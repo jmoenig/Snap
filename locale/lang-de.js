@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-07-06', // this, too, will appear in the Translators tab
+        '2021-12-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -469,14 +469,14 @@ SnapTranslator.dict.de = {
         'setze Stiftfarbe auf %clr',
     'set background color to %clr':
         'setze Hintergrundfarbe auf %clr',
-    'change pen %hsva by %n':
-        '\u00e4ndere Stift %hsva um %n',
-    'change background %hsva by %n':
-        '\u00e4ndere Hintergrund %hsva um %n',
-    'set pen %hsva to %n':
-        'setze Stift %hsva auf %n',
-    'set background %hsva to %n':
-        'setze Hintergrund %hsva auf %n',
+    'change pen %clrdim by %n':
+        '\u00e4ndere Stift %clrdim um %n',
+    'change background %clrdim by %n':
+        '\u00e4ndere Hintergrund %clrdim um %n',
+    'set pen %clrdim to %n':
+        'setze Stift %clrdim auf %n',
+    'set background %clrdim to %n':
+        'setze Hintergrund %clrdim auf %n',
     'pen %pen':
         'Stift %pen',
     'change pen size by %n':
@@ -499,8 +499,10 @@ SnapTranslator.dict.de = {
     // control:
     'when %greenflag clicked':
         'Wenn %greenflag angeklickt',
-    'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+    'when %keyHat key pressed %keyName':
+        'Wenn Taste %keyHat gedr\u00fcckt %keyName',
+    'key':
+        'Taste',
     'when I am %interaction':
         'Wenn ich %interaction werde',
     'clicked':
@@ -521,14 +523,14 @@ SnapTranslator.dict.de = {
         'gestoppt',
     'when %b':
         'Wenn %b',
-    'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
-    'broadcast %msg':
-        'sende %msg an alle',
-    'broadcast %msg and wait':
-        'sende %msg an alle und warte',
-    'send %msg to %spr':
-        'sende %msg an %spr',
+    'when I receive %msgHat %message':
+        'Wenn ich %msgHat empfange %message',
+    'broadcast %msg %receive':
+        'sende %msg %receive',
+    'broadcast %msg %receive and wait':
+        'sende %msg %receive und warte',
+    'to':
+        'an',
     'Message name':
         'Nachricht',
     'message':
@@ -558,7 +560,7 @@ SnapTranslator.dict.de = {
     'stop %stopChoices':
         'stoppe %stopChoices',
     'all':
-        'alles',
+        'alle',
     'this script':
         'dieses Skript',
     'this block':
@@ -593,6 +595,14 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
+    'switch to scene %scn %send':
+        'wechsle zur Szene %scn %send',
+    'and send':
+        'und sende',
+    'next':
+        'nächste',
+    'previous':
+        'vorherige',
     'tell %spr to %cmdRing %inputs':
         'lasse %spr %cmdRing tun %inputs',
     'ask %spr for %repRing %inputs':
@@ -715,6 +725,14 @@ SnapTranslator.dict.de = {
         'Rahmenz\u00e4hler',
     'log pen vectors':
         'Vektoraufzeichnung',
+    '%block of block %repRing':
+        '%block von Block %repRing',
+    'definition':
+        'Definition',
+    'custom?':
+        'benutzerdefiniert?',
+    'global?':
+        'global?',
 
     // operators:
     '%n mod %n':
@@ -914,7 +932,7 @@ SnapTranslator.dict.de = {
     'save global custom block\ndefinitions as XML':
         'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
     'Unused blocks...':
-          'nicht verwendete Bl\u00f6cke...',
+          'Nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
         'nicht verwendete Bl\u00f6cke finden\nund entfernen',
     'Remove unused blocks':
@@ -923,6 +941,18 @@ SnapTranslator.dict.de = {
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
         'nicht verwendete Bl\u00f6cke entfernt',
+    'Hide blocks...':
+        'Blöcke verbergen...',
+    'New category...':
+        'Neue Kategorie...',
+    'Remove a category...':
+        'Kategorie löschen...',
+    'Scenes...':
+        'Szenen...',
+    'New scene':
+        'Neue Szene',
+    'Add scene...':
+        'Szene hinzufügen...',
     'Export summary...':
         'Zusammenfassung exportieren...',
     'save a summary\nof this project':
@@ -1067,14 +1097,6 @@ SnapTranslator.dict.de = {
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
         'ausschalten f\u00fcr kurzen\nInput-Dialog',
-    'Virtual keyboard':
-        'Virtuelle Tastatur',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
     'JavaScript extensions':
         'JavaScript Erweiterungen',
     'check to support\nnative JavaScript functions':
@@ -1083,6 +1105,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
     'JavaScript extensions for Snap!\nare turned off':
         'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
+    'Extension blocks':
+        'Erweiterungsblöcke',
+    'uncheck to hide extension\nprimitives in the palette':
+        'ausschalten um Blöcke für Erweiterungen\nin der Palette zu verbergen',
+    'check to show extension\nprimitives in the palette':
+        'einschalten um Blöcke für Erweiterungen\nin der Palette anzuzeigen',
     'Input sliders':
         'Eingabeschieber',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1137,12 +1165,6 @@ SnapTranslator.dict.de = {
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
     'check to disallow\nscript reentrance':
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
-    'Prefer smooth animations':
-        'Fixe Framerate',
-    'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
-    'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
         'Flache Pinselstriche',
     'check for flat ends of lines':
@@ -1168,9 +1190,33 @@ SnapTranslator.dict.de = {
     'Single palette':
         'Einheitliche Palette',
     'check to show all blocks in a single palette':
-        'einschalten, um alle Blöcke in einer einzigen Palette zu sehen',
+        'einschalten, um alle Blöcke in\neiner einzigen Palette zu sehen',
     'uncheck to show only the selected category\'s blocks':
         'ausschalten, um nur die Blöcke der ausgewählten Kategorie zu sehen',
+    'Show categories':
+        'Kategorien anzeigen',
+    'uncheck to hide\ncategory names\nin the palette':
+        'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
+    'check to show\ncategory names\nin the palette':
+        'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
+    'Show buttons':
+        'Knöpfe anzeigen',
+    'uncheck to hide buttons\nin the palette':
+        'ausschalten, um Knöpfe in\nder Palette zu verbergen',
+    'check to show buttons\nin the palette':
+        'einschalten, um Knöpfe in\nder Palette anzuzeigen',
+    'HSL pen color model':
+        'HSL Farbmodell',
+     'uncheck to switch pen colors\nand graphic effects to HSV':
+        'ausschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSV zurückzusetzen',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'einschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSL zu setzen',
+    'Disable click-to-run':
+        'Block-Klicks deaktivieren',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
 
     // inputs
     'with inputs':
@@ -1189,10 +1235,28 @@ SnapTranslator.dict.de = {
     // palette:
     'find blocks':
         'Blöcke finden',
-    'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
-    'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+    'hide blocks...':
+        'Blöcke verbergen...',
+    'Hide blocks in palette':
+        'Blöcke verbergen',
+    'unused':
+        'nicht verwendete',
+    'make a category...':
+        'Neue Kategorie...',
+    'New Category':
+        'Neue Kategorie',
+    'Blocks category name:':
+        'Name der neuen Block-Gruppe:',
+    'Category color':
+        'Kategoriefarbe',
+    'red':
+        'rot',
+    'green':
+        'grün',
+    'blue':
+        'blau',
+    'delete a category...':
+        'Kategorie löschen...',
 
     // blocks:
     'help...':
@@ -1766,6 +1830,8 @@ SnapTranslator.dict.de = {
         'Sättigung',
     'brightness':
         'Helligkeit',
+    'lightness':
+        'Helligkeit',
     'transparency':
         'Transparenz',
     'ghost':
@@ -1780,6 +1846,8 @@ SnapTranslator.dict.de = {
     // keys
     'space':
         'Leertaste',
+    'enter':
+        'Eingabetaste',
     'up arrow':
         'Pfeil nach oben',
     'down arrow':

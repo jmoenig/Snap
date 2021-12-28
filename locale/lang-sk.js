@@ -469,14 +469,14 @@ SnapTranslator.dict.sk = {
         'nastavi\u0165 farbu pera na %clr',
     'set background color to %clr':
         'nastav pozadie na %clr',
-    'change pen %hsva by %n':
-        'zme\u0148 pero %hsva o %n',
-    'change background %hsva by %n':
-        'zme\u0148 pozadie %hsva o %n',
-    'set pen %hsva to %n':
-        'nastav pero %hsva na %n',
-    'set background %hsva to %n':
-        'nastav pozadie %hsva na %n',
+    'change pen %clrdim by %n':
+        'zme\u0148 pero %clrdim o %n',
+    'change background %clrdim by %n':
+        'zme\u0148 pozadie %clrdim o %n',
+    'set pen %clrdim to %n':
+        'nastav pero %clrdim na %n',
+    'set background %clrdim to %n':
+        'nastav pozadie %clrdim na %n',
     'pen %pen':
         'pero %pen',
     'change pen size by %n':
@@ -497,8 +497,8 @@ SnapTranslator.dict.sk = {
     // control:
     'when %greenflag clicked':
         'Po kliknut\u00ED na %greenflag',
-    'when %keyHat key pressed':
-        'po stla\u010Den\u00ED kl\u00E1vesy %keyHat',
+    'when %keyHat key pressed %keyName':
+        'po stla\u010Den\u00ED kl\u00E1vesy %keyHat %keyName',
     'when I am %interaction':
         'ke\u010F %interaction',
     'clicked':
@@ -519,12 +519,12 @@ SnapTranslator.dict.sk = {
         'zastaven\u00FD',
     'when %b':
         'Ke\u010F %b',
-    'when I receive %msgHat':
-        'po prijat\u00ED spr\u00E1vy %msgHat',
-    'broadcast %msg':
-        'posla\u0165 v\u0161etk\u00FDm %msg',
-    'broadcast %msg and wait':
-        'posla\u0165 v\u0161etk\u00FDm %msg a \u010Daka\u0165',
+    'when I receive %msgHat %message':
+        'po prijat\u00ED spr\u00E1vy %msgHat %message',
+    'broadcast %msg %receive':
+        'posla\u0165 %msg %receive',
+    'broadcast %msg %receive and wait':
+        'posla\u0165 %msg %receive a \u010Daka\u0165',
     'Message name':
         'n\u00E1zov spr\u00E1vy',
     'message':

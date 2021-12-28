@@ -472,14 +472,14 @@ SnapTranslator.dict.pl = {
         'ustaw kolor pisaka %clr',
     'set background color to %clr':
         'ustaw kolor t\u0142a %clr',
-    'change pen %hsva by %n':
-        'zmie\u0144 pisak %hsva o %n',
-    'change background %hsva by %n':
-        'zmie\u0144 t\u0142o %hsva o %n',
-    'set pen %hsva to %n':
-        'ustaw pisak %hsva na %n',
-    'set background %hsva to %n':
-        'ustaw t\u0142o %hsva na %n',
+    'change pen %clrdim by %n':
+        'zmie\u0144 pisak %clrdim o %n',
+    'change background %clrdim by %n':
+        'zmie\u0144 t\u0142o %clrdim o %n',
+    'set pen %clrdim to %n':
+        'ustaw pisak %clrdim na %n',
+    'set background %clrdim to %n':
+        'ustaw t\u0142o %clrdim na %n',
     'pen %pen':
         'pisak %pen',
     'change pen size by %n':
@@ -502,8 +502,8 @@ SnapTranslator.dict.pl = {
     // control:
     'when %greenflag clicked':
         'kiedy klikni\u0119to %greenflag',
-    'when %keyHat key pressed':
-        'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
+    'when %keyHat key pressed %keyName':
+        'kiedy klawisz %keyHat naci\u015Bni\u0119ty %keyName',
     'when I am %interaction':
         'kiedy zostan\u0119 %interaction',
     'clicked':
@@ -524,12 +524,14 @@ SnapTranslator.dict.pl = {
         'zatrzymany',
     'when %b':
         'kiedy %b',
-    'when I receive %msgHat':
-        'kiedy otrzymam %msgHat',
-    'broadcast %msg':
-        'nadaj %msg do wszystkich',
-    'broadcast %msg and wait':
-        'nadaj %msg do wszystkich i czekaj',
+    'when I receive %msgHat %message':
+        'kiedy otrzymam %msgHat %message',
+    'broadcast %msg %receive':
+        'nadaj %msg %receive',
+    'broadcast %msg %receive and wait':
+        'nadaj %msg %receive i czekaj',
+    'to':
+        'do',
     'send %msg to %spr':
         'nadaj %msg do %spr',
     'Message name':
@@ -561,7 +563,7 @@ SnapTranslator.dict.pl = {
     'stop %stopChoices':
         'zatrzymaj %stopChoices',
     'all':
-        'wszystko',
+        'wszystkich',
     'this script':
         'ten skrypt',
     'this block':

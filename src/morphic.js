@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-July-09';
+var morphicVersion = '2021-December-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -10764,7 +10764,14 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format, onDoubleClick, separator) {
+function ListMorph(
+    elements,
+    labelGetter,
+    format,
+    onDoubleClick,
+    separator,
+    verbatim
+) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -10798,7 +10805,8 @@ function ListMorph(elements, labelGetter, format, onDoubleClick, separator) {
         },
         format || [],
         onDoubleClick, // optional callback
-        separator // string indicating a horizontal line between items
+        separator, // string indicating a horizontal line between items
+        verbatim
     );
 }
 
@@ -10807,7 +10815,8 @@ ListMorph.prototype.init = function (
     labelGetter,
     format,
     onDoubleClick,
-    separator
+    separator,
+    verbatim
 ) {
     ListMorph.uber.init.call(this);
 
@@ -10824,6 +10833,7 @@ ListMorph.prototype.init = function (
     this.action = null;
     this.doubleClickAction = onDoubleClick || null;
     this.separator = separator || '';
+    this.verbatim = isNil(verbatim) ? true : verbatim;
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -10871,7 +10881,7 @@ ListMorph.prototype.buildListContents = function () {
                 italic,
                 this.doubleClickAction,
                 null, // shortcut
-                true // verbatim - don't translate
+                this.verbatim // don't translate
             );
         }
     });

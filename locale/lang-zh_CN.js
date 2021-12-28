@@ -632,10 +632,10 @@ SnapTranslator.dict.zh_CN = {
         '抬笔',
     'set pen color to %clr':
         '把画笔的颜色值设定为 %clr',        
-    'change pen %hsva by %n':
-        '把画笔的 %hsva 增加 %n',
-    'set pen %hsva to %n':
-        '把画笔的 %hsva 设定为 %n',        
+    'change pen %clrdim by %n':
+        '把画笔的 %clrdim 增加 %n',
+    'set pen %clrdim to %n':
+        '把画笔的 %clrdim 设定为 %n',
     'hue':
         '色调',
     'transparency':
@@ -656,10 +656,10 @@ SnapTranslator.dict.zh_CN = {
         '把画笔的大小设定为 %n',
     'set background color to %clr':
         '把背景色设置为 %clr',
-    'change background %hsva by %n':
-        '把背景的 %hsva 增加 %n',        
-    'set background %hsva to %n':
-        '把背景的 %hsva 设定为 %n',        
+    'change background %clrdim by %n':
+        '把背景的 %clrdim 增加 %n',
+    'set background %clrdim to %n':
+        '把背景的 %clrdim 设定为 %n',        
     'stamp':
         '图章',
     'fill':
@@ -680,8 +680,8 @@ SnapTranslator.dict.zh_CN = {
   // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
-    'when %keyHat key pressed':
-        '当按下 %keyHat 键',
+    'when %keyHat key pressed %keyName':
+        '当按下 %keyHat 键 %keyName',
     'when I am %interaction':
         '当 %interaction 我',
     'clicked':
@@ -702,12 +702,12 @@ SnapTranslator.dict.zh_CN = {
         '停止',    
     'when %b':
         '当 %b',
-    'when I receive %msgHat':
-        '当接收到 %msgHat',
-    'broadcast %msg':
-        '广播 %msg',
-    'broadcast %msg and wait':
-        '广播 %msg 并等待',
+    'when I receive %msgHat %message':
+        '当接收到 %msgHat %message',
+    'broadcast %msg %receive':
+        '广播 %msg %receive',
+    'broadcast %msg %receive and wait':
+        '广播 %msg %receive 并等待',
     'send %msg to %spr':
         '发送消息 %msg 给 %spr',
     'Message name':
@@ -1007,7 +1007,7 @@ SnapTranslator.dict.zh_CN = {
     'item':
         '项',      
     '%la of %l':
-        '%l 的 %la',
+        '%la 的 %l',
     'rank':
         '维数',
     'dimensions':
@@ -2179,7 +2179,7 @@ SnapTranslator.dict.zh_CN = {
     'center x':
         '中心点x坐标',
     'center y':
-        '中心店y坐标',
+        '中心点y坐标',
     'pen is down?':
         '画笔已落下？',
     'name':

@@ -32,183 +32,21 @@
 
     documentation
     -------------
-    the experimental Snap! API is a set of methods for an IDE_Morph containing
-    a Snap! project. These methods are maintained to work with future versions
-    of Snap! They can be used to trigger scripts, get feedback from running
-    scripts, and access the project's global variables. Currently the API
-    consists of the following methods:
-
-        Broadcast Messages (and optionally wait)
-        
-            - IDE_Morph.prototype.broadcast()
-
-        Listen to Messages
-
-            - IDE_Morph.prototype.addMessageListenerForAll()
-            - IDE_Morph.prototype.addMessageListener()
-            - IDE_Morph.prototype.getMessages()
-
-        Access Global Variables
-
-            - IDE_Morph.prototype.getVarNames()
-            - IDE_Morph.prototype.getVar()
-            - IDE_Morph.prototype.setVar()
-
-        Create and Modify Lists
-
-            - IDE_Morph.prototype.newList()
-
-        Access the Serialized Project
-
-            - IDE_Morph.prototype.getProjectXML()
-            - IDE_Morph.prototype.loadProjectXML(projectXML)
-            - IDE_Morph.prototype.unsavedChanges()
-
-    Getting hold of an ide can usually be achieved by
-    evaluating:
-
-        var ide = world.children[0];
-
-
-    IDE_Morph.prototype.broadcast()
-    ===============================
-    The broadcast() method triggers all scripts whose hat block listens to
-    the specified message. An optional callback can be added to be run
-    after all triggered scripts have terminated.
-
-        syntax:
-        -------
-            ide.broadcast(message [, callback]);
-
-        parameters:
-        -----------
-            message
-                string, the message to be sent to all listeners
-            callback | optional
-                function to execute after all scripts terminate, no arguments
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.addMessageListenerForAll()
-    ==============================================
-    The addMessageListenerForAll() method sets up a function that will be
-    called whenever a message is broadcast. The function takes one argument,
-    the message being broadcast, and can be used to react to any message.
-    Multiple message listeners can be set up, they all the executed in the
-    order in which they were added.
-
-        syntax:
-        -------
-            ide.addMessageListenerForAll(callback);
-
-        parameters:
-        -----------
-            callback
-                function to execute whenever a message is sent,
-                takes one argument: The message string
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.addMessageListener()
-    ========================================
-    The addMessageListener() method sets up a function that will be called
-    whenever the specified message is broadcast. Multiple message listeners
-    can be set up per message, they all get executed in the order in which
-    they were added.
-
-        syntax:
-        -------
-            ide.addMessageListener(message, callback);
-
-        parameters:
-        -----------
-            message
-                string, the message to which the listener will react.
-                If the message is an empty string the callback will
-                be executed at any broadcast, passing the message as
-                argument
-            callback
-                function to execute whenever the specified message is sent,
-                takes no argument, except when the message to listen to is
-                the empty string, then it takes the message as argument
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.getMessages()
-    =================================
-    The getMessage() method returns a new Array that contains all the message
-    strings that occur in the project, both in hat blocks and in broadcast
-    blocks.
-
-        syntax:
-        -------
-            ide.getMessages();
-
-        return value:
-        -------------
-            an Array of strings, or an empty Array
-
-
-    IDE_Morph.prototype.getVarNames()
-    =================================
-    The getVarNames() method returns a new Array that contains all the global
-    variable names in the project.
-
-        syntax:
-        -------
-            ide.getVarNames();
-
-        return value:
-        -------------
-            an Array of strings, or an empty Array
-
-
-    IDE_Morph.prototype.getVar()
-    =============================
-    The getVar() method returns the value of the global variable indicated by
-    the specified name.
-
-        syntax:
-        -------
-            ide.getVar(name);
-
-        return value:
-        -------------
-            whatever value the variable holds.
-
-
-    IDE_Morph.prototype.setVar()
-    ============================
-    The setVar() methods assigns a value to the a global variable specified
-    by name.
-
-        syntax:
-        =======
-            ide.setVar(name, value);
-
-        return value:
-        =============
-            undefined
-        
+    along with this file you should have received a copy of the Snap! API
+    documentation. If not, see
+    https://github.com/jmoenig/Snap/blob/master/API.md
+    or https://snap.berkeley.edu/snap/API.md
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world, isNil*/
+/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
+detect*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2021-July-05';
+modules.api = '2021-November-17';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -229,6 +67,46 @@ window.onmessage = function (event) {
             '*'
         );
     }
+};
+
+IDE_Morph.prototype.getScenes = function () {
+    // return an array of all scenenames
+    return this.scenes.itemsArray().map(each => each.name);
+};
+
+IDE_Morph.prototype.getCurrentScene = function () {
+    // return the name of the currently active scene
+    return this.scene.name;
+};
+
+IDE_Morph.prototype.switchTo = function (sceneName) {
+    var scene = detect(this.scenes.itemsArray(), scn => scn.name === sceneName);
+    if (scene === null) {
+         throw new Error('cannot find scene ' + sceneName);
+    }
+    this.switchToScene(scene);
+};
+
+IDE_Morph.prototype.isRunning = function () {
+    // return true if the active scene is currently running a script
+    return this.stage.threads.processes.length > 0;
+};
+
+IDE_Morph.prototype.stop = function () {
+    // stop all currently running processes in the active scene
+    // no matter what, without firing a stop event
+    var stage = this.stage;
+    stage.keysPressed = {};
+    stage.threads.stopAll();
+    stage.stopAllActiveSounds();
+    stage.children.forEach(morph => {
+        if (morph.stopTalking) {
+            morph.stopTalking();
+        }
+    });
+    stage.removeAllClones();
+    stage.stopProjection();
+    this.controlBar.pauseButton.refresh();
 };
 
 IDE_Morph.prototype.broadcast = function(message, callback) {
@@ -337,7 +215,7 @@ IDE_Morph.prototype.newList = function (array) {
 };
 
 IDE_Morph.prototype.getProjectXML = function () {
-    return this.serializer.serialize(this.stage);
+    return this.serializer.serialize(new Project(this.scenes, this.scene));
 };
 
 IDE_Morph.prototype.loadProjectXML = function (projectXML) {
@@ -349,5 +227,5 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
 };
 
 IDE_Morph.prototype.unsavedChanges = function () {
-    return this.hasUnsavedEdits;
+    return this.hasUnsavedEdits();
 };

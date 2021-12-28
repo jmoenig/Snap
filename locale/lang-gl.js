@@ -422,10 +422,10 @@ SnapTranslator.dict.gl = {
         'cambiar á cor do lapis a %n',
     'set pen color to %n':
         'fixar a cor do lapis a %n',
-    'change pen %hsva by %n':
-        'cambiar %hsva do lapis a %n',
-    'set pen %hsva to %n':
-        'fixar %hsva do lapis a %n',
+    'change pen %clrdim by %n':
+        'cambiar %clrdim do lapis a %n',
+    'set pen %clrdim to %n':
+        'fixar %clrdim do lapis a %n',
     'change pen shade by %n':
         'cambiar á intensidade do lapis en %n',
     'set pen shade to %n':
@@ -436,10 +436,10 @@ SnapTranslator.dict.gl = {
         'fixar o tamaño do lapis en %n',
     'set background color to %clr':
         'fixar a cor do fondo a %clr',
-    'change background %hsva by %n':
-        'cambiar %hsva do fondo en %n',
-    'set background %hsva to %n':
-        'fixar %hsva do fondo a %n',
+    'change background %clrdim by %n':
+        'cambiar %clrdim do fondo en %n',
+    'set background %clrdim to %n':
+        'fixar %clrdim do fondo a %n',
     'stamp':
         'selar',
     'fill':
@@ -448,8 +448,8 @@ SnapTranslator.dict.gl = {
     // control:
     'when %greenflag clicked':
         'ao facer clic en %greenflag',
-    'when %keyHat key pressed':
-        'ao premer a tecla %keyHat',
+    'when %keyHat key pressed %keyName':
+        'ao premer a tecla %keyHat %keyName',
     'when I am %interaction':
         'ao %interaction nesta personaxe',
     'clicked':
@@ -464,12 +464,14 @@ SnapTranslator.dict.gl = {
         'separar o rato',
     'when %b':
         'cando %b',
-    'when I receive %msgHat':
-        'ao recibir %msgHat',
-    'broadcast %msg':
-        'enviar a todos %msg',
-    'broadcast %msg and wait':
-        'enviar a todos %msg e agardar',
+    'when I receive %msgHat %message':
+        'ao recibir %msgHat %message',
+    'broadcast %msg %receive':
+        'enviar %msg %receive',
+    'broadcast %msg %receive and wait':
+        'enviar %msg %receive e agardar',
+    'to':
+        'a',
     'Message name':
         'Nome da mensaxe',
     'message':

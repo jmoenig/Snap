@@ -415,16 +415,16 @@ SnapTranslator.dict.zh_TW = {
     // control:
     'when %greenflag clicked':
         '當 %greenflag 被點擊',
-    'when %keyHat key pressed':
-        '當按下 %keyHat',
-    'when I am clicked':
-        '當角色被點擊',
-    'when I receive %msgHat':
-        '當接收到 %msgHat',
-    'broadcast %msg':
-        '廣播 %msg ',
-    'broadcast %msg and wait':
-        '廣播 %msg 並等待',
+    'when %keyHat key pressed %keyName':
+        '當按下 %keyHat %keyName',
+    'when I am %interaction':
+        '當角色被點擊 %interaction',
+    'when I receive %msgHat %message':
+        '當接收到 %msgHat %message',
+    'broadcast %msg %receive':
+        '廣播 %msg %receive',
+    'broadcast %msg %receive and wait':
+        '廣播 %msg %receive 並等待',
     'Message name':
         '資訊名稱',
     'wait %n secs':

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-August-01';
+modules.store = '2021-December-14';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -253,7 +253,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7dev, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -378,8 +378,12 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
         }
         scene.name = 'Untitled ' + nameID;
     }
-    // unified palette persistence commented out during development:
-    // scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    scene.unifiedPalette = model.scene.attributes.palette === 'single';
+    scene.showCategories = model.scene.attributes.categories !== 'false';
+    scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
+    scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
+    scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
+        'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
     if (model.notes) {
         scene.notes = model.notes.contents;
@@ -394,7 +398,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     /* Stage */
 
     model.stage = model.scene.require('stage');
-    StageMorph.prototype.frameRate = 0;
     scene.stage.remixID = remixID;
 
     if (Object.prototype.hasOwnProperty.call(
@@ -408,11 +411,9 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     }
     if (model.stage.attributes.color) {
         scene.stage.color = this.loadColor(model.stage.attributes.color);
-        scene.stage.cachedHSV = scene.stage.color.hsv();
-    }
-    if (model.stage.attributes.scheduled === 'true') {
-        scene.stage.fps = 30;
-        StageMorph.prototype.frameRate = 30;
+        scene.stage.cachedColorDimensions = scene.stage.color[
+            SpriteMorph.prototype.penColorModel
+        ]();
     }
     if (model.stage.attributes.volume) {
         scene.stage.volume = +model.stage.attributes.volume;
@@ -670,8 +671,8 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     }
     model.palette = model.childNamed('palette');
     if (model.palette) {
-        SpriteMorph.prototype.customCategories = this.loadPalette(
-            model.palette
+        this.loadPalette(model.palette).forEach((value, key) =>
+            SpriteMorph.prototype.customCategories.set(key, value)
         );
     }
     model.removeChild(model.palette);
@@ -714,7 +715,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
         if (model.attributes.color) {
             sprite.color = this.loadColor(model.attributes.color);
-            sprite.cachedHSV = sprite.color.hsv();
+            sprite.cachedColorDimensions = sprite.color[sprite.penColorModel]();
         }
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
@@ -946,6 +947,7 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element, object) {
         value = child.children[0];
         v = new Variable();
         v.isTransient = (child.attributes.transient === 'true');
+        v.isHidden = (child.attributes.hidden === 'true');
         v.value = (v.isTransient || !value ) ? 0
                 : this.loadValue(value, object);
         varFrame.vars[child.attributes.name] = v;
@@ -969,6 +971,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             object
         );
         definition.category = child.attributes.category || 'other';
+        if (!SpriteMorph.prototype.allCategories().includes(
+            definition.category
+        )) {
+            definition.category = 'other';
+        }
         definition.type = child.attributes.type || 'command';
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.isGlobal = (isGlobal === true);
@@ -1198,7 +1205,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                 model.attributes.s
             ];
             if (migration) {
-                migrationOffset = migration.offset;
+                migrationOffset = migration.offset || 0;
             }
         }
     } else if (model.tag === 'custom-block') {
@@ -1315,7 +1322,18 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
         });
         input.fixLayout();
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
-        block.replaceInput(input, this.loadBlock(model, true, object));
+        if (input.slotSpec === '%rcv') {
+            // special case for migrating former SEND block inputs to
+            // newer BROADCAST expansion slots for receivers
+            // this can be removed once all SEND blocks have been
+            // converted to v7
+            input.replaceInput(
+                input.inputs()[0],
+                this.loadBlock(model, true, object)
+            );
+        } else {
+            block.replaceInput(input, this.loadBlock(model, true, object));
+        }
     } else if (model.tag === 'color') {
         input.setColor(this.loadColor(model.contents));
     } else {
@@ -1441,7 +1459,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         if (model.attributes.color) {
             v.color = this.loadColor(model.attributes.color);
-            v.cachedHSV = v.color.hsv();
+            v.cachedColorDimensions = v.color[v.penColorModel]();
         }
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;
@@ -1720,20 +1738,27 @@ Scene.prototype.toXML = function (serializer) {
         return str;
     }
 
+    serializer.scene = this; // keep the order of sprites in the corral
+
     xml = serializer.format(
-        '<scene name="@"%>' +
+        '<scene name="@"%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
-            '<variables>%</variables>' +
             '%' + // stage
+            '<variables>%</variables>' +
             '</scene>',
         this.name || localize('Untitled'),
-        '', // unified palette persistence commented out during development
-        // this.unifiedPalette ? ' palette="single"' : '',
+        this.unifiedPalette ? ' palette="single"' : '',
+        this.unifiedPalette && !this.showCategories ?
+            ' categories="false"' : '',
+        this.unifiedPalette && !this.showPaletteButtons ?
+            ' buttons="false"' : '',
+        this.disableClickToRun ? ' clickrun="false"' : '',
+        this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
@@ -1743,8 +1768,8 @@ Scene.prototype.toXML = function (serializer) {
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),
-        serializer.store(this.globalVariables),
-        serializer.store(this.stage)
+        serializer.store(this.stage),
+        serializer.store(this.globalVariables)
     );
     return xml;
 };
@@ -1767,8 +1792,7 @@ StageMorph.prototype.toXML = function (serializer) {
             'hyperops="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
-            'sublistIDs="@" ' +
-            'scheduled="@" ~>' +
+            'sublistIDs="@" ~>' +
             '<pentrails>$</pentrails>' +
             '%' + // current costume, if it's not in the wardrobe
             '<costumes>%</costumes>' +
@@ -1798,7 +1822,6 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,
-        StageMorph.prototype.frameRate !== 0,
         normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
 
         // current costume, if it's not in the wardrobe
@@ -1930,17 +1953,24 @@ Sound.prototype.toXML = function (serializer) {
 VariableFrame.prototype.toXML = function (serializer) {
     return Object.keys(this.vars).reduce((vars, v) => {
         var val = this.vars[v].value,
+            transient = this.vars[v].isTransient,
+            hidden = this.vars[v].isHidden,
             dta;
-        if (this.vars[v].isTransient) {
+
+        if (transient || val === undefined || val === null) {
             dta = serializer.format(
-                '<variable name="@" transient="true"/>',
-                v)
-            ;
-        } else if (val === undefined || val === null) {
-            dta = serializer.format('<variable name="@"/>', v);
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '/>',
+                v
+            );
         } else {
             dta = serializer.format(
-                '<variable name="@">%</variable>',
+                '<variable name="@"' +
+                    (transient ? ' transient="true"' : '') +
+                    (hidden ? ' hidden="true"' : '') +
+                    '>%</variable>',
                 v,
                 typeof val === 'object' ?
                         (isSnapObject(val) ? ''

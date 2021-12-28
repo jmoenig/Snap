@@ -482,10 +482,10 @@ SnapTranslator.dict.ua = {
         'штамп',
     'fill':
         'заливка',
-    'change pen %hsva by %n':
-        'змінити властивість %hsva на %n',
-    'set pen %hsva to %n':
-        'встановити властивість %hsva як %n',
+    'change pen %clrdim by %n':
+        'змінити властивість %clrdim на %n',
+    'set pen %clrdim to %n':
+        'встановити властивість %clrdim як %n',
     'pen %pen':
         'олівець %pen',
     'write %s size %n':
@@ -496,8 +496,8 @@ SnapTranslator.dict.ua = {
     // control:
     'when %greenflag clicked':
         'коли натиснуто %greenflag',
-    'when %keyHat key pressed':
-        'коли натиснуто клавішу %keyHat',
+    'when %keyHat key pressed %keyName':
+        'коли натиснуто клавішу %keyHat %keyName',
     'when I am %interaction':
         'коли мене %interaction',
     'clicked':
@@ -518,12 +518,12 @@ SnapTranslator.dict.ua = {
         'зупинка',
     'when %b':
         'коли %b',
-    'when I receive %msgHat':
-        'коли я отримаю %msgHat',
-    'broadcast %msg':
-        'надіслати %msg всім',
-    'broadcast %msg and wait':
-        'надіслати %msg всім і чекати',
+    'when I receive %msgHat %message':
+        'коли я отримаю %msgHat %message',
+    'broadcast %msg %receive':
+        'надіслати %msg %receive',
+    'broadcast %msg %receive and wait':
+        'надіслати %msg %receive і чекати',
     'Message name':
         'назва повідомлення',
     'message':

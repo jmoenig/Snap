@@ -469,14 +469,14 @@ SnapTranslator.dict.ru = {
         'установить цвет пера %clr',
     'set background color to %clr':
         'установить фоновый цвет %clr',
-     'change pen %hsva by %n':
-        'изменить %hsva пера на %n',
-    'change background %hsva by %n':
-        'изменить %hsva фона на %n',
-    'set pen %hsva to %n':
-        'установить %hsva пера %n',
-    'set background %hsva to %n':
-        'установить %hsva фона %n',
+     'change pen %clrdim by %n':
+        'изменить %clrdim пера на %n',
+    'change background %clrdim by %n':
+        'изменить %clrdim фона на %n',
+    'set pen %clrdim to %n':
+        'установить %clrdim пера %n',
+    'set background %clrdim to %n':
+        'установить %clrdim фона %n',
     'pen %pen':
         '%pen пера',
     'change pen size by %n':
@@ -499,8 +499,8 @@ SnapTranslator.dict.ru = {
     // control:
     'when %greenflag clicked':
         'при нажатии на %greenflag',
-    'when %keyHat key pressed':
-        'при нажатии клавиши %keyHat',
+    'when %keyHat key pressed %keyName':
+        'при нажатии клавиши %keyHat %keyName',
     'when I am %interaction':
         'когда меня %interaction',
     'clicked':
@@ -521,12 +521,14 @@ SnapTranslator.dict.ru = {
         'остановят',
     'when %b':
         'когда %b',
-    'when I receive %msgHat':
-        'когда я получу %msgHat',
-    'broadcast %msg':
-        'разослать %msg всем',
-    'broadcast %msg and wait':
-        'разослать %msg всем и ждать',
+    'when I receive %msgHat %message':
+        'когда я получу %msgHat %message',
+    'broadcast %msg %receive':
+        'разослать %msg %receive',
+    'broadcast %msg %receive and wait':
+        'разослать %msg %receive и ждать',
+    'to':
+        'адресату',
     'send %msg to %spr':
         'отправить %msg адресату %spr',
     'Message name':

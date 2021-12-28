@@ -47,13 +47,13 @@
 */
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
-normalizeCanvas, SnapSerializer, Costume*/
+normalizeCanvas, SnapSerializer, Costume, ThreadManager*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-July-22';
+modules.scenes = '2021-November-24';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -118,7 +118,9 @@ function Scene(aStageMorph) {
         aStageMorph.globalVariables() : new VariableFrame();
     this.stage = aStageMorph || new StageMorph(this.globalVariables);
     this.hasUnsavedEdits = false;
-    this.unifiedPalette = true;
+    this.unifiedPalette = false;
+    this.showCategories = true;
+    this.showPaletteButtons = true;
 
     // cached IDE state
     this.sprites = new List();
@@ -138,6 +140,8 @@ function Scene(aStageMorph) {
     this.useFlatLineEnds = false;
     this.enableLiveCoding = false;
     this.enableHyperOps = true;
+    this.disableClickToRun = false;
+    this.penColorModel = 'hsv'; // can also bei 'hsl'
 
     // for deserializing - do not persist
     this.spritesDict = {};
@@ -192,6 +196,8 @@ Scene.prototype.captureGlobalSettings = function () {
     this.enableLiveCoding = Process.prototype.enableLiveCoding;
     this.enableHyperOps = Process.prototype.enableHyperOps;
     this.customCategories = SpriteMorph.prototype.customCategories;
+    this.disableClickToRun = ThreadManager.prototype.disableClickToRun;
+    this.penColorModel = SpriteMorph.prototype.penColorModel;
 };
 
 Scene.prototype.applyGlobalSettings = function () {
@@ -207,6 +213,8 @@ Scene.prototype.applyGlobalSettings = function () {
     Process.prototype.enableLiveCoding = this.enableLiveCoding;
     Process.prototype.enableHyperOps = this.enableHyperOps;
     SpriteMorph.prototype.customCategories = this.customCategories;
+    ThreadManager.prototype.disableClickToRun = this.disableClickToRun;
+    SpriteMorph.prototype.penColorModel = this.penColorModel;
 };
 
 Scene.prototype.updateTrash = function () {

@@ -65,7 +65,7 @@ ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2021-July-19';
+modules.lists = '2021-December-15';
 
 var List;
 var ListWatcherMorph;
@@ -922,7 +922,7 @@ List.prototype.asCSV = function () {
 
     var items = this.itemsArray(),
         rows = [];
-    
+
     function encodeCell(atomicValue) {
         var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
@@ -932,7 +932,7 @@ List.prototype.asCSV = function () {
             return string;
         }
         cell = ['\"'];
-        string.split('').forEach(letter => {
+        Array.from(string).forEach(letter => {
             cell.push(letter);
             if (letter === '\"') {
                 cell.push(letter);
@@ -1094,7 +1094,7 @@ List.prototype.blockify = function (limit = 500, count = [0]) {
 
     block.isDraggable = true;
     slots.removeInput();
-    
+
     // fill the slots with the data
     for (i = 0; i < len && count[0] < limit; i += 1) {
         value = this.at(i + 1);

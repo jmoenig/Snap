@@ -239,8 +239,8 @@ SnapTranslator.dict.et = {
     // control:
     'when %greenflag clicked':
         'kui vajutatakse %greenflag',
-    'when %keyHat key pressed':
-        'kui vajutatakse klahvi %keyHat',
+    'when %keyHat key pressed %keyName':
+        'kui vajutatakse klahvi %keyHat %keyName',
     'when I am %interaction':
         'kui minul %interaction',
     'clicked':
@@ -255,12 +255,12 @@ SnapTranslator.dict.et = {
         'hiirekursor lahkub',
     'when %b':
         'kui %b',
-    'when I receive %msgHat':
-        'kui saan teate %msgHat',
-    'broadcast %msg':
-        'saada teade %msg',
-    'broadcast %msg and wait':
-        'saada teade %msg ja oota',
+    'when I receive %msgHat %message':
+        'kui saan teate %msgHat %message',
+    'broadcast %msg %receive':
+        'saada teade %msg %receive',
+    'broadcast %msg %receive and wait':
+        'saada teade %msg %receive ja oota',
     'Message name':
         'Teate nimi',
     'message':

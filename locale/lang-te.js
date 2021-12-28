@@ -415,16 +415,16 @@ SnapTranslator.dict.te = {
     // control:
     'when %greenflag clicked':
         '%greenflag ఒత్తినప్పుడ',
-    'when %keyHat key pressed':
-        '%keyHat కీ ఒత్తినప్పుడ',
-    'when I am clicked':
-        'Wenn ich angeklickt werde',
-    'when I receive %msgHat':
-        '%msgHat  నేను స్వీకరించినప్పుడు',
-    'broadcast %msg':
-        'ప్రసార %msg',
-    'broadcast %msg and wait':
-        '%msg ని ప్రసారం చేసి,  వేచివుండు',
+    'when %keyHat key pressed %keyName':
+        '%keyHat %keyName కీ ఒత్తినప్పుడ',
+    'when I am %interaction':
+        'when I am %interaction',
+    'when I receive %msgHat %message':
+        '%msgHat %message నేను స్వీకరించినప్పుడు',
+    'broadcast %msg %receive':
+        'ప్రసార %msg %receive',
+    'broadcast %msg %receive and wait':
+        '%msg %receive ని ప్రసారం చేసి,  వేచివుండు',
     'Message name':
         'సందేశం పేర',
     'message':

@@ -466,14 +466,14 @@ SnapTranslator.dict.hi = {
         'पेन रंग सेट करें %clr',
     'set background color to %clr':
         'पकरने के लिए पृष्ठभूमि रंग सेट %clr',
-    'change pen %hsva by %n':
-        'कलम बदल दो %hsva से %n',
-    'change background %hsva by %n':
-        'पृष्ठभूमि का रंग बदलें %hsva से %n',
-    'set pen %hsva to %n':
-        ' पेन सेट %hsva सेवा मेरे %n',
-    'set background %hsva to %n':
-        'पृष्ठभूमि सेट %hsva सेवा मेरे %n',
+    'change pen %clrdim by %n':
+        'कलम बदल दो %clrdim से %n',
+    'change background %clrdim by %n':
+        'पृष्ठभूमि का रंग बदलें %clrdim से %n',
+    'set pen %clrdim to %n':
+        ' पेन सेट %clrdim सेवा मेरे %n',
+    'set background %clrdim to %n':
+        'पृष्ठभूमि सेट %clrdim सेवा मेरे %n',
     'pen %pen':
         'कलम %pen',
     'change pen size by %n':
@@ -496,8 +496,8 @@ SnapTranslator.dict.hi = {
     // control:
     'when %greenflag clicked':
         'जब %greenflag क्लिक किया',
-    'when %keyHat key pressed':
-        'जब %keyHat दबाई जाती है',
+    'when %keyHat key pressed %keyName':
+        'जब %keyHat दबाई जाती है %keyName',
     'when I am %interaction':
         'जब मैं %interaction werde',
     'clicked':
@@ -518,12 +518,12 @@ SnapTranslator.dict.hi = {
         'रोका हुआ',
     'when %b':
         'जब %b',
-    'when I receive %msgHat':
-        'जब मैं प्राप्त करता हूँ %msgHat ',
-    'broadcast %msg':
-        'प्रसारण %msg',
-    'broadcast %msg and wait':
-        'प्रसारण %msg और रुको',
+    'when I receive %msgHat %message':
+        'जब मैं प्राप्त करता हूँ %msgHat %message',
+    'broadcast %msg %receive':
+        'प्रसारण %msg %receive',
+    'broadcast %msg %receive and wait':
+        'प्रसारण %msg %receive और रुको',
     'send %msg to %spr':
         'भेजने %msg को %spr',
     'Message name':
