@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-20';
+modules.blocks = '2021-December-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1841,7 +1841,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.fontSize = this.fontSize * (+tokens[1] || 1);
         } else {
             part = new BlockSymbolMorph(tokens[0]);
-            part.size = this.fontSize * (+tokens[1] || 1.2);
+            part.size = this.fontSize * (+tokens[1] || 1.4);
         }
         part.color = new Color(
             +tokens[2] === 0 ? 0 : +tokens[2] || 255,
