@@ -82,7 +82,7 @@ IDE_Morph.prototype.getCurrentScene = function () {
 IDE_Morph.prototype.switchTo = function (sceneName) {
     var scene = detect(this.scenes.itemsArray(), scn => scn.name === sceneName);
     if (scene === null) {
-        throw new Error('cannot find scene ' + sceneName);
+         throw new Error('cannot find scene ' + sceneName);
     }
     this.switchToScene(scene);
 };
