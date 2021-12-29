@@ -82,7 +82,7 @@ IDE_Morph.prototype.getCurrentScene = function () {
 IDE_Morph.prototype.switchTo = function (sceneName) {
     var scene = detect(this.scenes.itemsArray(), scn => scn.name === sceneName);
     if (scene === null) {
-         throw new Error('cannot find scene ' + sceneName);
+        throw new Error('cannot find scene ' + sceneName);
     }
     this.switchToScene(scene);
 };
@@ -135,16 +135,37 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
         throw new Error('message must be a String');
     }
     this.stage.lastMessage = message;
-    rcvrs.forEach(sprite => {
-        sprite.allHatBlocksFor(message).forEach(block => {
-            procs.push(this.stage.threads.startProcess(
-                block,
-                sprite,
-                this.stage.isThreadSafe,
-                false,
-                callback instanceof Function ? wait : null
-            ));
-        });
+    rcvrs.forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksFor(message).forEach(block => {
+                var varName, varFrame;
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(varName, message);
+                    }
+                    procs.push(this.stage.threads.startProcess(
+                        block,
+                        morph,
+                        this.stage.isThreadSafe || // make "any msg" threadsafe
+                        block.inputs()[0].evaluate() instanceof Array,
+                        null, // exportResult (bool)
+                        callback instanceof Function ? wait : null,
+                        null, // isClicked
+                        null, // rightAway
+                        null, // atomic
+                        varFrame
+                    ));
+                } else {
+                    procs.push(stage.threads.startProcess(
+                        block,
+                        morph,
+                        stage.isThreadSafe
+                    ));
+                }
+            });
+        }
     });
     (this.stage.messageCallbacks[''] || []).forEach(
         callback => callback(message)
