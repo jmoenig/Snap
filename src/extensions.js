@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2021-December-15';
+modules.extensions = '2022-January-01';
 
 // Global stuff
 
@@ -262,17 +262,19 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'dta_analyze(list)',
-    function (list) {
+    function (list, proc) {
         var dict = new Map(),
             result = [],
             data = list.itemsArray(),
             len = data.length,
-            i;
+            item, i;
         for (i = 0; i < len; i += 1) {
-            if (dict.has(data[i])) {
-                dict.set(data[i], dict.get(data[i]) + 1);
+            item = proc.reportIsA(data[i], 'number') ?
+                data[i].toString() : data[i];
+            if (dict.has(item)) {
+                dict.set(item, dict.get(item) + 1);
             } else {
-                dict.set(data[i], 1);
+                dict.set(item, 1);
             }
         }
         dict.forEach(function (value, key) {
