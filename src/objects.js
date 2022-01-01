@@ -3256,7 +3256,8 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
 };
 
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
-    var ide, dict, cat;
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict, cat;
     if (aBlock.isCustomBlock) {
         (aBlock.isGlobal ? aBlock.definition
             : this.getMethod(aBlock.semanticSpec)
