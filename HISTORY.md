@@ -4,11 +4,15 @@
 
 * **New Features:**
 * **Notable Changes:**
+    * fixed storing the stage name(s)
     * same blocks with empty variadic inputs compare as equal regardless of their arity
 * **Notable Fixes:**
     * removed distinction between number and string keys in "analyze" 
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-01-02
+* store: fixed storing the stage name(s)
 
 ### 2022-01-01
 * extensions: removed distinction between number and string keys in "analyze"
