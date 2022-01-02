@@ -4,9 +4,9 @@
 
 * **New Features:**
 * **Notable Changes:**
-    * fixed storing the stage name(s)
     * same blocks with empty variadic inputs compare as equal regardless of their arity
 * **Notable Fixes:**
+    * fixed storing the stage name(s)
     * removed distinction between number and string keys in "analyze" 
 * **Documentation Updates:**
 * **Translation Updates:**
