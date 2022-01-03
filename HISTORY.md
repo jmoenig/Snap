@@ -12,6 +12,7 @@
     * removed distinction between number and string keys in "analyze" 
     * fixed variable binding when broadcasting through the API, thanks, Zak!
     * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+    * fixed / worked around PWA caching for URLs with query parts, thanks, Ken!
 * **Documentation Updates:**
 * **Translation Updates:**
     * Italian, thanks, Stefano!
@@ -21,7 +22,8 @@
 * api: fixed variable binding when broadcasting through the API, thanks, Zak!
 * objects: fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
 * threads, api: made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
-* threads, extensions: improved handling of user-defined errors and errors inside custom blocks 
+* threads, extensions: improved handling of user-defined errors and errors inside custom blocks
+* sw.js: fixed #2957, thanks, Ken! 
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)
