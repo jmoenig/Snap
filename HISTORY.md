@@ -8,7 +8,7 @@
     * made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
     * improved handling of user-defined errors and errors inside custom blocks 
 * **Notable Fixes:**
-    * fixed storing the stage name(s)
+    * fixed storing the stage name(s) - also fixes undesired translation
     * removed distinction between number and string keys in "analyze" 
     * fixed variable binding when broadcasting through the API, thanks, Zak!
     * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
@@ -18,6 +18,9 @@
 * **Translation Updates:**
     * Italian, thanks, Stefano!
 
+### 2022-01-04
+* manifest: fixed #2954
+
 ### 2022-01-03
 * Italian translation update, thanks, Stefano!
 * api: fixed variable binding when broadcasting through the API, thanks, Zak!
@@ -26,6 +29,7 @@
 * threads, extensions: improved handling of user-defined errors and errors inside custom blocks
 * sw.js: fixed #2957, thanks, Ken!
 * objects: fixed #2950, thanks, Mary!
+* manifest: fixed #2954
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)
