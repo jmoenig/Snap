@@ -8,12 +8,14 @@
 * **Notable Fixes:**
     * fixed storing the stage name(s)
     * removed distinction between number and string keys in "analyze" 
+    * fixed variable binding when broadcasting through the API, thanks, Zak!
 * **Documentation Updates:**
 * **Translation Updates:**
     * Italian, thanks, Stefano!
 
 ### 2022-01-03
 * Italian translation update, thanks, Stefano!
+* api: fixed variable binding when broadcasting through the API, thanks, Zak!
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)
