@@ -1213,7 +1213,7 @@ Process.prototype.errorBubble = function (error, element) {
     // Return a morph containing an image of the elment causing the error
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
-        errorIsNested = isNil(element.world()),
+        errorIsNested = !!element && isNil(element.world()),
         errorPrefix = errorIsNested ? `${localize('Inside a custom block')}\n`
             : '',
         errorMessage = new TextMorph(
