@@ -1214,7 +1214,7 @@ Process.prototype.errorBubble = function (error, element) {
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
         errorIsNested = isNil(element.world()),
-        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}\n`
             : '',
         errorMessage = new TextMorph(
             `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
@@ -1223,16 +1223,18 @@ Process.prototype.errorBubble = function (error, element) {
         blockToShow = element;
 
     errorMorph.add(errorMessage);
-    if (errorIsNested) {
+
+    if (errorIsNested && error.cause !== 'user') {
         if (blockToShow.selector === 'reportGetVar') {
             // if I am a single variable, show my caller in the output.
             blockToShow = blockToShow.parent;
         }
-        errorMorph.text += `\n${localize('The error occured at:')}\n`;
+        errorMorph.children[0].text += `\n${localize('The error occured at')}`;
+        errorMorph.children[0].fixLayout();
         errorMorph.add(blockToShow.fullCopy());
-        errorMorph.fixLayout();
     }
 
+    errorMorph.fixLayout();
     return errorMorph;
 };
 

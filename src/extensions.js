@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2022-January-01';
+modules.extensions = '2022-January-03';
 
 // Global stuff
 
@@ -203,7 +203,7 @@ var SnapExtensions = {
 SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
-        throw new Error(msg);
+        throw new Error(msg, {cause: 'user'});
     }
 );
 
