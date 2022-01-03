@@ -9,6 +9,7 @@
     * fixed storing the stage name(s)
     * removed distinction between number and string keys in "analyze" 
     * fixed variable binding when broadcasting through the API, thanks, Zak!
+    * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
 * **Documentation Updates:**
 * **Translation Updates:**
     * Italian, thanks, Stefano!
@@ -16,6 +17,7 @@
 ### 2022-01-03
 * Italian translation update, thanks, Stefano!
 * api: fixed variable binding when broadcasting through the API, thanks, Zak!
+* objects: fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)
