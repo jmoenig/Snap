@@ -651,24 +651,23 @@ Cloud.prototype.getProject = function (id, callBack, errorCall, roleId) {
     );
 };
 
-Cloud.prototype.getProjectByName = function (owner, name, callBack, errorCall) {
-    var myself = this;
-
-    this.reconnect(
-        function () {
-            myself.callService(
+Cloud.prototype.getProjectByName = async function (owner, name) {
+    const deferred = utils.defer();
+    await this.reconnect(() => {
+            this.callService(
                 'getProjectByName',
-                function (response) {
-                    var xml = response[0];
-                    myself.setLocalState(xml.ProjectID, xml.RoleID);
-                    callBack(xml);
+                response => {
+                    const xml = response[0];
+                    this.setLocalState(xml.ProjectID, xml.RoleID);
+                    deferred.resolve(xml);
                 },
-                errorCall,
+                deferred.reject,
                 [owner, name]
             );
         },
-        errorCall
+        deferred.reject
     );
+    return deferred.promise;
 };
 
 Cloud.prototype.getCollaboratorList = function (callBack, errorCall) {
