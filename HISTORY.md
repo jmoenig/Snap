@@ -10,6 +10,10 @@
     * removed distinction between number and string keys in "analyze" 
 * **Documentation Updates:**
 * **Translation Updates:**
+    * Italian, thanks, Stefano!
+
+### 2022-01-03
+* Italian translation update, thanks, Stefano!
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)
