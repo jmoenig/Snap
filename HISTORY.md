@@ -5,6 +5,7 @@
 * **New Features:**
 * **Notable Changes:**
     * same blocks with empty variadic inputs compare as equal regardless of their arity
+    * made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
 * **Notable Fixes:**
     * fixed storing the stage name(s)
     * removed distinction between number and string keys in "analyze" 
@@ -18,6 +19,7 @@
 * Italian translation update, thanks, Stefano!
 * api: fixed variable binding when broadcasting through the API, thanks, Zak!
 * objects: fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+* threads, api: made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
 
 ### 2022-01-02
 * store: fixed storing the stage name(s)

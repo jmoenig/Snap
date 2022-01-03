@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-22';
+modules.threads = '2022-January-03';
 
 var ThreadManager;
 var Process;
@@ -3744,8 +3744,10 @@ Process.prototype.doBroadcast = function (message, receivers) {
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
-                            stage.isThreadSafe || // make "any msg" threadsafe
-                                block.inputs()[0].evaluate() instanceof Array,
+                            stage.isThreadSafe,
+                            // commented out for now to enable tail recursion:
+                            // || // make "any msg" threadsafe
+                            // block.inputs()[0].evaluate() instanceof Array,
                             null, // exportResult (bool)
                             null, // callback
                             null, // isClicked

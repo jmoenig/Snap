@@ -148,8 +148,10 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
                     procs.push(this.stage.threads.startProcess(
                         block,
                         morph,
-                        this.stage.isThreadSafe || // make "any msg" threadsafe
-                        block.inputs()[0].evaluate() instanceof Array,
+                        this.stage.isThreadSafe,
+                        // commented out for now to enable tail recursion:
+                        // || // make "any msg" threadsafe
+                        // block.inputs()[0].evaluate() instanceof Array,
                         null, // exportResult (bool)
                         callback instanceof Function ? wait : null,
                         null, // isClicked
