@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2021-December-20';
+modules.blocks = '2022-January-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3849,7 +3849,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     // distribute inputs among the slots
     slots = cpy.inputs();
     slots.forEach((slot) => {
-        var inp;
+        var inp, i, cnt;
         if (slot instanceof MultiArgMorph && slot.inputs().length) {
             slot.inputs().forEach(entry => {
                 inp = dta[count];
@@ -3885,8 +3885,26 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     slot.nestedBlock(inp);
                 }
             } else {
-                if (inp instanceof List && inp.length() === 0) {
-                    nop(); // ignore, i.e. leave slot as is
+                if (inp instanceof List) {
+                    if (inp.length() === 0) {
+                        nop(); // ignore, i.e. leave slot as is
+                    } else if (slot instanceof MultiArgMorph) {
+                        slot.collapseAll();
+                        for (i = 1; i <= inp.at(1); i += 1) {
+                            cnt = inp.at(i + 1);
+                            if (cnt instanceof List) {
+                                cnt = Process.prototype.assemble(cnt);
+                            }
+                            if (cnt instanceof Context) {
+                                slot.replaceInput(
+                                    slot.addInput(),
+                                    cnt.expression.fullCopy()
+                                );
+                            } else {
+                                slot.addInput(cnt);
+                            }
+                        }
+                    }
                 } else if (slot instanceof ColorSlotMorph) {
                     slot.setColor(Color.fromString(inp));
                 } else if (slot instanceof InputSlotMorph ||

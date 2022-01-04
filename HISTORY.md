@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * arity control for assembling polyadic inputs using JOIN (pass a list whose first item is an integer representing the number of slots followed by the contents of those slots)
 * **Notable Changes:**
     * same blocks with empty variadic inputs compare as equal regardless of their arity
     * made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
@@ -20,6 +21,7 @@
 
 ### 2022-01-04
 * manifest: fixed #2954
+* threads, blocks: added arity control for assembling polyadic inputs
 
 ### 2022-01-03
 * Italian translation update, thanks, Stefano!

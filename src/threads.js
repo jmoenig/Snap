@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-03';
+modules.threads = '2022-January-04';
 
 var ThreadManager;
 var Process;
@@ -4573,6 +4573,9 @@ Process.prototype.assemble = function (blocks) {
     }
     if (blocks.isEmpty()) {
         return blocks;
+    }
+    if (this.reportIsA(blocks.at(1), 'number')) {
+        return blocks.map(each => this.assemble(each));
     }
     return blocks.map(each => this.assemble(each)).itemsArray().reduce(
         (a, b) => a.copyWithNext(b)
