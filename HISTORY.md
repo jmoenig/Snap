@@ -3,6 +3,14 @@
 ## in development:
 
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+
+## 7.0.3:
+* **New Features:**
     * arity control for assembling polyadic inputs using JOIN (pass a list whose first item is an integer representing the number of slots followed by the contents of those slots)
 * **Notable Changes:**
     * same blocks with empty variadic inputs compare as equal regardless of their arity
@@ -15,13 +23,13 @@
     * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
     * fixed / worked around PWA caching for URLs with query parts, thanks, Ken!
     * added missing "identical to" relabel option to "less than" reporter, thanks, Mary!
-* **Documentation Updates:**
 * **Translation Updates:**
     * Italian, thanks, Stefano!
 
 ### 2022-01-04
 * manifest: fixed #2954
 * threads, blocks: added arity control for assembling polyadic inputs
+* v7.0.3
 
 ### 2022-01-03
 * Italian translation update, thanks, Stefano!

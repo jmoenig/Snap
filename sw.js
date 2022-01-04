@@ -1,6 +1,5 @@
-var snapVersion = '7.0.3 - dev -'
-
-var cacheName = 'snap-pwa',
+var snapVersion = '7.0.3',
+    cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
 
