@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * syntax tree format for translatable input options and constants: "[choice]"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
