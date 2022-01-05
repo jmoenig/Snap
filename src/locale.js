@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2021-December-10';
+modules.locale = '2022-January-03';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -196,7 +196,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2020-11-19'
+        '2022-91-03'
 };
 
 SnapTranslator.dict.ja = {

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-22';
+modules.threads = '2022-January-04';
 
 var ThreadManager;
 var Process;
@@ -1213,8 +1213,8 @@ Process.prototype.errorBubble = function (error, element) {
     // Return a morph containing an image of the elment causing the error
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
-        errorIsNested = isNil(element.world()),
-        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`
+        errorIsNested = !!element && isNil(element.world()),
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}\n`
             : '',
         errorMessage = new TextMorph(
             `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
@@ -1223,16 +1223,18 @@ Process.prototype.errorBubble = function (error, element) {
         blockToShow = element;
 
     errorMorph.add(errorMessage);
-    if (errorIsNested) {
+
+    if (errorIsNested && error.cause !== 'user') {
         if (blockToShow.selector === 'reportGetVar') {
             // if I am a single variable, show my caller in the output.
             blockToShow = blockToShow.parent;
         }
-        errorMorph.text += `\n${localize('The error occured at:')}\n`;
+        errorMorph.children[0].text += `\n${localize('The error occured at')}`;
+        errorMorph.children[0].fixLayout();
         errorMorph.add(blockToShow.fullCopy());
-        errorMorph.fixLayout();
     }
 
+    errorMorph.fixLayout();
     return errorMorph;
 };
 
@@ -3744,8 +3746,10 @@ Process.prototype.doBroadcast = function (message, receivers) {
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
-                            stage.isThreadSafe || // make "any msg" threadsafe
-                                block.inputs()[0].evaluate() instanceof Array,
+                            stage.isThreadSafe,
+                            // commented out for now to enable tail recursion:
+                            // || // make "any msg" threadsafe
+                            // block.inputs()[0].evaluate() instanceof Array,
                             null, // exportResult (bool)
                             null, // callback
                             null, // isClicked
@@ -4569,6 +4573,9 @@ Process.prototype.assemble = function (blocks) {
     }
     if (blocks.isEmpty()) {
         return blocks;
+    }
+    if (this.reportIsA(blocks.at(1), 'number')) {
+        return blocks.map(each => this.assemble(each));
     }
     return blocks.map(each => this.assemble(each)).itemsArray().reduce(
         (a, b) => a.copyWithNext(b)

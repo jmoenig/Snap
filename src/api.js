@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs gui.js, lists.js and morphic.js
+    needs gui.js, lists.js, objects.js, threads.js and morphic.js
 
 
     documentation
@@ -40,13 +40,13 @@
 */
 
 /*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
-detect*/
+detect, isSnapObject, VariableFrame*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2021-November-17';
+modules.api = '2022-January-03';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -148,8 +148,10 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
                     procs.push(this.stage.threads.startProcess(
                         block,
                         morph,
-                        this.stage.isThreadSafe || // make "any msg" threadsafe
-                        block.inputs()[0].evaluate() instanceof Array,
+                        this.stage.isThreadSafe,
+                        // commented out for now to enable tail recursion:
+                        // || // make "any msg" threadsafe
+                        // block.inputs()[0].evaluate() instanceof Array,
                         null, // exportResult (bool)
                         callback instanceof Function ? wait : null,
                         null, // isClicked
@@ -158,10 +160,10 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
                         varFrame
                     ));
                 } else {
-                    procs.push(stage.threads.startProcess(
+                    procs.push(this.stage.threads.startProcess(
                         block,
                         morph,
-                        stage.isThreadSafe
+                        this.stage.isThreadSafe
                     ));
                 }
             });

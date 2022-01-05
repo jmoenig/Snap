@@ -4,10 +4,48 @@
 
 * **New Features:**
 * **Notable Changes:**
-    * same blocks with empty variadic inputs compare as equal regardless of their arity
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+
+
+## 7.0.3:
+* **New Features:**
+    * arity control for assembling polyadic inputs using JOIN (pass a list whose first item is an integer representing the number of slots followed by the contents of those slots)
+* **Notable Changes:**
+    * same blocks with empty variadic inputs compare as equal regardless of their arity
+    * made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
+    * improved handling of user-defined errors and errors inside custom blocks 
+* **Notable Fixes:**
+    * fixed storing the stage name(s) - also fixes undesired translation
+    * removed distinction between number and string keys in "analyze" 
+    * fixed variable binding when broadcasting through the API, thanks, Zak!
+    * fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+    * fixed / worked around PWA caching for URLs with query parts, thanks, Ken!
+    * added missing "identical to" relabel option to "less than" reporter, thanks, Mary!
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+
+### 2022-01-04
+* manifest: fixed #2954
+* threads, blocks: added arity control for assembling polyadic inputs
+* v7.0.3
+
+### 2022-01-03
+* Italian translation update, thanks, Stefano!
+* api: fixed variable binding when broadcasting through the API, thanks, Zak!
+* objects: fixed programmatically hiding palette blocks using the "hide variable" block, thanks, Zak!
+* threads, api: made "When I receive any messagge" non-thread-safe by default (again) to enable tail recursive broadcasts
+* threads, extensions: improved handling of user-defined errors and errors inside custom blocks
+* sw.js: fixed #2957, thanks, Ken!
+* objects: fixed #2950, thanks, Mary!
+* manifest: fixed #2954
+
+### 2022-01-02
+* store: fixed storing the stage name(s)
+
+### 2022-01-01
+* extensions: removed distinction between number and string keys in "analyze"
 
 ### 2021-12-22
 * new dev version
