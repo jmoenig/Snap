@@ -10,7 +10,7 @@
 
 ### 2022-01-05
 * new dev version
-
+* blocks: added syntax tree representation for translated input options and constants
 
 ## 7.0.3:
 * **New Features:**

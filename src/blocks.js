@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-04';
+modules.blocks = '2022-January-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3797,6 +3797,9 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
             expr.revertToEmptyInput(inp).collapseAll();
         } else {
             val = inp.evaluate();
+            if (val instanceof Array) {
+                val = '[' + val + ']';
+            }
             if (inp instanceof ColorSlotMorph) {
                 val = val.toString();
             }
