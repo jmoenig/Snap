@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs gui.js, lists.js and morphic.js
+    needs gui.js, lists.js, objects.js, threads.js and morphic.js
 
 
     documentation
@@ -40,13 +40,13 @@
 */
 
 /*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
-detect*/
+detect, isSnapObject, VariableFrame*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2021-November-17';
+modules.api = '2022-January-03';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -135,16 +135,39 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
         throw new Error('message must be a String');
     }
     this.stage.lastMessage = message;
-    rcvrs.forEach(sprite => {
-        sprite.allHatBlocksFor(message).forEach(block => {
-            procs.push(this.stage.threads.startProcess(
-                block,
-                sprite,
-                this.stage.isThreadSafe,
-                false,
-                callback instanceof Function ? wait : null
-            ));
-        });
+    rcvrs.forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksFor(message).forEach(block => {
+                var varName, varFrame;
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(varName, message);
+                    }
+                    procs.push(this.stage.threads.startProcess(
+                        block,
+                        morph,
+                        this.stage.isThreadSafe,
+                        // commented out for now to enable tail recursion:
+                        // || // make "any msg" threadsafe
+                        // block.inputs()[0].evaluate() instanceof Array,
+                        null, // exportResult (bool)
+                        callback instanceof Function ? wait : null,
+                        null, // isClicked
+                        null, // rightAway
+                        null, // atomic
+                        varFrame
+                    ));
+                } else {
+                    procs.push(this.stage.threads.startProcess(
+                        block,
+                        morph,
+                        this.stage.isThreadSafe
+                    ));
+                }
+            });
+        }
     });
     (this.stage.messageCallbacks[''] || []).forEach(
         callback => callback(message)
