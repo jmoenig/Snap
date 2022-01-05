@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2021-December-14';
+modules.store = '2022-January-02';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1781,7 +1781,7 @@ StageMorph.prototype.toXML = function (serializer) {
 
     this.removeAllClones();
     return serializer.format(
-            '<stage width="@" height="@" ' +
+            '<stage name="@" width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
             'penlog="@" ' +
             '%' +
@@ -1802,6 +1802,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<scripts>%</scripts>' +
             '<sprites select="@">%</sprites>' +
             '</stage>',
+        this.name,
         this.dimensions.x,
         this.dimensions.y,
         costumeIdx,

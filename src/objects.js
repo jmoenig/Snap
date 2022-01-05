@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-December-20';
+modules.objects = '2022-January-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -1793,7 +1793,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
         'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
+        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
@@ -3256,7 +3257,8 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
 };
 
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
-    var ide, dict, cat;
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict, cat;
     if (aBlock.isCustomBlock) {
         (aBlock.isGlobal ? aBlock.definition
             : this.getMethod(aBlock.semanticSpec)

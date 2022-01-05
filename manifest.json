@@ -3,15 +3,15 @@
   "short_name": "Snap!",
   "icons": [{
       "src": "img/snap-icon-72.png",
-      "sizes": "128x128",
+      "sizes": "72x72",
       "type": "image/png"
     }, {
       "src": "img/snap-icon-96.png",
-      "sizes": "128x128",
+      "sizes": "96x96",
       "type": "image/png"
     }, {
       "src": "img/snap-icon-120.png",
-      "sizes": "128x128",
+      "sizes": "120x120",
       "type": "image/png"
     }, {
       "src": "img/snap-icon-128.png",
@@ -36,7 +36,7 @@
       "type": "image/png"
     }, {
       "src": "img/snap-icon-384.png",
-      "sizes": "256x256",
+      "sizes": "384x384",
       "type": "image/png"
     }, {
       "src": "img/snap-icon-512.png",
