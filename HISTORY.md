@@ -9,6 +9,10 @@
     * strings library: substrings handle negative indices as documented, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * Catalan library translations, thanks, Joan!
+
+### 2022-01-06
+* Catalan library translations, thanks, Joan!
 
 ### 2022-01-05
 * new dev version
