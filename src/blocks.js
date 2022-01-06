@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-04';
+modules.blocks = '2022-January-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3797,6 +3797,9 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
             expr.revertToEmptyInput(inp).collapseAll();
         } else {
             val = inp.evaluate();
+            if (val instanceof Array) {
+                val = '[' + val + ']';
+            }
             if (inp instanceof ColorSlotMorph) {
                 val = val.toString();
             }
@@ -3826,6 +3829,13 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         count = 0,
         dflt;
 
+    function isOption(data) {
+        return isString(data) &&
+            data.length > 2 &&
+            data[0] === '[' &&
+            data[data.length - 1] === ']';
+    }
+
     if (dta.length === 0) {
         return cpy.reify();
     }
@@ -3850,7 +3860,33 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     slots = cpy.inputs();
     slots.forEach((slot) => {
         var inp, i, cnt;
-        if (slot instanceof MultiArgMorph && slot.inputs().length) {
+        if (slot instanceof MultiArgMorph && dta[count] instanceof List) {
+            // let the list's first item control the arity of the polyadic slot
+            // fill with the following items in the list
+            inp = dta[count];
+            if (inp.length() === 0) {
+                nop(); // ignore, i.e. leave slot as is
+            } else {
+                slot.collapseAll();
+                for (i = 1; i <= inp.at(1); i += 1) {
+                    cnt = inp.at(i + 1);
+                    if (cnt instanceof List) {
+                        cnt = Process.prototype.assemble(cnt);
+                    }
+                    if (cnt instanceof Context) {
+                        slot.replaceInput(
+                            slot.addInput(),
+                            cnt.expression.fullCopy()
+                        );
+                    } else {
+                        slot.addInput(cnt);
+                    }
+                }
+            }
+            count += 1;
+        } else if (slot instanceof MultiArgMorph && slot.inputs().length) {
+            // fill the visible slots of the polyadic input as if they were
+            // permanent inputs each
             slot.inputs().forEach(entry => {
                 inp = dta[count];
                 if (inp instanceof BlockMorph) {
@@ -3872,6 +3908,9 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                 count += 1;
             });
         } else {
+            // fill the visible slot, treat collapsed variadic slots as single
+            // input (to be replaced by a reporter),
+            // skip in case the join value is an empty list
             inp = dta[count];
             if (inp === undefined) {return; }
             if (inp instanceof BlockMorph) {
@@ -3885,30 +3924,13 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     slot.nestedBlock(inp);
                 }
             } else {
-                if (inp instanceof List) {
-                    if (inp.length() === 0) {
-                        nop(); // ignore, i.e. leave slot as is
-                    } else if (slot instanceof MultiArgMorph) {
-                        slot.collapseAll();
-                        for (i = 1; i <= inp.at(1); i += 1) {
-                            cnt = inp.at(i + 1);
-                            if (cnt instanceof List) {
-                                cnt = Process.prototype.assemble(cnt);
-                            }
-                            if (cnt instanceof Context) {
-                                slot.replaceInput(
-                                    slot.addInput(),
-                                    cnt.expression.fullCopy()
-                                );
-                            } else {
-                                slot.addInput(cnt);
-                            }
-                        }
-                    }
+                if (inp instanceof List && inp.length() === 0) {
+                    nop(); // ignore, i.e. leave slot as is
                 } else if (slot instanceof ColorSlotMorph) {
                     slot.setColor(Color.fromString(inp));
-                } else if (slot instanceof InputSlotMorph ||
-                        slot instanceof TemplateSlotMorph ||
+                } else if (slot instanceof InputSlotMorph) {
+                    slot.setContents(isOption(inp) ? [inp.slice(1, -1)] : inp);
+                } else if (slot instanceof TemplateSlotMorph ||
                         slot instanceof BooleanSlotMorph) {
                     slot.setContents(inp);
                 }
