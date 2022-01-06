@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2021-12-09', // this, too, will appear in the Translators tab
+        '2022-01-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2616,6 +2616,10 @@ SnapTranslator.dict.ca = {
         'Colors i Paletes',
     'Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.':
         'Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.',
+    'Crayons':
+        'Llapis de colors',
+    'Just the crayons, without the rest of the colors library.  Fast and simple.':
+        'Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.',
     'Bignums, rationals, complex #s':
         'Números sencers de precisió infinita, racionals exactes i complexos',
     'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
@@ -2702,6 +2706,14 @@ SnapTranslator.dict.ca = {
         'Crea variables',
     'Create and manage global/sprite/script variables in a script':
         'Crea i gestiona variables de tipus global/sprite/script dins els programes',
+    'Serial Ports':
+        'Ports sèrie',
+    'Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)':
+        'Connexió a microcontroladors connectats al port sèrie utilitzant el Web Serial API (requereix de la utilització del navegador Chromium, Chrome o Edge)',
+    'Signada (Network remote control)':
+        'Signada (control remot per xarxa)',
+    'Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.':
+        'Interactua amb dispositius programats amb Microblocks per la WiFi. Els dispositius han de tenir una pantalla TFT, dos butons i connectivitat WiFi i tenir carregat el projecte Signada de MicroBlocks. Exemples compatibles són la placa ED1 del Citilab i múltiples dispositius tipus M5Stack.',
 
     'Hummingbird robotics':
         'Hummingbird robòtics',

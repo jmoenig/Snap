@@ -3829,6 +3829,13 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         count = 0,
         dflt;
 
+    function isOption(data) {
+        return isString(data) &&
+            data.length > 2 &&
+            data[0] === '[' &&
+            data[data.length - 1] === ']';
+    }
+
     if (dta.length === 0) {
         return cpy.reify();
     }
@@ -3921,8 +3928,9 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     nop(); // ignore, i.e. leave slot as is
                 } else if (slot instanceof ColorSlotMorph) {
                     slot.setColor(Color.fromString(inp));
-                } else if (slot instanceof InputSlotMorph ||
-                        slot instanceof TemplateSlotMorph ||
+                } else if (slot instanceof InputSlotMorph) {
+                    slot.setContents(isOption(inp) ? [inp.slice(1, -1)] : inp);
+                } else if (slot instanceof TemplateSlotMorph ||
                         slot instanceof BooleanSlotMorph) {
                     slot.setContents(inp);
                 }

@@ -3,14 +3,21 @@
 ## in development:
 
 * **New Features:**
+    * syntax tree format for translatable input options and constants: "[choice]"
 * **Notable Changes:**
 * **Notable Fixes:**
+    * strings library: substrings handle negative indices as documented, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * Catalan library translations, thanks, Joan!
+
+### 2022-01-06
+* Catalan library translations, thanks, Joan!
 
 ### 2022-01-05
 * new dev version
 * blocks: added syntax tree representation for translated input options and constants
+* strings library update, thanks, Brian!
 
 ## 7.0.3:
 * **New Features:**
