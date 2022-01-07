@@ -989,7 +989,7 @@ SyntaxElementMorph.prototype.labelParts = {
     */
     '%t': {
         type: 'template',
-        label: 'a'
+        label: 'v'
     },
     '%upvar': {
         type: 'template',
@@ -3810,7 +3810,7 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
     parts.at(1).updateEmptySlots();
     if (expr.selector === 'reportGetVar') {
         parts.add(expr.blockSpec);
-        expr.setSpec('var');
+        expr.setSpec('v');
     }
     parameterNames.forEach(name => parts.add(name));
     return parts;
