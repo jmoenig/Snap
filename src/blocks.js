@@ -3750,7 +3750,7 @@ BlockMorph.prototype.components = function (parameterNames = []) {
     return seq.length() === 1 ? seq.at(1) : seq;
 };
 
-BlockMorph.prototype.syntaxTree = function (parameterNames) { // +++
+BlockMorph.prototype.syntaxTree = function (parameterNames) {
     var expr = this.fullCopy(),
         nb = expr.nextBlock ? expr.nextBlock() : null,
         inputs, parts;
@@ -3841,6 +3841,10 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     }
 
     if (dta.length === 0) {
+        return cpy.reify();
+    }
+    if (cpy.selector === 'reportGetVar' && (dta.length === 1)) {
+        cpy.setSpec(dta[0]);
         return cpy.reify();
     }
 

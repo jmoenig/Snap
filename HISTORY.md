@@ -4,6 +4,7 @@
 
 * **New Features:**
     * syntax tree format for translatable input options and constants: "[choice]"
+    * syntax tree support for variable getter names
 * **Notable Changes:**
 * **Notable Fixes:**
     * strings library: substrings handle negative indices as documented, thanks, Brian!
