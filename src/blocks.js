@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-05';
+modules.blocks = '2022-January-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3750,7 +3750,7 @@ BlockMorph.prototype.components = function (parameterNames = []) {
     return seq.length() === 1 ? seq.at(1) : seq;
 };
 
-BlockMorph.prototype.syntaxTree = function (parameterNames) {
+BlockMorph.prototype.syntaxTree = function (parameterNames) { // +++
     var expr = this.fullCopy(),
         nb = expr.nextBlock ? expr.nextBlock() : null,
         inputs, parts;
@@ -3808,6 +3808,10 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
         }
     });
     parts.at(1).updateEmptySlots();
+    if (expr.selector === 'reportGetVar') {
+        parts.add(expr.blockSpec);
+        expr.setSpec('var');
+    }
     parameterNames.forEach(name => parts.add(name));
     return parts;
 };

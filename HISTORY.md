@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * Catalan library translations, thanks, Joan!
 
+### 2022-01-07
+* blocks: added syntax tree representation for variable getters
+
 ### 2022-01-06
 * Catalan library translations, thanks, Joan!
 
