@@ -14,6 +14,7 @@
 
 ### 2022-01-07
 * blocks: added syntax tree representation for variable getters
+* blocks, byob: blank-out variable getters in syntax-tree result list
 
 ### 2022-01-06
 * Catalan library translations, thanks, Joan!

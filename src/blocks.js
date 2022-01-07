@@ -989,11 +989,11 @@ SyntaxElementMorph.prototype.labelParts = {
     */
     '%t': {
         type: 'template',
-        label: 'v'
+        label: '\xa0' // non-breaking space, appears blank
     },
     '%upvar': {
         type: 'template',
-        label: '\u2191' // up-arrow
+        label: '\xa0' // non-breaking space, appears blank
     },
 
     // other single types
@@ -3810,7 +3810,7 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
     parts.at(1).updateEmptySlots();
     if (expr.selector === 'reportGetVar') {
         parts.add(expr.blockSpec);
-        expr.setSpec('v');
+        expr.setSpec('\xa0'); // non-breaking space, appears blank
     }
     parameterNames.forEach(name => parts.add(name));
     return parts;
