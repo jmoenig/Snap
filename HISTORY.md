@@ -3,18 +3,25 @@
 ## in development:
 
 * **New Features:**
-    * syntax tree format for translatable input options and constants: "[choice]"
-    * syntax tree support for variable getter names
 * **Notable Changes:**
 * **Notable Fixes:**
-    * strings library: substrings handle negative indices as documented, thanks, Brian!
 * **Documentation Updates:**
+* **Translation Updates:**
+
+
+## 7.0.4:
+* **New Features:**
+    * syntax tree format for translatable input options and constants: "[choice]"
+    * syntax tree support for variable getter names
+* **Notable Fixes:**
+    * strings library: substrings handle negative indices as documented, thanks, Brian!
 * **Translation Updates:**
     * Catalan library translations, thanks, Joan!
 
 ### 2022-01-07
 * blocks: added syntax tree representation for variable getters
 * blocks, byob: blank-out variable getters in syntax-tree result list
+* v7.0.4
 
 ### 2022-01-06
 * Catalan library translations, thanks, Joan!
@@ -65,7 +72,6 @@
 ### 2021-12-22
 * new dev version
 * threads: same blocks with empty variadic inputs compare as equal regardless of their arity 
- 
 
 ## 7.0.2:
 * **Notable Fixes:**
@@ -83,7 +89,6 @@
 ### 2021-12-18
 * new dev version
 * objects: shadow (a clone's) costumes when setting its rotation coordinates 
-
 
 ## 7.0.1:
 * **Notable Changes:**
