@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-01-10
+* new dev version
+
 
 ## 7.0.4:
 * **New Features:**
