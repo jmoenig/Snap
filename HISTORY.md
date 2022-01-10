@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * text costumes library: new block to add a rectangular colored background with optional padding to a copy of a costume, for making "clickable buttons"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -10,6 +11,7 @@
 
 ### 2022-01-10
 * new dev version
+* text costumes library: new block to add a rectangular colored background with padding to a copy of a costume
 
 
 ## 7.0.4:
