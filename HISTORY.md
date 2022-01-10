@@ -6,6 +6,7 @@
     * text costumes library: new block to add a rectangular colored background with optional padding to a copy of a costume, for making "clickable buttons"
 * **Notable Changes:**
 * **Notable Fixes:**
+    * strings library: fixed an index range bug, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
     * Chinese, thanks, Simon!
@@ -14,6 +15,7 @@
 * new dev version
 * text costumes library: new block to add a rectangular colored background with padding to a copy of a costume
 * Chinese translation update, thanks, Simon!
+* strings library: fixed an index range bug, thanks, Brian!
 
 
 ## 7.0.4:
