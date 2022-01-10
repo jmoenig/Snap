@@ -8,10 +8,12 @@
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+    * Chinese, thanks, Simon!
 
 ### 2022-01-10
 * new dev version
 * text costumes library: new block to add a rectangular colored background with padding to a copy of a costume
+* Chinese translation update, thanks, Simon!
 
 
 ## 7.0.4:
