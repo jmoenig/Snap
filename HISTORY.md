@@ -6,6 +6,7 @@
     * text costumes library: new block to add a rectangular colored background with optional padding to a copy of a costume, for making "clickable buttons"
 * **Notable Changes:**
     * improved emoji handling for "length of text" reporter, thanks, Michael!
+    * added support for EDC's Early Math Microworld extension
 * **Notable Fixes:**
     * strings library: fixed an index range bug, thanks, Brian!
 * **Documentation Updates:**
@@ -14,6 +15,7 @@
 
 ### 2022-01-13
 * threads: improved emoji handling for "length of text" reporter, thanks, Michael!
+* extensions: added support for EDC's Early Math Microworld extension
 
 ### 2022-01-10
 * new dev version
