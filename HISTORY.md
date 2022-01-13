@@ -5,11 +5,15 @@
 * **New Features:**
     * text costumes library: new block to add a rectangular colored background with optional padding to a copy of a costume, for making "clickable buttons"
 * **Notable Changes:**
+    * improved emoji handling for "length of text" reporter, thanks, Michael!
 * **Notable Fixes:**
     * strings library: fixed an index range bug, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
     * Chinese, thanks, Simon!
+
+### 2022-01-13
+* threads: improved emoji handling for "length of text" reporter, thanks, Michael!
 
 ### 2022-01-10
 * new dev version
