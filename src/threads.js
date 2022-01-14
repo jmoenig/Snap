@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-04';
+modules.threads = '2022-January-13';
 
 var ThreadManager;
 var Process;
@@ -4344,7 +4344,7 @@ Process.prototype.reportStringSize = function (data) {
     if (data instanceof List) { // catch a common user error
         return data.length();
     }
-    return isNil(data) ? 0 : data.toString().length;
+    return isNil(data) ? 0 : Array.from(data.toString()).length;
 };
 
 Process.prototype.reportUnicode = function (string) {

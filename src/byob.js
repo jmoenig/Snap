@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -110,7 +110,7 @@ WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-December-16';
+modules.byob = '2022-January-07';
 
 // Declarations
 
@@ -725,11 +725,11 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         });
     }
 
-    // find unnamed upvars and label them
+    // find unnamed upvars (indicated by non-breaking space) and label them
     // to their internal definition (default)
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
-        if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
+        if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
         }
     });

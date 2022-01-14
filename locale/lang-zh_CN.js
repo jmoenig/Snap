@@ -125,7 +125,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2021-07-12',
+        '2022-01-10',
 
     // GUI
     // control bar:
@@ -778,6 +778,14 @@ SnapTranslator.dict.zh_CN = {
         '自己',
     'delete this clone':
         '删除这个克隆',
+    'switch to scene %scn %send':
+        '切换至场景 %scn %send',
+    'and send':
+        '并发送',    
+    'next':
+        '下一个',
+    'previous':
+        '上一个',  
 
     // sensing:
     'touching %col ?':
@@ -899,7 +907,15 @@ SnapTranslator.dict.zh_CN = {
     'frames':
         '帧',    
     'log pen vectors':
-        '记录画笔矢量',    
+        '记录画笔矢量',
+    '%block of block %repRing':
+        '积木 %repRing 的 %block',
+    'definition':
+        '定义',
+    'custom?':
+        '是自定义积木?',
+    'global?':
+        '是全局积木?',    
 
     // operators:
     '%n mod %n':
@@ -1007,7 +1023,7 @@ SnapTranslator.dict.zh_CN = {
     'item':
         '项',      
     '%la of %l':
-        '%la 的 %l',
+        '%l 的 %la',
     'rank':
         '维数',
     'dimensions':
@@ -1096,6 +1112,18 @@ SnapTranslator.dict.zh_CN = {
         '打开新窗口，以XML格式展示全局自制积木',
     'Unused blocks...':
         '没用到的积木…',
+    'Hide blocks...':
+        '隐藏积木...',
+    'New category...':
+        '新建积木类别...',
+    'Remove a category...':
+        '删除积木类别...',
+    'Scenes...':
+        '场景...',
+    'New scene':
+        '新建场景',
+    'Add scene...':
+        '添加场景...',    
     'find unused global custom blocks\nand remove their definitions':
         '查找没用到的全局自制积木，\n删除它们的定义',
     'Remove unused blocks':
@@ -1445,6 +1473,18 @@ SnapTranslator.dict.zh_CN = {
         '不保存子列表的ID',
     'check to enable\nsaving linked sublist identities':
         '保存子列表的ID',
+    'Disable click-to-run':
+        '禁止点击积木直接运行',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        '取消勾选后可以点击积木直接运行',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        '勾选后禁止点击积木直接运行', 
+    'Single palette':
+        '单一积木面板',
+    'check to show all blocks in a single palette':
+        '勾选之后所有的积木会在同一个积木面板(类别)里显示',
+    'uncheck to show only the selected category\'s blocks':
+        '取消勾选后积木会分别显示在其归属的积木面板(类别)中',
     // inputs
     'with inputs':
         '输入项',
