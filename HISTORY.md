@@ -5,11 +5,15 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
+    * fixed loading the Chinese translation, thanks, @moodykeke
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-01-17
 * new dev version
+* fixed loading the Chinese translation, thanks, @moodykeke
+* threads: fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
 
 ## 7.0.5:
 * **New Features:**

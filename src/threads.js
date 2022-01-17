@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-13';
+modules.threads = '2022-January-17';
 
 var ThreadManager;
 var Process;
@@ -4761,7 +4761,7 @@ Process.prototype.goToLayer = function (name) {
 
 // Process scene primitives
 
-Process.prototype.doSwitchToScene = function (id, transmission) { // +++
+Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
         message = this.inputOption(transmission.at(1)),
@@ -5886,18 +5886,20 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         rootVars;
 
     result.receiver = otherObj;
-    if (result.outerContext) {
-        result.outerContext = copy(result.outerContext);
-        result.outerContext.variables = copy(result.outerContext.variables);
-        result.outerContext.receiver = otherObj;
-        if (result.outerContext.variables.parentFrame) {
-            rootVars = result.outerContext.variables.parentFrame;
-            receiverVars = copy(otherObj.variables);
-            receiverVars.parentFrame = rootVars;
-            result.outerContext.variables.parentFrame = receiverVars;
-        } else {
-            result.outerContext.variables.parentFrame = otherObj.variables;
-        }
+    if (!result.outerContext) {
+        result.outerContext = new Context();
+        result.variables.parentFrame = result.outerContext.variables;
+    }
+    result.outerContext = copy(result.outerContext);
+    result.outerContext.variables = copy(result.outerContext.variables);
+    result.outerContext.receiver = otherObj;
+    if (result.outerContext.variables.parentFrame) {
+        rootVars = result.outerContext.variables.parentFrame;
+        receiverVars = copy(otherObj.variables);
+        receiverVars.parentFrame = rootVars;
+        result.outerContext.variables.parentFrame = receiverVars;
+    } else {
+        result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
 };
