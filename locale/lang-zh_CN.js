@@ -192,7 +192,7 @@ SnapTranslator.dict.zh_CN = {
     'paint a new sprite':
         '绘制一个新角色',
     'take a camera snapshot and\nimport it as a new sprite':
-        '用摄像头拍摄一个新角色',    
+        '用摄像头拍摄一个新角色',
 
     // tab help
     'costumes tab help':
@@ -281,15 +281,15 @@ SnapTranslator.dict.zh_CN = {
     'Hello!':
         '你好！',
     'Hmm...':
-        '嗯……',
+        '嗯......',
     '%img of costume %cst':
-        '取 %img 于 %cst', 
+        '取 %img 于 %cst',
     'pixels':
         '像素',
     'current':
-        '当前造型',    
+        '当前造型',
     'stretch %cst x: %n y: %n %':
-        '拉伸 %cst 比例 x: %n y: %n %',               
+        '拉伸 %cst 比例 x: %n y: %n %',
     'change %eff effect by %n':
         '把 %eff 效果增加 %n',
     'set %eff effect to %n':
@@ -297,7 +297,7 @@ SnapTranslator.dict.zh_CN = {
     'clear graphic effects':
         '清除所有图形效果',
     '%eff effect':
-        '%eff 效果',        
+        '%eff 效果',
     'change size by %n':
         '把角色的大小增加 %n',
     'set size to %n %':
@@ -315,7 +315,7 @@ SnapTranslator.dict.zh_CN = {
     'front':
         '顶',
     'back':
-        '底',        
+        '底',
     'go back %n layers':
         '下移 %n 层',
 
@@ -353,17 +353,17 @@ SnapTranslator.dict.zh_CN = {
 
     // development mode: morph context menu
     'user features...':
-        '用户菜单…',
+        '用户菜单...',
     'color...':
-        '颜色…',
+        '颜色...',
     'choose another color \nfor this morph':
         '指定morph的颜色',
     'transparency...':
-        '透明度…',
+        '透明度...',
     'set this morph\'s\nalpha value':
         '设置morph的alpha通道值',
     'resize...':
-        '改变大小…',
+        '改变大小...',
     'show a handle\nwhich can be dragged\nto change this morph\'s extent':
         '显示一个把手，\n拖动可改变morph大小',
     'pick up':
@@ -371,15 +371,15 @@ SnapTranslator.dict.zh_CN = {
     'disattach and put \ninto the hand':
         '断开连接拿起morph',
     'attach...':
-        '连接到…',
+        '连接到...',
     'stick this morph\nto another one':
         '连接到另外一个morph',
     'move...':
-        '移动…',
+        '移动...',
     'show a handle\nwhich can be dragged\nto move this morph':
         '显示一个把手，\n拖动可移动这个morph',
     'inspect...':
-        '查看…',
+        '查看...',
     'open a window\non all properties':
         '打开新的窗口\n显示所有属性',
     'open a new window\nwith a picture of this morph': // pick up
@@ -393,11 +393,11 @@ SnapTranslator.dict.zh_CN = {
     'make this morph\nmovable':
         '可以移动morph',
     'World...':
-        'World…', // don't translate "World"
+        'World...', // don't translate "World"
     'show the\nWorld\'s menu':
         '显示World菜单',
     'font size...':
-        '字体大小…',
+        '字体大小...',
     'set this String\'s\nfont point size':
         '设置字符串的字体点数',
     'align left':
@@ -429,19 +429,19 @@ SnapTranslator.dict.zh_CN = {
     'delete block':
         '删除积木',
     'spec...':
-        '描述…',
+        '描述...',
     'spec':
         '描述',
     'border width...':
-        '边框粗细…',
+        '边框粗细...',
     'set the border\'s\nline size':
         '设置边框线条尺寸',
     'border color...':
-        '边框颜色…',
+        '边框颜色...',
     'set the border\'s\nline color':
         '设置边框线条颜色',
     'corner size...':
-        '圆角大小…',
+        '圆角大小...',
     'set the corner\'s\nradius':
         '设置圆角半径',
     'alpha\nvalue:':
@@ -451,7 +451,7 @@ SnapTranslator.dict.zh_CN = {
 
     // development mode: morph inspector
     'show...':
-        '显示…',
+        '显示...',
     'close':
         '关闭',
     'attributes':
@@ -465,29 +465,29 @@ SnapTranslator.dict.zh_CN = {
     'save':
         '保存',
     'add property...':
-        '增加属性…',
+        '增加属性...',
     'remove...':
-        '删除…',
+        '删除...',
     'new property name:':
         '新属性名：',
     'property name:':
         '属性名：',
     'in new inspector...':
-        '新窗口…',
+        '新窗口...',
     'here...':
-        '此窗口…',
+        '此窗口...',
 
     // development mode: WorldMorph context menu
     'demo...':
-        '演示…',
+        '演示...',
     'sample morphs':
         '各种morph示例',
     'hide all...':
-        '全部隐藏…',
+        '全部隐藏...',
     'show all...':
-        '全部显示…',
+        '全部显示...',
     'move all inside...':
-        '全部围住…',
+        '全部围住...',
     'keep all submorphs\nwithin and visible':
         '围入所有子morph\n全部可见',
     'auto line wrap on...':
@@ -499,21 +499,21 @@ SnapTranslator.dict.zh_CN = {
     'turn automatic\nline wrapping\noff':
         '关闭自动折行功能',
     'screenshot...':
-        '屏幕截图…',
+        '屏幕截图...',
     'restore display':
         '恢复显示',
     'redraw the\nscreen once':
         '重画屏幕',
     'fill page...':
-        '填满页面…',
+        '填满页面...',
     'let the World automatically\nadjust to browser resizings':
         '让Wolrd随浏览器改变大小',
     'sharp shadows...':
-        '锐利的阴影…',
+        '锐利的阴影...',
     'sharp drop shadows\nuse for old browsers':
         '对老旧浏览器\n使用锐利的阴影',
     'blurred shadows...':
-        '模糊的阴影…',
+        '模糊的阴影...',
     'blurry shades,\n use for new browsers':
         '对新浏览器\n使用模糊的阴影',
     'choose the World\'s\nbackground color':
@@ -527,13 +527,13 @@ SnapTranslator.dict.zh_CN = {
     'smaller menu fonts\nand sliders':
         '使用小号菜单字体和游标',
     'user mode...':
-        '用户模式…',
+        '用户模式...',
     'disable developers\'\ncontext menus':
         '禁用开发者快捷菜单',
     'about morphic.js...':
-        '关于morphic.js…',
+        '关于morphic.js...',
     'development mode...':
-        '开发者模式…',
+        '开发者模式...',
 
     // development mode: World's demo context menu
     'make a morph':
@@ -573,11 +573,11 @@ SnapTranslator.dict.zh_CN = {
     'play sound %snd until done':
         '播放声音 %snd 直到播放完毕',
     'stop all sounds':
-        '停止所有声音',     
+        '停止所有声音',
     'rest for %n beats':
         '停止 %n 拍',
     'play sound %snd at %rate Hz':
-        '播放声音 %snd 于频率 %rate 赫兹',        
+        '播放声音 %snd 于频率 %rate 赫兹',
     'play note %note for %n beats':
         '弹奏音符 %note 持续 %n 拍',
     '%aa of sound %snd':
@@ -589,15 +589,15 @@ SnapTranslator.dict.zh_CN = {
     'number of channels':
         '通道数',
     'new sound %l rate %rate Hz':
-        '创建声音 %l 频率 %rate Hz',    
+        '创建声音 %l 频率 %rate Hz',
     'sample rate':
         '样本频率',
     'samples':
-        '样本数据',          
+        '样本数据',
     'change volume by %n':
         '把音量增加 %n',
     'set volume to %n %':
-        '把音量设定为 %n %',  
+        '把音量设定为 %n %',
     'volume':
         '音量',
     'change balance by %n':
@@ -605,7 +605,7 @@ SnapTranslator.dict.zh_CN = {
     'set balance to %n':
         '设置声音平衡为 %n',
     'balance':
-        '声音平衡',                       
+        '声音平衡',
     'set instrument to %inst':
         '将乐器设定为 %inst',
     'change tempo by %n':
@@ -617,7 +617,7 @@ SnapTranslator.dict.zh_CN = {
     'play frequency %n Hz':
         '演奏频率 %n 赫兹',
     'stop frequency':
-        '停止演奏频率', 
+        '停止演奏频率',
     'play %n Hz for %n secs':
         '演奏频率 %n 赫兹 %n 秒',
 
@@ -627,11 +627,11 @@ SnapTranslator.dict.zh_CN = {
     'pen down':
         '落笔',
     'pen down?':
-        '画笔已落下?',        
+        '画笔已落下?',
     'pen up':
         '抬笔',
     'set pen color to %clr':
-        '把画笔的颜色值设定为 %clr',        
+        '把画笔的颜色值设定为 %clr',
     'change pen %clrdim by %n':
         '把画笔的 %clrdim 增加 %n',
     'set pen %clrdim to %n':
@@ -641,7 +641,7 @@ SnapTranslator.dict.zh_CN = {
     'transparency':
         '透明度',
     'pen %pen':
-        '画笔的 %pen',        
+        '画笔的 %pen',
     'change pen color by %n':
         '把画笔的颜色值增加 %n',
     'set pen color to %n':
@@ -659,13 +659,13 @@ SnapTranslator.dict.zh_CN = {
     'change background %clrdim by %n':
         '把背景的 %clrdim 增加 %n',
     'set background %clrdim to %n':
-        '把背景的 %clrdim 设定为 %n',        
+        '把背景的 %clrdim 设定为 %n',
     'stamp':
         '图章',
     'fill':
         '填充',
     'write %s size %n':
-        '写字 %s 字号 %n',        
+        '写字 %s 字号 %n',
     'tip':
         '尖端',
     'middle':
@@ -673,9 +673,9 @@ SnapTranslator.dict.zh_CN = {
     'paste on %spr':
         '拼贴在 %spr 上',
     'cut from %spr':
-        '从 %spr 剪切',      
+        '从 %spr 剪切',
     'pen vectors':
-        '画笔矢量',    
+        '画笔矢量',
 
   // control:
     'when %greenflag clicked':
@@ -697,9 +697,9 @@ SnapTranslator.dict.zh_CN = {
     'scrolled-up':
         '向上滚动滚轮',
     'scrolled-down':
-        '向下滚动滚轮',    
+        '向下滚动滚轮',
     'stopped':
-        '停止',    
+        '停止',
     'when %b':
         '当 %b',
     'when I receive %msgHat %message':
@@ -727,13 +727,13 @@ SnapTranslator.dict.zh_CN = {
     'repeat until %b %loop':
         '重复执行直到 %b %loop',
     'for %upvar = %n to %n %cla':
-        '重复执行 因子 %upvar 从 %n 到 %n %cla',        
+        '重复执行 因子 %upvar 从 %n 到 %n %cla',
     'if %b %c':
         '如果 %b %c',
     'if %b %c else %c':
         '如果 %b %c 否则 %c',
     'if %b then %s else %s':
-        '如果 %b 返回 %s 否则 %s',        
+        '如果 %b 返回 %s 否则 %s',
     'report %s':
         '报告 %s',
     'stop %stopChoices':
@@ -781,11 +781,11 @@ SnapTranslator.dict.zh_CN = {
     'switch to scene %scn %send':
         '切换至场景 %scn %send',
     'and send':
-        '并发送',    
+        '并发送',
     'next':
         '下一个',
     'previous':
-        '上一个',  
+        '上一个',
 
     // sensing:
     'touching %col ?':
@@ -809,13 +809,13 @@ SnapTranslator.dict.zh_CN = {
     'key %key pressed?':
         '按下了 %key 键？',
     '%rel to %dst':
-        '%rel 到 %dst',    
+        '%rel 到 %dst',
     '%asp at %loc' :
-        '%asp 于 %loc',    
+        '%asp 于 %loc',
     'sprites':
         '角色',
     'object %self':
-        '对象 %self',                
+        '对象 %self',
     'distance to %dst':
         '到 %dst 的距离',
     'distance':
@@ -865,7 +865,7 @@ SnapTranslator.dict.zh_CN = {
     'at':
         '于',
     'microphone %audio':
-        '麦克风 %audio',   
+        '麦克风 %audio',
     'Microphone resolution...':
         '麦克风分辨率...',
     'Microphone':
@@ -875,7 +875,7 @@ SnapTranslator.dict.zh_CN = {
     'high':
         '高',
     'max':
-        '最大',    
+        '最大',
     'note':
         '音符',
     'frequency':
@@ -891,31 +891,31 @@ SnapTranslator.dict.zh_CN = {
     'motion':
         '动作',
     'set video transparency to %n':
-        '把视频透明度设置为 %n',       
+        '把视频透明度设置为 %n',
     'is %setting on?':
         '%setting 已启用?',
     'set %setting to %b':
-        '设置 %setting 为 %b',        
+        '设置 %setting 为 %b',
     'turbo mode':
         '加速模式',
     'flat line ends':
         '平头线条',
     'video capture':
-        '视频捕捉',     
+        '视频捕捉',
     'mirror video':
-        '视频镜像',      
+        '视频镜像',
     'frames':
-        '帧',    
+        '帧',
     'log pen vectors':
         '记录画笔矢量',
     '%block of block %repRing':
-        '积木 %repRing 的 %block',
+        '%block 自积木  %repRing',
     'definition':
         '定义',
     'custom?':
-        '是自定义积木?',
+       '是自定义积木?',
     'global?':
-        '是全局积木?',    
+        '是全局积木?',
 
     // operators:
     '%n mod %n':
@@ -1011,19 +1011,19 @@ SnapTranslator.dict.zh_CN = {
     'is %l empty?':
         '%l 为空?',
     'map %repRing over %l':
-        '映射 %repRing ，来源 %l', 
+        '映射 %repRing ，来源 %l',
     'keep items %predRing from %l':
-        '保留满足条件 %predRing 的数据,来源 %l',  
+        '保留满足条件 %predRing 的数据,来源 %l',
     'find first item %predRing in %l':
-        '满足条件 %predRing 的第一个数据,来源 %l',    
+        '满足条件 %predRing 的第一个数据,来源 %l',
     'combine %l using %repRing':
-        '合并 %l 方法为 %repRing',      
+        '合并 %l 方法为 %repRing',
     'for each %upvar in %l %cla':
         '逐个执行 %upvar 来自 %l %cla',
     'item':
-        '项',      
+        '项',
     '%la of %l':
-        '%l 的 %la',
+        '%la 自 %l',
     'rank':
         '维数',
     'dimensions':
@@ -1035,15 +1035,15 @@ SnapTranslator.dict.zh_CN = {
     'reverse':
         '倒序',
     'lines':
-        '行',       
+        '行',
     'index':
         '索引',
     'index of %s in %l':
-        '%s 在 %l 中的索引',        
+        '%s 在 %l 中的索引',
     'append %lists':
         '追加合并 %lists',
     'reshape %l to %nums':
-        '重构列表 %l 为 %nums',     
+        '重构列表 %l 为 %nums',
 
     // other
     'Make a block':
@@ -1052,7 +1052,7 @@ SnapTranslator.dict.zh_CN = {
     // menus
     // snap menu
     'About...':
-        '关于Snap!…',
+        '关于Snap!...',
     'Reference manual':
         '参考手册',
     'Snap! website':
@@ -1072,11 +1072,11 @@ SnapTranslator.dict.zh_CN = {
 
     // project menu
     'Project notes...':
-        '项目备注…',
+        '项目备注...',
     'New':
         '新建',
     'Open...':
-        '打开…',
+        '打开...',
     'Save':
         '保存',
     'Save to disk':
@@ -1085,17 +1085,17 @@ SnapTranslator.dict.zh_CN = {
         '保存到下载文件夹\n（部分浏览器支持）',
 
     'Save As...':
-        '另存为…',
+        '另存为...',
     'Import...':
-        '导入…',
+        '导入...',
     'file menu import hint':
         '加载导出的项目、积木库、造型或声音',
 
 
     'Export project as plain text...':
-        '用文字格式导出项目…',
+        '用文字格式导出项目...',
     'Export project...':
-        '导出项目…',
+        '导出项目...',
     '(in a new window)':
         '（打开新窗口）',
     'save project data as XML\nto your downloads folder':
@@ -1103,15 +1103,15 @@ SnapTranslator.dict.zh_CN = {
     'show project data as XML\nin a new browser window':
         '打开新窗口，展示项目的XML数据',
     'Export Project As...':
-        '把项目导出到…',
+        '把项目导出到...',
     'Exported!':
         '导出好了！',
     'Export blocks...':
-        '导出积木…',
+        '导出积木...',
     'show global custom block definitions as XML\nin a new browser window':
         '打开新窗口，以XML格式展示全局自制积木',
     'Unused blocks...':
-        '没用到的积木…',
+        '没用到的积木...',
     'Hide blocks...':
         '隐藏积木...',
     'New category...':
@@ -1123,7 +1123,7 @@ SnapTranslator.dict.zh_CN = {
     'New scene':
         '新建场景',
     'Add scene...':
-        '添加场景...',    
+        '添加场景...',
     'find unused global custom blocks\nand remove their definitions':
         '查找没用到的全局自制积木，\n删除它们的定义',
     'Remove unused blocks':
@@ -1137,7 +1137,7 @@ SnapTranslator.dict.zh_CN = {
     'open a new browser browser window\n with a summary of this project':
         '打开新窗口，展示这个项目',
     'Export summary with drop-shadows...':
-        '以HTML格式导出项目（带阴影）…',
+        '以HTML格式导出项目（带阴影）...',
     'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
         '打开新窗口，使用带有阴影的图形\n展示这个项目\n（只有部分浏览器可以）',
 
@@ -1158,7 +1158,7 @@ SnapTranslator.dict.zh_CN = {
     'load the official library of\npowerful blocks':
         '载入强大的官方积木库',
     'Libraries...':
-        '积木库…',
+        '积木库...',
     'Select categories of additional blocks to add to this project.':
         '挑选更多积木，添加到项目中。',
     'Select a costume from the media library':
@@ -1174,25 +1174,25 @@ SnapTranslator.dict.zh_CN = {
 
     // cloud menu
     'Login...':
-        '登录…',
+        '登录...',
     'Signup...':
-        '注册…',
+        '注册...',
     'Reset Password...':
-        '重设密码…',
+        '重设密码...',
     'Logout':
         '登出',
     'Change Password...':
-        '修改密码…',
+        '修改密码...',
     'Change Password':
         '修改密码',
     'password has been changed.':
         '密码改好了。',
     'Export all scripts as pic...':
-        '把所有脚本导出为图片…',
+        '把所有脚本导出为图片...',
     'show a picture of all scripts\nand block definitions':
         '把所有脚本展示成一张图片',
     'url...':
-        '网址…',
+        '网址...',
     'Service:':
         '服务：',
     'Reset Password':
@@ -1202,13 +1202,13 @@ SnapTranslator.dict.zh_CN = {
     'Signup':
         '注册',
     'export project media only...':
-        '仅导出项目中的媒体文件…',
+        '仅导出项目中的媒体文件...',
     'export project without media...':
-        '导出项目，不含媒体…',
+        '导出项目，不含媒体...',
     'export project as cloud data...':
-        '把项目以云端数据格式导出…',
+        '把项目以云端数据格式导出...',
     'open shared project from cloud...':
-        '打开共享在云端的项目…',
+        '打开共享在云端的项目...',
 
     // Sign up dialog
     'Sign up':
@@ -1224,9 +1224,9 @@ SnapTranslator.dict.zh_CN = {
     'E-mail address of parent or guardian:':
         '家长电子邮件：',
     'Terms of Service...':
-        '服务条款…',
+        '服务条款...',
     'Privacy...':
-        '隐私政策…',
+        '隐私政策...',
     'I have read and agree\nto the Terms of Service':
         '我已阅读并同意《服务条款》',
     'January':
@@ -1290,13 +1290,13 @@ SnapTranslator.dict.zh_CN = {
 
     // settings menu
     'Language...':
-        '语言…',
+        '语言...',
     'Zoom blocks...':
-        '放大积木…',
+        '放大积木...',
     'Fade blocks...':
-        '积木边框隐身...',       
+        '积木边框隐身...',
     'Stage size...':
-        '舞台大小…',
+        '舞台大小...',
     'Stage size':
         '舞台大小',
     'Stage width':
@@ -1347,6 +1347,18 @@ SnapTranslator.dict.zh_CN = {
         '不使用移动设备的虚拟键盘',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         '使用移动设备的虚拟键盘',
+    'JavaScript extensions':
+        'JavaScript扩展',
+    'check to support\nnative JavaScript functions':
+        '勾选启用JS扩展函数',
+    'uncheck to disable support for\nnative JavaScript functions':
+        '取消勾选以禁用JS扩展函数',
+    'Extension blocks':
+        '第三方扩展块',
+    'check to show extension\nprimitives in the palette':
+        '显示扩展块',
+    'uncheck to hide extension\nprimitives in the palette':
+        '隐藏扩展块',
     'Input sliders':
         '使用游标',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -1402,7 +1414,7 @@ SnapTranslator.dict.zh_CN = {
     'check for higher contrast\ntable views':
         '深色表格线',
     'Visible stepping':
-        '可视化单步运行',    
+        '可视化单步运行',
     'Thread safe scripts':
         '线程安全的脚本',
     'uncheck to allow\nscript reentrance':
@@ -1446,7 +1458,7 @@ SnapTranslator.dict.zh_CN = {
     'check to enable support\n for first-class sprite':
         '使用高等角色',
     'Dragging threshold...':
-        '拖放最小距离…',
+        '拖放最小距离...',
     'specify the distance the hand has to move\nbefore it picks up an object':
         '要抓起东西\n鼠标需要移动的最小距离',
     'Cache Inputs':
@@ -1478,13 +1490,19 @@ SnapTranslator.dict.zh_CN = {
     'uncheck to enable\ndirectly running blocks\nby clicking on them':
         '取消勾选后可以点击积木直接运行',
     'check to disable\ndirectly running blocks\nby clicking on them':
-        '勾选后禁止点击积木直接运行', 
+        '勾选后禁止点击积木直接运行',
     'Single palette':
         '单一积木面板',
     'check to show all blocks in a single palette':
         '勾选之后所有的积木会在同一个积木面板(类别)里显示',
     'uncheck to show only the selected category\'s blocks':
         '取消勾选后积木会分别显示在其归属的积木面板(类别)中',
+    'HSL pen color model':
+        '画笔HSL颜色模式',
+    'check to switch pen colors\nand graphic effects to HSL':
+        '勾选后更改画笔颜色为HSL模式',
+    'uncheck to switch pen colors\nand graphic effects to HSV':
+        '取消勾选后更改画笔颜色为HSV模式',
     // inputs
     'with inputs':
         '输入项',
@@ -1495,7 +1513,7 @@ SnapTranslator.dict.zh_CN = {
     'input list:':
         '输入列表：',
     'options...':
-        '选项…',
+        '选项...',
     'read-only':
         '只读',
     'Input Slot Options':
@@ -1516,7 +1534,7 @@ SnapTranslator.dict.zh_CN = {
     'uncheck to turn off\nlogging pen vectors':
         '取消勾选以停止记录画笔矢量',
     'check to turn on\nlogging pen vectors':
-        '勾选以开始记录画笔矢量',        
+        '勾选以开始记录画笔矢量',
 
     // palette:
     'hide primitives':
@@ -1524,15 +1542,15 @@ SnapTranslator.dict.zh_CN = {
     'show primitives':
         '显示原始积木',
     'header mapping...':
-        '对应的定义代码…',
+        '对应的定义代码...',
     'code mapping...':
-        '对应的调用代码…',
+        '对应的调用代码...',
     'code list mapping...':
-        '列表对应的代码…',
+        '列表对应的代码...',
     'code item mapping...':
-        '列表项对应的代码…',
+        '列表项对应的代码...',
     'code delimiter mapping...':
-        '列表项分隔符对应的代码…',
+        '列表项分隔符对应的代码...',
 
     // codification dialog:
     'Header mapping':
@@ -1580,20 +1598,20 @@ SnapTranslator.dict.zh_CN = {
     'header':
         '定义代码',
     'code string mapping...':
-        '字符串对应的代码…',
+        '字符串对应的代码...',
     // sprites:
     'parent:':
         '母角色：',
     'parent...':
-        '母角色…',
+        '母角色...',
     'current parent':
         '目前的母角色',
 
     // blocks:
     'help...':
-        '帮助…',
+        '帮助...',
     'relabel...':
-        '更换…',
+        '更换...',
     'duplicate':
         '复制',
     'make a copy\nand pick it up':
@@ -1603,11 +1621,11 @@ SnapTranslator.dict.zh_CN = {
     'delete':
         '删除',
     'script pic...':
-        '显示脚本图片…',
+        '显示脚本图片...',
     'open a new window\nwith a picture of this script':
         '打开一个新窗口，\n显示这个脚本的图片',
     'script pic with result...':
-        '带结果的脚本图片…',
+        '带结果的脚本图片...',
     'open a new window\nwith a picture of both\nthis script and its result':
         '打开一个新窗口，\n显示这个脚本和运行结果的图片',
     'ringify':
@@ -1621,15 +1639,15 @@ SnapTranslator.dict.zh_CN = {
     'check to prevent contents\nfrom being saved':
         '不保存变量内容',
     'find blocks...':
-        '找积木…',
+        '找积木...',
 
     // custom blocks:
     'delete block definition...':
-        '删除积木定义…',
+        '删除积木定义...',
     'duplicate block definition...':
-        '复制积木定义…',
+        '复制积木定义...',
     'edit...':
-        '编辑…',
+        '编辑...',
 
     // sprites:
     'edit':
@@ -1641,7 +1659,7 @@ SnapTranslator.dict.zh_CN = {
     'detach all parts':
         '所有组件脱离',
     'export...':
-        '导出…',
+        '导出...',
     'paint a new sprite':
         '画一个新角色',
 
@@ -1649,11 +1667,11 @@ SnapTranslator.dict.zh_CN = {
     'show all':
         '显示所有',
     'pic...':
-        '展示图片…',
+        '展示图片...',
     'open a new window\nwith a picture of the stage':
         '打开一个新窗口，显示舞台的图片',
     'turn pen trails into new costume...':
-        '把笔迹变成新造型…',
+        '把笔迹变成新造型...',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         '把所有笔迹和图章变成当前选中角色的一个新造型',
 
@@ -1669,11 +1687,11 @@ SnapTranslator.dict.zh_CN = {
     'undo the last\nblock drop\nin this pane':
         '收回刚刚放下的积木',
     'scripts pic...':
-        '脚本图片…',
+        '脚本图片...',
     'open a new window\nwith a picture of all scripts':
         '打开一个新窗口，展示所有脚本的图片',
     'make a block...':
-        '制作新积木…',
+        '制作新积木...',
 
     // costumes
     'rename':
@@ -1685,7 +1703,7 @@ SnapTranslator.dict.zh_CN = {
     'Paint a new costume':
         '画一个新造型',
     'edit rotation point only...':
-        '修改旋转中心点…',
+        '修改旋转中心点...',
 
     // sounds
     'Play sound':
@@ -1701,13 +1719,13 @@ SnapTranslator.dict.zh_CN = {
 
     // lists and tables
     'list view...':
-        '展示为列表…',
+        '展示为列表...',
     'table view...':
-        '展示为表格…',
+        '展示为表格...',
     'open in dialog...':
-        '在对话框中查看…',
+        '在对话框中查看...',
     'open in another dialog...':
-        '在另一个对话框中查看…',
+        '在另一个对话框中查看...',
     'reset columns':
         '重置列',
     'items':
@@ -1770,7 +1788,7 @@ SnapTranslator.dict.zh_CN = {
     'Are you sure you want to delete':
         '你确定要删除',
     'rename...':
-        '改名为…',
+        '改名为...',
     'Open':
         '打开',
     'Cloud':
@@ -1784,7 +1802,7 @@ SnapTranslator.dict.zh_CN = {
     'You are not logged in':
         '你还没有登录',
     'Updating\nproject list...':
-        '正在更新项目列表…',
+        '正在更新项目列表...',
     'last changed':
         '最后修改',
     'Share':
@@ -1800,21 +1818,21 @@ SnapTranslator.dict.zh_CN = {
     'Are you sure you want to unpublish':
         '确定不让其他人看到项目',
     'sharing\nproject...':
-        '正在分享项目…',
+        '正在分享项目...',
     'shared.':
         '项目已分享给其他人。',
     'unsharing\nproject...':
-        '正在取消项目分享…',
+        '正在取消项目分享...',
     'unshared.':
         '其他人已看不到项目。',
     'Fetching project\nfrom the cloud...':
-        '从云端下载下项目…',
+        '从云端下载下项目...',
     'Opening project...':
-        '正在打开项目…',
+        '正在打开项目...',
     'Save Project':
-        '保存项目…',
+        '保存项目...',
     'Saving project\nto the cloud...':
-        '把项目保存到云端…',
+        '把项目保存到云端...',
     'saved.':
         '项目已保存。',
 
@@ -1836,7 +1854,7 @@ SnapTranslator.dict.zh_CN = {
 
     // save project
     'Save Project As...':
-        '项目另存为…',
+        '项目另存为...',
 
     // export blocks
     'Export blocks':
@@ -1878,13 +1896,13 @@ SnapTranslator.dict.zh_CN = {
     'block deletion dialog text':
         '你确实要删除所有这种自制积木和它的定义吗？',
     'block variables...':
-        '积木变量…',
+        '积木变量...',
     'block variables':
         '积木变量',
     'Block variable name':
         '积木变量名字',
     'remove block variables...':
-        '删除积木变量…',
+        '删除积木变量...',
     '(temporary)':
         '(临时)',
 
@@ -1934,15 +1952,15 @@ SnapTranslator.dict.zh_CN = {
     'About Snap':
         '关于 Snap',
     'Back...':
-        '返回…',
+        '返回...',
     'License...':
-        '许可…',
+        '许可...',
     'Modules...':
-        '模块…',
+        '模块...',
     'Credits...':
-        '光荣榜…',
+        '光荣榜...',
     'Translators...':
-        '翻译者…',
+        '翻译者...',
     'License':
         '许可协议',
     'current module versions:':
@@ -1960,11 +1978,11 @@ SnapTranslator.dict.zh_CN = {
     'slider':
         '游标',
     'slider min...':
-        '游标最小值…',
+        '游标最小值...',
     'slider max...':
-        '游标最大值…',
+        '游标最大值...',
     'import...':
-        '导入…',
+        '导入...',
     'Slider minimum value':
         '游标的最小值',
     'Slider maximum value':
@@ -1976,9 +1994,9 @@ SnapTranslator.dict.zh_CN = {
 
     // comments
     'add comment here...':
-        '在这里添加说明…',
+        '在这里添加说明...',
     'comment pic...':
-        '展示图片…',
+        '展示图片...',
     'open a new window\nwith a picture of this comment':
         '打开新窗口，展示这条说明的图片',
 
@@ -2127,7 +2145,7 @@ SnapTranslator.dict.zh_CN = {
 
     // messages
     'new...':
-        '新建…',
+        '新建...',
 
     // math functions
     'abs':
@@ -2141,7 +2159,7 @@ SnapTranslator.dict.zh_CN = {
     'neg':
         '取反',
     'sign':
-        '符号',  
+        '符号',
     'e^':
         'e^',
 
@@ -2201,7 +2219,7 @@ SnapTranslator.dict.zh_CN = {
     'temporary?':
         '属性为临时?',
     'draggable?':
-        '是否可拖动?',       
+        '是否可拖动?',
     'clones':
         '克隆',
     'other clones':
@@ -2230,7 +2248,7 @@ SnapTranslator.dict.zh_CN = {
         '宽度',
     'height':
         '高度',
-                
+
     // Paint.js
     'Paint Editor':
         '画板',
@@ -2277,10 +2295,10 @@ SnapTranslator.dict.zh_CN = {
     'expecting':
         '此处要求填写',
     'input(s), but getting':
-        '个输入项，但实际得到输入项个数是',    		
+        '个输入项，但实际得到输入项个数是',
     'Vector':
         '矢量',
     'Bitmap':
-        '位图'        
+        '位图'
 
 };
