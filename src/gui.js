@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-14';
+modules.gui = '2022-January-17';
 
 // Declarations
 
@@ -1055,7 +1055,7 @@ IDE_Morph.prototype.createControlBar = function () {
         }
         this.rerender();
     };
-    
+
     button.labelColor = new Color(
         0,
         MorphicPreferences.isFlat ? 100 : 200,
@@ -4768,7 +4768,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7.0.5\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 7.0.6 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2022 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

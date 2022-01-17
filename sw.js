@@ -1,4 +1,4 @@
-var snapVersion = '7.0.5',
+var snapVersion = '7.0.6-dev',
     cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
@@ -632,7 +632,7 @@ var snapVersion = '7.0.5',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
-        
+
         // Sounds
         'Sounds/SOUNDS',
 
@@ -648,7 +648,7 @@ var snapVersion = '7.0.5',
         'Sounds/Laugh-male3.mp3',
         'Sounds/Meow.wav',
         'Sounds/Pop.wav',
-        
+
         // Examples
         'Examples/EXAMPLES',
 
