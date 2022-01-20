@@ -861,7 +861,7 @@ Process.prototype.doApplyExtension = function (prim, args) {
 Process.prototype.reportApplyExtension = function (prim, args) {
     var ext = SnapExtensions.primitives.get(prim);
     if (isNil(ext)) {
-        throw new Error('missing / unspecified extension: ' + prim);
+        throw new Error(localize('missing / unspecified extension') + ': ' + prim);
     }
     return ext.apply(
         this.blockReceiver(),
@@ -4421,10 +4421,20 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         str,
         del;
     if (!contains(types, strType)) {
-        throw new Error('expecting text instead of a ' + strType);
+        throw new Error(
+            localize('expecting a') + ' ' +
+            localize('text') + ' ' +
+            localize('but getting a') + ' ' +
+            localize(strType)
+        );
     }
     if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instead of a ' + delType);
+        throw new Error(
+            localize('expecting a') + ' ' +
+            localize('text') + ' ' +
+            localize('but getting a') + ' ' +
+            localize(delType)
+        );
     }
     str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
@@ -6113,7 +6123,7 @@ Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
         return this.doMapHeader(aContext, aString);
     }
     throw new Error(
-        ' \'' + anOption + '\'\nis not a valid option'
+        ' \'' + anOption + '\'\n' + localize('is not a valid option')
     );
 };
 
@@ -6150,7 +6160,7 @@ Process.prototype.doMapValueCode = function (type, aString) {
         break;
     default:
         throw new Error(
-            localize('unsupported data type') + ' ' + tp
+            localize('unsupported data type') + ': "' + tp + '"'
         );
     }
 

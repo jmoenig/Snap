@@ -2121,5 +2121,33 @@ SnapTranslator.dict.de = {
     'continuations cannot be forked':
         'Continuations können nicht separat gestartet werden',
     'unable to convert to':
-        'Kann die Liste nicht umwandeln in'
+        'Kann die Liste nicht umwandeln in',
+    'Request blocked':
+        'Die Anfrage wurde blockiert',
+    'cannot operate on a deleted sprite':
+        'kann nicht mit einem gelöschten Objekt arbeiten',
+    'cannot send media,\nsprites or procedures\nto another scene':
+        'Kann keine Medien, Objekte oder Programme\nan eine andere Szene senden',
+    'unsupported attribute':
+        'Attribut wird nicht unterstützt',
+    'unable to nest\n(disabled or circular?)':
+        'Kann nicht verschachteln\n(ausgeschaltet oder zirkulär?)',
+    'unable to inherit\n(disabled or circular?)':
+        'Kann nicht erben\n(ausgeschaltet oder zirkulär?)',
+    'is read-only':
+        'kann nur gelesen werden',
+    'is not a valid option':
+        'ist keine erlaubte Auswahl',
+    'unsupported data type':
+        'Nicht unterstützter Datentyp',
+    'expecting a finite number\nbut getting Infinity or NaN':
+        'Erwarte eine endliche Zahl\nbekomme aber Unendlich oder eine Nicht-Zahl',
+    'the predicate takes\ntoo long for a\ncustom hat block':
+        'Das Prädikat dauert zu lang für einen\nbenutzerdefinierten Ereignisblock',
+    'missing / unspecified extension':
+        'Fehlende / undefinierte Erweiterung',
+    'reporter didn\'t report':
+        'Der Rückgabewert fehlt bei einer Funktion',
+    'a custom block definition is missing':
+        'Ein Block ist undefiniert'
 };
