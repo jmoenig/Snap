@@ -15,6 +15,7 @@
 ### 2022-01-20
 * German translation update (for error messages)
 * threads: added more localizable error strings
+* objects: added more localizable error strings
 
 ### 2022-01-17
 * new dev version

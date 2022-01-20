@@ -2149,5 +2149,15 @@ SnapTranslator.dict.de = {
     'reporter didn\'t report':
         'Der Rückgabewert fehlt bei einer Funktion',
     'a custom block definition is missing':
-        'Ein Block ist undefiniert'
+        'Ein Block ist undefiniert',
+    'exceeding maximum number of clones':
+        'Die maximale Anzahl von Klonen wird überschritten',
+    'can only write text or numbers, not a':
+        'Kann nur Text oder Zahlen schreiben, kein',
+    'unsupported graphic effect':
+        'Nicht unterstützter Grafikeffekt',
+    'setting the rotation center requires a costume':
+        'Der Drehpunkt kann nur zusammen\nmit einem Kostüm gesetzt werden',
+    'Web Audio API is not supported\nin this browser':
+        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt'
 };
