@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-12-10', // this, too, will appear in the Translators tab
+        '2022-01-20', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2093,5 +2093,15 @@ SnapTranslator.dict.de = {
     'check to inherit\nfrom':
         'einschalten, um zu erben\nvon',
     'uncheck to\ndisinherit':
-        'ausschalten, um \nnicht mehr zu erben'
+        'ausschalten, um \nnicht mehr zu erben',
+
+    // error messages
+    'a variable of name \'':
+        'eine Variable mit dem Namen \'',
+    '\'\ndoes not exist in this context':
+        '\'\ngibt es an dieser Stelle nicht',
+    'expecting':
+        'erwarte',
+    'input(s), but getting':
+        'Input(s), bekomme aber'
 };

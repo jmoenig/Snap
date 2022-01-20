@@ -9,6 +9,10 @@
     * fixed loading the Chinese translation, thanks, @moodykeke
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German (for error messages)
+
+### 2022-01-20
+* German translation update (for error messages)
 
 ### 2022-01-17
 * new dev version
