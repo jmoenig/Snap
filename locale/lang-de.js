@@ -1998,6 +1998,8 @@ SnapTranslator.dict.de = {
         'Pr\u00e4dikat',
     'sprite':
         'Objekt',
+    'nothing':
+        'nichts',
 
     // list indices
     'last':
@@ -2096,12 +2098,18 @@ SnapTranslator.dict.de = {
         'ausschalten, um \nnicht mehr zu erben',
 
     // error messages
+    'Error':
+        'Fehler',
     'a variable of name \'':
-        'eine Variable mit dem Namen \'',
+        'Eine Variable mit dem Namen \'',
     '\'\ndoes not exist in this context':
         '\'\ngibt es an dieser Stelle nicht',
+    'expecting a':
+        'Erwarte',
+    'but getting a':
+        'bekomme aber',
     'expecting':
-        'erwarte',
+        'Erwarte',
     'input(s), but getting':
         'Input(s), bekomme aber'
 };
