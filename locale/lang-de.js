@@ -1998,6 +1998,8 @@ SnapTranslator.dict.de = {
         'Pr\u00e4dikat',
     'sprite':
         'Objekt',
+    'ring':
+        'Ring',
     'nothing':
         'nichts',
 
@@ -2115,5 +2117,9 @@ SnapTranslator.dict.de = {
     'Inside a custom block':
         'In einem benutzerdefinierten Block',
     'The error occured at':
-        'Der Fehler passierte bei'
+        'Der Fehler passierte bei',
+    'continuations cannot be forked':
+        'Continuations können nicht separat gestartet werden',
+    'unable to convert to':
+        'Kann die Liste nicht umwandeln in'
 };
