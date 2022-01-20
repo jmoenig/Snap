@@ -4,6 +4,7 @@
 
 * **New Features:**
 * **Notable Changes:**
+    * added more localizable error strings
 * **Notable Fixes:**
     * fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
     * fixed loading the Chinese translation, thanks, @moodykeke
@@ -13,6 +14,7 @@
 
 ### 2022-01-20
 * German translation update (for error messages)
+* threads: added more localizable error strings
 
 ### 2022-01-17
 * new dev version

@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-17';
+modules.threads = '2022-January-20';
 
 var ThreadManager;
 var Process;
@@ -1170,7 +1170,7 @@ Process.prototype.throwError = function (error, element) {
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
     if (ide.isAppMode) {
-        ide.showMessage(error.name + '\n' + error.message);
+        ide.showMessage(localize(error.name) + '\n' + error.message);
     } else {
         if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
         m.showBubble(
