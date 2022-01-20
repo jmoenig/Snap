@@ -2111,5 +2111,9 @@ SnapTranslator.dict.de = {
     'expecting':
         'Erwarte',
     'input(s), but getting':
-        'Input(s), bekomme aber'
+        'Input(s), bekomme aber',
+    'Inside a custom block':
+        'In einem benutzerdefinierten Block',
+    'The error occured at':
+        'Der Fehler passierte bei'
 };
