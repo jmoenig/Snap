@@ -4,16 +4,22 @@
 
 * **New Features:**
 * **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 7.0.6:
+* **Notable Changes:**
     * added more localizable error strings
 * **Notable Fixes:**
     * fixed binding an unbound context to a sprite (e.g. when using JOIN blocks)
     * fixed loading the Chinese translation, thanks, @moodykeke
-* **Documentation Updates:**
 * **Translation Updates:**
     * German (for error messages)
 
 ### 2022-01-21
 * threads: refactored Context >> image
+* v7.0.6
 
 ### 2022-01-20
 * German translation update (for error messages)
