@@ -3,11 +3,15 @@
 ## in development:
 
 * **New Features:**
+    * support dragging blocks out from result bubbles
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-01-22
+* blocks: support dragging blocks out from result bubbles
 
 ### 2022-01-21
 * new dev version
