@@ -10072,7 +10072,6 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             script.setPosition(this.position());
             return script;
         };
-
     } else {
         contents = new TextMorph(
             data.toString(),
