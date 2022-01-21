@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-01-21
+* new dev version
+
 ## 7.0.6:
 * **Notable Changes:**
     * added more localizable error strings
