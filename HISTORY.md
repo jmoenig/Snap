@@ -5,11 +5,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-01-21
 * new dev version
+* gui: fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
 
 ## 7.0.6:
 * **Notable Changes:**

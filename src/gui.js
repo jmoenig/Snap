@@ -1459,6 +1459,7 @@ IDE_Morph.prototype.createCategories = function () {
                 scroller.addContents(myself.categories.children[8]);
             }
             myself.categories.add(scroller);
+            myself.categories.scroller = scroller;
             myself.categories.setHeight(
                 (4 + 1) * yPadding
                     + 4 * buttonHeight
@@ -2229,6 +2230,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
         this.categories.setWidth(this.paletteWidth);
+        if (this.categories.scroller) {
+            this.categories.scroller.setWidth(this.paletteWidth);
+        }
     }
 
     // palette
@@ -5682,7 +5686,7 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) { // +++
+IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     // name is optional (string), so is silently (bool)
     var blocks;
     this.toggleAppMode(false);
