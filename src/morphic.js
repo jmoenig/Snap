@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2021 by Jens Mönig
+    Copyright (C) 2010-2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2021-December-10';
+var morphicVersion = '2022-January-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11246,7 +11246,11 @@ HandMorph.prototype.dropTargetFor = function (aMorph) {
 };
 
 HandMorph.prototype.grab = function (aMorph) {
-    var oldParent = aMorph.parent;
+    var oldParent;
+    if (!aMorph) {
+        return null;
+    }
+    oldParent = aMorph.parent;
     if (aMorph instanceof WorldMorph) {
         return null;
     }

@@ -10069,6 +10069,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                 this.prepareToBeGrabbed = prepare;
             };
 
+            if (ide.isAppMode) {return; }
             script.setPosition(this.position());
             return script;
         };
@@ -11470,6 +11471,7 @@ CellMorph.prototype.createContents = function () {
                     this.prepareToBeGrabbed = prepare;
                 };
 
+                if (ide.isAppMode) {return; }
                 script.setPosition(this.position());
                 return script;
             };

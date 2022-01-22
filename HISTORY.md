@@ -14,6 +14,7 @@
 * blocks: support dragging blocks out from result bubbles
 * objects: support dragging blocks out from speech balloons
 * objects: support dragging blocks out from variable watchers
+* morphic, objects: only allow dragging block out from balloons and watchers in edit mode (not in presentation mode)
 
 ### 2022-01-21
 * new dev version
