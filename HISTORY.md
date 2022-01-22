@@ -3,7 +3,7 @@
 ## in development:
 
 * **New Features:**
-    * support dragging blocks out from result bubbles, speech balloons and variable watchers
+    * support dragging blocks out from result bubbles, and from speech balloons and variable watchers when in edit mode
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
