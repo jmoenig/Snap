@@ -10,6 +10,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-01-23
+* morphic: added Node >> childThatIsA
+
 ### 2022-01-22
 * blocks: support dragging blocks out from result bubbles
 * objects: support dragging blocks out from speech balloons

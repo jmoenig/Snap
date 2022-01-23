@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-January-21';
+modules.objects = '2022-January-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -11462,7 +11462,7 @@ CellMorph.prototype.createContents = function () {
                 var script = myself.contents.toBlock(),
                     prepare = script.prepareToBeGrabbed,
                     ide = this.parentThatIsA(IDE_Morph) ||
-                        this.world().childThatIsA(IDE_Morph); // +++
+                        this.world().childThatIsA(IDE_Morph);
 
                 script.prepareToBeGrabbed = function (hand) {
                     prepare.call(this, hand);
