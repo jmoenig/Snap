@@ -10058,7 +10058,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.selectForEdit = function () {
             var script = data.toBlock(),
                 prepare = script.prepareToBeGrabbed,
-                ide = this.parentThatIsA(IDE_Morph);
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
 
             script.prepareToBeGrabbed = function (hand) {
                 prepare.call(this, hand);
@@ -11460,7 +11461,8 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.selectForEdit = function () {
                 var script = myself.contents.toBlock(),
                     prepare = script.prepareToBeGrabbed,
-                    ide = this.parentThatIsA(IDE_Morph);
+                    ide = this.parentThatIsA(IDE_Morph) ||
+                        this.world().childThatIsA(IDE_Morph); // +++
 
                 script.prepareToBeGrabbed = function (hand) {
                     prepare.call(this, hand);

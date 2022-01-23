@@ -1291,7 +1291,7 @@
 
 /*jshint esversion: 6*/
 
-var morphicVersion = '2022-January-22';
+var morphicVersion = '2022-January-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3096,6 +3096,27 @@ Node.prototype.parentThatIsA = function () {
 Node.prototype.parentThatIsAnyOf = function (constructors) {
     // deprecated, use parentThatIsA instead
     return this.parentThatIsA.apply(this, constructors);
+};
+
+Node.prototype.childThatIsA = function () {
+    // including myself
+    // Note: you can pass in multiple constructors to test for
+    var i, hit;
+    for (i = 0; i < arguments.length; i += 1) {
+        if (this instanceof arguments[i]) {
+            return this;
+        }
+    }
+    if (!this.children.length) {
+        return null;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        hit = this.childThatIsA.apply(this.children[i], arguments);
+        if (hit) {
+            return hit;
+        }
+    }
+    return null;
 };
 
 // Morphs //////////////////////////////////////////////////////////////
