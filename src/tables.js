@@ -72,7 +72,7 @@ ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2021-July-05';
+modules.tables = '2022-January-23';
 
 var Table;
 var TableCellMorph;
@@ -343,6 +343,7 @@ TableCellMorph.prototype.render = function (ctx) {
         x,
         y;
 
+    this.isDraggable = this.data instanceof Context;
     ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
@@ -473,6 +474,26 @@ TableCellMorph.prototype.mouseLeave = function () {
         this.labelString = null;
         this.rerender();
     }
+};
+
+TableCellMorph.prototype.selectForEdit = function () {
+    var script = this.data.toBlock(),
+        prepare = script.prepareToBeGrabbed,
+        ide = this.parentThatIsA(IDE_Morph) ||
+            this.world().childThatIsA(IDE_Morph);
+
+    script.prepareToBeGrabbed = function (hand) {
+        prepare.call(this, hand);
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    script.setPosition(this.position());
+    return script;
 };
 
 // TableMorph //////////////////////////////////////////////////////////

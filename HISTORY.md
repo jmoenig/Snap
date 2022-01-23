@@ -12,6 +12,7 @@
 
 ### 2022-01-23
 * morphic: added Node >> childThatIsA
+* tables: support dragging blocks out from table views
 
 ### 2022-01-22
 * blocks: support dragging blocks out from result bubbles
