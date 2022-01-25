@@ -160,7 +160,7 @@ CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-22';
+modules.blocks = '2022-January-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10419,22 +10419,42 @@ InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
 
 InputSlotMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping) {
+    if (!StageMorph.prototype.enableCodeMapping &&
+            !(this.parent instanceof MultiArgMorph)) {
         return this.parent.userMenu();
     }
-    if (this.isNumeric) {
-        menu.addItem(
-            'code number mapping...',
-            'mapNumberToCode'
-        );
-    } else {
-        menu.addItem(
-            'code string mapping...',
-            'mapStringToCode'
-        );
+    if (this.parent instanceof MultiArgMorph &&
+            this.parentThatIsA(ScriptsMorph)) {
+        if (!this.parent.maxInputs ||
+                (this.parent.children.length <= this.parent.maxInputs)) {
+            menu.addItem(
+                'insert',
+                () => this.parent.insertNewInputBefore(this)
+            );
+        }
+        if (this.parent.children.length >= this.parent.minInputs) {
+            menu.addItem(
+                'delete',
+                () => this.parent.deleteSlot(this)
+            );
+        }
+    }
+    if (StageMorph.prototype.enableCodeMapping) {
+        if (this.isNumeric) {
+            menu.addItem(
+                'code number mapping...',
+                'mapNumberToCode'
+            );
+        } else {
+            menu.addItem(
+                'code string mapping...',
+                'mapStringToCode'
+            );
+        }
     }
     return menu;
 };
+
 
 // InputSlotMorph reacting to user choices
 
@@ -12311,6 +12331,33 @@ MultiArgMorph.prototype.refresh = function () {
         input.fixLayout();
         input.rerender();
     });
+};
+
+// MultiArgMorph deleting & inserting slots:
+
+    // caution, only call these methods with "primitive" inputs,
+    // since they don't preserve embedded blocks (yes, on purpose)
+
+MultiArgMorph.prototype.deleteSlot = function (anInput) {
+    if (this.children.length <= this.minInputs + 1) {
+        return;
+    }
+    this.removeChild(anInput);
+    this.fixLayout();
+};
+
+MultiArgMorph.prototype.insertNewInputBefore = function (anInput) { // +++
+    var idx = this.children.indexOf(anInput),
+        newPart = this.labelPart(this.slotSpec);
+    
+    if (this.maxInputs && (this.children.length > this.maxInputs)) {
+        return;
+    }
+    newPart.parent = this;
+    this.children.splice(idx, 0, newPart);
+    newPart.fixLayout();
+    this.fixLayout();
+    return newPart;
 };
 
 // MultiArgMorph arity control:

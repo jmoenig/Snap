@@ -4,11 +4,15 @@
 
 * **New Features:**
     * support dragging blocks out from result bubbles, and from speech balloons and variable watchers when in edit mode
+    * support deleting and inserting individual variadic slots
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-01-25
+* blocks: support deleting and inserting individual variadic slots
 
 ### 2022-01-23
 * morphic: added Node >> childThatIsA
