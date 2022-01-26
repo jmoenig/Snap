@@ -2838,6 +2838,8 @@ BlockMorph.prototype.userMenu = function () {
         top = this.topBlock(),
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
+        slot,
+        mult,
         alternatives,
         field,
         rcvr;
@@ -2893,6 +2895,32 @@ BlockMorph.prototype.userMenu = function () {
                     'refactorThisVar',
                     'rename all blocks that\naccess this variable'
                 );
+                if (this.parent.parent instanceof MultiArgMorph &&
+                        this.parentThatIsA(ScriptsMorph)) {
+                    // offer to insert / delete a variable slot
+                    slot = this.parent;
+                    mult = slot.parent;
+                    menu.addLine();
+                    if (!mult.maxInputs ||
+                            (mult.inputs().length < mult.maxInputs)) {
+                        if (!mult.is3ArgRingInHOF() ||
+                                mult.inputs().length < 3) {
+                            menu.addItem(
+                                'insert a variable',
+                                () => mult.insertNewInputBefore(
+                                    slot,
+                                    localize('variable')
+                                )
+                            );
+                        }
+                    }
+                    if (mult.inputs().length > mult.minInputs) {
+                        menu.addItem(
+                            'delete variable',
+                            () => mult.deleteSlot(slot)
+                        );
+                    }
+                }
             }
         } else { // in palette
             if (this.selector === 'reportGetVar') {
@@ -8273,13 +8301,13 @@ ArgMorph.prototype.userMenu = function () {
     if (this.parent instanceof MultiArgMorph &&
             this.parentThatIsA(ScriptsMorph)) {
         if (!this.parent.maxInputs ||
-                (this.parent.children.length <= this.parent.maxInputs)) {
+                (this.parent.inputs().length < this.parent.maxInputs)) {
             menu.addItem(
                 'insert a slot',
                 () => this.parent.insertNewInputBefore(this)
             );
         }
-        if (this.parent.children.length >= this.parent.minInputs) {
+        if (this.parent.inputs().length > this.parent.minInputs) {
             menu.addItem(
                 'delete slot',
                 () => this.parent.deleteSlot(this)
@@ -12362,12 +12390,15 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
     this.fixLayout();
 };
 
-MultiArgMorph.prototype.insertNewInputBefore = function (anInput) {
+MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     var idx = this.children.indexOf(anInput),
         newPart = this.labelPart(this.slotSpec);
     
     if (this.maxInputs && (this.children.length > this.maxInputs)) {
         return;
+    }
+    if (contents) {
+        newPart.setContents(contents);
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);

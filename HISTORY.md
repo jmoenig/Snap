@@ -4,7 +4,7 @@
 
 * **New Features:**
     * support dragging blocks out from result bubbles, and from speech balloons and variable watchers when in edit mode
-    * support deleting and inserting individual variadic slots
+    * support deleting and inserting individual variadic slots, script vars & ring params
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
@@ -12,7 +12,8 @@
 * **Translation Updates:**
 
 ### 2022-01-26
-* refactored slot context menus
+* blocks: refactored slot context menus
+* blocks: support for deleting and inserting individual script vars & ring params
 
 ### 2022-01-25
 * blocks: support deleting and inserting individual variadic slots
