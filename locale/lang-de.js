@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-01-20', // this, too, will appear in the Translators tab
+        '2022-01-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2098,6 +2098,18 @@ SnapTranslator.dict.de = {
         'einschalten, um zu erben\nvon',
     'uncheck to\ndisinherit':
         'ausschalten, um \nnicht mehr zu erben',
+
+    // editing slots inside variadic inputs
+    'insert a slot':
+        'Ein Feld einfügen',
+    'delete slot':
+        'Feld löschen',
+    'insert a variable':
+        'Eine Variable einfügen',
+    'delete variable':
+        'Variable löschen',
+    'variable':
+        'Variable',
 
     // error messages
     'Error':

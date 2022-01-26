@@ -10,10 +10,12 @@
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2022-01-26
 * blocks: refactored slot context menus
 * blocks: support for deleting and inserting individual script vars & ring params
+* German translation update
 
 ### 2022-01-25
 * blocks: support deleting and inserting individual variadic slots
