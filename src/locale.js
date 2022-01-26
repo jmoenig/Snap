@@ -511,11 +511,11 @@ SnapTranslator.dict.hu = {
     'language_name':
         'Magyar',
     'language_translator':
-        'Makány György',
+        'Makány György, Faragó Attila',
     'translator_e-mail':
-        'makany.gyorgy@gmail.com',
+        'makany.gyorgy@gmail.com, attila.farago@sap.com',
     'last_changed':
-        '2015-07-27'
+        '2022-01-25'
 };
 
 SnapTranslator.dict.ia = {

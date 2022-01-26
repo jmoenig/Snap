@@ -11,6 +11,7 @@
     * text-costumes library: fixed preserving (more) pen state, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * Hungarian, thank you, Attila Faragó, for this HUGE update!
     * German
 
 ### 2022-01-26
@@ -19,6 +20,7 @@
 * German translation update
 * blocks: support for deleting and inserting individual rings inside variadic inputs
 * updated text-costumes library, thanks, Brian!
+* Hungarian translation update, thank you, Attila Faragó!
 
 ### 2022-01-25
 * blocks: support deleting and inserting individual variadic slots
