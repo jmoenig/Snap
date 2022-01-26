@@ -11,6 +11,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-01-26
+* refactored slot context menus
+
 ### 2022-01-25
 * blocks: support deleting and inserting individual variadic slots
 
