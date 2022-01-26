@@ -16,6 +16,7 @@
 * blocks: refactored slot context menus
 * blocks: support for deleting and inserting individual script vars & ring params
 * German translation update
+* blocks: support for deleting and inserting individual rings inside variadic inputs
 
 ### 2022-01-25
 * blocks: support deleting and inserting individual variadic slots

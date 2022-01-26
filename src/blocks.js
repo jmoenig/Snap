@@ -7153,6 +7153,31 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
     slot.fixLayout();
 };
 
+// RingMorph menu
+
+RingMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    if (this.parent instanceof MultiArgMorph &&
+            this.parentThatIsA(ScriptsMorph)) {
+        if (!this.parent.maxInputs ||
+                (this.parent.inputs().length < this.parent.maxInputs)) {
+            menu.addItem(
+                'insert a slot',
+                () => this.parent.insertNewInputBefore(this)
+            );
+        }
+        if (this.isEmptySlot() &&
+                this.parent.inputs().length > this.parent.minInputs) {
+            menu.addItem(
+                'delete slot',
+                () => this.parent.deleteSlot(this)
+            );
+        }
+    return menu;
+    }
+    return RingMorph.uber.userMenu.call(this);
+};
+
 // ScriptsMorph ////////////////////////////////////////////////////////
 
 /*
