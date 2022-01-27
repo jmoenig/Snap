@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-21';
+modules.gui = '2022-January-27';
 
 // Declarations
 
@@ -1564,7 +1564,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             droppedMorph.destroy();
             this.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            this.currentSprite.wearCostume(null);
+            // this.currentSprite.wearCostume(null); // do we need this?
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else if (droppedMorph instanceof BlockMorph) {
             this.stage.threads.stopAllForBlock(droppedMorph);
@@ -1764,6 +1764,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     // tab bar
     tabBar.tabTo = function (tabString) {
         var active;
+        myself.world().hand.destroyTemporaries();
         myself.currentTab = tabString;
         this.children.forEach(each => {
             each.refresh();
@@ -1890,12 +1891,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-
-        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
-            if (morph instanceof BlockMorph) {
-                this.spriteBar.tabBar.tabTo('scripts');
-            }
-        };
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1906,12 +1901,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-
-        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
-            if (morph instanceof BlockMorph) {
-                this.spriteBar.tabBar.tabTo('scripts');
-            }
-        };
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
@@ -1927,6 +1916,16 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         };
         this.add(this.spriteEditor);
     }
+
+    this.spriteEditor.contents.mouseEnterDragging = (morph) => {
+        if (morph instanceof BlockMorph) {
+            this.spriteBar.tabBar.tabTo('scripts');
+        } else if (morph instanceof CostumeIconMorph) {
+            this.spriteBar.tabBar.tabTo('costumes');
+        } else if (morph instanceof SoundIconMorph) {
+            this.spriteBar.tabBar.tabTo('sounds');
+        }
+    };
 };
 
 IDE_Morph.prototype.createCorralBar = function () {

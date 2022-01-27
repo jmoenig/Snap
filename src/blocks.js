@@ -154,13 +154,14 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
-CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
+CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
+CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-26';
+modules.blocks = '2022-January-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2250,8 +2251,56 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.bounds.setWidth(img.width);
         morphToShow.bounds.setHeight(img.height);
         morphToShow.cachedImage = img;
+
+        // support costumes to be dragged out of result bubbles:
+        morphToShow.isDraggable = true;
+
+        morphToShow.selectForEdit = function () {
+            var cst = value.copy(),
+                icon,
+                prepare;
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            icon.setCenter(this.center());
+            return icon;
+        };
     } else if (value instanceof Sound) {
         morphToShow = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of result bubbles:
+        morphToShow.isDraggable = true;
+
+        morphToShow.selectForEdit = function () {
+            var snd = value.copy(),
+                icon,
+                prepare;
+
+            snd.name = ide.currentSprite.newSoundName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            icon.setCenter(this.center());
+            return icon;
+        };
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
