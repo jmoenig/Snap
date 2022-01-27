@@ -83,11 +83,11 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
-BlockVisibilityDialogMorph*/
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-January-23';
+modules.objects = '2022-January-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -10016,8 +10016,62 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+
+        // support costumes to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var cst = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var snd = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            snd.name = ide.currentSprite.newSoundName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();

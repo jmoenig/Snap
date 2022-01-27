@@ -4,7 +4,7 @@
 
 * **New Features:**
     * support dragging blocks out from result bubbles, and from speech balloons and variable watchers when in edit mode
-    * support dragging costumes and sounds out from result bubbles
+    * support dragging costumes and sounds out from result bubbles and speech balloons
     * support deleting and inserting individual variadic slots, script vars & ring params
 * **Notable Changes:**
 * **Notable Fixes:**
@@ -17,6 +17,7 @@
 
 ### 2022-01-27
 * blocks, gui: support dragging costumes and sounds out from result bubbles
+* objects: support dragging costumes and sounds out from speech balloons
 
 ### 2022-01-26
 * blocks: refactored slot context menus
