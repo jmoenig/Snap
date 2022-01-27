@@ -1764,6 +1764,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     // tab bar
     tabBar.tabTo = function (tabString) {
         var active;
+        if (myself.currentTab === tabString) {return; }
         myself.world().hand.destroyTemporaries();
         myself.currentTab = tabString;
         this.children.forEach(each => {
@@ -1917,7 +1918,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.add(this.spriteEditor);
     }
 
-    this.spriteEditor.contents.mouseEnterDragging = (morph) => {
+    this.spriteEditor.mouseEnterDragging = (morph) => {
         if (morph instanceof BlockMorph) {
             this.spriteBar.tabBar.tabTo('scripts');
         } else if (morph instanceof CostumeIconMorph) {
@@ -1926,6 +1927,9 @@ IDE_Morph.prototype.createSpriteEditor = function () {
             this.spriteBar.tabBar.tabTo('sounds');
         }
     };
+
+    this.spriteEditor.contents.mouseEnterDragging =
+        this.spriteEditor.mouseEnterDragging;
 };
 
 IDE_Morph.prototype.createCorralBar = function () {
