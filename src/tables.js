@@ -68,11 +68,12 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
-ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows*/
+ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows,
+CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2022-January-23';
+modules.tables = '2022-January-28';
 
 var Table;
 var TableCellMorph;
@@ -343,7 +344,8 @@ TableCellMorph.prototype.render = function (ctx) {
         x,
         y;
 
-    this.isDraggable = this.data instanceof Context;
+    this.isDraggable = (this.data instanceof Context) ||
+        (this.data instanceof Costume) || (this.data instanceof Sound);
     ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
@@ -477,6 +479,18 @@ TableCellMorph.prototype.mouseLeave = function () {
 };
 
 TableCellMorph.prototype.selectForEdit = function () {
+    if (this.data instanceof Context) {
+        return this.selectContextForEdit();
+    }
+    if (this.data instanceof Costume) {
+        return this.selectCostumeForEdit();
+    }
+    if (this.data instanceof Sound) {
+        return this.selectSoundForEdit();
+    }
+};
+
+TableCellMorph.prototype.selectContextForEdit = function () {
     var script = this.data.toBlock(),
         prepare = script.prepareToBeGrabbed,
         ide = this.parentThatIsA(IDE_Morph) ||
@@ -494,6 +508,54 @@ TableCellMorph.prototype.selectForEdit = function () {
     if (ide.isAppMode) {return; }
     script.setPosition(this.position());
     return script;
+};
+
+TableCellMorph.prototype.selectCostumeForEdit = function () {
+    var cst = this.data.copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    cst.name = ide.currentSprite.newCostumeName(cst.name);
+    icon = new CostumeIconMorph(cst);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
+};
+
+TableCellMorph.prototype.selectSoundForEdit = function () {
+    var snd = this.data.copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    snd.name = ide.currentSprite.newSoundName(snd.name);
+    icon = new SoundIconMorph(snd);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
 };
 
 // TableMorph //////////////////////////////////////////////////////////

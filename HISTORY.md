@@ -14,6 +14,9 @@
     * Hungarian, thank you, Attila Faragó, for this HUGE update!
     * German
 
+### 2022-01-28
+* tables: support dragging costumes and sounds out from table views
+
 ### 2022-01-27
 * blocks, gui: support dragging costumes and sounds out from result bubbles
 * objects: support dragging costumes and sounds out from speech balloons
