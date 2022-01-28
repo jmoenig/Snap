@@ -2276,7 +2276,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return icon;
         };
 
-        // support exporting costumes directly from result bubbles
+        // support exporting costumes directly from result bubbles:
         morphToShow.userMenu = function () {
             var menu = new MenuMorph(this);
             menu.addItem(
@@ -2324,7 +2324,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return icon;
         };
 
-        // support exporting sounds directly from result bubbles
+        // support exporting sounds directly from result bubbles:
         morphToShow.userMenu = function () {
             var menu = new MenuMorph(this);
             menu.addItem(

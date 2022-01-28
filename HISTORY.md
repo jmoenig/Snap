@@ -4,7 +4,7 @@
 
 * **New Features:**
     * support dragging blocks, costumes and sounds out from result bubbles, and from speech balloons and variable watchers when in edit mode
-    * support exporting costumes and sounds from result bubbles
+    * support exporting costumes and sounds from result bubbles, and from speech balloons in edit mode
     * support deleting and inserting individual variadic slots, script vars & ring params
 * **Notable Changes:**
 * **Notable Fixes:**
@@ -19,6 +19,7 @@
 * tables: support dragging costumes and sounds out from table views
 * blocks: support exporting costumes from result bubbles
 * blocks: support exporting sounds from result bubbles
+* objects: support exporting sounds and costumes from speech balloons in edit mode
 
 ### 2022-01-27
 * blocks, gui: support dragging costumes and sounds out from result bubbles

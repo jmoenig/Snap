@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-January-27';
+modules.objects = '2022-January-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -10043,6 +10043,32 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             icon.setCenter(this.center());
             return icon;
         };
+
+        // support exporting costumes directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => {
+                    if (data instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            data.contents.src,
+                            'text/svg',
+                            data.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(data.contents, data.name);
+                    }
+                }
+            );
+            return menu;
+        };
+
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
 
@@ -10072,6 +10098,21 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             icon.setCenter(this.center());
             return icon;
         };
+
+        // support exporting sounds directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveAudioAs(data.audio, data.name)
+            );
+            return menu;
+        };
+
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();
