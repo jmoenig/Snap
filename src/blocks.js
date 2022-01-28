@@ -155,13 +155,13 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
-CostumeIconMorph, SoundIconMorph*/
+CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-27';
+modules.blocks = '2022-January-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2275,6 +2275,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             icon.setCenter(this.center());
             return icon;
         };
+
+        // support exporting costumes directly from result bubbles
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => {
+                    if (value instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            value.contents.src,
+                            'text/svg',
+                            value.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(value.contents, value.name);
+                    }
+                }
+            );
+            return menu;
+        };
+
     } else if (value instanceof Sound) {
         morphToShow = new SymbolMorph('notes', 30);
 
