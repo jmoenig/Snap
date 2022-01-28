@@ -10002,6 +10002,25 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -10178,6 +10197,25 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data.toString(),
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     }
     if (contents instanceof TextMorph) {
         // reflow text boundaries
