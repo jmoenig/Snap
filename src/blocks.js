@@ -2372,6 +2372,21 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             txt,
             this.fontSize
         );
+
+        // support exporting text / numbers directly from result bubbles:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    value,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
@@ -2383,9 +2398,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             this.fontSize
         );
     } else if (value.toString) {
-        morphToShow = new TextMorph(
+        return this.showBubble(
             value.toString(),
-            this.fontSize
+            exportPic,
+            target
         );
     }
     if (ide && (ide.currentSprite !== target)) {
