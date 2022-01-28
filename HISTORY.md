@@ -26,6 +26,7 @@
 * blocks: support exporting numbers and text from result bubbles
 * objects: support exporting numbers and text from speech balloons when in edit mode
 * lists: support exporting atomic lists from list watchers everywhere when in edit mode
+* tables: support exporting atomic tables from table views everywhere when in edit mode
 
 ### 2022-01-27
 * blocks, gui: support dragging costumes and sounds out from result bubbles
