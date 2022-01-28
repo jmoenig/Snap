@@ -12265,14 +12265,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeCSV()) {
                 menu.addItem(
                     'export as CSV...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asCSV(),
-                            'text/csv;charset=utf-8', // RFC 4180
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -12281,14 +12278,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeJSON()) {
                 menu.addItem(
                     'export as JSON...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asJSON(true), // guess objects
-                            'text/json;charset=utf-8',
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asJSON(true), // guess objects
+                        'text/json;charset=utf-8',
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -12305,27 +12299,48 @@ WatcherMorph.prototype.userMenu = function () {
             }
             menu.addItem(
                 'export...',
-                () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.toString(),
-                        'text/plain;charset=utf-8',
-                        this.getter // variable name
-                    );
+                () => ide.saveFileAs(
+                    this.currentValue.toString(),
+                    'text/plain;charset=utf-8',
+                    this.getter // variable name
+                )
+            );
+        } else if (this.currentValue instanceof Costume) {
+            menu.addItem(
+                'export...',
+                 () => {
+                    if (this.currentValue instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            this.currentValue.contents.src,
+                            'text/svg',
+                            this.currentValue.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(
+                            this.currentValue.contents,
+                            this.currentValue.name
+                        );
+                    }
                 }
+            );
+        } else if (this.currentValue instanceof Sound) {
+            menu.addItem(
+                'export...',
+                () => ide.saveAudioAs(
+                    this.currentValue.audio,
+                    this.currentValue.name
+                )
             );
         } else if (this.currentValue instanceof List &&
                 this.currentValue.canBeCSV()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asCSV(),
-                        'text/csv;charset=utf-8', // RFC 4180
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asCSV(),
+                    'text/csv;charset=utf-8', // RFC 4180
+                    this.getter // variable name
+                )
             );
             if (this.currentValue.canBeJSON()) {
                 menu.addItem(
@@ -12344,14 +12359,11 @@ WatcherMorph.prototype.userMenu = function () {
                 this.currentValue.canBeJSON()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asJSON(true), // guessObjects
-                        'text/json;charset=utf-8',
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asJSON(true), // guessObjects
+                    'text/json;charset=utf-8',
+                    this.getter // variable name
+                )
             );
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();
