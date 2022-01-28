@@ -2323,6 +2323,17 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             icon.setCenter(this.center());
             return icon;
         };
+
+        // support exporting sounds directly from result bubbles
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => ide.saveAudioAs(value.audio, value.name)
+            );
+            return menu;
+        };
+
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
