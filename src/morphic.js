@@ -1446,7 +1446,7 @@ function isWordChar(aCharacter) {
 }
 
 function isURLChar(aCharacter) {
-    return aCharacter.match(/[A-z0-9./:?&#_+%-]/);
+    return aCharacter.match(/[A-z0-9./:?&_+%-]/);
 }
 
 function isURL(text) {
