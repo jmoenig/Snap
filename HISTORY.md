@@ -1,18 +1,21 @@
 # Snap! (BYOB) History
 
 ## in development:
-
 * **New Features:**
-    * deleting and inserting individual variadic slots, script vars & ring params
-    * dragging blocks, costumes and sounds out from result bubbles, and from speech balloons and variable watchers when in edit mode
-    * exporting costumes and sounds from result bubbles, and from speech balloons and variable watchers when in edit mode
-    * exporting text and numbers from result bubbles and speech balloons when in edit mode
-    * exporting atomic lists from list watchers everywhere when in edit mode
 * **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+
+## 7.1.0:
+* **New Features:**
+    * delete and insert individual variadic slots, script vars & ring params via the context menu
+    * drag blocks, costumes and sounds out from result bubbles, and from speech balloons and variable watchers when in edit mode
+    * export data (costumes, sounds, text, numbers, atomic lists) from result bubbles, and from speech balloons and variable watchers when in edit mode via the context menu
 * **Notable Fixes:**
     * fixed layout for scrolling custom categories, thanks, Eckart, for the bug report!
     * text-costumes library: fixed preserving (more) pen state, thanks, Brian!
-* **Documentation Updates:**
 * **Translation Updates:**
     * Hungarian, thank you, Attila Faragó, for this HUGE update!
     * German
@@ -27,6 +30,7 @@
 * objects: support exporting numbers and text from speech balloons when in edit mode
 * lists: support exporting atomic lists from list watchers everywhere when in edit mode
 * tables: support exporting atomic tables from table views everywhere when in edit mode
+* v7.1.0
 
 ### 2022-01-27
 * blocks, gui: support dragging costumes and sounds out from result bubbles
