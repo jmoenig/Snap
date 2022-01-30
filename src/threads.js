@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-21';
+modules.threads = '2022-January-30';
 
 var ThreadManager;
 var Process;
@@ -4018,8 +4018,8 @@ Process.prototype.reportRandom = function (a, b) {
 };
 
 Process.prototype.reportBasicRandom = function (min, max) {
-    var floor = +min,
-        ceil = +max;
+    var floor = Math.min(+min, +max),
+        ceil = Math.max(+min, +max);
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
         return Math.random() * (ceil - floor) + floor;
     }

@@ -5,12 +5,14 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * disabled reporter drops into "When I am ..." hat block (again)
+    * fixed "pick random" for descending ranges, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-01-30
 * new dev version
 * blocks: disabled reporter drops into "When I am ..." hat block (again)
+* threads: fixed #2972 (fixed "pick random" for descending ranges), thanks, Brian!
 
 
 ## 7.1.0:
