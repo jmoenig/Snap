@@ -4,8 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * disabled reporter drops into "When I am ..." hat block (again)
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-01-30
+* new dev version
+* blocks: disabled reporter drops into "When I am ..." hat block (again)
 
 
 ## 7.1.0:

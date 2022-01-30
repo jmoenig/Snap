@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-28';
+modules.blocks = '2022-January-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -410,7 +410,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%interaction': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'clicked' : ['clicked'],
             'pressed' : ['pressed'],
