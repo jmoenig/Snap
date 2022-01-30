@@ -1,6 +1,7 @@
 # Snap! (BYOB) History
 
 ## in development:
+
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
@@ -9,11 +10,16 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 7.1.1:
+* **Notable Fixes:**
+    * disabled reporter drops into "When I am ..." hat block (again)
+    * fixed "pick random" for descending ranges, thanks, Brian!
+
 ### 2022-01-30
 * new dev version
 * blocks: disabled reporter drops into "When I am ..." hat block (again)
 * threads: fixed #2972 (fixed "pick random" for descending ranges), thanks, Brian!
-
+* prepared v7.1.1
 
 ## 7.1.0:
 * **New Features:**
