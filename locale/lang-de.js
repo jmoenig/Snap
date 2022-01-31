@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-01-26', // this, too, will appear in the Translators tab
+        '2022-01-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2128,8 +2128,8 @@ SnapTranslator.dict.de = {
         'Input(s), bekomme aber',
     'Inside a custom block':
         'In einem benutzerdefinierten Block',
-    'The error occured at':
-        'Der Fehler passierte bei',
+    'The question came up at':
+        'Die Frage stellte sich bei',
     'continuations cannot be forked':
         'Continuations können nicht separat gestartet werden',
     'unable to convert to':

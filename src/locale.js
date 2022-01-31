@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2022-January-26';
+modules.locale = '2022-January-31';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -119,6 +119,8 @@ Localizer.prototype.unload = function () {
 
 Localizer.prototype.contextualize = function (string) {
     switch (string) {
+    case 'Error':
+        return 'Hmm...';
     case 'brightness':
         return SpriteMorph.prototype.penColorModel === 'hsl' ?
             'lightness' : string;
@@ -185,7 +187,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2022-01-26'
+        '2022-01-31'
 };
 
 SnapTranslator.dict.it = {

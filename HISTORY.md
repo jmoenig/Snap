@@ -4,11 +4,16 @@
 
 * **New Features:**
 * **Notable Changes:**
+    * friendlier error messages
 * **Notable Fixes:**
-    * disabled reporter drops into "When I am ..." hat block (again)
-    * fixed "pick random" for descending ranges, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
+
+### 2022-01-31
+* new dev version
+* threads, locale: friendlier error messages
+* German translation update
 
 ## 7.1.1:
 * **Notable Fixes:**

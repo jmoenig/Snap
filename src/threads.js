@@ -1217,7 +1217,7 @@ Process.prototype.errorBubble = function (error, element) {
         errorPrefix = errorIsNested ? `${localize('Inside a custom block')}\n`
             : '',
         errorMessage = new TextMorph(
-            `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
+            `${errorPrefix}${localize(error.name)}\n${localize(error.message)}`,
             SyntaxElementMorph.prototype.fontSize
         ),
         blockToShow = element;
@@ -1229,7 +1229,7 @@ Process.prototype.errorBubble = function (error, element) {
             // if I am a single variable, show my caller in the output.
             blockToShow = blockToShow.parent;
         }
-        errorMorph.children[0].text += `\n${localize('The error occured at')}`;
+        errorMorph.children[0].text += `\n${localize('The question came up at')}`;
         errorMorph.children[0].fixLayout();
         errorMorph.add(blockToShow.fullCopy());
     }
