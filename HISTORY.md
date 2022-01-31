@@ -4,9 +4,13 @@
 
 * **New Features:**
 * **Notable Changes:**
-    * friendlier error messages
 * **Notable Fixes:**
 * **Documentation Updates:**
+* **Translation Updates:**
+
+## 7.1.2:
+* **Notable Changes:**
+    * friendlier error messages
 * **Translation Updates:**
     * German
 
@@ -14,6 +18,7 @@
 * new dev version
 * threads, locale: friendlier error messages
 * German translation update
+* prepared v7.1.2
 
 ## 7.1.1:
 * **Notable Fixes:**
