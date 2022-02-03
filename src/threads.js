@@ -7080,11 +7080,11 @@ Context.prototype.copyForContinuation = function () {
             isString(this.expression));
     if (isReporter) {
         cur.prepareContinuationForBinding();
-        while (cur.parentContext) {
-            cur.parentContext = copy(cur.parentContext);
-            cur = cur.parentContext;
-            cur.inputs = [];
-        }
+    }
+    while (cur.parentContext) {
+        cur.parentContext = copy(cur.parentContext);
+        cur = cur.parentContext;
+        cur.inputs = [];
     }
     return cpy;
 };
@@ -7097,11 +7097,11 @@ Context.prototype.copyForContinuationCall = function () {
     if (isReporter) {
         this.expression = this.expression.fullCopy();
         this.inputs = [];
-        while (cur.parentContext) {
-            cur.parentContext = copy(cur.parentContext);
-            cur = cur.parentContext;
-            cur.inputs = [];
-        }
+    }
+    while (cur.parentContext) {
+        cur.parentContext = copy(cur.parentContext);
+        cur = cur.parentContext;
+        cur.inputs = [];
     }
     return cpy;
 };
