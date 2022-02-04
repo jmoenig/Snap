@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-04
+* new dev version
+
 ## 7.1.2:
 * **Notable Changes:**
     * friendlier error messages
