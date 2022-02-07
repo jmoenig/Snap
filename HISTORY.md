@@ -7,6 +7,7 @@
 * **Notable Fixes:**
     * JSON encoding for nested lists
     * enforce static typing for stage backgrounds and sounds, and for sprite duplicates
+    * prevent Chrome from crashing when using serial ports on a Mac, thanks, Dariusz!
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -14,6 +15,7 @@
 * lists: fixed JSON encoding for nested lists
 * objects: fixed static "costume" type for stage backgrounds and sprite duplicates
 * objects: fixed static "sound" type for stage backgrounds and sprite duplicates
+* extensions: fixed #2980, thanks, Dariusz!
 
 ### 2022-02-04
 * new dev version

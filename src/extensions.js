@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11*/
 
-modules.extensions = '2022-January-13';
+modules.extensions = '2022-February-07';
 
 // Global stuff
 
@@ -834,6 +834,7 @@ SnapExtensions.primitives.set(
                         bufferSize: buf || 15000
                     });
                     acc.result = port;
+                    port._bklog = [];//backlog
                 } catch(e) {
                     acc.result = e;
                 }
@@ -859,7 +860,7 @@ SnapExtensions.primitives.set(
             (async function (port) {
                 try {
                     // console.log("pending close...", port);
-                    if (port._reader) {await port._read.cancel(); }
+                    if (port._reader) {await port._reader.cancel(); }
                     if (port?.readable) {await port.readable.cancel(); }
                     if (port?.writable) {await port.writable.abort(); }
                     if (port?.readable || port?.writable) {await port.close(); }
@@ -883,40 +884,37 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'srl_read(port)',
     function (port, proc) {
-        var acc = proc.context.accumulator;
-
-        function timeout(msecs) {
-            return new Promise((resolve, reject) =>
-                setTimeout(
-                    () => reject(Error("Timeout")),
-                    msecs
-                )
-            );
+        var acc = {result: false};
+        if(!port?.readable) {throw Error( "Port not opened."); }
+        if( port.readable?.locked){ //No reentry
+            return (port._bklog?.length > 0) ? port._bklog.splice(0) : true;
         }
-
-        if (!acc) {
-            acc = proc.context.accumulator = {result: false};
-            (async function (port) {
-                var reader, data;
-                try {
-                    if(!port?.readable) {throw Error( "Port not opened."); }
-                    reader = port.readable.getReader();
-                    data = await Promise.race([ reader.read(), timeout(0)]);
-                    acc.result = new List( data?.value);
-                } catch (e) {
-                    if (reader) {await reader.cancel(); }
-                    acc.result = (e.message === "Timeout") ? true : e;
+        (async function (port) {
+            var reader, data;
+            try {
+                reader = port._reader = port.readable.getReader();
+                data = await reader.read();
+                delete port._reader;
+                if( data.value){
+                    port._bklog.push( ...data.value);
                 }
-                if (reader) {await reader.releaseLock(); }
-            }) (port);
-        } else if (acc.result !== false) {
+            } catch (e) {
+                await reader.cancel();
+                acc.result = e;
+            }
+            if (reader) {await reader.releaseLock(); }
+        }) (port);
+     
+        if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
             }
             return acc.result;
         }
-        proc.pushContext('doYield');
-        proc.pushContext();
+     
+        return (port._bklog?.length > 0) ?
+            new List( Array.from( port._bklog.splice(0)))
+            : true;
     }
 );
 
