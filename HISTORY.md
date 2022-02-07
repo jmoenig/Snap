@@ -6,11 +6,13 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * JSON encoding for nested lists
+    * static "costume" type for stage backgrounds
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
+* objects: fixed static "costume" type for stage backgrounds
 
 ### 2022-02-04
 * new dev version
