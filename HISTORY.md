@@ -5,8 +5,12 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * JSON encoding for nested lists
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-07
+* lists: fixed JSON encoding for nested lists
 
 ### 2022-02-04
 * new dev version

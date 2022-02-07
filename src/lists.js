@@ -65,7 +65,7 @@ ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2022-January-28';
+modules.lists = '2022-February-07';
 
 var List;
 var ListWatcherMorph;
@@ -957,25 +957,24 @@ List.prototype.asCSV = function () {
     return items.map(encodeCell).join(',');
 };
 
-List.prototype.asJSON = function (guessObjects) {
+List.prototype.asJSON = function () {
     // Caution, no error catching!
     // this method assumes that the list.canBeJSON()
 
-    function objectify(list, guessObjects) {
+    function objectify(list) {
         var items = list.itemsArray(),
             obj = {};
         if (canBeObject(items)) {
             items.forEach(pair => {
                 var value = pair.length() === 2 ? pair.at(2) : undefined;
                 obj[pair.at(1)] = (value instanceof List ?
-                    objectify(value, guessObjects) : value);
+                    objectify(value) : value);
             });
             return obj;
         }
-        return items.map(element => {
-            return element instanceof List ?
-                objectify(element, guessObjects) : element;
-        });
+        return items.map(element => element instanceof List ?
+            objectify(element) : element
+        );
     }
 
     function canBeObject(array) {
@@ -984,18 +983,19 @@ List.prototype.asJSON = function (guessObjects) {
         // than as array
         var keys;
         if (array.every(
-            element => element instanceof List && (element.length() < 3)
+            element => element instanceof List && (element.length() === 2)
         )) {
             keys = array.map(each => each.at(1));
             return keys.every(each => isString(each) && isUniqueIn(each, keys));
         }
+        return false;
     }
 
     function isUniqueIn(element, array) {
         return array.indexOf(element) === array.lastIndexOf(element);
     }
 
-    return JSON.stringify(objectify(this, guessObjects));
+    return JSON.stringify(objectify(this));
 };
 
 List.prototype.canBeTXT = function () {
@@ -1502,7 +1502,7 @@ ListWatcherMorph.prototype.userMenu = function () {
                     );
                 } else {
                     ide.saveFileAs(
-                        this.list.asJSON(true), // guessObjects
+                        this.list.asJSON(),
                         'text/json;charset=utf-8',
                         localize('data') // name
                     );
