@@ -1994,6 +1994,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             arr.push(snd);
         });
         c.sounds = new List(arr);
+        c.sounds.type = 'sound';
         arr = [];
     }
     c.nestingScale = 1;
@@ -7938,6 +7939,7 @@ StageMorph.prototype.init = function (globals) {
     this.costumes.type = 'costume';
     this.costume = null;
     this.sounds = new List();
+    this.sounds.type = 'sound';
     this.version = Date.now(); // for observers
     this.isFastTracked = false;
     this.enableCustomHatBlocks = true;

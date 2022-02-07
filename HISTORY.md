@@ -6,13 +6,14 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * JSON encoding for nested lists
-    * static "costume" type for stage backgrounds
+    * enforce static typing for stage backgrounds and sounds, and for sprite duplicates
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
-* objects: fixed static "costume" type for stage backgrounds
+* objects: fixed static "costume" type for stage backgrounds and sprite duplicates
+* objects: fixed static "sound" type for stage backgrounds and sprite duplicates
 
 ### 2022-02-04
 * new dev version
