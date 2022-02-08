@@ -12,6 +12,7 @@
     * fixed an infinite loop in the signada library, thanks, Bernat!
     * fixed missing blocks in bar chars library
     * fixed missing blocks in frequency distribution analysis library
+    * fixed missing blocks in iteration composition library
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -20,6 +21,7 @@
 * variadic reporters library: fixed blocks that apparently were "lost in translation" before, thanks, Brian!
 * fixed PIPE in bar-charts library
 * fixed PIPE in frequency distribution analysis library
+* fixed PIPE in iteration composition library
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
