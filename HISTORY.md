@@ -3,8 +3,14 @@
 ## in development:
 
 * **New Features:**
-    * new bitwise operators library, thanks, Bernat!
 * **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 7.1.3:
+* **New Features:**
+    * new bitwise operators library, thanks, Bernat!
 * **Notable Fixes:**
     * JSON encoding for nested lists
     * enforce static typing for stage backgrounds and sounds, and for sprite duplicates
@@ -16,8 +22,6 @@
     * fixed missing blocks in iteration composition library
     * fixed a comment in "remove duplicates" in the list utilities library
     * fixed missing blocks in parallelization library
-* **Documentation Updates:**
-* **Translation Updates:**
 
 ### 2022-02-08
 * signade library: fixed cached values being stuck forever in edge case, thanks, Bernat!
@@ -29,6 +33,7 @@
 * fixed "do in parallel" block in parallelization library
 * new bitwise operators library, thanks, Bernat!
 * moved bitwise operators into standard extensions
+* prepared v7.1.3
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
