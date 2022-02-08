@@ -13,6 +13,7 @@
     * fixed missing blocks in bar chars library
     * fixed missing blocks in frequency distribution analysis library
     * fixed missing blocks in iteration composition library
+    * fixed a comment in "remove duplicates" in the list utilities library
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -22,6 +23,7 @@
 * fixed PIPE in bar-charts library
 * fixed PIPE in frequency distribution analysis library
 * fixed PIPE in iteration composition library
+* fixed the comment in "remove duplicates" in the list utilities library to reflect that the last match is kept
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
