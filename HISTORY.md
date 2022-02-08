@@ -14,6 +14,7 @@
     * fixed missing blocks in frequency distribution analysis library
     * fixed missing blocks in iteration composition library
     * fixed a comment in "remove duplicates" in the list utilities library
+    * fixed missing blocks in parallelization library
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -24,6 +25,7 @@
 * fixed PIPE in frequency distribution analysis library
 * fixed PIPE in iteration composition library
 * fixed the comment in "remove duplicates" in the list utilities library to reflect that the last match is kept
+* fixed "do in parallel" block in parallelization library
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
