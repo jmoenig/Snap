@@ -11,6 +11,7 @@
     * fixed missing blocks in variadic reporters library, thanks, Brian!
     * fixed an infinite loop in the signada library, thanks, Bernat!
     * fixed missing blocks in bar chars library
+    * fixed missing blocks in frequency distribution analysis library
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -18,6 +19,7 @@
 * signade library: fixed cached values being stuck forever in edge case, thanks, Bernat!
 * variadic reporters library: fixed blocks that apparently were "lost in translation" before, thanks, Brian!
 * fixed PIPE in bar-charts library
+* fixed PIPE in frequency distribution analysis library
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
