@@ -28,6 +28,7 @@
 * fixed the comment in "remove duplicates" in the list utilities library to reflect that the last match is kept
 * fixed "do in parallel" block in parallelization library
 * new bitwise operators library, thanks, Bernat!
+* moved bitwise operators into standard extensions
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists

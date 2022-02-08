@@ -31,9 +31,9 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains*/
 
-/*jshint esversion: 11*/
+/*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-February-07';
+modules.extensions = '2022-February-08';
 
 // Global stuff
 
@@ -256,6 +256,57 @@ SnapExtensions.primitives.set(
     'txt_indexof(sub, txt)',
     function (sub, txt) {
         return txt.indexOf(sub) + 1;
+    }
+);
+
+// bitwise operations
+
+SnapExtensions.primitives.set(
+    'bit_and(a, b)',
+    function (a, b) {
+        return a & b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_or(a, b)',
+    function (a, b) {
+        return a | b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_xor(a, b)',
+    function (a, b) {
+        return a ^ b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_not(a)',
+    function (a) {
+        return ~ a;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_left_shift(a, b)',
+    function (a, b) {
+        return a << b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_right_shift(a, b)',
+    function (a, b) {
+        return a >> b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_unsigned_right_shift(a, b)',
+    function (a, b) {
+        return a >>> b;
     }
 );
 
