@@ -8,8 +8,14 @@
     * JSON encoding for nested lists
     * enforce static typing for stage backgrounds and sounds, and for sprite duplicates
     * prevent Chrome from crashing when using serial ports on a Mac, thanks, Dariusz!
+    * fixed missing blocks in variadic reporters library, thanks, Brian!
+    * fixed an infinite loop in the signada library, thanks, Bernat!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-08
+* signade library: fixed cached values being stuck forever in edge case, thanks, Bernat!
+* variadic reporters library: fixed blocks that apparently were "lost in translation" before, thanks, Brian!
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
