@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * new bitwise operators library, thanks, Bernat!
 * **Notable Changes:**
 * **Notable Fixes:**
     * JSON encoding for nested lists
@@ -26,6 +27,7 @@
 * fixed PIPE in iteration composition library
 * fixed the comment in "remove duplicates" in the list utilities library to reflect that the last match is kept
 * fixed "do in parallel" block in parallelization library
+* new bitwise operators library, thanks, Bernat!
 
 ### 2022-02-07
 * lists: fixed JSON encoding for nested lists
