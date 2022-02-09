@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-January-30';
+modules.threads = '2022-February-09';
 
 var ThreadManager;
 var Process;
@@ -878,7 +878,7 @@ Process.prototype.reportOr = function (block) {
         this.evaluateNextInput(block);
     } else if (inputs.length === 1) {
         // this.assertType(inputs[0], 'Boolean');
-        if (inputs[0]) {
+        if (inputs[0] === true) {
             if (this.flashContext()) {return; }
             this.returnValueToParentContext(true);
             this.popContext();
@@ -888,9 +888,16 @@ Process.prototype.reportOr = function (block) {
     } else {
         // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        // this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(
+            this.hyperDyadic(this.reportBasicOr, inputs[0], inputs[1])
+        );
         this.popContext();
     }
+};
+
+Process.prototype.reportBasicOr = function (a, b) {
+    return a || b;
 };
 
 Process.prototype.reportAnd = function (block) {
@@ -910,9 +917,16 @@ Process.prototype.reportAnd = function (block) {
     } else {
         // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        // this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(
+            this.hyperDyadic(this.reportBasicAnd, inputs[0], inputs[1])
+        );
         this.popContext();
     }
+};
+
+Process.prototype.reportBasicAnd = function (a, b) {
+    return a && b;
 };
 
 Process.prototype.doReport = function (block) {
