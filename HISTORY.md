@@ -5,11 +5,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * preserve contents of variadic inputs when editing or translating a custom blocks
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-02-09
 * new dev version
+* blocks, byob: preserve contents of variadic inputs when editing or translating a custom blocks
 
 ## 7.1.3:
 * **New Features:**

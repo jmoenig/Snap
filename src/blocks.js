@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-30';
+modules.blocks = '2022-February-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1250,7 +1250,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         oldArg.inputs().forEach(inp => // preserve nested reporters
             oldArg.replaceInput(inp, new InputSlotMorph())
         );
-        if (this.dynamicInputLabels) {
+        if (this.dynamicInputLabels && newArg instanceof ReporterBlockMorph) {
             replacement = new ArgLabelMorph(newArg);
         }
     }
