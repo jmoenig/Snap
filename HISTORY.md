@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-09
+* new dev version
+
 ## 7.1.3:
 * **New Features:**
     * new bitwise operators library, thanks, Bernat!
