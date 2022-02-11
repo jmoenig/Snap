@@ -10,6 +10,15 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 7.1.4:
+* **Notable Changes:**
+    * hyperized Boolean AND, OR operators
+* **Notable Fixes:**
+    * preserve contents of variadic inputs when editing or translating a custom blocks
+
+### 2022-02-11
+* prepared v7.1.4
+
 ### 2022-02-09
 * new dev version
 * blocks, byob: preserve contents of variadic inputs when editing or translating a custom blocks
