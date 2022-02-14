@@ -5,11 +5,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * temporary fix for a new temporary Chrome v98 blank-tab bug
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-02-14
 * new dev version
+* gui: temporary fix for a new temporary Chrome v98 blank-tab bug
 
 ## 7.1.4:
 * **Notable Changes:**
