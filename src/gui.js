@@ -690,7 +690,7 @@ IDE_Morph.prototype.openIn = function (world) {
     this.warnAboutIE();
 
     // quick fix for Chrome 98 on Windows, remove in next Chrome version +++
-    window.onfocus = (evt) => this.changed();
+    window.onfocus = () => this.forAllChildren(m => m.rerender());
 };
 
 // IDE_Morph construction
