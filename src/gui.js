@@ -688,9 +688,6 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
-
-    // quick fix for Chrome 98 on Windows, remove in next Chrome version +++
-    window.onfocus = () => this.forAllChildren(m => m.rerender());
 };
 
 // IDE_Morph construction
