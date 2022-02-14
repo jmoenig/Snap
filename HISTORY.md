@@ -4,11 +4,12 @@
 
 * **New Features:**
 * **Notable Changes:**
-    * hyperized Boolean AND, OR operators
 * **Notable Fixes:**
-    * preserve contents of variadic inputs when editing or translating a custom blocks
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-14
+* new dev version
 
 ## 7.1.4:
 * **Notable Changes:**
