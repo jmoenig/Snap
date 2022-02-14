@@ -1459,12 +1459,14 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     // by default retina support is automatic
     // optional existing canvas to be used again, unless it is marked as
     // being shared among Morphs (dataset property "morphicShare")
-    var canvas, ext;
+    var canvas, ext,
+        supportsOC = typeof OffscreenCanvas !== "undefined"; // +++
     nonRetina = nonRetina || false;
     ext = (extentPoint ||
             (recycleMe ? new Point(recycleMe.width, recycleMe.height)
                 : new Point(0, 0))).ceil();
     if (recycleMe &&
+            !supportsOC && // +++
             !recycleMe.dataset.morphicShare &&
             (recycleMe.isRetinaEnabled || false) !== nonRetina &&
             ext.x === recycleMe.width && ext.y === recycleMe.height
@@ -1473,9 +1475,13 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         return canvas;
     } else {
-        canvas = document.createElement('canvas');
-        canvas.width = ext.x;
-        canvas.height = ext.y;
+        if (supportsOC) {
+            canvas = new OffscreenCanvas(ext.x, ext.y);
+        } else {
+            canvas = document.createElement('canvas');
+            canvas.width = ext.x;
+            canvas.height = ext.y;
+        }
     }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
