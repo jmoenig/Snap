@@ -4,9 +4,13 @@
 
 * **New Features:**
 * **Notable Changes:**
+    * hyperized reporter-IF/ELSE
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-16
+* threads: hyperized reporter-IF/ELSE
 
 ### 2022-02-14
 * new dev version

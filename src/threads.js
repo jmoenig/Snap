@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-09';
+modules.threads = '2022-February-16';
 
 var ThreadManager;
 var Process;
@@ -2348,23 +2348,52 @@ Process.prototype.doIfElse = function () {
 };
 
 Process.prototype.reportIfElse = function (block) {
-    var inputs = this.context.inputs;
+    var inputs = this.context.inputs,
+        condition,
+        expression;
 
     if (inputs.length < 1) {
+        // evaluate the first input, either a Boolean or a (nested) list
         this.evaluateNextInput(block);
-    } else if (inputs.length > 1) {
-        if (this.flashContext()) {return; }
+        return;
+    }
+
+    if (inputs[0] instanceof List && this.enableHyperOps) {
+        // hyperize a (nested) list of Booleans
+        if (this.context.accumulator === null) {
+            this.context.accumulator = [];
+        } else if (inputs.length > 1) {
+            // retrieve & remember previous result & remove it from the inputs
+            this.context.accumulator.push(inputs.pop());
+        }
+        if (this.context.accumulator.length === inputs[0].length()) {
+            // done with all the conditions in the current list
+            this.returnValueToParentContext(
+                new List(this.context.accumulator)
+            );
+            this.popContext();
+            return;
+        }
+        condition = inputs[0].at(this.context.accumulator.length + 1);
+        this.pushContext(block); // recursive call
+        this.context.addInput(condition); //
+        return;
+    }
+
+    // handle a scalar condition
+    if (inputs.length > 1) {
+        // done with evaluating a case, retrieve and return its result
         this.returnValueToParentContext(inputs.pop());
         this.popContext();
-    } else {
-        // this.assertType(inputs[0], ['Boolean']);
-        if (inputs[0]) {
-            this.evaluateNextInput(block);
-        } else {
-            inputs.push(null);
-            this.evaluateNextInput(block);
-        }
+        return;
     }
+    // this.assertType(inputs[0], ['Boolean']);
+    if (inputs[0]) {
+        expression = block.inputs()[1]; // true block
+    } else {
+        expression = block.inputs()[2]; // false block
+    }
+    this.pushContext(expression);
 };
 
 // Process process related primitives
@@ -3804,7 +3833,7 @@ Process.prototype.assertType = function (thing, typeString) {
     throw new Error(
         localize('expecting a') + ' ' +
         (typeString instanceof Array ?
-            typeString.reduce((a, b) => localize(a) + ' / ' + localize(b)) // +++
+            typeString.reduce((a, b) => localize(a) + ' / ' + localize(b))
             : localize(typeString)) +
         ' ' +
         localize('but getting a') + ' ' +
