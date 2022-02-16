@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2021 by Jens Mönig and Brian Harvey
+    Copyright (C) 2022 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2021-July-19';
+modules.lists = '2022-February-07';
 
 var List;
 var ListWatcherMorph;
@@ -922,7 +922,7 @@ List.prototype.asCSV = function () {
 
     var items = this.itemsArray(),
         rows = [];
-    
+
     function encodeCell(atomicValue) {
         var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
@@ -932,7 +932,7 @@ List.prototype.asCSV = function () {
             return string;
         }
         cell = ['\"'];
-        string.split('').forEach(letter => {
+        Array.from(string).forEach(letter => {
             cell.push(letter);
             if (letter === '\"') {
                 cell.push(letter);
@@ -957,25 +957,24 @@ List.prototype.asCSV = function () {
     return items.map(encodeCell).join(',');
 };
 
-List.prototype.asJSON = function (guessObjects) {
+List.prototype.asJSON = function () {
     // Caution, no error catching!
     // this method assumes that the list.canBeJSON()
 
-    function objectify(list, guessObjects) {
+    function objectify(list) {
         var items = list.itemsArray(),
             obj = {};
         if (canBeObject(items)) {
             items.forEach(pair => {
                 var value = pair.length() === 2 ? pair.at(2) : undefined;
                 obj[pair.at(1)] = (value instanceof List ?
-                    objectify(value, guessObjects) : value);
+                    objectify(value) : value);
             });
             return obj;
         }
-        return items.map(element => {
-            return element instanceof List ?
-                objectify(element, guessObjects) : element;
-        });
+        return items.map(element => element instanceof List ?
+            objectify(element) : element
+        );
     }
 
     function canBeObject(array) {
@@ -984,18 +983,19 @@ List.prototype.asJSON = function (guessObjects) {
         // than as array
         var keys;
         if (array.every(
-            element => element instanceof List && (element.length() < 3)
+            element => element instanceof List && (element.length() === 2)
         )) {
             keys = array.map(each => each.at(1));
             return keys.every(each => isString(each) && isUniqueIn(each, keys));
         }
+        return false;
     }
 
     function isUniqueIn(element, array) {
         return array.indexOf(element) === array.lastIndexOf(element);
     }
 
-    return JSON.stringify(objectify(this, guessObjects));
+    return JSON.stringify(objectify(this));
 };
 
 List.prototype.canBeTXT = function () {
@@ -1094,7 +1094,7 @@ List.prototype.blockify = function (limit = 500, count = [0]) {
 
     block.isDraggable = true;
     slots.removeInput();
-    
+
     // fill the slots with the data
     for (i = 0; i < len && count[0] < limit; i += 1) {
         value = this.at(i + 1);
@@ -1472,7 +1472,10 @@ ListWatcherMorph.prototype.expand = function (maxExtent) {
 // ListWatcherMorph context menu
 
 ListWatcherMorph.prototype.userMenu = function () {
-    if (!List.prototype.enableTables) {
+    var world = this.world(),
+        ide = detect(world.children, m => m instanceof IDE_Morph);
+
+    if (!List.prototype.enableTables || ide.isAppMode) {
         return this.escalateEvent('userMenu');
     }
     var menu = new MenuMorph(this);
@@ -1481,13 +1484,29 @@ ListWatcherMorph.prototype.userMenu = function () {
         menu.addItem(
             'blockify',
             () => {
-                var world = this.world(),
-                    ide = detect(world.children, m => m instanceof IDE_Morph);
                 this.list.blockify().pickUp(world);
                 world.hand.grabOrigin = {
                     origin: ide.palette,
                     position: ide.palette.center()
                 };
+            }
+        );
+        menu.addItem(
+            'export',
+            () => {
+                if (this.list.canBeCSV()) {
+                    ide.saveFileAs(
+                        this.list.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        localize('data') // name
+                    );
+                } else {
+                    ide.saveFileAs(
+                        this.list.asJSON(),
+                        'text/json;charset=utf-8',
+                        localize('data') // name
+                    );
+                }
             }
         );
     }

@@ -30,7 +30,7 @@ If you have security concerns, please do not post them publicly.
 Please reach out to us at [contact@snap.berkeley.edu](mailto:contact@snap.berkeley.edu).
 
 ## License
-Copyright (C) 2008-2021 by Jens Mönig and Brian Harvey
+Copyright (C) 2008-2022 by Jens Mönig and Brian Harvey
 
 Snap! is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

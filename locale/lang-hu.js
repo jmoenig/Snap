@@ -4,9 +4,9 @@
 
     A SNAP! magyar fordítása
 
-    written by Makány György
+    written by Makány György, Faragó Attila
 
-    Copyright (C) 2015 by Makány György
+    Copyright (C) 2015-2022 by Makány György, Faragó Attila
 
     This file is part of Snap!.
 
@@ -181,11 +181,11 @@ SnapTranslator.dict.hu = {
     'language_name':
         'Magyar', // the name as it should appear in the language menu
     'language_translator':
-        'Makány György', // your name for the Translators tab
+        'Makány György, Faragó Attila', // your name for the Translators tab
     'translator_e-mail':
-        'makany.gyorgy@gmail.com', // optional
+        'makany.gyorgy@gmail.com, attila.farago@sap.com', // optional
     'last_changed':
-        '2015-07-26', // this, too, will appear in the Translators tab
+        '2022-01-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -218,13 +218,15 @@ SnapTranslator.dict.hu = {
 
     // editor:
     'draggable':
-        'vonszolható',
+        'húzható',
 
     // tabs:
     'Scripts':
         'Feladatok',
     'Costumes':
         'Jelmezek',
+    'Backgrounds':
+        'Hátterek',
     'Sounds':
         'Hangok',
 
@@ -245,6 +247,14 @@ SnapTranslator.dict.hu = {
     // new sprite button:
     'add a new sprite':
         'Új szereplő',
+
+    'add a new Turtle sprite':
+        'új teknőc rajzának hozzáadása',
+    'paint a new sprite':
+        'új alakzat rajzolása',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'készíts fotót a webkamerával és\nimportáld új szereplőként',
+    
 
     // tab help
     'costumes tab help':
@@ -313,7 +323,7 @@ SnapTranslator.dict.hu = {
     'set y to %n':
         'y legyen %n',
     'if on edge, bounce':
-        'ha szélen vagy, pattanj vissza',
+        'ha szélén vagy, pattanj vissza',
     'x position':
         'x hely',
     'y position':
@@ -340,12 +350,20 @@ SnapTranslator.dict.hu = {
         'Szia!',
     'Hmm...':
         'Hmm...',
+    '%img of costume %cst':
+        '%img jelmez %cst',
+    'new costume %l width %dim height %dim':
+        'új jelmez %l szélesség %dim magasság %dim',
+    'stretch %cst x: %n y: %n %':
+        'nyújtsd %cst x: %n y: %n %',
     'change %eff effect by %n':
         '%eff hatás változzon %n',
     'set %eff effect to %n':
         '%eff hatás legyen %n',
     'clear graphic effects':
         'töröld a grafikus hatásokat',
+    '%eff effect':
+        '%eff hatás',
     'change size by %n':
         'a méret változzon %n',
     'set size to %n %':
@@ -356,17 +374,28 @@ SnapTranslator.dict.hu = {
         'jelenj meg',
     'hide':
         'tűnj el',
-    'go to front':
-        'kerülj legelőre',
+    'shown?': 
+        'látható?',
+    'go to %layer layer': 
+        'kerülj %layer',
+    'front': 
+        'előre',
+    'back': 
+        'hátulra',
     'go back %n layers':
         'kerülj %n szinttel hátrébb',
 
     'development mode \ndebugging primitives:':
-        'Fejlesztő mód \nblokkok hibakeresése',
+        'fejlesztő mód \nblokkok hibakeresése',
     'console log %mult%s':
         'konzolra írás: %mult%',
     'alert %mult%s':
-        'Felbukkanó: %mult%',
+        'felbukkanó: %mult%',
+
+    'pixels': 
+        'pixelek',
+    'current':
+        'jelenlegi',
 
     // sound:
     'play sound %snd':
@@ -377,14 +406,55 @@ SnapTranslator.dict.hu = {
         'minden hangot állíts le',
     'rest for %n beats':
         'szünetelj %n ütemet',
-    'play note %n for %n beats':
-        'szóljon %n %n ütemig',
+    'play sound %snd at %rate Hz':
+        'játszd le %snd hangot %rate Hz mintavételezéssel',
+    '%aa of sound %snd':
+        'hangminta %aa %snd',
+    'duration':
+        'hossz',
+    'length':
+        'elemek száma',
+    'number of channels':
+        'csatornák száma',
+    'new sound %l rate %rate Hz':
+        'új hang %l mintavételezéssel %rate Hz',
+    'play note %note for %n beats':
+        'játszd le a %note hangot %n ütemig',
+    'set instrument to %inst':
+        'hangeszközt állítsd: %inst',
     'change tempo by %n':
         'a tempó változzon: %n',
     'set tempo to %n bpm':
         'a tempó legyen %n ütem/perc',
     'tempo':
         'tempó',
+
+    'change volume by %n':
+        'hangerő változzon: %n',
+    'set volume to %n %':
+        'hangerő legyen %n %',
+    'change balance by %n':
+        'hangmérleg változzon: %n',
+    'set balance to %n':
+        'hangmérleg legyen %n',
+    'balance':
+        'hangmérleg',
+    'play frequency %n Hz':
+        'játszt le frekvenciát %n Hz',
+    'stop frequency':
+        'állítsd le a frekvenciát',
+    'play %n Hz for %n secs':
+        'játssz %n Hz %n mp hosszan',
+
+    // "instruments", i.e. wave forms
+    '(1) sine':
+        '(1) szinusz',
+    '(2) square':
+        '(2) négyzetes',
+    '(3) sawtooth':
+        '(3) fűrészfog',
+    '(4) triangle':
+        '(4) háromszög',
 
     // pen:
     'clear':
@@ -393,22 +463,39 @@ SnapTranslator.dict.hu = {
         'tollat le',
     'pen up':
         'tollat fel',
+    'pen down?':
+        'toll lent?',
     'set pen color to %clr':
-        'a tollszín legyen %clr',
-    'change pen color by %n':
-        'a tollszín változzon %n',
-    'set pen color to %n':
-        'a tollszín legyen %n',
-    'change pen shade by %n':
-        'a tollárnyalat változzon %n',
-    'set pen shade to %n':
-        'a tollárnyalat legyen %n',
+        'tollszín legyen %clr',
+    'set background color to %clr':
+        'hátteret állítsd %clr',
+    'change pen %clrdim by %n':
+        'toll %clrdim változzon %n',
+    'change background %clrdim by %n':
+        'háttér %clrdim változzon %n',
+    'set pen %clrdim to %n':
+        'toll %clrdim legyen a %n',
+    'set background %clrdim to %n':
+        'háttér %clrdim legyen a %n',
+    'pen %pen':
+        'toll %pen',
     'change pen size by %n':
-        'a tollméret változzon %n',
+        'tollméret változzon %n',
     'set pen size to %n':
-        'a tollméret legyen %n',
+        'tollméret legyen %n',
     'stamp':
         'készíts lenyomatot',
+
+    'fill':
+        'kitöltés',
+    'write %s size %n':
+        'írd %s mérettel %n',
+    'paste on %spr':
+        'nyomtasd erre %spr',
+    'cut from %spr':
+        'vágd ki innen %spr',
+    'pen vectors':
+        'toll vektor',
 
     // control:
     'when %greenflag clicked':
@@ -420,19 +507,29 @@ SnapTranslator.dict.hu = {
     'clicked':
         'rám kattintanak',
     'pressed':
-        'gombnyomás történik',
+        'gombnyomásra',
     'dropped':
         'leejtenek',
     'mouse-entered':
         'az egér fölém kerül',
     'mouse-departed':
         'az egér lemegy rólam',
+    'scrolled-down':
+    	'lefelé görgetnek',
+    'scrolled-up':
+        'felfelé görgetnek',
+    'stopped':
+        'megállítottak',
+    'when %b':
+        'amikor %b',
     'when I receive %msgHat %message':
         '%msgHat üzenet érkezésekor %message',
     'broadcast %msg %receive':
         'küldj mindenkinek %msg %receive üzenetet',
     'broadcast %msg %receive and wait':
         'küldj mindenkinek %msg %receive üzenetet és várj',
+    'send %msg to %spr':
+        'küldd %msg a szereplőnek %spr',
     'Message name':
         'Az üzenet neve',
     'message':
@@ -449,10 +546,14 @@ SnapTranslator.dict.hu = {
         'ismételd %n -szer %loop',
     'repeat until %b %loop':
         'ismételd amíg %b %loop',
+    'for %upvar = %n to %n %cla':
+        'ciklus %upvar = %n tól %n ig %cla',
     'if %b %c':
         'ha %b %c',
     'if %b %c else %c':
         'ha %b %c különben %c',
+    'if %b then %s else %s':
+        'ha %b %s különben %s',
     'report %s':
         'jelents %s',
     'stop %stopChoices':
@@ -470,70 +571,168 @@ SnapTranslator.dict.hu = {
     'other scripts in sprite':
         'ennek a szereplőnek minden más feladata',
     'pause all %pause':
-        'Várakozzon minden %pause',
+        'várakozz %pause',
     'run %cmdRing %inputs':
         'futtasd %cmdRing %inputs értékkel',
     'launch %cmdRing %inputs':
         'induljon %cmdRing %inputs',
     'call %repRing %inputs':
-        'hívd %repRing auf %inputs',
+        'hívd %repRing %inputs',
     'run %cmdRing w/continuation':
-        'futtatás %cmdRing folytatásával',
+        'futtasd %cmdRing folytatással',
     'call %cmdRing w/continuation':
-        'hívd meg %cmdRing folytatásával',
+        'hívd meg %cmdRing folytatással',
     'warp %c':
-        'Warp %c',
+        'gyorsítva %c',
     'when I start as a clone':
         'másolatként indítva',
     'create a clone of %cln':
         'készíts másolatot %cln',
+    'a new clone of %cln':
+        'új másolat %cln',
     'myself':
-        'magadról',
+        'magam',
     'delete this clone':
         'töröld ezt a másolatot',
+    'switch to scene %scn %send':
+        'válts jelenetet %scn %send',
+    'and send':
+        'és küldd',
+    'next':
+        'következő',
+    'previous':
+        'előző',
+
+    'tell %spr to %cmdRing %inputs':
+        'hajtsd végre %spr %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'kérdezd le %spr %repRing %inputs',
 
     // sensing:
     'touching %col ?':
-        'érint %col színt?',
+        'érint %col ?',
     'touching %clr ?':
         'érint %clr színt?',
     'color %clr is touching %clr ?':
         '%clr szín érint %clr színt?',
     'ask %s and wait':
-        'Kérdezd meg %s és várj',
+        'kérdezd meg %s és várj',
     'what\'s your name?':
         'Mi a neved?',
     'answer':
-        'Válasz',
+        'válasz',
     'mouse x':
         'egér x',
     'mouse y':
         'egér y',
     'mouse down?':
-        'Egér lenyomva?',
+        'egér lenyomva?',
     'key %key pressed?':
         '%key gomb lenyomva?',
-    'distance to %dst':
-        'távolság: %dst',
+    '%rel to %dst': 
+        '%rel ehhez %dst',
+    'distance':
+    	'távolság',
+    'ray length':
+        'távolság a széléig',
+    '%asp at %loc' :
+        '%asp itt %loc',
+    'r-g-b-a':
+        'r-g-b-a szín',
+    'sprites' :
+        'Objekte',
     'reset timer':
-        'Nullázd az órát',
+        'nullázd az órát',
     'timer':
-        'Stopper',
+        'stopper',
     '%att of %spr':
-        '%att %spr objektumérték',
+        '%att itt %spr',
+    'my %get':
+        'saját %get',
+    'object %self':
+        'objektum %self',
     'http:// %s':
         'http:// %s',
-    'turbo mode?':
-        'Turbó mód?',
-    'set turbo mode to %b':
-        '%b turbó módjának bekapcsolása',
-
+    'turbo mode':
+        'turbo mód',
+    'flat line ends':
+        'egyszerű vonalvégződés',
+    'is %setting on?':
+        '%setting bállítás bekapcsolva?',
+    'set %setting to %b':
+        'legyen %setting beállítás %b',
+    'current %dates':
+        'aktuális %dates',
+    'year':
+        'év',
+    'month':
+        'hónap',
+    'date':
+        'nap',
+    'day of week':
+        'a hét napja',
+    'hour':
+        'óra',
+    'minute':
+        'perc',
+    'second':
+        'másodperc',
+    'time in milliseconds':
+        'idő (ezredmásodpercben)',
+    'microphone %audio':
+        'mikrofon %audio',
+    'volume':
+        'hangerő',
+    'note':
+        'hangjegy',
+    'frequency':
+        'frekvencia',
+    'samples':
+        'hangminta',
+    'sample rate':
+        'mintavétel',
+    'spectrum':
+        'frekvenciaspektrum',
+    'resolution':
+        'felbontás',
+    'Microphone resolution...':
+        'Mikrofon felbontás...',
+    'Microphone':
+        'Mikrofon',
+    'low':
+        'alacsony',
+    'high':
+        'magas',
+    'max':
+        'max',
+    'video %vid on %self':
+        'video %vid ezen %self',
+    'motion':
+        'mozgás',
+    'snap':
+        'pillanatfelvétel',
+    'set video transparency to %n':
+        'legyen video átlátszósága %n',
+    'video capture':
+        'video felvétel',
+    'mirror video':
+        'video tükrözése',
     'filtered for %clr':
         '%clr szín szűrése',
     'stack size':
-        'Veremméret',
+        'veremméret',
     'frames':
-        'Keretek',
+        'keretek',
+    'log pen vectors':
+        'toll vektorok mentése',
+    '%block of block %repRing':
+        'blokk %block %repRing',
+    'definition':
+        'definíció',
+    'custom?':
+        'egyedi?',
+    'global?':
+        'globális?',
 
     // operators:
     '%n mod %n':
@@ -545,11 +744,11 @@ SnapTranslator.dict.hu = {
     'pick random %n to %n':
         'véletlen %n és %n között',
     '%b and %b':
-        '%b ÉS %b',
+        '%b és %b',
     '%b or %b':
-        '%b VAGY %b',
+        '%b vagy %b',
     'not %b':
-        'NEM %b',
+        'nem %b',
     'true':
         'igaz',
     'false':
@@ -559,7 +758,7 @@ SnapTranslator.dict.hu = {
     'split %s by %delim':
         '%s szétvágása %delim jeleknél',
     'hello':
-        'szia',
+        'hello',
     'world':
         'világ',
     'letter %idx of %s':
@@ -569,11 +768,16 @@ SnapTranslator.dict.hu = {
     'unicode of %s':
         '%s Unicode-ra alakítva',
     'unicode %n as letter':
-        'Unicode %n betűként',
+        'unicode %n betűként',
     'is %s a %typ ?':
         '%s egy %typ ?',
     'is %s identical to %s ?':
         '%s ugyanaz, mint %s ?',
+
+    'JavaScript function ( %mult%s ) { %code }':
+        'JavaScript függvény ( %mult%s ) { %code }',
+    'compile %repRing':
+    	'fordítsd %repRing',
 
     'type of %s':
         'típus: %s',
@@ -585,6 +789,8 @@ SnapTranslator.dict.hu = {
         'Változónév',
     'Script variable name':
         'Feladatváltozó név',
+    'inherit %shd':
+        'örököld %shd',
     'Delete a variable':
         'Változó törlése',
 
@@ -602,18 +808,64 @@ SnapTranslator.dict.hu = {
     // lists:
     'list %exp':
         'lista %exp',
+    'numbers from %n to %n':
+        'számok ettől %n eddig %n',
     '%s in front of %l':
         '%s megelőzi %l',
     'item %idx of %l':
         '%idx eleme a %l listának',
     'all but first of %l':
         '%l elsőnkívüli elemei',
-    'length of %l':
-        '%l hossza',
+    '%la of %l':
+        '%la itt %l',
+    'rank':
+        'rang',
+    'dimensions':
+        'dimenziók',
+    'flatten':
+        'laposít',
+    'columns':
+        'oszlopok',
+    'reverse':
+        'visszafelé',
+    'lines':
+        'sorok',
     '%l contains %s':
-        '%l tartalmazza %s -t',
+        '%l tartalmazza %s',
     'thing':
         'dolog',
+    'is %l empty?':
+        'üres %l ?',
+    'index of %s in %l':
+        'index %s itt %l',
+    'map %repRing over %l':
+        'képezd le %repRing erre %l',
+    'keep items %predRing from %l':
+        'válogasd ki az ilyen %predRing elemeket ebből %l',
+    'find first item %predRing in %l':
+        'keresd ki az első %predRing elemet ebből %l',
+    'combine %l using %repRing':
+        'kombináld %l így %repRing',
+    '%blitz map %repRing over %l':
+        '%blitz képezd le %repRing erre %l',
+    '%blitz keep items %predRing from %l':
+        '%blitz válogasd ki az ilyen %predRing elemeket ebből %l',
+    '%blitz find first item %predRing in %l':
+        '%blitz keresd ki az első %predRing elemet ebből %l',
+    '%blitz combine %l using %repRing':
+        '%blitz kombináld %l így %repRing',
+    'for each %upvar in %l %cla':
+        'minden elemre %upvar ebből %l %cla',
+    'item':
+        'elem',
+    'value':
+        'érték',
+    'index':
+        'index',
+    'append %lists':
+        'fűzd hozzá %lists',
+    'reshape %l to %nums':
+        'formáld át %l így %nums',
     'add %s to %l':
         '%s hozzáadása %l listához',
     'delete %ida of %l':
@@ -669,20 +921,104 @@ SnapTranslator.dict.hu = {
         'Projekt exportálása egyszerű szövegként...',
     'Export project...':
         'Projekt exportálása...',
+    'save project data as XML\nto your downloads folder':
+        'mentsd le a projektet XML formátumban\na letöltés mappába',
     'show project data as XML\nin a new browser window':
         'a projekt adatainak megtekintése\negy új böngészőablakban',
     'Export blocks...':
         'Blokk exportálása...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'globális felhasználói blokk definíciók\nmegtekintése egy új böngészőablakban',
-    'Import tools':
-        'Eszközök importálása',
-    'load the official library of\npowerful blocks':
-        'a hivatalos könyvtári\nblokkok betöltése',
+    'save global custom block\ndefinitions as XML':
+        'mentsd el a saját blokkokat\nXML formátumban',
+    'Unused blocks...':
+          'Nem használt blokkok...',
+    'find unused global custom blocks\nand remove their definitions':
+        'keresd meg a nem használt blokkokat\nés töröld a definícióikat',
+    'Remove unused blocks':
+        'Töröld a nem használt blokkokat',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'nem találtam nem használt saját blokkot a projektben',
+    'unused block(s) removed':
+        'nem használt blokkok törölve',
+    'Hide blocks...':
+        'Blokkok elrejtése...',
+    'New category...':
+        'Új kategória...',
+    'Remove a category...':
+        'Kategória törlése...',
+    'Scenes...':
+        'Jelenetek...',
+    'New scene':
+        'Új jelenet',
+    'Add scene...':
+        'Jelenet hozzáadása...',
+    'Export summary...':
+        'Összefoglaló exportálása...',
+    'save a summary\nof this project':
+        'mentsd el a projekt összefoglalóját',
+    'Contents':
+        'Tartalom',
+    'Kind of':
+        'Típus',
+    'Part of':
+        'Része',
+    'Parts':
+        'Részei',
+    'Blocks':
+        'Blokkok',
+    'For all Sprites':
+        'Minden szereplőre',
     'Libraries...':
         'Modulkönyvtárak...',
+    'Select categories of additional blocks to add to this project.':
+        'Válassza ki a projekthez adandó blokkok kategóriáit.',
+    'Select a costume from the media library':
+        'Válasszon ki egy jelmezt a médiakönyvtárból.',
+    'Select a sound from the media library':
+        'Válasszon ki egy hangot a médiakönyvtárból.',
+    'Undelete sprites...':
+        'Szereplők visszaállítása...',
+    'Bring back deleted sprites':
+        'Állítsd vissza a törölt szereplőket',
+    'trash is empty':
+        'üres a kuka',
+
     'Import library':
         'Modulkönyvtár importálása',
+
+    'Loading':
+        'Betöltés',
+    'Imported':
+        'Importálva',
+    'Iteration, composition':
+        'Ismétlés, Kompozíció',
+    'List utilities':
+        'Lista eszközök',
+    'Variadic reporters':
+        'Változó függvények',
+    'Web services access (https)':
+        'Web service hozzáférés (https)',
+    'Multi-branched conditional (switch)':
+        'Több-ágú feltételes blokk (elágazás)',
+    'LEAP Motion controller':
+        'LEAP mozgásvezérlő',
+    'Words, sentences':
+        'Szavak, mondatok',
+    'Catch errors in a script':
+        'Programban hibák elkapása',
+    'Set RGB or HSV pen color':
+        'Toll RGB vagy HSV szín szerint',
+    'Text to speech':
+        'Szöveg beszéddé',
+    'Provide 100 selected colors':
+        '100 kiválasztott szín',
+    'Infinite precision integers, exact rationals, complex':
+        'Végtelen pontosság a számokban',
+    'Provide getters and setters for all GUI-controlled global settings':
+        'Érték-olvasó és -író minden felületen megjelenő beállításhoz',
+    'Allow multi-line text input to a block':
+        'Többsoros szövegbevitel megengedése',
+    'Create variables in program':
+        'Programban változók létrehozása',
 
     // cloud menu
     'Login...':
@@ -690,25 +1026,38 @@ SnapTranslator.dict.hu = {
     'Signup...':
         'Feliratkozás...',
 
+    'Logout':
+        'Kijelentkezés',
+    'Change Password...':
+        'Jelszó megváltoztatása...',
+    'Reset Password...':
+        'A jelszó alaphelyzetre állítása...',
+    'Resend Verification Email...':
+        'Ellenörző e-mail újraküldése...',
+    'Open in Community Site':
+        'Projektoldalon megnyítás',
+
     // settings menu
     'Language...':
         'Nyelv...',
     'Zoom blocks...':
-        'Blokkok bővítése...',
+        'Blokkok nagyítása...',
+    'Fade blocks...':
+        'Blokkok átlátszósága...',
     'Stage size...':
-        'A játéktér mérete...',
+        'Játéktér mérete...',
     'Stage size':
-        'A játéktér mérete',
+        'Játéktér mérete',
     'Stage width':
-        'A játéktér szélessége',
+        'Játéktér szélessége',
     'Stage height':
-        'A játéktér magassága',
+        'Játéktér magassága',
     'Default':
         'Alapérték',
     'Blurred shadows':
         'Elmosódó árnyékok',
     'uncheck to use solid drop\nshadows and highlights':
-        'vegye ki a jelölést, ha éles árnyékokat\nés kiemeléseket kíván használni',
+        'vedd ki a jelölést, ha éles árnyékokat\nés kiemeléseket kíván használni',
     'check to use blurred drop\nshadows and highlights':
         'jelölje be, ha elmosódó árnyékokat\nés kiemeléseket kíván használni',
     'Zebra coloring':
@@ -724,13 +1073,15 @@ SnapTranslator.dict.hu = {
     'check to enable dynamic\nlabels for variadic inputs':
         'bejelölve engedélyezi a többszörös\nbeviteli mezők dinamikus feliratait',
     'Prefer empty slot drops':
-        'Szóköz használata üres karakterként',
+        'Üres helyre ejt először',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'bekapcsolva az üres helyre ejti\nelőször a behúzott blokkot',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'kikapcsolva engedélyezed,\nhogy a behúzott blokk kirúgjon más blokkokat',
+    'check to turn on\n visible stepping (slow)':
+        'bekapcsolva lassítva láthatod a program lépéseit',
+    'uncheck to turn off\nvisible stepping':
+        'kikapcsolva nem látod már\nlassítva láthatod a program lépéseit',
     'Long form input dialog':
         'Hosszú formátumú beviteli párbeszéd',
     'Plain prototype labels':
@@ -743,18 +1094,34 @@ SnapTranslator.dict.hu = {
         'bejelölve mindig látszik a csatlakozás típusa a beviteli párbeszédablakban',
     'uncheck to use the input\ndialog in short form':
         'kapcsolja ki, ha rövidített\npárbeszédablakot akar használni',
-    'Virtual keyboard':
-        'Virtuális billentyűzet',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'kikapcsolva letiltja a virtuális\nbillentyűzetet a mobil eszközökön',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'bejelölve engedélyezi a virtuális\nbillentyűzetet a mobil eszközökön',
+    'JavaScript extensions':
+        'JavaScript kiegészítők',
+    'check to support\nnative JavaScript functions':
+        'bekapcsolva a natív\nJavaScript függvények elérhetőek',
+    'uncheck to disable support for\nnative JavaScript functions':
+        'kikapcsolva a natív\nJavaScript függvények nem elérhetőek',
+    'JavaScript extensions for Snap!\nare turned off':
+        'JavaScript natív függvények\nkikapcsolva',
+    'Extension blocks':
+        'Kiegészítő blokkok',
+    'uncheck to hide extension\nprimitives in the palette':
+        'kikapcsolva a kiegészítő blokkokat\nelrejti a palettáról',
+    'check to show extension\nprimitives in the palette':
+        'bekapcsolva a kiegészítő blokkokat\nmegjeleníti a palettán',
     'Input sliders':
         'Beviteli csúszkák',
     'uncheck to disable\ninput sliders for\nentry fields':
         'kikapcsolva letiltja a csúszkákat\na beviteli mezőknél',
     'check to enable\ninput sliders for\nentry fields':
         'bekapcsolva engedélyezi a csúszkákat\na beviteli mezőknél',
+    'Retina display support':
+        'Retina felbontás támogatása',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'kikapcsolva alacsonyabb felbontást mutat\nés kíméli az erőforrásokat',
+    'check for higher resolution,\nuses more computing resources':
+        'bekapcsolva magasabb felbontást mutat\nés több erőforrást használ',
+    'Codification support':
+        'A kodifikáció támogatása',
     'Clicking sound':
         'A kattintás hangja',
     'uncheck to turn\nblock clicking\nsound off':
@@ -773,24 +1140,81 @@ SnapTranslator.dict.hu = {
         'kikapcsolva normál sebességen\nfutnak a programok',
     'check to enable\nIDE animations':
         'bekapcsolva engedélyezi\naz IDE animációit',
+    'Flat design':
+        'Flat design',
+    'check for alternative\nGUI design':
+        'bekapcsolva más kinézetű grafikus felületet látsz',
+    'uncheck for default\nGUI design':
+        'kikapcsolva a normál grafikus felületet látod',
+    'Nested auto-wrapping':
+        'Automatikus beágyazás',
+    'Keyboard Editing':
+        'Billentyűzet Szerkesztés',
+    'Table support':
+        'Táblázat támogatás',
+    'Table lines':
+        'Táblázat sorok',
+    'Visible stepping':
+        'Léptetés látható',
     'Thread safe scripts':
         'Biztonságos programszálak',
     'uncheck to allow\nscript reentrance':
         'kikapcsolva engedélyezi a programok\n többszörös végrehajtását',
     'check to disallow\nscript reentrance':
         'bekapcsolva engedélyezi a programok\n többszörös végrehajtását',
-    'Prefer smooth animations':
-        'Finom animációk',
-    'uncheck for greater speed\nat variable frame rates':
-        'kapcsolja ki, ha nagyobb sebességet\nakar változtatható képfrissítéseknél',
-    'check for smooth, predictable\nanimations across computers':
-        'kapcsolja be, ha finomabb, kiszámíthatóbb\nanimációkat akar minden számítógépen',
     'Flat line ends':
         'Egyszerű vonalvégződés',
     'check for flat ends of lines':
         'kapcsolja be az\negyszerű vonalvégződéshez',
     'uncheck for round ends of lines':
         'kapcsolja ki a\nlekerekített vonalvégződésekhez',
+
+    'Ternary Boolean slots':
+        'Ternary boolean támogatás',
+    'Inheritance support':
+        'Öröklődés támogatás',
+    'Hyper blocks support':
+        'Hyper blokk támogatás',
+    'uncheck to disable\nusing operators on lists and tables':
+         'kapcsold ki, hogy letiltsd\na műveleteket listákon és táblázatokon',
+    'check to enable\nusing operators on lists and tables':
+         'jelöld be, hogy engedélyezd\na műveleteket listákon és táblázatokon',
+    'Log pen vectors':
+        'Toll vektorok mentése',
+    'uncheck to turn off\nlogging pen vectors':
+        'kapcsold ki, hogy a\ntoll vektorok mentését leáálítsd',
+    'check to turn on\nlogging pen vectors':
+        'kapcsold be, hogy a\ntoll vektorok mentését elindítsd',
+    'Single palette':
+        'Egyesített paletta',
+    'check to show all blocks in a single palette':
+        'bekapcsolva minden blokkot egy palettán mutat',
+    'uncheck to show only the selected category\'s blocks':
+        'kikapcsolva csak a kiválasztott kategóriához tartozó blokkokat mutatja',
+    'Show categories':
+        'Kategóriák kijelzése',
+    'uncheck to hide\ncategory names\nin the palette':
+        'kikacsolva elrejti\na kategóriák neveit a palettáról',
+    'check to show\ncategory names\nin the palette':
+        'bekapcsolva megjeleníti\na kategóriák neveit a palettán',
+    'Show buttons':
+        'Gombok megjelenítése',
+    'uncheck to hide buttons\nin the palette':
+        'kikapcsolva elrejti\na gombokat a palettáról',
+    'check to show buttons\nin the palette':
+        'bekapcsolva megjeleníti\na gombokat a palettán',
+    'HSL pen color model':
+        'HSL színmodell',
+    'uncheck to switch pen colors\nand graphic effects to HSV':
+        'kikapcsolva a toll színekhez\nés a grafikai hatásokhoz a HSV színmodellt használja',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'bekapcsolva a toll színekhez\nés a grafikai hatásokhoz a HSL színmodellt használja',
+    'Disable click-to-run':
+        'Blokkon-kattintáskor-futtatás tiltása',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'kikapcsolva a blokkon kattintva\na hozzá tartozó kód futtatása',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'bekapcsolva a blokkon kattintva\na hozzá tartozó kód futtatása nem indul el',
 
     // inputs
     'with inputs':
@@ -807,44 +1231,119 @@ SnapTranslator.dict.hu = {
         'Súgó',
 
     // palette:
-    'hide primitives':
-        'az alapvetők elrejtése',
-    'show primitives':
-        'az alapvetők megjelentése',
+    'find blocks':
+        'blokk keresése',
+    'hide blocks...':
+        'blokkok elrejtése...',
+    'Hide blocks in palette':
+        'Blokkok elrejtése a palettáról',
+    'unused':
+        'nem használt',
+    'make a category...':
+        'új kategória...',
+    'New Category':
+        'Új kategória',
+    'Blocks category name:':
+        'Új kategória neve:',
+    'Category color':
+        'Kategória színe',
+    'red':
+        'piros',
+    'green':
+        'zöld',
+    'blue':
+        'kék',
+    'delete a category...':
+        'kategória törlése...',
 
     // blocks:
     'help...':
         'Súgó...',
     'relabel...':
         'átcimkézés...',
+    'compile':
+        'fordítás',
+    'uncompile':
+        'fordítás visszavonása',
     'duplicate':
         'megkettőzés',
     'make a copy\nand pick it up':
         'másolat felvétele',
     'only duplicate this block':
         'csak készítsen egy másolatot\nerről a blokkról',
+    'extract':
+        'emeld ki',
+    'only grab this block':
+        'csak ezt a blokkot fogd meg',
     'delete':
         'törlés',
+    'senders...':
+        'küldők...',
+    'receivers...':
+        'fogadók...',
     'script pic...':
-        'Program képe...',
-    'open a new window\nwith a picture of this script':
-        'új böngészőablak megnyitása\nennek a programnak a képével',
+        'program képe...',
+    'save a picture\nof this script':
+        'mentsd le a képét\nennek a programnak',
+    'result pic...':
+        'kép...',
+    'save a picture of both\nthis script and its result':
+        'mentsd le a képét ennek a programnak\naz eredményével együtt',
     'ringify':
-        'körülvesz',
+        'körülfog',
     'unringify':
         'körülfogás megszüntetése',
+
+    'transient':
+        'átmeneti',
+    'uncheck to save contents\nin the project':
+        'kikapcsolva elmenti\na változó értékét a projekttel',
+    'check to prevent contents\nfrom being saved':
+        'bekapcsolva nem menti el\na változó értékét a projekttel',
+    'new line':
+        'új sor',
 
     // custom blocks:
     'delete block definition...':
         'blokkdefiníció törlése',
+    'duplicate block definition...':
+        'blokk definíció másolása...',
+    'export block definition...':
+        'blokk definíció exportálása...',
+    'including dependencies':
+        'függőségekkel együtt',
     'edit...':
         'szerkesztés...',
+    'translations...':
+        'fordítások...',
+    'block variables...':
+        'blokk változók...',
+    'in palette':
+        'a palettán',
+
+    /* additional, missing from lang-de */
+    'block variables':
+        'blokk változók',
+    'Block variable name':
+        'Blokk változó neve',
+    'remove block variables...':
+        'blokk változók törlése...',
 
     // sprites:
     'edit':
         'szerkesztés',
+    'clone':
+        'másolás',
     'move':
         'mozgatás',
+    'pivot':
+        'forgatás',
+    'edit the costume\'s\nrotation center':
+        'szerkezd a jelmez\nforgatási középpontját',
+    'rotate':
+    	'forgatás',
+    'stick to':
+        'tapadjon',
     'detach from':
         'leválasztás erről',
     'detach all parts':
@@ -852,14 +1351,32 @@ SnapTranslator.dict.hu = {
     'export...':
         'exportálás...',
 
+    'parent...':
+        'szülő...',
+    'current parent':
+        'aktuális szülő',
+    'release':
+        'engedd el',
+    'make temporary and\nhide in the sprite corral':
+        'tedd ideiglenessé\nés rejtsd el a szereplők közül',
+
     // stage:
     'show all':
         'mindent mutat',
     'pic...':
         'kép exportálása...',
-    'open a new window\nwith a picture of the stage':
-        'új ablak nyitása a színpad képével',
-
+    'save a picture\nof the stage':
+        'mentsd el a játéktér képét',
+    'svg...':
+        'svg...',
+    'export pen trails\nline segments as SVG':
+        'toll vonalak exportálása\nSVG forámumba',
+    'there are currently no\nvectorizable pen trail segments':
+        'jelenleg nincs vektoros toll vonal',
+    'turn all pen trails and stamps\ninto a new background for the stage':
+        'játéktér háttérképévé változtasd\naz összes tollvonás és békyegzőt',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'minden tollbeállítás átállítása\nés átvitele az aktuális\nalak egy új jelmezébe',
     // scripting area
     'clean up':
         'törlés',
@@ -871,10 +1388,14 @@ SnapTranslator.dict.hu = {
         'visszavétel',
     'undo the last\nblock drop\nin this pane':
         'az utolsó blokk visszavétele erről a lapról',
+    'redrop':
+        'újra',
+    'use the keyboard\nto enter blocks':
+    	'a billenytűzet segítségével\nhozz létre blokkokat',
     'scripts pic...':
         'minden feladat képpé...',
-    'open a new window\nwith a picture of all scripts':
-        'új ablak nyitása\naz összes program képével',
+    'save a picture\nof all scripts':
+        'mentsd el minden program képét',
     'make a block...':
         'blokk létrehozása...',
 
@@ -884,9 +1405,9 @@ SnapTranslator.dict.hu = {
     'export':
         'exportálás',
     'rename costume':
-        'a jelmez átnevezése',
-    'Paint a new costume':
-        'Új jelmez rajzolása',
+        'jelmez átnevezése',
+    'rename background':
+        'háttér átnevezése',
 
     // sounds
     'Play sound':
@@ -899,6 +1420,22 @@ SnapTranslator.dict.hu = {
         'Lejátszás',
     'rename sound':
         'A hang átnevezése',
+
+    // lists and tables
+    'list view...':
+        'lista nézet...',
+    'table view...':
+        'tábla nézet...',
+    'Table view':
+        'Tábla nézet',
+    'open in dialog...':
+        'nyisd meg párbeszédablakban...',
+    'blockify':
+        'blokkosdítsd',
+    'reset columns':
+        'oszlopok visszaállítása',
+    'items':
+        'elemek',
 
     // dialogs
     // buttons
@@ -941,11 +1478,31 @@ SnapTranslator.dict.hu = {
     'monstrous (10x)':
         'szörnyeteg (10x)',
 
+    // fade blocks
+    'Fade blocks':
+        'Blokkok átlátszósága',
+    'block-solid (0)':
+        'normál (0)',
+    'medium (50)':
+        'közepes (50)',
+    'light (70)':
+        'halvány (70)',
+    'shimmering (80)':
+        'csillámló (80)',
+    'elegant (90)':
+        'elegáns (90)',
+    'subtle (95)':
+        'kifinomult (95)',
+    'text-only (100)':
+        'csak szöveg (100)',
+
     // Project Manager
     'Untitled':
         'Névtelen',
     'Open Project':
         'Projekt megnyitása',
+    'Open':
+        'Megnyitás',
     '(empty)':
         '(üres)',
     'Saved!':
@@ -957,26 +1514,115 @@ SnapTranslator.dict.hu = {
     'rename...':
         'átnevezés...',
 
+    'Examples':
+        'Példák',
+    'Share':
+        'Megosztás',
+    'Unshare':
+        'Nincs megosztás',
+    'Publish':
+        'Publikálás',
+    'Unpublish':
+        'Publikálás visszavonása',
+    'Updating\nproject list...':
+        'A projeklista frissítése...',
+    'Recover':
+        'Visszaállítás',
+    'Today':
+        'Ma',
+    'Yesterday':
+        'Tegnap',
+
     // costume editor
     'Costume Editor':
         'Jelmezszerkesztő',
+    'Paint Editor':
+        'Képszerkesztő',
     'click or drag crosshairs to move the rotation center':
         'kattints oda vagy vidd a szálkeresztet a forgás középpontjába',
 
+    'undo':
+        'visszavon',
+    'Vector':
+        'Vektor',
+    'Paintbrush tool\n(free draw)':
+        'Festőecset eszköz\n(szabadkézi rajz)',
+    'Stroked Rectangle\n(shift: square)':
+        'Téglalap\n(shift: négyzet)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Ellipszis\n(shift: kör)',
+    'Eraser tool':
+        'Törlő eszköz',
+    'Set the rotation center':
+        'A forgatás középpontjának beállítása',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Vonalrajzoló eszköz\n(shift: függőleges/vízszintes)',
+    'Filled Rectangle\n(shift: square)':
+        'Kitöltött téglalap\n(shift: négyzet)',
+    'Filled Ellipse\n(shift: circle)':
+        'Kitöltött ellipszis\n(shift: kör)',
+    'Fill a region':
+        'Terület kitöltése',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipetta\n(szín felvétele bárhonnan)',
+    'Brush size':
+        'Ecsetméret',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Megmaradjanak az alakzat arányai?\n(ehhez használhatja a SHIFT billentyűt is)',
+    'Vector Paint Editor':
+        'Vektor Szerkesztő',
+    'Rectangle\n(shift: square)':
+        'Négyszög\n(Shift: négyzet)',
+    'Ellipse\n(shift: circle)':
+        'Ellipszis\n(Shift: kör)',
+    'Selection tool':
+        'Kijelölő',
+    'Line tool\n(shift: constrain to 45º)':
+        'Vonal\n(Shift: korlátozza 45°)',
+    'Closed brush\n(free draw)':
+        'Kitöltött ecset\n(szabad rajz)',
+    'Paint a shape\n(shift: secondary color)':
+        'Minta kitöltése\n(Shift: másodlagos színnel)',
+    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+        'Pipetta eszköz\n(Tetszőleges hlyről szín felszedése\nshift: másodlagos színnel)',
+    'Edge color\n(left click)':
+        'Vonal színe\n(bal gomb)',
+    'Fill color\n(right click)':
+        'Kitöltő szín\n(jobb klikk)',
+   // 'Top':
+   //     'oben',
+   // 'Bottom':
+   //     'unten',
+   // 'Up':
+   //     'nach oben',
+   // 'Down':
+   //     'nach unten',
+
+
     // project notes
     'Project Notes':
-        'A projekt tudnivalói',
+        'A projekt jegyzetei',
+    /* additional, missing from lang-de */
+    'Notes...':
+        'A projekt jegyzetei',
 
     // new project
     'New Project':
         'Új projekt',
+    'Unsaved Changes!':
+        'Nem mentett változások!',
     'Replace the current project with a new one?':
         'Felülírja az aktuális projektet egy újjal?',
+
+    'Backup failed.\nThis cannot be undone, proceed anyway?':
+        'Sikertelen biztonsági mentés.\nNem visszavonható, folytatod?',
 
     // save project
     'Save Project As...':
         'Projekt mentése másként...',
 
+    'Save Project':
+        'A projekt mentése',
     // export blocks
     'Export blocks':
         'Blokkok exportja',
@@ -995,6 +1641,15 @@ SnapTranslator.dict.hu = {
     'for this sprite only':
         'csak erre az alakzatra',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'nevezd át \ncsak ezt a függvényt',
+    'rename all...':
+        'mindegyik átnevezése...',
+    'rename all blocks that\naccess this variable':
+        'minden blokk átnevezése\namely ezt a változót használja',
+
+
     // block dialog
     'Change block':
         'Blokk változtatása',
@@ -1007,9 +1662,11 @@ SnapTranslator.dict.hu = {
 
     // block editor
     'Block Editor':
-        'Blokk szerkesztő',
+        'Blokk Szerkesztő',
+    'Method Editor':
+        'Függvény Szekesztő',
     'Apply':
-        'Alkalmazás',
+        'Alkalmaz',
 
     // block deletion dialog
     'Delete Custom Block':
@@ -1036,6 +1693,8 @@ SnapTranslator.dict.hu = {
         'Szám',
     'Text':
         'Szöveg',
+    'String':
+        'Szöveg',
     'List':
         'Lista',
     'Any type':
@@ -1043,13 +1702,13 @@ SnapTranslator.dict.hu = {
     'Boolean (T/F)':
         'Logikai (I/H)',
     'Command\n(inline)':
-        'Parancs\n(inline)',
+        'Parancs\n(egysoros)',
     'Command\n(C-shape)':
-        'Parancs\n(C-Form)',
+        'Parancs\n(C-forma)',
     'Any\n(unevaluated)':
         'Bármilyen\n(nem kiértékelt)',
     'Boolean\n(unevaluated)':
-        'Logikai(nem kiértékelt)',
+        'Logikai\n(nem kiértékelt)',
     'Single input.':
         'Egyszerű bevitel.',
     'Default Value:':
@@ -1094,18 +1753,27 @@ SnapTranslator.dict.hu = {
         'a csúszka maximuma...',
     'import...':
         'importálás...',
+    'raw data...':
+        'nyers adat...',
+    'import without attempting to\nparse or format data':
+        'importálj anélkül, hogy megpróbálnád\értelmezni vagy formázni az adatot',
     'Slider minimum value':
-        'A csúszka minimális értéke',
+        'Csúszka minimális értéke',
     'Slider maximum value':
-        'A csúszka maximális értéke',
+        'Csúszka maximális értéke',
 
     // list watchers
     'length: ':
-        'Hossz: ',
+        'hossz: ',
 
     // coments
     'add comment here...':
         'tegye ide a megjegyzést',
+
+    'comment pic...':
+        'megjegyzés képe...',
+    'save a picture\nof this comment':
+        'kép erről a megjegyzésről',
 
     // drow downs
     // directions
@@ -1118,13 +1786,21 @@ SnapTranslator.dict.hu = {
     '(180) down':
         '(180) le',
 
+    'random':
+    	'véletlen',
+    'random position':
+     	'véletlenszerű hely',
+
     // collision detection
     'mouse-pointer':
         'egérmutató',
     'edge':
-        'csúcs',
+        'játéktér széle',
     'pen trails':
-        'ceruza nyomvonalak',
+        'ceruza nyomvonala',
+
+    'center':
+        'közép',
 
     // costumes
     'Turtle':
@@ -1132,9 +1808,40 @@ SnapTranslator.dict.hu = {
     'Empty':
         'Üres',
 
+    'Paint a new costume':
+        'Új jelmez rajzolása',
+    'Import a new costume from your webcam':
+        'Új jelmez importálása a webkamerával',
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Győződj meg arról, hogy a böngésződ naprakész\nés a kamerát is megfelelően beállítottad. \n\nPár böngésző megköveteli, hogy HTTPS kapcsolaton\nkeresztül nyisd meg a Snap oldalát\n\nPróbáld meg kicserélni a cím "http://" részét\n"https://" előtagra és próbáld meg újra!',
+    'Camera':
+        'Kamera',
+    
+    // sounds
+    'Record a new sound':
+        'Új hang felvétele',
+    
+
+    // graphical effects, pen color
+    'color':
+        'szín',
+    'hue':
+        'árnyalat',
+    'fisheye':
+        'halszem',
+    'whirl':
+        'örvény',
+    'pixelate':
+        'pixeles',
+    'mosaic':
+        'mozaik',
+    'saturation':
+        'színtelítettség',
     // graphical effects
     'brightness':
         'világosság',
+    'transparency':
+        'áttetszőség',
     'ghost':
         'átlátszóság',
     'negative':
@@ -1155,6 +1862,8 @@ SnapTranslator.dict.hu = {
         'jobbra nyíl',
     'left arrow':
         'balra nyíl',
+    'any key':
+        'bármelyik gomb',
     'a':
         'a',
     'b':
@@ -1232,11 +1941,16 @@ SnapTranslator.dict.hu = {
     'new...':
         'új...',
 
+    '__shout__go__':
+        '__zöld__zászló__',
+
     // math functions
     'abs':
         'abszolútérték',
+    'ceiling':
+        'felső egészrész',
     'floor':
-        'egészrész',
+        'alsó egészrész',
     'sqrt':
         'négyzetgyök',
     'sin':
@@ -1256,9 +1970,15 @@ SnapTranslator.dict.hu = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'nem',
+
     // delimiters
     'letter':
         'betű',
+    'word':
+        'szó',
     'whitespace':
         'szóköz',
     'line':
@@ -1284,12 +2004,180 @@ SnapTranslator.dict.hu = {
     'predicate':
         'kijelentés',
 
+    'sprite':
+        'szereplő',
+    'ring':
+        'gyűrű',
+    'nothing':
+        'semmi',
+
     // list indices
     'last':
         'utolsó',
     'any':
-        'bármilyen',
-    // Ez kimaradt a német nyelvi fájlból
+        'valamelyik',
+    // attributes
+    'my':
+        'saját',
+    'neighbors':
+        'szomszéd',
+    'self':
+        'saját',
+    'other sprites':
+        'más szereplők',
+    'parts':
+        'részek',
+    'anchor':
+        'horgony',
+    'parent':
+        'szülő',
+    'temporary?':
+        'ideiglenes?',
+    'children':
+        'gyermek',
+    'clones':
+        'másolat',
+    'other clones':
+        'többi másolat',
+    'dangling?':
+        'külön forgó?',
+    'draggable?':
+        'húzható?',
+    'rotation style':
+        'forgási stílus',
+    'rotation x':
+        'forgatás x',
+    'rotation y':
+        'forgatás y',
+    'center x':
+        'középpont x',
+    'center y':
+        'középpont y',
+    'name':
+        'név',
+    'costume':
+        'jelmez',
+    'stage':
+        'játéktér',
+    'costumes':
+        'jelmezek',
+    'sounds':
+        'hangok',
+    'scripts':
+        'programok',
+    'width':
+        'szélesség',
+    'height':
+        'magasság',
+    'left':
+        'bal',
+    'right':
+        'jobb',
+    'top':
+        'teteje',
+    'bottom':
+        'alja',
+
+    // attributes in the SET block's dropdown
+    'my anchor':
+        'horgonyom',
+    'my parent':
+        'szülőm',
+    'my name':
+        'nevem',
+    'my temporary?':
+        'ideiglenes vagyok?',
+    'my dangling?':
+        'külön forgok?',
+    'my draggable?':
+        'húzható vagyok?',
+    'my rotation style':
+        'forgatási stílusom',
+    'my rotation x':
+        'forgatás x attribútumom',
+    'my rotation y':
+        'forgatás y attribútumom',
+
+    // inheritance
+    'inherited':
+        'örökölt',
+    'check to inherit\nfrom':
+        'bekapcsolva öröklődik\ninnen',
+    'uncheck to\ndisinherit':
+        'kikapcsolva nem öröklődik tovább',
+
+    // error messages
+    'Error':
+        'Hiba',
+    'a variable of name \'':
+        'a változó \'',
+    '\'\ndoes not exist in this context':
+        '\'\nnem található ebben környzetben',
+    'expecting a':
+        'Számítunk egy',
+    'but getting a':
+        'helyette találtunk egy',
+    'expecting':
+        'számítunk',
+    'input(s), but getting':
+        'bevitel(ek)re, de helyette',
+    'Inside a custom block':
+        'Egy egyedi blokkban',
+    'The error occured at':
+        'Hiba történt ezen a',
+    'continuations cannot be forked':
+        'Folytatásokat nem tudom indítani',
+    'unable to convert to':
+        'nem tudom konvertálni',
+    'Request blocked':
+        'Kérés blokkolva',
+    'cannot operate on a deleted sprite':
+        'nem tudok törölt szereplővel dolgozni',
+    'cannot send media,\nsprites or procedures\nto another scene':
+        'nem lehetséges média,\n szerepl[ vagy eljárás küldése\nmásik jelenetbe',
+    'unsupported attribute':
+        'nem támogatott tulajdonság',
+    'unable to nest\n(disabled or circular?)':
+        'nem lehet beágyazni\n(inaktív vagy körkörös hivatkozás?)',
+    'unable to inherit\n(disabled or circular?)':
+        'nem örökölhető\n(inaktív vagy körkörös hivatkozás?)',
+    'is read-only':
+        'csak olvasható',
+    'is not a valid option':
+        'nem választható',
+    'unsupported data type':
+        'nem támogatott adattípus',
+    'expecting a finite number\nbut getting Infinity or NaN':
+        'véges számot várunk\nhelyette végtelen vagy NaN érkezett',
+    'the predicate takes\ntoo long for a\ncustom hat block':
+        'az előzmény túl hosszú ideig fut\negy egyedi kalap blokkhoz',
+    'missing / unspecified extension':
+        'Hiányzó vagy nem specifikált kiegészítő',
+    'reporter didn\'t report':
+        'a függvény érték nélkül tért vissza',
+    'a custom block definition is missing':
+        'hiányzó egyedi blokk definíció',
+    'exceeding maximum number of clones':
+        'meghaladta a maximális másolatok számát',
+    'can only write text or numbers, not a':
+        'csak szöveget vagy számot adhatsz meg, ezt nem érvényes',
+    'unsupported graphic effect':
+        'nem támogatott grafikai hatás',
+    'setting the rotation center requires a costume':
+        'a forgáspont beállításához szükség van egy jelmezre',
+    'Web Audio API is not supported\nin this browser':
+        'a Web Audio API nem\ntámogatott ezen a böngészőn',
+
+
+	/* ::DELETED, BUT TO BE KEPT */
+    'costume name':
+        'a jelmez neve',
+    'read-only':
+        'csak olvasható',
+    'variables':
+        'változók',
+
+    /* additional, missing from lang-de */
     'grow':
         'növekedés',
     'shrink':
@@ -1299,35 +2187,11 @@ SnapTranslator.dict.hu = {
     'flip ↕':
         'tükrözés ↕',
     'Export all scripts as pic...':
-        'Minden feladat exportálása képként…',
+        'Minden feladat exportálása képként...',
     'show a picture of all scripts\nand block definitions':
         'minden feladat és blokk\ndefinícióról készült kép mutatása',
-    'current %dates':
-        'aktuális %dates',
-    'year':
-        'év',
-    'month':
-        'hónap',
-    'date':
-        'nap',
-    'day of week':
-        'a hét napja',
-    'hour':
-        'óra',
-    'minute':
-        'perc',
-    'second':
-        'másodperc',
-    'time in milliseconds':
-        'idő (ezredmásodpercben)',
     'find blocks...':
-        'blokkok keresése…',
-    'costume name':
-        'a jelmez neve',
-    'Open':
-        'Megnyitás',
-    'Share':
-        'Megosztás',
+        'blokkok keresése...',
     'Snap!Cloud':
         'Snap!Felhő',
     'Cloud':
@@ -1348,10 +2212,6 @@ SnapTranslator.dict.hu = {
         'Új regisztráció',
     'Sign in':
         'Regisztráció',
-    'Logout':
-        'Kijelentkezés',
-    'Change Password...':
-        'Jelszó megváltoztatása…',
     'Change Password':
         'Jelszó megváltoztatása',
     'Account created.':
@@ -1364,8 +2224,6 @@ SnapTranslator.dict.hu = {
         'leválasztva.',
     'Reset password':
         'A jelszó alaphelyzetre állítása',
-    'Reset Password...':
-        'A jelszó alaphelyzetre állítása…',
     'User name:':
         'Felhasználói név:',
     'Password:':
@@ -1411,9 +2269,9 @@ SnapTranslator.dict.hu = {
     'E-mail address of parent or guardian:':
         'A szülő vagy gondozó email címe:',
     'Terms of Service...':
-        'Felhasználási feltételek…',
+        'Felhasználási feltételek...',
     'Privacy...':
-        'Jogvédelem…',
+        'Jogvédelem...',
     'I have read and agree\nto the Terms of Service':
         'Elolvastam és egyetértek\na felhasználási feltételekkel',
     'stay signed in on this computer\nuntil logging out':
@@ -1430,82 +2288,32 @@ SnapTranslator.dict.hu = {
         'A jelszavak nem egyeznek.',
     'please agree to\nthe TOS':
         'fogadja el a felhasználási feltételeket.',
-    'Examples':
-        'Példák',
     'You are not logged in':
         'Még nem lépett be',
-    'Updating\nproject list...':
-        'A projeklista frissítése…',
     'Opening project...':
-        'Projekt megnyitása…',
+        'Projekt megnyitása...',
     'Fetching project\nfrom the cloud...':
-        'Projekt letöltése\na felhőből…',
+        'Projekt letöltése\na felhőből...',
     'Saving project\nto the cloud...':
-        'Projekt mentése\na felhőbe…',
+        'Projekt mentése\na felhőbe...',
     'Sprite Nesting':
         'Szereplők összefűzése',
     'uncheck to disable\nsprite composition':
         'kapcsolja ki a szereplők összefűzésének megakadályozásához.',
-    'Codification support':
-        'A kodifikáció támogatása',
     'check for block\nto text mapping features':
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
     'saved.':
         'mentve.',
-    'options...':
-        'beállítások…',
-    'read-only':
-        'csak olvasható',
     'Input Slot Options':
         'Bemenő adat csatlakozási lehetőségek',
     'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
         'Soronként egy lehetőséget írjon be.\nSzükség esetén használhatja az "=" jelet\nkulcs/érték pár elválasztására, pl.\na válasz=42',
-    'paint a new sprite':
-        'új alakzat rajzolása',
-    'Paint a new costume':
-        'Új jelmez rajzolása',
-    'add a new Turtle sprite':
-        'új teknőc rajzának hozzáadása',
-    'Flat design':
-        'Síkbeli tervezés',
-    'check for alternative\nGUI design':
-        'más grafikus felület ellenőrzése',
     'Rasterize SVGs':
         'SVG átalakítása bittérképbe',
     'check to rasterize\nSVGs on import':
         'SVG bittérképpé alakíthatóságának\nellenőrzése az importálás során',
-    'comment pic...':
-        'megjegyzés képe…',
     'open a new window\nwith a picture of this comment':
         'új ablak megnyitása\nennek a megjegyzésnek a képével',
-    'undo':
-        'visszavon',
-    'Brush size':
-        'Ecsetméret',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Megmaradjanak az alakzat arányai?\n(ehhez használhatja a SHIFT billentyűt is)',
-    'Eraser tool':
-        'Törlő eszköz',
-    'Paintbrush tool\n(free draw)':
-        'Festőecset eszköz\n(szabadkézi rajz)',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Vonalrajzoló eszköz\n(shift: függőleges/vízszintes)',
-    'Stroked Rectangle\n(shift: square)':
-        'Téglalap\n(shift: négyzet)',
-    'Filled Rectangle\n(shift: square)':
-        'Kitöltött téglalap\n(shift: négyzet)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Ellipszis\n(shift: kör)',
-    'Filled Ellipse\n(shift: circle)':
-        'Kitöltött ellipszis\n(shift: kör)',
-    'Fill a region':
-        'Terület kitöltése',
-    'Set the rotation center':
-        'A forgatás középpontjának beállítása',
-    'Pipette tool\n(pick a color anywhere)':
-        'Pipetta\n(szín felvétele bárhonnan)',
-    'Paint Editor':
-        'Képszerkesztő',
     'square':
         'négyzet',
     'pointRight':
@@ -1519,13 +2327,11 @@ SnapTranslator.dict.hu = {
     'normalScreen':
         'normál képernyő',
     'smallStage':
-        'kis színpad',
+        'kis játéktér',
     'normalStage':
-        'normál színpad',
+        'normál játéktér',
     'turtle':
         'teknős',
-    'stage':
-        'színpad',
     'turtleOutline':
         'a teknős körvonala',
     'pause':
@@ -1591,9 +2397,7 @@ SnapTranslator.dict.hu = {
     'robot':
         'robot',
     'turn pen trails into new costume...':
-        'a toll beállításainak alkalmazása egy új jelmezre…',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'minden tollbeállítás átállítása\nés átvitele az aktuális\nalak egy új jelmezébe',
+        'a toll beállításainak alkalmazása egy új jelmezre...',
     'pen':
         'toll',
     'tip':
@@ -1611,41 +2415,29 @@ SnapTranslator.dict.hu = {
     'Unshare Project':
         'A projekt megosztásának megszüntetése',
     'sharing\nproject...':
-        'a projekt\nmegosztása…',
+        'a projekt\nmegosztása...',
     'unsharing\nproject...':
-        'a projekt megosztásának\nmegszüntetése…',
+        'a projekt megosztásának\nmegszüntetése...',
     'shared.':
         'megosztva.',
     'unshared.':
         'nincs megosztva.',
-    'Unshare':
-        'Nincs megosztás',
     'password has been changed.':
         'a jelszó megváltozott.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
         'Az SVG ábrákat nem minden böngésző támogatja',
-    'Save Project':
-        'A projekt mentése',
     'script pic with result...':
-        'a program képe az eredménnyel…',
+        'a program képe az eredménnyel...',
     'open a new window\nwith a picture of both\nthis script and its result':
         'Új böngészőablak megnyitása a programnak és eredményének képével.',
-    'JavaScript function ( %mult%s ) { %code }':
-        'JavaScript függvény ( %mult%s ) { %code }',
-    'Select categories of additional blocks to add to this project.':
-        'Válassza ki a projekthez adandó blokkok kategóriáit.',
     'Import sound':
         'Hang importálása',
-    'Select a sound from the media library':
-        'Válasszon ki egy hangot a médiakönyvtárból.',
     'Import':
         'Import',
-    'Select a costume from the media library':
-        'Válasszon ki egy jelmezt a médiakönyvtárból.',
     'edit rotation point only...':
-        'csak a forgáspont szerkesztése…',
+        'csak a forgáspont szerkesztése...',
     'Export Project As...':
-        'Projekt exportálása mint…',
+        'Projekt exportálása mint...',
     'a variable of name \'':
         'ilyen nevű változó «',
     '\'\ndoes not exist in this context':
@@ -1657,21 +2449,19 @@ SnapTranslator.dict.hu = {
     'input(s), but getting':
         'adatbevitel, de ez érkezett',
 
-    // kódolás
+    // kódolás - "Codification”
     'map %cmdRing to %codeKind %code':
-        'mapear %cmdRing no %codeKind %code',
-    'map String to code %code':
-        'mapear texto no código %code',
+        'képezd le %cmdRing erre %codeKind %code',
+    'map %mapValue to code %code':
+        'képezd le %mapValue kódra %code',
     'map %codeListPart of %codeListKind to code %code':
-        'mapear %codeListPart de %codeListKind no código %code',
+        'képezd le %codeListPart ebben %codeListKind erre a kódre %code',
     'code of %cmdRing':
         '%cmdRing kódja',
     'delimiter':
         'határoló',
     'collection':
         'gyűjtemény',
-    'variables':
-        'változók',
     'parameters':
         'paraméterek',
     'code':
@@ -1679,17 +2469,17 @@ SnapTranslator.dict.hu = {
     'header':
         'fejléc',
     'header mapping...':
-        'mapeamento para cabeçalho…',
+        'fejléc leképezés...',
     'code mapping...':
-        'kód leképezés…',
+        'kód leképezés...',
     'Code mapping':
         'Kód leképezés',
     'Header mapping':
         'A fejléc leképezése',
     'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
-        'Gépelje be a blokk definíciójának megfelelő programkódot. Használja a látható formális paramétereket és a <body> referenciát a törzs generált szövegkódjához.',
+        'Gépeld be a blokk definíciójának megfelelő programkódot. Használd a látható formális paramétereket\nés a <body> referenciát a törzs generált szövegkódodhoz.',
     'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
-        'Gépelje be a blokk definíciójának megfelelő programkódot. Használja a saját formális paramétereit (hagyja figyelmen kívül a láthatókat).',
+        'Gépeld be a blokk definíciójának megfelelő programkódot. Használd a saját\nformális paramétereit (hagyd figyelmen kívül a példákat).',
     'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
-        'Gépelje be a blokk működésének megfelelő programkódot (általában egy függvény bevezetésével). Használja a <#n> hivatkozási helyen látható aktuális argumentumokat.'
+        'Gépeld be a blokk működésének megfelelő programkódot (általában egy függvény\nbevezetésével). Használd a <#n> hivatkozási helyen látható aktuális argumentumokat.'
 };

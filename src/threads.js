@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2021-December-02';
+modules.threads = '2022-February-09';
 
 var ThreadManager;
 var Process;
@@ -598,11 +598,11 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
-Process.prototype.enableHyperOps = true; // experimental hyper operations
+Process.prototype.enableHyperOps = true;
 Process.prototype.enableLiveCoding = false; // experimental
-Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.enableSingleStepping = false;
 Process.prototype.enableCompiling = false; // experimental
-Process.prototype.flashTime = 0; // experimental
+Process.prototype.flashTime = 0;
 Process.prototype.enableJS = false;
 
 function Process(topBlock, receiver, onComplete, yieldFirst) {
@@ -631,8 +631,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.exportResult = false;
     this.onComplete = onComplete || null;
     this.procedureCount = 0;
-    this.flashingContext = null; // experimental, for single-stepping
-    this.isInterrupted = false; // experimental, for single-stepping
+    this.flashingContext = null; // for single-stepping
+    this.isInterrupted = false; // for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
 
     if (topBlock) {
@@ -861,7 +861,7 @@ Process.prototype.doApplyExtension = function (prim, args) {
 Process.prototype.reportApplyExtension = function (prim, args) {
     var ext = SnapExtensions.primitives.get(prim);
     if (isNil(ext)) {
-        throw new Error('missing / unspecified extension: ' + prim);
+        throw new Error(localize('missing / unspecified extension') + ': ' + prim);
     }
     return ext.apply(
         this.blockReceiver(),
@@ -878,7 +878,7 @@ Process.prototype.reportOr = function (block) {
         this.evaluateNextInput(block);
     } else if (inputs.length === 1) {
         // this.assertType(inputs[0], 'Boolean');
-        if (inputs[0]) {
+        if (inputs[0] === true) {
             if (this.flashContext()) {return; }
             this.returnValueToParentContext(true);
             this.popContext();
@@ -888,9 +888,16 @@ Process.prototype.reportOr = function (block) {
     } else {
         // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        // this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(
+            this.hyperDyadic(this.reportBasicOr, inputs[0], inputs[1])
+        );
         this.popContext();
     }
+};
+
+Process.prototype.reportBasicOr = function (a, b) {
+    return a || b;
 };
 
 Process.prototype.reportAnd = function (block) {
@@ -910,9 +917,16 @@ Process.prototype.reportAnd = function (block) {
     } else {
         // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        this.returnValueToParentContext(inputs[1] === true);
+        // this.returnValueToParentContext(inputs[1] === true);
+        this.returnValueToParentContext(
+            this.hyperDyadic(this.reportBasicAnd, inputs[0], inputs[1])
+        );
         this.popContext();
     }
+};
+
+Process.prototype.reportBasicAnd = function (a, b) {
+    return a && b;
 };
 
 Process.prototype.doReport = function (block) {
@@ -1170,7 +1184,7 @@ Process.prototype.throwError = function (error, element) {
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
     if (ide.isAppMode) {
-        ide.showMessage(error.name + '\n' + error.message);
+        ide.showMessage(localize(error.name) + '\n' + error.message);
     } else {
         if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
         m.showBubble(
@@ -1213,26 +1227,28 @@ Process.prototype.errorBubble = function (error, element) {
     // Return a morph containing an image of the elment causing the error
     // above the text of error.
     var errorMorph = new AlignmentMorph('column', 5),
-        errorIsNested = isNil(element.world()),
-        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}:\n`
+        errorIsNested = !!element && isNil(element.world()),
+        errorPrefix = errorIsNested ? `${localize('Inside a custom block')}\n`
             : '',
         errorMessage = new TextMorph(
-            `${errorPrefix}${localize(error.name)}:\n${localize(error.message)}`,
+            `${errorPrefix}${localize(error.name)}\n${localize(error.message)}`,
             SyntaxElementMorph.prototype.fontSize
         ),
         blockToShow = element;
 
     errorMorph.add(errorMessage);
-    if (errorIsNested) {
+
+    if (errorIsNested && error.cause !== 'user') {
         if (blockToShow.selector === 'reportGetVar') {
             // if I am a single variable, show my caller in the output.
             blockToShow = blockToShow.parent;
         }
-        errorMorph.text += `\n${localize('The error occured at:')}\n`;
+        errorMorph.children[0].text += `\n${localize('The question came up at')}`;
+        errorMorph.children[0].fixLayout();
         errorMorph.add(blockToShow.fullCopy());
-        errorMorph.fixLayout();
     }
 
+    errorMorph.fixLayout();
     return errorMorph;
 };
 
@@ -1455,7 +1471,12 @@ Process.prototype.initializeFor = function (context, args) {
         );
     }
     if (!(context instanceof Context)) {
-        throw new Error('expecting a ring but getting ' + context);
+        throw new Error(
+            localize('expecting a') + ' ' +
+            localize('ring') + ' ' +
+            localize('but getting a') + ' ' +
+            localize(this.reportTypeOf(context))
+        );
     }
 
     var outer = new Context(null, null, context.outerContext),
@@ -1613,7 +1634,7 @@ Process.prototype.evaluateCustomBlock = function () {
 
     outer.variables.parentFrame = block.variables;
 
-    // block (instance) var support, experimental:
+    // block (instance) var support:
     // only splice in block vars if any are defined, because block vars
     // can cause race conditions in global block definitions that
     // access sprite-local variables at the same time.
@@ -1899,7 +1920,7 @@ Process.prototype.doDeleteAttr = function (attrName) {
     }
 };
 
-// experimental message passing primitives
+// message passing primitives
 
 Process.prototype.doTellTo = function (sprite, context, args) {
     this.doRun(
@@ -2034,7 +2055,7 @@ Process.prototype.reportListItem = function (index, list) {
     return list.at(index);
 };
 
-// Process - experimental tabular list ops
+// Process - tabular list ops
 
 Process.prototype.reportTranspose = function (list) {
     this.assertType(list, 'list');
@@ -2094,19 +2115,25 @@ Process.prototype.reportListAttribute = function (choice, list) {
         if (list.canBeTXT()) {
             return list.asTXT();
         }
-        throw new Error('unable to convert to lines');
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('lines')
+        );
     case 'csv':
         this.assertType(list, 'list');
         if (list.canBeCSV()) {
             return list.asCSV();
         }
-        throw new Error('unable to convert to CSV');
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('CSV')
+        );
     case 'json':
         this.assertType(list, 'list');
         if (list.canBeJSON()) {
             return list.asJSON();
         }
-        throw new Error('unable to convert to JSON');
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('JSON')
+        );
     default:
         return 0;
     }
@@ -3701,6 +3728,11 @@ Process.prototype.doBroadcast = function (message, receivers) {
         return [];
     }
 
+    // remove all clones when the green flag event is broadcast to all
+    if (msg === '__shout__go__' && target === 'all') {
+        stage.removeAllClones();
+    }
+
     // determine the receivers
     thisObj = this.blockReceiver();
     if (target === 'all') {
@@ -3739,8 +3771,10 @@ Process.prototype.doBroadcast = function (message, receivers) {
                         procs.push(stage.threads.startProcess(
                             block,
                             morph,
-                            stage.isThreadSafe || // make "any msg" threadsafe
-                                block.inputs()[0].evaluate() instanceof Array,
+                            stage.isThreadSafe,
+                            // commented out for now to enable tail recursion:
+                            // || // make "any msg" threadsafe
+                            // block.inputs()[0].evaluate() instanceof Array,
                             null, // exportResult (bool)
                             null, // callback
                             null, // isClicked
@@ -3813,7 +3847,15 @@ Process.prototype.assertType = function (thing, typeString) {
     if (typeString instanceof Array && contains(typeString, thingType)) {
         return true;
     }
-    throw new Error('expecting ' + typeString + ' but getting ' + thingType);
+    throw new Error(
+        localize('expecting a') + ' ' +
+        (typeString instanceof Array ?
+            typeString.reduce((a, b) => localize(a) + ' / ' + localize(b)) // +++
+            : localize(typeString)) +
+        ' ' +
+        localize('but getting a') + ' ' +
+        localize(thingType)
+    );
 };
 
 Process.prototype.assertAlive = function (thing) {
@@ -3990,8 +4032,8 @@ Process.prototype.reportRandom = function (a, b) {
 };
 
 Process.prototype.reportBasicRandom = function (min, max) {
-    var floor = +min,
-        ceil = +max;
+    var floor = Math.min(+min, +max),
+        ceil = Math.max(+min, +max);
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
         return Math.random() * (ceil - floor) + floor;
     }
@@ -4335,19 +4377,20 @@ Process.prototype.reportStringSize = function (data) {
     if (data instanceof List) { // catch a common user error
         return data.length();
     }
-    return isNil(data) ? 0 : data.toString().length;
+    return isNil(data) ? 0 : Array.from(data.toString()).length;
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str;
+    var str, unicodeList;
 
     if (this.enableHyperOps) {
         if (string instanceof List) {
             return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
-        if (str.length > 1) {
-            return this.reportUnicode(new List(str.split('')));
+        unicodeList = Array.from(str);
+        if (unicodeList.length > 1) {
+            return this.reportUnicode(new List(unicodeList));
         }
     } else {
         str = isNil(string) ? '\u0000' : string.toString();
@@ -4392,10 +4435,20 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         str,
         del;
     if (!contains(types, strType)) {
-        throw new Error('expecting text instead of a ' + strType);
+        throw new Error(
+            localize('expecting a') + ' ' +
+            localize('text') + ' ' +
+            localize('but getting a') + ' ' +
+            localize(strType)
+        );
     }
     if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instead of a ' + delType);
+        throw new Error(
+            localize('expecting a') + ' ' +
+            localize('text') + ' ' +
+            localize('but getting a') + ' ' +
+            localize(delType)
+        );
     }
     str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
@@ -4415,9 +4468,9 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         str = str.trim();
         del = /\s+/;
         break;
+    case '':
     case 'letter':
-        del = '';
-        break;
+        return new List(Array.from(str));
     case 'csv':
         return this.parseCSV(string);
     case 'json':
@@ -4429,7 +4482,7 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         return this.parseCSVfields(string);
     */
     default:
-        del = isNil(delimiter) ? '' : delimiter.toString();
+        del = delimiter.toString();
     }
     return new List(str.split(del));
 };
@@ -4548,7 +4601,7 @@ Process.prototype.parseJSON = function (string) {
     return listify(JSON.parse(string));
 };
 
-// Process script components - EXPERIMENTAL
+// Process syntax analysis
 
 Process.prototype.assemble = function (blocks) {
     var first;
@@ -4560,6 +4613,12 @@ Process.prototype.assemble = function (blocks) {
         return first.copyWithInputs(
             blocks.cdr().map(each => this.assemble(each))
         );
+    }
+    if (blocks.isEmpty()) {
+        return blocks;
+    }
+    if (this.reportIsA(blocks.at(1), 'number')) {
+        return blocks.map(each => this.assemble(each));
     }
     return blocks.map(each => this.assemble(each)).itemsArray().reduce(
         (a, b) => a.copyWithNext(b)
@@ -5437,6 +5496,41 @@ Process.prototype.reportDirectionTo = function (name) {
     return 0;
 };
 
+Process.prototype.reportBlockAttribute = function (attribute, block) {
+    // hyper-dyadic
+    // note: attributes in the left slot
+    // can only be queried via the dropdown menu and are, therefore, not
+    // reachable as dyadic inputs
+    return this.hyperDyadic(
+        (att, obj) => this.reportBasicBlockAttribute(att, obj),
+        attribute,
+        block
+    );
+};
+
+Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
+    var choice = this.inputOption(attribute),
+        expr;
+    this.assertType(block, ['command', 'reporter', 'predicate']);
+    expr = block.expression;
+    switch (choice) {
+    case 'definition':
+        if (expr.isCustomBlock) {
+            if (expr.isGlobal) {
+                return expr.definition.body || new Context();
+            }
+            return this.blockReceiver().getMethod(expr.semanticSpec).body ||
+                new Context();
+        }
+        return new Context();
+    case 'custom?':
+        return expr ? !!expr.isCustomBlock : false;
+    case 'global?':
+        return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    }
+    return '';
+};
+
 Process.prototype.reportAttributeOf = function (attribute, name) {
     // hyper-dyadic
     // note: specifying strings in the left input only accesses
@@ -5613,7 +5707,6 @@ Process.prototype.reportGet = function (query) {
             return thisObj.name;
         case 'stage':
             return thisObj.parentThatIsA(StageMorph);
-        /* // not yet ready
         case 'scripts':
             return new List(
                 thisObj.scripts.children.filter(
@@ -5622,7 +5715,32 @@ Process.prototype.reportGet = function (query) {
                     each => each.fullCopy().reify()
                 )
             );
-        */
+        case 'blocks': // palette unoordered without inherited methods
+            return new List(
+                thisObj.parentThatIsA(StageMorph).globalBlocks.concat(
+                    thisObj.allBlocks(true)
+                ).filter(
+                    def => !def.isHelper
+                ).map(
+                    def => def.blockInstance().reify()
+                ).concat(
+                    SpriteMorph.prototype.categories.reduce(
+                        (blocks, category) => blocks.concat(
+                            thisObj.getPrimitiveTemplates(
+                                category
+                            ).filter(
+                                each => each instanceof BlockMorph &&
+                                    !(each instanceof HatBlockMorph)
+                            ).map(block => {
+                                let instance = block.fullCopy();
+                                instance.isTemplate = false;
+                                return instance.reify();
+                            })
+                        ),
+                        []
+                    )
+                )
+            );
         case 'costume':
             return thisObj.costume;
         case 'costumes':
@@ -5674,7 +5792,7 @@ Process.prototype.reportObject = function (name) {
 };
 
 Process.prototype.doSet = function (attribute, value) {
-    // experimental, manipulate sprites' attributes
+    // manipulate sprites' attributes
     var name, rcvr, ide;
     rcvr = this.blockReceiver();
     this.assertAlive(rcvr);
@@ -5811,18 +5929,20 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         rootVars;
 
     result.receiver = otherObj;
-    if (result.outerContext) {
-        result.outerContext = copy(result.outerContext);
-        result.outerContext.variables = copy(result.outerContext.variables);
-        result.outerContext.receiver = otherObj;
-        if (result.outerContext.variables.parentFrame) {
-            rootVars = result.outerContext.variables.parentFrame;
-            receiverVars = copy(otherObj.variables);
-            receiverVars.parentFrame = rootVars;
-            result.outerContext.variables.parentFrame = receiverVars;
-        } else {
-            result.outerContext.variables.parentFrame = otherObj.variables;
-        }
+    if (!result.outerContext) {
+        result.outerContext = new Context();
+        result.variables.parentFrame = result.outerContext.variables;
+    }
+    result.outerContext = copy(result.outerContext);
+    result.outerContext.variables = copy(result.outerContext.variables);
+    result.outerContext.receiver = otherObj;
+    if (result.outerContext.variables.parentFrame) {
+        rootVars = result.outerContext.variables.parentFrame;
+        receiverVars = copy(otherObj.variables);
+        receiverVars.parentFrame = rootVars;
+        result.outerContext.variables.parentFrame = receiverVars;
+    } else {
+        result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
 };
@@ -6017,7 +6137,7 @@ Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
         return this.doMapHeader(aContext, aString);
     }
     throw new Error(
-        ' \'' + anOption + '\'\nis not a valid option'
+        ' \'' + anOption + '\'\n' + localize('is not a valid option')
     );
 };
 
@@ -6054,7 +6174,7 @@ Process.prototype.doMapValueCode = function (type, aString) {
         break;
     default:
         throw new Error(
-            localize('unsupported data type') + ' ' + tp
+            localize('unsupported data type') + ': "' + tp + '"'
         );
     }
 
@@ -6897,6 +7017,11 @@ Context.prototype.toString = function () {
 };
 
 Context.prototype.image = function () {
+    var ring = this.toBlock();
+    return ring.doWithAlpha(1, () => ring.fullImage());
+};
+
+Context.prototype.toBlock = function () {
     var ring = new RingMorph(),
         block,
         cont;
@@ -6915,21 +7040,16 @@ Context.prototype.image = function () {
             }
         }
         ring.embed(block, this.inputs);
-        return ring.doWithAlpha(
-            1,
-            () => {
-                ring.clearAlpha();
-                return ring.fullImage();
-            }
-        );
+        ring.clearAlpha();
+        return ring;
     }
     if (this.expression instanceof Array) {
         block = this.expression[this.pc].fullCopy();
         if (block instanceof RingMorph && !block.contents()) { // empty ring
-            return block.doWithAlpha(1, () => block.fullImage());
+            return block;
         }
         ring.embed(block, this.isContinuation ? [] : this.inputs);
-        return ring.doWithAlpha(1, () => ring.fullImage());
+        return ring;
     }
 
     // otherwise show an empty ring
@@ -6942,7 +7062,7 @@ Context.prototype.image = function () {
             ring.parts()[1].addInput(inp)
         );
     }
-    return ring.doWithAlpha(1, () => ring.fullImage());
+    return ring;
 };
 
 // Context continuations:
@@ -7032,7 +7152,7 @@ Context.prototype.stopMusic = function () {
 // Context single-stepping:
 
 Context.prototype.lastFlashable = function () {
-    // for experimental single-stepping when pausing
+    // for single-stepping when pausing
     if (this.expression instanceof SyntaxElementMorph &&
             !(this.expression instanceof CommandSlotMorph)) {
         return this;
@@ -7061,13 +7181,12 @@ Context.prototype.isInCustomBlock = function () {
     return false;
 };
 
-// Context components - EXPERIMENTAL
+// Context syntax analysis
 
 Context.prototype.components = function () {
-    var expr;
-    
-    if (this.expression.components) {
-        expr = this.expression.components(this.inputs.slice());
+    var expr = this.expression;
+    if (expr && expr.components) {
+        expr = expr.components(this.inputs.slice());
     } else {
         expr = new Context();
         expr.inputs = this.inputs.slice();
@@ -7078,18 +7197,28 @@ Context.prototype.components = function () {
 Context.prototype.equalTo = function (other) {
     var c1 = this.components(),
         c2 = other.components();
-    if (!(new List(this.inputs).equalTo(new List(other.inputs)))) {
-        return false;
-    }
-    if (snapEquals(c1.cdr(), c2.cdr())) {
+    if (this.emptyOrEqual(c1.cdr(), c2.cdr())) {
+        if (this.expression && this.expression.length === 1 &&
+                other.expression && other.expression.length === 1) {
+            return snapEquals(this.expression[0], other.expression[0]);
+        }
         return snapEquals(this.expression, other.expression);
     }
-    return snapEquals(c1, c2);
+    return false;
+};
+
+Context.prototype.emptyOrEqual = function (list1, list2) {
+    // private - return TRUE if both lists are either equal
+    // or only contain empty items
+    return list1.equalTo(list2) || (
+        list1.itemsArray().every(item => !item) &&
+        list2.itemsArray().every(item => !item)
+    );
 };
 
 Context.prototype.copyWithInputs = function (inputs) {
     return this.expression ?
-        this.expression.copyWithInputs(inputs, this.inputs.slice())
+        this.expression.copyWithInputs(inputs)
         : this;
 };
 

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -31,9 +31,9 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains*/
 
-/*jshint esversion: 11*/
+/*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2021-November-22';
+modules.extensions = '2022-February-08';
 
 // Global stuff
 
@@ -41,9 +41,11 @@ var SnapExtensions = {
     primitives: new Map(),
     menus: new Map(),
     scripts: [],
-    urls: [
+    urls: [ // allow-list of trusted servers
         'libraries/',
-        'https://snap.berkeley.edu/'
+        'https://snap.berkeley.edu/',
+        'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
+        'https://microworld.edc.org' // EDC, E. Paul Goldenberg
     ]
 };
 
@@ -202,7 +204,7 @@ var SnapExtensions = {
 SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
-        throw new Error(msg);
+        throw new Error(msg, {cause: 'user'});
     }
 );
 
@@ -257,21 +259,74 @@ SnapExtensions.primitives.set(
     }
 );
 
+// bitwise operations
+
+SnapExtensions.primitives.set(
+    'bit_and(a, b)',
+    function (a, b) {
+        return a & b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_or(a, b)',
+    function (a, b) {
+        return a | b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_xor(a, b)',
+    function (a, b) {
+        return a ^ b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_not(a)',
+    function (a) {
+        return ~ a;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_left_shift(a, b)',
+    function (a, b) {
+        return a << b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_right_shift(a, b)',
+    function (a, b) {
+        return a >> b;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_unsigned_right_shift(a, b)',
+    function (a, b) {
+        return a >>> b;
+    }
+);
+
 // data sciene & frequency distribution analysis (dta_):
 
 SnapExtensions.primitives.set(
     'dta_analyze(list)',
-    function (list) {
+    function (list, proc) {
         var dict = new Map(),
             result = [],
             data = list.itemsArray(),
             len = data.length,
-            i;
+            item, i;
         for (i = 0; i < len; i += 1) {
-            if (dict.has(data[i])) {
-                dict.set(data[i], dict.get(data[i]) + 1);
+            item = proc.reportIsA(data[i], 'number') ?
+                data[i].toString() : data[i];
+            if (dict.has(item)) {
+                dict.set(item, dict.get(item) + 1);
             } else {
-                dict.set(data[i], 1);
+                dict.set(item, 1);
             }
         }
         dict.forEach(function (value, key) {
@@ -830,6 +885,7 @@ SnapExtensions.primitives.set(
                         bufferSize: buf || 15000
                     });
                     acc.result = port;
+                    port._bklog = [];//backlog
                 } catch(e) {
                     acc.result = e;
                 }
@@ -855,7 +911,7 @@ SnapExtensions.primitives.set(
             (async function (port) {
                 try {
                     // console.log("pending close...", port);
-                    if (port._reader) {await port._read.cancel(); }
+                    if (port._reader) {await port._reader.cancel(); }
                     if (port?.readable) {await port.readable.cancel(); }
                     if (port?.writable) {await port.writable.abort(); }
                     if (port?.readable || port?.writable) {await port.close(); }
@@ -879,40 +935,37 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'srl_read(port)',
     function (port, proc) {
-        var acc = proc.context.accumulator;
-
-        function timeout(msecs) {
-            return new Promise((resolve, reject) =>
-                setTimeout(
-                    () => reject(Error("Timeout")),
-                    msecs
-                )
-            );
+        var acc = {result: false};
+        if(!port?.readable) {throw Error( "Port not opened."); }
+        if( port.readable?.locked){ //No reentry
+            return (port._bklog?.length > 0) ? port._bklog.splice(0) : true;
         }
-
-        if (!acc) {
-            acc = proc.context.accumulator = {result: false};
-            (async function (port) {
-                var reader, data;
-                try {
-                    if(!port?.readable) {throw Error( "Port not opened."); }
-                    reader = port.readable.getReader();
-                    data = await Promise.race([ reader.read(), timeout(0)]);
-                    acc.result = new List( data?.value);
-                } catch (e) {
-                    if (reader) {await reader.cancel(); }
-                    acc.result = (e.message === "Timeout") ? true : e;
+        (async function (port) {
+            var reader, data;
+            try {
+                reader = port._reader = port.readable.getReader();
+                data = await reader.read();
+                delete port._reader;
+                if( data.value){
+                    port._bklog.push( ...data.value);
                 }
-                if (reader) {await reader.releaseLock(); }
-            }) (port);
-        } else if (acc.result !== false) {
+            } catch (e) {
+                await reader.cancel();
+                acc.result = e;
+            }
+            if (reader) {await reader.releaseLock(); }
+        }) (port);
+     
+        if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
             }
             return acc.result;
         }
-        proc.pushContext('doYield');
-        proc.pushContext();
+     
+        return (port._bklog?.length > 0) ?
+            new List( Array.from( port._bklog.splice(0)))
+            : true;
     }
 );
 

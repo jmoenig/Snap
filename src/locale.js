@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2021-November-29';
+modules.locale = '2022-January-31';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -119,6 +119,8 @@ Localizer.prototype.unload = function () {
 
 Localizer.prototype.contextualize = function (string) {
     switch (string) {
+    case 'Error':
+        return 'Hmm...';
     case 'brightness':
         return SpriteMorph.prototype.penColorModel === 'hsl' ?
             'lightness' : string;
@@ -185,7 +187,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2021-11-25'
+        '2022-01-31'
 };
 
 SnapTranslator.dict.it = {
@@ -196,7 +198,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2020-11-19'
+        '2022-91-03'
 };
 
 SnapTranslator.dict.ja = {
@@ -262,7 +264,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2021-07-12'
+        '2022-01-17'
 };
 
 SnapTranslator.dict.eo = {
@@ -394,7 +396,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2021-03-14'
+        '2022-01-05'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -511,11 +513,11 @@ SnapTranslator.dict.hu = {
     'language_name':
         'Magyar',
     'language_translator':
-        'Makány György',
+        'Makány György, Faragó Attila',
     'translator_e-mail':
-        'makany.gyorgy@gmail.com',
+        'makany.gyorgy@gmail.com, attila.farago@sap.com',
     'last_changed':
-        '2015-07-27'
+        '2022-01-25'
 };
 
 SnapTranslator.dict.ia = {

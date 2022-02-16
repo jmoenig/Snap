@@ -1,6 +1,5 @@
-var snapVersion = '7-dev211130'
-
-var cacheName = 'snap-pwa',
+var snapVersion = '7.1.5-dev',
+    cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
 
@@ -85,6 +84,7 @@ var cacheName = 'snap-pwa',
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
         'libraries/bignums.js',
+        'libraries/bitwise.xml',
         'libraries/bbtSnapExtension.js',
         'libraries/cases.xml',
         'libraries/colors.xml',
@@ -633,7 +633,7 @@ var cacheName = 'snap-pwa',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
-        
+
         // Sounds
         'Sounds/SOUNDS',
 
@@ -649,7 +649,7 @@ var cacheName = 'snap-pwa',
         'Sounds/Laugh-male3.mp3',
         'Sounds/Meow.wav',
         'Sounds/Pop.wav',
-        
+
         // Examples
         'Examples/EXAMPLES',
 
@@ -690,7 +690,10 @@ self.addEventListener('activate', (evt) => {
 /* Serve cached content when offline */
 self.addEventListener('fetch', function(e) {
     e.respondWith(
-        caches.match(e.request).then(function(response) {
+        caches.match(
+            e.request,
+            {'ignoreSearch': true}
+        ).then(function(response) {
             return response || fetch(e.request);
         })
     );

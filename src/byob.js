@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -104,13 +104,14 @@ nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
-WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
+WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
+ArgLabelMorph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-November-23';
+modules.byob = '2022-February-09';
 
 // Declarations
 
@@ -725,11 +726,11 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         });
     }
 
-    // find unnamed upvars and label them
+    // find unnamed upvars (indicated by non-breaking space) and label them
     // to their internal definition (default)
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
-        if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
+        if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
         }
     });
@@ -747,34 +748,60 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
 
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
-    var i = 0,
-        old;
+    var newInputs = this.inputs(),
+        len = Math.max(oldInputs.length, newInputs.length),
+        scripts = this.parentThatIsA(ScriptsMorph),
+        old,
+        inp,
+        i;
+
+    function preserve(item) {
+        // keep unused blocks around in the scripting area
+        if (item instanceof MultiArgMorph) {
+            return item.inputs().forEach(slot => preserve(slot));
+        }
+        if (item instanceof BlockMorph && scripts) {
+            scripts.add(item);
+            item.moveBy(new Point(20, 20));
+            item.fixBlockColor();
+        }
+    }
+
     if (this.isPrototype) {return; }
     this.cachedInputs = null;
-    this.inputs().forEach(inp => {
+    for (i = 0; i < len; i += 1) {
+        inp = newInputs[i];
         old = oldInputs[i];
-        if (old instanceof ReporterBlockMorph &&
+        if (old instanceof ArgLabelMorph) {
+            old = old.argMorph();
+        }
+        if (old instanceof ReporterBlockMorph && inp &&
                 (!(inp instanceof TemplateSlotMorph))) {
             this.replaceInput(inp, old.fullCopy());
-        } else if (old instanceof InputSlotMorph
-                && inp instanceof InputSlotMorph) {
+        } else if (old instanceof InputSlotMorph &&
+                inp instanceof InputSlotMorph) {
             if (old.isEmptySlot()) {
                 inp.setContents('');
             } else {
                 inp.setContents(old.evaluate());
             }
-        } else if (old instanceof BooleanSlotMorph
-                && inp instanceof BooleanSlotMorph) {
+        } else if (old instanceof BooleanSlotMorph &&
+                inp instanceof BooleanSlotMorph) {
             inp.setContents(old.evaluate());
-        } else if (old instanceof TemplateSlotMorph
-                && inp instanceof TemplateSlotMorph) {
+        } else if (old instanceof TemplateSlotMorph &&
+                inp instanceof TemplateSlotMorph) {
             inp.setContents(old.evaluate());
-        } else if (old instanceof CSlotMorph
-                && inp instanceof CSlotMorph) {
+        } else if (old instanceof CSlotMorph &&
+                inp instanceof CSlotMorph) {
             inp.nestedBlock(old.evaluate());
+        } else if (old instanceof MultiArgMorph &&
+                inp instanceof MultiArgMorph &&
+                (old.slotSpec === inp.slotSpec)) {
+            this.replaceInput(inp, old.fullCopy());
+        } else {
+            preserve(old);
         }
-        i += 1;
-    });
+    }
     this.cachedInputs = null;
 };
 
@@ -4291,7 +4318,10 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '</blocks>';
         ide.saveXMLAs(
             str,
-            (ide.projectName || localize('untitled')) + ' ' + localize('blocks')
+            (ide.getProjectName() || localize('untitled')) +
+                ' ' +
+                localize('blocks'
+            )
         );
     } else {
         new DialogBoxMorph().inform(

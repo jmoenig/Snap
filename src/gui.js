@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2021-November-30';
+modules.gui = '2022-February-14';
 
 // Declarations
 
@@ -1055,7 +1055,7 @@ IDE_Morph.prototype.createControlBar = function () {
         }
         this.rerender();
     };
-    
+
     button.labelColor = new Color(
         0,
         MorphicPreferences.isFlat ? 100 : 200,
@@ -1459,6 +1459,7 @@ IDE_Morph.prototype.createCategories = function () {
                 scroller.addContents(myself.categories.children[8]);
             }
             myself.categories.add(scroller);
+            myself.categories.scroller = scroller;
             myself.categories.setHeight(
                 (4 + 1) * yPadding
                     + 4 * buttonHeight
@@ -1563,7 +1564,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             droppedMorph.destroy();
             this.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            this.currentSprite.wearCostume(null);
+            // this.currentSprite.wearCostume(null); // do we need this?
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else if (droppedMorph instanceof BlockMorph) {
             this.stage.threads.stopAllForBlock(droppedMorph);
@@ -1763,6 +1764,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
     // tab bar
     tabBar.tabTo = function (tabString) {
         var active;
+        if (myself.currentTab === tabString) {return; }
+        myself.world().hand.destroyTemporaries();
         myself.currentTab = tabString;
         this.children.forEach(each => {
             each.refresh();
@@ -1889,12 +1892,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-
-        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
-            if (morph instanceof BlockMorph) {
-                this.spriteBar.tabBar.tabTo('scripts');
-            }
-        };
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1905,12 +1902,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-
-        this.spriteEditor.contents.mouseEnterDragging = (morph) => {
-            if (morph instanceof BlockMorph) {
-                this.spriteBar.tabBar.tabTo('scripts');
-            }
-        };
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
@@ -1926,6 +1917,19 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         };
         this.add(this.spriteEditor);
     }
+
+    this.spriteEditor.mouseEnterDragging = (morph) => {
+        if (morph instanceof BlockMorph) {
+            this.spriteBar.tabBar.tabTo('scripts');
+        } else if (morph instanceof CostumeIconMorph) {
+            this.spriteBar.tabBar.tabTo('costumes');
+        } else if (morph instanceof SoundIconMorph) {
+            this.spriteBar.tabBar.tabTo('sounds');
+        }
+    };
+
+    this.spriteEditor.contents.mouseEnterDragging =
+        this.spriteEditor.mouseEnterDragging;
 };
 
 IDE_Morph.prototype.createCorralBar = function () {
@@ -2229,6 +2233,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
         this.categories.setWidth(this.paletteWidth);
+        if (this.categories.scroller) {
+            this.categories.scroller.setWidth(this.paletteWidth);
+        }
     }
 
     // palette
@@ -3507,14 +3514,12 @@ IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
 };
 
 IDE_Morph.prototype.newName = function (name, elements) {
-    var ix = name.indexOf('('),
-        stem = (ix < 0) ? name : name.substring(0, ix),
-        count = 1,
-        newName = stem;
+    var count = 1,
+        newName = name;
 
     while (contains(elements, newName)) {
         count += 1;
-        newName = stem + '(' + count + ')';
+        newName = name + '(' + count + ')';
     }
     return newName;
 };
@@ -4770,8 +4775,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7 - dev211130 -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2021 Jens M\u00F6nig and '
+    aboutTxt = 'Snap! 7.1.5 - dev -\nBuild Your Own Blocks\n\n'
+        + 'Copyright \u24B8 2008-2022 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -5687,6 +5692,8 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
 IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     // name is optional (string), so is silently (bool)
     var blocks;
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             blocks = this.serializer.loadBlocks(str, this.stage);
@@ -5730,6 +5737,8 @@ IDE_Morph.prototype.openSpritesString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenSpritesString = function (str) {
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.loadSprites(str, this);
@@ -5912,6 +5921,9 @@ IDE_Morph.prototype.switchToScene = function (
         }
     });
     scene.applyGlobalSettings();
+    if (!SpriteMorph.prototype.allCategories().includes(this.currentCategory)) {
+        this.currentCategory = 'motion';
+    }
     if (!this.setUnifiedPalette(scene.unifiedPalette)) {
         this.createCategories();
         this.createPaletteHandle();
@@ -8967,7 +8979,8 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         element => element.name,
         null,
         () => this.importLibrary(),
-        '~' // separator
+        '~', // separator
+        false // verbatim
     );
 
     this.fixListFieldItemColors();
@@ -11322,9 +11335,6 @@ PaletteHandleMorph.prototype.mouseDoubleClick = function () {
 /*
     I am a dialog morph that lets users take a snapshot using their webcam
     and use it as a costume for their sprites or a background for the Stage.
-
-    NOTE: Currently disabled because of issues with experimental technology
-    in Safari.
 */
 
 // CamSnapshotDialogMorph inherits from DialogBoxMorph:
@@ -11335,7 +11345,7 @@ CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 
 // CamSnapshotDialogMorph settings
 
-CamSnapshotDialogMorph.prototype.enableCamera = true; // off while experimental
+CamSnapshotDialogMorph.prototype.enableCamera = true;
 CamSnapshotDialogMorph.prototype.enabled = true;
 
 CamSnapshotDialogMorph.prototype.notSupportedMessage =
