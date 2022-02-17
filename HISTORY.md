@@ -14,6 +14,7 @@
 ### 2022-02-17
 * strings library: fixed lowercase(number), thanks, Brian and Simon!
 * new SciSnap2 extension and library, thanks, Eckart!
+* added Eckart to the contributors credits
 
 ### 2022-02-16
 * threads: hyperized reporter-IF/ELSE
