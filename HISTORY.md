@@ -6,8 +6,12 @@
 * **Notable Changes:**
     * hyperized reporter-IF/ELSE
 * **Notable Fixes:**
+    * strings library: fixed lowercase(number), thanks, Brian and Simon!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-17
+* strings library: fixed lowercase(number), thanks, Brian and Simon!
 
 ### 2022-02-16
 * threads: hyperized reporter-IF/ELSE
