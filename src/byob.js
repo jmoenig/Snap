@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-February-09';
+modules.byob = '2022-February-17';
 
 // Declarations
 
@@ -1982,7 +1982,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
             col = Math.ceil((i + 1) / 4);
         } else if (i < 10) {
             row = 4;
-            col = 10 - i;
+            col = 3 - (10 - i);
         } else {
             row = i - 5;
             col = 1;

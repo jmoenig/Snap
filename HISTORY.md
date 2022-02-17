@@ -8,6 +8,7 @@
     * hyperized reporter-IF/ELSE
 * **Notable Fixes:**
     * strings library: fixed lowercase(number), thanks, Brian and Simon!
+    * swapped "lists" and "other" in the make-a-block category menu, thanks Brian, for the report!
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -15,6 +16,7 @@
 * strings library: fixed lowercase(number), thanks, Brian and Simon!
 * new SciSnap2 extension and library, thanks, Eckart!
 * added Eckart to the contributors credits
+* byob: swapped "lists" and "other" in the make-a-block category menu
 
 ### 2022-02-16
 * threads: hyperized reporter-IF/ELSE
