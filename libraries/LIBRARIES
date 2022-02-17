@@ -33,5 +33,9 @@ bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit man
 ~	~
 ~	~
 ~	~
+SciSnap!2Blocks.xml	SciSnap! v2	Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)
+~	~
+~	~
+~	~
 serial_module.xml	Serial Ports	Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)
 signada.xml	Signada (Network remote control)	Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.

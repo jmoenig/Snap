@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * new SciSnap2 extension and library, thanks, Eckart!
 * **Notable Changes:**
     * hyperized reporter-IF/ELSE
 * **Notable Fixes:**
@@ -12,6 +13,7 @@
 
 ### 2022-02-17
 * strings library: fixed lowercase(number), thanks, Brian and Simon!
+* new SciSnap2 extension and library, thanks, Eckart!
 
 ### 2022-02-16
 * threads: hyperized reporter-IF/ELSE
