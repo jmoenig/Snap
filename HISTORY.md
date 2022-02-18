@@ -4,6 +4,7 @@
 
 * **New Features:**
     * new SciSnap2 extension and library, thanks, Eckart!
+    * new MQTT extension and library, thanks, Simon and Xavier!
 * **Notable Changes:**
     * hyperized reporter-IF/ELSE
 * **Notable Fixes:**
@@ -11,6 +12,9 @@
     * swapped "lists" and "other" in the make-a-block category menu, thanks Brian, for the report!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-02-18
+* new MQTT extension and library, thanks, Simon and Xavier!
 
 ### 2022-02-17
 * strings library: fixed lowercase(number), thanks, Brian and Simon!
