@@ -38,5 +38,5 @@ SciSnap!2Blocks.xml	SciSnap! v2	Scientific Functions, Graphing, SQL interface, M
 ~	~
 ~	~
 serial_module.xml	Serial Ports	Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)
-mqtt.xml	MQTT (Message Queuing Telemetry Transport) protocol for connecting with IOT devices
+mqtt.xml	MQTT	(Message Queuing Telemetry Transport) protocol for connecting with IOT devices
 signada.xml	Signada (Network remote control)	Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.
