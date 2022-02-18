@@ -2383,6 +2383,7 @@ Process.prototype.reportIfElse = function (block) {
     // handle a scalar condition
     if (inputs.length > 1) {
         // done with evaluating a case, retrieve and return its result
+        if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs.pop());
         this.popContext();
         return;
