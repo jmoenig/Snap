@@ -62,6 +62,8 @@ SnapExtensions.primitives.set(
             wsbroker = wsbroker + ':8081'
         } else if (wsbroker == 'ws://test.mosquitto.org') {
             wsbroker = wsbroker + ':8080'
+        } else if (broker == 'broker.xmqtt.net') {
+            wsbroker = wsbroker + '/mqtt'
         } else if (wsbroker == 'wss://simplesi.cloud') {
             wsbroker = wsbroker + ':8084'
         } else if (wsbroker == 'ws://simplesi.cloud') {
