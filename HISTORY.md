@@ -13,6 +13,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-21
+* threads: optimized hyper-if/else to skip repeated evaluation of literal true/false cases
+
 ### 2022-02-18
 * new MQTT extension and library, thanks, Simon and Xavier!
 

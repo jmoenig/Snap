@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-16';
+modules.threads = '2022-February-21';
 
 var ThreadManager;
 var Process;
@@ -2349,8 +2349,11 @@ Process.prototype.doIfElse = function () {
 
 Process.prototype.reportIfElse = function (block) {
     var inputs = this.context.inputs,
+        accumulator,
         condition,
-        expression;
+        expression,
+        trueIsBlock,
+        falseIsBlock;
 
     if (inputs.length < 1) {
         // evaluate the first input, either a Boolean or a (nested) list
@@ -2361,22 +2364,48 @@ Process.prototype.reportIfElse = function (block) {
     if (inputs[0] instanceof List && this.enableHyperOps) {
         // hyperize a (nested) list of Booleans
         if (this.context.accumulator === null) {
-            this.context.accumulator = [];
+            // cache literal true/false cases for optimized evaluation
+            trueIsBlock = block.inputs()[1] instanceof BlockMorph;
+            falseIsBlock = block.inputs()[2] instanceof BlockMorph;
+            this.context.accumulator = {
+                results : [],
+                trueIsLiteral : !trueIsBlock,
+                trueCase : trueIsBlock ? null : block.inputs()[1].evaluate(),
+                falseIsLiteral : !falseIsBlock,
+                falseCase : falseIsBlock ? null : block.inputs()[2].evaluate()
+            };
         } else if (inputs.length > 1) {
             // retrieve & remember previous result & remove it from the inputs
-            this.context.accumulator.push(inputs.pop());
+            this.context.accumulator.results.push(inputs.pop());
         }
-        if (this.context.accumulator.length === inputs[0].length()) {
+        accumulator = this.context.accumulator;
+        if (accumulator.results.length === inputs[0].length()) {
             // done with all the conditions in the current list
             this.returnValueToParentContext(
-                new List(this.context.accumulator)
+                new List(accumulator.results)
             );
             this.popContext();
             return;
         }
-        condition = inputs[0].at(this.context.accumulator.length + 1);
+        condition = inputs[0].at(accumulator.results.length + 1);
+
+        // optimize literal true-/false- cases for atomic conditions:
+        if (!(condition instanceof List)) {
+            if (condition && accumulator.trueIsLiteral) {
+                accumulator.results.push(accumulator.trueCase);
+                return;
+            }
+            if (!condition && accumulator.falseIsLiteral) {
+                accumulator.results.push(accumulator.falseCase);
+                return;
+            }
+        }
+
         this.pushContext(block); // recursive call
-        this.context.addInput(condition); //
+        this.context.addInput(condition);
+        // optimize evaluation of literals:
+        this.context.accumulator = copy(accumulator);
+        this.context.accumulator.results = [];
         return;
     }
 
