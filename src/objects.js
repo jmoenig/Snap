@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-February-07';
+modules.objects = '2022-February-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -4263,6 +4263,9 @@ SpriteMorph.prototype.remove = function () {
 SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph),
         clone;
+    if (this.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
     if (stage && stage.cloneCount <= 5000) {
         clone = this.fullCopy(true);
         clone.clonify(stage, immediately);
