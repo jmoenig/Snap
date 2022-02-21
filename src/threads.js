@@ -2374,6 +2374,16 @@ Process.prototype.reportIfElse = function (block) {
                 falseIsLiteral : !falseIsBlock,
                 falseCase : falseIsBlock ? null : block.inputs()[2].evaluate()
             };
+            // optimize if both true-/false- cases are literals
+            // for atomic conditions:
+            if (!trueIsBlock && !falseIsBlock) {
+                this.returnValueToParentContext(inputs[0].deepMap(
+                    leaf => leaf ? this.context.accumulator.trueCase
+                        : this.context.accumulator.falseCase)
+                );
+                this.popContext();
+                return;
+            }
         } else if (inputs.length > 1) {
             // retrieve & remember previous result & remove it from the inputs
             this.context.accumulator.results.push(inputs.pop());
@@ -2389,7 +2399,7 @@ Process.prototype.reportIfElse = function (block) {
         }
         condition = inputs[0].at(accumulator.results.length + 1);
 
-        // optimize literal true-/false- cases for atomic conditions:
+        // optimize single literal true-/false- cases for atomic conditions:
         if (!(condition instanceof List)) {
             if (condition && accumulator.trueIsLiteral) {
                 accumulator.results.push(accumulator.trueCase);
