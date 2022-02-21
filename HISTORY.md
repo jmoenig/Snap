@@ -3,6 +3,13 @@
 ## in development:
 
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 7.2.0:
+* **New Features:**
     * new SciSnap2 extension and library, thanks, Eckart!
     * new MQTT extension and library, thanks, Simon and Xavier!
 * **Notable Changes:**
@@ -11,12 +18,11 @@
     * strings library: fixed lowercase(number), thanks, Brian and Simon!
     * swapped "lists" and "other" in the make-a-block category menu, thanks Brian, for the report!
     * don't let deleted sprites clone
-* **Documentation Updates:**
-* **Translation Updates:**
 
 ### 2022-02-21
 * threads: optimized hyper-if/else to skip repeated evaluation of literal true/false cases
 * objects: prevent deleted sprites from cloning
+* prepared v7.2.0
 
 ### 2022-02-18
 * new MQTT extension and library, thanks, Simon and Xavier!
