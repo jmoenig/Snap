@@ -9,7 +9,7 @@
 * **Translation Updates:**
 
 
-## 7.2.0:
+## 7.2.1:
 * **New Features:**
     * new "List Comprehension" library adding a HOF version of ZIP
     * added "crossproduct" as relabel option for "append"
