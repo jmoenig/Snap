@@ -4,6 +4,7 @@
 
 * **New Features:**
     * new "List Comprehension" library adding a HOF version of ZIP
+    * added "crossproduct" as relabel option for "append"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -12,6 +13,7 @@
 ### 2022-02-22
 * new dev version
 * new "List Comprehension" library adding a HOF version of ZIP
+* added "crossproduct" as relabel option for "append"
 
 ## 7.2.0:
 * **New Features:**
