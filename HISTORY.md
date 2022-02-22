@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-22
+* new dev version
+
 ## 7.2.0:
 * **New Features:**
     * new SciSnap2 extension and library, thanks, Eckart!
