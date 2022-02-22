@@ -863,8 +863,8 @@ SnapTranslator.dict.de = {
         'Index',
     'append %lists':
         'verbinde %lists',
-    'crossproduct %lists':
-        'Kreuzprodukt %lists',
+    'combinations %lists':
+        'Kombinationen %lists',
     'reshape %l to %nums':
         'strukturiere %l in %nums',
     'add %s to %l':

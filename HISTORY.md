@@ -9,6 +9,15 @@
 * **Translation Updates:**
 
 
+## 7.2.2:
+* **Notable Changes:**
+    * renamed "crossproduct" to "combinations"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+    * renamed "crossproduct" to "combinations"
+
 ## 7.2.1:
 * **New Features:**
     * new "List Comprehension" library adding a HOF version of ZIP

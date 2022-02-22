@@ -1431,7 +1431,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCrossproduct: { // as relabel option for "append"
             type: 'reporter',
             category: 'lists',
-            spec: 'crossproduct %lists'
+            spec: 'combinations %lists'
         },
         reportTranspose: { // deprecated
             type: 'reporter',
