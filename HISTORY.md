@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * new "List Comprehension" library adding a HOF version of ZIP
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -10,6 +11,7 @@
 
 ### 2022-02-22
 * new dev version
+* new "List Comprehension" library adding a HOF version of ZIP
 
 ## 7.2.0:
 * **New Features:**
