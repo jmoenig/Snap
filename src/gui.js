@@ -9118,7 +9118,7 @@ LibraryImportDialogMorph.prototype.hasCached = function (key) {
 };
 
 LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
-    this.libraryCache[key] = blocks ;
+    this.libraryCache[key] = blocks;
 };
 
 LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
@@ -9176,6 +9176,8 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
 
     SpriteMorph.prototype.allCategories().forEach(category => {
         blocksList.forEach(definition => {
+            if (definition.isHelper) {return; }
+
             if (definition.category !== category) {return; }
             if (category !== previousCategory) {
                 y += padding;
