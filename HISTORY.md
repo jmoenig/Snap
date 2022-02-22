@@ -13,7 +13,8 @@
 ### 2022-02-22
 * new dev version
 * new "List Comprehension" library adding a HOF version of ZIP
-* added "crossproduct" as relabel option for "append"
+* threads: added "crossproduct" as relabel option for "append"
+* blocks: restore embedded inputs when relabelling variadic primitives
 
 ## 7.2.0:
 * **New Features:**
