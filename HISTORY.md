@@ -3,11 +3,16 @@
 ## in development:
 
 * **New Features:**
-    * new "List Comprehension" library adding a HOF version of ZIP
-    * added "crossproduct" as relabel option for "append"
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
+* **Translation Updates:**
+
+
+## 7.2.0:
+* **New Features:**
+    * new "List Comprehension" library adding a HOF version of ZIP
+    * added "crossproduct" as relabel option for "append"
 * **Translation Updates:**
     * German
 
@@ -17,6 +22,7 @@
 * threads: added "crossproduct" as relabel option for "append"
 * blocks: restore embedded inputs when relabelling variadic primitives
 * German translation update for "crossproduct %lists"
+* prepared patch
 
 ## 7.2.0:
 * **New Features:**
