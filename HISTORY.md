@@ -8,6 +8,12 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 7.2.3:
+* **Notable Fix:**
+    * escape JIT-compiled inputs
+
+### 2022-02-25
+    * threads: escape JIT-compiled inputs
 
 ## 7.2.2:
 * **Notable Changes:**

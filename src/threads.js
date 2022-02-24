@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-22';
+modules.threads = '2022-February-25';
 
 var ThreadManager;
 var Process;
@@ -7683,8 +7683,8 @@ JSCompiler.prototype.compileInput = function (inp) {
         case 'Boolean':
             return '' + value;
         case 'text':
-            // enclose in double quotes
-            return '"' + value + '"';
+            // escape and enclose in double quotes
+            return '"' + this.escape(value) + '"';
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
         default:
@@ -7716,4 +7716,48 @@ JSCompiler.prototype.compileInput = function (inp) {
             inp.constructor.name
         );
     }
+};
+
+JSCompiler.prototype.escape = function (string) {
+    var len = string.length,
+        result = '',
+        char,
+        esc,
+        i;
+    for (i = 0; i < len; i += 1) {
+        char = string[i];
+        switch (char) {
+        case '\\':
+            esc = '\\\\';
+            break;
+        case '\"':
+            esc = '\\"';
+            break;
+        case "\'":
+            esc = "\\'";
+            break;
+        case '\b':
+            esc = '\\b';
+            break;
+        case '\n':
+            esc = '\\n';
+            break;
+        case '\f':
+            esc = '\\f';
+            break;
+        case '\r':
+            esc = '\\r';
+            break;
+        case '\t':
+            esc = '\\t';
+            break;
+        case '\v':
+            esc = '\\v';
+            break;
+        default:
+            esc = char;
+        }
+        result += esc;
+    }
+    return result;
 };
