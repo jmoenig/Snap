@@ -5,11 +5,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * tweaked JOIN BLOCKS for variables
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2022-02-25
 * new dev version
+* threads: tweaked JOIN BLOCKS for variables 
 
 ## 7.2.3:
 * **Notable Fix:**

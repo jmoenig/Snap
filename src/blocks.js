@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-February-22';
+modules.blocks = '2022-February-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3996,9 +3996,11 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     if (dta.length === 0) {
         return cpy.reify();
     }
-    if (cpy.selector === 'reportGetVar' && (dta.length === 1)) {
+    if (cpy.selector === 'reportGetVar' && (
+        (dta.length === 1) || (cpy.blockSpec === '\xa0' && dta.length > 1))
+    ) {
         cpy.setSpec(dta[0]);
-        return cpy.reify();
+        return cpy.reify(dta.slice(1))
     }
 
     // restore input slots
