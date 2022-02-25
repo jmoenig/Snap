@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-25
+* new dev version
+
 ## 7.2.3:
 * **Notable Fix:**
     * escape JIT-compiled inputs
