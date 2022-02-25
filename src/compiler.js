@@ -325,7 +325,12 @@ JSCompiler.prototype.compileInput = function (inp) {
             return '' + value;
         case 'text':
             // enclose in double quotes
-            return '"' + value + '"';
+            encoded_text = encodeURIComponent(value)
+            // If no changes, then no special characters used
+            if (encoded_text == value) {
+                return '"' + value + '"';
+            }
+            return 'decodeURIComponent("' + encoded_text + '")';
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
         default:
