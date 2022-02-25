@@ -252,13 +252,12 @@ for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar(
             }
         }
         rcvr = target.constructor.name + '.prototype';
-        rcvr_var_name = target.constructor.name + '_prototype'
+        rcvr_var_name = target.constructor.name + '_prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            return rcvr + '.' + selector + '.apply('+ rcvr_var_name + ', [' + args +'])';
+            return ''.concat(rcvr, '.', selector, '.apply(', rcvr_var_name, ', [', args, '])');
         } else {
-            return 'current_process.' + selector +
-                '.apply(current_process, [' + args +'])';
+            return ''.concat('current_process.', selector, '.apply(current_process, [', args, '])');
         }
     }
 };
