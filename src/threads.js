@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-25';
+modules.threads = '2022-February-26';
 
 var ThreadManager;
 var Process;
@@ -7705,7 +7705,7 @@ JSCompiler.prototype.compileInput = function (inp) {
         	}
          	// redirect var query to process
             return 'arguments[arguments.length - 1].getVarNamed("' +
-            	inp.blockSpec +
+            	this.escape(inp.blockSpec) +
             	'")';
         }
         return this.compileExpression(inp);
