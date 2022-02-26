@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-26
+* new dev version
+
 ## 7.2.5:
 * **Notable Fix:**
     * escape JIT-compiled variable names
