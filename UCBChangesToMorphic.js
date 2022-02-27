@@ -64,6 +64,10 @@ HandMorph.prototype.processDrop = function (event) {
             *      1. Process the script as an XML file and load script
             *      2. Process the script as an image and load it into the costumes
             *  - Base code credit given do Snap-Forum user Dardoro
+            * 
+            * 2/26 Changes:
+            *  - Attempting to break up custom block definitions and scripts into 2 drops
+            *  - Added asyncronous call to ide.droppedText() for both drops
             */
         function arr2Str(arr) { 
             return arr.reduce((acc, b) => acc + String.fromCharCode(b), "");
@@ -94,7 +98,13 @@ HandMorph.prototype.processDrop = function (event) {
                     menu.addItem(
                         "Interpret script pic as blocks.", 
                         () => {
-                            ide.droppedText(blocks, file.name, "");
+                            if (blocks.includes("Custom\tBlock\tDefinitions")) {
+                                let customsSplit = blocks.split("Custom\tBlock\tDefinitions");
+                                await ide.droppedText(customsSplit[0], file.name, ""); // drop definitions on first
+                                await ide.droppedText(customsSplit[1], file.name, ""); // drop scripts on afterwards
+                            } else {
+                                ide.droppedText(blocks, file.name, "");
+                            } 
                         },
                         "Interpret the code within\nthis script pic as code."
                     )
