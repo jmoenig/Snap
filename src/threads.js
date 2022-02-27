@@ -7657,7 +7657,7 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-     var value, type;
+    var value, type;
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
