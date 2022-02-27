@@ -8,6 +8,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-276
+* variadic infix branch
+
 ### 2022-02-26
 * new dev version
 
