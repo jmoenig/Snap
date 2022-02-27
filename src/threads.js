@@ -7505,7 +7505,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     ));
 
     // translate formal parameters into gensyms
-    this.gensyms = {};
+    this.gensyms = new Map();
     this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
@@ -7520,7 +7520,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         parameters.forEach((pName, idx) => {
         	var pn = 'p' + idx;
             parms.push(pn);
-        	this.gensyms[pName] = pn;
+        	this.gensyms.set(pName, pn);
         });
     } else if (hasEmptySlots) {
     	if (this.implicitParams > 1) {
@@ -7619,11 +7619,15 @@ JSCompiler.prototype.compileExpression = function (block) {
         rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+            if (rcvr === 'SpriteMorph.prototype') {
+                // fix for blocks like (x position)
+                rcvr = 'arguments[arguments.length - 1].blockReceiver()';
+            } 
+            return rcvr + '.' + selector + '(' + args +')';
         } else {
             return 'arguments[arguments.length - 1].' +
                 selector +
-                '.apply(arguments[arguments.length - 1], [' + args +'])';
+                '(' + args + ')';
         }
     }
 };
@@ -7631,8 +7635,7 @@ JSCompiler.prototype.compileExpression = function (block) {
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     commandBlock.blockSequence().forEach(block => {
-        body += this.compileExpression(block);
-        body += ';\n';
+        body += this.compileExpression(block) + ';\n';
     });
     return body;
 };
@@ -7689,7 +7692,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             return 'new List([' + this.compileInputs(value) + '])';
         default:
             if (value instanceof Array) {
-                 return '"' + value[0] + '"';
+                return '"' + this.escape(value[0]) + '"';
             }
             throw new Error(
                 'compiling does not yet support\n' +
@@ -7699,9 +7702,9 @@ JSCompiler.prototype.compileInput = function (inp) {
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
-        	if (contains(this.source.inputs, inp.blockSpec)) {
+        	if (this.gensyms.has(inp.blockSpec)) {
             	// un-quoted gensym:
-            	return this.gensyms[inp.blockSpec];
+            	return this.gensyms.get(inp.blockSpec);
         	}
          	// redirect var query to process
             return 'arguments[arguments.length - 1].getVarNamed("' +
@@ -7718,46 +7721,17 @@ JSCompiler.prototype.compileInput = function (inp) {
     }
 };
 
-JSCompiler.prototype.escape = function (string) {
-    var len = string.length,
-        result = '',
-        char,
-        esc,
-        i;
-    for (i = 0; i < len; i += 1) {
-        char = string[i];
-        switch (char) {
-        case '\\':
-            esc = '\\\\';
-            break;
-        case '\"':
-            esc = '\\"';
-            break;
-        case "\'":
-            esc = "\\'";
-            break;
-        case '\b':
-            esc = '\\b';
-            break;
-        case '\n':
-            esc = '\\n';
-            break;
-        case '\f':
-            esc = '\\f';
-            break;
-        case '\r':
-            esc = '\\r';
-            break;
-        case '\t':
-            esc = '\\t';
-            break;
-        case '\v':
-            esc = '\\v';
-            break;
-        default:
-            esc = char;
+JSCompiler.prototype.escape = function(string) {
+    // make sure string is a string
+    string += '';
+    var len = string.length, i = 0, char, escaped = '';
+    while (len > i) {
+        char = string.charAt(i++);
+        if (" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~".indexOf(char) === -1) {
+            escaped += "\\u" + (char.charCodeAt(0) | 0x10000).toString(16).substring(1);
+        } else {
+            escaped += char;
         }
-        result += esc;
     }
-    return result;
+    return escaped;
 };
