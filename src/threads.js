@@ -7724,11 +7724,14 @@ JSCompiler.prototype.compileInput = function (inp) {
 JSCompiler.prototype.escape = function(string) {
     // make sure string is a string
     string += '';
-    var len = string.length, i = 0, char, escaped = '';
+    var len = string.length, i = 0, char, escaped = '', safe_chars = 
+        ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
+        "%&'()*+,-./:;<=>?@[]^_`{|}~";
     while (len > i) {
         char = string.charAt(i++);
-        if (" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~".indexOf(char) === -1) {
-            escaped += '\\u' + (char.charCodeAt(0) | 0x10000).toString(16).substring(1);
+        if (safe_chars.indexOf(char) === -1) {
+            escaped += '\\u' + (char.charCodeAt(0) | 0x10000)
+                .toString(16).substring(1);
         } else {
             escaped += char;
         }
