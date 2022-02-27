@@ -7728,7 +7728,7 @@ JSCompiler.prototype.escape = function(string) {
     while (len > i) {
         char = string.charAt(i++);
         if (" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~".indexOf(char) === -1) {
-            escaped += "\\u" + (char.charCodeAt(0) | 0x10000).toString(16).substring(1);
+            escaped += '\\u' + (char.charCodeAt(0) | 0x10000).toString(16).substring(1);
         } else {
             escaped += char;
         }
