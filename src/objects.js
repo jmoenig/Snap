@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-February-07';
+modules.objects = '2022-February-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -1428,6 +1428,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
+        reportCrossproduct: { // as relabel option for "append"
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combinations %lists'
+        },
         reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
@@ -1821,6 +1826,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
+
+    // lists
+    reportConcatenatedLists: ['reportCrossproduct'],
+    reportCrossproduct: ['reportConcatenatedLists'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
@@ -4263,6 +4272,9 @@ SpriteMorph.prototype.remove = function () {
 SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph),
         clone;
+    if (this.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
     if (stage && stage.cloneCount <= 5000) {
         clone = this.fullCopy(true);
         clone.clonify(stage, immediately);

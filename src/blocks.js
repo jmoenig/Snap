@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-February-09';
+modules.blocks = '2022-February-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3748,6 +3748,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     // restore matching inputs in their original order
     this.inputs().forEach(inp => {
         old = oldInputs[offset];
+        if (old instanceof ArgLabelMorph) {
+            old = old.argMorph();
+        }
         if (old instanceof RingMorph) {
             if (old.contents()) {
                 this.replaceInput(inp, old.fullCopy());
@@ -3774,6 +3777,10 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             if (nb) {
                 inp.nestedBlock(nb.fullCopy());
             }
+        } else if (old instanceof MultiArgMorph &&
+                inp instanceof MultiArgMorph &&
+                (old.slotSpec === inp.slotSpec)) {
+            this.replaceInput(inp, old.fullCopy());
         }
         offset += 1;
     });
@@ -3989,9 +3996,11 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     if (dta.length === 0) {
         return cpy.reify();
     }
-    if (cpy.selector === 'reportGetVar' && (dta.length === 1)) {
+    if (cpy.selector === 'reportGetVar' && (
+        (dta.length === 1) || (cpy.blockSpec === '\xa0' && dta.length > 1))
+    ) {
         cpy.setSpec(dta[0]);
-        return cpy.reify();
+        return cpy.reify(dta.slice(1))
     }
 
     // restore input slots

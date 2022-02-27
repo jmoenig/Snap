@@ -8,6 +8,84 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-02-26
+* new dev version
+
+## 7.2.5:
+* **Notable Fix:**
+    * escape JIT-compiled variable names
+
+### 2022-02-26
+    * threads: escape JIT-compiled variable names
+
+## 7.2.4:
+* **Notable Fix:**
+    * tweaked JOIN BLOCKS for variables
+
+### 2022-02-25
+* new dev version
+* threads: tweaked JOIN BLOCKS for variables
+* prepared patch 
+
+## 7.2.3:
+* **Notable Fix:**
+    * escape JIT-compiled inputs
+
+### 2022-02-25
+    * threads: escape JIT-compiled inputs
+
+## 7.2.2:
+* **Notable Changes:**
+    * renamed "crossproduct" to "combinations"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+    * renamed "crossproduct" to "combinations"
+
+## 7.2.1:
+* **New Features:**
+    * new "List Comprehension" library adding a HOF version of ZIP
+    * added "crossproduct" as relabel option for "append"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+* new dev version
+* new "List Comprehension" library adding a HOF version of ZIP
+* threads: added "crossproduct" as relabel option for "append"
+* blocks: restore embedded inputs when relabelling variadic primitives
+* German translation update for "crossproduct %lists"
+* prepared patch
+
+## 7.2.0:
+* **New Features:**
+    * new SciSnap2 extension and library, thanks, Eckart!
+    * new MQTT extension and library, thanks, Simon and Xavier!
+* **Notable Changes:**
+    * hyperized reporter-IF/ELSE
+* **Notable Fixes:**
+    * strings library: fixed lowercase(number), thanks, Brian and Simon!
+    * swapped "lists" and "other" in the make-a-block category menu, thanks Brian, for the report!
+    * don't let deleted sprites clone
+
+### 2022-02-21
+* threads: optimized hyper-if/else to skip repeated evaluation of literal true/false cases
+* objects: prevent deleted sprites from cloning
+* prepared v7.2.0
+
+### 2022-02-18
+* new MQTT extension and library, thanks, Simon and Xavier!
+
+### 2022-02-17
+* strings library: fixed lowercase(number), thanks, Brian and Simon!
+* new SciSnap2 extension and library, thanks, Eckart!
+* added Eckart to the contributors credits
+* byob: swapped "lists" and "other" in the make-a-block category menu
+
+### 2022-02-16
+* threads: hyperized reporter-IF/ELSE
+
 ### 2022-02-14
 * new dev version
 * gui: temporary fix for a new temporary Chrome v98 blank-tab bug (later reverted)
