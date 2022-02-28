@@ -8,11 +8,13 @@
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
 * blocks, objects, threads: made multiplication reporter variadic
 * blocks: tweaked infix label shadow rendering
+* German translation update (for "sum" and "product")
 
 ### 2022-02-27
 * variadic infix branch
