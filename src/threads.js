@@ -4091,6 +4091,10 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
+Process.prototype.reportVariadicMin = function (list) { // +++
+    return this.reportListAggregation(list, 'reportMin');
+};
+
 Process.prototype.reportMin = function (a, b) {
     return this.hyperDyadic(this.reportBasicMin, a, b);
 };
@@ -4104,6 +4108,10 @@ Process.prototype.reportBasicMin = function (a, b) {
         y = b;
     }
     return x < y ? x : y;
+};
+
+Process.prototype.reportVariadicMax = function (list) { // +++
+    return this.reportListAggregation(list, 'reportMax');
 };
 
 Process.prototype.reportMax = function (a, b) {

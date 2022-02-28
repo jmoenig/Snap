@@ -1110,6 +1110,20 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: '\u00D7',
         collapse: 'product'
+    },
+    '%min': { // +++
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: 'min',
+        collapse: 'minimum'
+    },
+    '%max': { // +++
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: 'max',
+        collapse: 'maximum'
     }
 };
 

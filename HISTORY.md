@@ -15,6 +15,7 @@
 * blocks, objects, threads: made multiplication reporter variadic
 * blocks: tweaked infix label shadow rendering
 * German translation update (for "sum" and "product")
+* blocks, objects, threads: made "min" and "max" reporters variadic
 
 ### 2022-02-27
 * variadic infix branch

@@ -1164,10 +1164,20 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n min %n'
         },
+        reportVariadicMin: { // +++
+            type: 'reporter',
+            category: 'operators',
+            spec: '%min'
+        },
         reportMax: {
             type: 'reporter',
             category: 'operators',
             spec: '%n max %n'
+        },
+        reportVariadicMax: { // +++
+            type: 'reporter',
+            category: 'operators',
+            spec: '%max'
         },
         reportRandom: {
             type: 'reporter',
@@ -1700,6 +1710,14 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         reportProduct: { // +++
             selector: 'reportVariadicProduct',
+            variadic: true
+        },
+        reportMin: { // +++
+            selector: 'reportVariadicMin',
+            variadic: true
+        },
+        reportMax: { // +++
+            selector: 'reportVariadicMax',
             variadic: true
         }
     };
