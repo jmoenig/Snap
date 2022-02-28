@@ -3028,7 +3028,7 @@ Process.prototype.reportCombine = function (list, reporter) {
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             // check for special cases to speed up
-            if (this.canRunOptimizedForCombine(reporter)) {
+            if (this.canRunOptimizedForCombine(reporter)) { // ++++
                 return this.reportListAggregation(
                     list,
                     reporter.expression.selector
@@ -3108,9 +3108,15 @@ Process.prototype.reportListAggregation = function (list, selector) {
     // private - used by reportCombine to optimize certain commutative
     // operations such as sum, product, min, max hyperized all at once
     var len = list.length(),
-        result, i;
+        result, i, op;
+    op = {
+        reportVariadicSum: 'reportSum',
+        reportVariadicProduct: 'reportProduct',
+        reportVariadicMin: 'reportMin',
+        reportVariadicMax: 'reportMax'
+    }[selector] || selector;
     if (len === 0) {
-        switch (selector) {
+        switch (op) {
         case 'reportProduct':
             return 1;
         case 'reportMin':
@@ -3124,12 +3130,13 @@ Process.prototype.reportListAggregation = function (list, selector) {
     result = list.at(1);
     if (len > 1) {
         for (i = 2; i <= len; i += 1) {
-            result = this[selector](result, list.at(i));
+            result = this[op](result, list.at(i));
         }
     }
     return result;
 };
 
+/* +++
 Process.prototype.canRunOptimizedForCombine = function (aContext) {
     // private - used by reportCombine to check for optimizable
     // special cases
@@ -3155,6 +3162,47 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
         return false;
     }
     return aContext.expression.inputs().every(each =>
+        each.selector === 'reportGetVar' &&
+            contains(aContext.inputs, each.blockSpec)
+    );
+};
+*/
+
+Process.prototype.canRunOptimizedForCombine = function (aContext) {
+    // private - used by reportCombine to check for optimizable
+    // special cases
+    var op = aContext.expression.selector,
+        slots,
+        eligible;
+    if (!op) {
+        return false;
+    }
+    eligible = [
+        'reportVariadicSum',
+        'reportVariadicProduct',
+        'reportVariadicMin',
+        'reportVariadicMax'
+    ];
+    if (!contains(eligible, op)) {
+        return false;
+    }
+
+    // scan the expression's inputs,
+    // make sure there are exactly two and none is
+    // a non-empty input slot or a variable getter whose name doesn't
+    // correspond to an input of the context.
+    // make sure the context has either no or exactly two inputs.
+    slots = aContext.expression.inputs()[0].inputs();
+    if (slots.length !== 2) {
+        return false;
+    }
+    if (aContext.inputs.length === 0) {
+        return slots.every(each => each.bindingID);
+    }
+    if (aContext.inputs.length !== 2) {
+        return false;
+    }
+    return slots.every(each =>
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );

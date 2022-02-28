@@ -18,6 +18,7 @@
 * blocks, objects, threads: made "min" and "max" reporters variadic
 * German translation update (for "minimum" and "maximum")
 * threads: added list-type assertions for new variadic blocks
+* threads: adjusted optimizations for COMBINE to the new variadic infix reporters
 
 ### 2022-02-27
 * variadic infix branch
