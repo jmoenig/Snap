@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-26';
+modules.threads = '2022-February-28';
 
 var ThreadManager;
 var Process;
@@ -4009,6 +4009,10 @@ Process.prototype.isMatrix = function (data) {
 };
 
 // Process math primtives - arithmetic
+
+Process.prototype.reportVariadicSum = function (list) { // +++
+    return this.reportListAggregation(list, 'reportSum');
+};
 
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);

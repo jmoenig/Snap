@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-February-25';
+modules.blocks = '2022-February-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1014,6 +1014,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi'
         slots: a slot spec string
         label: (optional)
+        infix: (optional) // +++
+        collapse: (optional) alternative label to "Input list"
         tags: 'widget' // doesn't count as "empty" slot implicit parameter
         min: (optional) number of minimum inputs) or zero
         max: (optional) number of maximum inputs) or zero
@@ -1094,6 +1096,13 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%s',
         defaults: 1,
         tags: 'static widget'
+    },
+    '%sum': { // +++
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: '+',
+        collapse: 'sum'
     }
 };
 
@@ -1250,8 +1259,10 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         oldArg.inputs().forEach(inp => // preserve nested reporters
             oldArg.replaceInput(inp, new InputSlotMorph())
         );
-        if (this.dynamicInputLabels && newArg instanceof ReporterBlockMorph) {
-            replacement = new ArgLabelMorph(newArg);
+//        if (this.dynamicInputLabels && newArg instanceof ReporterBlockMorph) {
+        if ((this.dynamicInputLabels || oldArg.collapse) &&
+                newArg instanceof ReporterBlockMorph) {
+            replacement = new ArgLabelMorph(newArg, oldArg.collapse); // +++
         }
     }
     replacement.parent = this;
@@ -1732,7 +1743,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.slots,
                 info.label,
                 info.min || 0,
-                spec
+                spec,
+                null, null, null, null, null,
+                info.infix, // +++
+                info.collapse // +++
             );
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
@@ -4000,7 +4014,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         (dta.length === 1) || (cpy.blockSpec === '\xa0' && dta.length > 1))
     ) {
         cpy.setSpec(dta[0]);
-        return cpy.reify(dta.slice(1))
+        return cpy.reify(dta.slice(1));
     }
 
     // restore input slots
@@ -12260,7 +12274,9 @@ function MultiArgMorph(
     labelColor,
     shadowColor,
     shadowOffset,
-    isTransparent
+    isTransparent,
+    infix, // +++
+    collapse // +++
 ) {
     this.init(
         slotSpec,
@@ -12271,7 +12287,9 @@ function MultiArgMorph(
         labelColor,
         shadowColor,
         shadowOffset,
-        isTransparent
+        isTransparent,
+        infix,
+        collapse
     );
 }
 
@@ -12284,7 +12302,9 @@ MultiArgMorph.prototype.init = function (
     labelColor,
     shadowColor,
     shadowOffset,
-    isTransparent
+    isTransparent,
+    infix,
+    collapse
 ) {
     var label,
         arrows = new FrameMorph(),
@@ -12294,6 +12314,8 @@ MultiArgMorph.prototype.init = function (
 
     this.slotSpec = slotSpec || '%s';
     this.labelText = localize(labelTxt || '');
+    this.infix = infix || ''; // +++
+    this.collapse = collapse || ''; // +++
     this.minInputs = min || 0;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
@@ -12542,9 +12564,11 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
 // MultiArgMorph arity control:
 
 MultiArgMorph.prototype.addInput = function (contents) {
-    var i, name,
-        newPart = this.labelPart(this.slotSpec),
-        idx = this.children.length - 1;
+    var newPart = this.labelPart(this.slotSpec),
+        i, name, idx;
+
+    this.addInfix(); // +++
+    idx = this.children.length - 1;
     if (contents) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars' ||
@@ -12582,6 +12606,14 @@ MultiArgMorph.prototype.addInput = function (contents) {
     return newPart;
 };
 
+MultiArgMorph.prototype.addInfix = function () {
+    var infix;
+    if (this.infix === '' || !this.inputs().length) {return; }
+    infix = this.labelPart(this.infix);
+    infix.parent = this;
+    this.children.splice(this.children.length - 1, 0, infix);
+};
+
 MultiArgMorph.prototype.removeInput = function () {
     var oldPart, scripts;
     if (this.children.length > 1) {
@@ -12593,6 +12625,11 @@ MultiArgMorph.prototype.removeInput = function () {
             if (scripts) {
                 scripts.add(oldPart);
             }
+        }
+    }
+    if (this.infix !== '') { // +++
+        if (this.children.length > 1) {
+            this.removeChild(this.children[this.children.length - 2]);
         }
     }
     this.fixLayout();

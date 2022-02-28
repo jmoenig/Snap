@@ -3,12 +3,16 @@
 ## in development:
 
 * **New Features:**
+    * variadic infix reporters
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
 
-### 2022-02-276
+### 2022-02-28
+* blocks, objects, threads, store: made addition reporter variadic
+
+### 2022-02-27
 * variadic infix branch
 
 ### 2022-02-26

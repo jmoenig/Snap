@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-February-22';
+modules.objects = '2022-February-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -1104,6 +1104,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n + %n'
         },
+        reportVariadicSum: { // +++ under construction
+            // +++ dev: true,
+            type: 'reporter',
+            category: 'operators',
+            spec: '%sum'
+        },
         reportDifference: {
             type: 'reporter',
             category: 'operators',
@@ -1681,6 +1687,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doSend: {
             selector: 'doBroadcast',
             expand: 1
+        },
+        reportSum: { // +++
+            selector: 'reportVariadicSum',
+            variadic: true
         }
     };
 };
@@ -2663,7 +2673,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+//        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
         blocks.push(block('reportProduct'));
         blocks.push(block('reportQuotient'));
@@ -2708,6 +2719,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportVariadicSum')); // +++
         }
 
     } else if (category === 'variables') {
@@ -9088,7 +9100,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+// +++        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
         blocks.push(block('reportProduct'));
         blocks.push(block('reportQuotient'));
@@ -9134,6 +9147,7 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportVariadicSum')); // +++
         }
 
     }
