@@ -739,6 +739,10 @@ SnapTranslator.dict.de = {
         'Summe',
     'product':
         'Produkt',
+    'minimum':
+        'Minimum',
+    'maximum':
+        'Maximum',
     '%n mod %n':
         '%n modulo %n',
     'round %n':
