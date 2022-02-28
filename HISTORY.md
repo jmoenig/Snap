@@ -12,6 +12,7 @@
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
 * blocks, objects, threads: made multiplication reporter variadic
+* blocks: tweaked infix label shadow rendering
 
 ### 2022-02-27
 * variadic infix branch

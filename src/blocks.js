@@ -12380,6 +12380,11 @@ MultiArgMorph.prototype.label = function () {
     return this.labelText ? this.children[0] : null;
 };
 
+MultiArgMorph.prototype.allLabels = function () {
+    // including infix labels
+    return this.children.filter(m => m instanceof BlockLabelMorph); // +++
+};
+
 MultiArgMorph.prototype.arrows = function () {
     return this.children[this.children.length - 1];
 };
@@ -12447,27 +12452,28 @@ MultiArgMorph.prototype.setLabelColor = function (
 // MultiArgMorph layout:
 
 MultiArgMorph.prototype.fixLayout = function () {
-    var label, shadowColor, shadowOffset;
+    var labels, shadowColor, shadowOffset;
     if (this.slotSpec === '%t') {
         this.isStatic = true; // in this case I cannot be exchanged
     }
     if (this.parent) {
-        label = this.label();
+        labels = this.allLabels();
         this.color = this.parent.color;
         this.arrows().color = this.color;
-        if (label) {
+        if (labels.length) {
             shadowColor = this.shadowColor ||
                 this.parent.color.darker(this.labelContrast);
-            shadowOffset = this.shadowOffset ||
-                (label ? label.shadowOffset : null);
-            if (!label.shadowColor.eq(shadowColor)) {
-                label.shadowColor = shadowColor;
-                label.shadowOffset = shadowOffset;
-                label.fixLayout();
-                label.rerender();
-            }
+            labels.forEach(label => {
+                shadowOffset = this.shadowOffset ||
+                    (label ? label.shadowOffset : null);
+                if (!label.shadowColor.eq(shadowColor)) {
+                    label.shadowColor = shadowColor;
+                    label.shadowOffset = shadowOffset;
+                    label.fixLayout();
+                    label.rerender();
+                }
+            });
         }
-
     }
     this.fixArrowsLayout();
     MultiArgMorph.uber.fixLayout.call(this);
@@ -12886,7 +12892,7 @@ ArgLabelMorph.prototype.init = function (argMorph, labelTxt) {
     this.add(argMorph);
 };
 
-ArgLabelMorph.prototype.label = function () {
+ArgLabelMorph.prototype.label = function () { // +++
     return this.children[0];
 };
 
