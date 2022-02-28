@@ -100,8 +100,8 @@ HandMorph.prototype.processDrop = function (event) {
                         () => {
                             if (blocks.includes("Custom\tBlock\tDefinitions")) {
                                 let customsSplit = blocks.split("Custom\tBlock\tDefinitions");
-                                await ide.droppedText(customsSplit[0], file.name, ""); // drop definitions on first
-                                await ide.droppedText(customsSplit[1], file.name, ""); // drop scripts on afterwards
+                                ide.rawOpenBlocksString(customsSplit[0], file.name, true);      // drop custom block definitions on first
+                                ide.openScriptString(customsSplit[1], file.name, false);        // drop scripts on afterwards
                             } else {
                                 ide.droppedText(blocks, file.name, "");
                             } 
