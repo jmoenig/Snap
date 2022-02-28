@@ -1103,6 +1103,13 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: '+',
         collapse: 'sum'
+    },
+    '%product': { // +++
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: '\u00D7',
+        collapse: 'product'
     }
 };
 

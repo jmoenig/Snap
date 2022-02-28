@@ -4030,6 +4030,10 @@ Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
 };
 
+Process.prototype.reportVariadicProduct = function (list) { // +++
+    return this.reportListAggregation(list, 'reportProduct');
+};
+
 Process.prototype.reportProduct = function (a, b) {
     return this.hyperDyadic(this.reportBasicProduct, a, b);
 };

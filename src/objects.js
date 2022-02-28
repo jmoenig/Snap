@@ -1122,6 +1122,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u00D7 %n',
             alias: '*'
         },
+        reportVariadicProduct: { // +++ under construction
+            // +++ dev: true,
+            type: 'reporter',
+            category: 'operators',
+            spec: '%product'
+        },
         reportQuotient: {
             type: 'reporter',
             category: 'operators',
@@ -1690,6 +1696,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         reportSum: { // +++
             selector: 'reportVariadicSum',
+            variadic: true
+        },
+        reportProduct: { // +++
+            selector: 'reportVariadicProduct',
             variadic: true
         }
     };
@@ -2673,10 +2683,11 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-//        blocks.push(block('reportSum'));
+// +++       blocks.push(block('reportSum'));
         blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+// +++       blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -2719,7 +2730,6 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportVariadicSum')); // +++
         }
 
     } else if (category === 'variables') {
@@ -9103,7 +9113,8 @@ StageMorph.prototype.blockTemplates = function (
 // +++        blocks.push(block('reportSum'));
         blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+// +++        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -9147,7 +9158,6 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportVariadicSum')); // +++
         }
 
     }

@@ -3,7 +3,7 @@
 ## in development:
 
 * **New Features:**
-    * variadic infix reporters
+    * variadic commutative infix reporters
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -11,6 +11,7 @@
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
+* blocks, objects, threads: made multiplication reporter variadic
 
 ### 2022-02-27
 * variadic infix branch
