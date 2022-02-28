@@ -17,6 +17,7 @@
 * German translation update (for "sum" and "product")
 * blocks, objects, threads: made "min" and "max" reporters variadic
 * German translation update (for "minimum" and "maximum")
+* threads: added list-type assertions for new variadic blocks
 
 ### 2022-02-27
 * variadic infix branch

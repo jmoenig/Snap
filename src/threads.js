@@ -4010,8 +4010,9 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
-Process.prototype.reportVariadicSum = function (list) { // +++
-    return this.reportListAggregation(list, 'reportSum');
+Process.prototype.reportVariadicSum = function (numbers) { // +++
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportSum');
 };
 
 Process.prototype.reportSum = function (a, b) {
@@ -4030,8 +4031,9 @@ Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
 };
 
-Process.prototype.reportVariadicProduct = function (list) { // +++
-    return this.reportListAggregation(list, 'reportProduct');
+Process.prototype.reportVariadicProduct = function (numbers) { // +++
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportProduct');
 };
 
 Process.prototype.reportProduct = function (a, b) {
@@ -4091,8 +4093,9 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
-Process.prototype.reportVariadicMin = function (list) { // +++
-    return this.reportListAggregation(list, 'reportMin');
+Process.prototype.reportVariadicMin = function (numbers) { // +++
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMin');
 };
 
 Process.prototype.reportMin = function (a, b) {
@@ -4110,8 +4113,9 @@ Process.prototype.reportBasicMin = function (a, b) {
     return x < y ? x : y;
 };
 
-Process.prototype.reportVariadicMax = function (list) { // +++
-    return this.reportListAggregation(list, 'reportMax');
+Process.prototype.reportVariadicMax = function (numbers) { // +++
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMax');
 };
 
 Process.prototype.reportMax = function (a, b) {
