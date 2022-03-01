@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-February-28';
+modules.objects = '2022-March-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -1099,16 +1099,19 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
+        /* +++
         reportSum: {
             type: 'reporter',
             category: 'operators',
             spec: '%n + %n'
         },
+        */
         reportVariadicSum: { // +++ under construction
             // +++ dev: true,
             type: 'reporter',
             category: 'operators',
-            spec: '%sum'
+            spec: '%sum',
+            alias: '+'
         },
         reportDifference: {
             type: 'reporter',
@@ -1116,17 +1119,20 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
+        /* +++
         reportProduct: {
             type: 'reporter',
             category: 'operators',
             spec: '%n \u00D7 %n',
             alias: '*'
         },
+        */
         reportVariadicProduct: { // +++ under construction
             // +++ dev: true,
             type: 'reporter',
             category: 'operators',
-            spec: '%product'
+            spec: '%product',
+            alias: '*'
         },
         reportQuotient: {
             type: 'reporter',
@@ -1159,25 +1165,31 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n ÷ %n'
         },
+        /* +++
         reportMin: {
             type: 'reporter',
             category: 'operators',
             spec: '%n min %n'
         },
+        */
         reportVariadicMin: { // +++
             type: 'reporter',
             category: 'operators',
-            spec: '%min'
+            spec: '%min',
+            alias: 'min'
         },
+        /* +++
         reportMax: {
             type: 'reporter',
             category: 'operators',
             spec: '%n max %n'
         },
+        */
         reportVariadicMax: { // +++
             type: 'reporter',
             category: 'operators',
-            spec: '%max'
+            spec: '%max',
+            alias: 'max'
         },
         reportRandom: {
             type: 'reporter',

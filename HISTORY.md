@@ -13,7 +13,8 @@
 ### 2022-03-01
 * blocks: adjusted restoring inputs for relabelling to / from variadic infix reporters
 * blocks: refactored adding and removing inputs in variadic slots
-* blocks: adjusted inserting / deleting single inputs in variadic infix slots 
+* blocks: adjusted inserting / deleting single inputs in variadic infix slots
+* objects: adjusted block-search-bar for variadic infix reporters
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
