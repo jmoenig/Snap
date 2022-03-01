@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-27';
+modules.gui = '2022-March-01';
 
 // Declarations
 
@@ -688,6 +688,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
+    this.warnAboutDev();
 };
 
 // IDE_Morph construction
@@ -7454,6 +7455,36 @@ IDE_Morph.prototype.warnAboutIE = function () {
 IDE_Morph.prototype.isIE = function () {
     var ua = navigator.userAgent;
     return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+};
+
+// IDE_Morph warn about saving project in the dev version
+
+IDE_Morph.prototype.warnAboutDev = function () {
+    var dlg, txt;
+    dlg = new DialogBoxMorph();
+    txt = new TextMorph(
+        'This version of Snap! is being developed.\n' +
+            '*** It is NOT supported for end users. ***\n' +
+            'Saving a project in THIS version is likely to\n' +
+            'make it UNUSABLE or DEFECTIVE for current and\n' +
+            'even future official versions!',
+        dlg.fontSize,
+        dlg.fontStyle,
+        true,
+        false,
+        'center',
+        null,
+        null,
+        MorphicPreferences.isFlat ? null : new Point(1, 1),
+        WHITE
+    );
+
+    dlg.key = 'Dev-Warning';
+    dlg.labelString = "CAUTION! Development Version";
+    dlg.createLabel();
+    dlg.addBody(txt);
+    dlg.fixLayout();
+    dlg.popUp(this.world());
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

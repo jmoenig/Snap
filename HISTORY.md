@@ -23,7 +23,8 @@
 * blocks: removed scaffolding
 * threads: removed scaffolding
 * renamed help screens for addition and multiplication blocks
-* removed now redundant variadic reporters from the variadic reporters library 
+* removed now redundant variadic reporters from the variadic reporters library
+* added dev warning box
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
