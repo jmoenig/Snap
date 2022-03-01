@@ -19,6 +19,7 @@
 * objects: removed scaffolding
 * store: apply block migration dictionary to hidden blocks in microworlds
 * store: removed scaffolding
+* blocks: removed scaffolding
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic

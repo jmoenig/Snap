@@ -1014,7 +1014,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi'
         slots: a slot spec string
         label: (optional)
-        infix: (optional) // +++
+        infix: (optional)
         collapse: (optional) alternative label to "Input list"
         tags: 'widget' // doesn't count as "empty" slot implicit parameter
         min: (optional) number of minimum inputs) or zero
@@ -1097,28 +1097,28 @@ SyntaxElementMorph.prototype.labelParts = {
         defaults: 1,
         tags: 'static widget'
     },
-    '%sum': { // +++
+    '%sum': {
         type: 'multi',
         slots: '%n',
         min: 2,
         infix: '+',
         collapse: 'sum'
     },
-    '%product': { // +++
+    '%product': {
         type: 'multi',
         slots: '%n',
         min: 2,
         infix: '\u00D7',
         collapse: 'product'
     },
-    '%min': { // +++
+    '%min': {
         type: 'multi',
         slots: '%n',
         min: 2,
         infix: 'min',
         collapse: 'minimum'
     },
-    '%max': { // +++
+    '%max': {
         type: 'multi',
         slots: '%n',
         min: 2,
@@ -1280,10 +1280,9 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         oldArg.inputs().forEach(inp => // preserve nested reporters
             oldArg.replaceInput(inp, new InputSlotMorph())
         );
-//        if (this.dynamicInputLabels && newArg instanceof ReporterBlockMorph) {
         if ((this.dynamicInputLabels || oldArg.collapse) &&
                 newArg instanceof ReporterBlockMorph) {
-            replacement = new ArgLabelMorph(newArg, oldArg.collapse); // +++
+            replacement = new ArgLabelMorph(newArg, oldArg.collapse);
         }
     }
     replacement.parent = this;
@@ -1766,8 +1765,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.min || 0,
                 spec,
                 null, null, null, null, null,
-                info.infix, // +++
-                info.collapse // +++
+                info.infix,
+                info.collapse
             );
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
@@ -3758,7 +3757,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     }
 };
 
-BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) { // +++++
+BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
     // return an Array of left-over blocks, if any
@@ -3881,7 +3880,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) { // +++++
             }
         }
     }
-    element.cachedInputs = null; // +++
+    element.cachedInputs = null;
     this.cachedInputs = null;
     return leftOver;
 };
@@ -12346,8 +12345,8 @@ function MultiArgMorph(
     shadowColor,
     shadowOffset,
     isTransparent,
-    infix, // +++
-    collapse // +++
+    infix,
+    collapse
 ) {
     this.init(
         slotSpec,
@@ -12385,8 +12384,8 @@ MultiArgMorph.prototype.init = function (
 
     this.slotSpec = slotSpec || '%s';
     this.labelText = localize(labelTxt || '');
-    this.infix = infix || ''; // +++
-    this.collapse = collapse || ''; // +++
+    this.infix = infix || '';
+    this.collapse = collapse || '';
     this.minInputs = min || 0;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
@@ -12446,7 +12445,7 @@ MultiArgMorph.prototype.label = function () {
 
 MultiArgMorph.prototype.allLabels = function () {
     // including infix labels
-    return this.children.filter(m => m instanceof BlockLabelMorph); // +++
+    return this.children.filter(m => m instanceof BlockLabelMorph);
 };
 
 MultiArgMorph.prototype.arrows = function () {
@@ -12660,7 +12659,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     var newPart = this.labelPart(this.slotSpec),
         i, name, idx;
 
-    this.addInfix(); // +++
+    this.addInfix();
     idx = this.children.length - 1;
     if (contents) {
         newPart.setContents(contents);
@@ -12721,7 +12720,7 @@ MultiArgMorph.prototype.removeInput = function () {
             }
         }
     }
-    if (this.infix !== '') { // +++
+    if (this.infix !== '') {
         if (this.children.length > 1) {
             this.removeChild(this.children[this.children.length - 2]);
         }
@@ -12973,7 +12972,7 @@ ArgLabelMorph.prototype.init = function (argMorph, labelTxt) {
     this.add(argMorph);
 };
 
-ArgLabelMorph.prototype.label = function () { // +++
+ArgLabelMorph.prototype.label = function () {
     return this.children[0];
 };
 
