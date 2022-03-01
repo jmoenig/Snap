@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-02-22', // this, too, will appear in the Translators tab
+        '2022-02-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -735,6 +735,14 @@ SnapTranslator.dict.de = {
         'global?',
 
     // operators:
+    'sum':
+        'Summe',
+    'product':
+        'Produkt',
+    'minimum':
+        'Minimum',
+    'maximum':
+        'Maximum',
     '%n mod %n':
         '%n modulo %n',
     'round %n':

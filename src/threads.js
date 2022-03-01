@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-26';
+modules.threads = '2022-March-01';
 
 var ThreadManager;
 var Process;
@@ -3108,9 +3108,15 @@ Process.prototype.reportListAggregation = function (list, selector) {
     // private - used by reportCombine to optimize certain commutative
     // operations such as sum, product, min, max hyperized all at once
     var len = list.length(),
-        result, i;
+        result, i, op;
+    op = {
+        reportVariadicSum: 'reportSum',
+        reportVariadicProduct: 'reportProduct',
+        reportVariadicMin: 'reportMin',
+        reportVariadicMax: 'reportMax'
+    }[selector] || selector;
     if (len === 0) {
-        switch (selector) {
+        switch (op) {
         case 'reportProduct':
             return 1;
         case 'reportMin':
@@ -3124,7 +3130,7 @@ Process.prototype.reportListAggregation = function (list, selector) {
     result = list.at(1);
     if (len > 1) {
         for (i = 2; i <= len; i += 1) {
-            result = this[selector](result, list.at(i));
+            result = this[op](result, list.at(i));
         }
     }
     return result;
@@ -3134,27 +3140,37 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
     // private - used by reportCombine to check for optimizable
     // special cases
     var op = aContext.expression.selector,
+        slots,
         eligible;
     if (!op) {
         return false;
     }
-    eligible = ['reportSum', 'reportProduct', 'reportMin', 'reportMax'];
+    eligible = [
+        'reportVariadicSum',
+        'reportVariadicProduct',
+        'reportVariadicMin',
+        'reportVariadicMax'
+    ];
     if (!contains(eligible, op)) {
         return false;
     }
 
-    // scan the expression's inputs, we can assume there are exactly two,
-    // because we're only looking at eligible selectors. Make sure none is
+    // scan the expression's inputs,
+    // make sure there are exactly two and none is
     // a non-empty input slot or a variable getter whose name doesn't
     // correspond to an input of the context.
     // make sure the context has either no or exactly two inputs.
+    slots = aContext.expression.inputs()[0].inputs();
+    if (slots.length !== 2) {
+        return false;
+    }
     if (aContext.inputs.length === 0) {
-        return aContext.expression.inputs().every(each => each.bindingID);
+        return slots.every(each => each.bindingID);
     }
     if (aContext.inputs.length !== 2) {
         return false;
     }
-    return aContext.expression.inputs().every(each =>
+    return slots.every(each =>
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );
@@ -4010,6 +4026,11 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
+Process.prototype.reportVariadicSum = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportSum');
+};
+
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
 };
@@ -4024,6 +4045,11 @@ Process.prototype.reportDifference = function (a, b) {
 
 Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
+};
+
+Process.prototype.reportVariadicProduct = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportProduct');
 };
 
 Process.prototype.reportProduct = function (a, b) {
@@ -4083,6 +4109,11 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
+Process.prototype.reportVariadicMin = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMin');
+};
+
 Process.prototype.reportMin = function (a, b) {
     return this.hyperDyadic(this.reportBasicMin, a, b);
 };
@@ -4096,6 +4127,11 @@ Process.prototype.reportBasicMin = function (a, b) {
         y = b;
     }
     return x < y ? x : y;
+};
+
+Process.prototype.reportVariadicMax = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMax');
 };
 
 Process.prototype.reportMax = function (a, b) {

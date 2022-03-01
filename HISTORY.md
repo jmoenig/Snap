@@ -3,10 +3,42 @@
 ## in development:
 
 * **New Features:**
+    * variadic commutative infix reporters
 * **Notable Changes:**
+    * removed now redundant variadic reporters from the variadic reporters library 
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
+
+### 2022-03-01
+* blocks: adjusted restoring inputs for relabelling to / from variadic infix reporters
+* blocks: refactored adding and removing inputs in variadic slots
+* blocks: adjusted inserting / deleting single inputs in variadic infix slots
+* objects: adjusted block-search-bar for variadic infix reporters
+* objects: adapted formula editor for variadic infix reporters
+* objects: removed scaffolding
+* store: apply block migration dictionary to hidden blocks in microworlds
+* store: removed scaffolding
+* blocks: removed scaffolding
+* threads: removed scaffolding
+* renamed help screens for addition and multiplication blocks
+* removed now redundant variadic reporters from the variadic reporters library
+* added dev warning box
+
+### 2022-02-28
+* blocks, objects, threads, store: made addition reporter variadic
+* blocks, objects, threads: made multiplication reporter variadic
+* blocks: tweaked infix label shadow rendering
+* German translation update (for "sum" and "product")
+* blocks, objects, threads: made "min" and "max" reporters variadic
+* German translation update (for "minimum" and "maximum")
+* threads: added list-type assertions for new variadic blocks
+* threads: adjusted optimizations for COMBINE to the new variadic infix reporters
+* objects. adjusted relabel options for new variadic infix blocks
+
+### 2022-02-27
+* variadic infix branch
 
 ### 2022-02-26
 * new dev version
