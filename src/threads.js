@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-February-28';
+modules.threads = '2022-March-01';
 
 var ThreadManager;
 var Process;
@@ -3028,7 +3028,7 @@ Process.prototype.reportCombine = function (list, reporter) {
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             // check for special cases to speed up
-            if (this.canRunOptimizedForCombine(reporter)) { // ++++
+            if (this.canRunOptimizedForCombine(reporter)) {
                 return this.reportListAggregation(
                     list,
                     reporter.expression.selector
@@ -3135,38 +3135,6 @@ Process.prototype.reportListAggregation = function (list, selector) {
     }
     return result;
 };
-
-/* +++
-Process.prototype.canRunOptimizedForCombine = function (aContext) {
-    // private - used by reportCombine to check for optimizable
-    // special cases
-    var op = aContext.expression.selector,
-        eligible;
-    if (!op) {
-        return false;
-    }
-    eligible = ['reportSum', 'reportProduct', 'reportMin', 'reportMax'];
-    if (!contains(eligible, op)) {
-        return false;
-    }
-
-    // scan the expression's inputs, we can assume there are exactly two,
-    // because we're only looking at eligible selectors. Make sure none is
-    // a non-empty input slot or a variable getter whose name doesn't
-    // correspond to an input of the context.
-    // make sure the context has either no or exactly two inputs.
-    if (aContext.inputs.length === 0) {
-        return aContext.expression.inputs().every(each => each.bindingID);
-    }
-    if (aContext.inputs.length !== 2) {
-        return false;
-    }
-    return aContext.expression.inputs().every(each =>
-        each.selector === 'reportGetVar' &&
-            contains(aContext.inputs, each.blockSpec)
-    );
-};
-*/
 
 Process.prototype.canRunOptimizedForCombine = function (aContext) {
     // private - used by reportCombine to check for optimizable
@@ -4058,7 +4026,7 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
-Process.prototype.reportVariadicSum = function (numbers) { // +++
+Process.prototype.reportVariadicSum = function (numbers) {
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportSum');
 };
@@ -4079,7 +4047,7 @@ Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
 };
 
-Process.prototype.reportVariadicProduct = function (numbers) { // +++
+Process.prototype.reportVariadicProduct = function (numbers) {
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportProduct');
 };
@@ -4141,7 +4109,7 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
-Process.prototype.reportVariadicMin = function (numbers) { // +++
+Process.prototype.reportVariadicMin = function (numbers) {
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportMin');
 };
@@ -4161,7 +4129,7 @@ Process.prototype.reportBasicMin = function (a, b) {
     return x < y ? x : y;
 };
 
-Process.prototype.reportVariadicMax = function (numbers) { // +++
+Process.prototype.reportVariadicMax = function (numbers) {
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportMax');
 };
