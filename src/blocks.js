@@ -12614,7 +12614,7 @@ MultiArgMorph.prototype.refresh = function () {
 */
 
 MultiArgMorph.prototype.deleteSlot = function (anInput) {
-    if (this.children.length <= this.minInputs + 1) {
+    if (this.inputs().length <= this.minInputs) {
         return;
     }
     this.removeChild(anInput);
@@ -12625,7 +12625,7 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     var idx = this.children.indexOf(anInput),
         newPart = this.labelPart(this.slotSpec);
     
-    if (this.maxInputs && (this.children.length > this.maxInputs)) {
+    if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
         return;
     }
     if (contents) {
@@ -12692,9 +12692,10 @@ MultiArgMorph.prototype.addInfix = function () {
 };
 
 MultiArgMorph.prototype.removeInput = function () {
-    var oldPart, scripts;
-    if (this.children.length > 1) {
-        oldPart = this.children[this.children.length - 2];
+    var len = this.inputs().length,
+        oldPart, scripts;
+    if (len > 0) {
+        oldPart = this.inputs()[len - 1];
         this.removeChild(oldPart);
         if (oldPart instanceof BlockMorph &&
                 !(oldPart instanceof RingMorph && !oldPart.contents())) {
