@@ -1099,15 +1099,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        /* +++
-        reportSum: {
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n + %n'
-        },
-        */
-        reportVariadicSum: { // +++ under construction
-            // +++ dev: true,
+        reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
             spec: '%sum',
@@ -1119,16 +1111,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        /* +++
-        reportProduct: {
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n \u00D7 %n',
-            alias: '*'
-        },
-        */
-        reportVariadicProduct: { // +++ under construction
-            // +++ dev: true,
+        reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
             spec: '%product',
@@ -1165,27 +1148,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n ÷ %n'
         },
-        /* +++
-        reportMin: {
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n min %n'
-        },
-        */
-        reportVariadicMin: { // +++
+        reportVariadicMin: {
             type: 'reporter',
             category: 'operators',
             spec: '%min',
             alias: 'min'
         },
-        /* +++
-        reportMax: {
-            type: 'reporter',
-            category: 'operators',
-            spec: '%n max %n'
-        },
-        */
-        reportVariadicMax: { // +++
+        reportVariadicMax: {
             type: 'reporter',
             category: 'operators',
             spec: '%max',
@@ -1716,19 +1685,19 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'doBroadcast',
             expand: 1
         },
-        reportSum: { // +++
+        reportSum: {
             selector: 'reportVariadicSum',
             variadic: true
         },
-        reportProduct: { // +++
+        reportProduct: {
             selector: 'reportVariadicProduct',
             variadic: true
         },
-        reportMin: { // +++
+        reportMin: {
             selector: 'reportVariadicMin',
             variadic: true
         },
-        reportMax: { // +++
+        reportMax: {
             selector: 'reportVariadicMax',
             variadic: true
         }
@@ -2717,10 +2686,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-// +++       blocks.push(block('reportSum'));
         blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-// +++       blocks.push(block('reportProduct'));
         blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
@@ -3763,11 +3730,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
-            target = block; // +++
+            target = block;
         } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
             target = block;
-            inps = block.inputs(); // +++++
+            inps = block.inputs();
             if (inps[0] instanceof MultiArgMorph) { // infix sum or product
                 target = inps[0];
                 inps = target.inputs();
@@ -3775,12 +3742,12 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                target.replaceInput(inps[i - off], blockFromAST(ast[i])); // +++
+                target.replaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    target.replaceInput( // +++
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3788,7 +3755,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    target.replaceInput( // +++
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
@@ -9151,10 +9118,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-// +++        blocks.push(block('reportSum'));
         blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-// +++        blocks.push(block('reportProduct'));
         blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));

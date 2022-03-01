@@ -16,6 +16,7 @@
 * blocks: adjusted inserting / deleting single inputs in variadic infix slots
 * objects: adjusted block-search-bar for variadic infix reporters
 * objects: adapted formula editor for variadic infix reporters
+* objects: removed scaffolding
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
