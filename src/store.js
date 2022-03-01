@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-February-28';
+modules.store = '2022-March-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -468,8 +468,11 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
             sel => {
+                var selector, migration;
                 if (sel) {
-                    scene.hiddenPrimitives[sel] = true;
+                    migration = SpriteMorph.prototype.blockMigrations[sel];
+                    selector = migration ? migration.selector : sel;
+                    scene.hiddenPrimitives[selector] = true;
                 }
             }
         );
