@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-February-28';
+modules.blocks = '2022-March-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3758,13 +3758,15 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     }
 };
 
-BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
+BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) { // +++++
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
     // return an Array of left-over blocks, if any
     // optional offset parameter allows for shifting the range
     // of inputs to be restored
-    var old, nb, i,
+    var old, nb, i, src, trg,
+        element = this,
+        inputs = this.inputs(),
         leftOver = [];
 
     // gather leading surplus blocks
@@ -3780,22 +3782,68 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
         }
     }
 
+    // special cases for relabelling to / from single variadic infix reporters
+    src = oldInputs[0];
+    trg = inputs[0];
+
+    // 1.
+    // both blocks have exactly one variadic slot, with the same slot spec but
+    // different infixes, and not nessesarily matching numbers of expanded
+    // slots.
+    if (oldInputs.length === 1 &&
+        (inputs.length === 1) &&
+        src instanceof MultiArgMorph &&
+        trg instanceof MultiArgMorph &&
+        src.slotSpec === trg.slotSpec &&
+        (src.infix !== trg.infix)
+    ) {
+        element = trg;
+        oldInputs = src.inputs();
+        while(element.inputs().length < oldInputs.length) {
+            element.addInput();
+        }
+        inputs = element.inputs();
+    }
+
+    // 2.
+    // this block has a single variadic infix slot which will hold all of the
+    // old block inputs.
+    else if (oldInputs.length &&
+        (inputs.length === 1) &&
+        trg instanceof MultiArgMorph &&
+        !(src instanceof MultiArgMorph)
+    ) {
+        element = trg;
+        inputs = element.inputs();
+    }
+
+    // 3.
+    // the old inputs are a single variadic infix slot whose inputs will be
+    // distributed over this blocks non-variadic slots
+    else if (oldInputs.length === 1 &&
+        inputs.length &&
+        src instanceof MultiArgMorph &&
+        !(trg instanceof MultiArgMorph)
+    ) {
+        oldInputs = src.inputs();
+    }
+
     // restore matching inputs in their original order
-    this.inputs().forEach(inp => {
+    inputs.forEach(inp => {
         old = oldInputs[offset];
         if (old instanceof ArgLabelMorph) {
             old = old.argMorph();
         }
         if (old instanceof RingMorph) {
             if (old.contents()) {
-                this.replaceInput(inp, old.fullCopy());
+                element.replaceInput(inp, old.fullCopy());
             }
             // otherwise ignore the empty ring
         } else if (old instanceof ReporterBlockMorph) {
             if (inp instanceof TemplateSlotMorph || inp.isStatic) {
                 leftOver.push(old);
             } else {
-                this.replaceInput(inp, old.fullCopy());
+                element.replaceInput(inp, old.fullCopy());
             }
         } else if (old && inp instanceof InputSlotMorph) {
             // original - turns empty numberslots to 0:
@@ -3814,8 +3862,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             }
         } else if (old instanceof MultiArgMorph &&
                 inp instanceof MultiArgMorph &&
-                (old.slotSpec === inp.slotSpec)) {
-            this.replaceInput(inp, old.fullCopy());
+                (old.slotSpec === inp.slotSpec) &&
+                old.infix === inp.infix) {
+            element.replaceInput(inp, old.fullCopy());
         }
         offset += 1;
     });
@@ -3832,6 +3881,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             }
         }
     }
+    element.cachedInputs = null; // +++
     this.cachedInputs = null;
     return leftOver;
 };

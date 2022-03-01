@@ -10,6 +10,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-01
+* blocks: adjusted restoring inputs for relabelling to / from variadic infix reporters
+
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
 * blocks, objects, threads: made multiplication reporter variadic
