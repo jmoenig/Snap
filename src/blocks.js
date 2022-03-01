@@ -12614,8 +12614,17 @@ MultiArgMorph.prototype.refresh = function () {
 */
 
 MultiArgMorph.prototype.deleteSlot = function (anInput) {
-    if (this.inputs().length <= this.minInputs) {
+    var len = this.inputs().length,
+        idx = this.children.indexOf(anInput);
+    if (len <= this.minInputs) {
         return;
+    }
+    if (this.infix !== '') {
+        if (idx === (this.children.length - 2)) { // b/c arrows
+            this.removeChild(this.children[idx - 1]);
+        } else {
+            this.removeChild(this.children[idx + 1]);
+        }
     }
     this.removeChild(anInput);
     this.fixLayout();
@@ -12623,7 +12632,8 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
 
 MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     var idx = this.children.indexOf(anInput),
-        newPart = this.labelPart(this.slotSpec);
+        newPart = this.labelPart(this.slotSpec),
+        infix;
     
     if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
         return;
@@ -12632,7 +12642,13 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         newPart.setContents(contents);
     }
     newPart.parent = this;
-    this.children.splice(idx, 0, newPart);
+    if (this.infix !== '') {
+        infix = this.labelPart(this.infix);
+        infix.parent = this;
+        this.children.splice(idx, 0, newPart, infix);
+    } else {
+        this.children.splice(idx, 0, newPart);
+    }
     newPart.fixLayout();
     this.fixLayout();
     return newPart;
