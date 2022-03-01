@@ -5,6 +5,7 @@
 * **New Features:**
     * variadic commutative infix reporters
 * **Notable Changes:**
+    * removed now redundant variadic reporters from the variadic reporters library 
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
@@ -22,6 +23,7 @@
 * blocks: removed scaffolding
 * threads: removed scaffolding
 * renamed help screens for addition and multiplication blocks
+* removed now redundant variadic reporters from the variadic reporters library 
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
