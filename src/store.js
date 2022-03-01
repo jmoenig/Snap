@@ -1193,7 +1193,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     // private
     var block, info, inputs, isGlobal, receiver, migration,
         migrationOffset = 0,
-        migratoToVariadic = false; // +++
+        migratoToVariadic = false;
 
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
@@ -1210,7 +1210,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             ];
             if (migration) {
                 migrationOffset = migration.offset || 0;
-                migratoToVariadic = migration.variadic; // +++
+                migratoToVariadic = migration.variadic;
             }
         }
     } else if (model.tag === 'custom-block') {
@@ -1270,13 +1270,23 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         } else if (child.tag === 'receiver') {
             nop(); // ignore
         } else {
-            if (migratoToVariadic) { // +++
+            if (migratoToVariadic) {
                 // assume all formerly single inputs are now part of the first
                 // one which is variadic and already expanded to hold them
                 // example: migrate old infix addition to new variadic infix sum
-                this.loadInput(child, inputs[0].inputs()[i], inputs[0], object); // +++
+                this.loadInput(
+                    child,
+                    inputs[0].inputs()[i],
+                    inputs[0],
+                    object
+                );
             } else {
-                this.loadInput(child, inputs[i + migrationOffset], block, object); // +++
+                this.loadInput(
+                    child,
+                    inputs[i + migrationOffset],
+                    block,
+                    object
+                );
             }
         }
     });
