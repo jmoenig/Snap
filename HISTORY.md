@@ -21,6 +21,7 @@
 * store: removed scaffolding
 * blocks: removed scaffolding
 * threads: removed scaffolding
+* renamed help screens for addition and multiplication blocks
 
 ### 2022-02-28
 * blocks, objects, threads, store: made addition reporter variadic
