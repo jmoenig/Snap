@@ -3634,7 +3634,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function parseInfix(expression, operator, already) {
-        // very basic diadic infix parser for arithmetic expressions
+        // very basic dyadic infix parser for arithmetic expressions
         // with strict left-to-right operator precedence (as in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
@@ -3723,13 +3723,13 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, target, selectors, monads, alias, key, sel, i, inps,
             off = 1,
             reverseDict = {};
         selectors = {
-            '+': 'reportSum',
+            '+': 'reportVariadicSum',
             '-': 'reportDifference',
-            '*': 'reportProduct',
+            '*': 'reportVariadicProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
@@ -3763,18 +3763,24 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
+            target = block; // +++
         } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
-            inps = block.inputs();
+            target = block;
+            inps = block.inputs(); // +++++
+            if (inps[0] instanceof MultiArgMorph) { // infix sum or product
+                target = inps[0];
+                inps = target.inputs();
+            }
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                block.replaceInput(inps[i - off], blockFromAST(ast[i]));
+                target.replaceInput(inps[i - off], blockFromAST(ast[i])); // +++
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    block.replaceInput(
+                    target.replaceInput( // +++
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3782,7 +3788,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    block.replaceInput(
+                    target.replaceInput( // +++
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
@@ -3791,6 +3797,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[i - off].setContents(ast[i]);
             }
         }
+        target.fixLayout();
         block.isDraggable = true;
         block.fixLayout();
         block.fixBlockColor(null, true);
