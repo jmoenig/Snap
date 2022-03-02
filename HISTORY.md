@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-02
+* gui: never close a dev-warning
+
 ### 2022-03-01
 * blocks: adjusted restoring inputs for relabelling to / from variadic infix reporters
 * blocks: refactored adding and removing inputs in variadic slots
