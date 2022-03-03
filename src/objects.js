@@ -8768,7 +8768,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     return procs;
 };
 
-StageMorph.prototype.fireStopAllEvent = function () {
+StageMorph.prototype.fireStopAllEvent = function () { // +++
     var ide = this.parentThatIsA(IDE_Morph);
 
     this.threads.resumeAll(this.stage);

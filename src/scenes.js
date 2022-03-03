@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-November-24';
+modules.scenes = '2022-March-03';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -184,6 +184,8 @@ Scene.prototype.addDefaultSprite = function () {
     return sprite;
 };
 
+// Scene - capturing global state locally:
+
 Scene.prototype.captureGlobalSettings = function () {
     this.hiddenPrimitives = StageMorph.prototype.hiddenPrimitives;
     this.codeMappings = StageMorph.prototype.codeMappings;
@@ -217,6 +219,17 @@ Scene.prototype.applyGlobalSettings = function () {
     SpriteMorph.prototype.penColorModel = this.penColorModel;
 };
 
+// Scene ops:
+
 Scene.prototype.updateTrash = function () {
     this.trash = this.trash.filter(sprite => sprite.isCorpse);
+};
+
+Scene.prototype.stop = function () {
+    if (this.stage.enableCustomHatBlocks) {
+        this.stage.threads.pauseCustomHatBlocks =
+            !this.stage.threads.pauseCustomHatBlocks;
+    } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+    }
 };
