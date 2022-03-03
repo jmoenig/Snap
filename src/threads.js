@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-March-01';
+modules.threads = '2022-March-03';
 
 var ThreadManager;
 var Process;
@@ -3397,48 +3397,6 @@ Process.prototype.decodeSound = function (sound, callback) {
         arrayBuffer = bytes.buffer;
         audioCtx = Note.prototype.getAudioContext();
         sound.isDecoding = true;
-        audioCtx.decodeAudioData(
-            arrayBuffer,
-            buffer => {
-                sound.audioBuffer = buffer;
-                sound.isDecoding = false;
-            },
-            err => {
-                sound.isDecoding = false;
-                this.handleError(err);
-            }
-        );
-    }
-    this.pushContext('doYield');
-    this.pushContext();
-};
-
-Process.prototype.decodeSpectrum = function (sound, callback) {
-    // private - callback is optional and invoked with sound as argument
-    var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx, analyzer;
-
-    if (sound.audioBuffer) {
-        return (callback || nop)(sound);
-    }
-    if (!sound.isDecoding) {
-        base64 = sound.audio.src.split(',')[1];
-        binaryString = window.atob(base64);
-        len = binaryString.length;
-        bytes = new Uint8Array(len);
-        for (i = 0; i < len; i += 1)        {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        arrayBuffer = bytes.buffer;
-        audioCtx = Note.prototype.getAudioContext();
-        sound.isDecoding = true;
-
-        analyser = audioCtx.createAnalyser(); // +++
-        analyser.fftSize = 256;
-        var bufferLength = analyser.frequencyBinCount;
-        var dataArray = new Uint8Array(bufferLength);
-        analyser.getByteFrequencyData(dataArray);
-
-
         audioCtx.decodeAudioData(
             arrayBuffer,
             buffer => {

@@ -14,6 +14,7 @@
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
+* threads: removed experimental code
 
 ### 2022-03-02
 * gui: never close a dev-warning
