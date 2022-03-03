@@ -5,6 +5,7 @@
 * **New Features:**
     * variadic commutative infix reporters
     * shift-click on STOP button to stop all scenes
+    * STOP "all scenes" dropdown option
 * **Notable Changes:**
     * SciSnap2 extension update (FFT), thanks, Eckart!
     * removed now redundant variadic reporters from the variadic reporters library
@@ -17,6 +18,7 @@
 * SciSnap2 extension update (FFT), thanks, Eckart!
 * threads: removed experimental code
 * scenes, gui: shift-click on STOP button to stop all scenes
+* blocks, threads: STOP "all scenes" dropdown option 
 
 ### 2022-03-02
 * gui: never close a dev-warning

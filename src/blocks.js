@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-01';
+modules.blocks = '2022-March-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -705,6 +705,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'all' : ['all'],
+            'all scenes' : ['all scenes'],
             'this script' : ['this script'],
             'this block' : ['this block'],
             'all but this script' : ['all but this script'],

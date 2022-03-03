@@ -2476,10 +2476,26 @@ Process.prototype.doStopAll = function () {
     }
 };
 
+Process.prototype.doStopAllScenes = function () {
+    var ide;
+    if (this.homeContext.receiver) {
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scenes.map(scn => {
+            if (scn !== ide.scene) {
+                scn.stop();
+            }
+        });
+    }
+    this.doStopAll();
+};
+
 Process.prototype.doStopThis = function (choice) {
     switch (this.inputOption(choice)) {
     case 'all':
         this.doStopAll();
+        break;
+    case 'all scenes':
+        this.doStopAllScenes();
         break;
     case 'this script':
         this.doStop();
