@@ -225,10 +225,10 @@ Scene.prototype.updateTrash = function () {
     this.trash = this.trash.filter(sprite => sprite.isCorpse);
 };
 
-Scene.prototype.stop = function () {
+Scene.prototype.stop = function (forGood) {
     if (this.stage.enableCustomHatBlocks) {
-        this.stage.threads.pauseCustomHatBlocks =
-            !this.stage.threads.pauseCustomHatBlocks;
+        this.stage.threads.pauseCustomHatBlocks = forGood ? true
+            : !this.stage.threads.pauseCustomHatBlocks;
     } else {
         this.stage.threads.pauseCustomHatBlocks = false;
     }

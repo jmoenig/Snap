@@ -2831,7 +2831,7 @@ IDE_Morph.prototype.isPaused = function () {
 
 IDE_Morph.prototype.stopAllScripts = function () {
     if (this.world().currentKey === 16) { // shiftClicked
-        this.scenes.map(scn => scn.stop());
+        this.scenes.map(scn => scn.stop(true));
     } else {
         this.scene.stop();
     }

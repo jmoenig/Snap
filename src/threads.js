@@ -2442,14 +2442,14 @@ Process.prototype.doStop = function () {
     this.stop();
 };
 
-Process.prototype.doStopAll = function () {
+Process.prototype.doStopAll = function (forGood) {
     var stage, ide;
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
             if (stage.enableCustomHatBlocks) {
-                stage.threads.pauseCustomHatBlocks =
-                    !stage.threads.pauseCustomHatBlocks;
+                stage.threads.pauseCustomHatBlocks = forGood ? true
+                    : !stage.threads.pauseCustomHatBlocks;
             } else {
                 stage.threads.pauseCustomHatBlocks = false;
             }
@@ -2482,11 +2482,11 @@ Process.prototype.doStopAllScenes = function () {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
         ide.scenes.map(scn => {
             if (scn !== ide.scene) {
-                scn.stop();
+                scn.stop(true);
             }
         });
     }
-    this.doStopAll();
+    this.doStopAll(true);
 };
 
 Process.prototype.doStopThis = function (choice) {
