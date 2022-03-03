@@ -5,11 +5,15 @@
 * **New Features:**
     * variadic commutative infix reporters
 * **Notable Changes:**
-    * removed now redundant variadic reporters from the variadic reporters library 
+    * SciSnap2 extension update (FFT), thanks, Eckart!
+    * removed now redundant variadic reporters from the variadic reporters library
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2022-03-03
+* SciSnap2 extension update (FFT), thanks, Eckart!
 
 ### 2022-03-02
 * gui: never close a dev-warning
