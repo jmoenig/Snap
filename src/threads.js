@@ -62,7 +62,7 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 6, bitwise: false*/
 
 modules.threads = '2022-March-04';
 
