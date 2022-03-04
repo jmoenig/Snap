@@ -23,6 +23,7 @@
 * animation library: fixed pen state for GLIDE, thanks, Brian!
 * threads: addressed security issues in the JIT-compiler, thanks, xBZZZZ!
 * gui: show project name in browser tab, thanks, Peter!
+* objects: handle (some cases of) extent-less costumes
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!

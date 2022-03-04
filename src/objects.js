@@ -3824,6 +3824,10 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
+    if (costume && (!costume.width() || !costume.height())) {
+        costume = null;
+        idx = null;
+    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
