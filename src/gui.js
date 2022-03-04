@@ -90,6 +90,8 @@ modules.gui = '2022-March-04';
 
 // Declarations
 
+var SnapVersion = '7.3.0-dev';
+
 var IDE_Morph;
 var ProjectDialogMorph;
 var LibraryImportDialogMorph;
@@ -1258,9 +1260,8 @@ IDE_Morph.prototype.createControlBar = function () {
         scene = myself.scenes.at(1) !== myself.scene ?
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
-        if (name !== null && name !== 'untitled') {
-            document.title = "Snap! " + name;
-        }
+        document.title = "Snap! " +
+            (myself.getProjectName() ? name : SnapVersion);
         txt = new StringMorph(
             prefix + name +  scene + suffix,
             14,
@@ -4777,7 +4778,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7.3.0 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2022 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

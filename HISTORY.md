@@ -7,6 +7,7 @@
     * shift-click on STOP button to stop all scenes
     * STOP "all scenes" dropdown option
 * **Notable Changes:**
+    * show project name in browser tab, thanks, Peter!
     * SciSnap2 extension update (FFT), thanks, Eckart!
     * removed now redundant variadic reporters from the variadic reporters library
 * **Notable Fixes:**
@@ -21,6 +22,7 @@
 * German translation update for "all scenes"
 * animation library: fixed pen state for GLIDE, thanks, Brian!
 * threads: addressed security issues in the JIT-compiler, thanks, xBZZZZ!
+* gui: show project name in browser tab, thanks, Peter!
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
