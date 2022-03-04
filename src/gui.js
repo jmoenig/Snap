@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-03';
+modules.gui = '2022-March-04';
 
 // Declarations
 
@@ -688,7 +688,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
-    this.warnAboutDev();
+    // this.warnAboutDev();
 };
 
 // IDE_Morph construction
@@ -2836,7 +2836,6 @@ IDE_Morph.prototype.stopAllScripts = function () {
         this.scene.stop();
     }
     this.controlBar.stopButton.refresh();
-    this.stage.fireStopAllEvent();
 };
 
 IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {

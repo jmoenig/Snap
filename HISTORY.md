@@ -14,6 +14,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-04
+* scenes, objects, threads, gui: refactored STOP
+
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
 * threads: removed experimental code

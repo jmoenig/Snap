@@ -47,13 +47,13 @@
 */
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
-normalizeCanvas, SnapSerializer, Costume, ThreadManager*/
+normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2022-March-03';
+modules.scenes = '2022-March-04';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -226,10 +226,30 @@ Scene.prototype.updateTrash = function () {
 };
 
 Scene.prototype.stop = function (forGood) {
-    if (this.stage.enableCustomHatBlocks) {
+    var ide;
+    if (this.stage.enableCustomHatBlocks || forGood) {
         this.stage.threads.pauseCustomHatBlocks = forGood ? true
             : !this.stage.threads.pauseCustomHatBlocks;
     } else {
         this.stage.threads.pauseCustomHatBlocks = false;
+    }
+    this.stage.stopAllActiveSounds();
+    this.stage.threads.resumeAll(this.stage);
+    this.stage.keysPressed = {};
+    this.stage.runStopScripts();
+    this.stage.threads.stopAll();
+    if (this.stage.projectionSource) {
+        this.stage.stopProjection();
+    }
+    this.stage.children.forEach(morph => {
+        if (morph.stopTalking) {
+            morph.stopTalking();
+        }
+    });
+    this.stage.removeAllClones();
+    ide = this.stage.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.controlBar.pauseButton.refresh();
+        ide.controlBar.stopButton.refresh();
     }
 };

@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6*/
 
-modules.threads = '2022-March-03';
+modules.threads = '2022-March-04';
 
 var ThreadManager;
 var Process;
@@ -2442,37 +2442,11 @@ Process.prototype.doStop = function () {
     this.stop();
 };
 
-Process.prototype.doStopAll = function (forGood) {
-    var stage, ide;
+Process.prototype.doStopAll = function () {
+    var ide;
     if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            if (stage.enableCustomHatBlocks) {
-                stage.threads.pauseCustomHatBlocks = forGood ? true
-                    : !stage.threads.pauseCustomHatBlocks;
-            } else {
-                stage.threads.pauseCustomHatBlocks = false;
-            }
-            stage.stopAllActiveSounds();
-            stage.threads.resumeAll(stage);
-            stage.keysPressed = {};
-            stage.runStopScripts();
-            stage.threads.stopAll();
-            if (stage.projectionSource) {
-                stage.stopProjection();
-            }
-            stage.children.forEach(morph => {
-                if (morph.stopTalking) {
-                    morph.stopTalking();
-                }
-            });
-            stage.removeAllClones();
-        }
-        ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {
-            ide.controlBar.pauseButton.refresh();
-            ide.controlBar.stopButton.refresh();
-        }
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scene.stop();
     }
 };
 
@@ -2480,13 +2454,8 @@ Process.prototype.doStopAllScenes = function () {
     var ide;
     if (this.homeContext.receiver) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
-        ide.scenes.map(scn => {
-            if (scn !== ide.scene) {
-                scn.stop(true);
-            }
-        });
+        ide.scenes.map(scn => scn.stop(true));
     }
-    this.doStopAll(true);
 };
 
 Process.prototype.doStopThis = function (choice) {
