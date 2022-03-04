@@ -3,13 +3,14 @@
 ## in development:
 
 * **New Features:**
-    * variadic commutative infix reporters
+    * variadic associative infix reporters
     * shift-click on STOP button to stop all scenes
     * STOP "all scenes" dropdown option
 * **Notable Changes:**
     * SciSnap2 extension update (FFT), thanks, Eckart!
     * removed now redundant variadic reporters from the variadic reporters library
 * **Notable Fixes:**
+    * animation library: fixed pen state for GLIDE, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
@@ -17,6 +18,7 @@
 ### 2022-03-04
 * scenes, objects, threads, gui: refactored STOP
 * German translation update for "all scenes"
+* animation library: fixed pen state for GLIDE, thanks, Brian!
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
