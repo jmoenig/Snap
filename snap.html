@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Snap! 7.3.0 - dev - Build Your Own Blocks</title>
+        <title>Snap! Build Your Own Blocks</title>
         <link rel="icon" href="src/favicon.ico" type="image/x-icon">
         <link rel="manifest" href="manifest.json">
         <link rel="apple-touch-icon" href="img/snap-icon-152.png">
@@ -40,7 +40,10 @@
             var world;
             window.onload = function () {
                 if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('sw.js');
+                    navigator.serviceWorker.register(
+                        'sw.js',
+                        {updateViaCache: 'none'}
+                    );
                 }
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
