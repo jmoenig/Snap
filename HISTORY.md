@@ -26,6 +26,7 @@
 * gui: show project name in browser tab, thanks, Peter!
 * objects: handle (some cases of) extent-less costumes
 * blocks, threads: "category" selector for block-getter in sensing
+* updated German translation with "category"
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!

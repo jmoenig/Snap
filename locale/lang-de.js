@@ -731,6 +731,8 @@ SnapTranslator.dict.de = {
         '%block von Block %repRing',
     'definition':
         'Definition',
+    'category':
+        'Kategorie',
     'custom?':
         'benutzerdefiniert?',
     'global?':
