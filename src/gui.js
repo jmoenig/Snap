@@ -690,7 +690,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
-    // this.warnAboutDev();
+    this.warnAboutDev();
 };
 
 // IDE_Morph construction
@@ -7463,6 +7463,9 @@ IDE_Morph.prototype.isIE = function () {
 
 IDE_Morph.prototype.warnAboutDev = function () {
     var dlg, txt;
+    if (!SnapVersion.includes('-dev')) {
+        return;
+    }
     dlg = new DialogBoxMorph();
     txt = new TextMorph(
         'This version of Snap! is being developed.\n' +
