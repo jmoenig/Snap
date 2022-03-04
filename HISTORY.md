@@ -10,6 +10,7 @@
     * SciSnap2 extension update (FFT), thanks, Eckart!
     * removed now redundant variadic reporters from the variadic reporters library
 * **Notable Fixes:**
+    * addressed security issues in the JIT-compiler, thanks, xBZZZZ!
     * animation library: fixed pen state for GLIDE, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
@@ -19,6 +20,7 @@
 * scenes, objects, threads, gui: refactored STOP
 * German translation update for "all scenes"
 * animation library: fixed pen state for GLIDE, thanks, Brian!
+* threads: addressed security issues in the JIT-compiler, thanks, xBZZZZ!
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
