@@ -5567,6 +5567,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 new Context();
         }
         return new Context();
+    case 'category':
+        return expr ?
+            SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
+                : 0;
     case 'custom?':
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':

@@ -6,6 +6,7 @@
     * variadic associative infix reporters
     * shift-click on STOP button to stop all scenes
     * STOP "all scenes" dropdown option
+    * "category" selector for block-getter in sensing
 * **Notable Changes:**
     * show project name in browser tab, thanks, Peter!
     * SciSnap2 extension update (FFT), thanks, Eckart!
@@ -24,6 +25,7 @@
 * threads: addressed security issues in the JIT-compiler, thanks, xBZZZZ!
 * gui: show project name in browser tab, thanks, Peter!
 * objects: handle (some cases of) extent-less costumes
+* blocks, threads: "category" selector for block-getter in sensing
 
 ### 2022-03-03
 * SciSnap2 extension update (FFT), thanks, Eckart!
