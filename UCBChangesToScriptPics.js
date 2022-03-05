@@ -75,7 +75,7 @@ BlockMorph.prototype.userMenu = function () {
 							return (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff]
 						}, (crc ||= 0) ^ (-1));
 						return ( crc ^ (-1) ) >>> 0;
-					};
+				};
 				function arr2Str(arr) { 
 					return arr.reduce((res, byte) => res + String.fromCharCode(byte), '');
 				};
@@ -85,10 +85,6 @@ BlockMorph.prototype.userMenu = function () {
 				function buildChunk(type , data) { 
 					let res = type + data; 
 					return int2BStr(data.length) + res + int2BStr(crc32(res));
-				};
-				function SaveData(dataURL, name) { 
-					return Object.assign(document.createElement("a"), 
-					{download: name, href: dataURL}).click(); 
 				};
                 function getDefinitions(str, ide) {
 					let customBlocksString = '';
@@ -134,7 +130,7 @@ BlockMorph.prototype.userMenu = function () {
 				    name = top?.definition?.spec || top.selector;
 				bPart.splice(-12, 0, ...newChunk);
 				parts[1] = btoa(bPart.join(""));
-				SaveData(parts.join(','), name + ".png");
+				this.saveFileAs(parts.join(','), 'image/png', name);
 			}
 		);
 	}
