@@ -101,6 +101,7 @@ HandMorph.prototype.processDrop = function (event) {
                             if (blocks.includes("Custom\tBlock\tDefinitions")) {
                                 let customsSplit = blocks.split("Custom\tBlock\tDefinitions");
                                 ide.rawOpenBlocksString(customsSplit[0], file.name, true);      // drop custom block definitions on first
+                                delete ide.serializer.scene.stage;                              // force loading script in "ide.stage" context
                                 ide.openScriptString(customsSplit[1], file.name, false);        // drop scripts on afterwards
                             } else {
                                 ide.droppedText(blocks, file.name, "");
