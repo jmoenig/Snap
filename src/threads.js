@@ -62,9 +62,9 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-February-26';
+modules.threads = '2022-March-04';
 
 var ThreadManager;
 var Process;
@@ -2443,36 +2443,18 @@ Process.prototype.doStop = function () {
 };
 
 Process.prototype.doStopAll = function () {
-    var stage, ide;
+    var ide;
     if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            if (stage.enableCustomHatBlocks) {
-                stage.threads.pauseCustomHatBlocks =
-                    !stage.threads.pauseCustomHatBlocks;
-            } else {
-                stage.threads.pauseCustomHatBlocks = false;
-            }
-            stage.stopAllActiveSounds();
-            stage.threads.resumeAll(stage);
-            stage.keysPressed = {};
-            stage.runStopScripts();
-            stage.threads.stopAll();
-            if (stage.projectionSource) {
-                stage.stopProjection();
-            }
-            stage.children.forEach(morph => {
-                if (morph.stopTalking) {
-                    morph.stopTalking();
-                }
-            });
-            stage.removeAllClones();
-        }
-        ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {
-            ide.controlBar.pauseButton.refresh();
-            ide.controlBar.stopButton.refresh();
-        }
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scene.stop();
+    }
+};
+
+Process.prototype.doStopAllScenes = function () {
+    var ide;
+    if (this.homeContext.receiver) {
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scenes.map(scn => scn.stop(true));
     }
 };
 
@@ -2480,6 +2462,9 @@ Process.prototype.doStopThis = function (choice) {
     switch (this.inputOption(choice)) {
     case 'all':
         this.doStopAll();
+        break;
+    case 'all scenes':
+        this.doStopAllScenes();
         break;
     case 'this script':
         this.doStop();
@@ -3108,9 +3093,15 @@ Process.prototype.reportListAggregation = function (list, selector) {
     // private - used by reportCombine to optimize certain commutative
     // operations such as sum, product, min, max hyperized all at once
     var len = list.length(),
-        result, i;
+        result, i, op;
+    op = {
+        reportVariadicSum: 'reportSum',
+        reportVariadicProduct: 'reportProduct',
+        reportVariadicMin: 'reportMin',
+        reportVariadicMax: 'reportMax'
+    }[selector] || selector;
     if (len === 0) {
-        switch (selector) {
+        switch (op) {
         case 'reportProduct':
             return 1;
         case 'reportMin':
@@ -3124,7 +3115,7 @@ Process.prototype.reportListAggregation = function (list, selector) {
     result = list.at(1);
     if (len > 1) {
         for (i = 2; i <= len; i += 1) {
-            result = this[selector](result, list.at(i));
+            result = this[op](result, list.at(i));
         }
     }
     return result;
@@ -3134,27 +3125,37 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
     // private - used by reportCombine to check for optimizable
     // special cases
     var op = aContext.expression.selector,
+        slots,
         eligible;
     if (!op) {
         return false;
     }
-    eligible = ['reportSum', 'reportProduct', 'reportMin', 'reportMax'];
+    eligible = [
+        'reportVariadicSum',
+        'reportVariadicProduct',
+        'reportVariadicMin',
+        'reportVariadicMax'
+    ];
     if (!contains(eligible, op)) {
         return false;
     }
 
-    // scan the expression's inputs, we can assume there are exactly two,
-    // because we're only looking at eligible selectors. Make sure none is
+    // scan the expression's inputs,
+    // make sure there are exactly two and none is
     // a non-empty input slot or a variable getter whose name doesn't
     // correspond to an input of the context.
     // make sure the context has either no or exactly two inputs.
+    slots = aContext.expression.inputs()[0].inputs();
+    if (slots.length !== 2) {
+        return false;
+    }
     if (aContext.inputs.length === 0) {
-        return aContext.expression.inputs().every(each => each.bindingID);
+        return slots.every(each => each.bindingID);
     }
     if (aContext.inputs.length !== 2) {
         return false;
     }
-    return aContext.expression.inputs().every(each =>
+    return slots.every(each =>
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );
@@ -4010,6 +4011,11 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
+Process.prototype.reportVariadicSum = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportSum');
+};
+
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
 };
@@ -4024,6 +4030,11 @@ Process.prototype.reportDifference = function (a, b) {
 
 Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
+};
+
+Process.prototype.reportVariadicProduct = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportProduct');
 };
 
 Process.prototype.reportProduct = function (a, b) {
@@ -4083,6 +4094,11 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
+Process.prototype.reportVariadicMin = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMin');
+};
+
 Process.prototype.reportMin = function (a, b) {
     return this.hyperDyadic(this.reportBasicMin, a, b);
 };
@@ -4096,6 +4112,11 @@ Process.prototype.reportBasicMin = function (a, b) {
         y = b;
     }
     return x < y ? x : y;
+};
+
+Process.prototype.reportVariadicMax = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMax');
 };
 
 Process.prototype.reportMax = function (a, b) {
@@ -5546,6 +5567,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 new Context();
         }
         return new Context();
+    case 'category':
+        return expr ?
+            SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
+                : 0;
     case 'custom?':
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
@@ -7505,7 +7530,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     ));
 
     // translate formal parameters into gensyms
-    this.gensyms = {};
+    this.gensyms = new Map();
     this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
@@ -7520,7 +7545,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         parameters.forEach((pName, idx) => {
         	var pn = 'p' + idx;
             parms.push(pn);
-        	this.gensyms[pName] = pn;
+        	this.gensyms.set(pName, pn);
         });
     } else if (hasEmptySlots) {
     	if (this.implicitParams > 1) {
@@ -7619,11 +7644,15 @@ JSCompiler.prototype.compileExpression = function (block) {
         rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+            if (rcvr === 'SpriteMorph.prototype') {
+                // fix for blocks like (x position)
+                rcvr = 'arguments[arguments.length - 1].blockReceiver()';
+            } 
+            return rcvr + '.' + selector + '(' + args +')';
         } else {
             return 'arguments[arguments.length - 1].' +
                 selector +
-                '.apply(arguments[arguments.length - 1], [' + args +'])';
+                '(' + args + ')';
         }
     }
 };
@@ -7631,8 +7660,7 @@ JSCompiler.prototype.compileExpression = function (block) {
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     commandBlock.blockSequence().forEach(block => {
-        body += this.compileExpression(block);
-        body += ';\n';
+        body += this.compileExpression(block) + ';\n';
     });
     return body;
 };
@@ -7654,7 +7682,7 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-     var value, type;
+    var value, type;
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
@@ -7689,7 +7717,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             return 'new List([' + this.compileInputs(value) + '])';
         default:
             if (value instanceof Array) {
-                 return '"' + value[0] + '"';
+                return '"' + this.escape(value[0]) + '"';
             }
             throw new Error(
                 'compiling does not yet support\n' +
@@ -7699,9 +7727,9 @@ JSCompiler.prototype.compileInput = function (inp) {
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
-        	if (contains(this.source.inputs, inp.blockSpec)) {
+        	if (this.gensyms.has(inp.blockSpec)) {
             	// un-quoted gensym:
-            	return this.gensyms[inp.blockSpec];
+            	return this.gensyms.get(inp.blockSpec);
         	}
          	// redirect var query to process
             return 'arguments[arguments.length - 1].getVarNamed("' +
@@ -7718,46 +7746,20 @@ JSCompiler.prototype.compileInput = function (inp) {
     }
 };
 
-JSCompiler.prototype.escape = function (string) {
-    var len = string.length,
-        result = '',
-        char,
-        esc,
-        i;
-    for (i = 0; i < len; i += 1) {
-        char = string[i];
-        switch (char) {
-        case '\\':
-            esc = '\\\\';
-            break;
-        case '\"':
-            esc = '\\"';
-            break;
-        case "\'":
-            esc = "\\'";
-            break;
-        case '\b':
-            esc = '\\b';
-            break;
-        case '\n':
-            esc = '\\n';
-            break;
-        case '\f':
-            esc = '\\f';
-            break;
-        case '\r':
-            esc = '\\r';
-            break;
-        case '\t':
-            esc = '\\t';
-            break;
-        case '\v':
-            esc = '\\v';
-            break;
-        default:
-            esc = char;
+JSCompiler.prototype.escape = function(string) {
+    // make sure string is a string
+    string += '';
+    var len = string.length, i = 0, char, escaped = '', safe_chars = 
+        ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
+        "%&'()*+,-./:;<=>?@[]^_`{|}~";
+    while (len > i) {
+        char = string.charAt(i++);
+        if (safe_chars.indexOf(char) === -1) {
+            escaped += '\\u' + (char.charCodeAt(0) | 0x10000)
+                .toString(16).substring(1);
+        } else {
+            escaped += char;
         }
-        result += esc;
     }
-    return result;
+    return escaped;
 };

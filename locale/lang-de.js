@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-02-22', // this, too, will appear in the Translators tab
+        '2022-03-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -561,6 +561,8 @@ SnapTranslator.dict.de = {
         'stoppe %stopChoices',
     'all':
         'alle',
+    'all scenes':
+        'alle Szenen',
     'this script':
         'dieses Skript',
     'this block':
@@ -729,12 +731,22 @@ SnapTranslator.dict.de = {
         '%block von Block %repRing',
     'definition':
         'Definition',
+    'category':
+        'Kategorie',
     'custom?':
         'benutzerdefiniert?',
     'global?':
         'global?',
 
     // operators:
+    'sum':
+        'Summe',
+    'product':
+        'Produkt',
+    'minimum':
+        'Minimum',
+    'maximum':
+        'Maximum',
     '%n mod %n':
         '%n modulo %n',
     'round %n':
