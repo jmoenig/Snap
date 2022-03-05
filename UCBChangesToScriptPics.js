@@ -130,7 +130,7 @@ BlockMorph.prototype.userMenu = function () {
 				    name = top?.definition?.spec || top.selector;
 				bPart.splice(-12, 0, ...newChunk);
 				parts[1] = btoa(bPart.join(""));
-				this.saveFileAs(parts.join(','), 'image/png', name);
+				ide.saveFileAs(parts.join(','), 'image/png', name);
 			}
 		);
 	}
