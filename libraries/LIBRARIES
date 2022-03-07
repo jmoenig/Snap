@@ -18,6 +18,7 @@ speech_module.xml	Text to Speech	Output text using speech synthesis.
 animation_module.xml	Animation	Glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	Manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	Analyze, manipulate and generate sound samples.
+JStts2022.xml	Text to speach working in 2022
 frequency_distribution_module.xml	Frequency Distribution Analysis	Analyze data for frequency distribution
 localstorage_module.xml	Database	Persistent key-value storage across Snap! sessions in the same browser
 ~	~
