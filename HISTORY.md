@@ -1,7 +1,13 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
 
+## 7.3.0:
 * **New Features:**
     * variadic associative infix reporters
     * shift-click on STOP button to stop all scenes
@@ -14,12 +20,12 @@
 * **Notable Fixes:**
     * addressed security issues in the JIT-compiler, thanks, xBZZZZ!
     * animation library: fixed pen state for GLIDE, thanks, Brian!
-* **Documentation Updates:**
 * **Translation Updates:**
     * German
 
 ### 2022-03-07
 * blocks: refactored experimental export scripts feature
+* prepared v7.3.0
 
 ### 2022-03-04
 * scenes, objects, threads, gui: refactored STOP
