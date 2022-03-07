@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-04';
+modules.blocks = '2022-March-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3342,19 +3342,7 @@ BlockMorph.prototype.userMenu = function () {
     if (shiftClicked) {
         menu.addItem(
             'download script',
-            () => {
-                var ide = this.parentThatIsA(IDE_Morph),
-                    blockEditor = this.parentThatIsA(BlockEditorMorph);
-                if (!ide && blockEditor) {
-                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
-                }
-                if (ide) {
-                    ide.saveXMLAs(
-                        ide.serializer.serialize(top),
-                        top.selector + ' script',
-                        false);
-                }
-            },
+            () => top.exportScript(),
             'download this script\nas an XML file',
             new Color(100, 0, 0)
         );
@@ -3974,6 +3962,22 @@ BlockMorph.prototype.exportResultPic = function () {
             stage.threads.stopProcess(top);
             stage.threads.startProcess(top, receiver, false, true);
         }
+    }
+};
+
+// BlockMorph exporting a script
+
+BlockMorph.prototype.exportScript = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (ide) {
+        ide.saveXMLAs(
+            ide.serializer.serialize(this),
+            top.selector + ' script',
+            false);
     }
 };
 

@@ -18,6 +18,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-07
+* blocks: refactored experimental export scripts feature
+
 ### 2022-03-04
 * scenes, objects, threads, gui: refactored STOP
 * German translation update for "all scenes"
