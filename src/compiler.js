@@ -270,9 +270,9 @@ for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar(
         rcvr_var_name = target.constructor.name + '_prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            return ''.concat(rcvr, '.', selector, '.apply(', rcvr_var_name, ', [', args, '])');
+            return `${rcvr}.${selector}.apply(${rcvr_var_name}, [${args}])`;
         } else {
-            return ''.concat('current_process.', selector, '.apply(current_process, [', args, '])');
+            return `current_process.${selector}.apply(current_process, [${args}])`;
         }
     }
 };
@@ -348,6 +348,8 @@ JSCompiler.prototype.compileInput = function (inp) {
             return 'decodeURIComponent("' + encoded_text + '")';
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
+        case 'color':
+            return `Color.fromString(${value.toString()})`
         default:
             if (value instanceof Array) {
                  return '"' + value[0] + '"';
