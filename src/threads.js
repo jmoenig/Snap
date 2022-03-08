@@ -3920,6 +3920,9 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing instanceof Sound) {
         return 'sound';
     }
+    if (thing instanceof Color) {
+        return 'color'
+    }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
             return thing.expression.dataType();
