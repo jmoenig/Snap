@@ -61,6 +61,7 @@ function JSCompiler(aProcess) {
  	this.gensyms = null; // temp dictionary for parameter substitutions
   	this.implicitParams = null;
    	this.paramCount = null;
+    this.yield_enabled = false;
 }
 
 JSCompiler.prototype.toString = function () {
@@ -113,6 +114,9 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     }
 
     // compile using gensyms
+
+    SpriteMorph_prototype = this.process.receiver
+    current_process = this.process
 
     if (block instanceof CommandBlockMorph) {
         return Function.apply(
@@ -197,6 +201,9 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (body) {
             while_body = "\n" + this.compileSequence(body);
         }
+        if (!this.yield_enabled) {
+            throw "Forever loop requires 'yield' to be enabled";
+        }
         return "while (true) {\n" +
                     while_body + "\n" +
                     "yield;\n" +
@@ -213,9 +220,13 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (body) {
             repeat_body = "\n" + this.compileSequence(body);
         }
+        var yield_keyword = ""
+        if (this.yield_enabled) {
+            yield_keyword = "yield;\n"
+        }
         return "for (let i = 0; i < " + counter + "; i++) {\n" +
                     repeat_body + "\n" + 
-                    "yield;\n" +
+                    yield_keyword +
                 "}";
     case 'doFor':
         var upvar, start, end, pre_body;
@@ -233,11 +244,15 @@ JSCompiler.prototype.compileExpression = function (block) {
         }
         // vars.changeVar(upvar, dta.step);
         var proc_vars = "current_process.context.variables"
+        var yield_keyword = ""
+        if (this.yield_enabled) {
+            yield_keyword = "yield;"
+        }
         return `${proc_vars}.addVar("${upvar}");
 for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar("${upvar}") ${test_sign} ${end}; ${proc_vars}.changeVar("${upvar}", ${step})) {
     current_process.pushContext(null, current_process.context);
     ${for_body}
-    yield;
+    ${yield_keyword}
     current_process.popContext();
 }`;
     default:
@@ -263,6 +278,7 @@ for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar(
 };
 
 JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
+    this.yield_enabled = true;
     var body = this.compileSequence(commandBlock);
     return "function* (SpriteMorph_prototype, current_process) {\n" + body + "}\n";
 };
