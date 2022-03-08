@@ -360,6 +360,7 @@ MicroWorld.prototype.enter = function () {
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
     this.updateSerializeFunction();
+    this.updateLoadFunctions();
     this.updateFreshPaletteFunction();
 
     this.addBeButtonFunction();
@@ -454,6 +455,33 @@ MicroWorld.prototype.blocksToButtons = function(undo) {
         }
     })
 }
+
+MicroWorld.prototype.updateLoadFunctions = function() {
+
+    if(!IDE_Morph.prototype.oldRawOpenProjectString) {
+        IDE_Morph.prototype.oldRawOpenProjectString = IDE_Morph.prototype.rawOpenProjectString;
+        IDE_Morph.prototype.rawOpenProjectString = function(str) {
+            if(currentMicroworld() && currentMicroworld().isActive){
+                currentMicroworld().escape();
+                this.oldRawOpenProjectString(str);
+            }
+        }
+    }
+
+    if(!IDE_Morph.prototype.oldRawOpenCloudDataString) {
+        IDE_Morph.prototype.oldRawOpenCloudDataString = IDE_Morph.prototype.rawOpenCloudDataString;
+        IDE_Morph.prototype.rawOpenCloudDataString = function(str) {
+            if(currentMicroworld() && currentMicroworld().isActive){
+                currentMicroworld().escape();
+                this.oldRawOpenCloudDataString(str);
+            }
+        }
+    }
+
+
+}
+
+
 
 MicroWorld.prototype.updateSerializeFunction = function() {
     var ide = this.ide;
