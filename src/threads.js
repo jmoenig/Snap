@@ -1704,7 +1704,13 @@ Process.prototype.compile = function (codeBlockName, body, gen_cont) {
                 var compiler = new JSCompiler(this);
                 var compiled_js = compiler.compileWithSpriteProcessContext(body);
                 console.log(compiled_js);
-                eval("compiledFunctions.set(\"" + codeBlockName + "\", " + compiled_js + ")");
+                encoded_text = encodeURIComponent(codeBlockName);
+                // If no changes, then no special characters used
+                if (encoded_text == codeBlockName) {
+                    eval(`compiledFunctions.set("${codeBlockName}", ${compiled_js})`);
+                } else {
+                    eval(`compiledFunctions.set(decodeURIComponent("${encoded_text}"), ${compiled_js})`);
+                }
             }
             gen_code = compiledFunctions.get(codeBlockName)(this.receiver, this);
         } catch (error) {
