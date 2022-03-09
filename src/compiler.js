@@ -61,7 +61,7 @@ function JSCompiler(aProcess) {
  	this.gensyms = null; // temp dictionary for parameter substitutions
   	this.implicitParams = null;
    	this.paramCount = null;
-    this.yield_enabled = false;
+    this.yield_enabled = true; // TODO
 }
 
 JSCompiler.prototype.toString = function () {
@@ -196,16 +196,27 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileSequence(inputs[2].evaluate()) +
             '}';
     case 'doForever':
+        if (!this.yield_enabled) {
+            throw "Forever loop requires 'yield' to be enabled";
+        }
         var body = inputs[0].inputs()[0];
         var while_body = "";
         if (body) {
             while_body = "\n" + this.compileSequence(body);
         }
-        if (!this.yield_enabled) {
-            throw "Forever loop requires 'yield' to be enabled";
-        }
         return "while (true) {\n" +
                     while_body + "\n" +
+                    "yield;\n" +
+               "}";
+    case 'doUntil':
+        var goalCondition = this.compileInput(inputs[0]);
+        var body = inputs[1].inputs()[0];
+        var loop_body = "";
+        if (body) {
+            loop_body = "\n" + this.compileSequence(body);
+        }
+        return `while (!(${goalCondition})) {\n` +
+                    loop_body + "\n" +
                     "yield;\n" +
                "}";
     case 'doRepeat':
@@ -220,7 +231,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (body) {
             repeat_body = "\n" + this.compileSequence(body);
         }
-        var yield_keyword = ""
+        var yield_keyword = "";
         if (this.yield_enabled) {
             yield_keyword = "yield;\n"
         }
@@ -228,6 +239,50 @@ JSCompiler.prototype.compileExpression = function (block) {
                     repeat_body + "\n" + 
                     yield_keyword +
                 "}";
+    case 'doWaitUntil':
+        var goalCondition = this.compileInput(inputs[0]);
+        return `while (!(${goalCondition})) {\n` +
+                    "yield;\n" +
+               "}";
+    case 'doForEach':
+        var upvar, list, pre_body;
+        [upvar, list, pre_body] = inputs;
+        upvar = upvar.inputs()[0].blockSpec;
+
+        var assignment_to_code_list;
+        
+        list = this.compileInput(list);
+        
+        assignment_to_code_list = list;
+
+        var body = pre_body.inputs()[0];
+        
+        var for_body = "";
+        if (body) {
+            for_body = this.compileSequence(body);
+        }
+        // vars.changeVar(upvar, dta.step);
+        var proc_vars = "current_process.context.variables"
+        var yield_keyword = ""
+        if (this.yield_enabled) {
+            yield_keyword = "yield;"
+        }
+        return `${proc_vars}.addVar("${upvar}");
+let list = ${assignment_to_code_list};
+current_process.assertType(list, 'list');
+let list_size = list.length();
+for (let i = 1; i <= list_size; i++) {
+    if (list.isLinked) {
+        ${proc_vars}.setVar("${upvar}", list.at(1));
+        list = list.cdr();
+    } else {
+        ${proc_vars}.setVar("${upvar}", list.at(i));
+    }
+    current_process.pushContext(null, current_process.context);
+    ${for_body}
+    ${yield_keyword}
+    current_process.popContext();
+}`;
     case 'doFor':
         var upvar, start, end, pre_body;
         [upvar, start, end, pre_body] = inputs;
@@ -340,7 +395,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             return '' + value;
         case 'text':
             // enclose in double quotes
-            encoded_text = encodeURIComponent(value)
+            let encoded_text = encodeURIComponent(value)
             // If no changes, then no special characters used
             if (encoded_text == value) {
                 return '"' + value + '"';
@@ -367,9 +422,15 @@ JSCompiler.prototype.compileInput = function (inp) {
             	return this.gensyms[inp.blockSpec];
         	}
          	// redirect var query to process
-            return 'current_process.getVarNamed("' +
-            	inp.blockSpec +
-            	'")';
+            let encoded_var_name = encodeURIComponent(inp.blockSpec)
+            // If no changes, then no special characters used
+            let var_name = inp.blockSpec
+            if (encoded_var_name == inp.blockSpec) {
+                var_name = '"' + inp.blockSpec + '"';
+            } else {
+                var_name = 'decodeURIComponent("' + encoded_var_name + '")'
+            }
+            return `current_process.getVarNamed(${var_name})`;
         }
         return this.compileExpression(inp);
     } else {
