@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-04';
+modules.objects = '2022-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -10352,11 +10352,11 @@ Costume.prototype.center = function () {
 };
 
 Costume.prototype.width = function () {
-    return this.contents.width;
+    return this.contents ? this.contents.width : 0;
 };
 
 Costume.prototype.height = function () {
-    return this.contents.height;
+    return this.contents ? this.contents.height : 0;
 };
 
 Costume.prototype.bounds = function () {
