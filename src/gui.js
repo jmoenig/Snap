@@ -5715,7 +5715,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             this.stage.replaceDoubleDefinitionsFor(def);
         });
         blocks.local.forEach(def => {
-            def.receiver = this.stage;
+            def.receiver = this.currentSprite;
             this.currentSprite.customBlocks.push(def);
             this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
@@ -5726,7 +5726,11 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             2
         );
     } else {
-        new BlockImportDialogMorph(blocks, this.stage, name).popUp();
+        new BlockImportDialogMorph(
+            blocks.global.concat(blocks.local),
+            this.stage,
+            name
+        ).popUp();
     }
     this.createCategories();
     this.categories.refreshEmpty();

@@ -4422,10 +4422,16 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
     var ide = this.target.parentThatIsA(IDE_Morph);
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        this.blocks.forEach(def => { // +++ under construction
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
+        this.blocks.forEach(def => {
+            if (def.isGlobal) {
+                def.receiver = ide.stage;
+                ide.stage.globalBlocks.push(def);
+                ide.stage.replaceDoubleDefinitionsFor(def);
+            } else {
+                def.receiver = ide.currentSprite;
+                ide.currentSprite.customBlocks.push(def);
+                ide.currentSprite.replaceDoubleDefinitionsFor(def);
+            }
         });
         ide.flushPaletteCache();
         ide.categories.refreshEmpty();
