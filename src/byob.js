@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-February-17';
+modules.byob = '2022-March-09';
 
 // Declarations
 
@@ -598,10 +598,12 @@ CustomBlockDefinition.prototype.collectDependencies = function (
     excluding = [],
     result = []
 ) {
+/* // +++ under construction
     if (!this.isGlobal) {
         throw new Error('collecting dependencies is only supported\n' +
             'for global custom blocks');
     }
+*/
     excluding.push(this);
     this.scripts.concat(
         this.body ? [this.body.expression] : []
@@ -1277,13 +1279,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 "duplicate block definition...",
                 'duplicateBlockDefinition'
             );
-            if (this.isGlobal) {
-                menu.addItem(
-                    "export block definition...",
-                    'exportBlockDefinition',
-                    'including dependencies'
-                );
-            }
+            menu.addItem(
+                "export block definition...",
+                'exportBlockDefinition',
+                'including dependencies'
+            );
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal ||
@@ -1308,10 +1308,12 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide = this.parentThatIsA(IDE_Morph),
+        def = this.isGlobal ? this.definition
+            : this.scriptTarget().getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
-        [this.definition].concat(this.definition.collectDependencies()),
+        [def].concat(def.collectDependencies()),
         ide
     ).popUp(this.world());
 };
@@ -4304,17 +4306,22 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks, true), // for library
-        ide = this.world().children[0];
+    var globals = this.blocks.filter(def => def.isGlobal),
+        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
+        locals = this.blocks.filter(def => !def.isGlobal),
+        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        ide = this.world().children[0],
+        str;
 
-    if (this.blocks.length > 0) {
+    if (this.blocks.length) {
         str = '<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + this.paletteXML()
-            + str
+            + (globals.length ? glbStr : '')
+            + (locals.length ? ('<local>' + locStr + '</local>') : '')
             + '</blocks>';
         ide.saveXMLAs(
             str,
@@ -4415,7 +4422,7 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
     var ide = this.target.parentThatIsA(IDE_Morph);
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        this.blocks.forEach(def => {
+        this.blocks.forEach(def => { // +++ under construction
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);

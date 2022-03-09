@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * export / import sprite-local custom block definitions, under construction
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -9,6 +10,7 @@
 
 ### 2022-03-09
 * new dev version
+* byob, store, gui: export / import sprite-local custom block definitions, under construction
 
 ## 7.3.0:
 * **New Features:**

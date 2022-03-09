@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-01';
+modules.store = '2022-March-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -661,7 +661,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
-    // public - answer a new Array of custom block definitions
+    // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
     var stage, model;
 
@@ -679,18 +679,22 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
         );
     }
     model.removeChild(model.palette);
-    this.loadCustomBlocks(stage, model, true);
-    this.populateCustomBlocks(
-        stage,
-        model,
-        true
-    );
+    this.loadCustomBlocks(stage, model, true); // global
+    this.populateCustomBlocks(stage, model, true); // global
+    model.local = model.childNamed('local');
+    if (model.local) {
+        this.loadCustomBlocks(stage, model.local, false); // not global
+        this.populateCustomBlocks( stage, model.local, false); // not global
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
     this.scene = new Scene();
     this.mediaDict = {};
-    return stage.globalBlocks;
+    return {
+        global : stage.globalBlocks,
+        local : stage.customBlocks
+    };
 };
 
 SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
