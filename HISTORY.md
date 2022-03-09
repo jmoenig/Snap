@@ -12,6 +12,7 @@
 * new dev version
 * byob, store, gui: export / import sprite-local custom block definitions, under construction
 * byob, gui: adapted library import dialog to the new format
+* byob: added collecting dependencies for sprite-local custom blocks
 
 ## 7.3.0:
 * **New Features:**

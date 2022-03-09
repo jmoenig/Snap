@@ -595,27 +595,31 @@ CustomBlockDefinition.prototype.purgeCorpses = function () {
 // CustomBlockDefinition dependencies
 
 CustomBlockDefinition.prototype.collectDependencies = function (
-    excluding = [],
-    result = []
+    excluding,
+    result,
+    localReceiver // optional when exporting sprite-local blocks
 ) {
-/* // +++ under construction
-    if (!this.isGlobal) {
-        throw new Error('collecting dependencies is only supported\n' +
-            'for global custom blocks');
+    if (!this.isGlobal && !localReceiver) {
+        throw new Error('cannot collect dependencies for local\n' +
+            'custom blocks of an unspecified sprite');
     }
-*/
     excluding.push(this);
     this.scripts.concat(
         this.body ? [this.body.expression] : []
     ).forEach(script => {
         script.forAllChildren(morph => {
-            if (morph.isCustomBlock &&
-                morph.isGlobal &&
-                !contains(excluding, morph.definition) &&
-                !contains(result, morph.definition)
-            ) {
-                result.push(morph.definition);
-                morph.definition.collectDependencies(excluding, result);
+            var def;
+            if (morph.isCustomBlock) {
+                def = morph.isGlobal ? morph.definition
+                    : localReceiver.getMethod(morph.blockSpec);
+                if (!contains(excluding, def) && !contains(result, def)) {
+                    result.push(def);
+                    def.collectDependencies(
+                        excluding,
+                        result,
+                        localReceiver
+                    );
+                }
             }
         });
     });
@@ -1309,11 +1313,12 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     var ide = this.parentThatIsA(IDE_Morph),
+        rcvr = this.scriptTarget(),
         def = this.isGlobal ? this.definition
-            : this.scriptTarget().getMethod(this.blockSpec);
+            : rcvr.getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
-        [def].concat(def.collectDependencies()),
+        [def].concat(def.collectDependencies([], [], rcvr)),
         ide
     ).popUp(this.world());
 };
