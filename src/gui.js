@@ -9160,7 +9160,6 @@ LibraryImportDialogMorph.prototype.cachedPalette = function (key) {
     return this.libraryCache.get(key).palette;
 };
 
-
 LibraryImportDialogMorph.prototype.importLibrary = function () {
     if (!this.listField.selected) {return; }
 
@@ -9172,7 +9171,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
     if (this.hasCached(selectedLibrary)) {
-        console.log('Loading from cache: ', this.libraryCache)
         blocks = this.cachedLibrary(selectedLibrary);
         blocks.forEach(def => {
             def.receiver = ide.stage;
