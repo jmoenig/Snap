@@ -86,9 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-22';
+modules.gui = '2022-March-10';
 
 // Declarations
+
+var SnapVersion = '7.3.1-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -688,6 +690,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
+    this.warnAboutDev();
 };
 
 // IDE_Morph construction
@@ -1257,6 +1260,8 @@ IDE_Morph.prototype.createControlBar = function () {
         scene = myself.scenes.at(1) !== myself.scene ?
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
+        document.title = "Snap! " +
+            (myself.getProjectName() ? name : SnapVersion);
         txt = new StringMorph(
             prefix + name +  scene + suffix,
             14,
@@ -2829,14 +2834,12 @@ IDE_Morph.prototype.isPaused = function () {
 };
 
 IDE_Morph.prototype.stopAllScripts = function () {
-    if (this.stage.enableCustomHatBlocks) {
-        this.stage.threads.pauseCustomHatBlocks =
-            !this.stage.threads.pauseCustomHatBlocks;
+    if (this.world().currentKey === 16) { // shiftClicked
+        this.scenes.map(scn => scn.stop(true));
     } else {
-        this.stage.threads.pauseCustomHatBlocks = false;
+        this.scene.stop();
     }
     this.controlBar.stopButton.refresh();
-    this.stage.fireStopAllEvent();
 };
 
 IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
@@ -4775,7 +4778,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 7.2.1\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2008-2022 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5706,10 +5709,15 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks = this.serializer.loadBlocks(str, this.stage);
     }
     if (silently) {
-        blocks.forEach(def => {
+        blocks.global.forEach(def => {
             def.receiver = this.stage;
             this.stage.globalBlocks.push(def);
             this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -5718,7 +5726,11 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             2
         );
     } else {
-        new BlockImportDialogMorph(blocks, this.stage, name).popUp();
+        new BlockImportDialogMorph(
+            blocks.global.concat(blocks.local),
+            this.stage,
+            name
+        ).popUp();
     }
     this.createCategories();
     this.categories.refreshEmpty();
@@ -5900,8 +5912,8 @@ IDE_Morph.prototype.switchToScene = function (
     if (!scene || !scene.stage) {
         return;
     }
-    this.siblings().forEach(morph =>
-        morph.destroy()
+    this.siblings().filter(morph => morph.key !== 'Dev-Warning').forEach(
+        morph => morph.destroy()
     );
     this.scene.captureGlobalSettings();
     this.scene = scene;
@@ -7454,6 +7466,24 @@ IDE_Morph.prototype.warnAboutIE = function () {
 IDE_Morph.prototype.isIE = function () {
     var ua = navigator.userAgent;
     return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+};
+
+// IDE_Morph warn about saving project in the dev version
+
+IDE_Morph.prototype.warnAboutDev = function () {
+    if (!SnapVersion.includes('-dev')) {
+        return;
+    }
+    this.inform(
+        "CAUTION! Development Version",
+        'This version of Snap! is being developed.\n' +
+            '*** It is NOT supported for end users. ***\n' +
+            'Saving a project in THIS version is likely to\n' +
+            'make it UNUSABLE or DEFECTIVE for current and\n' +
+            'even future official versions!\n\n' +
+            'visit https://snap.berkeley.edu/run\n' +
+            'for the official Snap! installation.'
+    );
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

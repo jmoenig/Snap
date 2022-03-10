@@ -3253,28 +3253,27 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
   'SciS_drawGraph(amatrix,vlist,cAttributes,vAttributes,lAttributes,oldCostume)',
-  function (amatrix, vlist, cAttributes, vAttributes, lAttributes,oldCostume) {
+  function (amatrix, vlist, cAttributes, vAttributes, lAttributes, oldCostume) {
     var costume = new Costume(), ctx = costume.contents.getContext('2d'), c, row, anz,
       w = Number(cAttributes.at(1)), h = Number(cAttributes.at(2)), v1, v2, x1, y1, x2, y2, n = amatrix.length(), label, textheight,
       weight, directed, marked, showWeights, xp, yp, alpha, l, dx, dy, dl, size, minsize = Number(vAttributes.at(2)), growing = vAttributes.at(3);
 //create new costume or take old one
-  //create new costume or take old one
-  if(oldCostume==="null"){ 
-    costume.contents.width = w;
-    costume.contents.height = h;
-    ctx.beginPath();
-    ctx.fillStyle = new Color(cAttributes.at(3), cAttributes.at(4), cAttributes.at(5)).toString();
-    ctx.strokeStyle = new Color(0, 0, 0).toString();
-    ctx.fillRect(0, 0, w, h);
-    ctx.strokeRect(0, 0, w, h);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    costume.rotationCenter = new Point(w / 2, h / 2);
-    }
-  else{
-    costume = oldCostume;
-    ctx = costume.contents.getContext('2d');   
+    //create new costume or take old one
+    if (oldCostume === "null") {
+      costume.contents.width = w;
+      costume.contents.height = h;
+      ctx.beginPath();
+      ctx.fillStyle = new Color(cAttributes.at(3), cAttributes.at(4), cAttributes.at(5)).toString();
+      ctx.strokeStyle = new Color(0, 0, 0).toString();
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeRect(0, 0, w, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      costume.rotationCenter = new Point(w / 2, h / 2);
+    } else {
+      costume = oldCostume;
+      ctx = costume.contents.getContext('2d');
     }
 
 //count edges per vertex an set size per vertex
@@ -4317,6 +4316,150 @@ SnapExtensions.primitives.set(
   }
 );
 
+SnapExtensions.primitives.set(
+  'SciS_FFTops(data,freq,choice)',
+  function (data, freq, choice) {
+    function newComplex(re, im) {
+      return [re, im];
+    }
+    function addComplex(c1, c2) {
+      return newComplex(c1[0] + c2[0], c1[1] + c2[1]);
+    }
+    function subComplex(c1, c2) {
+      return newComplex(c1[0] - c2[0], c1[1] - c2[1]);
+    }
+    function mulComplex(c1, c2) {
+      return newComplex(c1[0] * c2[0] - c1[1] * c2[1], c1[0] * c2[1] + c1[1] * c2[0]);
+    }
+    function absComplex(c) {
+      return Math.sqrt(c[0] * c[0] + c[1] * c[1]);
+    }
+    function complexToPolar(c) {
+      return newComplex(absComplex(c), Math.atan(c[1] / c[0]));
+    }
+    function polarToComplex(c) {
+      return newComplex(c[0] * Math.cos(c[1]), c[0] * Math.sin(c[1]));
+    }
+
+    function FFT(d) {
+      var n = d.length, nDIV2 = n / 2, even = [], odd = [], result = [], evenPart, oddPart;
+      if (n <= 1)
+        return d;
+      for (var i = 0; i < n; i++) {
+        result.push(0);
+      }
+      for (var i = 0; i < nDIV2; i++) {
+        even.push(d[2 * i]);
+        odd.push(d[2 * i + 1]);
+      }
+      evenPart = FFT(even);
+      oddPart = FFT(odd);
+      f = -2 * Math.PI / n;
+      for (var k = 0; k < nDIV2; k++) {
+        g = mulComplex(newComplex(Math.cos(f * k), Math.sin(f * k)), oddPart[k]);
+        result[k] = addComplex(evenPart[k], g);
+        result[k + nDIV2] = subComplex(evenPart[k], g);
+      }
+      return result;
+    }
+
+    var rData = [], cData = [], N = 0, result, maxLength = data.length(), n;
+
+    if (choice === "frequency_spectrum") {
+      rData = data.asArray();
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push(0);
+      }
+      //convert to complex numbers
+      for (var i = 0; i < rData.length; i++) {
+        cData.push([Number(rData[i]), Number(0)]);
+      }
+      //calculate FFT
+      result = FFT(cData);
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //calculate normalized FFT data
+      n = cData.length;
+      for (var i = 0; i < result.length; i++) {
+        result[i] = [1.0 * i / n * freq, 2 * absComplex(result[i]) / maxLength];
+      }
+      result[0][1] = result[0][1] / 2;
+      //convert to List
+      for (var i = 0; i < result.length; i++) {
+        result[i] = new List(result[i]);
+      }
+      return new List(result);
+    }
+
+
+    if (choice === 'complex_FFTdata') {
+      rData = data.asArray();
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push(0);
+      }
+      //convert to complex numbers
+      for (var i = 0; i < rData.length; i++) {
+        cData.push([Number(rData[i]), Number(0)]);
+      }
+      //calculate FFT
+      result = FFT(cData);
+      //use SciSnap! format for complex numbers
+      for (var i = 0; i < result.length; i++) {
+        result[i] = ["complexNumberCartesianStyle", result[i][0], result[i][1]];
+      }
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //convert to List
+      for (var i = 0; i < result.length; i++) {
+        result[i] = new List(result[i]);
+      }
+      return new List(result);
+    }
+
+
+    if (choice === 'iFFT_of_FFTdata') {
+      //convert data to conjugate complex array
+      for (var i = 1; i <= data.length(); i++) {
+        rData.push([data.at(i).at(1), -data.at(i).at(2)]);
+      }
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push([0, 0]);
+      }
+      //calculate FFT
+      result = FFT(rData);
+      n = result.length;
+      for (var i = 0; i < n; i++) {
+        result[i] = result[i][0] / n;
+      }
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //convert to List
+      return new List(result);
+    }
+
+    return "ERROR: incorrect selection!";
+
+  }
+);
+
 
 
 
@@ -4329,6 +4472,17 @@ SnapExtensions.primitives.set(
  );
  
  */
+
+
+
+
+
+
+
+
+
+
+
 
 
 

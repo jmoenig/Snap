@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-February-22';
+modules.objects = '2022-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1099,10 +1099,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportSum: {
+        reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n + %n'
+            spec: '%sum',
+            alias: '+'
         },
         reportDifference: {
             type: 'reporter',
@@ -1110,10 +1111,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        reportProduct: {
+        reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u00D7 %n',
+            spec: '%product',
             alias: '*'
         },
         reportQuotient: {
@@ -1147,15 +1148,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n ÷ %n'
         },
-        reportMin: {
+        reportVariadicMin: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n min %n'
+            spec: '%min',
+            alias: 'min'
         },
-        reportMax: {
+        reportVariadicMax: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n max %n'
+            spec: '%max',
+            alias: 'max'
         },
         reportRandom: {
             type: 'reporter',
@@ -1431,7 +1434,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCrossproduct: { // as relabel option for "append"
             type: 'reporter',
             category: 'lists',
-            spec: 'crossproduct %lists'
+            spec: 'combinations %lists'
         },
         reportTranspose: { // deprecated
             type: 'reporter',
@@ -1681,6 +1684,22 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doSend: {
             selector: 'doBroadcast',
             expand: 1
+        },
+        reportSum: {
+            selector: 'reportVariadicSum',
+            variadic: true
+        },
+        reportProduct: {
+            selector: 'reportVariadicProduct',
+            variadic: true
+        },
+        reportMin: {
+            selector: 'reportVariadicMin',
+            variadic: true
+        },
+        reportMax: {
+            selector: 'reportVariadicMax',
+            variadic: true
         }
     };
 };
@@ -1774,29 +1793,33 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMouseY: ['reportMouseX'],
 
     // operators:
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportModulus: ['reportAtan2', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportAtan2: ['reportModulus', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportMin: ['reportMax', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
-    reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportDifference: ['reportVariadicSum', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicProduct: ['reportDifference', 'reportVariadicSum',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportQuotient: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportPower: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportQuotient', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportModulus: ['reportAtan2', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportAtan2: ['reportModulus', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicMin: ['reportVariadicMax', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
         'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
@@ -2663,9 +2686,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -3578,7 +3601,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function parseInfix(expression, operator, already) {
-        // very basic diadic infix parser for arithmetic expressions
+        // very basic dyadic infix parser for arithmetic expressions
         // with strict left-to-right operator precedence (as in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
@@ -3667,13 +3690,13 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, target, selectors, monads, alias, key, sel, i, inps,
             off = 1,
             reverseDict = {};
         selectors = {
-            '+': 'reportSum',
+            '+': 'reportVariadicSum',
             '-': 'reportDifference',
-            '*': 'reportProduct',
+            '*': 'reportVariadicProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
@@ -3707,18 +3730,24 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
+            target = block;
         } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            target = block;
             inps = block.inputs();
+            if (inps[0] instanceof MultiArgMorph) { // infix sum or product
+                target = inps[0];
+                inps = target.inputs();
+            }
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                block.replaceInput(inps[i - off], blockFromAST(ast[i]));
+                target.replaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3726,7 +3755,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
@@ -3735,6 +3764,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[i - off].setContents(ast[i]);
             }
         }
+        target.fixLayout();
         block.isDraggable = true;
         block.fixLayout();
         block.fixBlockColor(null, true);
@@ -3794,6 +3824,10 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
+    if (costume && (!costume.width() || !costume.height())) {
+        costume = null;
+        idx = null;
+    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
@@ -8631,7 +8665,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'esc' && !ide.isAppMode) {
-        return this.fireStopAllEvent();
+        return ide.stopAllScripts();
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
@@ -8736,33 +8770,6 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         ide.controlBar.pauseButton.refresh();
     }
     return procs;
-};
-
-StageMorph.prototype.fireStopAllEvent = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-
-    this.threads.resumeAll(this.stage);
-
-    // experimental: run one step of a user-defined script
-    this.runStopScripts();
-
-    this.keysPressed = {};
-    this.threads.stopAll();
-    this.stopAllActiveSounds();
-    this.children.forEach(morph => {
-        if (morph.stopTalking) {
-            morph.stopTalking();
-        }
-    });
-    this.removeAllClones();
-    if (ide) {
-        ide.nextSteps([
-            nop,
-            () => this.stopAllActiveSounds(), // catch forever loops
-            () => this.stopProjection(),
-            () => ide.controlBar.pauseButton.refresh()
-        ]);
-    }
 };
 
 StageMorph.prototype.runStopScripts = function () {
@@ -9088,9 +9095,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -10345,11 +10352,11 @@ Costume.prototype.center = function () {
 };
 
 Costume.prototype.width = function () {
-    return this.contents.width;
+    return this.contents ? this.contents.width : 0;
 };
 
 Costume.prototype.height = function () {
-    return this.contents.height;
+    return this.contents ? this.contents.height : 0;
 };
 
 Costume.prototype.bounds = function () {

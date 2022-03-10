@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-January-02';
+modules.store = '2022-March-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -468,8 +468,11 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
             sel => {
+                var selector, migration;
                 if (sel) {
-                    scene.hiddenPrimitives[sel] = true;
+                    migration = SpriteMorph.prototype.blockMigrations[sel];
+                    selector = migration ? migration.selector : sel;
+                    scene.hiddenPrimitives[selector] = true;
                 }
             }
         );
@@ -658,7 +661,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
-    // public - answer a new Array of custom block definitions
+    // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
     var stage, model;
 
@@ -676,18 +679,22 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
         );
     }
     model.removeChild(model.palette);
-    this.loadCustomBlocks(stage, model, true);
-    this.populateCustomBlocks(
-        stage,
-        model,
-        true
-    );
+    this.loadCustomBlocks(stage, model, true); // global
+    this.populateCustomBlocks(stage, model, true); // global
+    model.local = model.childNamed('local');
+    if (model.local) {
+        this.loadCustomBlocks(stage, model.local, false); // not global
+        this.populateCustomBlocks( stage, model.local, false); // not global
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
     this.scene = new Scene();
     this.mediaDict = {};
-    return stage.globalBlocks;
+    return {
+        global : stage.globalBlocks,
+        local : stage.customBlocks
+    };
 };
 
 SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
@@ -1189,7 +1196,8 @@ SnapSerializer.prototype.loadComment = function (model) {
 SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     // private
     var block, info, inputs, isGlobal, receiver, migration,
-        migrationOffset = 0;
+        migrationOffset = 0,
+        migratoToVariadic = false;
 
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
@@ -1206,6 +1214,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             ];
             if (migration) {
                 migrationOffset = migration.offset || 0;
+                migratoToVariadic = migration.variadic;
             }
         }
     } else if (model.tag === 'custom-block') {
@@ -1265,7 +1274,24 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         } else if (child.tag === 'receiver') {
             nop(); // ignore
         } else {
-            this.loadInput(child, inputs[i + migrationOffset], block, object);
+            if (migratoToVariadic) {
+                // assume all formerly single inputs are now part of the first
+                // one which is variadic and already expanded to hold them
+                // example: migrate old infix addition to new variadic infix sum
+                this.loadInput(
+                    child,
+                    inputs[0].inputs()[i],
+                    inputs[0],
+                    object
+                );
+            } else {
+                this.loadInput(
+                    child,
+                    inputs[i + migrationOffset],
+                    block,
+                    object
+                );
+            }
         }
     });
     block.cachedInputs = null;
