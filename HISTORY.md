@@ -9,6 +9,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-03-10
+* gui: made dev-warning closeable and added official url 
+
 ### 2022-03-09
 * new dev version
 * byob, store, gui: export / import sprite-local custom block definitions, under construction
