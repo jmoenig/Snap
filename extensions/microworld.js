@@ -1,4 +1,4 @@
-// Update 2022-03-08
+// Update 2022-03-09
 var ide = world.children.find(child => {
         return child instanceof IDE_Morph;
     }),
@@ -464,8 +464,8 @@ MicroWorld.prototype.updateLoadFunctions = function() {
         IDE_Morph.prototype.rawOpenProjectString = function(str) {
             if(currentMicroworld() && currentMicroworld().isActive){
                 currentMicroworld().escape();
-                this.oldRawOpenProjectString(str);
             }
+            this.oldRawOpenProjectString(str);
         }
     }
 
@@ -474,8 +474,8 @@ MicroWorld.prototype.updateLoadFunctions = function() {
         IDE_Morph.prototype.rawOpenCloudDataString = function(str) {
             if(currentMicroworld() && currentMicroworld().isActive){
                 currentMicroworld().escape();
-                this.oldRawOpenCloudDataString(str);
             }
+            this.oldRawOpenCloudDataString(str);
         }
     }
 
