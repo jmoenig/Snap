@@ -1,7 +1,22 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * export / import sprite-local custom block definitions, under construction
+* **Notable Changes:**
+* **Notable Fixes:**
+    * guard against broken SVG costumes when loading a project
+* **Documentation Updates:**
+* **Translation Updates:**
 
+### 2022-03-09
+* new dev version
+* byob, store, gui: export / import sprite-local custom block definitions, under construction
+* byob, gui: adapted library import dialog to the new format
+* byob: added collecting dependencies for sprite-local custom blocks
+* objects: guard against broken SVG costumes when loading a project
+
+## 7.3.0:
 * **New Features:**
     * variadic associative infix reporters
     * shift-click on STOP button to stop all scenes
@@ -14,12 +29,12 @@
 * **Notable Fixes:**
     * addressed security issues in the JIT-compiler, thanks, xBZZZZ!
     * animation library: fixed pen state for GLIDE, thanks, Brian!
-* **Documentation Updates:**
 * **Translation Updates:**
     * German
 
 ### 2022-03-07
 * blocks: refactored experimental export scripts feature
+* prepared v7.3.0
 
 ### 2022-03-04
 * scenes, objects, threads, gui: refactored STOP
