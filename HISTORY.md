@@ -9,6 +9,7 @@
 * **Notable Fixes:**
     * guard against broken SVG costumes when loading a project
     * fixed an edge case for slot type inferral
+    * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -17,6 +18,7 @@
 * objects: added "combinations" primitive to the palette
 * moved "append", "reshape", "combinations" blocks down one group in the palette
 * incremented dev version
+* updated variadic reporters library, thanks, Brian
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
