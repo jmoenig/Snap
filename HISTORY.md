@@ -5,6 +5,7 @@
     * export / import sprite-local custom block definitions, under construction
     * added "combinations" primitive to the palette
 * **Notable Changes:**
+    * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
     * guard against broken SVG costumes when loading a project
     * fixed an edge case for slot type inferral
@@ -14,6 +15,7 @@
 ### 2022-03-11
 * blocks: fixed an edge case for slot type inferral
 * objects: added "combinations" primitive to the palette
+* moved "append", "reshape", "combinations" blocks down one group in the palette
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
