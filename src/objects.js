@@ -6978,6 +6978,11 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
         this.customBlocks = this.customBlocks.filter(def =>
             !contains(doubles, def)
         );
+        this.allDependentInvocationsOf(
+            definition.blockSpec()
+        ).reverse().forEach(
+            block => block.refresh(definition)
+        );
     }
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {

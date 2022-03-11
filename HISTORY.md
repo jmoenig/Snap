@@ -19,6 +19,7 @@
 * moved "append", "reshape", "combinations" blocks down one group in the palette
 * incremented dev version
 * updated variadic reporters library, thanks, Brian
+* objects: adjusted library-import for sprite-local blocks
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
