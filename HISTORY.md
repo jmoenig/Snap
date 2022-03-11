@@ -3,11 +3,26 @@
 ## in development:
 * **New Features:**
     * export / import sprite-local custom block definitions, under construction
+    * added "combinations" primitive to the palette
 * **Notable Changes:**
+    * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
     * guard against broken SVG costumes when loading a project
+    * fixed an edge case for slot type inferral
+    * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-03-11
+* blocks: fixed an edge case for slot type inferral
+* objects: added "combinations" primitive to the palette
+* moved "append", "reshape", "combinations" blocks down one group in the palette
+* incremented dev version
+* updated variadic reporters library, thanks, Brian
+* objects: adjusted library-import for sprite-local blocks
+
+### 2022-03-10
+* gui: made dev-warning closeable and added official url 
 
 ### 2022-03-09
 * new dev version

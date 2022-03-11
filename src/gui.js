@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-09';
+modules.gui = '2022-March-11';
 
 // Declarations
 
-var SnapVersion = '7.3.1-dev';
+var SnapVersion = '7.4.0-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -7471,34 +7471,19 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-    var dlg, txt;
     if (!SnapVersion.includes('-dev')) {
         return;
     }
-    dlg = new DialogBoxMorph();
-    txt = new TextMorph(
+    this.inform(
+        "CAUTION! Development Version",
         'This version of Snap! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
             'make it UNUSABLE or DEFECTIVE for current and\n' +
-            'even future official versions!',
-        dlg.fontSize,
-        dlg.fontStyle,
-        true,
-        false,
-        'center',
-        null,
-        null,
-        MorphicPreferences.isFlat ? null : new Point(1, 1),
-        WHITE
+            'even future official versions!\n\n' +
+            'visit https://snap.berkeley.edu/run\n' +
+            'for the official Snap! installation.'
     );
-
-    dlg.key = 'Dev-Warning';
-    dlg.labelString = "CAUTION! Development Version";
-    dlg.createLabel();
-    dlg.addBody(txt);
-    dlg.fixLayout();
-    dlg.popUp(this.world());
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

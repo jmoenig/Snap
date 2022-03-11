@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-07';
+modules.blocks = '2022-March-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6670,7 +6670,7 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
     if (this.parent instanceof TemplateSlotMorph) {
         return this.parent.getSpec();
     }
-    return null;
+    return '';
 };
 
 // ReporterBlockMorph events
