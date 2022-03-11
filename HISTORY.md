@@ -16,6 +16,7 @@
 * blocks: fixed an edge case for slot type inferral
 * objects: added "combinations" primitive to the palette
 * moved "append", "reshape", "combinations" blocks down one group in the palette
+* incremented dev version
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
