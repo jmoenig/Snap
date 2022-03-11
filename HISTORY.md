@@ -6,8 +6,12 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * guard against broken SVG costumes when loading a project
+    * fixed an edge case for slot type inferral
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2022-03-11
+* blocks: fixed an edge case for slot type inferral
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
