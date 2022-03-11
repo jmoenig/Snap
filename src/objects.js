@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-09';
+modules.objects = '2022-March-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1431,7 +1431,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
-        reportCrossproduct: { // as relabel option for "append"
+        reportCrossproduct: {
             type: 'reporter',
             category: 'lists',
             spec: 'combinations %lists'
@@ -2794,6 +2794,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -9197,6 +9198,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));

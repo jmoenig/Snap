@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * export / import sprite-local custom block definitions, under construction
+    * added "combinations" primitive to the palette
 * **Notable Changes:**
 * **Notable Fixes:**
     * guard against broken SVG costumes when loading a project
@@ -12,6 +13,7 @@
 
 ### 2022-03-11
 * blocks: fixed an edge case for slot type inferral
+* objects: added "combinations" primitive to the palette
 
 ### 2022-03-10
 * gui: made dev-warning closeable and added official url 
