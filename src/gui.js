@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-11';
+modules.gui = '2022-March-14';
 
 // Declarations
 
@@ -7387,6 +7387,41 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
             return request[rsp];
         }
     }
+};
+
+// IDE_Morph serialization helper ops
+
+IDE_Morph.prototype.blocksLibraryXML = function (definitions) {
+    // answer an XML string encoding of an array of CustomBlockDefinitions
+    var globals = definitions.filter(def => def.isGlobal),
+        locals = definitions.filter(def => !def.isGlobal),
+        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
+        locStr = locals.length ? this.serializer.serialize(locals, true) : '';
+
+    return '<blocks app="' +
+        this.serializer.app +
+        '" version="' +
+        this.serializer.version +
+        '">' +
+        this.paletteXML(definitions) +
+        (globals.length ? glbStr : '') +
+        (locals.length ? ('<local>' + locStr + '</local>') : '') +
+        '</blocks>';
+};
+
+IDE_Morph.prototype.paletteXML = function (definitions) {
+    // private - answer an XML string containing the palette information
+    // found in an array of CustomBlockDefinitions
+    var palette = new Map();
+    definitions.forEach(def => {
+        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+            palette.set(
+                def.category,
+                SpriteMorph.prototype.customCategories.get(def.category)
+            );
+        }
+    });
+    return this.serializer.paletteToXML(palette);
 };
 
 // IDE_Morph user dialog shortcuts

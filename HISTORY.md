@@ -13,6 +13,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-03-14
+* gui, byob: refactored library serialization
+
 ### 2022-03-11
 * blocks: fixed an edge case for slot type inferral
 * objects: added "combinations" primitive to the palette

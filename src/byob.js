@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-09';
+modules.byob = '2022-March-14';
 
 // Declarations
 
@@ -4311,25 +4311,11 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var globals = this.blocks.filter(def => def.isGlobal),
-        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
-        locals = this.blocks.filter(def => !def.isGlobal),
-        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
-        ide = this.world().children[0],
-        str;
+    var ide = this.world().children[0];
 
     if (this.blocks.length) {
-        str = '<blocks app="'
-            + this.serializer.app
-            + '" version="'
-            + this.serializer.version
-            + '">'
-            + this.paletteXML()
-            + (globals.length ? glbStr : '')
-            + (locals.length ? ('<local>' + locStr + '</local>') : '')
-            + '</blocks>';
         ide.saveXMLAs(
-            str,
+            ide.blocksLibraryXML(this.blocks),
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
@@ -4342,19 +4328,6 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
-};
-
-BlockExportDialogMorph.prototype.paletteXML = function () {
-    var palette = new Map();
-    this.blocks.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
-            palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
-            );
-        }
-    });
-    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout
