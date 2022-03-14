@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-11';
+modules.blocks = '2022-March-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3967,7 +3967,8 @@ BlockMorph.prototype.exportResultPic = function () {
 
 // BlockMorph exporting a script
 
-BlockMorph.prototype.exportScript = function () {
+/*
+BlockMorph.prototype.exportScript = function () { // +++
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph);
     if (!ide && blockEditor) {
@@ -3979,6 +3980,54 @@ BlockMorph.prototype.exportScript = function () {
             top.selector + ' script',
             false);
     }
+};
+*/
+
+BlockMorph.prototype.exportScript = function () { // +++
+    // assumes this is the script's top block
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        rcvr = this.scriptTarget(),
+        dependencies = [],
+        str;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    // collect custom block definitions referenced in this script:
+    this.forAllChildren(morph => {
+        var def;
+        if (morph.isCustomBlock) {
+            def = morph.isGlobal ? morph.definition
+                : rcvr.getMethod(morph.semanticSpec);
+            [def].concat(def.collectDependencies([], [], rcvr)).forEach(
+                fun => {
+                    if (!contains(dependencies, fun)) {
+                        dependencies.push(fun);
+                    }
+                }
+            );
+        }
+    });
+
+    str = '<stack app="' +
+        ide.serializer.app +
+        '" version="' +
+        ide.serializer.version +
+        '">' +
+        (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
+        ide.serializer.serialize(this) +
+        '</stack>';
+
+    ide.saveXMLAs(
+        str,
+        this.selector + ' script',
+        false
+    );
 };
 
 // BlockMorph syntax analysis

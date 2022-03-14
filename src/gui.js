@@ -7391,18 +7391,21 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
 
 // IDE_Morph serialization helper ops
 
-IDE_Morph.prototype.blocksLibraryXML = function (definitions) {
+IDE_Morph.prototype.blocksLibraryXML = function (definitions, asFile) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
     var globals = definitions.filter(def => def.isGlobal),
         locals = definitions.filter(def => !def.isGlobal),
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
-        locStr = locals.length ? this.serializer.serialize(locals, true) : '';
+        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        appStr = ' app="' +
+            this.serializer.app +
+            '" version="' +
+            this.serializer.version +
+            '"';
 
-    return '<blocks app="' +
-        this.serializer.app +
-        '" version="' +
-        this.serializer.version +
-        '">' +
+    return '<blocks' +
+        (asFile ? appStr : '' ) +
+        '>' +
         this.paletteXML(definitions) +
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +

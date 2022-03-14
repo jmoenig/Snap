@@ -4315,7 +4315,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 
     if (this.blocks.length) {
         ide.saveXMLAs(
-            ide.blocksLibraryXML(this.blocks),
+            ide.blocksLibraryXML(this.blocks, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'

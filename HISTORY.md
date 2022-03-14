@@ -15,6 +15,7 @@
 
 ### 2022-03-14
 * gui, byob: refactored library serialization
+* blocks, byob, gui: new format for exported scripts, under construction
 
 ### 2022-03-11
 * blocks: fixed an edge case for slot type inferral
