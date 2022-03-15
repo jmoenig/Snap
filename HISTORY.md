@@ -20,6 +20,7 @@
 * blocks: new "export script" feature (including dependencies)
 * blocks: tweaked "export scripts" for reporters
 * German translation update (for "export script" feature)
+* blocks: added BlockMorph >> toXMLString() api
 
 ### 2022-03-14
 * gui, byob: refactored library serialization

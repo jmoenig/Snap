@@ -3968,10 +3968,31 @@ BlockMorph.prototype.exportScript = function () {
     // assumes this is the script's top block
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
+        xml;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    xml = this.toXMLString();
+    if (xml) {
+        ide.saveXMLAs(
+            xml,
+            this.selector + ' script',
+            false
+        );
+    }
+};
+
+BlockMorph.prototype.toXMLString = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
         rcvr = this.scriptTarget(),
         dependencies = [],
-        isReporter = this instanceof ReporterBlockMorph,
-        str;
+        isReporter = this instanceof ReporterBlockMorph;
 
     if (!ide && blockEditor) {
         ide = blockEditor.target.parentThatIsA(IDE_Morph);
@@ -3996,7 +4017,7 @@ BlockMorph.prototype.exportScript = function () {
         }
     });
 
-    str = '<script app="' +
+    return '<script app="' +
         ide.serializer.app +
         '" version="' +
         ide.serializer.version +
@@ -4006,12 +4027,6 @@ BlockMorph.prototype.exportScript = function () {
         ide.serializer.serialize(this) +
         (isReporter ? '</script>' : '') +
         '</script>';
-
-    ide.saveXMLAs(
-        str,
-        this.selector + ' script',
-        false
-    );
 };
 
 // BlockMorph syntax analysis
