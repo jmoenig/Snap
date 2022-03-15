@@ -5939,7 +5939,7 @@ IDE_Morph.prototype.switchToScene = function (
     if (!scene || !scene.stage) {
         return;
     }
-    this.siblings().filter(morph => morph.key !== 'Dev-Warning').forEach(
+    this.siblings().forEach(
         morph => morph.destroy()
     );
     this.scene.captureGlobalSettings();
