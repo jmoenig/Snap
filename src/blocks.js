@@ -3970,6 +3970,7 @@ BlockMorph.prototype.exportScript = function () {
         blockEditor = this.parentThatIsA(BlockEditorMorph),
         rcvr = this.scriptTarget(),
         dependencies = [],
+        isReporter = this instanceof ReporterBlockMorph,
         str;
 
     if (!ide && blockEditor) {
@@ -4001,7 +4002,9 @@ BlockMorph.prototype.exportScript = function () {
         ide.serializer.version +
         '">' +
         (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
+        (isReporter ? '<script>' : '') +
         ide.serializer.serialize(this) +
+        (isReporter ? '</script>' : '') +
         '</script>';
 
     ide.saveXMLAs(

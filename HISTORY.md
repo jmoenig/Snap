@@ -17,6 +17,7 @@
 ### 2022-03-15
 * blocks, store, gui: deserialize new format for exported scripts
 * blocks: new "export script" feature (including dependencies)
+* blocks: tweaked "export scripts" for reporters
 
 ### 2022-03-14
 * gui, byob: refactored library serialization
