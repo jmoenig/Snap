@@ -13,6 +13,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2022-03-15
+* blocks, store, gui: deserialize new format for exported scripts
+
 ### 2022-03-14
 * gui, byob: refactored library serialization
 * blocks, byob, gui: new format for exported scripts, under construction

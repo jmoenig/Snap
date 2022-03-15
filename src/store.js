@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-09';
+modules.store = '2022-March-15';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -226,8 +226,7 @@ XML_Serializer.prototype.format = function (string) {
 // XML_Serializer loading:
 
 XML_Serializer.prototype.load = function (xmlString) {
-    // public - answer a new object which is represented by the given
-    // XML string.
+    // answer a new object which is represented by the given XML string.
     nop(xmlString);
     throw new Error(
         'loading should be implemented in heir of XML_Serializer'
@@ -663,15 +662,21 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
-    var stage, model;
+    var model = this.parse(xmlString);
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    return this.loadBlocksModel(model, targetStage);
+};
+
+SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
+    // public - answer a new dictionary of custom block definitions
+    // represented by the given already parsed XML Node
+    var stage;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
     stage = this.scene.stage;
-    model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
     model.palette = model.childNamed('palette');
     if (model.palette) {
         this.loadPalette(model.palette).forEach((value, key) =>
@@ -1147,6 +1152,16 @@ SnapSerializer.prototype.loadScriptsArray = function (model, object) {
         }
     });
     return scripts;
+};
+
+SnapSerializer.prototype.loadScriptModule = function (model, object) {
+    // return a new script represented by the given xml model,
+    // note: custom block definitions referenced here must be loaded before
+    var script;
+    this.scene = new Scene(object.parentThatIsA(StageMorph));
+    script = this.loadScript(model, object);
+    this.scene = new Scene();
+    return script;
 };
 
 SnapSerializer.prototype.loadScript = function (model, object) {

@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-14';
+modules.gui = '2022-March-15';
 
 // Declarations
 
@@ -5789,20 +5789,17 @@ IDE_Morph.prototype.openScriptString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var xml,
-        script,
-        scripts = this.currentSprite.scripts;
+    var scripts = this.currentSprite.scripts,
+        script;
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            xml = this.serializer.parse(str, this.currentSprite);
-            script = this.serializer.loadScript(xml, this.currentSprite);
+            script = this.deserializeScriptString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        xml = this.serializer.loadScript(str, this.currentSprite);
-        script = this.serializer.loadScript(xml, this.currentSprite);
+        script = this.deserializeScriptString(str);
     }
     script.setPosition(this.world().hand.position());
     scripts.add(script);
@@ -5819,6 +5816,36 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         'Imported Script.',
         2
     );
+};
+
+IDE_Morph.prototype.deserializeScriptString = function (str) {
+    var xml = this.serializer.parse(str, this.currentSprite),
+        blocksModel = xml.childNamed('blocks'),
+        scriptModel = xml.childNamed('script') || xml,
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the script depends on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
+        });
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.categories.refreshEmpty();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    return this.serializer.loadScriptModule(scriptModel, this.currentSprite);
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {

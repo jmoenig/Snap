@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-14';
+modules.blocks = '2022-March-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3967,23 +3967,7 @@ BlockMorph.prototype.exportResultPic = function () {
 
 // BlockMorph exporting a script
 
-/*
-BlockMorph.prototype.exportScript = function () { // +++
-    var ide = this.parentThatIsA(IDE_Morph),
-        blockEditor = this.parentThatIsA(BlockEditorMorph);
-    if (!ide && blockEditor) {
-        ide = blockEditor.target.parentThatIsA(IDE_Morph);
-    }
-    if (ide) {
-        ide.saveXMLAs(
-            ide.serializer.serialize(this),
-            top.selector + ' script',
-            false);
-    }
-};
-*/
-
-BlockMorph.prototype.exportScript = function () { // +++
+BlockMorph.prototype.exportScript = function () {
     // assumes this is the script's top block
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
@@ -4014,14 +3998,14 @@ BlockMorph.prototype.exportScript = function () { // +++
         }
     });
 
-    str = '<stack app="' +
+    str = '<script app="' +
         ide.serializer.app +
         '" version="' +
         ide.serializer.version +
         '">' +
         (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
         ide.serializer.serialize(this) +
-        '</stack>';
+        '</script>';
 
     ide.saveXMLAs(
         str,
