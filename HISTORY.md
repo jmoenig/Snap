@@ -13,11 +13,13 @@
     * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2022-03-15
 * blocks, store, gui: deserialize new format for exported scripts
 * blocks: new "export script" feature (including dependencies)
 * blocks: tweaked "export scripts" for reporters
+* German translation update (for "export script" feature)
 
 ### 2022-03-14
 * gui, byob: refactored library serialization
