@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-04';
+modules.gui = '2022-March-15';
 
 // Declarations
 
-var SnapVersion = '7.3.0-dev';
+var SnapVersion = '7.4.0-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5709,10 +5709,15 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks = this.serializer.loadBlocks(str, this.stage);
     }
     if (silently) {
-        blocks.forEach(def => {
+        blocks.global.forEach(def => {
             def.receiver = this.stage;
             this.stage.globalBlocks.push(def);
             this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -5721,7 +5726,11 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             2
         );
     } else {
-        new BlockImportDialogMorph(blocks, this.stage, name).popUp();
+        new BlockImportDialogMorph(
+            blocks.global.concat(blocks.local),
+            this.stage,
+            name
+        ).popUp();
     }
     this.createCategories();
     this.categories.refreshEmpty();
@@ -5780,20 +5789,17 @@ IDE_Morph.prototype.openScriptString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var xml,
-        script,
-        scripts = this.currentSprite.scripts;
+    var scripts = this.currentSprite.scripts,
+        script;
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            xml = this.serializer.parse(str, this.currentSprite);
-            script = this.serializer.loadScript(xml, this.currentSprite);
+            script = this.deserializeScriptString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        xml = this.serializer.loadScript(str, this.currentSprite);
-        script = this.serializer.loadScript(xml, this.currentSprite);
+        script = this.deserializeScriptString(str);
     }
     script.setPosition(this.world().hand.position());
     scripts.add(script);
@@ -5810,6 +5816,36 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         'Imported Script.',
         2
     );
+};
+
+IDE_Morph.prototype.deserializeScriptString = function (str) {
+    var xml = this.serializer.parse(str, this.currentSprite),
+        blocksModel = xml.childNamed('blocks'),
+        scriptModel = xml.childNamed('script') || xml,
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the script depends on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
+        });
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.categories.refreshEmpty();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    return this.serializer.loadScriptModule(scriptModel, this.currentSprite);
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
@@ -5903,7 +5939,7 @@ IDE_Morph.prototype.switchToScene = function (
     if (!scene || !scene.stage) {
         return;
     }
-    this.siblings().filter(morph => morph.key !== 'Dev-Warning').forEach(
+    this.siblings().forEach(
         morph => morph.destroy()
     );
     this.scene.captureGlobalSettings();
@@ -7380,6 +7416,44 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     }
 };
 
+// IDE_Morph serialization helper ops
+
+IDE_Morph.prototype.blocksLibraryXML = function (definitions, asFile) {
+    // answer an XML string encoding of an array of CustomBlockDefinitions
+    var globals = definitions.filter(def => def.isGlobal),
+        locals = definitions.filter(def => !def.isGlobal),
+        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
+        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        appStr = ' app="' +
+            this.serializer.app +
+            '" version="' +
+            this.serializer.version +
+            '"';
+
+    return '<blocks' +
+        (asFile ? appStr : '' ) +
+        '>' +
+        this.paletteXML(definitions) +
+        (globals.length ? glbStr : '') +
+        (locals.length ? ('<local>' + locStr + '</local>') : '') +
+        '</blocks>';
+};
+
+IDE_Morph.prototype.paletteXML = function (definitions) {
+    // private - answer an XML string containing the palette information
+    // found in an array of CustomBlockDefinitions
+    var palette = new Map();
+    definitions.forEach(def => {
+        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+            palette.set(
+                def.category,
+                SpriteMorph.prototype.customCategories.get(def.category)
+            );
+        }
+    });
+    return this.serializer.paletteToXML(palette);
+};
+
 // IDE_Morph user dialog shortcuts
 
 IDE_Morph.prototype.showMessage = function (message, secs) {
@@ -7462,34 +7536,19 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-    var dlg, txt;
     if (!SnapVersion.includes('-dev')) {
         return;
     }
-    dlg = new DialogBoxMorph();
-    txt = new TextMorph(
+    this.inform(
+        "CAUTION! Development Version",
         'This version of Snap! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
             'make it UNUSABLE or DEFECTIVE for current and\n' +
-            'even future official versions!',
-        dlg.fontSize,
-        dlg.fontStyle,
-        true,
-        false,
-        'center',
-        null,
-        null,
-        MorphicPreferences.isFlat ? null : new Point(1, 1),
-        WHITE
+            'even future official versions!\n\n' +
+            'visit https://snap.berkeley.edu/run\n' +
+            'for the official Snap! installation.'
     );
-
-    dlg.key = 'Dev-Warning';
-    dlg.labelString = "CAUTION! Development Version";
-    dlg.createLabel();
-    dlg.addBody(txt);
-    dlg.fixLayout();
-    dlg.popUp(this.world());
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////

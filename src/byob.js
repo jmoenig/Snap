@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-February-17';
+modules.byob = '2022-March-14';
 
 // Declarations
 
@@ -595,25 +595,31 @@ CustomBlockDefinition.prototype.purgeCorpses = function () {
 // CustomBlockDefinition dependencies
 
 CustomBlockDefinition.prototype.collectDependencies = function (
-    excluding = [],
-    result = []
+    excluding,
+    result,
+    localReceiver // optional when exporting sprite-local blocks
 ) {
-    if (!this.isGlobal) {
-        throw new Error('collecting dependencies is only supported\n' +
-            'for global custom blocks');
+    if (!this.isGlobal && !localReceiver) {
+        throw new Error('cannot collect dependencies for local\n' +
+            'custom blocks of an unspecified sprite');
     }
     excluding.push(this);
     this.scripts.concat(
         this.body ? [this.body.expression] : []
     ).forEach(script => {
         script.forAllChildren(morph => {
-            if (morph.isCustomBlock &&
-                morph.isGlobal &&
-                !contains(excluding, morph.definition) &&
-                !contains(result, morph.definition)
-            ) {
-                result.push(morph.definition);
-                morph.definition.collectDependencies(excluding, result);
+            var def;
+            if (morph.isCustomBlock) {
+                def = morph.isGlobal ? morph.definition
+                    : localReceiver.getMethod(morph.blockSpec);
+                if (!contains(excluding, def) && !contains(result, def)) {
+                    result.push(def);
+                    def.collectDependencies(
+                        excluding,
+                        result,
+                        localReceiver
+                    );
+                }
             }
         });
     });
@@ -1277,13 +1283,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 "duplicate block definition...",
                 'duplicateBlockDefinition'
             );
-            if (this.isGlobal) {
-                menu.addItem(
-                    "export block definition...",
-                    'exportBlockDefinition',
-                    'including dependencies'
-                );
-            }
+            menu.addItem(
+                "export block definition...",
+                'exportBlockDefinition',
+                'including dependencies'
+            );
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal ||
@@ -1308,10 +1312,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide = this.parentThatIsA(IDE_Morph),
+        rcvr = this.scriptTarget(),
+        def = this.isGlobal ? this.definition
+            : rcvr.getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
-        [this.definition].concat(this.definition.collectDependencies()),
+        [def].concat(def.collectDependencies([], [], rcvr)),
         ide
     ).popUp(this.world());
 };
@@ -4304,20 +4311,11 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks, true), // for library
-        ide = this.world().children[0];
+    var ide = this.world().children[0];
 
-    if (this.blocks.length > 0) {
-        str = '<blocks app="'
-            + this.serializer.app
-            + '" version="'
-            + this.serializer.version
-            + '">'
-            + this.paletteXML()
-            + str
-            + '</blocks>';
+    if (this.blocks.length) {
         ide.saveXMLAs(
-            str,
+            ide.blocksLibraryXML(this.blocks, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
@@ -4330,19 +4328,6 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
-};
-
-BlockExportDialogMorph.prototype.paletteXML = function () {
-    var palette = new Map();
-    this.blocks.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
-            palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
-            );
-        }
-    });
-    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout
@@ -4416,9 +4401,15 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
     if (!ide) {return; }
     if (this.blocks.length > 0) {
         this.blocks.forEach(def => {
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
+            if (def.isGlobal) {
+                def.receiver = ide.stage;
+                ide.stage.globalBlocks.push(def);
+                ide.stage.replaceDoubleDefinitionsFor(def);
+            } else {
+                def.receiver = ide.currentSprite;
+                ide.currentSprite.customBlocks.push(def);
+                ide.currentSprite.replaceDoubleDefinitionsFor(def);
+            }
         });
         ide.flushPaletteCache();
         ide.categories.refreshEmpty();

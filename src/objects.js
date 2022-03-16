@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-04';
+modules.objects = '2022-March-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1431,7 +1431,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
-        reportCrossproduct: { // as relabel option for "append"
+        reportCrossproduct: {
             type: 'reporter',
             category: 'lists',
             spec: 'combinations %lists'
@@ -2792,13 +2792,14 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
@@ -6977,6 +6978,11 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
         this.customBlocks = this.customBlocks.filter(def =>
             !contains(doubles, def)
         );
+        this.allDependentInvocationsOf(
+            definition.blockSpec()
+        ).reverse().forEach(
+            block => block.refresh(definition)
+        );
     }
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
@@ -9195,13 +9201,14 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
@@ -10352,11 +10359,11 @@ Costume.prototype.center = function () {
 };
 
 Costume.prototype.width = function () {
-    return this.contents.width;
+    return this.contents ? this.contents.width : 0;
 };
 
 Costume.prototype.height = function () {
-    return this.contents.height;
+    return this.contents ? this.contents.height : 0;
 };
 
 Costume.prototype.bounds = function () {

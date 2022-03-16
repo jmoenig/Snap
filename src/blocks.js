@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-04';
+modules.blocks = '2022-March-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2967,7 +2967,6 @@ BlockMorph.prototype.userMenu = function () {
         world = this.world(),
         myself = this,
         hasLine = false,
-        shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
         top = this.topBlock(),
         vNames = proc && proc.context && proc.context.outerContext ?
@@ -3314,6 +3313,7 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    menu.addLine();
     menu.addItem(
         "script pic...",
         () => {
@@ -3339,26 +3339,11 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    if (shiftClicked) {
-        menu.addItem(
-            'download script',
-            () => {
-                var ide = this.parentThatIsA(IDE_Morph),
-                    blockEditor = this.parentThatIsA(BlockEditorMorph);
-                if (!ide && blockEditor) {
-                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
-                }
-                if (ide) {
-                    ide.saveXMLAs(
-                        ide.serializer.serialize(top),
-                        top.selector + ' script',
-                        false);
-                }
-            },
-            'download this script\nas an XML file',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'export script',
+        () => top.exportScript(),
+        'download this script\nas an XML file'
+    );
     if (proc) {
         if (vNames.length) {
             menu.addLine();
@@ -3975,6 +3960,73 @@ BlockMorph.prototype.exportResultPic = function () {
             stage.threads.startProcess(top, receiver, false, true);
         }
     }
+};
+
+// BlockMorph exporting a script
+
+BlockMorph.prototype.exportScript = function () {
+    // assumes this is the script's top block
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        xml;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    xml = this.toXMLString();
+    if (xml) {
+        ide.saveXMLAs(
+            xml,
+            this.selector + ' script',
+            false
+        );
+    }
+};
+
+BlockMorph.prototype.toXMLString = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        rcvr = this.scriptTarget(),
+        dependencies = [],
+        isReporter = this instanceof ReporterBlockMorph;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    // collect custom block definitions referenced in this script:
+    this.forAllChildren(morph => {
+        var def;
+        if (morph.isCustomBlock) {
+            def = morph.isGlobal ? morph.definition
+                : rcvr.getMethod(morph.semanticSpec);
+            [def].concat(def.collectDependencies([], [], rcvr)).forEach(
+                fun => {
+                    if (!contains(dependencies, fun)) {
+                        dependencies.push(fun);
+                    }
+                }
+            );
+        }
+    });
+
+    return '<script app="' +
+        ide.serializer.app +
+        '" version="' +
+        ide.serializer.version +
+        '">' +
+        (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
+        (isReporter ? '<script>' : '') +
+        ide.serializer.serialize(this) +
+        (isReporter ? '</script>' : '') +
+        '</script>';
 };
 
 // BlockMorph syntax analysis
@@ -6666,7 +6718,7 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
     if (this.parent instanceof TemplateSlotMorph) {
         return this.parent.getSpec();
     }
-    return null;
+    return '';
 };
 
 // ReporterBlockMorph events
