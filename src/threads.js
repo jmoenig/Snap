@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-March-04';
+modules.threads = '2022-March-16';
 
 var ThreadManager;
 var Process;
@@ -6441,7 +6441,9 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
     if (width <= 0 || height <= 0) {
-        return new Costume();
+        throw new Error(
+            'cannot handle zero width or height'
+        );
     }
     if (!isFinite(width * height) || isNaN(width * height)) {
        throw new Error(

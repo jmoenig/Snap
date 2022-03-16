@@ -15,6 +15,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-16
+* objects, threads: reformulated the zero-costume-width fix addressing a costume-loading issue
+
 ### 2022-03-15
 * blocks, store, gui: deserialize new format for exported scripts
 * blocks: new "export script" feature (including dependencies)
