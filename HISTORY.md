@@ -14,6 +14,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-16
+* restored v7.4.0-dev
+
 ## 7.3.1:
 * **Notable Fix:**
     * guard against broken SVG costumes when loading a project

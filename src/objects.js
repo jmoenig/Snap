@@ -2792,14 +2792,14 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        // +++ blocks.push(block('reportCrossproduct'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
@@ -9197,14 +9197,14 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        // +++ blocks.push(block('reportCrossproduct'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');

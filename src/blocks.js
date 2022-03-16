@@ -3313,7 +3313,7 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
-    // +++ menu.addLine();
+    menu.addLine();
     menu.addItem(
         "script pic...",
         () => {
@@ -3339,14 +3339,11 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    if (this.world().currentKey === 16) { // +++ shift
-        menu.addItem(
-            'export script',
-            () => top.exportScript(),
-            'download this script\nas an XML file',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'export script',
+        () => top.exportScript(),
+        'download this script\nas an XML file'
+    );
     if (proc) {
         if (vNames.length) {
             menu.addLine();
