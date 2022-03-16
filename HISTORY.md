@@ -8,18 +8,30 @@
 * **Notable Changes:**
     * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
-    * guard against broken SVG costumes when loading a project
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
 
+### 2022-03-16
+* restored v7.4.0-dev
+
+## 7.3.1:
+* **Notable Fix:**
+    * guard against broken SVG costumes when loading a project
+
+### 2022-03-16
+* objects, threads: reformulated the zero-costume-width fix addressing a costume-loading issue
+* German translation update for new error message
+* prepared v7.3.1 emergency patch
+
 ### 2022-03-15
 * blocks, store, gui: deserialize new format for exported scripts
 * blocks: new "export script" feature (including dependencies)
 * blocks: tweaked "export scripts" for reporters
 * German translation update (for "export script" feature)
+* blocks: added BlockMorph >> toXMLString() api
 
 ### 2022-03-14
 * gui, byob: refactored library serialization

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-03-15', // this, too, will appear in the Translators tab
+        '2022-03-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2170,6 +2170,8 @@ SnapTranslator.dict.de = {
         'ist keine erlaubte Auswahl',
     'unsupported data type':
         'Nicht unterstützter Datentyp',
+    'cannot handle zero width or height':
+        'Breite oder Höhe dürfen nicht Null sein',
     'expecting a finite number\nbut getting Infinity or NaN':
         'Erwarte eine endliche Zahl\nbekomme aber Unendlich oder eine Nicht-Zahl',
     'the predicate takes\ntoo long for a\ncustom hat block':

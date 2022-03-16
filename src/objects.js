@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-11';
+modules.objects = '2022-March-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -3825,10 +3825,6 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
-    if (costume && (!costume.width() || !costume.height())) {
-        costume = null;
-        idx = null;
-    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
@@ -10359,11 +10355,11 @@ Costume.prototype.center = function () {
 };
 
 Costume.prototype.width = function () {
-    return this.contents ? this.contents.width : 0;
+    return this.contents.width;
 };
 
 Costume.prototype.height = function () {
-    return this.contents ? this.contents.height : 0;
+    return this.contents.height;
 };
 
 Costume.prototype.bounds = function () {
