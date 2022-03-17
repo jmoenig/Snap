@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-16';
+modules.blocks = '2022-March-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3990,9 +3990,8 @@ BlockMorph.prototype.exportScript = function () {
 BlockMorph.prototype.toXMLString = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
-        rcvr = this.scriptTarget(),
-        dependencies = [],
-        isReporter = this instanceof ReporterBlockMorph;
+        isReporter = this instanceof ReporterBlockMorph,
+        dependencies;
 
     if (!ide && blockEditor) {
         ide = blockEditor.target.parentThatIsA(IDE_Morph);
@@ -4002,20 +4001,7 @@ BlockMorph.prototype.toXMLString = function () {
     }
 
     // collect custom block definitions referenced in this script:
-    this.forAllChildren(morph => {
-        var def;
-        if (morph.isCustomBlock) {
-            def = morph.isGlobal ? morph.definition
-                : rcvr.getMethod(morph.semanticSpec);
-            [def].concat(def.collectDependencies([], [], rcvr)).forEach(
-                fun => {
-                    if (!contains(dependencies, fun)) {
-                        dependencies.push(fun);
-                    }
-                }
-            );
-        }
-    });
+    dependencies = this.dependencies(); // both global and local
 
     return '<script app="' +
         ide.serializer.app +
@@ -4027,6 +4013,33 @@ BlockMorph.prototype.toXMLString = function () {
         ide.serializer.serialize(this) +
         (isReporter ? '</script>' : '') +
         '</script>';
+};
+
+BlockMorph.prototype.dependencies = function (onlyGlobal) {
+    // answer an array containing all custom block definitions referenced
+    // by this and the following blocks, optional parameter to constrain
+    // to global definitions.
+    // NOTE: this method can only be called from within the IDE because it
+    // needs to be able to determine the scriptTarget
+    var dependencies = [],
+        rcvr = onlyGlobal ? null : this.scriptTarget();
+    this.forAllChildren(morph => {
+        var def;
+        if (morph.isCustomBlock) {
+            if (!onlyGlobal || (onlyGlobal && morph.isGlobal)) {
+                def = morph.isGlobal ? morph.definition
+                    : rcvr.getMethod(morph.semanticSpec);
+                [def].concat(def.collectDependencies([], [], rcvr)).forEach(
+                    fun => {
+                        if (!contains(dependencies, fun)) {
+                            dependencies.push(fun);
+                        }
+                    }
+                );
+            }
+        }
+    });
+    return dependencies;
 };
 
 // BlockMorph syntax analysis

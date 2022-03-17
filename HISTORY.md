@@ -14,6 +14,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-17
+* blocks: refactored dependencies scan for scripts
+
 ### 2022-03-16
 * restored v7.4.0-dev
 
