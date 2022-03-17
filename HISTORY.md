@@ -6,7 +6,7 @@
     * export / import sprite-local custom block definitions
     * added "combinations" primitive to the palette
 * **Notable Changes:**
-    * exporting / importing a sprite includes all block dependencies (global custom blocks and palette categories) 
+    * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
     * fixed an edge case for slot type inferral
