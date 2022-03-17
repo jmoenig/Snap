@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-14';
+modules.byob = '2022-March-17';
 
 // Declarations
 
@@ -4315,7 +4315,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 
     if (this.blocks.length) {
         ide.saveXMLAs(
-            ide.blocksLibraryXML(this.blocks, true), // as file
+            ide.blocksLibraryXML(this.blocks, null, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'

@@ -4008,7 +4008,7 @@ BlockMorph.prototype.toXMLString = function () {
         '" version="' +
         ide.serializer.version +
         '">' +
-        (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
+        (dependencies.length ? ide.blocksLibraryXML(dependencies) : '') +
         (isReporter ? '<script>' : '') +
         ide.serializer.serialize(this) +
         (isReporter ? '</script>' : '') +
