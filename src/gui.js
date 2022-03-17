@@ -5259,14 +5259,67 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite.allParts());
-    str = '<sprites app="'
-        + this.serializer.app
-        + '" version="'
-        + this.serializer.version
-        + '">'
-        + str
-        + '</sprites>';
+    var all = sprite.allParts(),
+        dependencies = [],
+        categories = [],
+        blocksXML = '',
+        str;
+
+    function collect(item, array) {
+        // only once
+        if (!contains(array, item)) {
+            array.push(item);
+        }
+    }
+
+    function collectAll(items, array) {
+        items.forEach(item => collect(item, array));
+    }
+
+    // collect all dependencies and custom categories.
+    // only collect global custom block dependencies, because the locals
+    // will be included in each sprite's serialization code
+
+    all.forEach(sprite => {
+
+        // global block definition in scripts
+        sprite.scripts.children.filter(
+            morph => morph instanceof BlockMorph
+        ).forEach(script =>
+            collectAll(
+                script.dependencies(true),
+                dependencies
+            )
+        );
+
+        // global block definitions referenced in local block definitions
+        sprite.customBlocks.forEach(def => {
+            collect(def.category, categories);
+            collectAll(
+                def.collectDependencies([], [], sprite)
+                    .filter(each => each.isGlobal),
+                dependencies
+            );
+        });
+
+    });
+
+    // encode both parts of the export-file:
+    // the blocks library and the sprites
+
+    if (dependencies.length || categories.length) {
+        blocksXML = this.blocksLibraryXML(dependencies, categories);
+    }
+
+    str = '<sprites app="' +
+        this.serializer.app +
+        '" version="' +
+        this.serializer.version +
+        '">' +
+        blocksXML +
+        this.serializer.serialize(sprite.allParts()) +
+        '</sprites>';
+
     this.saveXMLAs(str, sprite.name);
 };
 
