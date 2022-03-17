@@ -16,6 +16,7 @@
 
 ### 2022-03-17
 * blocks: refactored dependencies scan for scripts
+* gui: refactored palette serialization for scripts
 
 ### 2022-03-16
 * restored v7.4.0-dev

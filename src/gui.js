@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-16';
+modules.gui = '2022-March-17';
 
 // Declarations
 
@@ -7433,21 +7433,21 @@ IDE_Morph.prototype.blocksLibraryXML = function (definitions, asFile) {
     return '<blocks' +
         (asFile ? appStr : '' ) +
         '>' +
-        this.paletteXML(definitions) +
+        this.paletteXML(definitions.map(def => def.category)) +
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         '</blocks>';
 };
 
-IDE_Morph.prototype.paletteXML = function (definitions) {
-    // private - answer an XML string containing the palette information
-    // found in an array of CustomBlockDefinitions
+IDE_Morph.prototype.paletteXML = function (categoryNames) {
+    // answer an XML string containing the palette information
+    // found in an array of category names
     var palette = new Map();
-    definitions.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+    categoryNames.forEach(cat => {
+        if (SpriteMorph.prototype.customCategories.has(cat)) {
             palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
+                cat,
+                SpriteMorph.prototype.customCategories.get(cat)
             );
         }
     });
