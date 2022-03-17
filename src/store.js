@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-15';
+modules.store = '2022-March-17';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -705,16 +705,24 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
 SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     // public - import a set of sprites represented by xmlString
     // into the current scene of the ide
-    var model, scene;
+    var model = this.parse(xmlString);
+
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    this.loadSpritesModel(model, ide);
+};
+
+SnapSerializer.prototype.loadSpritesModel = function (xmlNode, ide) {
+    // public - import a set of sprites represented by an xml model
+    // into the current scene of the ide
+    var model = xmlNode,
+        scene;
 
     this.scene = new Scene(ide.stage);
     scene = this.scene;
     scene.spritesDict[scene.stage.name] = scene.stage;
 
-    model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
     model.childrenNamed('sprite').forEach(model => {
         var sprite  = new SpriteMorph(scene.globalVariables);
 
@@ -1154,7 +1162,7 @@ SnapSerializer.prototype.loadScriptsArray = function (model, object) {
     return scripts;
 };
 
-SnapSerializer.prototype.loadScriptModule = function (model, object) {
+SnapSerializer.prototype.loadScriptModel = function (model, object) {
     // return a new script represented by the given xml model,
     // note: custom block definitions referenced here must be loaded before
     var script;

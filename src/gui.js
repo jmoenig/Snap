@@ -5808,13 +5808,39 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.loadSprites(str, this);
+            this.deserializeSpritesString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.loadSprites(str, this);
+        this.deserializeSpritesString(str);
     }
+};
+
+IDE_Morph.prototype.deserializeSpritesString = function (str) {
+    var xml = this.serializer.parse(str),
+        blocksModel = xml.childNamed('blocks'),
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the sprites depend on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        // notice, there should not be any local blocks in this part of
+        // the model instead we're expecting them inside each sprite
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.categories.refreshEmpty();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    this.serializer.loadSpritesModel(xml, this);
 };
 
 IDE_Morph.prototype.openMediaString = function (str) {
@@ -5898,7 +5924,7 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
         this.categories.fixLayout();
         this.fixLayout();
     }
-    return this.serializer.loadScriptModule(scriptModel, this.currentSprite);
+    return this.serializer.loadScriptModel(scriptModel, this.currentSprite);
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
