@@ -12,8 +12,12 @@
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
+    * updated contribution guidelines, thanks, Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-18
+* objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
 
 ### 2022-03-17
 * blocks: refactored dependencies scan for scripts
