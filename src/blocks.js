@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-17';
+modules.blocks = '2022-March-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3987,7 +3987,11 @@ BlockMorph.prototype.exportScript = function () {
     }
 };
 
-BlockMorph.prototype.toXMLString = function () {
+BlockMorph.prototype.toXMLString = function (receiver) {
+    // answer an xml string representation of this block and all the
+    // following ones attached to it, including all dependencies.
+    // specifying a receiver sprite is optional for cases where
+    // the receiver sprite is not the currently edited one inside the IDE
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
         isReporter = this instanceof ReporterBlockMorph,
@@ -4001,7 +4005,7 @@ BlockMorph.prototype.toXMLString = function () {
     }
 
     // collect custom block definitions referenced in this script:
-    dependencies = this.dependencies(); // both global and local
+    dependencies = this.dependencies(false, receiver); // both global and local
 
     return '<script app="' +
         ide.serializer.app +
@@ -4015,14 +4019,16 @@ BlockMorph.prototype.toXMLString = function () {
         '</script>';
 };
 
-BlockMorph.prototype.dependencies = function (onlyGlobal) {
+BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
     // answer an array containing all custom block definitions referenced
     // by this and the following blocks, optional parameter to constrain
     // to global definitions.
-    // NOTE: this method can only be called from within the IDE because it
-    // needs to be able to determine the scriptTarget
+    // specifying a receiver sprite is optional for cases where
+    // the receiver sprite is not the currently edited one inside the IDE
+    // if a receiver is not specified  this method can only be called from
+    // within the IDE because it needs to be able to determine the scriptTarget
     var dependencies = [],
-        rcvr = onlyGlobal ? null : this.scriptTarget();
+        rcvr = onlyGlobal ? null : (receiver || this.scriptTarget());
     this.forAllChildren(morph => {
         var def;
         if (morph.isCustomBlock) {
