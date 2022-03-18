@@ -666,6 +666,16 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     return scene.initialize();
 };
 
+SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
+    // public - answer a new dictionary of custom block definitions
+    // represented by the given XML String
+    var model = this.parse(xmlString);
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    return this.loadBlocksModel(model, targetStage);
+};
+
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
