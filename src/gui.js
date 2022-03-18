@@ -828,6 +828,7 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton,
         stageSizeButton,
         appModeButton,
+        embedModeButton,
         steppingButton,
         cloudButton,
         x,
@@ -922,6 +923,29 @@ IDE_Morph.prototype.createControlBar = function () {
     appModeButton = button;
     this.controlBar.add(appModeButton);
     this.controlBar.appModeButton = appModeButton; // for refreshing
+
+    //embedModeButton
+    button = new PushButtonMorph(
+        this,
+        'enableEmbedMode',
+        new SymbolMorph('rectangle', 14)
+    );
+
+    button.hasNeutralBackground = true;
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[0];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.fixLayout();
+    embedModeButton = button;
+    this.controlBar.add(embedModeButton);
+    this.controlBar.embedModeButton = embedModeButton; // for refreshing
 
     //steppingButton
     button = new ToggleButtonMorph(
@@ -1181,7 +1205,7 @@ IDE_Morph.prototype.createControlBar = function () {
             myself.right() - myself.stage.dimensions.x *
                 (myself.isSmallStage ? myself.stageRatio : 1)
         );
-        [stageSizeButton, appModeButton].forEach(button => {
+        [stageSizeButton, appModeButton, embedModeButton].forEach(button => {
                 x += padding;
                 button.setCenter(myself.controlBar.center());
                 button.setLeft(x);
@@ -6306,6 +6330,12 @@ IDE_Morph.prototype.setEmbedMode = function () {
     this.fixLayout();
 };
 
+// switch to embeded mode from IDE mode. This is a one-way transition
+IDE_Morph.prototype.enableEmbedMode = function () {
+    this.toggleAppMode(true);
+    this.setEmbedMode();
+};
+
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         elements = [
@@ -6328,10 +6358,10 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
     if (this.isAppMode) {
-		this.wasSingleStepping = Process.prototype.enableSingleStepping;
-		if (this.wasSingleStepping) {
-     		this.toggleSingleStepping();
-    	}
+        this.wasSingleStepping = Process.prototype.enableSingleStepping;
+        if (this.wasSingleStepping) {
+            this.toggleSingleStepping();
+        }
         this.setColor(this.appModeColor);
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
