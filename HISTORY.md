@@ -13,6 +13,7 @@
     * fixed variadic AND/OR reporters library, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
+    * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
 
