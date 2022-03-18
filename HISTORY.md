@@ -2,8 +2,8 @@
 
 ## in development:
 * **New Features:**
-    * export script (including dependencies)
-    * export / import sprite-local custom block definitions
+    * export script (including dependencies) via its context menu
+    * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
 * **Notable Changes:**
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
