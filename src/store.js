@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-17';
+modules.store = '2022-March-18';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -233,10 +233,17 @@ XML_Serializer.prototype.load = function (xmlString) {
     );
 };
 
-XML_Serializer.prototype.parse = function (xmlString) {
-    // private - answer an XML_Element representing the given XML String
+XML_Serializer.prototype.parse = function (xmlString, assertVersion) {
+    // answer an XML_Element representing the given XML String
+    // optional assertVersion parameter for asserting a top-level
+    // node to be consistent with the current serializer version
     var element = new XML_Element();
     element.parseString(xmlString);
+    if (assertVersion) {
+        if (+element.attributes.version > this.version) {
+            throw 'Module uses newer version of Serializer';
+        }
+    }
     return element;
 };
 
@@ -659,16 +666,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     return scene.initialize();
 };
 
-SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
-    // public - answer a new dictionary of custom block definitions
-    // represented by the given XML String
-    var model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
-    return this.loadBlocksModel(model, targetStage);
-};
-
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
@@ -700,17 +697,6 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         global : stage.globalBlocks,
         local : stage.customBlocks
     };
-};
-
-SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
-    // public - import a set of sprites represented by xmlString
-    // into the current scene of the ide
-    var model = this.parse(xmlString);
-
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
-    this.loadSpritesModel(model, ide);
 };
 
 SnapSerializer.prototype.loadSpritesModel = function (xmlNode, ide) {

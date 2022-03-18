@@ -19,6 +19,7 @@
 ### 2022-03-18
 * objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
 * blocks: added optional receiver sprite to toXMLScript() api
+* store: cleaned up version assertion
 
 ### 2022-03-17
 * blocks: refactored dependencies scan for scripts

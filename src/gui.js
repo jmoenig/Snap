@@ -5757,7 +5757,7 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
 };
 
 IDE_Morph.prototype.deserializeSpritesString = function (str) {
-    var xml = this.serializer.parse(str),
+    var xml = this.serializer.parse(str, true), // assert version
         blocksModel = xml.childNamed('blocks'),
         blocks;
 
@@ -5837,7 +5837,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
 };
 
 IDE_Morph.prototype.deserializeScriptString = function (str) {
-    var xml = this.serializer.parse(str, this.currentSprite),
+    var xml = this.serializer.parse(str, true), // assert version
         blocksModel = xml.childNamed('blocks'),
         scriptModel = xml.childNamed('script') || xml,
         blocks;
