@@ -4283,6 +4283,8 @@ SpriteMorph.prototype.remove = function () {
 // SpriteMorph serialization & exporting utils
 
 SpriteMorph.prototype.toXMLString = function () {
+    // answer an xml string representation of this sprite and all parts
+    // attached to it, including all dependencies (global custom blocks).
     var ide = this.parentThatIsA(IDE_Morph),
         all = this.allParts(),
         dependencies = [],
