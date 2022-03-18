@@ -11,6 +11,7 @@
 * **Notable Fixes:**
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
+    * fixed library blocks preview to deal with both local and global blocks
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
     * updated help screen for NUMBERS, thanks, Brian and Peter!
@@ -21,6 +22,7 @@
 * objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
 * blocks: added optional receiver sprite to toXMLScript() api
 * store: cleaned up version assertion
+* gui: migrated library import dialog to the new file structure
 
 ### 2022-03-17
 * blocks: refactored dependencies scan for scripts

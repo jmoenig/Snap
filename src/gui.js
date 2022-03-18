@@ -9286,30 +9286,31 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
         padding = 4,
         blocksList = this.cachedLibrary(libraryKey);
 
-    if (!blocksList.length) {return; }
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
     SpriteMorph.prototype.allCategories().forEach(category => {
-        blocksList.forEach(definition => {
-            if (definition.category !== category) {return; }
-            if (category !== previousCategory) {
-                y += padding;
-            }
-            previousCategory = category;
+        ['global', 'local'].forEach(scope => {
+            blocksList[scope].forEach(definition => {
+                if (definition.category !== category) {return; }
+                if (category !== previousCategory) {
+                    y += padding;
+                }
+                previousCategory = category;
 
-            blockImage = definition.templateInstance().fullImage();
-            blockContainer = new Morph();
-            blockContainer.isCachingImage = true;
-            blockContainer.bounds.setWidth(blockImage.width);
-            blockContainer.bounds.setHeight(blockImage.height);
-            blockContainer.cachedImage = blockImage;
-            blockContainer.setPosition(new Point(x, y));
-            this.palette.addContents(blockContainer);
+                blockImage = definition.templateInstance().fullImage();
+                blockContainer = new Morph();
+                blockContainer.isCachingImage = true;
+                blockContainer.bounds.setWidth(blockImage.width);
+                blockContainer.bounds.setHeight(blockImage.height);
+                blockContainer.cachedImage = blockImage;
+                blockContainer.setPosition(new Point(x, y));
+                this.palette.addContents(blockContainer);
 
-            y += blockContainer.fullBounds().height() + padding;
+                y += blockContainer.fullBounds().height() + padding;
+            });
         });
     });
 
