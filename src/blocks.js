@@ -154,13 +154,14 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
-CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions*/
+CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
+CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-January-04';
+modules.blocks = '2022-March-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -409,7 +410,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%interaction': {
         type: 'input',
-        tags: 'read-only',
+        tags: 'read-only static',
         menu: {
             'clicked' : ['clicked'],
             'pressed' : ['pressed'],
@@ -704,6 +705,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'all' : ['all'],
+            'all scenes' : ['all scenes'],
             'this script' : ['this script'],
             'this block' : ['this block'],
             'all but this script' : ['all but this script'],
@@ -800,6 +802,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'definition': ['definition'],
+            'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?']
         }
@@ -989,11 +992,11 @@ SyntaxElementMorph.prototype.labelParts = {
     */
     '%t': {
         type: 'template',
-        label: 'a'
+        label: '\xa0' // non-breaking space, appears blank
     },
     '%upvar': {
         type: 'template',
-        label: '\u2191' // up-arrow
+        label: '\xa0' // non-breaking space, appears blank
     },
 
     // other single types
@@ -1013,6 +1016,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi'
         slots: a slot spec string
         label: (optional)
+        infix: (optional)
+        collapse: (optional) alternative label to "Input list"
         tags: 'widget' // doesn't count as "empty" slot implicit parameter
         min: (optional) number of minimum inputs) or zero
         max: (optional) number of maximum inputs) or zero
@@ -1093,6 +1098,34 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%s',
         defaults: 1,
         tags: 'static widget'
+    },
+    '%sum': {
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: '+',
+        collapse: 'sum'
+    },
+    '%product': {
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: '\u00D7',
+        collapse: 'product'
+    },
+    '%min': {
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: 'min',
+        collapse: 'minimum'
+    },
+    '%max': {
+        type: 'multi',
+        slots: '%n',
+        min: 2,
+        infix: 'max',
+        collapse: 'maximum'
     }
 };
 
@@ -1249,8 +1282,9 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         oldArg.inputs().forEach(inp => // preserve nested reporters
             oldArg.replaceInput(inp, new InputSlotMorph())
         );
-        if (this.dynamicInputLabels) {
-            replacement = new ArgLabelMorph(newArg);
+        if ((this.dynamicInputLabels || oldArg.collapse) &&
+                newArg instanceof ReporterBlockMorph) {
+            replacement = new ArgLabelMorph(newArg, oldArg.collapse);
         }
     }
     replacement.parent = this;
@@ -1731,7 +1765,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.slots,
                 info.label,
                 info.min || 0,
-                spec
+                spec,
+                null, null, null, null, null,
+                info.infix,
+                info.collapse
             );
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
@@ -2250,8 +2287,89 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.bounds.setWidth(img.width);
         morphToShow.bounds.setHeight(img.height);
         morphToShow.cachedImage = img;
+
+        // support costumes to be dragged out of result bubbles:
+        morphToShow.isDraggable = true;
+
+        morphToShow.selectForEdit = function () {
+            var cst = value.copy(),
+                icon,
+                prepare;
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting costumes directly from result bubbles:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => {
+                    if (value instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            value.contents.src,
+                            'text/svg',
+                            value.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(value.contents, value.name);
+                    }
+                }
+            );
+            return menu;
+        };
+
     } else if (value instanceof Sound) {
         morphToShow = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of result bubbles:
+        morphToShow.isDraggable = true;
+
+        morphToShow.selectForEdit = function () {
+            var snd = value.copy(),
+                icon,
+                prepare;
+
+            snd.name = ide.currentSprite.newSoundName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting sounds directly from result bubbles:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => ide.saveAudioAs(value.audio, value.name)
+            );
+            return menu;
+        };
+
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
@@ -2259,6 +2377,26 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.bounds.setWidth(img.width);
         morphToShow.bounds.setHeight(img.height);
         morphToShow.cachedImage = img;
+
+        // support blocks to be dragged out of result bubbles:
+        morphToShow.isDraggable = true;
+
+        morphToShow.selectForEdit = function () {
+            var script = value.toBlock(),
+                prepare = script.prepareToBeGrabbed;
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            script.setPosition(this.position());
+            return script;
+        };
     } else if (typeof value === 'boolean') {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,
@@ -2270,6 +2408,21 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             txt,
             this.fontSize
         );
+
+        // support exporting text / numbers directly from result bubbles:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    value,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
@@ -2281,9 +2434,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             this.fontSize
         );
     } else if (value.toString) {
-        morphToShow = new TextMorph(
+        return this.showBubble(
             value.toString(),
-            this.fontSize
+            exportPic,
+            target
         );
     }
     if (ide && (ide.currentSprite !== target)) {
@@ -2813,11 +2967,12 @@ BlockMorph.prototype.userMenu = function () {
         world = this.world(),
         myself = this,
         hasLine = false,
-        shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
         top = this.topBlock(),
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
+        slot,
+        mult,
         alternatives,
         field,
         rcvr;
@@ -2873,6 +3028,32 @@ BlockMorph.prototype.userMenu = function () {
                     'refactorThisVar',
                     'rename all blocks that\naccess this variable'
                 );
+                if (this.parent.parent instanceof MultiArgMorph &&
+                        this.parentThatIsA(ScriptsMorph)) {
+                    // offer to insert / delete a variable slot
+                    slot = this.parent;
+                    mult = slot.parent;
+                    menu.addLine();
+                    if (!mult.maxInputs ||
+                            (mult.inputs().length < mult.maxInputs)) {
+                        if (!mult.is3ArgRingInHOF() ||
+                                mult.inputs().length < 3) {
+                            menu.addItem(
+                                'insert a variable',
+                                () => mult.insertNewInputBefore(
+                                    slot,
+                                    localize('variable')
+                                )
+                            );
+                        }
+                    }
+                    if (mult.inputs().length > mult.minInputs) {
+                        menu.addItem(
+                            'delete variable',
+                            () => mult.deleteSlot(slot)
+                        );
+                    }
+                }
             }
         } else { // in palette
             if (this.selector === 'reportGetVar') {
@@ -3132,6 +3313,7 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    // +++ menu.addLine();
     menu.addItem(
         "script pic...",
         () => {
@@ -3157,22 +3339,10 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    if (shiftClicked) {
+    if (this.world().currentKey === 16) { // +++ shift
         menu.addItem(
-            'download script',
-            () => {
-                var ide = this.parentThatIsA(IDE_Morph),
-                    blockEditor = this.parentThatIsA(BlockEditorMorph);
-                if (!ide && blockEditor) {
-                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
-                }
-                if (ide) {
-                    ide.saveXMLAs(
-                        ide.serializer.serialize(top),
-                        top.selector + ' script',
-                        false);
-                }
-            },
+            'export script',
+            () => top.exportScript(),
             'download this script\nas an XML file',
             new Color(100, 0, 0)
         );
@@ -3583,7 +3753,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     // return an Array of left-over blocks, if any
     // optional offset parameter allows for shifting the range
     // of inputs to be restored
-    var old, nb, i,
+    var old, nb, i, src, trg,
+        element = this,
+        inputs = this.inputs(),
         leftOver = [];
 
     // gather leading surplus blocks
@@ -3599,19 +3771,68 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
         }
     }
 
+    // special cases for relabelling to / from single variadic infix reporters
+    src = oldInputs[0];
+    trg = inputs[0];
+
+    // 1.
+    // both blocks have exactly one variadic slot, with the same slot spec but
+    // different infixes, and not nessesarily matching numbers of expanded
+    // slots.
+    if (oldInputs.length === 1 &&
+        (inputs.length === 1) &&
+        src instanceof MultiArgMorph &&
+        trg instanceof MultiArgMorph &&
+        src.slotSpec === trg.slotSpec &&
+        (src.infix !== trg.infix)
+    ) {
+        element = trg;
+        oldInputs = src.inputs();
+        while(element.inputs().length < oldInputs.length) {
+            element.addInput();
+        }
+        inputs = element.inputs();
+    }
+
+    // 2.
+    // this block has a single variadic infix slot which will hold all of the
+    // old block inputs.
+    else if (oldInputs.length &&
+        (inputs.length === 1) &&
+        trg instanceof MultiArgMorph &&
+        !(src instanceof MultiArgMorph)
+    ) {
+        element = trg;
+        inputs = element.inputs();
+    }
+
+    // 3.
+    // the old inputs are a single variadic infix slot whose inputs will be
+    // distributed over this blocks non-variadic slots
+    else if (oldInputs.length === 1 &&
+        inputs.length &&
+        src instanceof MultiArgMorph &&
+        !(trg instanceof MultiArgMorph)
+    ) {
+        oldInputs = src.inputs();
+    }
+
     // restore matching inputs in their original order
-    this.inputs().forEach(inp => {
+    inputs.forEach(inp => {
         old = oldInputs[offset];
+        if (old instanceof ArgLabelMorph) {
+            old = old.argMorph();
+        }
         if (old instanceof RingMorph) {
             if (old.contents()) {
-                this.replaceInput(inp, old.fullCopy());
+                element.replaceInput(inp, old.fullCopy());
             }
             // otherwise ignore the empty ring
         } else if (old instanceof ReporterBlockMorph) {
             if (inp instanceof TemplateSlotMorph || inp.isStatic) {
                 leftOver.push(old);
             } else {
-                this.replaceInput(inp, old.fullCopy());
+                element.replaceInput(inp, old.fullCopy());
             }
         } else if (old && inp instanceof InputSlotMorph) {
             // original - turns empty numberslots to 0:
@@ -3628,6 +3849,11 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             if (nb) {
                 inp.nestedBlock(nb.fullCopy());
             }
+        } else if (old instanceof MultiArgMorph &&
+                inp instanceof MultiArgMorph &&
+                (old.slotSpec === inp.slotSpec) &&
+                old.infix === inp.infix) {
+            element.replaceInput(inp, old.fullCopy());
         }
         offset += 1;
     });
@@ -3644,6 +3870,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             }
         }
     }
+    element.cachedInputs = null;
     this.cachedInputs = null;
     return leftOver;
 };
@@ -3738,6 +3965,73 @@ BlockMorph.prototype.exportResultPic = function () {
     }
 };
 
+// BlockMorph exporting a script
+
+BlockMorph.prototype.exportScript = function () {
+    // assumes this is the script's top block
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        xml;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    xml = this.toXMLString();
+    if (xml) {
+        ide.saveXMLAs(
+            xml,
+            this.selector + ' script',
+            false
+        );
+    }
+};
+
+BlockMorph.prototype.toXMLString = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        rcvr = this.scriptTarget(),
+        dependencies = [],
+        isReporter = this instanceof ReporterBlockMorph;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    // collect custom block definitions referenced in this script:
+    this.forAllChildren(morph => {
+        var def;
+        if (morph.isCustomBlock) {
+            def = morph.isGlobal ? morph.definition
+                : rcvr.getMethod(morph.semanticSpec);
+            [def].concat(def.collectDependencies([], [], rcvr)).forEach(
+                fun => {
+                    if (!contains(dependencies, fun)) {
+                        dependencies.push(fun);
+                    }
+                }
+            );
+        }
+    });
+
+    return '<script app="' +
+        ide.serializer.app +
+        '" version="' +
+        ide.serializer.version +
+        '">' +
+        (dependencies.length ? ide.blocksLibraryXML(dependencies, false) : '') +
+        (isReporter ? '<script>' : '') +
+        ide.serializer.serialize(this) +
+        (isReporter ? '</script>' : '') +
+        '</script>';
+};
+
 // BlockMorph syntax analysis
 
 BlockMorph.prototype.components = function (parameterNames = []) {
@@ -3797,6 +4091,9 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
             expr.revertToEmptyInput(inp).collapseAll();
         } else {
             val = inp.evaluate();
+            if (val instanceof Array) {
+                val = '[' + val + ']';
+            }
             if (inp instanceof ColorSlotMorph) {
                 val = val.toString();
             }
@@ -3805,6 +4102,10 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
         }
     });
     parts.at(1).updateEmptySlots();
+    if (expr.selector === 'reportGetVar') {
+        parts.add(expr.blockSpec);
+        expr.setSpec('\xa0'); // non-breaking space, appears blank
+    }
     parameterNames.forEach(name => parts.add(name));
     return parts;
 };
@@ -3826,8 +4127,21 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
         count = 0,
         dflt;
 
+    function isOption(data) {
+        return isString(data) &&
+            data.length > 2 &&
+            data[0] === '[' &&
+            data[data.length - 1] === ']';
+    }
+
     if (dta.length === 0) {
         return cpy.reify();
+    }
+    if (cpy.selector === 'reportGetVar' && (
+        (dta.length === 1) || (cpy.blockSpec === '\xa0' && dta.length > 1))
+    ) {
+        cpy.setSpec(dta[0]);
+        return cpy.reify(dta.slice(1));
     }
 
     // restore input slots
@@ -3918,8 +4232,9 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                     nop(); // ignore, i.e. leave slot as is
                 } else if (slot instanceof ColorSlotMorph) {
                     slot.setColor(Color.fromString(inp));
-                } else if (slot instanceof InputSlotMorph ||
-                        slot instanceof TemplateSlotMorph ||
+                } else if (slot instanceof InputSlotMorph) {
+                    slot.setContents(isOption(inp) ? [inp.slice(1, -1)] : inp);
+                } else if (slot instanceof TemplateSlotMorph ||
                         slot instanceof BooleanSlotMorph) {
                     slot.setContents(inp);
                 }
@@ -6406,7 +6721,7 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
     if (this.parent instanceof TemplateSlotMorph) {
         return this.parent.getSpec();
     }
-    return null;
+    return '';
 };
 
 // ReporterBlockMorph events
@@ -7084,6 +7399,31 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
     var slot = this.parts()[0];
     RingMorph.uber.fixBlockColor.call(this, nearest, isForced);
     slot.fixLayout();
+};
+
+// RingMorph menu
+
+RingMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    if (this.parent instanceof MultiArgMorph &&
+            this.parentThatIsA(ScriptsMorph)) {
+        if (!this.parent.maxInputs ||
+                (this.parent.inputs().length < this.parent.maxInputs)) {
+            menu.addItem(
+                'insert a slot',
+                () => this.parent.insertNewInputBefore(this)
+            );
+        }
+        if (this.isEmptySlot() &&
+                this.parent.inputs().length > this.parent.minInputs) {
+            menu.addItem(
+                'delete slot',
+                () => this.parent.deleteSlot(this)
+            );
+        }
+    return menu;
+    }
+    return RingMorph.uber.userMenu.call(this);
 };
 
 // ScriptsMorph ////////////////////////////////////////////////////////
@@ -8220,6 +8560,39 @@ ArgMorph.prototype.justDropped = function () {
 
 ArgMorph.prototype.getSpec = function () {
     return '%s'; // default
+};
+
+// ArgMorph menu
+
+ArgMorph.prototype.userMenu = function () {
+    var sm = this.slotMenu(),
+        menu;
+    if (!sm && !(this.parent instanceof MultiArgMorph)) {
+        return this.parent.userMenu();
+    }
+    menu = sm || new MenuMorph(this);
+    if (this.parent instanceof MultiArgMorph &&
+            this.parentThatIsA(ScriptsMorph)) {
+        if (!this.parent.maxInputs ||
+                (this.parent.inputs().length < this.parent.maxInputs)) {
+            menu.addItem(
+                'insert a slot',
+                () => this.parent.insertNewInputBefore(this)
+            );
+        }
+        if (this.parent.inputs().length > this.parent.minInputs) {
+            menu.addItem(
+                'delete slot',
+                () => this.parent.deleteSlot(this)
+            );
+        }
+    }
+    return menu;
+};
+
+ArgMorph.prototype.slotMenu = function () {
+    // subclass responsibility
+    return null;
 };
 
 // ArgMorph drawing
@@ -10378,23 +10751,24 @@ InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
 
 // InputSlotMorph menu:
 
-InputSlotMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping) {
-        return this.parent.userMenu();
+InputSlotMorph.prototype.slotMenu = function () {
+    var menu;
+    if (StageMorph.prototype.enableCodeMapping) {
+        menu = new MenuMorph(this);
+        if (this.isNumeric) {
+            menu.addItem(
+                'code number mapping...',
+                'mapNumberToCode'
+            );
+        } else {
+            menu.addItem(
+                'code string mapping...',
+                'mapStringToCode'
+            );
+        }
+        return menu;
     }
-    if (this.isNumeric) {
-        menu.addItem(
-            'code number mapping...',
-            'mapNumberToCode'
-        );
-    } else {
-        menu.addItem(
-            'code string mapping...',
-            'mapStringToCode'
-        );
-    }
-    return menu;
+    return null;
 };
 
 // InputSlotMorph reacting to user choices
@@ -11177,23 +11551,24 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
 
 // BooleanSlotMorph menu:
 
-BooleanSlotMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping) {
-        return this.parent.userMenu();
+BooleanSlotMorph.prototype.slotMenu = function () {
+    var menu;
+    if (StageMorph.prototype.enableCodeMapping) {
+        menu = new MenuMorph(this);
+        if (this.evaluate() === true) {
+            menu.addItem(
+                'code true mapping...',
+                'mapTrueToCode'
+            );
+        } else {
+            menu.addItem(
+                'code false mapping...',
+                'mapFalseToCode'
+            );
+        }
+        return menu;
     }
-    if (this.evaluate() === true) {
-        menu.addItem(
-            'code true mapping...',
-            'mapTrueToCode'
-        );
-    } else {
-        menu.addItem(
-            'code false mapping...',
-            'mapFalseToCode'
-        );
-    }
-    return menu;
+    return null;
 };
 
 // BooleanSlotMorph code mapping
@@ -12026,7 +12401,9 @@ function MultiArgMorph(
     labelColor,
     shadowColor,
     shadowOffset,
-    isTransparent
+    isTransparent,
+    infix,
+    collapse
 ) {
     this.init(
         slotSpec,
@@ -12037,7 +12414,9 @@ function MultiArgMorph(
         labelColor,
         shadowColor,
         shadowOffset,
-        isTransparent
+        isTransparent,
+        infix,
+        collapse
     );
 }
 
@@ -12050,7 +12429,9 @@ MultiArgMorph.prototype.init = function (
     labelColor,
     shadowColor,
     shadowOffset,
-    isTransparent
+    isTransparent,
+    infix,
+    collapse
 ) {
     var label,
         arrows = new FrameMorph(),
@@ -12060,6 +12441,8 @@ MultiArgMorph.prototype.init = function (
 
     this.slotSpec = slotSpec || '%s';
     this.labelText = localize(labelTxt || '');
+    this.infix = infix || '';
+    this.collapse = collapse || '';
     this.minInputs = min || 0;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
@@ -12115,6 +12498,11 @@ MultiArgMorph.prototype.init = function (
 
 MultiArgMorph.prototype.label = function () {
     return this.labelText ? this.children[0] : null;
+};
+
+MultiArgMorph.prototype.allLabels = function () {
+    // including infix labels
+    return this.children.filter(m => m instanceof BlockLabelMorph);
 };
 
 MultiArgMorph.prototype.arrows = function () {
@@ -12184,27 +12572,28 @@ MultiArgMorph.prototype.setLabelColor = function (
 // MultiArgMorph layout:
 
 MultiArgMorph.prototype.fixLayout = function () {
-    var label, shadowColor, shadowOffset;
+    var labels, shadowColor, shadowOffset;
     if (this.slotSpec === '%t') {
         this.isStatic = true; // in this case I cannot be exchanged
     }
     if (this.parent) {
-        label = this.label();
+        labels = this.allLabels();
         this.color = this.parent.color;
         this.arrows().color = this.color;
-        if (label) {
+        if (labels.length) {
             shadowColor = this.shadowColor ||
                 this.parent.color.darker(this.labelContrast);
-            shadowOffset = this.shadowOffset ||
-                (label ? label.shadowOffset : null);
-            if (!label.shadowColor.eq(shadowColor)) {
-                label.shadowColor = shadowColor;
-                label.shadowOffset = shadowOffset;
-                label.fixLayout();
-                label.rerender();
-            }
+            labels.forEach(label => {
+                shadowOffset = this.shadowOffset ||
+                    (label ? label.shadowOffset : null);
+                if (!label.shadowColor.eq(shadowColor)) {
+                    label.shadowColor = shadowColor;
+                    label.shadowOffset = shadowOffset;
+                    label.fixLayout();
+                    label.rerender();
+                }
+            });
         }
-
     }
     this.fixArrowsLayout();
     MultiArgMorph.uber.fixLayout.call(this);
@@ -12274,12 +12663,61 @@ MultiArgMorph.prototype.refresh = function () {
     });
 };
 
+// MultiArgMorph deleting & inserting slots:
+/*
+    caution, only call these methods with "primitive" inputs,
+    since they don't preserve embedded blocks (yes, on purpose)
+*/
+
+MultiArgMorph.prototype.deleteSlot = function (anInput) {
+    var len = this.inputs().length,
+        idx = this.children.indexOf(anInput);
+    if (len <= this.minInputs) {
+        return;
+    }
+    if (this.infix !== '') {
+        if (idx === (this.children.length - 2)) { // b/c arrows
+            this.removeChild(this.children[idx - 1]);
+        } else {
+            this.removeChild(this.children[idx + 1]);
+        }
+    }
+    this.removeChild(anInput);
+    this.fixLayout();
+};
+
+MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
+    var idx = this.children.indexOf(anInput),
+        newPart = this.labelPart(this.slotSpec),
+        infix;
+    
+    if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
+        return;
+    }
+    if (contents) {
+        newPart.setContents(contents);
+    }
+    newPart.parent = this;
+    if (this.infix !== '') {
+        infix = this.labelPart(this.infix);
+        infix.parent = this;
+        this.children.splice(idx, 0, newPart, infix);
+    } else {
+        this.children.splice(idx, 0, newPart);
+    }
+    newPart.fixLayout();
+    this.fixLayout();
+    return newPart;
+};
+
 // MultiArgMorph arity control:
 
 MultiArgMorph.prototype.addInput = function (contents) {
-    var i, name,
-        newPart = this.labelPart(this.slotSpec),
-        idx = this.children.length - 1;
+    var newPart = this.labelPart(this.slotSpec),
+        i, name, idx;
+
+    this.addInfix();
+    idx = this.children.length - 1;
     if (contents) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars' ||
@@ -12317,10 +12755,19 @@ MultiArgMorph.prototype.addInput = function (contents) {
     return newPart;
 };
 
+MultiArgMorph.prototype.addInfix = function () {
+    var infix;
+    if (this.infix === '' || !this.inputs().length) {return; }
+    infix = this.labelPart(this.infix);
+    infix.parent = this;
+    this.children.splice(this.children.length - 1, 0, infix);
+};
+
 MultiArgMorph.prototype.removeInput = function () {
-    var oldPart, scripts;
-    if (this.children.length > 1) {
-        oldPart = this.children[this.children.length - 2];
+    var len = this.inputs().length,
+        oldPart, scripts;
+    if (len > 0) {
+        oldPart = this.inputs()[len - 1];
         this.removeChild(oldPart);
         if (oldPart instanceof BlockMorph &&
                 !(oldPart instanceof RingMorph && !oldPart.contents())) {
@@ -12328,6 +12775,11 @@ MultiArgMorph.prototype.removeInput = function () {
             if (scripts) {
                 scripts.add(oldPart);
             }
+        }
+    }
+    if (this.infix !== '') {
+        if (this.children.length > 1) {
+            this.removeChild(this.children[this.children.length - 2]);
         }
     }
     this.fixLayout();

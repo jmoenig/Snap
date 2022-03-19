@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -104,13 +104,14 @@ nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
-WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions*/
+WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
+ArgLabelMorph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2021-December-16';
+modules.byob = '2022-March-14';
 
 // Declarations
 
@@ -594,25 +595,31 @@ CustomBlockDefinition.prototype.purgeCorpses = function () {
 // CustomBlockDefinition dependencies
 
 CustomBlockDefinition.prototype.collectDependencies = function (
-    excluding = [],
-    result = []
+    excluding,
+    result,
+    localReceiver // optional when exporting sprite-local blocks
 ) {
-    if (!this.isGlobal) {
-        throw new Error('collecting dependencies is only supported\n' +
-            'for global custom blocks');
+    if (!this.isGlobal && !localReceiver) {
+        throw new Error('cannot collect dependencies for local\n' +
+            'custom blocks of an unspecified sprite');
     }
     excluding.push(this);
     this.scripts.concat(
         this.body ? [this.body.expression] : []
     ).forEach(script => {
         script.forAllChildren(morph => {
-            if (morph.isCustomBlock &&
-                morph.isGlobal &&
-                !contains(excluding, morph.definition) &&
-                !contains(result, morph.definition)
-            ) {
-                result.push(morph.definition);
-                morph.definition.collectDependencies(excluding, result);
+            var def;
+            if (morph.isCustomBlock) {
+                def = morph.isGlobal ? morph.definition
+                    : localReceiver.getMethod(morph.blockSpec);
+                if (!contains(excluding, def) && !contains(result, def)) {
+                    result.push(def);
+                    def.collectDependencies(
+                        excluding,
+                        result,
+                        localReceiver
+                    );
+                }
             }
         });
     });
@@ -725,11 +732,11 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         });
     }
 
-    // find unnamed upvars and label them
+    // find unnamed upvars (indicated by non-breaking space) and label them
     // to their internal definition (default)
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
-        if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
+        if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
         }
     });
@@ -747,34 +754,60 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
 
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
-    var i = 0,
-        old;
+    var newInputs = this.inputs(),
+        len = Math.max(oldInputs.length, newInputs.length),
+        scripts = this.parentThatIsA(ScriptsMorph),
+        old,
+        inp,
+        i;
+
+    function preserve(item) {
+        // keep unused blocks around in the scripting area
+        if (item instanceof MultiArgMorph) {
+            return item.inputs().forEach(slot => preserve(slot));
+        }
+        if (item instanceof BlockMorph && scripts) {
+            scripts.add(item);
+            item.moveBy(new Point(20, 20));
+            item.fixBlockColor();
+        }
+    }
+
     if (this.isPrototype) {return; }
     this.cachedInputs = null;
-    this.inputs().forEach(inp => {
+    for (i = 0; i < len; i += 1) {
+        inp = newInputs[i];
         old = oldInputs[i];
-        if (old instanceof ReporterBlockMorph &&
+        if (old instanceof ArgLabelMorph) {
+            old = old.argMorph();
+        }
+        if (old instanceof ReporterBlockMorph && inp &&
                 (!(inp instanceof TemplateSlotMorph))) {
             this.replaceInput(inp, old.fullCopy());
-        } else if (old instanceof InputSlotMorph
-                && inp instanceof InputSlotMorph) {
+        } else if (old instanceof InputSlotMorph &&
+                inp instanceof InputSlotMorph) {
             if (old.isEmptySlot()) {
                 inp.setContents('');
             } else {
                 inp.setContents(old.evaluate());
             }
-        } else if (old instanceof BooleanSlotMorph
-                && inp instanceof BooleanSlotMorph) {
+        } else if (old instanceof BooleanSlotMorph &&
+                inp instanceof BooleanSlotMorph) {
             inp.setContents(old.evaluate());
-        } else if (old instanceof TemplateSlotMorph
-                && inp instanceof TemplateSlotMorph) {
+        } else if (old instanceof TemplateSlotMorph &&
+                inp instanceof TemplateSlotMorph) {
             inp.setContents(old.evaluate());
-        } else if (old instanceof CSlotMorph
-                && inp instanceof CSlotMorph) {
+        } else if (old instanceof CSlotMorph &&
+                inp instanceof CSlotMorph) {
             inp.nestedBlock(old.evaluate());
+        } else if (old instanceof MultiArgMorph &&
+                inp instanceof MultiArgMorph &&
+                (old.slotSpec === inp.slotSpec)) {
+            this.replaceInput(inp, old.fullCopy());
+        } else {
+            preserve(old);
         }
-        i += 1;
-    });
+    }
     this.cachedInputs = null;
 };
 
@@ -1250,13 +1283,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 "duplicate block definition...",
                 'duplicateBlockDefinition'
             );
-            if (this.isGlobal) {
-                menu.addItem(
-                    "export block definition...",
-                    'exportBlockDefinition',
-                    'including dependencies'
-                );
-            }
+            menu.addItem(
+                "export block definition...",
+                'exportBlockDefinition',
+                'including dependencies'
+            );
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal ||
@@ -1281,10 +1312,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide = this.parentThatIsA(IDE_Morph),
+        rcvr = this.scriptTarget(),
+        def = this.isGlobal ? this.definition
+            : rcvr.getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
-        [this.definition].concat(this.definition.collectDependencies()),
+        [def].concat(def.collectDependencies([], [], rcvr)),
         ide
     ).popUp(this.world());
 };
@@ -1955,7 +1989,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
             col = Math.ceil((i + 1) / 4);
         } else if (i < 10) {
             row = 4;
-            col = 10 - i;
+            col = 3 - (10 - i);
         } else {
             row = i - 5;
             col = 1;
@@ -4277,20 +4311,11 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks, true), // for library
-        ide = this.world().children[0];
+    var ide = this.world().children[0];
 
-    if (this.blocks.length > 0) {
-        str = '<blocks app="'
-            + this.serializer.app
-            + '" version="'
-            + this.serializer.version
-            + '">'
-            + this.paletteXML()
-            + str
-            + '</blocks>';
+    if (this.blocks.length) {
         ide.saveXMLAs(
-            str,
+            ide.blocksLibraryXML(this.blocks, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
@@ -4303,19 +4328,6 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
-};
-
-BlockExportDialogMorph.prototype.paletteXML = function () {
-    var palette = new Map();
-    this.blocks.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
-            palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
-            );
-        }
-    });
-    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout
@@ -4389,9 +4401,15 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
     if (!ide) {return; }
     if (this.blocks.length > 0) {
         this.blocks.forEach(def => {
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
+            if (def.isGlobal) {
+                def.receiver = ide.stage;
+                ide.stage.globalBlocks.push(def);
+                ide.stage.replaceDoubleDefinitionsFor(def);
+            } else {
+                def.receiver = ide.currentSprite;
+                ide.currentSprite.customBlocks.push(def);
+                ide.currentSprite.replaceDoubleDefinitionsFor(def);
+            }
         });
         ide.flushPaletteCache();
         ide.categories.refreshEmpty();

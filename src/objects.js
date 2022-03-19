@@ -83,11 +83,11 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
-BlockVisibilityDialogMorph*/
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-January-03';
+modules.objects = '2022-March-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -1099,10 +1099,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportSum: {
+        reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n + %n'
+            spec: '%sum',
+            alias: '+'
         },
         reportDifference: {
             type: 'reporter',
@@ -1110,10 +1111,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        reportProduct: {
+        reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u00D7 %n',
+            spec: '%product',
             alias: '*'
         },
         reportQuotient: {
@@ -1147,15 +1148,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n ÷ %n'
         },
-        reportMin: {
+        reportVariadicMin: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n min %n'
+            spec: '%min',
+            alias: 'min'
         },
-        reportMax: {
+        reportVariadicMax: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n max %n'
+            spec: '%max',
+            alias: 'max'
         },
         reportRandom: {
             type: 'reporter',
@@ -1428,6 +1431,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
+        reportCrossproduct: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combinations %lists'
+        },
         reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
@@ -1676,6 +1684,22 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doSend: {
             selector: 'doBroadcast',
             expand: 1
+        },
+        reportSum: {
+            selector: 'reportVariadicSum',
+            variadic: true
+        },
+        reportProduct: {
+            selector: 'reportVariadicProduct',
+            variadic: true
+        },
+        reportMin: {
+            selector: 'reportVariadicMin',
+            variadic: true
+        },
+        reportMax: {
+            selector: 'reportVariadicMax',
+            variadic: true
         }
     };
 };
@@ -1769,29 +1793,33 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMouseY: ['reportMouseX'],
 
     // operators:
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportModulus: ['reportAtan2', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportAtan2: ['reportModulus', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportMin: ['reportMax', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
-    reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportDifference: ['reportVariadicSum', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicProduct: ['reportDifference', 'reportVariadicSum',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportQuotient: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportPower: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportQuotient', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportModulus: ['reportAtan2', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportAtan2: ['reportModulus', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicMin: ['reportVariadicMax', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
         'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
@@ -1821,6 +1849,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
+
+    // lists
+    reportConcatenatedLists: ['reportCrossproduct'],
+    reportCrossproduct: ['reportConcatenatedLists'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
@@ -1987,12 +2019,14 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             }
         });
         c.costumes = new List(arr);
+        c.costumes.type = 'costume';
         arr = [];
         this.sounds.asArray().forEach(sound => {
             var snd = forClone ? sound : sound.copy();
             arr.push(snd);
         });
         c.sounds = new List(arr);
+        c.sounds.type = 'sound';
         arr = [];
     }
     c.nestingScale = 1;
@@ -2652,9 +2686,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -2760,6 +2794,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
+        // +++ blocks.push(block('reportCrossproduct'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -3567,7 +3602,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function parseInfix(expression, operator, already) {
-        // very basic diadic infix parser for arithmetic expressions
+        // very basic dyadic infix parser for arithmetic expressions
         // with strict left-to-right operator precedence (as in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
@@ -3656,13 +3691,13 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, target, selectors, monads, alias, key, sel, i, inps,
             off = 1,
             reverseDict = {};
         selectors = {
-            '+': 'reportSum',
+            '+': 'reportVariadicSum',
             '-': 'reportDifference',
-            '*': 'reportProduct',
+            '*': 'reportVariadicProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
@@ -3696,18 +3731,24 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
+            target = block;
         } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            target = block;
             inps = block.inputs();
+            if (inps[0] instanceof MultiArgMorph) { // infix sum or product
+                target = inps[0];
+                inps = target.inputs();
+            }
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                block.replaceInput(inps[i - off], blockFromAST(ast[i]));
+                target.replaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3715,7 +3756,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
@@ -3724,6 +3765,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[i - off].setContents(ast[i]);
             }
         }
+        target.fixLayout();
         block.isDraggable = true;
         block.fixLayout();
         block.fixBlockColor(null, true);
@@ -4261,6 +4303,9 @@ SpriteMorph.prototype.remove = function () {
 SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph),
         clone;
+    if (this.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
     if (stage && stage.cloneCount <= 5000) {
         clone = this.fullCopy(true);
         clone.clonify(stage, immediately);
@@ -4926,7 +4971,7 @@ SpriteMorph.prototype.write = function (text, size) {
     // thanks to Michael Ball for contributing this code!
     if (typeof text !== 'string' && typeof text !== 'number') {
         throw new Error(
-            'LABEL can only draw text or numbers, not a ' +
+            localize('can only write text or numbers, not a') + ' ' +
             typeof text
         );
     }
@@ -5522,7 +5567,7 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
             ],
             eff
     )) {
-        throw new Error(localize('unsupported graphic effect') + ':\n' + eff);
+        throw new Error(localize('unsupported graphic effect') + ': "' + eff + '"');
     }
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
@@ -6929,6 +6974,11 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
         this.customBlocks = this.customBlocks.filter(def =>
             !contains(doubles, def)
         );
+        this.allDependentInvocationsOf(
+            definition.blockSpec()
+        ).reverse().forEach(
+            block => block.refresh(definition)
+        );
     }
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
@@ -7934,8 +7984,10 @@ StageMorph.prototype.init = function (globals) {
     this.customBlocks = [];
     this.globalBlocks = [];
     this.costumes = new List();
+    this.costumes.type = 'costume';
     this.costume = null;
     this.sounds = new List();
+    this.sounds.type = 'sound';
     this.version = Date.now(); // for observers
     this.isFastTracked = false;
     this.enableCustomHatBlocks = true;
@@ -8615,7 +8667,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'esc' && !ide.isAppMode) {
-        return this.fireStopAllEvent();
+        return ide.stopAllScripts();
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
@@ -8720,33 +8772,6 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         ide.controlBar.pauseButton.refresh();
     }
     return procs;
-};
-
-StageMorph.prototype.fireStopAllEvent = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-
-    this.threads.resumeAll(this.stage);
-
-    // experimental: run one step of a user-defined script
-    this.runStopScripts();
-
-    this.keysPressed = {};
-    this.threads.stopAll();
-    this.stopAllActiveSounds();
-    this.children.forEach(morph => {
-        if (morph.stopTalking) {
-            morph.stopTalking();
-        }
-    });
-    this.removeAllClones();
-    if (ide) {
-        ide.nextSteps([
-            nop,
-            () => this.stopAllActiveSounds(), // catch forever loops
-            () => this.stopProjection(),
-            () => ide.controlBar.pauseButton.refresh()
-        ]);
-    }
 };
 
 StageMorph.prototype.runStopScripts = function () {
@@ -9072,9 +9097,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -9174,6 +9199,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportConcatenatedLists'));
         blocks.push(block('reportReshape'));
+        // +++ blocks.push(block('reportCrossproduct'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -10002,6 +10028,25 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -10016,8 +10061,103 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+
+        // support costumes to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var cst = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting costumes directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => {
+                    if (data instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            data.contents.src,
+                            'text/svg',
+                            data.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(data.contents, data.name);
+                    }
+                }
+            );
+            return menu;
+        };
+
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var snd = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            snd.name = ide.currentSprite.newSoundName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting sounds directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveAudioAs(data.audio, data.name)
+            );
+            return menu;
+        };
+
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();
@@ -10051,6 +10191,29 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+
+        // support blocks to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var script = data.toBlock(),
+                prepare = script.prepareToBeGrabbed,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            script.setPosition(this.position());
+            return script;
+        };
     } else {
         contents = new TextMorph(
             data.toString(),
@@ -10060,6 +10223,25 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data.toString(),
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     }
     if (contents instanceof TextMorph) {
         // reflow text boundaries
@@ -11362,6 +11544,7 @@ CellMorph.prototype.createContents = function () {
     // re-build my contents
     var txt,
         img,
+        myself = this,
         fontSize = SyntaxElementMorph.prototype.fontSize,
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
@@ -11430,6 +11613,29 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.bounds.setWidth(img.width);
             this.contentsMorph.bounds.setHeight(img.height);
             this.contentsMorph.cachedImage = img;
+
+            // support blocks to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var script = myself.contents.toBlock(),
+                    prepare = script.prepareToBeGrabbed,
+                    ide = this.parentThatIsA(IDE_Morph) ||
+                        this.world().childThatIsA(IDE_Morph);
+
+                script.prepareToBeGrabbed = function (hand) {
+                    prepare.call(this, hand);
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                script.setPosition(this.position());
+                return script;
+            };
         } else if (this.contents instanceof Costume) {
             img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
@@ -11437,8 +11643,62 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.bounds.setWidth(img.width);
             this.contentsMorph.bounds.setHeight(img.height);
             this.contentsMorph.cachedImage = img;
+
+            // support costumes to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var cst = myself.contents.copy(),
+                    icon,
+                    prepare,
+                    ide = this.parentThatIsA(IDE_Morph)||
+                        this.world().childThatIsA(IDE_Morph);
+
+                cst.name = ide.currentSprite.newCostumeName(cst.name);
+                icon = new CostumeIconMorph(cst);
+                prepare = icon.prepareToBeGrabbed;
+
+                icon.prepareToBeGrabbed = function (hand) {
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                icon.setCenter(this.center());
+                return icon;
+            };
         } else if (this.contents instanceof Sound) {
             this.contentsMorph = new SymbolMorph('notes', 30);
+
+            // support sounds to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var snd = myself.contents.copy(),
+                    icon,
+                    prepare,
+                    ide = this.parentThatIsA(IDE_Morph)||
+                        this.world().childThatIsA(IDE_Morph);
+
+                snd.name = ide.currentSprite.newCostumeName(snd.name);
+                icon = new SoundIconMorph(snd);
+                prepare = icon.prepareToBeGrabbed;
+
+                icon.prepareToBeGrabbed = function (hand) {
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                icon.setCenter(this.center());
+                return icon;
+            };
         } else if (this.contents instanceof List) {
             if (this.contents.isTable()) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(
@@ -12069,14 +12329,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeCSV()) {
                 menu.addItem(
                     'export as CSV...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asCSV(),
-                            'text/csv;charset=utf-8', // RFC 4180
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -12085,14 +12342,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeJSON()) {
                 menu.addItem(
                     'export as JSON...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asJSON(true), // guess objects
-                            'text/json;charset=utf-8',
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asJSON(true), // guess objects
+                        'text/json;charset=utf-8',
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -12109,27 +12363,48 @@ WatcherMorph.prototype.userMenu = function () {
             }
             menu.addItem(
                 'export...',
-                () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.toString(),
-                        'text/plain;charset=utf-8',
-                        this.getter // variable name
-                    );
+                () => ide.saveFileAs(
+                    this.currentValue.toString(),
+                    'text/plain;charset=utf-8',
+                    this.getter // variable name
+                )
+            );
+        } else if (this.currentValue instanceof Costume) {
+            menu.addItem(
+                'export...',
+                 () => {
+                    if (this.currentValue instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            this.currentValue.contents.src,
+                            'text/svg',
+                            this.currentValue.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(
+                            this.currentValue.contents,
+                            this.currentValue.name
+                        );
+                    }
                 }
+            );
+        } else if (this.currentValue instanceof Sound) {
+            menu.addItem(
+                'export...',
+                () => ide.saveAudioAs(
+                    this.currentValue.audio,
+                    this.currentValue.name
+                )
             );
         } else if (this.currentValue instanceof List &&
                 this.currentValue.canBeCSV()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asCSV(),
-                        'text/csv;charset=utf-8', // RFC 4180
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asCSV(),
+                    'text/csv;charset=utf-8', // RFC 4180
+                    this.getter // variable name
+                )
             );
             if (this.currentValue.canBeJSON()) {
                 menu.addItem(
@@ -12148,14 +12423,11 @@ WatcherMorph.prototype.userMenu = function () {
                 this.currentValue.canBeJSON()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asJSON(true), // guessObjects
-                        'text/json;charset=utf-8',
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asJSON(true), // guessObjects
+                    'text/json;charset=utf-8',
+                    this.getter // variable name
+                )
             );
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();

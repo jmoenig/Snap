@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -68,11 +68,12 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
-ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows*/
+ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows,
+CostumeIconMorph, SoundIconMorph, localize*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2021-July-05';
+modules.tables = '2022-January-28';
 
 var Table;
 var TableCellMorph;
@@ -343,6 +344,8 @@ TableCellMorph.prototype.render = function (ctx) {
         x,
         y;
 
+    this.isDraggable = (this.data instanceof Context) ||
+        (this.data instanceof Costume) || (this.data instanceof Sound);
     ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
@@ -473,6 +476,86 @@ TableCellMorph.prototype.mouseLeave = function () {
         this.labelString = null;
         this.rerender();
     }
+};
+
+TableCellMorph.prototype.selectForEdit = function () {
+    if (this.data instanceof Context) {
+        return this.selectContextForEdit();
+    }
+    if (this.data instanceof Costume) {
+        return this.selectCostumeForEdit();
+    }
+    if (this.data instanceof Sound) {
+        return this.selectSoundForEdit();
+    }
+};
+
+TableCellMorph.prototype.selectContextForEdit = function () {
+    var script = this.data.toBlock(),
+        prepare = script.prepareToBeGrabbed,
+        ide = this.parentThatIsA(IDE_Morph) ||
+            this.world().childThatIsA(IDE_Morph);
+
+    script.prepareToBeGrabbed = function (hand) {
+        prepare.call(this, hand);
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    script.setPosition(this.position());
+    return script;
+};
+
+TableCellMorph.prototype.selectCostumeForEdit = function () {
+    var cst = this.data.copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    cst.name = ide.currentSprite.newCostumeName(cst.name);
+    icon = new CostumeIconMorph(cst);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
+};
+
+TableCellMorph.prototype.selectSoundForEdit = function () {
+    var snd = this.data.copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    snd.name = ide.currentSprite.newSoundName(snd.name);
+    icon = new SoundIconMorph(snd);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
 };
 
 // TableMorph //////////////////////////////////////////////////////////
@@ -1028,7 +1111,11 @@ TableMorph.prototype.columnAt = function (relativeX) {
 // TableMorph context menu
 
 TableMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        world = this.world(),
+        ide = detect(world.children, m => m instanceof IDE_Morph);
+
+    if (ide.isAppMode) {return; }
     if (this.parentThatIsA(TableDialogMorph)) {
         if (this.colWidths.length) {
             menu.addItem('reset columns', 'resetColumns');
@@ -1038,16 +1125,29 @@ TableMorph.prototype.userMenu = function () {
             menu.addItem(
                 'blockify',
                 () => {
-                    var world = this.world(),
-                        ide = detect(
-                            world.children,
-                            m => m instanceof IDE_Morph
-                        );
                     this.table.blockify().pickUp(world);
                     world.hand.grabOrigin = {
                         origin: ide.palette,
                         position: ide.palette.center()
                     };
+                }
+            );
+            menu.addItem(
+                'export',
+                () => {
+                    if (this.table.canBeCSV()) {
+                        ide.saveFileAs(
+                            this.table.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            this.table.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
                 }
             );
         }
@@ -1063,13 +1163,29 @@ TableMorph.prototype.userMenu = function () {
         menu.addItem(
             'blockify',
             () => {
-                var world = this.world(),
-                    ide = detect(world.children, m => m instanceof IDE_Morph);
                 this.table.blockify().pickUp(world);
                 world.hand.grabOrigin = {
                     origin: ide.palette,
                     position: ide.palette.center()
                 };
+            }
+        );
+        menu.addItem(
+            'export',
+            () => {
+                if (this.table.canBeCSV()) {
+                    ide.saveFileAs(
+                        this.table.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        localize('data') // name
+                    );
+                } else {
+                    ide.saveFileAs(
+                        this.table.asJSON(true), // guessObjects
+                        'text/json;charset=utf-8',
+                        localize('data') // name
+                    );
+                }
             }
         );
     }

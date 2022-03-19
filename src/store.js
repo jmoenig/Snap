@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-January-02';
+modules.store = '2022-March-15';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -226,8 +226,7 @@ XML_Serializer.prototype.format = function (string) {
 // XML_Serializer loading:
 
 XML_Serializer.prototype.load = function (xmlString) {
-    // public - answer a new object which is represented by the given
-    // XML string.
+    // answer a new object which is represented by the given XML string.
     nop(xmlString);
     throw new Error(
         'loading should be implemented in heir of XML_Serializer'
@@ -468,8 +467,11 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
             sel => {
+                var selector, migration;
                 if (sel) {
-                    scene.hiddenPrimitives[sel] = true;
+                    migration = SpriteMorph.prototype.blockMigrations[sel];
+                    selector = migration ? migration.selector : sel;
+                    scene.hiddenPrimitives[selector] = true;
                 }
             }
         );
@@ -658,17 +660,23 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
-    // public - answer a new Array of custom block definitions
+    // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
-    var stage, model;
+    var model = this.parse(xmlString);
+    if (+model.attributes.version > this.version) {
+        throw 'Module uses newer version of Serializer';
+    }
+    return this.loadBlocksModel(model, targetStage);
+};
+
+SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
+    // public - answer a new dictionary of custom block definitions
+    // represented by the given already parsed XML Node
+    var stage;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
     stage = this.scene.stage;
-    model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
     model.palette = model.childNamed('palette');
     if (model.palette) {
         this.loadPalette(model.palette).forEach((value, key) =>
@@ -676,18 +684,22 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
         );
     }
     model.removeChild(model.palette);
-    this.loadCustomBlocks(stage, model, true);
-    this.populateCustomBlocks(
-        stage,
-        model,
-        true
-    );
+    this.loadCustomBlocks(stage, model, true); // global
+    this.populateCustomBlocks(stage, model, true); // global
+    model.local = model.childNamed('local');
+    if (model.local) {
+        this.loadCustomBlocks(stage, model.local, false); // not global
+        this.populateCustomBlocks( stage, model.local, false); // not global
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
     this.scene = new Scene();
     this.mediaDict = {};
-    return stage.globalBlocks;
+    return {
+        global : stage.globalBlocks,
+        local : stage.customBlocks
+    };
 };
 
 SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
@@ -1142,6 +1154,16 @@ SnapSerializer.prototype.loadScriptsArray = function (model, object) {
     return scripts;
 };
 
+SnapSerializer.prototype.loadScriptModule = function (model, object) {
+    // return a new script represented by the given xml model,
+    // note: custom block definitions referenced here must be loaded before
+    var script;
+    this.scene = new Scene(object.parentThatIsA(StageMorph));
+    script = this.loadScript(model, object);
+    this.scene = new Scene();
+    return script;
+};
+
 SnapSerializer.prototype.loadScript = function (model, object) {
     // private
     var topBlock, block, nextBlock;
@@ -1189,7 +1211,8 @@ SnapSerializer.prototype.loadComment = function (model) {
 SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     // private
     var block, info, inputs, isGlobal, receiver, migration,
-        migrationOffset = 0;
+        migrationOffset = 0,
+        migratoToVariadic = false;
 
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
@@ -1206,6 +1229,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             ];
             if (migration) {
                 migrationOffset = migration.offset || 0;
+                migratoToVariadic = migration.variadic;
             }
         }
     } else if (model.tag === 'custom-block') {
@@ -1265,7 +1289,24 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         } else if (child.tag === 'receiver') {
             nop(); // ignore
         } else {
-            this.loadInput(child, inputs[i + migrationOffset], block, object);
+            if (migratoToVariadic) {
+                // assume all formerly single inputs are now part of the first
+                // one which is variadic and already expanded to hold them
+                // example: migrate old infix addition to new variadic infix sum
+                this.loadInput(
+                    child,
+                    inputs[0].inputs()[i],
+                    inputs[0],
+                    object
+                );
+            } else {
+                this.loadInput(
+                    child,
+                    inputs[i + migrationOffset],
+                    block,
+                    object
+                );
+            }
         }
     });
     block.cachedInputs = null;
