@@ -12,11 +12,15 @@
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed library blocks preview to deal with both local and global blocks
+    * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
     * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-21
+* updated frequency distribution analysis library, thanks, Brian!
 
 ### 2022-03-18
 * objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
