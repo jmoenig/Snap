@@ -22,6 +22,7 @@
 
 ### 2022-03-22
 * blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+* store: tweaked script deserialization
 
 ### 2022-03-21
 * updated frequency distribution analysis library, thanks, Brian!

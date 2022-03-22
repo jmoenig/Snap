@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-18';
+modules.store = '2022-March-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1353,7 +1353,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             input.fixLayout();
         }
     } else if (model.tag === 'list') {
-        while (input.inputs().length > 0) {
+        while (input.inputs().length > 0 && input.removeInput) {
             input.removeInput();
         }
         model.children.forEach(item => {
