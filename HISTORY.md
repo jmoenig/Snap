@@ -9,6 +9,7 @@
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
+    * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed library blocks preview to deal with both local and global blocks
@@ -18,6 +19,9 @@
     * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-22
+* blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
 
 ### 2022-03-21
 * updated frequency distribution analysis library, thanks, Brian!

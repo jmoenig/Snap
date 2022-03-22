@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-18';
+modules.blocks = '2022-March-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3797,7 +3797,8 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     else if (oldInputs.length &&
         (inputs.length === 1) &&
         trg instanceof MultiArgMorph &&
-        !(src instanceof MultiArgMorph)
+        !(src instanceof MultiArgMorph) &&
+        !(src instanceof ArgLabelMorph)
     ) {
         element = trg;
         inputs = element.inputs();
