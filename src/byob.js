@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-17';
+modules.byob = '2022-March-22';
 
 // Declarations
 
@@ -4242,6 +4242,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                         } else {
                             this.blocks.push(definition);
                         }
+                        this.collectDependencies();
                     },
                     null,
                     () => contains(this.blocks, definition),
@@ -4306,6 +4307,31 @@ BlockExportDialogMorph.prototype.selectNone = function () {
     this.body.contents.children.forEach(checkBox => {
         checkBox.refresh();
     });
+};
+
+// BlockExportDialogMorph dependency management
+
+BlockExportDialogMorph.prototype.collectDependencies = function () {
+    // add dependencies to the blocks:
+    this.dependencies().forEach(def => {
+        if (!contains(this.blocks, def)) {
+            this.blocks.push(def);
+        }
+    });
+    // refresh the checkmarks
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockExportDialogMorph.prototype.dependencies = function () {
+    var deps = [];
+    this.blocks.forEach(def => def.collectDependencies(
+        [],
+        deps,
+        def.receiver
+    ));
+    return deps;
 };
 
 // BlockExportDialogMorph ops

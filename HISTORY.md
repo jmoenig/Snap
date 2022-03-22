@@ -6,6 +6,7 @@
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
 * **Notable Changes:**
+    * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
@@ -23,6 +24,7 @@
 ### 2022-03-22
 * blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
 * store: tweaked script deserialization
+* byob: exporting a library includes dependencies (auto-select all referenced blocks)
 
 ### 2022-03-21
 * updated frequency distribution analysis library, thanks, Brian!
