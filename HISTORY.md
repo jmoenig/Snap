@@ -11,6 +11,7 @@
     * moved "append", "reshape", "combinations" blocks down one group in the palette
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+    * fixed relabelling local custom blocks to global ones and vice-versa
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed library blocks preview to deal with both local and global blocks
@@ -20,6 +21,9 @@
     * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-23
+* byob: fixed #3020
 
 ### 2022-03-22
 * blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters

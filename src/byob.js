@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-22';
+modules.byob = '2022-March-23';
 
 // Declarations
 
@@ -1436,6 +1436,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.definition = def;
+                this.isGlobal = def.isGlobal;
                 this.refresh();
                 this.scriptTarget().parentThatIsA(
                     IDE_Morph
