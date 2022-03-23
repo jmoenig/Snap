@@ -9,6 +9,7 @@
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * SciSnap2 extension update (ImagePad), thanks, Eckart!
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
@@ -24,6 +25,7 @@
 
 ### 2022-03-23
 * byob: fixed #3020
+* SciSnap2 extension update (ImagePad), thanks, Eckart!
 
 ### 2022-03-22
 * blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
