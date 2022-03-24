@@ -33,7 +33,7 @@ Color, Process, contains*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-February-08';
+modules.extensions = '2022-March-24';
 
 // Global stuff
 
@@ -484,6 +484,7 @@ SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
     function (method, url, data, headers, proc) {
         var response, i, header;
+        url = decodeURI(url);
         Process.prototype.checkURLAllowed(url);
         if (!proc.httpRequest) {
             proc.httpRequest = new XMLHttpRequest();

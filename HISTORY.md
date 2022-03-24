@@ -25,6 +25,7 @@
 
 ### 2022-03-24
 * German translation update for "costume name"
+* threads, extension: decodeURI XHR requests
 
 ### 2022-03-23
 * byob: fixed #3020

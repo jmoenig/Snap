@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-March-16';
+modules.threads = '2022-March-24';
 
 var ThreadManager;
 var Process;
@@ -3689,6 +3689,7 @@ Process.prototype.reportLastAnswer = function () {
 
 Process.prototype.reportURL = function (url) {
     var response;
+    url = decodeURI(url);
     this.checkURLAllowed(url);
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
