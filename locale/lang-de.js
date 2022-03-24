@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-03-16', // this, too, will appear in the Translators tab
+        '2022-03-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2088,6 +2088,8 @@ SnapTranslator.dict.de = {
         'Rand oben',
     'bottom':
         'Rand unten',
+    'costume name':
+        'Kostümname',
 
     // attributes in the SET block's dropdown
     'my anchor':

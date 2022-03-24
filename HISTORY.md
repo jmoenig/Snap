@@ -23,6 +23,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-24
+* German translation update for "costume name"
+
 ### 2022-03-23
 * byob: fixed #3020
 * SciSnap2 extension update (ImagePad), thanks, Eckart!
