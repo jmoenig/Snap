@@ -7521,13 +7521,14 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     var block = aContext.expression,
   		parameters = aContext.inputs,
         hasEmptySlots = false,
-        plength = 0;
+        plength = 0,
+        code;
 
 	this.source = aContext;
-    if (implicitParamCount == null || implicitParamCount === '') {
+    if (isNil(implicitParamCount) || implicitParamCount === '') {
         this.implicitParams = 1;
     } else {
-        this.implicitParams = implicitParamCount >> 0;
+        this.implicitParams = Math.floor(implicitParamCount);
         if (this.implicitParams < 0) {
             // use 1 if implicitParamCount doesn't make sense
             this.implicitParams = 1;
@@ -7564,7 +7565,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     // compile using gensyms
 
     this.scriptVarCounter = 0;
-    var code = 'proc=p.pop();\n';
+    code = 'proc=p.pop();\n';
     if (plength) {
         // fill missing parameters with empty string
         code += 'while(' + plength + '>p.length)p.push("");\n';
@@ -7575,13 +7576,15 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         code += 'return ' + this.compileExpression(block);
     }
     block = 'var ';
-    this.gensyms.forEach(function (value) {
+    this.gensyms.forEach(value => {
         if (value.charAt(0) === 's') {
             // declare script variable
             block += value + '=0,';
         }
     });
+    /*jshint evil: true*/
     return Function('...p', block + code);
+    /*jshint evil: false*/
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -7623,13 +7626,15 @@ JSCompiler.prototype.compileExpression = function (block) {
     // special command forms
     case 'doDeclareVariables':
         block = '';
+
         inputs[0].inputs().forEach(({children: {0: {blockSpec: name}}}) => {
-            if (gensym = this.gensyms.get(name)) {
+            var gensym = this.gensyms.get(name);
+            if (gensym) {
                 // we already have that script variable, just set it to 0
                 block += gensym + '=';
                 return;
             }
-            var gensym = 's' + this.scriptVarCounter++;
+            gensym = 's' + this.scriptVarCounter++;
             block += gensym + '=';
             this.gensyms.set(name, gensym);
         });
@@ -7639,9 +7644,12 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.escape(block.blockSpec) +
             '")');
     case 'doSetVar':
-        if (inputs[0] instanceof ArgMorph && (target = this.gensyms.get(inputs[0].evaluate()))) {
-            // setting gensym (script or argument) variable
-            return target + ' = ' + this.compileInput(inputs[1]);
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                // setting gensym (script or argument) variable
+                return target + ' = ' + this.compileInput(inputs[1]);
+            }
         }
         // redirect var to process
         return 'proc.setVarNamed(' +
@@ -7650,10 +7658,13 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileInput(inputs[1]) +
             ')';
     case 'doChangeVar':
-        if (inputs[0] instanceof ArgMorph && (target = this.gensyms.get(inputs[0].evaluate()))) {
-            return '{const d=' + this.compileInput(inputs[1]) +
-                ',v=parseFloat(' + target + ');' +
-                target + '=isNaN(v)?d:v+parseFloat(d)}';
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                return '{const d=' + this.compileInput(inputs[1]) +
+                    ',v=parseFloat(' + target + ');' +
+                    target + '=isNaN(v)?d:v+parseFloat(d)}';
+            }
         }
         // redirect var to process
         return 'proc.incrementVarNamed(' +

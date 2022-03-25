@@ -25,6 +25,7 @@
 
 ### 2022-03-25
 * threads: added @xBZZZZ's JSCompiler fixes (was #3009)
+* threads: refactored some JSCompiler code (mostly to please JSHint)
 
 ### 2022-03-24
 * German translation update for "costume name"
