@@ -235,7 +235,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (this.yield_enabled) {
             yield_keyword = "yield;\n"
         }
-        return "for (let i = 0; i < " + counter + "; i++) {\n" +
+        return `for (let i = 0; i < ${counter}; i++) {\n` +
                     repeat_body + "\n" + 
                     yield_keyword +
                 "}";
