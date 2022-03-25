@@ -13,9 +13,10 @@
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
+    * fixed library blocks preview to deal with both local and global blocks
+    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ! 
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
-    * fixed library blocks preview to deal with both local and global blocks
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
