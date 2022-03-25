@@ -152,6 +152,15 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileInput(inputs[2]) +
             ')';
     case 'evaluateCustomBlock':
+        /*
+        DESIGN:
+        1. Check if the Function is compiled or not (acting like a linker), then compile
+        2. Caller style of pushing a New Context and Assigning Variables
+        LAST. Pop the context
+        */
+        if (block.to_compile) {
+            
+        }
         throw new Error(
             'compiling does not yet support\n' +
             'custom blocks'
@@ -262,21 +271,21 @@ JSCompiler.prototype.compileExpression = function (block) {
             for_body = this.compileSequence(body);
         }
         // vars.changeVar(upvar, dta.step);
-        var proc_vars = "current_process.context.variables"
+        var proc_context_vars = "current_process.context.variables"
         var yield_keyword = ""
         if (this.yield_enabled) {
             yield_keyword = "yield;"
         }
-        return `${proc_vars}.addVar("${upvar}");
+        return `${proc_context_vars}.addVar("${upvar}");
 let list = ${assignment_to_code_list};
 current_process.assertType(list, 'list');
 let list_size = list.length();
 for (let i = 1; i <= list_size; i++) {
     if (list.isLinked) {
-        ${proc_vars}.setVar("${upvar}", list.at(1));
+        ${proc_context_vars}.setVar("${upvar}", list.at(1));
         list = list.cdr();
     } else {
-        ${proc_vars}.setVar("${upvar}", list.at(i));
+        ${proc_context_vars}.setVar("${upvar}", list.at(i));
     }
     current_process.pushContext(null, current_process.context);
     ${for_body}
@@ -298,13 +307,16 @@ for (let i = 1; i <= list_size; i++) {
             for_body = "\n" + this.compileSequence(body);
         }
         // vars.changeVar(upvar, dta.step);
-        var proc_vars = "current_process.context.variables"
-        var yield_keyword = ""
+        var proc_context_vars = "current_process.context.variables";
+        var yield_keyword = "";
         if (this.yield_enabled) {
-            yield_keyword = "yield;"
+            yield_keyword = "yield;";
         }
-        return `${proc_vars}.addVar("${upvar}");
-for (${proc_vars}.setVar("${upvar}", ${Math.floor(start)}); ${proc_vars}.getVar("${upvar}") ${test_sign} ${end}; ${proc_vars}.changeVar("${upvar}", ${step})) {
+        let initalizer = `${proc_context_vars}.setVar("${upvar}", ${Math.floor(start)})`;
+        let loop_condition = `${proc_context_vars}.getVar("${upvar}") ${test_sign} ${end}`;
+        let incrementor = `${proc_context_vars}.changeVar("${upvar}", ${step})`;
+        return `${proc_context_vars}.addVar("${upvar}");
+for (${initalizer}; ${loop_condition}; ${incrementor}) {
     current_process.pushContext(null, current_process.context);
     ${for_body}
     ${yield_keyword}
