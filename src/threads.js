@@ -736,7 +736,12 @@ Process.prototype.runStep = function (deadline) {
         }
         
         if (ALLOW_PROCESS_COMPILERS) {
-            this.process_compiler(this.topBlock)
+            if (this.topBlock.selector == "doYield") {
+                // It already pops itself
+                this.doYield();
+            } else {
+                this.process_compiler(this.topBlock);
+            }
         } else {
             this.evaluateContext();
         }
