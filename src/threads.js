@@ -194,6 +194,8 @@ function ThreadManager() {
 ThreadManager.prototype.pauseCustomHatBlocks = false;
 ThreadManager.prototype.disableClickToRun = false;
 
+var ALLOW_PROCESS_COMPILERS = true;
+
 ThreadManager.prototype.toggleProcess = function (block, receiver) {
     if (this.disableClickToRun) {
         return;
@@ -627,6 +629,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isInterrupted = false; // experimental, for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
 
+    this.code_cont_gen = null;
+
     if (topBlock) {
         this.homeContext.variables.parentFrame =
             this.homeContext.receiver.variables;
@@ -646,6 +650,54 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
 Process.prototype.isRunning = function () {
     return !this.readyToTerminate && (this.context || this.isPaused);
 };
+
+Process.prototype.process_compiler = function (topBlock) {
+    // Only this code has access to gen_cont, not Snap
+    var gen_code = null;
+    if (this.code_cont_gen) {
+        gen_code = this.code_cont_gen;
+    } else if (topBlock) {
+        try {
+            if (topBlock.to_compile) {
+                var compiler = new JSCompiler(this);
+                var compiled_js = compiler.compileWithSpriteProcessContext(topBlock);
+                console.log(compiled_js);
+                // Save the compiled_function to the topBlock
+                eval(`topBlock.compiled_function = ${compiled_js}`);
+                topBlock.to_compile = false; // Compiled now, no need to recompile
+            }
+            if (topBlock.compiled_function) {
+                gen_code = topBlock.compiled_function(this.receiver, this);
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    } else {
+        // Hardcoded compile reset
+        topBlock.to_compile = false;
+        topBlock.compiled_function = null;
+        gen_code = null; // Generator Code is already null, but
+                         //   more informative to be here also
+    }
+
+    if (gen_code) {
+        try {
+            var gen_output = gen_code.next();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
+        if (!gen_output.done) {
+            this.code_cont_gen = gen_code;
+        } else {
+            // Done, return any value given
+            this.returnValueToParentContext(gen_output.value);
+            this.popContext()
+        }
+    }
+}
 
 // Process entry points
 
@@ -682,7 +734,12 @@ Process.prototype.runStep = function (deadline) {
             }
             return;
         }
-        this.evaluateContext();
+        
+        if (ALLOW_PROCESS_COMPILERS) {
+            this.process_compiler(this.topBlock)
+        } else {
+            this.evaluateContext();
+        }
     }
 
     this.stepFrameCount = 0;

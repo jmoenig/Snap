@@ -11499,6 +11499,11 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (this.morphToGrab.isDraggable) {
                 morph = this.morphToGrab.selectForEdit ?
                         this.morphToGrab.selectForEdit() : this.morphToGrab;
+                if (morph.topBlock) {
+                    let topblk = morph.topBlock()
+                    topblk.to_compile = true;
+                    topblk.compiled_function = null;
+                }
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
                 this.world.stopEditing();

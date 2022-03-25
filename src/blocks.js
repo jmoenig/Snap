@@ -2604,6 +2604,9 @@ BlockMorph.prototype.init = function () {
     BlockMorph.uber.init.call(this);
     this.color = new Color(102, 102, 102);
     this.cachedInputs = null;
+
+    this.to_compile = true;
+    this.compiled_function = null;
 };
 
 BlockMorph.prototype.scriptTarget = function () {
@@ -4909,6 +4912,8 @@ BlockMorph.prototype.snap = function () {
     top.allComments().forEach(comment =>
         comment.align(top)
     );
+    top.to_compile = true;
+    top.compiled_function = null;
     // fix highlights, if any
     if (this.getHighlight() && (this !== top)) {
         this.removeHighlight();
@@ -4932,6 +4937,14 @@ BlockMorph.prototype.snap = function () {
         }
     }
 };
+
+BlockMorph.prototype.blockMorphRecompile = function () {
+    if (this instanceof BlockMorph) {
+        let topblk = this.topBlock();
+        topblk.to_compile = true;
+        topblk.compiled_function = null;
+    }
+}
 
 // CommandBlockMorph ///////////////////////////////////////////////////
 
