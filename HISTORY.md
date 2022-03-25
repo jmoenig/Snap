@@ -23,6 +23,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-03-25
+* threads: added @xBZZZZ's JSCompiler fixes (was #3009)
+
 ### 2022-03-24
 * German translation update for "costume name"
 * threads, extension: decodeURI XHR requests
