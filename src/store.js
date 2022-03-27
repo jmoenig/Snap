@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-15';
+modules.store = '2022-March-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -233,10 +233,17 @@ XML_Serializer.prototype.load = function (xmlString) {
     );
 };
 
-XML_Serializer.prototype.parse = function (xmlString) {
-    // private - answer an XML_Element representing the given XML String
+XML_Serializer.prototype.parse = function (xmlString, assertVersion) {
+    // answer an XML_Element representing the given XML String
+    // optional assertVersion parameter for asserting a top-level
+    // node to be consistent with the current serializer version
     var element = new XML_Element();
     element.parseString(xmlString);
+    if (assertVersion) {
+        if (+element.attributes.version > this.version) {
+            throw 'Module uses newer version of Serializer';
+        }
+    }
     return element;
 };
 
@@ -702,19 +709,16 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     };
 };
 
-SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
-    // public - import a set of sprites represented by xmlString
+SnapSerializer.prototype.loadSpritesModel = function (xmlNode, ide) {
+    // public - import a set of sprites represented by an xml model
     // into the current scene of the ide
-    var model, scene;
+    var model = xmlNode,
+        scene;
 
     this.scene = new Scene(ide.stage);
     scene = this.scene;
     scene.spritesDict[scene.stage.name] = scene.stage;
 
-    model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
     model.childrenNamed('sprite').forEach(model => {
         var sprite  = new SpriteMorph(scene.globalVariables);
 
@@ -1154,7 +1158,7 @@ SnapSerializer.prototype.loadScriptsArray = function (model, object) {
     return scripts;
 };
 
-SnapSerializer.prototype.loadScriptModule = function (model, object) {
+SnapSerializer.prototype.loadScriptModel = function (model, object) {
     // return a new script represented by the given xml model,
     // note: custom block definitions referenced here must be loaded before
     var script;
@@ -1349,7 +1353,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             input.fixLayout();
         }
     } else if (model.tag === 'list') {
-        while (input.inputs().length > 0) {
+        while (input.inputs().length > 0 && input.removeInput) {
             input.removeInput();
         }
         model.children.forEach(item => {

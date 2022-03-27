@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-March-04';
+modules.threads = '2022-March-25';
 
 var ThreadManager;
 var Process;
@@ -3689,6 +3689,7 @@ Process.prototype.reportLastAnswer = function () {
 
 Process.prototype.reportURL = function (url) {
     var response;
+    url = decodeURI(url);
     this.checkURLAllowed(url);
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
@@ -6441,7 +6442,9 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
     if (width <= 0 || height <= 0) {
-        return new Costume();
+        throw new Error(
+            'cannot handle zero width or height'
+        );
     }
     if (!isFinite(width * height) || isNaN(width * height)) {
        throw new Error(
@@ -7504,9 +7507,10 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 function JSCompiler(aProcess) {
 	this.process = aProcess;
 	this.source = null; // a context
- 	this.gensyms = null; // temp dictionary for parameter substitutions
+ 	this.gensyms = new Map(); // temp dictionary for parameter substitutions
   	this.implicitParams = null;
    	this.paramCount = null;
+    this.scriptVarCounter = null;
 }
 
 JSCompiler.prototype.toString = function () {
@@ -7516,12 +7520,20 @@ JSCompiler.prototype.toString = function () {
 JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     var block = aContext.expression,
   		parameters = aContext.inputs,
-        parms = [],
         hasEmptySlots = false,
-        i;
+        plength = 0,
+        code;
 
 	this.source = aContext;
-    this.implicitParams = implicitParamCount || 1;
+    if (isNil(implicitParamCount) || implicitParamCount === '') {
+        this.implicitParams = 1;
+    } else {
+        this.implicitParams = Math.floor(implicitParamCount);
+        if (this.implicitParams < 0) {
+            // use 1 if implicitParamCount doesn't make sense
+            this.implicitParams = 1;
+        }
+    }
 
 	// scan for empty input slots
  	hasEmptySlots = !isNil(detect(
@@ -7530,7 +7542,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     ));
 
     // translate formal parameters into gensyms
-    this.gensyms = new Map();
+    this.gensyms.clear();
     this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
@@ -7543,33 +7555,36 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         }
         // map explicit formal parameters
         parameters.forEach((pName, idx) => {
-        	var pn = 'p' + idx;
-            parms.push(pn);
-        	this.gensyms.set(pName, pn);
+        	this.gensyms.set(pName, 'p[' + idx + ']');
         });
+        plength = parameters.length;
     } else if (hasEmptySlots) {
-    	if (this.implicitParams > 1) {
-        	for (i = 0; i < this.implicitParams; i += 1) {
-         		parms.push('p' + i);
-         	}
-     	} else {
-        	// allow for a single implicit formal parameter
-        	parms = ['p0'];
-        }
+    	plength = this.implicitParams;
     }
 
     // compile using gensyms
 
-    if (block instanceof CommandBlockMorph) {
-        return Function.apply(
-            null,
-            parms.concat([this.compileSequence(block)])
-        );
+    this.scriptVarCounter = 0;
+    code = 'proc=p.pop();\n';
+    if (plength) {
+        // fill missing parameters with empty string
+        code += 'while(' + plength + '>p.length)p.push("");\n';
     }
-    return Function.apply(
-        null,
-        parms.concat(['return ' + this.compileExpression(block)])
-    );
+    if (block instanceof CommandBlockMorph) {
+        code += this.compileSequence(block) + 'return ""';
+    } else {
+        code += 'return ' + this.compileExpression(block);
+    }
+    block = 'var ';
+    this.gensyms.forEach(value => {
+        if (value.charAt(0) === 's') {
+            // declare script variable
+            block += value + '=0,';
+        }
+    });
+    /*jshint evil: true*/
+    return Function('...p', block + code);
+    /*jshint evil: false*/
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -7604,21 +7619,57 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'evaluate':
         return 'invoke(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
 
     // special command forms
-    case 'doSetVar': // redirect var to process
-        return 'arguments[arguments.length - 1].setVarNamed(' +
+    case 'doDeclareVariables':
+        block = '';
+
+        inputs[0].inputs().forEach(({children: {0: {blockSpec: name}}}) => {
+            var gensym = this.gensyms.get(name);
+            if (gensym) {
+                // we already have that script variable, just set it to 0
+                block += gensym + '=';
+                return;
+            }
+            gensym = 's' + this.scriptVarCounter++;
+            block += gensym + '=';
+            this.gensyms.set(name, gensym);
+        });
+        return block + '0';
+    case 'reportGetVar':
+        return this.gensyms.get(block.blockSpec) || ('proc.getVarNamed("' +
+            this.escape(block.blockSpec) +
+            '")');
+    case 'doSetVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                // setting gensym (script or argument) variable
+                return target + ' = ' + this.compileInput(inputs[1]);
+            }
+        }
+        // redirect var to process
+        return 'proc.setVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
-    case 'doChangeVar': // redirect var to process
-        return 'arguments[arguments.length - 1].incrementVarNamed(' +
+    case 'doChangeVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                return '{const d=' + this.compileInput(inputs[1]) +
+                    ',v=parseFloat(' + target + ');' +
+                    target + '=isNaN(v)?d:v+parseFloat(d)}';
+            }
+        }
+        // redirect var to process
+        return 'proc.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
@@ -7637,7 +7688,9 @@ JSCompiler.prototype.compileExpression = function (block) {
             '} else {\n' +
             this.compileSequence(inputs[2].evaluate()) +
             '}';
-
+    case 'reportBoolean':
+    case 'reportNewList':
+        return this.compileInput(inputs[0]);
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
@@ -7646,13 +7699,11 @@ JSCompiler.prototype.compileExpression = function (block) {
         if (isSnapObject(target)) {
             if (rcvr === 'SpriteMorph.prototype') {
                 // fix for blocks like (x position)
-                rcvr = 'arguments[arguments.length - 1].blockReceiver()';
-            } 
-            return rcvr + '.' + selector + '(' + args +')';
+                rcvr = 'proc.blockReceiver()';
+            }
+            return rcvr + '.' + selector + '(' + args + ')';
         } else {
-            return 'arguments[arguments.length - 1].' +
-                selector +
-                '(' + args + ')';
+            return 'proc.' + selector + '(' + args + ')';
         }
     }
 };
@@ -7667,13 +7718,13 @@ JSCompiler.prototype.compileSequence = function (commandBlock) {
 
 JSCompiler.prototype.compileInfix = function (operator, inputs) {
     return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
-        this.compileInput(inputs[1]) +')';
+        this.compileInput(inputs[1]) + ')';
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
     var args = '';
     array.forEach(inp => {
-        if (args.length) {
+        if (args) {
             args += ', ';
         }
         args += this.compileInput(inp);
@@ -7689,7 +7740,7 @@ JSCompiler.prototype.compileInput = function (inp) {
         if (this.implicitParams > 1) {
          	if (this.paramCount < this.implicitParams) {
             	this.paramCount += 1;
-             	return 'p' + (this.paramCount - 1);
+             	return 'p[' + (this.paramCount - 1) + ']';
         	}
             throw new Error(
                 localize('expecting') + ' ' + this.implicitParams + ' '
@@ -7697,7 +7748,7 @@ JSCompiler.prototype.compileInput = function (inp) {
                     + this.paramCount
             );
         }
-		return 'p0';
+		return 'p[0]';
     } else if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
     } else if (inp instanceof ArgLabelMorph) {
@@ -7726,16 +7777,6 @@ JSCompiler.prototype.compileInput = function (inp) {
             );
         }
     } else if (inp instanceof BlockMorph) {
-        if (inp.selector === 'reportGetVar') {
-        	if (this.gensyms.has(inp.blockSpec)) {
-            	// un-quoted gensym:
-            	return this.gensyms.get(inp.blockSpec);
-        	}
-         	// redirect var query to process
-            return 'arguments[arguments.length - 1].getVarNamed("' +
-            	this.escape(inp.blockSpec) +
-            	'")';
-        }
         return this.compileExpression(inp);
     } else {
         throw new Error(
@@ -7749,7 +7790,7 @@ JSCompiler.prototype.compileInput = function (inp) {
 JSCompiler.prototype.escape = function(string) {
     // make sure string is a string
     string += '';
-    var len = string.length, i = 0, char, escaped = '', safe_chars = 
+    var len = string.length, i = 0, char, escaped = '', safe_chars =
         ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
         "%&'()*+,-./:;<=>?@[]^_`{|}~";
     while (len > i) {

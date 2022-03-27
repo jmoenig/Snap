@@ -2,18 +2,72 @@
 
 ## in development:
 * **New Features:**
-    * export script (including dependencies)
-    * export / import sprite-local custom block definitions
+    * export script (including dependencies) via its context menu
+    * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
 * **Notable Changes:**
+    * exporting a library includes dependencies (auto-select all referenced blocks)
+    * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * SciSnap2 extension update (ImagePad), thanks, Eckart!
 * **Notable Fixes:**
-    * guard against broken SVG costumes when loading a project
+    * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+    * fixed relabelling local custom blocks to global ones and vice-versa
+    * fixed library blocks preview to deal with both local and global blocks
+    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ! 
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
+    * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
+    * updated contribution guidelines, thanks, Peter!
+    * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-25
+* threads: added @xBZZZZ's JSCompiler fixes (was #3009)
+* threads: refactored some JSCompiler code (mostly to please JSHint)
+
+### 2022-03-24
+* German translation update for "costume name"
+* threads, extension: decodeURI XHR requests
+
+### 2022-03-23
+* byob: fixed #3020
+* SciSnap2 extension update (ImagePad), thanks, Eckart!
+
+### 2022-03-22
+* blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+* store: tweaked script deserialization
+* byob: exporting a library includes dependencies (auto-select all referenced blocks)
+
+### 2022-03-21
+* updated frequency distribution analysis library, thanks, Brian!
+
+### 2022-03-18
+* objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
+* blocks: added optional receiver sprite to toXMLScript() api
+* store: cleaned up version assertion
+* gui: migrated library import dialog to the new file structure
+
+### 2022-03-17
+* blocks: refactored dependencies scan for scripts
+* gui: refactored palette serialization for scripts
+* byob, blocks, gui: refactored blocksLibraryXML()
+* gui: new format for exporting sprites, under construction
+* gui: store: import sprites with dependencies
+
+### 2022-03-16
+* restored v7.4.0-dev
+
+## 7.3.1:
+* **Notable Fix:**
+    * guard against broken SVG costumes when loading a project
+
+### 2022-03-16
+* objects, threads: reformulated the zero-costume-width fix addressing a costume-loading issue
+* German translation update for new error message
+* prepared v7.3.1 emergency patch
 
 ### 2022-03-15
 * blocks, store, gui: deserialize new format for exported scripts

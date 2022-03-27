@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-14';
+modules.byob = '2022-March-23';
 
 // Declarations
 
@@ -1436,6 +1436,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.definition = def;
+                this.isGlobal = def.isGlobal;
                 this.refresh();
                 this.scriptTarget().parentThatIsA(
                     IDE_Morph
@@ -4242,6 +4243,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                         } else {
                             this.blocks.push(definition);
                         }
+                        this.collectDependencies();
                     },
                     null,
                     () => contains(this.blocks, definition),
@@ -4308,6 +4310,31 @@ BlockExportDialogMorph.prototype.selectNone = function () {
     });
 };
 
+// BlockExportDialogMorph dependency management
+
+BlockExportDialogMorph.prototype.collectDependencies = function () {
+    // add dependencies to the blocks:
+    this.dependencies().forEach(def => {
+        if (!contains(this.blocks, def)) {
+            this.blocks.push(def);
+        }
+    });
+    // refresh the checkmarks
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockExportDialogMorph.prototype.dependencies = function () {
+    var deps = [];
+    this.blocks.forEach(def => def.collectDependencies(
+        [],
+        deps,
+        def.receiver
+    ));
+    return deps;
+};
+
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
@@ -4315,7 +4342,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 
     if (this.blocks.length) {
         ide.saveXMLAs(
-            ide.blocksLibraryXML(this.blocks, true), // as file
+            ide.blocksLibraryXML(this.blocks, null, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
