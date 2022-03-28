@@ -64,7 +64,7 @@ SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
 /*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-March-25';
+modules.threads = '2022-March-28';
 
 var ThreadManager;
 var Process;
@@ -5625,6 +5625,10 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.variables.getVar(attribute);
             }
             switch (this.inputOption(attribute)) {
+            case 'position':
+                return thatObj.xPosition ?
+                    new List([thatObj.xPosition(), thatObj.yPosition()])
+                    : '';
             case 'x position':
                 return thatObj.xPosition ? thatObj.xPosition() : '';
             case 'y position':

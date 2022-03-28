@@ -5,6 +5,7 @@
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
+    * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
@@ -27,6 +28,7 @@
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
+* blocks, threads: new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
 
 ### 2022-03-25
 * threads: added @xBZZZZ's JSCompiler fixes (was #3009)

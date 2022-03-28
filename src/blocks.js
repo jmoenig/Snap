@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-22';
+modules.blocks = '2022-March-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10388,6 +10388,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
 
 InputSlotMorph.prototype.attributesMenu = function (searching) {
     var dict = {
+            'position' : ['position'],
             'x position' : ['x position'],
             'y position' : ['y position'],
             'direction' : ['direction'],
