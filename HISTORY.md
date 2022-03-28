@@ -5,6 +5,7 @@
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
+    * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
@@ -23,6 +24,9 @@
     * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-28
+* new "Tad" turtle costumes, thanks, Meghan and Brian!
 
 ### 2022-03-25
 * threads: added @xBZZZZ's JSCompiler fixes (was #3009)
