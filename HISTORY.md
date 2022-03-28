@@ -29,6 +29,7 @@
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
 * blocks, threads: new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+* German translation update for "position"
 
 ### 2022-03-25
 * threads: added @xBZZZZ's JSCompiler fixes (was #3009)
