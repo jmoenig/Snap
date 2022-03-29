@@ -3360,7 +3360,6 @@ Process.prototype.reportLastAnswer = function () {
 // Process URI retrieval (interpolated)
 
 Process.prototype.reportURL = function (url) {
-    var response;
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
         if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
@@ -3373,6 +3372,7 @@ Process.prototype.reportURL = function (url) {
         }
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
+        this.httpRequest.setRequestHeader('X-Source', 'NetsBlox'); // flag this as coming from the NetsBlox client
         // cache-control, commented out for now
         // added for Snap4Arduino but has issues with local robot servers
         // this.httpRequest.setRequestHeader('Cache-Control', 'max-age=0');
@@ -3384,9 +3384,9 @@ Process.prototype.reportURL = function (url) {
             return null;
         }
     } else if (this.httpRequest.readyState === 4) {
-        response = this.httpRequest.responseText;
+        const res = this.httpRequest.responseText;
         this.httpRequest = null;
-        return response;
+        return res;
     }
     this.pushContext('doYield');
     this.pushContext();

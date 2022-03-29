@@ -1115,6 +1115,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(1);
             break;
+        case '%httprt': // http request type
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'GET': ['GET'],
+                    'POST': ['POST'],
+                    'PUT': ['PUT'],
+                    'DELETE': ['DELETE'],
+                },
+                true // read-only
+            );
+            break;
         case '%month':
             part = new InputSlotMorph(
                 null, // text

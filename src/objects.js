@@ -993,6 +993,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'url %s',
             defaults: ['snap.berkeley.edu']
         },
+        reportHTTPRequest: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: '%httprt url: %s send: %s headers: %lists',
+            defaults: ['GET', 'https://snap.berkeley.edu'],
+        },
         doSetGlobalFlag: {
             type: 'command',
             category: 'sensing',
@@ -2551,6 +2557,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportThreadCount'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+
+            blocks.push(block('reportHTTPRequest'));
         }
 
 	/////////////////////////////////
@@ -8833,6 +8841,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('reportThreadCount'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+
+            blocks.push(block('reportHTTPRequest'));
         }
 
     /////////////////////////////////

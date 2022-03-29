@@ -480,6 +480,32 @@ Process.prototype.reportImageOfObject = function (object) {
     }
 };
 
+Process.prototype.reportHTTPRequest = function (method, url, data, headers) {
+    if (!this.httpRequest) {
+        this.httpRequest = new XMLHttpRequest();
+        this.httpRequest.open(method, url, true);
+
+        this.assertType(headers, 'list');
+        for (let i = 1; i <= headers.length(); i += 1) {
+            const header = headers.at(i);
+            this.assertType(header, 'list');
+            this.httpRequest.setRequestHeader(
+                header.at(1),
+                header.at(2)
+            );
+        }
+        this.httpRequest.setRequestHeader('X-Source', 'NetsBlox'); // flag this as coming from the NetsBlox client
+
+        this.httpRequest.send(data || null);
+    } else if (this.httpRequest.readyState === 4) {
+        const res = this.httpRequest.responseText;
+        this.httpRequest = null;
+        return res;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
 // helps executing async functions in custom js blocks
 // WARN it could be slower than non-promise based approach
 // when calling this function, return only if the return value is not undefined.
