@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-09';
+modules.byob = '2022-March-23';
 
 // Declarations
 
@@ -1436,6 +1436,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.definition = def;
+                this.isGlobal = def.isGlobal;
                 this.refresh();
                 this.scriptTarget().parentThatIsA(
                     IDE_Morph
@@ -4242,6 +4243,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                         } else {
                             this.blocks.push(definition);
                         }
+                        this.collectDependencies();
                     },
                     null,
                     () => contains(this.blocks, definition),
@@ -4308,28 +4310,39 @@ BlockExportDialogMorph.prototype.selectNone = function () {
     });
 };
 
+// BlockExportDialogMorph dependency management
+
+BlockExportDialogMorph.prototype.collectDependencies = function () {
+    // add dependencies to the blocks:
+    this.dependencies().forEach(def => {
+        if (!contains(this.blocks, def)) {
+            this.blocks.push(def);
+        }
+    });
+    // refresh the checkmarks
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockExportDialogMorph.prototype.dependencies = function () {
+    var deps = [];
+    this.blocks.forEach(def => def.collectDependencies(
+        [],
+        deps,
+        def.receiver
+    ));
+    return deps;
+};
+
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var globals = this.blocks.filter(def => def.isGlobal),
-        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
-        locals = this.blocks.filter(def => !def.isGlobal),
-        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
-        ide = this.world().children[0],
-        str;
+    var ide = this.world().children[0];
 
     if (this.blocks.length) {
-        str = '<blocks app="'
-            + this.serializer.app
-            + '" version="'
-            + this.serializer.version
-            + '">'
-            + this.paletteXML()
-            + (globals.length ? glbStr : '')
-            + (locals.length ? ('<local>' + locStr + '</local>') : '')
-            + '</blocks>';
         ide.saveXMLAs(
-            str,
+            ide.blocksLibraryXML(this.blocks, null, true), // as file
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
@@ -4342,19 +4355,6 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
-};
-
-BlockExportDialogMorph.prototype.paletteXML = function () {
-    var palette = new Map();
-    this.blocks.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
-            palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
-            );
-        }
-    });
-    return this.serializer.paletteToXML(palette);
 };
 
 // BlockExportDialogMorph layout

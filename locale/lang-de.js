@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-03-04', // this, too, will appear in the Translators tab
+        '2022-03-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -623,6 +623,8 @@ SnapTranslator.dict.de = {
         'Wie hei\u00dft Du?',
     'answer':
         'Antwort',
+    'mouse position':
+        'Mausposition',
     'mouse x':
         'Maus x-Position',
     'mouse y':
@@ -1305,6 +1307,10 @@ SnapTranslator.dict.de = {
         'Ergebnisbild...',
     'save a picture of both\nthis script and its result':
         'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
+    'export script':
+        'Skript exportieren',
+    'download this script\nas an XML file':
+        'dieses Skript als XML\nDatei herunterladen',
     'ringify':
         'Umringen',
     'unringify':
@@ -2084,6 +2090,10 @@ SnapTranslator.dict.de = {
         'Rand oben',
     'bottom':
         'Rand unten',
+    'position':
+        'Position',
+    'costume name':
+        'Kostümname',
 
     // attributes in the SET block's dropdown
     'my anchor':
@@ -2166,6 +2176,8 @@ SnapTranslator.dict.de = {
         'ist keine erlaubte Auswahl',
     'unsupported data type':
         'Nicht unterstützter Datentyp',
+    'cannot handle zero width or height':
+        'Breite oder Höhe dürfen nicht Null sein',
     'expecting a finite number\nbut getting Infinity or NaN':
         'Erwarte eine endliche Zahl\nbekomme aber Unendlich oder eine Nicht-Zahl',
     'the predicate takes\ntoo long for a\ncustom hat block':

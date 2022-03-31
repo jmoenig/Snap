@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-11';
+modules.blocks = '2022-March-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2967,7 +2967,6 @@ BlockMorph.prototype.userMenu = function () {
         world = this.world(),
         myself = this,
         hasLine = false,
-        shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
         top = this.topBlock(),
         vNames = proc && proc.context && proc.context.outerContext ?
@@ -3314,6 +3313,7 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    menu.addLine();
     menu.addItem(
         "script pic...",
         () => {
@@ -3339,14 +3339,11 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    if (shiftClicked) {
-        menu.addItem(
-            'download script',
-            () => top.exportScript(),
-            'download this script\nas an XML file',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'export script',
+        () => top.exportScript(),
+        'download this script\nas an XML file'
+    );
     if (proc) {
         if (vNames.length) {
             menu.addLine();
@@ -3800,7 +3797,8 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     else if (oldInputs.length &&
         (inputs.length === 1) &&
         trg instanceof MultiArgMorph &&
-        !(src instanceof MultiArgMorph)
+        !(src instanceof MultiArgMorph) &&
+        !(src instanceof ArgLabelMorph)
     ) {
         element = trg;
         inputs = element.inputs();
@@ -3968,17 +3966,87 @@ BlockMorph.prototype.exportResultPic = function () {
 // BlockMorph exporting a script
 
 BlockMorph.prototype.exportScript = function () {
+    // assumes this is the script's top block
     var ide = this.parentThatIsA(IDE_Morph),
-        blockEditor = this.parentThatIsA(BlockEditorMorph);
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        xml;
+
     if (!ide && blockEditor) {
         ide = blockEditor.target.parentThatIsA(IDE_Morph);
     }
-    if (ide) {
-        ide.saveXMLAs(
-            ide.serializer.serialize(this),
-            top.selector + ' script',
-            false);
+    if (!ide) {
+        return;
     }
+
+    xml = this.toXMLString();
+    if (xml) {
+        ide.saveXMLAs(
+            xml,
+            this.selector + ' script',
+            false
+        );
+    }
+};
+
+BlockMorph.prototype.toXMLString = function (receiver) {
+    // answer an xml string representation of this block and all the
+    // following ones attached to it, including all dependencies.
+    // specifying a receiver sprite is optional for cases where
+    // the receiver sprite is not the currently edited one inside the IDE
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        isReporter = this instanceof ReporterBlockMorph,
+        dependencies;
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {
+        return;
+    }
+
+    // collect custom block definitions referenced in this script:
+    dependencies = this.dependencies(false, receiver); // both global and local
+
+    return '<script app="' +
+        ide.serializer.app +
+        '" version="' +
+        ide.serializer.version +
+        '">' +
+        (dependencies.length ? ide.blocksLibraryXML(dependencies) : '') +
+        (isReporter ? '<script>' : '') +
+        ide.serializer.serialize(this) +
+        (isReporter ? '</script>' : '') +
+        '</script>';
+};
+
+BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
+    // answer an array containing all custom block definitions referenced
+    // by this and the following blocks, optional parameter to constrain
+    // to global definitions.
+    // specifying a receiver sprite is optional for cases where
+    // the receiver sprite is not the currently edited one inside the IDE
+    // if a receiver is not specified  this method can only be called from
+    // within the IDE because it needs to be able to determine the scriptTarget
+    var dependencies = [],
+        rcvr = onlyGlobal ? null : (receiver || this.scriptTarget());
+    this.forAllChildren(morph => {
+        var def;
+        if (morph.isCustomBlock) {
+            if (!onlyGlobal || (onlyGlobal && morph.isGlobal)) {
+                def = morph.isGlobal ? morph.definition
+                    : rcvr.getMethod(morph.semanticSpec);
+                [def].concat(def.collectDependencies([], [], rcvr)).forEach(
+                    fun => {
+                        if (!contains(dependencies, fun)) {
+                            dependencies.push(fun);
+                        }
+                    }
+                );
+            }
+        }
+    });
+    return dependencies;
 };
 
 // BlockMorph syntax analysis
@@ -10320,6 +10388,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
 
 InputSlotMorph.prototype.attributesMenu = function (searching) {
     var dict = {
+            'position' : ['position'],
             'x position' : ['x position'],
             'y position' : ['y position'],
             'direction' : ['direction'],
