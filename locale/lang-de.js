@@ -2094,6 +2094,8 @@ SnapTranslator.dict.de = {
         'Position',
     'costume name':
         'Kostümname',
+    'categories':
+        'Kategorien',
 
     // attributes in the SET block's dropdown
     'my anchor':

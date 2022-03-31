@@ -38,6 +38,7 @@
 * threads: added new MOUSE POSITION primitive block to the SENSING category
 * German translation update for "mouse position"
 * blocks, threads: new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+* German translation for "categories"
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
