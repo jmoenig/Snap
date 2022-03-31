@@ -301,6 +301,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'if on edge, bounce'
         },
+        getPosition: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'motion',
+            spec: 'position'
+        },
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
@@ -1733,8 +1739,9 @@ SpriteMorph.prototype.blockAlternatives = {
     changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition',
         'forward'],
     setYPosition: ['setXPosition', 'changeYPosition', 'changeXPosition'],
-    xPosition: ['yPosition'],
-    yPosition: ['xPosition'],
+    xPosition: ['yPosition', 'getPosition'],
+    yPosition: ['xPosition', 'getPosition'],
+    getPosition: ['xPosition', 'yPosition'],
 
     // looks:
     doSayFor: ['doThinkFor', 'bubble', 'doThink', 'doAsk'],
@@ -2459,6 +2466,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('bounceOffEdge'));
         blocks.push('-');
+        blocks.push(block('getPosition'));
         blocks.push(watcherToggle('xPosition'));
         blocks.push(block('xPosition', this.inheritsAttribute('x position')));
         blocks.push(watcherToggle('yPosition'));
@@ -6077,6 +6085,10 @@ SpriteMorph.prototype.turn = function (degrees) {
 
 SpriteMorph.prototype.turnLeft = function (degrees) {
     this.setHeading(this.heading - (+degrees || 0));
+};
+
+SpriteMorph.prototype.getPosition = function () {
+    return new List([this.xPosition(), this.yPosition()]);
 };
 
 SpriteMorph.prototype.xPosition = function () {
