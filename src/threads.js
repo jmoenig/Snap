@@ -60,11 +60,12 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
+SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph,
+StagePickerMorph*/
 
-/*jshint esversion: 6, bitwise: false*/
+/*jshint esversion: 6, bitwise: false, evil: true*/
 
-modules.threads = '2022-March-28';
+modules.threads = '2022-March-31';
 
 var ThreadManager;
 var Process;
@@ -3641,36 +3642,67 @@ Process.prototype.doAsk = function (data) {
         rcvr = this.blockReceiver(),
         isStage = rcvr instanceof StageMorph,
         isHiddenSprite = rcvr instanceof SpriteMorph && !rcvr.isVisible,
-        activePrompter;
+        activePrompter,
+        leftSpace,
+        rightSpace;
 
     stage.keysPressed = {};
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
-            morph => morph instanceof StagePrompterMorph
+            morph => morph instanceof StagePrompterMorph ||
+                morph instanceof StagePickerMorph
         );
         if (!activePrompter) {
-            if (!isStage && !isHiddenSprite) {
-                rcvr.bubble(data, false, true);
-            }
-            this.prompter = new StagePrompterMorph(
-                isStage || isHiddenSprite ? data : null
-            );
-            if (stage.scale < 1) {
-                this.prompter.setWidth(stage.width() - 10);
+            if (data instanceof List) {
+                if (!isStage) {
+                    rcvr.stopTalking();
+                }
+                this.prompter = new StagePickerMorph(data);
+                this.prompter.createItems(stage.scale);
+                leftSpace = rcvr.left() - stage.left();
+                rightSpace = stage.right() - rcvr.right();
+                if (isStage) {
+                    this.prompter.popup(
+                        stage,
+                        stage.center().subtract(
+                            this.prompter.extent().floorDivideBy(2)
+                        )
+                    );
+                } else {
+                    this.prompter.popup(
+                        stage,
+                        rightSpace > this.prompter.width() ||
+                                rightSpace >= leftSpace ?
+                            rcvr.topRight()
+                            : rcvr.topLeft().subtract(
+                                new Point(this.prompter.width(), 0)
+                            )
+                    );
+                }
             } else {
-                this.prompter.setWidth(stage.dimensions.x - 20);
+                if (!isStage && !isHiddenSprite) {
+                    rcvr.bubble(data, false, true);
+                }
+                this.prompter = new StagePrompterMorph(
+                    isStage || isHiddenSprite ? data : null
+                );
+                if (stage.scale < 1) {
+                    this.prompter.setWidth(stage.width() - 10);
+                } else {
+                    this.prompter.setWidth(stage.dimensions.x - 20);
+                }
+                this.prompter.fixLayout();
+                this.prompter.setCenter(stage.center());
+                this.prompter.setBottom(stage.bottom() - this.prompter.border);
+                stage.add(this.prompter);
+                this.prompter.inputField.edit();
+                stage.changed();
             }
-            this.prompter.fixLayout();
-            this.prompter.setCenter(stage.center());
-            this.prompter.setBottom(stage.bottom() - this.prompter.border);
-            stage.add(this.prompter);
-            this.prompter.inputField.edit();
-            stage.changed();
         }
     } else {
         if (this.prompter.isDone) {
-            stage.lastAnswer = this.prompter.inputField.getValue();
+            stage.lastAnswer = this.prompter.answer;
             this.prompter.destroy();
             this.prompter = null;
             if (!isStage) {rcvr.stopTalking(); }
@@ -7586,9 +7618,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
             block += value + '=0,';
         }
     });
-    /*jshint evil: true*/
     return Function('...p', block + code);
-    /*jshint evil: false*/
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
