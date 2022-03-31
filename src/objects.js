@@ -12883,7 +12883,7 @@ StagePickerMorph.prototype.init = function (options) {
                 this.addLine();
             } else {
                 this.addItem(
-                    this.dataRepresentation(key),
+                    key,
                     value,
                     null, // hint
                     null, // color
@@ -12913,10 +12913,16 @@ StagePickerMorph.prototype.isSubmenu = function (options) {
 
 StagePickerMorph.prototype.dataRepresentation = function (data) {
     switch (Process.prototype.reportTypeOf(data)) {
-    case 'number':
-        return data.toString();
+    case 'costume':
+    case 'sprite':
+    case 'stage':
+        return data.thumbnail(new Point(40, 40).multiplyBy(this.scale));
+    case 'command':
+    case 'reporter':
+    case 'predicate':
+        return data.image();
     default:
-        return data;
+        return data.toString();
     }
 };
 
@@ -12949,7 +12955,7 @@ StagePickerMorph.prototype.createLabel = function () {
         this.label.destroy();
     }
     text = new TextMorph(
-        localize(this.title),
+        this.title,
         SpriteMorph.prototype.bubbleFontSize * this.scale,
         null, // MorphicPreferences.menuFontName,
         true,
@@ -13040,7 +13046,7 @@ StagePickerMorph.prototype.createItems = function (scale) {
             item = new StagePickerItemMorph(
                 this.target,
                 tuple[1],
-                tuple[0],
+                this.dataRepresentation(tuple[0]),
                 SpriteMorph.prototype.bubbleFontSize  * this.scale,
                 null, // MorphicPreferences.menuFontName,
                 this.environment,
