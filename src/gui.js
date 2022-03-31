@@ -9282,20 +9282,22 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blockImage, blockContainer, text, blocksByCategory,
+    var x, y, blockImage, blockContainer, text,
         padding = 4,
-        libraryBlocks = this.cachedLibrary(libraryKey);
+        libraryBlocks = this.cachedLibrary(libraryKey),
+        blocksByCategory = new Map(
+            SpriteMorph.prototype.allCategories().map(cat => [cat, []])
+        );
 
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    blocksByCategory = new Map(SpriteMorph.prototype.allCategories().map(cat => [cat, []]));
     libraryBlocks['global'].concat(libraryBlocks['local']).forEach(definition => {
-        if (definition.isHelper) {return; }
-
-        blocksByCategory.get(definition.category).push(definition);
+        if (!definition.isHelper) {
+            blocksByCategory.get(definition.category).push(definition);
+        }
     });
 
     blocksByCategory.forEach((blocks, category) => {
