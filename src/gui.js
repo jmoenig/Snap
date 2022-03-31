@@ -9284,40 +9284,41 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blockImage, previousCategory, blockContainer, text,
+    var x, y, blockImage, blockContainer, text, blocksByCategory,
         padding = 4,
-        blocksList = this.cachedLibrary(libraryKey);
+        libraryBlocks = this.cachedLibrary(libraryKey);
 
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    SpriteMorph.prototype.allCategories().forEach(category => {
-        ['global', 'local'].forEach(scope => {
-            blocksList[scope].forEach(definition => {
-                if (definition.isHelper) {return; }
+    blocksByCategory = new Map(SpriteMorph.prototype.allCategories().map(cat => [cat, []]));
+    libraryBlocks['global'].concat(libraryBlocks['local']).forEach(definition => {
+        if (definition.isHelper) {return; }
 
-                if (definition.category !== category) {return; }
-                if (category !== previousCategory) {
-                    text = SpriteMorph.prototype.categoryText(category);
-                    text.setPosition(new Point(x, y));
-                    this.palette.addContents(text);
-                    y += text.fullBounds().height() + padding;
-                }
-                previousCategory = category;
+        blocksByCategory.get(definition.category).push(definition);
+    });
 
-                blockImage = definition.templateInstance().fullImage();
-                blockContainer = new Morph();
-                blockContainer.isCachingImage = true;
-                blockContainer.bounds.setWidth(blockImage.width);
-                blockContainer.bounds.setHeight(blockImage.height);
-                blockContainer.cachedImage = blockImage;
-                blockContainer.setPosition(new Point(x, y));
-                this.palette.addContents(blockContainer);
+    blocksByCategory.forEach((blocks, category) => {
+        if (blocks.length > 0) {
+            text = SpriteMorph.prototype.categoryText(category);
+            text.setPosition(new Point(x, y));
+            this.palette.addContents(text);
+            y += text.fullBounds().height() + padding;
+        }
 
-                y += blockContainer.fullBounds().height() + padding;
-            });
+        blocks.forEach(definition => {
+            blockImage = definition.templateInstance().fullImage();
+            blockContainer = new Morph();
+            blockContainer.isCachingImage = true;
+            blockContainer.bounds.setWidth(blockImage.width);
+            blockContainer.bounds.setHeight(blockImage.height);
+            blockContainer.cachedImage = blockImage;
+            blockContainer.setPosition(new Point(x, y));
+            this.palette.addContents(blockContainer);
+
+            y += blockContainer.fullBounds().height() + padding;
         });
     });
 
