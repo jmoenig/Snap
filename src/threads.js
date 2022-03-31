@@ -62,9 +62,9 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 6, bitwise: false*/
 
-modules.threads = '2022-February-22';
+modules.threads = '2022-March-28';
 
 var ThreadManager;
 var Process;
@@ -2443,36 +2443,18 @@ Process.prototype.doStop = function () {
 };
 
 Process.prototype.doStopAll = function () {
-    var stage, ide;
+    var ide;
     if (this.homeContext.receiver) {
-        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            if (stage.enableCustomHatBlocks) {
-                stage.threads.pauseCustomHatBlocks =
-                    !stage.threads.pauseCustomHatBlocks;
-            } else {
-                stage.threads.pauseCustomHatBlocks = false;
-            }
-            stage.stopAllActiveSounds();
-            stage.threads.resumeAll(stage);
-            stage.keysPressed = {};
-            stage.runStopScripts();
-            stage.threads.stopAll();
-            if (stage.projectionSource) {
-                stage.stopProjection();
-            }
-            stage.children.forEach(morph => {
-                if (morph.stopTalking) {
-                    morph.stopTalking();
-                }
-            });
-            stage.removeAllClones();
-        }
-        ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {
-            ide.controlBar.pauseButton.refresh();
-            ide.controlBar.stopButton.refresh();
-        }
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scene.stop();
+    }
+};
+
+Process.prototype.doStopAllScenes = function () {
+    var ide;
+    if (this.homeContext.receiver) {
+        ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+        ide.scenes.map(scn => scn.stop(true));
     }
 };
 
@@ -2480,6 +2462,9 @@ Process.prototype.doStopThis = function (choice) {
     switch (this.inputOption(choice)) {
     case 'all':
         this.doStopAll();
+        break;
+    case 'all scenes':
+        this.doStopAllScenes();
         break;
     case 'this script':
         this.doStop();
@@ -3108,9 +3093,15 @@ Process.prototype.reportListAggregation = function (list, selector) {
     // private - used by reportCombine to optimize certain commutative
     // operations such as sum, product, min, max hyperized all at once
     var len = list.length(),
-        result, i;
+        result, i, op;
+    op = {
+        reportVariadicSum: 'reportSum',
+        reportVariadicProduct: 'reportProduct',
+        reportVariadicMin: 'reportMin',
+        reportVariadicMax: 'reportMax'
+    }[selector] || selector;
     if (len === 0) {
-        switch (selector) {
+        switch (op) {
         case 'reportProduct':
             return 1;
         case 'reportMin':
@@ -3124,7 +3115,7 @@ Process.prototype.reportListAggregation = function (list, selector) {
     result = list.at(1);
     if (len > 1) {
         for (i = 2; i <= len; i += 1) {
-            result = this[selector](result, list.at(i));
+            result = this[op](result, list.at(i));
         }
     }
     return result;
@@ -3134,27 +3125,37 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
     // private - used by reportCombine to check for optimizable
     // special cases
     var op = aContext.expression.selector,
+        slots,
         eligible;
     if (!op) {
         return false;
     }
-    eligible = ['reportSum', 'reportProduct', 'reportMin', 'reportMax'];
+    eligible = [
+        'reportVariadicSum',
+        'reportVariadicProduct',
+        'reportVariadicMin',
+        'reportVariadicMax'
+    ];
     if (!contains(eligible, op)) {
         return false;
     }
 
-    // scan the expression's inputs, we can assume there are exactly two,
-    // because we're only looking at eligible selectors. Make sure none is
+    // scan the expression's inputs,
+    // make sure there are exactly two and none is
     // a non-empty input slot or a variable getter whose name doesn't
     // correspond to an input of the context.
     // make sure the context has either no or exactly two inputs.
+    slots = aContext.expression.inputs()[0].inputs();
+    if (slots.length !== 2) {
+        return false;
+    }
     if (aContext.inputs.length === 0) {
-        return aContext.expression.inputs().every(each => each.bindingID);
+        return slots.every(each => each.bindingID);
     }
     if (aContext.inputs.length !== 2) {
         return false;
     }
-    return aContext.expression.inputs().every(each =>
+    return slots.every(each =>
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );
@@ -3688,6 +3689,7 @@ Process.prototype.reportLastAnswer = function () {
 
 Process.prototype.reportURL = function (url) {
     var response;
+    url = decodeURI(url);
     this.checkURLAllowed(url);
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
@@ -4010,6 +4012,11 @@ Process.prototype.isMatrix = function (data) {
 
 // Process math primtives - arithmetic
 
+Process.prototype.reportVariadicSum = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportSum');
+};
+
 Process.prototype.reportSum = function (a, b) {
     return this.hyperDyadic(this.reportBasicSum, a, b);
 };
@@ -4024,6 +4031,11 @@ Process.prototype.reportDifference = function (a, b) {
 
 Process.prototype.reportBasicDifference = function (a, b) {
     return +a - +b;
+};
+
+Process.prototype.reportVariadicProduct = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportProduct');
 };
 
 Process.prototype.reportProduct = function (a, b) {
@@ -4083,6 +4095,11 @@ Process.prototype.reportBasicAtan2 = function (a, b) {
     return degrees(Math.atan2(+a, +b));
 };
 
+Process.prototype.reportVariadicMin = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMin');
+};
+
 Process.prototype.reportMin = function (a, b) {
     return this.hyperDyadic(this.reportBasicMin, a, b);
 };
@@ -4096,6 +4113,11 @@ Process.prototype.reportBasicMin = function (a, b) {
         y = b;
     }
     return x < y ? x : y;
+};
+
+Process.prototype.reportVariadicMax = function (numbers) {
+    this.assertType(numbers, 'list');
+    return this.reportListAggregation(numbers, 'reportMax');
 };
 
 Process.prototype.reportMax = function (a, b) {
@@ -5546,6 +5568,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 new Context();
         }
         return new Context();
+    case 'category':
+        return expr ?
+            SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
+                : 0;
     case 'custom?':
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
@@ -5599,6 +5625,10 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.variables.getVar(attribute);
             }
             switch (this.inputOption(attribute)) {
+            case 'position':
+                return thatObj.xPosition ?
+                    new List([thatObj.xPosition(), thatObj.yPosition()])
+                    : '';
             case 'x position':
                 return thatObj.xPosition ? thatObj.xPosition() : '';
             case 'y position':
@@ -6416,7 +6446,9 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
     if (width <= 0 || height <= 0) {
-        return new Costume();
+        throw new Error(
+            'cannot handle zero width or height'
+        );
     }
     if (!isFinite(width * height) || isNaN(width * height)) {
        throw new Error(
@@ -7479,9 +7511,10 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 function JSCompiler(aProcess) {
 	this.process = aProcess;
 	this.source = null; // a context
- 	this.gensyms = null; // temp dictionary for parameter substitutions
+ 	this.gensyms = new Map(); // temp dictionary for parameter substitutions
   	this.implicitParams = null;
    	this.paramCount = null;
+    this.scriptVarCounter = null;
 }
 
 JSCompiler.prototype.toString = function () {
@@ -7491,12 +7524,20 @@ JSCompiler.prototype.toString = function () {
 JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     var block = aContext.expression,
   		parameters = aContext.inputs,
-        parms = [],
         hasEmptySlots = false,
-        i;
+        plength = 0,
+        code;
 
 	this.source = aContext;
-    this.implicitParams = implicitParamCount || 1;
+    if (isNil(implicitParamCount) || implicitParamCount === '') {
+        this.implicitParams = 1;
+    } else {
+        this.implicitParams = Math.floor(implicitParamCount);
+        if (this.implicitParams < 0) {
+            // use 1 if implicitParamCount doesn't make sense
+            this.implicitParams = 1;
+        }
+    }
 
 	// scan for empty input slots
  	hasEmptySlots = !isNil(detect(
@@ -7505,7 +7546,7 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     ));
 
     // translate formal parameters into gensyms
-    this.gensyms = {};
+    this.gensyms.clear();
     this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
@@ -7518,33 +7559,36 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
         }
         // map explicit formal parameters
         parameters.forEach((pName, idx) => {
-        	var pn = 'p' + idx;
-            parms.push(pn);
-        	this.gensyms[pName] = pn;
+        	this.gensyms.set(pName, 'p[' + idx + ']');
         });
+        plength = parameters.length;
     } else if (hasEmptySlots) {
-    	if (this.implicitParams > 1) {
-        	for (i = 0; i < this.implicitParams; i += 1) {
-         		parms.push('p' + i);
-         	}
-     	} else {
-        	// allow for a single implicit formal parameter
-        	parms = ['p0'];
-        }
+    	plength = this.implicitParams;
     }
 
     // compile using gensyms
 
-    if (block instanceof CommandBlockMorph) {
-        return Function.apply(
-            null,
-            parms.concat([this.compileSequence(block)])
-        );
+    this.scriptVarCounter = 0;
+    code = 'proc=p.pop();\n';
+    if (plength) {
+        // fill missing parameters with empty string
+        code += 'while(' + plength + '>p.length)p.push("");\n';
     }
-    return Function.apply(
-        null,
-        parms.concat(['return ' + this.compileExpression(block)])
-    );
+    if (block instanceof CommandBlockMorph) {
+        code += this.compileSequence(block) + 'return ""';
+    } else {
+        code += 'return ' + this.compileExpression(block);
+    }
+    block = 'var ';
+    this.gensyms.forEach(value => {
+        if (value.charAt(0) === 's') {
+            // declare script variable
+            block += value + '=0,';
+        }
+    });
+    /*jshint evil: true*/
+    return Function('...p', block + code);
+    /*jshint evil: false*/
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -7579,21 +7623,57 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'evaluate':
         return 'invoke(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
 
     // special command forms
-    case 'doSetVar': // redirect var to process
-        return 'arguments[arguments.length - 1].setVarNamed(' +
+    case 'doDeclareVariables':
+        block = '';
+
+        inputs[0].inputs().forEach(({children: {0: {blockSpec: name}}}) => {
+            var gensym = this.gensyms.get(name);
+            if (gensym) {
+                // we already have that script variable, just set it to 0
+                block += gensym + '=';
+                return;
+            }
+            gensym = 's' + this.scriptVarCounter++;
+            block += gensym + '=';
+            this.gensyms.set(name, gensym);
+        });
+        return block + '0';
+    case 'reportGetVar':
+        return this.gensyms.get(block.blockSpec) || ('proc.getVarNamed("' +
+            this.escape(block.blockSpec) +
+            '")');
+    case 'doSetVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                // setting gensym (script or argument) variable
+                return target + ' = ' + this.compileInput(inputs[1]);
+            }
+        }
+        // redirect var to process
+        return 'proc.setVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
-    case 'doChangeVar': // redirect var to process
-        return 'arguments[arguments.length - 1].incrementVarNamed(' +
+    case 'doChangeVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.gensyms.get(inputs[0].evaluate());
+            if (target) {
+                return '{const d=' + this.compileInput(inputs[1]) +
+                    ',v=parseFloat(' + target + ');' +
+                    target + '=isNaN(v)?d:v+parseFloat(d)}';
+            }
+        }
+        // redirect var to process
+        return 'proc.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
@@ -7612,18 +7692,22 @@ JSCompiler.prototype.compileExpression = function (block) {
             '} else {\n' +
             this.compileSequence(inputs[2].evaluate()) +
             '}';
-
+    case 'reportBoolean':
+    case 'reportNewList':
+        return this.compileInput(inputs[0]);
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
         rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            return rcvr + '.' + selector + '.apply('+ rcvr + ', [' + args +'])';
+            if (rcvr === 'SpriteMorph.prototype') {
+                // fix for blocks like (x position)
+                rcvr = 'proc.blockReceiver()';
+            }
+            return rcvr + '.' + selector + '(' + args + ')';
         } else {
-            return 'arguments[arguments.length - 1].' +
-                selector +
-                '.apply(arguments[arguments.length - 1], [' + args +'])';
+            return 'proc.' + selector + '(' + args + ')';
         }
     }
 };
@@ -7631,21 +7715,20 @@ JSCompiler.prototype.compileExpression = function (block) {
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     commandBlock.blockSequence().forEach(block => {
-        body += this.compileExpression(block);
-        body += ';\n';
+        body += this.compileExpression(block) + ';\n';
     });
     return body;
 };
 
 JSCompiler.prototype.compileInfix = function (operator, inputs) {
     return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
-        this.compileInput(inputs[1]) +')';
+        this.compileInput(inputs[1]) + ')';
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
     var args = '';
     array.forEach(inp => {
-        if (args.length) {
+        if (args) {
             args += ', ';
         }
         args += this.compileInput(inp);
@@ -7654,14 +7737,14 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-     var value, type;
+    var value, type;
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
         if (this.implicitParams > 1) {
          	if (this.paramCount < this.implicitParams) {
             	this.paramCount += 1;
-             	return 'p' + (this.paramCount - 1);
+             	return 'p[' + (this.paramCount - 1) + ']';
         	}
             throw new Error(
                 localize('expecting') + ' ' + this.implicitParams + ' '
@@ -7669,7 +7752,7 @@ JSCompiler.prototype.compileInput = function (inp) {
                     + this.paramCount
             );
         }
-		return 'p0';
+		return 'p[0]';
     } else if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
     } else if (inp instanceof ArgLabelMorph) {
@@ -7683,13 +7766,13 @@ JSCompiler.prototype.compileInput = function (inp) {
         case 'Boolean':
             return '' + value;
         case 'text':
-            // enclose in double quotes
-            return '"' + value + '"';
+            // escape and enclose in double quotes
+            return '"' + this.escape(value) + '"';
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
         default:
             if (value instanceof Array) {
-                 return '"' + value[0] + '"';
+                return '"' + this.escape(value[0]) + '"';
             }
             throw new Error(
                 'compiling does not yet support\n' +
@@ -7698,16 +7781,6 @@ JSCompiler.prototype.compileInput = function (inp) {
             );
         }
     } else if (inp instanceof BlockMorph) {
-        if (inp.selector === 'reportGetVar') {
-        	if (contains(this.source.inputs, inp.blockSpec)) {
-            	// un-quoted gensym:
-            	return this.gensyms[inp.blockSpec];
-        	}
-         	// redirect var query to process
-            return 'arguments[arguments.length - 1].getVarNamed("' +
-            	inp.blockSpec +
-            	'")';
-        }
         return this.compileExpression(inp);
     } else {
         throw new Error(
@@ -7716,4 +7789,22 @@ JSCompiler.prototype.compileInput = function (inp) {
             inp.constructor.name
         );
     }
+};
+
+JSCompiler.prototype.escape = function(string) {
+    // make sure string is a string
+    string += '';
+    var len = string.length, i = 0, char, escaped = '', safe_chars =
+        ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
+        "%&'()*+,-./:;<=>?@[]^_`{|}~";
+    while (len > i) {
+        char = string.charAt(i++);
+        if (safe_chars.indexOf(char) === -1) {
+            escaped += '\\u' + (char.charCodeAt(0) | 0x10000)
+                .toString(16).substring(1);
+        } else {
+            escaped += char;
+        }
+    }
+    return escaped;
 };

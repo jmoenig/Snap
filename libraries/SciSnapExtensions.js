@@ -763,44 +763,8 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
   'SciS_writetoCSVfile(data,filename)',
   function (data, filename) {
-    function toCSV(data) {
-      var items = data.itemsArray(), rows = [];
-
-      function encodeCell(atomicValue) {
-        var string = atomicValue.toString(), cell;
-        if (string.indexOf('\"') === -1 &&
-          (string.indexOf('\n') === -1) &&
-          (string.indexOf('\,') === -1)) {
-          return string;
-        }
-        cell = ['\"'];
-        string.split('').forEach(function (letter) {
-          cell.push(letter);
-          if (letter === '\"') {
-            cell.push(letter);
-          }
-        });
-        cell.push('\"');
-        return cell.join('');
-      }
-
-      if (items.some(function (any) {
-        return any instanceof List;
-      })) {
-        items.forEach(function (item) {
-          if (item instanceof List) {
-            rows.push(item.itemsArray().map(encodeCell).join(';'));
-          } else {
-            rows.push(encodeCell(item));
-          }
-        });
-        return rows.join('\n');
-      }
-      return items.map(encodeCell).join(';');
-    }
-
     var ide = this.parent.parent;
-    ide.saveFileAs(toCSV(data), 'text/csv;charset=utf-8', filename);
+    ide.saveFileAs(data.asCSV(), 'text/csv;charset=utf-8', filename);
   }
 );
 
@@ -3253,28 +3217,27 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
   'SciS_drawGraph(amatrix,vlist,cAttributes,vAttributes,lAttributes,oldCostume)',
-  function (amatrix, vlist, cAttributes, vAttributes, lAttributes,oldCostume) {
+  function (amatrix, vlist, cAttributes, vAttributes, lAttributes, oldCostume) {
     var costume = new Costume(), ctx = costume.contents.getContext('2d'), c, row, anz,
       w = Number(cAttributes.at(1)), h = Number(cAttributes.at(2)), v1, v2, x1, y1, x2, y2, n = amatrix.length(), label, textheight,
       weight, directed, marked, showWeights, xp, yp, alpha, l, dx, dy, dl, size, minsize = Number(vAttributes.at(2)), growing = vAttributes.at(3);
 //create new costume or take old one
-  //create new costume or take old one
-  if(oldCostume==="null"){ 
-    costume.contents.width = w;
-    costume.contents.height = h;
-    ctx.beginPath();
-    ctx.fillStyle = new Color(cAttributes.at(3), cAttributes.at(4), cAttributes.at(5)).toString();
-    ctx.strokeStyle = new Color(0, 0, 0).toString();
-    ctx.fillRect(0, 0, w, h);
-    ctx.strokeRect(0, 0, w, h);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    costume.rotationCenter = new Point(w / 2, h / 2);
-    }
-  else{
-    costume = oldCostume;
-    ctx = costume.contents.getContext('2d');   
+    //create new costume or take old one
+    if (oldCostume === "null") {
+      costume.contents.width = w;
+      costume.contents.height = h;
+      ctx.beginPath();
+      ctx.fillStyle = new Color(cAttributes.at(3), cAttributes.at(4), cAttributes.at(5)).toString();
+      ctx.strokeStyle = new Color(0, 0, 0).toString();
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeRect(0, 0, w, h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      costume.rotationCenter = new Point(w / 2, h / 2);
+    } else {
+      costume = oldCostume;
+      ctx = costume.contents.getContext('2d');
     }
 
 //count edges per vertex an set size per vertex
@@ -4317,6 +4280,738 @@ SnapExtensions.primitives.set(
   }
 );
 
+SnapExtensions.primitives.set(
+  'SciS_FFTops(data,freq,choice)',
+  function (data, freq, choice) {
+    function newComplex(re, im) {
+      return [re, im];
+    }
+    function addComplex(c1, c2) {
+      return newComplex(c1[0] + c2[0], c1[1] + c2[1]);
+    }
+    function subComplex(c1, c2) {
+      return newComplex(c1[0] - c2[0], c1[1] - c2[1]);
+    }
+    function mulComplex(c1, c2) {
+      return newComplex(c1[0] * c2[0] - c1[1] * c2[1], c1[0] * c2[1] + c1[1] * c2[0]);
+    }
+    function absComplex(c) {
+      return Math.sqrt(c[0] * c[0] + c[1] * c[1]);
+    }
+    function complexToPolar(c) {
+      return newComplex(absComplex(c), Math.atan(c[1] / c[0]));
+    }
+    function polarToComplex(c) {
+      return newComplex(c[0] * Math.cos(c[1]), c[0] * Math.sin(c[1]));
+    }
+
+    function FFT(d) {
+      var n = d.length, nDIV2 = n / 2, even = [], odd = [], result = [], evenPart, oddPart;
+      if (n <= 1)
+        return d;
+      for (var i = 0; i < n; i++) {
+        result.push(0);
+      }
+      for (var i = 0; i < nDIV2; i++) {
+        even.push(d[2 * i]);
+        odd.push(d[2 * i + 1]);
+      }
+      evenPart = FFT(even);
+      oddPart = FFT(odd);
+      f = -2 * Math.PI / n;
+      for (var k = 0; k < nDIV2; k++) {
+        g = mulComplex(newComplex(Math.cos(f * k), Math.sin(f * k)), oddPart[k]);
+        result[k] = addComplex(evenPart[k], g);
+        result[k + nDIV2] = subComplex(evenPart[k], g);
+      }
+      return result;
+    }
+
+    var rData = [], cData = [], N = 0, result, maxLength = data.length(), n;
+
+    if (choice === "frequency_spectrum") {
+      rData = data.asArray();
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push(0);
+      }
+      //convert to complex numbers
+      for (var i = 0; i < rData.length; i++) {
+        cData.push([Number(rData[i]), Number(0)]);
+      }
+      //calculate FFT
+      result = FFT(cData);
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //calculate normalized FFT data
+      n = cData.length;
+      for (var i = 0; i < result.length; i++) {
+        result[i] = [1.0 * i / n * freq, 2 * absComplex(result[i]) / maxLength];
+      }
+      result[0][1] = result[0][1] / 2;
+      //convert to List
+      for (var i = 0; i < result.length; i++) {
+        result[i] = new List(result[i]);
+      }
+      return new List(result);
+    }
+
+
+    if (choice === 'complex_FFTdata') {
+      rData = data.asArray();
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push(0);
+      }
+      //convert to complex numbers
+      for (var i = 0; i < rData.length; i++) {
+        cData.push([Number(rData[i]), Number(0)]);
+      }
+      //calculate FFT
+      result = FFT(cData);
+      //use SciSnap! format for complex numbers
+      for (var i = 0; i < result.length; i++) {
+        result[i] = ["complexNumberCartesianStyle", result[i][0], result[i][1]];
+      }
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //convert to List
+      for (var i = 0; i < result.length; i++) {
+        result[i] = new List(result[i]);
+      }
+      return new List(result);
+    }
+
+
+    if (choice === 'iFFT_of_FFTdata') {
+      //convert data to conjugate complex array
+      for (var i = 1; i <= data.length(); i++) {
+        rData.push([data.at(i).at(1), -data.at(i).at(2)]);
+      }
+      //complete data up to length 2^N
+      while (Math.pow(2, N) < rData.length) {
+        N++;
+      }
+      while (rData.length < Math.pow(2, N)) {
+        rData.push([0, 0]);
+      }
+      //calculate FFT
+      result = FFT(rData);
+      n = result.length;
+      for (var i = 0; i < n; i++) {
+        result[i] = result[i][0] / n;
+      }
+      //shorten to length of original data
+      while (result.length > maxLength) {
+        result.pop();
+      }
+      //convert to List
+      return new List(result);
+    }
+
+    return "ERROR: incorrect selection!";
+
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_addGridToImagePad(costume,gridProperties,colors,withLines,data)',
+  function (costume, gridProperties, colors, withLines, data) {
+    var ctx = costume.contents.getContext('2d'),
+      xMax = Number(gridProperties.at(1)),
+      yMax = Number(gridProperties.at(2)),
+      cellWidth = Number(gridProperties.at(3)),
+      cellHeight = Number(gridProperties.at(4)),
+      maxColors = colors.length(),
+      d;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = new Color(0, 0, 0).toString();
+    for (var x = 1; x <= xMax; x++) {
+      for (var y = 1; y <= yMax; y++) {
+        ctx.beginPath();
+        d = data.at(y).at(x);
+        if (d > maxColors)
+          d = maxColors;
+        if (d < 1)
+          d = 1;
+        ctx.fillStyle = new Color(colors.at(d).at(1), colors.at(d).at(2), colors.at(d).at(3)).toString();
+        ctx.fillRect((x - 1) * cellWidth, (y - 1) * cellHeight, cellWidth, cellHeight);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(xMax * cellWidth, 0);
+    ctx.lineTo(xMax * cellWidth, yMax * cellHeight);
+    ctx.lineTo(0, yMax * cellHeight);
+    ctx.lineTo(0, 0);
+    ctx.closePath();
+    ctx.stroke();
+    if (!withLines)
+      return costume;
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = new Color(0, 0, 0).toString();
+    for (var y = 0; y <= yMax; y++) {
+      ctx.moveTo(0, cellHeight * y);
+      ctx.lineTo(cellWidth * xMax, cellHeight * y);
+    }
+    for (var x = 0; x <= xMax; x++) {
+      ctx.moveTo(cellWidth * x, 0);
+      ctx.lineTo(cellWidth * x, cellHeight * yMax);
+    }
+    ctx.closePath();
+    ctx.stroke();
+    return costume;
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_fillOnImagePadGridRandomlyOnImagePad(xMin,xMax,yMin,yMax,numbers,data)',
+  function (xMin, xMax, yMin, yMax, numbers, data) {
+    var result, maxNumber = numbers.length(), h;
+
+    function listCopy(item) {
+      var theCopy;
+      if (item instanceof List) {
+        theCopy = new List();
+        for (var i = 1; i <= item.length(); i++)
+          theCopy.add(listCopy(item.at(i)));
+      } else
+        theCopy = item;
+      return theCopy;
+    }
+
+    function myRandom(min, max) {
+      if (max < min) {
+        var h = max;
+        max = min;
+        min = h;
+      }
+      return Math.floor(Math.random() * (Number(max) - Number(min)) + Number(min) + 0.5);
+    }
+
+    result = listCopy(data);
+    xMin = Math.abs(xMin);
+    xMax = Math.abs(xMax);
+    yMin = Math.abs(yMin);
+    yMax = Math.abs(yMax);
+    if (xMin > xMax) {
+      h = xMin;
+      xMin = xMax;
+      xMax = h;
+    }
+    if (yMin > yMax) {
+      h = yMin;
+      yMin = yMax;
+      yMax = h;
+    }
+    for (var y = yMin; y <= yMax; y++)
+      for (var x = xMin; x <= xMax; x++)
+        result.at(y).put(numbers.at(myRandom(1, maxNumber)), x);
+    return result;
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_neighborhoodInGridOnImagePad(data,gridProperties,x,y,isTorus,typeOfNeighborhood)',
+  function (data, gridProperties, x, y, isTorus, typeOfNeighborhood) {
+    var xMax = Number(gridProperties.at(1)),
+      yMax = Number(gridProperties.at(2)),
+      result = [], xg, yg;
+    if ((x < 1) || (x > xMax) || (y < 1) || (y > yMax))
+      return "ERROR: index out of bounds!";
+    for (var xp = x - 1; xp <= x + 1; xp++) {
+      for (var yp = y - 1; yp <= y + 1; yp++) {
+        xg = xp;
+        yg = yp;
+        if (xp < 1) {
+          if (isTorus) {
+            xg = xMax;
+          } else {
+            xg = 0;
+          }
+        }
+        if (xp > xMax) {
+          if (isTorus) {
+            xg = 1;
+          } else {
+            xg = 0;
+          }
+        }
+        if (yp < 1) {
+          if (isTorus) {
+            yg = yMax;
+          } else {
+            yg = 0;
+          }
+        }
+        if (yp > yMax) {
+          if (isTorus) {
+            yg = 1;
+          } else {
+            yg = 0;
+          }
+        }
+        if ((xg > 0) && (yg > 0)) {
+          result.push(data.at(yg).at(xg));
+        } else {
+          result.push("");
+        }
+      }
+    }
+    if (typeOfNeighborhood === "Moore")
+      return new List([result[3], result[6], result[7], result[8], result[5], result[2], result[1], result[0]]);
+    else
+      return new List([result[3], result[7], result[5], result[1], ]);
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_swapCellsOfGridOnImagePad(data,gridProperties,n,isTorus,range,xMin,xMax,yMin,yMax)',
+  function (data, gridProperties, n, isTorus, range, xMin, xMax, yMin, yMax) {
+    var result, rnd;
+
+    function listCopy(item) {
+      var theCopy;
+      if (item instanceof List) {
+        theCopy = new List();
+        for (var i = 1; i <= item.length(); i++)
+          theCopy.add(listCopy(item.at(i)));
+      } else
+        theCopy = item;
+      return theCopy;
+    }
+
+    function myRandom(min, max) {
+      if (max < min) {
+        var h = max;
+        max = min;
+        min = h;
+      }
+      return Math.floor(Math.random() * (Number(max) - Number(min)) + Number(min) + 0.5);
+    }
+
+    function swap(x, y) {
+      var xNew, yNew;
+      if (isTorus) {
+        xNew = x + myRandom(-range, range);
+        yNew = y + myRandom(-range, range);
+        if (xNew < 1)
+          xNew = xMax;
+        if (xNew > xMax)
+          xNew = 1;
+        if (yNew < 1)
+          yNew = yMax;
+        if (yNew > yMax)
+          yNew = 1;
+      } else {
+        do {
+          xNew = x + myRandom(-range, range);
+        } while ((xNew < 1) || (xNew > xMax));
+        do {
+          yNew = y + myRandom(-range, range);
+        } while ((yNew < 1) || (yNew > yMax));
+      }
+      result.at(y).put(data.at(yNew).at(xNew), x);
+      result.at(yNew).put(data.at(y).at(x), xNew);
+    }
+
+    data = listCopy(data);
+    result = listCopy(data);
+    xMin = Math.abs(xMin);
+    xMax = Math.abs(xMax);
+    yMin = Math.abs(yMin);
+    yMax = Math.abs(yMax);
+    if (xMin > xMax) {
+      h = xMin;
+      xMin = xMax;
+      xMax = h;
+    }
+    if (yMin > yMax) {
+      h = yMin;
+      yMin = yMax;
+      yMax = h;
+    }
+
+    for (i = 1; i <= n; i++) {
+      rnd = myRandom(1, 8);
+      if (rnd === 1) {
+        for (var x = xMin; x <= xMax; x++)
+          for (var y = yMin; y <= yMax; y++)
+            swap(x, y);
+      }
+      if (rnd === 2) {
+        for (var x = xMin; x <= xMax; x++)
+          for (var y = yMax; y >= yMin; y--)
+            swap(x, y);
+      }
+      if (rnd === 3) {
+        for (var x = xMax; x >= xMin; x--)
+          for (var y = yMin; y <= yMax; y++)
+            swap(x, y);
+      }
+      if (rnd === 4) {
+        for (var x = xMax; x >= xMin; x--)
+          for (var y = yMax; y >= yMin; y--)
+            swap(x, y);
+      }
+      if (rnd === 5) {
+        for (var y = yMin; y <= yMax; y++)
+          for (var x = xMin; x <= xMax; x++)
+            swap(x, y);
+      }
+      if (rnd === 6) {
+        for (var y = yMax; y >= yMin; y--)
+          for (var x = xMin; x <= xMax; x++)
+            swap(x, y);
+      }
+      if (rnd === 7) {
+        for (var y = yMin; y <= yMax; y++)
+          for (var x = xMax; x >= xMin; x--)
+            swap(x, y);
+      }
+      if (rnd === 8) {
+        for (var y = yMax; y >= yMin; y--)
+          for (var x = xMax; x >= xMin; x--)
+            swap(x, y);
+      }
+      data = result;
+      result = listCopy(data);
+    }
+    return result;
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_changeSurroundingValuesOfGridOnImagePag(data,gridProperties,ifValue,elseValue,surrValue,op,n,isTorus,withNoise,noise,xMin,xMax,yMin,yMax,oldValue)',
+  function (data, gridProperties, ifValue, elseValue, surrValue, op, n, isTorus, withNoise, noise, xMin, xMax, yMin, yMax, oldValue) {
+    var result;
+
+    function listCopy(item) {
+      var theCopy;
+      if (item instanceof List) {
+        theCopy = new List();
+        for (var i = 1; i <= item.length(); i++)
+          theCopy.add(listCopy(item.at(i)));
+      } else
+        theCopy = item;
+      return theCopy;
+    }
+
+    function myRandom(min, max) {
+      if (max < min) {
+        var h = max;
+        max = min;
+        min = h;
+      }
+      return Math.floor(Math.random() * (Number(max) - Number(min)) + Number(min) + 0.5);
+    }
+
+    function actWith(x, y) {
+      var xg, yg, res = 0, ok, val;
+      if ((oldValue === 0) || (data.at(y).at(x) === oldValue)) {
+        for (var xp = x - 1; xp <= x + 1; xp++) {
+          for (var yp = y - 1; yp <= y + 1; yp++) {
+            xg = xp;
+            yg = yp;
+            if (xp < 1) {
+              if (isTorus) {
+                xg = xMax;
+              } else {
+                xg = 0;
+              }
+            }
+            if (xp > xMax) {
+              if (isTorus) {
+                xg = 1;
+              } else {
+                xg = 0;
+              }
+            }
+            if (yp < 1) {
+              if (isTorus) {
+                yg = yMax;
+              } else {
+                yg = 0;
+              }
+            }
+            if (yp > yMax) {
+              if (isTorus) {
+                yg = 1;
+              } else {
+                yg = 0;
+              }
+            }
+            if ((xg > 0) && (yg > 0) && (data.at(yg).at(xg) === surrValue))
+              res++;
+          }
+        }
+        if((oldValue!==0)&&(data.at(y).at(x)===surrValue)) res--;
+        ok = false;
+        if ((op === "greater-than") && (res > n))
+          ok = true;
+        if ((op === "equal-to") && (res == n))
+          ok = true;
+        if ((op === "smaller-than") && (res < n))
+          ok = true;
+        if ((op === "different-from") && (res !== n))
+          ok = true;
+        if (ok)
+          result.at(y).put(ifValue, x);
+        else
+          result.at(y).put(elseValue, x);
+        if (withNoise) {
+          if (Math.random() * 100 <= noise)
+            if (Math.random() <= 0.5)
+              result.at(y).put(ifValue, x);
+            else
+              result.at(y).put(elseValue, x);
+        }
+      }
+    }
+
+    result = listCopy(data);
+    xMin = Math.abs(xMin);
+    xMax = Math.abs(xMax);
+    yMin = Math.abs(yMin);
+    yMax = Math.abs(yMax);
+    if (xMin > xMax) {
+      h = xMin;
+      xMin = xMax;
+      xMax = h;
+    }
+    if (yMin > yMax) {
+      h = yMin;
+      yMin = yMax;
+      yMax = h;
+    }
+    if (oldValue === "any")
+      oldValue = 0;
+    oldValue = Number(oldValue);
+    for (var x = xMin; x <= xMax; x++)
+      for (var y = yMin; y <= yMax; y++)
+        actWith(x, y);
+    return result;
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_replaceValuesOfGridOnImagePad(data,gridProperties,operation,isTorus,xMin,xMax,yMin,yMax,range)',
+  function (data, gridProperties, operation, isTorus, xMin, xMax, yMin, yMax,range) {
+    var result;
+
+    function listCopy(item) {
+      var theCopy;
+      if (item instanceof List) {
+        theCopy = new List();
+        for (var i = 1; i <= item.length(); i++)
+          theCopy.add(listCopy(item.at(i)));
+      } else
+        theCopy = item;
+      return theCopy;
+    }
+
+    function actWith(x, y) {
+     var xg, yg,sum=0, max=-100000, min=100000, n=0, z;
+     for (var xp = x - range; xp <= x + range; xp++) {
+       for (var yp = y - range; yp <= y + range; yp++) {
+         xg = xp;
+         yg = yp;
+         if (xp < 1) {
+           if (isTorus) {
+             xg = xMax+xp;
+           } else {
+             xg = 0;
+           }
+         }
+         if (xp > xMax) {
+           if (isTorus) {
+             xg = xp-xMax;
+           } else {
+             xg = 0;
+           }
+         }
+         if (yp < 1) {
+           if (isTorus) {
+             yg = yMax+yp;
+           } else {
+             yg = 0;
+           }
+         }
+         if (yp > yMax) {
+           if (isTorus) {
+             yg = yp-yMax;
+           } else {
+             yg = 0;
+           }
+         }
+        if ((xg > 0) && (yg > 0)) {
+          z = data.at(yg).at(xg);
+          sum = sum + z;
+          n++;
+          if (z > max)
+            max = z;
+          if (z < min)
+            min = z;
+         }
+       }
+     } 
+      if (operation === "sum")
+        result.at(y).put(sum, x);
+      if (operation === "min")
+        result.at(y).put(min, x);
+      if (operation === "max")
+        result.at(y).put(max, x);
+      if (operation === "mean")
+        if (n > 0)
+          result.at(y).put(1.0 * sum / n, x);
+        else
+          result.at(y).put("", x);
+   } 
+
+
+    result = listCopy(data);
+    xMin = Math.abs(xMin);
+    xMax = Math.abs(xMax);
+    yMin = Math.abs(yMin);
+    yMax = Math.abs(yMax);
+    range=Number(range);
+    if (xMin > xMax) {
+      h = xMin;
+      xMin = xMax;
+      xMax = h;
+    }
+    if (yMin > yMax) {
+      h = yMin;
+      yMin = yMax;
+      yMax = h;
+    }
+    for (var x = xMin; x <= xMax; x++)
+      for (var y = yMin; y <= yMax; y++)
+        actWith(x, y);
+    return result;
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_combineGridsOnImagePad(grid1,grid2,value1,operator,value2,ifValue,elseValue,xMax,yMax)',
+  function (grid1, grid2, value1, operator, value2, ifValue, elseValue, xMax, yMax) {
+    var result = new List(), row, ok, ok1, ok2;
+    for (var y = 1; y <= yMax; y++) {
+      row = new List();
+      for (var x = 1; x <= xMax; x++) {
+        ok1 = grid1.at(y).at(x) === value1;
+        ok2 = grid2.at(y).at(x) === value2;
+        ok = false;
+        if ((operator === "and") && (ok1 && ok2))
+          ok = true;
+        if ((operator === "or") && (ok1 || ok2))
+          ok = true;
+        if ((operator === "xor") && ((ok1 && !ok2) || (!ok1 && ok2)))
+          ok = true;
+        if ((operator === "not-and") && (!(ok1 && ok2)))
+          ok = true;
+        if ((operator === "not-or") && (!(ok1 || ok2)))
+          ok = true;
+        if ((operator === "not-xor") && (!((ok1 && !ok2) || (!ok1 && ok2))))
+          ok = true;
+        if (operator === "minus")
+          if (ok2)
+            ok = false;
+          else
+            ok = ok1;
+        if (ok)
+          row.add(ifValue);
+        else
+          row.add(elseValue);
+      }
+      result.add(row);
+    }
+    return result;
+
+  }
+);
+
+SnapExtensions.primitives.set(
+  'SciS_applyWolframAutomatonToAgridOnImagePad(no,grid,color0,color1)',
+  function (no, grid, color0, color1) {
+    var WolframData, gridWidth = grid.at(1).length(), lineData = new List(), lineLength, result;
+
+    function numberToBits(n) {
+      var result = [0, 0, 0, 0, 0, 0, 0, 0], bit;
+      for (var i = 7; i >= 0; i--) {
+        bit = Math.floor(1.0 * n / Math.pow(2, i));
+        result[i] = bit;
+        n = n - bit * Math.pow(2, i);
+      }
+      return result;
+    }
+
+    no = Number(no);
+    color0 = Number(color0);
+    color1 = Number(color1);
+    if ((no > 255) || (no < 0))
+      return "ERROR: number out of range!";
+    WolframData = new List(numberToBits(no));
+    for (var i = 1; i <= 3 * gridWidth; i++)
+      lineData.add(color0);
+    for (var i = gridWidth + 1; i <= 2 * gridWidth; i++)
+      lineData.put(grid.at(1).at(i - gridWidth), i);
+    lineLength = lineData.length();
+    for (var y = 1; y < grid.length(); y++) {
+      result = new List();
+      for (var i = 1; i <= lineLength; i++) {
+        if (i === 1) {
+          if (lineData.at(1) === color1)
+            n = 2;
+          else
+            n = 0;
+          if (lineData.at(2) === color1)
+            n++;
+        } else if (i === lineLength) {
+          if (lineData.at(i - 1) === color1)
+            n = 4;
+          else
+            n = 0;
+          if (lineData.at(i) === color1)
+            n = n + 2;
+        } else {
+          if (lineData.at(i - 1) === color1)
+            n = 4;
+          else
+            n = 0;
+          if (lineData.at(i) === color1)
+            n = n + 2;
+          if (lineData.at(i + 1) === color1)
+            n++;
+        }
+        if (WolframData.at(n + 1) === 1) {
+          result.add(color1);
+          if ((i > gridWidth) && (i <= 2 * gridWidth))
+            grid.at(y + 1).put(color1, i - gridWidth);
+        } else {
+          result.add(color0);
+          if ((i > gridWidth) && (i <= 2 * gridWidth))
+            grid.at(y + 1).put(color0, i - gridWidth);
+        }
+      }
+      lineData = result;
+    }
+    return grid;
+  }
+);
 
 
 
@@ -4329,6 +5024,17 @@ SnapExtensions.primitives.set(
  );
  
  */
+
+
+
+
+
+
+
+
+
+
+
 
 
 

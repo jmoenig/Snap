@@ -1,13 +1,212 @@
 # Snap! (BYOB) History
 
 ## in development:
-
 * **New Features:**
+    * export script (including dependencies) via its context menu
+    * export / import sprite-local custom block definitions from the palette
+    * added "combinations" primitive to the palette
+    * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+    * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
+    * exporting a library includes dependencies (auto-select all referenced blocks)
+    * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
+    * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * SciSnap2 extension update (ImagePad), thanks, Eckart!
 * **Notable Fixes:**
+    * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+    * fixed relabelling local custom blocks to global ones and vice-versa
+    * fixed library blocks preview to deal with both local and global blocks
+    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ! 
+    * fixed an edge case for slot type inferral
+    * fixed variadic AND/OR reporters library, thanks, Brian!
+    * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
+    * updated contribution guidelines, thanks, Peter!
+    * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
+    * German
 
+### 2022-03-28
+* new "Tad" turtle costumes, thanks, Meghan and Brian!
+* blocks, threads: new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+* German translation update for "position"
+
+### 2022-03-25
+* threads: added @xBZZZZ's JSCompiler fixes (was #3009)
+* threads: refactored some JSCompiler code (mostly to please JSHint)
+
+### 2022-03-24
+* German translation update for "costume name"
+* threads, extension: decodeURI XHR requests
+
+### 2022-03-23
+* byob: fixed #3020
+* SciSnap2 extension update (ImagePad), thanks, Eckart!
+
+### 2022-03-22
+* blocks: fixed relabelling "sum", "product", "minimum" and "maximum" reporters
+* store: tweaked script deserialization
+* byob: exporting a library includes dependencies (auto-select all referenced blocks)
+
+### 2022-03-21
+* updated frequency distribution analysis library, thanks, Brian!
+
+### 2022-03-18
+* objects, gui: refactored sprite serialization, added SpriteMorph >> toXMLString() api
+* blocks: added optional receiver sprite to toXMLScript() api
+* store: cleaned up version assertion
+* gui: migrated library import dialog to the new file structure
+
+### 2022-03-17
+* blocks: refactored dependencies scan for scripts
+* gui: refactored palette serialization for scripts
+* byob, blocks, gui: refactored blocksLibraryXML()
+* gui: new format for exporting sprites, under construction
+* gui: store: import sprites with dependencies
+
+### 2022-03-16
+* restored v7.4.0-dev
+
+## 7.3.1:
+* **Notable Fix:**
+    * guard against broken SVG costumes when loading a project
+
+### 2022-03-16
+* objects, threads: reformulated the zero-costume-width fix addressing a costume-loading issue
+* German translation update for new error message
+* prepared v7.3.1 emergency patch
+
+### 2022-03-15
+* blocks, store, gui: deserialize new format for exported scripts
+* blocks: new "export script" feature (including dependencies)
+* blocks: tweaked "export scripts" for reporters
+* German translation update (for "export script" feature)
+* blocks: added BlockMorph >> toXMLString() api
+
+### 2022-03-14
+* gui, byob: refactored library serialization
+* blocks, byob, gui: new format for exported scripts, under construction
+
+### 2022-03-11
+* blocks: fixed an edge case for slot type inferral
+* objects: added "combinations" primitive to the palette
+* moved "append", "reshape", "combinations" blocks down one group in the palette
+* incremented dev version
+* updated variadic reporters library, thanks, Brian
+* objects: adjusted library-import for sprite-local blocks
+
+### 2022-03-10
+* gui: made dev-warning closeable and added official url 
+
+### 2022-03-09
+* new dev version
+* byob, store, gui: export / import sprite-local custom block definitions, under construction
+* byob, gui: adapted library import dialog to the new format
+* byob: added collecting dependencies for sprite-local custom blocks
+* objects: guard against broken SVG costumes when loading a project
+
+## 7.3.0:
+* **New Features:**
+    * variadic associative infix reporters
+    * shift-click on STOP button to stop all scenes
+    * STOP "all scenes" dropdown option
+    * "category" selector for block-getter in sensing
+* **Notable Changes:**
+    * show project name in browser tab, thanks, Peter!
+    * SciSnap2 extension update (FFT), thanks, Eckart!
+    * removed now redundant variadic reporters from the variadic reporters library
+* **Notable Fixes:**
+    * addressed security issues in the JIT-compiler, thanks, xBZZZZ!
+    * animation library: fixed pen state for GLIDE, thanks, Brian!
+* **Translation Updates:**
+    * German
+
+### 2022-03-07
+* blocks: refactored experimental export scripts feature
+* prepared v7.3.0
+
+### 2022-03-04
+* scenes, objects, threads, gui: refactored STOP
+* German translation update for "all scenes"
+* animation library: fixed pen state for GLIDE, thanks, Brian!
+* threads: addressed security issues in the JIT-compiler, thanks, xBZZZZ!
+* gui: show project name in browser tab, thanks, Peter!
+* objects: handle (some cases of) extent-less costumes
+* blocks, threads: "category" selector for block-getter in sensing
+* updated German translation with "category"
+
+### 2022-03-03
+* SciSnap2 extension update (FFT), thanks, Eckart!
+* threads: removed experimental code
+* scenes, gui: shift-click on STOP button to stop all scenes
+* blocks, threads: STOP "all scenes" dropdown option 
+
+### 2022-03-02
+* gui: never close a dev-warning
+
+### 2022-03-01
+* blocks: adjusted restoring inputs for relabelling to / from variadic infix reporters
+* blocks: refactored adding and removing inputs in variadic slots
+* blocks: adjusted inserting / deleting single inputs in variadic infix slots
+* objects: adjusted block-search-bar for variadic infix reporters
+* objects: adapted formula editor for variadic infix reporters
+* objects: removed scaffolding
+* store: apply block migration dictionary to hidden blocks in microworlds
+* store: removed scaffolding
+* blocks: removed scaffolding
+* threads: removed scaffolding
+* renamed help screens for addition and multiplication blocks
+* removed now redundant variadic reporters from the variadic reporters library
+* added dev warning box
+
+### 2022-02-28
+* blocks, objects, threads, store: made addition reporter variadic
+* blocks, objects, threads: made multiplication reporter variadic
+* blocks: tweaked infix label shadow rendering
+* German translation update (for "sum" and "product")
+* blocks, objects, threads: made "min" and "max" reporters variadic
+* German translation update (for "minimum" and "maximum")
+* threads: added list-type assertions for new variadic blocks
+* threads: adjusted optimizations for COMBINE to the new variadic infix reporters
+* objects. adjusted relabel options for new variadic infix blocks
+
+### 2022-02-27
+* variadic infix branch
+
+### 2022-02-26
+* new dev version
+
+## 7.2.5:
+* **Notable Fix:**
+    * escape JIT-compiled variable names
+
+### 2022-02-26
+    * threads: escape JIT-compiled variable names
+
+## 7.2.4:
+* **Notable Fix:**
+    * tweaked JOIN BLOCKS for variables
+
+### 2022-02-25
+* new dev version
+* threads: tweaked JOIN BLOCKS for variables
+* prepared patch 
+
+## 7.2.3:
+* **Notable Fix:**
+    * escape JIT-compiled inputs
+
+### 2022-02-25
+    * threads: escape JIT-compiled inputs
+
+## 7.2.2:
+* **Notable Changes:**
+    * renamed "crossproduct" to "combinations"
+* **Translation Updates:**
+    * German
+
+### 2022-02-22
+    * renamed "crossproduct" to "combinations"
 
 ## 7.2.1:
 * **New Features:**
