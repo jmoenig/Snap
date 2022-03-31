@@ -49,7 +49,13 @@
         CellMorph
         WatcherMorph
         StagePrompterMorph
+        StagePickerMorph
+        StagePickerItemMorph
 
+        MenuItemMorph*
+            StagePickerItemMorph
+        MenuMorph*
+            StagePickerMorph
         SpeechBubbleMorph*
             SpriteBubbleMorph
 
@@ -83,11 +89,11 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
-BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph*/
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-18';
+modules.objects = '2022-March-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -103,6 +109,8 @@ var WatcherMorph;
 var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
+var StagePickerMorph;
+var StagePickerItemMorph;
 
 function isSnapObject(thing) {
     return thing instanceof SpriteMorph || (thing instanceof StageMorph);
@@ -292,6 +300,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'motion',
             spec: 'if on edge, bounce'
+        },
+        getPosition: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'motion',
+            spec: 'position'
         },
         xPosition: {
             only: SpriteMorph,
@@ -980,6 +994,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
+        },
+        reportMousePosition: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'mouse position'
         },
         reportMouseX: {
             type: 'reporter',
@@ -1725,8 +1744,9 @@ SpriteMorph.prototype.blockAlternatives = {
     changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition',
         'forward'],
     setYPosition: ['setXPosition', 'changeYPosition', 'changeXPosition'],
-    xPosition: ['yPosition'],
-    yPosition: ['xPosition'],
+    xPosition: ['yPosition', 'getPosition'],
+    yPosition: ['xPosition', 'getPosition'],
+    getPosition: ['xPosition', 'yPosition'],
 
     // looks:
     doSayFor: ['doThinkFor', 'bubble', 'doThink', 'doAsk'],
@@ -1789,8 +1809,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
     getLastAnswer: ['getTimer'],
     getTimer: ['getLastAnswer'],
-    reportMouseX: ['reportMouseY'],
-    reportMouseY: ['reportMouseX'],
+    reportMouseX: ['reportMouseY', 'reportMousePosition'],
+    reportMouseY: ['reportMouseX', 'reportMousePosition'],
+    reportMousePosition: ['reportMouseX', 'reportMouseY'],
 
     // operators:
     reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
@@ -2451,6 +2472,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('bounceOffEdge'));
         blocks.push('-');
+        blocks.push(block('getPosition'));
         blocks.push(watcherToggle('xPosition'));
         blocks.push(block('xPosition', this.inheritsAttribute('x position')));
         blocks.push(watcherToggle('yPosition'));
@@ -2634,6 +2656,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));
@@ -6071,6 +6094,10 @@ SpriteMorph.prototype.turnLeft = function (degrees) {
     this.setHeading(this.heading - (+degrees || 0));
 };
 
+SpriteMorph.prototype.getPosition = function () {
+    return new List([this.xPosition(), this.yPosition()]);
+};
+
 SpriteMorph.prototype.xPosition = function () {
     if (this.inheritsAttribute('x position')) {
         return this.exemplar.xPosition();
@@ -6552,24 +6579,6 @@ SpriteMorph.prototype.getLastMessage = function () {
 
 SpriteMorph.prototype.getLastAnswer = function () {
     return this.parentThatIsA(StageMorph).lastAnswer;
-};
-
-// SpriteMorph mouse coordinates
-
-SpriteMorph.prototype.reportMouseX = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseX();
-    }
-    return 0;
-};
-
-SpriteMorph.prototype.reportMouseY = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseY();
-    }
-    return 0;
 };
 
 // SpriteMorph thread count (for debugging)
@@ -8176,6 +8185,9 @@ StageMorph.prototype.setScale = function (number) {
             }
             morph.setCenter(this.center());
             morph.setBottom(this.bottom());
+        } else if (morph instanceof StagePickerMorph) {
+            morph.createItems(number);
+            morph.popup(this, morph.position());
         }
     });
 };
@@ -9112,6 +9124,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));
@@ -12727,6 +12740,7 @@ StagePrompterMorph.prototype.init = function (question) {
     // question is optional in case the Stage is asking
 
     // additional properties
+    this.answer = null;
     this.isDone = false;
     if (question) {
         this.label = new StringMorph(
@@ -12800,5 +12814,432 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 };
 
 StagePrompterMorph.prototype.accept = function () {
+    this.answer = this.inputField.getValue();
     this.isDone = true;
+};
+
+// StagePickerMorph ////////////////////////////////////////////////////////
+
+/*
+    I am a sensor-category-colored input box which lets the user pick one
+    from a list of options.
+*/
+
+// StagePickerMorph inherits from MenuMorph:
+
+StagePickerMorph.prototype = new MenuMorph();
+StagePickerMorph.prototype.constructor = StagePickerMorph;
+StagePickerMorph.uber = MenuMorph.prototype;
+
+// StagePickerMorph instance creation:
+
+function StagePickerMorph(options) {
+    this.init(options);
+}
+
+StagePickerMorph.prototype.init = function (options) {
+    var first = options.at(1),
+        isSubmenu = this.isSubmenu(options),
+        title = isSubmenu ? first : null,
+        items = isSubmenu ? options.at(2) : options;
+
+    // additional properties
+    this.answer = null;
+    this.isDone = false;
+    this.scale = 1;
+
+    // initialize inherited properties
+    StagePickerMorph.uber.init.call(
+        this,
+        choice => {
+            var root = this.rootMenu();
+            root.answer = choice;
+            root.isDone = true;
+        },
+        title, // title
+        this, // environment
+        null // font size
+    );
+
+    // override inherited behavior
+
+    // create items
+    items.map(each => {
+        var key, value, isLine;
+        if (this.isSubmenu(each)) {
+            this.addMenu(
+                each.at(1), // label
+                new StagePickerMorph(each.at(2)), // aMenu
+                null, // indicator
+                true // verbatim, don't translate
+            );
+        } else {
+            key = each;
+            value = each;
+            if (each instanceof List) { // treat as pair
+                isLine = each.isEmpty();
+                key = each.at(1);
+                value = each.at(2);
+            }
+            if (isLine) {
+                this.addLine();
+            } else {
+                this.addItem(
+                    key,
+                    value,
+                    null, // hint
+                    null, // color
+                    null, // bold
+                    null, // italic
+                    null, // doubleClickAction
+                    null, // shortcut
+                    true // verbatim? don't translate
+                );
+            }
+        }
+    });
+
+};
+
+StagePickerMorph.prototype.isSubmenu = function (options) {
+    var first;
+    if (!(options instanceof List)) {
+        return false;
+    }
+    first = options.at(1);
+    return (isString(first) || !isNaN(+first)) &&
+        first.toString().length &&
+        options.length() === 2 &&
+        options.rank() > 1;
+};
+
+StagePickerMorph.prototype.dataRepresentation = function (data) {
+    switch (Process.prototype.reportTypeOf(data)) {
+    case 'costume':
+    case 'sprite':
+    case 'stage':
+        return data.thumbnail(new Point(40, 40).multiplyBy(this.scale));
+    case 'command':
+    case 'reporter':
+    case 'predicate':
+        return data.image();
+    default:
+        return data.toString();
+    }
+};
+
+// StagePickerMorph popping up
+
+StagePickerMorph.prototype.popup = function (stage, pos) {
+	var scroller;
+
+    this.setPosition(pos);
+    this.keepWithin(stage);
+
+    if (this.bottom() > stage.bottom()) {
+    	// scroll menu items if the menu is taller than the stage
+        scroller = this.scroll();
+        this.bounds.corner.y = stage.bottom() - 2;
+        scroller.setHeight(stage.bottom() - scroller.top() - this.edge - 2);
+        scroller.adjustScrollBars();
+     }
+
+    if (this.items.length < 1 && !this.title) { // don't show empty menus
+        return;
+    }
+    stage.add(this);
+    this.fullChanged();
+};
+
+StagePickerMorph.prototype.createLabel = function () {
+    var text;
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    text = new TextMorph(
+        this.title,
+        SpriteMorph.prototype.bubbleFontSize * this.scale,
+        null, // MorphicPreferences.menuFontName,
+        true,
+        false,
+        'center'
+    );
+    text.alignment = 'center';
+    text.color = WHITE;
+    text.backgroundColor = this.borderColor;
+    text.fixLayout();
+
+    // reflow text boundaries
+    text.setWidth(Math.min(
+        text.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+
+    this.label = new BoxMorph(this.edge, 0);
+    this.label.color = this.borderColor;
+    this.label.borderColor = this.borderColor;
+
+    this.label.outlinePath = function (ctx, corner, inset) {
+        // modify to only draw the top corners rounded
+        var w = this.width(),
+            h = this.height(),
+            radius = Math.min(corner, (Math.min(w, h) - inset) / 2),
+            offset = radius + inset;
+
+        // top left:
+        ctx.arc(
+            offset,
+            offset,
+            radius,
+            radians(-180),
+            radians(-90),
+            false
+        );
+
+        // top right:
+        ctx.arc(
+            w - offset,
+            offset,
+            radius,
+            radians(-90),
+            radians(-0),
+            false
+        );
+
+        // bottom right:
+        ctx.lineTo(w, h);
+
+        // bottom left:
+        ctx.lineTo(0, h);
+    };
+
+    this.label.setExtent(text.extent().add(this.edge));
+    this.label.add(text);
+    this.label.text = text;
+};
+
+StagePickerMorph.prototype.createItems = function (scale) {
+    var item,
+        x,
+        y,
+        isLine = false;
+
+    this.scale = scale;
+    this.children.forEach(m => m.destroy());
+    this.children = [];
+    this.edge = SyntaxElementMorph.prototype.rounding  * this.scale;
+    this.border = SpriteMorph.prototype.bubbleBorder * this.scale;
+    this.color = WHITE;
+    this.borderColor = SpriteMorph.prototype.blockColor.sensing;
+    this.setExtent(new Point(0, 0));
+
+    y = this.border;
+    x = this.left() + this.border;
+    if (this.title) {
+        this.createLabel();
+        this.label.setPosition(this.bounds.origin);
+        this.add(this.label);
+        y = this.label.bottom();
+    } else {
+        y = this.top() + this.edge;
+    }
+    y += 1;
+    this.items.forEach(tuple => {
+        isLine = false;
+        if (tuple[0] === 0) {
+            isLine = true;
+            item = new Morph();
+            item.color = this.borderColor;
+            item.setHeight(tuple[1] * this.scale);
+        } else {
+            item = new StagePickerItemMorph(
+                this.target,
+                tuple[1],
+                this.dataRepresentation(tuple[0]),
+                SpriteMorph.prototype.bubbleFontSize  * this.scale,
+                null, // MorphicPreferences.menuFontName,
+                this.environment,
+                tuple[2], // bubble help hint
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5], // italic
+                tuple[6], // doubleclick action
+                tuple[7], // shortcut
+                this.scale
+            );
+        }
+        if (isLine) {
+            y += 1;
+        }
+        item.setPosition(new Point(x, y));
+        this.add(item);
+        y = y + item.height();
+        if (isLine) {
+            y += 1;
+        }
+    });
+
+    this.adjustWidths();
+    this.setExtent(
+        this.fullBounds().extent().add(new Point(this.border, this.edge))
+    );
+    if (this.label) {
+        this.label.setWidth(this.width());
+        this.label.text.setPosition(
+            this.label.center().subtract(
+                this.label.text.extent().floorDivideBy(2)
+            )
+        );
+    }
+};
+
+StagePickerMorph.prototype.maxWidth = function () {
+    var w = 0;
+
+    if (this.parent instanceof FrameMorph) {
+        if (this.parent.scrollFrame instanceof ScrollFrameMorph) {
+            w = this.parent.scrollFrame.width();
+        }
+    }
+    this.children.forEach(item => {
+        if (item instanceof MenuItemMorph) {
+            w = Math.max(
+                w,
+                item.label.width() + this.edge +
+                    (item.shortcut ? item.shortcut.width() + this.border : 0)
+            );
+        }
+    });
+    if (this.label) {
+        w = Math.max(w, this.label.width() - this.border);
+    }
+    return w;
+};
+
+StagePickerMorph.prototype.adjustWidths = function () {
+    var w = this.maxWidth();
+    this.children.forEach(item => {
+        item.setWidth(w);
+        item.fixLayout();
+    });
+};
+
+// StagePickerMorph removing
+
+StagePickerMorph.prototype.destroy = function () {
+    MenuMorph.uber.destroy.call(this);
+};
+
+// StagePickerMorph submenus
+
+StagePickerMorph.prototype.closeSubmenu = function () {
+    if (this.submenu) {
+        this.submenu.destroy();
+        this.submenu = null;
+        this.unselectAllItems();
+    }
+};
+
+StagePickerMorph.prototype.rootMenu = function () {
+    return (this.parent instanceof StagePickerMorph) ?
+        this.parent.rootMenu()
+        : this;
+};
+
+// StagePickerItemMorph ////////////////////////////////////////////////////////
+
+/*
+    I am an option that can be clicked inside a StagePickerMorph.
+*/
+
+// StagePickerItemMorph inherits from MenuItemMorph:
+
+StagePickerItemMorph.prototype = new MenuItemMorph();
+StagePickerItemMorph.prototype.constructor = StagePickerItemMorph;
+StagePickerItemMorph.uber = MenuItemMorph.prototype;
+
+// StagePickerItemMorph instance creation:
+
+function StagePickerItemMorph(
+    target,
+    action,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction, // optional when used as list morph item
+    shortcut, // optional string, Morph, Canvas or tuple: [icon, string]
+    scale
+) {
+    this.shortcutString = shortcut || null;
+    this.shortcut = null;
+    this.scale = scale || 1;
+    this.init(
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction
+    );
+
+    this.highlightColor = SpriteMorph.prototype.blockColor.sensing.lighter(75);
+    this.pressColor = SpriteMorph.prototype.blockColor.sensing.lighter(25);
+    if (this.shortcut) {
+        this.shortcut.setColor(SpriteMorph.prototype.blockColor.sensing);
+    }
+}
+
+StagePickerItemMorph.prototype.createLabelString = function (string) {
+    var lbl = new TextMorph(
+        string,
+        this.fontSize,
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
+    );
+    // reflow text boundaries
+    lbl.setWidth(Math.min(
+        lbl.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+    lbl.setColor(this.labelColor);
+    return lbl;
+};
+
+// StagePickerItemMorph submenus:
+
+StagePickerItemMorph.prototype.popUpSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph),
+        stage = this.parentThatIsA(StageMorph),
+        scroller;
+
+    if (!(this.action instanceof MenuMorph)) {return; }
+    this.action.createItems(menu.scale);
+    this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
+    this.action.keepWithin(stage);
+    if (this.action.items.length < 1 && !this.action.title) {return; }
+
+    if (this.action.bottom() > stage.bottom()) {
+        // scroll menu items if the menu is taller than the world
+        scroller = this.action.scroll();
+        this.action.bounds.corner.y = stage.bottom() - 2;
+        scroller.setHeight(
+            stage.bottom() - scroller.top() - this.action.edge - 2
+        );
+        scroller.adjustScrollBars();
+     }
+    
+    menu.add(this.action);
+    menu.submenu = this.action;
+    this.action.fullChanged();
 };

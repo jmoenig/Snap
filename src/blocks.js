@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-22';
+modules.blocks = '2022-March-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10370,6 +10370,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     dict.costumes = ['costumes'];
     dict.sounds = ['sounds'];
     dict.blocks = ['blocks'];
+    dict.categories = ['categories'];
     dict['dangling?'] = ['dangling?'];
     dict['draggable?'] = ['draggable?'];
     dict.width = ['width'];
@@ -10388,6 +10389,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
 
 InputSlotMorph.prototype.attributesMenu = function (searching) {
     var dict = {
+            'position' : ['position'],
             'x position' : ['x position'],
             'y position' : ['y position'],
             'direction' : ['direction'],

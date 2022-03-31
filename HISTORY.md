@@ -2,9 +2,15 @@
 
 ## in development:
 * **New Features:**
+    * passing a list to the ASK command in sensing presents a menu to the user
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
+    * new POSITION primitive reporter in the MOTION category
+    * new MOUSE POSITION primitive reporter in the SENSING category
+    * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+    * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+    * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
@@ -23,6 +29,22 @@
     * updated help screen for NUMBERS, thanks, Brian and Peter!
 * **Translation Updates:**
     * German
+
+### 2022-03-31
+* threads, objects: new menu functionality for ASK command, when passing a list
+* objects: support various data types inside menus (sprites, costumes, blocks)
+* objects: wrap long texts inside menus into several lines
+* objects: added new POSITION primitive block to the MOTION category
+* threads: added new MOUSE POSITION primitive block to the SENSING category
+* German translation update for "mouse position"
+* blocks, threads: new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+* German translation for "categories"
+* objects: tweaked submenu qualification for ASK
+
+### 2022-03-28
+* new "Tad" turtle costumes, thanks, Meghan and Brian!
+* blocks, threads: new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+* German translation update for "position"
 
 ### 2022-03-25
 * threads: added @xBZZZZ's JSCompiler fixes (was #3009)

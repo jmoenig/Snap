@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-03-24', // this, too, will appear in the Translators tab
+        '2022-03-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -623,6 +623,8 @@ SnapTranslator.dict.de = {
         'Wie hei\u00dft Du?',
     'answer':
         'Antwort',
+    'mouse position':
+        'Mausposition',
     'mouse x':
         'Maus x-Position',
     'mouse y':
@@ -2088,8 +2090,12 @@ SnapTranslator.dict.de = {
         'Rand oben',
     'bottom':
         'Rand unten',
+    'position':
+        'Position',
     'costume name':
         'Kostümname',
+    'categories':
+        'Kategorien',
 
     // attributes in the SET block's dropdown
     'my anchor':
