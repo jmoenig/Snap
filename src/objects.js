@@ -12966,6 +12966,13 @@ StagePickerMorph.prototype.createLabel = function () {
     text.color = WHITE;
     text.backgroundColor = this.borderColor;
     text.fixLayout();
+
+    // reflow text boundaries
+    text.setWidth(Math.min(
+        text.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+
     this.label = new BoxMorph(this.edge, 0);
     this.label.color = this.borderColor;
     this.label.borderColor = this.borderColor;
@@ -13055,7 +13062,8 @@ StagePickerMorph.prototype.createItems = function (scale) {
                 tuple[4], // bold
                 tuple[5], // italic
                 tuple[6], // doubleclick action
-                tuple[7] // shortcut
+                tuple[7], // shortcut
+                this.scale
             );
         }
         if (isLine) {
@@ -13162,10 +13170,12 @@ function StagePickerItemMorph(
     bold,
     italic,
     doubleClickAction, // optional when used as list morph item
-    shortcut // optional string, Morph, Canvas or tuple: [icon, string]
+    shortcut, // optional string, Morph, Canvas or tuple: [icon, string]
+    scale
 ) {
     this.shortcutString = shortcut || null;
     this.shortcut = null;
+    this.scale = scale || 1;
     this.init(
         target,
         action,
@@ -13186,6 +13196,23 @@ function StagePickerItemMorph(
         this.shortcut.setColor(SpriteMorph.prototype.blockColor.sensing);
     }
 }
+
+StagePickerItemMorph.prototype.createLabelString = function (string) {
+    var lbl = new TextMorph(
+        string,
+        this.fontSize,
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
+    );
+    // reflow text boundaries
+    lbl.setWidth(Math.min(
+        lbl.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+    lbl.setColor(this.labelColor);
+    return lbl;
+};
 
 // StagePickerItemMorph submenus:
 

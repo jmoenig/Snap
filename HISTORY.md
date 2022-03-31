@@ -30,6 +30,7 @@
 ### 2022-03-31
 * threads, objects: new menu functionality for ASK command, when passing a list
 * objects: support various data types inside menus (sprites, costumes, blocks)
+* objects: wrap long texts inside menus into several lines
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
