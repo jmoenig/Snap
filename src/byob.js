@@ -1128,7 +1128,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     }
 
-   function monitor(vName) {
+    function monitor(vName) {
         var stage = rcvr.parentThatIsA(StageMorph),
             varFrame = myself.variables;
         menu.addItem(
@@ -1351,7 +1351,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
     if (exp instanceof BlockMorph) {
         rebindRecursiveCalls(exp);
     }
- 
+
 
     ide.flushPaletteCache();
     ide.refreshPalette();
