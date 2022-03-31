@@ -12907,8 +12907,8 @@ StagePickerMorph.prototype.isSubmenu = function (options) {
         return false;
     }
     first = options.at(1);
-    return isString(first) &&
-        first.length &&
+    return (isString(first) || !isNaN(+first)) &&
+        first.toString().length &&
         options.length() === 2 &&
         options.rank() > 1;
 };

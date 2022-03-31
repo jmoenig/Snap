@@ -39,6 +39,7 @@
 * German translation update for "mouse position"
 * blocks, threads: new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
 * German translation for "categories"
+* objects: tweaked submenu qualification for ASK
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
