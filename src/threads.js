@@ -5826,6 +5826,17 @@ Process.prototype.reportGet = function (query) {
                     )
                 )
             );
+        case 'categories':
+            /* // localized version, commented out for now:
+            return new List(SpriteMorph.prototype.categories.map(cat =>
+                localize(cat.charAt(0).toUpperCase() + cat.slice(1))).concat(
+                    Array.from(
+                        SpriteMorph.prototype.customCategories.keys()
+                    ).sort()
+                )
+            );
+            */
+            return new List(SpriteMorph.prototype.allCategories());
         case 'costume':
             return thisObj.costume;
         case 'costumes':

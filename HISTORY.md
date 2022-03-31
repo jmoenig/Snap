@@ -9,6 +9,7 @@
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+    * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
@@ -36,6 +37,7 @@
 * objects: added new POSITION primitive block to the MOTION category
 * threads: added new MOUSE POSITION primitive block to the SENSING category
 * German translation update for "mouse position"
+* blocks, threads: new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
