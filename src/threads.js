@@ -6032,6 +6032,18 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     return result;
 };
 
+Process.prototype.reportMousePosition = function () {
+    var world, pos;
+    if (this.homeContext.receiver) {
+        world = this.homeContext.receiver.world();
+        if (world) {
+            pos = this.homeContext.receiver.snapPoint(world.hand.position());
+            return new List([pos.x, pos.y]);
+        }
+    }
+    return '';
+};
+
 Process.prototype.reportMouseX = function () {
     var world;
     if (this.homeContext.receiver) {

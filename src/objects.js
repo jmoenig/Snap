@@ -995,6 +995,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'answer'
         },
+        reportMousePosition: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'mouse position'
+        },
         reportMouseX: {
             type: 'reporter',
             category: 'sensing',
@@ -1804,8 +1809,9 @@ SpriteMorph.prototype.blockAlternatives = {
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
     getLastAnswer: ['getTimer'],
     getTimer: ['getLastAnswer'],
-    reportMouseX: ['reportMouseY'],
-    reportMouseY: ['reportMouseX'],
+    reportMouseX: ['reportMouseY', 'reportMousePosition'],
+    reportMouseY: ['reportMouseX', 'reportMousePosition'],
+    reportMousePosition: ['reportMouseX', 'reportMouseY'],
 
     // operators:
     reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
@@ -2650,6 +2656,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));
@@ -6574,24 +6581,6 @@ SpriteMorph.prototype.getLastAnswer = function () {
     return this.parentThatIsA(StageMorph).lastAnswer;
 };
 
-// SpriteMorph mouse coordinates
-
-SpriteMorph.prototype.reportMouseX = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseX();
-    }
-    return 0;
-};
-
-SpriteMorph.prototype.reportMouseY = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseY();
-    }
-    return 0;
-};
-
 // SpriteMorph thread count (for debugging)
 
 SpriteMorph.prototype.reportThreadCount = function () {
@@ -9135,6 +9124,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));

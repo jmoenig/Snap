@@ -7,6 +7,7 @@
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
+    * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
@@ -33,6 +34,7 @@
 * objects: support various data types inside menus (sprites, costumes, blocks)
 * objects: wrap long texts inside menus into several lines
 * objects: added new POSITION primitive block to the MOTION category
+* threads: added new MOUSE POSITION primitive block to the SENSING category
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
