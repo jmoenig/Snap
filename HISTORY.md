@@ -35,6 +35,7 @@
 * objects: wrap long texts inside menus into several lines
 * objects: added new POSITION primitive block to the MOTION category
 * threads: added new MOUSE POSITION primitive block to the SENSING category
+* German translation update for "mouse position"
 
 ### 2022-03-28
 * new "Tad" turtle costumes, thanks, Meghan and Brian!
