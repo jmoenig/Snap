@@ -12930,6 +12930,8 @@ StagePickerMorph.prototype.dataRepresentation = function (data) {
         sym.edge *= this.scale;
         sym.fixLayout();
         return sym.fullImage();
+    case 'sound':
+        return (new SymbolMorph('notes', 30 * this.scale)).fullImage();
     default:
         return data.toString();
     }
