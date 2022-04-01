@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
+    * formatting a list of texts displays it as chat-history in an ASK menu
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
@@ -33,7 +34,8 @@
 ### 2022-04-01
 * objects: added ASK-menu data representation for Booleans
 * objects: added ASK-menu data representation for Sounds
-* objects: added icon support for ASK menu items 
+* objects: added icon support for ASK menu items
+* objects: added formatting support for visualizing chat histories in ASK menus
 
 ### 2022-03-31
 * threads, objects: new menu functionality for ASK command, when passing a list
