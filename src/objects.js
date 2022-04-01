@@ -12879,6 +12879,9 @@ StagePickerMorph.prototype.init = function (options) {
             if (each instanceof List) { // treat as pair
                 isLine = each.isEmpty();
                 key = each.at(1);
+                if (key instanceof List) {
+                    key = key.itemsArray();
+                }
                 value = each.at(2);
             }
             if (isLine) {
@@ -13095,7 +13098,9 @@ StagePickerMorph.prototype.createItems = function (scale) {
             item = new StagePickerItemMorph(
                 this.target,
                 tuple[1],
-                this.dataRepresentation(tuple[0]),
+                tuple[0] instanceof Array ?
+                    [this.dataRepresentation(tuple[0][0]), tuple[0][1]]
+                        : this.dataRepresentation(tuple[0]),
                 SpriteMorph.prototype.bubbleFontSize  * this.scale,
                 null, // MorphicPreferences.menuFontName,
                 this.environment,

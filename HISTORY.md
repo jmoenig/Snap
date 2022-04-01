@@ -33,6 +33,7 @@
 ### 2022-04-01
 * objects: added ASK-menu data representation for Booleans
 * objects: added ASK-menu data representation for Sounds
+* objects: added icon support for ASK menu items 
 
 ### 2022-03-31
 * threads, objects: new menu functionality for ASK command, when passing a list
