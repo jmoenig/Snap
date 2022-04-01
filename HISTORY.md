@@ -30,6 +30,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-01
+* objects: added ASK-menu data representation for Booleans
+
 ### 2022-03-31
 * threads, objects: new menu functionality for ASK command, when passing a list
 * objects: support various data types inside menus (sprites, costumes, blocks)

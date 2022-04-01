@@ -93,7 +93,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-31';
+modules.objects = '2022-April-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -12914,6 +12914,7 @@ StagePickerMorph.prototype.isSubmenu = function (options) {
 };
 
 StagePickerMorph.prototype.dataRepresentation = function (data) {
+    var sym;
     switch (Process.prototype.reportTypeOf(data)) {
     case 'costume':
     case 'sprite':
@@ -12923,9 +12924,46 @@ StagePickerMorph.prototype.dataRepresentation = function (data) {
     case 'reporter':
     case 'predicate':
         return data.image();
+    case 'Boolean':
+        sym = new BooleanSlotMorph(data);
+        sym.fontSize *= this.scale;
+        sym.edge *= this.scale;
+        sym.fixLayout();
+        return sym.fullImage();
     default:
         return data.toString();
     }
+};
+
+StagePickerMorph.prototype.addItem = function (
+    labelString,
+    action,
+    hint,
+    color,
+    bold, // bool
+    italic, // bool
+    doubleClickAction, // optional, when used as list contents
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    verbatim // optional bool, don't translate if true
+) {
+    /*
+    labelString is normally a single-line string. But it can also be one
+    of the following:
+
+        * a multi-line string (containing line breaks)
+        * an icon (either a Morph or a Canvas)
+        * a tuple of format: [icon, string]
+    */
+    this.items.push([
+        verbatim ? labelString : localize(labelString),
+        action === 0 ? 0 : action || nop,
+        hint,
+        color,
+        bold || false,
+        italic || false,
+        doubleClickAction,
+        shortcut,
+        verbatim]);
 };
 
 // StagePickerMorph popping up
