@@ -31,6 +31,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-03
+* objects: added shortcut support for ASK menu items
+
 ### 2022-04-01
 * objects: added ASK-menu data representation for Booleans
 * objects: added ASK-menu data representation for Sounds

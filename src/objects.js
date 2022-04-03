@@ -93,7 +93,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-April-01';
+modules.objects = '2022-April-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -12903,6 +12903,14 @@ StagePickerMorph.prototype.init = function (options) {
                 } else {
                     key = each.at(1);
                     if (key instanceof List) {
+                        if (this.isShortcut(key)) {
+                            this.addPair(
+                                key.at(1).toString(),
+                                each.at(2),
+                                key.at(2).toString()
+                            );
+                            return;
+                        }
                         key = key.itemsArray();
                     }
                     value = each.at(2);
@@ -12948,6 +12956,14 @@ StagePickerMorph.prototype.isRightQuote = function (options) {
     return options instanceof List && !options.isEmpty() && !options.at(1);
 };
 
+StagePickerMorph.prototype.isShortcut = function (key) {
+    var types = ['text', 'number'];
+    return key instanceof List &&
+        (key.length() === 2) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(1))) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(2)));
+};
+
 StagePickerMorph.prototype.dataRepresentation = function (data) {
     var sym, img;
     if (data instanceof SpeechBubbleMorph) {
@@ -12972,8 +12988,6 @@ StagePickerMorph.prototype.dataRepresentation = function (data) {
         ));
         img.getContext('2d').drawImage(sym, img.width - sym.width, 0);
         return img;
-//        sprite.bubbleMaxTextWidth * this.scale
-
     }
     switch (Process.prototype.reportTypeOf(data)) {
     case 'costume':
