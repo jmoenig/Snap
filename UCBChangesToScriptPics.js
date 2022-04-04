@@ -92,7 +92,23 @@ BlockMorph.prototype.userMenu = function () {
      * 2/26 Changes:
      *  - Added new "scan" to scripts to export/encode custom block definitions with XML
      */
-    if (this.isTemplate || !this.definition) {
+    if (this.isCustomBlock) {
+        menu.addLine();
+        menu.addItem("definition pic...", 
+            () => {
+                var ide = this.parentThatIsA(IDE_Morph),
+                    top = this.definition;
+                
+                // xml is not well formatted when top block is a custom block
+                let xml = unescape(encodeURIComponent(ide.serializer.serialize(top))),
+                    pic = top.scriptsPicture();
+
+                encodeScriptPic(ide, xml, pic);
+            }
+        );
+    }
+
+    if (!this.definition) {
         menu.addLine();
 		menu.addItem("script pic and xml...", 
 			() => {
