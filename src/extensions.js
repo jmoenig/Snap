@@ -29,7 +29,7 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize*/
+Color, Process, contains, localize, SnapTranslator*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -799,23 +799,29 @@ SnapExtensions.primitives.set(
     }
 );
 
-/*
 SnapExtensions.primitives.set(
     'loc_language([set], [msg])',
     function (lang, msg, proc) {
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
-        this.changeBlockVisibility(context.expression, false);
+        if (arguments.length > 1) {
+            return;
+        }
+        return SnapTranslator.language;
     }
 );
 
 SnapExtensions.primitives.set(
     'loc_translations([block])',
     function (block, proc) {
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
-        this.changeBlockVisibility(context.expression, false);
+        if (arguments.length > 1) {
+            return;
+        }
+        return new List(
+            SnapTranslator.languages().map(lang =>
+                new List([SnapTranslator.languageName(lang), lang])
+            )
+        );
     }
 );
-*/
 
 // Colors (clr_):
 
