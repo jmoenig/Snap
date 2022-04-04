@@ -29,11 +29,11 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains*/
+Color, Process, contains, localize*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-March-24';
+modules.extensions = '2022-April-04';
 
 // Global stuff
 
@@ -352,6 +352,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    // no longer needed because it's a regular primitive now
     'dta_crossproduct(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
@@ -784,6 +785,34 @@ SnapExtensions.primitives.set(
         }
         ide.flushBlocksCache('variables'); // b/c of inheritance
         ide.refreshPalette();
+    }
+);
+*/
+
+// Localization (loc_):
+
+SnapExtensions.primitives.set(
+    'loc_translate(text)',
+    function (text, proc) {
+        proc.assertType(text, 'text');
+        return localize(text);
+    }
+);
+
+/*
+SnapExtensions.primitives.set(
+    'loc_language([set], [msg])',
+    function (lang, msg, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, false);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'loc_translations([block])',
+    function (block, proc) {
+        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        this.changeBlockVisibility(context.expression, false);
     }
 );
 */
