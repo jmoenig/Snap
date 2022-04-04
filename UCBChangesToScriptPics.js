@@ -52,6 +52,39 @@ BlockMorph.prototype.userMenu = function () {
         'showHelp'
     );
 
+    function encodeScriptPic(ide, xml, pic) {
+        const inbDelim = "Snap\tBlocks\tEmbedded";      // in-band XML delimeter
+
+        const crc32 = (str, crc) => {
+            let table = [...Array(256).keys()].map(it => 
+                [...Array(8)].reduce((cc) => 
+                (cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
+                );
+            crc = [...str].reduce((crc, ch) => { 
+                return (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff]
+            }, (crc ||= 0) ^ (-1));
+            return ( crc ^ (-1) ) >>> 0;
+        };
+        const arr2Str = (arr) => { 
+            return arr.reduce((res, byte) => res + String.fromCharCode(byte), '');
+        };
+        const int2BStr = (val) => { 
+            return arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse());
+        };
+        const buildChunk = (data) => { 
+            let res = "iTXt" + data; 
+            return int2BStr(data.length) + res + int2BStr(crc32(res));
+        };
+
+        let parts = pic.toDataURL("image/png").split(","),
+            bPart = atob(parts[1]).split("");
+        let newChunk = buildChunk("Snap!_XML\0\0\0\0\0"+inbDelim+xml+inbDelim),
+            name = top?.definition?.spec || top.selector;
+        bPart.splice(-12, 0, ...newChunk);
+        parts[1] = btoa(bPart.join(""));
+        ide.saveFileAs(parts.join(','), 'image/png', name);
+    }
+
     /* UCB Script Pic Edit:
      *  - Incorporated new method to userMenu to integrate scriptPic's and XML code.
      *  - Code credited to Snap! Forum user Dardoro.
@@ -60,77 +93,17 @@ BlockMorph.prototype.userMenu = function () {
      *  - Added new "scan" to scripts to export/encode custom block definitions with XML
      */
     if (this.isTemplate || !this.definition) {
-		menu.addLine();
+        menu.addLine();
 		menu.addItem("script pic and xml...", 
 			() => {
-				const inbDelim = "Snap\tBlocks\tEmbedded",      // in-band XML delimeter
-                    defnDelim = "Custom\tBlock\tDefinitions";   // in-band definition delimiter
-
-				function crc32(str, crc) {
-					let table = [...Array(256).keys()].map(it => 
-						[...Array(8)].reduce((cc) => 
-						(cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
-						);
-						crc = [...str].reduce((crc, ch) => { 
-							return (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff]
-						}, (crc ||= 0) ^ (-1));
-						return ( crc ^ (-1) ) >>> 0;
-				};
-				function arr2Str(arr) { 
-					return arr.reduce((res, byte) => res + String.fromCharCode(byte), '');
-				};
-				function int2BStr(val) { 
-					return arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse());
-				};
-				function buildChunk(type , data) { 
-					let res = type + data; 
-					return int2BStr(data.length) + res + int2BStr(crc32(res));
-				};
-                function getDefinitions(str, ide) {
-					let customBlocksString = '';
-                    function find(xml) {
-                        if (xml.includes("<custom-block")) {
-                            let custom = xml.split("<custom-block s=")[1].split('"')[1];
-                            ide.stage.globalBlocks.forEach((block, index) => { 
-                                if (block.spec == custom) { 
-                                    let blockDefn = ide.stage.globalBlocks[index].toXML(ide.serializer);
-                                    customBlocksString += blockDefn;
-                                } 
-                            });
-                            return find(xml.replace("<custom-block", ''));
-                        } else {
-                            return;
-                        }
-                    }
-                    find(str);
-
-					return customBlocksString 
-						? 
-                        '<blocks app="'
-                        + ide.serializer.app
-                        + '" version="'
-                        + ide.serializer.version
-                        + '">'
-                        + customBlocksString
-                        + '</blocks>'
-                        + defnDelim
-						:
-						customBlocksString;
-				}
-					
 				var ide = this.parentThatIsA(IDE_Morph),
-					top = this.definition || this.topBlock();
-				let xml = unescape(encodeURIComponent(ide.serializer.serialize(top))),
-				    pic = top.scriptsPicture?.() || top.scriptPic?.(),
-                    parts = pic.toDataURL("image/png").split(","),
-                    bPart = atob(parts[1]).split("");
-				if (this.isTemplate) { xml = "<blocks>" + xml + "</blocks>" };
-                xml = getDefinitions(xml, ide) + xml;
-				let newChunk = buildChunk("iTXt", "Snap!_XML\0\0\0\0\0"+inbDelim+xml+inbDelim),
-				    name = top?.definition?.spec || top.selector;
-				bPart.splice(-12, 0, ...newChunk);
-				parts[1] = btoa(bPart.join(""));
-				ide.saveFileAs(parts.join(','), 'image/png', name);
+					top = this.definition || this.topBlock();                
+				let xml = unescape(encodeURIComponent(
+                        this.defintion ? ide.serializer.serialize(top) : top.toXMLString())),
+                    pic = top.scriptsPicture?.() || top.scriptPic?.();
+                
+                if (this.isTemplate) { xml = "<blocks>" + xml + "</blocks>" };
+                encodeScriptPic(ide, xml, pic);
 			}
 		);
 	}
