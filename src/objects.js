@@ -93,7 +93,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-April-03';
+modules.objects = '2022-April-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -12885,33 +12885,29 @@ StagePickerMorph.prototype.init = function (options) {
                 isLine = each.isEmpty();
                 if (this.isLeftQuote(each)) {
                     value = each.at(1);
-                    key = new SpriteBubbleMorph(
-                        value,
-                        null, // stage,
-                        null, // isThought,
-                        null // isQuestion
-                    );
+                    key = new SpriteBubbleMorph(value);
                 } else if (this.isRightQuote(each)) {
                     value = each.at(2);
-                    key = new SpriteBubbleMorph(
-                        value,
-                        null, // stage,
-                        false, // isThought,
-                        null // isQuestion
-                    );
+                    key = new SpriteBubbleMorph(value);
                     key.isPointingRight = false;
                 } else {
                     key = each.at(1);
                     if (key instanceof List) {
-                        if (this.isShortcut(key)) {
+                        if (this.isLeftQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(1));
+                        } else if (this.isRightQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(2));
+                            key.isPointingRight = false;
+                        } else if (this.isShortcut(key)) {
                             this.addPair(
                                 key.at(1).toString(),
                                 each.at(2),
                                 key.at(2).toString()
                             );
                             return;
+                        } else {
+                            key = key.itemsArray();
                         }
-                        key = key.itemsArray();
                     }
                     value = each.at(2);
                 }
@@ -12960,6 +12956,8 @@ StagePickerMorph.prototype.isShortcut = function (key) {
     var types = ['text', 'number'];
     return key instanceof List &&
         (key.length() === 2) &&
+        key.at(1) &&
+        key.at(2) &&
         contains(types, Process.prototype.reportTypeOf(key.at(1))) &&
         contains(types, Process.prototype.reportTypeOf(key.at(2)));
 };
