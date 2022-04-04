@@ -29,7 +29,7 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize, SnapTranslator*/
+Color, Process, contains, localize, SnapTranslator, isString*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -806,16 +806,19 @@ SnapExtensions.primitives.set(
     }
 );
 
-/*
 SnapExtensions.primitives.set(
     'loc_set(language, [msg])',
     function (lang, msg, proc) {
-        if (arguments.length === 1) {
-            return SnapTranslator.language;
+        var ide = this.parentThatIsA(IDE_Morph),
+            disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
+            callback = null;
+        ide.loadNewProject = false;
+        if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
+            callback = () => ide.broadcast(msg);
         }
+        ide.setLanguage(lang, callback, true, true); // don't save, delay
     }
 );
-*/
 
 SnapExtensions.primitives.set(
     'loc_translations()',

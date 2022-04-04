@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-18';
+modules.gui = '2022-April-04';
 
 // Declarations
 
@@ -6611,7 +6611,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
+IDE_Morph.prototype.setLanguage = function (lang, callback, noSave, delay) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('locale', 'lang-' + lang + '.js');
     SnapTranslator.unload();
@@ -6619,16 +6619,17 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
         document.head.removeChild(translation);
     }
     if (lang === 'en') {
-        return this.reflectLanguage('en', callback, noSave);
+        return this.reflectLanguage('en', callback, noSave, delay);
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = () => this.reflectLanguage(lang, callback, noSave);
+    translation.onload = () =>
+        this.reflectLanguage(lang, callback, noSave, delay);
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave, delay) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
@@ -6658,12 +6659,12 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         this.newProject();
         location.hash = urlBar;
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(projectData, delay ? callback : null);
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    if (callback) {callback.call(this); }
+    if (callback && !delay) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling

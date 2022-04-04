@@ -11,6 +11,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+    * new localization extension primitives (prefixed "loc_")
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
@@ -36,7 +37,8 @@
 * extensions: added new extension primitive "loc_translate(text)"
 * extensions: added more extension translation primitives, under construction
 * objects: tweaked ASK menu display distinction for FALSE Booleans
-* extensions: tweaked localization extension prims, under construction 
+* extensions: tweaked localization extension prims, under construction
+* extensions, gui: added new extension prims (done)
 
 ### 2022-04-03
 * objects: added shortcut support for ASK menu items
