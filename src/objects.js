@@ -12949,7 +12949,10 @@ StagePickerMorph.prototype.isLeftQuote = function (options) {
 };
 
 StagePickerMorph.prototype.isRightQuote = function (options) {
-    return options instanceof List && !options.isEmpty() && !options.at(1);
+    return options instanceof List &&
+        !options.isEmpty() &&
+        !options.at(1) &&
+        (options.at(1) !== false);
 };
 
 StagePickerMorph.prototype.isShortcut = function (key) {
