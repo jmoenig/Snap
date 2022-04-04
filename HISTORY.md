@@ -36,6 +36,7 @@
 * extensions: added new extension primitive "loc_translate(text)"
 * extensions: added more extension translation primitives, under construction
 * objects: tweaked ASK menu display distinction for FALSE Booleans
+* extensions: tweaked localization extension prims, under construction 
 
 ### 2022-04-03
 * objects: added shortcut support for ASK menu items

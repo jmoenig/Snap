@@ -800,21 +800,26 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'loc_language([set], [msg])',
-    function (lang, msg, proc) {
-        if (arguments.length > 1) {
-            return;
-        }
+    'loc_language()',
+    function () {
         return SnapTranslator.language;
     }
 );
 
+/*
 SnapExtensions.primitives.set(
-    'loc_translations([block])',
-    function (block, proc) {
-        if (arguments.length > 1) {
-            return;
+    'loc_set(language, [msg])',
+    function (lang, msg, proc) {
+        if (arguments.length === 1) {
+            return SnapTranslator.language;
         }
+    }
+);
+*/
+
+SnapExtensions.primitives.set(
+    'loc_translations()',
+    function () {
         return new List(
             SnapTranslator.languages().map(lang =>
                 new List([SnapTranslator.languageName(lang), lang])
