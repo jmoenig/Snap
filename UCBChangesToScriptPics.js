@@ -52,7 +52,8 @@ BlockMorph.prototype.userMenu = function () {
         'showHelp'
     );
 
-    function encodeScriptPic(ide, xml, pic) {
+
+    function injectScriptPic(ide, xml, pic) {
         const inbDelim = "Snap\tBlocks\tEmbedded";      // in-band XML delimeter
 
         const crc32 = (str, crc) => {
@@ -86,40 +87,36 @@ BlockMorph.prototype.userMenu = function () {
     }
 
     /* UCB Script Pic Edit:
-     *  - Incorporated new method to userMenu to integrate scriptPic's and XML code.
-     *  - Code credited to Snap! Forum user Dardoro.
-     * 
-     * 2/26 Changes:
-     *  - Added new "scan" to scripts to export/encode custom block definitions with XML
+     *  - Added new processes to allow users to select either a definition pic for custom blocks
+     *          or script pics for all others, along with their respective XML
+     *  - Method to inject the pics with XML, injectScriptPic() , is above
      */
     if (this.isCustomBlock) {
         menu.addLine();
-        menu.addItem("definition pic...", 
+        menu.addItem("definition pic and xml...", 
             () => {
                 var ide = this.parentThatIsA(IDE_Morph),
                     top = this.definition;
-                
-                // xml is not well formatted when top block is a custom block
                 let xml = unescape(encodeURIComponent(ide.serializer.serialize(top))),
                     pic = top.scriptsPicture();
-
-                encodeScriptPic(ide, xml, pic);
+                injectScriptPic(ide, xml, pic);
             }
         );
     }
 
-    if (!this.definition) {
+    if (this.isTemplate || !this.definition || this.isCustomBlock) {
         menu.addLine();
 		menu.addItem("script pic and xml...", 
 			() => {
 				var ide = this.parentThatIsA(IDE_Morph),
-					top = this.definition || this.topBlock();                
-				let xml = unescape(encodeURIComponent(
-                        this.defintion ? ide.serializer.serialize(top) : top.toXMLString())),
-                    pic = top.scriptsPicture?.() || top.scriptPic?.();
-                
-                if (this.isTemplate) { xml = "<blocks>" + xml + "</blocks>" };
-                encodeScriptPic(ide, xml, pic);
+					top = this.topBlock();                
+				let xml = unescape(encodeURIComponent(top.toXMLString())),
+                    pic = top.scriptPic();
+                    
+                if (this.isTemplate) { 
+                    xml = "<blocks>" + xml + "</blocks>" 
+                };
+                injectScriptPic(ide, xml, pic);
 			}
 		);
 	}
