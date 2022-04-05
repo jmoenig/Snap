@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-January-03';
+modules.api = '2022-April-05';
 
 // IDE_Morph external communication API - experimental
 /*
@@ -251,4 +251,14 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
 
 IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits();
+};
+
+IDE_Morph.prototype.setTranslation = function (countryCode, callback) {
+    // switch to the specified language (format ISO 639-1 code) and
+    // optionally run a callback afterwards, e.g. to broadcast an event
+    // note the language setting does not overwrite the user's own setting
+    // that's stored in the browser this way, so that the next time the user
+    // opens Snap their own language setting again takes effect.
+    this.loadNewProject = false;
+    this.setLanguage(countryCode, callback, true); // don't save
 };

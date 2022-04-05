@@ -12,6 +12,7 @@
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new localization extension primitives in the "ide" category
+    * new support for setting the translation via the API
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
@@ -35,6 +36,7 @@
 ### 2022-04-05
 * gui, extensions: refactored callback synch for language-switching
 * extensions: renamed localization extension prims
+* api: added "setTranslation" method to API
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
