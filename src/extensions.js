@@ -29,11 +29,11 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains*/
+Color, Process, contains, localize, SnapTranslator, isString*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-March-24';
+modules.extensions = '2022-April-05';
 
 // Global stuff
 
@@ -352,6 +352,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    // no longer needed because it's a regular primitive now
     'dta_crossproduct(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
@@ -787,6 +788,52 @@ SnapExtensions.primitives.set(
     }
 );
 */
+
+SnapExtensions.primitives.set(
+    'ide_translate(text)',
+    function (text, proc) {
+        proc.assertType(text, 'text');
+        return localize(text);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_language()',
+    function () {
+        return SnapTranslator.language;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_setlang(language, [msg])',
+    function (lang, msg, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
+            flag = ide.isAppMode,
+            restoreMode = () => ide.toggleAppMode(flag),
+            callback = restoreMode;
+        ide.loadNewProject = false;
+        if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
+            // require an explicit user input to trigger a project reload
+            callback = () => {
+                ide.broadcast(msg);
+                restoreMode();
+            };
+        }
+        ide.setLanguage(lang, callback, true); // don't save language setting
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translations()',
+    function () {
+        return new List(
+            SnapTranslator.languages().map(lang =>
+                new List([SnapTranslator.languageName(lang), lang])
+            )
+        );
+    }
+);
 
 // Colors (clr_):
 

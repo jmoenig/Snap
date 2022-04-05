@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-22';
+modules.store = '2022-April-05';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -635,7 +635,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
             scene.stage.topLeft().add(new Point(
                 +model.attributes.x || 0,
                 +model.attributes.y || 0
-            ))
+            )).multiplyBy(scene.stage.scale)
         );
         scene.stage.add(watcher);
         watcher.onNextStep = function () {this.currentValue = null; };
@@ -2039,8 +2039,10 @@ WatcherMorph.prototype.toXML = function (serializer) {
         isList = this.currentValue instanceof List,
         color = this.readoutColor,
         position = this.parent ?
-                this.topLeft().subtract(this.parent.topLeft())
-                : this.topLeft();
+                this.topLeft().subtract(
+                    this.parent.topLeft()
+                ).divideBy(this.parent.scale)
+            : this.topLeft();
 
     if (this.isTemporary()) {
         // do not save watchers on temporary variables

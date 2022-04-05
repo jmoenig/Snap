@@ -88,12 +88,12 @@ VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, HandleMorph,
 SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
+AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-March-31';
+modules.objects = '2022-April-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -10052,6 +10052,12 @@ SpriteBubbleMorph.prototype.init = function (
     this.scale = stage ? stage.scale : 1;
     this.data = data;
     this.isQuestion = isQuestion;
+    this.bubbleFontColor = BLACK;
+    this.bubbleFontSize = sprite.bubbleFontSize;
+    this.bubbleFontIsBold = sprite.bubbleFontIsBold;
+    this.bubbleCorner = sprite.bubbleCorner;
+    this.bubbleBorder = sprite.bubbleBorder;
+    this.bubblePadding = this.bubbleCorner / 2;
 
     SpriteBubbleMorph.uber.init.call(
         this,
@@ -10102,9 +10108,9 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         isText = true;
         contents = new TextMorph(
             data,
-            sprite.bubbleFontSize * this.scale,
+            this.bubbleFontSize * this.scale,
             null, // fontStyle
-            sprite.bubbleFontIsBold,
+            this.bubbleFontIsBold,
             false, // italic
             'center'
         );
@@ -10297,9 +10303,9 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     } else {
         contents = new TextMorph(
             data.toString(),
-            sprite.bubbleFontSize * this.scale,
+            this.bubbleFontSize * this.scale,
             null, // fontStyle
-            sprite.bubbleFontIsBold,
+            this.bubbleFontIsBold,
             false, // italic
             'center'
         );
@@ -10332,6 +10338,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         if (isText) {
             width = Math.min(width, sprite.bubbleMaxTextWidth * this.scale);
         }
+        contents.color = this.bubbleFontColor;
         contents.setWidth(width);
     } else if (!(data instanceof List)) {
         // scale contents image
@@ -10361,8 +10368,6 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 // SpriteBubbleMorph layout:
 
 SpriteBubbleMorph.prototype.fixLayout = function () {
-    var sprite = SpriteMorph.prototype;
-
     // rebuild my contents
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
@@ -10372,9 +10377,9 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
     this.add(this.contentsMorph);
 
     // scale my settings
-    this.edge = sprite.bubbleCorner * this.scale;
-    this.border = sprite.bubbleBorder * this.scale;
-    this.padding = sprite.bubbleCorner / 2 * this.scale;
+    this.edge = this.bubbleCorner * this.scale;
+    this.border = this.bubbleBorder * this.scale;
+    this.padding = this.bubblePadding * this.scale;
 
     // adjust my dimensions
     this.bounds.setWidth(this.contentsMorph.width()
@@ -12878,8 +12883,34 @@ StagePickerMorph.prototype.init = function (options) {
             value = each;
             if (each instanceof List) { // treat as pair
                 isLine = each.isEmpty();
-                key = each.at(1);
-                value = each.at(2);
+                if (this.isLeftQuote(each)) {
+                    value = each.at(1);
+                    key = new SpriteBubbleMorph(value);
+                } else if (this.isRightQuote(each)) {
+                    value = each.at(2);
+                    key = new SpriteBubbleMorph(value);
+                    key.isPointingRight = false;
+                } else {
+                    key = each.at(1);
+                    if (key instanceof List) {
+                        if (this.isLeftQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(1));
+                        } else if (this.isRightQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(2));
+                            key.isPointingRight = false;
+                        } else if (this.isShortcut(key)) {
+                            this.addPair(
+                                key.at(1).toString(),
+                                each.at(2),
+                                key.at(2).toString()
+                            );
+                            return;
+                        } else {
+                            key = key.itemsArray();
+                        }
+                    }
+                    value = each.at(2);
+                }
             }
             if (isLine) {
                 this.addLine();
@@ -12913,7 +12944,52 @@ StagePickerMorph.prototype.isSubmenu = function (options) {
         options.rank() > 1;
 };
 
+StagePickerMorph.prototype.isLeftQuote = function (options) {
+    return options instanceof List && !options.isEmpty() && !options.at(2);
+};
+
+StagePickerMorph.prototype.isRightQuote = function (options) {
+    return options instanceof List &&
+        !options.isEmpty() &&
+        !options.at(1) &&
+        (options.at(1) !== false);
+};
+
+StagePickerMorph.prototype.isShortcut = function (key) {
+    var types = ['text', 'number'];
+    return key instanceof List &&
+        (key.length() === 2) &&
+        key.at(1) &&
+        key.at(2) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(1))) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(2)));
+};
+
 StagePickerMorph.prototype.dataRepresentation = function (data) {
+    var sym, img;
+    if (data instanceof SpeechBubbleMorph) {
+        data.bubbleFontSize = 12;
+        data.bubbleFontIsBold = false;
+        data.bubbleCorner = 5;
+        data.bubbleBorder = 0; // 1.5;
+        data.bubblePadding = 0;
+        data.scale = this.scale;
+        data.bubbleFontColor = data.isPointingRight ? BLACK : WHITE;
+        data.color = data.isPointingRight ? new Color(220, 220, 220)
+            : SpriteMorph.prototype.blockColor.sensing;
+        data.fixLayout();
+        data.rerender();
+        sym = data.fullImage();
+        if (data.isPointingRight) {
+            return sym;
+        }
+        img = newCanvas(new Point(
+            (SpriteMorph.prototype.bubbleMaxTextWidth + 10) * this.scale,
+            sym.height
+        ));
+        img.getContext('2d').drawImage(sym, img.width - sym.width, 0);
+        return img;
+    }
     switch (Process.prototype.reportTypeOf(data)) {
     case 'costume':
     case 'sprite':
@@ -12923,9 +12999,48 @@ StagePickerMorph.prototype.dataRepresentation = function (data) {
     case 'reporter':
     case 'predicate':
         return data.image();
+    case 'Boolean':
+        sym = new BooleanSlotMorph(data);
+        sym.fontSize *= this.scale;
+        sym.edge *= this.scale;
+        sym.fixLayout();
+        return sym.fullImage();
+    case 'sound':
+        return (new SymbolMorph('notes', 30 * this.scale)).fullImage();
     default:
         return data.toString();
     }
+};
+
+StagePickerMorph.prototype.addItem = function (
+    labelString,
+    action,
+    hint,
+    color,
+    bold, // bool
+    italic, // bool
+    doubleClickAction, // optional, when used as list contents
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    verbatim // optional bool, don't translate if true
+) {
+    /*
+    labelString is normally a single-line string. But it can also be one
+    of the following:
+
+        * a multi-line string (containing line breaks)
+        * an icon (either a Morph or a Canvas)
+        * a tuple of format: [icon, string]
+    */
+    this.items.push([
+        verbatim ? labelString : localize(labelString),
+        action === 0 ? 0 : action || nop,
+        hint,
+        color,
+        bold || false,
+        italic || false,
+        doubleClickAction,
+        shortcut,
+        verbatim]);
 };
 
 // StagePickerMorph popping up
@@ -13055,7 +13170,9 @@ StagePickerMorph.prototype.createItems = function (scale) {
             item = new StagePickerItemMorph(
                 this.target,
                 tuple[1],
-                this.dataRepresentation(tuple[0]),
+                tuple[0] instanceof Array ?
+                    [this.dataRepresentation(tuple[0][0]), tuple[0][1]]
+                        : this.dataRepresentation(tuple[0]),
                 SpriteMorph.prototype.bubbleFontSize  * this.scale,
                 null, // MorphicPreferences.menuFontName,
                 this.environment,

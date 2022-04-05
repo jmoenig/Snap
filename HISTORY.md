@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
+    * formatting a list of texts displays it as chat-history in an ASK menu
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
@@ -10,25 +11,59 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+    * new localization extension primitives in the "ide" category
+    * new support for setting the translation via the API
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
+    * MQTT extension update, thanks, Simon!
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
     * fixed library blocks preview to deal with both local and global blocks
-    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ! 
+    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ!
+    * fixed a "wandering" watcher positioning bug when saving / loading a project into a scaled stage
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
-    * updated help screen for NUMBERS, thanks, Brian and Peter!
+    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian and Peter!
+    * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-04-05
+* gui, extensions: refactored callback synch for language-switching
+* extensions: renamed localization extension prims
+* api: added "setTranslation" method to API
+* api documentation update
+* fixed help screen for FIND FIRST, thanks, Brian!
+* MQTT library update, thanks, Simon!
+* gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael!
+* extensions: restore presentation mode when using the extension prim to change languages
+* store: fixed a watcher positioning bug when saving / loading a project into a scaled stage 
+
+### 2022-04-04
+* objects: added speech-balloon-value-association support for ASK menu items
+* extensions: added new extension primitive "loc_translate(text)"
+* extensions: added more extension translation primitives, under construction
+* objects: tweaked ASK menu display distinction for FALSE Booleans
+* extensions: tweaked localization extension prims, under construction
+* extensions, gui: added new extension prims (done)
+
+### 2022-04-03
+* objects: added shortcut support for ASK menu items
+
+### 2022-04-01
+* objects: added ASK-menu data representation for Booleans
+* objects: added ASK-menu data representation for Sounds
+* objects: added icon support for ASK menu items
+* objects: added formatting support for visualizing chat histories in ASK menus
 
 ### 2022-03-31
 * threads, objects: new menu functionality for ASK command, when passing a list

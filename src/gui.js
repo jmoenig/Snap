@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-18';
+modules.gui = '2022-April-05';
 
 // Declarations
 
@@ -6623,7 +6623,8 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = () => this.reflectLanguage(lang, callback, noSave);
+    translation.onload = () =>
+        this.reflectLanguage(lang, callback, noSave);
     document.head.appendChild(translation);
     translation.src = src;
 };
@@ -6657,13 +6658,13 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     if (this.loadNewProject) {
         this.newProject();
         location.hash = urlBar;
+        if (callback) {callback.call(this); }
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(projectData, callback);
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    if (callback) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling
@@ -9011,7 +9012,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
-    this.libraryCache = {}; // {fileName: [blocks-array] }
+    this.libraryCache = new Map(); // fileName: { blocks: [], palette: {} }
 
     this.handle = null;
     this.listField = null;
@@ -9113,30 +9114,31 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = (item) => {
-        if (isNil(item)) {return; }
+    this.listField.action = ({name, fileName, description}) => {
+        if (isNil(name)) {return; }
 
-        this.notesText.text = localize(item.description || '');
+        this.notesText.text = localize(description) || '';
         this.notesText.rerender();
         this.notesField.contents.adjustBounds();
 
-        if (this.hasCached(item.fileName)) {
-            this.displayBlocks(item.fileName);
+        if (this.hasCached(fileName)) {
+            this.displayBlocks(fileName);
         } else {
-            this.showMessage(localize('Loading') + '\n' + localize(item.name));
+            this.showMessage(`${localize('Loading')}\n${localize(name)}`);
             this.ide.getURL(
-                this.ide.resourceURL('libraries', item.fileName),
+                this.ide.resourceURL('libraries', fileName),
                 libraryXML => {
+                    let serializer = this.ide.serializer,
+                        palette = serializer.parse(libraryXML).childNamed('palette');
                     this.cacheLibrary(
-                        item.fileName,
-                        this.ide.serializer.loadBlocks(libraryXML)
+                        fileName,
+                        serializer.loadBlocks(libraryXML),
+                        palette ? serializer.loadPalette(palette) : {}
                     );
-                    this.displayBlocks(item.fileName);
+                    this.displayBlocks(fileName);
                 }
             );
         }
-
-
     };
 
     this.listField.setWidth(200);
@@ -9235,41 +9237,39 @@ LibraryImportDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
 };
 
-LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
-    this.libraryCache[key] = blocks ;
+LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks, palette) {
+    this.libraryCache.set(key, { blocks, palette });
 };
 
 LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
-    return this.libraryCache[key];
+    return this.libraryCache.get(key).blocks;
+};
+
+LibraryImportDialogMorph.prototype.cachedPalette = function (key) {
+    return this.libraryCache.get(key).palette;
 };
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
-    // browsing and importing libraries needs to be redesigned because of
-    // custom categories introduced in v7.
-    // currently caching libraries is ignored when loading a library
-    // to avoid creating custom categories that were only looked at
-    // in the libraries browser.
     if (!this.listField.selected) {return; }
 
-    var // blocks,
-        ide = this.ide,
+    var ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
-    /*
     if (this.hasCached(selectedLibrary)) {
-        blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(def => {
+        this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
         });
+        this.cachedPalette(selectedLibrary).forEach((value, key) =>
+            SpriteMorph.prototype.customCategories.set(key, value)
+        );
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
-    */
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -9278,39 +9278,47 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
                 this.isLoadingLibrary = true;
             }
         );
-    // }
+    }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blockImage, previousCategory, blockContainer,
+    var x, y, blockImage, blockContainer, text,
         padding = 4,
-        blocksList = this.cachedLibrary(libraryKey);
+        libraryBlocks = this.cachedLibrary(libraryKey),
+        blocksByCategory = new Map(
+            SpriteMorph.prototype.allCategories().map(cat => [cat, []])
+        );
 
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    SpriteMorph.prototype.allCategories().forEach(category => {
-        ['global', 'local'].forEach(scope => {
-            blocksList[scope].forEach(definition => {
-                if (definition.category !== category) {return; }
-                if (category !== previousCategory) {
-                    y += padding;
-                }
-                previousCategory = category;
+    libraryBlocks.global.concat(libraryBlocks.local).forEach(definition => {
+        if (!definition.isHelper) {
+            blocksByCategory.get(definition.category).push(definition);
+        }
+    });
 
-                blockImage = definition.templateInstance().fullImage();
-                blockContainer = new Morph();
-                blockContainer.isCachingImage = true;
-                blockContainer.bounds.setWidth(blockImage.width);
-                blockContainer.bounds.setHeight(blockImage.height);
-                blockContainer.cachedImage = blockImage;
-                blockContainer.setPosition(new Point(x, y));
-                this.palette.addContents(blockContainer);
+    blocksByCategory.forEach((blocks, category) => {
+        if (blocks.length > 0) {
+            text = SpriteMorph.prototype.categoryText(category);
+            text.setPosition(new Point(x, y));
+            this.palette.addContents(text);
+            y += text.fullBounds().height() + padding;
+        }
 
-                y += blockContainer.fullBounds().height() + padding;
-            });
+        blocks.forEach(definition => {
+            blockImage = definition.templateInstance().fullImage();
+            blockContainer = new Morph();
+            blockContainer.isCachingImage = true;
+            blockContainer.bounds.setWidth(blockImage.width);
+            blockContainer.bounds.setHeight(blockImage.height);
+            blockContainer.cachedImage = blockImage;
+            blockContainer.setPosition(new Point(x, y));
+            this.palette.addContents(blockContainer);
+
+            y += blockContainer.fullBounds().height() + padding;
         });
     });
 
