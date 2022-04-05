@@ -25,7 +25,8 @@
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
     * fixed library blocks preview to deal with both local and global blocks
-    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ! 
+    * fixed scope of script vars inside experimental JIT-compiled rings, thanks, xBZZZ!
+    * fixed a "wandering" watcher positioning bug when saving / loading a project into a scaled stage
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
@@ -45,6 +46,7 @@
 * MQTT library update, thanks, Simon!
 * gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael!
 * extensions: restore presentation mode when using the extension prim to change languages
+* store: fixed a watcher positioning bug when saving / loading a project into a scaled stage 
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
