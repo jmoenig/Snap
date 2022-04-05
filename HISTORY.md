@@ -18,6 +18,7 @@
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
     * MQTT extension update, thanks, Simon!
 * **Notable Fixes:**
@@ -42,6 +43,7 @@
 * api documentation update
 * fixed help screen for FIND FIRST, thanks, Brian!
 * MQTT library update, thanks, Simon!
+* gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael! 
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items

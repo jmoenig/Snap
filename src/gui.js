@@ -9260,8 +9260,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
     if (this.hasCached(selectedLibrary)) {
-        blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(def => {
+        this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
@@ -9295,7 +9294,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    libraryBlocks['global'].concat(libraryBlocks['local']).forEach(definition => {
+    libraryBlocks.global.concat(libraryBlocks.local).forEach(definition => {
         if (!definition.isHelper) {
             blocksByCategory.get(definition.category).push(definition);
         }
