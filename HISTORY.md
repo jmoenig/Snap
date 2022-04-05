@@ -19,6 +19,7 @@
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
+    * MQTT extension update, thanks, Simon!
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
@@ -29,7 +30,7 @@
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
-    * updated help screen for NUMBERS, thanks, Brian and Peter!
+    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian and Peter!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
@@ -39,6 +40,8 @@
 * extensions: renamed localization extension prims
 * api: added "setTranslation" method to API
 * api documentation update
+* fixed help screen for FIND FIRST, thanks, Brian!
+* MQTT library update, thanks, Simon!
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
