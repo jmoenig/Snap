@@ -294,7 +294,7 @@ a Boolean
 
 
 ### IDE_Morph.prototype.setTranslation()
-the setTranslation() method  switches to the specified language, specified as ISO 639-1 code, and optionally run a callback afterwards, e.g. to broadcast an event. Note that switching to another translation involves serializing and deserializing the current project and thus stops all running processes. If you wish to "continue" a project afterwards you can use the callback to trigger an event, such as the green flag ('__shout__go__'). Also note that the language setting does not overwrite the user's own setting which is stored in the browser this way, so that the next time the user opens Snap their own language preference again takes effect.
+the setTranslation() method  switches to the specified language, formatted as ISO 639-1 code, and optionally runs a callback afterwards, e.g. to broadcast an event. Note that switching to another translation involves serializing and deserializing the current project and thus stops all running processes. If you wish to "continue" a project afterwards you can use the callback to trigger an event, such as the green flag ('__shout__go__'). Also note that the language setting does not overwrite the user's own setting which is stored in the browser this way, so that the next time the user opens Snap their own language preference again takes effect.
 
 #### syntax
     ide.setTranslation(countryCode [, callback]);
