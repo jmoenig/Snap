@@ -6658,13 +6658,15 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave, delay) {
     if (this.loadNewProject) {
         this.newProject();
         location.hash = urlBar;
+        if (callback && !delay) {callback.call(this); } // +++
     } else {
-        this.openProjectString(projectData, delay ? callback : null);
+        // +++ this.openProjectString(projectData, delay ? callback : null);
+        this.openProjectString(projectData, callback);
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    if (callback && !delay) {callback.call(this); }
+    // +++ if (callback && !delay) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling
