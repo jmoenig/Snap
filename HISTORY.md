@@ -32,6 +32,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-05
+* gui, extensions: refactored callback synch for language-switching
+
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
 * extensions: added new extension primitive "loc_translate(text)"

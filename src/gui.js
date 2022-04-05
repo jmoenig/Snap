@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-04';
+modules.gui = '2022-April-05';
 
 // Declarations
 
@@ -6611,7 +6611,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang, callback, noSave, delay) {
+IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('locale', 'lang-' + lang + '.js');
     SnapTranslator.unload();
@@ -6619,17 +6619,17 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave, delay) {
         document.head.removeChild(translation);
     }
     if (lang === 'en') {
-        return this.reflectLanguage('en', callback, noSave, delay);
+        return this.reflectLanguage('en', callback, noSave);
     }
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = () =>
-        this.reflectLanguage(lang, callback, noSave, delay);
+        this.reflectLanguage(lang, callback, noSave);
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave, delay) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
@@ -6658,15 +6658,13 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave, delay) {
     if (this.loadNewProject) {
         this.newProject();
         location.hash = urlBar;
-        if (callback && !delay) {callback.call(this); } // +++
+        if (callback) {callback.call(this); }
     } else {
-        // +++ this.openProjectString(projectData, delay ? callback : null);
         this.openProjectString(projectData, callback);
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    // +++ if (callback && !delay) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling
