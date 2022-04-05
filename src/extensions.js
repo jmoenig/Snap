@@ -809,11 +809,16 @@ SnapExtensions.primitives.set(
     function (lang, msg, proc) {
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
-            callback = null;
+            flag = ide.isAppMode,
+            restoreMode = () => ide.toggleAppMode(flag),
+            callback = restoreMode;
         ide.loadNewProject = false;
         if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
             // require an explicit user input to trigger a project reload
-            callback = () => ide.broadcast(msg);
+            callback = () => {
+                ide.broadcast(msg);
+                restoreMode();
+            };
         }
         ide.setLanguage(lang, callback, true); // don't save language setting
     }

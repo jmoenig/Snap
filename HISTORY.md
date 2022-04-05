@@ -43,7 +43,8 @@
 * api documentation update
 * fixed help screen for FIND FIRST, thanks, Brian!
 * MQTT library update, thanks, Simon!
-* gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael! 
+* gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael!
+* extensions: restore presentation mode when using the extension prim to change languages
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
