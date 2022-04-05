@@ -789,10 +789,8 @@ SnapExtensions.primitives.set(
 );
 */
 
-// Localization (loc_):
-
 SnapExtensions.primitives.set(
-    'loc_translate(text)',
+    'ide_translate(text)',
     function (text, proc) {
         proc.assertType(text, 'text');
         return localize(text);
@@ -800,20 +798,21 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'loc_language()',
+    'ide_language()',
     function () {
         return SnapTranslator.language;
     }
 );
 
 SnapExtensions.primitives.set(
-    'loc_set(language, [msg])',
+    'ide_setlang(language, [msg])',
     function (lang, msg, proc) {
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
             callback = null;
         ide.loadNewProject = false;
         if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
+            // require an explicit user input to trigger a project reload
             callback = () => ide.broadcast(msg);
         }
         ide.setLanguage(lang, callback, true); // don't save language setting
@@ -821,7 +820,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'loc_translations()',
+    'ide_translations()',
     function () {
         return new List(
             SnapTranslator.languages().map(lang =>
