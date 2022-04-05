@@ -30,6 +30,7 @@
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
     * updated help screen for NUMBERS, thanks, Brian and Peter!
+    * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
 
@@ -37,6 +38,7 @@
 * gui, extensions: refactored callback synch for language-switching
 * extensions: renamed localization extension prims
 * api: added "setTranslation" method to API
+* api documentation update
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
