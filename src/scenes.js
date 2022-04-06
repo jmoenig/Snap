@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -47,13 +47,13 @@
 */
 
 /*global modules, VariableFrame, StageMorph, SpriteMorph, Process, List,
-normalizeCanvas, SnapSerializer, Costume, ThreadManager*/
+normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2021-November-12';
+modules.scenes = '2022-March-04';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -120,6 +120,7 @@ function Scene(aStageMorph) {
     this.hasUnsavedEdits = false;
     this.unifiedPalette = false;
     this.showCategories = true;
+    this.showPaletteButtons = true;
 
     // cached IDE state
     this.sprites = new List();
@@ -183,6 +184,8 @@ Scene.prototype.addDefaultSprite = function () {
     return sprite;
 };
 
+// Scene - capturing global state locally:
+
 Scene.prototype.captureGlobalSettings = function () {
     this.hiddenPrimitives = StageMorph.prototype.hiddenPrimitives;
     this.codeMappings = StageMorph.prototype.codeMappings;
@@ -216,6 +219,37 @@ Scene.prototype.applyGlobalSettings = function () {
     SpriteMorph.prototype.penColorModel = this.penColorModel;
 };
 
+// Scene ops:
+
 Scene.prototype.updateTrash = function () {
     this.trash = this.trash.filter(sprite => sprite.isCorpse);
+};
+
+Scene.prototype.stop = function (forGood) {
+    var ide;
+    if (this.stage.enableCustomHatBlocks || forGood) {
+        this.stage.threads.pauseCustomHatBlocks = forGood ? true
+            : !this.stage.threads.pauseCustomHatBlocks;
+    } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+    }
+    this.stage.stopAllActiveSounds();
+    this.stage.threads.resumeAll(this.stage);
+    this.stage.keysPressed = {};
+    this.stage.runStopScripts();
+    this.stage.threads.stopAll();
+    if (this.stage.projectionSource) {
+        this.stage.stopProjection();
+    }
+    this.stage.children.forEach(morph => {
+        if (morph.stopTalking) {
+            morph.stopTalking();
+        }
+    });
+    this.stage.removeAllClones();
+    ide = this.stage.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.controlBar.pauseButton.refresh();
+        ide.controlBar.stopButton.refresh();
+    }
 };

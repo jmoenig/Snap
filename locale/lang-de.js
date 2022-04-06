@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2021-11-11', // this, too, will appear in the Translators tab
+        '2022-03-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -561,6 +561,8 @@ SnapTranslator.dict.de = {
         'stoppe %stopChoices',
     'all':
         'alle',
+    'all scenes':
+        'alle Szenen',
     'this script':
         'dieses Skript',
     'this block':
@@ -621,6 +623,8 @@ SnapTranslator.dict.de = {
         'Wie hei\u00dft Du?',
     'answer':
         'Antwort',
+    'mouse position':
+        'Mausposition',
     'mouse x':
         'Maus x-Position',
     'mouse y':
@@ -725,8 +729,26 @@ SnapTranslator.dict.de = {
         'Rahmenz\u00e4hler',
     'log pen vectors':
         'Vektoraufzeichnung',
+    '%block of block %repRing':
+        '%block von Block %repRing',
+    'definition':
+        'Definition',
+    'category':
+        'Kategorie',
+    'custom?':
+        'benutzerdefiniert?',
+    'global?':
+        'global?',
 
     // operators:
+    'sum':
+        'Summe',
+    'product':
+        'Produkt',
+    'minimum':
+        'Minimum',
+    'maximum':
+        'Maximum',
     '%n mod %n':
         '%n modulo %n',
     'round %n':
@@ -855,6 +877,8 @@ SnapTranslator.dict.de = {
         'Index',
     'append %lists':
         'verbinde %lists',
+    'combinations %lists':
+        'Kombinationen %lists',
     'reshape %l to %nums':
         'strukturiere %l in %nums',
     'add %s to %l':
@@ -924,7 +948,7 @@ SnapTranslator.dict.de = {
     'save global custom block\ndefinitions as XML':
         'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
     'Unused blocks...':
-          'nicht verwendete Bl\u00f6cke...',
+          'Nicht verwendete Bl\u00f6cke...',
     'find unused global custom blocks\nand remove their definitions':
         'nicht verwendete Bl\u00f6cke finden\nund entfernen',
     'Remove unused blocks':
@@ -933,6 +957,18 @@ SnapTranslator.dict.de = {
         'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
     'unused block(s) removed':
         'nicht verwendete Bl\u00f6cke entfernt',
+    'Hide blocks...':
+        'Blöcke verbergen...',
+    'New category...':
+        'Neue Kategorie...',
+    'Remove a category...':
+        'Kategorie löschen...',
+    'Scenes...':
+        'Szenen...',
+    'New scene':
+        'Neue Szene',
+    'Add scene...':
+        'Szene hinzufügen...',
     'Export summary...':
         'Zusammenfassung exportieren...',
     'save a summary\nof this project':
@@ -1077,14 +1113,6 @@ SnapTranslator.dict.de = {
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
         'ausschalten f\u00fcr kurzen\nInput-Dialog',
-    'Virtual keyboard':
-        'Virtuelle Tastatur',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
     'JavaScript extensions':
         'JavaScript Erweiterungen',
     'check to support\nnative JavaScript functions':
@@ -1153,12 +1181,6 @@ SnapTranslator.dict.de = {
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
     'check to disallow\nscript reentrance':
         'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
-    'Prefer smooth animations':
-        'Fixe Framerate',
-    'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
-    'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
     'Flat line ends':
         'Flache Pinselstriche',
     'check for flat ends of lines':
@@ -1193,6 +1215,24 @@ SnapTranslator.dict.de = {
         'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
     'check to show\ncategory names\nin the palette':
         'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
+    'Show buttons':
+        'Knöpfe anzeigen',
+    'uncheck to hide buttons\nin the palette':
+        'ausschalten, um Knöpfe in\nder Palette zu verbergen',
+    'check to show buttons\nin the palette':
+        'einschalten, um Knöpfe in\nder Palette anzuzeigen',
+    'HSL pen color model':
+        'HSL Farbmodell',
+     'uncheck to switch pen colors\nand graphic effects to HSV':
+        'ausschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSV zurückzusetzen',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'einschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSL zu setzen',
+    'Disable click-to-run':
+        'Block-Klicks deaktivieren',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
 
     // inputs
     'with inputs':
@@ -1267,6 +1307,10 @@ SnapTranslator.dict.de = {
         'Ergebnisbild...',
     'save a picture of both\nthis script and its result':
         'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
+    'export script':
+        'Skript exportieren',
+    'download this script\nas an XML file':
+        'dieses Skript als XML\nDatei herunterladen',
     'ringify':
         'Umringen',
     'unringify':
@@ -1806,6 +1850,8 @@ SnapTranslator.dict.de = {
         'Sättigung',
     'brightness':
         'Helligkeit',
+    'lightness':
+        'Helligkeit',
     'transparency':
         'Transparenz',
     'ghost':
@@ -1972,6 +2018,10 @@ SnapTranslator.dict.de = {
         'Pr\u00e4dikat',
     'sprite':
         'Objekt',
+    'ring':
+        'Ring',
+    'nothing':
+        'nichts',
 
     // list indices
     'last':
@@ -2040,6 +2090,12 @@ SnapTranslator.dict.de = {
         'Rand oben',
     'bottom':
         'Rand unten',
+    'position':
+        'Position',
+    'costume name':
+        'Kostümname',
+    'categories':
+        'Kategorien',
 
     // attributes in the SET block's dropdown
     'my anchor':
@@ -2067,5 +2123,81 @@ SnapTranslator.dict.de = {
     'check to inherit\nfrom':
         'einschalten, um zu erben\nvon',
     'uncheck to\ndisinherit':
-        'ausschalten, um \nnicht mehr zu erben'
+        'ausschalten, um \nnicht mehr zu erben',
+
+    // editing slots inside variadic inputs
+    'insert a slot':
+        'Ein Feld einfügen',
+    'delete slot':
+        'Feld löschen',
+    'insert a variable':
+        'Eine Variable einfügen',
+    'delete variable':
+        'Variable löschen',
+    'variable':
+        'Variable',
+
+    // error messages
+    'Error':
+        'Fehler',
+    'a variable of name \'':
+        'Eine Variable mit dem Namen \'',
+    '\'\ndoes not exist in this context':
+        '\'\ngibt es an dieser Stelle nicht',
+    'expecting a':
+        'Erwarte',
+    'but getting a':
+        'bekomme aber',
+    'expecting':
+        'Erwarte',
+    'input(s), but getting':
+        'Input(s), bekomme aber',
+    'Inside a custom block':
+        'In einem benutzerdefinierten Block',
+    'The question came up at':
+        'Die Frage stellte sich bei',
+    'continuations cannot be forked':
+        'Continuations können nicht separat gestartet werden',
+    'unable to convert to':
+        'Kann die Liste nicht umwandeln in',
+    'Request blocked':
+        'Die Anfrage wurde blockiert',
+    'cannot operate on a deleted sprite':
+        'kann nicht mit einem gelöschten Objekt arbeiten',
+    'cannot send media,\nsprites or procedures\nto another scene':
+        'Kann keine Medien, Objekte oder Programme\nan eine andere Szene senden',
+    'unsupported attribute':
+        'Attribut wird nicht unterstützt',
+    'unable to nest\n(disabled or circular?)':
+        'Kann nicht verschachteln\n(ausgeschaltet oder zirkulär?)',
+    'unable to inherit\n(disabled or circular?)':
+        'Kann nicht erben\n(ausgeschaltet oder zirkulär?)',
+    'is read-only':
+        'kann nur gelesen werden',
+    'is not a valid option':
+        'ist keine erlaubte Auswahl',
+    'unsupported data type':
+        'Nicht unterstützter Datentyp',
+    'cannot handle zero width or height':
+        'Breite oder Höhe dürfen nicht Null sein',
+    'expecting a finite number\nbut getting Infinity or NaN':
+        'Erwarte eine endliche Zahl\nbekomme aber Unendlich oder eine Nicht-Zahl',
+    'the predicate takes\ntoo long for a\ncustom hat block':
+        'Das Prädikat dauert zu lang für einen\nbenutzerdefinierten Ereignisblock',
+    'missing / unspecified extension':
+        'Fehlende / undefinierte Erweiterung',
+    'reporter didn\'t report':
+        'Der Rückgabewert fehlt bei einer Funktion',
+    'a custom block definition is missing':
+        'Ein Block ist undefiniert',
+    'exceeding maximum number of clones':
+        'Die maximale Anzahl von Klonen wird überschritten',
+    'can only write text or numbers, not a':
+        'Kann nur Text oder Zahlen schreiben, kein',
+    'unsupported graphic effect':
+        'Nicht unterstützter Grafikeffekt',
+    'setting the rotation center requires a costume':
+        'Der Drehpunkt kann nur zusammen\nmit einem Kostüm gesetzt werden',
+    'Web Audio API is not supported\nin this browser':
+        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt'
 };

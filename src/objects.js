@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2022 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -49,7 +49,13 @@
         CellMorph
         WatcherMorph
         StagePrompterMorph
+        StagePickerMorph
+        StagePickerItemMorph
 
+        MenuItemMorph*
+            StagePickerItemMorph
+        MenuMorph*
+            StagePickerMorph
         SpeechBubbleMorph*
             SpriteBubbleMorph
 
@@ -82,12 +88,12 @@ VariableDialogMorph, HTMLCanvasElement, Context, List, RingMorph, HandleMorph,
 SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
-AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows,
-BlockVisibilityDialogMorph*/
+AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2021-November-12';
+modules.objects = '2022-April-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -103,6 +109,8 @@ var WatcherMorph;
 var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
+var StagePickerMorph;
+var StagePickerItemMorph;
 
 function isSnapObject(thing) {
     return thing instanceof SpriteMorph || (thing instanceof StageMorph);
@@ -172,7 +180,9 @@ SpriteMorph.prototype.allCategories = function () {
 };
 
 SpriteMorph.prototype.blockColorFor = function (category) {
-    return this.blockColor[category] || this.customCategories.get(category);
+    return this.blockColor[category] ||
+        this.customCategories.get(category) ||
+        this.blockColor.other;
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
@@ -290,6 +300,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'motion',
             spec: 'if on edge, bounce'
+        },
+        getPosition: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'motion',
+            spec: 'position'
         },
         xPosition: {
             only: SpriteMorph,
@@ -979,6 +995,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'answer'
         },
+        reportMousePosition: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'mouse position'
+        },
         reportMouseX: {
             type: 'reporter',
             category: 'sensing',
@@ -1071,6 +1092,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'microphone %audio',
             defaults: [['volume']]
         },
+        reportBlockAttribute: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: '%block of block %repRing',
+            defaults: [['definition']]
+        },
 
         // Operators
         reifyScript: {
@@ -1091,10 +1118,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportSum: {
+        reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n + %n'
+            spec: '%sum',
+            alias: '+'
         },
         reportDifference: {
             type: 'reporter',
@@ -1102,10 +1130,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        reportProduct: {
+        reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u00D7 %n',
+            spec: '%product',
             alias: '*'
         },
         reportQuotient: {
@@ -1139,15 +1167,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'atan2 %n ÷ %n'
         },
-        reportMin: {
+        reportVariadicMin: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n min %n'
+            spec: '%min',
+            alias: 'min'
         },
-        reportMax: {
+        reportVariadicMax: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n max %n'
+            spec: '%max',
+            alias: 'max'
         },
         reportRandom: {
             type: 'reporter',
@@ -1420,6 +1450,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'append %lists'
         },
+        reportCrossproduct: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combinations %lists'
+        },
         reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
@@ -1668,6 +1703,22 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doSend: {
             selector: 'doBroadcast',
             expand: 1
+        },
+        reportSum: {
+            selector: 'reportVariadicSum',
+            variadic: true
+        },
+        reportProduct: {
+            selector: 'reportVariadicProduct',
+            variadic: true
+        },
+        reportMin: {
+            selector: 'reportVariadicMin',
+            variadic: true
+        },
+        reportMax: {
+            selector: 'reportVariadicMax',
+            variadic: true
         }
     };
 };
@@ -1693,8 +1744,9 @@ SpriteMorph.prototype.blockAlternatives = {
     changeYPosition: ['changeXPosition', 'setYPosition', 'setXPosition',
         'forward'],
     setYPosition: ['setXPosition', 'changeYPosition', 'changeXPosition'],
-    xPosition: ['yPosition'],
-    yPosition: ['xPosition'],
+    xPosition: ['yPosition', 'getPosition'],
+    yPosition: ['xPosition', 'getPosition'],
+    getPosition: ['xPosition', 'yPosition'],
 
     // looks:
     doSayFor: ['doThinkFor', 'bubble', 'doThink', 'doAsk'],
@@ -1757,35 +1809,41 @@ SpriteMorph.prototype.blockAlternatives = {
     doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
     getLastAnswer: ['getTimer'],
     getTimer: ['getLastAnswer'],
-    reportMouseX: ['reportMouseY'],
-    reportMouseY: ['reportMouseX'],
+    reportMouseX: ['reportMouseY', 'reportMousePosition'],
+    reportMouseY: ['reportMouseX', 'reportMousePosition'],
+    reportMousePosition: ['reportMouseX', 'reportMouseY'],
 
     // operators:
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus', 'reportAtan2', 'reportMin',
-        'reportMax'],
-    reportModulus: ['reportAtan2', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportAtan2: ['reportModulus', 'reportDifference', 'reportProduct',
-        'reportSum','reportQuotient', 'reportPower', 'reportMin', 'reportMax'],
-    reportMin: ['reportMax', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
-    reportMax: ['reportMin', 'reportSum', 'reportDifference', 'reportProduct',
-        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportDifference: ['reportVariadicSum', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicProduct: ['reportDifference', 'reportVariadicSum',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportQuotient: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportPower: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportQuotient', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportModulus: ['reportAtan2', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportAtan2: ['reportModulus', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicMin: ['reportVariadicMax', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
     reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportNotEquals', 'reportGreaterThan', 'reportGreaterThanOrEquals'],
+        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
@@ -1812,6 +1870,10 @@ SpriteMorph.prototype.blockAlternatives = {
     doChangeVar: ['doSetVar'],
     doShowVar: ['doHideVar'],
     doHideVar: ['doShowVar'],
+
+    // lists
+    reportConcatenatedLists: ['reportCrossproduct'],
+    reportCrossproduct: ['reportConcatenatedLists'],
 
     // HOFs
     reportMap: ['reportKeep', 'reportFindFirst'],
@@ -1870,6 +1932,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
+    this.categoriesCache = null; // not to be serialized (!)
     this.rotationOffset = ZERO; // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
 
@@ -1935,6 +1998,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.freqPlayer = null;
     c.primitivesCache = {};
     c.paletteCache = {};
+    c.categoriesCache = null;
     c.imageData = {};
     c.cachedColorDimensions = c.color[this.penColorModel]();
     arr = [];
@@ -1976,12 +2040,14 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             }
         });
         c.costumes = new List(arr);
+        c.costumes.type = 'costume';
         arr = [];
         this.sounds.asArray().forEach(sound => {
             var snd = forClone ? sound : sound.copy();
             arr.push(snd);
         });
         c.sounds = new List(arr);
+        c.sounds.type = 'sound';
         arr = [];
     }
     c.nestingScale = 1;
@@ -2406,6 +2472,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('bounceOffEdge'));
         blocks.push('-');
+        blocks.push(block('getPosition'));
         blocks.push(watcherToggle('xPosition'));
         blocks.push(block('xPosition', this.inheritsAttribute('x position')));
         blocks.push(watcherToggle('yPosition'));
@@ -2589,6 +2656,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));
@@ -2621,6 +2689,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportBlockAttribute'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -2640,9 +2709,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -2746,13 +2815,14 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
@@ -2957,6 +3027,7 @@ SpriteMorph.prototype.makeBlock = function () {
                     this.customBlocks.push(definition);
                 }
                 ide.flushPaletteCache();
+                ide.categories.refreshEmpty();
                 ide.refreshPalette();
                 ide.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
@@ -3000,8 +3071,10 @@ SpriteMorph.prototype.palette = function (category) {
 SpriteMorph.prototype.freshPalette = function (category) {
     var myself = this,
         palette = new ScrollFrameMorph(null, null, this.sliderColor),
-        showCategories,
         unit = SyntaxElementMorph.prototype.fontSize,
+        ide,
+        showCategories,
+        showButtons,
         x = 0,
         y = 5,
         ry = 0,
@@ -3087,7 +3160,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        showCategories = this.parentThatIsA(IDE_Morph).scene.showCategories;
+        ide = this.parentThatIsA(IDE_Morph);
+        showCategories = ide.scene.showCategories;
+        showButtons = ide.scene.showPaletteButtons;
         blocks = SpriteMorph.prototype.allCategories().reduce(
             (blocks, category) => {
                 let header = [this.categoryText(category), '-'],
@@ -3098,9 +3173,17 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
+                // hide category names
                 if (!showCategories && category !== 'variables') {
                     primitives = primitives.filter(each =>
                         each !== '-' && each !== '=');
+                }
+
+                // hide "make / delete a variable" buttons
+                if (!showButtons && category === 'variables') {
+                    primitives = primitives.filter(each =>
+                        !(each instanceof PushButtonMorph &&
+                            !(each instanceof ToggleMorph)));
                 }
 
                 return blocks.concat(
@@ -3117,8 +3200,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
     }
-    blocks.push('=');
-    blocks.push(this.makeBlockButton(category));
+
+    if (category !== 'unified' || showButtons) {
+        blocks.push('=');
+        blocks.push(this.makeBlockButton(category));
+    }
 
     if (category !== 'unified') {
         blocks.push('=');
@@ -3171,7 +3257,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 // SpriteMorph utilities for showing & hiding blocks in the palette
 
 SpriteMorph.prototype.allPaletteBlocks = function () {
-    // private - only to be used for showing & hiding blocks im the palette
+    // private - only to be used for showing & hiding blocks in the palette
     var blocks = SpriteMorph.prototype.allCategories().reduce(
         (blocks, category) => {
             let primitives = this.blockTemplates(category, true),
@@ -3229,7 +3315,8 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
 };
 
 SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
-    var ide, dict, cat;
+    var ide = this.parentThatIsA(IDE_Morph),
+        dict, cat;
     if (aBlock.isCustomBlock) {
         (aBlock.isGlobal ? aBlock.definition
             : this.getMethod(aBlock.semanticSpec)
@@ -3257,6 +3344,21 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+SpriteMorph.prototype.emptyCategories = function () {
+    // return a dictionary that indicates for each category whether
+    // it has any shown blocks in it (true) or is empty (false)
+    var hasBlocks = (any) => any instanceof BlockMorph &&
+            !this.isHidingBlock(any);
+    if (this.categoriesCache === null) {
+        this.categoriesCache = {};
+        SpriteMorph.prototype.allCategories().forEach(category =>
+            this.categoriesCache[category] =
+                this.getPrimitiveTemplates(category).some(hasBlocks) ||
+                this.customBlockTemplatesForCategory(category).some(hasBlocks));
+    }
+    return this.categoriesCache;
 };
 
 // SpriteMorph blocks searching
@@ -3523,7 +3625,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function parseInfix(expression, operator, already) {
-        // very basic diadic infix parser for arithmetic expressions
+        // very basic dyadic infix parser for arithmetic expressions
         // with strict left-to-right operator precedence (as in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
@@ -3612,13 +3714,13 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, target, selectors, monads, alias, key, sel, i, inps,
             off = 1,
             reverseDict = {};
         selectors = {
-            '+': 'reportSum',
+            '+': 'reportVariadicSum',
             '-': 'reportDifference',
-            '*': 'reportProduct',
+            '*': 'reportVariadicProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
@@ -3652,18 +3754,24 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 off = 0;
             }
+            target = block;
         } else { // dyadic
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            target = block;
             inps = block.inputs();
+            if (inps[0] instanceof MultiArgMorph) { // infix sum or product
+                target = inps[0];
+                inps = target.inputs();
+            }
         }
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
-                block.replaceInput(inps[i - off], blockFromAST(ast[i]));
+                target.replaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 if (contains(
                     ['true', 'false'], reverseDict[ast[i]] || ast[i])
                 ) {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
                             (reverseDict[ast[i]] || ast[i]) === 'true' ?
@@ -3671,7 +3779,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         )
                     );
                 } else if (ast[i] !== '_') {
-                    block.replaceInput(
+                    target.replaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.variableBlock(ast[i])
                     );
@@ -3680,6 +3788,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[i - off].setContents(ast[i]);
             }
         }
+        target.fixLayout();
         block.isDraggable = true;
         block.fixLayout();
         block.fixBlockColor(null, true);
@@ -4194,6 +4303,73 @@ SpriteMorph.prototype.remove = function () {
     }
 };
 
+// SpriteMorph serialization & exporting utils
+
+SpriteMorph.prototype.toXMLString = function () {
+    // answer an xml string representation of this sprite and all parts
+    // attached to it, including all dependencies (global custom blocks).
+    var ide = this.parentThatIsA(IDE_Morph),
+        all = this.allParts(),
+        dependencies = [],
+        categories = [],
+        blocksXML = '';
+
+    function collect(item, array) {
+        // only once
+        if (!contains(array, item)) {
+            array.push(item);
+        }
+    }
+
+    function collectAll(items, array) {
+        items.forEach(item => collect(item, array));
+    }
+
+    // collect all dependencies and custom categories.
+    // only collect global custom block dependencies, because the locals
+    // will be included in each sprite's serialization code
+
+    all.forEach(sprite => {
+
+        // global block definition in scripts
+        sprite.scripts.children.filter(
+            morph => morph instanceof BlockMorph
+        ).forEach(script =>
+            collectAll(
+                script.dependencies(true),
+                dependencies
+            )
+        );
+
+        // global block definitions referenced in local block definitions
+        sprite.customBlocks.forEach(def => {
+            collect(def.category, categories);
+            collectAll(
+                def.collectDependencies([], [], sprite)
+                    .filter(each => each.isGlobal),
+                dependencies
+            );
+        });
+
+    });
+
+    // encode both parts of the export-file:
+    // the blocks library and the sprites
+
+    if (dependencies.length || categories.length) {
+        blocksXML = ide.blocksLibraryXML(dependencies, categories);
+    }
+
+    return '<sprites app="' +
+        ide.serializer.app +
+        '" version="' +
+        ide.serializer.version +
+        '">' +
+        blocksXML +
+        ide.serializer.serialize(all) +
+        '</sprites>';
+};
+
 // SpriteMorph cloning
 
 /*
@@ -4217,6 +4393,9 @@ SpriteMorph.prototype.remove = function () {
 SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph),
         clone;
+    if (this.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
     if (stage && stage.cloneCount <= 5000) {
         clone = this.fullCopy(true);
         clone.clonify(stage, immediately);
@@ -4475,6 +4654,138 @@ SpriteMorph.prototype.changeColorDimension = function (idx, delta) {
     );
 };
 
+SpriteMorph.prototype.setColorRGBA = function (dta) {
+    // dta can be one of the following:
+    // - a 4 item list representing r-g-b-a each on a scale of 0-255
+    // - a 3 item list representing r-g-b leaving a unchanged
+    // - a 1 item list representing greyscale from 0-255 leaving alpha unchanged
+    // - a 2 item list representing greyscale and alpha each from 0-255
+    // - a number representing greyscale from 0-255 leaving alpha unchanged
+    var clr = this.color.copy(),
+        num;
+    if (dta instanceof List) {
+        switch (dta.length()) {
+        case 1:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            clr.g = num;
+            clr.b = num;
+            break;
+        case 2:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            clr.g = num;
+            clr.b = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.a = num / 255;
+            break;
+        case 3:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.g = num;
+            num = Math.max(0, Math.min(+(dta.at(3)), 255));
+            if (isNaN(num)) {return; }
+            clr.b = num;
+            break;
+        case 4:
+            num = Math.max(0, Math.min(+(dta.at(1)), 255));
+            if (isNaN(num)) {return; }
+            clr.r = num;
+            num = Math.max(0, Math.min(+(dta.at(2)), 255));
+            if (isNaN(num)) {return; }
+            clr.g = num;
+            num = Math.max(0, Math.min(+(dta.at(3)), 255));
+            if (isNaN(num)) {return; }
+            clr.b = num;
+            num = Math.max(0, Math.min(+(dta.at(4)), 255));
+            if (isNaN(num)) {return; }
+            clr.a = num / 255;
+            break;
+        default:
+            return;
+        }
+    } else {
+        num = Math.max(0, Math.min(+dta, 255));
+        if (isNaN(num)) {return; }
+        clr.r = num;
+        clr.g = num;
+        clr.b = num;
+    }
+    this.setColor(clr);
+};
+
+SpriteMorph.prototype.changeColorRGBA = function (dta) {
+    // dta can be one of the following:
+    // - a 4 item list representing r-g-b-a each on a scale of 0-255
+    // - a 3 item list representing r-g-b leaving a unchanged
+    // - a 1 item list representing greyscale from 0-255 leaving alpha unchanged
+    // - a 2 item list representing greyscale and alpha each from 0-255
+    // - a number representing greyscale from 0-255 leaving alpha unchanged
+    var clr = this.color.copy(),
+        num;
+    if (dta instanceof List) {
+        switch (dta.length()) {
+        case 1:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            break;
+        case 2:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.a = Math.max(0, Math.min((clr.a * 255) + num, 255)) / 255;
+            break;
+        case 3:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            num = +(dta.at(3));
+            if (isNaN(num)) {return; }
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            break;
+        case 4:
+            num = +(dta.at(1));
+            if (isNaN(num)) {return; }
+            clr.r = Math.max(0, Math.min(clr.r + num, 255));
+            num = +(dta.at(2));
+            if (isNaN(num)) {return; }
+            clr.g = Math.max(0, Math.min(clr.g + num, 255));
+            num = +(dta.at(3));
+            if (isNaN(num)) {return; }
+            clr.b = Math.max(0, Math.min(clr.b + num, 255));
+            num = +(dta.at(4));
+            if (isNaN(num)) {return; }
+            clr.a = Math.max(0, Math.min((clr.a * 255) + num, 255)) / 255;
+            break;
+        default:
+            return;
+        }
+    } else {
+        num = +dta;
+        if (isNaN(num)) {return; }
+        clr.r = Math.max(0, Math.min(clr.r + num, 255));
+        clr.g = Math.max(0, Math.min(clr.g + num, 255));
+        clr.b = Math.max(0, Math.min(clr.b + num, 255));
+    }
+    this.setColor(clr);
+};
+
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
@@ -4495,6 +4806,14 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
         options = ['hue', 'saturation', 'brightness', 'transparency'];
     if (name === 'size') {
         return this.size || 0;
+    }
+    if (name === 'r-g-b-a') {
+        return new List([
+            this.color.r,
+            this.color.g,
+            this.color.b,
+            Math.round(this.color.a * 255)
+        ]);
     }
     return this.getColorDimension(options.indexOf(name));
 };
@@ -4742,7 +5061,7 @@ SpriteMorph.prototype.write = function (text, size) {
     // thanks to Michael Ball for contributing this code!
     if (typeof text !== 'string' && typeof text !== 'number') {
         throw new Error(
-            'LABEL can only draw text or numbers, not a ' +
+            localize('can only write text or numbers, not a') + ' ' +
             typeof text
         );
     }
@@ -5338,7 +5657,7 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
             ],
             eff
     )) {
-        throw new Error(localize('unsupported graphic effect') + ':\n' + eff);
+        throw new Error(localize('unsupported graphic effect') + ': "' + eff + '"');
     }
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
@@ -5550,6 +5869,12 @@ SpriteMorph.prototype.floodFill = function () {
             Math.floor((height / 2) - this.yPosition()) * width +
             Math.floor(this.xPosition() + (width / 2))
         ],
+        clr = new Color(
+            Math.round(Math.min(Math.max(this.color.r, 0), 255)),
+            Math.round(Math.min(Math.max(this.color.g, 0), 255)),
+            Math.round(Math.min(Math.max(this.color.b, 0), 255)),
+            this.color.a
+        ),
         current,
         src;
 
@@ -5566,10 +5891,10 @@ SpriteMorph.prototype.floodFill = function () {
     }
 
     src = read(stack[0]);
-    if (src[0] === Math.round(this.color.r) &&
-            src[1] === Math.round(this.color.g) &&
-            src[2] === Math.round(this.color.b) &&
-            src[3] === Math.round(this.color.a * 255)) {
+    if (src[0] === clr.r &&
+            src[1] === clr.g &&
+            src[2] === clr.b &&
+            src[3] === Math.round(clr.a * 255)) {
         return;
     }
     while (stack.length > 0) {
@@ -5584,10 +5909,10 @@ SpriteMorph.prototype.floodFill = function () {
                 stack.push(current - width);
             }
         }
-        dta[current * 4] = Math.round(this.color.r);
-        dta[current * 4 + 1] = Math.round(this.color.g);
-        dta[current * 4 + 2] = Math.round(this.color.b);
-        dta[current * 4 + 3] = Math.round(this.color.a * 255);
+        dta[current * 4] = clr.r;
+        dta[current * 4 + 1] = clr.g;
+        dta[current * 4 + 2] = clr.b;
+        dta[current * 4 + 3] = Math.round(clr.a * 255);
     }
     ctx.putImageData(img, 0, 0);
     this.parent.changed();
@@ -5769,6 +6094,10 @@ SpriteMorph.prototype.turnLeft = function (degrees) {
     this.setHeading(this.heading - (+degrees || 0));
 };
 
+SpriteMorph.prototype.getPosition = function () {
+    return new List([this.xPosition(), this.yPosition()]);
+};
+
 SpriteMorph.prototype.xPosition = function () {
     if (this.inheritsAttribute('x position')) {
         return this.exemplar.xPosition();
@@ -5942,6 +6271,7 @@ SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
     if (!this.costume) {
         throw new Error('setting the rotation center requires a costume');
     }
+    this.shadowAttribute('costumes');
     delta = absoluteCoordinate.subtract(
         new Point(this.xPosition(), this.yPosition())
     ).divideBy(this.scale).rotateBy(radians(90 - this.heading));
@@ -6113,7 +6443,8 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
-                var evt = morph.inputs()[0].evaluate()[0];
+                var choice = morph.inputs()[0].evaluate(),
+                    evt = choice instanceof Array ? choice[0] : choice;
                 return evt === key || evt === 'any key';
             }
         }
@@ -6248,24 +6579,6 @@ SpriteMorph.prototype.getLastMessage = function () {
 
 SpriteMorph.prototype.getLastAnswer = function () {
     return this.parentThatIsA(StageMorph).lastAnswer;
-};
-
-// SpriteMorph mouse coordinates
-
-SpriteMorph.prototype.reportMouseX = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseX();
-    }
-    return 0;
-};
-
-SpriteMorph.prototype.reportMouseY = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        return stage.reportMouseY();
-    }
-    return 0;
 };
 
 // SpriteMorph thread count (for debugging)
@@ -6736,6 +7049,11 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     } else {
         this.customBlocks = this.customBlocks.filter(def =>
             !contains(doubles, def)
+        );
+        this.allDependentInvocationsOf(
+            definition.blockSpec()
+        ).reverse().forEach(
+            block => block.refresh(definition)
         );
     }
     ide = this.parentThatIsA(IDE_Morph);
@@ -7708,7 +8026,6 @@ StageMorph.uber = FrameMorph.prototype;
 // StageMorph preferences settings
 
 StageMorph.prototype.dimensions = new Point(480, 360); // fallback unscaled ext
-StageMorph.prototype.frameRate = 0; // unscheduled per default
 
 StageMorph.prototype.isCachingPrimitives
     = SpriteMorph.prototype.isCachingPrimitives;
@@ -7743,8 +8060,10 @@ StageMorph.prototype.init = function (globals) {
     this.customBlocks = [];
     this.globalBlocks = [];
     this.costumes = new List();
+    this.costumes.type = 'costume';
     this.costume = null;
     this.sounds = new List();
+    this.sounds.type = 'sound';
     this.version = Date.now(); // for observers
     this.isFastTracked = false;
     this.enableCustomHatBlocks = true;
@@ -7773,6 +8092,7 @@ StageMorph.prototype.init = function (globals) {
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
+    this.categoriesCache = null; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
@@ -7827,7 +8147,6 @@ StageMorph.prototype.init = function (globals) {
     ]();
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
-    this.fps = this.frameRate;
 };
 
 // StageMorph scaling
@@ -7866,6 +8185,9 @@ StageMorph.prototype.setScale = function (number) {
             }
             morph.setCenter(this.center());
             morph.setBottom(this.bottom());
+        } else if (morph instanceof StagePickerMorph) {
+            morph.createItems(number);
+            morph.popup(this, morph.position());
         }
     });
 };
@@ -7890,7 +8212,7 @@ StageMorph.prototype.render = function (ctx) {
     ctx.save();
     ctx.fillStyle = this.color.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
-    if (this.costume) {
+    if (this.costume && !(this.costume.loaded instanceof Function)) {
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
             this.costume.contents,
@@ -8424,7 +8746,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'esc' && !ide.isAppMode) {
-        return this.fireStopAllEvent();
+        return ide.stopAllScripts();
     }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
@@ -8468,6 +8790,11 @@ StageMorph.prototype.inspectKeyEvent
 
 StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
     var procs = [];
+
+    // remove all clones when the green flag event is broadcast
+    if (message === '__shout__go__') {
+        this.removeAllClones();
+    }
 
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
@@ -8524,33 +8851,6 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         ide.controlBar.pauseButton.refresh();
     }
     return procs;
-};
-
-StageMorph.prototype.fireStopAllEvent = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-
-    this.threads.resumeAll(this.stage);
-
-    // experimental: run one step of a user-defined script
-    this.runStopScripts();
-
-    this.keysPressed = {};
-    this.threads.stopAll();
-    this.stopAllActiveSounds();
-    this.children.forEach(morph => {
-        if (morph.stopTalking) {
-            morph.stopTalking();
-        }
-    });
-    this.removeAllClones();
-    if (ide) {
-        ide.nextSteps([
-            nop,
-            () => this.stopAllActiveSounds(), // catch forever loops
-            () => this.stopProjection(),
-            () => ide.controlBar.pauseButton.refresh()
-        ]);
-    }
 };
 
 StageMorph.prototype.runStopScripts = function () {
@@ -8824,6 +9124,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
         blocks.push('-');
+        blocks.push(block('reportMousePosition'));
         blocks.push(watcherToggle('reportMouseX'));
         blocks.push(block('reportMouseX'));
         blocks.push(watcherToggle('reportMouseY'));
@@ -8855,6 +9156,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push(block('reportBlockAttribute'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
@@ -8875,9 +9177,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -8975,13 +9277,14 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
@@ -9269,6 +9572,12 @@ StageMorph.prototype.getColorDimension =
 StageMorph.prototype.changeColorDimension =
     SpriteMorph.prototype.changeColorDimension;
 
+StageMorph.prototype.setColorRGBA =
+    SpriteMorph.prototype.setColorRGBA;
+
+StageMorph.prototype.changeColorRGBA =
+    SpriteMorph.prototype.changeColorRGBA;
+
 StageMorph.prototype.setColor = function (aColor) {
     if (!this.color.eq(aColor, true)) { // observeAlpha
         this.color = aColor.copy();
@@ -9344,6 +9653,9 @@ StageMorph.prototype.changeCustomBlockVisibility
 
 StageMorph.prototype.changeVarBlockVisibility
     = SpriteMorph.prototype.changeVarBlockVisibility;
+
+StageMorph.prototype.emptyCategories =
+    SpriteMorph.prototype.emptyCategories;
 
 // StageMorph neighbor detection
 
@@ -9740,6 +10052,12 @@ SpriteBubbleMorph.prototype.init = function (
     this.scale = stage ? stage.scale : 1;
     this.data = data;
     this.isQuestion = isQuestion;
+    this.bubbleFontColor = BLACK;
+    this.bubbleFontSize = sprite.bubbleFontSize;
+    this.bubbleFontIsBold = sprite.bubbleFontIsBold;
+    this.bubbleCorner = sprite.bubbleCorner;
+    this.bubbleBorder = sprite.bubbleBorder;
+    this.bubblePadding = this.bubbleCorner / 2;
 
     SpriteBubbleMorph.uber.init.call(
         this,
@@ -9790,12 +10108,31 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         isText = true;
         contents = new TextMorph(
             data,
-            sprite.bubbleFontSize * this.scale,
+            this.bubbleFontSize * this.scale,
             null, // fontStyle
-            sprite.bubbleFontIsBold,
+            this.bubbleFontIsBold,
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -9810,8 +10147,103 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+
+        // support costumes to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var cst = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting costumes directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => {
+                    if (data instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            data.contents.src,
+                            'text/svg',
+                            data.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(data.contents, data.name);
+                    }
+                }
+            );
+            return menu;
+        };
+
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var snd = data.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            snd.name = ide.currentSprite.newSoundName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+
+        // support exporting sounds directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveAudioAs(data.audio, data.name)
+            );
+            return menu;
+        };
+
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();
@@ -9845,15 +10277,57 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+
+        // support blocks to be dragged out of speech balloons:
+        contents.isDraggable = true;
+
+        contents.selectForEdit = function () {
+            var script = data.toBlock(),
+                prepare = script.prepareToBeGrabbed,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            script.setPosition(this.position());
+            return script;
+        };
     } else {
         contents = new TextMorph(
             data.toString(),
-            sprite.bubbleFontSize * this.scale,
+            this.bubbleFontSize * this.scale,
             null, // fontStyle
-            sprite.bubbleFontIsBold,
+            this.bubbleFontIsBold,
             false, // italic
             'center'
         );
+
+        // support exporting text / numbers directly from speech balloons:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    data.toString(),
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            return menu;
+        };
+
     }
     if (contents instanceof TextMorph) {
         // reflow text boundaries
@@ -9864,6 +10338,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         if (isText) {
             width = Math.min(width, sprite.bubbleMaxTextWidth * this.scale);
         }
+        contents.color = this.bubbleFontColor;
         contents.setWidth(width);
     } else if (!(data instanceof List)) {
         // scale contents image
@@ -9893,8 +10368,6 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 // SpriteBubbleMorph layout:
 
 SpriteBubbleMorph.prototype.fixLayout = function () {
-    var sprite = SpriteMorph.prototype;
-
     // rebuild my contents
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
@@ -9904,9 +10377,9 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
     this.add(this.contentsMorph);
 
     // scale my settings
-    this.edge = sprite.bubbleCorner * this.scale;
-    this.border = sprite.bubbleBorder * this.scale;
-    this.padding = sprite.bubbleCorner / 2 * this.scale;
+    this.edge = this.bubbleCorner * this.scale;
+    this.border = this.bubbleBorder * this.scale;
+    this.padding = this.bubblePadding * this.scale;
 
     // adjust my dimensions
     this.bounds.setWidth(this.contentsMorph.width()
@@ -11156,6 +11629,7 @@ CellMorph.prototype.createContents = function () {
     // re-build my contents
     var txt,
         img,
+        myself = this,
         fontSize = SyntaxElementMorph.prototype.fontSize,
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
@@ -11224,6 +11698,29 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.bounds.setWidth(img.width);
             this.contentsMorph.bounds.setHeight(img.height);
             this.contentsMorph.cachedImage = img;
+
+            // support blocks to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var script = myself.contents.toBlock(),
+                    prepare = script.prepareToBeGrabbed,
+                    ide = this.parentThatIsA(IDE_Morph) ||
+                        this.world().childThatIsA(IDE_Morph);
+
+                script.prepareToBeGrabbed = function (hand) {
+                    prepare.call(this, hand);
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                script.setPosition(this.position());
+                return script;
+            };
         } else if (this.contents instanceof Costume) {
             img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
@@ -11231,8 +11728,62 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.bounds.setWidth(img.width);
             this.contentsMorph.bounds.setHeight(img.height);
             this.contentsMorph.cachedImage = img;
+
+            // support costumes to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var cst = myself.contents.copy(),
+                    icon,
+                    prepare,
+                    ide = this.parentThatIsA(IDE_Morph)||
+                        this.world().childThatIsA(IDE_Morph);
+
+                cst.name = ide.currentSprite.newCostumeName(cst.name);
+                icon = new CostumeIconMorph(cst);
+                prepare = icon.prepareToBeGrabbed;
+
+                icon.prepareToBeGrabbed = function (hand) {
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                icon.setCenter(this.center());
+                return icon;
+            };
         } else if (this.contents instanceof Sound) {
             this.contentsMorph = new SymbolMorph('notes', 30);
+
+            // support sounds to be dragged out of watchers:
+            this.contentsMorph.isDraggable = true;
+
+            this.contentsMorph.selectForEdit = function () {
+                var snd = myself.contents.copy(),
+                    icon,
+                    prepare,
+                    ide = this.parentThatIsA(IDE_Morph)||
+                        this.world().childThatIsA(IDE_Morph);
+
+                snd.name = ide.currentSprite.newCostumeName(snd.name);
+                icon = new SoundIconMorph(snd);
+                prepare = icon.prepareToBeGrabbed;
+
+                icon.prepareToBeGrabbed = function (hand) {
+                    hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                    this.prepareToBeGrabbed = prepare;
+                };
+
+                if (ide.isAppMode) {return; }
+                icon.setCenter(this.center());
+                return icon;
+            };
         } else if (this.contents instanceof List) {
             if (this.contents.isTable()) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(
@@ -11863,14 +12414,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeCSV()) {
                 menu.addItem(
                     'export as CSV...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asCSV(),
-                            'text/csv;charset=utf-8', // RFC 4180
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -11879,14 +12427,11 @@ WatcherMorph.prototype.userMenu = function () {
                     this.currentValue.canBeJSON()) {
                 menu.addItem(
                     'export as JSON...',
-                    () => {
-                        var ide = this.parentThatIsA(IDE_Morph);
-                        ide.saveFileAs(
-                            this.currentValue.asJSON(true), // guess objects
-                            'text/json;charset=utf-8',
-                            this.getter // variable name
-                        );
-                    },
+                    () => ide.saveFileAs(
+                        this.currentValue.asJSON(true), // guess objects
+                        'text/json;charset=utf-8',
+                        this.getter // variable name
+                    ),
                     null,
                     new Color(100, 0, 0)
                 );
@@ -11903,27 +12448,48 @@ WatcherMorph.prototype.userMenu = function () {
             }
             menu.addItem(
                 'export...',
-                () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.toString(),
-                        'text/plain;charset=utf-8',
-                        this.getter // variable name
-                    );
+                () => ide.saveFileAs(
+                    this.currentValue.toString(),
+                    'text/plain;charset=utf-8',
+                    this.getter // variable name
+                )
+            );
+        } else if (this.currentValue instanceof Costume) {
+            menu.addItem(
+                'export...',
+                 () => {
+                    if (this.currentValue instanceof SVG_Costume) {
+                        // don't show SVG costumes in a new tab (shows text)
+                        ide.saveFileAs(
+                            this.currentValue.contents.src,
+                            'text/svg',
+                            this.currentValue.name
+                        );
+                    } else { // rasterized Costume
+                        ide.saveCanvasAs(
+                            this.currentValue.contents,
+                            this.currentValue.name
+                        );
+                    }
                 }
+            );
+        } else if (this.currentValue instanceof Sound) {
+            menu.addItem(
+                'export...',
+                () => ide.saveAudioAs(
+                    this.currentValue.audio,
+                    this.currentValue.name
+                )
             );
         } else if (this.currentValue instanceof List &&
                 this.currentValue.canBeCSV()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asCSV(),
-                        'text/csv;charset=utf-8', // RFC 4180
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asCSV(),
+                    'text/csv;charset=utf-8', // RFC 4180
+                    this.getter // variable name
+                )
             );
             if (this.currentValue.canBeJSON()) {
                 menu.addItem(
@@ -11942,14 +12508,11 @@ WatcherMorph.prototype.userMenu = function () {
                 this.currentValue.canBeJSON()) {
             menu.addItem(
                 'export...',
-                 () => {
-                    var ide = this.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        this.currentValue.asJSON(true), // guessObjects
-                        'text/json;charset=utf-8',
-                        this.getter // variable name
-                    );
-                }
+                () => ide.saveFileAs(
+                    this.currentValue.asJSON(true), // guessObjects
+                    'text/json;charset=utf-8',
+                    this.getter // variable name
+                )
             );
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();
@@ -12182,6 +12745,7 @@ StagePrompterMorph.prototype.init = function (question) {
     // question is optional in case the Stage is asking
 
     // additional properties
+    this.answer = null;
     this.isDone = false;
     if (question) {
         this.label = new StringMorph(
@@ -12255,5 +12819,544 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 };
 
 StagePrompterMorph.prototype.accept = function () {
+    this.answer = this.inputField.getValue();
     this.isDone = true;
+};
+
+// StagePickerMorph ////////////////////////////////////////////////////////
+
+/*
+    I am a sensor-category-colored input box which lets the user pick one
+    from a list of options.
+*/
+
+// StagePickerMorph inherits from MenuMorph:
+
+StagePickerMorph.prototype = new MenuMorph();
+StagePickerMorph.prototype.constructor = StagePickerMorph;
+StagePickerMorph.uber = MenuMorph.prototype;
+
+// StagePickerMorph instance creation:
+
+function StagePickerMorph(options) {
+    this.init(options);
+}
+
+StagePickerMorph.prototype.init = function (options) {
+    var first = options.at(1),
+        isSubmenu = this.isSubmenu(options),
+        title = isSubmenu ? first : null,
+        items = isSubmenu ? options.at(2) : options;
+
+    // additional properties
+    this.answer = null;
+    this.isDone = false;
+    this.scale = 1;
+
+    // initialize inherited properties
+    StagePickerMorph.uber.init.call(
+        this,
+        choice => {
+            var root = this.rootMenu();
+            root.answer = choice;
+            root.isDone = true;
+        },
+        title, // title
+        this, // environment
+        null // font size
+    );
+
+    // override inherited behavior
+
+    // create items
+    items.map(each => {
+        var key, value, isLine;
+        if (this.isSubmenu(each)) {
+            this.addMenu(
+                each.at(1), // label
+                new StagePickerMorph(each.at(2)), // aMenu
+                null, // indicator
+                true // verbatim, don't translate
+            );
+        } else {
+            key = each;
+            value = each;
+            if (each instanceof List) { // treat as pair
+                isLine = each.isEmpty();
+                if (this.isLeftQuote(each)) {
+                    value = each.at(1);
+                    key = new SpriteBubbleMorph(value);
+                } else if (this.isRightQuote(each)) {
+                    value = each.at(2);
+                    key = new SpriteBubbleMorph(value);
+                    key.isPointingRight = false;
+                } else {
+                    key = each.at(1);
+                    if (key instanceof List) {
+                        if (this.isLeftQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(1));
+                        } else if (this.isRightQuote(key)) {
+                            key = new SpriteBubbleMorph(key.at(2));
+                            key.isPointingRight = false;
+                        } else if (this.isShortcut(key)) {
+                            this.addPair(
+                                key.at(1).toString(),
+                                each.at(2),
+                                key.at(2).toString()
+                            );
+                            return;
+                        } else {
+                            key = key.itemsArray();
+                        }
+                    }
+                    value = each.at(2);
+                }
+            }
+            if (isLine) {
+                this.addLine();
+            } else {
+                this.addItem(
+                    key,
+                    value,
+                    null, // hint
+                    null, // color
+                    null, // bold
+                    null, // italic
+                    null, // doubleClickAction
+                    null, // shortcut
+                    true // verbatim? don't translate
+                );
+            }
+        }
+    });
+
+};
+
+StagePickerMorph.prototype.isSubmenu = function (options) {
+    var first;
+    if (!(options instanceof List)) {
+        return false;
+    }
+    first = options.at(1);
+    return (isString(first) || !isNaN(+first)) &&
+        first.toString().length &&
+        options.length() === 2 &&
+        options.rank() > 1;
+};
+
+StagePickerMorph.prototype.isLeftQuote = function (options) {
+    return options instanceof List && !options.isEmpty() && !options.at(2);
+};
+
+StagePickerMorph.prototype.isRightQuote = function (options) {
+    return options instanceof List &&
+        !options.isEmpty() &&
+        !options.at(1) &&
+        (options.at(1) !== false);
+};
+
+StagePickerMorph.prototype.isShortcut = function (key) {
+    var types = ['text', 'number'];
+    return key instanceof List &&
+        (key.length() === 2) &&
+        key.at(1) &&
+        key.at(2) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(1))) &&
+        contains(types, Process.prototype.reportTypeOf(key.at(2)));
+};
+
+StagePickerMorph.prototype.dataRepresentation = function (data) {
+    var sym, img;
+    if (data instanceof SpeechBubbleMorph) {
+        data.bubbleFontSize = 12;
+        data.bubbleFontIsBold = false;
+        data.bubbleCorner = 5;
+        data.bubbleBorder = 0; // 1.5;
+        data.bubblePadding = 0;
+        data.scale = this.scale;
+        data.bubbleFontColor = data.isPointingRight ? BLACK : WHITE;
+        data.color = data.isPointingRight ? new Color(220, 220, 220)
+            : SpriteMorph.prototype.blockColor.sensing;
+        data.fixLayout();
+        data.rerender();
+        sym = data.fullImage();
+        if (data.isPointingRight) {
+            return sym;
+        }
+        img = newCanvas(new Point(
+            (SpriteMorph.prototype.bubbleMaxTextWidth + 10) * this.scale,
+            sym.height
+        ));
+        img.getContext('2d').drawImage(sym, img.width - sym.width, 0);
+        return img;
+    }
+    switch (Process.prototype.reportTypeOf(data)) {
+    case 'costume':
+    case 'sprite':
+    case 'stage':
+        return data.thumbnail(new Point(40, 40).multiplyBy(this.scale));
+    case 'command':
+    case 'reporter':
+    case 'predicate':
+        return data.image();
+    case 'Boolean':
+        sym = new BooleanSlotMorph(data);
+        sym.fontSize *= this.scale;
+        sym.edge *= this.scale;
+        sym.fixLayout();
+        return sym.fullImage();
+    case 'sound':
+        return (new SymbolMorph('notes', 30 * this.scale)).fullImage();
+    default:
+        return data.toString();
+    }
+};
+
+StagePickerMorph.prototype.addItem = function (
+    labelString,
+    action,
+    hint,
+    color,
+    bold, // bool
+    italic, // bool
+    doubleClickAction, // optional, when used as list contents
+    shortcut, // optional string, icon (Morph or Canvas) or tuple [icon, string]
+    verbatim // optional bool, don't translate if true
+) {
+    /*
+    labelString is normally a single-line string. But it can also be one
+    of the following:
+
+        * a multi-line string (containing line breaks)
+        * an icon (either a Morph or a Canvas)
+        * a tuple of format: [icon, string]
+    */
+    this.items.push([
+        verbatim ? labelString : localize(labelString),
+        action === 0 ? 0 : action || nop,
+        hint,
+        color,
+        bold || false,
+        italic || false,
+        doubleClickAction,
+        shortcut,
+        verbatim]);
+};
+
+// StagePickerMorph popping up
+
+StagePickerMorph.prototype.popup = function (stage, pos) {
+	var scroller;
+
+    this.setPosition(pos);
+    this.keepWithin(stage);
+
+    if (this.bottom() > stage.bottom()) {
+    	// scroll menu items if the menu is taller than the stage
+        scroller = this.scroll();
+        this.bounds.corner.y = stage.bottom() - 2;
+        scroller.setHeight(stage.bottom() - scroller.top() - this.edge - 2);
+        scroller.adjustScrollBars();
+     }
+
+    if (this.items.length < 1 && !this.title) { // don't show empty menus
+        return;
+    }
+    stage.add(this);
+    this.fullChanged();
+};
+
+StagePickerMorph.prototype.createLabel = function () {
+    var text;
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    text = new TextMorph(
+        this.title,
+        SpriteMorph.prototype.bubbleFontSize * this.scale,
+        null, // MorphicPreferences.menuFontName,
+        true,
+        false,
+        'center'
+    );
+    text.alignment = 'center';
+    text.color = WHITE;
+    text.backgroundColor = this.borderColor;
+    text.fixLayout();
+
+    // reflow text boundaries
+    text.setWidth(Math.min(
+        text.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+
+    this.label = new BoxMorph(this.edge, 0);
+    this.label.color = this.borderColor;
+    this.label.borderColor = this.borderColor;
+
+    this.label.outlinePath = function (ctx, corner, inset) {
+        // modify to only draw the top corners rounded
+        var w = this.width(),
+            h = this.height(),
+            radius = Math.min(corner, (Math.min(w, h) - inset) / 2),
+            offset = radius + inset;
+
+        // top left:
+        ctx.arc(
+            offset,
+            offset,
+            radius,
+            radians(-180),
+            radians(-90),
+            false
+        );
+
+        // top right:
+        ctx.arc(
+            w - offset,
+            offset,
+            radius,
+            radians(-90),
+            radians(-0),
+            false
+        );
+
+        // bottom right:
+        ctx.lineTo(w, h);
+
+        // bottom left:
+        ctx.lineTo(0, h);
+    };
+
+    this.label.setExtent(text.extent().add(this.edge));
+    this.label.add(text);
+    this.label.text = text;
+};
+
+StagePickerMorph.prototype.createItems = function (scale) {
+    var item,
+        x,
+        y,
+        isLine = false;
+
+    this.scale = scale;
+    this.children.forEach(m => m.destroy());
+    this.children = [];
+    this.edge = SyntaxElementMorph.prototype.rounding  * this.scale;
+    this.border = SpriteMorph.prototype.bubbleBorder * this.scale;
+    this.color = WHITE;
+    this.borderColor = SpriteMorph.prototype.blockColor.sensing;
+    this.setExtent(new Point(0, 0));
+
+    y = this.border;
+    x = this.left() + this.border;
+    if (this.title) {
+        this.createLabel();
+        this.label.setPosition(this.bounds.origin);
+        this.add(this.label);
+        y = this.label.bottom();
+    } else {
+        y = this.top() + this.edge;
+    }
+    y += 1;
+    this.items.forEach(tuple => {
+        isLine = false;
+        if (tuple[0] === 0) {
+            isLine = true;
+            item = new Morph();
+            item.color = this.borderColor;
+            item.setHeight(tuple[1] * this.scale);
+        } else {
+            item = new StagePickerItemMorph(
+                this.target,
+                tuple[1],
+                tuple[0] instanceof Array ?
+                    [this.dataRepresentation(tuple[0][0]), tuple[0][1]]
+                        : this.dataRepresentation(tuple[0]),
+                SpriteMorph.prototype.bubbleFontSize  * this.scale,
+                null, // MorphicPreferences.menuFontName,
+                this.environment,
+                tuple[2], // bubble help hint
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5], // italic
+                tuple[6], // doubleclick action
+                tuple[7], // shortcut
+                this.scale
+            );
+        }
+        if (isLine) {
+            y += 1;
+        }
+        item.setPosition(new Point(x, y));
+        this.add(item);
+        y = y + item.height();
+        if (isLine) {
+            y += 1;
+        }
+    });
+
+    this.adjustWidths();
+    this.setExtent(
+        this.fullBounds().extent().add(new Point(this.border, this.edge))
+    );
+    if (this.label) {
+        this.label.setWidth(this.width());
+        this.label.text.setPosition(
+            this.label.center().subtract(
+                this.label.text.extent().floorDivideBy(2)
+            )
+        );
+    }
+};
+
+StagePickerMorph.prototype.maxWidth = function () {
+    var w = 0;
+
+    if (this.parent instanceof FrameMorph) {
+        if (this.parent.scrollFrame instanceof ScrollFrameMorph) {
+            w = this.parent.scrollFrame.width();
+        }
+    }
+    this.children.forEach(item => {
+        if (item instanceof MenuItemMorph) {
+            w = Math.max(
+                w,
+                item.label.width() + this.edge +
+                    (item.shortcut ? item.shortcut.width() + this.border : 0)
+            );
+        }
+    });
+    if (this.label) {
+        w = Math.max(w, this.label.width() - this.border);
+    }
+    return w;
+};
+
+StagePickerMorph.prototype.adjustWidths = function () {
+    var w = this.maxWidth();
+    this.children.forEach(item => {
+        item.setWidth(w);
+        item.fixLayout();
+    });
+};
+
+// StagePickerMorph removing
+
+StagePickerMorph.prototype.destroy = function () {
+    MenuMorph.uber.destroy.call(this);
+};
+
+// StagePickerMorph submenus
+
+StagePickerMorph.prototype.closeSubmenu = function () {
+    if (this.submenu) {
+        this.submenu.destroy();
+        this.submenu = null;
+        this.unselectAllItems();
+    }
+};
+
+StagePickerMorph.prototype.rootMenu = function () {
+    return (this.parent instanceof StagePickerMorph) ?
+        this.parent.rootMenu()
+        : this;
+};
+
+// StagePickerItemMorph ////////////////////////////////////////////////////////
+
+/*
+    I am an option that can be clicked inside a StagePickerMorph.
+*/
+
+// StagePickerItemMorph inherits from MenuItemMorph:
+
+StagePickerItemMorph.prototype = new MenuItemMorph();
+StagePickerItemMorph.prototype.constructor = StagePickerItemMorph;
+StagePickerItemMorph.uber = MenuItemMorph.prototype;
+
+// StagePickerItemMorph instance creation:
+
+function StagePickerItemMorph(
+    target,
+    action,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction, // optional when used as list morph item
+    shortcut, // optional string, Morph, Canvas or tuple: [icon, string]
+    scale
+) {
+    this.shortcutString = shortcut || null;
+    this.shortcut = null;
+    this.scale = scale || 1;
+    this.init(
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction
+    );
+
+    this.highlightColor = SpriteMorph.prototype.blockColor.sensing.lighter(75);
+    this.pressColor = SpriteMorph.prototype.blockColor.sensing.lighter(25);
+    if (this.shortcut) {
+        this.shortcut.setColor(SpriteMorph.prototype.blockColor.sensing);
+    }
+}
+
+StagePickerItemMorph.prototype.createLabelString = function (string) {
+    var lbl = new TextMorph(
+        string,
+        this.fontSize,
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
+    );
+    // reflow text boundaries
+    lbl.setWidth(Math.min(
+        lbl.width(),
+        SpriteMorph.prototype.bubbleMaxTextWidth * this.scale * 2
+    ));
+    lbl.setColor(this.labelColor);
+    return lbl;
+};
+
+// StagePickerItemMorph submenus:
+
+StagePickerItemMorph.prototype.popUpSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph),
+        stage = this.parentThatIsA(StageMorph),
+        scroller;
+
+    if (!(this.action instanceof MenuMorph)) {return; }
+    this.action.createItems(menu.scale);
+    this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
+    this.action.keepWithin(stage);
+    if (this.action.items.length < 1 && !this.action.title) {return; }
+
+    if (this.action.bottom() > stage.bottom()) {
+        // scroll menu items if the menu is taller than the world
+        scroller = this.action.scroll();
+        this.action.bounds.corner.y = stage.bottom() - 2;
+        scroller.setHeight(
+            stage.bottom() - scroller.top() - this.action.edge - 2
+        );
+        scroller.adjustScrollBars();
+     }
+    
+    menu.add(this.action);
+    menu.submenu = this.action;
+    this.action.fullChanged();
 };

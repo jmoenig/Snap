@@ -1,12 +1,23 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, January 07, 2021
+Jens Mönig, Bernat Romagosa, April 05, 2022
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
 This experimental Snap! API is a set of methods for an IDE_Morph containing a Snap! project. These methods are maintained to work with future versions of Snap! They can be used to trigger scripts, get feedback from running scripts, and access the project's global variables.
 
 Currently the API consists of the following methods:
+
+#### Navigate Scenes
+
+* IDE_Morph.prototype.getScenes()
+* IDE_Morph.prototype.getCurrentScene()
+* IDE_Morph.prototype.switchTo()
+
+#### Control Processes
+
+* IDE_Morph.prototype.isRunning()
+* IDE_Morph.prototype.stop()
 
 #### Broadcast Messages (and optionally wait)
 
@@ -33,6 +44,10 @@ Currently the API consists of the following methods:
 * IDE_Morph.prototype.getProjectXML()
 * IDE_Morph.prototype.loadProjectXML()
 * IDE_Morph.prototype.unsavedChanges()
+
+#### Set the Language
+
+* IDE_Morph.prototype.setTranslation()
 
 ## Referencing the IDE
 
@@ -93,6 +108,60 @@ Note that `e.data.selector` carries the original selector back, so you can tie i
 request, while `e.data.response` carries the return value of the API method call.
 
 ## Interacting with the IDE
+
+### IDE_Morph.prototype.getScenes()
+The getScenes() method returns an array with the names of all scenes in the projects. The minimum number of elements is 1, since there is always at least one scene per project. The scene names are unique strings within the array. Note that the empty string ('') is a valid scene identifier.
+
+#### syntax
+    ide.getScenes();
+
+#### return value
+an Array of Strings, minimum length 1
+
+
+### IDE_Morph.prototype.getCurrentScene()
+The getCurrentScene() method returns a string representing the name of the currently active scene in the project. If the scene is unnamed and empty string is returned.
+
+#### syntax
+    ide.getCurrentScene();
+
+#### return value
+a String, can be an empty String
+
+
+### IDE_Morph.prototype.switchTo()
+The switchTo() method displays the specified scene. It suspends all processes and clones of the previously active scene and passes control to the new scene.
+
+#### syntax
+    ide.switchTo(sceneName);
+
+#### parameters
+* sceneName
+    - string, the name of the scene to be activated
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.isRunning()
+The isRunning() method returns `true` if the active scene is currently running one or more threads, `false` if the scene is idle.
+
+#### syntax
+    ide.isRunning();
+
+#### return value
+a Boolean
+
+
+### IDE_Morph.prototype.stop()
+The stop() method immediately terminates all currently running threads in the active scene and removes all temporary clones. It does not trigger a "When I am stopped" event.
+
+#### syntax
+    ide.stop();
+
+#### return value
+undefined
+
 
 ### IDE_Morph.prototype.broadcast()
 The broadcast() method triggers all scripts whose hat block listens to the specified message. An optional callback can be added to be run after all triggered scripts have terminated.
@@ -209,19 +278,35 @@ the loadProjectXML() method replaces the current project of the IDE with another
 #### parameters
 * projectData
     * XML string representing a serialized project
-    
+
 #### return value
 unefined
 
 
 ### IDE_Morph.prototype.unsavedChanges()
-the unsavedChanges() method return a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
+the unsavedChanges() method returns a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
 
 #### syntax
     ide.unsavedChanges();
-    
+
 #### return value
 a Boolean
+
+
+### IDE_Morph.prototype.setTranslation()
+the setTranslation() method  switches to the specified language, formatted as ISO 639-1 code, and optionally runs a callback afterwards, e.g. to broadcast an event. Note that switching to another translation involves serializing and deserializing the current project and thus stops all running processes. If you wish to "continue" a project afterwards you can use the callback to trigger an event, such as the green flag ('\_\_shout__go\_\_'). Also note that the language setting does not overwrite the user's own setting which is stored in the browser this way, so that the next time the user opens Snap their own language preference again takes effect.
+
+#### syntax
+    ide.setTranslation(countryCode [, callback]);
+
+#### parameters
+* countryCode
+    - string representing a country in ISO 639-1 format
+* callback | optional
+    - function to execute after the language has been set, no arguments
+
+#### return value
+undefined
 
 
 ## Manipulating Lists

@@ -1,6 +1,5 @@
-var snapVersion = '7-dev211112'
-
-var cacheName = 'snap-pwa',
+var snapVersion = '7.4.0-dev',
+    cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
 
@@ -85,6 +84,7 @@ var cacheName = 'snap-pwa',
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
         'libraries/bignums.js',
+        'libraries/bitwise.xml',
         'libraries/bbtSnapExtension.js',
         'libraries/cases.xml',
         'libraries/colors.xml',
@@ -94,14 +94,22 @@ var cacheName = 'snap-pwa',
         'libraries/HummingbirdBlocks.xml',
         'libraries/iteration-composition.xml',
         'libraries/leap-library.xml',
+        'libraries/list_comprehension_module.xml',
         'libraries/list-utilities.xml',
         'libraries/localstorage_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
+        'libraries/mqttExtension.js',
+        'libraries/mqtt.js',
+        'libraries/mqtt.xml',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
         'libraries/schemeNumber.js',
+        'libraries/SciSnapExtensions.js',
+        'libraries/SciSnap!2Blocks.xml',
         'libraries/serial_module.xml',
+        'libraries/signada.js',
+        'libraries/signada.xml',
         'libraries/speech_module.xml',
         'libraries/stream-tools.xml',
         'libraries/strings.xml',
@@ -631,7 +639,7 @@ var cacheName = 'snap-pwa',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
-        
+
         // Sounds
         'Sounds/SOUNDS',
 
@@ -647,7 +655,7 @@ var cacheName = 'snap-pwa',
         'Sounds/Laugh-male3.mp3',
         'Sounds/Meow.wav',
         'Sounds/Pop.wav',
-        
+
         // Examples
         'Examples/EXAMPLES',
 
@@ -688,7 +696,10 @@ self.addEventListener('activate', (evt) => {
 /* Serve cached content when offline */
 self.addEventListener('fetch', function(e) {
     e.respondWith(
-        caches.match(e.request).then(function(response) {
+        caches.match(
+            e.request,
+            {'ignoreSearch': true}
+        ).then(function(response) {
             return response || fetch(e.request);
         })
     );
