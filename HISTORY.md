@@ -39,6 +39,7 @@
 
 ### 2022-04-06
 * extensions: tweaked restoring the display mode when changing languages
+* gui: tweaked display status when refreshing the IDE
 
 ### 2022-04-05
 * gui, extensions: refactored callback synch for language-switching
