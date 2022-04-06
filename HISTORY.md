@@ -37,6 +37,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-06
+* extensions: tweaked restoring the display mode when changing languages
+
 ### 2022-04-05
 * gui, extensions: refactored callback synch for language-switching
 * extensions: renamed localization extension prims
