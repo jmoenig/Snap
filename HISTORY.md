@@ -40,6 +40,7 @@
 ### 2022-04-07
 * extensions: added "translateback" extension primitive
 * extensions: hyperized "translate" extension primitive
+* extensions: hyperized "translateback" extension primitive
 
 ### 2022-04-06
 * extensions: tweaked restoring the display mode when changing languages

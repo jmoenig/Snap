@@ -808,7 +808,16 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_translateback(text)',
     function (text, proc) {
-        var dict = SnapTranslator.dict[SnapTranslator.language];
+        var dict;
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translateback(text)')
+                        (each, proc)
+                );
+            }
+        }
+        dict = SnapTranslator.dict[SnapTranslator.language];
         proc.assertType(text, 'text');
         return detect(
             Object.keys(dict),
