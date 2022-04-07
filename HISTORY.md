@@ -37,6 +37,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-07
+* extensions: added "translateback" extension primitive
+
 ### 2022-04-06
 * extensions: tweaked restoring the display mode when changing languages
 * gui: tweaked display status when refreshing the IDE

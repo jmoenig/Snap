@@ -29,11 +29,11 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize, SnapTranslator, isString*/
+Color, Process, contains, localize, SnapTranslator, isString, detect*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-06';
+modules.extensions = '2022-April-07';
 
 // Global stuff
 
@@ -794,6 +794,18 @@ SnapExtensions.primitives.set(
     function (text, proc) {
         proc.assertType(text, 'text');
         return localize(text);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translateback(text)',
+    function (text, proc) {
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        proc.assertType(text, 'text');
+        return detect(
+            Object.keys(dict),
+            key => dict[key] === text
+        ) || text;
     }
 );
 
