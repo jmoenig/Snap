@@ -792,7 +792,15 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_translate(text)',
     function (text, proc) {
-        proc.assertType(text, 'text');
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translate(text)')
+                        (each, proc)
+                );
+            }
+        }
+        proc.assertType(text, ['text']);
         return localize(text);
     }
 );
