@@ -4,6 +4,7 @@
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
+    * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
@@ -41,6 +42,7 @@
 * extensions: added "translateback" extension primitive
 * extensions: hyperized "translate" extension primitive
 * extensions: hyperized "translateback" extension primitive
+* new "menus" library
 
 ### 2022-04-06
 * extensions: tweaked restoring the display mode when changing languages
