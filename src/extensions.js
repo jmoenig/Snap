@@ -29,11 +29,11 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize, SnapTranslator, isString*/
+Color, Process, contains, localize, SnapTranslator, isString, detect*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-05';
+modules.extensions = '2022-April-07';
 
 // Global stuff
 
@@ -792,8 +792,37 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_translate(text)',
     function (text, proc) {
-        proc.assertType(text, 'text');
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translate(text)')
+                        (each, proc)
+                );
+            }
+        }
+        proc.assertType(text, ['text']);
         return localize(text);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translateback(text)',
+    function (text, proc) {
+        var dict;
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translateback(text)')
+                        (each, proc)
+                );
+            }
+        }
+        dict = SnapTranslator.dict[SnapTranslator.language];
+        proc.assertType(text, 'text');
+        return detect(
+            Object.keys(dict),
+            key => dict[key] === text
+        ) || text;
     }
 );
 
@@ -812,12 +841,13 @@ SnapExtensions.primitives.set(
             flag = ide.isAppMode,
             restoreMode = () => ide.toggleAppMode(flag),
             callback = restoreMode;
+        proc.assertType(lang, 'text');
         ide.loadNewProject = false;
         if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
             // require an explicit user input to trigger a project reload
             callback = () => {
-                ide.broadcast(msg);
                 restoreMode();
+                ide.broadcast(msg);
             };
         }
         ide.setLanguage(lang, callback, true); // don't save language setting

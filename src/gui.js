@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-05';
+modules.gui = '2022-April-06';
 
 // Declarations
 
@@ -1296,15 +1296,18 @@ IDE_Morph.prototype.createCategories = function () {
         categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
-            : queryCurrentCategory;
+            : queryCurrentCategory,
+        flag = true;
 
     if (this.categories) {
+        flag = this.categories.isVisible;
         this.categories.destroy();
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
     this.categories.buttons = [];
+    this.categories.isVisible = flag;
 
     this.categories.refresh = function () {
         this.buttons.forEach(cat => {
@@ -1944,6 +1947,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         paintbutton,
         cambutton,
         trashbutton,
+        flag = true,
         myself = this,
         colors = MorphicPreferences.isFlat ? this.tabColors
         : [
@@ -1953,11 +1957,13 @@ IDE_Morph.prototype.createCorralBar = function () {
         ];
 
     if (this.corralBar) {
+        flag = this.corralBar.isVisible;
         this.corralBar.destroy();
     }
 
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
+    this.corralBar.isVisible = flag;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
     this.corralBar.setWidth(this.stage.width());
     this.add(this.corralBar);

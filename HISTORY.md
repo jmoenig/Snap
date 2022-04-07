@@ -4,6 +4,7 @@
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
+    * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * added "combinations" primitive to the palette
@@ -11,7 +12,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
-    * new localization extension primitives in the "ide" category
+    * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
@@ -36,6 +37,16 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-04-07
+* extensions: added "translateback" extension primitive
+* extensions: hyperized "translate" extension primitive
+* extensions: hyperized "translateback" extension primitive
+* new "menus" library
+
+### 2022-04-06
+* extensions: tweaked restoring the display mode when changing languages
+* gui: tweaked display status when refreshing the IDE
 
 ### 2022-04-05
 * gui, extensions: refactored callback synch for language-switching
