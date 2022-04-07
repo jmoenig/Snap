@@ -33,7 +33,7 @@ Color, Process, contains, localize, SnapTranslator, isString*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-05';
+modules.extensions = '2022-April-06';
 
 // Global stuff
 
@@ -816,8 +816,8 @@ SnapExtensions.primitives.set(
         if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
             // require an explicit user input to trigger a project reload
             callback = () => {
-                ide.broadcast(msg);
                 restoreMode();
+                ide.broadcast(msg);
             };
         }
         ide.setLanguage(lang, callback, true); // don't save language setting
