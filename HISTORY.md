@@ -11,7 +11,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
-    * new localization extension primitives in the "ide" category
+    * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
     * new "Tad" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
