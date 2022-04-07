@@ -824,6 +824,7 @@ SnapExtensions.primitives.set(
             flag = ide.isAppMode,
             restoreMode = () => ide.toggleAppMode(flag),
             callback = restoreMode;
+        proc.assertType(lang, 'text');
         ide.loadNewProject = false;
         if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
             // require an explicit user input to trigger a project reload
