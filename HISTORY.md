@@ -41,6 +41,7 @@
 
 ### 2022-04-08
 * blocks, threads: added new "label" selector to OF BLOCK's block dropdown
+* German translation update for "label"
 
 ### 2022-04-07
 * extensions: added "translateback" extension primitive
