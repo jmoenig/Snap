@@ -65,7 +65,7 @@ StagePickerMorph*/
 
 /*jshint esversion: 6, bitwise: false, evil: true*/
 
-modules.threads = '2022-March-31';
+modules.threads = '2022-April-08';
 
 var ThreadManager;
 var Process;
@@ -5591,6 +5591,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
+    case 'label':
+        return expr ? expr.abstractBlockSpec() : '';
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {

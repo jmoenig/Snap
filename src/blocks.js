@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-31';
+modules.blocks = '2022-April-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -801,6 +801,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            'label': ['label'],
             'definition': ['definition'],
             'category': ['category'],
             'custom?': ['custom?'],
@@ -2958,6 +2959,14 @@ BlockMorph.prototype.rebuild = function (contrast) {
             }
         });
     }
+};
+
+BlockMorph.prototype.abstractBlockSpec = function () {
+	// answer the semantic block spec substituting each input
+ 	// with an underscore. Used as "name" of the Block.
+    return this.parseSpec(this.blockSpec).map(str =>
+        (str.length > 1 && (str[0]) === '%') ? '_' : str
+    ).join(' ');
 };
 
 // BlockMorph menu:

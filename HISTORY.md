@@ -12,6 +12,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+    * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
     * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
     * new "Tad" costume series, thanks, Meghan and Brian!
@@ -37,6 +38,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-04-08
+* blocks, threads: added new "label" selector to OF BLOCK's block dropdown
 
 ### 2022-04-07
 * extensions: added "translateback" extension primitive
