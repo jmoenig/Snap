@@ -91,7 +91,7 @@ BlockMorph.prototype.userMenu = function () {
      *          or script pics for all others, along with their respective XML
      *  - Method to inject the pics with XML, injectScriptPic() , is above
      */
-    if (this.isCustomBlock) {
+    if (this.isCustomBlock && this.isTemplate) {
         menu.addLine();
         menu.addItem("definition pic and xml...", 
             () => {
@@ -99,27 +99,23 @@ BlockMorph.prototype.userMenu = function () {
                     top = this.definition;
                 let xml = unescape(encodeURIComponent(ide.serializer.serialize(top))),
                     pic = top.scriptsPicture();
-                injectScriptPic(ide, xml, pic);
+                injectScriptPic(ide, "<blocks>" + xml + "</blocks>", pic);
             }
         );
     }
 
-    if (this.isTemplate || !this.definition || this.isCustomBlock) {
+    if ((this.isCustomBlock && !this.isTemplate) || !this.definition) {
         menu.addLine();
 		menu.addItem("script pic and xml...", 
 			() => {
 				var ide = this.parentThatIsA(IDE_Morph),
-					top = this.topBlock();                
+					top = this.topBlock();           
 				let xml = unescape(encodeURIComponent(top.toXMLString())),
                     pic = top.scriptPic();
-                    
-                if (this.isTemplate) { 
-                    xml = "<blocks>" + xml + "</blocks>" 
-                };
                 injectScriptPic(ide, xml, pic);
 			}
 		);
-	}
+	} 
 
     if (this.isTemplate) {
         if (this.parent instanceof SyntaxElementMorph) { // in-line
