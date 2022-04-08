@@ -64,10 +64,6 @@ HandMorph.prototype.processDrop = function (event) {
             *      1. Process the script as an XML file and load script
             *      2. Process the script as an image and load it into the costumes
             *  - Base code credit given do Snap-Forum user Dardoro
-            * 
-            * 2/26 Changes:
-            *  - Attempting to break up custom block definitions and scripts into 2 drops
-            *  - Added asyncronous call to ide.droppedText() for both drops
             */
         function arr2Str(arr) { 
             return arr.reduce((acc, b) => acc + String.fromCharCode(b), "");
@@ -84,12 +80,12 @@ HandMorph.prototype.processDrop = function (event) {
 
             (async () => {
                 if (!file && url) {
-                    file = await fetch("https://api.allorigins.win/raw?url="+url)
+                    file = await fetch("https://api.allorigins.win/raw?url="+url);
                 };
                 let buff = new Uint8Array(await file?.arrayBuffer()),
                     strBuff = arr2Str(buff),
                     blocks;
-                
+
                 strBuff.includes("Snap\tBlocks\tEmbedded") 
                     ? blocks = decodeURIComponent(escape((strBuff)?.split("Snap\tBlocks\tEmbedded")[1]))
                     : blocks = null;
@@ -97,16 +93,7 @@ HandMorph.prototype.processDrop = function (event) {
                 if (blocks) { 
                     menu.addItem(
                         "Interpret script pic as blocks.", 
-                        () => {
-                            if (blocks.includes("Custom\tBlock\tDefinitions")) {
-                                let customsSplit = blocks.split("Custom\tBlock\tDefinitions");
-                                ide.rawOpenBlocksString(customsSplit[0], file.name, true);      // drop custom block definitions on first
-                                delete ide.serializer.scene.stage;                              // force loading script in "ide.stage" context
-                                ide.openScriptString(customsSplit[1], file.name, false);        // drop scripts on afterwards
-                            } else {
-                                ide.droppedText(blocks, file.name, "");
-                            } 
-                        },
+                        () => { ide.droppedText(blocks, file.name, ""); },
                         "Interpret the code within\nthis script pic as code."
                     )
                     menu.addItem(
