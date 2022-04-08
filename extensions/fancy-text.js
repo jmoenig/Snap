@@ -207,6 +207,8 @@ var renderText = function (aString, canvas, fontSize, offsetX, offsetY, font, co
     // Takes a pseudo-markdown string, possibly containing fractions, and
     // returns a canvas where the string has been parsed and rendered
 
+    aString = ""+aString;
+
     var ctx = canvas.getContext('2d'),
         y = offsetY || 0, x = offsetX || 0, width = 0,
         fontSize = fontSize || 32,
