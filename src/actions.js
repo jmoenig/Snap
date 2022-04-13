@@ -623,15 +623,15 @@ ActionManager.prototype.serializeBlock = function(block, force, justMe) {
     return serialized;
 };
 
-ActionManager.prototype.deserializeBlock = function(ser, owner) {
+ActionManager.prototype.deserializeBlock = function(serialized, owner) {
     this.serializer.project = this.ide();
 
-    if (ser[0] !== '<') {
-        return this.getBlockFromId(ser);
-    } else if (ser.indexOf('<script>') === 0) {
-        return this.serializer.loadScript(this.serializer.parse(ser), owner);
+    if (serialized[0] !== '<') {
+        return this.getBlockFromId(serialized);
+    } else if (serialized.indexOf('<script>') === 0) {
+        return this.serializer.loadScript(this.serializer.parse(serialized), owner);
     } else {  // Comment
-        return this.serializer.loadComment(this.serializer.parse(ser));
+        return this.serializer.loadComment(this.serializer.parse(serialized));
     }
 };
 

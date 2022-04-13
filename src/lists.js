@@ -173,7 +173,7 @@ List.prototype.cdr = function () {
 List.prototype.add = function (element, index) {
 /*
     insert the element before the given slot index,
-    if no index is specifed, append the element
+    if no index is specified, append the element
 */
     var idx = index || this.length() + 1,
         obj = isNil(element) ? null : element;
@@ -326,7 +326,7 @@ List.prototype.rows = function () {
 };
 
 List.prototype.cols = function () {
-    // scan the first 10 rows for the maximun width
+    // scan the first 10 rows for the maximum width
     var len = Math.min(10, this.length()),
         count = 1,
         r, i;

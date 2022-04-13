@@ -77,7 +77,7 @@ Easy, isn't it?
 ## Keeping Snap! up-to-date
 
 From time to time it's wise to check whether a new version of Snap! is available. You can
-find out the lastest release using the link above, and compare that to the offline sources on
+find out the latest release using the link above, and compare that to the offline sources on
 your computer. If there is a newer version, simply replace the source files with the newer ones.
 
 

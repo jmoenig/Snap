@@ -206,7 +206,7 @@
     * "empty" continuations referring to the end of a script no longer throw an error.
 * **Translation Updates:**
     * New Hebrew translation
-    * Ukranian
+    * Ukrainian
     * Catalan
     * Portuguese
     * Chinese
@@ -422,13 +422,13 @@
 
 ### 2019-11-06
 * new dev version
-* morphic, blocks: reverted recent changes to tranlation mechanism
+* morphic, blocks: reverted recent changes to translation mechanism
 * morphic: added support for "verbatim" (untranslated) menu items
 * blocks: don't translate variable names in drop-down menus
 * objects: don't translate variable names in "delete a variable" button menu
 * blocks: don't translate variable names in "inherit" block menu
 * blocks: fixed dropdown menu generation for untranslated items
-* blocks: don't translate message names in drow-down menus
+* blocks: don't translate message names in drop-down menus
 * blocks: don't translate names in dropdowns
 * byob: don't translate items in dropdowns
 * help: fixed size of MY help screen, thanks, Brian
@@ -670,7 +670,7 @@
 * new dev version
 * blocks, threads: added "r-g-b-a" option to (aspect) AT (location) reporter in the sensing category
 * blocks, threads: made "temporary?" attribute for clones settable (in the SET->my... block)
-* objects: made the "paste on" block avaible in the "pen" palette
+* objects: made the "paste on" block available in the "pen" palette
 * fix for tainted audio context when the user interacts with an auto-playing project
 * store: persist temporary costumes that aren't in the wardrobe (e.g. generated graphics, maps, paste-ups) 
 * German translation update
@@ -850,7 +850,7 @@
     * colors in the vector editor are now named "Edge color" and "Fill color", thanks, Brian!
     * renamed "whitespace" option in SPLIT to "word"
     * made the "name" attribute programmatically settable
-    * made the "temporary?" attibute readyble
+    * made the "temporary?" attribute readable
     * deprecated storing projects in the browser's localStorage
     * deprecated some (useless) graphic effects
     * additional "publish / unpublish" buttons in the project dialog
@@ -937,8 +937,8 @@
 * Threads, Objects: added "Find First" primitive to lists category
 * Blocks, Threads, Objects: added "blitz" version of FIND
 * Blocks, Threads, Objects:  renamed "whitespace" option in SPLIT to "word"
-* GUI, Threads: made "name" attribut programmatically settable, (I hate my life!)
-* Blocks: made the "temporary?" attibute readable (I hate my life even more!)
+* GUI, Threads: made "name" attribute programmatically settable, (I hate my life!)
+* Blocks: made the "temporary?" attribute readable (I hate my life even more!)
 
 ### 2019-05-28
 * Maps: added various different tile hosts
@@ -1046,7 +1046,7 @@
 * updated Spanish translation (for new HOF prims)
 * updated French translation (for new HOF prims)
 * corrected French translation for "warp" to be "warp" instead of "englobe"
-* moved "for each" down in the lists pallette towards the imperative blocks
+* moved "for each" down in the lists palette towards the imperative blocks
 * updated "tools" library (for new HOF prims)
 * removed "catch" etc. from "tools" library (has been moved to "iteration" lib)
 * updated "cases" library (for new HOF prims)
@@ -1056,7 +1056,7 @@
 * updated "audio comp" library (for new HOF prims)
 * updated "parallelism" library (for new HOF prims)
 * renamed help screens for the new HOF prims
-* Theads: added support for single implicit parameter to FOR EACH prim
+* Threads: added support for single implicit parameter to FOR EACH prim
 
 ### 2019-04-25
 * updated German translation (for new HOF prims)
@@ -1199,7 +1199,7 @@
 ### 2019-03-13
 * Objects: Simplified and optimized pitch detection, made it work on Safari
 * Objects: made "play frequency" command experimental / only revealed in dev
-* added "play hz" and "stop hz" blocks to AudioComp libary
+* added "play hz" and "stop hz" blocks to AudioComp library
 * Objects: Optimized microphone volume detection
 
 ### 2019-03-12
@@ -1283,7 +1283,7 @@
 
 ### 2019-02-19
 * Threads: fixed #2332. I hate it. It's fixes like this that bog Snap! down.
-* Udated German translation
+* Updated German translation
 
 ### 2019-02-18
 * Objects: enable sprite nesting via the context menu
@@ -1349,7 +1349,7 @@
 
 ### 2019-01-22
 * Objects: Remove all clones when the Green Flag is clicked
-* Blocks: adjust label row below C-Slot to accomodate loop icon, if any
+* Blocks: adjust label row below C-Slot to accommodate loop icon, if any
 * updated iteration-composition library blocks with new loop-arrow symbols
 * updated list-utilities library blocks with new loop-arrow symbols
 * Threads: cleaned up CSV parser
@@ -1446,12 +1446,12 @@
 * GUI: fixed offline version (avoid sessionStorage access)
 
 ### 2018-11-28
-* Objects: added special checks to make imporing text-based files into vars easier in Windows
+* Objects: added special checks to make importing text-based files into vars easier in Windows
 * GUI: allow smaller stage extent in embed mode (for social website)
 
 ### 2018-11-27
 * Objects: Cache stage>>penTrailsMorph to optimize collision detection
-* Objects: Fixed a collision detection errror when objects are sub-pixel sized
+* Objects: Fixed a collision detection error when objects are sub-pixel sized
 * Objects: made importing files into variable watchers more lenient wrt to file types
 * Objects: added "open anyway?" option to "unable to import" dialog for variables
 
@@ -1872,7 +1872,7 @@
     * new sound recorder, thanks, Bernat!
     * new "Crayons" library, thanks, Brian!
 * Notable Changes:
-    * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
+    * global and local variables are now separate in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
     * keyboard events are now always thread safe (the same as in Scratch nowadays)
     * the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
     * accidentally clicking on a custom block definition no longer fires up the Block Dialog
@@ -2272,7 +2272,7 @@
 * added inheritance support for scripts, partly done, copy-on-write is still missing
 
 ### 2017-05-30
-* let clones share the orginal’s scripts without shallow-copying them
+* let clones share the original’s scripts without shallow-copying them
 
 ### 2017-05-12
 * exposed ‘costumes’ as an attribute
@@ -2887,7 +2887,7 @@
 * Threads: invoke a block synchronously
 
 ### 2015-11-04
-* Morphic: new grabTheshold preference to suppress accidental grabbing through micro-movements of the hand
+* Morphic: new grabThreshold preference to suppress accidental grabbing through micro-movements of the hand
 * GUI: hidden (shift-click) option to adjust the grabThreshold for the current session
 * Lists, Blocks: Expand list watchers inside result bubbles to show everything
 * Objects: Expand list watchers inside speech/thought bubbles to show everything
@@ -3729,7 +3729,7 @@
 ### 2013-04-09
 * various formatting and encoding normalizations
 * Morphic: Formatting options for Triggers and MenuItems (and ListItems): bold, italic
-* Morphic: ListMorph (items) manipulation capabilites
+* Morphic: ListMorph (items) manipulation capabilities
 * GUI: display shared project names bold typed in the project dialog
 * GUI: Feedback msg when sharing / unsharing projects
 * GUI: Shield (hide) IDE while opening a shared project for presentation
@@ -4249,7 +4249,7 @@
 ### 2012-08-08
 * Morphic, GUI, blocks, BYOB: More "gentle" font control (can be overridden by browser)
 * BYOB: new "Apply" button in the block editor (updates definition keeping editor open)
-* BYOB: editing custom block prototpyes preserves existing inputs in custom block instances
+* BYOB: editing custom block prototypes preserves existing inputs in custom block instances
 
 ### 2012-08-07
 * SymbolMorphs for object type slot and identifier, and for "new sprite" button
@@ -4958,8 +4958,8 @@
 * MultiArgMorphs (%mult%x)
 
 ### 2011-07-22
-* stringField settable as numeric, supresses textual input
-* editable numeric input slots supress textual type-in
+* stringField settable as numeric, suppresses textual input
+* editable numeric input slots suppress textual type-in
 * evaluation helper methods and properties
 * collision detection
 
@@ -4988,7 +4988,7 @@
 
 ### 2011-07-12
 * rectangular reporter layout
-* label mutli-line wrapping for reporters
+* label multi-line wrapping for reporters
 * user-definable label line breaks (%br)
 * font size customizable for individual menus
 * ArrowMorphs

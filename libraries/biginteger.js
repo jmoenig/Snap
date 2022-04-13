@@ -490,7 +490,7 @@ BigInteger.prototype.add = function(n) {
 
 	Returns:
 
-		A <BigInteger> with the same magnatude, but with the opposite sign.
+		A <BigInteger> with the same magnitude, but with the opposite sign.
 
 	See Also:
 
@@ -506,7 +506,7 @@ BigInteger.prototype.negate = function() {
 
 	Returns:
 
-		A <BigInteger> with the same magnatude, but always positive (or zero).
+		A <BigInteger> with the same magnitude, but always positive (or zero).
 
 	See Also:
 
@@ -1344,7 +1344,7 @@ BigInteger.prototype.isZero = function() {
 	Parameters:
 
 		n - The power of 10 to multiply *this* by. *n* is converted to a
-		javascipt number and must be no greater than <BigInteger.MAX_EXP>
+		javascript number and must be no greater than <BigInteger.MAX_EXP>
 		(0x7FFFFFFF), or an exception will be thrown.
 
 	Returns:
@@ -1533,7 +1533,7 @@ BigInteger.prototype.log = function() {
 	Function: valueOf
 	Convert a <BigInteger> to a native JavaScript integer.
 
-	This is called automatically by JavaScipt to convert a <BigInteger> to a
+	This is called automatically by JavaScript to convert a <BigInteger> to a
 	native value.
 
 	Returns:

@@ -172,7 +172,7 @@ VideoMotion.prototype.getStageMotion = function() {
                     C1 += gradY * gradT;
                 }
             }
-            // Use the accumalated values from the for loop to determine a
+            // Use the accumulated values from the for loop to determine a
             // motion direction.
             vector = this.getMotionVector(A2, A1B2, B1, C2, C1);
             // If u and v are within negative winStep to positive winStep,
@@ -318,7 +318,7 @@ VideoMotion.prototype.getLocalMotion = function(aSprite) {
                 }
             }
         }
-        // Use the accumalated values from the for loop to determine a
+        // Use the accumulated values from the for loop to determine a
         // motion direction.
         vector = this.getMotionVector(A2, A1B2, B1, C2, C1);
         if (scaleFactor) {

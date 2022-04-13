@@ -301,7 +301,7 @@ TableCellMorph.prototype.init = function (data, extent, isLabel) {
     // initialize inherited properties:
     TableCellMorph.uber.init.call(this, true);
 
-    // override inherited properites:
+    // override inherited properties:
     if (extent) {this.bounds.setExtent(extent); }
     this.fixLayout();
 };
@@ -565,7 +565,7 @@ TableMorph.prototype.init = function (
     // and only initialize properties inherited from Morph:
     Morph.prototype.init.call(this, true);
 
-    // override inherited properites:
+    // override inherited properties:
     // this.fps = 3; // this will slow down the sliders (!)
     if (extent) {this.bounds.setExtent(extent); }
     this.initScrollBars();
@@ -1153,7 +1153,7 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
     // initialize inherited properties:
     TableFrameMorph.uber.init.call(this, true);
 
-    // override inherited properites:
+    // override inherited properties:
     this.color = 'transparent';
     this.bounds = this.tableMorph.bounds.copy();
     this.add(this.tableMorph);
@@ -1220,7 +1220,7 @@ TableDialogMorph.prototype.init = function (
     // initialize inherited properties:
     TableDialogMorph.uber.init.call(this);
 
-    // override inherited properites:
+    // override inherited properties:
     this.labelString = 'Table view';
     this.createLabel();
 

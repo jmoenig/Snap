@@ -2126,7 +2126,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             }
         });
 
-    // adjust label row below a loop-arrow C-slot to accomodate the loop icon
+    // adjust label row below a loop-arrow C-slot to accommodate the loop icon
     if (hasLoopArrow) {
         x += this.fontSize * 1.5;
         maxX = Math.max(maxX, x);
@@ -3092,7 +3092,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             'compile',
             () => this.setSelector(alternatives[this.selector]),
-            'experimental!\nmake this reporter fast and uninterruptable\n' +
+            'experimental!\nmake this reporter fast and uninterruptible\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
         );
     } else if (
@@ -3818,7 +3818,7 @@ BlockMorph.prototype.mapToCode = function () {
 };
 
 BlockMorph.prototype.mapHeader = function (aString, key) {
-    // primitive for programatically mapping header code
+    // primitive for programmatically mapping header code
     var sel = key || this.selector.substr(0, 5) === 'reify' ?
             'reify' : this.selector;
     if (aString) {
@@ -3831,7 +3831,7 @@ BlockMorph.prototype.mapHeader = function (aString, key) {
 };
 
 BlockMorph.prototype.mapCode = function (aString, key) {
-    // primitive for programatically mapping code
+    // primitive for programmatically mapping code
     var sel = key || this.selector.substr(0, 5) === 'reify' ?
             'reify' : this.selector;
     if (aString) {
@@ -8985,7 +8985,7 @@ InputSlotMorph.prototype.init = function (
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
     this.isReadOnly = isReadOnly || false;
-    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
+    this.minWidth = 0; // can be changed for text-type inputs ("landscape")
     this.constant = null;
 
     InputSlotMorph.uber.init.call(this, null, true);
@@ -11254,7 +11254,7 @@ TextSlotMorph.prototype.init = function (
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
     this.isReadOnly = isReadOnly || false;
-    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
+    this.minWidth = 0; // can be changed for text-type inputs ("landscape")
     this.constant = null;
 
     InputSlotMorph.uber.init.call(this, null, null, null, null, true); // sil.
@@ -11291,7 +11291,7 @@ TextSlotMorph.prototype.layoutChanged = function () {
 
 SymbolMorph.prototype.drawSymbolQueue = function (canvas, color) {
 
-    // draws a triangle given the tip position, dimenstions and direction
+    // draws a triangle given the tip position, dimensions and direction
     /* opts = {tipPos, dims, direction: pointing dir} */
     var drawTriangle = function(ctx, color, opts) {
         var tgHeight = opts.dims.h;

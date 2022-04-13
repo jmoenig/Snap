@@ -303,7 +303,7 @@ Cloud.prototype.callURL = function (url, callBack, errorCall) {
         stickyUrl,
         myself = this;
     try {
-        // set the Limo. Also set the glue as a query paramter for backup.
+        // set the Limo. Also set the glue as a query parameter for backup.
         stickyUrl = url +
             '&SESSIONGLUE=' +
             this.route +

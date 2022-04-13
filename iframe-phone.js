@@ -256,9 +256,9 @@ var structuredClone = require('./structured-clone');
   against sending messages to an unexpected domain. This might happen if our iframe is navigated to
   a third-party URL unexpectedly. Furthermore, having a reference to Window object (as in the first
   form of the constructor) does not protect against sending a message to the wrong domain. The
-  window object is actualy a WindowProxy which transparently proxies the Window object of the
+  window object is actually a WindowProxy which transparently proxies the Window object of the
   underlying iframe, so that when the iframe is navigated, the "same" WindowProxy now references a
-  completely differeent Window object, possibly controlled by a hostile domain.
+  completely different Window object, possibly controlled by a hostile domain.
 
   See http://www.esdiscuss.org/topic/a-dom-use-case-that-can-t-be-emulated-with-direct-proxies for
   more about this weird behavior of WindowProxies (the type returned by <iframe>.contentWindow).
@@ -288,7 +288,7 @@ module.exports = function ParentEndpoint(targetWindowOrIframeEl, targetOrigin, a
     }
     if (connected) {
       var tWindow = getTargetWindow();
-      // if we are laready connected ... send the message
+      // if we are already connected ... send the message
       // See http://dev.opera.com/articles/view/window-postmessage-messagechannel/#crossdoc
       //     https://github.com/Modernizr/Modernizr/issues/388
       //     http://jsfiddle.net/ryanseddon/uZTgD/2/
@@ -367,7 +367,7 @@ module.exports = function ParentEndpoint(targetWindowOrIframeEl, targetOrigin, a
     }
   }
 
-  // Handle pages served through file:// protocol. Behaviour varies in different browsers. Safari sets origin
+  // Handle pages served through file:// protocol. Behavior varies in different browsers. Safari sets origin
   // to 'file://' and everything works fine, but Chrome and Safari set message.origin to null.
   // Also, https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage says:
   //  > Lastly, posting a message to a page at a file: URL currently requires that the targetOrigin argument be "*".

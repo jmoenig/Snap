@@ -3490,7 +3490,7 @@ Morph.prototype.render = function (aContext) {
 };
 
 Morph.prototype.getRenderColor = function () {
-    // can be overriden by my heirs or instances
+    // can be overridden by my heirs or instances
     return this.color;
 };
 
@@ -3951,7 +3951,7 @@ Morph.prototype.updateReferences = function (map) {
     /*
     Update intra-morph references within a composite morph that has
     been copied. For example, if a button refers to morph X in the
-    orginal composite then the copy of that button in the new composite
+    original composite then the copy of that button in the new composite
     should refer to the copy of X in new composite, not the original X.
     */
     var properties = Object.keys(this),
@@ -8548,7 +8548,7 @@ StringMorph.prototype.init = function (
     this.startMark = 0;
     this.endMark = 0;
     this.markedTextColor = WHITE;
-    this.markedBackgoundColor = new Color(60, 60, 120);
+    this.markedBackgroundColor = new Color(60, 60, 120);
 
     // initialize inherited properties:
     StringMorph.uber.init.call(this, true);
@@ -8667,7 +8667,7 @@ StringMorph.prototype.render = function (ctx) {
     for (i = start; i < stop; i += 1) {
         p = this.slotPosition(i).subtract(this.position());
         c = txt.charAt(i);
-        ctx.fillStyle = this.markedBackgoundColor.toString();
+        ctx.fillStyle = this.markedBackgroundColor.toString();
         ctx.fillRect(p.x, p.y, ctx.measureText(c).width + 1 + x,
             fontHeight(this.fontSize) + y);
         ctx.fillStyle = this.markedTextColor.toString();
@@ -9282,7 +9282,7 @@ TextMorph.prototype.init = function (
     this.startMark = 0;
     this.endMark = 0;
     this.markedTextColor = WHITE;
-    this.markedBackgoundColor = new Color(60, 60, 120);
+    this.markedBackgroundColor = new Color(60, 60, 120);
 
     // initialize inherited properties:
     TextMorph.uber.init.call(this);
@@ -9442,7 +9442,7 @@ TextMorph.prototype.render = function (ctx) {
     for (i = start; i < stop; i += 1) {
         p = this.slotPosition(i).subtract(this.position());
         c = this.text.charAt(i);
-        ctx.fillStyle = this.markedBackgoundColor.toString();
+        ctx.fillStyle = this.markedBackgroundColor.toString();
         ctx.fillRect(p.x, p.y, ctx.measureText(c).width + 1,
             fontHeight(this.fontSize));
         ctx.fillStyle = this.markedTextColor.toString();
@@ -9460,7 +9460,7 @@ TextMorph.prototype.setExtent = function (aPoint) {
     this.rerender();
 };
 
-// TextMorph mesuring:
+// TextMorph measuring:
 
 TextMorph.prototype.columnRow = function (slot) {
     // answer the logical position point of the given index ("slot")
@@ -9832,7 +9832,7 @@ TriggerMorph.prototype.init = function (
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
 
-    // override inherited properites:
+    // override inherited properties:
     this.color = WHITE;
     this.createLabel();
 };

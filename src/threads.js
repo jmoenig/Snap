@@ -542,7 +542,7 @@ ThreadManager.prototype.toggleSingleStepping = function () {
     isShowingResult     boolean flag indicating whether a "report" command
                         has been executed in a user-clicked process
     exportResult        boolean flag indicating whether a picture of the top
-                        block along with the result bubble shoud be exported
+                        block along with the result bubble should be exported
     onComplete          an optional callback function to be executed when
                         the process is done
     procedureCount      number counting procedure call entries,
@@ -615,7 +615,7 @@ Process.prototype.isRunning = function () {
 // Process entry points
 
 Process.prototype.runStep = function (deadline) {
-    // a step is an an uninterruptable 'atom', it can consist
+    // a step is an an uninterruptible 'atom', it can consist
     // of several contexts, even of several blocks
 
     if (this.isPaused) { // allow pausing in between atomic steps:
@@ -1376,7 +1376,7 @@ Process.prototype.runContinuation = function (aContext, args) {
     var parms = args.asArray();
 
     // determine whether the continuations is to show the result
-    // in a value-balloon becuse the user has directly clicked on a reporter
+    // in a value-balloon because the user has directly clicked on a reporter
     if (aContext.expression === 'expectReport' && parms.length) {
         this.stop();
         this.homeContext.inputs[0] = parms[0];
@@ -4381,7 +4381,7 @@ Process.prototype.changeBackgroundHSVA = Process.prototype.changeHSVA;
 // Process pasting primitives
 
 Process.prototype.doPasteOn = function (name, thisObj, stage) {
-    // allow for lists of sprites and also check for temparary clones,
+    // allow for lists of sprites and also check for temporary clones,
     // as in Scratch 2.0,
     var those;
     thisObj = thisObj || this.blockReceiver();
@@ -4450,7 +4450,7 @@ Process.prototype.reportTouchingObject = function (name) {
 
 Process.prototype.objectTouchingObject = function (thisObj, name) {
     // helper function for reportTouchingObject()
-    // also check for temparary clones, as in Scratch 2.0,
+    // also check for temporary clones, as in Scratch 2.0,
     // and for any parts (subsprites)
     var those,
         stage,
@@ -5730,15 +5730,15 @@ Process.prototype.capture = function (aContext) {
     // private - answer a new process on a full copy of the given context
     // while retaining the lexical variable scope
     var proc = new Process(this.topBlock, this.receiver);
-    var clos = new Context(
+    var closure = new Context(
         aContext.parentContext,
         aContext.expression,
         aContext.outerContext,
         aContext.receiver
     );
-    clos.variables = aContext.variables.fullCopy();
-    clos.variables.root().parentFrame = proc.variables;
-    proc.context = clos;
+    closure.variables = aContext.variables.fullCopy();
+    closure.variables.root().parentFrame = proc.variables;
+    proc.context = closure;
     return proc;
 };
 

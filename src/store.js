@@ -1354,7 +1354,7 @@ SnapSerializer.prototype.loadScripts = function (object, scripts, model) {
 };
 
 SnapSerializer.prototype.loadScriptsArray = function (model, object) {
-    // private - answer an array containting the model's scripts
+    // private - answer an array containing the model's scripts
     var scale = SyntaxElementMorph.prototype.scale,
         scripts = [];
     model.children.forEach(child => {

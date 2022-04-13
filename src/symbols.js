@@ -2305,7 +2305,7 @@ SymbolMorph.prototype.renderSymbolNetsBloxLogo = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolQueue = function (ctx, color) {
 
-    // draws a triangle given the tip position, dimenstions and direction
+    // draws a triangle given the tip position, dimensions and direction
     /* opts = {tipPos, dims, direction: pointing dir} */
     var drawTriangle = function(ctx, color, opts) {
         var tgHeight = opts.dims.h;

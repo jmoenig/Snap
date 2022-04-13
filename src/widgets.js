@@ -173,7 +173,7 @@ PushButtonMorph.prototype.init = function (
     this.enabledColor = PushButtonMorph.prototype.labelColor;
     this.disabledColor = PushButtonMorph.prototype.disabledColor;
 
-    // override inherited properites:
+    // override inherited properties:
     this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.fixLayout();
@@ -1547,7 +1547,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     this.target = target || null;
     this.action = action || null;
     this.environment = environment || null;
-    this.key = null; // keep track of my purpose to prevent mulitple instances
+    this.key = null; // keep track of my purpose to prevent multiple instances
 
     this.labelString = null;
     this.label = null;
@@ -1558,7 +1558,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     // initialize inherited properties:
     DialogBoxMorph.uber.init.call(this);
 
-    // override inherited properites:
+    // override inherited properties:
     this.isDraggable = true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
@@ -2859,7 +2859,7 @@ AlignmentMorph.prototype.init = function (orientation, padding) {
     // initialize inherited properties:
     AlignmentMorph.uber.init.call(this);
 
-    // override inherited properites:
+    // override inherited properties:
 };
 
 // AlignmentMorph displaying and layout

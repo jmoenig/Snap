@@ -734,7 +734,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
             // if it isn't an input label consisting of several words
             if (part.fragment.type) { // marked as input, take label as is
                 frags.push(part.fragment);
-            } else { // not an input, devide into several non-input fragments
+            } else { // not an input, divide into several non-input fragments
                 words = myself.definition.parseSpec(
                     part.fragment.labelString
                 );
@@ -1579,7 +1579,7 @@ BlockDialogMorph.prototype.init = function (target, action, environment) {
         environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.key = 'makeABlock';
 
     this.types = new AlignmentMorph('row', this.padding);
@@ -2023,7 +2023,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         target
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.key = 'editBlock' + definition.spec;
     this.labelString = this.definition.isGlobal ? 'Block Editor'
     		: 'Method Editor';
@@ -3035,7 +3035,7 @@ InputSlotDialogMorph.prototype.init = function (
         environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.types = new AlignmentMorph('row', this.padding);
     this.types.respectHiddens = true; // prevent the arrow from flipping
     this.add(this.types);
@@ -3726,7 +3726,7 @@ VariableDialogMorph.prototype.init = function (target, action, environment) {
         environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.types = new AlignmentMorph('row', this.padding);
     this.add(this.types);
     this.createTypeButtons();
@@ -3849,7 +3849,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, stage, act
         null // environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.labelString = 'Export blocks / message types';
     this.createLabel();
 
@@ -4070,7 +4070,7 @@ BlockImportDialogMorph.prototype.init = function (blocks, target, name) {
         null // environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.labelString = localize('Import blocks')
         + (name ? ': ' : '')
         + name || '';
@@ -4150,7 +4150,7 @@ BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
         null // environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.labelString = localize('Remove unused blocks')
         + (name ? ': ' : '')
         + name || '';

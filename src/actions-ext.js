@@ -156,7 +156,7 @@ SnapActions.submitIfAllowed = function(event) {
         ide.confirm(
             'Edits cannot be made on projects by guests.\n\nWould ' +
             'you like to request to be made a collaborator?',
-            'Request Collaborator Priviledges?',
+            'Request Collaborator Privileges?',
             function () {
                 ide.sockets.sendMessage({
                     type: 'permission-elevation-request',

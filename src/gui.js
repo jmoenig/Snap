@@ -29,7 +29,7 @@
 
     prerequisites:
     --------------
-    needs blocks.js, threads.js, objects.js, cloud.jus and morphic.js
+    needs blocks.js, threads.js, objects.js, cloud.js and morphic.js
 
 
     toc
@@ -304,7 +304,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
 
-    // override inherited properites:
+    // override inherited properties:
     this.color = this.backgroundColor;
     this.activeEditor = this;
     this.extensions = NetsBloxExtensions;
@@ -2672,7 +2672,7 @@ IDE_Morph.prototype.refreshIDE = function () {
     }
 };
 
-// IDE_Morph settings persistance
+// IDE_Morph settings persistence
 
 IDE_Morph.prototype.applySavedSettings = function () {
     var design = this.getSetting('design'),
@@ -7179,7 +7179,7 @@ SaveOpenDialogMorph.prototype.init = function (task, itemName, sources, source, 
         null // environment
     );
 
-    // override inherited properites:
+    // override inherited properties:
     this.labelString = this.task === 'save' ? 'Save ' + itemName : 'Open ' + itemName;
     this.createLabel();
     this.key = task + itemName;
@@ -8610,7 +8610,7 @@ SpriteIconMorph.prototype.createRotationButton = function () {
 
     if (this.rotationButton) {
         this.rotationButton.destroy();
-        this.roationButton = null;
+        this.rotationButton = null;
     }
     if (!this.object.anchor) {
         return;
@@ -10260,7 +10260,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'and your camera is properly configured. \n\n' +
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
-    'Plase replace the "http://" part of the address\n' +
+    'Please replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation

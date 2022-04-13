@@ -2977,7 +2977,7 @@ function implementSchemeNumber(plugins) {
     "#e1e9999999", the <SchemeNumber> function tries to allocate 10
     million digits, regardless of <maxIntegerDigits>.
 
-    In a future release, cases such as the preceeding example may be
+    In a future release, cases such as the preceding example may be
     checked.  If there is any possibility of legitimately creating
     such large integers, either as number objects or components
     thereof, code should increase <maxIntegerDigits>.
@@ -4072,8 +4072,8 @@ function implementPluginLibrary(plugins) {
     //
     // Assumes numerator(this) !== this.
     function ExactRational_numberToString(radix) {
-        var nd = numeratorAndDenominator(this);
-        var n = nd[0], d = nd[1];
+        var num_denom = numeratorAndDenominator(this);
+        var n = num_denom[0], d = num_denom[1];
         if (isUnit(d))
             return numberToString(n, radix);
         return (numberToString(n, radix) +
@@ -6101,8 +6101,8 @@ function defaultRationalFactory(plugins) {
     var importRational = plugins.get("Dispatch").defGeneric("toFraction", 1);
 
     function Rational_toFraction() {
-        var nd = numeratorAndDenominator(this);
-        return _divideReduced(nd[0], nd[1]);
+        var num_denom = numeratorAndDenominator(this);
+        return _divideReduced(num_denom[0], num_denom[1]);
     }
 
     function Fraction_numeratorAndDenominator() {
@@ -6184,8 +6184,8 @@ function defaultRationalFactory(plugins) {
         return divide(multiply(this._n, q._n), multiply(this._d, q._d));
     }
     function times_int(n, d, i) {
-        var nd = numeratorAndDenominator(divide(i, d));
-        return _divideReduced(multiply(n, nd[0]), nd[1]);
+        var num_denom = numeratorAndDenominator(divide(i, d));
+        return _divideReduced(multiply(n, num_denom[0]), num_denom[1]);
     }
     function Fraction_multiply_Integer(i) {
         return times_int(this._n, this._d, i);
@@ -6198,8 +6198,8 @@ function defaultRationalFactory(plugins) {
         return divide(multiply(this._n, q._d), multiply(this._d, q._n));
     }
     function Fraction_divide_Integer(i) {
-        var nd = numeratorAndDenominator(divide(this._n, i));
-        return new Fraction(nd[0], multiply(nd[1], this._d));
+        var num_denom = numeratorAndDenominator(divide(this._n, i));
+        return new Fraction(num_denom[0], multiply(num_denom[1], this._d));
     }
     function Integer_divide_Fraction(q) {
         return divide(multiply(this, q._d), q._n);
