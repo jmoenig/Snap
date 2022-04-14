@@ -670,8 +670,11 @@ Process.prototype.process_compiler = function (topBlock) {
                 gen_code = topBlock.compiled_function(this.receiver, this);
             }
         } catch (error) {
+            topBlock.to_compile = true;
+            this.popContext()
             console.error(error);
-            throw error;
+            this.handleError(error, topBlock);
+            return;
         }
     } else {
         // Hardcoded compile reset
