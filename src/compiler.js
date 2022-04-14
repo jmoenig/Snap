@@ -130,6 +130,30 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     );
 };
 
+JSCompiler.prototype.compileFunctionJSCode = function (customBlock, inputs) {
+    declaritions = customBlock.definition.body.inputs;
+
+    // passing parameters if any were passed
+    if (inputs.length > 0) {
+        input_values = inputs.map(this.compileInput)
+        // assign formal parameters
+        for (i = 0; i < inputs.length; i += 1) {
+            value = 0;
+            if (!isNil(input_values[i])) {
+                value = input_values[i];
+            }
+            outer.variables.addVar(declaritions[i], value);
+
+            // if the parameter is an upvar,
+            // create a reference to the variable it points to
+            if (declarations.get(declaritions[i])[0] === '%upvar') {
+                this.context.outerContext.variables.vars[value] =
+                    outer.variables.vars[context.inputs[i]];
+            }
+        }
+    }
+}
+
 JSCompiler.prototype.compileExpression = function (block) {
     var selector = block.selector,
         inputs = block.inputs(),
@@ -156,11 +180,25 @@ JSCompiler.prototype.compileExpression = function (block) {
         DESIGN:
         1. Check if the Function is compiled or not (acting like a linker), then compile
         2. Caller style of pushing a New Context and Assigning Variables
+        3. Call the function
+        4. Check if how many procedure call so far (this exists in Process already) and then "yield"
         LAST. Pop the context
         */
         if (block.to_compile) {
+            block.to_compile = false;
+
+            // TODO Compile it
+            try {
+                let func_code = this.compileFunction(block, inputs);
+
+
+            } catch (error) {
+                block.to_compile = true;
+            }
+
             
         }
+        block.to_compile = true; // Tempory
         throw new Error(
             'compiling does not yet support\n' +
             'custom blocks'
