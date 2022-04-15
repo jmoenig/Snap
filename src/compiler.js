@@ -130,28 +130,50 @@ JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
     );
 };
 
-JSCompiler.prototype.compileFunctionJSCode = function (customBlock, inputs) {
-    declaritions = customBlock.definition.body.inputs;
+JSCompiler.prototype.cleanJSVarName = function (text) {
+    text = text.replaceAll("_", "__"); // Escaping underscore myself
+    text = text.replaceAll("%", "_");
+    text = encodeURIComponent(text);
+    text = text.replaceAll("%", "_");
+    return text;
+}
 
-    // passing parameters if any were passed
-    if (inputs.length > 0) {
-        input_values = inputs.map(this.compileInput)
-        // assign formal parameters
-        for (i = 0; i < inputs.length; i += 1) {
-            value = 0;
-            if (!isNil(input_values[i])) {
-                value = input_values[i];
-            }
-            outer.variables.addVar(declaritions[i], value);
+JSCompiler.prototype.compileFunctionJSCode = function (customBlock) {
+    var declarations = customBlock.definition.declarations;
+    var param_vars = customBlock.definition.body.inputs;
+    var cleaned_param_vars = customBlock.definition.body.inputs.map(this.cleanJSVarName);
 
-            // if the parameter is an upvar,
-            // create a reference to the variable it points to
-            if (declarations.get(declaritions[i])[0] === '%upvar') {
-                this.context.outerContext.variables.vars[value] =
-                    outer.variables.vars[context.inputs[i]];
-            }
+    variable_assignment_code = [];
+
+    var proc_context_vars = "current_process.context.variables";
+
+    // assign formal parameters
+    for (i = 0; i < param_vars.length; i += 1) {
+        var_decl = this.cleanJSVarName(param_vars[i]);
+        variable_assignment_code.push(`${proc_context_vars}.addVar("${var_decl}", ${cleaned_param_vars[i]})`);
+
+        // if the parameter is an upvar,
+        // create a reference to the variable it points to
+        if (declarations.get(param_vars[i])[0] === '%upvar') {
+            variable_assignment_code.push(`current_process.context.outerContext.variables.vars["${var_decl}"] = ${proc_context_vars}.vars["${var_decl}"]`);
         }
     }
+
+    var final_variable_assignment_code = variable_assignment_code.join(";\n");
+    if (final_variable_assignment_code.length > 0) {
+        final_variable_assignment_code += ";\n";
+    }
+
+    var body = this.compileSequence(customBlock.definition.body.expression);
+
+    var func_code = `function* (SpriteMorph_prototype, current_process, ${param_vars.map(this.cleanJSVarName).join(", ")}) {
+    ${final_variable_assignment_code}
+    current_process.pushContext(null, current_process.context);
+    ${body}
+    current_process.popContext();
+}`;
+
+    return func_code;
 }
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -184,25 +206,24 @@ JSCompiler.prototype.compileExpression = function (block) {
         4. Check if how many procedure call so far (this exists in Process already) and then "yield"
         LAST. Pop the context
         */
+
+        var function_name = this.cleanJSVarName(block.blockSpec);
+
         if (block.to_compile) {
             block.to_compile = false;
-
-            // TODO Compile it
+            
             try {
-                let func_code = this.compileFunction(block, inputs);
-
-
+                func_code = this.compileFunctionJSCode(block, inputs);
+                eval(`block.compiled_function = ${func_code}`);
             } catch (error) {
                 block.to_compile = true;
+                throw error;
             }
-
-            
         }
-        block.to_compile = true; // Tempory
-        throw new Error(
-            'compiling does not yet support\n' +
-            'custom blocks'
-        );
+
+        var processed_inputs = this.compileInputs(inputs);
+
+        return `${function_name}(SpriteMorph_prototype, current_process, ${processed_inputs})`
 
     // special evaluation primitives
     case 'doRun':
@@ -385,12 +406,20 @@ for (${initalizer}; ${loop_condition}; ${incrementor}) {
 JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
     this.yield_enabled = true;
     var body = this.compileSequence(commandBlock);
-    return "function* (SpriteMorph_prototype, current_process) {\n" + body + "}\n";
+    return `function* (SpriteMorph_prototype, current_process, custom_blocks) {
+    for (let i = 0; i < custom_blocks.length; i++) {
+        custom_blocks.
+    }
+    ${body}
+}`;
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     commandBlock.blockSequence().forEach(block => {
+        if (block.selector == "reportGo") {
+            return;
+        }
         body += this.compileExpression(block);
         body += ';\n';
     });
@@ -412,6 +441,16 @@ JSCompiler.prototype.compileInputs = function (array) {
     });
     return args;
 };
+
+JSCompiler.prototype.process_text = function (text) {
+    // enclose in double quotes
+    let encoded_text = encodeURIComponent(text)
+    // If no changes, then no special characters used
+    if (encoded_text == text) {
+        return '"' + text + '"';
+    }
+    return 'decodeURIComponent("' + encoded_text + '")';
+}
 
 JSCompiler.prototype.compileInput = function (inp) {
      var value, type;
@@ -444,17 +483,13 @@ JSCompiler.prototype.compileInput = function (inp) {
         case 'Boolean':
             return '' + value;
         case 'text':
-            // enclose in double quotes
-            let encoded_text = encodeURIComponent(value)
-            // If no changes, then no special characters used
-            if (encoded_text == value) {
-                return '"' + value + '"';
-            }
-            return 'decodeURIComponent("' + encoded_text + '")';
+            return this.process_text(value)
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
         case 'color':
             return `Color.fromString(${value.toString()})`
+        case 'nothing':
+            return null;
         default:
             if (value instanceof Array) {
                  return '"' + value[0] + '"';
