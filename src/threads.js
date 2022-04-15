@@ -671,7 +671,7 @@ Process.prototype.process_compiler = function (topBlock) {
             }
         } catch (error) {
             topBlock.to_compile = true;
-            this.popContext()
+            this.popContext();
             console.error(error);
             this.handleError(error, topBlock);
             return;
@@ -688,8 +688,11 @@ Process.prototype.process_compiler = function (topBlock) {
         try {
             var gen_output = gen_code.next();
         } catch (error) {
+            topBlock.to_compile = true;
+            this.popContext()
             console.error(error);
-            throw error;
+            this.handleError(error, topBlock);
+            return;
         }
 
         if (!gen_output.done) {
@@ -739,7 +742,7 @@ Process.prototype.runStep = function (deadline) {
         }
         
         if (ALLOW_PROCESS_COMPILERS) {
-            if (this.topBlock.selector == "doYield") {
+            if (this.context.expression == "doYield") {
                 // It already pops itself
                 this.doYield();
             } else {
