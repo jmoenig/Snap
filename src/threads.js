@@ -2497,7 +2497,7 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.pushContext();
     this.context.outerContext.variables.addVar(upvar);
     this.context.outerContext.variables.setVar(upvar, next);
-    this.evaluate(script, new List([next]), true);
+    this.evaluate(script, new List([]), true);  // pass [] for args to disable auto-filling default (RPC) args
 };
 
 Process.prototype.doFor = function (upvar, start, end, script) {
