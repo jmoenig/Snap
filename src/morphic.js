@@ -5686,6 +5686,9 @@ CursorMorph.prototype.processInput = function (event) {
     }
     // target morph: copy the content and selection status to the target.
     target.text = filteredContent;
+    var topBlock = target.parentThatIsA(CommandBlockMorph).topBlock();
+    topBlock.to_compile = true;
+    topBlock.compiled_function = null;
 
     if (textarea.selectionStart === textarea.selectionEnd) {
         target.startMark = null;

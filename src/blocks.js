@@ -9227,6 +9227,8 @@ InputSlotMorph.prototype.menuFromDict = function (
         );
 
 	function update(num) {
+        block.to_compile = true;
+        block.compiled_function = null;
     	myself.setContents(num);
         myself.reactToSliderEdit();
         if (ide && !block.isTemplate) {
