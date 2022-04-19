@@ -65,7 +65,7 @@ StagePickerMorph*/
 
 /*jshint esversion: 6, bitwise: false, evil: true*/
 
-modules.threads = '2022-April-08';
+modules.threads = '2022-April-19';
 
 var ThreadManager;
 var Process;
@@ -3699,6 +3699,13 @@ Process.prototype.doAsk = function (data) {
                 this.prompter.inputField.edit();
                 stage.changed();
             }
+        } else if (!data) {
+            // terminate the processes currently asking a question
+            // making way for the next one waiting to ask one
+            stage.threads.processes.filter(proc =>
+                proc.prompter && !proc.prompter.isDone
+            ).forEach(proc => proc.stop());
+            return;
         }
     } else {
         if (this.prompter.isDone) {

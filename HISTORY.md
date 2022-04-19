@@ -4,6 +4,7 @@
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
+    * ASK nothing or a falsy value terminates the thread currently displaying a question
     * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
@@ -38,6 +39,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-04-19
+* threads: ASK nothing or a falsy value terminates the thread currently displaying a question
 
 ### 2022-04-08
 * blocks, threads: added new "label" selector to OF BLOCK's block dropdown
