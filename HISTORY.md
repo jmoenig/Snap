@@ -16,7 +16,7 @@
     * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
     * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
-    * new "Tad" costume series, thanks, Meghan and Brian!
+    * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
@@ -35,7 +35,7 @@
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
-    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian and Peter!
+    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
