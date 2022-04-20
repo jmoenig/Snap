@@ -8,6 +8,7 @@
     * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
+    * export block definitions from inside the block editor
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
@@ -43,6 +44,7 @@
 ### 2022-04-20
 * threads: terminate all threads waiting to display a question on ASKing a falsy value
 * threads: clear "answer" on ASK nothing/falsy
+* byob, blocks: export block definition from inside the block editor
 
 ### 2022-04-19
 * threads: ASK nothing or a falsy value terminates the thread currently displaying a question

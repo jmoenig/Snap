@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-April-08';
+modules.blocks = '2022-April-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3348,11 +3348,19 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    menu.addItem(
-        'export script',
-        () => top.exportScript(),
-        'download this script\nas an XML file'
-    );
+    if (top instanceof PrototypeHatBlockMorph) {
+        menu.addItem(
+            "export...",
+            () => top.exportBlockDefinition(),
+            'including dependencies'
+        );
+    } else {
+        menu.addItem(
+            'export script',
+            () => top.exportScript(),
+            'download this script\nas an XML file'
+        );
+    }
     if (proc) {
         if (vNames.length) {
             menu.addLine();

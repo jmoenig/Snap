@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-March-23';
+modules.byob = '2022-April-20';
 
 // Declarations
 
@@ -1218,6 +1218,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             'uncheck to\nhide in palette',
             'check to\nshow in palette'
         );
+        menu.addItem(
+            "export...",
+            () => hat.exportBlockDefinition(),
+            'including dependencies'
+        );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
         dlg = this.parentThatIsA(DialogBoxMorph);
@@ -1312,10 +1317,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        rcvr = this.scriptTarget(),
-        def = this.isGlobal ? this.definition
-            : rcvr.getMethod(this.blockSpec);
+    var rcvr = this.scriptTarget(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        def = this.isGlobal || this instanceof PrototypeHatBlockMorph ?
+            this.definition
+                : rcvr.getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
         [def].concat(def.collectDependencies([], [], rcvr)),
@@ -2789,6 +2795,9 @@ PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
 PrototypeHatBlockMorph.prototype.userMenu = function () {
     return this.parts()[0].userMenu();
 };
+
+PrototypeHatBlockMorph.prototype.exportBlockDefinition =
+    CustomCommandBlockMorph.prototype.exportBlockDefinition;
 
 // PrototypeHatBlockMorph zebra coloring
 
