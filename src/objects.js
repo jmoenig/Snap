@@ -93,7 +93,7 @@ BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-April-04';
+modules.objects = '2022-April-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -10403,7 +10403,7 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 /*
     I am a picture that's "wearable" by a sprite. My rotationCenter is
-    relative to my contents position.
+    relative to my contents position. I can also contain and share code.
 */
 
 // Costume instance creation
@@ -10414,6 +10414,7 @@ function Costume(canvas, name, rotationCenter, noFit, maxExtent) {
     if (!noFit) {this.shrinkToFit(maxExtent || this.maxExtent()); }
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
+    this.code = null;
     this.version = Date.now(); // for observer optimization
     this.loaded = null; // for de-serialization only
 }

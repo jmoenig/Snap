@@ -45,6 +45,7 @@
 * threads: terminate all threads waiting to display a question on ASKing a falsy value
 * threads: clear "answer" on ASK nothing/falsy
 * byob, blocks: export block definition from inside the block editor
+* objects: added "code" field to Costume constructor
 
 ### 2022-04-19
 * threads: ASK nothing or a falsy value terminates the thread currently displaying a question
