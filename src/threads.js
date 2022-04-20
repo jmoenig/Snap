@@ -667,7 +667,7 @@ Process.prototype.process_compiler = function (topBlock) {
                 topBlock.to_compile = false; // Compiled now, no need to recompile
             }
             if (topBlock.compiled_function) {
-                gen_code = topBlock.compiled_function(this.receiver, this);
+                gen_code = topBlock.compiled_function(this.receiver, this, JSCompiler.prototype.getCustomBlock);
             }
         } catch (error) {
             topBlock.to_compile = true;

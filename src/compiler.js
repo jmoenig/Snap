@@ -138,11 +138,19 @@ JSCompiler.prototype.cleanJSVarName = function (text) {
     return text;
 }
 
-JSCompiler.prototype.compileFunctionJSCode = function (customBlock) {
-    var declarations = customBlock.definition.declarations;
-    var param_vars = customBlock.definition.body.inputs;
-    var cleaned_param_vars = customBlock.definition.body.inputs.map(this.cleanJSVarName);
-
+JSCompiler.prototype.compileFunctionJSCode = function (customBlockDefinition) {
+    // Input: customBlockDefinition: CustomBlockDefinition 
+    var declarations = customBlockDefinition.declarations;
+    var body = customBlockDefinition.body;
+    var param_vars, cleaned_param_vars;
+    if (body) {
+        param_vars = body.inputs;
+        cleaned_param_vars = body.inputs.map(this.cleanJSVarName);
+    } else {
+        param_vars = [];
+        cleaned_param_vars = [];
+    }
+    
     variable_assignment_code = [];
 
     var proc_context_vars = "current_process.context.variables";
@@ -164,12 +172,20 @@ JSCompiler.prototype.compileFunctionJSCode = function (customBlock) {
         final_variable_assignment_code += ";\n";
     }
 
-    var body = this.compileSequence(customBlock.definition.body.expression);
+    var body_compiled = "";
+    if (body) {
+        body_compiled = this.compileSequence(body.expression);
+    }
 
-    var func_code = `function* (SpriteMorph_prototype, current_process, ${param_vars.map(this.cleanJSVarName).join(", ")}) {
+    var func_params = "SpriteMorph_prototype, current_process, get_custom_block";
+    if (param_vars.length > 0) {
+        func_params = `${func_params}, ${param_vars.map(this.cleanJSVarName).join(", ")}`;
+    }
+
+    var func_code = `function* (${func_params}) {
     ${final_variable_assignment_code}
     current_process.pushContext(null, current_process.context);
-    ${body}
+    ${body_compiled}
     current_process.popContext();
 }`;
 
@@ -207,23 +223,26 @@ JSCompiler.prototype.compileExpression = function (block) {
         LAST. Pop the context
         */
 
-        var function_name = this.cleanJSVarName(block.blockSpec);
+        var function_name = this.process_text(block.blockSpec);
 
-        if (block.to_compile) {
-            block.to_compile = false;
+        if (block.definition.to_compile) {
+            block.definition.to_compile = false;
             
             try {
-                func_code = this.compileFunctionJSCode(block, inputs);
-                eval(`block.compiled_function = ${func_code}`);
+                func_code = this.compileFunctionJSCode(block.definition, inputs);
+                eval(`block.definition.compiled_function = ${func_code}`);
             } catch (error) {
-                block.to_compile = true;
+                block.definition.to_compile = true;
                 throw error;
             }
         }
 
-        var processed_inputs = this.compileInputs(inputs);
+        var func_params = "SpriteMorph_prototype, current_process, get_custom_block"
+        if (inputs.length > 0) {
+            func_params = `${func_params}, ${this.compileInputs(inputs)}`
+        }
 
-        return `${function_name}(SpriteMorph_prototype, current_process, ${processed_inputs})`
+        return `yield *get_custom_block(SpriteMorph_prototype, ${function_name}, ${block.definition.isGlobal}).compiled_function(${func_params})`
 
     // special evaluation primitives
     case 'doRun':
@@ -406,10 +425,7 @@ for (${initalizer}; ${loop_condition}; ${incrementor}) {
 JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
     this.yield_enabled = true;
     var body = this.compileSequence(commandBlock);
-    return `function* (SpriteMorph_prototype, current_process, custom_blocks) {
-    for (let i = 0; i < custom_blocks.length; i++) {
-        custom_blocks.
-    }
+    return `function* (SpriteMorph_prototype, current_process, get_custom_block) {
     ${body}
 }`;
 };
@@ -443,13 +459,14 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.process_text = function (text) {
-    // enclose in double quotes
-    let encoded_text = encodeURIComponent(text)
-    // If no changes, then no special characters used
-    if (encoded_text == text) {
-        return '"' + text + '"';
-    }
-    return 'decodeURIComponent("' + encoded_text + '")';
+    return JSON.stringify(text);
+    // // enclose in double quotes
+    // let encoded_text = encodeURIComponent(text)
+    // // If no changes, then no special characters used
+    // if (encoded_text == text) {
+    //     return '"' + text + '"';
+    // }
+    // return 'decodeURIComponent("' + encoded_text + '")';
 }
 
 JSCompiler.prototype.compileInput = function (inp) {
@@ -526,3 +543,21 @@ JSCompiler.prototype.compileInput = function (inp) {
         );
     }
 };
+
+JSCompiler.prototype.getCustomBlock = function(SpriteMorph_prototype, blockName, global) {
+    var blockList;
+    if (global) {
+        let stage = SpriteMorph_prototype.parentThatIsA(StageMorph);
+        if (!stage) {
+            return null;
+        }
+        blockList = stage.globalBlocks;
+    } else {
+        blockList = SpriteMorph_prototype.customBlocks;
+    }
+    blockList = blockList.filter((def, i) => def.blockSpec() === blockName);
+    if (blockList.length != 1) {
+        console.log("Block", blockName, "not found");
+    }
+    return blockList[0];
+}

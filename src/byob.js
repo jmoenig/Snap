@@ -161,6 +161,10 @@ function CustomBlockDefinition(spec, receiver) {
 
 	// transient - for "wishes"
  	this.storedSemanticSpec = null;
+
+    // Compiler variables
+    this.to_compile = true;
+    this.compiled_funciton = null;
 }
 
 // CustomBlockDefinition instantiating blocks
