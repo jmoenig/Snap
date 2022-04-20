@@ -3654,6 +3654,7 @@ Process.prototype.doAsk = function (data) {
             (proc.prompter && !proc.prompter.isDone) ||
             (proc?.context?.expression?.selector === 'doAsk' && proc !== this)
         ).forEach(proc => proc.stop());
+        stage.lastAnswer = '';
         return;
     }
     if (!this.prompter) {
