@@ -4,7 +4,7 @@
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
-    * ASK nothing or a falsy value terminates all threads currently displaying a question or waiting to ask one and resets the last "answer"
+    * ASK nothing or a falsy value terminates all threads currently displaying a question or waiting to ask one and clears the last "answer"
     * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
@@ -42,7 +42,7 @@
 
 ### 2022-04-20
 * threads: terminate all threads waiting to display a question on ASKing a falsy value
-* threads: reset "answer" on ASK nothing
+* threads: clear "answer" on ASK nothing/falsy
 
 ### 2022-04-19
 * threads: ASK nothing or a falsy value terminates the thread currently displaying a question
