@@ -63,9 +63,9 @@ TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph,
 StagePickerMorph*/
 
-/*jshint esversion: 6, bitwise: false, evil: true*/
+/*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-April-19';
+modules.threads = '2022-April-20';
 
 var ThreadManager;
 var Process;
@@ -3647,6 +3647,15 @@ Process.prototype.doAsk = function (data) {
         rightSpace;
 
     stage.keysPressed = {};
+    if (!data) {
+        // terminate all other processes currently asking a question
+        // or waiting to ask one
+        stage.threads.processes.filter(proc =>
+            (proc.prompter && !proc.prompter.isDone) ||
+            (proc?.context?.expression?.selector === 'doAsk' && proc !== this)
+        ).forEach(proc => proc.stop());
+        return;
+    }
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
@@ -3699,13 +3708,6 @@ Process.prototype.doAsk = function (data) {
                 this.prompter.inputField.edit();
                 stage.changed();
             }
-        } else if (!data) {
-            // terminate the processes currently asking a question
-            // making way for the next one waiting to ask one
-            stage.threads.processes.filter(proc =>
-                proc.prompter && !proc.prompter.isDone
-            ).forEach(proc => proc.stop());
-            return;
         }
     } else {
         if (this.prompter.isDone) {
