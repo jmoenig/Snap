@@ -46,6 +46,7 @@
 * threads: clear "answer" on ASK nothing/falsy
 * byob, blocks: export block definition from inside the block editor
 * objects: added "code" field to Costume constructor
+* objects, gui, extensions, store: support blocks embedded into costumes (under construction)
 
 ### 2022-04-19
 * threads: ASK nothing or a falsy value terminates the thread currently displaying a question

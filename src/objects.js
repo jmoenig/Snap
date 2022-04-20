@@ -10414,7 +10414,7 @@ function Costume(canvas, name, rotationCenter, noFit, maxExtent) {
     if (!noFit) {this.shrinkToFit(maxExtent || this.maxExtent()); }
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
-    this.code = null;
+    this.code = null; // must be a string or null
     this.version = Date.now(); // for observer optimization
     this.loaded = null; // for de-serialization only
 }

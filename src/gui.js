@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-06';
+modules.gui = '2022-April-20';
 
 // Declarations
 
@@ -9919,11 +9919,13 @@ CostumeIconMorph.prototype.init = function (aCostume) {
 };
 
 CostumeIconMorph.prototype.createThumbnail = function () {
-    var txt;
+    var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
-    if (this.object instanceof SVG_Costume) {
+    watermark = this.object instanceof SVG_Costume ? 'svg'
+        : (this.object.code ? '</>' : null);
+    if (watermark) {
         txt = new StringMorph(
-            'svg',
+            watermark,
             this.fontSize * 0.8,
             this.fontStyle,
             false,
@@ -9970,6 +9972,9 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
+    if (this.object.code) {
+        menu.addItem("get blocks", "importCode");
+    }
     menu.addItem("export", "exportCostume");
     return menu;
 };
@@ -10047,6 +10052,10 @@ CostumeIconMorph.prototype.removeCostume = function () {
     if (ide.currentSprite.costume === this.object) {
         ide.currentSprite.wearCostume(null);
     }
+};
+
+CostumeIconMorph.prototype.importCode = function () {
+    this.parentThatIsA(IDE_Morph).droppedText(this.object.code);
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
