@@ -35,14 +35,15 @@ SnapExtensions.primitives.set(
         context.translate(trans.x, trans.y);
         context.rotate(rotation);
 
-        var dimensions = renderText(text, canvas, size, 0, 0, font, color);
-        len = dimensions[0];
+        var dimensions = renderText(text, canvas, size, 0, 0, font, color),
+            len = dimensions[0],
+            height = dimensions[1];
 
         context.translate(-trans.x, -trans.y);
         context.restore();
         pos = new Point(
-            len * Math.sin(radians(sprite.direction())),
-            len * Math.cos(radians(sprite.direction())));
+            len * Math.sin(radians(sprite.direction())) + height * Math.cos(radians(sprite.direction())),
+            len * Math.cos(radians(sprite.direction())) - height * Math.sin(radians(sprite.direction())));
         pos = pos.add(new Point(sprite.xPosition(), sprite.yPosition()));
         sprite.gotoXY(pos.x, pos.y, false);
         sprite.changed();
