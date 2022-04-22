@@ -46,6 +46,7 @@
 ### 2022-04-22
 * morphic, objects, gui: support embedding blocks into PNG metadata
 * blocks: automatically include extractable blocks in all script pics & result pics
+* morphic: catch errors when decoding embedded PNG metadata
 
 ### 2022-04-20
 * threads: terminate all threads waiting to display a question on ASKing a falsy value

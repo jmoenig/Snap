@@ -11791,14 +11791,20 @@ HandMorph.prototype.processDrop = function (event) {
 
                 // extract embedded data (e.g. blocks)
                 // from the image's meta data if present.
-                let buff = new Uint8Array(await file?.arrayBuffer()),
+                var buff = new Uint8Array(await file?.arrayBuffer()),
                     strBuff = buff.reduce((acc, b) =>
                         acc + String.fromCharCode(b), ""),
-                    embedded = strBuff.includes(embedTag) ?
-                        decodeURIComponent(
+                    embedded;
+
+                if (strBuff.includes(embedTag)) {
+                    try {
+                        embedded = decodeURIComponent(
                             escapeString((strBuff)?.split(embedTag)[1])
-                        )
-                        : null;
+                        );
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
 
                 trg.droppedImage(canvas, aFile.name, embedded);
                 bulkDrop();
