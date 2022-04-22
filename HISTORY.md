@@ -9,6 +9,8 @@
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * export block definitions from inside the block editor
+    * embed blocks into costume metadata to be shared as image file
+    * exported script pics now always include the actual blocks, which can be extracted from the image inside Snap!
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
@@ -43,6 +45,7 @@
 
 ### 2022-04-22
 * morphic, objects, gui: support embedding blocks into PNG metadata
+* blocks: automatically include extractable blocks in all script pics & result pics
 
 ### 2022-04-20
 * threads: terminate all threads waiting to display a question on ASKing a falsy value
