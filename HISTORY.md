@@ -41,6 +41,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-22
+* morphic, objects, gui: support embedding blocks into PNG metadata
+
 ### 2022-04-20
 * threads: terminate all threads waiting to display a question on ASKing a falsy value
 * threads: clear "answer" on ASK nothing/falsy

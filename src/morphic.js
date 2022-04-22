@@ -642,7 +642,7 @@
 
     Drops of image elements from outside the world canvas are dispatched as
 
-        droppedImage(aCanvas, name)
+        droppedImage(aCanvas, name, embeddedCode)
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want your Morph
@@ -663,8 +663,22 @@
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
 
-    The same applies to drops of audio or text files from outside the world
-    canvas.
+    Note that PNG images provide for embedded text comments, which can be used
+    to include code inside the image. Such a payload has to be identified by
+    an agreed-upon marker. The default tag is stored in MorphicPreferences and
+    can be overriden by apps wishing to make use of this feature. If such an
+    embedded text-payload is found inside a PNG it is passed as the optional
+    third "embeddedCode" parameter to the "droppedImage()" event. embedded text
+    only applies to PNGs. You can embed a string into the PNG metadata of a PNG
+    by  calling
+
+        embedMetadataPNG(aCanvas, aString)
+
+    with a raster image represented by a canvas and a string that is to be
+    embedded into the PNG's metadata.
+
+    The same event mechanism applies to drops of audio or text files from
+    outside the world canvas.
 
     Those are dispatched as
 
@@ -1276,6 +1290,8 @@
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
     Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Dariusz Dorożalski and Jesus Villalobos contributed embedding blocks
+    into image metadata.
     Bernat Romagosa contributed to text editing and to the core design.
     Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
@@ -1289,9 +1305,9 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-January-28';
+var morphicVersion = '2022-April-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1303,6 +1319,7 @@ const CLEAR = new Color(0, 0, 0, 0);
 Object.freeze(ZERO);
 Object.freeze(BLACK);
 Object.freeze(WHITE);
+Object.freeze(CLEAR);
 
 var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
@@ -1318,6 +1335,7 @@ var standardSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: false, // turned on by touch events, don't set
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1338,6 +1356,7 @@ var touchScreenSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: true,
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1568,6 +1587,65 @@ function copy(target) {
     }
     return c;
 }
+
+function escapeString(str) {
+    var len, R = '', k = 0, S, chr, ord,
+        ascii = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' +
+            '0123456789@*_+-./,';
+    str = str.toString();
+    len = str.length;
+    while(k < len) {
+        chr = str[k];
+        if (ascii.indexOf(chr) != -1) {
+            S = chr;
+        } else {
+            ord = str.charCodeAt(k);
+            if (ord < 256) {
+                S = '%' + ("00" + ord.toString(16)).toUpperCase().slice(-2);
+            } else {
+                S = '%u' + ("0000" + ord.toString(16)).toUpperCase().slice(-4);
+            }
+        }
+        R += S;
+        k++;
+    }
+    return R;
+}
+
+function embedMetadataPNG(aCanvas, aString) {
+    var embedTag = MorphicPreferences.pngPayloadMarker,
+        crc32 = (str, crc) => {
+            let table = [...Array(256).keys()].map(it =>
+                [...Array(8)].reduce((cc) =>
+                (cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
+                );
+            crc = [...str].reduce(
+                (crc, ch) => (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff],
+                (crc ? crc = 0 : crc) ^ (-1) // (crc ||= 0) ^ (-1)
+            );
+            return ( crc ^ (-1) ) >>> 0;
+        },
+        arr2Str = (arr) =>
+            arr.reduce((res, byte) => res + String.fromCharCode(byte), ''),
+        int2BStr = (val) =>
+            arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse()),
+        buildChunk = (data) => {
+            let res = "iTXt" + data;
+            return int2BStr(data.length) + res + int2BStr(crc32(res));
+        },
+        parts = aCanvas.toDataURL("image/png").split(","),
+        bPart = atob(parts[1]).split(""),
+        newChunk = buildChunk(
+            "Snap!_SRC\0\0\0\0\0" +
+            embedTag +
+            aString +
+            embedTag
+        );
+    bPart.splice(-12, 0, ...newChunk);
+    parts[1] = btoa(bPart.join(""));
+    return parts.join(',');
+}
+
 
 // Retina Display Support //////////////////////////////////////////////
 
@@ -11643,7 +11721,7 @@ HandMorph.prototype.processDrop = function (event) {
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
 
-        droppedImage(canvas, name)
+        droppedImage(canvas, name, embeddedCode)
         droppedSVG(image, name)
         droppedAudio(audio, name)
         droppedText(text, name, type)
@@ -11692,16 +11770,41 @@ HandMorph.prototype.processDrop = function (event) {
     function readImage(aFile) {
         var pic = new Image(),
             frd = new FileReader(),
-            trg = target;
+            url = event.dataTransfer?.getData( "text/uri-list"),
+            file = event.dataTransfer?.files?.[0],
+            trg = target,
+            embedTag = MorphicPreferences.pngPayloadMarker;
+
         while (!trg.droppedImage) {
             trg = trg.parent;
         }
+                
         pic.onload = () => {
             canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
-            trg.droppedImage(canvas, aFile.name);
-            bulkDrop();
+
+            (async () => {
+                if (!file && url) {
+                    // alternative: "https://api.allorigins.win/raw?url=" + url
+                    file = await fetch(url);
+                }
+
+                // extract embedded data (e.g. blocks)
+                // from the image's meta data if present.
+                let buff = new Uint8Array(await file?.arrayBuffer()),
+                    strBuff = buff.reduce((acc, b) =>
+                        acc + String.fromCharCode(b), ""),
+                    embedded = strBuff.includes(embedTag) ?
+                        decodeURIComponent(
+                            escapeString((strBuff)?.split(embedTag)[1])
+                        )
+                        : null;
+
+                trg.droppedImage(canvas, aFile.name, embedded);
+                bulkDrop();
+            })();
         };
+
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);

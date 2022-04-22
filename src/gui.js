@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-20';
+modules.gui = '2022-April-22';
 
 // Declarations
 
@@ -2471,7 +2471,7 @@ IDE_Morph.prototype.endBulkDrop = function () {
     this.bulkDropInProgress = false;
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedCode) {
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2491,6 +2491,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
+    costume.code = embeddedCode || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -10063,6 +10064,9 @@ CostumeIconMorph.prototype.exportCostume = function () {
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else if (this.object.code) {
+        // embed blocks code inside the PNG image data
+        ide.saveFileAs(this.object.pngData(), 'image/png', this.object.name);
     } else { // rasterized Costume
         ide.saveCanvasAs(this.object.contents, this.object.name);
     }

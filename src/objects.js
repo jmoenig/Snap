@@ -89,11 +89,12 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
-BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
+embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-April-20';
+modules.objects = '2022-April-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -10774,6 +10775,12 @@ Costume.prototype.isTainted = function () {
         return true;
     }
     return false;
+};
+
+// Costume storing blocks code in PNG exports
+
+Costume.prototype.pngData = function () {
+    return embedMetadataPNG(this.contents, this.code);
 };
 
 // SVG_Costume /////////////////////////////////////////////////////////////
