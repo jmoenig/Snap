@@ -43,6 +43,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-24
+* morphic: fixed an encoding bug for embedding blocks in PNG metadata
+
 ### 2022-04-22
 * morphic, objects, gui: support embedding blocks into PNG metadata
 * blocks: automatically include extractable blocks in all script pics & result pics

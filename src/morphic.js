@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-22';
+var morphicVersion = '2022-April-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1588,30 +1588,6 @@ function copy(target) {
     return c;
 }
 
-function escapeString(str) {
-    var len, R = '', k = 0, S, chr, ord,
-        ascii = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' +
-            '0123456789@*_+-./,';
-    str = str.toString();
-    len = str.length;
-    while(k < len) {
-        chr = str[k];
-        if (ascii.indexOf(chr) != -1) {
-            S = chr;
-        } else {
-            ord = str.charCodeAt(k);
-            if (ord < 256) {
-                S = '%' + ("00" + ord.toString(16)).toUpperCase().slice(-2);
-            } else {
-                S = '%u' + ("0000" + ord.toString(16)).toUpperCase().slice(-4);
-            }
-        }
-        R += S;
-        k++;
-    }
-    return R;
-}
-
 function embedMetadataPNG(aCanvas, aString) {
     var embedTag = MorphicPreferences.pngPayloadMarker,
         crc32 = (str, crc) => {
@@ -1638,7 +1614,7 @@ function embedMetadataPNG(aCanvas, aString) {
         newChunk = buildChunk(
             "Snap!_SRC\0\0\0\0\0" +
             embedTag +
-            aString +
+            encodeURIComponent(aString) +
             embedTag
         );
     bPart.splice(-12, 0, ...newChunk);
@@ -11799,7 +11775,7 @@ HandMorph.prototype.processDrop = function (event) {
                 if (strBuff.includes(embedTag)) {
                     try {
                         embedded = decodeURIComponent(
-                            escapeString((strBuff)?.split(embedTag)[1])
+                            (strBuff)?.split(embedTag)[1]
                         );
                     } catch (err) {
                         console.log(err);
