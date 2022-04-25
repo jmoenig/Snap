@@ -642,7 +642,7 @@
 
     Drops of image elements from outside the world canvas are dispatched as
 
-        droppedImage(aCanvas, name, embeddedCode)
+        droppedImage(aCanvas, name, embeddedData)
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want your Morph
@@ -664,13 +664,13 @@
     SVG.
 
     Note that PNG images provide for embedded text comments, which can be used
-    to include code inside the image. Such a payload has to be identified by
-    an agreed-upon marker. The default tag is stored in MorphicPreferences and
-    can be overriden by apps wishing to make use of this feature. If such an
-    embedded text-payload is found inside a PNG it is passed as the optional
-    third "embeddedCode" parameter to the "droppedImage()" event. embedded text
-    only applies to PNGs. You can embed a string into the PNG metadata of a PNG
-    by  calling
+    to include code or arbitrary data such as a CSV, JSON or XML file inside
+    the image. Such a payload has to be identified by an agreed-upon marker.
+    The default tag is stored in MorphicPreferences and can be overriden by
+    apps wishing to make use of this feature. If such an embedded text-payload
+    is found inside a PNG it is passed as the optional third "embeddedData"
+    parameter to the "droppedImage()" event. embedded text only applies to PNGs.
+    You can embed a string into the PNG metadata of a PNG by  calling
 
         embedMetadataPNG(aCanvas, aString)
 
@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-24';
+var morphicVersion = '2022-April-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11697,7 +11697,7 @@ HandMorph.prototype.processDrop = function (event) {
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
 
-        droppedImage(canvas, name, embeddedCode)
+        droppedImage(canvas, name, embeddedData)
         droppedSVG(image, name)
         droppedAudio(audio, name)
         droppedText(text, name, type)

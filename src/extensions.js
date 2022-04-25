@@ -34,7 +34,7 @@ SVG_Costume*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-20';
+modules.extensions = '2022-April-25';
 
 // Global stuff
 
@@ -673,15 +673,15 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     // experimental, will probably be taken out again, don't rely on this
-    'cst_code(cst, code)',
-    function (cst, code, proc) {
+    'cst_embed(cst, data)',
+    function (cst, data, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(cst, 'costume');
-        proc.assertType(code, 'text');
+        proc.assertType(data, 'text');
         if (cst instanceof SVG_Costume) {
             throw new Error('option currently not supported for SVG costumes');
         }
-        cst.code = code || null;
+        cst.embeddedData = data || null;
         cst.version = Date.now();
         ide.recordUnsavedChanges();
     }

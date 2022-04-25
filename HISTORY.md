@@ -43,6 +43,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-25
+* morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"
+
 ### 2022-04-24
 * morphic: fixed an encoding bug for embedding blocks in PNG metadata
 
