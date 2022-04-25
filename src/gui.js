@@ -10056,7 +10056,11 @@ CostumeIconMorph.prototype.removeCostume = function () {
 };
 
 CostumeIconMorph.prototype.importEmbeddedData = function () {
-    this.parentThatIsA(IDE_Morph).droppedText(this.object.embeddedData);
+    this.parentThatIsA(IDE_Morph).droppedText(
+        this.object.embeddedData,
+        this.object.name,
+        ''
+    );
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
