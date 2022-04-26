@@ -155,13 +155,13 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
-CostumeIconMorph, SoundIconMorph, SVG_Costume*/
+CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-March-31';
+modules.blocks = '2022-April-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -801,6 +801,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            'label': ['label'],
             'definition': ['definition'],
             'category': ['category'],
             'custom?': ['custom?'],
@@ -2496,9 +2497,12 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     ctx.drawImage(scr, 0, pic.height - scr.height);
     ctx.drawImage(bub, scr.width + 2, 0);
     // request to open pic in new window.
-    ide.saveCanvasAs(
-        pic,
-        (ide.projectName || localize('untitled')) + ' ' + localize('script pic')
+
+    ide.saveFileAs(
+        embedMetadataPNG(pic, this.toXMLString()),
+        'image/png',
+        (ide.getProjectName() || localize('untitled')) + ' ' +
+            localize('script pic')
     );
 };
 
@@ -2960,6 +2964,14 @@ BlockMorph.prototype.rebuild = function (contrast) {
     }
 };
 
+BlockMorph.prototype.abstractBlockSpec = function () {
+	// answer the semantic block spec substituting each input
+ 	// with an underscore. Used as "name" of the Block.
+    return this.parseSpec(this.blockSpec).map(str =>
+        (str.length > 1 && (str[0]) === '%') ? '_' : str
+    ).join(' ');
+};
+
 // BlockMorph menu:
 
 BlockMorph.prototype.userMenu = function () {
@@ -3318,12 +3330,25 @@ BlockMorph.prototype.userMenu = function () {
         "script pic...",
         () => {
             var ide = this.parentThatIsA(IDE_Morph) ||
-                this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
-                    IDE_Morph
-            );
-            ide.saveCanvasAs(
-                top.scriptPic(),
-                (ide.projectName || localize('untitled')) + ' ' +
+                    this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
+                        IDE_Morph),
+                xml = top instanceof PrototypeHatBlockMorph ?
+                    ide.blocksLibraryXML(
+                        [top.definition].concat(
+                            top.definition.collectDependencies(
+                                [],
+                                [],
+                                top.scriptTarget()
+                            )
+                        ),
+                        null,
+                        true
+                    )
+                    : top.toXMLString();
+            ide.saveFileAs(
+                embedMetadataPNG(top.scriptPic(), xml),
+                'image/png',
+                (ide.getProjectName() || localize('untitled')) + ' ' +
                     localize('script pic')
             );
         },
@@ -3339,11 +3364,19 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    menu.addItem(
-        'export script',
-        () => top.exportScript(),
-        'download this script\nas an XML file'
-    );
+    if (top instanceof PrototypeHatBlockMorph) {
+        menu.addItem(
+            "export...",
+            () => top.exportBlockDefinition(),
+            'including dependencies'
+        );
+    } else {
+        menu.addItem(
+            'export script',
+            () => top.exportScript(),
+            'download this script\nas an XML file'
+        );
+    }
     if (proc) {
         if (vNames.length) {
             menu.addLine();
@@ -7995,7 +8028,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
     if (pic) {
         ide.saveCanvasAs(
             pic,
-            (ide.projectName || localize('untitled')) + ' ' +
+            (ide.getProjectName() || localize('untitled')) + ' ' +
                 localize('script pic')
         );
     }

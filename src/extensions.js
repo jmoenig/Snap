@@ -29,11 +29,12 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize, SnapTranslator, isString, detect*/
+Color, Process, contains, localize, SnapTranslator, isString, detect,
+SVG_Costume*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-07';
+modules.extensions = '2022-April-25';
 
 // Global stuff
 
@@ -665,6 +666,24 @@ SnapExtensions.primitives.set(
             ide.hasChangedMedia = true;
             ide.recordUnsavedChanges();
         }
+    }
+);
+
+// Costumes (cst_):
+
+SnapExtensions.primitives.set(
+    // experimental, will probably be taken out again, don't rely on this
+    'cst_embed(cst, data)',
+    function (cst, data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        proc.assertType(data, 'text');
+        if (cst instanceof SVG_Costume) {
+            throw new Error('option currently not supported for SVG costumes');
+        }
+        cst.embeddedData = data || null;
+        cst.version = Date.now();
+        ide.recordUnsavedChanges();
     }
 );
 

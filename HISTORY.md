@@ -4,17 +4,22 @@
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
+    * ASK nothing or a falsy value terminates all threads currently displaying a question or waiting to ask one and clears the last "answer"
     * new "Menus" library
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
+    * export block definitions from inside the block editor
+    * embed blocks into costume metadata to be shared as image file
+    * exported script pics now always include the actual blocks, which can be extracted from the image inside Snap!
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
+    * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
     * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
-    * new "Tad" costume series, thanks, Meghan and Brian!
+    * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
@@ -33,10 +38,35 @@
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
-    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian and Peter!
+    * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-04-25
+* morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"
+
+### 2022-04-24
+* morphic: fixed an encoding bug for embedding blocks in PNG metadata
+
+### 2022-04-22
+* morphic, objects, gui: support embedding blocks into PNG metadata
+* blocks: automatically include extractable blocks in all script pics & result pics
+* morphic: catch errors when decoding embedded PNG metadata
+
+### 2022-04-20
+* threads: terminate all threads waiting to display a question on ASKing a falsy value
+* threads: clear "answer" on ASK nothing/falsy
+* byob, blocks: export block definition from inside the block editor
+* objects: added "code" field to Costume constructor
+* objects, gui, extensions, store: support blocks embedded into costumes (under construction)
+
+### 2022-04-19
+* threads: ASK nothing or a falsy value terminates the thread currently displaying a question
+
+### 2022-04-08
+* blocks, threads: added new "label" selector to OF BLOCK's block dropdown
+* German translation update for "label"
 
 ### 2022-04-07
 * extensions: added "translateback" extension primitive

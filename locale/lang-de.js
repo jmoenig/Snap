@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-03-31', // this, too, will appear in the Translators tab
+        '2022-04-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -731,6 +731,8 @@ SnapTranslator.dict.de = {
         'Vektoraufzeichnung',
     '%block of block %repRing':
         '%block von Block %repRing',
+    'label':
+        'Aufschrift',
     'definition':
         'Definition',
     'category':

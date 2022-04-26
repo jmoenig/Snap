@@ -89,11 +89,12 @@ SpeechBubbleMorph, InputSlotMorph, isNil, FileReader, TableDialogMorph, String,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
-BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph*/
+BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
+embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-April-04';
+modules.objects = '2022-April-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -10403,7 +10404,9 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 /*
     I am a picture that's "wearable" by a sprite. My rotationCenter is
-    relative to my contents position.
+    relative to my contents position. I can also contain embedded data
+    (a string), e.g. for sharing a CSV or JSON or serialized blocks,
+    sprites, scenes in XML format.
 */
 
 // Costume instance creation
@@ -10414,6 +10417,7 @@ function Costume(canvas, name, rotationCenter, noFit, maxExtent) {
     if (!noFit) {this.shrinkToFit(maxExtent || this.maxExtent()); }
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
+    this.embeddedData = null; // must be a string or null
     this.version = Date.now(); // for observer optimization
     this.loaded = null; // for de-serialization only
 }
@@ -10773,6 +10777,12 @@ Costume.prototype.isTainted = function () {
         return true;
     }
     return false;
+};
+
+// Costume storing blocks code in PNG exports
+
+Costume.prototype.pngData = function () {
+    return embedMetadataPNG(this.contents, this.embeddedData);
 };
 
 // SVG_Costume /////////////////////////////////////////////////////////////

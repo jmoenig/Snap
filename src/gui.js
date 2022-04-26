@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-06';
+modules.gui = '2022-April-25';
 
 // Declarations
 
@@ -2471,7 +2471,7 @@ IDE_Morph.prototype.endBulkDrop = function () {
     this.bulkDropInProgress = false;
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2491,6 +2491,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
+    costume.embeddedData = embeddedData || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -9919,11 +9920,13 @@ CostumeIconMorph.prototype.init = function (aCostume) {
 };
 
 CostumeIconMorph.prototype.createThumbnail = function () {
-    var txt;
+    var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
-    if (this.object instanceof SVG_Costume) {
+    watermark = this.object instanceof SVG_Costume ? 'svg'
+        : (this.object.embeddedData ? '</>' : null);
+    if (watermark) {
         txt = new StringMorph(
-            'svg',
+            watermark,
             this.fontSize * 0.8,
             this.fontStyle,
             false,
@@ -9970,6 +9973,9 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
+    if (this.object.embeddedData) {
+        menu.addItem("get blocks", "importEmbeddedData");
+    }
     menu.addItem("export", "exportCostume");
     return menu;
 };
@@ -10049,11 +10055,22 @@ CostumeIconMorph.prototype.removeCostume = function () {
     }
 };
 
+CostumeIconMorph.prototype.importEmbeddedData = function () {
+    this.parentThatIsA(IDE_Morph).droppedText(
+        this.object.embeddedData,
+        this.object.name,
+        ''
+    );
+};
+
 CostumeIconMorph.prototype.exportCostume = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else if (this.object.embeddedData) {
+        // embed payload data (e.g blocks)  inside the PNG image data
+        ide.saveFileAs(this.object.pngData(), 'image/png', this.object.name);
     } else { // rasterized Costume
         ide.saveCanvasAs(this.object.contents, this.object.name);
     }
