@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-25';
+modules.gui = '2022-April-26';
 
 // Declarations
 
@@ -9923,7 +9923,11 @@ CostumeIconMorph.prototype.createThumbnail = function () {
     var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
     watermark = this.object instanceof SVG_Costume ? 'svg'
-        : (this.object.embeddedData ? '</>' : null);
+        : (this.object.embeddedData ? (
+                this.typeOfStringData(this.object.embeddedData) === 'data' ?
+                    'dta' : '</>'
+        )
+            : null);
     if (watermark) {
         txt = new StringMorph(
             watermark,
@@ -9974,7 +9978,10 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("delete", "removeCostume");
     menu.addLine();
     if (this.object.embeddedData) {
-        menu.addItem("get blocks", "importEmbeddedData");
+        menu.addItem(
+            "get" + ' ' + this.typeOfStringData(this.object.embeddedData),
+            "importEmbeddedData"
+        );
     }
     menu.addItem("export", "exportCostume");
     return menu;
@@ -10061,6 +10068,17 @@ CostumeIconMorph.prototype.importEmbeddedData = function () {
         this.object.name,
         ''
     );
+};
+
+CostumeIconMorph.prototype.typeOfStringData = function (aString) {
+    // check for Snap specific files, projects, libraries, sprites, scripts
+    if (aString.startsWith('<')) {
+        if (['project', 'snapdata', 'blocks', 'sprites', 'block'].some(tag =>
+                aString.slice(1).startsWith(tag))) {
+            return 'blocks';
+        }
+    }
+    return 'data';
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
