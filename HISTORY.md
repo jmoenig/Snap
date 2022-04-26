@@ -47,6 +47,7 @@
 * gui: distinguish between embedded blocks code and raw data in PNGs
 * morphic: fixed bulk-drop of images
 * German translation update for "get blocks" and "get data"
+* store: fixed storing costume metadata in projects and sprite
 
 ### 2022-04-25
 * morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"
