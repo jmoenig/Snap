@@ -22,7 +22,8 @@
     * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
-    * exporting / importing a sprite includes dependencies (global custom blocks and palette categories) 
+    * exporting / importing a sprite includes dependencies (global custom blocks and palette categories)
+    * imported single scripts are now placed into the hand, for the user to position them in the scripting area 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
@@ -49,6 +50,7 @@
 * German translation update for "get blocks" and "get data"
 * store: fixed storing costume metadata in projects and sprite
 * gui: switch to scripts pane when extracting blocks or data from a costume
+* morphic, gui: place imported scripts into the hand (not into the scripting pane)
 
 ### 2022-04-25
 * morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"

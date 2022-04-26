@@ -12381,6 +12381,7 @@ WorldMorph.prototype.initEventListeners = function () {
     window.addEventListener(
         "drop",
         event => {
+            this.hand.processMouseMove(event);
             this.hand.processDrop(event);
             event.preventDefault();
         },
