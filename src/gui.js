@@ -10072,9 +10072,16 @@ CostumeIconMorph.prototype.importEmbeddedData = function () {
 
 CostumeIconMorph.prototype.typeOfStringData = function (aString) {
     // check for Snap specific files, projects, libraries, sprites, scripts
-    if (aString.startsWith('<')) {
-        if (['project', 'snapdata', 'blocks', 'sprites', 'block'].some(tag =>
-                aString.slice(1).startsWith(tag))) {
+    if (aString[0] === '<') {
+        if ([
+                'project',
+                'snapdata',
+                'blocks',
+                'sprites',
+                'block',
+                'script'
+            ].some(tag => aString.slice(1).startsWith(tag))
+        ) {
             return 'blocks';
         }
     }
