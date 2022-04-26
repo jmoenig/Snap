@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-25';
+var morphicVersion = '2022-April-26';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11746,8 +11746,6 @@ HandMorph.prototype.processDrop = function (event) {
     function readImage(aFile) {
         var pic = new Image(),
             frd = new FileReader(),
-            url = event.dataTransfer?.getData( "text/uri-list"),
-            file = event.dataTransfer?.files?.[0],
             trg = target,
             embedTag = MorphicPreferences.pngPayloadMarker;
 
@@ -11756,18 +11754,10 @@ HandMorph.prototype.processDrop = function (event) {
         }
                 
         pic.onload = () => {
-            canvas = newCanvas(new Point(pic.width, pic.height), true);
-            canvas.getContext('2d').drawImage(pic, 0, 0);
-
             (async () => {
-                if (!file && url) {
-                    // alternative: "https://api.allorigins.win/raw?url=" + url
-                    file = await fetch(url);
-                }
-
                 // extract embedded data (e.g. blocks)
-                // from the image's meta data if present.
-                var buff = new Uint8Array(await file?.arrayBuffer()),
+                // from the image's metadata if present
+                var buff = new Uint8Array(await aFile?.arrayBuffer()),
                     strBuff = buff.reduce((acc, b) =>
                         acc + String.fromCharCode(b), ""),
                     embedded;
@@ -11781,7 +11771,8 @@ HandMorph.prototype.processDrop = function (event) {
                         console.log(err);
                     }
                 }
-
+                canvas = newCanvas(new Point(pic.width, pic.height), true);
+                canvas.getContext('2d').drawImage(pic, 0, 0);
                 trg.droppedImage(canvas, aFile.name, embedded);
                 bulkDrop();
             })();

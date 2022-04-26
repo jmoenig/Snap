@@ -43,6 +43,10 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-26
+* gui: distinguish between embedded blocks code and raw data in PNGs
+* morphic: fixed bulk-drop of images
+
 ### 2022-04-25
 * morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"
 
