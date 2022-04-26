@@ -48,6 +48,7 @@
 * morphic: fixed bulk-drop of images
 * German translation update for "get blocks" and "get data"
 * store: fixed storing costume metadata in projects and sprite
+* gui: switch to scripts pane when extracting blocks or data from a costume
 
 ### 2022-04-25
 * morphic, gui, objects, extensions: renamed "embeddedCode" property of costumes to "embeddedData"
