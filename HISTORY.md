@@ -44,6 +44,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-27
+* threads, byob: custom block definition api, highly experimental, very much under construction
+
 ### 2022-04-26
 * gui: distinguish between embedded blocks code and raw data in PNGs
 * morphic: fixed bulk-drop of images

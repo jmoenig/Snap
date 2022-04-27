@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-April-20';
+modules.byob = '2022-April-27';
 
 // Declarations
 
@@ -528,6 +528,37 @@ CustomBlockDefinition.prototype.updateTranslations = function (text) {
      		this.translations[key] = val;
      	}
     });
+};
+
+// CustomBlockDefinition API, highly experimental & under construction
+
+CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
+    // private - only to be called from a Process that also does housekeeping
+    // abstract block specs replace the inputs with underscores,
+    // e.g. "move _ steps", "say _", "_ + _"
+    var count = abstractSpec.split(' ').filter(word => word === '_').length,
+        inputNames = this.inputNames(),
+        parts = [],
+        spec = abstractSpec;
+
+    if (count !== inputNames.length) { // not yet sure about this... (jens)
+        throw new Error('expecting the number of inputs to match');
+    }
+    if (spec.startsWith('_ ')) {
+        parts.push('');
+        spec = spec.slice(2);
+    }
+    if (spec.endsWith(' _')) {
+        spec = spec.slice(0, -2);
+    }
+    parts = parts.concat(spec.split(' _ '));
+    spec = '';
+    parts.forEach((part, i) =>
+        spec += (part + (
+            inputNames[i] ? ' %\'' + inputNames[i] + '\' ' : '')
+        )
+    );
+    this.spec = spec.trim();
 };
 
 // CustomBlockDefinition picturing

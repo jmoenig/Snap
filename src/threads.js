@@ -65,7 +65,7 @@ StagePickerMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-April-20';
+modules.threads = '2022-April-27';
 
 var ThreadManager;
 var Process;
@@ -5622,6 +5622,62 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
     }
     return '';
+};
+
+Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
+    // highly experimental & under construction
+    var choice = this.inputOption(attribute),
+        rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        oldSpec,
+        count = 1,
+        expr,
+        def,
+        template;
+
+    this.assertType(block, ['command', 'reporter', 'predicate']);
+    expr = block.expression;
+    def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
+    oldSpec = def.blockSpec();
+
+    switch (choice) {
+    case 'label':
+        def.setBlockLabel(val);
+        break;
+    case 'definition':
+        return;
+    case 'category':
+        return;
+    case 'global?':
+        return;
+    }
+
+    // make sure the spec is unique
+    while (rcvr.doubleDefinitionsFor(def).length > 0) {
+        count += 1;
+        def.spec += (' (' + count + ')');
+    }
+    
+    // update all block instances:
+    // refer to "updateDefinition()" of BlockEditorMorph:
+    template = rcvr.paletteBlockInstance(def);
+
+    if (def.isGlobal) {
+        rcvr.allBlockInstances(def).reverse().forEach(
+            block => block.refresh()
+        );
+    } else {
+        rcvr.allDependentInvocationsOf(oldSpec).reverse().forEach(
+            block => block.refresh(def)
+        );
+    }
+    if (template) {
+        template.refreshDefaults();
+    }
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
