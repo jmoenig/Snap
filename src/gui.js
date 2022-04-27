@@ -5814,7 +5814,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var scripts = this.currentSprite.scripts,
+    var world = this.world(),
         script;
 
     if (Process.prototype.isCatchingErrors) {
@@ -5826,17 +5826,12 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     } else {
         script = this.deserializeScriptString(str);
     }
-    script.setPosition(this.world().hand.position());
-    scripts.add(script);
-    script.fixBlockColor(null, true); // force zebra coloring
-    scripts.adjustBounds();
-    scripts.lastDroppedBlock = script;
-    scripts.recordDrop(
-		{
-            origin: this.palette,
-            position: this.palette.center()
-        }
-    );
+    this.spriteBar.tabBar.tabTo('scripts');
+    script.pickUp(world);
+    world.hand.grabOrigin = {
+        origin: this.palette,
+        position: this.palette.center()
+    };
     this.showMessage(
         'Imported Script.',
         2
@@ -10063,11 +10058,9 @@ CostumeIconMorph.prototype.removeCostume = function () {
 };
 
 CostumeIconMorph.prototype.importEmbeddedData = function () {
-    this.parentThatIsA(IDE_Morph).droppedText(
-        this.object.embeddedData,
-        this.object.name,
-        ''
-    );
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.spriteBar.tabBar.tabTo('scripts');
+    ide.droppedText(this.object.embeddedData, this.object.name, '');
 };
 
 CostumeIconMorph.prototype.typeOfStringData = function (aString) {

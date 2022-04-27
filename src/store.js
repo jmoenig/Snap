@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-April-20';
+modules.store = '2022-April-26';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1653,9 +1653,9 @@ SnapSerializer.prototype.loadValue = function (model, object) {
                     v.version = +new Date();
                     if (Object.prototype.hasOwnProperty.call(
                         model.attributes,
-                        'code'
+                        'embed'
                     )) {
-                        v.code = model.attributes.code;
+                        v.embeddedData = model.attributes.embed;
                     }
                     if (typeof v.loaded === 'function') {
                         v.loaded();
@@ -1989,7 +1989,8 @@ Costume.prototype.toXML = function (serializer) {
         this.rotationCenter.y,
         this instanceof SVG_Costume ? this.contents.src
                 : normalizeCanvas(this.contents).toDataURL('image/png'),
-        this.code ? serializer.format(' code="@"', this.code) : ''
+        this.embeddedData ? serializer.format(' embed="@"', this.embeddedData)
+            : ''
     );
 };
 
