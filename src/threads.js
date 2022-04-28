@@ -5637,6 +5637,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
 
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
+    if (!expr.isCustomBlock) {
+        throw new Error('expecting a custom block\nbut getting a primitive');
+    }
     def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
     oldSpec = def.blockSpec();
 
