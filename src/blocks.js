@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-April-22';
+modules.blocks = '2022-April-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -806,6 +806,15 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?']
+        }
+    },
+    '%byob': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'label': ['label'],
+            'definition': ['definition'],
+            'category': ['category']
         }
     },
 

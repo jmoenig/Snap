@@ -17,6 +17,7 @@
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
+    * new "set attribute of block" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
     * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
@@ -47,6 +48,7 @@
 ### 2022-04-28
 * threads, byob: programmatically re-define custom blocks, experimental, under construction
 * threads: programmatically re-categorize custom blocks
+* blocks, object: new "set attribute of block" primitive, experimental
 
 ### 2022-04-27
 * threads, byob: custom block definition api, highly experimental, very much under construction
