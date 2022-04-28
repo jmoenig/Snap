@@ -49,6 +49,7 @@
 * threads, byob: programmatically re-define custom blocks, experimental, under construction
 * threads: programmatically re-categorize custom blocks
 * blocks, object: new "set attribute of block" primitive, experimental
+* German translation update
 
 ### 2022-04-27
 * threads, byob: custom block definition api, highly experimental, very much under construction
