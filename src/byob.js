@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-April-27';
+modules.byob = '2022-April-28';
 
 // Declarations
 
@@ -541,7 +541,7 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
         parts = [],
         spec = abstractSpec;
 
-    if (count !== inputNames.length) { // not yet sure about this... (jens)
+    if (count !== inputNames.length) {
         throw new Error('expecting the number of inputs to match');
     }
     if (spec.startsWith('_ ')) {
@@ -559,6 +559,46 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
         )
     );
     this.spec = spec.trim();
+};
+
+CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
+    // private - only to be called from a Process that also does housekeeping
+    var oldInputs = this.inputNames(),
+        newInputs =  aContext.inputs,
+        spec = this.abstractBlockSpec(),
+        declarations = this.declarations,
+        parts = [];
+
+    if (oldInputs.length !== newInputs.length) {
+        throw new Error('expecting the number of inputs to match');
+    }
+
+    // change the input names in the spec to those of the given context
+    if (spec.startsWith('_ ')) {
+        parts.push('');
+        spec = spec.slice(2);
+    }
+    if (spec.endsWith(' _')) {
+        spec = spec.slice(0, -2);
+    }
+    parts = parts.concat(spec.split(' _ '));
+    spec = '';
+    parts.forEach((part, i) =>
+        spec += (part + (
+            newInputs[i] ? ' %\'' + newInputs[i] + '\' ' : '')
+        )
+    );
+    this.spec = spec.trim();
+
+    // change the input names in the slot declarations to those of the context
+    // copy declarations
+    this.declarations = new Map();
+    for (var [key, val] of declarations) {
+        this.declarations.set(newInputs[oldInputs.indexOf(key)], val);
+    }
+
+    // replace the definition body with the given context
+    this.body = aContext;
 };
 
 // CustomBlockDefinition picturing

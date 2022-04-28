@@ -65,7 +65,7 @@ StagePickerMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-April-27';
+modules.threads = '2022-April-28';
 
 var ThreadManager;
 var Process;
@@ -5645,7 +5645,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.setBlockLabel(val);
         break;
     case 'definition':
-        return;
+        this.assertType(val, 'command');
+        def.setBlockDefinition(val);
+        break;
     case 'category':
         return;
     case 'global?':

@@ -44,6 +44,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-04-28
+* threads, byob: programmatically re-define custom blocks, experimental, under construction
+
 ### 2022-04-27
 * threads, byob: custom block definition api, highly experimental, very much under construction
 
