@@ -5649,8 +5649,18 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.setBlockDefinition(val);
         break;
     case 'category':
-        return;
-    case 'global?':
+        this.assertType(val, ['number', 'text']);
+        if (this.reportTypeOf(val) === 'text') {
+            def.category = contains(
+                SpriteMorph.prototype.allCategories(),
+                val
+            ) ? val : 'other';
+            break;
+        }
+        def.category = SpriteMorph.prototype.allCategories()[+val - 1] ||
+            'other';
+        break;
+    default:
         return;
     }
 
