@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-April-28';
+modules.byob = '2022-May-01';
 
 // Declarations
 
@@ -569,7 +569,10 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
         declarations = this.declarations,
         parts = [];
 
-    if (oldInputs.length !== newInputs.length) {
+    if (oldInputs.length > newInputs.length) {
+        this.removeInputs(oldInputs.length - newInputs.length);
+        spec = this.abstractBlockSpec();
+    } else if (oldInputs.length !== newInputs.length) {
         throw new Error('expecting the number of inputs to match');
     }
 
@@ -599,6 +602,31 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
 
     // replace the definition body with the given context
     this.body = aContext;
+};
+
+CustomBlockDefinition.prototype.removeInputs = function (count) {
+    // private - only to be called from a Process that also does housekeeping
+    var surplus = this.inputNames().slice(-count);
+
+    // remove the surplus input names from the spec
+    this.spec = this.parseSpec(this.spec).filter(str =>
+        !(str.length > 1 && (str[0]) === '%' && surplus.includes(str.slice(1)))
+    ).join(' ').trim();
+
+    // remove the surplus input names from the slot declarations
+    surplus.forEach(name => this.declarations.delete(name));
+};
+
+CustomBlockDefinition.prototype.addInputs = function (count) {
+    // private
+};
+
+CustomBlockDefinition.prototype.gensym = function (existing) {
+    var count = 1;
+    while (contains(existing, '#' + count)) {
+        count += 1;
+    }
+    return '#' + count;
 };
 
 // CustomBlockDefinition picturing

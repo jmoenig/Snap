@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-05-01
+* byob: programmatically reduce the number of inputs in a custom block
+
 ### 2022-04-28
 * threads, byob: programmatically re-define custom blocks, experimental, under construction
 * threads: programmatically re-categorize custom blocks
