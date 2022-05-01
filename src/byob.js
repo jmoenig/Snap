@@ -569,11 +569,13 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
         declarations = this.declarations,
         parts = [];
 
+    // remove excess inputs or add missing ones
     if (oldInputs.length > newInputs.length) {
         this.removeInputs(oldInputs.length - newInputs.length);
         spec = this.abstractBlockSpec();
-    } else if (oldInputs.length !== newInputs.length) {
-        throw new Error('expecting the number of inputs to match');
+    } else if (oldInputs.length > newInputs.length) {
+        this.addInputs(newInputs.length - oldInputs.length);
+        spec = this.abstractBlockSpec();
     }
 
     // change the input names in the spec to those of the given context
@@ -618,7 +620,24 @@ CustomBlockDefinition.prototype.removeInputs = function (count) {
 };
 
 CustomBlockDefinition.prototype.addInputs = function (count) {
-    // private
+    // private - only to be called from a Process that also does housekeeping
+    var inputNames = this.inputNames(),
+        i;
+
+    // create gensyms
+    for (i = 0; i < count; i += 1) {
+        inputNames.push(this.gensym(inputNames));
+    }
+
+    // add gensyms to the spec
+    this.spec = this.parseSpec(this.spec).concat(
+        inputNames.slice(-count).map(str => '%' + str)
+    ).join(' ').trim();
+
+    // add slot declarations for the gensyms
+    inputNames.slice(-count).forEach(name =>
+        this.declarations.set(name, ['%s'])
+    );
 };
 
 CustomBlockDefinition.prototype.gensym = function (existing) {
