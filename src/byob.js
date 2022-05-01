@@ -565,18 +565,14 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     // private - only to be called from a Process that also does housekeeping
     var oldInputs = this.inputNames(),
         newInputs =  aContext.inputs,
-        spec = this.abstractBlockSpec(),
         declarations = this.declarations,
-        parts = [];
+        parts = [],
+        spec;
+
 
     // remove excess inputs or add missing ones
-    if (oldInputs.length > newInputs.length) {
-        this.removeInputs(oldInputs.length - newInputs.length);
-        spec = this.abstractBlockSpec();
-    } else if (oldInputs.length > newInputs.length) {
-        this.addInputs(newInputs.length - oldInputs.length);
-        spec = this.abstractBlockSpec();
-    }
+    this.addInputs(newInputs.length - oldInputs.length);
+    spec = this.abstractBlockSpec();
 
     // change the input names in the spec to those of the given context
     if (spec.startsWith('_ ')) {
@@ -606,23 +602,17 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     this.body = aContext;
 };
 
-CustomBlockDefinition.prototype.removeInputs = function (count) {
-    // private - only to be called from a Process that also does housekeeping
-    var surplus = this.inputNames().slice(-count);
-
-    // remove the surplus input names from the spec
-    this.spec = this.parseSpec(this.spec).filter(str =>
-        !(str.length > 1 && (str[0]) === '%' && surplus.includes(str.slice(1)))
-    ).join(' ').trim();
-
-    // remove the surplus input names from the slot declarations
-    surplus.forEach(name => this.declarations.delete(name));
-};
-
 CustomBlockDefinition.prototype.addInputs = function (count) {
     // private - only to be called from a Process that also does housekeeping
-    var inputNames = this.inputNames(),
-        i;
+    var inputNames, i;
+
+    if (count === 0) {
+        return;
+    } else if (count < 0) {
+        return this.removeInputs(-count);
+    }
+
+    inputNames = this.inputNames();
 
     // create gensyms
     for (i = 0; i < count; i += 1) {
@@ -638,6 +628,19 @@ CustomBlockDefinition.prototype.addInputs = function (count) {
     inputNames.slice(-count).forEach(name =>
         this.declarations.set(name, ['%s'])
     );
+};
+
+CustomBlockDefinition.prototype.removeInputs = function (count) {
+    // private - only to be called from a Process that also does housekeeping
+    var surplus = this.inputNames().slice(-count);
+
+    // remove the surplus input names from the spec
+    this.spec = this.parseSpec(this.spec).filter(str =>
+        !(str.length > 1 && (str[0]) === '%' && surplus.includes(str.slice(1)))
+    ).join(' ').trim();
+
+    // remove the surplus input names from the slot declarations
+    surplus.forEach(name => this.declarations.delete(name));
 };
 
 CustomBlockDefinition.prototype.gensym = function (existing) {
