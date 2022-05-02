@@ -2683,6 +2683,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
+        blocks.push(block('reportDate'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
 
@@ -2700,7 +2701,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportDate'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportDefineBlock'));
@@ -9152,6 +9152,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
         blocks.push(block('getTimer'));
+        blocks.push(block('reportDate'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
 
@@ -9169,7 +9170,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportDate'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportDefineBlock'));

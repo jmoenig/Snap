@@ -50,6 +50,7 @@
 * blocks, threads: new "scope" choice in block menu dropdown
 * blocks, threads: programmatically change the scope of unused custom blocks
 * blocks, objects, threads: new DEFINE BLOCK primitive
+* objects: move DATE reporter up in the palette below TIME
 
 ### 2022-05-01
 * byob: programmatically reduce the number of inputs in a custom block
