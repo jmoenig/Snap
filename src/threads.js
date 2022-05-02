@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph,
-StagePickerMorph*/
+StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
@@ -5636,7 +5636,6 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
-        count = 1,
         oldSpec,
         expr,
         def,
@@ -5672,7 +5671,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.setBlockLabel(val);
         break;
     case 'definition':
-        this.assertType(val, 'command');
+        this.assertType(val, types);
         def.setBlockDefinition(val);
         break;
     case 'category':
@@ -5726,8 +5725,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
 
     // make sure the spec is unique
     while (rcvr.doubleDefinitionsFor(def).length > 0) {
-        count += 1;
-        def.spec += (' (' + count + ')');
+        def.spec += (' (2)');
     }
     
     // update all block instances:
@@ -5750,6 +5748,38 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     ide.categories.refreshEmpty();
     ide.refreshPalette();
     ide.recordUnsavedChanges();
+};
+
+Process.prototype.reportDefineBlock = function (label, context) {
+    // highly experimental & under construction
+    var rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        def;
+
+    this.assertType(label, 'text');
+    if (label === '') {return ''; }
+    this.assertType(context, ['command', 'reporter', 'predicate']);
+
+    // make a new custom block definition
+    def = new CustomBlockDefinition('BYOB'); // haha!
+    def.type = this.reportTypeOf(context);
+    def.category = 'other';
+    def.isGlobal = true;
+    def.setBlockDefinition(context);
+    def.setBlockLabel(label);
+    ide.stage.globalBlocks.push(def);
+
+    // make sure the spec is unique
+    while (rcvr.doubleDefinitionsFor(def).length > 0) {
+        def.spec += (' (2)');
+    }
+
+    // update the IDE
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+    return def.blockInstance().reify();
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {

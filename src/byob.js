@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-May-01';
+modules.byob = '2022-May-02';
 
 // Declarations
 
@@ -564,25 +564,29 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
 CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     // private - only to be called from a Process that also does housekeeping
     var oldInputs = this.inputNames(),
-        newInputs =  aContext.inputs,
+        newInputs = aContext.inputs,
         declarations = this.declarations,
         parts = [],
+        suffix = [],
+        body = aContext,
+        reportBlock,
         spec;
-
 
     // remove excess inputs or add missing ones
     this.addInputs(newInputs.length - oldInputs.length);
     spec = this.abstractBlockSpec();
+    oldInputs = this.inputNames();
 
     // change the input names in the spec to those of the given context
-    if (spec.startsWith('_ ')) {
+    while (spec.startsWith('_ ')) {
         parts.push('');
         spec = spec.slice(2);
     }
-    if (spec.endsWith(' _')) {
+    while (spec.endsWith(' _')) {
         spec = spec.slice(0, -2);
+        suffix.push('');
     }
-    parts = parts.concat(spec.split(' _ '));
+    parts = parts.concat(spec.split(' _ ')).concat(suffix);
     spec = '';
     parts.forEach((part, i) =>
         spec += (part + (
@@ -599,7 +603,20 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     }
 
     // replace the definition body with the given context
-    this.body = aContext;
+    if (body.expression instanceof Array) {
+        this.body = null;
+        return;
+    } else if (body.expression instanceof ReporterBlockMorph) {
+        // turn reporter epressions into a command stack with "report"
+        body = copy(aContext);
+        reportBlock = SpriteMorph.prototype.blockForSelector('doReport');
+        reportBlock.replaceInput(
+            reportBlock.inputs()[0],
+            body.expression.fullCopy()
+        );
+        body.expression = reportBlock;
+    }
+    this.body = body;
 };
 
 CustomBlockDefinition.prototype.addInputs = function (count) {
