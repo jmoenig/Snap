@@ -18,6 +18,7 @@
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
+    * new "define block" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
     * new support for setting the translation via the API
     * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
@@ -26,6 +27,7 @@
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories)
     * imported single scripts are now placed into the hand, for the user to position them in the scripting area 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
+    * moved "current date" block up to "timer" group in the palette
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
     * MQTT extension update, thanks, Simon!
