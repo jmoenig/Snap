@@ -29,13 +29,13 @@
 
         async getProjectXML() {
             const reqData = {type: 'export-project'};
-            const data = await this.reqReply(reqData);
+            const data = await this._reqReply(reqData);
             return data.xml;
         }
 
         async getUsername() {
             const reqData = {type: 'get-username'};
-            const data = await this.reqReply(reqData);
+            const data = await this._reqReply(reqData);
             return data.username;
         }
 
@@ -54,9 +54,9 @@
         }
 
         async addEventListener(type, fn) {
-            const listenerId = this.genUuid();
+            const listenerId = this._genUuid();
             this._listeners[listenerId] = fn;
-            await this.reqReply({
+            await this._reqReply({
                 type: 'add-listener',
                 eventType: type,
                 listenerId,
@@ -68,7 +68,7 @@
             const listenerId = Object.keys(this._listeners)
                 .find(id => this._listeners[id] === fn);
 
-            await this.reqReply({
+            await this._reqReply({
                 type: 'remove-listener',
                 eventType: type,
                 listenerId,
@@ -78,23 +78,35 @@
         }
 
         async import(name, content) {
-            this.call({
+            this._call({
                 type: 'import',
                 name: name,
                 content: content,
             });
         }
 
-        genUuid() {
+        runScripts() {
+            this._call({
+                type: 'run-scripts',
+            });
+        }
+
+        stopAllScripts() {
+            this._call({
+                type: 'stop-all-scripts',
+            });
+        }
+
+        _genUuid() {
             return Date.now() + Math.floor(Math.random() * 1000);
         }
 
-        reqReply(reqData) {
-            const id = this.genUuid();
+        _reqReply(reqData) {
+            const id = this._genUuid();
             const deferred = defer();
             this._requests[id] = deferred;
             reqData.id = id;
-            this.call(reqData);
+            this._call(reqData);
 
             setTimeout(() => {
                 const deferred = this._requests[id];
@@ -107,7 +119,7 @@
             return deferred.promise;
         }
 
-        call(msgData) {
+        _call(msgData) {
             this.element.contentWindow.postMessage(msgData, '*');
         }
     }

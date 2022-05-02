@@ -389,15 +389,14 @@ IDE_Morph.prototype.mobileMode.positionButtons = function(buttons, controls) {
 };
 
 IDE_Morph.prototype.initializeEmbeddedAPI = function () {
-    var self = this,
-        externalVariables = {},
+    var externalVariables = {},
         receiveMessage;
 
-    receiveMessage = async function(event) {
+    receiveMessage = async event => {
         var data = event.data;
         switch (data.type) {
         case 'import':
-            self.droppedText(data.content, data.name, data.fileType);
+            this.droppedText(data.content, data.name, data.fileType);
             break;
         case 'set-variable':
             externalVariables[data.key] = data.value;
@@ -408,7 +407,7 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         case 'export-project':
         {
             const {id} = data;
-            const xml = await self.getProjectXML();
+            const xml = await this.getProjectXML();
             const type = 'reply';
             event.source.postMessage({id, type, xml}, event.origin);
             break;
@@ -432,16 +431,23 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
                     detail: event.detail,
                 }, origin);
             };
-            self.events.addEventListener(eventType, listenerId, callback);
+            this.events.addEventListener(eventType, listenerId, callback);
             source.postMessage({id, type: 'reply'}, origin);
             break;
         }
         case 'remove-listener':
         {
             const {id, eventType, listenerId} = data;
-            self.events.removeEventListener(eventType, listenerId);
+            this.events.removeEventListener(eventType, listenerId);
             event.source.postMessage({id, type: 'reply'}, event.origin);
+            break;
         }
+        case 'run-scripts':
+            this.runScripts();
+            break;
+        case 'stop-all-scripts':
+            this.stopAllScripts();
+            break;
         }
     };
 
