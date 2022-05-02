@@ -5660,6 +5660,13 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         return rcvr.allDependentInvocationsOf(oldSpec).length > 0;
     }
 
+    function remove(arr, value) {
+        var idx = arr.indexOf(value);
+        if (idx > -1) {
+            arr.splice(idx, 1);
+        }
+    }
+
     switch (choice) {
     case 'label':
         def.setBlockLabel(val);
@@ -5682,9 +5689,8 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         break;
     case 'type':
         if (isInUse()) {
-            throw new Error('cannot change a block\nthat is in use');
+            throw new Error('cannot change this\nfor a block that is in use');
         }
-
         this.assertType(val, ['number', 'text']);
         if (this.reportTypeOf(val) === 'text') {
             type = val;
@@ -5693,6 +5699,26 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         }
         if (!types.includes(type)) {return;}
         def.type = type;
+        break;
+    case 'scope':
+        if (isInUse()) {
+            throw new Error('cannot change this\nfor a block that is in use');
+        }
+        this.assertType(val, ['number', 'text']);
+        type = +val;
+        if (type === 1 && !def.isGlobal) {
+            // make global
+            def.isGlobal = true;
+            remove(rcvr.customBlocks, def);
+            ide.stage.globalBlocks.push(def);
+        } else if (type === 2 && def.isGlobal) {
+            // make local
+            def.isGlobal = false;
+            remove(ide.stage.globalBlocks, def);
+            rcvr.customBlocks.push(def);
+        } else {
+            return;
+        }
         break;
     default:
         return;
