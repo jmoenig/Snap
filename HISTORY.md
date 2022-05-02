@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-05-02
+* blocks, threads: programmatically change the type of unused custom blocks
+
 ### 2022-05-01
 * byob: programmatically reduce the number of inputs in a custom block
 * byob: programmatically add inputs to a custom block

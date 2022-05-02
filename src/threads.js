@@ -65,7 +65,7 @@ StagePickerMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-April-28';
+modules.threads = '2022-May-02';
 
 var ThreadManager;
 var Process;
@@ -5620,6 +5620,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    case 'type':
+        return ['command', 'reporter', 'predicate'].indexOf(
+            this.reportTypeOf(block)
+        ) + 1;
     }
     return '';
 };
@@ -5629,19 +5633,30 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     var choice = this.inputOption(attribute),
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
-        oldSpec,
+        types = ['command', 'reporter', 'predicate'],
         count = 1,
+        oldSpec,
         expr,
         def,
-        template;
+        template,
+        type;
 
-    this.assertType(block, ['command', 'reporter', 'predicate']);
+    this.assertType(block, types);
     expr = block.expression;
     if (!expr.isCustomBlock) {
         throw new Error('expecting a custom block\nbut getting a primitive');
     }
     def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
     oldSpec = def.blockSpec();
+
+    function isInUse() {
+        if (def.isGlobal) {
+            return ide.sprites.asArray().concat([ide.stage]).some((any, idx) =>
+                any.usesBlockInstance(def, false, idx)
+            );
+        }
+        return rcvr.allDependentInvocationsOf(oldSpec).length > 0;
+    }
 
     switch (choice) {
     case 'label':
@@ -5662,6 +5677,20 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         }
         def.category = SpriteMorph.prototype.allCategories()[+val - 1] ||
             'other';
+        break;
+    case 'type':
+        if (isInUse()) {
+            throw new Error('cannot change a block\nthat is in use');
+        }
+
+        this.assertType(val, ['number', 'text']);
+        if (this.reportTypeOf(val) === 'text') {
+            type = val;
+        } else {
+            type = types[val - 1] || '';
+        }
+        if (!types.includes(type)) {return;}
+        def.type = type;
         break;
     default:
         return;
