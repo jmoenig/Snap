@@ -47,6 +47,7 @@
 
 ### 2022-05-02
 * blocks, threads: programmatically change the type of unused custom blocks
+* blocks, threads: new "scope" choice in block menu dropdown
 
 ### 2022-05-01
 * byob: programmatically reduce the number of inputs in a custom block

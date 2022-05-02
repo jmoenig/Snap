@@ -5624,6 +5624,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return ['command', 'reporter', 'predicate'].indexOf(
             this.reportTypeOf(block)
         ) + 1;
+    case 'scope':
+        return expr.isCustomBlock ? (expr.isGlobal ? 1 : 2) : 0;
     }
     return '';
 };

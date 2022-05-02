@@ -806,7 +806,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?'],
-            'type': ['type']
+            'type': ['type'],
+            'scope': ['scope']
         }
     },
     '%byob': {
