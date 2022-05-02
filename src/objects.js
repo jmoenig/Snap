@@ -1103,7 +1103,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set %byob of block %repRing to %s',
-            defaults: [['definition']]
+            defaults: [['label']]
         },
         reportDefineBlock: {
             type: 'reporter',
