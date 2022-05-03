@@ -4912,8 +4912,13 @@ BlockMorph.prototype.snap = function () {
     top.allComments().forEach(comment =>
         comment.align(top)
     );
-    top.to_compile = true;
-    top.compiled_function = null;
+    if (top.definition) {
+        top.definition.to_compile = true;
+        top.definition.compiled_function = null;
+    } else {
+        top.to_compile = true;
+        top.compiled_function = null;
+    }
     // fix highlights, if any
     if (this.getHighlight() && (this !== top)) {
         this.removeHighlight();

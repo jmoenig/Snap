@@ -11504,8 +11504,13 @@ HandMorph.prototype.processMouseMove = function (event) {
                         this.morphToGrab.selectForEdit() : this.morphToGrab;
                 if (morph.topBlock) {
                     let topblk = morph.topBlock()
-                    topblk.to_compile = true;
-                    topblk.compiled_function = null;
+                    if (topblk.definition) {
+                        topblk.definition.to_compile = true;
+                        topblk.definition.compiled_function = null;
+                    } else {
+                        topblk.to_compile = true;
+                        topblk.compiled_function = null;
+                    }
                 }
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
