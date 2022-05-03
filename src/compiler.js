@@ -434,6 +434,7 @@ JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     commandBlock.blockSequence().forEach(block => {
         if (block.selector == "reportGo") {
+            // Due to the "forEach", this is a "continue"
             return;
         }
         body += this.compileExpression(block);
