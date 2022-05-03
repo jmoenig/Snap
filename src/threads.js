@@ -747,6 +747,11 @@ Process.prototype.runStep = function (deadline) {
                 this.doYield();
             } else {
                 this.process_compiler(this.topBlock);
+                // Pop all the contexts that are added, usually doYields
+                while (this.context) {
+                    this.popContext();
+                }
+                this.blockReceiver().stopTalking();
             }
         } else {
             this.evaluateContext();
