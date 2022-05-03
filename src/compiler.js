@@ -432,6 +432,9 @@ JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
+    if (commandBlock instanceof ReporterBlockMorph) {
+        return 'return ' + this.compileInput(commandBlock);
+    }
     commandBlock.blockSequence().forEach(block => {
         if (block.selector == "reportGo") {
             // Due to the "forEach", this is a "continue"
