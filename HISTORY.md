@@ -47,6 +47,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-05-03
+* threads, byob: tweaked double definition naming
+
 ### 2022-05-02
 * blocks, threads: programmatically change the type of unused custom blocks
 * blocks, threads: new "scope" choice in block menu dropdown

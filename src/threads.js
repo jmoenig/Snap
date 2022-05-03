@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-02';
+modules.threads = '2022-May-03';
 
 var ThreadManager;
 var Process;
@@ -5754,7 +5754,8 @@ Process.prototype.reportDefineBlock = function (label, context) {
     // highly experimental & under construction
     var rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
-        def;
+        count = 1,
+        spec, def;
 
     this.assertType(label, 'text');
     if (label === '') {return ''; }
@@ -5770,8 +5771,10 @@ Process.prototype.reportDefineBlock = function (label, context) {
     ide.stage.globalBlocks.push(def);
 
     // make sure the spec is unique
+    spec = def.spec;
     while (rcvr.doubleDefinitionsFor(def).length > 0) {
-        def.spec += (' (2)');
+        count += 1;
+        def.spec = spec + ' (' + count + ')';
     }
 
     // update the IDE
