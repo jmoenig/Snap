@@ -6607,6 +6607,9 @@ Process.prototype.returnValueToParentContext = function (value) {
             : this.homeContext;
         target.addInput(value);
     }
+    if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph) {
+        showBubble(value, this.exportResult, this.receiver)
+    }
 };
 
 Process.prototype.reportStackSize = function () {

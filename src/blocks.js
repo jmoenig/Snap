@@ -1208,6 +1208,7 @@ SyntaxElementMorph.prototype.allInputs = function () {
         (child instanceof ArgMorph) ||
             (child instanceof ReporterBlockMorph &&
                 child !== this)
+
     );
 };
 
