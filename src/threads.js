@@ -6606,10 +6606,15 @@ Process.prototype.returnValueToParentContext = function (value) {
                 this.context.parentContext || this.homeContext
             : this.homeContext;
         target.addInput(value);
+        if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph) {
+                //this.context.topBlock.show();
+                //this.context.expression.show();
+                //this.block.topBlock.show();
+                this.context.expression.showBubble(value);
+                //return value;
+            }
     }
-    if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph) {
-        showBubble(value, this.exportResult, this.receiver)
-    }
+
 };
 
 Process.prototype.reportStackSize = function () {
