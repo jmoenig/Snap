@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-03';
+modules.threads = '2022-May-06';
 
 var ThreadManager;
 var Process;
@@ -5885,18 +5885,24 @@ Process.prototype.reportGet = function (query) {
         stage,
         objName;
 
+    function allOtherSprites() {
+        var stage = thisObj.parentThatIsA(StageMorph),
+            sprites = stage.children.filter(each =>
+                each instanceof SpriteMorph && each !== thisObj
+            ),
+            inHand = stage.world().hand.children[0];
+        if (inHand instanceof SpriteMorph) {
+            sprites.push(inHand);
+        }
+        return sprites;
+    }
+
     if (thisObj) {
         switch (this.inputOption(query)) {
         case 'self' :
             return thisObj;
         case 'other sprites':
-            stage = thisObj.parentThatIsA(StageMorph);
-            return new List(
-                stage.children.filter(each =>
-                    each instanceof SpriteMorph &&
-                        each !== thisObj
-                )
-            );
+            return new List(allOtherSprites());
         case 'parts': // shallow copy to disable side-effects
             return new List((thisObj.parts || []).map(each => each));
         case 'anchor':
@@ -5908,13 +5914,10 @@ Process.prototype.reportGet = function (query) {
         case 'temporary?':
             return thisObj.isTemporary || false;
         case 'clones':
-            stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
             return new List(
-                stage.children.filter(each =>
-                    each.isTemporary &&
-                        (each !== thisObj) &&
-                            (each.cloneOriginName === objName)
+                allOtherSprites().filter(each =>
+                    each.isTemporary && (each.cloneOriginName === objName)
                 )
             );
         case 'other clones':
@@ -5924,17 +5927,13 @@ Process.prototype.reportGet = function (query) {
             // old rectangular, bounding-box-based algorithm
             // deprecated in favor of a circular perimeter based newer one
             /*
-            stage = thisObj.parentThatIsA(StageMorph);
             neighborhood = thisObj.bounds.expandBy(new Point(
                 thisObj.width(),
                 thisObj.height()
             ));
             return new List(
-                stage.children.filter(each =>
-                    each instanceof SpriteMorph &&
-                        each.isVisible &&
-                        (each !== thisObj) &&
-                        each.bounds.intersects(neighborhood)
+                allOtherSprites.filter(each =>
+                    each.isVisible && each.bounds.intersects(neighborhood)
                 )
             );
             */

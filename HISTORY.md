@@ -28,6 +28,7 @@
     * imported single scripts are now placed into the hand, for the user to position them in the scripting area 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
     * moved "current date" block up to "timer" group in the palette
+    * include currently dragged sprites in the MY OTHER SPRITES/CLONES lists
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
     * MQTT extension update, thanks, Simon!
@@ -46,6 +47,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-05-06
+* threads: include currently dragged sprites in the MY OTHER SPRITES/CLONES lists
 
 ### 2022-05-03
 * threads, byob: tweaked double definition naming
