@@ -2669,7 +2669,7 @@ ActionManager.prototype.onOpenProject = async function (str) {
         if (str.indexOf('<project') === 0) {
             project = ide.rawOpenProjectString(str);
         } else if (str.indexOf('<snapdata') === 0) {
-            project = ide.rawOpenCloudDataString(str);
+            project = await ide.rawOpenCloudDataString(str);
         }
 
     } else {
