@@ -5328,43 +5328,44 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         .then(() => msg.destroy());
 };
 
-IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
-    var model,
-        project;
+IDE_Morph.prototype.rawOpenCloudDataString = async function (model, parsed) {
+    var project;
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
+    StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
-    StageMorph.prototype.enablePenLogging = false;
     Process.prototype.enableLiveCoding = false;
+    Process.prototype.enablePenLogging = false;
     SnapActions.disableCollaboration();
     SnapUndo.reset();
     if (Process.prototype.isCatchingErrors) {
         try {
-            model = this.serializer.parse(str);
+            model = parsed ? model : this.serializer.parse(model);
             this.serializer.loadMediaModel(model.childNamed('media'));
+            const projectModel = await this.serializer.loadProjectModel(
+                model.childNamed('project'),
+                this,
+                model.attributes.remixID
+            );
             project = this.serializer.openProject(
-                this.serializer.loadProjectModel(
-                    model.childNamed('project'),
-                    this,
-                    model.attributes.remixID
-                ),
+                projectModel,
                 this
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        model = this.serializer.parse(str);
+        model = parsed ? model : this.serializer.parse(model);
         this.serializer.loadMediaModel(model.childNamed('media'));
+        const projectModel = await this.serializer.loadProjectModel(
+            model.childNamed('project'),
+            this,
+            model.attributes.remixID
+        );
         project = this.serializer.openProject(
-            this.serializer.loadProjectModel(
-                model.childNamed('project'),
-                this,
-                model.attributes.remixID
-            ),
+            projectModel,
             this
         );
     }

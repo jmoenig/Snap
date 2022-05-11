@@ -265,50 +265,6 @@ NetsBloxMorph.prototype.createControlBar = function () {
     };
 };
 
-NetsBloxMorph.prototype.rawOpenCloudDataString = function (model, parsed) {
-    var project;
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = false;
-    StageMorph.prototype.enableSublistIDs = false;
-    Process.prototype.enableLiveCoding = false;
-    SnapActions.disableCollaboration();
-    SnapUndo.reset();
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            // NetsBlox addition: start
-            model = parsed ? model : this.serializer.parse(model);
-            // NetsBlox addition: end
-            this.serializer.loadMediaModel(model.childNamed('media'));
-            project = this.serializer.openProject(
-                this.serializer.loadProjectModel(
-                    model.childNamed('project'),
-                    this
-                ),
-                this
-            );
-        } catch (err) {
-            this.showMessage('Load failed: ' + err);
-        }
-    } else {
-        // NetsBlox addition: start
-        model = parsed ? model : this.serializer.parse(model);
-        // NetsBlox addition: end
-        this.serializer.loadMediaModel(model.childNamed('media'));
-        project = this.serializer.openProject(
-            this.serializer.loadProjectModel(
-                model.childNamed('project'),
-                this
-            ),
-            this
-        );
-    }
-    this.stopFastTracking();
-    return project;
-};
-
 NetsBloxMorph.prototype.createSpriteBar = function () {
     NetsBloxMorph.uber.createSpriteBar.call(this);
 
