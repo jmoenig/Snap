@@ -5686,9 +5686,7 @@ CursorMorph.prototype.processInput = function (event) {
     }
     // target morph: copy the content and selection status to the target.
     target.text = filteredContent;
-    var topBlock = target.parentThatIsA(CommandBlockMorph).topBlock();
-    topBlock.to_compile = true;
-    topBlock.compiled_function = null;
+    JSCompiler.prototype.resetAllWarps(target.parentThatIsA(CommandBlockMorph));
 
     if (textarea.selectionStart === textarea.selectionEnd) {
         target.startMark = null;
@@ -11507,10 +11505,8 @@ HandMorph.prototype.processMouseMove = function (event) {
                     if (topblk.definition) {
                         topblk.definition.to_compile = true;
                         topblk.definition.compiled_function = null;
-                    } else {
-                        topblk.to_compile = true;
-                        topblk.compiled_function = null;
                     }
+                    JSCompiler.prototype.resetAllWarps(morph)
                 }
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {

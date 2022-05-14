@@ -651,59 +651,60 @@ Process.prototype.isRunning = function () {
     return !this.readyToTerminate && (this.context || this.isPaused);
 };
 
-Process.prototype.process_compiler = function (topBlock) {
-    // Only this code has access to gen_cont, not Snap
-    var gen_code = null;
-    if (this.code_cont_gen) {
-        gen_code = this.code_cont_gen;
-    } else if (topBlock) {
-        try {
-            if (topBlock.to_compile) {
-                var compiler = new JSCompiler(this);
-                var compiled_js = compiler.compileWithSpriteProcessContext(topBlock);
-                console.log(compiled_js);
-                // Save the compiled_function to the topBlock
-                eval(`topBlock.compiled_function = ${compiled_js}`);
-                topBlock.to_compile = false; // Compiled now, no need to recompile
-            }
-            if (topBlock.compiled_function) {
-                gen_code = topBlock.compiled_function(this.receiver, this, JSCompiler.prototype.getCustomBlock);
-            }
-        } catch (error) {
-            topBlock.to_compile = true;
-            this.popContext();
-            console.error(error);
-            this.handleError(error, topBlock);
-            return;
-        }
-    } else {
-        // Hardcoded compile reset
-        topBlock.to_compile = false;
-        topBlock.compiled_function = null;
-        gen_code = null; // Generator Code is already null, but
-                         //   more informative to be here also
-    }
+// For compiling the entire Snap series of blocks
+// Process.prototype.process_compiler = function (topBlock) {
+//     // Only this code has access to gen_cont, not Snap
+//     var gen_code = null;
+//     if (this.code_cont_gen) {
+//         gen_code = this.code_cont_gen;
+//     } else if (topBlock) {
+//         try {
+//             if (topBlock.to_compile) {
+//                 var compiler = new JSCompiler(this);
+//                 var compiled_js = compiler.compileWithSpriteProcessContext(topBlock);
+//                 console.log(compiled_js);
+//                 // Save the compiled_function to the topBlock
+//                 eval(`topBlock.compiled_function = ${compiled_js}`);
+//                 topBlock.to_compile = false; // Compiled now, no need to recompile
+//             }
+//             if (topBlock.compiled_function) {
+//                 gen_code = topBlock.compiled_function(this.receiver, this, JSCompiler.prototype.getCustomBlock);
+//             }
+//         } catch (error) {
+//             topBlock.to_compile = true;
+//             this.popContext();
+//             console.error(error);
+//             this.handleError(error, topBlock);
+//             return;
+//         }
+//     } else {
+//         // Hardcoded compile reset
+//         topBlock.to_compile = false;
+//         topBlock.compiled_function = null;
+//         gen_code = null; // Generator Code is already null, but
+//                          //   more informative to be here also
+//     }
 
-    if (gen_code) {
-        try {
-            var gen_output = gen_code.next();
-        } catch (error) {
-            topBlock.to_compile = true;
-            this.popContext()
-            console.error(error);
-            this.handleError(error, topBlock);
-            return;
-        }
+//     if (gen_code) {
+//         try {
+//             var gen_output = gen_code.next();
+//         } catch (error) {
+//             topBlock.to_compile = true;
+//             this.popContext()
+//             console.error(error);
+//             this.handleError(error, topBlock);
+//             return;
+//         }
 
-        if (!gen_output.done) {
-            this.code_cont_gen = gen_code;
-        } else {
-            // Done, return any value given
-            this.returnValueToParentContext(gen_output.value);
-            this.popContext()
-        }
-    }
-}
+//         if (!gen_output.done) {
+//             this.code_cont_gen = gen_code;
+//         } else {
+//             // Done, return any value given
+//             this.returnValueToParentContext(gen_output.value);
+//             this.popContext()
+//         }
+//     }
+// }
 
 // Process entry points
 
@@ -740,22 +741,7 @@ Process.prototype.runStep = function (deadline) {
             }
             return;
         }
-        
-        if (ALLOW_PROCESS_COMPILERS) {
-            if (this.context.expression == "doYield") {
-                // It already pops itself
-                this.doYield();
-            } else {
-                this.process_compiler(this.topBlock);
-                // Pop all the contexts that are added, usually doYields
-                while (this.context) {
-                    this.popContext();
-                }
-                this.blockReceiver().stopTalking();
-            }
-        } else {
-            this.evaluateContext();
-        }
+        this.evaluateContext();
     }
 
     this.stepFrameCount = 0;
@@ -1759,77 +1745,6 @@ Process.prototype.evaluateCustomBlock = function () {
     runnable.expression = runnable.expression.blockSequence();
 };
 
-var compiledFunctions = new Map();
-  
-// Process compiler primitives
-// Process.prototype.compile = function (codeBlockName, body, gen_cont) {
-//     // Only this code has access to gen_cont, not Snap
-//     var block = this.context.expression,
-//         outer = this.context.outerContext, // for tail call elimination
-//         isCustomBlock = this.context.isCustomBlock;
-//     var gen_code = null;
-//     if (gen_cont) {
-//         gen_code = gen_cont;
-//     } else if (body) {
-//         try {
-//             // console.log(typeof compiledFunctions.get(codeBlockName));
-//             if (typeof compiledFunctions.get(codeBlockName) != 'function') {
-//                 var compiler = new JSCompiler(this);
-//                 var compiled_js = compiler.compileWithSpriteProcessContext(body);
-//                 console.log(compiled_js);
-//                 encoded_text = encodeURIComponent(codeBlockName);
-//                 // If no changes, then no special characters used
-//                 if (encoded_text == codeBlockName) {
-//                     eval(`compiledFunctions.set("${codeBlockName}", ${compiled_js})`);
-//                 } else {
-//                     eval(`compiledFunctions.set(decodeURIComponent("${encoded_text}"), ${compiled_js})`);
-//                 }
-//             }
-//             gen_code = compiledFunctions.get(codeBlockName)(this.receiver, this);
-//         } catch (error) {
-//             console.error(error);
-//             throw error;
-//         }
-//     } else {
-//         // Hardcoded compile reset
-//         compiledFunctions.delete(codeBlockName);
-//         gen_code = null; // Generator Code is already null, but
-//                          //   more informative to be here also
-//     }
-
-//     if (gen_code) {
-//         try {
-//             var gen_output = gen_code.next();
-//         } catch (error) {
-//             console.error(error);
-//             throw error;
-//         }
-
-//         if (!gen_output.done) {
-//             // Not done, prepare for rerun of next section of code
-//             //  after allowing GUI to refresh
-//             this.popContext();
-//             this.pushContext(block, outer);
-//             this.context.isCustomBlock = isCustomBlock;
-//             // Add back the inputs to do again, continuing
-//             this.context.addInput(codeBlockName);
-//             this.context.addInput(body);
-//             this.context.addInput(gen_code);
-//             this.pushContext('doYield');
-//             this.pushContext(); // Empty context, places doYield -> Compile
-//                                 //  next in line on popContext
-//         } else {
-//             // Done, return any value given
-//             return gen_output.value;
-//         }
-//     }
-// };
-
-Process.prototype.clear_compiled_all = function() {
-    compiledFunctions.clear();
-    return "All compiled code cleared";
-};
-
 // Process variables primitives
 
 Process.prototype.doDeclareVariables = function (varNames) {
@@ -2600,11 +2515,91 @@ Process.prototype.doStopOthers = function (choice) {
     }
 };
 
-Process.prototype.doWarp = function (body) {
+
+// Process compiler primitives
+Process.prototype.process_compiler_inblock = function (body, gen_cont) {
+    // Only this code has access to gen_cont, not Snap
+    var block = this.context.expression,
+        outer = this.context.outerContext, // for tail call elimination
+        isCustomBlock = this.context.isCustomBlock;
+    var gen_code = null;
+    if (gen_cont) {
+        gen_code = gen_cont;
+    } else if (body) {
+        try {
+            if (block.to_compile) {
+                var compiler = new JSCompiler(this);
+                var compiled_js = compiler.compileWithSpriteProcessContext(body);
+                console.log(compiled_js);
+                // Save the compiled_function to the Warp block
+                eval(`block.compiled_function = ${compiled_js}`);
+                block.to_compile = false; // Compiled now, no need to recompile
+            }
+            if (block.compiled_function) {
+                gen_code = block.compiled_function(this.receiver, this, JSCompiler.prototype.getCustomBlock);
+            }
+        } catch (error) {
+            block.to_compile = true;
+            console.error(error);
+            throw error;
+        }
+    } else {
+        // Hardcoded compile reset
+        block.to_compile = false;
+        block.compiled_function = null;
+        gen_code = null; // Generator Code is already null, but
+                         //   more informative to be here also
+    }
+
+    if (gen_code) {
+        var gen_output = null;
+        try {
+            if (false) {
+                var yield_skips = 100;
+                while (yield_skips > 0) {
+                    gen_output = gen_code.next();
+                    if (gen_output.done) {
+                        break;
+                    }
+                    yield_skips--;
+                }
+            } else {
+                gen_output = gen_code.next();
+            }
+        } catch (error) {
+            block.to_compile = true;
+            console.error(error);
+            throw error;
+        }
+
+        if (gen_output && !gen_output.done) {
+            // Not done, prepare for rerun of next section of code
+            //  after allowing GUI to refresh
+            this.popContext();
+            this.pushContext(block, outer);
+            this.context.isCustomBlock = isCustomBlock;
+            // Add back the inputs to do again, continuing
+            this.context.addInput(body);
+            this.context.addInput(gen_code);
+            this.pushContext('doYield');
+            this.pushContext(); // Empty context, places doYield -> compile block (currently Warp)
+                                //  next in line on popContext
+        } else {
+            // Done, return any value given
+            return gen_output.value;
+        }
+    }
+};
+
+Process.prototype.doWarp = function (body, gen_cont) {
     // execute my contents block atomically (more or less)
     var outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock,
         stage;
+
+    if (ALLOW_PROCESS_COMPILERS) {
+        return this.process_compiler_inblock(body, gen_cont);
+    }
 
     this.popContext();
 

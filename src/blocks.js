@@ -4915,10 +4915,9 @@ BlockMorph.prototype.snap = function () {
     if (top.definition) {
         top.definition.to_compile = true;
         top.definition.compiled_function = null;
-    } else {
-        top.to_compile = true;
-        top.compiled_function = null;
     }
+    JSCompiler.prototype.resetAllWarps(this);
+
     // fix highlights, if any
     if (this.getHighlight() && (this !== top)) {
         this.removeHighlight();
@@ -9232,8 +9231,7 @@ InputSlotMorph.prototype.menuFromDict = function (
         );
 
 	function update(num) {
-        block.to_compile = true;
-        block.compiled_function = null;
+        JSCompiler.prototype.resetAllWarps(block);
     	myself.setContents(num);
         myself.reactToSliderEdit();
         if (ide && !block.isTemplate) {
