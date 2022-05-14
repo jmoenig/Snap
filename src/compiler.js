@@ -62,10 +62,21 @@ function JSCompiler(aProcess) {
   	this.implicitParams = null;
    	this.paramCount = null;
     this.yield_enabled = true; // TODO
+    this.num_custom = 0;
 }
 
 JSCompiler.prototype.toString = function () {
     return 'a JSCompiler';
+};
+
+JSCompiler.prototype.resetAllWarps = function (block) {
+    if (block.selector == "doWarp") {
+        block.to_compile = true;
+        block.compiled_function = null;
+    }
+    if (block.parent && block.parent.topBlock) {
+        this.resetAllWarps(block.parent);
+    }
 };
 
 JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
@@ -182,7 +193,9 @@ JSCompiler.prototype.compileFunctionJSCode = function (customBlockDefinition) {
         func_params = `${func_params}, ${param_vars.map(this.cleanJSVarName).join(", ")}`;
     }
 
+    // Yield at start is required in case of recursion
     var func_code = `function* (${func_params}) {
+    yield;
     ${final_variable_assignment_code}
     current_process.pushContext(null, current_process.context);
     ${body_compiled}
@@ -214,37 +227,14 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileInput(inputs[2]) +
             ')';
     case 'evaluateCustomBlock':
-        /*
-        DESIGN:
-        1. Check if the Function is compiled or not (acting like a linker), then compile
-        2. Caller style of pushing a New Context and Assigning Variables
-        3. Call the function
-        4. Check if how many procedure call so far (this exists in Process already) and then "yield"
-        LAST. Pop the context
-        */
-
-        var function_name = this.process_text(block.blockSpec);
-
-        if (block.definition.to_compile) {
-            block.definition.to_compile = false;
-            
-            try {
-                func_code = this.compileFunctionJSCode(block.definition, inputs);
-                eval(`block.definition.compiled_function = ${func_code}`);
-            } catch (error) {
-                block.definition.to_compile = true;
-                throw error;
-            }
-        }
-
-        var func_params = "SpriteMorph_prototype, current_process, get_custom_block"
-        if (inputs.length > 0) {
-            func_params = `${func_params}, ${this.compileInputs(inputs)}`
-        }
-
-        return `yield *get_custom_block(SpriteMorph_prototype, ${function_name}, ${block.definition.isGlobal}).compiled_function(${func_params})`
-
+        return this.buildCustomBlock(block.blockSpec, block.definition, inputs);
+    
     // special evaluation primitives
+    case 'doWarp':
+        // Just ignore any bypass the Warp
+        return `current_process.pushContext(null, current_process.context);
+${this.compileInput(inputs[0])}
+current_process.popContext();`
     case 'doRun':
     case 'evaluate':
         return 'invoke(' +
@@ -377,8 +367,10 @@ for (let i = 1; i <= list_size; i++) {
         start = this.compileInput(start);
         end = this.compileInput(end);
         var body = pre_body.inputs()[0];
-        var step = start < end ? 1 : -1
-        var test_sign = +start < +end ? "<=" : ">=";
+
+        // CAN'T USE THESE, especially for on the fly vals
+        // var step = start < end ? 1 : -1
+        // var test_sign = +start < +end ? "<=" : ">=";
 
         var for_body = "";
         if (body) {
@@ -391,9 +383,11 @@ for (let i = 1; i <= list_size; i++) {
             yield_keyword = "yield;";
         }
         let initalizer = `${proc_context_vars}.setVar("${upvar}", ${Math.floor(start)})`;
-        let loop_condition = `${proc_context_vars}.getVar("${upvar}") ${test_sign} ${end}`;
-        let incrementor = `${proc_context_vars}.changeVar("${upvar}", ${step})`;
-        return `${proc_context_vars}.addVar("${upvar}");
+        let loop_condition = `(dir * ${proc_context_vars}.getVar("${upvar}")) <= (dir * ${end})`;
+        let incrementor = `${proc_context_vars}.changeVar("${upvar}", dir)`; // dir is in the start of code
+        return `
+let dir = Math.sign(${end} - ${start});
+${proc_context_vars}.addVar("${upvar}");
 for (${initalizer}; ${loop_condition}; ${incrementor}) {
     current_process.pushContext(null, current_process.context);
     ${for_body}
@@ -415,6 +409,13 @@ for (${initalizer}; ${loop_condition}; ${incrementor}) {
         rcvr_var_name = target.constructor.name + '_prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
+            if (rcvr_var_name == "Process_prototype") {
+                if (rcvr == "SpriteMorph.prototype") {
+                    rcvr_var_name = "SpriteMorph_prototype"
+                } else {
+                    rcvr_var_name = "current_process";
+                }
+            }
             return `${rcvr}.${selector}.apply(${rcvr_var_name}, [${args}])`;
         } else {
             return `current_process.${selector}.apply(current_process, [${args}])`;
@@ -433,7 +434,7 @@ JSCompiler.prototype.compileWithSpriteProcessContext = function (commandBlock) {
 JSCompiler.prototype.compileSequence = function (commandBlock) {
     var body = '';
     if (commandBlock instanceof ReporterBlockMorph) {
-        return 'return ' + this.compileInput(commandBlock);
+        return 'return ' + this.compileInput(commandBlock) + ";";
     }
     commandBlock.blockSequence().forEach(block => {
         if (block.selector == "reportGo") {
@@ -560,8 +561,45 @@ JSCompiler.prototype.getCustomBlock = function(SpriteMorph_prototype, blockName,
         blockList = SpriteMorph_prototype.customBlocks;
     }
     blockList = blockList.filter((def, i) => def.blockSpec() === blockName);
-    if (blockList.length != 1) {
+    if (blockList.length == 0) {
         console.log("Block", blockName, "not found");
     }
+    if (blockList.length > 1) {
+        console.log("Block", blockName, "has multiple names, using the first one");
+    }
     return blockList[0];
+}
+
+JSCompiler.prototype.buildCustomBlock = function(blockName, block_definition, inputs) {
+    /*
+        DESIGN:
+        1. Check if the Function is compiled or not (acting like a linker), then compile
+        2. Caller style of pushing a New Context and Assigning Variables
+        3. Call the function
+        4. Check if how many procedure call so far (this exists in Process already) and then "yield"
+        LAST. Pop the context
+    */
+    var function_name = this.process_text(blockName);
+
+    if (block_definition.to_compile) {
+        block_definition.to_compile = false;
+        
+        try {
+            this.num_custom += 1;
+            var func_code = this.compileFunctionJSCode(block_definition, inputs);
+            console.log(function_name, "\n", func_code);
+            eval(`block_definition.compiled_function = ${func_code}`);
+            this.num_custom -= 1;
+        } catch (error) {
+            block_definition.to_compile = true;
+            throw error;
+        }
+    }
+
+    var func_params = "SpriteMorph_prototype, current_process, get_custom_block"
+    if (inputs.length > 0) {
+        func_params = `${func_params}, ${this.compileInputs(inputs)}`;
+    }
+
+    return `(yield *(get_custom_block(SpriteMorph_prototype, ${function_name}, ${block_definition.isGlobal})).compiled_function(${func_params}))`;
 }
