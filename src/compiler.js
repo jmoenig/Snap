@@ -197,7 +197,7 @@ JSCompiler.prototype.compileFunctionJSCode = function (customBlockDefinition) {
     var func_code = `function* (${func_params}) {
     yield;
     ${final_variable_assignment_code}
-    current_process.pushContext(null, current_process.context);
+    current_process.pushContext(null, current_process.context, 1);
     ${body_compiled}
     current_process.popContext();
 }`;
@@ -257,7 +257,7 @@ current_process.popContext();`
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
-        return 'return ' + this.compileInput(inputs[0]);
+        return 'current_process.popContextTilFunc();\nreturn ' + this.compileInput(inputs[0]);
     case 'doIf':
         return 'if (' +
             this.compileInput(inputs[0]) +

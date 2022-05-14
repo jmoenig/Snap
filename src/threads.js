@@ -2554,7 +2554,7 @@ Process.prototype.process_compiler_inblock = function (body, gen_cont) {
     if (gen_code) {
         var gen_output = null;
         try {
-            if (false) {
+            if (true) {
                 var yield_skips = 100;
                 while (yield_skips > 0) {
                     gen_output = gen_code.next();
@@ -2598,7 +2598,10 @@ Process.prototype.doWarp = function (body, gen_cont) {
         stage;
 
     if (ALLOW_PROCESS_COMPILERS) {
-        return this.process_compiler_inblock(body, gen_cont);
+        this.context.fromCompiledFunction = 2;
+        let result = this.process_compiler_inblock(body, gen_cont);
+        this.context.fromCompiledFunction = 0;
+        return result;
     }
 
     this.popContext();
@@ -6432,14 +6435,15 @@ Process.prototype.inputOption = function (dta) {
 
 // Process stack
 
-Process.prototype.pushContext = function (expression, outerContext) {
+Process.prototype.pushContext = function (expression, outerContext, fromCompiledFunction) {
     this.context = new Context(
         this.context,
         expression,
         outerContext || (this.context ? this.context.outerContext : null),
             // for tail call elimination
         this.context ? // check needed due to tail call elimination
-                this.context.receiver : this.homeContext.receiver
+                this.context.receiver : this.homeContext.receiver,
+        fromCompiledFunction
     );
 };
 
@@ -6448,6 +6452,19 @@ Process.prototype.popContext = function () {
         this.context.stopMusic();
     }
     this.context = this.context ? this.context.parentContext : null;
+};
+
+Process.prototype.popContextTilFunc = function () {
+    if (this.context) {
+        this.context.stopMusic();
+    }
+    while (this.context.fromCompiledFunction == 0) {
+        this.context = this.context ? this.context.parentContext : null;
+    }
+    if (this.context.fromCompiledFunction == 1) {
+        this.context = this.context ? this.context.parentContext : null;
+    }
+    // 2 is the warp block we originated from ... we don't pop that
 };
 
 Process.prototype.returnValueToParentContext = function (value) {
@@ -6942,7 +6959,8 @@ function Context(
     parentContext,
     expression,
     outerContext,
-    receiver
+    receiver,
+    fromCompiledFunction
 ) {
     this.outerContext = outerContext || null;
     this.parentContext = parentContext || null;
@@ -6967,6 +6985,9 @@ function Context(
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
     this.accumulator = null;
+
+    // For compiler use
+    this.fromCompiledFunction = fromCompiledFunction || 0;
 }
 
 Context.prototype.toString = function () {
