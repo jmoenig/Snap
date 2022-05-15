@@ -523,7 +523,9 @@ SnapSerializer.prototype.loadProjectModel = async function (xmlNode, ide, remixI
         return deferred.promise;
     }
 
-    await waitForCallback(model.pentrails, 'onload');
+    if (model.pentrails) {
+        await waitForCallback(model.pentrails, 'onload');
+    }
     return model;
 };
 
