@@ -5287,7 +5287,7 @@ IDE_Morph.prototype.openProjectString = function (str) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str) {
+IDE_Morph.prototype.rawOpenProjectString = async function (str) {
     var project;
 
     this.toggleAppMode(false);
@@ -5303,7 +5303,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     if (Process.prototype.isCatchingErrors) {
         try {
             project = this.serializer.openProject(
-                this.serializer.load(str, this),
+                await this.serializer.load(str, this),
                 this
             );
         } catch (err) {
@@ -5311,7 +5311,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         }
     } else {
         project = this.serializer.openProject(
-            this.serializer.load(str, this),
+            await this.serializer.load(str, this),
             this
         );
     }
