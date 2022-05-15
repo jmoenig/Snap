@@ -2555,8 +2555,8 @@ Process.prototype.process_compiler_inblock = function (body, gen_cont) {
         var gen_output = null;
         try {
             if (true) {
-                var yield_skips = 100;
-                while (yield_skips > 0) {
+                var yield_skips = 300;
+                while ((yield_skips > 0) && ((Date.now() - this.lastYield < this.timeout))) {
                     gen_output = gen_code.next();
                     if (gen_output.done) {
                         break;
