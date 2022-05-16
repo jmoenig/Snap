@@ -257,7 +257,8 @@ current_process.popContext();`
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
-        return 'current_process.popContextTilFunc();\nreturn ' + this.compileInput(inputs[0]);
+        return 'current_process.popContextTilFunc();' + '\n' +
+               'return ' + this.compileInput(inputs[0]);
     case 'doIf':
         return 'if (' +
             this.compileInput(inputs[0]) +
@@ -601,5 +602,7 @@ JSCompiler.prototype.buildCustomBlock = function(blockName, block_definition, in
         func_params = `${func_params}, ${this.compileInputs(inputs)}`;
     }
 
-    return `(yield *(get_custom_block(SpriteMorph_prototype, ${function_name}, ${block_definition.isGlobal})).compiled_function(${func_params}))`;
+    var get_custom_code = `get_custom_block(SpriteMorph_prototype, ${function_name}, ${block_definition.isGlobal})`;
+
+    return `(yield *(${get_custom_code}).compiled_function(${func_params}))`;
 }
