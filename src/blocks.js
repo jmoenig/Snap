@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-May-02';
+modules.blocks = '2022-May-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3567,6 +3567,45 @@ BlockMorph.prototype.developersMenu = function () {
         )
     );
     return menu;
+};
+
+BlockMorph.prototype.isChangeableTo = function (type) {
+    // answer whether it's safe to change my type, e.g. from command to
+    // reporter or from global to sprite-local.
+    // valid types "command", "reporter" and "predicate".
+    //
+    // a block is considered "changeable" if
+    // -------------------------------------
+    // * it's a command & the target type isn't also a command & doesn't have a
+    //   next block & its parent also isn't a syntax element (block or C-shaped
+    //   slot), except it can be a ring.
+    //
+    // * it's a reporter or a predicate & the target type is a command & its
+    //   parent is not a block, except it can be a ring.
+    //
+    // * it's a reporter or a predicate & the target type is also a reporter or
+    //   a predicate the type can always be changed
+
+    var typ = this.type();
+    if (typ === type) {return true; }
+    if (typ === 'command') {
+        if (this.nextBlock()) {return false; }
+        if (this.parent instanceof RingMorph) {return true; }
+        return !(this.parent instanceof SyntaxElementMorph);
+    }
+    // typ is 'reporter' or 'predicate'
+    if (type === 'command') {
+        if (this.parent instanceof RingMorph) {return true; }
+        return !(this.parent instanceof BlockMorph);
+    }
+    // type is 'reporter' or 'predicate'
+    return true;
+};
+
+BlockMorph.prototype.type = function () {
+    // private
+    return this instanceof CommandBlockMorph ? 'command'
+        : (this.isPredicate ? 'predicate' : 'reporter');
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {
