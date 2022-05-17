@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-06';
+modules.threads = '2022-May-17';
 
 var ThreadManager;
 var Process;
@@ -5687,9 +5687,6 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             'other';
         break;
     case 'type':
-        if (isInUse()) {
-            throw new Error('cannot change this\nfor a block that is in use');
-        }
         this.assertType(val, ['number', 'text']);
         if (this.reportTypeOf(val) === 'text') {
             type = val;
@@ -5697,7 +5694,14 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             type = types[val - 1] || '';
         }
         if (!types.includes(type)) {return;}
-        def.type = type;
+
+        if (rcvr.allBlockInstances(def).every(block =>
+            block.isChangeableTo(type))
+        ) {
+            def.type = type;
+        } else {
+            throw new Error('cannot change this\nfor a block that is in use');
+        }
         break;
     case 'scope':
         if (isInUse()) {

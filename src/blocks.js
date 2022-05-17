@@ -3577,28 +3577,19 @@ BlockMorph.prototype.isChangeableTo = function (type) {
     // a block is considered "changeable" if
     // -------------------------------------
     // * it's a command & the target type isn't also a command & doesn't have a
-    //   next block & its parent also isn't a syntax element (block or C-shaped
-    //   slot), except it can be a ring.
+    //   next block & is unattached (e.g. the only expression inside a context).
     //
-    // * it's a reporter or a predicate & the target type is a command & its
-    //   parent is not a block, except it can be a ring.
+    // * it's a reporter or a predicate & the target type is a command & is
+    //   unattached (e.g. the only expression inside a function context).
     //
     // * it's a reporter or a predicate & the target type is also a reporter or
     //   a predicate the type can always be changed
 
     var typ = this.type();
     if (typ === type) {return true; }
-    if (typ === 'command') {
-        if (this.nextBlock()) {return false; }
-        if (this.parent instanceof RingMorph) {return true; }
-        return !(this.parent instanceof SyntaxElementMorph);
+    if (typ === 'command' || type === 'command') {
+        return this.isUnattached();
     }
-    // typ is 'reporter' or 'predicate'
-    if (type === 'command') {
-        if (this.parent instanceof RingMorph) {return true; }
-        return !(this.parent instanceof BlockMorph);
-    }
-    // type is 'reporter' or 'predicate'
     return true;
 };
 
@@ -3606,6 +3597,13 @@ BlockMorph.prototype.type = function () {
     // private
     return this instanceof CommandBlockMorph ? 'command'
         : (this.isPredicate ? 'predicate' : 'reporter');
+};
+
+BlockMorph.prototype.isUnattached = function () {
+    // private
+    return ((this.nextBlock && !this.nextBlock()) || !this.nextBlock) &&
+        !(this.parent instanceof SyntaxElementMorph) &&
+        !(this.parent instanceof ScriptsMorph)
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {

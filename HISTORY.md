@@ -50,6 +50,7 @@
 
 ### 2022-05-017
 * blocks: added experimental private isChangeableTo(type) method
+* blocks, threads: tweaked programmatic blocks-changing
 
 ### 2022-05-06
 * threads: include currently dragged sprites in the MY OTHER SPRITES/CLONES lists
