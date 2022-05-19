@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-May-03';
+modules.byob = '2022-May-19';
 
 // Declarations
 
@@ -2668,6 +2668,9 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
     if (this.definition.isGlobal) {
         this.target.allBlockInstances(this.definition).reverse().forEach(
             block => block.refresh()
+        );
+        this.target.parentThatIsA(StageMorph).allContextsUsing(def).forEach(
+            context => context.changed()
         );
     } else {
         this.target.allDependentInvocationsOf(oldSpec).reverse().forEach(
