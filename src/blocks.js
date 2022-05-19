@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-May-17';
+modules.blocks = '2022-May-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2391,6 +2391,15 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.bounds.setWidth(img.width);
         morphToShow.bounds.setHeight(img.height);
         morphToShow.cachedImage = img;
+        morphToShow.version = value.version;
+        morphToShow.step = function () {
+            if (this.version !== value.version) {
+                img = value.image();
+                this.cachedImage = img;
+                this.version = value.version;
+                this.changed();
+            }
+        };
 
         // support blocks to be dragged out of result bubbles:
         morphToShow.isDraggable = true;
@@ -3603,7 +3612,7 @@ BlockMorph.prototype.isUnattached = function () {
     // private
     return ((this.nextBlock && !this.nextBlock()) || !this.nextBlock) &&
         !(this.parent instanceof SyntaxElementMorph) &&
-        !(this.parent instanceof ScriptsMorph)
+        !(this.parent instanceof ScriptsMorph);
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {

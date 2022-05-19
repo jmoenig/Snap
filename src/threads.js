@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-17';
+modules.threads = '2022-May-19';
 
 var ThreadManager;
 var Process;
@@ -5737,9 +5737,8 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     template = rcvr.paletteBlockInstance(def);
 
     if (def.isGlobal) {
-        rcvr.allBlockInstances(def).reverse().forEach(
-            block => block.refresh()
-        );
+        rcvr.allBlockInstances(def).reverse().forEach(block => block.refresh());
+        ide.stage.allContextsUsing(def).forEach(context => context.changed());
     } else {
         rcvr.allDependentInvocationsOf(oldSpec).reverse().forEach(
             block => block.refresh(def)
@@ -7290,6 +7289,7 @@ function Context(
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
     this.accumulator = null;
+    this.version = null; // for oberservers, don't serialize
 }
 
 Context.prototype.toString = function () {
@@ -7300,6 +7300,11 @@ Context.prototype.toString = function () {
         }
     }
     return 'Context >> ' + expr + ' ' + this.variables;
+};
+
+Context.prototype.changed = function () {
+    // notify observers about a change of my state
+    this.version = Date.now();
 };
 
 Context.prototype.image = function () {

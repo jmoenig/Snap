@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-ZERO, WHITE*/
+Context, ZERO, WHITE*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2022-February-07';
+modules.lists = '2022-May-19';
 
 var List;
 var ListWatcherMorph;
@@ -1241,7 +1241,9 @@ ListWatcherMorph.prototype.update = function (anyway) {
             if (m.contentsMorph instanceof ListWatcherMorph) {
                 m.contentsMorph.update();
             } else if (isSnapObject(m.contents) ||
-                    (m.contents instanceof Costume)) {
+                (m.contents instanceof Costume) ||
+                (m.contents instanceof Context)
+            ) {
                 m.update();
             }
         }

@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-May-02';
+modules.objects = '2022-May-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -6810,7 +6810,9 @@ SpriteMorph.prototype.deleteAllBlockInstances = function (definition) {
 };
 
 SpriteMorph.prototype.allBlockInstances = function (definition) {
-    var stage, objects, blocks = [], inDefinitions;
+    var stage, objects,
+        blocks = [],
+        inDefinitions = [];
     if (definition.isGlobal) {
         stage = this.parentThatIsA(StageMorph);
         objects = stage.children.filter(morph =>
@@ -6822,7 +6824,6 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
                 sprite.allLocalBlockInstances(definition)
             )
         );
-        inDefinitions = [];
         stage.globalBlocks.forEach(def => {
             def.scripts.forEach(eachScript =>
                 eachScript.allChildren().forEach(c => {
@@ -6839,7 +6840,9 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
                 });
             }
         });
-        return blocks.concat(inDefinitions);
+        return blocks.concat(inDefinitions).concat(
+            stage.allBlockInstancesInData(definition)
+        );
     }
     return this.allLocalBlockInstances(definition);
 };
@@ -9916,6 +9919,75 @@ StageMorph.prototype.deleteAllBlockInstances
 StageMorph.prototype.allBlockInstances
     = SpriteMorph.prototype.allBlockInstances;
 
+StageMorph.prototype.allBlockInstancesInData = function (definition) {
+    var blocks = [];
+    this.allContextsUsing(definition).forEach(context => {
+        if (context.expression instanceof BlockMorph) {
+            context.expression.allChildren().forEach(c => {
+                if (c.isCustomBlock && (c.definition === definition)) {
+                    blocks.push(c);
+                }
+            });
+        }
+    });
+    return blocks;
+};
+
+StageMorph.prototype.allContextsUsing = function (definition) {
+    var objects,
+        contexts = [],
+        charted = [];
+
+    if (!definition.isGlobal) {return []; } // not yet implemented, maybe never
+
+    function scanVariables(varFrame) {
+        varFrame.names().forEach(vname => {
+            var value = varFrame.getVar(vname);
+            if (value instanceof Context) {
+                scanContext(value);
+            } else if (value instanceof List) {
+                scanList(value);
+            }
+        });
+    }
+
+    function scanContext(context) {
+        if (!charted.includes(context)) {
+            charted.push(context);
+        }
+        if (context.expression instanceof BlockMorph &&
+            context.expression.allChildren().some(c =>
+                c.isCustomBlock && (c.definition === definition))
+        ) {
+            contexts.push(context);
+        }
+    }
+
+    function scanList(list) {
+        if (!charted.includes(list)) {
+            charted.push(list);
+            list.map(each => {
+                if (each instanceof Context) {
+                    scanContext(each);
+                } else if (each instanceof List) {
+                    scanList(each);
+                }
+            });
+        }
+    }
+
+    objects = this.children.filter(morph => morph instanceof SpriteMorph);
+    objects.push(this);
+    scanVariables(this.globalVariables());
+    objects.forEach(sprite => scanVariables(sprite.variables));
+    this.threads.processes.forEach(proc => {
+        if (proc.context instanceof Context) {
+            scanContext(proc.context);
+        }
+    });
+    return contexts;
+};
+
 StageMorph.prototype.allLocalBlockInstances
     = SpriteMorph.prototype.allLocalBlockInstances;
 
@@ -10293,6 +10365,15 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setWidth(img.width);
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
+        contents.version = data.version;
+        contents.step = function () {
+            if (this.version !== data.version) {
+                img = data.image();
+                this.cachedImage = img;
+                this.version = data.version;
+                this.changed();
+            }
+        };
 
         // support blocks to be dragged out of speech balloons:
         contents.isDraggable = true;
@@ -11723,6 +11804,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.bounds.setWidth(img.width);
             this.contentsMorph.bounds.setHeight(img.height);
             this.contentsMorph.cachedImage = img;
+            this.version = this.contents.version;
 
             // support blocks to be dragged out of watchers:
             this.contentsMorph.isDraggable = true;
@@ -11858,7 +11940,10 @@ CellMorph.prototype.createContents = function () {
 
 CellMorph.prototype.update = function () {
     // special case for observing sprites
-    if (!isSnapObject(this.contents) && !(this.contents instanceof Costume)) {
+    if (!isSnapObject(this.contents) &&
+        !(this.contents instanceof Costume) &&
+        !(this.contents instanceof Context)
+    ) {
         return;
     }
     if (this.version !== this.contents.version) {
