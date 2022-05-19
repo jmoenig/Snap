@@ -50,6 +50,7 @@
 
 ### 2022-05-19
 * blocks, lists, objects, threads: made global Contexts observable 
+* gui: pushed dev version to 8
 
 ### 2022-05-17
 * blocks: added experimental private isChangeableTo(type) method
