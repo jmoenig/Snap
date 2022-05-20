@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-May-19';
+modules.objects = '2022-May-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -6866,7 +6866,9 @@ SpriteMorph.prototype.allDependentInvocationsOf = function (aSpec) {
     this.instances.forEach(sprite =>
         sprite.addAllInvocationsOf(aSpec, blocks)
     );
-    return blocks;
+    return blocks.concat(
+        this.parentThatIsA(StageMorph).allBlockInvocationsInData(aSpec, this)
+    );
 };
 
 SpriteMorph.prototype.allInvocationsOf = function (aSpec) {
@@ -9938,7 +9940,7 @@ StageMorph.prototype.allContextsUsing = function (definition) {
         contexts = [],
         charted = [];
 
-    if (!definition.isGlobal) {return []; } // not yet implemented, maybe never
+    if (!definition.isGlobal) {return []; }
 
     function scanVariables(varFrame) {
         varFrame.names().forEach(vname => {
@@ -9958,6 +9960,78 @@ StageMorph.prototype.allContextsUsing = function (definition) {
         if (context.expression instanceof BlockMorph &&
             context.expression.allChildren().some(c =>
                 c.isCustomBlock && (c.definition === definition))
+        ) {
+            contexts.push(context);
+        }
+    }
+
+    function scanList(list) {
+        if (!charted.includes(list)) {
+            charted.push(list);
+            list.map(each => {
+                if (each instanceof Context) {
+                    scanContext(each);
+                } else if (each instanceof List) {
+                    scanList(each);
+                }
+            });
+        }
+    }
+
+    objects = this.children.filter(morph => morph instanceof SpriteMorph);
+    objects.push(this);
+    scanVariables(this.globalVariables());
+    objects.forEach(sprite => scanVariables(sprite.variables));
+    this.threads.processes.forEach(proc => {
+        if (proc.context instanceof Context) {
+            scanContext(proc.context);
+        }
+    });
+    return contexts;
+};
+
+StageMorph.prototype.allBlockInvocationsInData = function (oldSpec, receiver) {
+    var blocks = [];
+    this.allContextsInvoking(oldSpec, receiver).forEach(context => {
+        if (context.expression instanceof BlockMorph) {
+            context.expression.allChildren().forEach(c => {
+                if (c.isCustomBlock &&
+                    !c.isGlobal &&
+                    (c.blockSpec === oldSpec)
+                ) {
+                    blocks.push(c);
+                }
+            });
+        }
+    });
+    return blocks;
+};
+
+StageMorph.prototype.allContextsInvoking = function (oldSpec, receiver) {
+    var objects,
+        contexts = [],
+        charted = [];
+
+    function scanVariables(varFrame) {
+        varFrame.names().forEach(vname => {
+            var value = varFrame.getVar(vname);
+            if (value instanceof Context) {
+                scanContext(value);
+            } else if (value instanceof List) {
+                scanList(value);
+            }
+        });
+    }
+
+    function scanContext(context) {
+        if (!charted.includes(context)) {
+            charted.push(context);
+        }
+        if (context.receiver === receiver &&
+            context.expression instanceof BlockMorph &&
+            context.expression.allChildren().some(c =>
+                c.isCustomBlock && !c.isGlobal && (c.blockSpec === oldSpec)
+            )
         ) {
             contexts.push(context);
         }

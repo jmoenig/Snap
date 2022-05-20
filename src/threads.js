@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-19';
+modules.threads = '2022-May-20';
 
 var ThreadManager;
 var Process;
@@ -5742,6 +5742,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     } else {
         rcvr.allDependentInvocationsOf(oldSpec).reverse().forEach(
             block => block.refresh(def)
+        );
+        ide.stage.allContextsInvoking(def.blockSpec(), rcvr).forEach(context =>
+            context.changed()
         );
     }
     if (template) {
