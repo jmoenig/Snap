@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-May-19';
+modules.blocks = '2022-May-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12817,6 +12817,9 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         this.children.splice(idx, 0, newPart);
     }
     newPart.fixLayout();
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+    }
     this.fixLayout();
     return newPart;
 };
@@ -12862,6 +12865,9 @@ MultiArgMorph.prototype.addInput = function (contents) {
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
     newPart.fixLayout();
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+    }
     this.fixLayout();
     return newPart;
 };

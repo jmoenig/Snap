@@ -41,12 +41,16 @@
     * fixed an edge case for slot type inferral
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
+    * fixed block label color when expanding or inserting variadic infix slots
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
     * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-05-23
+* blocks: fixed block label color when expanding or inserting variadic infix slots 
 
 ### 2022-05-20
 * byob, objects, threads: update sprite-local custom blocks in data
