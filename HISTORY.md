@@ -49,6 +49,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-05-25
+* threads: update programmatic custom block-type changes in data references
+
 ### 2022-05-23
 * blocks: fixed block label color when expanding or inserting variadic infix slots 
 

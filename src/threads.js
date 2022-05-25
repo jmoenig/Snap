@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-20';
+modules.threads = '2022-May-25';
 
 var ThreadManager;
 var Process;
@@ -5640,6 +5640,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         expr,
         def,
         template,
+        oldType,
         type;
 
     this.assertType(block, types);
@@ -5664,6 +5665,12 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         if (idx > -1) {
             arr.splice(idx, 1);
         }
+    }
+
+    function isMajorTypeChange() {
+        var rep = ['reporter', 'predicate'];
+        return (type === 'command' && rep.includes(oldType)) ||
+            (oldType == 'command' && rep.includes(type));
     }
 
     switch (choice) {
@@ -5698,10 +5705,27 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         if (rcvr.allBlockInstances(def).every(block =>
             block.isChangeableTo(type))
         ) {
+            oldType = def.type;
             def.type = type;
         } else {
             throw new Error('cannot change this\nfor a block that is in use');
         }
+        if (isMajorTypeChange()) {
+            // since we've already scanned all contexts we know that those
+            // that contain block instances only contain single, unattached
+            // ones. Therefore we can simply replace them with new ones.
+            if (def.isGlobal) {
+                ide.stage.allContextsUsing(def).forEach(context =>
+                    context.expression = def.blockInstance()
+                );
+            } else {
+                ide.stage.allContextsInvoking(def.blockSpec(), rcvr).forEach(
+                    context => context.expression = def.blockInstance()
+                );
+            }
+        }
+
+
         break;
     case 'scope':
         if (isInUse()) {
