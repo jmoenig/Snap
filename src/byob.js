@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-May-20';
+modules.byob = '2022-May-25';
 
 // Declarations
 
@@ -2665,12 +2665,27 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
     var def = this.definition,
         template = this.target.paletteBlockInstance(def);
 
-    if (this.definition.isGlobal) {
-        this.target.allBlockInstances(this.definition).reverse().forEach(
+    function isMajorTypeChange(oldType) {
+        var rep = ['reporter', 'predicate'],
+            type = def.type;
+        return (type === 'command' && rep.includes(oldType)) ||
+            (oldType == 'command' && rep.includes(type));
+    }
+
+    if (def.isGlobal) {
+        this.target.allBlockInstances(def).reverse().forEach(
             block => block.refresh()
         );
         this.target.parentThatIsA(StageMorph).allContextsUsing(def).forEach(
-            context => context.changed()
+            context => {
+                if (context.expression.isCustomBlock &&
+                    context.expression.isUnattached() &&
+                    isMajorTypeChange(context.expression.type())
+                ) {
+                    context.expression = def.blockInstance();
+                }
+                context.changed();
+            }
         );
     } else {
         this.target.allDependentInvocationsOf(oldSpec).reverse().forEach(
@@ -2680,7 +2695,15 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function (oldSpec) {
             def.blockSpec(),
             this.target
         ).forEach(
-            context => context.changed()
+            context => {
+                if (context.expression.isCustomBlock &&
+                    context.expression.isUnattached() &&
+                    isMajorTypeChange(context.expression.type())
+                ) {
+                    context.expression = def.blockInstance();
+                }
+                context.changed();
+            }
         );
     }
     if (template) {

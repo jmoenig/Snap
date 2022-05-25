@@ -5724,8 +5724,6 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 );
             }
         }
-
-
         break;
     case 'scope':
         if (isInUse()) {
