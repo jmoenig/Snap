@@ -10027,7 +10027,7 @@ StageMorph.prototype.allContextsInvoking = function (oldSpec, receiver) {
         if (!charted.includes(context)) {
             charted.push(context);
         }
-        if (context.receiver === receiver &&
+        if ((context.receiver === receiver || context.receiver === null) &&
             context.expression instanceof BlockMorph &&
             context.expression.allChildren().some(c =>
                 c.isCustomBlock && !c.isGlobal && (c.blockSpec === oldSpec)

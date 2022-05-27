@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-May-23';
+modules.blocks = '2022-May-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
