@@ -20,6 +20,7 @@
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
+    * new extension primitive for importing a costume from a url
     * new support for setting the translation via the API
     * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
@@ -48,6 +49,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-05-28
+* new extension primitive for importing a costume from a url
 
 ### 2022-05-27
 * blocks, threads: update programmatic custom block scope changes in data references

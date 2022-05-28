@@ -30,11 +30,11 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect,
-SVG_Costume*/
+SVG_Costume, newCanvas, Point*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-April-25';
+modules.extensions = '2022-May-28';
 
 // Global stuff
 
@@ -670,6 +670,28 @@ SnapExtensions.primitives.set(
 );
 
 // Costumes (cst_):
+
+SnapExtensions.primitives.set(
+    'cst_load(url)',
+    function (url, proc) {
+        if (!proc.context.accumulator) {
+            proc.context.accumulator = {
+                img: new Image(),
+                cst: null,
+            };
+            proc.context.accumulator.img.onload = function () {
+                var canvas = newCanvas(new Point(this.width, this.height));
+                canvas.getContext('2d').drawImage(this, 0, 0);
+                proc.context.accumulator.cst = new Costume(canvas);
+            };
+            proc.context.accumulator.img.src = url;
+        } else if (proc.context.accumulator.cst) {
+            return proc.context.accumulator.cst;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
 
 SnapExtensions.primitives.set(
     // experimental, will probably be taken out again, don't rely on this
