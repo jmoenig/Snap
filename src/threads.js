@@ -5690,7 +5690,7 @@ Process.prototype.slotType = function (spec) {
 Process.prototype.slotSpec = function (num) {
     // answer a spec indicating the shape of a slot represented by a number
     var prefix = '',
-        id = num,
+        id = +num,
         spec;
 
     if (id >= 100) {
@@ -5699,7 +5699,7 @@ Process.prototype.slotSpec = function (num) {
     }
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
-    'anyUE', 'boolUE', 'obj', 'upvar'][num];
+    'anyUE', 'boolUE', 'obj', 'upvar'][id];
 
     if (spec === undefined) {
         return null;
