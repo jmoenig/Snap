@@ -8670,7 +8670,7 @@ ArgMorph.prototype.justDropped = function () {
 // ArgMorph spec extrapolation (for demo purposes)
 
 ArgMorph.prototype.getSpec = function () {
-    return '%s'; // default
+    return this.type === 'list' ? '%l' : '%s'; // default
 };
 
 // ArgMorph menu

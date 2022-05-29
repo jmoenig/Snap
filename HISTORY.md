@@ -54,6 +54,7 @@
 ### 2022-05-29
 * blocks, threads: new "slots" choice in the OF BLOCK block-attribute reporter's dropdown
 * blocks, threads: programmatically change slot shapes in custom blocks
+* blocks: correctly identify list slots in primitives
 
 ### 2022-05-28
 * new extension primitive for importing a costume from a url
