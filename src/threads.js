@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-27';
+modules.threads = '2022-May-29';
 
 var ThreadManager;
 var Process;
@@ -5597,7 +5597,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr;
+        expr, slots;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -5626,8 +5626,65 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         ) + 1;
     case 'scope':
         return expr.isCustomBlock ? (expr.isGlobal ? 1 : 2) : 0;
+    case 'slots':
+        if (expr.isCustomBlock) {
+            slots = [];
+            (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec)
+            ).declarations.forEach(value => slots.push(value[0]));
+            return new List(slots).map(spec => this.slotType(spec));
+        }
+        return new List(
+            expr.inputs().map(each =>
+                each instanceof ReporterBlockMorph ?
+                    each.getSlotSpec() : each.getSpec()
+            )
+        ).map(spec => this.slotType(spec));
     }
     return '';
+};
+
+Process.prototype.slotType = function (spec) {
+    // answer a number indicating the shape of a slot represented by its spec
+    var key = spec.slice(1),
+        shift = 0,
+        num;
+
+    if (key.startsWith('mult')) {
+        shift = 100;
+        key = key.slice(5);
+    }
+    num =  {
+        's':        0,
+        'n':        1,
+        'b':        2,
+        'l':        3,
+
+        'txt':      4,
+        'mlt':      4,
+        'code':     4,
+
+        'c':        5,
+        'cs':       5,
+        'loop':     5,
+        'ca':       5,
+
+        'cmdRing':  6,
+        'repRing':  7,
+        'predRing': 8,
+
+        'anyUE':    9,
+        'boolUE':   10,
+        'obj':      11,
+
+        't':        12,
+        'upvar':    12
+    }[key];
+    if (num === undefined) {
+        return spec;
+    }
+    return shift + num;
 };
 
 Process.prototype.doSetBlockAttribute = function (attribute, block, val) {

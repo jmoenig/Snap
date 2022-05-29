@@ -17,6 +17,7 @@
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label" choice in the OF BLOCK block-attribute reporter's dropdown
+    * new "slots" choice in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
@@ -49,6 +50,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-05-29
+* blocks, threads: new "slots" choice in the OF BLOCK block-attribute reporter's dropdown
 
 ### 2022-05-28
 * new extension primitive for importing a costume from a url
