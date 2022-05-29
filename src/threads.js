@@ -5687,6 +5687,29 @@ Process.prototype.slotType = function (spec) {
     return shift + num;
 };
 
+Process.prototype.slotSpec = function (num) {
+    // answer a spec indicating the shape of a slot represented by a number
+    var prefix = '',
+        id = num,
+        spec;
+
+    if (id >= 100) {
+        prefix = '%mult';
+        id -= 100;
+    }
+
+    spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
+    'anyUE', 'boolUE', 'obj', 'upvar'][num];
+
+    if (spec === undefined) {
+        return null;
+    }
+    if (spec === 'upvar' && id > 100) {
+        return null;
+    }
+    return prefix + '%' + spec;
+};
+
 Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     // highly experimental & under construction
     var choice = this.inputOption(attribute),
@@ -5811,6 +5834,17 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         inData.forEach(context => {
             context.expression = def.blockInstance();
             context.changed();
+        });
+        break;
+    case 'slots':
+        this.assertType(val, ['list', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name);
+            info[0] = this.slotSpec(val.at(idx + 1)) || info[0];
+            def.declarations.set(name, info);
         });
         break;
     default:

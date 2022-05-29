@@ -819,8 +819,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'definition': ['definition'],
             'category': ['category'],
             'type': ['type'],
-            'scope': ['scope']
-            // 'slots': ['slots']
+            'scope': ['scope'],
+            'slots': ['slots']
         }
     },
 
