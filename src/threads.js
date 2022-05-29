@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-29';
+modules.threads = '2022-May-30';
 
 var ThreadManager;
 var Process;
@@ -5842,9 +5842,12 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             val = new List([val]);
         }
         def.inputNames().forEach((name, idx) => {
-            var info = def.declarations.get(name);
-            info[0] = this.slotSpec(val.at(idx + 1)) || info[0];
-            def.declarations.set(name, info);
+            var info = def.declarations.get(name),
+                num = val.at(idx + 1);
+            if (num !== '') {
+                info[0] = this.slotSpec(num) || info[0];
+                def.declarations.set(name, info);
+            }
         });
         break;
     default:

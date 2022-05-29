@@ -51,6 +51,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-05-30
+* threads: support single value for slot type
+
 ### 2022-05-29
 * blocks, threads: new "slots" choice in the OF BLOCK block-attribute reporter's dropdown
 * blocks, threads: programmatically change slot shapes in custom blocks
