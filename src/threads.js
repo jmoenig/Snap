@@ -5646,40 +5646,96 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
 };
 
 Process.prototype.slotType = function (spec) {
-    // answer a number indicating the shape of a slot represented by its spec
-    var key = spec.slice(1),
-        shift = 0,
+    // answer a number indicating the shape of a slot represented by its spec.
+    // Note: you can also use it to translate mnemonics into slot type numbers
+    var shift = 0,
+        key = spec,
         num;
 
-    if (key.startsWith('mult')) {
+    if (spec.startsWith('%')) {
+        key = spec.slice(1);
+        if (key.startsWith('mult')) {
+            shift = 100;
+            key = key.slice(5);
+        }
+    } else if (spec.endsWith('...')) {
         shift = 100;
-        key = key.slice(5);
+        key = spec.slice(0, -3);
     }
+
     num =  {
-        's':        0,
-        'n':        1,
-        'b':        2,
-        'l':        3,
+        's':        0, // spec
+        // mnemonics:
+        ' ':        0,
+        '_':        0,
+        'a':        0,
+        'any':      0,
 
-        'txt':      4,
-        'mlt':      4,
-        'code':     4,
+        'n':        1, // spec
+        // mnemonics:
+        '#':        1,
+        'num':      1,
+        'number':   1,
 
-        'c':        5,
-        'cs':       5,
-        'loop':     5,
-        'ca':       5,
+        'b':        2, // spec
+        // mnemonics:
+        '?':        2,
+        'bool':     2,
+        'boolean':  2,
 
-        'cmdRing':  6,
-        'repRing':  7,
-        'predRing': 8,
+        'l':        3, // spec
+        // mnemonics:
+        ':':        3,
+        'lst':      3,
+        'list':     3,
 
-        'anyUE':    9,
-        'boolUE':   10,
-        'obj':      11,
+        'txt':      4, // spec
+        'mlt':      4, // spec
+        'code':     4, // spec
+        // mnemonics:
+        'x':        4,
+        'text':     4,
+        'abc':      4,
 
-        't':        12,
-        'upvar':    12
+        'c':        5, // spec
+        'cs':       5, // spec
+        'loop':     5, // spec
+        'ca':       5, // spec
+        // mnemonics:
+        'script':   5,
+        
+        'cmdRing':  6, // spec
+        // mnemonics:
+        'cmd':      6,
+        'command':  6,
+
+        'repRing':  7, // spec
+        // mnemonics:
+        'rep':      7,
+        'reporter': 7,
+
+        'predRing': 8, // spec
+        // mnemonics:
+        'pred':     8,
+        'predicate': 8,
+
+        'anyUE':    9, // spec
+        // mnemonics:
+        'unevaluated': 9,
+
+        'boolUE':   10, // spec
+        // mnemonics: none
+
+        'obj':      11, // spec
+        // mnemonics:
+        'o':        11,
+        'object':   11,
+
+        't':        12, // spec
+        'upvar':    12, // spec
+        // mnemonics:
+        'v':        12,
+        'var':      12
     }[key];
     if (num === undefined) {
         return spec;
@@ -5689,8 +5745,9 @@ Process.prototype.slotType = function (spec) {
 
 Process.prototype.slotSpec = function (num) {
     // answer a spec indicating the shape of a slot represented by a number
+    // or by a textual mnemomic
     var prefix = '',
-        id = +num,
+        id = this.reportIsA(num, 'text') ? this.slotType(num) : +num,
         spec;
 
     if (id >= 100) {
@@ -5837,15 +5894,15 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         });
         break;
     case 'slots':
-        this.assertType(val, ['list', 'number']);
+        this.assertType(val, ['list', 'number', 'text']);
         if (!(val instanceof List)) {
             val = new List([val]);
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
-                num = val.at(idx + 1);
-            if (num !== '') {
-                info[0] = this.slotSpec(num) || info[0];
+                id = val.at(idx + 1);
+            if (id !== '') {
+                info[0] = this.slotSpec(id) || info[0];
                 def.declarations.set(name, info);
             }
         });

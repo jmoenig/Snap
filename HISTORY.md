@@ -53,6 +53,7 @@
 ### 2022-05-30
 * threads: support single value for slot type
 * German translation update (for new strings 'type', 'scope' and 'slots')
+* threads: added mnemonics support for programmatically setting slot shapes
 
 ### 2022-05-29
 * blocks, threads: new "slots" choice in the OF BLOCK block-attribute reporter's dropdown
