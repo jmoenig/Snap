@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-04-28', // this, too, will appear in the Translators tab
+        '2022-05-30', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -741,6 +741,12 @@ SnapTranslator.dict.de = {
         'benutzerdefiniert?',
     'global?':
         'global?',
+    'type':
+        'Art',
+    'scope':
+        'Bereich',
+    'slots':
+        'Felder',
     'set %byob of block %repRing to %s':
         'setze %byob von Block %repRing auf %s',
 
