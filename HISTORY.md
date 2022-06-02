@@ -31,6 +31,7 @@
     * moved "current date" block up to "timer" group in the palette
     * include currently dragged sprites in the MY OTHER SPRITES/CLONES lists
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
+    * when querying a custom reporter's "definition" property only report its reporter without the REPORT block (if applicable)
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
     * MQTT extension update, thanks, Simon!
 * **Notable Fixes:**
@@ -49,6 +50,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-06-02
+* threads: when querying a custom reporter's "definition" property only report its reporter without the REPORT block (if applicable)
 
 ### 2022-05-30
 * threads: support single value for slot type

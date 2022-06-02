@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-May-30';
+modules.threads = '2022-June-02';
 
 var ThreadManager;
 var Process;
@@ -5597,7 +5597,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, slots;
+        expr, body, slots;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -5606,12 +5606,19 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
-                return expr.definition.body || new Context();
+                body = expr.definition.body || new Context();
+            } else {
+                body = this.blockReceiver().getMethod(expr.semanticSpec).body ||
+                    new Context();
             }
-            return this.blockReceiver().getMethod(expr.semanticSpec).body ||
-                new Context();
+        } else {
+            body = new Context();
         }
-        return new Context();
+        if (body.expression && body.expression.selector === 'doReport') {
+            return body.expression.inputs()[0].reify(body.inputs);
+        }
+        return body;
+
     case 'category':
         return expr ?
             SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
