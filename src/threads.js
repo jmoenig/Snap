@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-02';
+modules.threads = '2022-June-21';
 
 var ThreadManager;
 var Process;
@@ -5614,7 +5614,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         } else {
             body = new Context();
         }
-        if (body.expression && body.expression.selector === 'doReport') {
+        if (body.expression && body.expression.selector === 'doReport' &&
+                body.expression.inputs()[0] instanceof BlockMorph) {
             return body.expression.inputs()[0].reify(body.inputs);
         }
         return body;

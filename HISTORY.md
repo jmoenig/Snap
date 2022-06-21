@@ -51,6 +51,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-06-21
+* threads: fixed #3061
+
 ### 2022-06-02
 * threads: when querying a custom reporter's "definition" property only report its reporter without the REPORT block (if applicable)
 
