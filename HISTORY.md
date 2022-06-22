@@ -54,6 +54,7 @@
 
 ### 2022-06-22
 * objects, blocks, threads: new "this script" primitive in sensing, experimental
+* German translation update for "define block"
 
 ### 2022-06-21
 * threads: fixed #3061
