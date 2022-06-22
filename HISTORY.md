@@ -19,6 +19,7 @@
     * new "label", "type", "scope" and "slots" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
+    * new "this script" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
     * new extension primitive for importing a costume from a url
     * new support for setting the translation via the API
@@ -50,6 +51,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-06-22
+* objects, blocks, threads: new "this script" primitive in sensing, experimental
 
 ### 2022-06-21
 * threads: fixed #3061

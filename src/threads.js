@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-21';
+modules.threads = '2022-June-22';
 
 var ThreadManager;
 var Process;
@@ -1379,6 +1379,9 @@ Process.prototype.evaluate = function (
     // parameter ID Symbol.for('arguments'), to be used for variadic inputs
     outer.variables.addVar(Symbol.for('arguments'), args);
 
+    // assign a self-reference for introspection and recursion
+    outer.variables.addVar(Symbol.for('self'), context);
+
     // assign arguments that are actually passed
     if (parms.length > 0) {
 
@@ -1544,6 +1547,17 @@ Process.prototype.initializeFor = function (context, args) {
     this.homeContext.receiver = context.outerContext.receiver;
     this.topBlock = context.expression;
     this.context = runnable;
+};
+
+// Process introspection
+
+Process.prototype.reportThisContext = function () {
+    var sym = Symbol.for('self'),
+        frame = this.context.variables.silentFind(sym);
+    if (frame) {
+        return frame.vars[sym].value;
+    }
+    return this.topBlock.reify();
 };
 
 // Process stopping blocks primitives
@@ -1713,6 +1727,7 @@ Process.prototype.evaluateCustomBlock = function () {
             this.readyToYield = true;
         }
     }
+    outer.variables.addVar(Symbol.for('self'), method.body || new Context());
     runnable.expression = runnable.expression.blockSequence();
 };
 
@@ -5619,7 +5634,6 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             return body.expression.inputs()[0].reify(body.inputs);
         }
         return body;
-
     case 'category':
         return expr ?
             SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1

@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-May-29';
+modules.blocks = '2022-June-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7474,6 +7474,7 @@ RingMorph.prototype.vanishForSimilar = function () {
         block.selector === 'reportJSFunction' ||
         block.selector === 'reportAttributeOf' ||
         block.selector === 'reportCompiled' ||
+        block.selector === 'reportThisContext' ||
         (block instanceof RingMorph)
     ) {
         this.parent.replaceInput(this, block);

@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-May-20';
+modules.objects = '2022-June-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -1109,6 +1109,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'define block %s %repRing'
+        },
+        reportThisContext: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'this script'
         },
 
         // Operators
@@ -2704,6 +2709,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportDefineBlock'));
+        blocks.push(block('reportThisContext'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -9178,6 +9184,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportDefineBlock'));
+        blocks.push(block('reportThisContext'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
