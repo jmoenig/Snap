@@ -5967,6 +5967,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     var rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
         vars = this.context.outerContext.variables,
+        type = this.reportTypeOf(context),
         count = 1,
         spec, def;
 
@@ -5976,27 +5977,11 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
 
     // replace upvar self references inside the definition body
     // with "reportThisContext" reporters
-    if (context.expression instanceof BlockMorph) {
-        context.expression.forAllChildren(morph => {
-            var ref;
-            if (morph.selector === 'reportGetVar' &&
-                (morph.blockSpec === upvar))
-            {
-                ref = SpriteMorph.prototype.blockForSelector(
-                    'reportThisContext'
-                );
-                if (morph.parent instanceof SyntaxElementMorph) {
-                    morph.parent.replaceInput(morph, ref);
-                } else {
-                    context.expression = ref;
-                }
-            }
-        });
-    }
+    this.compileBlockReferences(context, upvar);
 
     // make a new custom block definition
     def = new CustomBlockDefinition('BYOB'); // haha!
-    def.type = this.reportTypeOf(context);
+    def.type = type;
     def.category = 'other';
     def.isGlobal = true;
     def.setBlockDefinition(context);
@@ -6019,6 +6004,60 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     // create the reference to the new block
     vars.addVar(upvar);
     vars.setVar(upvar, def.blockInstance().reify());
+};
+
+Process.prototype.compileBlockReferences = function (context, varName) {
+    // private - replace self references inside the definition body
+    // with "reportThisContext" reporters
+    var report, declare, assign;
+
+    function block(selector) {
+        return SpriteMorph.prototype.blockForSelector(selector);
+    }
+
+    if (context.expression.allChildren().some(any =>
+        any.selector === 'reportGetVar' && any.parentThatIsA(RingMorph)
+    )) {
+        if (context.expression instanceof ReporterBlockMorph) {
+            // turn into a REPORT script
+            report = block('doReport');
+            report.replaceInput(
+                report.inputs()[0],
+                context.expression.fullCopy()
+            );
+            context.expression = report;
+        }
+        // add a script var to capture the outer definition
+        // don't replace any references, because they now should just work
+        declare = block('doDeclareVariables');
+        declare.inputs()[0].setContents([varName]);
+        assign = block('doSetVar');
+        assign.inputs()[0].setContents(varName);
+        assign.replaceInput(
+            assign.inputs()[1],
+            block('reportThisContext')
+        );
+        declare.nextBlock(assign);
+        assign.nextBlock(context.expression.fullCopy());
+        context.expression = declare;
+        return;
+    }
+
+    if (context.expression instanceof BlockMorph) {
+        context.expression.forAllChildren(morph => {
+            var ref;
+            if (morph.selector === 'reportGetVar' &&
+                (morph.blockSpec === varName))
+            {
+                ref = block('reportThisContext');
+                if (morph.parent instanceof SyntaxElementMorph) {
+                    morph.parent.replaceInput(morph, ref);
+                } else {
+                    context.expression = ref;
+                }
+            }
+        });
+    }
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {

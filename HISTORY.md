@@ -56,6 +56,7 @@
 * objects, threads: turned DEFINE into a command block with an upvar, experimental
 * German translation update for the new format of the DEFINE block
 * objects: moved DEFINE primitives to the control category
+* threads: compile block references in DEFINE
 
 ### 2022-06-22
 * objects, blocks, threads: new "this script" primitive in sensing, experimental
