@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-22';
+modules.threads = '2022-June-23';
 
 var ThreadManager;
 var Process;
@@ -5962,16 +5962,37 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     ide.recordUnsavedChanges();
 };
 
-Process.prototype.reportDefineBlock = function (label, context) {
+Process.prototype.doDefineBlock = function (upvar, label, context) {
     // highly experimental & under construction
     var rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
+        vars = this.context.outerContext.variables,
         count = 1,
         spec, def;
 
     this.assertType(label, 'text');
     if (label === '') {return ''; }
     this.assertType(context, ['command', 'reporter', 'predicate']);
+
+    // replace upvar self references inside the definition body
+    // with "reportThisContext" reporters
+    if (context.expression instanceof BlockMorph) {
+        context.expression.forAllChildren(morph => {
+            var ref;
+            if (morph.selector === 'reportGetVar' &&
+                (morph.blockSpec === upvar))
+            {
+                ref = SpriteMorph.prototype.blockForSelector(
+                    'reportThisContext'
+                );
+                if (morph.parent instanceof SyntaxElementMorph) {
+                    morph.parent.replaceInput(morph, ref);
+                } else {
+                    context.expression = ref;
+                }
+            }
+        });
+    }
 
     // make a new custom block definition
     def = new CustomBlockDefinition('BYOB'); // haha!
@@ -5994,7 +6015,10 @@ Process.prototype.reportDefineBlock = function (label, context) {
     ide.categories.refreshEmpty();
     ide.refreshPalette();
     ide.recordUnsavedChanges();
-    return def.blockInstance().reify();
+
+    // create the reference to the new block
+    vars.addVar(upvar);
+    vars.setVar(upvar, def.blockInstance().reify());
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {

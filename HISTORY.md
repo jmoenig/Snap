@@ -52,6 +52,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-06-23
+* objects, threads: turned DEFINE into a command block with an upvar, experimental
+
 ### 2022-06-22
 * objects, blocks, threads: new "this script" primitive in sensing, experimental
 * German translation update for "define block"

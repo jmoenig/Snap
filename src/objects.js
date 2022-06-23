@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-June-22';
+modules.objects = '2022-June-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -1105,10 +1105,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set %byob of block %repRing to %s',
             defaults: [['label']]
         },
-        reportDefineBlock: {
-            type: 'reporter',
+        doDefineBlock: {
+            type: 'command',
             category: 'sensing',
-            spec: 'define block %s %repRing'
+            spec: 'define %upvar %s %repRing',
+            defaults: [['block']]
         },
         reportThisContext: {
             type: 'reporter',
@@ -2706,9 +2707,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportBlockAttribute'));
+        blocks.push(block('doDefineBlock'));
         blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportDefineBlock'));
+        blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));
 
         // for debugging: ///////////////
@@ -9181,9 +9182,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGlobalFlag'));
         blocks.push(block('doSetGlobalFlag'));
         blocks.push('-');
-        blocks.push(block('reportBlockAttribute'));
+        blocks.push(block('doDefineBlock'));
         blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportDefineBlock'));
+        blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));
 
         // for debugging: ///////////////
