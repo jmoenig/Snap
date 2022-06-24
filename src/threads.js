@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-24';
+modules.threads = '2022-June-25';
 
 var ThreadManager;
 var Process;
@@ -5671,18 +5671,18 @@ Process.prototype.slotType = function (spec) {
     // answer a number indicating the shape of a slot represented by its spec.
     // Note: you can also use it to translate mnemonics into slot type numbers
     var shift = 0,
-        key = spec,
+        key = spec.toLowerCase(),
         num;
 
     if (spec.startsWith('%')) {
-        key = spec.slice(1);
+        key = spec.slice(1).toLowerCase();
         if (key.startsWith('mult')) {
             shift = 100;
             key = key.slice(5);
         }
     } else if (spec.endsWith('...')) {
         shift = 100;
-        key = spec.slice(0, -3);
+        key = spec.slice(0, -3).toLowerCase();
     }
 
     num =  {
@@ -5705,6 +5705,7 @@ Process.prototype.slotType = function (spec) {
         'b':        2, // spec
         // mnemonics:
         '?':        2,
+        'tf':       2,
         'bool':     2,
         'boolean':  2,
 
@@ -5733,30 +5734,30 @@ Process.prototype.slotType = function (spec) {
         'script':   5,
         
         '6':        6,
-        'cmdRing':  6, // spec
+        'cmdring':  6, // spec
         // mnemonics:
         'cmd':      6,
         'command':  6,
 
         '7':        7,
-        'repRing':  7, // spec
+        'repring':  7, // spec
         // mnemonics:
         'rep':      7,
         'reporter': 7,
 
         '8':        8,
-        'predRing': 8, // spec
+        'predring': 8, // spec
         // mnemonics:
         'pred':     8,
         'predicate': 8,
 
         '9':        9,
-        'anyUE':    9, // spec
+        'anyue':    9, // spec
         // mnemonics:
         'unevaluated': 9,
 
         '10':        10,
-        'boolUE':   10, // spec
+        'boolue':   10, // spec
         // mnemonics: none
 
         '11':        11,

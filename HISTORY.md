@@ -52,6 +52,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-06-25
+* threads: made slot-type mnemonics case-insensitive
+
 ### 2022-06-24
 * threads: made block attribute "type" case-insensitive for textual mnemonics
 * threads: allow variadic slot type declaration using ellipses after type numbers
