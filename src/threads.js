@@ -5810,13 +5810,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
         scopes = ['global', 'local'],
-        oldSpec,
-        expr,
-        def,
-        inData,
-        template,
-        oldType,
-        type;
+        idx, oldSpec, expr, def, inData, template, oldType, type;
 
     this.assertType(block, types);
     expr = block.expression;
@@ -5863,11 +5857,10 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'category':
         this.assertType(val, ['number', 'text']);
         if (this.reportTypeOf(val) === 'text') {
-            def.category = contains(
-                SpriteMorph.prototype.allCategories(),
-                val
-            ) ? val : 'other';
-            break;
+            idx = SpriteMorph.prototype.allCategories().map(
+                cat => cat.toLowerCase()
+            ).indexOf(val.toLowerCase());
+            val = idx + 1;
         }
         def.category = SpriteMorph.prototype.allCategories()[+val - 1] ||
             'other';
