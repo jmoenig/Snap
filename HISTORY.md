@@ -55,6 +55,7 @@
 ### 2022-06-24
 * threads: made block attribute "type" case-insensitive for textual mnemonics
 * threads: allow variadic slot type declaration using ellipses after type numbers
+* threads: allow case-insensitive text for custom block scope specification
 
 ### 2022-06-23
 * objects, threads: turned DEFINE into a command block with an upvar, experimental

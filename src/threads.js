@@ -5808,6 +5808,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
+        scopes = ['global', 'local'],
         oldSpec,
         expr,
         def,
@@ -5907,7 +5908,14 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             throw new Error('cannot change this\nfor a block that is in use');
         }
         this.assertType(val, ['number', 'text']);
-        type = +val;
+        if (this.reportTypeOf(val) === 'text') {
+            type = val.toLowerCase();
+        }
+        if (scopes.includes(type)) {
+            type = scopes.indexOf(type) + 1;
+        } else {
+            type = +val;
+        }
         if (type === 1 && !def.isGlobal) {
             // make global
             inData = ide.stage.allContextsInvoking(def.blockSpec(), rcvr);
