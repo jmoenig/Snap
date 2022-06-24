@@ -6008,7 +6008,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     );
     if (matches.length > 1) {
         throw new Error(
-            'several block definitions already match this label'
+            'several block definitions\nalready match this label'
         );
     } else if (matches.length === 1) {
         // update the existing global definition with the context body

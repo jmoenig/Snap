@@ -57,6 +57,7 @@
 * threads: allow variadic slot type declaration using ellipses after type numbers
 * threads: allow case-insensitive text for custom block scope specification
 * threads: update an existing global definition matching DEFINE's label
+* German translation update (for new error message)
 
 ### 2022-06-23
 * objects, threads: turned DEFINE into a command block with an upvar, experimental

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-06-23', // this, too, will appear in the Translators tab
+        '2022-06-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2217,5 +2217,8 @@ SnapTranslator.dict.de = {
     'setting the rotation center requires a costume':
         'Der Drehpunkt kann nur zusammen\nmit einem Kostüm gesetzt werden',
     'Web Audio API is not supported\nin this browser':
-        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt'
+        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt',
+    'several block definitions\nalready match this label':
+        'Mehrere Blöcke passen\nzu dieser Aufschrift'
+        
 };
