@@ -5990,7 +5990,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
         vars = this.context.outerContext.variables,
         type = this.reportTypeOf(context),
         count = 1,
-        spec, def;
+        matches, spec, def;
 
     this.assertType(label, 'text');
     if (label === '') {return ''; }
@@ -6000,6 +6000,29 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     // with "reportThisContext" reporters
     if (context.expression instanceof BlockMorph) {
         this.compileBlockReferences(context, upvar);
+    }
+
+    // identify global custom block matching the specified label
+    matches = ide.stage.globalBlocks.filter(def =>
+        def.abstractBlockSpec() === label
+    );
+    if (matches.length > 1) {
+        throw new Error(
+            'several block definitions already match this label'
+        );
+    } else if (matches.length === 1) {
+        // update the existing global definition with the context body
+        def = matches[0];
+        this.doSetBlockAttribute(
+            'definition',
+            def.blockInstance().reify(),
+            context
+        );
+
+        // create the reference to the new block
+        vars.addVar(upvar);
+        vars.setVar(upvar, def.blockInstance().reify());
+        return;
     }
 
     // make a new custom block definition
