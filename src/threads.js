@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-23';
+modules.threads = '2022-June-24';
 
 var ThreadManager;
 var Process;
@@ -5860,7 +5860,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'type':
         this.assertType(val, ['number', 'text']);
         if (this.reportTypeOf(val) === 'text') {
-            type = val;
+            type = val.toLowerCase();
         } else {
             type = types[val - 1] || '';
         }
