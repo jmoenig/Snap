@@ -5686,6 +5686,7 @@ Process.prototype.slotType = function (spec) {
     }
 
     num =  {
+        '0':        0,
         's':        0, // spec
         // mnemonics:
         ' ':        0,
@@ -5693,24 +5694,28 @@ Process.prototype.slotType = function (spec) {
         'a':        0,
         'any':      0,
 
+        '1':        1,
         'n':        1, // spec
         // mnemonics:
         '#':        1,
         'num':      1,
         'number':   1,
 
+        '2':        2,
         'b':        2, // spec
         // mnemonics:
         '?':        2,
         'bool':     2,
         'boolean':  2,
 
+        '3':        3,
         'l':        3, // spec
         // mnemonics:
         ':':        3,
         'lst':      3,
         'list':     3,
 
+        '4':        4,
         'txt':      4, // spec
         'mlt':      4, // spec
         'code':     4, // spec
@@ -5719,6 +5724,7 @@ Process.prototype.slotType = function (spec) {
         'text':     4,
         'abc':      4,
 
+        '5':        5,
         'c':        5, // spec
         'cs':       5, // spec
         'loop':     5, // spec
@@ -5726,33 +5732,40 @@ Process.prototype.slotType = function (spec) {
         // mnemonics:
         'script':   5,
         
+        '6':        6,
         'cmdRing':  6, // spec
         // mnemonics:
         'cmd':      6,
         'command':  6,
 
+        '7':        7,
         'repRing':  7, // spec
         // mnemonics:
         'rep':      7,
         'reporter': 7,
 
+        '8':        8,
         'predRing': 8, // spec
         // mnemonics:
         'pred':     8,
         'predicate': 8,
 
+        '9':        9,
         'anyUE':    9, // spec
         // mnemonics:
         'unevaluated': 9,
 
+        '10':        10,
         'boolUE':   10, // spec
         // mnemonics: none
 
+        '11':        11,
         'obj':      11, // spec
         // mnemonics:
         'o':        11,
         'object':   11,
 
+        '12':        12,
         't':        12, // spec
         'upvar':    12, // spec
         // mnemonics:
