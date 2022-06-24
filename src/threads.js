@@ -5998,7 +5998,9 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
 
     // replace upvar self references inside the definition body
     // with "reportThisContext" reporters
-    this.compileBlockReferences(context, upvar);
+    if (context.expression instanceof BlockMorph) {
+        this.compileBlockReferences(context, upvar);
+    }
 
     // make a new custom block definition
     def = new CustomBlockDefinition('BYOB'); // haha!
