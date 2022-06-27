@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-25';
+modules.threads = '2022-June-27';
 
 var ThreadManager;
 var Process;
@@ -5987,6 +5987,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
         matches, spec, def;
 
     this.assertType(label, 'text');
+    label = label.trim();
     if (label === '') {return ''; }
     this.assertType(context, ['command', 'reporter', 'predicate']);
 

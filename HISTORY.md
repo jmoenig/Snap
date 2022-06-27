@@ -52,6 +52,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-06-27
+* threads: trim block label before identifying existing definition in DEFINE
+
 ### 2022-06-25
 * threads: made slot-type mnemonics case-insensitive
 * threads: made categories case-insensitive
