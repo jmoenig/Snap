@@ -809,7 +809,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'type': ['type'],
             'scope': ['scope'],
             'slots': ['slots'],
-            'menus' : ['menus']
+            'menus' : ['menus'],
+            'editables' : ['editables']
         }
     },
     '%byob': {
@@ -822,7 +823,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'type': ['type'],
             'scope': ['scope'],
             'slots': ['slots'],
-            'menus' : ['menus']
+            'menus' : ['menus'],
+            'editables' : ['editables']
         }
     },
 

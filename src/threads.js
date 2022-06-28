@@ -5674,6 +5674,15 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             ));
         }
         return slots;
+    case 'editables':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(!value[3]));
+        }
+        return slots;
     }
     return '';
 };
@@ -5967,7 +5976,22 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 if (!(options instanceof List)) {
                     options = new List([options]);
                 }
-                info[2] = def.encodeChoices(options); // +++ || info[2];
+                info[2] = def.encodeChoices(options);
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'editables':
+        this.assertType(val, ['list', 'Boolean', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if ([true, false, 0, 1, '0', '1'].includes(options)) {
+                options = +options;
+                info[3] = !options;
                 def.declarations.set(name, info);
             }
         });

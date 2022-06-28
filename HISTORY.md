@@ -16,7 +16,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
-    * new "label", "type", "scope", "slots" and "menus" choices in the OF BLOCK block-attribute reporter's dropdown
+    * new "label", "type", "scope", "slots", "menus" and "editables" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
     * new "this script" primitive, experimental
@@ -56,6 +56,7 @@
 ### 2022-06-28
 * blocks, byob, threads: new "menus" selector for block attributes
 * German translation update for "menus"
+* blocks, threads: new "editables" selector for block attributes (indicates read-only input slots)
 
 ### 2022-06-27
 * threads: trim block label before identifying existing definition in DEFINE
