@@ -747,6 +747,8 @@ SnapTranslator.dict.de = {
         'Bereich',
     'slots':
         'Felder',
+    'defaults':
+        'Defaults',
     'menus':
         'Menüs',
     'editables':
