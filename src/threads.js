@@ -5663,6 +5663,15 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     each.getSlotSpec() : each.getSpec()
             )
         ).map(spec => this.slotType(spec));
+    case 'defaults':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(value[1]));
+        }
+        return slots;
     case 'menus':
         slots = new List();
         if (expr.isCustomBlock) {
@@ -5962,6 +5971,19 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 info[0] = this.slotSpec(id) || info[0];
                 def.declarations.set(name, info);
             }
+        });
+        break;
+    case 'defaults':
+        this.assertType(val, ['list', 'Boolean', 'number', 'text']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            this.assertType(options, ['Boolean', 'number', 'text']);
+            info[1] = options;
+            def.declarations.set(name, info);
         });
         break;
     case 'menus':
