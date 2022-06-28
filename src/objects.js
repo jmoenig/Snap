@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-June-23';
+modules.objects = '2022-June-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -926,6 +926,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'set %byob of block %repRing to %s',
             defaults: [['label']]
+        },
+        doDeleteBlock: {
+            type: 'command',
+            category: 'control',
+            spec: 'delete block %repRing'
         },
         reportBlockAttribute: {
             type: 'reporter',
@@ -2658,6 +2663,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doDefineBlock'));
+        blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));
@@ -9138,6 +9144,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('doDefineBlock'));
+        blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));

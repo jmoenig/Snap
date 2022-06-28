@@ -13685,6 +13685,10 @@ ReporterSlotMorph.prototype.isEmptySlot = function () {
 
 ReporterSlotMorph.prototype.fixLayout = function () {
     var contents = this.contents();
+    if (!contents) {
+        contents = this.emptySlot();
+        this.add(contents);
+    }
     this.bounds.setExtent(contents.extent().add(
         this.edge * 2 + this.rfBorder * 2
     ));

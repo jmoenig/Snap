@@ -6175,6 +6175,47 @@ Process.prototype.compileBlockReferences = function (context, varName) {
     }
 };
 
+Process.prototype.doDeleteBlock = function (context) {
+    // highly experimental & under construction
+    var rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        stage = ide.stage,
+        expr, def, method, idx;
+
+    this.assertType(context, ['command', 'reporter', 'predicate']);
+    expr = context.expression;
+    if (!expr.isCustomBlock) {
+        throw new Error('expecting a custom block\nbut getting a primitive');
+    }
+    def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
+    rcvr.deleteAllBlockInstances(def);
+    if (def.isGlobal) {
+        idx = stage.globalBlocks.indexOf(def);
+        if (idx !== -1) {
+            stage.globalBlocks.splice(idx, 1);
+        }
+    } else {
+        // delete local definition
+        idx = rcvr.customBlocks.indexOf(def);
+        if (idx !== -1) {
+            rcvr.customBlocks.splice(idx, 1);
+        }
+        // refresh instances of inherited method, if any
+        method = rcvr.getMethod(def.blockSpec);
+        if (method) {
+            rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
+                block => block.refresh(method)
+            );
+        }
+    }
+
+    // update the IDE
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+};
+
 Process.prototype.reportAttributeOf = function (attribute, name) {
     // hyper-dyadic
     // note: specifying strings in the left input only accesses

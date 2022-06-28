@@ -19,6 +19,7 @@
     * new "label", "type", "scope", "slots", "defaults", "menus" and "editables" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
+    * new "delete block" primitive, experimental
     * new "this script" primitive, experimental
     * new localization extension primitives in the "ide" category, hyperized
     * new extension primitive for importing a costume from a url
@@ -59,6 +60,7 @@
 * blocks, threads: new "editables" selector for block attributes (indicates read-only input slots)
 * German translation update for "editables"
 * blocks, threads: new "defaults" selector for block attributes
+* blocks, objects, threads: new "delete block" primitive in sensing
 
 ### 2022-06-27
 * threads: trim block label before identifying existing definition in DEFINE
