@@ -57,6 +57,7 @@
 * blocks, byob, threads: new "menus" selector for block attributes
 * German translation update for "menus"
 * blocks, threads: new "editables" selector for block attributes (indicates read-only input slots)
+* German translation update for "editables"
 
 ### 2022-06-27
 * threads: trim block label before identifying existing definition in DEFINE

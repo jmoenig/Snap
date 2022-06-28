@@ -749,6 +749,8 @@ SnapTranslator.dict.de = {
         'Felder',
     'menus':
         'Menüs',
+    'editables':
+        'Eingaben',
     'set %byob of block %repRing to %s':
         'setze %byob von Block %repRing auf %s',
     'define %upvar %s %repRing':
