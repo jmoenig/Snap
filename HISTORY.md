@@ -55,6 +55,7 @@
 
 ### 2022-06-28
 * blocks, byob, threads: new "menus" selector for block attributes
+* German translation update for "menus"
 
 ### 2022-06-27
 * threads: trim block label before identifying existing definition in DEFINE
