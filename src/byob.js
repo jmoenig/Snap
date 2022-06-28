@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-May-25';
+modules.byob = '2022-June-28';
 
 // Declarations
 
@@ -372,6 +372,52 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
         }
     });
     return dict;
+};
+
+CustomBlockDefinition.prototype.encodeChoices = function (list) {
+    // answer a string representing a parseable dropdown menu for an input slot
+    var encode = (dta) => dta instanceof List ?
+            encodeList(dta) : dta.toString(),
+        encodeList = (dta) => dta.length() === 2 ? encodePair(dta)
+            : dta.itemsArray().reduce(
+                (a, b) => encode(a) + '\n' + encode(b)),
+        encodePair = (dta) => encode(dta.at(1)) + '=' +
+            (dta.at(2) instanceof List ?
+                encodeSub(dta.at(2))
+                : encode(dta.at(2))),
+        encodeSub = (dta) => '{\n' + encode(dta) + '\n}';
+
+    if (list.isEmpty()) {
+        return '';
+    }
+    return list.itemsArray().reduce((a, b) => encode(a) + '\n' + encode(b));
+};
+
+CustomBlockDefinition.prototype.decodeChoices = function (choices) {
+    // answer a (nested) List representing the input slot dropdown menu
+    var list = new List(),
+        key;
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            if (key[0] === '~') {
+                list.add(key[0]);
+            } else if (choices[key] instanceof Object &&
+                    !(choices[key] instanceof Array) &&
+                    (typeof choices[key] !== 'function')) {
+                list.add(new List([key, this.decodeChoices(choices[key])]));
+            } else if (choices[key] instanceof Array &&
+                    choices[key][0] instanceof Object &&
+                    typeof choices[key][0] !== 'function') {
+
+                list.add(new List([key, this.decodeChoices(choices[key][0])]));
+            } else {
+                list.add(choices[key] === key ? key
+                    : new List([key, choices[key]])
+                );
+            }
+        }
+    }
+    return list;
 };
 
 CustomBlockDefinition.prototype.menuSearchWords = function () {

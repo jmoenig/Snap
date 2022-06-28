@@ -16,7 +16,7 @@
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
-    * new "label", "type", "scope" and "slots" choices in the OF BLOCK block-attribute reporter's dropdown
+    * new "label", "type", "scope", "slots" and "menus" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive, experimental
     * new "define block" primitive, experimental
     * new "this script" primitive, experimental
@@ -30,6 +30,7 @@
     * imported single scripts are now placed into the hand, for the user to position them in the scripting area 
     * moved "append", "reshape", "combinations" blocks down one group in the palette
     * moved "current date" block up to "timer" group in the palette
+    * moved "attribute of block" block from the sensing category to control
     * include currently dragged sprites in the MY OTHER SPRITES/CLONES lists
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * when querying a custom reporter's "definition" property only report its reporter without the REPORT block (if applicable)
@@ -51,6 +52,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-06-28
+* blocks, byob, threads: new "menus" selector for block attributes
 
 ### 2022-06-27
 * threads: trim block label before identifying existing definition in DEFINE

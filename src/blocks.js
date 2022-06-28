@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-June-22';
+modules.blocks = '2022-June-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -808,7 +808,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'global?': ['global?'],
             'type': ['type'],
             'scope': ['scope'],
-            'slots': ['slots']
+            'slots': ['slots'],
+            'menus' : ['menus']
         }
     },
     '%byob': {
@@ -820,7 +821,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'type': ['type'],
             'scope': ['scope'],
-            'slots': ['slots']
+            'slots': ['slots'],
+            'menus' : ['menus']
         }
     },
 

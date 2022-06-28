@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-27';
+modules.threads = '2022-June-28';
 
 var ThreadManager;
 var Process;
@@ -5612,7 +5612,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots;
+        expr, body, slots, def;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -5663,6 +5663,17 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     each.getSlotSpec() : each.getSpec()
             )
         ).map(spec => this.slotType(spec));
+    case 'menus':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(
+                def.decodeChoices(def.parseChoices(value[2]))
+            ));
+        }
+        return slots;
     }
     return '';
 };
@@ -5940,6 +5951,23 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 id = val.at(idx + 1);
             if (id !== '') {
                 info[0] = this.slotSpec(id) || info[0];
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'menus':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val.toString()]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if (options !== '') {
+                if (!(options instanceof List)) {
+                    options = new List([options]);
+                }
+                info[2] = def.encodeChoices(options); // +++ || info[2];
                 def.declarations.set(name, info);
             }
         });
