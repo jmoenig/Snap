@@ -757,6 +757,8 @@ SnapTranslator.dict.de = {
         'setze %byob von Block %repRing auf %s',
     'define %upvar %s %repRing':
         'definiere %upvar %s %repRing',
+    'delete block %repRing':
+        'lösche Block %repRing',
     'block':
         'Block',
 
