@@ -111,7 +111,7 @@ ArgLabelMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-June-28';
+modules.byob = '2022-June-29';
 
 // Declarations
 
@@ -406,9 +406,13 @@ CustomBlockDefinition.prototype.decodeChoices = function (choices) {
                     (typeof choices[key] !== 'function')) {
                 list.add(new List([key, this.decodeChoices(choices[key])]));
             } else if (choices[key] instanceof Array &&
+                    isString(choices[key][0])) {
+                list.add(choices[key][0] === key ? key
+                    : new List([key, choices[key][0]])
+                );
+            } else if (choices[key] instanceof Array &&
                     choices[key][0] instanceof Object &&
                     typeof choices[key][0] !== 'function') {
-
                 list.add(new List([key, this.decodeChoices(choices[key][0])]));
             } else {
                 list.add(choices[key] === key ? key

@@ -6757,6 +6757,21 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     def.decodeChoices(def.parseChoices(value[2]))
                     : ''
             ));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof InputSlotMorph ?
+                    (isString(slot.choices) ? slot.choices
+                        : CustomBlockDefinition.prototype.decodeChoices(
+                            slot.choices
+                        ))
+                    : ''
+                );
+            });
         }
         return slots;
     case 'editables':
