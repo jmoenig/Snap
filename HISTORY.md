@@ -54,6 +54,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-06-29
+* threads: catch empty options in "menus of blocks" selector
+
 ### 2022-06-28
 * blocks, byob, threads: new "menus" selector for block attributes
 * German translation update for "menus"

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-28';
+modules.threads = '2022-June-29';
 
 var ThreadManager;
 var Process;
@@ -5679,7 +5679,9 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             def.declarations.forEach(value => slots.add(
-                def.decodeChoices(def.parseChoices(value[2]))
+                isString(value[2]) ?
+                    def.decodeChoices(def.parseChoices(value[2]))
+                    : ''
             ));
         }
         return slots;
