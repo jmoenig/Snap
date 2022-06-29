@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, Point*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-May-28';
+modules.extensions = '2022-June-29';
 
 // Global stuff
 
@@ -732,6 +732,23 @@ SnapExtensions.primitives.set(
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
         }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'var_names(scope)',
+    function (scope, proc) {
+        var frame;
+        if (scope === 'script') {
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        } else if (scope === 'sprite') {
+            frame = this.variables;
+        } else {
+            frame = this.globalVariables();
+        }
+        return new List(frame.allNames());
     }
 );
 
