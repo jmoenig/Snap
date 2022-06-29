@@ -809,6 +809,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'type': ['type'],
             'scope': ['scope'],
             'slots': ['slots'],
+            '~' : null,
             'defaults': ['defaults'],
             'menus' : ['menus'],
             'editables' : ['editables']
@@ -824,6 +825,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'type': ['type'],
             'scope': ['scope'],
             'slots': ['slots'],
+            '~' : null,
             'defaults': ['defaults'],
             'menus' : ['menus'],
             'editables' : ['editables']
