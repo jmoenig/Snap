@@ -57,6 +57,7 @@
 ### 2022-06-29
 * threads: catch empty options in "menus of blocks" selector
 * threads: added support for "defaults" selector on primitives
+* threads: added support for "editables" selector on primitives
 
 ### 2022-06-28
 * blocks, byob, threads: new "menus" selector for block attributes

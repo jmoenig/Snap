@@ -60,7 +60,7 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph,
+SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
 StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
@@ -6766,6 +6766,17 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             def.declarations.forEach(value => slots.add(!value[3]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof InputSlotMorph ?
+                    !slot.isReadOnly : false
+                );
+            });
         }
         return slots;
     }
@@ -6861,17 +6872,17 @@ Process.prototype.slotType = function (spec) {
         // mnemonics:
         'unevaluated': 9,
 
-        '10':        10,
+        '10':       10,
         'boolue':   10, // spec
         // mnemonics: none
 
-        '11':        11,
+        '11':       11,
         'obj':      11, // spec
         // mnemonics:
         'o':        11,
         'object':   11,
 
-        '12':        12,
+        '12':       12,
         't':        12, // spec
         'upvar':    12, // spec
         // mnemonics:
