@@ -24,6 +24,7 @@
     * new localization extension primitives in the "ide" category, hyperized
     * new extension primitive for importing a costume from a url
     * new extension primitive for querying all variable names accessible from a specified scope (global, sprite, script)
+    * new extension primitive for querying whether a watcher for a variable by name is shown onstage
     * new support for setting the translation via the API
     * new "Tad" and "Jahrd" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
@@ -61,6 +62,7 @@
 * threads: added support for "editables" selector on primitives
 * threads, byob: added support for "menus" selector on primitives
 * extensions: new extension primitive for querying all variable names accessible from a specified scope (global, sprite, script)
+* extensions: new extension primitive for querying whether a watcher for a variable by name is shown onstage
 
 ### 2022-06-28
 * blocks, byob, threads: new "menus" selector for block attributes

@@ -29,8 +29,8 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains, localize, SnapTranslator, isString, detect,
-SVG_Costume, newCanvas, Point*/
+Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
+SVG_Costume, newCanvas, WatcherMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -811,6 +811,27 @@ SnapExtensions.primitives.set(
                 proc.homeContext
                 : proc.context.outerContext
         );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'var_showing(name)?',
+    function (name, proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables,
+            target = frame.silentFind(name),
+            watcher;
+
+        if (!target) {return false; }
+        watcher = detect(
+            stage.children,
+            morph => morph instanceof WatcherMorph &&
+                morph.target === target &&
+                    morph.getter === name
+        );
+        return watcher ? watcher.isVisible : false;
     }
 );
 
