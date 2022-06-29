@@ -6682,7 +6682,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, def;
+        expr, body, slots, def, info;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -6740,6 +6740,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             def.declarations.forEach(value => slots.add(value[1]));
+        } else {
+            info = SpriteMorph.prototype.blocks[expr.selector];
+            if (!info) {return slots; }
+            slots = new List(info.defaults);
         }
         return slots;
     case 'menus':
