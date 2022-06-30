@@ -38,7 +38,7 @@
     * library import dialog makeover for custom categories and hidden blocks, thanks, Michael!
     * when querying a custom reporter's "definition" property only report its reporter without the REPORT block (if applicable)
     * SciSnap2 extension update (ImagePad), thanks, Eckart!
-    * MQTT extension update, thanks, Simon!
+    * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
     * fixed relabelling "sum", "product", "minimum" and "maximum" reporters
     * fixed relabelling local custom blocks to global ones and vice-versa
@@ -55,6 +55,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-06-30
+* MQTT extension update, thanks, Simon and Xavier!
 
 ### 2022-06-29
 * threads: catch empty options in "menus of blocks" selector
