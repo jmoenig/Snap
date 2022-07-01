@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-June-29';
+modules.extensions = '2022-July-01';
 
 // Global stuff
 
@@ -46,7 +46,7 @@ var SnapExtensions = {
         'libraries/',
         'https://snap.berkeley.edu/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
-        'https://microworld.edc.org' // EDC, E. Paul Goldenberg
+        'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
     ]
 };
 

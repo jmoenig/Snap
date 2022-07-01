@@ -56,6 +56,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-07-01
+* extensions: added a slash-suffix to the EDC url allow-list entry 
+
 ### 2022-06-30
 * MQTT extension update, thanks, Simon and Xavier!
 
