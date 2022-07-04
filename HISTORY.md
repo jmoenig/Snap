@@ -56,6 +56,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-07-04
+* blocks, gui: directly import embedded blocks from a smart pic if the pic is dragged and dropped onto a scripting area or palette - otherwise import the pic as costume (with embedded blocks)
+
 ### 2022-07-01
 * extensions: added a slash-suffix to the EDC url allow-list entry 
 

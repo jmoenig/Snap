@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-June-28';
+modules.blocks = '2022-July-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8535,6 +8535,16 @@ ScriptsMorph.prototype.selectForEdit = function () {
         return rcvr.scripts;
     }
     return this;
+};
+
+ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {return; }
+    ide.droppedImage(aCanvas, name, embeddedData, 'scripts');
 };
 
 // ScriptsMorph keyboard support

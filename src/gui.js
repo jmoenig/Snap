@@ -80,13 +80,13 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager*/
+BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-May-19';
+modules.gui = '2022-July-04';
 
 // Declarations
 
@@ -1309,6 +1309,10 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.buttons = [];
     this.categories.isVisible = flag;
 
+    this.categories.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'categories');
+    };
+
     this.categories.refresh = function () {
         this.buttons.forEach(cat => {
             cat.refresh();
@@ -1592,6 +1596,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         if (droppedMorph instanceof BlockMorph) {
             droppedMorph.destroy();
         }
+    };
+
+    this.palette.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'palette');
     };
 
     this.palette.setWidth(this.logo.width());
@@ -2471,7 +2479,7 @@ IDE_Morph.prototype.endBulkDrop = function () {
     this.bulkDropInProgress = false;
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2489,6 +2497,18 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
                 'computer, and import it from there.'
         );
         return;
+    }
+
+    // directly import embedded blocks if the image was dropped on
+    // a scripting area or the palette, otherwise import as costume
+    // (with embedded data)
+    if (isString(embeddedData) &&
+        ['scripts', 'palette', 'categories'].includes(src) &&
+        embeddedData[0] === '<' &&
+        ['blocks', 'block', 'script'].some(tag =>
+            embeddedData.slice(1).startsWith(tag))
+    ) {
+        return this.droppedText(embeddedData, name, '');
     }
 
     costume.embeddedData = embeddedData || null;
