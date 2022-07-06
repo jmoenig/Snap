@@ -80,17 +80,17 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager*/
+BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-April-06';
+modules.gui = '2022-July-04';
 
 // Declarations
 
-var SnapVersion = '7.4.0-dev';
+var SnapVersion = '8.0.0-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -297,6 +297,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.bulkDropInProgress = false; // for handling multiple file-drops
     this.cachedSceneFlag = null; // for importing multiple scenes at once
+    this.isImportingLocalFile = false; // for handling imports of smart pics
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -1309,6 +1310,10 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.buttons = [];
     this.categories.isVisible = flag;
 
+    this.categories.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'categories');
+    };
+
     this.categories.refresh = function () {
         this.buttons.forEach(cat => {
             cat.refresh();
@@ -1592,6 +1597,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         if (droppedMorph instanceof BlockMorph) {
             droppedMorph.destroy();
         }
+    };
+
+    this.palette.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'palette');
     };
 
     this.palette.setWidth(this.logo.width());
@@ -2457,6 +2466,7 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
     if (this.filePicker) {
         document.body.removeChild(this.filePicker);
         this.filePicker = null;
+        this.isImportingLocalFile = false;
     }
 };
 
@@ -2471,7 +2481,7 @@ IDE_Morph.prototype.endBulkDrop = function () {
     this.bulkDropInProgress = false;
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2491,6 +2501,22 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
+    // directly import embedded blocks if the image was dropped on
+    // a scripting area or the palette, otherwise import as costume
+    // (with embedded data)
+    if (!this.isImportingLocalFile &&
+        isString(embeddedData) &&
+        ['scripts', 'palette', 'categories'].includes(src) &&
+        embeddedData[0] === '<' &&
+        ['blocks', 'block', 'script'].some(tag =>
+            embeddedData.slice(1).startsWith(tag))
+    ) {
+        this.isImportingLocalFile = false;
+        return this.droppedText(embeddedData, name, '');
+    }
+
+    this.isImportingLocalFile = false;
+    costume.embeddedData = embeddedData || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -4557,6 +4583,7 @@ IDE_Morph.prototype.importLocalFile = function () {
             if (addingScenes) {
                 myself.isAddingNextScene = true;
             }
+            myself.isImportingLocalFile = true;
             world.hand.processDrop(inp.files);
         },
         false
@@ -5813,7 +5840,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var scripts = this.currentSprite.scripts,
+    var world = this.world(),
         script;
 
     if (Process.prototype.isCatchingErrors) {
@@ -5825,17 +5852,12 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     } else {
         script = this.deserializeScriptString(str);
     }
-    script.setPosition(this.world().hand.position());
-    scripts.add(script);
-    script.fixBlockColor(null, true); // force zebra coloring
-    scripts.adjustBounds();
-    scripts.lastDroppedBlock = script;
-    scripts.recordDrop(
-		{
-            origin: this.palette,
-            position: this.palette.center()
-        }
-    );
+    this.spriteBar.tabBar.tabTo('scripts');
+    script.pickUp(world);
+    world.hand.grabOrigin = {
+        origin: this.palette,
+        position: this.palette.center()
+    };
     this.showMessage(
         'Imported Script.',
         2
@@ -9919,11 +9941,17 @@ CostumeIconMorph.prototype.init = function (aCostume) {
 };
 
 CostumeIconMorph.prototype.createThumbnail = function () {
-    var txt;
+    var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
-    if (this.object instanceof SVG_Costume) {
+    watermark = this.object instanceof SVG_Costume ? 'svg'
+        : (this.object.embeddedData ? (
+                this.typeOfStringData(this.object.embeddedData) === 'data' ?
+                    'dta' : '</>'
+        )
+            : null);
+    if (watermark) {
         txt = new StringMorph(
-            'svg',
+            watermark,
             this.fontSize * 0.8,
             this.fontStyle,
             false,
@@ -9970,6 +9998,12 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
+    if (this.object.embeddedData) {
+        menu.addItem(
+            "get" + ' ' + this.typeOfStringData(this.object.embeddedData),
+            "importEmbeddedData"
+        );
+    }
     menu.addItem("export", "exportCostume");
     return menu;
 };
@@ -10049,11 +10083,38 @@ CostumeIconMorph.prototype.removeCostume = function () {
     }
 };
 
+CostumeIconMorph.prototype.importEmbeddedData = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.spriteBar.tabBar.tabTo('scripts');
+    ide.droppedText(this.object.embeddedData, this.object.name, '');
+};
+
+CostumeIconMorph.prototype.typeOfStringData = function (aString) {
+    // check for Snap specific files, projects, libraries, sprites, scripts
+    if (aString[0] === '<') {
+        if ([
+                'project',
+                'snapdata',
+                'blocks',
+                'sprites',
+                'block',
+                'script'
+            ].some(tag => aString.slice(1).startsWith(tag))
+        ) {
+            return 'blocks';
+        }
+    }
+    return 'data';
+};
+
 CostumeIconMorph.prototype.exportCostume = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else if (this.object.embeddedData) {
+        // embed payload data (e.g blocks)  inside the PNG image data
+        ide.saveFileAs(this.object.pngData(), 'image/png', this.object.name);
     } else { // rasterized Costume
         ide.saveCanvasAs(this.object.contents, this.object.name);
     }

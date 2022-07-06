@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-04-08', // this, too, will appear in the Translators tab
+        '2022-06-28', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -741,6 +741,26 @@ SnapTranslator.dict.de = {
         'benutzerdefiniert?',
     'global?':
         'global?',
+    'type':
+        'Art',
+    'scope':
+        'Bereich',
+    'slots':
+        'Felder',
+    'defaults':
+        'Defaults',
+    'menus':
+        'Menüs',
+    'editables':
+        'Eingaben',
+    'set %byob of block %repRing to %s':
+        'setze %byob von Block %repRing auf %s',
+    'define %upvar %s %repRing':
+        'definiere %upvar %s %repRing',
+    'delete block %repRing':
+        'lösche Block %repRing',
+    'block':
+        'Block',
 
     // operators:
     'sum':
@@ -1423,6 +1443,10 @@ SnapTranslator.dict.de = {
         'Kost\u00fcm umbenennen',
     'rename background':
         'Hintergrund umbenennen',
+    'get blocks':
+        'Blöcke extrahieren',
+    'get data':
+        'Daten extrahieren',
 
     // sounds
     'Play sound':
@@ -2201,5 +2225,8 @@ SnapTranslator.dict.de = {
     'setting the rotation center requires a costume':
         'Der Drehpunkt kann nur zusammen\nmit einem Kostüm gesetzt werden',
     'Web Audio API is not supported\nin this browser':
-        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt'
+        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt',
+    'several block definitions\nalready match this label':
+        'Mehrere Blöcke passen\nzu dieser Aufschrift'
+        
 };

@@ -155,13 +155,13 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
-CostumeIconMorph, SoundIconMorph, SVG_Costume*/
+CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-April-08';
+modules.blocks = '2022-July-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -805,7 +805,30 @@ SyntaxElementMorph.prototype.labelParts = {
             'definition': ['definition'],
             'category': ['category'],
             'custom?': ['custom?'],
-            'global?': ['global?']
+            'global?': ['global?'],
+            'type': ['type'],
+            'scope': ['scope'],
+            'slots': ['slots'],
+            '~' : null,
+            'defaults': ['defaults'],
+            'menus' : ['menus'],
+            'editables' : ['editables']
+        }
+    },
+    '%byob': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'label': ['label'],
+            'definition': ['definition'],
+            'category': ['category'],
+            'type': ['type'],
+            'scope': ['scope'],
+            'slots': ['slots'],
+            '~' : null,
+            'defaults': ['defaults'],
+            'menus' : ['menus'],
+            'editables' : ['editables']
         }
     },
 
@@ -2379,6 +2402,15 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.bounds.setWidth(img.width);
         morphToShow.bounds.setHeight(img.height);
         morphToShow.cachedImage = img;
+        morphToShow.version = value.version;
+        morphToShow.step = function () {
+            if (this.version !== value.version) {
+                img = value.image();
+                this.cachedImage = img;
+                this.version = value.version;
+                this.changed();
+            }
+        };
 
         // support blocks to be dragged out of result bubbles:
         morphToShow.isDraggable = true;
@@ -2498,9 +2530,12 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     ctx.drawImage(scr, 0, pic.height - scr.height);
     ctx.drawImage(bub, scr.width + 2, 0);
     // request to open pic in new window.
-    ide.saveCanvasAs(
-        pic,
-        (ide.projectName || localize('untitled')) + ' ' + localize('script pic')
+
+    ide.saveFileAs(
+        embedMetadataPNG(pic, this.toXMLString()),
+        'image/png',
+        (ide.getProjectName() || localize('untitled')) + ' ' +
+            localize('script pic')
     );
 };
 
@@ -3328,12 +3363,25 @@ BlockMorph.prototype.userMenu = function () {
         "script pic...",
         () => {
             var ide = this.parentThatIsA(IDE_Morph) ||
-                this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
-                    IDE_Morph
-            );
-            ide.saveCanvasAs(
-                top.scriptPic(),
-                (ide.projectName || localize('untitled')) + ' ' +
+                    this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
+                        IDE_Morph),
+                xml = top instanceof PrototypeHatBlockMorph ?
+                    ide.blocksLibraryXML(
+                        [top.definition].concat(
+                            top.definition.collectDependencies(
+                                [],
+                                [],
+                                top.scriptTarget()
+                            )
+                        ),
+                        null,
+                        true
+                    )
+                    : top.toXMLString();
+            ide.saveFileAs(
+                embedMetadataPNG(top.scriptPic(), xml),
+                'image/png',
+                (ide.getProjectName() || localize('untitled')) + ' ' +
                     localize('script pic')
             );
         },
@@ -3349,11 +3397,19 @@ BlockMorph.prototype.userMenu = function () {
             'save a picture of both\nthis script and its result'
         );
     }
-    menu.addItem(
-        'export script',
-        () => top.exportScript(),
-        'download this script\nas an XML file'
-    );
+    if (top instanceof PrototypeHatBlockMorph) {
+        menu.addItem(
+            "export...",
+            () => top.exportBlockDefinition(),
+            'including dependencies'
+        );
+    } else {
+        menu.addItem(
+            'export script',
+            () => top.exportScript(),
+            'download this script\nas an XML file'
+        );
+    }
     if (proc) {
         if (vNames.length) {
             menu.addLine();
@@ -3531,6 +3587,43 @@ BlockMorph.prototype.developersMenu = function () {
         )
     );
     return menu;
+};
+
+BlockMorph.prototype.isChangeableTo = function (type) {
+    // answer whether it's safe to change my type, e.g. from command to
+    // reporter or from global to sprite-local.
+    // valid types "command", "reporter" and "predicate".
+    //
+    // a block is considered "changeable" if
+    // -------------------------------------
+    // * it's a command & the target type isn't also a command & doesn't have a
+    //   next block & is unattached (e.g. the only expression inside a context).
+    //
+    // * it's a reporter or a predicate & the target type is a command & is
+    //   unattached (e.g. the only expression inside a function context).
+    //
+    // * it's a reporter or a predicate & the target type is also a reporter or
+    //   a predicate the type can always be changed
+
+    var typ = this.type();
+    if (typ === type) {return true; }
+    if (typ === 'command' || type === 'command') {
+        return this.isUnattached();
+    }
+    return true;
+};
+
+BlockMorph.prototype.type = function () {
+    // private
+    return this instanceof CommandBlockMorph ? 'command'
+        : (this.isPredicate ? 'predicate' : 'reporter');
+};
+
+BlockMorph.prototype.isUnattached = function () {
+    // private
+    return ((this.nextBlock && !this.nextBlock()) || !this.nextBlock) &&
+        !(this.parent instanceof SyntaxElementMorph) &&
+        !(this.parent instanceof ScriptsMorph);
 };
 
 BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {
@@ -7390,6 +7483,7 @@ RingMorph.prototype.vanishForSimilar = function () {
         block.selector === 'reportJSFunction' ||
         block.selector === 'reportAttributeOf' ||
         block.selector === 'reportCompiled' ||
+        block.selector === 'reportThisContext' ||
         (block instanceof RingMorph)
     ) {
         this.parent.replaceInput(this, block);
@@ -8005,7 +8099,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
     if (pic) {
         ide.saveCanvasAs(
             pic,
-            (ide.projectName || localize('untitled')) + ' ' +
+            (ide.getProjectName() || localize('untitled')) + ' ' +
                 localize('script pic')
         );
     }
@@ -8444,6 +8538,16 @@ ScriptsMorph.prototype.selectForEdit = function () {
     return this;
 };
 
+ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (!ide) {return; }
+    ide.droppedImage(aCanvas, name, embeddedData, 'scripts');
+};
+
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
@@ -8586,7 +8690,7 @@ ArgMorph.prototype.justDropped = function () {
 // ArgMorph spec extrapolation (for demo purposes)
 
 ArgMorph.prototype.getSpec = function () {
-    return '%s'; // default
+    return this.type === 'list' ? '%l' : '%s'; // default
 };
 
 // ArgMorph menu
@@ -12735,6 +12839,9 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         this.children.splice(idx, 0, newPart);
     }
     newPart.fixLayout();
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+    }
     this.fixLayout();
     return newPart;
 };
@@ -12780,6 +12887,9 @@ MultiArgMorph.prototype.addInput = function (contents) {
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
     newPart.fixLayout();
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+    }
     this.fixLayout();
     return newPart;
 };
@@ -13588,6 +13698,10 @@ ReporterSlotMorph.prototype.isEmptySlot = function () {
 
 ReporterSlotMorph.prototype.fixLayout = function () {
     var contents = this.contents();
+    if (!contents) {
+        contents = this.emptySlot();
+        this.add(contents);
+    }
     this.bounds.setExtent(contents.extent().add(
         this.edge * 2 + this.rfBorder * 2
     ));
