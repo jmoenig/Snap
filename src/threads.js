@@ -6606,13 +6606,13 @@ Process.prototype.returnValueToParentContext = function (value) {
                 this.context.parentContext || this.homeContext
             : this.homeContext;
         target.addInput(value);
-        if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph) {
-                //this.context.topBlock.show();
-                //this.context.expression.show();
-                //this.block.topBlock.show();
+        if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph
+            && this.isCustomBlock) {
                 this.context.expression.showBubble(value);
-                //return value;
             }
+        else if (!this.isCustomBlock && this.context.isFlashing) {
+            this.context.expression.showBubble(value, this.exportResult, this.receiver);
+        }
     }
 
 };
