@@ -71,3 +71,6 @@ utils.sleep = function(time=0) {
     return new Promise(resolve => setTimeout(resolve, time));
 };
 
+utils.isNetsBloxDomain = function (url) {
+    return !!url.match(/^(?:\w+:\/+)?[^/]*\bnetsblox\.org\b\/?/i)
+};

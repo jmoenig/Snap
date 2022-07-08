@@ -3372,7 +3372,10 @@ Process.prototype.reportURL = function (url) {
         }
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", url, true);
-        this.httpRequest.setRequestHeader('X-Source', 'NetsBlox'); // flag this as coming from the NetsBlox client
+        if (utils.isNetsBloxDomain(url)) {
+            this.httpRequest.setRequestHeader('X-Source', 'NetsBlox'); // flag this as coming from the NetsBlox client
+        }
+
         // cache-control, commented out for now
         // added for Snap4Arduino but has issues with local robot servers
         // this.httpRequest.setRequestHeader('Cache-Control', 'max-age=0');
