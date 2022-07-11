@@ -1553,11 +1553,17 @@ Process.prototype.initializeFor = function (context, args) {
 
 Process.prototype.reportThisContext = function () {
     var sym = Symbol.for('self'),
-        frame = this.context.variables.silentFind(sym);
+        frame = this.context.variables.silentFind(sym),
+        ctx;
     if (frame) {
         return frame.vars[sym].value;
     }
-    return this.topBlock.reify();
+    ctx = this.topBlock.reify();
+    ctx.outerContext = this.context.outerContext;
+    if (ctx.outerContext) {
+        ctx.variables.parentFrame = ctx.outerContext.variables;
+    }
+    return ctx;
 };
 
 // Process stopping blocks primitives
@@ -5616,6 +5622,9 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
+    if (name instanceof Context && attribute instanceof Context) {
+        return this.reportContextFor(attribute, name);
+    }
     if (thisObj) {
         this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
@@ -6008,6 +6017,13 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     var result = copy(context),
         receiverVars,
         rootVars;
+
+    if (otherObj instanceof Context) {
+        result.outerContext = otherObj.outerContext;
+        result.variables.parentFrame = otherObj.outerContext.variables;
+        result.receiver = otherObj.receiver;
+        return result;
+    }
 
     result.receiver = otherObj;
     if (!result.outerContext) {
