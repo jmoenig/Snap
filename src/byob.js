@@ -105,13 +105,13 @@ ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
-ArgLabelMorph*/
+ArgLabelMorph, embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-June-29';
+modules.byob = '2022-July-11';
 
 // Declarations
 
@@ -1362,16 +1362,29 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
-            "script pic...",
+            "script pic...", // +++
             function () {
-                var ide = this.world().children[0];
-                ide.saveCanvasAs(
-                    this.topBlock().scriptPic(),
-                    (ide.projectName || localize('untitled')) + ' ' +
+                var ide = this.world().children[0],
+                    top = this.topBlock(),
+                    xml = ide.blocksLibraryXML(
+                        [top.definition].concat(
+                            top.definition.collectDependencies(
+                                [],
+                                [],
+                                top.scriptTarget()
+                            )
+                        ),
+                        null,
+                        true
+                    );
+                ide.saveFileAs(
+                    embedMetadataPNG(top.scriptPic(), xml),
+                    'image/png',
+                    (ide.getProjectName() || localize('untitled')) + ' ' +
                         localize('script pic')
                 );
             },
-            'open a new window\nwith a picture of this script'
+            'save a picture\nof this script'
         );
         menu.addItem(
             "translations...",
