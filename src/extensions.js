@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-July-01';
+modules.extensions = '2022-July-11';
 
 // Global stuff
 
@@ -879,7 +879,7 @@ SnapExtensions.primitives.set(
                 );
             }
         }
-        proc.assertType(text, ['text']);
+        proc.assertType(text, ['text', 'number']);
         return localize(text);
     }
 );
@@ -897,7 +897,7 @@ SnapExtensions.primitives.set(
             }
         }
         dict = SnapTranslator.dict[SnapTranslator.language];
-        proc.assertType(text, 'text');
+        proc.assertType(text, ['text', 'number']);
         return detect(
             Object.keys(dict),
             key => dict[key] === text
