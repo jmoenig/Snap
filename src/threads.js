@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-June-29';
+modules.threads = '2022-July-18';
 
 var ThreadManager;
 var Process;
@@ -8310,7 +8310,6 @@ JSCompiler.prototype.compileFunctionBody = function (aContext,
     var block = aContext.expression,
         parameters = aContext.inputs,
         hasEmptySlots,
-        plength = 0,
         code;
 
     if (block instanceof Array) {

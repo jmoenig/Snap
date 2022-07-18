@@ -59,6 +59,7 @@
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
+* threads: JSCompiler scope fixes and redesign, thanks, xBZZZZ!
 
 ### 2022-07-11
 * extensions: fixed #3065
