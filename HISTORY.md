@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-07-18
+* German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
+
 ### 2022-07-11
 * extensions: fixed #3065
 * threads: added support to the OF reporter for binding a ring to another one, e.g. THIS SCRIPT to access its local variables

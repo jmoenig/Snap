@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-06-28', // this, too, will appear in the Translators tab
+        '2022-07-18', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -306,7 +306,7 @@ SnapTranslator.dict.de = {
     'turn %counterclockwise %n degrees':
         'drehe %counterclockwise %n Grad',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'setze Richtung auf %dir Grad',
     'point towards %dst':
         'zeige auf %dst',
     'go to x: %n y: %n':
