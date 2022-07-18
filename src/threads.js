@@ -8305,8 +8305,10 @@ JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
     return false;
 };
 
-JSCompiler.prototype.compileFunctionBody = function (aContext,
-    implicitParamCount) {
+JSCompiler.prototype.compileFunctionBody = function (
+    aContext,
+    implicitParamCount
+) {
     var block = aContext.expression,
         parameters = aContext.inputs,
         hasEmptySlots,
