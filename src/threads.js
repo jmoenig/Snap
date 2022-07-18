@@ -7406,7 +7406,7 @@ Process.prototype.setVarNamed = function (name, value) {
 
 Process.prototype.incrementVarNamed = function (name, delta) {
     // private - special form for compiled expressions
-    this.setVarNamed(name, this.getVarNamed(name) + (+delta));
+    this.setVarNamed(name, this.getVarNamed(name) - (-delta));
 };
 
 // Process: Atomic HOFs using experimental JIT-compilation
@@ -8213,101 +8213,154 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
     return answer;
 };
 
-// JSCompiler /////////////////////////////////////////////////////////////////
+// JSCompiler ////////////////////////////////////////////////////////////////
 
 /*
-	Compile simple, side-effect free Reporters
+    *** don't use same JSCompiler object multiple times ***
+    Compile simple reporters
     with either only explicit formal parameters or a specified number of
     implicit formal parameters mapped to empty input slots
-	*** highly experimental and heavily under construction ***
+    *** highly experimental and heavily under construction ***
 */
 
-function JSCompiler(aProcess) {
-	this.process = aProcess;
-	this.source = null; // a context
- 	this.gensyms = new Map(); // temp dictionary for parameter substitutions
-  	this.implicitParams = null;
-   	this.paramCount = null;
-    this.scriptVarCounter = null;
+function JSCompiler(aProcess, outerScope) {
+    this.process = aProcess;
+    this.source = null; // a context
+    this.paramCount = 0;
+    this.params = 0;
+    this.gensymArgIndexes = new Map();
+    this.scope = new Map();
+    if (outerScope == null) {
+        this.scope.depth = 0;
+        this.scope.outerScope = null;
+        return;
+    }
+    this.scope.depth = 1 + outerScope.depth;
+    this.scope.outerScope = outerScope;
 }
 
-JSCompiler.prototype.toString = function () {
-    return 'a JSCompiler';
+JSCompiler.prototype.toString = () => 'a JSCompiler';
+
+JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
+    // argIndex -1 for script variables
+    var gensym = this.getGensym(varName), oldArgIndex;
+    if (gensym == null) {
+        gensym = '_' + this.scope.depth + '_' + this.scope.size;
+        this.scope.set(varName, gensym);
+        this.gensymArgIndexes.set(gensym, argIndex);
+        return gensym;
+    }
+    oldArgIndex = this.gensymArgIndexes.get(gensym);
+    if (oldArgIndex == null || oldArgIndex < argIndex) {
+        this.gensymArgIndexes.set(gensym, argIndex);
+    }
+    return gensym;
 };
 
-JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
+JSCompiler.prototype.getGensym = function (varName) {
+    var scope = this.scope, gensym;
+    while (null == (gensym = scope.get(varName)) && 
+        null != (scope = scope.outerScope));
+    return gensym;
+};
+
+JSCompiler.prototype.functionHead = function () {
+    var str1 = 'var ', str2 = '';
+    this.gensymArgIndexes.forEach((argIndex, gensym) => {
+        if (argIndex === -1) {
+            str1 += gensym + '=0,';
+            return;
+        }
+        str2 += ',' + argIndex + ':' + gensym;
+    });
+    str1 += 'proc=params.pop();\n';
+    if (this.params) {
+        str1 += 'while(' + this.params + '>params.length)params.push(0);\n';
+    }
+    if (str2) {
+        str1 += 'var{' + str2.substring(1) + '}=params;\n';
+    }
+    return str1;
+};
+
+JSCompiler.prototype.compileFunction = function () {
+    return window.eval(this.compileFunctionBody.apply(this, arguments));
+};
+
+JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
+    if (m.isEmptySlot != null && m.isEmptySlot()) {
+        return true;
+    }
+    if (m instanceof RingMorph) {
+        // don't look in rings (they are not current scope)
+        return false;
+    }
+    m = m.children;
+    var i = m.length;
+    while (i) {
+        if (findEmptySlot(m[--i])) {
+            return true;
+        }
+    }
+    return false;
+};
+
+JSCompiler.prototype.compileFunctionBody = function (aContext,
+    implicitParamCount) {
     var block = aContext.expression,
-  		parameters = aContext.inputs,
-        hasEmptySlots = false,
+        parameters = aContext.inputs,
+        hasEmptySlots,
         plength = 0,
         code;
 
-	this.source = aContext;
-    if (isNil(implicitParamCount) || implicitParamCount === '') {
+    if (block instanceof Array) {
+        throw new Error('can\'t compile empty ring');
+    }
+   
+    this.source = aContext;
+    if (implicitParamCount === '' || isNil(implicitParamCount)) {
         this.implicitParams = 1;
     } else {
         this.implicitParams = Math.floor(implicitParamCount);
-        if (this.implicitParams < 0) {
+        if (!(this.implicitParams > 0 && this.implicitParams < 128)) {
             // use 1 if implicitParamCount doesn't make sense
             this.implicitParams = 1;
         }
     }
 
-	// scan for empty input slots
- 	hasEmptySlots = !isNil(detect(
-  		block.allChildren(),
-    	morph => morph.isEmptySlot && morph.isEmptySlot()
-    ));
+    // scan for empty input slots
+    hasEmptySlots = this.findEmptySlot(block);
 
     // translate formal parameters into gensyms
-    this.gensyms.clear();
-    this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
         if (hasEmptySlots) {
-        	throw new Error(
+            throw new Error(
                 'compiling does not yet support\n' +
                 'mixing explicit formal parameters\n' +
                 'with empty input slots'
             );
         }
         // map explicit formal parameters
-        parameters.forEach((pName, idx) => {
-        	this.gensyms.set(pName, 'p[' + idx + ']');
-        });
-        plength = parameters.length;
+        this.params = parameters.length;
+        parameters.forEach(this.gensymForVar, this);
     } else if (hasEmptySlots) {
-    	plength = this.implicitParams;
+        this.params = this.implicitParams;
     }
 
     // compile using gensyms
-
-    this.scriptVarCounter = 0;
-    code = 'proc=p.pop();\n';
-    if (plength) {
-        // fill missing parameters with empty string
-        code += 'while(' + plength + '>p.length)p.push("");\n';
-    }
     if (block instanceof CommandBlockMorph) {
-        code += this.compileSequence(block) + 'return ""';
+        code = this.compileSequence(block) + 'return "";\n';
     } else {
-        code += 'return ' + this.compileExpression(block);
+        code = 'return ' + this.compileExpression(block) + ';\n';
     }
-    block = 'var ';
-    this.gensyms.forEach(value => {
-        if (value.charAt(0) === 's') {
-            // declare script variable
-            block += value + '=0,';
-        }
-    });
-    return Function('...p', block + code);
+    return '(function func(...params){\n' + this.functionHead() + code + '})';
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
     var selector = block.selector,
         inputs = block.inputs(),
         target,
-        rcvr,
         args;
 
     // first check for special forms and infix operators
@@ -8329,41 +8382,30 @@ JSCompiler.prototype.compileExpression = function (block) {
             'compiling does not yet support\n' +
             'custom blocks'
         );
-
     // special evaluation primitives
     case 'doRun':
     case 'evaluate':
-        return 'invoke(' +
-            this.compileInput(inputs[0]) +
-            ', ' +
+        return 'invoke(' + this.compileInput(inputs[0]) + ',' +
             this.compileInput(inputs[1]) +
-            ')';
-
+            ',proc.blockReceiver(),null,null,null,proc,null)';
     // special command forms
     case 'doDeclareVariables':
         block = '';
-
-        inputs[0].inputs().forEach(({children: {0: {blockSpec: name}}}) => {
-            var gensym = this.gensyms.get(name);
-            if (gensym) {
-                // we already have that script variable, just set it to 0
-                block += gensym + '=';
-                return;
-            }
-            gensym = 's' + this.scriptVarCounter++;
-            block += gensym + '=';
-            this.gensyms.set(name, gensym);
+        inputs[0].inputs().forEach(x => {
+            block += this.gensymForVar(x.children[0].blockSpec, -1) + '=';
         });
         return block + '0';
     case 'reportGetVar':
-        return this.gensyms.get(block.blockSpec) || ('proc.getVarNamed("' +
-            this.escape(block.blockSpec) +
-            '")');
+        target = this.getGensym(block = block.blockSpec);
+        if (target == null) {
+            // redirect var to process
+            return 'proc.getVarNamed("' + this.escape(block) + '")';
+        }
+        return target;
     case 'doSetVar':
         if (inputs[0] instanceof ArgMorph) {
-            target = this.gensyms.get(inputs[0].evaluate());
-            if (target) {
-                // setting gensym (script or argument) variable
+            target = this.getGensym(inputs[0].evaluate());
+            if (target != null) {
                 return target + ' = ' + this.compileInput(inputs[1]);
             }
         }
@@ -8375,11 +8417,9 @@ JSCompiler.prototype.compileExpression = function (block) {
             ')';
     case 'doChangeVar':
         if (inputs[0] instanceof ArgMorph) {
-            target = this.gensyms.get(inputs[0].evaluate());
-            if (target) {
-                return '{const d=' + this.compileInput(inputs[1]) +
-                    ',v=parseFloat(' + target + ');' +
-                    target + '=isNaN(v)?d:v+parseFloat(d)}';
+            target = this.getGensym(inputs[0].evaluate());
+            if (target != null) {
+                return target + ' -=- ' + this.compileInput(inputs[1]);
             }
         }
         // redirect var to process
@@ -8404,20 +8444,20 @@ JSCompiler.prototype.compileExpression = function (block) {
             '} else {\n' +
             this.compileSequence(inputs[2].evaluate()) +
             '}';
+    case 'doWarp':
+        // synchronous javascript is already like warp
+        return this.compileSequence(inputs[0].evaluate());
     case 'reportBoolean':
     case 'reportNewList':
         return this.compileInput(inputs[0]);
+    case 'reportThisContext':
+        return 'func';
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
-        rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            if (rcvr === 'SpriteMorph.prototype') {
-                // fix for blocks like (x position)
-                rcvr = 'proc.blockReceiver()';
-            }
-            return rcvr + '.' + selector + '(' + args + ')';
+            return 'proc.blockReceiver().' + selector + '(' + args + ')';
         } else {
             return 'proc.' + selector + '(' + args + ')';
         }
@@ -8425,10 +8465,12 @@ JSCompiler.prototype.compileExpression = function (block) {
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
-    var body = '';
-    commandBlock.blockSequence().forEach(block => {
-        body += this.compileExpression(block) + ';\n';
-    });
+    if (commandBlock == null) return '';
+    commandBlock = commandBlock.blockSequence();
+    var l = commandBlock.length, i = 0, body = '';
+    while (l > i) {
+        body += this.compileExpression(commandBlock[i++]) + ';\n';
+    }
     return body;
 };
 
@@ -8454,22 +8496,32 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
         if (this.implicitParams > 1) {
-         	if (this.paramCount < this.implicitParams) {
-            	this.paramCount += 1;
-             	return 'p[' + (this.paramCount - 1) + ']';
-        	}
+            if (this.paramCount < this.implicitParams) {
+                return 'params[' + this.paramCount++ + ']';
+            }
             throw new Error(
                 localize('expecting') + ' ' + this.implicitParams + ' '
                     + localize('input(s), but getting') + ' '
                     + this.paramCount
             );
         }
-		return 'p[0]';
-    } else if (inp instanceof MultiArgMorph) {
+        return 'params[0]';
+    }
+    if (inp instanceof RingMorph) {
+        inp = inp.children;
+        return new JSCompiler(this.process,this.scope).compileFunctionBody({
+            'expression': inp[0].children[0],
+            'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
+            'receiver': this.source.receiver
+        }, '');
+    }
+    if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
-    } else if (inp instanceof ArgLabelMorph) {
-    	return this.compileInput(inp.argMorph());
-    } else if (inp instanceof ArgMorph) {
+    }
+    if (inp instanceof ArgLabelMorph) {
+        return this.compileInput(inp.argMorph());
+    }
+    if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
         type = this.process.reportTypeOf(value);
@@ -8492,18 +8544,18 @@ JSCompiler.prototype.compileInput = function (inp) {
                  type
             );
         }
-    } else if (inp instanceof BlockMorph) {
-        return this.compileExpression(inp);
-    } else {
-        throw new Error(
-            'compiling does not yet support\n' +
-            'input slots of type\n' +
-            inp.constructor.name
-        );
     }
+    if (inp instanceof BlockMorph) {
+        return this.compileExpression(inp);
+    }
+    throw new Error(
+        'compiling does not yet support\n' +
+        'input slots of type\n' +
+        inp.constructor.name
+    );
 };
 
-JSCompiler.prototype.escape = function(string) {
+JSCompiler.prototype.escape = string => {
     // make sure string is a string
     string += '';
     var len = string.length, i = 0, char, escaped = '', safe_chars =
