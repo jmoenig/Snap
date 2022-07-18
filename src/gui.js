@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-July-04';
+modules.gui = '2022-July-18';
 
 // Declarations
 
@@ -5971,6 +5971,7 @@ IDE_Morph.prototype.openProject = function (project) {
         project.currentScene || project.scenes.at(1),
         true,  // refresh album
         null, // msg
+        null, // data
         true // pause generic WHEN hat blocks
     );
 };
@@ -5979,6 +5980,7 @@ IDE_Morph.prototype.switchToScene = function (
     scene,
     refreshAlbum,
     msg,
+    data,
     pauseHats
 ) {
     var appMode = this.isAppMode;
@@ -6025,7 +6027,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.controlBar.stopButton.refresh();
     this.world().keyboardFocus = this.stage;
     if (msg) {
-        this.stage.fireChangeOfSceneEvent(msg);
+        this.stage.fireChangeOfSceneEvent(msg, data);
     }
 };
 

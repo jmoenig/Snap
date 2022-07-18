@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-June-28';
+modules.objects = '2022-July-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -8822,7 +8822,7 @@ StageMorph.prototype.processKeyPress = function (event) {
 StageMorph.prototype.inspectKeyEvent
     = CursorMorph.prototype.inspectKeyEvent;
 
-StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
+StageMorph.prototype.fireChangeOfSceneEvent = function (message, data) {
     var procs = [];
 
     // remove all clones when the green flag event is broadcast
@@ -8833,12 +8833,23 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message) {
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allHatBlocksFor(message).forEach(block => {
-                var varName, varFrame;
+                var choice, varName, varFrame;
                 if (block.selector === 'receiveMessage') {
                     varName = block.inputs()[1].evaluate()[0];
                     if (varName) {
                         varFrame = new VariableFrame();
-                        varFrame.addVar(varName, message);
+                        choice = block.inputs()[0].evaluate();
+                        if (choice instanceof Array &&
+                                choice[0].indexOf('any') === 0) {
+                            varFrame.addVar(
+                                varName,
+                                data !== '' ?
+                                    new List([message, data])
+                                    : message
+                            );
+                        } else {
+                            varFrame.addVar(varName, data);
+                        }
                     }
                     procs.push(this.threads.startProcess(
                         block,

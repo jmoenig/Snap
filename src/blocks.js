@@ -603,8 +603,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%msgHat': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'messagesReceivedMenu',
-        react: 'updateEventUpvar'
+        menu: 'messagesReceivedMenu'
     },
     '%msgSend': {
         type: 'input',
@@ -1055,17 +1054,17 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%send': {
         type: 'multi',
-        slots: '%msgSend',
-        label: 'and send',
+        slots: ['%msgSend', '%s'],
+        label: ['and send', 'with data'],
         tags: 'static',
-        max: 1
+        max: 2
     },
     '%receive': {
         type: 'multi',
-        slots: '%rcv',
-        label: 'to',
+        slots: ['%rcv', '%s'],
+        label: ['to', 'with data'],
         tags: 'static',
-        max: 1
+        max: 2
     },
     '%scriptVars': {
         type: 'multi',
@@ -12891,7 +12890,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
             newPart.setContents('#' + idx);
         }
     } else if (this.elementSpec === '%message') {
-        newPart.setContents(localize('message'));
+        newPart.setContents(localize('data'));
     } else if (this.elementSpec === '%keyName') {
         newPart.setContents(localize('key'));
     }

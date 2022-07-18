@@ -6,6 +6,7 @@
     * formatting a list of texts displays it as chat-history in an ASK menu
     * ASK nothing or a falsy value terminates all threads currently displaying a question or waiting to ask one and clears the last "answer"
     * new "Menus" library
+    * broadcasting now supports optional additional data transmission, also when switching scenes 
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * export block definitions from inside the block editor
@@ -61,6 +62,7 @@
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
 * threads: JSCompiler scope fixes and redesign, thanks, xBZZZZ!
 * blocks: added support for mixed-typed polyadic inputs 
+* threads, blocks, objects, gui: added support for additional data transmission for broadcasts and scene switches
 
 ### 2022-07-11
 * extensions: fixed #3065

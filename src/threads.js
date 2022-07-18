@@ -3805,9 +3805,10 @@ Process.prototype.checkURLAllowed = function (url) {
 
 // Process event messages primitives
 
-Process.prototype.doBroadcast = function (message, receivers) {
+Process.prototype.doBroadcast = function (message, options) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        target = this.inputOption(receivers.at(1) || ['all']),
+        target = this.inputOption(options.at(1) || ['all']),
+        payload = options.at(2),
         thisObj,
         msg = this.inputOption(message),
         rcvrs,
@@ -3849,12 +3850,23 @@ Process.prototype.doBroadcast = function (message, receivers) {
         rcvrs.forEach(morph => {
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
-                    var varName, varFrame;
+                    var choice, varName, varFrame;
                     if (block.selector === 'receiveMessage') {
                         varName = block.inputs()[1].evaluate()[0];
                         if (varName) {
                             varFrame = new VariableFrame();
-                            varFrame.addVar(varName, message);
+                            choice = block.inputs()[0].evaluate();
+                            if (choice instanceof Array &&
+                                    choice[0].indexOf('any') === 0) {
+                                varFrame.addVar(
+                                    varName,
+                                    payload !== '' ?
+                                        new List([message, payload])
+                                        : message
+                                );
+                            } else {
+                                varFrame.addVar(varName, payload);
+                            }
                         }
                         procs.push(stage.threads.startProcess(
                             block,
@@ -4916,14 +4928,27 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
         message = this.inputOption(transmission.at(1)),
+        payload = transmission.at(2),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
     this.assertType(message, ['text', 'number', 'Boolean', 'list']);
+    this.assertType(payload, ['text', 'number', 'Boolean', 'list']);
     if (message instanceof List) {
         // make sure only atomic leafs are inside the list
         // don't actually encode the list as json, though
         if (message.canBeJSON()) {
             message = message.deepMap(leaf => leaf); // deep copy the list
+        } else {
+            throw new Error(localize(
+                'cannot send media,\nsprites or procedures\nto another scene'
+            ));
+        }
+    }
+    if (payload instanceof List) {
+        // make sure only atomic leafs are inside the list
+        // don't actually encode the list as json, though
+        if (payload.canBeJSON()) {
+            payload = payload.deepMap(leaf => leaf); // deep copy the list
         } else {
             throw new Error(localize(
                 'cannot send media,\nsprites or procedures\nto another scene'
@@ -4964,7 +4989,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
         }
         this.stop();
         // ide.onNextStep = () => // slow down scene switching, disabled for now
-        ide.switchToScene(scenes.at(idx), null, message);
+        ide.switchToScene(scenes.at(idx), null, message, payload);
         return;
     }
 
@@ -4978,7 +5003,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
     }
 
     this.stop();
-    ide.switchToScene(scene, null, message);
+    ide.switchToScene(scene, null, message, payload);
 };
 
 // Process color primitives
