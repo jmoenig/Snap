@@ -803,8 +803,10 @@ MicroWorld.prototype.makeButtons = function () {
 
     sf.toolBar.fixLayout();
 
+
+    if (!ide.corralButtonsFrame) { this.createCorralButtonsFrame(); }
+
     if (this.buttons['corral'].length > 0) {
-        if (!ide.corralButtonsFrame) { this.createCorralButtonsFrame(); }
         this.buttons['corral'].forEach(
             function (definition) {
                 var button = myself.makeButton(definition);
