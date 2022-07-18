@@ -531,12 +531,16 @@ SnapTranslator.dict.de = {
         'sende %msg %receive und warte',
     'to':
         'an',
+    'with data':
+        'mit Daten',
     'Message name':
         'Nachricht',
     'message':
         'Nachricht',
     'any message':
         'eine beliebige Nachricht',
+    'data':
+        'Daten',
     'wait %n secs':
         'warte %n Sek.',
     'wait until %b':

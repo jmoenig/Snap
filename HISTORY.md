@@ -63,6 +63,7 @@
 * threads: JSCompiler scope fixes and redesign, thanks, xBZZZZ!
 * blocks: added support for mixed-typed polyadic inputs 
 * threads, blocks, objects, gui: added support for additional data transmission for broadcasts and scene switches
+* German translation update for "with data" and "data" strings
 
 ### 2022-07-11
 * extensions: fixed #3065
