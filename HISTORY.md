@@ -28,7 +28,7 @@
     * new extension primitive for querying all variable names accessible from a specified scope (global, sprite, script)
     * new extension primitive for querying whether a watcher for a variable by name is shown onstage
     * new support for setting the translation via the API
-    * new "Tad", "Jahrd" and "Derec" costume series, thanks, Meghan and Brian!
+    * new "Tad", "Jahrd", "Derec" and "Jamet" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories)
@@ -57,6 +57,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-07-19
+* new "Jamet" costumes, thanks, Meghan and Brian!
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
