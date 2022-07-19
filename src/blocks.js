@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-July-18';
+modules.blocks = '2022-July-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10223,7 +10223,10 @@ InputSlotMorph.prototype.messagesMenu = function (searching) {
 };
 
 InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
-    var dict = {'any message': ['any message']},
+    var dict = {
+            '__shout__go__': ['__shout__go__'],
+            'any message': ['any message']
+        },
         rcvr,
         stage,
         allNames;

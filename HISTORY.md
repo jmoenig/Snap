@@ -12,6 +12,7 @@
     * export block definitions from inside the block editor
     * embed blocks into costume metadata to be shared as image file
     * exported script pics now always include the actual blocks, which can be extracted from the image inside Snap!
+    * added green flag symbol to "when I receive" dropdown menu
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
@@ -62,6 +63,7 @@
 * new "Jamet" costumes, thanks, Meghan and Brian!
 * updated sw.js with new costumes
 * updated sw.js with new libraries
+* blocks, objects: added green flag symbol to "when I receive" dropdown menu
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
