@@ -65,6 +65,7 @@
 * updated sw.js with new libraries
 * blocks, objects: added green flag symbol to "when I receive" dropdown menu
 * objects: support "when I receive" hat blocks with (empty) data when clicking the green flag button in the IDE
+* blocks: fixed reverting a mixed-type polyadic sub-slot back to default
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"

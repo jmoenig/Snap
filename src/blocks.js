@@ -1395,7 +1395,7 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                 }
             }
         } else if (this instanceof MultiArgMorph) {
-            deflt = this.labelPart(this.slotSpec);
+            deflt = this.labelPart(this.slotSpecFor(inp));
         } else if (this instanceof ReporterSlotMorph) {
             deflt = this.emptySlot();
         }
