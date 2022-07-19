@@ -61,6 +61,7 @@
 ### 2022-07-19
 * new "Jamet" costumes, thanks, Meghan and Brian!
 * updated sw.js with new costumes
+* updated sw.js with new libraries
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
