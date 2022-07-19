@@ -8886,13 +8886,29 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     this.removeAllClones();
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
-            morph.allHatBlocksFor('__shout__go__').forEach(block =>
+            morph.allHatBlocksFor('__shout__go__').forEach(block => {
+                var varName, varFrame;
+
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        varFrame.addVar(varName, ''); // empty
+                    }
+                }
+
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    this.isThreadSafe
-                ))
-            );
+                    this.isThreadSafe,
+                    null, // exportResult (bool)
+                    null, // callback
+                    null, // isClicked
+                    null, // rightAway
+                    null, // atomic
+                    varFrame
+                ));
+            });
         }
     });
     if (ide) {
