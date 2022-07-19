@@ -19,10 +19,10 @@
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label", "type", "scope", "slots", "defaults", "menus" and "editables" choices in the OF BLOCK block-attribute reporter's dropdown
-    * new "set attribute of block" primitive, experimental
-    * new "define block" primitive, experimental
-    * new "delete block" primitive, experimental
-    * new "this script" primitive, experimental
+    * new "set attribute of block" primitive
+    * new "define block" primitive
+    * new "delete block" primitive
+    * new "this script" primitive
     * added support to the OF reporter for binding a ring to another one, e.g. THIS SCRIPT, to access its local variables
     * new localization extension primitives in the "ide" category, hyperized
     * new extension primitive for importing a costume from a url
@@ -66,6 +66,7 @@
 * blocks, objects: added green flag symbol to "when I receive" dropdown menu
 * objects: support "when I receive" hat blocks with (empty) data when clicking the green flag button in the IDE
 * blocks: fixed reverting a mixed-type polyadic sub-slot back to default
+* removed a bunch of "experimental" tags in the code and documentation
 
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"

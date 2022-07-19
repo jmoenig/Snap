@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-July-11';
+modules.byob = '2022-July-19';
 
 // Declarations
 
@@ -150,9 +150,9 @@ function CustomBlockDefinition(spec, receiver) {
     this.variableNames = [];
     this.comment = null;
     this.isHelper = false;
-    this.codeMapping = null; // experimental, generate text code
-    this.codeHeader = null; // experimental, generate text code
-    this.translations = {}; // experimental, format: {lang : spec}
+    this.codeMapping = null; // generate text code
+    this.codeHeader = null; // generate text code
+    this.translations = {}; // format: {lang : spec}
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
@@ -513,7 +513,7 @@ CustomBlockDefinition.prototype.isDirectlyRecursive = function () {
     return this.cachedIsRecursive;
 };
 
-// CustomBlockDefinition localizing, highly experimental
+// CustomBlockDefinition localizing
 
 CustomBlockDefinition.prototype.localizedSpec = function () {
 	if (this.cachedTranslation) {return this.cachedTranslation; }
@@ -580,7 +580,7 @@ CustomBlockDefinition.prototype.updateTranslations = function (text) {
     });
 };
 
-// CustomBlockDefinition API, highly experimental & under construction
+// CustomBlockDefinition API
 
 CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
     // private - only to be called from a Process that also does housekeeping
@@ -1390,8 +1390,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             "translations...",
             function () {
                 hat.parentThatIsA(BlockEditorMorph).editTranslations();
-            },
-            'experimental -\nunder construction'
+            }
         );
         if (this.isGlobal) {
             if (hat.inputs().length < 2) {
@@ -1399,16 +1398,14 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     "block variables...",
                     function () {
                         hat.enableBlockVars();
-                    },
-                    'experimental -\nunder construction'
+                    }
                 );
             } else {
                 menu.addItem(
                     "remove block variables...",
                     function () {
                         hat.enableBlockVars(false);
-                    },
-                    'experimental -\nunder construction'
+                    }
                 );
             }
         }

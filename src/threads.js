@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-July-18';
+modules.threads = '2022-July-19';
 
 var ThreadManager;
 var Process;
@@ -6707,7 +6707,7 @@ Process.prototype.unflash = function () {
     }
 };
 
-// Process - Block attributes, DEFINE and introspection prims (experimental)
+// Process - Block attributes, DEFINE and introspection prims
 
 Process.prototype.reportBlockAttribute = function (attribute, block) {
     // hyper-dyadic
@@ -6976,7 +6976,6 @@ Process.prototype.slotSpec = function (num) {
 };
 
 Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
-    // highly experimental & under construction
     var choice = this.inputOption(attribute),
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
@@ -7195,7 +7194,6 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
 };
 
 Process.prototype.doDefineBlock = function (upvar, label, context) {
-    // highly experimental & under construction
     var rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
         vars = this.context.outerContext.variables,
@@ -7319,7 +7317,6 @@ Process.prototype.compileBlockReferences = function (context, varName) {
 };
 
 Process.prototype.doDeleteBlock = function (context) {
-    // highly experimental & under construction
     var rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
         stage = ide.stage,

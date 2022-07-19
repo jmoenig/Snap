@@ -46,9 +46,9 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-April-05';
+modules.api = '2022-July-19';
 
-// IDE_Morph external communication API - experimental
+// IDE_Morph external communication API
 /*
     programmatically trigger scripts from outside of Snap!
     add message listeners to Snap! broadcasts and access

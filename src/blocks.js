@@ -748,7 +748,7 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: 'shadowedVariablesMenu'
     },
 
-    // code mapping (experimental)
+    // code mapping
 
     '%codeKind': {
         type: 'input',

@@ -1933,13 +1933,13 @@ SpriteMorph.prototype.init = function (globals) {
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
 
-    // volume and stereo-pan support, experimental:
+    // volume and stereo-pan support
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
     this.pan = 0;
     this.pannerNode = null; // must be lazily initialized in Chrome, sigh...
 
-    // frequency player, experimental
+    // frequency player
     this.freqPlayer = null; // Note, to be lazily initialized
 
     // pen color dimensions support
@@ -8110,7 +8110,7 @@ StageMorph.prototype.init = function (globals) {
     this.tempo = 60; // bpm
     this.lastMessage = '';
 
-    // volume and stereo-pan support, experimental:
+    // volume and stereo-pan support
     this.volume = 100;
     this.gainNode = null; // must be lazily initialized in Chrome, sigh...
     this.pan = 0;
@@ -8169,10 +8169,10 @@ StageMorph.prototype.init = function (globals) {
     this.mirrorVideo = true;
     this.videoMotion = null;
 
-    // world map client - experimental, transient
+    // world map client, transient
     this.worldMap = new WorldMap();
 
-    // Snap! API event listeners - experimental, transient
+    // Snap! API event listeners, transient
     this.messageCallbacks = {}; // name : [functions]
 
     StageMorph.uber.init.call(this);
@@ -8918,7 +8918,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 };
 
 StageMorph.prototype.runStopScripts = function () {
-    // experimental: Allow each sprite to run one last step before termination
+    // Allow each sprite to run one last step before termination
     // usage example: Stop a robot or device associated with the sprite
     this.receiveUserInteraction('stopped', true, true);
     this.children.forEach(morph => {

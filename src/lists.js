@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2022-May-19';
+modules.lists = '2022-July-19';
 
 var List;
 var ListWatcherMorph;
@@ -406,7 +406,7 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
     return v;
 };
 
-// List matrix operations and utilities - very experimental
+// List matrix operations and utilities
 
 List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
@@ -1083,7 +1083,7 @@ List.prototype.hasOnlyAtomicData = function () {
     });
 };
 
-// List-to-block (experimental)
+// List-to-block
 
 List.prototype.blockify = function (limit = 500, count = [0]) {
     var block = SpriteMorph.prototype.blockForSelector('reportNewList'),
