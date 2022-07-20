@@ -29,6 +29,7 @@
     * new extension primitive for querying all variable names accessible from a specified scope (global, sprite, script)
     * new extension primitive for querying whether a watcher for a variable by name is shown onstage
     * new support for setting the translation via the API
+    * new TuneScope extension and library, thanks, Glen, Eric, and team!
     * new "Tad", "Jahrd", "Derec" and "Jamet" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
@@ -58,6 +59,9 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-07-20
+* new TuneScope extension and library, thanks, Glen, Eric, and team!
 
 ### 2022-07-19
 * new "Jamet" costumes, thanks, Meghan and Brian!
