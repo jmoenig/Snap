@@ -722,7 +722,7 @@
    * @since 3.0.0
    */
 
-  class Note {
+  class _Note {
     constructor(value, options = {}) {
       // Assign property defaults
       this.duration = wm.defaults.note.duration;

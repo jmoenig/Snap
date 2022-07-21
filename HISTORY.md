@@ -60,6 +60,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-07-21
+* fixed #3072
+
 ### 2022-07-20
 * new TuneScope extension and library, thanks, Glen, Eric, and team!
 
