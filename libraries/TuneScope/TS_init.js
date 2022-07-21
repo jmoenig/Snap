@@ -51,7 +51,7 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
    
 			function play(){
     const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
-    console.log(note, noteLength, instrumentName, vol)
+    // console.log(note, noteLength, instrumentName, vol)
 				player.queueWaveTable(audioContext, audioContext.destination
 					, window[currentInstrumentData.name], 0, note, noteLength, vol
     );
