@@ -36,24 +36,24 @@ const _convertToSharp = (note) => {
 window.parent.midiPitches = tempMidiPitches;
 window.parent.midiFreqs = tempMidiFreqs;
 
-
 window.playNote = (note, noteLength, instrumentName, volume) => {
-   if (note == "R" || note == "r") return;
+    console.log(note,noteLength,instrumentName,volume)
+    if (note == "R" || note == "r") return;
 
-   note = _convertToSharp(note);
+    // note = _convertToSharp(note);
    
-			var player=new WebAudioFontPlayer();
-   instrumentName = instrumentName || window.parent.currentInstrumentName;
-   instrumentName = instrumentName.toLowerCase()
-   // console.log(instrumentName);
-   let currentInstrumentData = window.parent.instrumentData[instrumentName]
+ 			var player=new WebAudioFontPlayer();
+    instrumentName = instrumentName || window.parent.currentInstrumentName;
+    instrumentName = instrumentName.toLowerCase()
+    // console.log(instrumentName);
+    let currentInstrumentData = window.parent.instrumentData[instrumentName]
 			player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
    
 			function play(){
     const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
     console.log(note, noteLength, instrumentName, vol)
 				player.queueWaveTable(audioContext, audioContext.destination
-					, window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
+					, window[currentInstrumentData.name], 0, note, noteLength, vol
     );
 				return false;
 			}
