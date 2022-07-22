@@ -27,7 +27,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ts_playtracks(tracklist, timesignature)',
+    'ts_playtracks(tracklist, timesignature, tempo)',
     function (tracksList, timeSignature, tempo) {
         const multiplyArray = (arr, length) =>
           Array.from({ length }, () => arr).flat()
@@ -53,7 +53,7 @@ SnapExtensions.primitives.set(
                 const durationInSeconds = noteLength * (window.baseTempo / tempo);
 
                 // play the note and wait
-                await window.playNote(note, durationInSeconds, instrument);
+                await window.playNote(note, durationInSeconds, instrument, );
                 await wait(durationInSeconds * 1000)
 
                 // we increment i with respect to the number of beats the current note occupies in a measure

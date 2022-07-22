@@ -62,7 +62,10 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
 
 window.timeSignatureToBeatsPerMeasure = (time) => {
   timeSig = time.split('/')
-  return (timeSig[0]*4)/timeSig[1]
+  // newTime = (timeSig[0]*4)/timeSig[1]
+  newTime = [parseInt(timeSig[0]), 4/timeSig[1]]
+  console.log(newTime)
+  return newTime
 }
 
 window.baseTempo = 60;
@@ -112,6 +115,14 @@ window.noteLengthToTimeValue = (duration) => {
     return noteDur
   } else {
     return duration
+  }
+}
+
+window.noteNum(noteName) {
+  if (typeof noteName == 'string') {
+
+  } else {
+    return noteName;
   }
 }
 
