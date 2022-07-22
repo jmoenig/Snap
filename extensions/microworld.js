@@ -1,4 +1,4 @@
-// Update 2022-07-18
+// Update 2022-07-22
 var ide = world.children.find(child => {
         return child instanceof IDE_Morph;
     }),
@@ -1090,6 +1090,19 @@ MicroWorld.prototype.hideSpriteBar = function () {
 
     IDE_Morph.prototype.fixLayout = function (situation){
         this.oldFixLayout(situation);
+
+        // spriteEditor (copied from inherited method; doesn't run in 'refreshPalette' situation)
+        if (ide.spriteEditor.isVisible) {
+            ide.spriteEditor.setPosition(new Point(
+                ide.spriteBar.left(),
+                ide.spriteBar.bottom() + ide.padding
+            ));
+            ide.spriteEditor.setExtent(new Point(
+                ide.spriteBar.width(),
+                ide.bottom() - ide.spriteEditor.top()
+            ));
+        }
+
         var spriteEditor = ide.spriteEditor;
         spriteEditor.setTop(spriteEditor.top() - ide.spriteBar.height());
         spriteEditor.setHeight(spriteEditor.height() + ide.spriteBar.height());
