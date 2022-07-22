@@ -3,48 +3,42 @@ var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
 // calculate midi pitches and frequencies
-var tempMidiPitches = {};
-var tempMidiFreqs = {};
+var tempMidiPitches = {}
+var tempMidiFreqs = {}
 
-var notes = [
+let notes = [
     "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-];
+]
 
-for (i = 0; i <= 127; i += 1) {
+for (var i = 0; i <= 127; i++) {
     let note = notes[i % 12] + Math.floor((i - 12) / 12);
     tempMidiPitches[note] = i;
     tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69) / 12)
 }
 
-function _convertToSharp(note) {
+const _convertToSharp = (note) => {
     const splitByFlat = note.split("b");
-    if (splitByFlat.length < 2) {
-        return note;
-    } // does not include a flat
+    if (splitByFlat.length < 2) return note; // does not include a flat
 
     const letter = splitByFlat[0];
     const number = splitByFlat[1];
 
     const indexOfLetter = notes.indexOf(letter);
-    if (indexOfLetter === -1) {
-        return note;
-    }; // TODO: handle this error
-    var previousSharp;
+    if (indexOfLetter === -1) return note; // TODO: handle this error
+    let previousSharp;
     if (indexOfLetter === 0) {
         previousSharp = notes[notes.length - 1];
     } else {
         previousSharp = notes[indexOfLetter - 1];
     }
     return previousSharp + number;
-};
+}
 window.parent.midiPitches = tempMidiPitches;
 window.parent.midiFreqs = tempMidiFreqs;
 
-function playNote(note, noteLength, instrumentName, volume) {
-    console.log(note, noteLength, instrumentName, volume);
-    if (note == "R" || note == "r") {
-        return;
-    }
+window.playNote = (note, noteLength, instrumentName, volume) => {
+    console.log(note, noteLength, instrumentName, volume)
+    if (note == "R" || note == "r") return;
 
     // note = _convertToSharp(note);
 
@@ -65,7 +59,7 @@ function playNote(note, noteLength, instrumentName, volume) {
 }
 
 window.timeSignatureToBeatsPerMeasure = (time) => {
-    timeSig = time.split("/")
+    timeSig = time.split('/')
     // newTime = (timeSig[0]*4)/timeSig[1]
     newTime = [parseInt(timeSig[0]), 4 / timeSig[1]]
     console.log(newTime)
@@ -77,8 +71,17 @@ window.baseTempo = 60;
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
 window.noteLengthToTimeValue = (duration) => {
-    if (typeof duration !== "number") {
-        splitDuration = duration.split(" ")
+    if (typeof duration !== 'number') {
+        splitDuration = duration.split(' ')
+
+        notes = {
+            'whole': 4,
+            'half': 2,
+            'quarter': 1,
+            'eighth': 0.5,
+            'sixteenth': 0.25,
+            'thirtysecond': 0.125
+        }
 
         var dots = 0
 
@@ -101,7 +104,7 @@ window.noteLengthToTimeValue = (duration) => {
             splitDuration[i] = splitDuration[i].toLowerCase()
         }
 
-        noteDur = notes.indexOf(splitDuration.find(e => notes[e] != undefined).toUpperCase())
+        noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
 
         console.log(splitDuration)
         for (let keyword = 0; keyword < splitDuration.length; keyword++) {
