@@ -216,7 +216,7 @@ SnapExtensions.primitives.set(
         //  if (aTopic !== topic) { return; }
           if (!mqttWildcard(aTopic, topic)) {return;}
           let p = new Process();
-          console.log(payload);
+
           newPayload = payload.reduce( (res, val) => res+String.fromCharCode( val), "")
           try {
               p.initializeFor(callback, new List([newPayload, aTopic]));
