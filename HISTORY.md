@@ -60,6 +60,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-07-22
+* v8.0.0 release candidate
+
 ### 2022-07-21
 * fixed #3072
 
