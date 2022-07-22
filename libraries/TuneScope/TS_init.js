@@ -3,69 +3,73 @@ var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
 // calculate midi pitches and frequencies
-var tempMidiPitches = {}
-var tempMidiFreqs = {}
+var tempMidiPitches = {};
+var tempMidiFreqs = {};
 
-let notes = [
+var notes = [
     "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-]
+];
 
-for (var i = 0; i <= 127; i++) {
-    let note = notes[i % 12] + Math.floor((i-12)/12);
+for (i = 0; i <= 127; i += 1) {
+    let note = notes[i % 12] + Math.floor((i - 12) / 12);
     tempMidiPitches[note] = i;
-    tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
+    tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69) / 12)
 }
 
-const _convertToSharp = (note) => {
+function _convertToSharp(note) {
     const splitByFlat = note.split("b");
-    if (splitByFlat.length < 2) return note; // does not include a flat
+    if (splitByFlat.length < 2) {
+        return note;
+    } // does not include a flat
 
     const letter = splitByFlat[0];
     const number = splitByFlat[1];
 
     const indexOfLetter = notes.indexOf(letter);
-    if (indexOfLetter === -1) return note; // TODO: handle this error
-    let previousSharp;
+    if (indexOfLetter === -1) {
+        return note;
+    }; // TODO: handle this error
+    var previousSharp;
     if (indexOfLetter === 0) {
         previousSharp = notes[notes.length - 1];
     } else {
         previousSharp = notes[indexOfLetter - 1];
     }
     return previousSharp + number;
-}
+};
 window.parent.midiPitches = tempMidiPitches;
 window.parent.midiFreqs = tempMidiFreqs;
 
-window.playNote = (note, noteLength, instrumentName, volume) => {
-    console.log(note,noteLength,instrumentName,volume)
-    if (note == "R" || note == "r") return;
+function playNote(note, noteLength, instrumentName, volume) {
+    console.log(note, noteLength, instrumentName, volume);
+    if (note == "R" || note == "r") {
+        return;
+    }
 
     // note = _convertToSharp(note);
-   
- 			var player=new WebAudioFontPlayer();
+
+    var player = new WebAudioFontPlayer();
     instrumentName = instrumentName || window.parent.currentInstrumentName;
     instrumentName = instrumentName.toLowerCase()
     // console.log(instrumentName);
     let currentInstrumentData = window.parent.instrumentData[instrumentName]
-			player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
-   
-			function play(){
-    const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
-    // console.log(note, noteLength, instrumentName, vol)
-				player.queueWaveTable(audioContext, audioContext.destination
-					, window[currentInstrumentData.name], 0, noteNum(note), noteLength, vol
-    );
-				return false;
-			}
-   play();
+    player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
+
+    function play() {
+        const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
+        // console.log(note, noteLength, instrumentName, vol)
+        player.queueWaveTable(audioContext, audioContext.destination, window[currentInstrumentData.name], 0, noteNum(note), noteLength, vol);
+        return false;
+    }
+    play();
 }
 
 window.timeSignatureToBeatsPerMeasure = (time) => {
-  timeSig = time.split('/')
-  // newTime = (timeSig[0]*4)/timeSig[1]
-  newTime = [parseInt(timeSig[0]), 4/timeSig[1]]
-  console.log(newTime)
-  return newTime
+    timeSig = time.split("/")
+    // newTime = (timeSig[0]*4)/timeSig[1]
+    newTime = [parseInt(timeSig[0]), 4 / timeSig[1]]
+    console.log(newTime)
+    return newTime
 }
 
 window.baseTempo = 60;
@@ -73,125 +77,122 @@ window.baseTempo = 60;
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
 window.noteLengthToTimeValue = (duration) => {
-  if (typeof duration !== 'number') {
-    splitDuration = duration.split(' ')
+    if (typeof duration !== "number") {
+        splitDuration = duration.split(" ")
 
-    notes = {
-      'whole' : 4,
-      'half' : 2,
-      'quarter' : 1,
-      'eighth' : 0.5,
-      'sixteenth' : 0.25,
-      'thirtysecond' : 0.125
+        var dots = 0
+
+        function dotted(duration) {
+            dots += 1
+            return duration + (duration / (dots * 2))
+        }
+
+        modifiers = {
+            'dotted': dotted,
+            'tie': (d) => {
+                return d * 2
+            },
+            'triplet': (d) => {
+                return (((d > 0) ? d : 1) * 2) / 3
+            }
+        }
+
+        for (let i = 0; i < splitDuration.length; i++) {
+            splitDuration[i] = splitDuration[i].toLowerCase()
+        }
+
+        noteDur = notes.indexOf(splitDuration.find(e => notes[e] != undefined).toUpperCase())
+
+        console.log(splitDuration)
+        for (let keyword = 0; keyword < splitDuration.length; keyword++) {
+            console.log(keyword, splitDuration[keyword])
+            console.log(noteDur)
+            if (modifiers[splitDuration[keyword]] != undefined) {
+                noteDur = modifiers[splitDuration[keyword]](noteDur)
+            }
+        }
+        return noteDur
+    } else {
+        return duration
     }
-
-    var dots = 0
-
-    function dotted(duration) {
-      dots += 1
-      return duration + (duration / (dots * 2))
-    }
-
-    modifiers = {
-      'dotted' : dotted,
-      'tie' : (d) => {return d*2},
-      'triplet' : (d) => {return (((d > 0) ? d : 1) * 2) / 3}
-    }
-
-    for (let i = 0; i < splitDuration.length; i++) {
-      splitDuration[i] = splitDuration[i].toLowerCase()
-    }
-
-    noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
-    
-    console.log(splitDuration)
-    for (let keyword = 0; keyword < splitDuration.length; keyword++) {
-      console.log(keyword, splitDuration[keyword])
-      console.log(noteDur)
-      if (modifiers[splitDuration[keyword]] != undefined) {
-        noteDur = modifiers[splitDuration[keyword]](noteDur)
-      }
-    }
-    return noteDur
-  } else {
-    return duration
-  }
 }
 
 function noteNum(noteName) {
-  if (Array.isArray(noteName)) {
-    return noteName.map((e) => {return noteNum(e)})
-  }
-
-  if (typeof noteName == 'string' && isNaN(noteName)) {
-    function range(start,end) {
-      if (end == undefined) {
-        end = start;
-        start = 0;
-      }
-
-      if (start > end) {
-        return Array.from(new Array(start-end+1), (x, i) => i + end).reverse()
-      } else if (start == end) {
-        return [start];
-      } else {
-        return Array.from(new Array(end-start+1), (x, i) => i + start);
-      }
+    if (Array.isArray(noteName)) {
+        return noteName.map((e) => {
+            return noteNum(e)
+        })
     }
 
-    function allButFirst(list) {
-      result = list;
-      result.splice(1, 1);
-    }
+    if (typeof noteName == 'string' && isNaN(noteName)) {
+        function range(start, end) {
+            if (end == undefined) {
+                end = start;
+                start = 0;
+            }
 
-    function letter (string,list) {
-      var result = [];
-      if (typeof list == 'object') {
-        for (let i = 0; i < list.length; i++) {
-          result.push(string[list[i]])
+            if (start > end) {
+                return Array.from(new Array(start - end + 1), (x, i) => i + end).reverse()
+            } else if (start == end) {
+                return [start];
+            } else {
+                return Array.from(new Array(end - start + 1), (x, i) => i + start);
+            }
         }
-      } else {
-        result = string[list];
-      }
-      return result;
+
+        function allButFirst(list) {
+            result = list;
+            result.splice(1, 1);
+        }
+
+        function letter(string, list) {
+            var result = [];
+            if (typeof list == 'object') {
+                for (let i = 0; i < list.length; i++) {
+                    result.push(string[list[i]])
+                }
+            } else {
+                result = string[list];
+            }
+            return result;
+        }
+
+        splitNoteName = noteName.split('')
+        var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
+        var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
+        console.log(octiveNum)
+        var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
+        var notes = {
+            'c': 1,
+            'd': 3,
+            'e': 5,
+            'f': 6,
+            'g': 8,
+            'a': 10,
+            'b': 12
+        }
+        var note = notes[letter(noteName, 0).toLowerCase()]
+
+        var accidentals = letter(noteName, range(0, (index > 0) ? index - 1 : noteName.length))
+
+        for (i = 0; i < accidentals.length; i++) {
+            item = accidentals[i]
+
+            if (item == undefined) {
+                continue
+            }
+
+            if (item == '#' || item == 's') {
+                note += 1
+            } else if (item == '♭' || item == 'b') {
+                note -= 1
+            }
+        }
+
+        return ((note + ((13 * (octive + 1)) - octive)) - 2)
+    } else {
+        return parseFloat(noteName);
     }
-
-    splitNoteName = noteName.split('')
-    var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
-    var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
-    console.log(octiveNum)
-    var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
-    var notes = {
-      'c' : 1,
-      'd' : 3,
-      'e' : 5,
-      'f' : 6,
-      'g' : 8,
-      'a' : 10,
-      'b' : 12
-    }
-    var note = notes[letter(noteName,0).toLowerCase()]
-
-    var accidentals = letter(noteName, range(0, (index > 0) ? index-1 : noteName.length))
-
-    for (i = 0; i < accidentals.length; i++) {
-      item = accidentals[i]
-
-      if (item == undefined) {
-        continue
-      }
-      
-      if (item == '#' || item == 's') {
-        note += 1
-      } else if (item == '♭' || item == 'b') {
-        note -= 1
-      }
-    }
-
-    return ((note + ((13 * (octive + 1)) - octive)) - 2)
-  } else {
-    return parseFloat(noteName);
-  }
 }
 
 // instrument data
@@ -339,57 +340,57 @@ window.parent.globalInstrumentVolume = 0.5;
 
 // tones
 class Tone {
-  constructor(id) {
-    this.id = id;
-    this.on = false;
+    constructor(id) {
+        this.id = id;
+        this.on = false;
 
-    const thisPlayer = new Object;
-    thisPlayer.context = new AudioContext();
-    thisPlayer.oscillator = thisPlayer.context.createOscillator();
-    thisPlayer.gainobj = thisPlayer.context.createGain();
-    thisPlayer.oscillator.frequency.value = 100;
-    thisPlayer.gainobj.gain.value = 1;
-    thisPlayer.oscillator.connect(thisPlayer.gainobj);
-    thisPlayer.gainobj.connect(thisPlayer.context.destination);
+        const thisPlayer = new Object;
+        thisPlayer.context = new AudioContext();
+        thisPlayer.oscillator = thisPlayer.context.createOscillator();
+        thisPlayer.gainobj = thisPlayer.context.createGain();
+        thisPlayer.oscillator.frequency.value = 100;
+        thisPlayer.gainobj.gain.value = 1;
+        thisPlayer.oscillator.connect(thisPlayer.gainobj);
+        thisPlayer.gainobj.connect(thisPlayer.context.destination);
 
-    this.player = thisPlayer;
-  }
-
-  dBFS2gain = (dbfs) => {
-    //return Math.pow(10, dbfs / 20);
-    return (dbfs / 100).toFixed(2);
-  }
-
-  setFreq = (freq) => {
-    this.freq = freq;
-    this.player.oscillator.frequency.value = Math.max(freq, 0);
-  }
-
-  setAmpl = (ampl) => {
-    this.ampl = ampl;
-    this.player.gainobj.gain.value = this.dBFS2gain(parseInt(ampl));
-  }
-
-  turnOn = () => {
-    console.log("on");
-    if (this.on) return;
-    console.log("turning on");
-    if (!this.started) {
-      this.player.oscillator.start(0);
-      this.started = true;
-    } else {
-      this.player.context.resume();
+        this.player = thisPlayer;
     }
-    this.on = true;
-  }
 
-  turnOff = () => {
-    console.log("off");
-    if (!this.on) return;
-    console.log("turning off");
-    this.player.context.suspend();
-    this.on = false;
-  }
+    dBFS2gain = (dbfs) => {
+        //return Math.pow(10, dbfs / 20);
+        return (dbfs / 100).toFixed(2);
+    }
+
+    setFreq = (freq) => {
+        this.freq = freq;
+        this.player.oscillator.frequency.value = Math.max(freq, 0);
+    }
+
+    setAmpl = (ampl) => {
+        this.ampl = ampl;
+        this.player.gainobj.gain.value = this.dBFS2gain(parseInt(ampl));
+    }
+
+    turnOn = () => {
+        console.log("on");
+        if (this.on) return;
+        console.log("turning on");
+        if (!this.started) {
+            this.player.oscillator.start(0);
+            this.started = true;
+        } else {
+            this.player.context.resume();
+        }
+        this.on = true;
+    }
+
+    turnOff = () => {
+        console.log("off");
+        if (!this.on) return;
+        console.log("turning off");
+        this.player.context.suspend();
+        this.on = false;
+    }
 
 }
 window.Tone = Tone;
@@ -399,7 +400,9 @@ window.tones = {};
 // repeats an array n times
 // similar to [1,2,3] * 2 = [1,2,3,1,2,3] in Python
 window.multiplyArray = (arr, length) =>
-  Array.from({ length }, () => arr).flat()
+    Array.from({
+        length
+    }, () => arr).flat()
 
 
 /*
@@ -416,56 +419,56 @@ http://creativecommons.org/publicdomain/zero/1.0/legalcode
  */
 function Queue() {
 
-  // initialise the queue and offset
-  var queue = [];
-  var offset = 0;
+    // initialise the queue and offset
+    var queue = [];
+    var offset = 0;
 
-  // Returns the length of the queue.
-  this.getLength = function () {
-    return (queue.length - offset);
-  }
-
-  // Returns true if the queue is empty, and false otherwise.
-  this.isEmpty = function () {
-    return (queue.length === 0);
-  }
-
-  /* Enqueues the specified item. The parameter is:
-   *
-   * item - the item to enqueue
-   */
-  this.enqueue = function (item) {
-    queue.push(item);
-  }
-
-  /* Dequeues an item and returns it. If the queue is empty, the value
-   * 'undefined' is returned.
-   */
-  this.dequeue = function () {
-
-    // if the queue is empty, return immediately
-    if (queue.length === 0) return undefined;
-
-    // store the item at the front of the queue
-    var item = queue[offset];
-
-    // increment the offset and remove the free space if necessary
-    if (++offset * 2 >= queue.length) {
-      queue = queue.slice(offset);
-      offset = 0;
+    // Returns the length of the queue.
+    this.getLength = function () {
+        return (queue.length - offset);
     }
 
-    // return the dequeued item
-    return item;
+    // Returns true if the queue is empty, and false otherwise.
+    this.isEmpty = function () {
+        return (queue.length === 0);
+    }
 
-  }
+    /* Enqueues the specified item. The parameter is:
+     *
+     * item - the item to enqueue
+     */
+    this.enqueue = function (item) {
+        queue.push(item);
+    }
 
-  /* Returns the item at the front of the queue (without dequeuing it). If the
-   * queue is empty then undefined is returned.
-   */
-  this.peek = function () {
-    return (queue.length > 0 ? queue[offset] : undefined);
-  }
+    /* Dequeues an item and returns it. If the queue is empty, the value
+     * 'undefined' is returned.
+     */
+    this.dequeue = function () {
+
+        // if the queue is empty, return immediately
+        if (queue.length === 0) return undefined;
+
+        // store the item at the front of the queue
+        var item = queue[offset];
+
+        // increment the offset and remove the free space if necessary
+        if (++offset * 2 >= queue.length) {
+            queue = queue.slice(offset);
+            offset = 0;
+        }
+
+        // return the dequeued item
+        return item;
+
+    }
+
+    /* Returns the item at the front of the queue (without dequeuing it). If the
+     * queue is empty then undefined is returned.
+     */
+    this.peek = function () {
+        return (queue.length > 0 ? queue[offset] : undefined);
+    }
 
 }
 window.Queue = Queue;
@@ -475,24 +478,24 @@ window.Queue = Queue;
  * @param {*} arr
  */
 function toLowerCaseRecursive(array) {
-  //check for arrays and recurse
-  if (Array.isArray(array)) {
-    for (var i = 0; i < array.length; i++) {
-      array[i] = toLowerCaseRecursive(array[i]);
+    //check for arrays and recurse
+    if (Array.isArray(array)) {
+        for (var i = 0; i < array.length; i++) {
+            array[i] = toLowerCaseRecursive(array[i]);
+        }
+        return array;
     }
-    return array;
-  }
-  //check for string vs non-strings
-  if (typeof array === "string") {
-    if (!hasNumber(array)) { //contains no numbers, so it isn't a note value
-      return array.toLowerCase();
-    } else {  //case with note values, which contain numbers
-      //capitalize the first character in the string
-      return array[0].toUpperCase() + array.slice(1);
+    //check for string vs non-strings
+    if (typeof array === "string") {
+        if (!hasNumber(array)) { //contains no numbers, so it isn't a note value
+            return array.toLowerCase();
+        } else { //case with note values, which contain numbers
+            //capitalize the first character in the string
+            return array[0].toUpperCase() + array.slice(1);
+        }
+    } else {
+        return array;
     }
-  } else {
-    return array;
-  }
 }
 window.toLowerCaseRecursive = toLowerCaseRecursive;
 
@@ -511,29 +514,29 @@ function convertListToArrayRecursive(list) {
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
 function hasNumber(myString) {
-  return /\d/.test(myString);
+    return /\d/.test(myString);
 }
 window.hasNumber = hasNumber;
 
 function deep_copy(array) {
-  return JSON.parse(JSON.stringify(array));
+    return JSON.parse(JSON.stringify(array));
 }
 window.deep_copy = deep_copy;
 
 // play dummy sound to initialize
 
 setTimeout(() => {
-  console.log("playing initialization sound")
-  for (let i = 0; i < instrumentNames.length; i++) {
-    let instrumentName = instrumentNames[i];
-    if (instrumentName === "shakuhachi") return;
-    window.playNote("C4", 1, instrumentName, 0);
-  }
+    console.log("playing initialization sound")
+    for (let i = 0; i < instrumentNames.length; i++) {
+        let instrumentName = instrumentNames[i];
+        if (instrumentName === "shakuhachi") return;
+        window.playNote("C4", 1, instrumentName, 0);
+    }
 }, 1000 * 3);
 
 // set loaded to true
 
 setTimeout(() => {
-  console.log("TuneScope Loaded")
-  window.parent.loadedTuneScope = true;
+    console.log("TuneScope Loaded")
+    window.parent.loadedTuneScope = true;
 }, 1000 * 4)
