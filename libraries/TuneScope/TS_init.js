@@ -53,7 +53,7 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
     const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
     // console.log(note, noteLength, instrumentName, vol)
 				player.queueWaveTable(audioContext, audioContext.destination
-					, window[currentInstrumentData.name], 0, note, noteLength, vol
+					, window[currentInstrumentData.name], 0, noteNum(note), noteLength, vol
     );
 				return false;
 			}
@@ -118,11 +118,79 @@ window.noteLengthToTimeValue = (duration) => {
   }
 }
 
-window.noteNum(noteName) {
-  if (typeof noteName == 'string') {
+function noteNum(noteName) {
+  if (Array.isArray(noteName)) {
+    return noteName.map((e) => {return noteNum(e)})
+  }
 
+  if (typeof noteName == 'string' && isNaN(noteName)) {
+    function range(start,end) {
+      if (end == undefined) {
+        end = start;
+        start = 0;
+      }
+
+      if (start > end) {
+        return Array.from(new Array(start-end+1), (x, i) => i + end).reverse()
+      } else if (start == end) {
+        return [start];
+      } else {
+        return Array.from(new Array(end-start+1), (x, i) => i + start);
+      }
+    }
+
+    function allButFirst(list) {
+      result = list;
+      result.splice(1, 1);
+    }
+
+    function letter (string,list) {
+      var result = [];
+      if (typeof list == 'object') {
+        for (let i = 0; i < list.length; i++) {
+          result.push(string[list[i]])
+        }
+      } else {
+        result = string[list];
+      }
+      return result;
+    }
+
+    splitNoteName = noteName.split('')
+    var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
+    var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
+    console.log(octiveNum)
+    var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
+    var notes = {
+      'c' : 1,
+      'd' : 3,
+      'e' : 5,
+      'f' : 6,
+      'g' : 8,
+      'a' : 10,
+      'b' : 12
+    }
+    var note = notes[letter(noteName,0).toLowerCase()]
+
+    var accidentals = letter(noteName, range(0, (index > 0) ? index-1 : noteName.length))
+
+    for (i = 0; i < accidentals.length; i++) {
+      item = accidentals[i]
+
+      if (item == undefined) {
+        continue
+      }
+      
+      if (item == '#' || item == 's') {
+        note += 1
+      } else if (item == '♭' || item == 'b') {
+        note -= 1
+      }
+    }
+
+    return ((note + ((13 * (octive + 1)) - octive)) - 2)
   } else {
-    return noteName;
+    return parseFloat(noteName);
   }
 }
 
