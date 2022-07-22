@@ -66,7 +66,7 @@ SnapExtensions.primitives.set(
             // verify inputs
             if (!tracksList.contents) return;
 
-            const beatsPerMeasure = window.timeSignatureToBeatsPerMeasure[timeSignature];
+            const beatsPerMeasure = window.timeSignatureToBeatsPerMeasure(timeSignature);
 
             var tracks = window.convertListToArrayRecursive(tracksList);
 
@@ -108,7 +108,7 @@ SnapExtensions.primitives.set(
                 for (let j = 1; j < currTrack.length; j++) { //index from 1 to avoid the header
                     //Reassign the durations list to numerical duration values from strings
                     //jth (Note, Duration) pair
-                    currTrack[j][1] = window.noteLengthToTimeValue[currTrack[j][1]]
+                    currTrack[j][1] = window.noteLengthToTimeValue(currTrack[j][1])
                 }
             }
 

@@ -60,39 +60,59 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
    play();
 }
 
-window.timeSignatureToBeatsPerMeasure = {
-    "4/4": [4,1], // 4 beats per measure, Quarter note gets the beat
-    "3/4": [3,1],
-    "5/4": [5,1],
-    "7/4": [7,1],
-    "6/8": [6,0.5], // 6 beats per measure, Eighth note gets the beat
-    "9/8": [9,0.5],
-    "12/8": [12,0.5]
+window.timeSignatureToBeatsPerMeasure = (time) => {
+  timeSig = time.split('/')
+  return (timeSig[0]*4)/timeSig[1]
 }
 
 window.baseTempo = 60;
 
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
-window.noteLengthToTimeValue = {
-    "dotted whole": 6,
-    "whole": 4,
-    "dotted half": 3,
-    "half": 2,
-    "dotted quarter": 1.5,
-    "quarter": 1,
-    "dotted eighth": 0.75,
-    "eighth": 0.5,
-    "dotted sixteenth": 0.375,
-    "sixteenth": 0.25,
-    "dotted thirtysecond": 0.1875,
-    "thirtysecond": 0.125,
-    "whole triplet": 2.667,
-    "half triplet": 1.333,
-    "quarter triplet": 0.667,
-    "eighth triplet": 0.333,
-    "sixteenth triplet": 0.167,
-    "thirtysecond triplet": 0.0417
+window.noteLengthToTimeValue = (duration) => {
+  if (typeof duration !== 'number') {
+    splitDuration = duration.split(' ')
+
+    notes = {
+      'whole' : 4,
+      'half' : 2,
+      'quarter' : 1,
+      'eighth' : 0.5,
+      'sixteenth' : 0.25,
+      'thirtysecond' : 0.125
+    }
+
+    var dots = 0
+
+    function dotted(duration) {
+      dots += 1
+      return duration + (duration / (dots * 2))
+    }
+
+    modifiers = {
+      'dotted' : dotted,
+      'tie' : (d) => {return d*2},
+      'triplet' : (d) => {return (((d > 0) ? d : 1) * 2) / 3}
+    }
+
+    for (let i = 0; i < splitDuration.length; i++) {
+      splitDuration[i] = splitDuration[i].toLowerCase()
+    }
+
+    noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
+    
+    console.log(splitDuration)
+    for (let keyword = 0; keyword < splitDuration.length; keyword++) {
+      console.log(keyword, splitDuration[keyword])
+      console.log(noteDur)
+      if (modifiers[splitDuration[keyword]] != undefined) {
+        noteDur = modifiers[splitDuration[keyword]](noteDur)
+      }
+    }
+    return noteDur
+  } else {
+    return duration
+  }
 }
 
 // instrument data
