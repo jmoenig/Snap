@@ -110,6 +110,7 @@ var snapVersion = '8.0.0-rc-220723',
         'libraries/SciSnapExtensions.js',
         'libraries/SciSnap!2Blocks.xml',
 
+        /*
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies
@@ -150,6 +151,7 @@ var snapVersion = '8.0.0-rc-220723',
             'libraries/TuneScope/0350_JCLive_sf2_file.js',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
+        */
 
         'libraries/serial_module.xml',
         'libraries/signada.js',
