@@ -37,9 +37,9 @@
         <script src="src/sha512.js?version=2019-06-27"></script>
         <script src="src/FileSaver.min.js?version=2019-06-27"></script>
         <script>
-            var world;
-                // FPS = 67,
-                // lastTime = 0;
+            var world,
+                FPS = 67,
+                lastTime = 0;
             window.onload = function () {
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('sw.js');
@@ -48,13 +48,13 @@
                 new IDE_Morph().openIn(world);
                 loop();
 			};
-            function loop() { // timestamp) {
+            function loop(timestamp) {
                 requestAnimationFrame(loop);
-                // if (timestamp - lastTime < 1000 / FPS) {
-                //     return;
-                // }
+                if (timestamp - lastTime < 1000 / FPS) {
+                    return;
+                }
                 world.doOneCycle();
-                // lastTime = timestamp;
+                lastTime = timestamp;
             }
         </script>
     </head>
