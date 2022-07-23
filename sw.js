@@ -1,4 +1,4 @@
-var snapVersion = '8.0.0-rc-220722',
+var snapVersion = '8.0.0-rc-220723',
     cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
@@ -737,7 +737,7 @@ var snapVersion = '8.0.0-rc-220722',
         'Examples/live-tree.xml',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
-        'Examples/vee.xml',
+        'Examples/vee.xml'
     ];
 
 /* Start the service worker and cache all of the app's content */
