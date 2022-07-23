@@ -87,7 +87,7 @@ window.noteLengthToTimeValue = (duration) => {
 
         function dotted(duration) {
             dots += 1
-            return duration + (duration / (dots * 2))
+            return duration + (start * Math.pow(0.5, dots))
         }
 
         modifiers = {
@@ -105,6 +105,7 @@ window.noteLengthToTimeValue = (duration) => {
         }
 
         noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
+        var start = noteDur
 
         console.log(splitDuration)
         for (let keyword = 0; keyword < splitDuration.length; keyword++) {
