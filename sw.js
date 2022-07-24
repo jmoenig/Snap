@@ -1,4 +1,4 @@
-var snapVersion = '8.0.0-rc-220722',
+var snapVersion = '8.0.0-rc-220724',
     cacheName = 'snap-pwa',
     filesToCache = [
         'snap.html',
@@ -100,7 +100,7 @@ var snapVersion = '8.0.0-rc-220722',
         'libraries/localstorage_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
-        'libraries/menu_module',
+        'libraries/menu_module.xml',
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
@@ -737,7 +737,7 @@ var snapVersion = '8.0.0-rc-220722',
         'Examples/live-tree.xml',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
-        'Examples/vee.xml',
+        'Examples/vee.xml'
     ];
 
 /* Start the service worker and cache all of the app's content */

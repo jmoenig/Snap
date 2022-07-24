@@ -53,12 +53,16 @@
     * fixed variadic AND/OR reporters library, thanks, Brian!
     * fixed a pen-size issue in the frequency distribution analysis' graph-plot block, thanks, Brian!
     * fixed block label color when expanding or inserting variadic infix slots
+    * framerate is throttled to < 67 fps
 * **Documentation Updates:**
     * updated contribution guidelines, thanks, Peter!
     * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+
+### 2022-07-23
+* throttle framerate to < 67 fps
 
 ### 2022-07-22
 * v8.0.0 release candidate
