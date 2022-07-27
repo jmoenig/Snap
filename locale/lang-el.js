@@ -737,7 +737,7 @@ SnapTranslator.dict.el = {
     'type':
         'τύπος',
     'scope':
-        'θέα',
+        'έκταση',
     'slots':
         'θέσεις',
     'defaults':
