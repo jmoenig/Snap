@@ -219,7 +219,6 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
         maxWidth = SpriteMorph.prototype.bubbleMaxTextWidth;
     }
     this.maxWidth = maxWidth;
-    console.log(this.maxWidth);
     this.size = size || SpriteMorph.prototype.bubbleFontSize;
     this.textColor = color || new Color();
 
