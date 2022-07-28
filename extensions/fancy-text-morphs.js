@@ -1,14 +1,14 @@
-var prefix = 'ft2_';
+var prefix = 'ftx_';
 
 SnapExtensions.primitives.set(
-    prefix+'fancy_say(data, size, maxWidth, color)',
+    prefix+'say(data, size, maxWidth, color)',
     (data, size, maxWidth, color, proc) => {
         makeFancyBubble(data, false, false, proc, size, maxWidth, color);
     }
 )
 
 SnapExtensions.primitives.set(
-    prefix+'fancy_think(data, size, maxWidth, color)',
+    prefix+'think(data, size, maxWidth, color)',
     (data, size, maxWidth, color, proc) => {
         makeFancyBubble(data, true, false, proc, size, maxWidth, color);
     }
@@ -280,6 +280,4 @@ FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
     }
 
     return FancySpriteBubbleMorph.uber.dataAsMorph.call(this, data);
-
-
 }
