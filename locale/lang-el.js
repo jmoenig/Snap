@@ -1915,23 +1915,23 @@ SnapTranslator.dict.el = {
         
     // attributes in the SET block's dropdown
     'my anchor':
-        'η άγκυρά μου',
+        'δικό μου άγκυρά',
     'my parent':
-        'ο γονέας μου',
+        'δικό μου γονέας',
     'my name':
-        'το ονομάμου',
+        'δικό μου ονομά',
     'my temporary?':
-        'προσωρινός;',
+        'δικό μου προσωρινός;',
     'my dangling?':
-        'κουνιέμαι',
+        'δικό μου κουνιέμαι;',
     'my draggable?':
-        'συρόμενο',
+        'δικό μου συρόμενο;',
     'my rotation style':
-        'το στύλ περιστροφής μου',
+        'δικό μου στύλ περιστροφής',
     'my rotation x':
-        'η x-περιστροφή μου',
+        'δικό μου x-περιστροφή',
     'my rotation y':
-        'η y περιστροφή μου',
+        'δικό μου y περιστροφή',
 
     // inheritance
     'inherited':
