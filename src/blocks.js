@@ -8144,7 +8144,8 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 ScriptsMorph.prototype.scriptsXML = function () {
     // private - answer a container (usually sprite) for all scripts
     var blockEditor = this.parentThatIsA(BlockEditorMorph),
-        ide = this.world().children[0];
+        ide = this.world().children[0],
+        scripts = this.children.filter(m => m instanceof BlockMorph);
     if (blockEditor) {
         return ide.blocksLibraryXML(
             [blockEditor.definition].concat(
@@ -8157,6 +8158,9 @@ ScriptsMorph.prototype.scriptsXML = function () {
             null,
             true
         );
+    }
+    if (scripts.length === 1) {
+        return scripts[0].toXMLString();
     }
     return null; // +++ for now
 };
