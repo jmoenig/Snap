@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-July-19';
+modules.blocks = '2022-July-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3358,7 +3358,7 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem(
-        "script pic...",
+        "script pic...", // +++
         () => {
             var ide = this.parentThatIsA(IDE_Morph) ||
                     this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
@@ -8094,15 +8094,25 @@ ScriptsMorph.prototype.cleanUp = function () {
     target.adjustBounds();
 };
 
-ScriptsMorph.prototype.exportScriptsPicture = function () {
+ScriptsMorph.prototype.exportScriptsPicture = function () { // +++
     var pic = this.scriptsPicture(),
-        ide = this.world().children[0];
+        ide = this.world().children[0],
+        xml = this.scriptsXML();
     if (pic) {
-        ide.saveCanvasAs(
-            pic,
-            (ide.getProjectName() || localize('untitled')) + ' ' +
-                localize('script pic')
+        if (xml) {
+            ide.saveFileAs(
+                embedMetadataPNG(pic, xml),
+                'image/png',
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
         );
+        } else {
+            ide.saveCanvasAs(
+                pic,
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
+            );
+        }
     }
 };
 
@@ -8129,6 +8139,30 @@ ScriptsMorph.prototype.scriptsPicture = function () {
         }
     });
     return pic;
+};
+
+ScriptsMorph.prototype.scriptsXML = function () {
+    // private - answer a container (usually sprite) for all scripts
+    var blockEditor = this.parentThatIsA(BlockEditorMorph),
+        ide = this.world().children[0],
+        scripts = this.children.filter(m => m instanceof BlockMorph);
+    if (blockEditor) {
+        return ide.blocksLibraryXML(
+            [blockEditor.definition].concat(
+                blockEditor.definition.collectDependencies(
+                    [],
+                    [],
+                    blockEditor.target
+                )
+            ),
+            null,
+            true
+        );
+    }
+    if (scripts.length === 1) {
+        return scripts[0].toXMLString();
+    }
+    return null; // +++ for now
 };
 
 ScriptsMorph.prototype.addComment = function () {

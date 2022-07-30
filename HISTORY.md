@@ -60,6 +60,12 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+    * Greek, thank you, HM100!
+
+### 2022-07-30
+* Greek translation update, thank you, HM100!!
+* blocks: include custom block definition in the "scripts pic" of the block editor
+* blocks: include script xml (blocks) in the "scripts pic" export if it is a single one
 
 ### 2022-07-23
 * throttle framerate to < 67 fps
