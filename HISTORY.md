@@ -64,6 +64,7 @@
 
 ### 2022-07-30
 * Greek translation update, thank you, HM100!!
+* blocks: include custom block definition in the "scripts pic" of the block editor
 
 ### 2022-07-23
 * throttle framerate to < 67 fps
