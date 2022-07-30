@@ -70,6 +70,9 @@
 ### 2022-07-23
 * throttle framerate to < 67 fps
 
+### 2022-07-23
+* throttle framerate to < 67 fps
+
 ### 2022-07-22
 * v8.0.0 release candidate
 
