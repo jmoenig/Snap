@@ -1679,7 +1679,8 @@ Process.prototype.evaluateCustomBlock = function () {
     this.context.parentContext = runnable;
 
     // capture the runtime environment in "this script"
-    self = copy(runnable);
+    self = copy(context);
+    self.outerContext = outer;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
