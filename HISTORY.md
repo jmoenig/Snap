@@ -65,6 +65,7 @@
 ### 2022-07-31
 * threads: fixed #3085 (I hope ^^)
 * byob: fixed #3088 (I hope ^^)
+* blocks: include the (whole) current sprite in the "scripts pic" export if it is more than a single one
 
 ### 2022-07-30
 * Greek translation update, thank you, HM100!!
