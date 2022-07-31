@@ -62,6 +62,9 @@
     * German
     * Greek, thank you, HM100!
 
+### 2022-07-31
+* threads: fixed #3085 (I hope ^^)
+
 ### 2022-07-30
 * Greek translation update, thank you, HM100!!
 * blocks: include custom block definition in the "scripts pic" of the block editor

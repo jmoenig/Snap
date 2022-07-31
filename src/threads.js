@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-July-19';
+modules.threads = '2022-July-31';
 
 var ThreadManager;
 var Process;
@@ -1646,7 +1646,8 @@ Process.prototype.evaluateCustomBlock = function () {
         exit,
         i,
         value,
-        outer;
+        outer,
+        self;
 
     if (!context) {return null; }
     this.procedureCount += 1;
@@ -1676,6 +1677,9 @@ Process.prototype.evaluateCustomBlock = function () {
     );
     runnable.isCustomBlock = true;
     this.context.parentContext = runnable;
+
+    // capture the runtime environment in "this script"
+    self = copy(runnable);
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1733,7 +1737,7 @@ Process.prototype.evaluateCustomBlock = function () {
             this.readyToYield = true;
         }
     }
-    outer.variables.addVar(Symbol.for('self'), method.body || new Context());
+    outer.variables.addVar(Symbol.for('self'), self);
     runnable.expression = runnable.expression.blockSequence();
 };
 
