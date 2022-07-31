@@ -64,6 +64,7 @@
 
 ### 2022-07-31
 * threads: fixed #3085 (I hope ^^)
+* byob: fixed #3088 (I hope ^^)
 
 ### 2022-07-30
 * Greek translation update, thank you, HM100!!
