@@ -68,6 +68,7 @@
 * removed some "under construction" markers
 * new release candidate version
 * threads: fixed an error display glitch
+* new release candidate version
 
 ### 2022-07-31
 * threads: fixed #3085 (I hope ^^)
