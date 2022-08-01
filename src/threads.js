@@ -7367,7 +7367,7 @@ Process.prototype.doDeleteBlock = function (context) {
 Process.prototype.reportCompiled = function (context, /*implicitParamCount*/) {
 	// implicitParamCount is unused because implicit paramerers are handled
     // at runtime
-    if (context instanceof Function) {
+    if (typeof context === 'function') {
         return context;
     }
     return new JSCompiler(this).compileFunction(context);
@@ -7451,12 +7451,11 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
     	i;
 
 	// try compiling the reporter into generic JavaScript
- 	// fall back to the morphic reporter if unsuccessful
     try {
     	func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-     	func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
 	// iterate over the data in a single frame:
@@ -7470,17 +7469,8 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
         if (formalParameterCount > 2) {
             parms.push(list);
         }
-  		result.push(
-        	invoke(
-            	func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this // process
-            )
-        );
+        parms.push(this);
+  		result.push(func.apply(null, parms));
 	}
 	return new List(result);
 };
@@ -7502,12 +7492,11 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
     // iterate over the data in a single frame:
@@ -7520,17 +7509,8 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
         if (formalParameterCount > 2) {
             parms.push(list);
         }
-    	if (
-        	invoke(
-            	func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this // process
-            )
-        ) {
+        parms.push(this);
+    	if (func.apply(null, parms)) {
      		result.push(src[i]);
      	}
     }
@@ -7553,12 +7533,11 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
     // iterate over the data in a single frame:
@@ -7571,19 +7550,10 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
         if (formalParameterCount > 2) {
             parms.push(list);
         }
-        if (
-            invoke(
-                func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this // process
-            )
-        ) {
+        parms.push(this);
+        if (func.apply(null, parms)) {
             return src[i];
-         }
+        }
     }
     return '';
 };
@@ -7600,7 +7570,7 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     this.assertType(list, 'list');
 
     // check for special cases to speed up
-    if (this.canRunOptimizedForCombine(reporter)) {
+    if (reporter instanceof Context && this.canRunOptimizedForCombine(reporter)) {
         return this.reportListAggregation(
             list,
             reporter.expression.selector
@@ -7618,12 +7588,11 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
   	result = src[0];
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 2); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
     // iterate over the data in a single frame:
@@ -7636,15 +7605,8 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
         if (formalParameterCount > 3) {
             parms.push(list);
         }
-    	result = invoke(
-        	func,
-            new List(parms),
-            null,
-            null,
-            null,
-            null,
-            this // process
-        );
+        parms.push(this);
+    	result = func.apply(null, parms);
     }
     return result;
 };
@@ -7654,26 +7616,17 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
     var func;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
     	func = this.reportCompiled(reporter, 2); // two inputs expected
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
     // iterate over the data in a single frame:
 	return new List(
   		list.itemsArray().slice().sort((a, b) =>
-            invoke(
-                func,
-                new List([a, b]),
-                null,
-                null,
-                null,
-                null,
-                this // process
-            ) ? -1 : 1
+            func(a, b, this) ? -1 : 1
         )
     );
 };
@@ -7693,23 +7646,15 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-         func = reporter;
+        console.error('compiler error:', err);
+        throw new Error('compiler error (see console)', {'cause': err});
     }
 
     // iterate over the data in a single frame:
     // to do: Insert some kind of user escape mechanism
 
     for (i = 0; i < len; i += 1) {
-        groupKey = invoke(
-            func,
-            new List([src[i]]),
-            null,
-            null,
-            null,
-            null,
-            this // process
-        );
+        groupKey = func(src[i], this);
         if (dict.has(groupKey)) {
             dict.get(groupKey).push(src[i]);
         } else {
@@ -8268,6 +8213,12 @@ JSCompiler.ring = (func, ...inputs) => {
     return func;
 };
 
+JSCompiler.invoke = (proc, func, argsList) =>
+    // used in compiled rings
+    typeof func === 'function' ?
+    func.apply(null, argsList.itemsArray().concat(proc)) :
+    invoke(func, argsList);
+
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
 JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
@@ -8436,9 +8387,11 @@ JSCompiler.prototype.compileExpression = function (block) {
     // special evaluation primitives
     case 'doRun':
     case 'evaluate':
-        return 'invoke(' + this.compileInput(inputs[0]) + ',' +
+        return 'JSCompiler.invoke(proc,' +
+            this.compileInput(inputs[0]) +
+            ',' +
             this.compileInput(inputs[1]) +
-            ',proc.blockReceiver(),null,null,null,proc,null)';
+            ')';
     // special command forms
     case 'doDeclareVariables':
         block = '';
