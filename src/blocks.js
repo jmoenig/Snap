@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-July-31';
+modules.blocks = '2022-August-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8164,10 +8164,10 @@ ScriptsMorph.prototype.scriptsXML = function () {
         return scripts[0].toXMLString();
     }
     target = this.scriptTarget();
-    if (target instanceof SpriteMorph) {
+    if (isSnapObject(target)) {
         return target.toXMLString();
     }
-    return null; // +++ for now
+    return null;
 };
 
 ScriptsMorph.prototype.addComment = function () {
