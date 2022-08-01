@@ -3358,7 +3358,7 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem(
-        "script pic...", // +++
+        "script pic...",
         () => {
             var ide = this.parentThatIsA(IDE_Morph) ||
                     this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
@@ -8094,7 +8094,7 @@ ScriptsMorph.prototype.cleanUp = function () {
     target.adjustBounds();
 };
 
-ScriptsMorph.prototype.exportScriptsPicture = function () { // +++
+ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture(),
         ide = this.world().children[0],
         xml = this.scriptsXML();

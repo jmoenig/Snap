@@ -65,6 +65,7 @@
 
 ### 2022-08-01
 * blocks, objects, store: include a representation of the stage as sprite in the "scripts pic" export if it is more than a single one
+* removed some "under construction" markers
 
 ### 2022-07-31
 * threads: fixed #3085 (I hope ^^)

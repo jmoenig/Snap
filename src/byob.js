@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-July-31';
+modules.byob = '2022-August-01';
 
 // Declarations
 
@@ -1352,7 +1352,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
-            "script pic...", // +++
+            "script pic...",
             function () {
                 var ide = this.world().children[0],
                     top = this.topBlock(),
