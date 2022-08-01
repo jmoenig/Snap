@@ -7364,15 +7364,13 @@ Process.prototype.doDeleteBlock = function (context) {
 	*** highly experimental and heavily under construction ***
 */
 
-Process.prototype.reportCompiled = function (context, implicitParamCount) {
-	// implicitParamCount is optional and indicates the number of
- 	// expected parameters, if any. This is only used to handle
-  	// implicit (empty slot) parameters and can otherwise be
-   	// ignored
+Process.prototype.reportCompiled = function (context, /*implicitParamCount*/) {
+	// implicitParamCount is unused because implicit paramerers are handled
+    // at runtime
     if (context instanceof Function) {
         return context;
     }
-    return new JSCompiler(this).compileFunction(context, implicitParamCount);
+    return new JSCompiler(this).compileFunction(context);
 };
 
 Process.prototype.capture = function (aContext) {
