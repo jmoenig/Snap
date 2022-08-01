@@ -7369,6 +7369,9 @@ Process.prototype.reportCompiled = function (context, implicitParamCount) {
  	// expected parameters, if any. This is only used to handle
   	// implicit (empty slot) parameters and can otherwise be
    	// ignored
+    if (context instanceof Function) {
+        return context;
+    }
     return new JSCompiler(this).compileFunction(context, implicitParamCount);
 };
 
@@ -7477,7 +7480,7 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
                 null,
                 null,
                 null,
-                this.capture(reporter) // process
+                this // process
             )
         );
 	}
@@ -7527,7 +7530,7 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
                 null,
                 null,
                 null,
-                this.capture(reporter) // process
+                this // process
             )
         ) {
      		result.push(src[i]);
@@ -7578,7 +7581,7 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
                 null,
                 null,
                 null,
-                this.capture(reporter) // process
+                this // process
             )
         ) {
             return src[i];
@@ -7642,7 +7645,7 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
             null,
             null,
             null,
-            this.capture(reporter) // process
+            this // process
         );
     }
     return result;
@@ -7671,7 +7674,7 @@ Process.prototype.reportAtomicSort = function (list, reporter) {
                 null,
                 null,
                 null,
-                this.capture(reporter) // process
+                this // process
             ) ? -1 : 1
         )
     );
@@ -7707,7 +7710,7 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
             null,
             null,
             null,
-            this.capture(reporter) // process
+            this // process
         );
         if (dict.has(groupKey)) {
             dict.get(groupKey).push(src[i]);
@@ -8248,7 +8251,7 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 function JSCompiler(aProcess, outerScope) {
     this.process = aProcess;
     this.source = null; // a context
-    this.paramCount = 0;
+    this.implicitParamCount = 0;
     this.params = 0;
     this.gensymArgIndexes = new Map();
     this.scope = new Map();
@@ -8260,6 +8263,12 @@ function JSCompiler(aProcess, outerScope) {
     this.scope.depth = 1 + outerScope.depth;
     this.scope.outerScope = outerScope;
 }
+
+JSCompiler.ring = (func, ...inputs) => {
+    // used in compiled rings
+    func.inputs = inputs;
+    return func;
+};
 
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
@@ -8281,13 +8290,13 @@ JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
 
 JSCompiler.prototype.getGensym = function (varName) {
     var scope = this.scope, gensym;
-    while (null == (gensym = scope.get(varName)) && 
+    while (null == (gensym = scope.get(varName)) &&
         null != (scope = scope.outerScope));
     return gensym;
 };
 
 JSCompiler.prototype.functionHead = function () {
-    var str1 = 'var ', str2 = '';
+    var str1 = 'var ', str2 = '', params = this.params;
     this.gensymArgIndexes.forEach((argIndex, gensym) => {
         if (argIndex === -1) {
             str1 += gensym + '=0,';
@@ -8296,17 +8305,55 @@ JSCompiler.prototype.functionHead = function () {
         str2 += ',' + argIndex + ':' + gensym;
     });
     str1 += 'proc=params.pop();\n';
-    if (this.params) {
-        str1 += 'while(' + this.params + '>params.length)params.push(0);\n';
+    switch (params) {
+    case -1:
+        // implicit parameters mode
+        switch (params = this.implicitParamCount) {
+        case 0:
+            return str1;
+        case 1:
+            return str1 + 'if(1!=params.length)params[0]="";\n'
+        default:
+            return str1 + 'if(' + params + '!=params.length)\
+params.fill(1==params.length?params[0]:"",0,params.length=' + params +
+            ');\n';
+        }
+    case 0:
+        break;
+    case 1:
+        str1 += 'if(!params.length)params.push(0);\n';
+        break;
+    default:
+        str1 += 'while(' + params + '>params.length)params.push(0);\n';
+        break;
     }
     if (str2) {
-        str1 += 'var{' + str2.substring(1) + '}=params;\n';
+        return str1 + 'var{' + str2.substring(1) + '}=params;\n';
     }
     return str1;
 };
 
-JSCompiler.prototype.compileFunction = function () {
-    return window.eval(this.compileFunctionBody.apply(this, arguments));
+JSCompiler.prototype.functionCache = [];
+JSCompiler.prototype.maxFunctionCache = 300;
+
+JSCompiler.prototype.compileFunction = function (aContext) {
+    if (this.scope.outerScope != null) {
+        throw new Error('can\'t compile function with outer scope');
+    }
+    var fc = this.functionCache,
+        c = aContext.components(),
+        cc = fc.find(c.equalTo, c);
+    if (cc != null) {
+        return cc.returnCompiledRing();
+    }
+    var returnCompiledRing = Function('"use strict";return ' +
+        this.compileFunctionBody(aContext));
+    if (fc.length >= this.maxFunctionCache) {
+        fc.length = 0;
+    }
+    fc.push(c);
+    c.returnCompiledRing = returnCompiledRing;
+    return returnCompiledRing();
 };
 
 JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
@@ -8327,48 +8374,24 @@ JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
     return false;
 };
 
-JSCompiler.prototype.compileFunctionBody = function (
-    aContext,
-    implicitParamCount
-) {
+JSCompiler.prototype.compileFunctionBody = function (aContext) {
     var block = aContext.expression,
         parameters = aContext.inputs,
-        hasEmptySlots,
         code;
 
     if (block instanceof Array) {
         throw new Error('can\'t compile empty ring');
     }
-   
+
     this.source = aContext;
-    if (implicitParamCount === '' || isNil(implicitParamCount)) {
-        this.implicitParams = 1;
-    } else {
-        this.implicitParams = Math.floor(implicitParamCount);
-        if (!(this.implicitParams > 0 && this.implicitParams < 128)) {
-            // use 1 if implicitParamCount doesn't make sense
-            this.implicitParams = 1;
-        }
-    }
 
-    // scan for empty input slots
-    hasEmptySlots = this.findEmptySlot(block);
-
-    // translate formal parameters into gensyms
     if (parameters.length) {
-        // test for conflicts
-        if (hasEmptySlots) {
-            throw new Error(
-                'compiling does not yet support\n' +
-                'mixing explicit formal parameters\n' +
-                'with empty input slots'
-            );
-        }
         // map explicit formal parameters
         this.params = parameters.length;
         parameters.forEach(this.gensymForVar, this);
-    } else if (hasEmptySlots) {
-        this.params = this.implicitParams;
+    } else if (this.findEmptySlot(block)) {
+        // implicit parameters mode (put parameters in empty slots)
+        this.params = -1;
     }
 
     // compile using gensyms
@@ -8377,7 +8400,14 @@ JSCompiler.prototype.compileFunctionBody = function (
     } else {
         code = 'return ' + this.compileExpression(block) + ';\n';
     }
-    return '(function func(...params){\n' + this.functionHead() + code + '})';
+    code = 'JSCompiler.ring(function ring(...params){\n' +
+        this.functionHead() +
+        code +
+        '}';
+    parameters.forEach(p => {
+        code += ',"' + this.escape(p) + '"';
+    });
+    return code + ')';
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
@@ -8435,7 +8465,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         // redirect var to process
         return 'proc.setVarNamed(' +
             this.compileInput(inputs[0]) +
-            ', ' +
+            ',' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doChangeVar':
@@ -8448,7 +8478,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         // redirect var to process
         return 'proc.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
-            ', ' +
+            ',' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
@@ -8474,16 +8504,29 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'reportNewList':
         return this.compileInput(inputs[0]);
     case 'reportThisContext':
-        return 'func';
+        return 'ring';
+    case 'reportEquals':
+        return 'snapEquals(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'reportNotEquals':
+        return '!snapEquals(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'reportNot':
+        return '!' + this.compileInput(inputs[0]);
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
             return 'proc.blockReceiver().' + selector + '(' + args + ')';
-        } else {
-            return 'proc.' + selector + '(' + args + ')';
         }
+        return 'proc.' + selector + '(' + args + ')';
     }
 };
 
@@ -8503,32 +8546,22 @@ JSCompiler.prototype.compileInfix = function (operator, inputs) {
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
-    var args = '';
-    array.forEach(inp => {
-        if (args) {
-            args += ', ';
-        }
-        args += this.compileInput(inp);
-    });
-    return args;
+    var l = array.length, i = 0, args = '';
+    while (l > i) {
+        args += ',' + this.compileInput(array[i++]);
+    }
+    return args.substring(1);
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
     var value, type;
 
-    if (inp.isEmptySlot && inp.isEmptySlot()) {
-        // implicit formal parameter
-        if (this.implicitParams > 1) {
-            if (this.paramCount < this.implicitParams) {
-                return 'params[' + this.paramCount++ + ']';
-            }
-            throw new Error(
-                localize('expecting') + ' ' + this.implicitParams + ' '
-                    + localize('input(s), but getting') + ' '
-                    + this.paramCount
-            );
+    if (inp.isEmptySlot != null && inp.isEmptySlot()) {
+        if (this.params === -1) {
+            // implicit parameter
+            return 'params[' + this.implicitParamCount++ + ']';
         }
-        return 'params[0]';
+        return '""';
     }
     if (inp instanceof RingMorph) {
         inp = inp.children;
@@ -8536,7 +8569,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             'expression': inp[0].children[0],
             'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
             'receiver': this.source.receiver
-        }, '');
+        });
     }
     if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
@@ -8582,8 +8615,8 @@ JSCompiler.prototype.escape = string => {
     // make sure string is a string
     string += '';
     var len = string.length, i = 0, char, escaped = '', safe_chars =
-        ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
-        "%&'()*+,-./:;<=>?@[]^_`{|}~";
+        " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&\
+'()*+,-./:;<=>?@[]^_`{|}~";
     while (len > i) {
         char = string.charAt(i++);
         if (safe_chars.indexOf(char) === -1) {
