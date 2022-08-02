@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2021-February-04';
+modules.cloud = '2022-August-02';
 
 // Global stuff
 
@@ -222,7 +222,7 @@ Cloud.prototype.request = function (
                 }
             }
         };
-        request.send(body);
+        request.send(typeof body === 'object' ? JSON.stringify(body) : body);
     } catch (err) {
         onError.call(this, err.toString(), 'Cloud Error');
     }
@@ -431,7 +431,7 @@ Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
                     onError,
                     'Project could not be saved',
                     false,
-                    JSON.stringify(body) // POST body
+                    body // POST body
                 );
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
@@ -719,7 +719,7 @@ Cloud.prototype.updateNotes = function (
         onError,
         'Could not update project notes',
         false, // wants raw response
-        JSON.stringify({ notes: notes })
+        { notes: notes }
     );
 };
 
@@ -738,7 +738,7 @@ Cloud.prototype.updateProjectName = function (
         onError,
         'Could not update project name',
         false, // wants raw response
-        JSON.stringify({ projectname: newName })
+        { projectname: newName }
     );
 };
 
@@ -845,7 +845,7 @@ Cloud.prototype.updateCollectionDescription = function (
         onError,
         'Could not update collection description',
         false, // wants raw response
-        JSON.stringify({ description: description })
+        { description: description }
     );
 };
 
@@ -865,7 +865,7 @@ Cloud.prototype.updateCollectionName = function (
         onError,
         'Could not update collection name',
         false, // wants raw response
-        JSON.stringify({ name: newName })
+        { name: newName }
     );
 };
 
@@ -954,10 +954,10 @@ Cloud.prototype.addProjectToCollection = function (
         onError,
         'Could not add project to collection',
         false, // wants raw response
-        JSON.stringify({
+        {
             username: projectUsername,
             projectname: projectName
-        })
+        }
     );
 };
 
@@ -1091,9 +1091,7 @@ Cloud.prototype.addEditorToCollection = function (
         onError,
         'Could not add editor to collection',
         false, // wants raw response
-        JSON.stringify({
-            editor_username: editorUsername,
-        })
+        { editor_username: editorUsername }
     );
 };
 
