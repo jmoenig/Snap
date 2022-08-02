@@ -63,6 +63,10 @@
     * German
     * Greek, thank you, HM100!
 
+### 2022-08-02
+* cloud: update
+* new release candidate version
+
 ### 2022-08-01
 * blocks, objects, store: include a representation of the stage as sprite in the "scripts pic" export if it is more than a single one
 * removed some "under construction" markers
