@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2021-November-09';
+modules.widgets = '2022-August-01';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1909,7 +1909,7 @@ DialogBoxMorph.prototype.promptRGB = function (
         rInp = new InputFieldMorph(color.r.toString(), true),
         gInp = new InputFieldMorph(color.g.toString(), true),
         bInp = new InputFieldMorph(color.b.toString(), true),
-        rCol = new AlignmentMorph('column', 2),// +++
+        rCol = new AlignmentMorph('column', 2),
         gCol = new AlignmentMorph('column', 2),
         bCol = new AlignmentMorph('column', 2),
         inp = new AlignmentMorph('column', 2),
@@ -1956,7 +1956,7 @@ DialogBoxMorph.prototype.promptRGB = function (
     gCol.add(labelText('green'));
     gCol.add(gInp);
     bCol.add(labelText('blue'));
-    bCol.add(bInp); // +++
+    bCol.add(bInp);
     clr.add(rCol);
     clr.add(gCol);
     clr.add(bCol);

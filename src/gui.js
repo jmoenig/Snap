@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-July-22';
+modules.gui = '2022-August-01';
 
 // Declarations
 
-var SnapVersion = '8.0.0-rc-220722';
+var SnapVersion = '8.0.0-rc-220801-2';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2508,7 +2508,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
         isString(embeddedData) &&
         ['scripts', 'palette', 'categories'].includes(src) &&
         embeddedData[0] === '<' &&
-        ['blocks', 'block', 'script'].some(tag =>
+        ['blocks', 'block', 'script', 'sprite'].some(tag =>
             embeddedData.slice(1).startsWith(tag))
     ) {
         this.isImportingLocalFile = false;

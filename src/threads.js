@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-July-19';
+modules.threads = '2022-August-01';
 
 var ThreadManager;
 var Process;
@@ -1242,7 +1242,7 @@ Process.prototype.errorBubble = function (error, element) {
     if (errorIsNested && error.cause !== 'user') {
         if (blockToShow.selector === 'reportGetVar') {
             // if I am a single variable, show my caller in the output.
-            blockToShow = blockToShow.parent;
+            blockToShow = blockToShow.parent || blockToShow;
         }
         errorMorph.children[0].text += `\n${localize('The question came up at')}`;
         errorMorph.children[0].fixLayout();
@@ -1646,7 +1646,8 @@ Process.prototype.evaluateCustomBlock = function () {
         exit,
         i,
         value,
-        outer;
+        outer,
+        self;
 
     if (!context) {return null; }
     this.procedureCount += 1;
@@ -1676,6 +1677,10 @@ Process.prototype.evaluateCustomBlock = function () {
     );
     runnable.isCustomBlock = true;
     this.context.parentContext = runnable;
+
+    // capture the runtime environment in "this script"
+    self = copy(context);
+    self.outerContext = outer;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1733,7 +1738,7 @@ Process.prototype.evaluateCustomBlock = function () {
             this.readyToYield = true;
         }
     }
-    outer.variables.addVar(Symbol.for('self'), method.body || new Context());
+    outer.variables.addVar(Symbol.for('self'), self);
     runnable.expression = runnable.expression.blockSequence();
 };
 

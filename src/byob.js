@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-July-19';
+modules.byob = '2022-August-01';
 
 // Declarations
 
@@ -586,28 +586,23 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
     // private - only to be called from a Process that also does housekeeping
     // abstract block specs replace the inputs with underscores,
     // e.g. "move _ steps", "say _", "_ + _"
-    var count = abstractSpec.split(' ').filter(word => word === '_').length,
+    var parts = abstractSpec.split(' ').filter(each => each.length && each !== ' '),
+        count = parts.filter(each => each === '_').length,
         inputNames = this.inputNames(),
-        parts = [],
-        spec = abstractSpec;
+        spec = '',
+        idx = 0;
 
     if (count !== inputNames.length) {
         throw new Error('expecting the number of inputs to match');
     }
-    if (spec.startsWith('_ ')) {
-        parts.push('');
-        spec = spec.slice(2);
-    }
-    if (spec.endsWith(' _')) {
-        spec = spec.slice(0, -2);
-    }
-    parts = parts.concat(spec.split(' _ '));
-    spec = '';
-    parts.forEach((part, i) =>
-        spec += (part + (
-            inputNames[i] ? ' %\'' + inputNames[i] + '\' ' : '')
-        )
-    );
+    parts.forEach(part => {
+        if (part === '_') {
+            spec += inputNames[idx] ? '%\'' + inputNames[idx] + '\' ' : '';
+            idx += 1;
+        } else {
+            spec += (part + ' ');
+        }
+    });
     this.spec = spec.trim();
 };
 
@@ -617,8 +612,8 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
         newInputs = aContext.inputs,
         declarations = this.declarations,
         parts = [],
-        suffix = [],
         body = aContext,
+        idx = 0,
         reportBlock,
         spec;
 
@@ -628,21 +623,16 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     oldInputs = this.inputNames();
 
     // change the input names in the spec to those of the given context
-    while (spec.startsWith('_ ')) {
-        parts.push('');
-        spec = spec.slice(2);
-    }
-    while (spec.endsWith(' _')) {
-        spec = spec.slice(0, -2);
-        suffix.push('');
-    }
-    parts = parts.concat(spec.split(' _ ')).concat(suffix);
+    parts = spec.split(' ').filter(each => each.length && each !== ' ');
     spec = '';
-    parts.forEach((part, i) =>
-        spec += (part + (
-            newInputs[i] ? ' %\'' + newInputs[i] + '\' ' : '')
-        )
-    );
+    parts.forEach(part => {
+        if (part === '_') {
+            spec += newInputs[idx] ? '%\'' + newInputs[idx] + '\' ' : '';
+            idx += 1;
+        } else {
+            spec += (part + ' ');
+        }
+    });
     this.spec = spec.trim();
 
     // change the input names in the slot declarations to those of the context
@@ -1362,7 +1352,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
-            "script pic...", // +++
+            "script pic...",
             function () {
                 var ide = this.world().children[0],
                     top = this.topBlock(),

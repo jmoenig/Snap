@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-April-26';
+modules.store = '2022-August-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1889,6 +1889,48 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.root.sprites.asArray().indexOf(
             serializer.root.currentSprite) + 1,
         serializer.store(this.children)
+    );
+};
+
+StageMorph.prototype.toSpriteXML = function (serializer) {
+    // special case: export the stage as a sprite, so it can be
+    // imported into another project or scene
+    var costumeIdx = this.getCostumeIdx();
+
+    return serializer.format(
+        '<sprite name="@" idx="1" x="0" y="0"' +
+            ' heading="90"' +
+            ' scale="1"' +
+            ' volume="@"' +
+            ' pan="@"' +
+            ' rotation="0"' +
+            '%' +
+            ' draggable="true"' +
+            ' costume="@" color="80,80,80,1" pen="tip" ~>' +
+            '%' + // current costume
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '<scripts>%</scripts>' +
+            '</sprite>',
+        this.name,
+        this.volume,
+        this.pan,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        costumeIdx,
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
+
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        !this.customBlocks ? '' : serializer.store(this.customBlocks),
+        serializer.store(this.variables),
+        serializer.store(this.scripts)
     );
 };
 

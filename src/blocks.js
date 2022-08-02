@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-July-19';
+modules.blocks = '2022-August-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8096,13 +8096,23 @@ ScriptsMorph.prototype.cleanUp = function () {
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture(),
-        ide = this.world().children[0];
+        ide = this.world().children[0],
+        xml = this.scriptsXML();
     if (pic) {
-        ide.saveCanvasAs(
-            pic,
-            (ide.getProjectName() || localize('untitled')) + ' ' +
-                localize('script pic')
+        if (xml) {
+            ide.saveFileAs(
+                embedMetadataPNG(pic, xml),
+                'image/png',
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
         );
+        } else {
+            ide.saveCanvasAs(
+                pic,
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
+            );
+        }
     }
 };
 
@@ -8129,6 +8139,35 @@ ScriptsMorph.prototype.scriptsPicture = function () {
         }
     });
     return pic;
+};
+
+ScriptsMorph.prototype.scriptsXML = function () {
+    // private - answer a container (usually sprite) for all scripts
+    var blockEditor = this.parentThatIsA(BlockEditorMorph),
+        ide = this.world().children[0],
+        scripts = this.children.filter(m => m instanceof BlockMorph),
+        target;
+    if (blockEditor) {
+        return ide.blocksLibraryXML(
+            [blockEditor.definition].concat(
+                blockEditor.definition.collectDependencies(
+                    [],
+                    [],
+                    blockEditor.target
+                )
+            ),
+            null,
+            true
+        );
+    }
+    if (scripts.length === 1) {
+        return scripts[0].toXMLString();
+    }
+    target = this.scriptTarget();
+    if (isSnapObject(target)) {
+        return target.toXMLString();
+    }
+    return null;
 };
 
 ScriptsMorph.prototype.addComment = function () {

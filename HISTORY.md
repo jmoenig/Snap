@@ -12,6 +12,7 @@
     * export block definitions from inside the block editor
     * embed blocks into costume metadata to be shared as image file
     * exported script pics now always include the actual blocks, which can be extracted from the image inside Snap!
+    * exported scripts (!) pics now also always include either the actual blocks (if it's a single script), the block definition (if it's a block editor), or a sprite-representation of the current object (sprite or stage)
     * added green flag symbol to "when I receive" dropdown menu, support when clicking the green flag button in the IDE
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
@@ -60,6 +61,25 @@
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
+    * Greek, thank you, HM100!
+
+### 2022-08-01
+* blocks, objects, store: include a representation of the stage as sprite in the "scripts pic" export if it is more than a single one
+* removed some "under construction" markers
+* new release candidate version
+* threads: fixed an error display glitch
+* new release candidate version
+
+### 2022-07-31
+* threads: fixed #3085 (I hope ^^)
+* byob: fixed #3088 (I hope ^^)
+* blocks: include the (whole) current sprite in the "scripts pic" export if it is more than a single one
+* gui: support directly importing an embedded sprite inside a smart costume
+
+### 2022-07-30
+* Greek translation update, thank you, HM100!!
+* blocks: include custom block definition in the "scripts pic" of the block editor
+* blocks: include script xml (blocks) in the "scripts pic" export if it is a single one
 
 ### 2022-07-23
 * throttle framerate to < 67 fps
