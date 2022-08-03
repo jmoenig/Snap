@@ -4862,6 +4862,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'
         + '\nBambi Brewer: Birdbrain Robotics Extension Support'
+        + '\nGlen Bull & team: TuneScope Music Extension'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'
