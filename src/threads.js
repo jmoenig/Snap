@@ -2948,6 +2948,58 @@ Process.prototype.reportKeep = function (predicate, list) {
     this.evaluate(predicate, new List(parms));
 };
 
+Process.prototype.reportSort = function (list, predicate) {
+    var sorter = this.context.accumulator;
+    if (sorter === null) {
+        this.assertType(list, 'list');
+        sorter = this.context.accumulator = new ArraySorter(
+            list.itemsArray().slice()
+        );
+    } else {
+        // this.context.accumulator is not null
+        // means not first time running
+        // means compared something before
+        sorter.cmpResult = !!this.context.inputs.pop();
+    }
+    if (sorter.step()) {
+        // need to compare
+        this.pushContext();
+        this.evaluate(predicate, new List([sorter.cmp1, sorter.cmp2]));
+    } else {
+        // done
+        this.returnValueToParentContext(new List(sorter.array));
+    }
+};
+
+Process.prototype.reportGroup = function (list, reporter) {
+    var groupKey, groupArr, acc = this.context.accumulator;
+    if (acc === null) {
+        this.assertType(list, 'list');
+        acc = this.context.accumulator = new Map();
+        acc.array = list.itemsArray();
+        acc.arrayLen = acc.array.length;
+        acc.arrayPos = 0;
+    } else {
+        groupKey = this.context.inputs.pop();
+        if (groupArr = acc.get(groupKey)) {
+            groupArr.push(acc.array[acc.arrayPos++]);
+        } else {
+            acc.set(groupKey, [acc.array[acc.arrayPos++]]);
+        }
+    }
+    if (acc.arrayPos === acc.arrayLen) {
+        // done
+        groupArr = [];
+        acc.forEach((value, key) => {
+            groupArr.push(new List([key, value.length, new List(value)]));
+        });
+        this.returnValueToParentContext(new List(groupArr));
+    } else {
+        this.pushContext();
+        this.evaluate(reporter, new List([acc.array[acc.arrayPos]]));
+    }
+};
+
 Process.prototype.reportFindFirst = function (predicate, list) {
     // Find - answer the first item of the list for which
     // the predicate evaluates TRUE.
@@ -7359,13 +7411,13 @@ Process.prototype.doDeleteBlock = function (context) {
 // Process: Compile (as of yet simple) block scripts to JS
 
 /*
-	with either only explicit formal parameters or a specified number of
-	implicit formal parameters mapped to empty input slots
-	*** highly experimental and heavily under construction ***
+    with either only explicit formal parameters or a specified number of
+    implicit formal parameters mapped to empty input slots
+    *** highly experimental and heavily under construction ***
 */
 
 Process.prototype.reportCompiled = function (context, /*implicitParamCount*/) {
-	// implicitParamCount is unused because implicit paramerers are handled
+    // implicitParamCount is unused because implicit paramerers are handled
     // at runtime
     if (typeof context === 'function') {
         return context;
@@ -7441,46 +7493,11 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
     // #2 - optional | index
     // #3 - optional | source list
 
-    this.assertType(list, 'list');
-	var result = [],
-    	src = list.itemsArray(),
-    	len = src.length,
-        formalParameterCount = reporter.inputs.length,
-        parms,
-     	func,
-    	i;
-
-	// try compiling the reporter into generic JavaScript
-    try {
-    	func = this.reportCompiled(reporter, 1); // a single expected input
-    } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportMap(reporter, list);
+        return;
     }
-
-	// iterate over the data in a single frame:
- 	// to do: Insert some kind of user escape mechanism
-
-	for (i = 0; i < len; i += 1) {
-        parms = [src[i]];
-        if (formalParameterCount > 1) {
-            parms.push(i + 1);
-        }
-        if (formalParameterCount > 2) {
-            parms.push(list);
-        }
-        parms.push(this);
-  		result.push(func.apply(null, parms));
-	}
-	return new List(result);
-};
-
-Process.prototype.reportAtomicKeep = function (reporter, list) {
-    // if the reporter uses formal parameters instead of implicit empty slots
-    // there are two additional optional parameters:
-    // #1 - element
-    // #2 - optional | index
-    // #3 - optional | source list
 
     this.assertType(list, 'list');
     var result = [],
@@ -7495,8 +7512,57 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+        console.warn('JavaScript compiler error:', err);
+        this.reportMap(reporter, list);
+        return;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+
+    for (i = 0; i < len; i += 1) {
+        parms = [src[i]];
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
+        parms.push(this);
+        result.push(func.apply(null, parms));
+    }
+    return new List(result);
+};
+
+Process.prototype.reportAtomicKeep = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportKeep(reporter, list);
+        return;
+    }
+
+    this.assertType(list, 'list');
+    var result = [],
+        src = list.itemsArray(),
+        len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.warn('JavaScript compiler error:', err);
+        this.reportKeep(reporter, list);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7510,9 +7576,9 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
             parms.push(list);
         }
         parms.push(this);
-    	if (func.apply(null, parms)) {
-     		result.push(src[i]);
-     	}
+        if (func.apply(null, parms)) {
+            result.push(src[i]);
+        }
     }
     return new List(result);
 };
@@ -7523,6 +7589,12 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     // #1 - element
     // #2 - optional | index
     // #3 - optional | source list
+
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportFindFirst(reporter, list);
+        return;
+    }
 
     this.assertType(list, 'list');
     var src = list.itemsArray(),
@@ -7536,8 +7608,9 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+        console.warn('JavaScript compiler error:', err);
+        this.reportFindFirst(reporter, list);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7566,6 +7639,12 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     // #3 - optional | index
     // #4 - optional | source list
 
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportCombine(list, reporter);
+        return;
+    }
+
     var result, src, len, formalParameterCount, parms, func, i;
     this.assertType(list, 'list');
 
@@ -7582,17 +7661,18 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     len = src.length;
     formalParameterCount = reporter.inputs.length;
 
-	if (len === 0) {
- 		return result;
- 	}
-  	result = src[0];
+    if (len === 0) {
+        return result;
+    }
+    result = src[0];
 
     // try compiling the reporter into generic JavaScript
     try {
         func = this.reportCompiled(reporter, 2); // a single expected input
     } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+        console.warn('JavaScript compiler error:', err);
+        this.reportCombine(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7606,48 +7686,62 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
             parms.push(list);
         }
         parms.push(this);
-    	result = func.apply(null, parms);
+        result = func.apply(null, parms);
     }
     return result;
 };
 
 Process.prototype.reportAtomicSort = function (list, reporter) {
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportSort(list, reporter);
+        return;
+    }
+
     this.assertType(list, 'list');
     var func;
 
     // try compiling the reporter into generic JavaScript
     try {
-    	func = this.reportCompiled(reporter, 2); // two inputs expected
+        func = this.reportCompiled(reporter, 2); // two inputs expected
     } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+        console.warn('JavaScript compiler error:', err);
+        this.reportSort(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
-	return new List(
-  		list.itemsArray().slice().sort((a, b) =>
-            func(a, b, this) ? -1 : 1
-        )
-    );
+    var sorter = new ArraySorter(list.itemsArray().slice());
+    while (sorter.step()) {
+        sorter.cmpResult = !!func(sorter.cmp1, sorter.cmp2, this);
+    }
+    return new List(sorter.array);
 };
 
 Process.prototype.reportAtomicGroup = function (list, reporter) {
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportGroup(list, reporter);
+        return;
+    }
+
     this.assertType(list, 'list');
     var result = [],
         dict = new Map(),
         groupKey,
+        groupArr,
         src = list.itemsArray(),
         len = src.length,
         func,
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.error('compiler error:', err);
-        throw new Error('compiler error (see console)', {'cause': err});
+        console.warn('JavaScript compiler error:', err);
+        this.reportGroup(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7655,16 +7749,16 @@ Process.prototype.reportAtomicGroup = function (list, reporter) {
 
     for (i = 0; i < len; i += 1) {
         groupKey = func(src[i], this);
-        if (dict.has(groupKey)) {
-            dict.get(groupKey).push(src[i]);
+        if (groupArr = dict.get(groupKey)) {
+            groupArr.push(src[i]);
         } else {
             dict.set(groupKey, [src[i]]);
         }
     }
 
-    dict.forEach((value, key) =>
-        result.push(new List([key, value.length, new List(value)]))
-    );
+    dict.forEach((value, key) => {
+        result.push(new List([key, value.length, new List(value)]));
+    });
     return new List(result);
 };
 
@@ -8578,4 +8672,106 @@ JSCompiler.prototype.escape = string => {
         }
     }
     return escaped;
+};
+
+function ArraySorter(array) {
+    // stepable array merge sort
+    // overwrites contents of array
+    // basic synchronous usage sort numbers ascending order:
+    /*
+        var sorter = new ArraySorter([1,4,3,6,2,5,7,8,10,9,0,-1]);
+        while (sorter.step()) {
+            sorter.cmpResult = sorter.cmp1 < sorter.cmp2;
+        }
+        console.log('sorted:', sorter.array);
+    */
+    // don't set sorter.cmpResult to null
+    this.array = array;
+    this.todo = [];
+    this.cmpWanted = false;
+    this.cmpResult = null;
+    this.cmp1 = null;
+    this.cmp2 = null;
+    new SubArraySorter(this, 0, array.length);
+}
+
+ArraySorter.prototype.step = function () {
+    var todo = this.todo;
+    this.cmpWanted = false;
+    while (todo.length) {
+        todo[todo.length - 1].step();
+        if (this.cmpWanted) {
+            return true;
+        }
+    }
+    return false;
+};
+
+function SubArraySorter(sorter, start, end) {
+    // used by ArraySorter
+    if (end - start < 2) {
+        return;
+    }
+    this.sorter = sorter;
+    this.start = start;
+    this.end = end;
+    this.mid = Math.ceil((start + end) / 2);
+    this.mode = 0;
+    this.sub = null;
+    this.sub1pos = 0;
+    this.sub1end = this.sub2pos = this.mid - this.start;
+    this.sub2end = this.end - this.start;
+    sorter.todo.push(this);
+}
+
+SubArraySorter.prototype.step = function () {
+    switch (this.mode) {
+    case 0:
+        // need array[start:mid] and array[mid:end] to be sorted
+        if (this.end - this.start > 2) {
+            new SubArraySorter(this.sorter, this.start, this.mid);
+            new SubArraySorter(this.sorter, this.mid, this.end);
+            this.mode = 1;
+            return;
+        }
+        // no need to return or break here because nothing new in todo
+    case 1:
+        // array[start:mid] and array[mid:end] are sorted
+        // prepare to merge
+        this.sub = this.sorter.array.slice(this.start, this.end);
+        this.mode = 2;
+        // no need to return or break here because nothing new in todo
+    case 2:
+        // merge
+        var cres = this.sorter.cmpResult,
+            subPos,
+            arrPos,
+            arrEnd,
+            array,
+            sub = this.sub;
+        if (cres !== null) {
+            this.sorter.cmpResult = null;
+            array = this.sorter.array;
+            array[this.start++] = sub[
+                cres ? this.sub1pos++ : this.sub2pos++
+            ];
+            subPos = this.sub1pos === this.sub1end;
+            if (subPos || this.sub2pos === this.sub2end) {
+                // finished one of sections
+                // write elements from unfinished section
+                subPos = subPos ? this.sub2pos : this.sub1pos;
+                arrPos = this.start;
+                arrEnd = this.end;
+                while (arrPos !== arrEnd) {
+                    array[arrPos++] = sub[subPos++];
+                }
+                // done sorting array[start:end]
+                this.sorter.todo.pop();
+                return;
+            }
+        }
+        this.sorter.cmp1 = sub[this.sub1pos];
+        this.sorter.cmp2 = sub[this.sub2pos];
+        this.sorter.cmpWanted = true;
+    }
 };
