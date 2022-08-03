@@ -66,6 +66,7 @@
 ### 2022-08-03
 * gui: added credits for Bambi
 * gui: added credits for Glen & team
+* gui: added credits for Meghan
 
 ### 2022-08-02
 * cloud: update
