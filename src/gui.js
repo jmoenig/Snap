@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-August-02';
+modules.gui = '2022-August-03';
 
 // Declarations
 
-var SnapVersion = '8.0.0-rc-220802';
+var SnapVersion = '8.0.0-rc-220803';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4861,6 +4861,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'
+        + '\nBambi Brewer: Birdbrain Robotics Extension Support'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'

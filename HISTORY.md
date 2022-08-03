@@ -63,6 +63,9 @@
     * German
     * Greek, thank you, HM100!
 
+### 2022-08-03
+* gui: added credits for Bambi
+
 ### 2022-08-02
 * cloud: update
 * new release candidate version
