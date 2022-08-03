@@ -69,6 +69,7 @@
 * gui: added credits for Glen & team
 * gui: added credits for Meghan
 * blocks, threads: new "variables" choice in OF reporter's attribute dropdown, reports a list of reachable variable names
+* German translation update for "variables" string (lowercased)
 
 ### 2022-08-02
 * cloud: update
