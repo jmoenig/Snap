@@ -18,6 +18,7 @@
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+    * new "variables" choice in OF reporter's attribute dropdown, reports a list of reachable variable names
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label", "type", "scope", "slots", "defaults", "menus" and "editables" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive
@@ -67,6 +68,7 @@
 * gui: added credits for Bambi
 * gui: added credits for Glen & team
 * gui: added credits for Meghan
+* blocks, threads: new "variables" choice in OF reporter's attribute dropdown, reports a list of reachable variable names
 
 ### 2022-08-02
 * cloud: update

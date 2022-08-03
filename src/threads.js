@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-August-01';
+modules.threads = '2022-August-03';
 
 var ThreadManager;
 var Process;
@@ -5658,12 +5658,14 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
     if (thisObj) {
         this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
-        if (stage.name === name) {
+        if (name instanceof Context) {
+            thatObj = name;
+        } else if (stage.name === name) {
             thatObj = stage;
         } else {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
-        if (thatObj) {
+        if (isSnapObject(thatObj)) {
             this.assertAlive(thatObj);
             if (attribute instanceof BlockMorph) { // a "wish"
             	return this.reportContextFor(
@@ -5725,6 +5727,12 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
             case 'bottom':
                 return thatObj.yBottom();
             }
+        }
+        if (this.inputOption(attribute) === 'variables') {
+            return new List((thatObj instanceof Context ?
+                thatObj.outerContext
+                : thatObj).variables.allNames()
+            );
         }
     }
     return '';

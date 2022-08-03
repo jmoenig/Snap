@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-August-01';
+modules.blocks = '2022-August-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10602,10 +10602,11 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
             'bottom' : ['bottom']
         };
     }
+    dict['~'] = null;
+    dict.variables = ['variables'];
     if (obj) {
         varNames = obj.variables.names();
         if (varNames.length > 0) {
-            dict['~'] = null;
             varNames.forEach(name =>
                 dict[name] = name
             );
