@@ -5728,6 +5728,9 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.yBottom();
             }
         }
+        if (isString(attribute)) {
+            return thatObj.outerContext.variables.getVar(attribute);
+        }
         if (this.inputOption(attribute) === 'variables') {
             return new List((thatObj instanceof Context ?
                 thatObj.outerContext
