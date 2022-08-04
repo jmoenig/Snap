@@ -8309,9 +8309,11 @@ JSCompiler.ring = (func, ...inputs) => {
 
 JSCompiler.invoke = (proc, func, argsList) =>
     // used in compiled rings
-    typeof func === 'function' ?
-    func.apply(null, argsList.itemsArray().concat(proc)) :
-    invoke(func, argsList);
+    func ? (
+        typeof func === 'function' ?
+        func.apply(null, argsList.itemsArray().concat(proc)) :
+        invoke(func, argsList)
+    ) : null;
 
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
