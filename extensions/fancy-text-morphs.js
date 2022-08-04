@@ -18,9 +18,17 @@ function makeFancyBubble(data, isThought, isQuestion, proc, size, maxWidth, colo
     const sprite = proc.receiver;
     const stage = sprite.parentThatIsA(StageMorph);
 
+function validateColor(color) {
     if(!/rgba?\(\d{1,3}\,\d{1,3},\d{1,3},?\d?\.?\d*\)/.test(color) && !!color){
         throw new Error("Color must be in the format rgb(0,0,0) or rgba(0,0,0,1)");
     }
+}
+
+function makeFancyBubble(data, isThought, isQuestion, proc, size, maxWidth, color) {
+    const sprite = proc.receiver;
+    const stage = sprite.parentThatIsA(StageMorph);
+
+    validateColor(color);
 
     color = Color.fromString(color);
 
