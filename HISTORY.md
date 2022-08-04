@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 8.0.0:
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
@@ -66,7 +68,8 @@
     * Greek, thank you, HM100!
 
 ### 2022-08-04
-* ew Manual for v8, yay! Thanks, Brian!
+* new Manual for v8, yay! Thanks, Brian!
+* prepared major release v8
 
 ### 2022-08-03
 * gui: added credits for Bambi
