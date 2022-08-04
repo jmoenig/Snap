@@ -57,12 +57,16 @@
     * fixed block label color when expanding or inserting variadic infix slots
     * framerate is throttled to < 67 fps
 * **Documentation Updates:**
+    * new Manual for v8, yay! Thanks, Brian!
     * updated contribution guidelines, thanks, Peter!
     * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
     * Greek, thank you, HM100!
+
+### 2022-08-04
+* ew Manual for v8, yay! Thanks, Brian!
 
 ### 2022-08-03
 * gui: added credits for Bambi
