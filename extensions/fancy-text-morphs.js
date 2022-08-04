@@ -14,9 +14,14 @@ SnapExtensions.primitives.set(
     }
 )
 
-function makeFancyBubble(data, isThought, isQuestion, proc, size, maxWidth, color) {
-    const sprite = proc.receiver;
-    const stage = sprite.parentThatIsA(StageMorph);
+SnapExtensions.primitives.set(
+    prefix+'costume(data, size, maxWidth, color, align, font)',
+    (data, size, maxWidth, color, align, font, proc) => {
+        validateColor(color);
+        return new FancyTextCostume(data, size, maxWidth, color, align, font)
+    }
+
+)
 
 function validateColor(color) {
     if(!/rgba?\(\d{1,3}\,\d{1,3},\d{1,3},?\d?\.?\d*\)/.test(color) && !!color){
@@ -637,3 +642,65 @@ FancyFraction.transformFont = function(fontString, originalFontName, originalFon
     }
     return font;
 }
+
+FancyTextCostume.prototype = new Costume();
+FancyTextCostume.prototype.constructor = FancyTextCostume;
+FancyTextCostume.uber = Costume.prototype
+
+function FancyTextCostume(data, size, maxWidth, color, align, font) {
+    align = ['left','right','center'].includes(align) ? align : 'left';
+    const textMorph = new FancyTextMorph(data,
+        // this.size * this.scale,
+        size,
+        null, // fontStyle
+        false,
+        false, // italic
+        align,
+        parseInt(maxWidth),
+        font
+
+    );
+    textMorph.setColor(color);
+
+    textMorph.setCenter(textMorph.center().multiplyBy(2));
+
+    this.textMorph = textMorph;
+
+
+    this.size = size || SpriteMorph.prototype.bubbleFontSize;
+
+    this.canvas = newCanvas();
+
+
+    this.shapes = [];
+    // this.shrinkToFit(this.maxExtent());
+    this.name = data || null;
+
+    let rotationCenter;
+
+    switch(align) {
+        case 'left':
+            rotationCenter = new Point(0,0);
+            break;
+        case 'right':
+            rotationCenter = new Point(this.width(), 0);
+            break;
+        default:
+            rotationCenter = new Point(this.center().x, 0);
+    }
+
+    this.rotationCenter = rotationCenter;
+    this.version = Date.now(); // for observer optimization
+    this.loaded = null; // for de-serialization only
+}
+
+Object.defineProperty(FancyTextCostume.prototype, "contents", {
+    get: function contents() {
+        const textMorph = this.textMorph;
+        const canvas = newCanvas(textMorph.bounds.corner.subtract(textMorph.bounds.origin), false, this.canvas);
+        const ctx = canvas.getContext("2d");
+        textMorph.render(ctx);
+
+        return canvas;
+    }
+})
