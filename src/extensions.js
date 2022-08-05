@@ -856,7 +856,6 @@ SnapExtensions.primitives.set(
                         ).filter(
                             each => each instanceof BlockMorph
                         ).map(block => {
-                            console.log(block)
                             let instance = block.fullCopy();
                             instance.isTemplate = false;
                             return instance.reify();
