@@ -4,6 +4,10 @@
  * Modified by Simon Walters
  * and converted into an extension
  * November 2021
+ * V1.1 - change back to using standard naming e.g payload not message
+ * V1.2.0 added in code from pixavier to improve sub and unsub 9May2022 
+ * V1.3.0 added in code from pixavier brokerKey to enable more than one connection to the same broker with different users  
+ * V1.4.0 30Jun22 handle binary payloads correctly
  */
 
 
@@ -14,11 +18,16 @@ SnapExtensions.primitives.set(
         /* original code from github.com/pixavier/mqtt4snap  */
         /* adapted into extension by cymplecy 26Nov21 */
         /* modified to add in keepalive parameter by cymplecy 23Nov21 */
+
         function log(txt) {
             console.log('mqt_connect: ', new Date().toString(), txt);
         }
 
-        broker = broker ? broker.trim() : broker;
+        broker = broker ? broker.trim() : '';
+        let brokerKey = broker;
+        if (broker.indexOf('|') >= 0) {
+            broker = broker.substr(broker.indexOf('|') + 1);
+        }
 
         options = JSON.parse(options);
         const opts = {};
@@ -68,16 +77,18 @@ SnapExtensions.primitives.set(
             wsbroker = wsbroker + ':8084'
         } else if (wsbroker == 'ws://simplesi.cloud') {
             wsbroker = wsbroker + ':8083'
+        } else if (wsbroker == 'ws://localhost') {
+            wsbroker = wsbroker + ':9001'
         }
         //log(wsbroker)
         try {
-            stage.mqtt[broker].end(true);
+            stage.mqtt[brokerKey].end(true);
         } catch (e){}
-        delete stage.mqtt[broker];
+        delete stage.mqtt[brokerKey];
 
-        stage.mqtt[broker] = mqtt.connect(wsbroker, opts);
+        stage.mqtt[brokerKey] = mqtt.connect(wsbroker, opts);
 
-        stage.mqtt[broker].on('connect', function(connack) {
+        stage.mqtt[brokerKey].on('connect', function(connack) {
             log('Connected to ' + wsbroker);
             if (callback) {
                 let p = new Process();
@@ -91,12 +102,12 @@ SnapExtensions.primitives.set(
             } catch(e) {}
         });
 
-        stage.mqtt[broker].stream.on('error', function(error) {
+        stage.mqtt[brokerKey].stream.on('error', function(error) {
             log('error event triggered');
             try{
-                stage.mqtt[broker].end();
+                stage.mqtt[brokerKey].end();
             }catch(e){}
-            delete stage.mqtt[broker];
+            delete stage.mqtt[brokerKey];
             try {
                 proc.doSetVar('connection status', 'failed to connect to ' + broker);
             } catch(e) {}
@@ -110,8 +121,8 @@ SnapExtensions.primitives.set(
 
 
 SnapExtensions.primitives.set(
-    'mqt_pub(broker,topic,message,options)',
-    function (broker,topic,message,options) {
+    'mqt_pub(broker,topic,payload,options)',
+    function (broker,topic,payload,options) {
         /* original code from github.com/pixavier/mqtt4snap  */
         /* adapted into extension by cymplecy 26Nov21 */
         /* modified 5 Sep2021 by cymplecy to add parameters for qos and retain flag */
@@ -119,10 +130,15 @@ SnapExtensions.primitives.set(
             console.log('mqt_pub: ', new Date().toString(), txt);
         }
 
-        broker = broker ? broker.trim() : broker;
+        broker = broker ? broker.trim() : '';
+		let brokerKey = broker;
+		if (broker.indexOf('|') >= 0) {
+			broker = broker.substr(broker.indexOf('|') + 1);
+		}
+		
         topic = topic ? topic.trim() : topic;
         //payload not trimmed as might have real leading/trailing spaces
-        console.log(options)
+        //console.log(options)
         options = JSON.parse(options);
         const opts = {};
         if (options['qos']) {
@@ -139,7 +155,7 @@ SnapExtensions.primitives.set(
             throw new Error('No connection to any broker ' + broker);
         }
 
-        if(!stage.mqtt[broker]){
+        if(!stage.mqtt[brokerKey]){
             log('No connection to broker ' + broker);
             throw new Error('No connection to broker ' + broker);
         }
@@ -149,11 +165,11 @@ SnapExtensions.primitives.set(
 
 
         try{
-            let client = stage.mqtt[broker];
-            client.publish(topic, '' + message, opts);
-            console.log(opts)
+            let client = stage.mqtt[brokerKey];
+            client.publish(topic, '' + payload, opts);
+            //console.log(opts)
         } catch(e) {
-            log('Failed to publish message ' + message);
+            log('Failed to publish payload ' + payload);
         //  console.log(e);
             throw e;
         }
@@ -169,7 +185,12 @@ SnapExtensions.primitives.set(
             console.log('mqt_sub: ', new Date().toString(), txt);
         }
 
-        broker = broker ? broker.trim() : broker;
+		broker = broker ? broker.trim() : '';
+		let brokerKey = broker;
+		if (broker.indexOf('|') >= 0) {
+			broker = broker.substr(broker.indexOf('|') + 1);
+		}
+		
         topic = topic ? topic.trim() : topic;
 
         let stage =  this.parentThatIsA(StageMorph);
@@ -182,28 +203,31 @@ SnapExtensions.primitives.set(
         //let prefix = window.location.protocol == 'https:'?'wss':'ws';
         //let wsbroker = prefix+'://'+broker;
 
-        if (stage.mqtt[broker]) {
-            try {stage.mqtt[broker].unsubscribe(topic);}catch(e){}
+        if (stage.mqtt[brokerKey]) {
+            try {stage.mqtt[brokerKey].unsubscribe(topic);}catch(e){}
         } else {
             log('No connection to broker ' + broker);
             throw new Error('No connection to broker '+broker);
         }
 
-        stage.mqtt[broker].subscribe(topic);
+        stage.mqtt[brokerKey].subscribe(topic);
 
         let mqttListener = function (aTopic, payload) {
         //  if (aTopic !== topic) { return; }
           if (!mqttWildcard(aTopic, topic)) {return;}
           let p = new Process();
+
+          newPayload = payload.reduce( (res, val) => res+String.fromCharCode( val), "")
           try {
-              p.initializeFor(callback, new List([payload.toString() , aTopic]));
+              p.initializeFor(callback, new List([newPayload, aTopic]));
           } catch(e) {
               p.initializeFor(callback, new List([]));
           }
           stage.threads.processes.push(p);
         };
-
-        stage.mqtt[broker].on('message', mqttListener);
+        
+        mqttListener.topic = topic;
+        stage.mqtt[brokerKey].on('message', mqttListener);
 
         let mqttWildcard = function (topic, wildcard) {
             if (topic === wildcard) {return true;}
@@ -236,6 +260,11 @@ SnapExtensions.primitives.set(
         /* adapted into extension by cymplecy 26Nov21 */
 
         let stage =  this.parentThatIsA(StageMorph);
+		broker = broker ? broker.trim() : '';
+		let brokerKey = broker;
+		if (broker.indexOf('|') >= 0) {
+			broker = broker.substr(broker.indexOf('|') + 1);
+		}
 
         try {
             if(broker=='all'){
@@ -248,7 +277,7 @@ SnapExtensions.primitives.set(
                     }
                 }
             } else {
-                stage.mqtt[broker].end(true);
+                stage.mqtt[brokerKey].end(true);
             }
         } catch(e1){
             //console.log('e1');
@@ -264,7 +293,7 @@ SnapExtensions.primitives.set(
                     //console.log(e2);
                 }
             } else {
-                delete stage.mqtt[broker];
+                delete stage.mqtt[brokerKey];
             }
         } catch(e3){
             //console.log('e3');
@@ -281,13 +310,21 @@ SnapExtensions.primitives.set(
 
         let stage =  this.parentThatIsA(StageMorph);
         try{
-          stage.mqtt[broker].unsubscribe(topic);
-          let listeners = stage.mqtt[broker].listeners('message');
-        //  https://github.com/mqttjs/async-mqtt/issues/31
-          listeners.forEach((listener) => {
-              //console.dir(listener);
-              stage.mqtt[broker].removeListener('message', listener);
-            })
+			broker = broker ? broker.trim() : '';
+			let brokerKey = broker;
+			if (broker.indexOf('|') >= 0) {
+				broker = broker.substr(broker.indexOf('|') + 1);
+			}
+			
+            stage.mqtt[brokerKey].unsubscribe(topic);
+            let listeners = stage.mqtt[brokerKey].listeners('message');
+            //  https://github.com/mqttjs/async-mqtt/issues/31
+            listeners.forEach((listener) => {
+                //console.dir(listener);
+                if (topic == listener.topic || topic == '#') {  // # = all
+                    stage.mqtt[brokerKey].removeListener('message', listener); 
+                }
+            });
         } catch(e){
           //console.log(e);
         }

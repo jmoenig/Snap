@@ -80,18 +80,17 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager*/
+BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-March-16';
+modules.gui = '2022-August-04';
 
 // Declarations
 
-// +++ var SnapVersion = '7.4.0-dev';
-var SnapVersion = '7.3.1';
+var SnapVersion = '8.0.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -298,6 +297,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.bulkDropInProgress = false; // for handling multiple file-drops
     this.cachedSceneFlag = null; // for importing multiple scenes at once
+    this.isImportingLocalFile = false; // for handling imports of smart pics
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -1297,15 +1297,22 @@ IDE_Morph.prototype.createCategories = function () {
         categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
-            : queryCurrentCategory;
+            : queryCurrentCategory,
+        flag = true;
 
     if (this.categories) {
+        flag = this.categories.isVisible;
         this.categories.destroy();
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.bounds.setWidth(this.paletteWidth);
     this.categories.buttons = [];
+    this.categories.isVisible = flag;
+
+    this.categories.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'categories');
+    };
 
     this.categories.refresh = function () {
         this.buttons.forEach(cat => {
@@ -1590,6 +1597,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         if (droppedMorph instanceof BlockMorph) {
             droppedMorph.destroy();
         }
+    };
+
+    this.palette.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'palette');
     };
 
     this.palette.setWidth(this.logo.width());
@@ -1945,6 +1956,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         paintbutton,
         cambutton,
         trashbutton,
+        flag = true,
         myself = this,
         colors = MorphicPreferences.isFlat ? this.tabColors
         : [
@@ -1954,11 +1966,13 @@ IDE_Morph.prototype.createCorralBar = function () {
         ];
 
     if (this.corralBar) {
+        flag = this.corralBar.isVisible;
         this.corralBar.destroy();
     }
 
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
+    this.corralBar.isVisible = flag;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
     this.corralBar.setWidth(this.stage.width());
     this.add(this.corralBar);
@@ -2452,6 +2466,7 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
     if (this.filePicker) {
         document.body.removeChild(this.filePicker);
         this.filePicker = null;
+        this.isImportingLocalFile = false;
     }
 };
 
@@ -2466,7 +2481,7 @@ IDE_Morph.prototype.endBulkDrop = function () {
     this.bulkDropInProgress = false;
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2486,6 +2501,22 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
+    // directly import embedded blocks if the image was dropped on
+    // a scripting area or the palette, otherwise import as costume
+    // (with embedded data)
+    if (!this.isImportingLocalFile &&
+        isString(embeddedData) &&
+        ['scripts', 'palette', 'categories'].includes(src) &&
+        embeddedData[0] === '<' &&
+        ['blocks', 'block', 'script', 'sprite'].some(tag =>
+            embeddedData.slice(1).startsWith(tag))
+    ) {
+        this.isImportingLocalFile = false;
+        return this.droppedText(embeddedData, name, '');
+    }
+
+    this.isImportingLocalFile = false;
+    costume.embeddedData = embeddedData || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -4552,6 +4583,7 @@ IDE_Morph.prototype.importLocalFile = function () {
             if (addingScenes) {
                 myself.isAddingNextScene = true;
             }
+            myself.isImportingLocalFile = true;
             world.hand.processDrop(inp.files);
         },
         false
@@ -4829,6 +4861,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'
+        + '\nBambi Brewer: Birdbrain Robotics Extension Support'
+        + '\nGlen Bull & team: TuneScope Music Extension'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'
@@ -4837,7 +4871,13 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging'
+        + '\n\n'
+        + 'Jahrd, Derec, and Jamet costumes are watercolor paintings'
+        + '\nby Meghan Taylor and represent characters from her'
+        + '\nwebcomic Prophecy of the Circle, licensed to us only'
+        + '\nfor use in Snap! projects. Meghan also painted the Tad'
+        + '\ncostumes, but that character is in the public domain.';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
@@ -5260,15 +5300,7 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite.allParts());
-    str = '<sprites app="'
-        + this.serializer.app
-        + '" version="'
-        + this.serializer.version
-        + '">'
-        + str
-        + '</sprites>';
-    this.saveXMLAs(str, sprite.name);
+    this.saveXMLAs(sprite.toXMLString(), sprite.name);
 };
 
 IDE_Morph.prototype.exportScriptsPicture = function () {
@@ -5756,13 +5788,39 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.loadSprites(str, this);
+            this.deserializeSpritesString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.loadSprites(str, this);
+        this.deserializeSpritesString(str);
     }
+};
+
+IDE_Morph.prototype.deserializeSpritesString = function (str) {
+    var xml = this.serializer.parse(str, true), // assert version
+        blocksModel = xml.childNamed('blocks'),
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the sprites depend on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        // notice, there should not be any local blocks in this part of
+        // the model instead we're expecting them inside each sprite
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.categories.refreshEmpty();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    this.serializer.loadSpritesModel(xml, this);
 };
 
 IDE_Morph.prototype.openMediaString = function (str) {
@@ -5790,7 +5848,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var scripts = this.currentSprite.scripts,
+    var world = this.world(),
         script;
 
     if (Process.prototype.isCatchingErrors) {
@@ -5802,17 +5860,12 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     } else {
         script = this.deserializeScriptString(str);
     }
-    script.setPosition(this.world().hand.position());
-    scripts.add(script);
-    script.fixBlockColor(null, true); // force zebra coloring
-    scripts.adjustBounds();
-    scripts.lastDroppedBlock = script;
-    scripts.recordDrop(
-		{
-            origin: this.palette,
-            position: this.palette.center()
-        }
-    );
+    this.spriteBar.tabBar.tabTo('scripts');
+    script.pickUp(world);
+    world.hand.grabOrigin = {
+        origin: this.palette,
+        position: this.palette.center()
+    };
     this.showMessage(
         'Imported Script.',
         2
@@ -5820,7 +5873,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
 };
 
 IDE_Morph.prototype.deserializeScriptString = function (str) {
-    var xml = this.serializer.parse(str, this.currentSprite),
+    var xml = this.serializer.parse(str, true), // assert version
         blocksModel = xml.childNamed('blocks'),
         scriptModel = xml.childNamed('script') || xml,
         blocks;
@@ -5846,7 +5899,7 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
         this.categories.fixLayout();
         this.fixLayout();
     }
-    return this.serializer.loadScriptModule(scriptModel, this.currentSprite);
+    return this.serializer.loadScriptModel(scriptModel, this.currentSprite);
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
@@ -5926,6 +5979,7 @@ IDE_Morph.prototype.openProject = function (project) {
         project.currentScene || project.scenes.at(1),
         true,  // refresh album
         null, // msg
+        null, // data
         true // pause generic WHEN hat blocks
     );
 };
@@ -5934,6 +5988,7 @@ IDE_Morph.prototype.switchToScene = function (
     scene,
     refreshAlbum,
     msg,
+    data,
     pauseHats
 ) {
     var appMode = this.isAppMode;
@@ -5980,7 +6035,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.controlBar.stopButton.refresh();
     this.world().keyboardFocus = this.stage;
     if (msg) {
-        this.stage.fireChangeOfSceneEvent(msg);
+        this.stage.fireChangeOfSceneEvent(msg, data);
     }
 };
 
@@ -6606,7 +6661,8 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = () => this.reflectLanguage(lang, callback, noSave);
+    translation.onload = () =>
+        this.reflectLanguage(lang, callback, noSave);
     document.head.appendChild(translation);
     translation.src = src;
 };
@@ -6640,13 +6696,13 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     if (this.loadNewProject) {
         this.newProject();
         location.hash = urlBar;
+        if (callback) {callback.call(this); }
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(projectData, callback);
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    if (callback) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling
@@ -7419,12 +7475,17 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
 
 // IDE_Morph serialization helper ops
 
-IDE_Morph.prototype.blocksLibraryXML = function (definitions, asFile) {
+IDE_Morph.prototype.blocksLibraryXML = function (
+    definitions,
+    moreCategories,
+    asFile
+) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
     var globals = definitions.filter(def => def.isGlobal),
         locals = definitions.filter(def => !def.isGlobal),
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        cats = moreCategories || [],
         appStr = ' app="' +
             this.serializer.app +
             '" version="' +
@@ -7434,21 +7495,21 @@ IDE_Morph.prototype.blocksLibraryXML = function (definitions, asFile) {
     return '<blocks' +
         (asFile ? appStr : '' ) +
         '>' +
-        this.paletteXML(definitions) +
+        this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         '</blocks>';
 };
 
-IDE_Morph.prototype.paletteXML = function (definitions) {
-    // private - answer an XML string containing the palette information
-    // found in an array of CustomBlockDefinitions
+IDE_Morph.prototype.paletteXML = function (categoryNames) {
+    // answer an XML string containing the palette information
+    // found in an array of category names
     var palette = new Map();
-    definitions.forEach(def => {
-        if (SpriteMorph.prototype.customCategories.has(def.category)) {
+    categoryNames.forEach(cat => {
+        if (SpriteMorph.prototype.customCategories.has(cat)) {
             palette.set(
-                def.category,
-                SpriteMorph.prototype.customCategories.get(def.category)
+                cat,
+                SpriteMorph.prototype.customCategories.get(cat)
             );
         }
     });
@@ -8989,7 +9050,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
-    this.libraryCache = {}; // {fileName: [blocks-array] }
+    this.libraryCache = new Map(); // fileName: { blocks: [], palette: {} }
 
     this.handle = null;
     this.listField = null;
@@ -9091,30 +9152,31 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = (item) => {
-        if (isNil(item)) {return; }
+    this.listField.action = ({name, fileName, description}) => {
+        if (isNil(name)) {return; }
 
-        this.notesText.text = localize(item.description || '');
+        this.notesText.text = localize(description) || '';
         this.notesText.rerender();
         this.notesField.contents.adjustBounds();
 
-        if (this.hasCached(item.fileName)) {
-            this.displayBlocks(item.fileName);
+        if (this.hasCached(fileName)) {
+            this.displayBlocks(fileName);
         } else {
-            this.showMessage(localize('Loading') + '\n' + localize(item.name));
+            this.showMessage(`${localize('Loading')}\n${localize(name)}`);
             this.ide.getURL(
-                this.ide.resourceURL('libraries', item.fileName),
+                this.ide.resourceURL('libraries', fileName),
                 libraryXML => {
+                    let serializer = this.ide.serializer,
+                        palette = serializer.parse(libraryXML).childNamed('palette');
                     this.cacheLibrary(
-                        item.fileName,
-                        this.ide.serializer.loadBlocks(libraryXML)
+                        fileName,
+                        serializer.loadBlocks(libraryXML),
+                        palette ? serializer.loadPalette(palette) : {}
                     );
-                    this.displayBlocks(item.fileName);
+                    this.displayBlocks(fileName);
                 }
             );
         }
-
-
     };
 
     this.listField.setWidth(200);
@@ -9213,41 +9275,39 @@ LibraryImportDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
 };
 
-LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
-    this.libraryCache[key] = blocks ;
+LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks, palette) {
+    this.libraryCache.set(key, { blocks, palette });
 };
 
 LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
-    return this.libraryCache[key];
+    return this.libraryCache.get(key).blocks;
+};
+
+LibraryImportDialogMorph.prototype.cachedPalette = function (key) {
+    return this.libraryCache.get(key).palette;
 };
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
-    // browsing and importing libraries needs to be redesigned because of
-    // custom categories introduced in v7.
-    // currently caching libraries is ignored when loading a library
-    // to avoid creating custom categories that were only looked at
-    // in the libraries browser.
     if (!this.listField.selected) {return; }
 
-    var // blocks,
-        ide = this.ide,
+    var ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
-    /*
     if (this.hasCached(selectedLibrary)) {
-        blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(def => {
+        this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
         });
+        this.cachedPalette(selectedLibrary).forEach((value, key) =>
+            SpriteMorph.prototype.customCategories.set(key, value)
+        );
         ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
-    */
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -9256,28 +9316,37 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
                 this.isLoadingLibrary = true;
             }
         );
-    // }
+    }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blockImage, previousCategory, blockContainer,
+    var x, y, blockImage, blockContainer, text,
         padding = 4,
-        blocksList = this.cachedLibrary(libraryKey);
+        libraryBlocks = this.cachedLibrary(libraryKey),
+        blocksByCategory = new Map(
+            SpriteMorph.prototype.allCategories().map(cat => [cat, []])
+        );
 
-    if (!blocksList.length) {return; }
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    SpriteMorph.prototype.allCategories().forEach(category => {
-        blocksList.forEach(definition => {
-            if (definition.category !== category) {return; }
-            if (category !== previousCategory) {
-                y += padding;
-            }
-            previousCategory = category;
+    libraryBlocks.global.concat(libraryBlocks.local).forEach(definition => {
+        if (!definition.isHelper) {
+            blocksByCategory.get(definition.category).push(definition);
+        }
+    });
 
+    blocksByCategory.forEach((blocks, category) => {
+        if (blocks.length > 0) {
+            text = SpriteMorph.prototype.categoryText(category);
+            text.setPosition(new Point(x, y));
+            this.palette.addContents(text);
+            y += text.fullBounds().height() + padding;
+        }
+
+        blocks.forEach(definition => {
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
             blockContainer.isCachingImage = true;
@@ -9882,11 +9951,17 @@ CostumeIconMorph.prototype.init = function (aCostume) {
 };
 
 CostumeIconMorph.prototype.createThumbnail = function () {
-    var txt;
+    var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
-    if (this.object instanceof SVG_Costume) {
+    watermark = this.object instanceof SVG_Costume ? 'svg'
+        : (this.object.embeddedData ? (
+                this.typeOfStringData(this.object.embeddedData) === 'data' ?
+                    'dta' : '</>'
+        )
+            : null);
+    if (watermark) {
         txt = new StringMorph(
-            'svg',
+            watermark,
             this.fontSize * 0.8,
             this.fontStyle,
             false,
@@ -9933,6 +10008,12 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
+    if (this.object.embeddedData) {
+        menu.addItem(
+            "get" + ' ' + this.typeOfStringData(this.object.embeddedData),
+            "importEmbeddedData"
+        );
+    }
     menu.addItem("export", "exportCostume");
     return menu;
 };
@@ -10012,11 +10093,38 @@ CostumeIconMorph.prototype.removeCostume = function () {
     }
 };
 
+CostumeIconMorph.prototype.importEmbeddedData = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.spriteBar.tabBar.tabTo('scripts');
+    ide.droppedText(this.object.embeddedData, this.object.name, '');
+};
+
+CostumeIconMorph.prototype.typeOfStringData = function (aString) {
+    // check for Snap specific files, projects, libraries, sprites, scripts
+    if (aString[0] === '<') {
+        if ([
+                'project',
+                'snapdata',
+                'blocks',
+                'sprites',
+                'block',
+                'script'
+            ].some(tag => aString.slice(1).startsWith(tag))
+        ) {
+            return 'blocks';
+        }
+    }
+    return 'data';
+};
+
 CostumeIconMorph.prototype.exportCostume = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else if (this.object.embeddedData) {
+        // embed payload data (e.g blocks)  inside the PNG image data
+        ide.saveFileAs(this.object.pngData(), 'image/png', this.object.name);
     } else { // rasterized Costume
         ide.saveCanvasAs(this.object.contents, this.object.name);
     }

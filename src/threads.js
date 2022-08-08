@@ -60,11 +60,12 @@ IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
-SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph*/
+SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
+StagePickerMorph, CustomBlockDefinition*/
 
-/*jshint esversion: 6, bitwise: false*/
+/*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-March-16';
+modules.threads = '2022-August-03';
 
 var ThreadManager;
 var Process;
@@ -1241,7 +1242,7 @@ Process.prototype.errorBubble = function (error, element) {
     if (errorIsNested && error.cause !== 'user') {
         if (blockToShow.selector === 'reportGetVar') {
             // if I am a single variable, show my caller in the output.
-            blockToShow = blockToShow.parent;
+            blockToShow = blockToShow.parent || blockToShow;
         }
         errorMorph.children[0].text += `\n${localize('The question came up at')}`;
         errorMorph.children[0].fixLayout();
@@ -1377,6 +1378,9 @@ Process.prototype.evaluate = function (
     // assign the actual arguments list to the special
     // parameter ID Symbol.for('arguments'), to be used for variadic inputs
     outer.variables.addVar(Symbol.for('arguments'), args);
+
+    // assign a self-reference for introspection and recursion
+    outer.variables.addVar(Symbol.for('self'), context);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1545,6 +1549,23 @@ Process.prototype.initializeFor = function (context, args) {
     this.context = runnable;
 };
 
+// Process introspection
+
+Process.prototype.reportThisContext = function () {
+    var sym = Symbol.for('self'),
+        frame = this.context.variables.silentFind(sym),
+        ctx;
+    if (frame) {
+        return frame.vars[sym].value;
+    }
+    ctx = this.topBlock.reify();
+    ctx.outerContext = this.context.outerContext;
+    if (ctx.outerContext) {
+        ctx.variables.parentFrame = ctx.outerContext.variables;
+    }
+    return ctx;
+};
+
 // Process stopping blocks primitives
 
 Process.prototype.doStopBlock = function () {
@@ -1625,7 +1646,8 @@ Process.prototype.evaluateCustomBlock = function () {
         exit,
         i,
         value,
-        outer;
+        outer,
+        self;
 
     if (!context) {return null; }
     this.procedureCount += 1;
@@ -1655,6 +1677,10 @@ Process.prototype.evaluateCustomBlock = function () {
     );
     runnable.isCustomBlock = true;
     this.context.parentContext = runnable;
+
+    // capture the runtime environment in "this script"
+    self = copy(context);
+    self.outerContext = outer;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1712,6 +1738,7 @@ Process.prototype.evaluateCustomBlock = function () {
             this.readyToYield = true;
         }
     }
+    outer.variables.addVar(Symbol.for('self'), self);
     runnable.expression = runnable.expression.blockSequence();
 };
 
@@ -3641,36 +3668,77 @@ Process.prototype.doAsk = function (data) {
         rcvr = this.blockReceiver(),
         isStage = rcvr instanceof StageMorph,
         isHiddenSprite = rcvr instanceof SpriteMorph && !rcvr.isVisible,
-        activePrompter;
+        activePrompter,
+        leftSpace,
+        rightSpace;
 
     stage.keysPressed = {};
+    if (!data) {
+        // terminate all other processes currently asking a question
+        // or waiting to ask one
+        stage.threads.processes.filter(proc =>
+            (proc.prompter && !proc.prompter.isDone) ||
+            (proc?.context?.expression?.selector === 'doAsk' && proc !== this)
+        ).forEach(proc => proc.stop());
+        stage.lastAnswer = '';
+        return;
+    }
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
-            morph => morph instanceof StagePrompterMorph
+            morph => morph instanceof StagePrompterMorph ||
+                morph instanceof StagePickerMorph
         );
         if (!activePrompter) {
-            if (!isStage && !isHiddenSprite) {
-                rcvr.bubble(data, false, true);
-            }
-            this.prompter = new StagePrompterMorph(
-                isStage || isHiddenSprite ? data : null
-            );
-            if (stage.scale < 1) {
-                this.prompter.setWidth(stage.width() - 10);
+            if (data instanceof List) {
+                if (!isStage) {
+                    rcvr.stopTalking();
+                }
+                this.prompter = new StagePickerMorph(data);
+                this.prompter.createItems(stage.scale);
+                leftSpace = rcvr.left() - stage.left();
+                rightSpace = stage.right() - rcvr.right();
+                if (isStage) {
+                    this.prompter.popup(
+                        stage,
+                        stage.center().subtract(
+                            this.prompter.extent().floorDivideBy(2)
+                        )
+                    );
+                } else {
+                    this.prompter.popup(
+                        stage,
+                        rightSpace > this.prompter.width() ||
+                                rightSpace >= leftSpace ?
+                            rcvr.topRight()
+                            : rcvr.topLeft().subtract(
+                                new Point(this.prompter.width(), 0)
+                            )
+                    );
+                }
             } else {
-                this.prompter.setWidth(stage.dimensions.x - 20);
+                if (!isStage && !isHiddenSprite) {
+                    rcvr.bubble(data, false, true);
+                }
+                this.prompter = new StagePrompterMorph(
+                    isStage || isHiddenSprite ? data : null
+                );
+                if (stage.scale < 1) {
+                    this.prompter.setWidth(stage.width() - 10);
+                } else {
+                    this.prompter.setWidth(stage.dimensions.x - 20);
+                }
+                this.prompter.fixLayout();
+                this.prompter.setCenter(stage.center());
+                this.prompter.setBottom(stage.bottom() - this.prompter.border);
+                stage.add(this.prompter);
+                this.prompter.inputField.edit();
+                stage.changed();
             }
-            this.prompter.fixLayout();
-            this.prompter.setCenter(stage.center());
-            this.prompter.setBottom(stage.bottom() - this.prompter.border);
-            stage.add(this.prompter);
-            this.prompter.inputField.edit();
-            stage.changed();
         }
     } else {
         if (this.prompter.isDone) {
-            stage.lastAnswer = this.prompter.inputField.getValue();
+            stage.lastAnswer = this.prompter.answer;
             this.prompter.destroy();
             this.prompter = null;
             if (!isStage) {rcvr.stopTalking(); }
@@ -3689,6 +3757,7 @@ Process.prototype.reportLastAnswer = function () {
 
 Process.prototype.reportURL = function (url) {
     var response;
+    url = decodeURI(url);
     this.checkURLAllowed(url);
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
@@ -3741,9 +3810,10 @@ Process.prototype.checkURLAllowed = function (url) {
 
 // Process event messages primitives
 
-Process.prototype.doBroadcast = function (message, receivers) {
+Process.prototype.doBroadcast = function (message, options) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        target = this.inputOption(receivers.at(1) || ['all']),
+        target = this.inputOption(options.at(1) || ['all']),
+        payload = options.at(2),
         thisObj,
         msg = this.inputOption(message),
         rcvrs,
@@ -3785,12 +3855,23 @@ Process.prototype.doBroadcast = function (message, receivers) {
         rcvrs.forEach(morph => {
             if (isSnapObject(morph)) {
                 morph.allHatBlocksFor(msg).forEach(block => {
-                    var varName, varFrame;
+                    var choice, varName, varFrame;
                     if (block.selector === 'receiveMessage') {
                         varName = block.inputs()[1].evaluate()[0];
                         if (varName) {
                             varFrame = new VariableFrame();
-                            varFrame.addVar(varName, message);
+                            choice = block.inputs()[0].evaluate();
+                            if (choice instanceof Array &&
+                                    choice[0].indexOf('any') === 0) {
+                                varFrame.addVar(
+                                    varName,
+                                    payload !== '' ?
+                                        new List([message, payload])
+                                        : message
+                                );
+                            } else {
+                                varFrame.addVar(varName, payload);
+                            }
                         }
                         procs.push(stage.threads.startProcess(
                             block,
@@ -4852,14 +4933,27 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
     var rcvr = this.blockReceiver(),
         idx = 0,
         message = this.inputOption(transmission.at(1)),
+        payload = transmission.at(2),
         ide, scenes, num, scene;
     this.assertAlive(rcvr);
     this.assertType(message, ['text', 'number', 'Boolean', 'list']);
+    this.assertType(payload, ['text', 'number', 'Boolean', 'list']);
     if (message instanceof List) {
         // make sure only atomic leafs are inside the list
         // don't actually encode the list as json, though
         if (message.canBeJSON()) {
             message = message.deepMap(leaf => leaf); // deep copy the list
+        } else {
+            throw new Error(localize(
+                'cannot send media,\nsprites or procedures\nto another scene'
+            ));
+        }
+    }
+    if (payload instanceof List) {
+        // make sure only atomic leafs are inside the list
+        // don't actually encode the list as json, though
+        if (payload.canBeJSON()) {
+            payload = payload.deepMap(leaf => leaf); // deep copy the list
         } else {
             throw new Error(localize(
                 'cannot send media,\nsprites or procedures\nto another scene'
@@ -4900,7 +4994,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
         }
         this.stop();
         // ide.onNextStep = () => // slow down scene switching, disabled for now
-        ide.switchToScene(scenes.at(idx), null, message);
+        ide.switchToScene(scenes.at(idx), null, message, payload);
         return;
     }
 
@@ -4914,7 +5008,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
     }
 
     this.stop();
-    ide.switchToScene(scene, null, message);
+    ide.switchToScene(scene, null, message, payload);
 };
 
 // Process color primitives
@@ -5540,45 +5634,6 @@ Process.prototype.reportDirectionTo = function (name) {
     return 0;
 };
 
-Process.prototype.reportBlockAttribute = function (attribute, block) {
-    // hyper-dyadic
-    // note: attributes in the left slot
-    // can only be queried via the dropdown menu and are, therefore, not
-    // reachable as dyadic inputs
-    return this.hyperDyadic(
-        (att, obj) => this.reportBasicBlockAttribute(att, obj),
-        attribute,
-        block
-    );
-};
-
-Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
-    var choice = this.inputOption(attribute),
-        expr;
-    this.assertType(block, ['command', 'reporter', 'predicate']);
-    expr = block.expression;
-    switch (choice) {
-    case 'definition':
-        if (expr.isCustomBlock) {
-            if (expr.isGlobal) {
-                return expr.definition.body || new Context();
-            }
-            return this.blockReceiver().getMethod(expr.semanticSpec).body ||
-                new Context();
-        }
-        return new Context();
-    case 'category':
-        return expr ?
-            SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
-                : 0;
-    case 'custom?':
-        return expr ? !!expr.isCustomBlock : false;
-    case 'global?':
-        return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
-    }
-    return '';
-};
-
 Process.prototype.reportAttributeOf = function (attribute, name) {
     // hyper-dyadic
     // note: specifying strings in the left input only accesses
@@ -5597,15 +5652,20 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
+    if (name instanceof Context && attribute instanceof Context) {
+        return this.reportContextFor(attribute, name);
+    }
     if (thisObj) {
         this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
-        if (stage.name === name) {
+        if (name instanceof Context) {
+            thatObj = name;
+        } else if (stage.name === name) {
             thatObj = stage;
         } else {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
-        if (thatObj) {
+        if (isSnapObject(thatObj)) {
             this.assertAlive(thatObj);
             if (attribute instanceof BlockMorph) { // a "wish"
             	return this.reportContextFor(
@@ -5624,6 +5684,10 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.variables.getVar(attribute);
             }
             switch (this.inputOption(attribute)) {
+            case 'position':
+                return thatObj.xPosition ?
+                    new List([thatObj.xPosition(), thatObj.yPosition()])
+                    : '';
             case 'x position':
                 return thatObj.xPosition ? thatObj.xPosition() : '';
             case 'y position':
@@ -5664,6 +5728,15 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.yBottom();
             }
         }
+        if (isString(attribute)) {
+            return thatObj.outerContext.variables.getVar(attribute);
+        }
+        if (this.inputOption(attribute) === 'variables') {
+            return new List((thatObj instanceof Context ?
+                thatObj.outerContext
+                : thatObj).variables.allNames()
+            );
+        }
     }
     return '';
 };
@@ -5675,18 +5748,24 @@ Process.prototype.reportGet = function (query) {
         stage,
         objName;
 
+    function allOtherSprites() {
+        var stage = thisObj.parentThatIsA(StageMorph),
+            sprites = stage.children.filter(each =>
+                each instanceof SpriteMorph && each !== thisObj
+            ),
+            inHand = stage.world().hand.children[0];
+        if (inHand instanceof SpriteMorph) {
+            sprites.push(inHand);
+        }
+        return sprites;
+    }
+
     if (thisObj) {
         switch (this.inputOption(query)) {
         case 'self' :
             return thisObj;
         case 'other sprites':
-            stage = thisObj.parentThatIsA(StageMorph);
-            return new List(
-                stage.children.filter(each =>
-                    each instanceof SpriteMorph &&
-                        each !== thisObj
-                )
-            );
+            return new List(allOtherSprites());
         case 'parts': // shallow copy to disable side-effects
             return new List((thisObj.parts || []).map(each => each));
         case 'anchor':
@@ -5698,13 +5777,10 @@ Process.prototype.reportGet = function (query) {
         case 'temporary?':
             return thisObj.isTemporary || false;
         case 'clones':
-            stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
             return new List(
-                stage.children.filter(each =>
-                    each.isTemporary &&
-                        (each !== thisObj) &&
-                            (each.cloneOriginName === objName)
+                allOtherSprites().filter(each =>
+                    each.isTemporary && (each.cloneOriginName === objName)
                 )
             );
         case 'other clones':
@@ -5714,17 +5790,13 @@ Process.prototype.reportGet = function (query) {
             // old rectangular, bounding-box-based algorithm
             // deprecated in favor of a circular perimeter based newer one
             /*
-            stage = thisObj.parentThatIsA(StageMorph);
             neighborhood = thisObj.bounds.expandBy(new Point(
                 thisObj.width(),
                 thisObj.height()
             ));
             return new List(
-                stage.children.filter(each =>
-                    each instanceof SpriteMorph &&
-                        each.isVisible &&
-                        (each !== thisObj) &&
-                        each.bounds.intersects(neighborhood)
+                allOtherSprites.filter(each =>
+                    each.isVisible && each.bounds.intersects(neighborhood)
                 )
             );
             */
@@ -5789,6 +5861,17 @@ Process.prototype.reportGet = function (query) {
                     )
                 )
             );
+        case 'categories':
+            /* // localized version, commented out for now:
+            return new List(SpriteMorph.prototype.categories.map(cat =>
+                localize(cat.charAt(0).toUpperCase() + cat.slice(1))).concat(
+                    Array.from(
+                        SpriteMorph.prototype.customCategories.keys()
+                    ).sort()
+                )
+            );
+            */
+            return new List(SpriteMorph.prototype.allCategories());
         case 'costume':
             return thisObj.costume;
         case 'costumes':
@@ -5976,6 +6059,13 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         receiverVars,
         rootVars;
 
+    if (otherObj instanceof Context) {
+        result.outerContext = otherObj.outerContext;
+        result.variables.parentFrame = otherObj.outerContext.variables;
+        result.receiver = otherObj.receiver;
+        return result;
+    }
+
     result.receiver = otherObj;
     if (!result.outerContext) {
         result.outerContext = new Context();
@@ -5993,6 +6083,18 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
+};
+
+Process.prototype.reportMousePosition = function () {
+    var world, pos;
+    if (this.homeContext.receiver) {
+        world = this.homeContext.receiver.world();
+        if (world) {
+            pos = this.homeContext.receiver.snapPoint(world.hand.position());
+            return new List([pos.x, pos.y]);
+        }
+    }
+    return '';
 };
 
 Process.prototype.reportMouseX = function () {
@@ -6621,6 +6723,655 @@ Process.prototype.unflash = function () {
     }
 };
 
+// Process - Block attributes, DEFINE and introspection prims
+
+Process.prototype.reportBlockAttribute = function (attribute, block) {
+    // hyper-dyadic
+    // note: attributes in the left slot
+    // can only be queried via the dropdown menu and are, therefore, not
+    // reachable as dyadic inputs
+    return this.hyperDyadic(
+        (att, obj) => this.reportBasicBlockAttribute(att, obj),
+        attribute,
+        block
+    );
+};
+
+Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
+    var choice = this.inputOption(attribute),
+        expr, body, slots, def, info;
+    this.assertType(block, ['command', 'reporter', 'predicate']);
+    expr = block.expression;
+    switch (choice) {
+    case 'label':
+        return expr ? expr.abstractBlockSpec() : '';
+    case 'definition':
+        if (expr.isCustomBlock) {
+            if (expr.isGlobal) {
+                body = expr.definition.body || new Context();
+            } else {
+                body = this.blockReceiver().getMethod(expr.semanticSpec).body ||
+                    new Context();
+            }
+        } else {
+            body = new Context();
+        }
+        if (body.expression && body.expression.selector === 'doReport' &&
+                body.expression.inputs()[0] instanceof BlockMorph) {
+            return body.expression.inputs()[0].reify(body.inputs);
+        }
+        return body;
+    case 'category':
+        return expr ?
+            SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
+                : 0;
+    case 'custom?':
+        return expr ? !!expr.isCustomBlock : false;
+    case 'global?':
+        return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    case 'type':
+        return ['command', 'reporter', 'predicate'].indexOf(
+            this.reportTypeOf(block)
+        ) + 1;
+    case 'scope':
+        return expr.isCustomBlock ? (expr.isGlobal ? 1 : 2) : 0;
+    case 'slots':
+        if (expr.isCustomBlock) {
+            slots = [];
+            (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec)
+            ).declarations.forEach(value => slots.push(value[0]));
+            return new List(slots).map(spec => this.slotType(spec));
+        }
+        return new List(
+            expr.inputs().map(each =>
+                each instanceof ReporterBlockMorph ?
+                    each.getSlotSpec() : each.getSpec()
+            )
+        ).map(spec => this.slotType(spec));
+    case 'defaults':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(value[1]));
+        } else {
+            info = SpriteMorph.prototype.blocks[expr.selector];
+            if (!info) {return slots; }
+            slots = new List(info.defaults);
+        }
+        return slots;
+    case 'menus':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(
+                isString(value[2]) ?
+                    def.decodeChoices(def.parseChoices(value[2]))
+                    : ''
+            ));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof InputSlotMorph ?
+                    (isString(slot.choices) ? slot.choices
+                        : CustomBlockDefinition.prototype.decodeChoices(
+                            slot.choices
+                        ))
+                    : ''
+                );
+            });
+        }
+        return slots;
+    case 'editables':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(!value[3]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof InputSlotMorph ?
+                    !slot.isReadOnly : false
+                );
+            });
+        }
+        return slots;
+    }
+    return '';
+};
+
+Process.prototype.slotType = function (spec) {
+    // answer a number indicating the shape of a slot represented by its spec.
+    // Note: you can also use it to translate mnemonics into slot type numbers
+    var shift = 0,
+        key = spec.toLowerCase(),
+        num;
+
+    if (spec.startsWith('%')) {
+        key = spec.slice(1).toLowerCase();
+        if (key.startsWith('mult')) {
+            shift = 100;
+            key = key.slice(5);
+        }
+    } else if (spec.endsWith('...')) {
+        shift = 100;
+        key = spec.slice(0, -3).toLowerCase();
+    }
+
+    num =  {
+        '0':        0,
+        's':        0, // spec
+        // mnemonics:
+        ' ':        0,
+        '_':        0,
+        'a':        0,
+        'any':      0,
+
+        '1':        1,
+        'n':        1, // spec
+        // mnemonics:
+        '#':        1,
+        'num':      1,
+        'number':   1,
+
+        '2':        2,
+        'b':        2, // spec
+        // mnemonics:
+        '?':        2,
+        'tf':       2,
+        'bool':     2,
+        'boolean':  2,
+
+        '3':        3,
+        'l':        3, // spec
+        // mnemonics:
+        ':':        3,
+        'lst':      3,
+        'list':     3,
+
+        '4':        4,
+        'txt':      4, // spec
+        'mlt':      4, // spec
+        'code':     4, // spec
+        // mnemonics:
+        'x':        4,
+        'text':     4,
+        'abc':      4,
+
+        '5':        5,
+        'c':        5, // spec
+        'cs':       5, // spec
+        'loop':     5, // spec
+        'ca':       5, // spec
+        // mnemonics:
+        'script':   5,
+        
+        '6':        6,
+        'cmdring':  6, // spec
+        // mnemonics:
+        'cmd':      6,
+        'command':  6,
+
+        '7':        7,
+        'repring':  7, // spec
+        // mnemonics:
+        'rep':      7,
+        'reporter': 7,
+
+        '8':        8,
+        'predring': 8, // spec
+        // mnemonics:
+        'pred':     8,
+        'predicate': 8,
+
+        '9':        9,
+        'anyue':    9, // spec
+        // mnemonics:
+        'unevaluated': 9,
+
+        '10':       10,
+        'boolue':   10, // spec
+        // mnemonics: none
+
+        '11':       11,
+        'obj':      11, // spec
+        // mnemonics:
+        'o':        11,
+        'object':   11,
+
+        '12':       12,
+        't':        12, // spec
+        'upvar':    12, // spec
+        // mnemonics:
+        'v':        12,
+        'var':      12
+    }[key];
+    if (num === undefined) {
+        return spec;
+    }
+    return shift + num;
+};
+
+Process.prototype.slotSpec = function (num) {
+    // answer a spec indicating the shape of a slot represented by a number
+    // or by a textual mnemomic
+    var prefix = '',
+        id = this.reportIsA(num, 'text') ? this.slotType(num) : +num,
+        spec;
+
+    if (id >= 100) {
+        prefix = '%mult';
+        id -= 100;
+    }
+
+    spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
+    'anyUE', 'boolUE', 'obj', 'upvar'][id];
+
+    if (spec === undefined) {
+        return null;
+    }
+    if (spec === 'upvar' && id > 100) {
+        return null;
+    }
+    return prefix + '%' + spec;
+};
+
+Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
+    var choice = this.inputOption(attribute),
+        rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        types = ['command', 'reporter', 'predicate'],
+        scopes = ['global', 'local'],
+        idx, oldSpec, expr, def, inData, template, oldType, type;
+
+    this.assertType(block, types);
+    expr = block.expression;
+    if (!expr.isCustomBlock) {
+        throw new Error('expecting a custom block\nbut getting a primitive');
+    }
+    def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
+    oldSpec = def.blockSpec();
+
+    function isInUse() {
+        if (def.isGlobal) {
+            return ide.sprites.asArray().concat([ide.stage]).some((any, idx) =>
+                any.usesBlockInstance(def, false, idx)
+            ) || ide.stage.allBlockInstancesInData(def).some(any =>
+                !any.isUnattached()
+            );
+        }
+        return rcvr.allDependentInvocationsOf(oldSpec).some(any =>
+            !any.isUnattached()
+        );
+    }
+
+    function remove(arr, value) {
+        var idx = arr.indexOf(value);
+        if (idx > -1) {
+            arr.splice(idx, 1);
+        }
+    }
+
+    function isMajorTypeChange() {
+        var rep = ['reporter', 'predicate'];
+        return (type === 'command' && rep.includes(oldType)) ||
+            (oldType == 'command' && rep.includes(type));
+    }
+
+    switch (choice) {
+    case 'label':
+        def.setBlockLabel(val);
+        break;
+    case 'definition':
+        this.assertType(val, types);
+        def.setBlockDefinition(val);
+        break;
+    case 'category':
+        this.assertType(val, ['number', 'text']);
+        if (this.reportTypeOf(val) === 'text') {
+            idx = SpriteMorph.prototype.allCategories().map(
+                cat => cat.toLowerCase()
+            ).indexOf(val.toLowerCase());
+            val = idx + 1;
+        }
+        def.category = SpriteMorph.prototype.allCategories()[+val - 1] ||
+            'other';
+        break;
+    case 'type':
+        this.assertType(val, ['number', 'text']);
+        if (this.reportTypeOf(val) === 'text') {
+            type = val.toLowerCase();
+        } else {
+            type = types[val - 1] || '';
+        }
+        if (!types.includes(type)) {return;}
+
+        if (rcvr.allBlockInstances(def).every(block =>
+            block.isChangeableTo(type))
+        ) {
+            oldType = def.type;
+            def.type = type;
+        } else {
+            throw new Error('cannot change this\nfor a block that is in use');
+        }
+        if (isMajorTypeChange()) {
+            // since we've already scanned all contexts we know that those
+            // that contain block instances only contain single, unattached
+            // ones. Therefore we can simply replace them with new ones.
+            if (def.isGlobal) {
+                ide.stage.allContextsUsing(def).forEach(context =>
+                    context.expression = def.blockInstance()
+                );
+            } else {
+                ide.stage.allContextsInvoking(def.blockSpec(), rcvr).forEach(
+                    context => context.expression = def.blockInstance()
+                );
+            }
+        }
+        break;
+    case 'scope':
+        if (isInUse()) {
+            throw new Error('cannot change this\nfor a block that is in use');
+        }
+        this.assertType(val, ['number', 'text']);
+        if (this.reportTypeOf(val) === 'text') {
+            type = val.toLowerCase();
+        }
+        if (scopes.includes(type)) {
+            type = scopes.indexOf(type) + 1;
+        } else {
+            type = +val;
+        }
+        if (type === 1 && !def.isGlobal) {
+            // make global
+            inData = ide.stage.allContextsInvoking(def.blockSpec(), rcvr);
+            def.isGlobal = true;
+            remove(rcvr.customBlocks, def);
+            ide.stage.globalBlocks.push(def);
+        } else if (type === 2 && def.isGlobal) {
+            // make local
+            inData = ide.stage.allContextsUsing(def);
+            def.isGlobal = false;
+            remove(ide.stage.globalBlocks, def);
+            rcvr.customBlocks.push(def);
+        } else {
+            return;
+        }
+        inData.forEach(context => {
+            context.expression = def.blockInstance();
+            context.changed();
+        });
+        break;
+    case 'slots':
+        this.assertType(val, ['list', 'number', 'text']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                id = val.at(idx + 1);
+            if (id !== '') {
+                info[0] = this.slotSpec(id) || info[0];
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'defaults':
+        this.assertType(val, ['list', 'Boolean', 'number', 'text']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            this.assertType(options, ['Boolean', 'number', 'text']);
+            info[1] = options;
+            def.declarations.set(name, info);
+        });
+        break;
+    case 'menus':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val.toString()]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if (options !== '') {
+                if (!(options instanceof List)) {
+                    options = new List([options]);
+                }
+                info[2] = def.encodeChoices(options);
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'editables':
+        this.assertType(val, ['list', 'Boolean', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if ([true, false, 0, 1, '0', '1'].includes(options)) {
+                options = +options;
+                info[3] = !options;
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    default:
+        return;
+    }
+
+    // make sure the spec is unique
+    while (rcvr.doubleDefinitionsFor(def).length > 0) {
+        def.spec += (' (2)');
+    }
+    
+    // update all block instances:
+    // refer to "updateDefinition()" of BlockEditorMorph:
+    template = rcvr.paletteBlockInstance(def);
+
+    if (def.isGlobal) {
+        rcvr.allBlockInstances(def).reverse().forEach(block => block.refresh());
+        ide.stage.allContextsUsing(def).forEach(context => context.changed());
+    } else {
+        rcvr.allDependentInvocationsOf(oldSpec).reverse().forEach(
+            block => block.refresh(def)
+        );
+        ide.stage.allContextsInvoking(def.blockSpec(), rcvr).forEach(context =>
+            context.changed()
+        );
+    }
+    if (template) {
+        template.refreshDefaults();
+    }
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+};
+
+Process.prototype.doDefineBlock = function (upvar, label, context) {
+    var rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        vars = this.context.outerContext.variables,
+        type = this.reportTypeOf(context),
+        count = 1,
+        matches, spec, def;
+
+    this.assertType(label, 'text');
+    label = label.trim();
+    if (label === '') {return ''; }
+    this.assertType(context, ['command', 'reporter', 'predicate']);
+
+    // replace upvar self references inside the definition body
+    // with "reportThisContext" reporters
+    if (context.expression instanceof BlockMorph) {
+        this.compileBlockReferences(context, upvar);
+    }
+
+    // identify global custom block matching the specified label
+    matches = ide.stage.globalBlocks.filter(def =>
+        def.abstractBlockSpec() === label
+    );
+    if (matches.length > 1) {
+        throw new Error(
+            'several block definitions\nalready match this label'
+        );
+    } else if (matches.length === 1) {
+        // update the existing global definition with the context body
+        def = matches[0];
+        this.doSetBlockAttribute(
+            'definition',
+            def.blockInstance().reify(),
+            context
+        );
+
+        // create the reference to the new block
+        vars.addVar(upvar);
+        vars.setVar(upvar, def.blockInstance().reify());
+        return;
+    }
+
+    // make a new custom block definition
+    def = new CustomBlockDefinition('BYOB'); // haha!
+    def.type = type;
+    def.category = 'other';
+    def.isGlobal = true;
+    def.setBlockDefinition(context);
+    def.setBlockLabel(label);
+    ide.stage.globalBlocks.push(def);
+
+    // make sure the spec is unique
+    spec = def.spec;
+    while (rcvr.doubleDefinitionsFor(def).length > 0) {
+        count += 1;
+        def.spec = spec + ' (' + count + ')';
+    }
+
+    // update the IDE
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+
+    // create the reference to the new block
+    vars.addVar(upvar);
+    vars.setVar(upvar, def.blockInstance().reify());
+};
+
+Process.prototype.compileBlockReferences = function (context, varName) {
+    // private - replace self references inside the definition body
+    // with "reportThisContext" reporters
+    var report, declare, assign;
+
+    function block(selector) {
+        return SpriteMorph.prototype.blockForSelector(selector);
+    }
+
+    if (context.expression.allChildren().some(any =>
+        any.selector === 'reportGetVar' && any.parentThatIsA(RingMorph)
+    )) {
+        if (context.expression instanceof ReporterBlockMorph) {
+            // turn into a REPORT script
+            report = block('doReport');
+            report.replaceInput(
+                report.inputs()[0],
+                context.expression.fullCopy()
+            );
+            context.expression = report;
+        }
+        // add a script var to capture the outer definition
+        // don't replace any references, because they now should just work
+        declare = block('doDeclareVariables');
+        declare.inputs()[0].setContents([varName]);
+        assign = block('doSetVar');
+        assign.inputs()[0].setContents(varName);
+        assign.replaceInput(
+            assign.inputs()[1],
+            block('reportThisContext')
+        );
+        declare.nextBlock(assign);
+        assign.nextBlock(context.expression.fullCopy());
+        context.expression = declare;
+        return;
+    }
+
+    if (context.expression instanceof BlockMorph) {
+        context.expression.forAllChildren(morph => {
+            var ref;
+            if (morph.selector === 'reportGetVar' &&
+                (morph.blockSpec === varName))
+            {
+                ref = block('reportThisContext');
+                if (morph.parent instanceof SyntaxElementMorph) {
+                    morph.parent.replaceInput(morph, ref);
+                } else {
+                    context.expression = ref;
+                }
+            }
+        });
+    }
+};
+
+Process.prototype.doDeleteBlock = function (context) {
+    var rcvr = this.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        stage = ide.stage,
+        expr, def, method, idx;
+
+    this.assertType(context, ['command', 'reporter', 'predicate']);
+    expr = context.expression;
+    if (!expr.isCustomBlock) {
+        throw new Error('expecting a custom block\nbut getting a primitive');
+    }
+    def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
+    rcvr.deleteAllBlockInstances(def);
+    if (def.isGlobal) {
+        idx = stage.globalBlocks.indexOf(def);
+        if (idx !== -1) {
+            stage.globalBlocks.splice(idx, 1);
+        }
+    } else {
+        // delete local definition
+        idx = rcvr.customBlocks.indexOf(def);
+        if (idx !== -1) {
+            rcvr.customBlocks.splice(idx, 1);
+        }
+        // refresh instances of inherited method, if any
+        method = rcvr.getMethod(def.blockSpec);
+        if (method) {
+            rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
+                block => block.refresh(method)
+            );
+        }
+    }
+
+    // update the IDE
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    ide.recordUnsavedChanges();
+};
+
 // Process: Compile (as of yet simple) block scripts to JS
 
 /*
@@ -6693,7 +7444,7 @@ Process.prototype.setVarNamed = function (name, value) {
 
 Process.prototype.incrementVarNamed = function (name, delta) {
     // private - special form for compiled expressions
-    this.setVarNamed(name, this.getVarNamed(name) + (+delta));
+    this.setVarNamed(name, this.getVarNamed(name) - (-delta));
 };
 
 // Process: Atomic HOFs using experimental JIT-compilation
@@ -7054,6 +7805,7 @@ function Context(
     this.tag = null;  // lexical catch-tag for custom blocks
     this.isFlashing = false; // for single-stepping
     this.accumulator = null;
+    this.version = null; // for oberservers, don't serialize
 }
 
 Context.prototype.toString = function () {
@@ -7064,6 +7816,11 @@ Context.prototype.toString = function () {
         }
     }
     return 'Context >> ' + expr + ' ' + this.variables;
+};
+
+Context.prototype.changed = function () {
+    // notify observers about a change of my state
+    this.version = Date.now();
 };
 
 Context.prototype.image = function () {
@@ -7494,91 +8251,155 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
     return answer;
 };
 
-// JSCompiler /////////////////////////////////////////////////////////////////
+// JSCompiler ////////////////////////////////////////////////////////////////
 
 /*
-	Compile simple, side-effect free Reporters
+    *** don't use same JSCompiler object multiple times ***
+    Compile simple reporters
     with either only explicit formal parameters or a specified number of
     implicit formal parameters mapped to empty input slots
-	*** highly experimental and heavily under construction ***
+    *** highly experimental and heavily under construction ***
 */
 
-function JSCompiler(aProcess) {
-	this.process = aProcess;
-	this.source = null; // a context
- 	this.gensyms = null; // temp dictionary for parameter substitutions
-  	this.implicitParams = null;
-   	this.paramCount = null;
+function JSCompiler(aProcess, outerScope) {
+    this.process = aProcess;
+    this.source = null; // a context
+    this.paramCount = 0;
+    this.params = 0;
+    this.gensymArgIndexes = new Map();
+    this.scope = new Map();
+    if (outerScope == null) {
+        this.scope.depth = 0;
+        this.scope.outerScope = null;
+        return;
+    }
+    this.scope.depth = 1 + outerScope.depth;
+    this.scope.outerScope = outerScope;
 }
 
-JSCompiler.prototype.toString = function () {
-    return 'a JSCompiler';
+JSCompiler.prototype.toString = () => 'a JSCompiler';
+
+JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
+    // argIndex -1 for script variables
+    var gensym = this.getGensym(varName), oldArgIndex;
+    if (gensym == null) {
+        gensym = '_' + this.scope.depth + '_' + this.scope.size;
+        this.scope.set(varName, gensym);
+        this.gensymArgIndexes.set(gensym, argIndex);
+        return gensym;
+    }
+    oldArgIndex = this.gensymArgIndexes.get(gensym);
+    if (oldArgIndex == null || oldArgIndex < argIndex) {
+        this.gensymArgIndexes.set(gensym, argIndex);
+    }
+    return gensym;
 };
 
-JSCompiler.prototype.compileFunction = function (aContext, implicitParamCount) {
+JSCompiler.prototype.getGensym = function (varName) {
+    var scope = this.scope, gensym;
+    while (null == (gensym = scope.get(varName)) && 
+        null != (scope = scope.outerScope));
+    return gensym;
+};
+
+JSCompiler.prototype.functionHead = function () {
+    var str1 = 'var ', str2 = '';
+    this.gensymArgIndexes.forEach((argIndex, gensym) => {
+        if (argIndex === -1) {
+            str1 += gensym + '=0,';
+            return;
+        }
+        str2 += ',' + argIndex + ':' + gensym;
+    });
+    str1 += 'proc=params.pop();\n';
+    if (this.params) {
+        str1 += 'while(' + this.params + '>params.length)params.push(0);\n';
+    }
+    if (str2) {
+        str1 += 'var{' + str2.substring(1) + '}=params;\n';
+    }
+    return str1;
+};
+
+JSCompiler.prototype.compileFunction = function () {
+    return window.eval(this.compileFunctionBody.apply(this, arguments));
+};
+
+JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
+    if (m.isEmptySlot != null && m.isEmptySlot()) {
+        return true;
+    }
+    if (m instanceof RingMorph) {
+        // don't look in rings (they are not current scope)
+        return false;
+    }
+    m = m.children;
+    var i = m.length;
+    while (i) {
+        if (findEmptySlot(m[--i])) {
+            return true;
+        }
+    }
+    return false;
+};
+
+JSCompiler.prototype.compileFunctionBody = function (
+    aContext,
+    implicitParamCount
+) {
     var block = aContext.expression,
-  		parameters = aContext.inputs,
-        parms = [],
-        hasEmptySlots = false,
-        i;
+        parameters = aContext.inputs,
+        hasEmptySlots,
+        code;
 
-	this.source = aContext;
-    this.implicitParams = implicitParamCount || 1;
+    if (block instanceof Array) {
+        throw new Error('can\'t compile empty ring');
+    }
+   
+    this.source = aContext;
+    if (implicitParamCount === '' || isNil(implicitParamCount)) {
+        this.implicitParams = 1;
+    } else {
+        this.implicitParams = Math.floor(implicitParamCount);
+        if (!(this.implicitParams > 0 && this.implicitParams < 128)) {
+            // use 1 if implicitParamCount doesn't make sense
+            this.implicitParams = 1;
+        }
+    }
 
-	// scan for empty input slots
- 	hasEmptySlots = !isNil(detect(
-  		block.allChildren(),
-    	morph => morph.isEmptySlot && morph.isEmptySlot()
-    ));
+    // scan for empty input slots
+    hasEmptySlots = this.findEmptySlot(block);
 
     // translate formal parameters into gensyms
-    this.gensyms = new Map();
-    this.paramCount = 0;
     if (parameters.length) {
         // test for conflicts
         if (hasEmptySlots) {
-        	throw new Error(
+            throw new Error(
                 'compiling does not yet support\n' +
                 'mixing explicit formal parameters\n' +
                 'with empty input slots'
             );
         }
         // map explicit formal parameters
-        parameters.forEach((pName, idx) => {
-        	var pn = 'p' + idx;
-            parms.push(pn);
-        	this.gensyms.set(pName, pn);
-        });
+        this.params = parameters.length;
+        parameters.forEach(this.gensymForVar, this);
     } else if (hasEmptySlots) {
-    	if (this.implicitParams > 1) {
-        	for (i = 0; i < this.implicitParams; i += 1) {
-         		parms.push('p' + i);
-         	}
-     	} else {
-        	// allow for a single implicit formal parameter
-        	parms = ['p0'];
-        }
+        this.params = this.implicitParams;
     }
 
     // compile using gensyms
-
     if (block instanceof CommandBlockMorph) {
-        return Function.apply(
-            null,
-            parms.concat([this.compileSequence(block)])
-        );
+        code = this.compileSequence(block) + 'return "";\n';
+    } else {
+        code = 'return ' + this.compileExpression(block) + ';\n';
     }
-    return Function.apply(
-        null,
-        parms.concat(['return ' + this.compileExpression(block)])
-    );
+    return '(function func(...params){\n' + this.functionHead() + code + '})';
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
     var selector = block.selector,
         inputs = block.inputs(),
         target,
-        rcvr,
         args;
 
     // first check for special forms and infix operators
@@ -7600,27 +8421,50 @@ JSCompiler.prototype.compileExpression = function (block) {
             'compiling does not yet support\n' +
             'custom blocks'
         );
-
     // special evaluation primitives
     case 'doRun':
     case 'evaluate':
-        return 'invoke(' +
-            this.compileInput(inputs[0]) +
-            ',' +
+        return 'invoke(' + this.compileInput(inputs[0]) + ',' +
             this.compileInput(inputs[1]) +
-            ')';
-
+            ',proc.blockReceiver(),null,null,null,proc,null)';
     // special command forms
-    case 'doSetVar': // redirect var to process
-        return 'arguments[arguments.length - 1].setVarNamed(' +
+    case 'doDeclareVariables':
+        block = '';
+        inputs[0].inputs().forEach(x => {
+            block += this.gensymForVar(x.children[0].blockSpec, -1) + '=';
+        });
+        return block + '0';
+    case 'reportGetVar':
+        target = this.getGensym(block = block.blockSpec);
+        if (target == null) {
+            // redirect var to process
+            return 'proc.getVarNamed("' + this.escape(block) + '")';
+        }
+        return target;
+    case 'doSetVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.getGensym(inputs[0].evaluate());
+            if (target != null) {
+                return target + ' = ' + this.compileInput(inputs[1]);
+            }
+        }
+        // redirect var to process
+        return 'proc.setVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
-    case 'doChangeVar': // redirect var to process
-        return 'arguments[arguments.length - 1].incrementVarNamed(' +
+    case 'doChangeVar':
+        if (inputs[0] instanceof ArgMorph) {
+            target = this.getGensym(inputs[0].evaluate());
+            if (target != null) {
+                return target + ' -=- ' + this.compileInput(inputs[1]);
+            }
+        }
+        // redirect var to process
+        return 'proc.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
-            ',' +
+            ', ' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
@@ -7639,43 +8483,45 @@ JSCompiler.prototype.compileExpression = function (block) {
             '} else {\n' +
             this.compileSequence(inputs[2].evaluate()) +
             '}';
-
+    case 'doWarp':
+        // synchronous javascript is already like warp
+        return this.compileSequence(inputs[0].evaluate());
+    case 'reportBoolean':
+    case 'reportNewList':
+        return this.compileInput(inputs[0]);
+    case 'reportThisContext':
+        return 'func';
     default:
         target = this.process[selector] ? this.process
             : (this.source.receiver || this.process.receiver);
-        rcvr = target.constructor.name + '.prototype';
         args = this.compileInputs(inputs);
         if (isSnapObject(target)) {
-            if (rcvr === 'SpriteMorph.prototype') {
-                // fix for blocks like (x position)
-                rcvr = 'arguments[arguments.length - 1].blockReceiver()';
-            } 
-            return rcvr + '.' + selector + '(' + args +')';
+            return 'proc.blockReceiver().' + selector + '(' + args + ')';
         } else {
-            return 'arguments[arguments.length - 1].' +
-                selector +
-                '(' + args + ')';
+            return 'proc.' + selector + '(' + args + ')';
         }
     }
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
-    var body = '';
-    commandBlock.blockSequence().forEach(block => {
-        body += this.compileExpression(block) + ';\n';
-    });
+    if (commandBlock == null) return '';
+    commandBlock = commandBlock.blockSequence();
+    var l = commandBlock.length, i = 0, body = '';
+    while (l > i) {
+        body += this.compileExpression(commandBlock[i++]) + ';\n';
+    }
     return body;
 };
 
 JSCompiler.prototype.compileInfix = function (operator, inputs) {
     return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
-        this.compileInput(inputs[1]) +')';
+        this.compileInput(inputs[1]) + ')';
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
     var args = '';
     array.forEach(inp => {
-        if (args.length) {
+        if (args) {
             args += ', ';
         }
         args += this.compileInput(inp);
@@ -7689,22 +8535,32 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit formal parameter
         if (this.implicitParams > 1) {
-         	if (this.paramCount < this.implicitParams) {
-            	this.paramCount += 1;
-             	return 'p' + (this.paramCount - 1);
-        	}
+            if (this.paramCount < this.implicitParams) {
+                return 'params[' + this.paramCount++ + ']';
+            }
             throw new Error(
                 localize('expecting') + ' ' + this.implicitParams + ' '
                     + localize('input(s), but getting') + ' '
                     + this.paramCount
             );
         }
-		return 'p0';
-    } else if (inp instanceof MultiArgMorph) {
+        return 'params[0]';
+    }
+    if (inp instanceof RingMorph) {
+        inp = inp.children;
+        return new JSCompiler(this.process,this.scope).compileFunctionBody({
+            'expression': inp[0].children[0],
+            'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
+            'receiver': this.source.receiver
+        }, '');
+    }
+    if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
-    } else if (inp instanceof ArgLabelMorph) {
-    	return this.compileInput(inp.argMorph());
-    } else if (inp instanceof ArgMorph) {
+    }
+    if (inp instanceof ArgLabelMorph) {
+        return this.compileInput(inp.argMorph());
+    }
+    if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
         type = this.process.reportTypeOf(value);
@@ -7727,31 +8583,21 @@ JSCompiler.prototype.compileInput = function (inp) {
                  type
             );
         }
-    } else if (inp instanceof BlockMorph) {
-        if (inp.selector === 'reportGetVar') {
-        	if (this.gensyms.has(inp.blockSpec)) {
-            	// un-quoted gensym:
-            	return this.gensyms.get(inp.blockSpec);
-        	}
-         	// redirect var query to process
-            return 'arguments[arguments.length - 1].getVarNamed("' +
-            	this.escape(inp.blockSpec) +
-            	'")';
-        }
-        return this.compileExpression(inp);
-    } else {
-        throw new Error(
-            'compiling does not yet support\n' +
-            'input slots of type\n' +
-            inp.constructor.name
-        );
     }
+    if (inp instanceof BlockMorph) {
+        return this.compileExpression(inp);
+    }
+    throw new Error(
+        'compiling does not yet support\n' +
+        'input slots of type\n' +
+        inp.constructor.name
+    );
 };
 
-JSCompiler.prototype.escape = function(string) {
+JSCompiler.prototype.escape = string => {
     // make sure string is a string
     string += '';
-    var len = string.length, i = 0, char, escaped = '', safe_chars = 
+    var len = string.length, i = 0, char, escaped = '', safe_chars =
         ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
         "%&'()*+,-./:;<=>?@[]^_`{|}~";
     while (len > i) {

@@ -13,6 +13,7 @@ list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you
 ~	~
 ~	~
 maps_module.xml	World Map	Add interactive maps to projects
+menu_module.xml	Menus	Prompt the user to pick an option.
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
 speech_module.xml	Text to Speech	Output text using speech synthesis.
 animation_module.xml	Animation	Glide, grow and rotate using easing functions.
@@ -35,6 +36,7 @@ bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit man
 ~	~
 ~	~
 SciSnap!2Blocks.xml	SciSnap! v2	Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)
+TuneScope.xml	TuneScope	Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)
 ~	~
 ~	~
 ~	~

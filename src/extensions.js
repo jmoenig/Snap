@@ -29,11 +29,12 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains*/
+Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
+SVG_Costume, newCanvas, WatcherMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-February-08';
+modules.extensions = '2022-July-11';
 
 // Global stuff
 
@@ -45,7 +46,7 @@ var SnapExtensions = {
         'libraries/',
         'https://snap.berkeley.edu/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
-        'https://microworld.edc.org' // EDC, E. Paul Goldenberg
+        'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
     ]
 };
 
@@ -352,6 +353,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    // no longer needed because it's a regular primitive now
     'dta_crossproduct(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
@@ -484,6 +486,7 @@ SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
     function (method, url, data, headers, proc) {
         var response, i, header;
+        url = decodeURI(url);
         Process.prototype.checkURLAllowed(url);
         if (!proc.httpRequest) {
             proc.httpRequest = new XMLHttpRequest();
@@ -666,6 +669,46 @@ SnapExtensions.primitives.set(
     }
 );
 
+// Costumes (cst_):
+
+SnapExtensions.primitives.set(
+    'cst_load(url)',
+    function (url, proc) {
+        if (!proc.context.accumulator) {
+            proc.context.accumulator = {
+                img: new Image(),
+                cst: null,
+            };
+            proc.context.accumulator.img.onload = function () {
+                var canvas = newCanvas(new Point(this.width, this.height));
+                canvas.getContext('2d').drawImage(this, 0, 0);
+                proc.context.accumulator.cst = new Costume(canvas);
+            };
+            proc.context.accumulator.img.src = url;
+        } else if (proc.context.accumulator.cst) {
+            return proc.context.accumulator.cst;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    // experimental, will probably be taken out again, don't rely on this
+    'cst_embed(cst, data)',
+    function (cst, data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        proc.assertType(data, 'text');
+        if (cst instanceof SVG_Costume) {
+            throw new Error('option currently not supported for SVG costumes');
+        }
+        cst.embeddedData = data || null;
+        cst.version = Date.now();
+        ide.recordUnsavedChanges();
+    }
+);
+
 // Variables (var_):
 
 SnapExtensions.primitives.set(
@@ -689,6 +732,23 @@ SnapExtensions.primitives.set(
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
         }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'var_names(scope)',
+    function (scope, proc) {
+        var frame;
+        if (scope === 'script') {
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        } else if (scope === 'sprite') {
+            frame = this.variables;
+        } else {
+            frame = this.globalVariables();
+        }
+        return new List(frame.allNames());
     }
 );
 
@@ -754,6 +814,27 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'var_showing(name)?',
+    function (name, proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables,
+            target = frame.silentFind(name),
+            watcher;
+
+        if (!target) {return false; }
+        watcher = detect(
+            stage.children,
+            morph => morph instanceof WatcherMorph &&
+                morph.target === target &&
+                    morph.getter === name
+        );
+        return watcher ? watcher.isVisible : false;
+    }
+);
+
 // IDE (ide_):
 
 SnapExtensions.primitives.set(
@@ -786,6 +867,82 @@ SnapExtensions.primitives.set(
     }
 );
 */
+
+SnapExtensions.primitives.set(
+    'ide_translate(text)',
+    function (text, proc) {
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translate(text)')
+                        (each, proc)
+                );
+            }
+        }
+        proc.assertType(text, ['text', 'number']);
+        return localize(text);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translateback(text)',
+    function (text, proc) {
+        var dict;
+        if (proc.enableHyperOps) {
+            if (text instanceof List) {
+                return text.map(each =>
+                    SnapExtensions.primitives.get('ide_translateback(text)')
+                        (each, proc)
+                );
+            }
+        }
+        dict = SnapTranslator.dict[SnapTranslator.language];
+        proc.assertType(text, ['text', 'number']);
+        return detect(
+            Object.keys(dict),
+            key => dict[key] === text
+        ) || text;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_language()',
+    function () {
+        return SnapTranslator.language;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_setlang(language, [msg])',
+    function (lang, msg, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
+            flag = ide.isAppMode,
+            restoreMode = () => ide.toggleAppMode(flag),
+            callback = restoreMode;
+        proc.assertType(lang, 'text');
+        ide.loadNewProject = false;
+        if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
+            // require an explicit user input to trigger a project reload
+            callback = () => {
+                restoreMode();
+                ide.broadcast(msg);
+            };
+        }
+        ide.setLanguage(lang, callback, true); // don't save language setting
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translations()',
+    function () {
+        return new List(
+            SnapTranslator.languages().map(lang =>
+                new List([SnapTranslator.languageName(lang), lang])
+            )
+        );
+    }
+);
 
 // Colors (clr_):
 

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-March-15';
+modules.store = '2022-August-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -233,10 +233,17 @@ XML_Serializer.prototype.load = function (xmlString) {
     );
 };
 
-XML_Serializer.prototype.parse = function (xmlString) {
-    // private - answer an XML_Element representing the given XML String
+XML_Serializer.prototype.parse = function (xmlString, assertVersion) {
+    // answer an XML_Element representing the given XML String
+    // optional assertVersion parameter for asserting a top-level
+    // node to be consistent with the current serializer version
     var element = new XML_Element();
     element.parseString(xmlString);
+    if (assertVersion) {
+        if (+element.attributes.version > this.version) {
+            throw 'Module uses newer version of Serializer';
+        }
+    }
     return element;
 };
 
@@ -628,7 +635,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
             scene.stage.topLeft().add(new Point(
                 +model.attributes.x || 0,
                 +model.attributes.y || 0
-            ))
+            )).multiplyBy(scene.stage.scale)
         );
         scene.stage.add(watcher);
         watcher.onNextStep = function () {this.currentValue = null; };
@@ -702,19 +709,16 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     };
 };
 
-SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
-    // public - import a set of sprites represented by xmlString
+SnapSerializer.prototype.loadSpritesModel = function (xmlNode, ide) {
+    // public - import a set of sprites represented by an xml model
     // into the current scene of the ide
-    var model, scene;
+    var model = xmlNode,
+        scene;
 
     this.scene = new Scene(ide.stage);
     scene = this.scene;
     scene.spritesDict[scene.stage.name] = scene.stage;
 
-    model = this.parse(xmlString);
-    if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
-    }
     model.childrenNamed('sprite').forEach(model => {
         var sprite  = new SpriteMorph(scene.globalVariables);
 
@@ -1154,7 +1158,7 @@ SnapSerializer.prototype.loadScriptsArray = function (model, object) {
     return scripts;
 };
 
-SnapSerializer.prototype.loadScriptModule = function (model, object) {
+SnapSerializer.prototype.loadScriptModel = function (model, object) {
     // return a new script represented by the given xml model,
     // note: custom block definitions referenced here must be loaded before
     var script;
@@ -1349,7 +1353,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             input.fixLayout();
         }
     } else if (model.tag === 'list') {
-        while (input.inputs().length > 0) {
+        while (input.inputs().length > 0 && input.removeInput) {
             input.removeInput();
         }
         model.children.forEach(item => {
@@ -1647,6 +1651,12 @@ SnapSerializer.prototype.loadValue = function (model, object) {
                     context.drawImage(image, 0, 0);
                     v.contents = canvas;
                     v.version = +new Date();
+                    if (Object.prototype.hasOwnProperty.call(
+                        model.attributes,
+                        'embed'
+                    )) {
+                        v.embeddedData = model.attributes.embed;
+                    }
                     if (typeof v.loaded === 'function') {
                         v.loaded();
                     } else {
@@ -1882,6 +1892,48 @@ StageMorph.prototype.toXML = function (serializer) {
     );
 };
 
+StageMorph.prototype.toSpriteXML = function (serializer) {
+    // special case: export the stage as a sprite, so it can be
+    // imported into another project or scene
+    var costumeIdx = this.getCostumeIdx();
+
+    return serializer.format(
+        '<sprite name="@" idx="1" x="0" y="0"' +
+            ' heading="90"' +
+            ' scale="1"' +
+            ' volume="@"' +
+            ' pan="@"' +
+            ' rotation="0"' +
+            '%' +
+            ' draggable="true"' +
+            ' costume="@" color="80,80,80,1" pen="tip" ~>' +
+            '%' + // current costume
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '<scripts>%</scripts>' +
+            '</sprite>',
+        this.name,
+        this.volume,
+        this.pan,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        costumeIdx,
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
+
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        !this.customBlocks ? '' : serializer.store(this.customBlocks),
+        serializer.store(this.variables),
+        serializer.store(this.scripts)
+    );
+};
+
 SpriteMorph.prototype.toXML = function (serializer) {
     var idx = serializer.scene.sprites.asArray().indexOf(this) + 1,
         costumeIdx = this.getCostumeIdx(),
@@ -1973,12 +2025,14 @@ Costume.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;
 
 Costume.prototype.toXML = function (serializer) {
     return serializer.format(
-        '<costume name="@" center-x="@" center-y="@" image="@" ~/>',
+        '<costume name="@" center-x="@" center-y="@" image="@"% ~/>',
         this.name,
         this.rotationCenter.x,
         this.rotationCenter.y,
         this instanceof SVG_Costume ? this.contents.src
-                : normalizeCanvas(this.contents).toDataURL('image/png')
+                : normalizeCanvas(this.contents).toDataURL('image/png'),
+        this.embeddedData ? serializer.format(' embed="@"', this.embeddedData)
+            : ''
     );
 };
 
@@ -2035,8 +2089,10 @@ WatcherMorph.prototype.toXML = function (serializer) {
         isList = this.currentValue instanceof List,
         color = this.readoutColor,
         position = this.parent ?
-                this.topLeft().subtract(this.parent.topLeft())
-                : this.topLeft();
+                this.topLeft().subtract(
+                    this.parent.topLeft()
+                ).divideBy(this.parent.scale)
+            : this.topLeft();
 
     if (this.isTemporary()) {
         // do not save watchers on temporary variables

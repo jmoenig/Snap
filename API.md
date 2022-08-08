@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, November 17, 2021
+Jens Mönig, Bernat Romagosa, April 05, 2022
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -44,6 +44,10 @@ Currently the API consists of the following methods:
 * IDE_Morph.prototype.getProjectXML()
 * IDE_Morph.prototype.loadProjectXML()
 * IDE_Morph.prototype.unsavedChanges()
+
+#### Set the Language
+
+* IDE_Morph.prototype.setTranslation()
 
 ## Referencing the IDE
 
@@ -280,13 +284,29 @@ unefined
 
 
 ### IDE_Morph.prototype.unsavedChanges()
-the unsavedChanges() method return a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
+the unsavedChanges() method returns a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
 
 #### syntax
     ide.unsavedChanges();
 
 #### return value
 a Boolean
+
+
+### IDE_Morph.prototype.setTranslation()
+the setTranslation() method  switches to the specified language, formatted as ISO 639-1 code, and optionally runs a callback afterwards, e.g. to broadcast an event. Note that switching to another translation involves serializing and deserializing the current project and thus stops all running processes. If you wish to "continue" a project afterwards you can use the callback to trigger an event, such as the green flag ('\_\_shout__go\_\_'). Also note that the language setting does not overwrite the user's own setting which is stored in the browser this way, so that the next time the user opens Snap their own language preference again takes effect.
+
+#### syntax
+    ide.setTranslation(countryCode [, callback]);
+
+#### parameters
+* countryCode
+    - string representing a country in ISO 639-1 format
+* callback | optional
+    - function to execute after the language has been set, no arguments
+
+#### return value
+undefined
 
 
 ## Manipulating Lists
