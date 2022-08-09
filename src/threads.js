@@ -7422,7 +7422,7 @@ Process.prototype.reportCompiled = function (context, /*implicitParamCount*/) {
     if (typeof context === 'function') {
         return context;
     }
-    return new JSCompiler(this).compileFunction(context);
+    return new JSCompiler().compileFunction(context);
 };
 
 Process.prototype.capture = function (aContext) {
@@ -8285,9 +8285,7 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
     *** highly experimental and heavily under construction ***
 */
 
-function JSCompiler(aProcess, outerScope) {
-    this.process = aProcess;
-    this.source = null; // a context
+function JSCompiler(outerScope) {
     this.implicitParamCount = 0;
     this.params = 0;
     this.gensymArgIndexes = new Map();
@@ -8428,8 +8426,6 @@ JSCompiler.prototype.compileFunctionBody = function (aContext) {
         throw new Error('can\'t compile empty ring');
     }
 
-    this.source = aContext;
-
     if (parameters.length) {
         // map explicit formal parameters
         this.params = parameters.length;
@@ -8458,8 +8454,7 @@ JSCompiler.prototype.compileFunctionBody = function (aContext) {
 JSCompiler.prototype.compileExpression = function (block) {
     var selector = block.selector,
         inputs = block.inputs(),
-        target,
-        args;
+        target;
 
     // first check for special forms and infix operators
     switch (selector) {
@@ -8567,22 +8562,27 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'reportNot':
         return '!' + this.compileInput(inputs[0]);
     default:
-        target = this.process[selector] ? this.process
-            : (this.source.receiver || this.process.receiver);
-        args = this.compileInputs(inputs);
-        if (isSnapObject(target)) {
-            return 'proc.blockReceiver().' + selector + '(' + args + ')';
+        if (Process.prototype[selector]) {
+            if (selector.substring(0, 6) === 'report') {
+                // use atomic (lightning symbol) block if available
+                target = 'reportAtomic' + selector.substring(6);
+                if (Process.prototype[target]) {
+                    selector = target;
+                }
+            }
+            target = 'proc.';
+        } else {
+            target = 'proc.blockReceiver().';
         }
-        return 'proc.' + selector + '(' + args + ')';
+        return target + selector + '(' + this.compileInputs(inputs) + ')';
     }
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
-    if (commandBlock == null) return '';
-    commandBlock = commandBlock.blockSequence();
-    var l = commandBlock.length, i = 0, body = '';
-    while (l > i) {
-        body += this.compileExpression(commandBlock[i++]) + ';\n';
+    var body = '';
+    while (commandBlock) {
+        body += this.compileExpression(commandBlock) + ';\n';
+        commandBlock = commandBlock.nextBlock();
     }
     return body;
 };
@@ -8612,10 +8612,9 @@ JSCompiler.prototype.compileInput = function (inp) {
     }
     if (inp instanceof RingMorph) {
         inp = inp.children;
-        return new JSCompiler(this.process,this.scope).compileFunctionBody({
+        return new JSCompiler(this.scope).compileFunctionBody({
             'expression': inp[0].children[0],
             'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
-            'receiver': this.source.receiver
         });
     }
     if (inp instanceof MultiArgMorph) {
@@ -8627,7 +8626,7 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
-        type = this.process.reportTypeOf(value);
+        type = Process.prototype.reportTypeOf(value);
         switch (type) {
         case 'number':
         case 'Boolean':
