@@ -486,11 +486,9 @@ FancySpriteBubbleMorph.prototype.constructor = FancySpriteBubbleMorph;
 FancySpriteBubbleMorph.uber = SpriteBubbleMorph.prototype;
 
 FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color){
-    if(maxWidth === 'default') {
-        maxWidth = SpriteMorph.prototype.bubbleMaxTextWidth;
-    } else {
-        maxWidth = parseInt(maxWidth);
-    }
+
+    maxWidth = parseInt(maxWidth);
+
     if(!maxWidth){
         maxWidth = 0;
     }
