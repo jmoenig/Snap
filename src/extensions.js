@@ -264,50 +264,58 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'bit_and(a, b)',
-    function (a, b) {
-        return a & b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a & b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_or(a, b)',
-    function (a, b) {
-        return a | b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a | b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_xor(a, b)',
-    function (a, b) {
-        return a ^ b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a ^ b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_not(a)',
-    function (a) {
-        return ~ a;
+    function (a, proc) {
+        function bitNot (a) {
+            if (proc.enableHyperOps) {
+                if (a instanceof List) {
+                    return a.map(each => bitNot(each));
+                }
+            }
+            return ~ a;
+        }
+        return bitNot(a);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_left_shift(a, b)',
-    function (a, b) {
-        return a << b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a << b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_right_shift(a, b)',
-    function (a, b) {
-        return a >> b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a >> b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_unsigned_right_shift(a, b)',
-    function (a, b) {
-        return a >>> b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a >>> b), a, b);
     }
 );
 
