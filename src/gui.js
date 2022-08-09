@@ -478,6 +478,20 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
         dict = SnapCloud.parseDict(querystring);
     }
+    
+    if (dict.extensions) {
+        try {
+            const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
+            extensionUrls.forEach(url => this.loadExtension(url));
+        } catch (err) {
+            this.inform(
+                'Unable to load extensions',
+                'The following error occurred while trying to load extensions:\n\n' +
+                err.message + '\n\n' +
+                'Perhaps the URL is malformed?'
+            );
+        }
+    }
 
     if (loc.hash.substr(0, 6) === '#open:') {
         hash = loc.hash.substr(6);
@@ -647,20 +661,6 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
     this.world().keyboardFocus = this.stage;
     this.warnAboutIE();
-
-    if (dict.extensions) {
-        try {
-            const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
-            extensionUrls.forEach(url => this.loadExtension(url));
-        } catch (err) {
-            this.inform(
-                'Unable to load extensions',
-                'The following error occurred while trying to load extensions:\n\n' +
-                err.message + '\n\n' +
-                'Perhaps the URL is malformed?'
-            );
-        }
-    }
 
     if (dict.setVariable) {
         const [varName, value] = dict.setVariable.split('=');
