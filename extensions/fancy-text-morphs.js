@@ -345,7 +345,7 @@ FancyTextMorph.prototype.fractionHeight = function(fraction) {
     const fontSize = this.fontSize,
         lineWidth = FancyFraction.lineWidth(fontSize);
     if(typeof fraction === 'number' || typeof fraction === 'string') {
-        return fontSize;
+        return parseFloat(fontSize);
     }
 
     if(Array.isArray(fraction)) {
