@@ -482,7 +482,7 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
     if (dict.extensions) {
         try {
             const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
-            extensionUrls.forEach(url => this.loadExtension(url));
+            await Promise.all(extensionUrls.map(url => this.loadExtension(url)));
         } catch (err) {
             this.inform(
                 'Unable to load extensions',
