@@ -105,7 +105,7 @@ window.noteLengthToTimeValue = (duration) => {
         }
 
         noteDur = notes[splitDuration.find(e => notes[e] != undefined)].
-        var start = noteDur;
+        start = noteDur;
 
         console.log(splitDuration);
         for (let keyword = 0; keyword < splitDuration.length; keyword++) {
