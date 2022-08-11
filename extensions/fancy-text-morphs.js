@@ -4,21 +4,21 @@ var prefix = 'ftx_';
 
 SnapExtensions.primitives.set(
     prefix+'say(data, size, maxWidth, color)',
-    (data, size, maxWidth, color, proc) => {
-        makeFancyBubble(data, false, false, proc, size, maxWidth, color);
+    function (data, size, maxWidth, color, proc) {
+        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color);
     }
 )
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color)',
-    (data, size, maxWidth, color, proc) => {
-        makeFancyBubble(data, true, false, proc, size, maxWidth, color);
+    function (data, size, maxWidth, color, proc) {
+        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color);
     }
 )
 
 SnapExtensions.primitives.set(
     prefix+'costume(data, size, maxWidth, color, align, font)',
-    (data, size, maxWidth, color, align, font, proc) => {
+    function (data, size, maxWidth, color, align, font, proc) {
         validateColor(color);
         return new FancyTextCostume(data, size, maxWidth, color, align, font)
     }
@@ -27,7 +27,9 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     prefix+'remove_formatting_characters(text)',
-    text => text.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1,-1))
+    function (text) {
+        return text.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1))
+    }
 )
 
 function validateColor(color) {
@@ -36,8 +38,7 @@ function validateColor(color) {
     }
 }
 
-function makeFancyBubble(data, isThought, isQuestion, proc, size, maxWidth, color) {
-    const sprite = proc.receiver;
+function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color) {
     const stage = sprite.parentThatIsA(StageMorph);
 
     validateColor(color);
