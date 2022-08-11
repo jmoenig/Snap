@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-July-22';
+modules.gui = '2022-August-04';
 
 // Declarations
 
-var SnapVersion = '8.0.0-rc-220722';
+var SnapVersion = '8.0.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2508,7 +2508,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
         isString(embeddedData) &&
         ['scripts', 'palette', 'categories'].includes(src) &&
         embeddedData[0] === '<' &&
-        ['blocks', 'block', 'script'].some(tag =>
+        ['blocks', 'block', 'script', 'sprite'].some(tag =>
             embeddedData.slice(1).startsWith(tag))
     ) {
         this.isImportingLocalFile = false;
@@ -4861,6 +4861,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'
+        + '\nBambi Brewer: Birdbrain Robotics Extension Support'
+        + '\nGlen Bull & team: TuneScope Music Extension'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'
@@ -4869,7 +4871,13 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging'
+        + '\n\n'
+        + 'Jahrd, Derec, and Jamet costumes are watercolor paintings'
+        + '\nby Meghan Taylor and represent characters from her'
+        + '\nwebcomic Prophecy of the Circle, licensed to us only'
+        + '\nfor use in Snap! projects. Meghan also painted the Tad'
+        + '\ncostumes, but that character is in the public domain.';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {

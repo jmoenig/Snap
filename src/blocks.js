@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-July-30';
+modules.blocks = '2022-August-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3358,7 +3358,7 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem(
-        "script pic...", // +++
+        "script pic...",
         () => {
             var ide = this.parentThatIsA(IDE_Morph) ||
                     this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
@@ -8094,7 +8094,7 @@ ScriptsMorph.prototype.cleanUp = function () {
     target.adjustBounds();
 };
 
-ScriptsMorph.prototype.exportScriptsPicture = function () { // +++
+ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture(),
         ide = this.world().children[0],
         xml = this.scriptsXML();
@@ -8145,7 +8145,8 @@ ScriptsMorph.prototype.scriptsXML = function () {
     // private - answer a container (usually sprite) for all scripts
     var blockEditor = this.parentThatIsA(BlockEditorMorph),
         ide = this.world().children[0],
-        scripts = this.children.filter(m => m instanceof BlockMorph);
+        scripts = this.children.filter(m => m instanceof BlockMorph),
+        target;
     if (blockEditor) {
         return ide.blocksLibraryXML(
             [blockEditor.definition].concat(
@@ -8162,7 +8163,11 @@ ScriptsMorph.prototype.scriptsXML = function () {
     if (scripts.length === 1) {
         return scripts[0].toXMLString();
     }
-    return null; // +++ for now
+    target = this.scriptTarget();
+    if (isSnapObject(target)) {
+        return target.toXMLString();
+    }
+    return null;
 };
 
 ScriptsMorph.prototype.addComment = function () {
@@ -10597,10 +10602,11 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
             'bottom' : ['bottom']
         };
     }
+    dict['~'] = null;
+    dict.variables = ['variables'];
     if (obj) {
         varNames = obj.variables.names();
         if (varNames.length > 0) {
-            dict['~'] = null;
             varNames.forEach(name =>
                 dict[name] = name
             );

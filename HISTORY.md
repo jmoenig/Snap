@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 8.0.0:
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
     * formatting a list of texts displays it as chat-history in an ASK menu
@@ -12,11 +14,13 @@
     * export block definitions from inside the block editor
     * embed blocks into costume metadata to be shared as image file
     * exported script pics now always include the actual blocks, which can be extracted from the image inside Snap!
+    * exported scripts (!) pics now also always include either the actual blocks (if it's a single script), the block definition (if it's a block editor), or a sprite-representation of the current object (sprite or stage)
     * added green flag symbol to "when I receive" dropdown menu, support when clicking the green flag button in the IDE
     * added "combinations" primitive to the palette
     * new POSITION primitive reporter in the MOTION category
     * new MOUSE POSITION primitive reporter in the SENSING category
     * new "position" choice in OF reporter's attribute dropdown, reports a list of XY coordinates
+    * new "variables" choice in OF reporter's attribute dropdown, reports a list of reachable variable names
     * new "categories" choice in MY reporter's dropdown, reports an ordered list of all category names whose indices match the "category" reported elsewhere
     * new "label", "type", "scope", "slots", "defaults", "menus" and "editables" choices in the OF BLOCK block-attribute reporter's dropdown
     * new "set attribute of block" primitive
@@ -55,12 +59,41 @@
     * fixed block label color when expanding or inserting variadic infix slots
     * framerate is throttled to < 67 fps
 * **Documentation Updates:**
+    * new Manual for v8, yay! Thanks, Brian!
     * updated contribution guidelines, thanks, Peter!
     * updated help screens for NUMBERS and FIND FIRST, thanks, Brian, Peter and WarpedWartWars!
     * updated the API documentation for "setTranslation"
 * **Translation Updates:**
     * German
     * Greek, thank you, HM100!
+
+### 2022-08-04
+* new Manual for v8, yay! Thanks, Brian!
+* prepared major release v8
+
+### 2022-08-03
+* gui: added credits for Bambi
+* gui: added credits for Glen & team
+* gui: added credits for Meghan
+* blocks, threads: new "variables" choice in OF reporter's attribute dropdown, reports a list of reachable variable names
+* German translation update for "variables" string (lowercased)
+
+### 2022-08-02
+* cloud: update
+* new release candidate version
+
+### 2022-08-01
+* blocks, objects, store: include a representation of the stage as sprite in the "scripts pic" export if it is more than a single one
+* removed some "under construction" markers
+* new release candidate version
+* threads: fixed an error display glitch
+* new release candidate version
+
+### 2022-07-31
+* threads: fixed #3085 (I hope ^^)
+* byob: fixed #3088 (I hope ^^)
+* blocks: include the (whole) current sprite in the "scripts pic" export if it is more than a single one
+* gui: support directly importing an embedded sprite inside a smart costume
 
 ### 2022-07-30
 * Greek translation update, thank you, HM100!!
