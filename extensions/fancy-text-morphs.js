@@ -1,3 +1,5 @@
+// Update 2022-08-11
+
 var prefix = 'ftx_';
 
 SnapExtensions.primitives.set(
@@ -692,13 +694,85 @@ function FancyTextCostume(data, size, maxWidth, color, align, font) {
     this.loaded = null; // for de-serialization only
 }
 
+FancyTextMorph.prototype.toString = function() {
+    return 'a FancyTextCostume(' + this.name + ')';
+}
+
 Object.defineProperty(FancyTextCostume.prototype, "contents", {
     get: function contents() {
         const textMorph = this.textMorph;
         const canvas = newCanvas(textMorph.bounds.corner.subtract(textMorph.bounds.origin), false, this.canvas);
         const ctx = canvas.getContext("2d");
         textMorph.render(ctx);
-
         return canvas;
     }
 })
+
+if(!SpriteMorph.prototype.oldRender) {
+    SpriteMorph.prototype.oldRender = SpriteMorph.prototype.render;
+}
+
+
+SpriteMorph.prototype.render = function(ctx) {
+    if(!this.costume?.hasOwnProperty('textMorph')) {
+        SpriteMorph.prototype.oldRender.call(this, ctx);
+        return;
+    }
+    var myself = this,
+        facing, // actual costume heading based on my rotation style
+        isFlipped,
+        isLoadingCostume,
+        cst,
+        pic, // (flipped copy of) actual costume based on my rotation style
+        stageScale,
+        handle;
+
+    isLoadingCostume = this.costume &&
+        typeof this.costume.loaded === 'function';
+    stageScale = this.parent instanceof StageMorph ?
+        this.parent.scale : 1;
+    facing = this.rotationStyle ? this.heading : 90;
+    if (this.rotationStyle === 2) {
+        facing = 90;
+        if ((this.heading > 180 && (this.heading < 360))
+            || (this.heading < 0 && (this.heading > -180))) {
+            isFlipped = true;
+        }
+    }
+    if (this.costume && !isLoadingCostume) {
+
+
+
+        pic = isFlipped ? this.costume.flipped() : this.costume;
+        const textMorph = pic.textMorph;
+        ctx.save();
+        ctx.scale(this.scale * stageScale, this.scale * stageScale);
+        ctx.translate(this.imageOffset.x, this.imageOffset.y);
+        ctx.rotate(radians(facing - 90));
+
+        textMorph.render(ctx);
+        ctx.restore();
+
+
+    } else {
+        facing = isFlipped ? -90 : facing;
+        SpriteMorph.uber.render.call(this, ctx, facing);
+
+        if (isLoadingCostume) { // retry until costume is done loading
+            cst = this.costume;
+            handle = setInterval(
+                function () {
+                    myself.wearCostume(cst, true);
+                    clearInterval(handle);
+                },
+                100
+            );
+            return this.wearCostume(null, true);
+        }
+    }
+    // apply graphics effects to image
+    this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
+    this.version = Date.now();
+
+
+}
