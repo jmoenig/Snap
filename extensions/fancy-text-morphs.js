@@ -25,6 +25,11 @@ SnapExtensions.primitives.set(
 
 )
 
+SnapExtensions.primitives.set(
+    prefix+'remove_formatting_characters(text)',
+    text => text.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1,-1))
+)
+
 function validateColor(color) {
     if(!/rgba?\(\d{1,3}\,\d{1,3},\d{1,3},?\d?\.?\d*\)/.test(color) && !!color){
         throw new Error("Color must be in the format rgb(0,0,0) or rgba(0,0,0,1)");
