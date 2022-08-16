@@ -71,7 +71,7 @@ window.baseTempo = 60;
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
 window.noteLengthToTimeValue = (duration) => {
-    if (typeof duration !== 'number') {
+    if (parseFloat(duration) == NaN) {
         splitDuration = duration.split(' ');
 
         notes = {
@@ -117,7 +117,7 @@ window.noteLengthToTimeValue = (duration) => {
         }
         return noteDur;
     } else {
-        return duration;
+        return parseFloat(duration);
     }
 }
 
