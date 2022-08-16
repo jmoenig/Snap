@@ -8601,7 +8601,7 @@ JSCompiler.prototype.compileInputs = function (array) {
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-    var value, type;
+    var value;
 
     if (inp.isEmptySlot != null && inp.isEmptySlot()) {
         if (this.params === -1) {
@@ -8626,24 +8626,37 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
-        type = Process.prototype.reportTypeOf(value);
-        switch (type) {
+        switch (typeof value) {
+        case 'boolean':
         case 'number':
-        case 'Boolean':
-            return '' + value;
-        case 'text':
-            // escape and enclose in double quotes
+            return value.toString();
+        case 'string':
             return '"' + this.escape(value) + '"';
-        case 'list':
-            return 'new List([' + this.compileInputs(value) + '])';
-        default:
+        case 'undefined':
+            throw new Error('can\'t compile input undefined');
+        case 'object':
+            if (value === null) {
+                throw new Error('can\'t compile input null');
+            }
+            if (value instanceof List) {
+                // not sure if value can be a List
+                return 'new List([' +
+                    this.compileInputs(value.itemsArray()) + '])';
+            }
+            if (value instanceof Color) {
+                return 'new Color(' +
+                    value.r + ',' +
+                    value.g + ',' +
+                    value.b + ',' +
+                    value.a + ')';
+            }
             if (value instanceof Array) {
                 return '"' + this.escape(value[0]) + '"';
             }
+        default:
             throw new Error(
-                'compiling does not yet support\n' +
-                'inputs of type\n' +
-                 type
+                'can\'t compile input of type\n' + value.constructor.name,
+                {'cause': value}
             );
         }
     }
