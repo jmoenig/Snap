@@ -40,6 +40,9 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
     console.log(note, noteLength, instrumentName, volume)
     if (note == "R" || note == "r") return;
 
+    note = noteNum(note)
+    noteLength = noteLengthToTimeValue(noteLength)
+
     // note = _convertToSharp(note);
 
     var player = new WebAudioFontPlayer();
@@ -71,7 +74,7 @@ window.baseTempo = 60;
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
 window.noteLengthToTimeValue = (duration) => {
-    if (parseFloat(duration) == NaN) {
+    if (parseFloat(duration) != duration) {
         splitDuration = duration.split(' ');
 
         notes = {

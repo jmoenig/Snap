@@ -27,6 +27,13 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'ts_playnoteIns(note, duration, instrument)',
+    function (note, noteLength, instrument) {
+        window.playNote(note, noteLength, instrument.toLowerCase());
+    }
+);
+
+SnapExtensions.primitives.set(
     'ts_playtracks(tracklist, timesignature, tempo)',
     function (tracksList, timeSignature, tempo) {
         const multiplyArray = (arr, length) =>
