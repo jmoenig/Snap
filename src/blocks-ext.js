@@ -519,10 +519,6 @@ HintInputSlotMorph.prototype.setContents = function(value) {
 
 // Check if the given morph has been changed
 HintInputSlotMorph.prototype.changed = function() {
-    var txtMorph = this.contents();
-    if (txtMorph) {
-        this.empty = txtMorph.text === this.hintText;
-    }
     return InputSlotMorph.prototype.changed.call(this);
 };
 
