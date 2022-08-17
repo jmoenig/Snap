@@ -8858,6 +8858,12 @@ SpriteIconMorph.prototype.wantsDropOf = function (morph) {
 
 SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
     if (morph instanceof BlockMorph) {
+        // Prevent dropping message type blocks into sprites
+	    if (morph instanceof ReporterBlockMorph && morph.forMsg) {
+            morph.slideBackTo(hand.grabOrigin);
+            return;
+        }
+	
         this.copyStack(morph);
     } else if (morph instanceof CostumeIconMorph) {
         this.copyCostume(morph.object);
