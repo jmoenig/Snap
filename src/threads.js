@@ -8299,19 +8299,17 @@ function JSCompiler(outerScope) {
     this.scope.outerScope = outerScope;
 }
 
-JSCompiler.ring = (func, ...inputs) => {
-    // used in compiled rings
-    func.inputs = inputs;
-    return func;
-};
-
-JSCompiler.invoke = (proc, func, argsList) =>
-    // used in compiled rings
-    func ? (
-        typeof func === 'function' ?
-        func.apply(null, argsList.itemsArray().concat(proc)) :
-        invoke(func, argsList)
-    ) : null;
+JSCompiler.prototype.C = Object.freeze({
+    //functions used in compiled rings
+    '__proto__': null,
+    'ring': (func, ...inputs) => (func.inputs = inputs, func),
+    'invoke': (proc, func, argsList) =>
+        func ? (
+            typeof func === 'function' ?
+            func.apply(null, argsList.itemsArray().concat(proc)) :
+            invoke(func, argsList)
+        ) : null
+});
 
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
@@ -8387,16 +8385,16 @@ JSCompiler.prototype.compileFunction = function (aContext) {
         c = aContext.components(),
         cc = fc.find(c.equalTo, c);
     if (cc != null) {
-        return cc.returnCompiledRing();
+        return cc.returnCompiledRing(this.C);
     }
-    var returnCompiledRing = Function('"use strict";return ' +
+    var returnCompiledRing = Function('C', '"use strict";\nreturn ' +
         this.compileFunctionBody(aContext));
     if (fc.length >= this.maxFunctionCache) {
         fc.length = 0;
     }
     fc.push(c);
     c.returnCompiledRing = returnCompiledRing;
-    return returnCompiledRing();
+    return returnCompiledRing(this.C);
 };
 
 JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
@@ -8441,7 +8439,7 @@ JSCompiler.prototype.compileFunctionBody = function (aContext) {
     } else {
         code = 'return ' + this.compileExpression(block) + ';\n';
     }
-    code = 'JSCompiler.ring(function ring(...params){\n' +
+    code = 'C.ring(function ring(...params){\n' +
         this.functionHead() +
         code +
         '}';
@@ -8478,7 +8476,7 @@ JSCompiler.prototype.compileExpression = function (block) {
     // special evaluation primitives
     case 'doRun':
     case 'evaluate':
-        return 'JSCompiler.invoke(proc,' +
+        return 'C.invoke(proc,' +
             this.compileInput(inputs[0]) +
             ',' +
             this.compileInput(inputs[1]) +
