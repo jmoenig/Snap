@@ -2752,6 +2752,27 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.evaluate(script, new List(/*[next]*/), true);
 };
 
+Process.prototype.doForEach = function (upvar, list, script) {
+    // perform a script for each element of a list, assigning the
+    // current iteration's element to a variable with the name
+    // specified in the "upvar" parameter, so it can be referenced
+    // within the script.
+    // Distinguish between linked and arrayed lists.
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = new ListIterator(list);
+    }
+    var result = this.context.accumulator.next();
+    if (result.done) {
+        return;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(upvar, result.value);
+    this.evaluate(script, new List(/*[result.value]*/), true);
+};
+
 Process.prototype.doFor = function (upvar, start, end, script) {
     // perform a script for every integer step between start and stop,
     // assigning the current iteration index to a variable with the
@@ -8300,7 +8321,7 @@ function JSCompiler(outerScope) {
 }
 
 JSCompiler.prototype.C = Object.freeze({
-    //functions used in compiled rings
+    // functions used in compiled rings
     '__proto__': null,
     'ring': (func, ...inputs) => (func.inputs = inputs, func),
     'invoke': (proc, func, argsList) =>
@@ -8540,6 +8561,14 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'doWarp':
         // synchronous javascript is already like warp
         return this.compileSequence(inputs[0].evaluate());
+    case 'doForEach':
+        return 'for(' +
+            this.gensymForVar(inputs[0].children[0].blockSpec, -1) +
+            ' of new ListIterator(' +
+            this.compileInput(inputs[1]) +
+            ')){\n' +
+            this.compileSequence(inputs[2].evaluate()) +
+            '}';
     case 'reportBoolean':
     case 'reportNewList':
         return this.compileInput(inputs[0]);
@@ -8786,4 +8815,40 @@ SubArraySorter.prototype.step = function () {
         this.sorter.cmp2 = sub[this.sub2pos];
         this.sorter.cmpWanted = true;
     }
+};
+
+function ListIterator(list) {
+    if(list instanceof List){
+        // behave like for each (item) in [=] block
+        this.source = list;
+        this.remaining = list.length();
+        this.idx = 0;
+        return;
+    }
+    throw new Error('can\'t iterate not a List', {'cause': list});
+}
+
+ListIterator.prototype[Symbol.iterator] = function () {
+    return this;
+};
+
+ListIterator.prototype.next = function () {
+    if (this.remaining === 0) {
+        return {'done': true};
+    }
+    this.remaining -= 1;
+    if (this.source.isLinked) {
+        // linked
+        var out = {
+            'done': false,
+            'value': this.source.at(1)
+        };
+        this.source = this.source.cdr();
+        return out;
+    }
+    // arrayed
+    return {
+        'done': false,
+        'value': this.source.at(this.idx += 1)
+    };
 };
