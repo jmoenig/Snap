@@ -2723,41 +2723,6 @@ Process.prototype.doForEach = function (upvar, list, script) {
     // specified in the "upvar" parameter, so it can be referenced
     // within the script.
     // Distinguish between linked and arrayed lists.
-
-    var next;
-    if (this.context.accumulator === null) {
-        this.assertType(list, 'list');
-        this.context.accumulator = {
-            source : list,
-            remaining : list.length(),
-            idx : 0
-        };
-    }
-    if (this.context.accumulator.remaining === 0) {
-        return;
-    }
-    this.context.accumulator.remaining -= 1;
-    if (this.context.accumulator.source.isLinked) {
-        next = this.context.accumulator.source.at(1);
-        this.context.accumulator.source =
-            this.context.accumulator.source.cdr();
-    } else { // arrayed
-        this.context.accumulator.idx += 1;
-        next = this.context.accumulator.source.at(this.context.accumulator.idx);
-    }
-    this.pushContext('doYield');
-    this.pushContext();
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, next);
-    this.evaluate(script, new List(/*[next]*/), true);
-};
-
-Process.prototype.doForEach = function (upvar, list, script) {
-    // perform a script for each element of a list, assigning the
-    // current iteration's element to a variable with the name
-    // specified in the "upvar" parameter, so it can be referenced
-    // within the script.
-    // Distinguish between linked and arrayed lists.
     if (this.context.accumulator === null) {
         this.assertType(list, 'list');
         this.context.accumulator = new ListIterator(list);
