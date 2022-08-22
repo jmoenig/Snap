@@ -3689,9 +3689,9 @@ Process.prototype.setMicrophoneModifier = function (modifier) {
         stage.microphone.stop();
         return;
     }
-    stage.microphone.modifier = modifier;
     stage.microphone.compiledModifier = this.reportCompiled(modifier, 1);
     stage.microphone.compilerProcess = this;
+    stage.microphone.modifier = modifier;
 };
 
 // Process user prompting primitives (interpolated)
