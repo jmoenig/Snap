@@ -8783,7 +8783,7 @@ SubArraySorter.prototype.step = function () {
 };
 
 function ListIterator(list) {
-    if(list instanceof List){
+    if (list instanceof List) {
         // behave like for each (item) in [=] block
         this.source = list;
         this.remaining = list.length();
