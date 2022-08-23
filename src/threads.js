@@ -2723,18 +2723,19 @@ Process.prototype.doForEach = function (upvar, list, script) {
     // specified in the "upvar" parameter, so it can be referenced
     // within the script.
     // Distinguish between linked and arrayed lists.
-    if (this.context.accumulator === null) {
-        this.assertType(list, 'list');
-        this.context.accumulator = new ListIterator(list);
+    var result = this.context.accumulator;
+    if (result === null) {
+        result = this.context.accumulator = new ListIterator(list);
     }
-    var result = this.context.accumulator.next();
+    result.next();
     if (result.done) {
         return;
     }
     this.pushContext('doYield');
     this.pushContext();
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, result.value);
+    var vars = this.context.outerContext.variables;
+    vars.addVar(upvar);
+    vars.setVar(upvar, result.value);
     this.evaluate(script, new List(/*[result.value]*/), true);
 };
 
@@ -8783,14 +8784,13 @@ SubArraySorter.prototype.step = function () {
 };
 
 function ListIterator(list) {
-    if (list instanceof List) {
-        // behave like for each (item) in [=] block
-        this.source = list;
-        this.remaining = list.length();
-        this.idx = 0;
-        return;
-    }
-    throw new Error('can\'t iterate not a List', {'cause': list});
+    Process.prototype.assertType(list, 'list');
+    // behave like for each (item) in [=] block
+    this.source = list;
+    this.remaining = list.length();
+    this.idx = 0;
+    this.done = false;
+    this.value = null;
 }
 
 ListIterator.prototype[Symbol.iterator] = function () {
@@ -8798,22 +8798,18 @@ ListIterator.prototype[Symbol.iterator] = function () {
 };
 
 ListIterator.prototype.next = function () {
-    if (this.remaining === 0) {
-        return {'done': true};
+    if (this.remaining) {
+        this.remaining -= 1;
+        if (this.source.isLinked) {
+            // linked
+            this.value = this.source.at(1);
+            this.source = this.source.cdr();
+        } else {
+            // arrayed
+            this.value = this.source.at(this.idx += 1);
+        }
+    } else {
+        this.done = true;
     }
-    this.remaining -= 1;
-    if (this.source.isLinked) {
-        // linked
-        var out = {
-            'done': false,
-            'value': this.source.at(1)
-        };
-        this.source = this.source.cdr();
-        return out;
-    }
-    // arrayed
-    return {
-        'done': false,
-        'value': this.source.at(this.idx += 1)
-    };
+    return this;
 };
