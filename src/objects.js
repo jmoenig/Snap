@@ -209,13 +209,15 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point in direction %dir'
+            spec: 'point in direction %dir',
+            defaults: [90]
         },
         doFaceTowards: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point towards %dst'
+            spec: 'point towards %dst',
+            defaults: [['mouse-pointer']]
         },
         gotoXY: {
             only: SpriteMorph,
@@ -228,7 +230,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to %dst'
+            spec: 'go to %dst',
+            defaults: [['random position']]
         },
         doGlide: {
             only: SpriteMorph,
@@ -310,7 +313,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: '%img of costume %cst',
-            defaults: [['width']]
+            defaults: [['width'], ['current']]
         },
         reportNewCostume: {
             type: 'reporter',
@@ -321,7 +324,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
-            defaults: ['', 100, 50]
+            defaults: [['current'], 100, 50]
         },
         doSayFor: {
             only: SpriteMorph,
@@ -355,18 +358,19 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'change %eff effect by %n',
-            defaults: [null, 25]
+            defaults: [['ghost'], 25]
         },
         setEffect: {
             type: 'command',
             category: 'looks',
             spec: 'set %eff effect to %n',
-            defaults: [null, 0]
+            defaults: [['ghost'], 0]
         },
         getEffect: {
             type: 'reporter',
             category: 'looks',
-            spec: '%eff effect'
+            spec: '%eff effect',
+            defaults: [['ghost']]
         },
         clearEffects: {
             type: 'command',
@@ -702,7 +706,8 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed'
+            spec: 'when %keyHat key pressed',
+            defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
@@ -791,7 +796,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doStopThis: {
             type: 'command',
             category: 'control',
-            spec: 'stop %stopChoices'
+            spec: 'stop %stopChoices',
+            defaults: [['all']]
         },
         doRun: {
             type: 'command',
@@ -851,7 +857,8 @@ SpriteMorph.prototype.initBlocks = function () {
         createClone: {
             type: 'command',
             category: 'control',
-            spec: 'create a clone of %cln'
+            spec: 'create a clone of %cln',
+            defaults: [['myself']]
         },
         newClone: {
             type: 'reporter',
@@ -877,7 +884,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'touching %col ?'
+            spec: 'touching %col ?',
+            defaults: [['mouse-pointer']]
         },
         reportTouchingColor: {
             only: SpriteMorph,
@@ -895,7 +903,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: '%asp at %loc',
-            defaults: [['hue']]
+            defaults: [['hue'], ['mouse-pointer']]
         },
         reportStackSize: {
             dev: true,
@@ -950,14 +958,15 @@ SpriteMorph.prototype.initBlocks = function () {
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'key %key pressed?'
+            spec: 'key %key pressed?',
+            defaults: [['space']]
         },
         reportRelationTo: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'sensing',
             spec: '%rel to %dst',
-            defaults: [['distance']]
+            defaults: [['distance'], ['mouse-pointer']]
         },
         doResetTimer: {
             type: 'command',
@@ -1014,7 +1023,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportDate: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'current %dates'
+            spec: 'current %dates',
+            defaults: [['date']]
         },
         reportGet: {
             type: 'reporter',
@@ -1048,10 +1058,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
-        reportSum: {
+        reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n + %n'
+            spec: '%sum',
+            alias: '+'
         },
         reportDifference: {
             type: 'reporter',
@@ -1059,10 +1070,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%n \u2212 %n',
             alias: '-'
         },
-        reportProduct: {
+        reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u00D7 %n',
+            spec: '%product',
             alias: '*'
         },
         reportQuotient: {
@@ -1079,7 +1090,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: '%fun of %n',
-            defaults: [null, 10]
+            defaults: [['sqrt'], 10]
         },
         reportPower: {
             type: 'reporter',
@@ -1091,26 +1102,58 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n mod %n'
         },
+        reportAtan2: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'atan2 %n ÷ %n'
+        },
+        reportVariadicMin: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%min',
+            alias: 'min'
+        },
+        reportVariadicMax: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%max',
+            alias: 'max'
+        },
         reportRandom: {
             type: 'reporter',
             category: 'operators',
             spec: 'pick random %n to %n',
             defaults: [1, 10]
         },
-        reportLessThan: {
-            type: 'predicate',
-            category: 'operators',
-            spec: '%s < %s'
-        },
         reportEquals: {
             type: 'predicate',
             category: 'operators',
             spec: '%s = %s'
         },
+        reportNotEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2260 %s'
+        },
+        reportLessThan: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s < %s'
+        },
+        reportLessThanOrEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2264 %s'
+        },
         reportGreaterThan: {
             type: 'predicate',
             category: 'operators',
             spec: '%s > %s'
+        },
+        reportGreaterThanOrEquals: {
+            type: 'predicate',
+            category: 'operators',
+            spec: '%s \u2265 %s'
         },
         reportAnd: {
             type: 'predicate',
@@ -1131,6 +1174,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: '%bool',
+            defaults: [true],
             alias: 'true boolean'
         },
         reportFalse: { // special case for keyboard entry and search
@@ -1174,7 +1218,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: 'is %s a %typ ?',
-            defaults: [5]
+            defaults: [5, ['number']]
         },
         reportIsIdentical: {
             type: 'predicate',
@@ -1271,10 +1315,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'all but first of %l'
         },
-        reportListLength: {
+        reportListLength: { // deprecated as of v6.6
             type: 'reporter',
             category: 'lists',
             spec: 'length of %l'
+        },
+        reportListAttribute: {
+            type: 'reporter',
+            category: 'lists',
+            spec: '%la of %l',
+            defaults: [['length']]
         },
         reportListContainsItem: {
             type: 'predicate',
@@ -1326,13 +1376,43 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'numbers from %n to %n',
             defaults: [1, 10]
         },
-
-        reportConcatenatedLists: { // only in dev mode - experimental
-            dev: true,
+    /*
+        reportListCombination: { // currently not in use
+            type: 'reporter',
+            category: 'lists',
+            spec: '%mlfunc %lists',
+            defaults: [['append']]
+        },
+    */
+        reportConcatenatedLists: {
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
         },
+        reportCrossproduct: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'combinations %lists'
+        },
+        reportTranspose: { // deprecated
+            type: 'reporter',
+            category: 'lists',
+            spec: 'transpose %l'
+        },
+        reportReshape: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'reshape %l to %nums',
+            defaults: [null, [4, 3]]
+        },
+    /*
+        reportSlice: { // currently not in use
+            type: 'reporter',
+            category: 'lists',
+            spec: 'slice %l by %nums',
+            defaults: [null, [2, -1]]
+        },
+    */
 
         // HOFs
         reportMap: {
@@ -1614,21 +1694,54 @@ SpriteMorph.prototype.blockAlternatives = {
     reportMouseY: ['reportMouseX'],
 
     // operators:
-    reportSum: ['reportDifference', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus'],
-    reportDifference: ['reportSum', 'reportProduct', 'reportQuotient',
-        'reportPower', 'reportModulus'],
-    reportProduct: ['reportDifference', 'reportSum', 'reportQuotient',
-        'reportPower', 'reportModulus'],
-    reportQuotient: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportPower', 'reportModulus'],
-    reportPower: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportModulus'],
-    reportModulus: ['reportDifference', 'reportProduct', 'reportSum',
-        'reportQuotient', 'reportPower'],
-    reportLessThan: ['reportEquals', 'reportGreaterThan'],
-    reportEquals: ['reportLessThan', 'reportGreaterThan'],
-    reportGreaterThan: ['reportEquals', 'reportLessThan'],
+    reportVariadicSum: ['reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportDifference: ['reportVariadicSum', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicProduct: ['reportDifference', 'reportVariadicSum',
+        'reportQuotient', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportQuotient: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportPower', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportPower: ['reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum', 'reportQuotient', 'reportModulus', 'reportAtan2',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportModulus: ['reportAtan2', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportAtan2: ['reportModulus', 'reportDifference', 'reportVariadicProduct',
+        'reportVariadicSum','reportQuotient', 'reportPower',
+        'reportVariadicMin', 'reportVariadicMax'],
+    reportVariadicMin: ['reportVariadicMax', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
+    reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
+        'reportDifference', 'reportVariadicProduct', 'reportQuotient',
+        'reportPower', 'reportModulus', 'reportAtan2'],
+    reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
+        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
+    reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
+    reportNotEquals: ['reportEquals', 'reportIsIdentical', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
+    reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
+        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals'],
+    reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
+        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
+    reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
+        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals'],
+    reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
+        'reportLessThanOrEquals', 'reportGreaterThan',
+        'reportGreaterThanOrEquals'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
 
@@ -2570,9 +2683,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -2724,7 +2837,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
-        blocks.push(block('reportListLength'));
+        blocks.push(block('reportListAttribute'));
         blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
@@ -2736,12 +2849,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
     // for debugging: ///////////////
 
@@ -2874,7 +2989,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    
+
     palette.toolBar = new AlignmentMorph('column');
 
     searchButton = new PushButtonMorph(
@@ -3488,9 +3603,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             off = 1,
             reverseDict = {};
         selectors = {
-            '+': 'reportSum',
+            '+': 'reportVariadicSum',
             '-': 'reportDifference',
-            '*': 'reportProduct',
+            '*': 'reportVariadicProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
@@ -3502,8 +3617,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             round: 'reportRound',
             not: 'reportNot'
         };
-        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
-            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+        monads = ['abs', 'neg', 'ceiling', 'floor', 'sqrt', 'sin', 'cos',
+            'tan', 'asin', 'acos', 'atan', 'ln', 'log', 'lg', 'id', 'round',
+            'not'];
         alias = {
             ceil: 'ceiling',
             '!' : 'not'
@@ -8854,9 +8970,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reifyPredicate'));
         blocks.push('#');
         blocks.push('-');
-        blocks.push(block('reportSum'));
+        blocks.push(block('reportVariadicSum'));
         blocks.push(block('reportDifference'));
-        blocks.push(block('reportProduct'));
+        blocks.push(block('reportVariadicProduct'));
         blocks.push(block('reportQuotient'));
         blocks.push(block('reportPower'));
         blocks.push('-');
@@ -8991,7 +9107,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
         blocks.push('-');
-        blocks.push(block('reportListLength'));
+        blocks.push(block('reportListAttribute'));
         blocks.push(block('reportListIndex'));
         blocks.push(block('reportListContainsItem'));
         blocks.push(block('reportListIsEmpty'));
@@ -9003,12 +9119,14 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doForEach'));
         blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+        blocks.push('-');
+        blocks.push(block('reportConcatenatedLists'));
+        blocks.push(block('reportReshape'));
+        blocks.push(block('reportCrossproduct'));
 
     // for debugging: ///////////////
 
