@@ -8274,6 +8274,7 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 
 function JSCompiler(outerScope) {
     this.implicitParamCount = 0;
+    this.implicitMultiArgCount = 0;
     this.params = 0;
     this.gensymArgIndexes = new Map();
     this.scope = new Map();
@@ -8286,17 +8287,19 @@ function JSCompiler(outerScope) {
     this.scope.outerScope = outerScope;
 }
 
-JSCompiler.prototype.C = Object.freeze({
+JSCompiler.prototype.C = {
     // functions used in compiled rings
-    '__proto__': null,
     'ring': (func, ...inputs) => (func.inputs = inputs, func),
     'invoke': (proc, func, argsList) =>
         func ? (
             typeof func === 'function' ?
-            func.apply(null, argsList.itemsArray().concat(proc)) :
+            func.apply(
+                proc.blockReceiver(),
+                argsList.itemsArray().concat(proc)
+            ) :
             invoke(func, argsList)
         ) : null
-});
+};
 
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
@@ -8335,8 +8338,15 @@ JSCompiler.prototype.functionHead = function () {
     str1 += 'proc=params.pop();\n';
     switch (params) {
     case -1:
+        params = this.implicitParamCount;
         // implicit parameters mode
-        switch (params = this.implicitParamCount) {
+        if (this.implicitMultiArgCount) {
+            if (params === this.implicitMultiArgCount) {
+                return str1 + 'var plist=new List(params);\n';
+            }
+            str1 += 'var plist=new List(params.slice());\n';
+        }
+        switch (params) {
         case 0:
             return str1;
         case 1:
@@ -8392,6 +8402,9 @@ JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
         // don't look in rings (they are not current scope)
         return false;
     }
+    if (m.selector === 'reportJSFunction') {
+        return false;
+    }
     m = m.children;
     var i = m.length;
     while (i) {
@@ -8407,8 +8420,8 @@ JSCompiler.prototype.compileFunctionBody = function (aContext) {
         parameters = aContext.inputs,
         code;
 
-    if (block instanceof Array) {
-        throw new Error('can\'t compile empty ring');
+    if (!(block instanceof BlockMorph)) {
+        throw new Error('compiling does not yet support\nempty rings');
     }
 
     if (parameters.length) {
@@ -8554,6 +8567,24 @@ JSCompiler.prototype.compileExpression = function (block) {
             ')';
     case 'reportNot':
         return '!' + this.compileInput(inputs[0]);
+    case 'reifyScript':
+    case 'reifyReporter':
+    case 'reifyPredicate':
+        return new JSCompiler(this.scope).compileFunctionBody({
+            'expression': inputs[0].children[0],
+            'inputs': inputs[1].inputs().map(x => x.children[0].blockSpec),
+        });
+    case 'reportJSFunction':
+        //don't fill empty slots inside JavaScript function block
+        target = this.params;
+        this.params = -2;
+        selector = 'proc.reportJSFunction(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+        this.params = target;
+        return selector;
     default:
         if (Process.prototype[selector]) {
             if (selector.substring(0, 6) === 'report') {
@@ -8599,16 +8630,17 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp.isEmptySlot != null && inp.isEmptySlot()) {
         if (this.params === -1) {
             // implicit parameter
+            if (inp instanceof MultiArgMorph) {
+                this.implicitParamCount += 1;
+                this.implicitMultiArgCount += 1;
+                return 'plist';
+            }
             return 'params[' + this.implicitParamCount++ + ']';
         }
+        if (inp instanceof MultiArgMorph) {
+            return 'new List()';
+        }
         return '""';
-    }
-    if (inp instanceof RingMorph) {
-        inp = inp.children;
-        return new JSCompiler(this.scope).compileFunctionBody({
-            'expression': inp[0].children[0],
-            'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
-        });
     }
     if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
