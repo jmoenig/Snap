@@ -8575,7 +8575,7 @@ JSCompiler.prototype.compileExpression = function (block) {
             'inputs': inputs[1].inputs().map(x => x.children[0].blockSpec),
         });
     case 'reportJSFunction':
-        //don't fill empty slots inside JavaScript function block
+        // don't fill empty slots inside JavaScript function block
         target = this.params;
         this.params = -2;
         selector = 'proc.reportJSFunction(' +
