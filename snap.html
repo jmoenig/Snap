@@ -47,7 +47,7 @@
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
                 loop();
-			};
+            };
             function loop(timestamp) {
                 requestAnimationFrame(loop);
                 if (timestamp - lastTime < 1000 / FPS) {
