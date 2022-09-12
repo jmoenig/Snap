@@ -30,11 +30,11 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph*/
+SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-July-11';
+modules.extensions = '2022-September-12';
 
 // Global stuff
 

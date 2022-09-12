@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new "ide_all_blocks()" extension primitive, thanks, Michael!
 * **Notable Changes:**
     * new "docs" folder for documentation files, thanks, Michael!
 * **Notable Fixes:**
