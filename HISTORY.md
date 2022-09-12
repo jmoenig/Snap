@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2022-09-12
+* new dev version
+
 ## 8.0.0:
 * **New Features:**
     * passing a list to the ASK command in sensing presents a menu to the user
