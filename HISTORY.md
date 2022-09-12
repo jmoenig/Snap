@@ -5,6 +5,7 @@
     * new "ide_all_blocks()" extension primitive, thanks, Michael!
 * **Notable Changes:**
     * new "docs" folder for documentation files, thanks, Michael!
+    * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
 * **Documentation Updates:**

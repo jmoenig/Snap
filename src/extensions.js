@@ -839,7 +839,7 @@ SnapExtensions.primitives.set(
 
 // Returns all blocks in the editor, regardlss of visibility
 SnapExtensions.primitives.set(
-    'ide_all_blocks()',
+    'ide_all_blocks',
     function () {
         let stage = this.parentThatIsA(StageMorph),
             allSprites = stage.children.filter(morph => morph instanceof SpriteMorph);
@@ -937,7 +937,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ide_language()',
+    'ide_language',
     function () {
         return SnapTranslator.language;
     }
@@ -965,7 +965,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ide_translations()',
+    'ide_translations',
     function () {
         return new List(
             SnapTranslator.languages().map(lang =>
