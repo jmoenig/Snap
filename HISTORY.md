@@ -1,9 +1,16 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * new "docs" folder for documentation files, thanks, Michael!
+* **Notable Fixes:**
+    * fixed aggressive cache issue, thanks, Michael!
+* **Documentation Updates:**
+    * new doc for extensions, thanks, Michael!
 
 ### 2022-09-12
 * new dev version
+* moved documentation into new "docs" folder
 
 ## 8.0.0:
 * **New Features:**
