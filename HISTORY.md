@@ -10,12 +10,19 @@
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+    * fixed API->broadcast() to also accept a data payload, thanks, Zak!
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
 ### 2022-09-12
 * new dev version
-* moved documentation into new "docs" folder
+* pwa: moved documentation into new "docs" folder, thanks, Michael
+* fixed aggressive cache issue, thanks, Michael!
+* hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
+* morphic: fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+* api: fixed API->broadcast() to also accept a data payload, thanks, Zak!
+* new "ide_all_blocks()" extension primitive, thanks, Michael!
+* extensions: removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
 
 ## 8.0.0:
 * **New Features:**

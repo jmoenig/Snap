@@ -42,11 +42,11 @@
 /*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
 detect, isSnapObject, VariableFrame*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-July-19';
+modules.api = '2022-September-12';
 
 // IDE_Morph external communication API
 /*
