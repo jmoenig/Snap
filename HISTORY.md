@@ -8,6 +8,7 @@
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
+    * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 

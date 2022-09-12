@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-26';
+var morphicVersion = '2022-September-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4511,7 +4511,8 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pic...",
         () => {
-            var imgURL = this.fullImage().toDataURL(), doc, body, tag;
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
             try {
                 doc = window.open('', '_blank', 'popup').document;
                 body = doc.getElementsByTagName('body')[0];
