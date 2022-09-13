@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-September-12';
+modules.extensions = '2022-September-14';
 
 // Global stuff
 
@@ -257,6 +257,22 @@ SnapExtensions.primitives.set(
     'txt_indexof(sub, txt)',
     function (sub, txt) {
         return txt.indexOf(sub) + 1;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_to_utf8(txt)',
+    function (txt) {
+        return new List(new TextEncoder().encode(txt));
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_from_utf8(utf8List)',
+    function (utf8List) {
+        return new TextDecoder("utf-8").decode(
+            new Uint8Array(utf8List.itemsArray())
+        );
     }
 );
 

@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * new "ide_all_blocks()" extension primitive, thanks, Michael!
+    * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
 * **Notable Changes:**
     * new "docs" folder for documentation files, thanks, Michael!
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
@@ -13,6 +14,9 @@
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
+
+### 2022-09-14
+* extensions: new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
 
 ### 2022-09-12
 * new dev version
