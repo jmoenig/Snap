@@ -263,16 +263,20 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'txt_to_utf8(txt)',
     function (txt) {
-        return new List(new TextEncoder().encode(txt));
+        var lst = new List(Array.from(new TextEncoder().encode(txt)));
+        // lst.type = 'number';
+        return lst;
     }
 );
 
 SnapExtensions.primitives.set(
     'txt_from_utf8(utf8List)',
     function (utf8List) {
-        return new TextDecoder("utf-8").decode(
-            new Uint8Array(utf8List.itemsArray())
-        );
+        var arr = utf8List.itemsArray();
+        if (!(arr instanceof Uint8Array)) {
+            arr = new Uint8Array(arr);
+        }
+        return new TextDecoder("utf-8").decode(arr);
     }
 );
 
