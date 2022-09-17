@@ -1058,6 +1058,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
+        reportSum: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n + %n',
+            alias: '+'
+        },
         reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
@@ -1069,6 +1075,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%n \u2212 %n',
             alias: '-'
+        },
+        reportProduct: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%n * %n',
+            alias: '*'
         },
         reportVariadicProduct: {
             type: 'reporter',
