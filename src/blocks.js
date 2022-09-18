@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-August-03';
+modules.blocks = '2022-September-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -696,6 +696,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'decode URI component' : ['decode URI component'],
             'XML escape' : ['XML escape'],
             'XML unescape' : ['XML unescape'],
+            'JS escape' : ['JS escape'],
             'hex sha512 hash' : ['hex sha512 hash']
         }
     },

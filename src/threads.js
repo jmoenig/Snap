@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-August-03';
+modules.threads = '2022-September-18';
 
 var ThreadManager;
 var Process;
@@ -4432,6 +4432,9 @@ Process.prototype.reportTextFunction = function (fname, string) {
         break;
     case 'XML unescape':
         result = new XML_Element().unescape(x);
+        break;
+    case 'JS escape':
+        result = JSCompiler.prototype.escape(x);
         break;
     case 'hex sha512 hash':
         result = hex_sha512(x);

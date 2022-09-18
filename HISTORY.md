@@ -15,6 +15,9 @@
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
+### 2022-09-18
+* blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
+
 ### 2022-09-14
 * extensions: new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
 
