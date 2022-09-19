@@ -48,7 +48,6 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
    // console.log(instrumentName);
    let currentInstrumentData = window.parent.instrumentData[instrumentName]
 			player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
-   
 			function play(){
     const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
     console.log(note, noteLength, instrumentName, vol)
@@ -244,13 +243,17 @@ class Tone {
     this.id = id;
     this.on = false;
 
+    //const pannerNode = new StereoPannerNode(audioContext, -1);
     const thisPlayer = new Object;
     thisPlayer.context = new AudioContext();
     thisPlayer.oscillator = thisPlayer.context.createOscillator();
+    thisPlayer.panner = thisPlayer.context.createStereoPanner();
     thisPlayer.gainobj = thisPlayer.context.createGain();
     thisPlayer.oscillator.frequency.value = 100;
+    thisPlayer.panner.pan.value = 0;
     thisPlayer.gainobj.gain.value = 1;
-    thisPlayer.oscillator.connect(thisPlayer.gainobj);
+    thisPlayer.oscillator.connect(thisPlayer.panner);
+    thisPlayer.panner.connect(thisPlayer.gainobj);
     thisPlayer.gainobj.connect(thisPlayer.context.destination);
 
     this.player = thisPlayer;
@@ -269,6 +272,11 @@ class Tone {
   setAmpl = (ampl) => {
     this.ampl = ampl;
     this.player.gainobj.gain.value = this.dBFS2gain(parseInt(ampl));
+  }
+
+  setPan = (pan) => {
+    this.pan = Math.min(Math.max(pan, -100), 100);
+    this.player.panner.pan.setValueAtTime(this.pan / 100, this.player.context.currentTime);
   }
 
   turnOn = () => {

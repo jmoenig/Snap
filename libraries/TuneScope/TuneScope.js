@@ -302,8 +302,8 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ts_settone(id, frequency, amplitude)',
-    function (id, freq, ampl) {
+    'ts_settone(id, frequency, amplitude, balance)',
+    function (id, freq, ampl, bal) {
         var created = false;
         if (!window.tones[id]) {
           window.tones[id] = new window.Tone(id);
@@ -312,6 +312,7 @@ SnapExtensions.primitives.set(
 
         window.tones[id].setFreq(freq);
         window.tones[id].setAmpl(ampl * 100);
+        window.tones[id].setPan(bal);
         created && window.tones[id].turnOn();
     }
 );
