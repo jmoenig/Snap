@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-August-04';
+modules.gui = '2022-September-12';
 
 // Declarations
 
-var SnapVersion = '8.0.0';
+var SnapVersion = '8.0.1-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4857,7 +4857,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJoan Guillén: Countless contributions'
         + '\nKartik Chandra: Paint Editor'
         + '\nCarles Paredes: Initial Vector Paint Editor'
-        + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
+        + '\n"Ava" Yuan Yuan, Deborah Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'

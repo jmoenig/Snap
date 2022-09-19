@@ -30,11 +30,11 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph*/
+SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-July-11';
+modules.extensions = '2022-September-18';
 
 // Global stuff
 
@@ -55,13 +55,13 @@ var SnapExtensions = {
     used as extension primitives for blocks or dynamic dropdown menus. Block
     extensions are stored in the "primitives" dictionary of SnapExtensions,
     dynamic dropdown menus in the "menus" section.
-    
+
     You can also extend Snap! with your own externally hosted JavaScript file(s)
     and have them add your own extension primitives and menus to the global
     SnapExtensions dictionaries. This lets you provide libraries to support
     special APIs and custom hardware.
 
-    
+
     1. Primitives (additional blocks)
     =================================
     The names under which primitives are stored will apear in the dropdown
@@ -131,9 +131,9 @@ var SnapExtensions = {
     You can provide extensions for your custom hardware or for arbitrary APIs
     or extend Snap! with JavaScript libraries from other parties. You can
     load additional JavaScript files using the
-    
+
         src_load(url)
-    
+
     extension primitive inside Snap, which you can find using Snap's search bar
     in the IDE. The loading primitive will wait until the source file has fully
     loaded and its defined functions are ready to be called.
@@ -142,7 +142,7 @@ var SnapExtensions = {
     This lets you lazily initialize your extension by simply adding a
     "src_load(url)" command for your external JS file before calling any of its
     added functions.
-    
+
 
     4. Miscellaneous
     ================
@@ -260,54 +260,101 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'txt_to_utf8(txt)',
+    function (txt) {
+        var lst = new List(Array.from(new TextEncoder().encode(txt)));
+        // lst.type = 'number';
+        return lst;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_from_utf8(utf8List)',
+    function (utf8List) {
+        var arr = utf8List.itemsArray();
+        if (!(arr instanceof Uint8Array)) {
+            arr = new Uint8Array(arr);
+        }
+        return new TextDecoder("utf-8").decode(arr);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_transform(name, txt)',
+    /*
+        supported transformation names:
+        -------------------------------
+        encode URI
+        decode URI
+        encode URI component
+        decode URI component
+        XML escape
+        XML unescape
+        JS escape
+        hex sha512 hash
+    */
+    function (name, txt) {
+        return Process.prototype.reportTextFunction(name, txt);
+    }
+);
+
 // bitwise operations
 
 SnapExtensions.primitives.set(
     'bit_and(a, b)',
-    function (a, b) {
-        return a & b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a & b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_or(a, b)',
-    function (a, b) {
-        return a | b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a | b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_xor(a, b)',
-    function (a, b) {
-        return a ^ b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a ^ b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_not(a)',
-    function (a) {
-        return ~ a;
+    function (a, proc) {
+        function bitNot (a) {
+            if (proc.enableHyperOps) {
+                if (a instanceof List) {
+                    return a.map(each => bitNot(each));
+                }
+            }
+            return ~ a;
+        }
+        return bitNot(a);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_left_shift(a, b)',
-    function (a, b) {
-        return a << b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a << b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_right_shift(a, b)',
-    function (a, b) {
-        return a >> b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a >> b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_unsigned_right_shift(a, b)',
-    function (a, b) {
-        return a >>> b;
+    function (a, b, proc) {
+        return proc.hyperDyadic(((a, b) => a >>> b), a, b);
     }
 );
 
@@ -837,6 +884,37 @@ SnapExtensions.primitives.set(
 
 // IDE (ide_):
 
+// Returns all blocks in the editor, regardlss of visibility
+SnapExtensions.primitives.set(
+    'ide_all_blocks',
+    function () {
+        let stage = this.parentThatIsA(StageMorph),
+            allSprites = stage.children.filter(morph => morph instanceof SpriteMorph);
+        return new List(
+            stage.globalBlocks.concat(
+                allSprites.map(sprite => sprite.allBlocks(true)).flat()
+            ).map(
+                def => def.blockInstance().reify()
+            ).concat(
+                SpriteMorph.prototype.categories.reduce(
+                    (blocks, category) => blocks.concat(
+                        this.getPrimitiveTemplates(
+                            category
+                        ).filter(
+                            each => each instanceof BlockMorph
+                        ).map(block => {
+                            let instance = block.fullCopy();
+                            instance.isTemplate = false;
+                            return instance.reify();
+                        })
+                    ),
+                    []
+                )
+            )
+        );
+    }
+);
+
 SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
@@ -906,7 +984,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ide_language()',
+    'ide_language',
     function () {
         return SnapTranslator.language;
     }
@@ -934,7 +1012,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ide_translations()',
+    'ide_translations',
     function () {
         return new List(
             SnapTranslator.languages().map(lang =>
@@ -1112,14 +1190,14 @@ SnapExtensions.primitives.set(
             }
             if (reader) {await reader.releaseLock(); }
         }) (port);
-     
+
         if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
             }
             return acc.result;
         }
-     
+
         return (port._bklog?.length > 0) ?
             new List( Array.from( port._bklog.splice(0)))
             : true;

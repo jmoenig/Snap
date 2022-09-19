@@ -42,11 +42,11 @@
 /*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
 detect, isSnapObject, VariableFrame*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-July-19';
+modules.api = '2022-September-12';
 
 // IDE_Morph external communication API
 /*
@@ -109,7 +109,7 @@ IDE_Morph.prototype.stop = function () {
     this.controlBar.pauseButton.refresh();
 };
 
-IDE_Morph.prototype.broadcast = function(message, callback) {
+IDE_Morph.prototype.broadcast = function(message, callback, payload) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
     // if a callback is supplied wait for all processes to terminate
@@ -118,6 +118,8 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
     var rcvrs = this.sprites.contents.concat(this.stage),
         myself = this,
         procs = [];
+
+    payload = payload ?? '';
 
     function wait() {
         if (procs.some(any => any.isRunning())) {
@@ -138,12 +140,23 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
     rcvrs.forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allHatBlocksFor(message).forEach(block => {
-                var varName, varFrame;
+                var varName, varFrame, choice;
                 if (block.selector === 'receiveMessage') {
                     varName = block.inputs()[1].evaluate()[0];
                     if (varName) {
                         varFrame = new VariableFrame();
-                        varFrame.addVar(varName, message);
+                        choice = block.inputs()[0].evaluate();
+                        if (choice instanceof Array &&
+                            choice[0].indexOf('any') === 0) {
+                            varFrame.addVar(
+                                varName,
+                                payload !== '' ?
+                                    new List([message, payload])
+                                    : message
+                            );
+                        } else {
+                            varFrame.addVar(varName, payload);
+                        }
                     }
                     procs.push(this.stage.threads.startProcess(
                         block,
