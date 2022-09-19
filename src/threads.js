@@ -4330,12 +4330,7 @@ Process.prototype.reportBoolean = function (bool) {
 // Process hyper-monadic primitives
 
 Process.prototype.reportRound = function (n) {
-    if (this.enableHyperOps) {
-        if (n instanceof List) {
-            return n.map(each => this.reportRound(each));
-        }
-    }
-    return Math.round(+n);
+    return this.hyper(n => Math.round(+n), n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
