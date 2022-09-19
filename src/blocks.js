@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-September-18';
+modules.blocks = '2022-September-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1057,14 +1057,14 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: ['%msgSend', '%s'],
         label: ['and send', 'with data'],
-        tags: 'static',
+        tags: 'static widget',
         max: 2
     },
     '%receive': {
         type: 'multi',
         slots: ['%rcv', '%s'],
         label: ['to', 'with data'],
-        tags: 'static',
+        tags: 'static widget',
         max: 2
     },
     '%scriptVars': {
