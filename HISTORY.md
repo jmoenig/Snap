@@ -10,6 +10,7 @@
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+    * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -19,6 +20,7 @@
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+* objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
 
 ### 2022-09-18
 * blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)

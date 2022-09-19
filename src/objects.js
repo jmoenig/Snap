@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-September-12';
+modules.objects = '2022-September-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -12411,7 +12411,7 @@ WatcherMorph.prototype.update = function () {
         if (newValue !== '' && !isNil(newValue)) {
             num = +newValue;
             if (typeof newValue !== 'boolean' && !isNaN(num)) {
-                newValue = Math.round(newValue * 1000000000) / 1000000000;
+                newValue = Math.round(newValue * 1000000) / 1000000;
             }
         }
         if (newValue === undefined) {
