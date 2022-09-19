@@ -4031,8 +4031,6 @@ Process.prototype.hyper = function (fn, ...args) {
         } else if (args.length === 2) {
             return this.hyperDyadic(fn, args[0], args[1]);
         }
-        throw new Error('cannot hyperize on' + args.length + ' inputs');
-
     }
     return fn.apply(null, args);
 };
