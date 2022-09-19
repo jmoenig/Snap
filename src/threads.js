@@ -4469,10 +4469,10 @@ Process.prototype.isAST = function (aList) {
     return false;
 };
 
-// Process string ops - hyper-monadic/dyadic
+// Process string ops - hyper
 
 Process.prototype.reportLetter = function (idx, string) {
-    return this.hyperDyadic(
+    return this.hyper(
         (ix, str) => this.reportBasicLetter(ix, str),
         idx,
         string
