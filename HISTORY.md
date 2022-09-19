@@ -6,6 +6,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
 * **Notable Changes:**
+    * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
     * new "docs" folder for documentation files, thanks, Michael!
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
@@ -23,6 +24,7 @@
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
 * objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
 * SciScnap2 library: fixed SQL queries containing the percent characters
+* threads: removed error messages for arguments-parameters number mismatch
 
 ### 2022-09-18
 * blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
