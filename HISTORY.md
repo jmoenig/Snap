@@ -15,12 +15,14 @@
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
+    * SciScnap2 library: fixed SQL queries containing the percent characters
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
 * objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+* SciScnap2 library: fixed SQL queries containing the percent characters
 
 ### 2022-09-18
 * blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
