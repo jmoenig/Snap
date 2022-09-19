@@ -4020,32 +4020,52 @@ Process.prototype.reportTypeOf = function (thing) {
     return 'undefined';
 };
 
-// Process math primtives - hyper-dyadic
+// Process math primtives - hyper
+
+Process.prototype.hyper = function (fn, ...args) {
+    // enable monadic and dyadic operations to be performed on dimensional data
+    // use this as entry point
+    if (this.enableHyperOps) {
+        if (args.length === 1) {
+            return this.hyperMonadic(fn, args[0]);
+        } else if (args.length === 2) {
+            return this.hyperDyadic(fn, args[0], args[1]);
+        }
+        throw new Error('cannot hyperize on' + args.length + ' inputs');
+
+    }
+    return fn.apply(null, args);
+};
+
+Process.prototype.hyperMonadic = function (baseOp, arg) {
+    // enable monadic operations to be performed on lists and tables
+    if (arg instanceof List) {
+        return arg.map(each => this.hyperMonadic(baseOp, each));
+    }
+    return baseOp(arg);
+};
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
     var len, i, result;
-    if (this.enableHyperOps) {
-        if (this.isMatrix(a)) {
-            if (this.isMatrix(b)) {
-                // zip both arguments ignoring out-of-bounds indices
-                a = a.itemsArray();
-                b = b.itemsArray();
-                len = Math.min(a.length, b.length);
-                result = new Array(len);
-                for (i = 0; i < len; i += 1) {
-                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
-                }
-                return new List(result);
-            }
-            return a.map(each => this.hyperDyadic(baseOp, each, b));
-        }
+    if (this.isMatrix(a)) {
         if (this.isMatrix(b)) {
-            return b.map(each => this.hyperDyadic(baseOp, a, each));
+            // zip both arguments ignoring out-of-bounds indices
+            a = a.itemsArray();
+            b = b.itemsArray();
+            len = Math.min(a.length, b.length);
+            result = new Array(len);
+            for (i = 0; i < len; i += 1) {
+                result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
+            }
+            return new List(result);
         }
-        return this.hyperZip(baseOp, a, b);
+        return a.map(each => this.hyperDyadic(baseOp, each, b));
     }
-    return baseOp(a, b);
+    if (this.isMatrix(b)) {
+        return b.map(each => this.hyperDyadic(baseOp, a, each));
+    }
+    return this.hyperZip(baseOp, a, b);
 };
 
 Process.prototype.hyperZip = function (baseOp, a, b) {
