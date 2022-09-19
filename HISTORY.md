@@ -26,6 +26,7 @@
 * SciScnap2 library: fixed SQL queries containing the percent characters
 * threads: removed error messages for arguments-parameters number mismatch
 * threads: refactored and generalized hyper()
+* threaes: refactored reportRound() and reportMonadic()
 
 ### 2022-09-18
 * blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
