@@ -2,40 +2,6 @@
 var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
-// calculate midi pitches and frequencies
-var tempMidiPitches = {}
-var tempMidiFreqs = {}
-
-let notes = [
-    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-]
-
-for (var i = 0; i <= 127; i++) {
-    let note = notes[i % 12] + Math.floor((i - 12) / 12);
-    tempMidiPitches[note] = i;
-    tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69) / 12)
-}
-
-const _convertToSharp = (note) => {
-    const splitByFlat = note.split("b");
-    if (splitByFlat.length < 2) return note; // does not include a flat
-
-    const letter = splitByFlat[0];
-    const number = splitByFlat[1];
-
-    const indexOfLetter = notes.indexOf(letter);
-    if (indexOfLetter === -1) return note; // TODO: handle this error
-    let previousSharp;
-    if (indexOfLetter === 0) {
-        previousSharp = notes[notes.length - 1];
-    } else {
-        previousSharp = notes[indexOfLetter - 1];
-    }
-    return previousSharp + number;
-}
-window.parent.midiPitches = tempMidiPitches;
-window.parent.midiFreqs = tempMidiFreqs;
-
 window.playNote = (note, noteLength, instrumentName, volume) => {
     console.log(note, noteLength, instrumentName, volume)
     if (note == "R" || note == "r") return;
