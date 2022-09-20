@@ -4136,16 +4136,8 @@ Process.prototype.reportBasicRandom = function (min, max) {
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
 
-// Process math primtives - arithmetic hyperdyadic
-
 Process.prototype.reportModulus = function (a, b) {
-    return this.hyperDyadic(this.reportBasicModulus, a, b);
-};
-
-Process.prototype.reportBasicModulus = function (a, b) {
-    var x = +a,
-        y = +b;
-    return ((x % y) + y) % y;
+    return this.hyper((x, y) => ((+x % +y) + (+y)) % +y, a, b);
 };
 
 Process.prototype.reportAtan2 = function (a, b) {

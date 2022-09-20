@@ -26,6 +26,7 @@
 * threads: refactored reportAnd() & reportOr()
 * threads: refactored reportNumbers()
 * threads: refactored arithmetic ops
+* threaes: refactored reportModulus()
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
