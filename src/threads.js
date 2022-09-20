@@ -4141,11 +4141,7 @@ Process.prototype.reportModulus = function (a, b) {
 };
 
 Process.prototype.reportAtan2 = function (a, b) {
-    return this.hyperDyadic(this.reportBasicAtan2, a, b);
-};
-
-Process.prototype.reportBasicAtan2 = function (a, b) {
-    return degrees(Math.atan2(+a, +b));
+    return this.hyper((x, y) => degrees(Math.atan2(+x, +y)), a, b);
 };
 
 Process.prototype.reportVariadicMin = function (numbers) {
