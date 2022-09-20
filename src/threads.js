@@ -4187,11 +4187,11 @@ Process.prototype.reportBasicMax = function (a, b) {
 // Process logic primitives - hyper-diadic / monadic where applicable
 
 Process.prototype.reportLessThan = function (a, b) {
-    return this.hyperDyadic(this.reportBasicLessThan, a, b);
+    return this.hyper(this.reportBasicLessThan, a, b);
 };
 
 Process.prototype.reportLessThanOrEquals = function (a, b) {
-    return this.hyperDyadic(
+    return this.hyper(
         (a, b) => !this.reportBasicGreaterThan(a, b),
         a,
         b
@@ -4209,11 +4209,11 @@ Process.prototype.reportBasicLessThan = function (a, b) {
 };
 
 Process.prototype.reportGreaterThan = function (a, b) {
-    return this.hyperDyadic(this.reportBasicGreaterThan, a, b);
+    return this.hyper(this.reportBasicGreaterThan, a, b);
 };
 
 Process.prototype.reportGreaterThanOrEquals = function (a, b) {
-    return this.hyperDyadic(
+    return this.hyper(
         (a, b) => !this.reportBasicLessThan(a, b),
         a,
         b

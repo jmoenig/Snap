@@ -29,6 +29,7 @@
 * threads: refactored reportModulus()
 * threads: refactored reportAtan2()
 * threads: refactored reportMin/Max
+* threads: refactored some logic primitives
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
