@@ -4239,13 +4239,7 @@ Process.prototype.reportNotEquals = function (a, b) {
 };
 
 Process.prototype.reportNot = function (bool) {
-    if (this.enableHyperOps) {
-        if (bool instanceof List) {
-            return bool.map(each => this.reportNot(each));
-        }
-    }
-    // this.assertType(bool, 'Boolean');
-    return !bool;
+    return this.hyper(val => !val, bool);
 };
 
 Process.prototype.reportIsIdentical = function (a, b) {
