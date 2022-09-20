@@ -891,7 +891,7 @@ Process.prototype.reportOr = function (block) {
         if (this.flashContext()) {return; }
         // this.returnValueToParentContext(inputs[1] === true);
         this.returnValueToParentContext(
-            this.hyperDyadic(this.reportBasicOr, inputs[0], inputs[1])
+            this.hyper(this.reportBasicOr, inputs[0], inputs[1])
         );
         this.popContext();
     }
@@ -920,7 +920,7 @@ Process.prototype.reportAnd = function (block) {
         if (this.flashContext()) {return; }
         // this.returnValueToParentContext(inputs[1] === true);
         this.returnValueToParentContext(
-            this.hyperDyadic(this.reportBasicAnd, inputs[0], inputs[1])
+            this.hyper(this.reportBasicAnd, inputs[0], inputs[1])
         );
         this.popContext();
     }
