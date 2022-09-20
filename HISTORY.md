@@ -31,6 +31,7 @@
 * threads: refactored reportMin/Max
 * threads: refactored some logic primitives
 * threads: refactored reportNot()
+* threads: refactored reportAttributeOf()
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
