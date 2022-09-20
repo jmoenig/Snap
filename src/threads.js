@@ -6687,7 +6687,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
     // note: attributes in the left slot
     // can only be queried via the dropdown menu and are, therefore, not
     // reachable as dyadic inputs
-    return this.hyperDyadic(
+    return this.hyper(
         (att, obj) => this.reportBasicBlockAttribute(att, obj),
         attribute,
         block

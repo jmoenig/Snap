@@ -32,6 +32,7 @@
 * threads: refactored some logic primitives
 * threads: refactored reportNot()
 * threads: refactored reportAttributeOf()
+* threads: refactored reportBlockAttribute()
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
