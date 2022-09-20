@@ -33,6 +33,7 @@
 * threads: refactored reportNot()
 * threads: refactored reportAttributeOf()
 * threads: refactored reportBlockAttribute()
+* extensions: refactored hyperized bitwise operators
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list

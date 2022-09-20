@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-September-18';
+modules.extensions = '2022-September-20';
 
 // Global stuff
 
@@ -304,57 +304,49 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'bit_and(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a & b), a, b);
+        return proc.hyper(((a, b) => a & b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_or(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a | b), a, b);
+        return proc.hyper(((a, b) => a | b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_xor(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a ^ b), a, b);
+        return proc.hyper(((a, b) => a ^ b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_not(a)',
     function (a, proc) {
-        function bitNot (a) {
-            if (proc.enableHyperOps) {
-                if (a instanceof List) {
-                    return a.map(each => bitNot(each));
-                }
-            }
-            return ~ a;
-        }
-        return bitNot(a);
+        return proc.hyper(n => ~ n, a);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_left_shift(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a << b), a, b);
+        return proc.hyper(((a, b) => a << b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_right_shift(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a >> b), a, b);
+        return proc.hyper(((a, b) => a >> b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_unsigned_right_shift(a, b)',
     function (a, b, proc) {
-        return proc.hyperDyadic(((a, b) => a >>> b), a, b);
+        return proc.hyper(((a, b) => a >>> b), a, b);
     }
 );
 
