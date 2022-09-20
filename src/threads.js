@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-September-19';
+modules.threads = '2022-September-20';
 
 var ThreadManager;
 var Process;
@@ -4503,6 +4503,8 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
+    // special case to report a list of numbers for a string of characters,
+    // hence this is NOT using hyper()
     var str, unicodeList;
 
     if (this.enableHyperOps) {
@@ -4524,12 +4526,10 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
-    if (this.enableHyperOps) {
-        if (num instanceof List) {
-            return num.map(each => this.reportUnicodeAsLetter(each));
-        }
-    }
+    return this.hyper(this.reportBasicUnicodeAsLetter, num);
+};
 
+Process.prototype.reportBasicUnicodeAsLetter = function (num) {
     var code = +(num || 0);
 
     if (String.fromCodePoint) { // support for Unicode in newer browsers.

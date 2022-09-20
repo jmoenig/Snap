@@ -21,12 +21,15 @@
     * new doc for extensions, thanks, Michael!
 
 ### 2022-09-19
+* threads: refactored reportUnicodeAsLetter()
+
+### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
 * objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
 * SciScnap2 library: fixed SQL queries containing the percent characters
 * threads: removed error messages for arguments-parameters number mismatch
 * threads: refactored and generalized hyper()
-* threaes: refactored reportRound() and reportMonadic()
+* threads: refactored reportRound() and reportMonadic()
 
 ### 2022-09-18
 * blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
