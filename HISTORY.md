@@ -22,6 +22,7 @@
 
 ### 2022-09-19
 * threads: refactored reportUnicodeAsLetter()
+* threads: refactored reportTextSplit()
 
 ### 2022-09-19
 * blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list

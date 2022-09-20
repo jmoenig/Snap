@@ -4543,7 +4543,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         this.assertType(string, ['command', 'reporter', 'predicate']);
         return string.components();
     }
-    return this.hyperDyadic(
+    return this.hyper(
         (str, delim) => this.reportBasicTextSplit(str, delim),
         string,
         delimiter
