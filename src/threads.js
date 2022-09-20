@@ -4099,19 +4099,11 @@ Process.prototype.reportVariadicSum = function (numbers) {
 };
 
 Process.prototype.reportSum = function (a, b) {
-    return this.hyperDyadic(this.reportBasicSum, a, b);
-};
-
-Process.prototype.reportBasicSum = function (a, b) {
-    return +a + (+b);
+    return this.hyper((x, y) => +x + (+y), a, b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return this.hyperDyadic(this.reportBasicDifference, a, b);
-};
-
-Process.prototype.reportBasicDifference = function (a, b) {
-    return +a - +b;
+    return this.hyper((x, y) => +x - +y, a, b);
 };
 
 Process.prototype.reportVariadicProduct = function (numbers) {
@@ -4120,31 +4112,19 @@ Process.prototype.reportVariadicProduct = function (numbers) {
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return this.hyperDyadic(this.reportBasicProduct, a, b);
-};
-
-Process.prototype.reportBasicProduct = function (a, b) {
-    return +a * +b;
+    return this.hyper((x, y) => +x * +y, a, b);
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return this.hyperDyadic(this.reportBasicQuotient, a, b);
-};
-
-Process.prototype.reportBasicQuotient = function (a, b) {
-    return +a / +b;
+    return this.hyper((x, y) => +x / +y, a, b);
 };
 
 Process.prototype.reportPower = function (a, b) {
-    return this.hyperDyadic(this.reportBasicPower, a, b);
-};
-
-Process.prototype.reportBasicPower = function (a, b) {
-    return Math.pow(+a, +b);
+    return this.hyper((x, y) => Math.pow(+x, +y), a, b);
 };
 
 Process.prototype.reportRandom = function (a, b) {
-    return this.hyperDyadic(this.reportBasicRandom, a, b);
+    return this.hyper(this.reportBasicRandom, a, b);
 };
 
 Process.prototype.reportBasicRandom = function (min, max) {
