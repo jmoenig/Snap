@@ -20,7 +20,10 @@
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
-### 2022-09-19
+### 2022-09-21
+* extensions: refactored hyperized translation primitives
+
+### 2022-09-20
 * threads: refactored reportUnicodeAsLetter()
 * threads: refactored reportTextSplit()
 * threads: refactored reportAnd() & reportOr()

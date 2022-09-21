@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-September-20';
+modules.extensions = '2022-September-21';
 
 // Global stuff
 
@@ -941,37 +941,30 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_translate(text)',
     function (text, proc) {
-        if (proc.enableHyperOps) {
-            if (text instanceof List) {
-                return text.map(each =>
-                    SnapExtensions.primitives.get('ide_translate(text)')
-                        (each, proc)
-                );
-            }
-        }
-        proc.assertType(text, ['text', 'number']);
-        return localize(text);
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return localize(txt);
+            },
+            text
+        );
     }
 );
 
 SnapExtensions.primitives.set(
     'ide_translateback(text)',
     function (text, proc) {
-        var dict;
-        if (proc.enableHyperOps) {
-            if (text instanceof List) {
-                return text.map(each =>
-                    SnapExtensions.primitives.get('ide_translateback(text)')
-                        (each, proc)
-                );
-            }
-        }
-        dict = SnapTranslator.dict[SnapTranslator.language];
-        proc.assertType(text, ['text', 'number']);
-        return detect(
-            Object.keys(dict),
-            key => dict[key] === text
-        ) || text;
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return detect(
+                    Object.keys(dict),
+                    key => dict[key] === txt
+                ) || txt;
+            },
+            text
+        );
     }
 );
 
