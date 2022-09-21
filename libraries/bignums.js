@@ -83,7 +83,7 @@ function makeGlobalObject () {
             reportBasicPower: Process.prototype.reportBasicPower,
             reportBasicModulus: Process.prototype.reportBasicModulus,
             reportBasicAtan2: Process.prototype.reportBasicAtan2,
-            reportRound: Process.prototype.reportRound,
+            reportBasicRound: Process.prototype.reportBasicRound,
             reportBasicMin: Process.prototype.reportBasicMin,
             reportBasicMax: Process.prototype.reportBasicMax,
             reportBasicRandom: Process.prototype.reportBasicRandom,
@@ -181,18 +181,13 @@ function loadBlocks (useBigNums) {
                 b = parseNumber(b);
                 if (Number.isNaN(a) || Number.isNaN(b)) return NaN;
                 return degrees(fn.atan2(a, b));
-          },
-          reportRound: function (n) {
-             if (this.enableHyperOps) {
-                 if (n instanceof List) {
-                     return n.map(each => this.reportRound(each));
-                 }
-               }
-           n = parseNumber(n);
-           if (Number.isNaN(n)) return NaN;
-           x = fn.round(n);
-           if (fn["integer?"](x)) return fn["exact"](x);
-           return x;
+           },
+           reportBasicRound: function (n) {
+                n = parseNumber(n);
+                if (Number.isNaN(n)) return NaN;
+                x = fn.round(n);
+                if (fn["integer?"](x)) return fn["exact"](x);
+                return x;
            },
            reportBasicMin: function (a, b) {
                 x = parseNumber(a);
