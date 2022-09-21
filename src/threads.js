@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-September-20';
+modules.threads = '2022-September-21';
 
 var ThreadManager;
 var Process;
@@ -4091,7 +4091,13 @@ Process.prototype.isMatrix = function (data) {
     return data instanceof List && data.at(1) instanceof List;
 };
 
-// Process math primtives - arithmetic
+// Process dyadic math primtives - arithmetic
+/*
+    Note: the "basic" versions are required so the abonomable "bignums"
+    library can overload them, a library so sloppily written, so ill maintained
+    and devoid of love, building on a terrible monstrosity of a mechanism
+    I don't even want to think about it, but here we are -jens
+*/
 
 Process.prototype.reportVariadicSum = function (numbers) {
     this.assertType(numbers, 'list');
@@ -4099,11 +4105,19 @@ Process.prototype.reportVariadicSum = function (numbers) {
 };
 
 Process.prototype.reportSum = function (a, b) {
-    return this.hyper((x, y) => +x + (+y), a, b);
+    return this.hyper(this.reportBasicSum, a, b);
+};
+
+Process.prototype.reportBasicSum = function (a, b) {
+    return +a + (+b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return this.hyper((x, y) => +x - +y, a, b);
+    return this.hyper(this.reportBasicDifference, a, b);
+};
+
+Process.prototype.reportBasicDifference = function (a, b) {
+    return +a - +b;
 };
 
 Process.prototype.reportVariadicProduct = function (numbers) {
@@ -4112,15 +4126,27 @@ Process.prototype.reportVariadicProduct = function (numbers) {
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return this.hyper((x, y) => +x * +y, a, b);
+    return this.hyper(this.reportBasicProduct, a, b);
+};
+
+Process.prototype.reportBasicProduct = function (a, b) {
+    return +a * +b;
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return this.hyper((x, y) => +x / +y, a, b);
+    return this.hyper(this.reportBasicQuotient, a, b);
+};
+
+Process.prototype.reportBasicQuotient = function (a, b) {
+    return +a / +b;
 };
 
 Process.prototype.reportPower = function (a, b) {
-    return this.hyper((x, y) => Math.pow(+x, +y), a, b);
+    return this.hyper(this.reportBasicPower, a, b);
+};
+
+Process.prototype.reportBasicPower = function (a, b) {
+    return Math.pow(+a, +b);
 };
 
 Process.prototype.reportRandom = function (a, b) {
@@ -4137,11 +4163,19 @@ Process.prototype.reportBasicRandom = function (min, max) {
 };
 
 Process.prototype.reportModulus = function (a, b) {
-    return this.hyper((x, y) => ((+x % +y) + (+y)) % +y, a, b);
+    return this.hyper(this.reportBasicModulus, a, b);
+};
+
+Process.prototype.reportBasicModulus = function (a, b) {
+    return ((+a % +b) + (+b)) % +b;
 };
 
 Process.prototype.reportAtan2 = function (a, b) {
-    return this.hyper((x, y) => degrees(Math.atan2(+x, +y)), a, b);
+    return this.hyper(this.reportBasicAtan2, a, b);
+};
+
+Process.prototype.reportBasicAtan2 = function (a, b) {
+    return degrees(Math.atan2(+a, +b));
 };
 
 Process.prototype.reportVariadicMin = function (numbers) {
@@ -4184,7 +4218,7 @@ Process.prototype.reportBasicMax = function (a, b) {
     return x > y ? x : y;
 };
 
-// Process logic primitives - hyper-diadic / monadic where applicable
+// Process logic primitives - hyper where applicable
 
 Process.prototype.reportLessThan = function (a, b) {
     return this.hyper(this.reportBasicLessThan, a, b);
@@ -4285,10 +4319,14 @@ Process.prototype.reportBoolean = function (bool) {
     return bool;
 };
 
-// Process hyper-monadic primitives
+// Process monadic primitives
 
 Process.prototype.reportRound = function (n) {
-    return this.hyper(n => Math.round(+n), n);
+    return this.hyper(this.reportBasicRound, n);
+};
+
+Process.prototype.reportBasicRound = function (n) {
+    return Math.round(+n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
