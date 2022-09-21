@@ -1689,6 +1689,8 @@ Process.prototype.evaluateCustomBlock = function () {
 
     // tag return target
     if (method.type !== 'command') {
+        // clear previous exit tags, if any
+        runnable.expression.tagExitBlocks(undefined, false);
         if (caller) {
             // tag caller, so "report" can catch it later
             caller.tag = 'exit';
