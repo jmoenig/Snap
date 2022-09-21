@@ -91,7 +91,7 @@ function makeGlobalObject () {
             reportBasicGreaterThan: Process.prototype.reportBasicGreaterThan,
             reportEquals: Process.prototype.reportEquals,
             reportIsIdentical: Process.prototype.reportIsIdentical,
-            reportMonadic: Process.prototype.reportMonadic
+            reportBasicMonadic: Process.prototype.reportBasicMonadic
         }
     };
 }
@@ -264,13 +264,7 @@ function loadBlocks (useBigNums) {
                 if (Number.isNaN(x) || Number.isNaN(y)) return originalPrims.reportIsIdentical.call(this, a, b);
                 return fn['='](x, y);
             },
-            reportMonadic: function (fname, n) {
-                if (this.enableHyperOps) {
-                    if (n instanceof List) {
-                        return n.map(each => this.reportMonadic(fname, each));
-                    }
-                }
-
+            reportBasicMonadic: function (fname, n) {
                 n = parseNumber(n);
                 if (Number.isNaN(n)) return NaN;
 
