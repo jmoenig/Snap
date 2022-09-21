@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-September-12';
+modules.gui = '2022-September-21';
 
 // Declarations
 
@@ -5413,7 +5413,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     function addBlocks(definitions) {
         if (definitions.length) {
             add(localize('Blocks'), 'h3');
-            SpriteMorph.prototype.categories.forEach(category => {
+            SpriteMorph.prototype.allCategories().forEach(category => {
                 var isFirst = true,
                     ul;
                 definitions.forEach(def => {
