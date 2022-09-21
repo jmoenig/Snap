@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-August-04';
+modules.gui = '2022-September-21';
 
 // Declarations
 
-var SnapVersion = '8.0.0';
+var SnapVersion = '8.0.1-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4857,7 +4857,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJoan Guillén: Countless contributions'
         + '\nKartik Chandra: Paint Editor'
         + '\nCarles Paredes: Initial Vector Paint Editor'
-        + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
+        + '\n"Ava" Yuan Yuan, Deborah Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nEckart Modrow: SciSnap! Extension'
@@ -5413,7 +5413,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     function addBlocks(definitions) {
         if (definitions.length) {
             add(localize('Blocks'), 'h3');
-            SpriteMorph.prototype.categories.forEach(category => {
+            SpriteMorph.prototype.allCategories().forEach(category => {
                 var isFirst = true,
                     ul;
                 definitions.forEach(def => {
@@ -5920,12 +5920,12 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     function newVarName(name) {
         var existing = globals.names(),
             ix = name.indexOf('\('),
-            stem = (ix < 0) ? name : name.substring(0, ix),
+            stem = ((ix < 0) ? name : name.substring(0, ix)).trim(),
             count = 1,
             newName = stem;
         while (contains(existing, newName)) {
             count += 1;
-            newName = stem + '(' + count + ')';
+            newName = stem + ' (' + count + ')';
         }
         return newName;
     }

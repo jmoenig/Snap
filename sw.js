@@ -1,5 +1,5 @@
-var snapVersion = '8.0.0',
-    cacheName = 'snap-pwa',
+var snapVersion = '8.0.0-dev-220812',
+    cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
 
@@ -740,6 +740,7 @@ var snapVersion = '8.0.0',
         'Examples/vee.xml'
     ];
 
+console.log('service worker executed')
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(
@@ -763,13 +764,12 @@ self.addEventListener('activate', (evt) => {
 });
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
-    e.respondWith(
-        caches.match(
-            e.request,
-            {'ignoreSearch': true}
-        ).then(function(response) {
-            return response || fetch(e.request);
-        })
-    );
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+      fetch(event.request).catch(function(e) {
+        return caches.open(cacheName).then(function(cache) {
+          return cache.match(event.request,
+                             {'ignoreSearch': true}).then(response => response);
+        });
+    }));
 });

@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-26';
+var morphicVersion = '2022-September-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4510,7 +4510,28 @@ Morph.prototype.developersMenu = function () {
     );
     menu.addItem(
         "pic...",
-        () => window.open(this.fullImage().toDataURL()),
+        () => {
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
+            try {
+                doc = window.open('', '_blank', 'popup').document;
+                body = doc.getElementsByTagName('body')[0];
+                str = '' + this;
+                doc.title = str;
+                tag = doc.createElement('h1');
+                tag.textContent = str;
+                body.appendChild(tag);
+                tag = doc.createElement('img');
+                tag.alt = str;
+                tag.src = imgURL;
+                body.appendChild(tag);
+            } catch (error) {
+                console.warn(
+                    'failed to popup pic, morph:%O, error:%O, image URL:%O',
+                    this, error, [imgURL]
+                );
+            }
+        },
         'open a new window\nwith a picture of this morph'
     );
     menu.addLine();

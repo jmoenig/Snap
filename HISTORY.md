@@ -1,6 +1,77 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new "ide_all_blocks()" extension primitive, thanks, Michael!
+    * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
+    * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
+* **Notable Changes:**
+    * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
+    * new "docs" folder for documentation files, thanks, Michael!
+    * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
+    * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
+    * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+    * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+* **Notable Fixes:**
+    * fixed aggressive cache issue, thanks, Michael!
+    * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+    * fixed API->broadcast() to also accept a data payload, thanks, Zak!
+    * SciScnap2 library: fixed SQL queries containing the percent characters
+    * fixed exporting information about blocks in custom categories when creating a summary document (#3097)
+    * fixed occasional "reporter did not report" error when changing a custom command block to become a reporter
+    * fixed a naming issue when importing duplicate data files
+    * fixed occasional errors when using "broadcast" and "this script" in the same script
+    * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
+* **Documentation Updates:**
+    * new doc for extensions, thanks, Michael!
+
+### 2022-09-21
+* extensions: refactored hyperized translation primitives
+* band-aided bignums library
+* gui: fixed #3097
+* threads: fixed #3083
+* gui: fixed #3099
+* byob: fixed #3105
+
+### 2022-09-20
+* threads: refactored reportUnicodeAsLetter()
+* threads: refactored reportTextSplit()
+* threads: refactored reportAnd() & reportOr()
+* threads: refactored reportNumbers()
+* threads: refactored arithmetic ops
+* threads: refactored reportModulus()
+* threads: refactored reportAtan2()
+* threads: refactored reportMin/Max
+* threads: refactored some logic primitives
+* threads: refactored reportNot()
+* threads: refactored reportAttributeOf()
+* threads: refactored reportBlockAttribute()
+* extensions: refactored hyperized bitwise operators
+
+### 2022-09-19
+* blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+* objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+* SciScnap2 library: fixed SQL queries containing the percent characters
+* threads: removed error messages for arguments-parameters number mismatch
+* threads: refactored and generalized hyper()
+* threads: refactored reportRound() and reportMonadic()
+
+### 2022-09-18
+* blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
+* extensions: new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
+
+### 2022-09-14
+* extensions: new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
+
+### 2022-09-12
+* new dev version
+* pwa: moved documentation into new "docs" folder, thanks, Michael
+* fixed aggressive cache issue, thanks, Michael!
+* hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
+* morphic: fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+* api: fixed API->broadcast() to also accept a data payload, thanks, Zak!
+* new "ide_all_blocks()" extension primitive, thanks, Michael!
+* extensions: removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
 
 ## 8.0.0:
 * **New Features:**
