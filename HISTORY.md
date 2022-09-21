@@ -22,6 +22,7 @@
 
 ### 2022-09-21
 * extensions: refactored hyperized translation primitives
+* band-aided bignums library
 
 ### 2022-09-20
 * threads: refactored reportUnicodeAsLetter()
