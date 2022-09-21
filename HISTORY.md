@@ -19,6 +19,7 @@
     * SciScnap2 library: fixed SQL queries containing the percent characters
     * fixed exporting information about blocks in custom categories when creating a summary document (#3097)
     * fixed occasional "reporter did not report" error when changing a custom command block to become a reporter
+    * fixed a naming issue when importing duplicate data files
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
@@ -27,6 +28,7 @@
 * band-aided bignums library
 * gui: fixed #3097
 * threads: fixed #3083
+* gui: fixed #3099
 
 ### 2022-09-20
 * threads: refactored reportUnicodeAsLetter()
