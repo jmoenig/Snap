@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-August-01';
+modules.byob = '2022-September-21';
 
 // Declarations
 
@@ -4694,7 +4694,7 @@ BlockImportDialogMorph.prototype.fixLayout
 // BlockRemovalDialogMorph inherits from DialogBoxMorph
 // and pseudo-inherits from BlockExportDialogMorph:
 
-BlockRemovalDialogMorph.prototype = new DialogBoxMorph();
+BlockRemovalDialogMorph.prototype = new DialogBoxMorph(); // +++
 BlockRemovalDialogMorph.prototype.constructor = BlockImportDialogMorph;
 BlockRemovalDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -4747,6 +4747,14 @@ BlockRemovalDialogMorph.prototype.selectAll
 
 BlockRemovalDialogMorph.prototype.selectNone
     = BlockExportDialogMorph.prototype.selectNone;
+
+// BlockRemovelDialogMorph dependency management
+
+BlockRemovalDialogMorph.prototype.collectDependencies =
+    BlockExportDialogMorph.prototype.collectDependencies;
+
+BlockRemovalDialogMorph.prototype.dependencies =
+    BlockExportDialogMorph.prototype.dependencies;
 
 // BlockRemovalDialogMorph ops
 

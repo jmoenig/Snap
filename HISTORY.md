@@ -20,6 +20,8 @@
     * fixed exporting information about blocks in custom categories when creating a summary document (#3097)
     * fixed occasional "reporter did not report" error when changing a custom command block to become a reporter
     * fixed a naming issue when importing duplicate data files
+    * fixed occasional errors when using "broadcast" and "this script" in the same script
+    * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
@@ -29,6 +31,7 @@
 * gui: fixed #3097
 * threads: fixed #3083
 * gui: fixed #3099
+* byob: fixed #3105
 
 ### 2022-09-20
 * threads: refactored reportUnicodeAsLetter()
