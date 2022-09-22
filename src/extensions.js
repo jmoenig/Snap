@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-September-21';
+modules.extensions = '2022-September-22';
 
 // Global stuff
 
@@ -692,6 +692,7 @@ SnapExtensions.primitives.set(
     function (obj, name, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(obj, ['sprite', 'stage', 'costume', 'sound']);
+        name = name.toString();
         if (isSnapObject(obj)) {
             obj.setName(ide.newSpriteName(name, obj));
             ide.recordUnsavedChanges();

@@ -22,8 +22,12 @@
     * fixed a naming issue when importing duplicate data files
     * fixed occasional errors when using "broadcast" and "this script" in the same script
     * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
+    * fixed "obj_name" extension prim to also accept numbers as names
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
+
+### 2022-09-22
+* extensions: fixed "obj_name" extension prim to also accept numbers as names
 
 ### 2022-09-21
 * extensions: refactored hyperized translation primitives
