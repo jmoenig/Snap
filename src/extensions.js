@@ -30,7 +30,7 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, SpriteMorph, BlockMorph*/
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -897,33 +897,19 @@ SnapExtensions.primitives.set(
 
 // IDE (ide_):
 
-// Returns all blocks in the editor, regardlss of visibility
+// Returns all blocks of the current sprite, regardless of visibility
 SnapExtensions.primitives.set(
-    'ide_all_blocks',
+    'ide_blocks',
     function () {
-        let stage = this.parentThatIsA(StageMorph),
-            allSprites = stage.children.filter(morph => morph instanceof SpriteMorph);
         return new List(
-            stage.globalBlocks.concat(
-                allSprites.map(sprite => sprite.allBlocks(true)).flat()
-            ).map(
-                def => def.blockInstance().reify()
-            ).concat(
-                SpriteMorph.prototype.categories.reduce(
-                    (blocks, category) => blocks.concat(
-                        this.getPrimitiveTemplates(
-                            category
-                        ).filter(
-                            each => each instanceof BlockMorph
-                        ).map(block => {
-                            let instance = block.fullCopy();
-                            instance.isTemplate = false;
-                            return instance.reify();
-                        })
-                    ),
-                    []
-                )
-            )
+            this.allPaletteBlocks().filter(
+                each => each instanceof BlockMorph &&
+                    !(each instanceof HatBlockMorph)
+            ).map(block => {
+                let instance = block.fullCopy();
+                instance.isTemplate = false;
+                return instance.reify();
+            })
         );
     }
 );
