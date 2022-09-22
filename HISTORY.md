@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * pixels library: Added command blocks to rename and export costumes
     * new "ide_all_blocks()" extension primitive, thanks, Michael!
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
@@ -30,6 +31,7 @@
 ### 2022-09-22
 * extensions: fixed "obj_name" extension prim to also accept numbers as names
 * extensions: new "cst_export(cst, name)" extension primitive
+* pixels library: Added command blocks to rename and export costumes
 
 ### 2022-09-21
 * extensions: refactored hyperized translation primitives
