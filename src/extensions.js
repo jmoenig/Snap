@@ -774,7 +774,7 @@ SnapExtensions.primitives.set(
     'var_declare(scope, name)',
     function (scope, name, proc) {
         var ide, frame;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         if (scope === 'script') {
             frame = proc.context.isInCustomBlock() ?
@@ -815,7 +815,8 @@ SnapExtensions.primitives.set(
     'var_delete(name)',
     function (name, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables
@@ -831,7 +832,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'var_get(name)',
     function (name, proc) {
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         return proc.homeContext.variables.getVar(name);
     }
 );
@@ -840,7 +841,7 @@ SnapExtensions.primitives.set(
     'var_set(name, val)',
     function (name, val, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables

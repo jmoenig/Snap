@@ -25,6 +25,7 @@
     * fixed occasional errors when using "broadcast" and "this script" in the same script
     * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
     * fixed "obj_name" extension prim to also accept numbers as names
+    * fixed "Make Variables" extension for numerical names
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
@@ -32,6 +33,7 @@
 * extensions: fixed "obj_name" extension prim to also accept numbers as names
 * extensions: new "cst_export(cst, name)" extension primitive
 * pixels library: Added command blocks to rename and export costumes
+* extensions: fixed "Make Variables" extension for numerical names
 
 ### 2022-09-21
 * extensions: refactored hyperized translation primitives
