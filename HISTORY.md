@@ -5,6 +5,7 @@
     * new "ide_all_blocks()" extension primitive, thanks, Michael!
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
+    * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
 * **Notable Changes:**
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
     * new "docs" folder for documentation files, thanks, Michael!
@@ -28,6 +29,7 @@
 
 ### 2022-09-22
 * extensions: fixed "obj_name" extension prim to also accept numbers as names
+* extensions: new "cst_export(cst, name)" extension primitive
 
 ### 2022-09-21
 * extensions: refactored hyperized translation primitives

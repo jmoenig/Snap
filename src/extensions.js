@@ -734,6 +734,25 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'cst_export(cst, name)',
+    function (cst, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        name = name || cst.name || localize('costume');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        if (cst instanceof SVG_Costume) {
+            ide.saveFileAs(cst.contents.src, 'text/svg', name);
+        } else if (cst.embeddedData) {
+            // embed payload data (e.g blocks)  inside the PNG image data
+            ide.saveFileAs(cst.pngData(), 'image/png', name);
+        } else { // rasterized Costume
+            ide.saveCanvasAs(cst.contents, name);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
     // experimental, will probably be taken out again, don't rely on this
     'cst_embed(cst, data)',
     function (cst, data, proc) {
