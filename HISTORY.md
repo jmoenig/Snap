@@ -14,6 +14,7 @@
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+    * updated "for each" help screen, thanks, Brian!
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -32,6 +33,7 @@
 
 ### 2022-09-23
 * extensions: fixed palette category ghosting update when hiding / unhiding blocks
+* updated "for each" help screen, thanks, Brian!
 
 ### 2022-09-22
 * extensions: fixed "obj_name" extension prim to also accept numbers as names
