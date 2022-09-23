@@ -3888,6 +3888,9 @@ IDE_Morph.prototype.loadExtension = async function (url) {
         const node = document.createElement('script');
         node.setAttribute('src', url);
         node.setAttribute('type', 'text/javascript');
+        node.onerror = () => {
+            this.inform('Error Loading Extension', 'The extension at: \n\n' + url + '\n\ncould not be loaded.');
+        };
         document.body.appendChild(node);
     }
 };
