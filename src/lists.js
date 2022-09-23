@@ -415,17 +415,17 @@ List.prototype.slice = function (indices) {
     //
     // slicing spec:
     // positive integers represent single indices,
-    // negative integes and zero represent slices starting at the
+    // negative integers and zero represent slices starting at the
     // index following the last specified positive integer up to / down to
     // my length offset by the negative / zero integer
     //
-    // Currently unused and NOT part of the ITEM OF primitivie in
+    // Currently unused and NOT part of the ITEM OF primitive in
     // production Snap, because negative indices are used in exercises and
     // curriculum activities relying on them returning zero / empty values
     // rather than wrapped ones, e.g. when creating a "reverb" or "echo"
     // effect from sound samples.
     //
-    // to be revisited in the future, perhaps as seperate primitive.
+    // to be revisited in the future, perhaps as separate primitive.
     // -Jens
 
     var first, select;

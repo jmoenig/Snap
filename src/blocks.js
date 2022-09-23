@@ -1877,7 +1877,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     case 'read-only':
                         part.isReadOnly = true;
                         if (!MorphicPreferences.isFlat) {
-                            // addjust initial dimensions
+                            // adjust initial dimensions
                             cnts = part.contents();
                             cnts.shadowOffset = new Point(1, 1);
                             cnts.fixLayout();
@@ -3633,7 +3633,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
 
     // 1.
     // both blocks have exactly one variadic slot, with the same slot spec but
-    // different infixes, and not nessesarily matching numbers of expanded
+    // different infixes, and not necessarily matching numbers of expanded
     // slots.
     if (oldInputs.length === 1 &&
         (inputs.length === 1) &&
