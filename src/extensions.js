@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-September-22';
+modules.extensions = '2022-September-23';
 
 // Global stuff
 
@@ -917,16 +917,26 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(context, ['command', 'reporter', 'predicate']);
         this.changeBlockVisibility(context.expression, true);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
+        ide.recordUnsavedChanges();
     }
 );
 
 SnapExtensions.primitives.set(
     'ide_show(block)',
     function (context, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(context, ['command', 'reporter', 'predicate']);
         this.changeBlockVisibility(context.expression, false);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
+        ide.recordUnsavedChanges();
     }
 );
 

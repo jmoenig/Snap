@@ -26,8 +26,12 @@
     * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
     * fixed "obj_name" extension prim to also accept numbers as names
     * fixed "Make Variables" extension for numerical names
+    * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
+
+### 2022-09-23
+* extensions: fixed palette category ghosting update when hiding / unhiding blocks
 
 ### 2022-09-22
 * extensions: fixed "obj_name" extension prim to also accept numbers as names
