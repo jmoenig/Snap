@@ -30,9 +30,12 @@
     * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
+* **Translation Updates:**
+    * German
 
 ### 2022-09-26
 * bitwise operators library: fixed #3118
+* updated German translation (removed obsolete argument-parameter mismatch error message)
 
 ### 2022-09-23
 * extensions: fixed palette category ghosting update when hiding / unhiding blocks

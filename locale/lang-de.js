@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-08-03', // this, too, will appear in the Translators tab
+        '2022-09-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -2182,8 +2182,6 @@ SnapTranslator.dict.de = {
         'bekomme aber',
     'expecting':
         'Erwarte',
-    'input(s), but getting':
-        'Input(s), bekomme aber',
     'Inside a custom block':
         'In einem benutzerdefinierten Block',
     'The question came up at':
