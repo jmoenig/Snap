@@ -31,6 +31,9 @@
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 
+### 2022-09-26
+* bitwise operators library: fixed #3118
+
 ### 2022-09-23
 * extensions: fixed palette category ghosting update when hiding / unhiding blocks
 * updated "for each" help screen, thanks, Brian!
