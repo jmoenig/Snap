@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-September-19';
+modules.objects = '2022-September-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -3388,6 +3388,16 @@ SpriteMorph.prototype.emptyCategories = function () {
                 this.customBlockTemplatesForCategory(category).some(hasBlocks));
     }
     return this.categoriesCache;
+};
+
+SpriteMorph.prototype.hasPrimitiveCategories = function () {
+    // - currently unused -
+    // answer <true> if at least one category of primitive blocks is
+    // showing at least one block in the palette, else <false>
+    // in which case the pane with primitive categories can be
+    // hidden altogether
+    var cache = this.emptyCategories();
+    return this.categories.some(prim => cache[prim]);
 };
 
 // SpriteMorph blocks searching
@@ -9724,6 +9734,9 @@ StageMorph.prototype.changeVarBlockVisibility
 
 StageMorph.prototype.emptyCategories =
     SpriteMorph.prototype.emptyCategories;
+
+StageMorph.prototype.hasPrimitiveCategories =
+    SpriteMorph.prototype.hasPrimitiveCategories;
 
 // StageMorph neighbor detection
 
