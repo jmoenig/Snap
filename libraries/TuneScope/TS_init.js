@@ -16,6 +16,8 @@ for (var i = 0; i <= 127; i++) {
     tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
 }
 
+window.currentNote = ""
+
 const _convertToSharp = (note) => {
     const splitByFlat = note.split("b");
     if (splitByFlat.length < 2) return note; // does not include a flat
@@ -38,6 +40,7 @@ window.parent.midiFreqs = tempMidiFreqs;
 
 
 window.playNote = (note, noteLength, instrumentName, volume) => {
+  window.currentNote = note
    if (note == "R" || note == "r") return;
 
    note = _convertToSharp(note);

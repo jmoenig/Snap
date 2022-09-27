@@ -27,6 +27,13 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'ts_getcurrentnote()',
+    function () {
+        return window.currentNote
+    }
+)
+
+SnapExtensions.primitives.set(
     'ts_playtracks(tracklist, timesignature)',
     function (tracksList, timeSignature, tempo) {
         const multiplyArray = (arr, length) =>
