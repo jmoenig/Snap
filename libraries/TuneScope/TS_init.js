@@ -195,6 +195,10 @@ window.parent.instrumentData = {
         path: "https://surikov.github.io/webaudiofontdata/sound/0580_GeneralUserGS_sf2_file.js",
         name: "_tone_0580_GeneralUserGS_sf2_file"
     },
+    "vibraphone": {
+        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
+        name: "_tone_0110_GeneralUserGS_sf2_file"
+    },
 
     // drums
 
