@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * pixels library: Added command blocks to rename and export costumes
     * new "ide_blocks" extension primitive
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
@@ -32,6 +33,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-09-30
+* objects, threads: added support for detecting sprite-collision with an arbitrary coordinate (a list of 2 numerical items representing x and y)
 
 ### 2022-09-26
 * bitwise operators library: fixed #3118

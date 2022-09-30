@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-September-21';
+modules.threads = '2022-September-30';
 
 var ThreadManager;
 var Process;
@@ -5136,12 +5136,18 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     var those,
         stage,
         box,
-        mouse;
+        coord;
 
     if (this.inputOption(name) === 'mouse-pointer') {
-        mouse = thisObj.world().hand.position();
-        if (thisObj.bounds.containsPoint(mouse) &&
-                !thisObj.isTransparentAt(mouse)) {
+        coord = thisObj.world().hand.position();
+        if (thisObj.bounds.containsPoint(coord) &&
+                !thisObj.isTransparentAt(coord)) {
+            return true;
+        }
+    } else if (this.isCoordinate(name)) {
+        coord = thisObj.worldPoint(new Point(name.at(1), name.at(2)));
+        if (thisObj.bounds.containsPoint(coord) &&
+                !thisObj.isTransparentAt(coord)) {
             return true;
         }
     } else {

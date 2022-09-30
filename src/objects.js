@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-September-26';
+modules.objects = '2022-September-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -6295,6 +6295,17 @@ SpriteMorph.prototype.snapPoint = function(aPoint) {
     );
 };
 
+SpriteMorph.prototype.worldPoint = function(aSnapPoint) {
+    var stage = this.parentThatIsA(StageMorph);
+    return this.normalizePoint(aSnapPoint)
+        .multiplyBy(stage.scale)
+        .translateBy(stage.center());
+};
+
+SpriteMorph.prototype.normalizePoint = function (snapPoint) {
+    return new Point(snapPoint.x, -snapPoint.y);
+};
+
 // SpriteMorph rotation center / fixation point manipulation
 
 SpriteMorph.prototype.setRotationX = function (absoluteX) {
@@ -9590,9 +9601,7 @@ StageMorph.prototype.trailsLogAsSVG = function () {
     };
 };
 
-StageMorph.prototype.normalizePoint = function (snapPoint) {
-    return new Point(snapPoint.x, -snapPoint.y);
-};
+StageMorph.prototype.normalizePoint = SpriteMorph.prototype.normalizePoint;
 
 // StageMorph hiding and showing:
 
@@ -9900,6 +9909,9 @@ StageMorph.prototype.reportThreadCount
 StageMorph.prototype.snapPoint
     = SpriteMorph.prototype.snapPoint;
 
+StageMorph.prototype.worldPoint =
+    SpriteMorph.prototype.worldPoint;
+    
 // StageMorph dimension getters
 
 StageMorph.prototype.xCenter = function () {
