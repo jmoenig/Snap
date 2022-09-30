@@ -16,6 +16,7 @@
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
+    * TuneScope extension update, thanks, Harsh, Jo and Glen!
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -36,6 +37,7 @@
 
 ### 2022-09-30
 * objects, threads: added support for detecting sprite-collision with an arbitrary coordinate (a list of 2 numerical items representing x and y)
+* TuneScope extension update, thanks, Harsh, Jo and Glen!
 
 ### 2022-09-26
 * bitwise operators library: fixed #3118
