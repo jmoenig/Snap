@@ -144,7 +144,6 @@ MessageCreatorMorph.prototype.init = function(target, action) {
         this.parent.rerender();
         fixLayout.call(this);
         myself.fixLayout();
-        myself.handle.rerender();  // Should this be automatic?
         myself.rerender();
     };
 
@@ -157,8 +156,10 @@ MessageCreatorMorph.prototype.init = function(target, action) {
 
         if (desc.name) {
             action(desc);
+            this.destroy();
+        } else {
+            world.inform('Message type must have a name');
         }
-        this.destroy();
     };
 
     this.addButton('ok', 'OK');
@@ -172,14 +173,7 @@ MessageCreatorMorph.prototype.popUp = function () {
     var world = this.target.world();
 
     if (world) {
-        BlockEditorMorph.uber.popUp.call(this, world);
-        this.handle = new HandleMorph(
-            this,
-            280,
-            220,
-            this.corner,
-            this.corner
-        );
+        MessageCreatorMorph.uber.popUp.call(this, world);
     }
 };
 
@@ -198,6 +192,9 @@ MessageDefinitionBlock.prototype.init = function() {
     this.category = 'network';
     this.setSpec('name: %hintname fields: %mhintfield');
     this.rerender();
+
+    // Fix for hint text display
+    this.inputs()[0].setContents('');
 };
 
 MessageDefinitionBlock.prototype.messageName = function() {

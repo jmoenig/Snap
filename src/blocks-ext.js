@@ -166,6 +166,41 @@ MultiHintArgMorph.prototype.addInput = function () {
     this.fixLayout();
 };
 
+MultiHintArgMorph.prototype.mouseClickLeft = function (pos) {
+    
+    // if the <shift> key is pressed, repeat action 3 times
+    var target = this.selectForEdit(),
+        arrows = target.arrows(),
+        leftArrow = arrows.children[0],
+        rightArrow = arrows.children[1],
+        repetition = target.world().currentKey === 16 ? 3 : 1,
+        i;
+
+    if (rightArrow.bounds.containsPoint(pos)) {
+        for (i = 0; i < repetition; i += 1) {
+            if (rightArrow.isVisible) {
+                target.addInput();
+            }
+        }
+        // if (ide) {
+        //     ide.recordUnsavedChanges();
+        // }
+    } else if (
+        leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
+    ) {
+        for (i = 0; i < repetition; i += 1) {
+            if (leftArrow.isVisible) {
+                target.removeInput();
+            }
+        }
+        // if (ide) {
+        //     ide.recordUnsavedChanges();
+        // }
+    } else {
+        target.escalateEvent('mouseClickLeft', pos);
+    }
+};
+
 StructInputSlotMorph.prototype = new InputSlotMorph();
 StructInputSlotMorph.prototype.constructor = StructInputSlotMorph;
 StructInputSlotMorph.uber = InputSlotMorph.prototype;
@@ -524,6 +559,19 @@ HintInputSlotMorph.prototype.changed = function() {
 
 HintInputSlotMorph.prototype.isEmptySlot = function() {
     return this.empty;
+};
+
+HintInputSlotMorph.prototype.updateFieldValue = function (newValue) {
+    var block = this.parentThatIsA(BlockMorph);
+
+    newValue = newValue !== undefined ? newValue : this.contents().text;
+    if (block.id) {  // not in the palette
+        this.setContents(this.lastValue);  // set to original value in case it fails
+        return SnapActions.setField(this, newValue);
+    } else {
+        // Handle use in message creation dialog
+        this.setContents(newValue);
+    }
 };
 
 var addStructReplaceSupport = function(fn) {
