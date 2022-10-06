@@ -6533,25 +6533,32 @@ IDE_Morph.prototype.createCloudAccount = function () {
 
     new DialogBoxMorph(
         null,
-        user => this.cloud.signup(
-            user.username,
-            user.password,
-            user.passwordRepeat,
-            user.email,
-            (txt, title) => new DialogBoxMorph().inform(
-                title,
-                txt + '.\n\nYou can now log in.',
-                world,
-                this.cloudIcon(null, new Color(0, 180, 0))
-            ),
-            this.cloudError()
-        )
+        user => {
+            this.cloud.signup(
+                user.username,
+                user.password,
+                user.email,
+                (txt, title) => {
+                    const message = !!user.password ?
+                        'You can now log in.' :
+                        'An e-mail with your password\n' +
+                        'has been sent to the address provided';
+                    new DialogBoxMorph().inform(
+                        title,
+                        txt + '.\n\n' + message,
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                },
+                this.cloudError()
+            );
+        }
     ).withKey('cloudsignup').promptCredentials(
         'Sign up',
         'signup',
-        'https://snap.berkeley.edu/tos.html',
+        '/tos.html',
         'Terms of Service...',
-        'https://snap.berkeley.edu/privacy.html',
+        '/privacy.html',
         'Privacy...',
         'I have read and agree\nto the Terms of Service',
         world,
