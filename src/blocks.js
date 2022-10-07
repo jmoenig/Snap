@@ -1748,7 +1748,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // look up the spec
         info = this.labelParts[spec];
         if (!info) {
-            throw new Error('label part spec not found: "' + spec + '"');
+            info = NetsBloxExtensions.getLabelPart(spec);
+            if (!info) throw new Error('label part spec not found: "' + spec + '"');
+
+            const tags = [];
+            if (info.isNumeric) tags.push('numeric');
+            if (info.isReadOnly) tags.push('read-only');
+            if (info.isUnevaluated) tags.push('unevaluated');
+            info = {
+                type: 'input',
+                menu: info.choices,
+                tags: tags.join(' '),
+            };
         }
 
         // create the morph
