@@ -4675,7 +4675,7 @@ SpriteMorph.prototype.setColorDimension = function (idx, num) {
     if (!this.costume) {
         this.rerender();
     }
-    this.gotoXY(x, y);
+    this.silentGotoXY(x, y);
 };
 
 SpriteMorph.prototype.getColorDimension = function (idx) {
