@@ -30,10 +30,14 @@
     * fixed "obj_name" extension prim to also accept numbers as names
     * fixed "Make Variables" extension for numerical names
     * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
+    * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
 * **Documentation Updates:**
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-10-17
+* objects: fixed a pen color dimension setting and position-inheritance bug, thanks, Joan!
 
 ### 2022-09-30
 * objects, threads: added support for detecting sprite-collision with an arbitrary coordinate (a list of 2 numerical items representing x and y)

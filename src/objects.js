@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-September-30';
+modules.objects = '2022-October-17';
 
 var SpriteMorph;
 var StageMorph;
