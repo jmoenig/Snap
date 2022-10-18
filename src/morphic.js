@@ -1495,6 +1495,9 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas = document.createElement('canvas');
         canvas.width = ext.x;
         canvas.height = ext.y;
+        canvas.getContext("2d", {
+            willReadFrequently: true
+        });
     }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
@@ -12039,6 +12042,9 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.worldCanvas.getContext("2d", {
+        willReadFrequently: true
+    });
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups

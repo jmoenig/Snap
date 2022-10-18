@@ -17,6 +17,7 @@
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
+    * optimized canvas for reading back image data
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -40,6 +41,7 @@
 ### 2022-10-18
 * blocks: fixed zebra coloring for polyadic read-only input slots
 * morphic: optimized getMinimumFontHeight()
+* morphic: optimized canvas for reading back image data
 
 ### 2022-10-17
 * objects: fixed a pen color dimension setting and position-inheritance bug, thanks, Joan!
