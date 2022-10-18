@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-October-17';
+modules.objects = '2022-October-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -957,6 +957,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'switch to scene %scn %send',
             defaults: [['next']]
+        },
+
+        // Pipe
+        reportPipe: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'pipe %s $arrowRight %mult%repRing'
         },
 
         // Sensing
@@ -2647,6 +2654,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
@@ -9181,6 +9189,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));

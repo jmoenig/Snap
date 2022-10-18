@@ -8,6 +8,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * new PIPE primitive in the control category, experimental, not yet sure about this
 * **Notable Changes:**
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
     * new "docs" folder for documentation files, thanks, Michael!
@@ -42,6 +43,7 @@
 * blocks: fixed zebra coloring for polyadic read-only input slots
 * morphic: optimized getMinimumFontHeight()
 * morphic: optimized canvas for reading back image data
+* objects, threads: new PIPE primitive in the control category, experimental, not yet sure about this
 
 ### 2022-10-17
 * objects: fixed a pen color dimension setting and position-inheritance bug, thanks, Joan!
