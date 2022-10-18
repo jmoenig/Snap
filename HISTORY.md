@@ -38,7 +38,8 @@
     * German
 
 ### 2022-10-18
-* blocks: fixed zebra coloring for polyadic read-only input slots 
+* blocks: fixed zebra coloring for polyadic read-only input slots
+* morphic: optimized getMinimumFontHeight()
 
 ### 2022-10-17
 * objects: fixed a pen color dimension setting and position-inheritance bug, thanks, Joan!

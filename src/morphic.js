@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-September-12';
+var morphicVersion = '2022-October-18';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1528,7 +1528,9 @@ function getMinimumFontHeight() {
         y;
     canvas.width = size;
     canvas.height = size;
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d', {
+        willReadFrequently: true
+    });
     ctx.font = '1px serif';
     maxX = ctx.measureText(str).width;
     ctx.fillStyle = 'black';
