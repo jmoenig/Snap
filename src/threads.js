@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-October-18';
+modules.threads = '2022-October-19';
 
 var ThreadManager;
 var Process;
@@ -3200,6 +3200,7 @@ Process.prototype.reportPipe = function (value, reporterList) {
     }
     this.context.accumulator.idx += 1;
     next = reporterList.at(this.context.accumulator.idx);
+    this.assertType(next, ['command', 'reporter', 'predicate']);
     current = this.context.accumulator.result;
     this.pushContext();
     this.evaluate(next, new List([current]));
