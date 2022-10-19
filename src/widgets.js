@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2022-August-01';
+modules.widgets = '2022-October-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
