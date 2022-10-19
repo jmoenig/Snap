@@ -8,6 +8,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * extensions can add custom blocks to the palette, thanks, Bernat!
     * new PIPE primitive in the control category, experimental, not yet sure about this
 * **Notable Changes:**
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -41,6 +42,7 @@
 
 ### 2022-10-19
 * threads: added ring-type assertion to PIPE primitive
+* extensions, objects, widgets: custom extension buttons for palette categories, thanks, Bernat!
 
 ### 2022-10-18
 * blocks: fixed zebra coloring for polyadic read-only input slots

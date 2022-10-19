@@ -54,15 +54,17 @@ var SnapExtensions = {
 };
 
 /*
-    SnapExtensions is a set of two global dictionaries of named functions to be
-    used as extension primitives for blocks or dynamic dropdown menus. Block
-    extensions are stored in the "primitives" dictionary of SnapExtensions,
-    dynamic dropdown menus in the "menus" section.
+    SnapExtensions is a set of three global dictionaries of named functions to
+    be used as extension primitives for blocks, dynamic dropdown menus and
+    custom push-buttons inside block palette categories. Block extensions are
+    stored in the "primitives" dictionary of SnapExtensions, dynamic dropdown
+    menus in the "menus" section and custom palette push-buttons in the
+    "buttons" collection.
 
     You can also extend Snap! with your own externally hosted JavaScript file(s)
-    and have them add your own extension primitives and menus to the global
-    SnapExtensions dictionaries. This lets you provide libraries to support
-    special APIs and custom hardware.
+    and have them add your own extension primitives, menus and buttons to the
+    global SnapExtensions dictionaries. This lets you provide libraries to
+    support special APIs and custom hardware.
 
 
     1. Primitives (additional blocks)
@@ -129,25 +131,7 @@ var SnapExtensions = {
       You can access the contents of an input slot by calling "slot.evaluate()"
 
 
-    3. External JavaScript files
-    ============================
-    You can provide extensions for your custom hardware or for arbitrary APIs
-    or extend Snap! with JavaScript libraries from other parties. You can
-    load additional JavaScript files using the
-
-        src_load(url)
-
-    extension primitive inside Snap, which you can find using Snap's search bar
-    in the IDE. The loading primitive will wait until the source file has fully
-    loaded and its defined functions are ready to be called.
-    Snap remembers the external extensions that have been already loaded and
-    will ignore any subsequent calls to load the same external extension again.
-    This lets you lazily initialize your extension by simply adding a
-    "src_load(url)" command for your external JS file before calling any of its
-    added functions.
-
-
-    4. Buttons
+    3. Buttons
     ==========
     You can have your extension add buttons at the top of the palette in a
     particular category. Usually, you will want to add these buttons to the
@@ -171,6 +155,24 @@ var SnapExtensions = {
     The "hideable" attribute defines whether the button will be hidden when
     turning off "Show buttons" in single palette mode. By default, extension
     buttons will not be hidden.
+
+
+    4. External JavaScript files
+    ============================
+    You can provide extensions for your custom hardware or for arbitrary APIs
+    or extend Snap! with JavaScript libraries from other parties. You can
+    load additional JavaScript files using the
+
+        src_load(url)
+
+    extension primitive inside Snap, which you can find using Snap's search bar
+    in the IDE. The loading primitive will wait until the source file has fully
+    loaded and its defined functions are ready to be called.
+    Snap remembers the external extensions that have been already loaded and
+    will ignore any subsequent calls to load the same external extension again.
+    This lets you lazily initialize your extension by simply adding a
+    "src_load(url)" command for your external JS file before calling any of its
+    added functions.
 
 
     5. Miscellaneous
@@ -211,7 +213,6 @@ var SnapExtensions = {
 
     publishing an extension
     -----------------------
-
     When you're ready to publish your extension you can contact us to allow-list
     the url hosting your JS file, or you can send me a Github pull-request to
     include it in the main Snap branch.
