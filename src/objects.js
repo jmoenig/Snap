@@ -959,6 +959,13 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [['next']]
         },
 
+        // Pipe
+        reportPipe: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'pipe %s $arrowRight %mult%repRing'
+        },
+
         // Sensing
         reportTouchingObject: {
             only: SpriteMorph,
@@ -2653,6 +2660,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
@@ -9206,6 +9214,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-September-30';
+modules.threads = '2022-October-19';
 
 var ThreadManager;
 var Process;
@@ -3171,6 +3171,39 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );
+};
+
+Process.prototype.reportPipe = function (value, reporterList) {
+    // Pipe - answer an aggregation of channeling an initial value
+    // through a sequence of monadic functions
+    var next, current;
+    this.assertType(reporterList, 'list');
+
+    if (this.context.accumulator === null) {
+        // test for base cases
+        if (reporterList.length() < 1) {
+            this.returnValueToParentContext(value);
+            return;
+        }
+
+        // initialize the accumulator
+        this.context.accumulator = {
+            idx : 0,
+            result : value
+        };
+    } else if (this.context.inputs.length > 2) {
+        this.context.accumulator.result = this.context.inputs.pop();
+    }
+    if (this.context.accumulator.idx === reporterList.length()) {
+        this.returnValueToParentContext(this.context.accumulator.result);
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = reporterList.at(this.context.accumulator.idx);
+    this.assertType(next, ['command', 'reporter', 'predicate']);
+    current = this.context.accumulator.result;
+    this.pushContext();
+    this.evaluate(next, new List([current]));
 };
 
 // Process interpolated primitives
