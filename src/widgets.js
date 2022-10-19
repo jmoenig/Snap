@@ -166,6 +166,7 @@ PushButtonMorph.prototype.init = function (
     this.labelMinExtent = ZERO;
     this.hint = hint || null;
     this.isDisabled = false;
+    this.hideable = true;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);

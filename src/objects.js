@@ -94,7 +94,7 @@ embedMetadataPNG*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-October-17';
+modules.objects = '2022-October-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -2477,6 +2477,12 @@ SpriteMorph.prototype.blockTemplates = function (
         );
     }
 
+    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
+        if (buttonDescriptor.category === category) {
+            blocks.push(this.customPaletteButton(buttonDescriptor));
+        }
+    });
+
     if (category === 'motion') {
 
         blocks.push(block('forward'));
@@ -3037,6 +3043,19 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
     return button;
 };
 
+SpriteMorph.prototype.customPaletteButton = function (descriptor) {
+    // buttons added by extensions (read the docs in extensions.js)
+    var button = new PushButtonMorph(
+        this,
+        descriptor.action,
+        descriptor.label,
+        null,
+        descriptor.hint
+    );
+    button.hideable = descriptor.hideable;
+    return button;
+};
+
 SpriteMorph.prototype.makeBlock = function () {
     // prompt the user to make a new block
     var ide = this.parentThatIsA(IDE_Morph),
@@ -3150,7 +3169,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     makeButton.fixLayout();
     palette.toolBar.add(makeButton);
 
-	palette.toolBar.fixLayout();
+    palette.toolBar.fixLayout();
     palette.add(palette.toolBar);
 
     // menu:
@@ -3211,7 +3230,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 // hide "make / delete a variable" buttons
                 if (!showButtons && category === 'variables') {
                     primitives = primitives.filter(each =>
-                        !(each instanceof PushButtonMorph &&
+                        !((each instanceof PushButtonMorph && each.hideable) &&
                             !(each instanceof ToggleMorph)));
                 }
 
@@ -9058,6 +9077,12 @@ StageMorph.prototype.blockTemplates = function (
         );
     }
 
+    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
+        if (buttonDescriptor.category === category) {
+            blocks.push(this.customPaletteButton(buttonDescriptor));
+        }
+    });
+
     if (category === 'motion') {
 
         txt = new TextMorph(localize('Stage selected:\nno motion primitives'));
@@ -9701,6 +9726,8 @@ StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 StageMorph.prototype.makeBlock = SpriteMorph.prototype.makeBlock;
 StageMorph.prototype.helpMenu = SpriteMorph.prototype.helpMenu;
 StageMorph.prototype.makeBlockButton = SpriteMorph.prototype.makeBlockButton;
+StageMorph.prototype.customPaletteButton
+    = SpriteMorph.prototype.customPaletteButton;
 
 StageMorph.prototype.makeVariableButton
     = SpriteMorph.prototype.makeVariableButton;
