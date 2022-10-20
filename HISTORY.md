@@ -12,7 +12,6 @@
     * new PIPE primitive in the control category, experimental, not yet sure about this
 * **Notable Changes:**
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
-    * new "docs" folder for documentation files, thanks, Michael!
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
@@ -36,6 +35,7 @@
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
     * fixed zebra coloring for polyadic read-only input slots 
 * **Documentation Updates:**
+    * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
