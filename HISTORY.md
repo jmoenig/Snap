@@ -40,6 +40,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-10-20
+* removed PIPE from the iteration-composition library
+
 ### 2022-10-19
 * threads: added ring-type assertion to PIPE primitive
 * extensions, objects, widgets: custom extension buttons for palette categories, thanks, Bernat!
