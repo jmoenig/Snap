@@ -42,6 +42,7 @@
 
 ### 2022-10-20
 * removed PIPE from the iteration-composition library
+* removed PIPE from the frequency-distribution-analysis library
 
 ### 2022-10-19
 * threads: added ring-type assertion to PIPE primitive
