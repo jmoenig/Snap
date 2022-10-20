@@ -19,6 +19,7 @@
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * optimized canvas for reading back image data
+    * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
 * **Notable Fixes:**
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
