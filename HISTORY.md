@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * pixels library: Added command blocks to rename and export costumes
     * new "ide_blocks" extension primitive
@@ -9,8 +10,8 @@
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * extensions can add custom blocks to the palette, thanks, Bernat!
-    * new PIPE primitive in the control category, experimental, not yet sure about this
 * **Notable Changes:**
+    * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
@@ -40,6 +41,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-10-21
+* objects: enabled same-named global and sprite-local variables 
 
 ### 2022-10-20
 * removed PIPE from the iteration-composition library
