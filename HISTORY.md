@@ -43,7 +43,8 @@
     * German
 
 ### 2022-10-21
-* objects: enabled same-named global and sprite-local variables 
+* objects: enabled same-named global and sprite-local variables
+* gui: incremented dev version to 8.1
 
 ### 2022-10-20
 * removed PIPE from the iteration-composition library
