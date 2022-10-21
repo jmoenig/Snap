@@ -6688,22 +6688,6 @@ SpriteMorph.prototype.refactorVariableInstances = function (
 
 // SpriteMorph variable watchers (for palette checkbox toggling)
 
-/*
-SpriteMorph.prototype.findVariableWatcher = function (varName) {
-    var stage = this.parentThatIsA(StageMorph),
-        globals = this.globalVariables();
-    if (stage === null) {
-        return null;
-    }
-    return detect(
-        stage.children,
-        morph => morph instanceof WatcherMorph &&
-            (morph.target === this.variables || morph.target === globals) &&
-                morph.getter === varName
-    );
-};
-*/
-
 SpriteMorph.prototype.findVariableWatcher = function (varName, isGlobal) {
     var stage = this.parentThatIsA(StageMorph),
         globals = this.globalVariables();
