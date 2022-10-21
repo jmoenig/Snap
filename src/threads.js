@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-October-19';
+modules.threads = '2022-October-21';
 
 var ThreadManager;
 var Process;
@@ -6112,9 +6112,10 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     result.outerContext.receiver = otherObj;
     if (result.outerContext.variables.parentFrame) {
         rootVars = result.outerContext.variables.parentFrame;
-        receiverVars = copy(otherObj.variables);
-        receiverVars.parentFrame = rootVars;
+        receiverVars = otherObj.variables.fullCopy();
+        receiverVars.root().parentFrame = rootVars;
         result.outerContext.variables.parentFrame = receiverVars;
+        result.variables = receiverVars;
     } else {
         result.outerContext.variables.parentFrame = otherObj.variables;
     }
@@ -8112,7 +8113,6 @@ VariableFrame.prototype.copy = function () {
 };
 
 VariableFrame.prototype.fullCopy = function () {
-    // experimental - for compiling to JS
     var frame;
     if (this.parentFrame) {
         frame = new VariableFrame(this.parentFrame.fullCopy());
