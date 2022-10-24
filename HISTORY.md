@@ -42,6 +42,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-10-24
+* threads: added optional atomicity-control predicate callbacks to hyperDyadic()
+
 ### 2022-10-21
 * objects: enabled same-named global and sprite-local variables
 * gui: incremented dev version to 8.1
