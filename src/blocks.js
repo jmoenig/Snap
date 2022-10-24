@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-October-18';
+modules.blocks = '2022-October-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -508,7 +508,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%rel': {
         type: 'input',
-        tags: 'read-only static',
+        tags: 'read-only',
         menu: {
             'distance' : ['distance'],
             'direction' : ['direction'],
