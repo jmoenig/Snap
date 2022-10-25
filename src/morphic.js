@@ -1802,7 +1802,8 @@ function enableRetinaSupport() {
                 context.restore();
                 context.save();
                 */
-                if (context.scale) { context.scale(pixelRatio, pixelRatio); }
+                //if (context.scale) { context.scale(pixelRatio, pixelRatio); }
+                context?.scale(pixelRatio, pixelRatio);
             } catch (err) {
                 console.log('Retina Display Support Problem', err);
                 uber.width.set.call(this, width);
