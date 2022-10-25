@@ -4327,7 +4327,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         () => SpriteMorph.prototype.disableDraggingData =
             !SpriteMorph.prototype.disableDraggingData,
         SpriteMorph.prototype.disableDraggingData,
-        'uncheck to drag media,\nand blocks out of\nwatchers and balloons',
+        'uncheck to drag media\nand blocks out of\nwatchers and balloons',
         'disable dragging media\nand blocks out of\nwatchers and balloons',
         false
     );

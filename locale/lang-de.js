@@ -1261,7 +1261,7 @@ SnapTranslator.dict.de = {
         'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
     'Disable dragging data':
         'Daten-Herausziehen deaktivieren',
-    'uncheck to drag media,\nand blocks out of\nwatchers and balloons':
+    'uncheck to drag media\nand blocks out of\nwatchers and balloons':
         'ausschalten, um Medien und Blöcke\naus Variablen und Sprechblasen\nherauszuziehen',
     'disable dragging media\nand blocks out of\nwatchers and balloons':
         'verhindert, dass Medien und Blöcke\naus Variablen und Sprechblasen\nherausgezogen werden können',
