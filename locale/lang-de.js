@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-09-26', // this, too, will appear in the Translators tab
+        '2022-10-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1259,6 +1259,12 @@ SnapTranslator.dict.de = {
         'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
     'check to disable\ndirectly running blocks\nby clicking on them':
         'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
+    'Disable dragging data':
+        'Daten-Herausziehen deaktivieren',
+    'uncheck to drag media\nand blocks out of\nwatchers and balloons':
+        'ausschalten, um Medien und Blöcke\naus Variablen und Sprechblasen\nherauszuziehen',
+    'disable dragging media\nand blocks out of\nwatchers and balloons':
+        'verhindert, dass Medien und Blöcke\naus Variablen und Sprechblasen\nherausgezogen werden können',
 
     // inputs
     'with inputs':
