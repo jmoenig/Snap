@@ -47,6 +47,7 @@
 ### 2022-10-25
 * objects, blocks, tables, scenes, gui: added new "disable dragging data" preference setting for (kids') MicroWorld creators
 * store: made "disable dragging data" setting persistent per scene in project
+* German translation update (for the new "disable dragging data" setting)
 
 ### 2022-10-24
 * threads: added optional atomicity-control predicate callbacks to hyperDyadic()
