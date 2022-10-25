@@ -5,6 +5,7 @@
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision 
+    * new "disable dragging data" preference setting for (kids') MicroWorld creators
     * pixels library: Added command blocks to rename and export costumes
     * new "ide_blocks" extension primitive
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
@@ -42,6 +43,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-10-25
+* objects, blocks, tables, scenes, gui: added new "disable dragging data" preference setting for (kids') MicroWorld creators
 
 ### 2022-10-24
 * threads: added optional atomicity-control predicate callbacks to hyperDyadic()

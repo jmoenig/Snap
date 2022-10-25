@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-October-21';
+modules.gui = '2022-October-25';
 
 // Declarations
 
@@ -4320,6 +4320,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         ThreadManager.prototype.disableClickToRun,
         'uncheck to enable\ndirectly running blocks\nby clicking on them',
         'check to disable\ndirectly running blocks\nby clicking on them',
+        false
+    );
+    addPreference(
+        'Disable dragging data',
+        () => SpriteMorph.prototype.disableDraggingData =
+            !SpriteMorph.prototype.disableDraggingData,
+        SpriteMorph.prototype.disableDraggingData,
+        'uncheck to drag media,\nand blocks out of\nwatchers and balloons',
+        'disable dragging media\nand blocks out of\nwatchers and balloons',
         false
     );
     menu.popup(world, pos);

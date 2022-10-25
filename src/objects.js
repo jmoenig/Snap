@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-October-21';
+modules.objects = '2022-October-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -197,6 +197,7 @@ SpriteMorph.prototype.enableFirstClass = true;
 SpriteMorph.prototype.showingExtensions = false;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.penColorModel = 'hsv'; // or 'hsl'
+SpriteMorph.prototype.disableDraggingData = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -10458,7 +10459,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support costumes to be dragged out of speech balloons:
-        contents.isDraggable = true;
+        contents.isDraggable = !sprite.disableDraggingData;
 
         contents.selectForEdit = function () {
             var cst = data.copy(),
@@ -10513,7 +10514,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('notes', 30);
 
         // support sounds to be dragged out of speech balloons:
-        contents.isDraggable = true;
+        contents.isDraggable = !sprite.disableDraggingData;
 
         contents.selectForEdit = function () {
             var snd = data.copy(),
@@ -10597,7 +10598,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = true;
+        contents.isDraggable = !sprite.disableDraggingData;
 
         contents.selectForEdit = function () {
             var script = data.toBlock(),
@@ -12028,7 +12029,8 @@ CellMorph.prototype.createContents = function () {
             this.version = this.contents.version;
 
             // support blocks to be dragged out of watchers:
-            this.contentsMorph.isDraggable = true;
+            this.contentsMorph.isDraggable =
+                !SpriteMorph.prototype.disableDraggingData;
 
             this.contentsMorph.selectForEdit = function () {
                 var script = myself.contents.toBlock(),
@@ -12058,7 +12060,8 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.cachedImage = img;
 
             // support costumes to be dragged out of watchers:
-            this.contentsMorph.isDraggable = true;
+            this.contentsMorph.isDraggable =
+                !SpriteMorph.prototype.disableDraggingData;
 
             this.contentsMorph.selectForEdit = function () {
                 var cst = myself.contents.copy(),
@@ -12087,7 +12090,8 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph = new SymbolMorph('notes', 30);
 
             // support sounds to be dragged out of watchers:
-            this.contentsMorph.isDraggable = true;
+            this.contentsMorph.isDraggable =
+                !SpriteMorph.prototype.disableDraggingData;
 
             this.contentsMorph.selectForEdit = function () {
                 var snd = myself.contents.copy(),

@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-October-24';
+modules.blocks = '2022-October-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2313,7 +2313,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.cachedImage = img;
 
         // support costumes to be dragged out of result bubbles:
-        morphToShow.isDraggable = true;
+        morphToShow.isDraggable = !SpriteMorph.prototype.disableDraggingData;
 
         morphToShow.selectForEdit = function () {
             var cst = value.copy(),
@@ -2361,7 +2361,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow = new SymbolMorph('notes', 30);
 
         // support sounds to be dragged out of result bubbles:
-        morphToShow.isDraggable = true;
+        morphToShow.isDraggable = !SpriteMorph.prototype.disableDraggingData;
 
         morphToShow.selectForEdit = function () {
             var snd = value.copy(),
@@ -2412,7 +2412,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         };
 
         // support blocks to be dragged out of result bubbles:
-        morphToShow.isDraggable = true;
+        morphToShow.isDraggable = !SpriteMorph.prototype.disableDraggingData;
 
         morphToShow.selectForEdit = function () {
             var script = value.toBlock(),
