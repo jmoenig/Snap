@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-October-25';
+var morphicVersion = '2022-October-26';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1802,7 +1802,7 @@ function enableRetinaSupport() {
                 context.restore();
                 context.save();
                 */
-                if (context?.scale) { context.scale(pixelRatio, pixelRatio); }
+                context?.scale(pixelRatio, pixelRatio);
             } catch (err) {
                 console.log('Retina Display Support Problem', err);
                 uber.width.set.call(this, width);
@@ -1825,7 +1825,7 @@ function enableRetinaSupport() {
             context.restore();
             context.save();
             */
-            if (context?.scale) { context.scale(pixelRatio, pixelRatio); }
+            context?.scale(pixelRatio, pixelRatio);
         }
     });
 
