@@ -39,29 +39,23 @@
         <script>
             var world,
                 FPS = 67,
-                lastIntendedTime = 0;
+                lastTime = 0;
             window.onload = function () {
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('sw.js');
                 }
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
-                requestAnimationFrame(loop);
+                loop();
             };
             function loop(timestamp) {
                 requestAnimationFrame(loop);
-                if (timestamp - lastIntendedTime < 1000 / FPS) {
+                if (timestamp - lastTime < 1000 / FPS) {
                     return;
                 }
                 world.doOneCycle();
-                // browsers often cap framerate or just have some lag
-                // if the browser is keeping up, the intended time is incremented by a frame time (set to when this frame should've happened)
-                // this prevents accumulating error from latency
-
-                // if it's more than a frame behind, we don't want it to try and rush to catch up with many fast frames afterward
-                // so the last indended time is capped to be at most a frame behind
-                lastIntendedTime = Math.max(
-                    lastIntendedTime + 1000 / FPS,
+                lastTime = Math.max(
+                    lastTime + 1000 / FPS,
                     timestamp - 1000 / FPS
                 );
             }

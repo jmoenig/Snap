@@ -39,6 +39,7 @@
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
     * fixed zebra coloring for polyadic read-only input slots 
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
+    * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -47,6 +48,7 @@
 
 ### 2022-10-26
 * blocks: caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
+* snap.html: improved frame scheduling, thanks, SArpnt!
 
 ### 2022-10-25
 * objects, blocks, tables, scenes, gui: added new "disable dragging data" preference setting for (kids') MicroWorld creators
