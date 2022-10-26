@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-October-25';
+modules.blocks = '2022-October-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8099,20 +8099,30 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture(),
         ide = this.world().children[0],
         xml = this.scriptsXML();
+
+    function fallback() {
+        ide.saveCanvasAs(
+            pic,
+            (ide.getProjectName() || localize('untitled')) + ' ' +
+                localize('script pic')
+        );
+    }
+
     if (pic) {
         if (xml) {
-            ide.saveFileAs(
-                embedMetadataPNG(pic, xml),
-                'image/png',
-                (ide.getProjectName() || localize('untitled')) + ' ' +
-                    localize('script pic')
-        );
+            try {
+                ide.saveFileAs(
+                    embedMetadataPNG(pic, xml),
+                    'image/png',
+                    (ide.getProjectName() || localize('untitled')) + ' ' +
+                        localize('script pic')
+                );
+            } catch (err) {
+                console.log(err);
+                fallback();
+            }
         } else {
-            ide.saveCanvasAs(
-                pic,
-                (ide.getProjectName() || localize('untitled')) + ' ' +
-                    localize('script pic')
-            );
+            fallback();
         }
     }
 };
