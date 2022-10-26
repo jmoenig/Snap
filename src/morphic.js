@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-26';
+var morphicVersion = '2022-October-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1495,6 +1495,9 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas = document.createElement('canvas');
         canvas.width = ext.x;
         canvas.height = ext.y;
+        canvas.getContext("2d", {
+            willReadFrequently: true
+        });
     }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
@@ -1528,7 +1531,9 @@ function getMinimumFontHeight() {
         y;
     canvas.width = size;
     canvas.height = size;
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d', {
+        willReadFrequently: true
+    });
     ctx.font = '1px serif';
     maxX = ctx.measureText(str).width;
     ctx.fillStyle = 'black';
@@ -1689,7 +1694,9 @@ function enableRetinaSupport() {
 
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
-    var ctx = document.createElement("canvas").getContext("2d"),
+    var ctx = document.createElement("canvas").getContext("2d", {
+            willReadFrequently: true
+        }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -1788,7 +1795,9 @@ function enableRetinaSupport() {
                 var pixelRatio = getPixelRatio(this),
                     context;
                 uber.width.set.call(this, width * pixelRatio);
-                context = this.getContext('2d');
+                context = this.getContext('2d', {
+                    willReadFrequently: true
+                });
                 /*
                 context.restore();
                 context.save();
@@ -1809,7 +1818,9 @@ function enableRetinaSupport() {
             var pixelRatio = getPixelRatio(this),
                 context;
             uber.height.set.call(this, height * pixelRatio);
-            context = this.getContext('2d');
+            context = this.getContext('2d', {
+                willReadFrequently: true
+            });
             /*
             context.restore();
             context.save();
@@ -1913,7 +1924,9 @@ function enableRetinaSupport() {
 }
 
 function isRetinaSupported () {
-    var ctx = document.createElement("canvas").getContext("2d"),
+    var ctx = document.createElement("canvas").getContext("2d", {
+            willReadFrequently: true
+        }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -4510,7 +4523,28 @@ Morph.prototype.developersMenu = function () {
     );
     menu.addItem(
         "pic...",
-        () => window.open(this.fullImage().toDataURL()),
+        () => {
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
+            try {
+                doc = window.open('', '_blank', 'popup').document;
+                body = doc.getElementsByTagName('body')[0];
+                str = '' + this;
+                doc.title = str;
+                tag = doc.createElement('h1');
+                tag.textContent = str;
+                body.appendChild(tag);
+                tag = doc.createElement('img');
+                tag.alt = str;
+                tag.src = imgURL;
+                body.appendChild(tag);
+            } catch (error) {
+                console.warn(
+                    'failed to popup pic, morph:%O, error:%O, image URL:%O',
+                    this, error, [imgURL]
+                );
+            }
+        },
         'open a new window\nwith a picture of this morph'
     );
     menu.addLine();
@@ -12008,6 +12042,9 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.worldCanvas.getContext("2d", {
+        willReadFrequently: true
+    });
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups

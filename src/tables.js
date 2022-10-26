@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2022-January-28';
+modules.tables = '2022-October-25';
 
 var Table;
 var TableCellMorph;
@@ -344,8 +344,11 @@ TableCellMorph.prototype.render = function (ctx) {
         x,
         y;
 
-    this.isDraggable = (this.data instanceof Context) ||
-        (this.data instanceof Costume) || (this.data instanceof Sound);
+    this.isDraggable = !SpriteMorph.prototype.disableDraggingData &&
+        ((this.data instanceof Context) ||
+            (this.data instanceof Costume) ||
+            (this.data instanceof Sound));
+
     ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-August-01';
+modules.store = '2022-October-25';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -388,6 +388,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     scene.showCategories = model.scene.attributes.categories !== 'false';
     scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
+    scene.disableDraggingData = model.scene.attributes.dragdata === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
@@ -1792,7 +1793,7 @@ Scene.prototype.toXML = function (serializer) {
     serializer.scene = this; // keep the order of sprites in the corral
 
     xml = serializer.format(
-        '<scene name="@"%%%%%>' +
+        '<scene name="@"%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1809,6 +1810,7 @@ Scene.prototype.toXML = function (serializer) {
         this.unifiedPalette && !this.showPaletteButtons ?
             ' buttons="false"' : '',
         this.disableClickToRun ? ' clickrun="false"' : '',
+        this.disableDraggingData ? ' dragdata="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),

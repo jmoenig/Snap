@@ -1,6 +1,149 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new PIPE primitive in the control category
+    * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
+    * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision 
+    * new "disable dragging data" preference setting for (kids') MicroWorld creators
+    * pixels library: Added command blocks to rename and export costumes
+    * new "ide_blocks" extension primitive
+    * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
+    * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
+    * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * extensions can add custom buttons to the palette, thanks, Bernat!
+* **Notable Changes:**
+    * enabled same-named global and sprite-local variables 
+    * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
+    * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
+    * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
+    * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+    * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+    * updated "for each" help screen, thanks, Brian!
+    * TuneScope extension update, thanks, Harsh, Jo and Glen!
+    * optimized canvas for reading back image data
+    * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
+* **Notable Fixes:**
+    * fixed aggressive cache issue, thanks, Michael!
+    * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+    * fixed API->broadcast() to also accept a data payload, thanks, Zak!
+    * SciScnap2 library: fixed SQL queries containing the percent characters
+    * fixed exporting information about blocks in custom categories when creating a summary document (#3097)
+    * fixed occasional "reporter did not report" error when changing a custom command block to become a reporter
+    * fixed a naming issue when importing duplicate data files
+    * fixed occasional errors when using "broadcast" and "this script" in the same script
+    * fixed deselecting / selecting blocks in the "Unused Blocks" dialog
+    * fixed "obj_name" extension prim to also accept numbers as names
+    * fixed "Make Variables" extension for numerical names
+    * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
+    * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
+    * fixed zebra coloring for polyadic read-only input slots 
+* **Documentation Updates:**
+    * new "docs" folder for documentation files, thanks, Michael!
+    * new doc for extensions, thanks, Michael!
+* **Translation Updates:**
+    * German
+
+### 2022-10-25
+* objects, blocks, tables, scenes, gui: added new "disable dragging data" preference setting for (kids') MicroWorld creators
+* store: made "disable dragging data" setting persistent per scene in project
+* German translation update (for the new "disable dragging data" setting)
+
+### 2022-10-24
+* threads: added optional atomicity-control predicate callbacks to hyperDyadic()
+* blocks, threads: fully hyperized (relation TO object) reporter with lists of relative angles for hyper-rays
+
+### 2022-10-21
+* objects: enabled same-named global and sprite-local variables
+* gui: incremented dev version to 8.1
+* threads: tweaked context binding
+
+### 2022-10-20
+* removed PIPE from the iteration-composition library
+* removed PIPE from the frequency-distribution-analysis library
+* removed PIPE from the bar-charts library
+* removed PIPE from the SciSnap!2Blocks library
+
+### 2022-10-19
+* threads: added ring-type assertion to PIPE primitive
+* extensions, objects, widgets: custom extension buttons for palette categories, thanks, Bernat!
+
+### 2022-10-18
+* blocks: fixed zebra coloring for polyadic read-only input slots
+* morphic: optimized getMinimumFontHeight()
+* morphic: optimized canvas for reading back image data
+* objects, threads: new PIPE primitive in the control category, experimental, not yet sure about this
+
+### 2022-10-17
+* objects: fixed a pen color dimension setting and position-inheritance bug, thanks, Joan!
+
+### 2022-09-30
+* objects, threads: added support for detecting sprite-collision with an arbitrary coordinate (a list of 2 numerical items representing x and y)
+* TuneScope extension update, thanks, Harsh, Jo and Glen!
+
+### 2022-09-26
+* bitwise operators library: fixed #3118
+* updated German translation (removed obsolete argument-parameter mismatch error message)
+* objects: added Sprite>>hasPrimitiveCategories() method
+
+### 2022-09-23
+* extensions: fixed palette category ghosting update when hiding / unhiding blocks
+* updated "for each" help screen, thanks, Brian!
+
+### 2022-09-22
+* extensions: fixed "obj_name" extension prim to also accept numbers as names
+* extensions: new "cst_export(cst, name)" extension primitive
+* pixels library: Added command blocks to rename and export costumes
+* extensions: fixed "Make Variables" extension for numerical names
+* extensions: fixed and renamed "ide_blocks" extension primitive
+
+### 2022-09-21
+* extensions: refactored hyperized translation primitives
+* band-aided bignums library
+* gui: fixed #3097
+* threads: fixed #3083
+* gui: fixed #3099
+* byob: fixed #3105
+
+### 2022-09-20
+* threads: refactored reportUnicodeAsLetter()
+* threads: refactored reportTextSplit()
+* threads: refactored reportAnd() & reportOr()
+* threads: refactored reportNumbers()
+* threads: refactored arithmetic ops
+* threads: refactored reportModulus()
+* threads: refactored reportAtan2()
+* threads: refactored reportMin/Max
+* threads: refactored some logic primitives
+* threads: refactored reportNot()
+* threads: refactored reportAttributeOf()
+* threads: refactored reportBlockAttribute()
+* extensions: refactored hyperized bitwise operators
+
+### 2022-09-19
+* blocks: optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+* objects: round watcher readouts to 6 decimal digits (like Scratch), instead of 9
+* SciScnap2 library: fixed SQL queries containing the percent characters
+* threads: removed error messages for arguments-parameters number mismatch
+* threads: refactored and generalized hyper()
+* threads: refactored reportRound() and reportMonadic()
+
+### 2022-09-18
+* blocks, threads: added "JS escape" option to text-transform reporter (in dev mode)
+* extensions: new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
+
+### 2022-09-14
+* extensions: new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
+
+### 2022-09-12
+* new dev version
+* pwa: moved documentation into new "docs" folder, thanks, Michael
+* fixed aggressive cache issue, thanks, Michael!
+* hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
+* morphic: fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
+* api: fixed API->broadcast() to also accept a data payload, thanks, Zak!
+* new "ide_all_blocks()" extension primitive, thanks, Michael!
+* extensions: removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
 
 ## 8.0.0:
 * **New Features:**

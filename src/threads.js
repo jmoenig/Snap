@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-August-03';
+modules.threads = '2022-October-24';
 
 var ThreadManager;
 var Process;
@@ -891,7 +891,7 @@ Process.prototype.reportOr = function (block) {
         if (this.flashContext()) {return; }
         // this.returnValueToParentContext(inputs[1] === true);
         this.returnValueToParentContext(
-            this.hyperDyadic(this.reportBasicOr, inputs[0], inputs[1])
+            this.hyper(this.reportBasicOr, inputs[0], inputs[1])
         );
         this.popContext();
     }
@@ -920,7 +920,7 @@ Process.prototype.reportAnd = function (block) {
         if (this.flashContext()) {return; }
         // this.returnValueToParentContext(inputs[1] === true);
         this.returnValueToParentContext(
-            this.hyperDyadic(this.reportBasicAnd, inputs[0], inputs[1])
+            this.hyper(this.reportBasicAnd, inputs[0], inputs[1])
         );
         this.popContext();
     }
@@ -1416,20 +1416,12 @@ Process.prototype.evaluate = function (
                         outer.variables.addVar(i, parms[0]);
                     }
                 }
-
-            // if the number of inputs matches the number
-            // of empty slots distribute them sequentially
-            } else if (parms.length === context.emptySlots) {
+            // otherwise match the inputs sequentially to the empty slots,
+            // disregard unmatched or excess inputs or slots
+            } else {
                 for (i = 1; i <= parms.length; i += 1) {
                     outer.variables.addVar(i, parms[i - 1]);
                 }
-
-            } else if (context.emptySlots !== 1) {
-                throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' '
-                        + localize('input(s), but getting') + ' '
-                        + parms.length
-                );
             }
         }
     }
@@ -1522,19 +1514,12 @@ Process.prototype.initializeFor = function (context, args) {
                     outer.variables.addVar(i, parms[0]);
                 }
 
-            // if the number of inputs matches the number
-            // of empty slots distribute them sequentially
-            } else if (parms.length === context.emptySlots) {
+            // otherwise match the inputs sequentially to the empty slots,
+            // disregard unmatched or excess inputs or slots
+            } else {
                 for (i = 1; i <= parms.length; i += 1) {
                     outer.variables.addVar(i, parms[i - 1]);
                 }
-
-            } else if (context.emptySlots !== 1) {
-                throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' '
-                        + localize('input(s), but getting') + ' '
-                        + parms.length
-                );
             }
         }
     }
@@ -1704,6 +1689,8 @@ Process.prototype.evaluateCustomBlock = function () {
 
     // tag return target
     if (method.type !== 'command') {
+        // clear previous exit tags, if any
+        runnable.expression.tagExitBlocks(undefined, false);
         if (caller) {
             // tag caller, so "report" can catch it later
             caller.tag = 'exit';
@@ -2196,14 +2183,11 @@ Process.prototype.doShowTable = function (list) {
 
 Process.prototype.reportNumbers = function (start, end) {
     // hyper-dyadic
-    if (this.enableHyperOps) {
-        return this.hyperDyadic(
-            (strt, stp) => this.reportBasicNumbers(strt, stp),
-            start,
-            end
-        );
-    }
-    return this.reportLinkedNumbers(start, end);
+    return this.hyper(
+        (strt, stp) => this.reportBasicNumbers(strt, stp),
+        start,
+        end
+    );
 };
 
 Process.prototype.reportBasicNumbers = function (start, end) {
@@ -2301,6 +2285,7 @@ Process.prototype.concatenateLinkedLists = function (lists) {
 // Process interpolated non-HOF list primitives
 
 Process.prototype.reportLinkedNumbers = function (start, end) {
+    // - currently not in use -
     // answer a new linked list containing an linearly ascending progression
     // of integers beginning at start to end.
     // this is interpolated so it can handle big ranges of numbers
@@ -3188,6 +3173,39 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
     );
 };
 
+Process.prototype.reportPipe = function (value, reporterList) {
+    // Pipe - answer an aggregation of channeling an initial value
+    // through a sequence of monadic functions
+    var next, current;
+    this.assertType(reporterList, 'list');
+
+    if (this.context.accumulator === null) {
+        // test for base cases
+        if (reporterList.length() < 1) {
+            this.returnValueToParentContext(value);
+            return;
+        }
+
+        // initialize the accumulator
+        this.context.accumulator = {
+            idx : 0,
+            result : value
+        };
+    } else if (this.context.inputs.length > 2) {
+        this.context.accumulator.result = this.context.inputs.pop();
+    }
+    if (this.context.accumulator.idx === reporterList.length()) {
+        this.returnValueToParentContext(this.context.accumulator.result);
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = reporterList.at(this.context.accumulator.idx);
+    this.assertType(next, ['command', 'reporter', 'predicate']);
+    current = this.context.accumulator.result;
+    this.pushContext();
+    this.evaluate(next, new List([current]));
+};
+
 // Process interpolated primitives
 
 Process.prototype.doWait = function (secs) {
@@ -4035,53 +4053,79 @@ Process.prototype.reportTypeOf = function (thing) {
     return 'undefined';
 };
 
-// Process math primtives - hyper-dyadic
+// Process math primtives - hyper
 
-Process.prototype.hyperDyadic = function (baseOp, a, b) {
-    // enable dyadic operations to be performed on lists and tables
-    var len, i, result;
+Process.prototype.hyper = function (fn, ...args) {
+    // enable monadic and dyadic operations to be performed on dimensional data
+    // use this as entry point
     if (this.enableHyperOps) {
-        if (this.isMatrix(a)) {
-            if (this.isMatrix(b)) {
-                // zip both arguments ignoring out-of-bounds indices
-                a = a.itemsArray();
-                b = b.itemsArray();
-                len = Math.min(a.length, b.length);
-                result = new Array(len);
-                for (i = 0; i < len; i += 1) {
-                    result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
-                }
-                return new List(result);
-            }
-            return a.map(each => this.hyperDyadic(baseOp, each, b));
+        if (args.length === 1) {
+            return this.hyperMonadic(fn, args[0]);
+        } else if (args.length === 2) {
+            return this.hyperDyadic(fn, args[0], args[1]);
         }
-        if (this.isMatrix(b)) {
-            return b.map(each => this.hyperDyadic(baseOp, a, each));
-        }
-        return this.hyperZip(baseOp, a, b);
     }
-    return baseOp(a, b);
+    return fn.apply(null, args);
 };
 
-Process.prototype.hyperZip = function (baseOp, a, b) {
+Process.prototype.hyperMonadic = function (baseOp, arg) {
+    // enable monadic operations to be performed on lists and tables
+    if (arg instanceof List) {
+        return arg.map(each => this.hyperMonadic(baseOp, each));
+    }
+    return baseOp(arg);
+};
+
+Process.prototype.hyperDyadic = function (baseOp, a, b, atoma, atomb) {
     // enable dyadic operations to be performed on lists and tables
+    // atoma and atomb are optional monadic callback predicates indicating
+    // whether a or b are to be treated as scalar atoms despite being
+    // lists. This is currenly used for treating 2-item numerical lists as
+    // atomic points of x-/y-coordinates in some primitives.
     var len, i, result;
-    if (a instanceof List) {
-        if (b instanceof List) {
+    if (this.isMatrix(a)) {
+        if (this.isMatrix(b)) {
             // zip both arguments ignoring out-of-bounds indices
             a = a.itemsArray();
             b = b.itemsArray();
             len = Math.min(a.length, b.length);
             result = new Array(len);
             for (i = 0; i < len; i += 1) {
-                result[i] = this.hyperZip(baseOp, a[i], b[i]);
+                result[i] = this.hyperDyadic(baseOp, a[i], b[i], atoma, atomb);
             }
             return new List(result);
         }
-        return a.map(each => this.hyperZip(baseOp, each, b));
+        return a.map(each => this.hyperDyadic(baseOp, each, b, atoma, atomb));
     }
-    if (b instanceof List) {
-        return b.map(each => this.hyperZip(baseOp, a, each));
+    if (this.isMatrix(b)) {
+        return b.map(each => this.hyperDyadic(baseOp, a, each, atoma, atomb));
+    }
+    return this.hyperZip(baseOp, a, b, atoma, atomb);
+};
+
+Process.prototype.hyperZip = function (baseOp, a, b, atoma, atomb) {
+    // enable dyadic operations to be performed on lists and tables
+    // atoma and atomb are optional monadic callback predicates indicating
+    // whether a or b are to be treated as scalar atoms despite being
+    // lists. This is currenly used for treating 2-item numerical lists as
+    // atomic points of x-/y-coordinates in some primitives.
+    var len, i, result;
+    if (!(atoma && atoma(a)) && a instanceof List) {
+        if (!(atomb && atomb(b)) && b instanceof List) {
+            // zip both arguments ignoring out-of-bounds indices
+            a = a.itemsArray();
+            b = b.itemsArray();
+            len = Math.min(a.length, b.length);
+            result = new Array(len);
+            for (i = 0; i < len; i += 1) {
+                result[i] = this.hyperZip(baseOp, a[i], b[i], atoma, atomb);
+            }
+            return new List(result);
+        }
+        return a.map(each => this.hyperZip(baseOp, each, b, atoma, atomb));
+    }
+    if (!(atomb && atomb(b)) && b instanceof List) {
+        return b.map(each => this.hyperZip(baseOp, a, each, atoma, atomb));
     }
     return baseOp(a, b);
 };
@@ -4090,7 +4134,13 @@ Process.prototype.isMatrix = function (data) {
     return data instanceof List && data.at(1) instanceof List;
 };
 
-// Process math primtives - arithmetic
+// Process dyadic math primtives - arithmetic
+/*
+    Note: the "basic" versions are required so the abonomable "bignums"
+    library can overload them, a library so sloppily written, so ill maintained
+    and devoid of love, building on a terrible monstrosity of a mechanism
+    I don't even want to think about it, but here we are -jens
+*/
 
 Process.prototype.reportVariadicSum = function (numbers) {
     this.assertType(numbers, 'list');
@@ -4098,7 +4148,7 @@ Process.prototype.reportVariadicSum = function (numbers) {
 };
 
 Process.prototype.reportSum = function (a, b) {
-    return this.hyperDyadic(this.reportBasicSum, a, b);
+    return this.hyper(this.reportBasicSum, a, b);
 };
 
 Process.prototype.reportBasicSum = function (a, b) {
@@ -4106,7 +4156,7 @@ Process.prototype.reportBasicSum = function (a, b) {
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return this.hyperDyadic(this.reportBasicDifference, a, b);
+    return this.hyper(this.reportBasicDifference, a, b);
 };
 
 Process.prototype.reportBasicDifference = function (a, b) {
@@ -4119,7 +4169,7 @@ Process.prototype.reportVariadicProduct = function (numbers) {
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return this.hyperDyadic(this.reportBasicProduct, a, b);
+    return this.hyper(this.reportBasicProduct, a, b);
 };
 
 Process.prototype.reportBasicProduct = function (a, b) {
@@ -4127,7 +4177,7 @@ Process.prototype.reportBasicProduct = function (a, b) {
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return this.hyperDyadic(this.reportBasicQuotient, a, b);
+    return this.hyper(this.reportBasicQuotient, a, b);
 };
 
 Process.prototype.reportBasicQuotient = function (a, b) {
@@ -4135,7 +4185,7 @@ Process.prototype.reportBasicQuotient = function (a, b) {
 };
 
 Process.prototype.reportPower = function (a, b) {
-    return this.hyperDyadic(this.reportBasicPower, a, b);
+    return this.hyper(this.reportBasicPower, a, b);
 };
 
 Process.prototype.reportBasicPower = function (a, b) {
@@ -4143,7 +4193,7 @@ Process.prototype.reportBasicPower = function (a, b) {
 };
 
 Process.prototype.reportRandom = function (a, b) {
-    return this.hyperDyadic(this.reportBasicRandom, a, b);
+    return this.hyper(this.reportBasicRandom, a, b);
 };
 
 Process.prototype.reportBasicRandom = function (min, max) {
@@ -4155,20 +4205,16 @@ Process.prototype.reportBasicRandom = function (min, max) {
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
 };
 
-// Process math primtives - arithmetic hyperdyadic
-
 Process.prototype.reportModulus = function (a, b) {
-    return this.hyperDyadic(this.reportBasicModulus, a, b);
+    return this.hyper(this.reportBasicModulus, a, b);
 };
 
 Process.prototype.reportBasicModulus = function (a, b) {
-    var x = +a,
-        y = +b;
-    return ((x % y) + y) % y;
+    return ((+a % +b) + (+b)) % +b;
 };
 
 Process.prototype.reportAtan2 = function (a, b) {
-    return this.hyperDyadic(this.reportBasicAtan2, a, b);
+    return this.hyper(this.reportBasicAtan2, a, b);
 };
 
 Process.prototype.reportBasicAtan2 = function (a, b) {
@@ -4181,7 +4227,7 @@ Process.prototype.reportVariadicMin = function (numbers) {
 };
 
 Process.prototype.reportMin = function (a, b) {
-    return this.hyperDyadic(this.reportBasicMin, a, b);
+    return this.hyper(this.reportBasicMin, a, b);
 };
 
 Process.prototype.reportBasicMin = function (a, b) {
@@ -4201,7 +4247,7 @@ Process.prototype.reportVariadicMax = function (numbers) {
 };
 
 Process.prototype.reportMax = function (a, b) {
-    return this.hyperDyadic(this.reportBasicMax, a, b);
+    return this.hyper(this.reportBasicMax, a, b);
 };
 
 Process.prototype.reportBasicMax = function (a, b) {
@@ -4215,14 +4261,14 @@ Process.prototype.reportBasicMax = function (a, b) {
     return x > y ? x : y;
 };
 
-// Process logic primitives - hyper-diadic / monadic where applicable
+// Process logic primitives - hyper where applicable
 
 Process.prototype.reportLessThan = function (a, b) {
-    return this.hyperDyadic(this.reportBasicLessThan, a, b);
+    return this.hyper(this.reportBasicLessThan, a, b);
 };
 
 Process.prototype.reportLessThanOrEquals = function (a, b) {
-    return this.hyperDyadic(
+    return this.hyper(
         (a, b) => !this.reportBasicGreaterThan(a, b),
         a,
         b
@@ -4240,11 +4286,11 @@ Process.prototype.reportBasicLessThan = function (a, b) {
 };
 
 Process.prototype.reportGreaterThan = function (a, b) {
-    return this.hyperDyadic(this.reportBasicGreaterThan, a, b);
+    return this.hyper(this.reportBasicGreaterThan, a, b);
 };
 
 Process.prototype.reportGreaterThanOrEquals = function (a, b) {
-    return this.hyperDyadic(
+    return this.hyper(
         (a, b) => !this.reportBasicLessThan(a, b),
         a,
         b
@@ -4270,13 +4316,7 @@ Process.prototype.reportNotEquals = function (a, b) {
 };
 
 Process.prototype.reportNot = function (bool) {
-    if (this.enableHyperOps) {
-        if (bool instanceof List) {
-            return bool.map(each => this.reportNot(each));
-        }
-    }
-    // this.assertType(bool, 'Boolean');
-    return !bool;
+    return this.hyper(val => !val, bool);
 };
 
 Process.prototype.reportIsIdentical = function (a, b) {
@@ -4322,24 +4362,24 @@ Process.prototype.reportBoolean = function (bool) {
     return bool;
 };
 
-// Process hyper-monadic primitives
+// Process monadic primitives
 
 Process.prototype.reportRound = function (n) {
-    if (this.enableHyperOps) {
-        if (n instanceof List) {
-            return n.map(each => this.reportRound(each));
-        }
-    }
+    return this.hyper(this.reportBasicRound, n);
+};
+
+Process.prototype.reportBasicRound = function (n) {
     return Math.round(+n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
-    if (this.enableHyperOps) {
-        if (n instanceof List) {
-            return n.map(each => this.reportMonadic(fname, each));
-        }
-    }
+    return this.hyper(
+        num => this.reportBasicMonadic(fname, num),
+        n
+    );
+};
 
+Process.prototype.reportBasicMonadic = function (fname, n) {
     var x = +n,
         result = 0;
 
@@ -4433,6 +4473,9 @@ Process.prototype.reportTextFunction = function (fname, string) {
     case 'XML unescape':
         result = new XML_Element().unescape(x);
         break;
+    case 'JS escape':
+        result = JSCompiler.prototype.escape(x);
+        break;
     case 'hex sha512 hash':
         result = hex_sha512(x);
         break;
@@ -4469,10 +4512,10 @@ Process.prototype.isAST = function (aList) {
     return false;
 };
 
-// Process string ops - hyper-monadic/dyadic
+// Process string ops - hyper
 
 Process.prototype.reportLetter = function (idx, string) {
-    return this.hyperDyadic(
+    return this.hyper(
         (ix, str) => this.reportBasicLetter(ix, str),
         idx,
         string
@@ -4494,18 +4537,15 @@ Process.prototype.reportBasicLetter = function (idx, string) {
 };
 
 Process.prototype.reportStringSize = function (data) {
-    if (this.enableHyperOps) {
-        if (data instanceof List) {
-            return data.map(each => this.reportStringSize(each));
-        }
-    }
-    if (data instanceof List) { // catch a common user error
-        return data.length();
-    }
-    return isNil(data) ? 0 : Array.from(data.toString()).length;
+    return this.hyper(
+        str => isNil(data) ? 0 : Array.from(str.toString()).length,
+        data
+    );
 };
 
 Process.prototype.reportUnicode = function (string) {
+    // special case to report a list of numbers for a string of characters,
+    // hence this is NOT using hyper()
     var str, unicodeList;
 
     if (this.enableHyperOps) {
@@ -4527,12 +4567,10 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
-    if (this.enableHyperOps) {
-        if (num instanceof List) {
-            return num.map(each => this.reportUnicodeAsLetter(each));
-        }
-    }
+    return this.hyper(this.reportBasicUnicodeAsLetter, num);
+};
 
+Process.prototype.reportBasicUnicodeAsLetter = function (num) {
     var code = +(num || 0);
 
     if (String.fromCodePoint) { // support for Unicode in newer browsers.
@@ -4546,7 +4584,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         this.assertType(string, ['command', 'reporter', 'predicate']);
         return string.components();
     }
-    return this.hyperDyadic(
+    return this.hyper(
         (str, delim) => this.reportBasicTextSplit(str, delim),
         string,
         delimiter
@@ -5139,12 +5177,18 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     var those,
         stage,
         box,
-        mouse;
+        coord;
 
     if (this.inputOption(name) === 'mouse-pointer') {
-        mouse = thisObj.world().hand.position();
-        if (thisObj.bounds.containsPoint(mouse) &&
-                !thisObj.isTransparentAt(mouse)) {
+        coord = thisObj.world().hand.position();
+        if (thisObj.bounds.containsPoint(coord) &&
+                !thisObj.isTransparentAt(coord)) {
+            return true;
+        }
+    } else if (this.isCoordinate(name)) {
+        coord = thisObj.worldPoint(new Point(name.at(1), name.at(2)));
+        if (thisObj.bounds.containsPoint(coord) &&
+                !thisObj.isTransparentAt(coord)) {
             return true;
         }
     } else {
@@ -5379,11 +5423,18 @@ Process.prototype.spritesAtPoint = function (point, stage) {
 
 Process.prototype.reportRelationTo = function (relation, name) {
     if (this.enableHyperOps) {
-        if (name instanceof List && !this.isCoordinate(name)) {
-            return name.map(each => this.reportRelationTo(relation, each));
-        }
+        return this.hyperDyadic(
+            (rel, nam) => this.reportBasicRelationTo(rel, nam),
+            relation,
+            name,
+            null,
+            n => this.isCoordinate(n)
+        );
     }
+    return this.reportBasicRelationTo(relation, name);
+};
 
+Process.prototype.reportBasicRelationTo = function (relation, name) {
 	var rel = this.inputOption(relation);
  	if (rel === 'distance') {
   		return this.reportDistanceTo(name);
@@ -5393,6 +5444,9 @@ Process.prototype.reportRelationTo = function (relation, name) {
     }
     if (rel === 'direction') {
     	return this.reportDirectionTo(name);
+    }
+    if (this.reportTypeOf(rel) === 'number') {
+        return this.reportRayLengthTo(name, rel);
     }
     return 0;
 };
@@ -5433,10 +5487,11 @@ Process.prototype.reportDistanceTo = function (name) {
     return 0;
 };
 
-Process.prototype.reportRayLengthTo = function (name) {
+Process.prototype.reportRayLengthTo = function (name, relativeAngle = 0) {
     // raycasting edge detection - answer the distance between the asking
     // sprite's rotation center to the target sprite's outer edge (the first
-    // opaque pixel) in the asking sprite's current direction
+    // opaque pixel) in the asking sprite's current direction offset by
+    // an optional relative angle in degrees
     var thisObj = this.blockReceiver(),
         thatObj,
         stage,
@@ -5500,7 +5555,8 @@ Process.prototype.reportRayLengthTo = function (name) {
     if (!(thatObj instanceof SpriteMorph)) {return -1; }
 
     // determine intersections with the target's bounding box
-    dir = thisObj.heading;
+    dir = thisObj.heading + relativeAngle;
+    dir = ((+dir % 360) + 360) % 360;
     targetBounds = thatObj.bounds;
     top = targetBounds.top();
     bottom = targetBounds.bottom();
@@ -5640,7 +5696,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     // sprite-local variables. Attributes such as "width", "direction" etc.
     // can only be queried via the dropdown menu and are, therefore, not
     // reachable as dyadic inputs
-    return this.hyperDyadic(
+    return this.hyper(
         (att, obj) => this.reportBasicAttributeOf(att, obj),
         attribute,
         name
@@ -6076,9 +6132,10 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     result.outerContext.receiver = otherObj;
     if (result.outerContext.variables.parentFrame) {
         rootVars = result.outerContext.variables.parentFrame;
-        receiverVars = copy(otherObj.variables);
-        receiverVars.parentFrame = rootVars;
+        receiverVars = otherObj.variables.fullCopy();
+        receiverVars.root().parentFrame = rootVars;
         result.outerContext.variables.parentFrame = receiverVars;
+        result.variables = receiverVars;
     } else {
         result.outerContext.variables.parentFrame = otherObj.variables;
     }
@@ -6730,7 +6787,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
     // note: attributes in the left slot
     // can only be queried via the dropdown menu and are, therefore, not
     // reachable as dyadic inputs
-    return this.hyperDyadic(
+    return this.hyper(
         (att, obj) => this.reportBasicBlockAttribute(att, obj),
         attribute,
         block
@@ -8076,7 +8133,6 @@ VariableFrame.prototype.copy = function () {
 };
 
 VariableFrame.prototype.fullCopy = function () {
-    // experimental - for compiling to JS
     var frame;
     if (this.parentFrame) {
         frame = new VariableFrame(this.parentFrame.fullCopy());
