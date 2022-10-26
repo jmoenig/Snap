@@ -46,7 +46,7 @@
                 }
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
-                loop();
+                requestAnimationFrame(loop);
             };
             function loop(timestamp) {
                 requestAnimationFrame(loop);
