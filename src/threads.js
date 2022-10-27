@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-October-24';
+modules.threads = '2022-October-27';
 
 var ThreadManager;
 var Process;
@@ -1763,7 +1763,7 @@ Process.prototype.doSetVar = function (varName, value) {
 Process.prototype.doChangeVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-    this.assertType(value, 'number');
+    this.assertType(value, 'number', '');
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.changeVar(
@@ -3961,15 +3961,16 @@ Process.prototype.reportIsA = function (thing, typeString) {
     return this.reportTypeOf(thing) === this.inputOption(typeString);
 };
 
-Process.prototype.assertType = function (thing, typeString) {
+Process.prototype.assertType = function (thing, typeString, ...exempt) {
     // make sure "thing" is a particular type or any of a number of types
-    // and raise an error if not
+    // or a particular exempt value and raise an error if not
     // use responsibly wrt performance implications
     var thingType = this.reportTypeOf(thing);
     if (thingType === typeString) {return true; }
     if (typeString instanceof Array && contains(typeString, thingType)) {
         return true;
     }
+    if (exempt.length && contains(exempt, thing)) {return true; }
     throw new Error(
         localize('expecting a') + ' ' +
         (typeString instanceof Array ?
@@ -8209,7 +8210,7 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
         newValue;
     if (frame) {
         value = parseFloat(frame.vars[name].value);
-        newValue = isNaN(value) ? delta : value + parseFloat(delta);
+        newValue = isNaN(value) ? delta : value + delta;
         if (sender instanceof SpriteMorph &&
                 (frame.owner instanceof SpriteMorph) &&
                 (sender !== frame.owner)) {

@@ -46,6 +46,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-10-27
+* threads: tweaked assertType() and allowed empty text as zero-argument for changeVar()
+
 ### 2022-10-26
 * blocks: caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
 * snap.html: improved frame scheduling, thanks, SArpnt!
