@@ -24,6 +24,7 @@
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
 * **Notable Fixes:**
+    * improved text wrapping - wrap words that are too wide for a line by letters
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
@@ -45,6 +46,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-10-31
+* morphic: improve text wrapping - wrap too wide words by letters
 
 ### 2022-10-27
 * threads: tweaked assertType() and allowed empty text as zero-argument for changeVar()

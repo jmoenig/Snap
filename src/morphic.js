@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-October-26';
+var morphicVersion = '2022-October-31';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -9377,7 +9377,25 @@ TextMorph.prototype.parse = function () {
                         this.maxLineWidth,
                         context.measureText(oldline).width
                     );
-                    oldline = word + ' ';
+                    w = context.measureText(word).width;
+                    if (w > this.maxWidth) {
+                        oldline = '';
+                        word.split('').forEach((letter, idx) => {
+                            w = context.measureText(oldline + letter).width;
+                            if (w > this.maxWidth && oldline.length) {
+                                this.lines.push(oldline);
+                                this.lineSlots.push(slot + idx);
+                                this.maxLineWidth = Math.max(
+                                    this.maxLineWidth,
+                                    context.measureText(oldline).width
+                                );
+                                oldline = '';
+                            }
+                            oldline += letter;
+                        });
+                    } else {
+                        oldline = word + ' ';
+                    }
                 } else {
                     oldline = newline;
                 }
