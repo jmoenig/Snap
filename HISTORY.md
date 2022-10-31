@@ -47,6 +47,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-11-01
+* morphic: made Canvas GPU/CPU optimization dynamic
+
 ### 2022-10-31
 * morphic: improve text wrapping - wrap too wide words by letters
 * morphic: turned Canvas GPU/CPU optimization into a central switch (after discovering severe slowdown in Chrome)

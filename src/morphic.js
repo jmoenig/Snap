@@ -1307,21 +1307,20 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-October-31';
+var morphicVersion = '2022-November-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
+var keepCanvasInCPU = false;
 
 const ZERO = new Point();
 const BLACK = new Color();
 const WHITE = new Color(255, 255, 255);
 const CLEAR = new Color(0, 0, 0, 0);
-const CPU_CANVAS = false;
 
 Object.freeze(ZERO);
 Object.freeze(BLACK);
 Object.freeze(WHITE);
 Object.freeze(CLEAR);
-Object.freeze(CPU_CANVAS);
 
 var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
@@ -1498,7 +1497,7 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas.width = ext.x;
         canvas.height = ext.y;
         canvas.getContext("2d", {
-            willReadFrequently: CPU_CANVAS
+            willReadFrequently: keepCanvasInCPU
         });
     }
     if (nonRetina && canvas.isRetinaEnabled) {
@@ -1534,7 +1533,7 @@ function getMinimumFontHeight() {
     canvas.width = size;
     canvas.height = size;
     ctx = canvas.getContext('2d', {
-        willReadFrequently: CPU_CANVAS
+        willReadFrequently: keepCanvasInCPU
     });
     ctx.font = '1px serif';
     maxX = ctx.measureText(str).width;
@@ -1697,7 +1696,7 @@ function enableRetinaSupport() {
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
     var ctx = document.createElement("canvas").getContext("2d", {
-            willReadFrequently: CPU_CANVAS
+            willReadFrequently: keepCanvasInCPU
         }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
@@ -1798,7 +1797,7 @@ function enableRetinaSupport() {
                     context;
                 uber.width.set.call(this, width * pixelRatio);
                 context = this.getContext('2d', {
-                    willReadFrequently: CPU_CANVAS
+                    willReadFrequently: keepCanvasInCPU
                 });
                 /*
                 context.restore();
@@ -1821,7 +1820,7 @@ function enableRetinaSupport() {
                 context;
             uber.height.set.call(this, height * pixelRatio);
             context = this.getContext('2d', {
-                willReadFrequently: CPU_CANVAS
+                willReadFrequently: keepCanvasInCPU
             });
             /*
             context.restore();
@@ -1927,7 +1926,7 @@ function enableRetinaSupport() {
 
 function isRetinaSupported () {
     var ctx = document.createElement("canvas").getContext("2d", {
-            willReadFrequently: CPU_CANVAS
+            willReadFrequently: keepCanvasInCPU
         }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
@@ -12063,7 +12062,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
     this.worldCanvas.getContext("2d", {
-        willReadFrequently: CPU_CANVAS
+        willReadFrequently: keepCanvasInCPU
     });
 
     // additional properties:
