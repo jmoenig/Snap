@@ -49,6 +49,7 @@
 
 ### 2022-10-31
 * morphic: improve text wrapping - wrap too wide words by letters
+* morphic: turned Canvas GPU/CPU optimization into a central switch (after discovering severe slowdown in Chrome)
 
 ### 2022-10-27
 * threads: tweaked assertType() and allowed empty text as zero-argument for changeVar()
