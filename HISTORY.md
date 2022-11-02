@@ -23,6 +23,7 @@
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
+    * updated "Codification" example project
 * **Notable Fixes:**
     * improved text wrapping - wrap words that are too wide for a line by letters
     * fixed aggressive cache issue, thanks, Michael!
@@ -46,6 +47,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-11-02
+* updated "Codification" example project
 
 ### 2022-11-01
 * morphic: made Canvas GPU/CPU optimization dynamic
