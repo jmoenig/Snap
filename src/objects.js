@@ -11977,15 +11977,15 @@ CellMorph.prototype.createContents = function () {
         if (this.contents instanceof Morph) {
             if (isSnapObject(this.contents)) {
                 img = this.contents.thumbnail(new Point(40, 40));
-                this.contentsMorph = new Morph();
-                this.contentsMorph.isCachingImage = true;
-                this.contentsMorph.bounds.setWidth(img.width);
-                this.contentsMorph.bounds.setHeight(img.height);
-                this.contentsMorph.cachedImage = img;
-                this.version = this.contents.version;
             } else {
-                this.contentsMorph = this.contents.fullCopy();
+                img = this.contents.fullImage();
             }
+            this.contentsMorph = new Morph();
+            this.contentsMorph.isCachingImage = true;
+            this.contentsMorph.bounds.setWidth(img.width);
+            this.contentsMorph.bounds.setHeight(img.height);
+            this.contentsMorph.cachedImage = img;
+            this.version = this.contents.version;
         } else if (isString(this.contents)) {
             txt  = this.contents.length > 500 ?
                     this.contents.slice(0, 500) + '...' : this.contents;
