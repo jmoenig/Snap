@@ -157,11 +157,11 @@ isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
 CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-October-26';
+modules.blocks = '2022-November-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5643,12 +5643,11 @@ BlockMorph.prototype.snap = function () {
     }
 };
 
-// BlockMorph op-sequence analysis // +++
+// BlockMorph op-sequence analysis
 
 BlockMorph.prototype.unwind = function () {
     var inp = this.inputs(),
-        nxt,
-        ops;
+        nxt;
     if (inp.length) {
         return inp[0].unwind();
     }
@@ -5661,7 +5660,7 @@ BlockMorph.prototype.unwind = function () {
     }
     // reporter or multi-arg
     nxt = this.parent instanceof MultiArgMorph ? this.parent
-        : this.parent?.parentThatIsA(BlockMorph);;
+        : this.parent?.parentThatIsA(BlockMorph);
     if (nxt) {
         return [this].concat(nxt.unwindAfter(this));
     }
@@ -8878,7 +8877,7 @@ ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
 };
 
-// ArgMorph op-sequence analysis // +++
+// ArgMorph op-sequence analysis
 
 ArgMorph.prototype.unwind = function () {
     var nxt = this.parent instanceof MultiArgMorph ? this.parent
@@ -13259,7 +13258,7 @@ MultiArgMorph.prototype.isEmptySlot = function () {
     return this.canBeEmpty ? this.inputs().length === 0 : false;
 };
 
-// MultiArgMorph op-sequence analysis // +++
+// MultiArgMorph op-sequence analysis
 
 MultiArgMorph.prototype.unwind = BlockMorph.prototype.unwind;
 MultiArgMorph.prototype.unwindAfter = BlockMorph.prototype.unwindAfter;
