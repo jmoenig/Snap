@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-October-25';
+modules.objects = '2022-November-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -11984,7 +11984,7 @@ CellMorph.prototype.createContents = function () {
                 this.contentsMorph.cachedImage = img;
                 this.version = this.contents.version;
             } else {
-                this.contentsMorph = this.contents;
+                this.contentsMorph = this.contents.fullCopy();
             }
         } else if (isString(this.contents)) {
             txt  = this.contents.length > 500 ?

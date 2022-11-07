@@ -48,6 +48,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-11-07
+* objects: tweaked monitoring non-sprite morphs for development
+
 ### 2022-11-02
 * updated "Codification" example project
 
