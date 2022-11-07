@@ -5642,6 +5642,52 @@ BlockMorph.prototype.snap = function () {
     }
 };
 
+// BlockMorph op-sequence analysis // +++
+
+BlockMorph.prototype.unwind = function () {
+    var inp = this.inputs(),
+        nxt,
+        ops;
+    if (inp.length) {
+        return inp[0].unwind();
+    }
+    if (this.nextBlock) { // command
+        nxt = this.nextBlock();
+        if (nxt) {
+            return [this].concat(nxt.unwind());
+        }
+        return [this];
+    }
+    // reporter or multi-arg
+    nxt = this.parent instanceof MultiArgMorph ? this.parent
+        : this.parent?.parentThatIsA(BlockMorph);;
+    if (nxt) {
+        return [this].concat(nxt.unwindAfter(this));
+    }
+    return [this];
+};
+
+BlockMorph.prototype.unwindAfter = function (element) {
+    var idx = this.inputs().indexOf(element),
+        nxt;
+    if (idx === this.inputs().length - 1) { // end of block
+        if (this.nextBlock) { // command
+            nxt = this.nextBlock();
+            if (nxt) {
+                return [this].concat(nxt.unwind());
+            }
+            return [this];
+        }
+        // reporter or multi-arg
+        nxt = this.parent?.parentThatIsA(BlockMorph);
+        if (nxt) {
+            return [this].concat(nxt.unwindAfter(this));
+        }
+        return [this];
+    }
+    return this.inputs()[idx + 1].unwind();
+};
+
 // CommandBlockMorph ///////////////////////////////////////////////////
 
 /*
@@ -8829,6 +8875,14 @@ ArgMorph.prototype.render = function (ctx) {
 
 ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
+};
+
+// ArgMorph op-sequence analysis // +++
+
+ArgMorph.prototype.unwind = function () {
+    var nxt = this.parent instanceof MultiArgMorph ? this.parent
+                : this.parentThatIsA(BlockMorph);
+    return [this].concat(nxt.unwindAfter(this));
 };
 
 // CommandSlotMorph ////////////////////////////////////////////////////
@@ -13203,6 +13257,11 @@ MultiArgMorph.prototype.evaluate = function () {
 MultiArgMorph.prototype.isEmptySlot = function () {
     return this.canBeEmpty ? this.inputs().length === 0 : false;
 };
+
+// MultiArgMorph op-sequence analysis // +++
+
+MultiArgMorph.prototype.unwind = BlockMorph.prototype.unwind;
+MultiArgMorph.prototype.unwindAfter = BlockMorph.prototype.unwindAfter;
 
 // ArgLabelMorph ///////////////////////////////////////////////////////
 
