@@ -9104,7 +9104,10 @@ CommandSlotMorph.prototype.unwind = function () {
         nxt = this.parent instanceof MultiArgMorph ? this.parent
                 : this.parentThatIsA(BlockMorph);
     if (nested) {
-        return nested.unwind().concat(nxt.unwindAfter(this));
+        if (this.isStatic) {
+            return nested.unwind().concat(nxt.unwindAfter(this));
+        }
+        return [nested.unwind()].concat(nxt.unwindAfter(this));        
     }
     return nxt.unwindAfter(this);
 };
