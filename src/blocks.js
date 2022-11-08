@@ -5647,6 +5647,7 @@ BlockMorph.prototype.snap = function () {
 
 BlockMorph.prototype.unwind = function () {
     var inp = this.inputs(),
+        current,
         nxt;
     if (inp.length) {
         return inp[0].unwind();
@@ -5659,16 +5660,23 @@ BlockMorph.prototype.unwind = function () {
         return [this];
     }
     // reporter or multi-arg
-    nxt = this.parent instanceof MultiArgMorph ? this.parent
-        : this.parent?.parentThatIsA(BlockMorph);
+    if (this.parent instanceof MultiArgMorph ||
+            this.parent instanceof BlockMorph) {
+        nxt = this.parent;
+        current = this;
+    } else if (this.parent instanceof ArgMorph) {
+        nxt = this.parent.parentThatIsA(BlockMorph);
+        current = this.parent;
+    }
     if (nxt) {
-        return [this].concat(nxt.unwindAfter(this));
+        return [this].concat(nxt.unwindAfter(current));
     }
     return [this];
 };
 
 BlockMorph.prototype.unwindAfter = function (element) {
     var idx = this.inputs().indexOf(element),
+        current,
         nxt;
     if (idx === this.inputs().length - 1) { // end of block
         if (this.nextBlock) { // command
@@ -5679,9 +5687,16 @@ BlockMorph.prototype.unwindAfter = function (element) {
             return [this];
         }
         // reporter or multi-arg
-        nxt = this.parent?.parentThatIsA(BlockMorph);
+        if (this.parent instanceof MultiArgMorph ||
+                this.parent instanceof BlockMorph) {
+            nxt = this.parent;
+            current = this;
+        } else if (this.parent instanceof ArgMorph) {
+            nxt = this.parent.parentThatIsA(BlockMorph);
+            current = this.parent;
+        }
         if (nxt) {
-            return [this].concat(nxt.unwindAfter(this));
+            return [this].concat(nxt.unwindAfter(current));
         }
         return [this];
     }
@@ -13864,6 +13879,10 @@ ReporterSlotMorph.prototype.fixLayout = function () {
         }
     }
 };
+
+// ReporterSlotMorph op-sequence analysis
+
+ReporterSlotMorph.prototype.unwind = CommandSlotMorph.prototype.unwind
 
 // RingReporterSlotMorph ///////////////////////////////////////////////////
 
