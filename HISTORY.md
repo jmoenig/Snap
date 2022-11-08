@@ -48,6 +48,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-11-08
+* blocks: special cased unwind() for c-clots, experimental
+
 ### 2022-11-07
 * objects: tweaked monitoring non-sprite morphs for development
 * blocks: op-sequence analysis, experimental
