@@ -9053,6 +9053,18 @@ CommandSlotMorph.prototype.attach = function () {
     }
 };
 
+// CommandSlotMorph op-sequence analysis
+
+CommandSlotMorph.prototype.unwind = function () {
+    var nested = this.nestedBlock(),
+        nxt = this.parent instanceof MultiArgMorph ? this.parent
+                : this.parentThatIsA(BlockMorph);
+    if (nested) {
+        return nested.unwind().concat(nxt.unwindAfter(this));
+    }
+    return nxt.unwindAfter(this);
+};
+
 // CommandSlotMorph drawing:
 
 CommandSlotMorph.prototype.render = function (ctx) {
@@ -9596,18 +9608,6 @@ CSlotMorph.prototype.fixHolesLayout = function () {
 
 CSlotMorph.prototype.isLocked = function () {
     return this.isStatic || this.parent instanceof MultiArgMorph;
-};
-
-// CSlotMorph op-sequence analysis
-
-CSlotMorph.prototype.unwind = function () {
-    var nested = this.nestedBlock(),
-        nxt = this.parent instanceof MultiArgMorph ? this.parent
-                : this.parentThatIsA(BlockMorph);
-    if (nested) {
-        return nested.unwind().concat(nxt.unwindAfter(this));
-    }
-    return nxt.unwindAfter(this);
 };
 
 // CSlotMorph drawing:
