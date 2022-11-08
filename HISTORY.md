@@ -50,6 +50,7 @@
 
 ### 2022-11-08
 * blocks: special cased unwind() for c-clots, experimental
+* blocks: reverse unwind() sequence for rings, experimental
 
 ### 2022-11-07
 * objects: tweaked monitoring non-sprite morphs for development
