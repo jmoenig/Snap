@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-08';
+modules.blocks = '2022-November-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7613,30 +7613,19 @@ RingMorph.prototype.userMenu = function () {
 // RingMorph op-sequence analysis
 
 RingMorph.prototype.unwind = function () {
-    // start with the formal parameters and then go backwards
-    return this.inputs()[1].unwind();
+    var nested = this.contents(),
+        parms = this.inputs()[1].inputs(),
+        nxt = this.parent instanceof MultiArgMorph ? this.parent
+                : this.parent.parentThatIsA(BlockMorph);
+    if (nested) {
+        return [parms.concat(nested.unwind()).concat([this])]
+            .concat(nxt.unwindAfter(this));
+    }
+    return [parms].concat([this]).concat(nxt.unwindAfter(this));
 };
 
-RingMorph.prototype.unwindAfter = function (element) {
-    // start with the formal parameters and then go backwards
-    var idx = this.inputs().indexOf(element),
-        current,
-        nxt;
-    if (idx < 1) { // begin of ring
-        if (this.parent instanceof MultiArgMorph ||
-                this.parent instanceof BlockMorph) {
-            nxt = this.parent;
-            current = this;
-        } else if (this.parent instanceof ArgMorph) {
-            nxt = this.parent.parentThatIsA(BlockMorph);
-            current = this.parent;
-        }
-        if (nxt) {
-            return [this].concat(nxt.unwindAfter(current));
-        }
-        return [this];
-    }
-    return this.inputs()[idx - 1].unwind();
+RingMorph.prototype.unwindAfter = function () {
+    return [];
 };
 
 // ScriptsMorph ////////////////////////////////////////////////////////
@@ -9107,7 +9096,7 @@ CommandSlotMorph.prototype.unwind = function () {
         if (this.isStatic) {
             return nested.unwind().concat(nxt.unwindAfter(this));
         }
-        return [nested.unwind()].concat(nxt.unwindAfter(this));        
+        return [nested.unwind()].concat(nxt.unwindAfter(this));
     }
     return nxt.unwindAfter(this);
 };
@@ -13911,10 +13900,6 @@ ReporterSlotMorph.prototype.fixLayout = function () {
         }
     }
 };
-
-// ReporterSlotMorph op-sequence analysis
-
-ReporterSlotMorph.prototype.unwind = CommandSlotMorph.prototype.unwind;
 
 // RingReporterSlotMorph ///////////////////////////////////////////////////
 

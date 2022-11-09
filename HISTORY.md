@@ -48,6 +48,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-11-09
+* blocks: tweaked unwind() for rings
+
 ### 2022-11-08
 * blocks: special cased unwind() for c-clots, experimental
 * blocks: reverse unwind() sequence for rings, experimental
