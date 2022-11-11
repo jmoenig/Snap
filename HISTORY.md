@@ -48,6 +48,9 @@
 * **Translation Updates:**
     * German
 
+### 2022-11-11
+* blocks: refactored renaming script variables, upvars and ring parameters
+
 ### 2022-11-09
 * blocks: tweaked unwind() for rings
 

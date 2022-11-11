@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-07';
+modules.objects = '2022-November-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -6670,7 +6670,7 @@ SpriteMorph.prototype.reportThreadCount = function () {
 
 // SpriteMorph variable refactoring
 
-SpriteMorph.prototype.refactorVariableInstances = function (
+SpriteMorph.prototype.refactorVariableInstances = function ( // +++ adjust this
     oldName,
     newName,
     isGlobal

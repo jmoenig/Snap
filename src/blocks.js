@@ -161,7 +161,7 @@ CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-09';
+modules.blocks = '2022-November-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1495,9 +1495,9 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     return {};
 };
 
-// Variable refactoring
+// Variable refactoring // +++ adjust this for the new system
 
-SyntaxElementMorph.prototype.refactorVarInStack = function (
+SyntaxElementMorph.prototype.refactorVarInStack = function ( // +++ is this needed?
     oldName,
     newName,
     isScriptVar
@@ -1541,7 +1541,7 @@ SyntaxElementMorph.prototype.refactorVarInStack = function (
     }
 };
 
-SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
+SyntaxElementMorph.prototype.definesScriptVariable = function (name) { // +++ remove this, should not be needed anymore
     // Returns true if this block is defining either a script local var or
     // an upVar called `name`
     return (this.selector === 'doDeclareVariables' ||
@@ -3065,12 +3065,12 @@ BlockMorph.prototype.userMenu = function () {
                 menu.addLine();
                 menu.addItem(
                     'rename...',
-                    () => this.refactorThisVar(true), // just the template
+                    renameVar,
                     'rename only\nthis reporter'
                 );
                 menu.addItem(
                     'rename all...',
-                    'refactorThisVar',
+                    'refactorInlineTemplate',
                     'rename all blocks that\naccess this variable'
                 );
                 if (this.parent.parent instanceof MultiArgMorph &&
@@ -3139,7 +3139,7 @@ BlockMorph.prototype.userMenu = function () {
                     );
                     menu.addItem(
                         'rename all...',
-                        'refactorThisVar',
+                        'refactorThisVar', // +++
                         'rename all blocks that\naccess this variable'
                     );
                 }
@@ -4652,7 +4652,69 @@ BlockMorph.prototype.codeMappingHeader = function () {
 
 // Variable refactoring
 
-BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
+BlockMorph.prototype.refactorInlineTemplate = function () {
+    // Rename all occurrences of the variable this block is holding,
+    // taking care of its lexical scope within this script.
+    // Assuming this block to be in inline-template that defines
+    // a local script variable (in a template slot), either
+    // as upvar, ring parameter or part of a primitive that
+    // uses template slots for defining local variables, such as
+    // the "script variables" block itself.
+
+    var oldName = this.instantiationSpec || this.blockSpec,
+        cpy = this.fullCopy(),
+        myself = this;
+
+    function renameTo(newName) {
+        // rename the template
+        myself.changed();
+        myself.setSpec(newName);
+        myself.fixLabelColor();
+        myself.changed();
+        // rename the following blocks in the lexical scope
+        myself.refactorVariable(oldName, newName, true);
+    }
+
+    cpy.addShadow();
+    // new DialogBoxMorph(this, renameVarTo, this).prompt(
+    new DialogBoxMorph(this, renameTo, this).prompt(
+        'Variable name',
+        oldName,
+        this.world(),
+        cpy.doWithAlpha(1, () => cpy.fullImage()), // pic
+        InputSlotMorph.prototype.getVarNamesDict.call(this)
+    );
+};
+
+BlockMorph.prototype.refactorVariable = function (name, newName, afterThis) {
+    // rename all variable references to a given name within this script's
+    // lexical scope to a new one.
+    // Optional Boolean "afterThis" switch indicates whether the very first
+    // - i.e. - this block should be ignored, because it is the template from
+    // which refactoring happens.
+
+    function rebind(block) {
+        if (block.selector === 'reportGetVar') {
+            block.changed();
+            block.setSpec(newName);
+            block.fixLabelColor();
+            block.changed();
+        } else {
+            block.inputs().forEach(inp => {
+                if (inp.choices === 'getVarNamesDict' &&
+                        inp.evaluate() === name) {
+                    inp.setContents(newName);
+                }
+            });
+        }
+    }
+
+    this.scopeFor(name, afterThis).forEach(block => rebind(block));
+};
+
+// +++ adjust all functions below to the end of this section
+
+BlockMorph.prototype.refactorThisVar = function (justTheTemplate) { // +++
     // Rename all occurrences of the variable this block is holding,
     // taking care of its lexical scope
 
@@ -5643,11 +5705,56 @@ BlockMorph.prototype.snap = function () {
     }
 };
 
+// BlockMorph lexical variable scope analysis
+
+BlockMorph.prototype.scopeFor = function (varName, afterThis) {
+    // return an array of blocks within my lexical scope that access
+    // the given variable name.
+    // Optional Boolean "afterThis" switch indicates whether the very first
+    // - i.e. - this block should be ignored, because it is the template whose
+    // scope is being determined.
+
+    function select(opsArray) {
+        var end = opsArray.findIndex(e =>
+                e instanceof TemplateSlotMorph && e.contents() === varName),
+            scope = [],
+            i, elem;
+        if (end < 0) {end = opsArray.length; }
+        for (i = 0; i < end; i += 1) {
+            elem = opsArray[i];
+            if (elem instanceof BlockMorph &&
+                    elem.isVariableAccessorFor(varName)) {
+                scope.push(elem);
+            } else if (elem instanceof Array) {
+                scope.push(select(elem));
+            }
+        }
+        return scope;
+    }
+
+    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
+};
+
+BlockMorph.prototype.isVariableAccessorFor = function (varName) {
+    // private
+    if (this.selector === 'reportGetVar') {
+        return this.blockSpec === varName;
+    }
+    return this.inputs().some(any =>
+        any.choices === 'getVarNamesDict' &&
+        any.evaluate() === varName
+    );
+};
+
 // BlockMorph op-sequence analysis
 
 BlockMorph.prototype.unwind = function () {
+    // return an array of blocks and input slots (roughly) mimicking my
+    // sequence of operations, i.e. inside-out & left-to-right.
+    // Lambda expressions branch off as array elements.
+
     var inp = this.inputs(),
-        current,
+        current = this,
         nxt;
     if (inp.length) {
         return inp[0].unwind();
@@ -5659,14 +5766,16 @@ BlockMorph.prototype.unwind = function () {
         }
         return [this];
     }
-    // reporter or multi-arg
-    if (this.parent instanceof MultiArgMorph ||
-            this.parent instanceof BlockMorph) {
-        nxt = this.parent;
-        current = this;
-    } else if (this.parent instanceof ArgMorph) {
-        nxt = this.parent.parentThatIsA(BlockMorph);
+    if (this.parent instanceof TemplateSlotMorph) {
         current = this.parent;
+    }
+    // reporter or multi-arg
+    if (current.parent instanceof MultiArgMorph ||
+            current.parent instanceof BlockMorph) {
+        nxt = current.parent;
+    } else if (current.parent instanceof ArgMorph) {
+        nxt = current.parent.parentThatIsA(BlockMorph);
+        current = current.parent;
     }
     if (nxt) {
         return [this].concat(nxt.unwindAfter(current));
@@ -5675,8 +5784,9 @@ BlockMorph.prototype.unwind = function () {
 };
 
 BlockMorph.prototype.unwindAfter = function (element) {
+    // private
     var idx = this.inputs().indexOf(element),
-        current,
+        current = this,
         nxt;
     if (idx === this.inputs().length - 1) { // end of block
         if (this.nextBlock) { // command
@@ -5687,13 +5797,16 @@ BlockMorph.prototype.unwindAfter = function (element) {
             return [this];
         }
         // reporter or multi-arg
-        if (this.parent instanceof MultiArgMorph ||
-                this.parent instanceof BlockMorph) {
-            nxt = this.parent;
-            current = this;
-        } else if (this.parent instanceof ArgMorph) {
-            nxt = this.parent.parentThatIsA(BlockMorph);
+        if (this.parent instanceof TemplateSlotMorph) {
             current = this.parent;
+        }
+        // reporter or multi-arg
+        if (current.parent instanceof MultiArgMorph ||
+                current.parent instanceof BlockMorph) {
+            nxt = current.parent;
+        } else if (current.parent instanceof ArgMorph) {
+            nxt = current.parent.parentThatIsA(BlockMorph);
+            current = current.parent;
         }
         if (nxt) {
             return [this].concat(nxt.unwindAfter(current));
