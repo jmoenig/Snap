@@ -7737,7 +7737,10 @@ RingMorph.prototype.unwind = function () {
     return [parms].concat([this]).concat(nxt.unwindAfter(this));
 };
 
-RingMorph.prototype.unwindAfter = function () {
+RingMorph.prototype.unwindAfter = function (elem) {
+    if (elem === this.inputs()[1]) {
+        return this.contents().unwind();
+    }
     return [];
 };
 
