@@ -938,7 +938,15 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'static'
     },
     '%cs': {
-        type: 'c',
+        type: 'c'
+    },
+    '%cc': {
+	type: 'c',
+	tags: 'multi',
+	label: 'if',
+	slots: '%b %c',
+	max: 1,
+	min: 0
     },
     '%ca': {
         type: 'c',
