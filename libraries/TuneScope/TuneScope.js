@@ -1,3 +1,9 @@
+// Load urls
+
+SnapExtensions.primitives.get('src_load(url)')()
+
+// extension functions
+
 SnapExtensions.primitives.set(
     'ts_setinst(name)',
     function (name) {

@@ -296,6 +296,10 @@ window.parent.instrumentData = {
         path: "https://surikov.github.io/webaudiofontdata/sound/12849_21_FluidR3_GM_sf2_file.js",
         name: "_drum_49_21_FluidR3_GM_sf2_file"
     },
+    "vibraphone": {
+        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
+        name: "_tone_0110_GeneralUserGS_sf2_file"
+    },
 }
 
 // load all instruments
