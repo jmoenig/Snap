@@ -4604,18 +4604,19 @@ BlockMorph.prototype.refactorPaletteTemplate = function (everywhere) {
         myself = this;
 
     function renameTo(newName) {
-        // rename the template
-        myself.changed();
-        myself.setSpec(newName);
-        myself.fixLabelColor();
-        myself.changed();
         // rename the following blocks in the lexical scope
-        myself.scriptTarget().renameVariable(
+        if (myself.scriptTarget().renameVariable(
             oldName,
             newName,
             !myself.isLocalVarTemplate,
             everywhere
-        );
+        )) {
+        // rename the template
+            myself.changed();
+            myself.setSpec(newName);
+            myself.fixLabelColor();
+            myself.changed();
+        }
     }
 
     cpy.addShadow();

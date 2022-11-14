@@ -3930,7 +3930,7 @@ SpriteMorph.prototype.renameVariable = function (
             'Variable exists',
             'A variable with this name already exists.'
         );
-        return;
+        return false;
 
     }
     oldValue = scope.getVar(oldName);
@@ -3985,6 +3985,7 @@ SpriteMorph.prototype.renameVariable = function (
     ide.flushBlocksCache('variables');
     ide.refreshPalette();
     ide.recordUnsavedChanges();
+    return true; // success
 };
 
 // SpriteMorph costume management
