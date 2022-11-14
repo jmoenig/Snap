@@ -154,14 +154,14 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
 DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
-CustomCommandBlockMorph, ToggleButtonMorph, DialMorph, SnapExtensions,
-CostumeIconMorph, SoundIconMorph, SVG_Costume, embedMetadataPNG*/
+ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
+SVG_Costume, embedMetadataPNG*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-11';
+modules.blocks = '2022-November-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1493,64 +1493,6 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         return dict;
     }
     return {};
-};
-
-// Variable refactoring // +++ adjust this for the new system
-
-SyntaxElementMorph.prototype.refactorVarInStack = function ( // +++ is this needed?
-    oldName,
-    newName,
-    isScriptVar
-) {
-    // Rename all oldName var occurrences found in this block stack into newName
-    // taking care of not being too greedy
-
-    if ((this instanceof RingMorph && contains(this.inputNames(), oldName))
-            || (!isScriptVar && this.definesScriptVariable(oldName))) {
-        return;
-    }
-
-    if (this.selector === 'reportGetVar'
-            && this.blockSpec === oldName) {
-        this.setSpec(newName);
-        this.fullChanged();
-        this.fixLabelColor();
-    }
-
-    if (this.choices === 'getVarNamesDict'
-            && this.contents().text === oldName) {
-        this.setContents(newName);
-    }
-
-    if (this instanceof CustomCommandBlockMorph
-            && this.definition.body
-            && isNil(this.definition.declarations.get(oldName))
-            && !contains(this.definition.variableNames, oldName)) {
-        this.definition.body.expression.refactorVarInStack(oldName, newName);
-    }
-
-    this.inputs().forEach(input =>
-        input.refactorVarInStack(oldName, newName)
-    );
-
-    if (this.nextBlock) {
-        var nb = this.nextBlock();
-        if (nb) {
-            nb.refactorVarInStack(oldName, newName);
-        }
-    }
-};
-
-SyntaxElementMorph.prototype.definesScriptVariable = function (name) { // +++ remove this, should not be needed anymore
-    // Returns true if this block is defining either a script local var or
-    // an upVar called `name`
-    return (this.selector === 'doDeclareVariables' ||
-            (this.blockSpec && this.blockSpec.match('%upvar'))
-    ) && detect(
-        this.inputs()[0].allInputs(),
-            input => (input.selector === 'reportGetVar' &&
-                input.blockSpec === name)
-    );
 };
 
 // SyntaxElementMorph copy-on-write support:
@@ -3134,12 +3076,12 @@ BlockMorph.prototype.userMenu = function () {
                     menu.addLine();
                     menu.addItem(
                         'rename...',
-                        () => this.refactorThisVar(true), // just the template
+                        'refactorPaletteTemplate',
                         'rename only\nthis reporter'
                     );
                     menu.addItem(
                         'rename all...',
-                        'refactorThisVar', // +++
+                        () => this.refactorPaletteTemplate(true), // everywhere
                         'rename all blocks that\naccess this variable'
                     );
                 }
@@ -4652,6 +4594,40 @@ BlockMorph.prototype.codeMappingHeader = function () {
 
 // Variable refactoring
 
+BlockMorph.prototype.refactorPaletteTemplate = function (everywhere) {
+    // Rename all occurrences of the variable this block is holding,
+    // taking care of its lexical scope depending whether the template
+    // is marked as sprite-local or global.
+
+    var oldName = this.instantiationSpec || this.blockSpec,
+        cpy = this.fullCopy(),
+        myself = this;
+
+    function renameTo(newName) {
+        // rename the template
+        myself.changed();
+        myself.setSpec(newName);
+        myself.fixLabelColor();
+        myself.changed();
+        // rename the following blocks in the lexical scope
+        myself.scriptTarget().renameVariable(
+            oldName,
+            newName,
+            !myself.isLocalVarTemplate,
+            everywhere
+        );
+    }
+
+    cpy.addShadow();
+    new DialogBoxMorph(this, renameTo, this).prompt(
+        'Variable name',
+        oldName,
+        this.world(),
+        cpy.doWithAlpha(1, () => cpy.fullImage()), // pic
+        InputSlotMorph.prototype.getVarNamesDict.call(this)
+    );
+};
+
 BlockMorph.prototype.refactorInlineTemplate = function () {
     // Rename all occurrences of the variable this block is holding,
     // taking care of its lexical scope within this script.
@@ -4676,7 +4652,6 @@ BlockMorph.prototype.refactorInlineTemplate = function () {
     }
 
     cpy.addShadow();
-    // new DialogBoxMorph(this, renameVarTo, this).prompt(
     new DialogBoxMorph(this, renameTo, this).prompt(
         'Variable name',
         oldName,
@@ -4709,294 +4684,7 @@ BlockMorph.prototype.refactorVariable = function (name, newName, afterThis) {
         }
     }
 
-    this.scopeFor(name, afterThis).forEach(block => rebind(block));
-};
-
-// +++ adjust all functions below to the end of this section
-
-BlockMorph.prototype.refactorThisVar = function (justTheTemplate) { // +++
-    // Rename all occurrences of the variable this block is holding,
-    // taking care of its lexical scope
-
-    var receiver = this.scriptTarget(),
-        oldName = this.instantiationSpec || this.blockSpec,
-        cpy = this.fullCopy();
-
-    cpy.addShadow();
-
-    new DialogBoxMorph(this, renameVarTo, this).prompt(
-        'Variable name',
-        oldName,
-        this.world(),
-        cpy.doWithAlpha(1, () => cpy.fullImage()), // pic
-        InputSlotMorph.prototype.getVarNamesDict.call(this)
-    );
-
-    function renameVarTo (newName) {
-        var block;
-
-        if (this.parent instanceof SyntaxElementMorph) {
-
-            // commented out by jens and reformulated below
-            // in an attempt to catch some bugs in v6:
-
-        /*
-            if (this.parentThatIsA(BlockEditorMorph)) {
-                this.doRefactorBlockParameter(
-                    oldName,
-                    newName,
-                    justTheTemplate
-                );
-            } else if (this.parentThatIsA(RingMorph)) {
-                this.doRefactorRingParameter(oldName, newName, justTheTemplate);
-            } else {
-                this.doRefactorScriptVar(oldName, newName, justTheTemplate);
-            }
-        */
-
-            // trying to make some things more reliable below,
-            // I guess at one point we'll have to rethink the
-            // whole mechanism (jens)
-
-            if (this.parent instanceof BlockInputFragmentMorph) {
-                this.doRefactorBlockParameter(
-                    oldName,
-                    newName,
-                    justTheTemplate
-                );
-            } else if (this.parent instanceof TemplateSlotMorph) {
-                block = this.parent.parentThatIsA(BlockMorph);
-                if (block instanceof RingMorph) {
-                    this.doRefactorRingParameter(
-                        oldName,
-                        newName,
-                        justTheTemplate
-                    );
-                } else if (block.selector === 'doDeclareVariables') {
-                    this.doRefactorScriptVar(oldName, newName, justTheTemplate);
-                } else {
-                    // I guess it could also be an upvar ... (jens)
-                    // perhaps we should show an error here?
-                }
-            }
-
-        } else if (receiver.hasSpriteVariable(oldName)) {
-            this.doRefactorSpriteVar(oldName, newName, justTheTemplate);
-        } else {
-            this.doRefactorGlobalVar(oldName, newName, justTheTemplate);
-        }
-    }
-};
-
-BlockMorph.prototype.varExistsError = function (ide, where) {
-    ide.inform(
-        'Variable exists',
-        'A variable with this name already exists ' +
-        (where || 'in this context') + '.'
-    );
-};
-
-BlockMorph.prototype.doRefactorBlockParameter = function (
-    oldName,
-    newName,
-    justTheTemplate
-) {
-    var fragMorph = this.parentThatIsA(BlockInputFragmentMorph),
-        fragment = fragMorph.fragment.copy(),
-        definer = fragMorph.parent,
-        editor = this.parentThatIsA(BlockEditorMorph),
-        scripts = editor.body.contents;
-
-    if (definer.anyChild(any =>
-            any.blockSpec === newName
-    )) {
-        this.varExistsError(editor.target.parentThatIsA(IDE_Morph));
-        return;
-    }
-
-    fragment.labelString = newName;
-    fragMorph.updateBlockLabel(fragment);
-
-    if (justTheTemplate) {
-        return;
-    }
-
-    scripts.children.forEach(script =>
-        script.refactorVarInStack(oldName, newName)
-    );
-};
-
-BlockMorph.prototype.doRefactorRingParameter = function (
-    oldName,
-    newName,
-    justTheTemplate
-) {
-    var ring = this.parentThatIsA(RingMorph),
-        script = ring.contents(),
-        tb = this.topBlock();
-
-    if (contains(ring.inputNames(), newName)) {
-        this.varExistsError(this.parentThatIsA(IDE_Morph));
-        return;
-    }
-
-    tb.fullChanged();
-    this.setSpec(newName);
-
-    if (justTheTemplate) {
-        tb.fullChanged();
-        return;
-    }
-
-    if (script) {
-        script.refactorVarInStack(oldName, newName);
-    }
-
-    tb.fullChanged();
-};
-
-BlockMorph.prototype.doRefactorScriptVar = function (
-    oldName,
-    newName,
-    justTheTemplate
-) {
-    var definer = this.parentThatIsA(CommandBlockMorph),
-        receiver, ide;
-
-    if (definer.definesScriptVariable(newName)) {
-        receiver = this.scriptTarget();
-        ide = receiver.parentThatIsA(IDE_Morph);
-        this.varExistsError(ide);
-        return;
-    }
-
-    this.userSetSpec(newName);
-
-    if (justTheTemplate) {
-        return;
-    }
-
-    definer.refactorVarInStack(oldName, newName, true);
-};
-
-BlockMorph.prototype.doRefactorSpriteVar = function (
-    oldName,
-    newName,
-    justTheTemplate
-) {
-    var receiver = this.scriptTarget(),
-        ide = receiver.parentThatIsA(IDE_Morph),
-        oldWatcher = receiver.findVariableWatcher(oldName),
-        oldValue, newWatcher;
-
-    if (receiver.hasSpriteVariable(newName)) {
-        this.varExistsError(ide);
-        return;
-    } else if (!isNil(ide.globalVariables.vars[newName])) {
-        this.varExistsError(ide, 'as a global variable');
-        return;
-    } else {
-        oldValue = receiver.variables.getVar(oldName);
-        receiver.deleteVariable(oldName);
-        receiver.addVariable(newName, false);
-        receiver.variables.setVar(newName, oldValue);
-
-        if (oldWatcher && oldWatcher.isVisible) {
-            newWatcher = receiver.toggleVariableWatcher(
-                newName,
-                false
-            );
-            newWatcher.setPosition(oldWatcher.position());
-        }
-
-        if (!justTheTemplate) {
-            receiver.refactorVariableInstances(
-                oldName,
-                newName,
-                false
-            );
-            receiver.customBlocks.forEach(eachBlock =>
-                eachBlock.body.expression.refactorVarInStack(
-                    oldName,
-                    newName
-                )
-            );
-        }
-    }
-
-    ide.flushBlocksCache('variables');
-    ide.refreshPalette();
-};
-
-BlockMorph.prototype.doRefactorGlobalVar = function (
-    oldName,
-    newName,
-    justTheTemplate
-) {
-    var receiver = this.scriptTarget(),
-        ide = receiver.parentThatIsA(IDE_Morph),
-        stage = ide ? ide.stage : null,
-        oldWatcher = receiver.findVariableWatcher(oldName),
-        oldValue, newWatcher;
-
-    if (!isNil(ide.globalVariables.vars[newName])) {
-        this.varExistsError(ide);
-        return;
-    } else if (detect(
-        stage.children,
-        any => any instanceof SpriteMorph &&
-            any.hasSpriteVariable(newName)
-    )) {
-        this.varExistsError(ide, 'as a sprite local variable');
-        return;
-    } else {
-        oldValue = ide.globalVariables.getVar(oldName);
-        stage.deleteVariable(oldName);
-        stage.addVariable(newName, true);
-        ide.globalVariables.setVar(newName, oldValue);
-
-        if (oldWatcher && oldWatcher.isVisible) {
-            newWatcher = receiver.toggleVariableWatcher(
-                    newName,
-                    true
-                    );
-            newWatcher.setPosition(oldWatcher.position());
-        }
-
-        if (!justTheTemplate) {
-            stage.refactorVariableInstances(
-                oldName,
-                newName,
-                true
-            );
-            stage.globalBlocks.forEach(eachBlock => {
-                if (eachBlock.body) {
-                    eachBlock.body.expression.refactorVarInStack(
-                        oldName,
-                        newName
-                    );
-                }
-            });
-            stage.forAllChildren(child => {
-                if (child instanceof SpriteMorph) {
-                    child.refactorVariableInstances(
-                        oldName,
-                        newName,
-                        true
-                    );
-                    child.customBlocks.forEach(eachBlock =>
-                        eachBlock.body.expression.refactorVarInStack(
-                            oldName,
-                            newName
-                        )
-                    );
-                }
-            });
-        }
-    }
-
-    ide.flushBlocksCache('variables');
-    ide.refreshPalette();
+    this.scopeFor(name, afterThis).flat().forEach(block => rebind(block));
 };
 
 // BlockMorph thumbnail and script pic
@@ -5759,7 +5447,7 @@ BlockMorph.prototype.unwind = function () {
     if (inp.length) {
         return inp[0].unwind();
     }
-    if (this.nextBlock) { // command
+    if (this.nextBlock && !this.isPrototype) { // command
         nxt = this.nextBlock();
         if (nxt) {
             return [this].concat(nxt.unwind());
@@ -5789,14 +5477,14 @@ BlockMorph.prototype.unwindAfter = function (element) {
         current = this,
         nxt;
     if (idx === this.inputs().length - 1) { // end of block
-        if (this.nextBlock) { // command
+        if (this.nextBlock && !this.isPrototype) { // command
             nxt = this.nextBlock();
             if (nxt) {
                 return [this].concat(nxt.unwind());
             }
             return [this];
         }
-        // reporter or multi-arg
+        // reporter, multi-arg or embedded prototype
         if (this.parent instanceof TemplateSlotMorph) {
             current = this.parent;
         }
@@ -7732,9 +7420,9 @@ RingMorph.prototype.unwind = function () {
                 : this.parent.parentThatIsA(BlockMorph);
     if (nested) {
         return [parms.concat(nested.unwind()).concat([this])]
-            .concat(nxt.unwindAfter(this));
+            .concat(nxt ? nxt.unwindAfter(this) : []);
     }
-    return [parms].concat([this]).concat(nxt.unwindAfter(this));
+    return [parms].concat([this]).concat(nxt ? nxt.unwindAfter(this) : []);
 };
 
 RingMorph.prototype.unwindAfter = function (elem) {

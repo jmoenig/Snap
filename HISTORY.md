@@ -25,6 +25,7 @@
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
 * **Notable Fixes:**
+    * fixed refactoring (renaming) variables (I hope, haha!)
     * improved text wrapping - wrap words that are too wide for a line by letters
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -47,6 +48,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-11-14
+* blocks, objects: refactored renaming global and sprite-local variables
 
 ### 2022-11-11
 * blocks: refactored renaming script variables, upvars and ring parameters
