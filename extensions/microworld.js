@@ -1,4 +1,4 @@
-// Update 2022-07-22
+// Update 2022-11-14
 var ide = world.children.find(child => {
         return child instanceof IDE_Morph;
     }),
@@ -879,7 +879,7 @@ MicroWorld.prototype.makeButton = function (definition) {
     return new PushButtonMorph(
         sprite,
         () => {
-            this.ide.broadcast(definition.message)
+            this.ide.broadcast(definition.message, null, definition.payload || null)
         },
         label
     );
