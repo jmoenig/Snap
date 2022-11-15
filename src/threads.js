@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-October-27';
+modules.threads = '2022-November-15';
 
 var ThreadManager;
 var Process;
@@ -8210,7 +8210,7 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
         newValue;
     if (frame) {
         value = parseFloat(frame.vars[name].value);
-        newValue = isNaN(value) ? delta : value + delta;
+        newValue = isNaN(value) ? +delta : value + (+delta);
         if (sender instanceof SpriteMorph &&
                 (frame.owner instanceof SpriteMorph) &&
                 (sender !== frame.owner)) {
