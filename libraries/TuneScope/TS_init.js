@@ -2,9 +2,46 @@
 var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
+window.currentNote = ""
+
+// calculate midi pitches and frequencies
+var tempMidiPitches = {}
+var tempMidiFreqs = {}
+
+let notes = [
+    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+]
+
+for (var i = 0; i <= 127; i++) {
+    let note = notes[i % 12] + Math.floor((i-12)/12);
+    tempMidiPitches[note] = i;
+    tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
+}
+
+const _convertToSharp = (note) => {
+    const splitByFlat = note.split("b");
+    if (splitByFlat.length < 2) return note; // does not include a flat
+
+    const letter = splitByFlat[0];
+    const number = splitByFlat[1];
+
+    const indexOfLetter = notes.indexOf(letter);
+    if (indexOfLetter === -1) return note; // TODO: handle this error
+    let previousSharp;
+    if (indexOfLetter === 0) {
+        previousSharp = notes[notes.length - 1];
+    } else {
+        previousSharp = notes[indexOfLetter - 1];
+    }
+    return previousSharp + number;
+}
+window.parent.midiPitches = tempMidiPitches;
+window.parent.midiFreqs = tempMidiFreqs;
+
+
 window.playNote = (note, noteLength, instrumentName, volume) => {
-    console.log(note, noteLength, instrumentName, volume)
-    if (note == "R" || note == "r") return;
+  window.currentNote = note
+   if (note == "R" || note == "r") return;
 
     note = noteNum(note)
     noteLength = noteLengthToTimeValue(noteLength)
@@ -261,6 +298,10 @@ window.parent.instrumentData = {
         path: "https://surikov.github.io/webaudiofontdata/sound/0580_GeneralUserGS_sf2_file.js",
         name: "_tone_0580_GeneralUserGS_sf2_file"
     },
+    "vibraphone": {
+        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
+        name: "_tone_0110_GeneralUserGS_sf2_file"
+    },
 
     // drums
 
@@ -316,18 +357,18 @@ class Tone {
         this.id = id;
         this.on = false;
 
-        //const pannerNode = new StereoPannerNode(audioContext, -1);
-        const thisPlayer = new Object;
-        thisPlayer.context = new AudioContext();
-        thisPlayer.oscillator = thisPlayer.context.createOscillator();
-        thisPlayer.panner = thisPlayer.context.createStereoPanner();
-        thisPlayer.gainobj = thisPlayer.context.createGain();
-        thisPlayer.oscillator.frequency.value = 100;
-        thisPlayer.panner.pan.value = 0;
-        thisPlayer.gainobj.gain.value = 1;
-        thisPlayer.oscillator.connect(thisPlayer.panner);
-        thisPlayer.panner.connect(thisPlayer.gainobj);
-        thisPlayer.gainobj.connect(thisPlayer.context.destination);
+    //const pannerNode = new StereoPannerNode(audioContext, -1);
+    const thisPlayer = new Object;
+    thisPlayer.context = new AudioContext();
+    thisPlayer.oscillator = thisPlayer.context.createOscillator();
+    thisPlayer.panner = thisPlayer.context.createStereoPanner();
+    thisPlayer.gainobj = thisPlayer.context.createGain();
+    thisPlayer.oscillator.frequency.value = 100;
+    thisPlayer.panner.pan.value = 0;
+    thisPlayer.gainobj.gain.value = 1;
+    thisPlayer.oscillator.connect(thisPlayer.panner);
+    thisPlayer.panner.connect(thisPlayer.gainobj);
+    thisPlayer.gainobj.connect(thisPlayer.context.destination);
 
         this.player = thisPlayer;
     }
@@ -342,29 +383,28 @@ class Tone {
         this.player.oscillator.frequency.value = Math.max(freq, 0);
     }
 
-    setAmpl = (ampl) => {
-        this.ampl = ampl;
-        this.player.gainobj.gain.value = this.dBFS2gain(parseInt(ampl));
-    }
-    
-    setPan = (pan) => {
-        this.pan = Math.min(Math.max(pan, -100), 100);
-        this.player.panner.pan.setValueAtTime(this.pan / 100, this.player.context.currentTime);
-    }
-    
+  setAmpl = (ampl) => {
+    this.ampl = ampl;
+    this.player.gainobj.gain.value = this.dBFS2gain(parseInt(ampl));
+  }
 
-    turnOn = () => {
-        console.log("on");
-        if (this.on) return;
-        console.log("turning on");
-        if (!this.started) {
-            this.player.oscillator.start(0);
-            this.started = true;
-        } else {
-            this.player.context.resume();
-        }
-        this.on = true;
+  setPan = (pan) => {
+    this.pan = Math.min(Math.max(pan, -100), 100);
+    this.player.panner.pan.setValueAtTime(this.pan / 100, this.player.context.currentTime);
+  }
+
+  turnOn = () => {
+    console.log("on");
+    if (this.on) return;
+    console.log("turning on");
+    if (!this.started) {
+      this.player.oscillator.start(0);
+      this.started = true;
+    } else {
+      this.player.context.resume();
     }
+    this.on = true;
+  }
 
     turnOff = () => {
         console.log("off");

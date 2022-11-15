@@ -34,9 +34,9 @@ Please reach out to us at [contact@snap.berkeley.edu](mailto:contact@snap.berkel
 The definitive source of how to use Snap! is the [Snap! Manual](help/Snap%20Manual.pdf).
 
 * [API.md](docs/API.md) describes the API for modifying the Snap! interface.
-* [Extensions.md](docs/extensions.md) describes the basic interface for building JavaScript extensions for Snap!
-* [Migrating.md](docs/migrating.md) gives guidance for older extensions to migrate to Morphic 2 and Snap! v6.
-* [Offline.md]((docs/offline.md) has instructions for running Snap! as a progressive web application.
+* [Extensions.md](docs/Extensions.md) describes the basic interface for building JavaScript extensions for Snap!
+* [Migrating.md](docs/Migrating.md) gives guidance for older extensions to migrate to Morphic 2 and Snap! v6.
+* [Offline.md](docs/Offline.md) has instructions for running Snap! as a progressive web application.
 
 _Please read the [Contribution Guidelines](docs/CONTRIBUTING.md) before making an issue or pull request. Thanks!_
 

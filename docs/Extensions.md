@@ -1,6 +1,6 @@
 # Snap! Extensions
 
-> Last updated August 4, 2022
+> Last updated October 19, 2022
 
 Snap! Extensions take the idea of a library, and expand it by allowing you to add your own JavaScript code.
 Much of the work happens through two (hidden) primitive blocks.
@@ -77,7 +77,34 @@ example: 'clr_number'
   "block.inputs()". This will give you an array of all input slots.
   You can access the contents of an input slot by calling "slot.evaluate()"
 
-### 3. External JavaScript files
+### 3. Buttons (in the palette)
+
+You can have your extension add buttons at the top of the palette in a
+particular category. Usually, you will want to add these buttons to the
+category created by your XML library.
+
+To do so, just add a button entry in your JS extension file:
+
+```js
+    SnapExtensions.buttons.palette.push(
+        {
+            category: 'My Extension',
+            label: 'Do Something',
+            action: function () { doYourStuffWith(this); },
+            hint: 'This button does things',
+            hideable: false
+        }
+    );
+```
+
+Inside the action, "this" points to the currently selected object, be it a
+sprite or the Stage.
+
+The `hideable` attribute defines whether the button will be hidden when
+turning off "Show buttons" in single palette mode. By default, extension
+buttons will not be hidden.
+
+### 4. External JavaScript files
 
 You can provide extensions for your custom hardware or for arbitrary APIs
 or extend Snap! with JavaScript libraries from other parties. You can
@@ -94,7 +121,7 @@ This lets you lazily initialize your extension by simply adding a
 "src_load(url)" command for your external JS file before calling any of its
 added functions.
 
-### 4. Miscellaneous
+### 5. Miscellaneous
 
 #### calling extension primitives in other JavaScript functions
 

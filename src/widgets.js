@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2022-August-01';
+modules.widgets = '2022-October-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -166,6 +166,7 @@ PushButtonMorph.prototype.init = function (
     this.labelMinExtent = ZERO;
     this.hint = hint || null;
     this.isDisabled = false;
+    this.hideable = true; // used for custom extensions
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
