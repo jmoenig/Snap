@@ -49,10 +49,12 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+    * Catalan, thanks, Joan!
 
 ### 2022-11-15
 * blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
 * threads: fixed #3144
+* Catalan translation update, thanks, Joan!
 
 ### 2022-11-14
 * blocks, objects: refactored renaming global and sprite-local variables
