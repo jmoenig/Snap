@@ -1594,10 +1594,10 @@ SyntaxElementMorph.prototype.setLabelColor = function (
     });
 };
 
-SyntaxElementMorph.prototype.flash = function () {
+SyntaxElementMorph.prototype.flash = function (aColor) {
     if (!this.cachedNormalColor) {
         this.cachedNormalColor = this.color;
-        this.setColor(this.activeHighlight);
+        this.setColor(aColor || this.activeHighlight);
     }
 };
 
@@ -11000,11 +11000,11 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 
 // InputSlotMorph single-stepping:
 
-InputSlotMorph.prototype.flash = function () {
+InputSlotMorph.prototype.flash = function (aColor) {
     // don't redraw the label b/c zebra coloring
     if (!this.cachedNormalColor) {
         this.cachedNormalColor = this.color;
-        this.color = this.activeHighlight;
+        this.color = aColor || this.activeHighlight;
         this.rerender();
     }
 };
@@ -11506,8 +11506,8 @@ TemplateSlotMorph.prototype.cSlots = function () {
 
 // TemplateSlotMorph single-stepping
 
-TemplateSlotMorph.prototype.flash = function () {
-    this.template().flash();
+TemplateSlotMorph.prototype.flash = function (aColor) {
+    this.template().flash(aColor);
 };
 
 TemplateSlotMorph.prototype.unflash = function () {
