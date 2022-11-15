@@ -5411,25 +5411,9 @@ BlockMorph.prototype.scopeFor = function (varName, afterThis) {
     // - i.e. - this block should be ignored, because it is the template whose
     // scope is being determined.
 
-    function select(opsArray) {
-        var end = opsArray.findIndex(e =>
-                e instanceof TemplateSlotMorph && e.contents() === varName),
-            scope = [],
-            i, elem;
-        if (end < 0) {end = opsArray.length; }
-        for (i = 0; i < end; i += 1) {
-            elem = opsArray[i];
-            if (elem instanceof BlockMorph &&
-                    elem.isVariableAccessorFor(varName)) {
-                scope.push(elem);
-            } else if (elem instanceof Array) {
-                scope.push(select(elem));
-            }
-        }
-        return scope;
-    }
-
-    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
+    return this.fullScopeFor(varName, afterThis).filter(elem =>
+        elem instanceof BlockMorph && elem.isVariableAccessorFor(varName)
+    );
 };
 
 BlockMorph.prototype.isVariableAccessorFor = function (varName) {
@@ -5441,6 +5425,33 @@ BlockMorph.prototype.isVariableAccessorFor = function (varName) {
         any.choices === 'getVarNamesDict' &&
         any.evaluate() === varName
     );
+};
+
+BlockMorph.prototype.fullScopeFor = function (varName, afterThis) {
+    // return an array of syntax elements within my lexical scope that can
+    // access the given variable name.
+    // Optional Boolean "afterThis" switch indicates whether the very first
+    // - i.e. - this block should be ignored, because it is the template whose
+    // scope is being determined.
+
+    function select(opsArray) {
+        var end = opsArray.findIndex(e =>
+                e instanceof TemplateSlotMorph && e.contents() === varName),
+            scope = [],
+            i, elem;
+        if (end < 0) {end = opsArray.length; }
+        for (i = 0; i < end; i += 1) {
+            elem = opsArray[i];
+            if (elem instanceof Array) {
+                scope.push(select(elem));
+            } else if (!(elem instanceof TemplateSlotMorph)) {
+                scope.push(elem);
+            }
+        }
+        return scope;
+    }
+
+    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
 };
 
 // BlockMorph op-sequence analysis
@@ -11477,6 +11488,37 @@ TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
     if (droppedMorph.selector === 'reportGetVar') {
         droppedMorph.destroy();
     }
+};
+
+// TemplateSlotMorph visualizing scope:
+
+TemplateSlotMorph.prototype.mouseEnter = function () {
+    var threads = this.parentThatIsA(BlockMorph).scriptTarget().parentThatIsA(
+            StageMorph).threads;
+    if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+        this.flashScope();
+    }
+};
+
+TemplateSlotMorph.prototype.mouseLeave = function () {
+    var threads = this.parentThatIsA(BlockMorph).scriptTarget().parentThatIsA(
+            StageMorph).threads;
+    if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+        this.unflashScope();
+    }
+};
+
+TemplateSlotMorph.prototype.flashScope = function () {
+    var tmp = this.template(),
+        scope = tmp.fullScopeFor(tmp.blockSpec, true),
+        clr = this.activeHighlight.darker();
+    scope.forEach(elem => elem.flash(clr));
+};
+
+TemplateSlotMorph.prototype.unflashScope = function () {
+    var tmp = this.template(),
+        scope = tmp.fullScopeFor(tmp.blockSpec, true);
+    scope.forEach(elem => elem.unflash());
 };
 
 // TemplateSlotMorph drawing:
