@@ -1,6 +1,6 @@
 // Load urls
 
-SnapExtensions.primitives.get('src_load(url)')()
+// SnapExtensions.primitives.get('src_load(url)')()
 
 // extension functions
 
