@@ -1567,6 +1567,7 @@ SyntaxElementMorph.prototype.setColor = function (aColor) {
                     morph.setColor(aColor);
                 }
             });
+            if (block) {block.fixLabelColor(); }
             this.rerender();
         }
     }

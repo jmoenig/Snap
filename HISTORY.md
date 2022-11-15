@@ -42,6 +42,7 @@
     * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
     * fixed zebra coloring for polyadic read-only input slots 
+    * fixed a label rendering glitch when flashing blocks
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
 * **Documentation Updates:**
@@ -56,6 +57,7 @@
 * threads: fixed #3144
 * Catalan translation update, thanks, Joan!
 * blocks: support flashing blocks in arbitrary colors
+* blocks: fixed a label rendering glitch when flashing blocks
 
 ### 2022-11-14
 * blocks, objects: refactored renaming global and sprite-local variables
