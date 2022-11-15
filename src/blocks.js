@@ -5472,7 +5472,11 @@ BlockMorph.prototype.unwind = function () {
         if (nxt) {
             return [this].concat(nxt.unwind());
         }
-        return [this];
+        // find the nearest enclosing C-slot or Ring
+        current = this.parentThatIsA(CommandSlotMorph, RingMorph);
+        if (!current || !current.isStatic || current instanceof RingMorph) {
+            return [this];
+        }
     }
     if (this.parent instanceof TemplateSlotMorph) {
         current = this.parent;
@@ -5502,7 +5506,11 @@ BlockMorph.prototype.unwindAfter = function (element) {
             if (nxt) {
                 return [this].concat(nxt.unwind());
             }
-            return [this];
+            // find the nearest enclosing C-slot or Ring
+            current = this.parentThatIsA(CommandSlotMorph, RingMorph);
+            if (!current || !current.isStatic || current instanceof RingMorph) {
+                return [this];
+            }
         }
         // reporter, multi-arg or embedded prototype
         if (this.parent instanceof TemplateSlotMorph) {
