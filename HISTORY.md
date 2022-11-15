@@ -4,7 +4,8 @@
 * **New Features:**
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
-    * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision 
+    * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
+    * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette 
     * new "disable dragging data" preference setting for (kids') MicroWorld creators
     * pixels library: Added command blocks to rename and export costumes
     * new "ide_blocks" extension primitive
@@ -48,6 +49,9 @@
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
+
+### 2022-11-15
+* blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
 
 ### 2022-11-14
 * blocks, objects: refactored renaming global and sprite-local variables

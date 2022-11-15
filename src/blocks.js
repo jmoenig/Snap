@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-14';
+modules.blocks = '2022-November-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3083,6 +3083,13 @@ BlockMorph.prototype.userMenu = function () {
                         'rename all...',
                         () => this.refactorPaletteTemplate(true), // everywhere
                         'rename all blocks that\naccess this variable'
+                    );
+                    menu.addLine();
+                    menu.addItem(
+                        'delete',
+                        () => rcvr.deleteVariable(
+                            this.instantiationSpec || this.blockSpec,
+                            !this.isLocalVarTemplate)
                     );
                 }
             }
