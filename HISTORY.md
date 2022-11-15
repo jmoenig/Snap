@@ -60,6 +60,7 @@
 * blocks: support flashing blocks in arbitrary colors
 * blocks: fixed a label rendering glitch when flashing blocks
 * blocks: visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode or when paused
+* blocks: extended variable scope highlighting to palette templates
 
 ### 2022-11-14
 * blocks, objects: refactored renaming global and sprite-local variables

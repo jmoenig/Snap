@@ -6763,6 +6763,40 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
     }
 };
 
+ReporterBlockMorph.prototype.mouseEnter = function () {
+    var rcvr, threads;
+    if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+    ) {
+        rcvr = this.scriptTarget();
+        threads = rcvr.parentThatIsA(StageMorph).threads;
+        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+            rcvr.flashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        }
+    }
+};
+
+ReporterBlockMorph.prototype.mouseLeave = function () {
+    var rcvr, threads;
+    if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+    ) {
+        rcvr = this.scriptTarget();
+        threads = rcvr.parentThatIsA(StageMorph).threads;
+        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+            rcvr.unflashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        }
+    }
+};
+
 // ReporterBlockMorph deleting
 
 ReporterBlockMorph.prototype.userDestroy = function () {
