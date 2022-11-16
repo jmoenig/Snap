@@ -7605,8 +7605,12 @@ RingMorph.prototype.unwind = function () {
 };
 
 RingMorph.prototype.unwindAfter = function (elem) {
+    var nested;
     if (elem === this.inputs()[1]) {
-        return this.contents().unwind();
+        nested = this.contents();
+        if (nested) {
+            return nested.unwind();
+        }
     }
     return [];
 };
