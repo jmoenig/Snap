@@ -59,6 +59,7 @@
 * blocks: refactored scope-highlighting entry point
 * blocks: visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode or when paused
 * blocks: confined scope-highlighting to visible stepping mode & non-dragging
+* blocks: catch attribute-references when highlighting variable scope
 
 ### 2022-11-15
 * blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette

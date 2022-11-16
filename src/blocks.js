@@ -5683,14 +5683,16 @@ BlockMorph.prototype.rewind = function () {
  BlockMorph.prototype.getVarName = function () {
     // return the name of the (first) variable accessed by this block or null
     // if it doesn't access any variable.
-    var slot;
+    var slot, name;
     if (this.isTemplate) {return null; }
     if (this.selector === 'reportGetVar') {
         return this.blockSpec || null;
     }
     slot = this.inputs().find(elem => elem.choices === 'getVarNamesDict');
     if (slot) {
-        return slot.evaluate() || null;
+        name = slot.evaluate();
+        if (name instanceof Array) {return null; }
+        return name || null;
     }
     return null;
  };
