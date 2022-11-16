@@ -11670,17 +11670,13 @@ TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
 // TemplateSlotMorph visualizing scope:
 
 TemplateSlotMorph.prototype.mouseEnter = function () {
-    var threads = this.parentThatIsA(BlockMorph).scriptTarget().parentThatIsA(
-            StageMorph).threads;
-    if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+    if (Process.prototype.enableSingleStepping) {
         this.flashScope();
     }
 };
 
 TemplateSlotMorph.prototype.mouseLeave = function () {
-    var threads = this.parentThatIsA(BlockMorph).scriptTarget().parentThatIsA(
-            StageMorph).threads;
-    if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+    if (Process.prototype.enableSingleStepping) {
         this.unflashScope();
     }
 };
