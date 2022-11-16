@@ -5283,7 +5283,10 @@ BlockMorph.prototype.mouseEnterBounds = function (dragged) {
         if (dec) {
             dec.flash(this.activeHighlight.darker());
         } else {
-            this.flash(new Color(255, 50, 50));
+            rcvr = this.scriptTarget();
+            if (!rcvr.variables.allNames().includes(vName)) {
+                this.flash(new Color(255, 50, 50));
+            }
         }
     }
 };
