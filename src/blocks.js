@@ -5246,82 +5246,86 @@ BlockMorph.prototype.activeProcess = function () {
 };
 
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
-    var rcvr, threads, vName, dec;
+    var rcvr, vName, dec;
+
+    if (dragged) {return; }
 
     // slightly increase my opacity if block-fading is active
-    if (!dragged && this.alpha < 1) {
+    if (this.alpha < 1) {
         this.alpha = Math.min(this.alpha + 0.2, 1);
         this.rerender();
     }
 
-    // highlight the lexical scope of a variable declaration when visible
-    // stepping is turned on in the IDE or when a thread is currently
-    // paused.
-    // Only applies to variable getters that serve as variable declarations
-    // either in the blocks palette or in a template slot (upvar etc.)
-    if (this.selector === 'reportGetVar' &&
-        this.isTemplate &&
-        !(this.parent instanceof SyntaxElementMorph)
-    ) {
-        rcvr = this.scriptTarget();
-        threads = rcvr.parentThatIsA(StageMorph).threads;
-        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+    if (Process.prototype.enableSingleStepping) {
+        // highlight the lexical scope of a variable declaration when visible
+        // stepping is turned on in the IDE or when a thread is currently
+        // paused.
+        // Only applies to variable getters that serve as variable declarations
+        // either in the blocks palette or in a template slot (upvar etc.)
+        if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+        ) {
+            rcvr = this.scriptTarget();
             rcvr.flashScope(
                 this.instantiationSpec || this.blockSpec,
                 !this.isLocalVarTemplate
             );
-        }
-    }
-
-    // highlight the variable declaration this block is referring to, if
-    // it happens to be a variable accessor
-    vName = this.getVarName();
-    if (vName) {
-        dec = this.rewind().find(elem => elem.selector === 'reportGetVar' &&
-            elem.isTemplate &&
-            (elem.instantiationSpec || elem.blockSpec) === vName);
-        if (dec) {
-            dec.flash(this.activeHighlight.darker());
         } else {
-            rcvr = this.scriptTarget();
-            if (!rcvr.variables.allNames().includes(vName)) {
-                this.flash(new Color(255, 50, 50));
+            // highlight the variable declaration this block is referring to,
+            // if it happens to be a variable accessor
+            vName = this.getVarName();
+            if (vName) {
+                dec = this.rewind().find(elem =>
+                    elem.selector === 'reportGetVar' &&
+                    elem.isTemplate &&
+                    (elem.instantiationSpec || elem.blockSpec) === vName
+                );
+                if (dec) {
+                    dec.flash(this.activeHighlight.darker());
+                } else {
+                    rcvr = this.scriptTarget();
+                    if (!rcvr.variables.allNames().includes(vName)) {
+                        this.flash(new Color(255, 50, 50));
+                    }
+                }
             }
         }
     }
 };
 
 BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
-    var rcvr, threads, vName, dec;
+    var rcvr, vName, dec;
 
     if (SyntaxElementMorph.prototype.alpha < 1) {
         delete this.alpha;
         this.rerender();
     }
 
-    // highlight the lexical scope of a variable declaration when visible
-    // stepping is turned on in the IDE or when a thread is currently
-    // paused.
-    if (this.selector === 'reportGetVar' &&
-        this.isTemplate &&
-        !(this.parent instanceof SyntaxElementMorph)
-    ) {
-        rcvr = this.scriptTarget();
-        threads = rcvr.parentThatIsA(StageMorph).threads;
-        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+    if (Process.prototype.enableSingleStepping && !dragged) {
+        // highlight the lexical scope of a variable declaration when visible
+        // stepping is turned on in the IDE or when a thread is currently
+        // paused.
+        if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+        ) {
+            rcvr = this.scriptTarget();
             rcvr.unflashScope(
                 this.instantiationSpec || this.blockSpec,
                 !this.isLocalVarTemplate
             );
+        } else {
+            vName = this.getVarName();
+            if (vName) {
+                dec = this.rewind().find(
+                    elem => elem.selector === 'reportGetVar' &&
+                    elem.isTemplate &&
+                    (elem.instantiationSpec || elem.blockSpec) === vName
+                );
+                (dec || this).unflash();
+            }
         }
-    }
-
-    vName = this.getVarName();
-    if (vName) {
-        dec = this.rewind().find(elem => elem.selector === 'reportGetVar' &&
-            elem.isTemplate &&
-            (elem.instantiationSpec || elem.blockSpec) === vName);
-        (dec || this).unflash();
     }
 };
 
