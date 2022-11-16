@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode or when paused
+    * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode or when paused
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -56,6 +57,7 @@
 ### 2022-11-16
 * blocks, objects: added comments to scope-highlighting
 * blocks: refactored scope-highlighting entry point
+* blocks: visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode or when paused
 
 ### 2022-11-15
 * blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette

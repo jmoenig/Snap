@@ -5246,8 +5246,9 @@ BlockMorph.prototype.activeProcess = function () {
 };
 
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
-    var rcvr, threads;
+    var rcvr, threads, vName, dec;
 
+    // slightly increase my opacity if block-fading is active
     if (!dragged && this.alpha < 1) {
         this.alpha = Math.min(this.alpha + 0.2, 1);
         this.rerender();
@@ -5271,10 +5272,24 @@ BlockMorph.prototype.mouseEnterBounds = function (dragged) {
             );
         }
     }
+
+    // highlight the variable declaration this block is referring to, if
+    // it happens to be a variable accessor
+    vName = this.getVarName();
+    if (vName) {
+        dec = this.rewind().find(elem => elem.selector === 'reportGetVar' &&
+            elem.isTemplate &&
+            (elem.instantiationSpec || elem.blockSpec) === vName);
+        if (dec) {
+            dec.flash(this.activeHighlight.darker());
+        } else {
+            this.flash(new Color(255, 50, 50));
+        }
+    }
 };
 
 BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
-    var rcvr, threads;
+    var rcvr, threads, vName, dec;
 
     if (SyntaxElementMorph.prototype.alpha < 1) {
         delete this.alpha;
@@ -5296,6 +5311,14 @@ BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
                 !this.isLocalVarTemplate
             );
         }
+    }
+
+    vName = this.getVarName();
+    if (vName) {
+        dec = this.rewind().find(elem => elem.selector === 'reportGetVar' &&
+            elem.isTemplate &&
+            (elem.instantiationSpec || elem.blockSpec) === vName);
+        (dec || this).unflash();
     }
 };
 
@@ -5571,6 +5594,91 @@ BlockMorph.prototype.unwindAfter = function (element) {
     }
     return this.inputs()[idx + 1].unwind();
 };
+
+BlockMorph.prototype.rewind = function () {
+    // return an array of blocks and inputs roughly mimicking the visible
+    // sequence of operations leading up to this block. Used to trace
+    // variable accessors back to their nearest variable declaration within
+    // lexical scope.
+
+    var ide = this.scriptTarget().parentThatIsA(IDE_Morph),
+        current = this,
+        trace = [],
+        declarations;
+
+    function log(block) {
+        if (trace.includes(block)) {return; }
+        trace.push(block);
+        block.inputs().slice(0).reverse().forEach(elem => {
+            var nested;
+            if (elem instanceof MultiArgMorph) {
+                trace.push(elem);
+                elem.inputs().slice(0).reverse().forEach(inp => {
+                    if (inp instanceof TemplateSlotMorph) {
+                        trace.push(inp.template());
+                    } else if (inp instanceof BlockMorph) {
+                        if (!(inp instanceof RingMorph)) {
+                            log(inp);
+                        }
+                    } else if (inp instanceof CommandSlotMorph) {
+                        if (inp.isStatic) {
+                            nested = inp.nestedBlock();
+                            if (nested) {
+                                nested.blockSequence().forEach(cmd => log(cmd));
+                            }
+                        }
+                    } else {
+                        trace.push(inp);
+                    }
+                });
+            } else if (elem instanceof TemplateSlotMorph) {
+                trace.push(elem.template());
+            } else if (elem instanceof BlockMorph) {
+                if (!(elem instanceof RingMorph)) {
+                    log(elem);
+                }
+            } else if (elem instanceof CommandSlotMorph) {
+                if (elem.isStatic) {
+                    nested = elem.nestedBlock();
+                    if (nested) {
+                        nested.blockSequence().forEach(cmd => log(cmd));
+                    }
+                }
+            } else {
+                trace.push(elem);
+            }
+        });
+    }
+
+    while (current instanceof BlockMorph) {
+        log(current);
+        current = current.parent?.parentThatIsA(BlockMorph);
+    }
+
+    if (ide) {
+        declarations = ide.palette.contents.children.filter(morph =>
+            morph instanceof BlockMorph && morph.selector === 'reportGetVar'
+        ).reverse();
+        declarations.forEach(block => trace.push(block));
+    }
+
+    return trace;
+};
+ 
+ BlockMorph.prototype.getVarName = function () {
+    // return the name of the (first) variable accessed by this block or null
+    // if it doesn't access any variable.
+    var slot;
+    if (this.isTemplate) {return null; }
+    if (this.selector === 'reportGetVar') {
+        return this.blockSpec || null;
+    }
+    slot = this.inputs().find(elem => elem.choices === 'getVarNamesDict');
+    if (slot) {
+        return slot.evaluate() || null;
+    }
+    return null;
+ };
  
 // CommandBlockMorph ///////////////////////////////////////////////////
 
