@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-15';
+modules.blocks = '2022-November-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5444,7 +5444,7 @@ BlockMorph.prototype.fullScopeFor = function (varName, afterThis) {
             elem = opsArray[i];
             if (elem instanceof Array) {
                 scope.push(select(elem));
-            } else if (!(elem instanceof TemplateSlotMorph)) {
+            } else {
                 scope.push(elem);
             }
         }
@@ -6764,6 +6764,12 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 };
 
 ReporterBlockMorph.prototype.mouseEnter = function () {
+    // highlight the lexical scope of a variable declaration when visible
+    // stepping is turned on in the IDE or when a thread is currently
+    // paused.
+    // Only applies to variable getters that serve as variable declarations
+    // either in the blocks palette or in a template slot (upvar etc.)
+
     var rcvr, threads;
     if (this.selector === 'reportGetVar' &&
             this.isTemplate &&

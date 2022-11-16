@@ -53,6 +53,9 @@
     * German
     * Catalan, thanks, Joan!
 
+### 2022-11-16
+* blocks, objects: added comments to scope-highlighting
+
 ### 2022-11-15
 * blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
 * threads: fixed #3144
