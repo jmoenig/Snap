@@ -5329,6 +5329,14 @@ BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
     }
 };
 
+BlockMorph.prototype.mouseDownLeft = function (pos) {
+    if (Process.prototype.enableSingleStepping) {
+        // un-highhlight any scope-visualization
+        // before possible picking me up
+        this.mouseLeaveBounds();
+    }
+};
+
 // BlockMorph dragging and dropping
 
 BlockMorph.prototype.rootForGrab = function () {
