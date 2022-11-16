@@ -5246,16 +5246,56 @@ BlockMorph.prototype.activeProcess = function () {
 };
 
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
+    var rcvr, threads;
+
     if (!dragged && this.alpha < 1) {
         this.alpha = Math.min(this.alpha + 0.2, 1);
         this.rerender();
     }
+
+    // highlight the lexical scope of a variable declaration when visible
+    // stepping is turned on in the IDE or when a thread is currently
+    // paused.
+    // Only applies to variable getters that serve as variable declarations
+    // either in the blocks palette or in a template slot (upvar etc.)
+    if (this.selector === 'reportGetVar' &&
+        this.isTemplate &&
+        !(this.parent instanceof SyntaxElementMorph)
+    ) {
+        rcvr = this.scriptTarget();
+        threads = rcvr.parentThatIsA(StageMorph).threads;
+        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+            rcvr.flashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        }
+    }
 };
 
 BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
+    var rcvr, threads;
+
     if (SyntaxElementMorph.prototype.alpha < 1) {
         delete this.alpha;
         this.rerender();
+    }
+
+    // highlight the lexical scope of a variable declaration when visible
+    // stepping is turned on in the IDE or when a thread is currently
+    // paused.
+    if (this.selector === 'reportGetVar' &&
+        this.isTemplate &&
+        !(this.parent instanceof SyntaxElementMorph)
+    ) {
+        rcvr = this.scriptTarget();
+        threads = rcvr.parentThatIsA(StageMorph).threads;
+        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
+            rcvr.unflashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        }
     }
 };
 
@@ -5531,7 +5571,7 @@ BlockMorph.prototype.unwindAfter = function (element) {
     }
     return this.inputs()[idx + 1].unwind();
 };
-
+ 
 // CommandBlockMorph ///////////////////////////////////////////////////
 
 /*
@@ -6760,46 +6800,6 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         );
     } else {
         ReporterBlockMorph.uber.mouseClickLeft.call(this, pos);
-    }
-};
-
-ReporterBlockMorph.prototype.mouseEnter = function () {
-    // highlight the lexical scope of a variable declaration when visible
-    // stepping is turned on in the IDE or when a thread is currently
-    // paused.
-    // Only applies to variable getters that serve as variable declarations
-    // either in the blocks palette or in a template slot (upvar etc.)
-
-    var rcvr, threads;
-    if (this.selector === 'reportGetVar' &&
-            this.isTemplate &&
-            !(this.parent instanceof SyntaxElementMorph)
-    ) {
-        rcvr = this.scriptTarget();
-        threads = rcvr.parentThatIsA(StageMorph).threads;
-        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
-            rcvr.flashScope(
-                this.instantiationSpec || this.blockSpec,
-                !this.isLocalVarTemplate
-            );
-        }
-    }
-};
-
-ReporterBlockMorph.prototype.mouseLeave = function () {
-    var rcvr, threads;
-    if (this.selector === 'reportGetVar' &&
-            this.isTemplate &&
-            !(this.parent instanceof SyntaxElementMorph)
-    ) {
-        rcvr = this.scriptTarget();
-        threads = rcvr.parentThatIsA(StageMorph).threads;
-        if (Process.prototype.enableSingleStepping || threads.isPaused()) {
-            rcvr.unflashScope(
-                this.instantiationSpec || this.blockSpec,
-                !this.isLocalVarTemplate
-            );
-        }
     }
 };
 

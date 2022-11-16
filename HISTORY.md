@@ -55,6 +55,7 @@
 
 ### 2022-11-16
 * blocks, objects: added comments to scope-highlighting
+* blocks: refactored scope-highlighting entry point
 
 ### 2022-11-15
 * blocks: added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
