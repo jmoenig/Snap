@@ -57,6 +57,7 @@
 
 ### 2022-11-17
 * objects: fixed displaying message senders
+* gui: parameterized SpriteIconMorph >> flash() 
 
 ### 2022-11-16
 * blocks, objects: added comments to scope-highlighting

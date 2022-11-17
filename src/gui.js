@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-October-25';
+modules.gui = '2022-November-17';
 
 // Declarations
 
@@ -9835,13 +9835,14 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 
 // SpriteIconMorph flashing
 
-SpriteIconMorph.prototype.flash = function () {
+SpriteIconMorph.prototype.flash = function (msecs = 800) {
     var world = this.world(),
         isFlat = MorphicPreferences.isFlat,
         highlight = SpriteMorph.prototype.highlightColor,
         previousColor = isFlat ? this.pressColor : this.outlineColor,
         previousOutline = this.outline,
-        previousState = this.userState;
+        previousState = this.userState,
+        wait = msecs === -1 ? 50 : msecs;
 
     if (isFlat) {
         this.pressColor = highlight;
@@ -9856,7 +9857,7 @@ SpriteIconMorph.prototype.flash = function () {
         nop,
         nop,
         0,
-        800,
+        wait,
         nop,
         () => {
             if (isFlat) {
@@ -9866,7 +9867,7 @@ SpriteIconMorph.prototype.flash = function () {
                 this.outline = previousOutline;
             }
             this.userState = previousState;
-            this.rerender();
+            if (msecs > 0) {this.rerender(); }
         }
     ));
 };
