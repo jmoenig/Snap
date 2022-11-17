@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-16';
+modules.blocks = '2022-November-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5257,9 +5257,17 @@ BlockMorph.prototype.mouseEnterBounds = function (dragged) {
     }
 
     if (Process.prototype.enableSingleStepping) {
+        // highlight senders and receivers of message / broadcast blocks
+        if (contains(
+            ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage',
+                'receiveOnClone', 'receiveGo'],
+            this.selector
+        )) {
+            this.showMessageUsers();
+        }
+
         // highlight the lexical scope of a variable declaration when visible
-        // stepping is turned on in the IDE or when a thread is currently
-        // paused.
+        // stepping is turned on in the IDE.
         // Only applies to variable getters that serve as variable declarations
         // either in the blocks palette or in a template slot (upvar etc.)
         if (this.selector === 'reportGetVar' &&
@@ -5304,8 +5312,7 @@ BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
 
     if (Process.prototype.enableSingleStepping && !dragged) {
         // highlight the lexical scope of a variable declaration when visible
-        // stepping is turned on in the IDE or when a thread is currently
-        // paused.
+        // stepping is turned on in the IDE.
         if (this.selector === 'reportGetVar' &&
             this.isTemplate &&
             !(this.parent instanceof SyntaxElementMorph)

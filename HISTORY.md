@@ -4,6 +4,7 @@
 * **New Features:**
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
+    * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -57,7 +58,8 @@
 
 ### 2022-11-17
 * objects: fixed displaying message senders
-* gui: parameterized SpriteIconMorph >> flash() 
+* gui: parameterized SpriteIconMorph >> flash()
+* gui, blocks: highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
 
 ### 2022-11-16
 * blocks, objects: added comments to scope-highlighting

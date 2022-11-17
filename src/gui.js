@@ -9447,6 +9447,7 @@ SpriteIconMorph.prototype.init = function (aSprite) {
     this.version = this.object.version;
     this.thumbnail = null;
     this.rotationButton = null; // synchronous rotation of nested sprites
+    this.isFlashing = false;
 
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
@@ -9835,14 +9836,15 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 
 // SpriteIconMorph flashing
 
-SpriteIconMorph.prototype.flash = function (msecs = 800) {
+SpriteIconMorph.prototype.flash = function () {
     var world = this.world(),
         isFlat = MorphicPreferences.isFlat,
         highlight = SpriteMorph.prototype.highlightColor,
         previousColor = isFlat ? this.pressColor : this.outlineColor,
         previousOutline = this.outline,
-        previousState = this.userState,
-        wait = msecs === -1 ? 50 : msecs;
+        previousState = this.userState;
+
+    if (this.isFlashing) {return; }
 
     if (isFlat) {
         this.pressColor = highlight;
@@ -9852,12 +9854,13 @@ SpriteIconMorph.prototype.flash = function (msecs = 800) {
     }
     this.userState = 'pressed';
     this.rerender();
+    this.isFlashing = true;
 
     world.animations.push(new Animation(
         nop,
         nop,
         0,
-        wait,
+        800,
         nop,
         () => {
             if (isFlat) {
@@ -9867,7 +9870,8 @@ SpriteIconMorph.prototype.flash = function (msecs = 800) {
                 this.outline = previousOutline;
             }
             this.userState = previousState;
-            if (msecs > 0) {this.rerender(); }
+            this.rerender();
+            this.isFlashing = false;
         }
     ));
 };
