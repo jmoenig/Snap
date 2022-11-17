@@ -29,6 +29,7 @@
     * updated "Codification" example project
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
+    * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
@@ -53,6 +54,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-11-17
+* objects: fixed displaying message senders
 
 ### 2022-11-16
 * blocks, objects: added comments to scope-highlighting

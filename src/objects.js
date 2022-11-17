@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-16';
+modules.objects = '2022-November-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -10364,7 +10364,7 @@ StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
             def => def.isSending(message, receiverName)
         );
     this.globalBlocks.forEach(def => {
-        if (def.collectDependencies().some(dep => contains(all, dep))) {
+        if (def.collectDependencies([], []).some(dep => contains(all, dep))) {
             all.push(def);
         }
     });
