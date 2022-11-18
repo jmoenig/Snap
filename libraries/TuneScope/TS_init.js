@@ -2,85 +2,54 @@
 var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
-window.currentNote = ""
 
-// calculate midi pitches and frequencies
-var tempMidiPitches = {}
-var tempMidiFreqs = {}
 
-let notes = [
-    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-]
-
-for (var i = 0; i <= 127; i++) {
-    let note = notes[i % 12] + Math.floor((i-12)/12);
-    tempMidiPitches[note] = i;
-    tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
+var TuneScope = {
+    currentNote: ''
 }
 
-const _convertToSharp = (note) => {
-    const splitByFlat = note.split("b");
-    if (splitByFlat.length < 2) return note; // does not include a flat
+TuneScope.playNote = function (note, noteLength, instrumentName, volume) {
+    this.currentNote = note
+    if (note == "R" || note == "r") return;
 
-    const letter = splitByFlat[0];
-    const number = splitByFlat[1];
-
-    const indexOfLetter = notes.indexOf(letter);
-    if (indexOfLetter === -1) return note; // TODO: handle this error
-    let previousSharp;
-    if (indexOfLetter === 0) {
-        previousSharp = notes[notes.length - 1];
-    } else {
-        previousSharp = notes[indexOfLetter - 1];
-    }
-    return previousSharp + number;
-}
-window.parent.midiPitches = tempMidiPitches;
-window.parent.midiFreqs = tempMidiFreqs;
-
-
-window.playNote = (note, noteLength, instrumentName, volume) => {
-  window.currentNote = note
-   if (note == "R" || note == "r") return;
-
-    note = noteNum(note)
-    noteLength = noteLengthToTimeValue(noteLength)
+    note = this.noteNum(note)
+    noteLength = this.noteLengthToTimeValue(noteLength)
 
     // note = _convertToSharp(note);
 
     var player = new WebAudioFontPlayer();
-    instrumentName = instrumentName || window.parent.currentInstrumentName;
+    instrumentName = instrumentName || this.currentInstrumentName;
     instrumentName = instrumentName.toLowerCase()
     // console.log(instrumentName);
-    let currentInstrumentData = window.parent.instrumentData[instrumentName]
+    let currentInstrumentData = this.instrumentData[instrumentName]
     player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
 
-    function play() {
-        const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
+    play = () => {
+        const vol = volume || this.instrumentVolumes[instrumentName] || this.globalInstrumentVolume;
         // console.log(note, noteLength, instrumentName, vol)
-        player.queueWaveTable(audioContext, audioContext.destination, window[currentInstrumentData.name], 0, noteNum(note), noteLength, vol);
+        player.queueWaveTable(audioContext, audioContext.destination, window[currentInstrumentData.name], 0, this.noteNum(note), noteLength, vol);
         return false;
     }
     play();
 }
 
-window.timeSignatureToBeatsPerMeasure = (time) => {
-    timeSig = time.split('/');
-    // newTime = (timeSig[0]*4)/timeSig[1];
-    newTime = [parseInt(timeSig[0]), 4 / timeSig[1]];
-    console.log(newTime);
-    return newTime;
+TuneScope.timeSignatureToBeatsPerMeasure = function (time) {
+    timeSig = time.split('/')
+    // newTime = (timeSig[0]*4)/timeSig[1]
+    newTime = [parseInt(timeSig[0]), 4 / timeSig[1]]
+    console.log(newTime)
+    return newTime
 }
 
-window.baseTempo = 60;
+TuneScope.baseTempo = 60;
 
 // converts note lengths (quarter, half, whole)
 // to corresponding time value (1, 2, 4)
-window.noteLengthToTimeValue = (duration) => {
+TuneScope.noteLengthToTimeValue = function (duration) {
     if (parseFloat(duration) != duration) {
         splitDuration = duration.split(' ');
 
-        notes = {
+        let notes = {
             'whole': 4,
             'half': 2,
             'quarter': 1,
@@ -127,7 +96,7 @@ window.noteLengthToTimeValue = (duration) => {
     }
 }
 
-function noteNum(noteName) {
+TuneScope.noteNum = function (noteName) {
     if (Array.isArray(noteName)) {
         return noteName.map((e) => {
             return noteNum(e);
@@ -162,12 +131,12 @@ function noteNum(noteName) {
             return result;
         }
 
-        splitNoteName = noteName.split('');
-        var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'));
-        var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('');
-        console.log(octiveNum);
-        var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4));
-        var notes = {
+        splitNoteName = noteName.split('')
+        var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
+        var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
+        console.log(octiveNum)
+        var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
+        let notes = {
             'c': 1,
             'd': 3,
             'e': 5,
@@ -201,155 +170,155 @@ function noteNum(noteName) {
 }
 
 // instrument data
-window.parent.instrumentData = {
+TuneScope.instrumentData = {
     "accordion": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0230_Aspirin_sf2_file.js",
+        path: "libraries/TuneScope/0230_Aspirin_sf2_file.js",
         name: "_tone_0230_Aspirin_sf2_file"
     },
     "bass, acoustic": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0320_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0320_GeneralUserGS_sf2_file.js",
         name: "_tone_0320_GeneralUserGS_sf2_file"
     },
     "bass, electric (finger)": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0350_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0350_JCLive_sf2_file.js",
         name: "_tone_0350_JCLive_sf2_file"
     },
     "guitar, acoustic": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0241_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0241_JCLive_sf2_file.js",
         name: "_tone_0241_JCLive_sf2_file"
     },
     "guitar, electric": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0260_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0260_JCLive_sf2_file.js",
         name: "_tone_0260_JCLive_sf2_file"
     },
     "piano": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0020_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0020_JCLive_sf2_file.js",
         name: "_tone_0020_JCLive_sf2_file"
     },
     "organ": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0180_Chaos_sf2_file.js",
+        path: "libraries/TuneScope/0180_Chaos_sf2_file.js",
         name: "_tone_0180_Chaos_sf2_file"
     },
     "banjo": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1050_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/1050_FluidR3_GM_sf2_file.js",
         name: "_tone_1050_FluidR3_GM_sf2_file"
     },
     "saxophone": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0650_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/0650_FluidR3_GM_sf2_file.js",
         name: "_tone_0650_FluidR3_GM_sf2_file"
     },
     "shakuhachi": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0770_SBLive_sf2.js",
+        path: "libraries/TuneScope/0770_SBLive_sf2.js",
         name: "_tone_0770_SBLive_sf2"
     },
     "sitar": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1040_Aspirin_sf2_file.js",
+        path: "libraries/TuneScope/1040_Aspirin_sf2_file.js",
         name: "_tone_1040_Aspirin_sf2_file"
     },
     "bassoon": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0700_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/0700_FluidR3_GM_sf2_file.js",
         name: "_tone_0700_FluidR3_GM_sf2_file"
     },
     "bass": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0350_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0350_JCLive_sf2_file.js",
         name: "_tone_0350_JCLive_sf2_file"
     },
     "violin": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0400_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0400_JCLive_sf2_file.js",
         name: "_tone_0400_JCLive_sf2_file"
     },
     "cello": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0420_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0420_JCLive_sf2_file.js",
         name: "_tone_0420_JCLive_sf2_file"
     },
     "clarinet": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0710_Chaos_sf2_file.js",
+        path: "libraries/TuneScope/0710_Chaos_sf2_file.js",
         name: "_tone_0710_Chaos_sf2_file"
     },
     "flute": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0730_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0730_JCLive_sf2_file.js",
         name: "_tone_0730_JCLive_sf2_file"
     },
     "french horn": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0600_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0600_GeneralUserGS_sf2_file.js",
         name: "_tone_0600_GeneralUserGS_sf2_file"
     },
     "harp": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0460_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0460_GeneralUserGS_sf2_file.js",
         name: "_tone_0460_GeneralUserGS_sf2_file"
     },
     "koto": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1070_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/1070_FluidR3_GM_sf2_file.js",
         name: "_tone_1070_FluidR3_GM_sf2_file"
     },
     "marimba": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0121_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/0121_FluidR3_GM_sf2_file.js",
         name: "_tone_0121_FluidR3_GM_sf2_file"
     },
     "oboe": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0680_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/0680_JCLive_sf2_file.js",
         name: "_tone_0680_JCLive_sf2_file"
     },
     "trumpet": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0560_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0560_GeneralUserGS_sf2_file.js",
         name: "_tone_0560_GeneralUserGS_sf2_file"
     },
     "tuba": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0580_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0580_GeneralUserGS_sf2_file.js",
         name: "_tone_0580_GeneralUserGS_sf2_file"
     },
     "vibraphone": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0110_GeneralUserGS_sf2_file.js",
         name: "_tone_0110_GeneralUserGS_sf2_file"
     },
 
     // drums
 
     "cabasa": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12869_6_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/12869_6_JCLive_sf2_file.js",
         name: "_drum_69_6_JCLive_sf2_file"
     },
     "snare drum": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12840_6_JCLive_sf2_file.js",
+        path: "libraries/TuneScope/12840_6_JCLive_sf2_file.js",
         name: "_drum_40_6_JCLive_sf2_file"
     },
     "bass drum": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12835_21_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12835_21_FluidR3_GM_sf2_file.js",
         name: "_drum_35_21_FluidR3_GM_sf2_file"
     },
     "closed hi-hat": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12842_0_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12842_0_FluidR3_GM_sf2_file.js",
         name: "_drum_42_0_FluidR3_GM_sf2_file"
     },
     "open hi-hat": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12846_0_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12846_0_FluidR3_GM_sf2_file.js",
         name: "_drum_46_0_FluidR3_GM_sf2_file"
     },
     "mid tom": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12847_21_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12847_21_FluidR3_GM_sf2_file.js",
         name: "_drum_47_21_FluidR3_GM_sf2_file"
     },
     "high tom": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12848_21_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12848_21_FluidR3_GM_sf2_file.js",
         name: "_drum_48_21_FluidR3_GM_sf2_file"
     },
     "crash cymbal": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12849_21_FluidR3_GM_sf2_file.js",
+        path: "libraries/TuneScope/12849_21_FluidR3_GM_sf2_file.js",
         name: "_drum_49_21_FluidR3_GM_sf2_file"
     },
     "vibraphone": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
+        path: "libraries/TuneScope/0110_GeneralUserGS_sf2_file.js",
         name: "_tone_0110_GeneralUserGS_sf2_file"
     },
 }
 
 // load all instruments
-let instrumentNames = Object.keys(window.parent.instrumentData);
-window.parent.currentInstrumentName = "piano";
+TuneScope.instrumentNames = Object.keys(TuneScope.instrumentData);
+TuneScope.currentInstrumentName = "piano";
 
 // initialize volumes
-window.parent.instrumentVolumes = {}
-window.parent.globalInstrumentVolume = 0.5;
+TuneScope.instrumentVolumes = {}
+TuneScope.globalInstrumentVolume = 0.5;
 
 // tones
 class Tone {
@@ -415,8 +384,8 @@ class Tone {
     }
 
 }
-window.Tone = Tone;
-window.tones = {};
+TuneScope.Tone = Tone;
+TuneScope.tones = {};
 
 /* Auxillary Functions */
 // repeats an array n times
@@ -549,10 +518,10 @@ window.deep_copy = deep_copy;
 
 setTimeout(() => {
     console.log("playing initialization sound")
-    for (let i = 0; i < instrumentNames.length; i++) {
-        let instrumentName = instrumentNames[i];
+    for (let i = 0; i < TuneScope.instrumentNames.length; i++) {
+        let instrumentName = TuneScope.instrumentNames[i];
         if (instrumentName === "shakuhachi") return;
-        window.playNote("C4", 1, instrumentName, 0);
+        TuneScope.playNote("C4", 1, instrumentName, 0);
     }
 }, 1000 * 3);
 
@@ -560,5 +529,5 @@ setTimeout(() => {
 
 setTimeout(() => {
     console.log("TuneScope Loaded")
-    window.parent.loadedTuneScope = true;
+    TuneScope.loadedTuneScope = true;
 }, 1000 * 4)
