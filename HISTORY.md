@@ -22,6 +22,7 @@
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
+    * made formal parameters available in variable-menu dropdowns of all blocks inside of block editors
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
@@ -55,6 +56,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-11-18
+* blocks: made formal parameters available in variable-menu dropdowns of all blocks inside of block editors
 
 ### 2022-11-17
 * objects: fixed displaying message senders

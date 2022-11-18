@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-17';
+modules.blocks = '2022-November-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1441,6 +1441,14 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     }
     rcvr = block.scriptTarget();
     block.allParents().forEach(morph => {
+        var proto;
+        if (morph instanceof BlockEditorMorph) {
+            proto = morph.body.contents.children.find(child =>
+                child instanceof PrototypeHatBlockMorph);
+            if (proto) {
+                morph = proto;
+            }
+        }
         if (morph instanceof PrototypeHatBlockMorph) {
             tempVars.push.apply(
                 tempVars,
