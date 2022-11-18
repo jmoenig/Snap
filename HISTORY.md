@@ -60,6 +60,7 @@
 ### 2022-11-18
 * blocks: made formal parameters available in variable-menu dropdowns of all blocks inside of block editors
 * gui: refactored SpriteIcon >> flash() mechanism
+* blocks: refactored Block >> showMesageUsers()
 
 ### 2022-11-17
 * objects: fixed displaying message senders

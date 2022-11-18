@@ -3434,6 +3434,23 @@ BlockMorph.prototype.userMenu = function () {
 };
 
 BlockMorph.prototype.showMessageUsers = function () {
+    // for blocks that send, broadcast or receive a message
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            this.parentThatIsA(BlockEditorMorph)
+                .target.parentThatIsA(IDE_Morph),
+        users = this.messageUsers();
+
+    ide.corral.frame.contents.children.concat(ide.corral.stageIcon).forEach(
+        icon => {
+            if (users.includes(icon.object)) {
+                icon.flash();
+            }
+        }
+    );
+};
+
+
+BlockMorph.prototype.messageUsers = function () {
     // for the following selectors:
     // ['doBroadcast', 'doBroadcastAndWait',
     // 'receiveMessage', 'receiveOnClone', 'receiveGo']
@@ -3441,7 +3458,6 @@ BlockMorph.prototype.showMessageUsers = function () {
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
                 .target.parentThatIsA(IDE_Morph),
-        corral = ide.corral,
         isSender = this.selector.indexOf('doBroadcast') === 0,
         isReceiver = this.selector.indexOf('receive') === 0,
         getter = isReceiver ? 'allSendersOf' : 'allHatBlocksFor',
@@ -3475,23 +3491,14 @@ BlockMorph.prototype.showMessageUsers = function () {
         if (isReceiver) {
             knownSenders = ide.stage.globalBlocksSending(message, receiverName);
         }
-        corral.frame.contents.children.concat(corral.stageIcon).forEach(
-            icon => {
-                if (icon.object &&
-                    icon.object[getter](
-                        message,
-                        receiverName,
-                        knownSenders
-                    ).length
-                ) {
-                    icon.flash();
-                }
-            }
 
-
+        return ide.sprites.asArray().concat([ide.stage]).filter(sprite =>
+            sprite[getter](message, receiverName, knownSenders).length
         );
     }
+    return [];
 };
+
 
 BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
     if (typeof message === 'number') {
