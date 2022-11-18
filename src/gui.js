@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-17';
+modules.gui = '2022-November-18';
 
 // Declarations
 
@@ -9447,7 +9447,12 @@ SpriteIconMorph.prototype.init = function (aSprite) {
     this.version = this.object.version;
     this.thumbnail = null;
     this.rotationButton = null; // synchronous rotation of nested sprites
+
+    // additional properties for highlighting
     this.isFlashing = false;
+    this.previousColor = null;
+    this.previousOutline = null;
+    this.previousState = null;
 
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
@@ -9839,12 +9844,13 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 SpriteIconMorph.prototype.flash = function () {
     var world = this.world(),
         isFlat = MorphicPreferences.isFlat,
-        highlight = SpriteMorph.prototype.highlightColor,
-        previousColor = isFlat ? this.pressColor : this.outlineColor,
-        previousOutline = this.outline,
-        previousState = this.userState;
+        highlight = SpriteMorph.prototype.highlightColor;
 
     if (this.isFlashing) {return; }
+
+    this.previousColor = isFlat ? this.pressColor : this.outlineColor;
+    this.previousOutline = this.outline;
+    this.previousState = this.userState;
 
     if (isFlat) {
         this.pressColor = highlight;
@@ -9864,12 +9870,12 @@ SpriteIconMorph.prototype.flash = function () {
         nop,
         () => {
             if (isFlat) {
-                this.pressColor = previousColor;
+                this.pressColor = this.previousColor;
             } else {
-                this.outlineColor = previousColor;
-                this.outline = previousOutline;
+                this.outlineColor = this.previousColor;
+                this.outline = this.previousOutline;
             }
-            this.userState = previousState;
+            this.userState = this.previousState;
             this.rerender();
             this.isFlashing = false;
         }
