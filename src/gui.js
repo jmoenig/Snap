@@ -9842,8 +9842,23 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 // SpriteIconMorph flashing
 
 SpriteIconMorph.prototype.flash = function () {
-    var world = this.world(),
-        isFlat = MorphicPreferences.isFlat,
+    var world = this.world();
+
+    if (this.isFlashing) {return; }
+    this.flashOn();
+
+    world.animations.push(new Animation(
+        nop,
+        nop,
+        0,
+        800,
+        nop,
+        () => this.flashOff()
+    ));
+};
+
+SpriteIconMorph.prototype.flashOn = function () {
+    var isFlat = MorphicPreferences.isFlat,
         highlight = SpriteMorph.prototype.highlightColor;
 
     if (this.isFlashing) {return; }
@@ -9861,25 +9876,20 @@ SpriteIconMorph.prototype.flash = function () {
     this.userState = 'pressed';
     this.rerender();
     this.isFlashing = true;
+};
 
-    world.animations.push(new Animation(
-        nop,
-        nop,
-        0,
-        800,
-        nop,
-        () => {
-            if (isFlat) {
-                this.pressColor = this.previousColor;
-            } else {
-                this.outlineColor = this.previousColor;
-                this.outline = this.previousOutline;
-            }
-            this.userState = this.previousState;
-            this.rerender();
-            this.isFlashing = false;
-        }
-    ));
+SpriteIconMorph.prototype.flashOff = function () {
+    if (!this.isFlashing) {return; }
+
+    if (MorphicPreferences.isFlat) {
+        this.pressColor = this.previousColor;
+    } else {
+        this.outlineColor = this.previousColor;
+        this.outline = this.previousOutline;
+    }
+    this.userState = this.previousState;
+    this.rerender();
+    this.isFlashing = false;
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////
