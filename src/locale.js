@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2022-October-25';
+modules.locale = '2022-November-07';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -392,11 +392,11 @@ SnapTranslator.dict.ca = {
     'language_name':
         'Català',
     'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
+        'Joan Guillén i Pelegay, Bernat Romagosa Carrasquer',
     'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
+        'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2022-01-05'
+        '2022-11-07'
 };
 
 SnapTranslator.dict.ca_VA = {

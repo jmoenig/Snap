@@ -1307,7 +1307,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-November-01';
+var morphicVersion = '2022-November-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 var keepCanvasInCPU = false;
@@ -11270,7 +11270,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
-    this.touchStartPosition = new Point();
+    this.touchStartPosition = null;
 
     // properties for caching dragged objects:
     this.cachedFullImage = null;
@@ -11521,7 +11521,6 @@ HandMorph.prototype.processTouchStart = function (event) {
             event.touches[0].pageX,
             event.touches[0].pageY
         );
-
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             () => {
                 this.processMouseDown({button: 2});
@@ -11538,21 +11537,16 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    var pos = new Point(event.touches[0].pageX, event.touches[0].pageY);
     MorphicPreferences.isTouchDevice = true;
-
-    let pos = new Point(
-        event.touches[0].pageX,
-        event.touches[0].pageY
-    );
-
-    let dis = this.touchStartPosition.distanceTo(pos);
-
-    if (dis > MorphicPreferences.grabThreshold) {
-        if (event.touches.length === 1) {
-            var touch = event.touches[0];
-            this.processMouseMove(touch);
-            clearInterval(this.touchHoldTimeout);
-        }
+    if (this.touchStartPosition.distanceTo(pos) <
+            MorphicPreferences.grabThreshold) {
+        return;
+    }
+    if (event.touches.length === 1) {
+        var touch = event.touches[0];
+        this.processMouseMove(touch);
+        clearInterval(this.touchHoldTimeout);
     }
 };
 

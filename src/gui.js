@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-October-25';
+modules.gui = '2022-November-18';
 
 // Declarations
 
@@ -9448,6 +9448,12 @@ SpriteIconMorph.prototype.init = function (aSprite) {
     this.thumbnail = null;
     this.rotationButton = null; // synchronous rotation of nested sprites
 
+    // additional properties for highlighting
+    this.isFlashing = false;
+    this.previousColor = null;
+    this.previousOutline = null;
+    this.previousState = null;
+
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
         this,
@@ -9836,12 +9842,30 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 // SpriteIconMorph flashing
 
 SpriteIconMorph.prototype.flash = function () {
-    var world = this.world(),
-        isFlat = MorphicPreferences.isFlat,
-        highlight = SpriteMorph.prototype.highlightColor,
-        previousColor = isFlat ? this.pressColor : this.outlineColor,
-        previousOutline = this.outline,
-        previousState = this.userState;
+    var world = this.world();
+
+    if (this.isFlashing) {return; }
+    this.flashOn();
+
+    world.animations.push(new Animation(
+        nop,
+        nop,
+        0,
+        800,
+        nop,
+        () => this.flashOff()
+    ));
+};
+
+SpriteIconMorph.prototype.flashOn = function () {
+    var isFlat = MorphicPreferences.isFlat,
+        highlight = SpriteMorph.prototype.highlightColor;
+
+    if (this.isFlashing) {return; }
+
+    this.previousColor = isFlat ? this.pressColor : this.outlineColor;
+    this.previousOutline = this.outline;
+    this.previousState = this.userState;
 
     if (isFlat) {
         this.pressColor = highlight;
@@ -9851,24 +9875,21 @@ SpriteIconMorph.prototype.flash = function () {
     }
     this.userState = 'pressed';
     this.rerender();
+    this.isFlashing = true;
+};
 
-    world.animations.push(new Animation(
-        nop,
-        nop,
-        0,
-        800,
-        nop,
-        () => {
-            if (isFlat) {
-                this.pressColor = previousColor;
-            } else {
-                this.outlineColor = previousColor;
-                this.outline = previousOutline;
-            }
-            this.userState = previousState;
-            this.rerender();
-        }
-    ));
+SpriteIconMorph.prototype.flashOff = function () {
+    if (!this.isFlashing) {return; }
+
+    if (MorphicPreferences.isFlat) {
+        this.pressColor = this.previousColor;
+    } else {
+        this.outlineColor = this.previousColor;
+        this.outline = this.previousOutline;
+    }
+    this.userState = this.previousState;
+    this.rerender();
+    this.isFlashing = false;
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////

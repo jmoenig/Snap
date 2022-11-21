@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-14';
+modules.objects = '2022-November-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -3986,6 +3986,51 @@ SpriteMorph.prototype.renameVariable = function (
     ide.refreshPalette();
     ide.recordUnsavedChanges();
     return true; // success
+};
+
+SpriteMorph.prototype.flashScope = function (varName, isGlobal) {
+    var scope = this.visibleScopeFor(varName, isGlobal),
+        clr = SyntaxElementMorph.prototype.activeHighlight.darker();
+    scope.flat().forEach(elem => elem.flash(clr));
+};
+
+SpriteMorph.prototype.unflashScope = function (varName, isGlobal) {
+    var scope = this.visibleScopeFor(varName, isGlobal);
+    scope.flat().forEach(elem => elem.unflash());
+};
+
+SpriteMorph.prototype.visibleScopeFor = function (varName, isGlobal) {
+    // private - answer an array of all my syntax elements within the lexical
+    // scope of a given variable name, so they can be highlighted in the IDE.
+    // Note: This is optimized to only answer the *visible* blocks, if you
+    // want to get the full collection of affected elements use
+    // Block >> fullScopeFor(varName) instead.
+
+    var elements = [];
+
+    if (isGlobal && contains(this.variables.names(), varName)) {
+        return elements;
+    }
+
+    // in scripts
+    this.scripts.children.forEach(morph => {
+        if (morph instanceof BlockMorph) {
+            elements.push(morph.fullScopeFor(varName));
+        }
+    });
+
+    // in currently open block editors
+    this.world().children.forEach(morph => {
+        if (morph instanceof BlockEditorMorph) {
+            morph.body.contents.children.forEach(morph => {
+                if (morph instanceof BlockMorph) {
+                    elements.push(morph.fullScopeFor(varName));
+                }
+            });
+        }
+    });
+
+    return elements.flat();
 };
 
 // SpriteMorph costume management
@@ -9774,6 +9819,10 @@ StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 StageMorph.prototype.renameVariable = SpriteMorph.prototype.renameVariable;
+StageMorph.prototype.flashScope = SpriteMorph.prototype.flashScope;
+StageMorph.prototype.unflashScope = SpriteMorph.prototype.unflashScope;
+StageMorph.prototype.visibleScopeFor = SpriteMorph.prototype.visibleScopeFor;
+ 
 
 // StageMorph Palette Utilities
 
@@ -10319,7 +10368,7 @@ StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
             def => def.isSending(message, receiverName)
         );
     this.globalBlocks.forEach(def => {
-        if (def.collectDependencies().some(dep => contains(all, dep))) {
+        if (def.collectDependencies([], []).some(dep => contains(all, dep))) {
             all.push(def);
         }
     });

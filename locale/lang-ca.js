@@ -181,11 +181,11 @@ SnapTranslator.dict.ca = {
     'language_name':
         'Català', // the name as it should appear in the language menu
     'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay', // your name for the Translators tab
+        'Joan Guillén i Pelegay, Bernat Romagosa Carrasquer', // your name for the Translators tab
     'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
+        'jguille2@xtec.cat, bernat@snap4arduino.rocks', // optional
     'last_changed':
-        '2022-01-05', // this, too, will appear in the Translators tab
+        '2022-11-07', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -489,6 +489,8 @@ SnapTranslator.dict.ca = {
         'Envia %msg %receive i espera',
     'to':
         'a',
+    'with data':
+        'amb dades',
     'send %msg to %spr':
         'envia %msg a %spr',
     'Message name':
@@ -497,6 +499,8 @@ SnapTranslator.dict.ca = {
         'missatge',
     'any message':
         'qualsevol missatge',
+    'data':
+        'dades',
     'wait %n secs':
         'espera %n segons',
     'wait until %b':
@@ -521,6 +525,8 @@ SnapTranslator.dict.ca = {
         'atura %stopChoices',
     'all':
         'tots',
+    'all scenes':
+        'totes les escenes',
     'this script':
         'aquest programa',
     'this block':
@@ -543,6 +549,8 @@ SnapTranslator.dict.ca = {
         'executa %cmdRing amb continuació',
     'call %cmdRing w/continuation':
         'crida %cmdRing amb continuació',
+    'pipe %s $arrowRight %mult%repRing':
+        'canalitza %s $arrowRight %mult%repRing',
     'warp %c':
         'executa de cop %c',
     'when I start as a clone':
@@ -581,6 +589,8 @@ SnapTranslator.dict.ca = {
         'Com et dius?',
     'answer':
         'resposta',
+    'mouse position':
+        'posició del ratolí',
     'mouse x':
         'ratolí x',
     'mouse y':
@@ -637,14 +647,46 @@ SnapTranslator.dict.ca = {
         'color RGBA',
     '%block of block %repRing':
         '%block del bloc %repRing',
+    'label':
+        'etiqueta',
     'definition':
         'definició',
+    'category':
+        'categoria',
     'custom?':
         'personalitzat?',
     'global?':
         'global?',
+    'type':
+        'tipus',
+    'scope':
+        'àmbit',
+    'slots':
+        'ranures',
+    'defaults':
+        'valors per defecte',
+    'menus':
+        'menús',
+    'editables':
+        'editables',
+    'set %byob of block %repRing to %s':
+        'assigna a %byob de %repRing el valor %s',
+    'define %upvar %s %repRing':
+        'defineix %upvar %s %repRing',
+    'delete block %repRing':
+        'esborra Block %repRing',
+    'block':
+        'bloc',
 
     // operators:
+    'sum':
+        'suma',
+    'product':
+        'producte',
+    'minimum':
+        'mínim',
+    'maximum':
+        'màxim',
     '%n mod %n':
         'residu de dividir %n entre %n',
     'round %n':
@@ -772,6 +814,8 @@ SnapTranslator.dict.ca = {
         'element',
     'append %lists':
         'annexa %lists',
+    'combinations %lists':
+        'combinacions de %lists',
    'reshape %l to %nums':
         'redimensiona %l a %nums',
     'add %s to %l':
@@ -1667,6 +1711,8 @@ SnapTranslator.dict.ca = {
         'predicat',
     'sprite':
         'objecte',
+    'ring':
+        'càpsula',
 
     // list indices
     'last':
@@ -1727,6 +1773,18 @@ SnapTranslator.dict.ca = {
         'marqueu per heretar\n de',
     'uncheck to\ndisinherit':
         'desmarqueu per a\ndesheretar',
+
+    // editing slots inside variadic inputs
+    'insert a slot':
+        'afegeix una ranura',
+    'delete slot':
+        'esborra la ranura',
+    'insert a variable':
+        'afegeix una variable',
+    'delete variable':
+        'esborra la variable',
+    'variable':
+        'variable',
 
     // missing in lang-de.js - copied from lang-pt.js
     'delete %shd':
@@ -1947,6 +2005,12 @@ SnapTranslator.dict.ca = {
         'desmarqueu per habilitar\nl\'execució directa dels blocs\nen clicar-los',
     'check to disable\ndirectly running blocks\nby clicking on them':
         'marqueu per a deshabilitar\nl\'execució directa dels blocs\nen clicar-los',
+    'Disable dragging data':
+        'Deshabilita l\'arrossegament des de visors i bafarades',
+    'uncheck to drag media,\nand blocks out of\nwatchers and balloons':
+        'desmarqueu per poder arrossegar objectes, imatges\ni blocs fora dels visors de variables\n i de les bafarades de diàleg',
+    'disable dragging media\nand blocks out of\nwatchers and balloons':
+        'marqueu per deshabilitar l\'arrossegament d\'objectes, imatgess\ni blocs fora dels visors de variables\ni de les bafarades de diàleg',
     'saved.':
         'desat.',
     'options...':
@@ -2098,6 +2162,12 @@ SnapTranslator.dict.ca = {
         'superior',
     'bottom':
         'inferior',
+    'position':
+        'posició',
+    'costume name':
+        'nom del vestit',
+    'categories':
+        'categories',
     'left':
         'esquerra',
     'right':
@@ -2236,6 +2306,10 @@ SnapTranslator.dict.ca = {
         'imatge del resultat...',
     'save a picture of both\nthis script and its result':
         'desa una imatge\ndels blocs amb el resultat',
+    'export script':
+        'exporta el programa',
+    'download this script\nas an XML file':
+        'descarrega el programa\nen un fitxer XML',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript function ( %mult%s ) { %code }',
     'Select categories of additional blocks to add to this project.':
@@ -2252,16 +2326,8 @@ SnapTranslator.dict.ca = {
         'edita només el centre de rotació…',
     'Export Project As...':
         'Exporta el Projecte com…',
-    'a variable of name \'':
-        'una variable de nom \'',
-    '\'\ndoes not exist in this context':
-        '\'\nno existeix en aquest context',
     '(temporary)':
         '(temporal)',
-    'expecting':
-        'esperant',
-    'input(s), but getting':
-        'com a entrada(s), però s\'ha rebut',
     'parent...':
         'pare…',
     'Dragging threshold...':
@@ -2399,6 +2465,10 @@ SnapTranslator.dict.ca = {
 //costumes and backgrounds
 	'rename background':
 		'canvia el nom del fons',
+    'get blocks':
+        'obté els blocs',
+    'get data':
+        'obté les dades',
 	'turn pen trails into new background...':
 		'crea un nou fons amb la imatge dibuixada…',
 	'turn all pen trails and stamps\ninto a new background for the stage':
@@ -2923,6 +2993,70 @@ SnapTranslator.dict.ca = {
     'senders...':
         'emissors...',
     'receivers...':
-        'receptors...'
+        'receptors...',
+
+    // error messages
+    'Error':
+        'problema',
+    'a variable of name \'':
+        'una variable de nom \'',
+    '\'\ndoes not exist in this context':
+        '\'\nno existeix en aquest context',
+    'expecting a':
+        's\'esperava un/a',
+    'but getting a':
+        'però s\'ha rebut un/a',
+    'expecting':
+        'esperant',
+    'input(s), but getting':
+        'com a entrada(s), però s\'ha rebut',
+    'Inside a custom block':
+        'En la definició d\'un bloc',
+    'The question came up at':
+        'La incidència ha sorgit en',
+    'continuations cannot be forked':
+        'les continuacions no poden separar-se',
+    'unable to convert to':
+        'no és possible convertir-ho a',
+    'Request blocked':
+        'Petició denegada',
+    'cannot operate on a deleted sprite':
+        'no pot funcionar en un objecte esborrat',
+    'cannot send media,\nsprites or procedures\nto another scene':
+        'no es pot enviar multimedia,\nni objectes ni funcions\na altres escenes',
+    'unable to nest\n(disabled or circular?)':
+        'no es pot imbrincar\n(està deshabilitat o és cíclic?)',
+    'unable to inherit\n(disabled or circular?)':
+        'no es pot heretar\n(està deshabilitat o és cíclic?)',
+    'is read-only':
+        'és només de lectura',
+    'is not a valid option':
+        'no és una opció vàlida',
+    'unsupported data type':
+        'aquest tipus de dades no és possible',
+    'cannot handle zero width or height':
+        'no pot tenir una amplada o alçada de zero',
+    'expecting a finite number\nbut getting Infinity or NaN':
+        'ha de ser un número finit\nperò s\'ha rebut infinit o NaN',
+    'the predicate takes\ntoo long for a\ncustom hat block':
+        'la condició triga massa\nen avaluar-se per a\npoder definir un bloc inicial personalitzat',
+    'missing / unspecified extension':
+        'no es troba o no es coneix l\'extensió',
+    'reporter didn\'t report':
+        'al bloc reportador no obté cap dada',
+    'a custom block definition is missing':
+        'no es troba una definició de bloc',
+    'exceeding maximum number of clones':
+        's\'ha sobrepassat el número màxi de clons',
+    'can only write text or numbers, not a':
+        'només pot escriure text o números, no un/a',
+    'unsupported graphic effect':
+        'aquest efecte gràfic no existeix',
+    'setting the rotation center requires a costume':
+        'només es pot fixar el centre de rotació en un vestit (no en la tortuga)',
+    'Web Audio API is not supported\nin this browser':
+        'aquest navegador no és compatible\namb l\'API de Web Audio',
+    'several block definitions\nalready match this label':
+        'algun bloc definit\nja utilitza aquest nom'
 
 };

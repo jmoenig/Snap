@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-14';
+modules.blocks = '2022-November-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1441,6 +1441,14 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     }
     rcvr = block.scriptTarget();
     block.allParents().forEach(morph => {
+        var proto;
+        if (morph instanceof BlockEditorMorph) {
+            proto = morph.body.contents.children.find(child =>
+                child instanceof PrototypeHatBlockMorph);
+            if (proto) {
+                morph = proto;
+            }
+        }
         if (morph instanceof PrototypeHatBlockMorph) {
             tempVars.push.apply(
                 tempVars,
@@ -1567,6 +1575,7 @@ SyntaxElementMorph.prototype.setColor = function (aColor) {
                     morph.setColor(aColor);
                 }
             });
+            if (block) {block.fixLabelColor(); }
             this.rerender();
         }
     }
@@ -1594,10 +1603,10 @@ SyntaxElementMorph.prototype.setLabelColor = function (
     });
 };
 
-SyntaxElementMorph.prototype.flash = function () {
+SyntaxElementMorph.prototype.flash = function (aColor) {
     if (!this.cachedNormalColor) {
         this.cachedNormalColor = this.color;
-        this.setColor(this.activeHighlight);
+        this.setColor(aColor || this.activeHighlight);
     }
 };
 
@@ -3084,6 +3093,13 @@ BlockMorph.prototype.userMenu = function () {
                         () => this.refactorPaletteTemplate(true), // everywhere
                         'rename all blocks that\naccess this variable'
                     );
+                    menu.addLine();
+                    menu.addItem(
+                        'delete',
+                        () => rcvr.deleteVariable(
+                            this.instantiationSpec || this.blockSpec,
+                            !this.isLocalVarTemplate)
+                    );
                 }
             }
 
@@ -3418,6 +3434,23 @@ BlockMorph.prototype.userMenu = function () {
 };
 
 BlockMorph.prototype.showMessageUsers = function () {
+    // for blocks that send, broadcast or receive a message
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            this.parentThatIsA(BlockEditorMorph)
+                .target.parentThatIsA(IDE_Morph),
+        users = this.messageUsers();
+
+    ide.corral.frame.contents.children.concat(ide.corral.stageIcon).forEach(
+        icon => {
+            if (users.includes(icon.object)) {
+                icon.flash();
+            }
+        }
+    );
+};
+
+
+BlockMorph.prototype.messageUsers = function () {
     // for the following selectors:
     // ['doBroadcast', 'doBroadcastAndWait',
     // 'receiveMessage', 'receiveOnClone', 'receiveGo']
@@ -3425,7 +3458,6 @@ BlockMorph.prototype.showMessageUsers = function () {
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
                 .target.parentThatIsA(IDE_Morph),
-        corral = ide.corral,
         isSender = this.selector.indexOf('doBroadcast') === 0,
         isReceiver = this.selector.indexOf('receive') === 0,
         getter = isReceiver ? 'allSendersOf' : 'allHatBlocksFor',
@@ -3459,23 +3491,14 @@ BlockMorph.prototype.showMessageUsers = function () {
         if (isReceiver) {
             knownSenders = ide.stage.globalBlocksSending(message, receiverName);
         }
-        corral.frame.contents.children.concat(corral.stageIcon).forEach(
-            icon => {
-                if (icon.object &&
-                    icon.object[getter](
-                        message,
-                        receiverName,
-                        knownSenders
-                    ).length
-                ) {
-                    icon.flash();
-                }
-            }
 
-
+        return ide.sprites.asArray().concat([ide.stage]).filter(sprite =>
+            sprite[getter](message, receiverName, knownSenders).length
         );
     }
+    return [];
 };
+
 
 BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
     if (typeof message === 'number') {
@@ -5238,16 +5261,101 @@ BlockMorph.prototype.activeProcess = function () {
 };
 
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
-    if (!dragged && this.alpha < 1) {
+    var rcvr, vName, dec;
+
+    if (dragged) {return; }
+
+    // slightly increase my opacity if block-fading is active
+    if (this.alpha < 1) {
         this.alpha = Math.min(this.alpha + 0.2, 1);
         this.rerender();
+    }
+
+    if (Process.prototype.enableSingleStepping) {
+        // highlight senders and receivers of message / broadcast blocks
+        if (contains(
+            ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage',
+                'receiveOnClone', 'receiveGo'],
+            this.selector
+        )) {
+            this.showMessageUsers();
+        }
+
+        // highlight the lexical scope of a variable declaration when visible
+        // stepping is turned on in the IDE.
+        // Only applies to variable getters that serve as variable declarations
+        // either in the blocks palette or in a template slot (upvar etc.)
+        if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+        ) {
+            rcvr = this.scriptTarget();
+            rcvr.flashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        } else {
+            // highlight the variable declaration this block is referring to,
+            // if it happens to be a variable accessor
+            vName = this.getVarName();
+            if (vName) {
+                dec = this.rewind().find(elem =>
+                    elem.selector === 'reportGetVar' &&
+                    elem.isTemplate &&
+                    (elem.instantiationSpec || elem.blockSpec) === vName
+                );
+                if (dec) {
+                    dec.flash(this.activeHighlight.darker());
+                } else {
+                    rcvr = this.scriptTarget();
+                    if (!rcvr.variables.allNames().includes(vName)) {
+                        this.flash(new Color(255, 50, 50));
+                    }
+                }
+            }
+        }
     }
 };
 
 BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
+    var rcvr, vName, dec;
+
     if (SyntaxElementMorph.prototype.alpha < 1) {
         delete this.alpha;
         this.rerender();
+    }
+
+    if (Process.prototype.enableSingleStepping && !dragged) {
+        // highlight the lexical scope of a variable declaration when visible
+        // stepping is turned on in the IDE.
+        if (this.selector === 'reportGetVar' &&
+            this.isTemplate &&
+            !(this.parent instanceof SyntaxElementMorph)
+        ) {
+            rcvr = this.scriptTarget();
+            rcvr.unflashScope(
+                this.instantiationSpec || this.blockSpec,
+                !this.isLocalVarTemplate
+            );
+        } else {
+            vName = this.getVarName();
+            if (vName) {
+                dec = this.rewind().find(
+                    elem => elem.selector === 'reportGetVar' &&
+                    elem.isTemplate &&
+                    (elem.instantiationSpec || elem.blockSpec) === vName
+                );
+                (dec || this).unflash();
+            }
+        }
+    }
+};
+
+BlockMorph.prototype.mouseDownLeft = function (pos) {
+    if (Process.prototype.enableSingleStepping) {
+        // un-highhlight any scope-visualization
+        // before possible picking me up
+        this.mouseLeaveBounds();
     }
 };
 
@@ -5403,25 +5511,9 @@ BlockMorph.prototype.scopeFor = function (varName, afterThis) {
     // - i.e. - this block should be ignored, because it is the template whose
     // scope is being determined.
 
-    function select(opsArray) {
-        var end = opsArray.findIndex(e =>
-                e instanceof TemplateSlotMorph && e.contents() === varName),
-            scope = [],
-            i, elem;
-        if (end < 0) {end = opsArray.length; }
-        for (i = 0; i < end; i += 1) {
-            elem = opsArray[i];
-            if (elem instanceof BlockMorph &&
-                    elem.isVariableAccessorFor(varName)) {
-                scope.push(elem);
-            } else if (elem instanceof Array) {
-                scope.push(select(elem));
-            }
-        }
-        return scope;
-    }
-
-    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
+    return this.fullScopeFor(varName, afterThis).filter(elem =>
+        elem instanceof BlockMorph && elem.isVariableAccessorFor(varName)
+    );
 };
 
 BlockMorph.prototype.isVariableAccessorFor = function (varName) {
@@ -5433,6 +5525,33 @@ BlockMorph.prototype.isVariableAccessorFor = function (varName) {
         any.choices === 'getVarNamesDict' &&
         any.evaluate() === varName
     );
+};
+
+BlockMorph.prototype.fullScopeFor = function (varName, afterThis) {
+    // return an array of syntax elements within my lexical scope that can
+    // access the given variable name.
+    // Optional Boolean "afterThis" switch indicates whether the very first
+    // - i.e. - this block should be ignored, because it is the template whose
+    // scope is being determined.
+
+    function select(opsArray) {
+        var end = opsArray.findIndex(e =>
+                e instanceof TemplateSlotMorph && e.contents() === varName),
+            scope = [],
+            i, elem;
+        if (end < 0) {end = opsArray.length; }
+        for (i = 0; i < end; i += 1) {
+            elem = opsArray[i];
+            if (elem instanceof Array) {
+                scope.push(select(elem));
+            } else {
+                scope.push(elem);
+            }
+        }
+        return scope;
+    }
+
+    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
 };
 
 // BlockMorph op-sequence analysis
@@ -5453,7 +5572,11 @@ BlockMorph.prototype.unwind = function () {
         if (nxt) {
             return [this].concat(nxt.unwind());
         }
-        return [this];
+        // find the nearest enclosing C-slot or Ring
+        current = this.parentThatIsA(CommandSlotMorph, RingMorph);
+        if (!current || !current.isStatic || current instanceof RingMorph) {
+            return [this];
+        }
     }
     if (this.parent instanceof TemplateSlotMorph) {
         current = this.parent;
@@ -5483,7 +5606,11 @@ BlockMorph.prototype.unwindAfter = function (element) {
             if (nxt) {
                 return [this].concat(nxt.unwind());
             }
-            return [this];
+            // find the nearest enclosing C-slot or Ring
+            current = this.parentThatIsA(CommandSlotMorph, RingMorph);
+            if (!current || !current.isStatic || current instanceof RingMorph) {
+                return [this];
+            }
         }
         // reporter, multi-arg or embedded prototype
         if (this.parent instanceof TemplateSlotMorph) {
@@ -5505,6 +5632,93 @@ BlockMorph.prototype.unwindAfter = function (element) {
     return this.inputs()[idx + 1].unwind();
 };
 
+BlockMorph.prototype.rewind = function () {
+    // return an array of blocks and inputs roughly mimicking the visible
+    // sequence of operations leading up to this block. Used to trace
+    // variable accessors back to their nearest variable declaration within
+    // lexical scope.
+
+    var ide = this.scriptTarget().parentThatIsA(IDE_Morph),
+        current = this,
+        trace = [],
+        declarations;
+
+    function log(block) {
+        if (trace.includes(block)) {return; }
+        trace.push(block);
+        block.inputs().slice(0).reverse().forEach(elem => {
+            var nested;
+            if (elem instanceof MultiArgMorph) {
+                trace.push(elem);
+                elem.inputs().slice(0).reverse().forEach(inp => {
+                    if (inp instanceof TemplateSlotMorph) {
+                        trace.push(inp.template());
+                    } else if (inp instanceof BlockMorph) {
+                        if (!(inp instanceof RingMorph)) {
+                            log(inp);
+                        }
+                    } else if (inp instanceof CommandSlotMorph) {
+                        if (inp.isStatic) {
+                            nested = inp.nestedBlock();
+                            if (nested) {
+                                nested.blockSequence().forEach(cmd => log(cmd));
+                            }
+                        }
+                    } else {
+                        trace.push(inp);
+                    }
+                });
+            } else if (elem instanceof TemplateSlotMorph) {
+                trace.push(elem.template());
+            } else if (elem instanceof BlockMorph) {
+                if (!(elem instanceof RingMorph)) {
+                    log(elem);
+                }
+            } else if (elem instanceof CommandSlotMorph) {
+                if (elem.isStatic) {
+                    nested = elem.nestedBlock();
+                    if (nested) {
+                        nested.blockSequence().forEach(cmd => log(cmd));
+                    }
+                }
+            } else {
+                trace.push(elem);
+            }
+        });
+    }
+
+    while (current instanceof BlockMorph) {
+        log(current);
+        current = current.parent?.parentThatIsA(BlockMorph);
+    }
+
+    if (ide) {
+        declarations = ide.palette.contents.children.filter(morph =>
+            morph instanceof BlockMorph && morph.selector === 'reportGetVar'
+        ).reverse();
+        declarations.forEach(block => trace.push(block));
+    }
+
+    return trace;
+};
+ 
+ BlockMorph.prototype.getVarName = function () {
+    // return the name of the (first) variable accessed by this block or null
+    // if it doesn't access any variable.
+    var slot, name;
+    if (this.isTemplate) {return null; }
+    if (this.selector === 'reportGetVar') {
+        return this.blockSpec || null;
+    }
+    slot = this.inputs().find(elem => elem.choices === 'getVarNamesDict');
+    if (slot) {
+        name = slot.evaluate();
+        if (name instanceof Array) {return null; }
+        return name || null;
+    }
+    return null;
+ };
+ 
 // CommandBlockMorph ///////////////////////////////////////////////////
 
 /*
@@ -7427,8 +7641,12 @@ RingMorph.prototype.unwind = function () {
 };
 
 RingMorph.prototype.unwindAfter = function (elem) {
+    var nested;
     if (elem === this.inputs()[1]) {
-        return this.contents().unwind();
+        nested = this.contents();
+        if (nested) {
+            return nested.unwind();
+        }
     }
     return [];
 };
@@ -10993,11 +11211,11 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 
 // InputSlotMorph single-stepping:
 
-InputSlotMorph.prototype.flash = function () {
+InputSlotMorph.prototype.flash = function (aColor) {
     // don't redraw the label b/c zebra coloring
     if (!this.cachedNormalColor) {
         this.cachedNormalColor = this.color;
-        this.color = this.activeHighlight;
+        this.color = aColor || this.activeHighlight;
         this.rerender();
     }
 };
@@ -11471,6 +11689,33 @@ TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
     }
 };
 
+// TemplateSlotMorph visualizing scope:
+
+TemplateSlotMorph.prototype.mouseEnter = function () {
+    if (Process.prototype.enableSingleStepping) {
+        this.flashScope();
+    }
+};
+
+TemplateSlotMorph.prototype.mouseLeave = function () {
+    if (Process.prototype.enableSingleStepping) {
+        this.unflashScope();
+    }
+};
+
+TemplateSlotMorph.prototype.flashScope = function () {
+    var tmp = this.template(),
+        scope = tmp.fullScopeFor(tmp.blockSpec, true),
+        clr = this.activeHighlight.darker();
+    scope.forEach(elem => elem.flash(clr));
+};
+
+TemplateSlotMorph.prototype.unflashScope = function () {
+    var tmp = this.template(),
+        scope = tmp.fullScopeFor(tmp.blockSpec, true);
+    scope.forEach(elem => elem.unflash());
+};
+
 // TemplateSlotMorph drawing:
 
 TemplateSlotMorph.prototype.render = function (ctx) {
@@ -11499,8 +11744,8 @@ TemplateSlotMorph.prototype.cSlots = function () {
 
 // TemplateSlotMorph single-stepping
 
-TemplateSlotMorph.prototype.flash = function () {
-    this.template().flash();
+TemplateSlotMorph.prototype.flash = function (aColor) {
+    this.template().flash(aColor);
 };
 
 TemplateSlotMorph.prototype.unflash = function () {
