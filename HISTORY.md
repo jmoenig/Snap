@@ -33,6 +33,7 @@
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
+    * improved touch-hold gesture on mobile Android devices, thanks, @ego-lay-atman-bay!
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
@@ -56,6 +57,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-11-21
+* morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay
 
 ### 2022-11-18
 * blocks: made formal parameters available in variable-menu dropdowns of all blocks inside of block editors
