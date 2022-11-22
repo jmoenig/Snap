@@ -12228,25 +12228,13 @@ WorldMorph.prototype.fillPage = function () {
 
 WorldMorph.prototype.initRetina = function () {
     var canvasHeight = this.worldCanvas.getBoundingClientRect().height,
-        canvasWidth = this.worldCanvas.getBoundingClientRect().width,
-        clientHeight = window.innerHeight,
-        clientWidth = window.innerWidth;
-
-    if (this.worldCanvas.width < canvasWidth) {
-        this.worldCanvas.style.width = Math.round(
-            canvasWidth / clientWidth * 100
-        ) + '%';
-        this.worldCanvas.width = canvasWidth;
-        this.setWidth(canvasWidth);
-    }
-
-    if (this.worldCanvas.height < canvasHeight) {
-        this.worldCanvas.style.height = Math.round(
-            canvasHeight / clientHeight * 100
-        ) + '%';
-        this.worldCanvas.height = canvasHeight;
-        this .setHeight(canvasHeight);
-    }
+        canvasWidth = this.worldCanvas.getBoundingClientRect().width;
+    this.worldCanvas.style.width = canvasWidth + 'px';
+    this.worldCanvas.width = canvasWidth;
+    this.setWidth(canvasWidth);
+    this.worldCanvas.style.height = canvasHeight + 'px';
+    this.worldCanvas.height = canvasHeight;
+    this.setHeight(canvasHeight);
 };
 
 // WorldMorph global pixel access:
