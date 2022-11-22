@@ -50,6 +50,7 @@
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
     * fixed zebra coloring for polyadic read-only input slots 
     * fixed a label rendering glitch when flashing blocks
+    * prevented variables from being renamed to blanks 
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
     * hiding the keyboard handler text area better by reducing its visible dimensions to zero
@@ -63,6 +64,7 @@
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
 * morphic: hide the keyboard handler text area better by reducing its dimensions to zero
+* blocks: prevented variables from being renamed to blanks 
 
 ### 2022-11-21
 * morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay

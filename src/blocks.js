@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-18';
+modules.blocks = '2022-November-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4627,6 +4627,8 @@ BlockMorph.prototype.refactorPaletteTemplate = function (everywhere) {
         myself = this;
 
     function renameTo(newName) {
+        newName = newName.trim();
+        if (newName === '') {return; }
         // rename the following blocks in the lexical scope
         if (myself.scriptTarget().renameVariable(
             oldName,
