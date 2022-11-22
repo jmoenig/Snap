@@ -16,6 +16,7 @@
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * extensions can add custom buttons to the palette, thanks, Bernat!
+    * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
 * **Notable Changes:**
     * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -57,6 +58,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-11-22
+* morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
 
 ### 2022-11-21
 * morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay

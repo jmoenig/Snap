@@ -317,7 +317,6 @@
                 var	world1, world2;
 
                 window.onload = function () {
-                    disableRetinaSupport();
                     world1 = new WorldMorph(
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
@@ -326,7 +325,7 @@
                 };
 
                 function loop() {
-            requestAnimationFrame(loop);
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -1307,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-November-21';
+var morphicVersion = '2022-November-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 var keepCanvasInCPU = false;
@@ -1783,7 +1782,7 @@ function enableRetinaSupport() {
                 this.height = prevHeight;
             }
         },
-        configurable: true // [Jens]: allow to be deleted an reconfigured
+        configurable: true // [Jens]: allow to be deleted and reconfigured
     });
 
     Object.defineProperty(canvasProto, 'width', {
@@ -12095,6 +12094,10 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.activeMenu = null;
     this.activeHandle = null;
 
+    if (!fillPage && aCanvas.isRetinaEnabled) {
+        this.initRetina();
+    }
+
     this.initKeyboardHandler();
     this.resetKeyboardHandler();
     this.initEventListeners();
@@ -12221,6 +12224,29 @@ WorldMorph.prototype.fillPage = function () {
             child.reactToWorldResize(this.bounds.copy());
         }
     });
+};
+
+WorldMorph.prototype.initRetina = function () {
+    var canvasHeight = this.worldCanvas.getBoundingClientRect().height,
+        canvasWidth = this.worldCanvas.getBoundingClientRect().width,
+        clientHeight = window.innerHeight,
+        clientWidth = window.innerWidth;
+
+    if (this.worldCanvas.width < canvasWidth) {
+        this.worldCanvas.style.width = Math.round(
+            canvasWidth / clientWidth * 100
+        ) + '%';
+        this.worldCanvas.width = canvasWidth;
+        this.setWidth(canvasWidth);
+    }
+
+    if (this.worldCanvas.height < canvasHeight) {
+        this.worldCanvas.style.height = Math.round(
+            canvasHeight / clientHeight * 100
+        ) + '%';
+        this.worldCanvas.height = canvasHeight;
+        this .setHeight(canvasHeight);
+    }
 };
 
 // WorldMorph global pixel access:
