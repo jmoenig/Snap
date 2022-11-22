@@ -52,6 +52,7 @@
     * fixed a label rendering glitch when flashing blocks
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
+    * hiding the keyboard handler text area better by reducing its visible dimensions to zero
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -61,6 +62,7 @@
 
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
+* morphic: hide the keyboard handler text area better by reducing its dimensions to zero
 
 ### 2022-11-21
 * morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay

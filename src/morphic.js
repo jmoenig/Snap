@@ -12269,6 +12269,8 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.autofocus = true;
+    kbd.style.width = '0px'
+    kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;
 
