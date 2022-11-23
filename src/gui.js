@@ -708,7 +708,21 @@ IDE_Morph.prototype.applyPreLaunchConfigurations = function () {
 };
 
 IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
-    var cnf = this.config;
+    var cnf = this.config,
+        refreshLater = false,
+        lang, translation, src,
+
+        refresh = () => {
+            this.buildPanes();
+            this.fixLayout();
+            this.newProject();
+
+            // hide controls in presentation mode
+            if (cnf.hideControls && cnf.mode === "presentation") {
+                this.controlBar.hide();
+                window.onbeforeunload = nop;
+            }
+        };
 
     // design
     if (cnf.design) {
@@ -729,19 +743,38 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
 
     // blocks size
     if (cnf.blocksZoom) {
-        SyntaxElementMorph.prototype.setScale(Math.max(1,Math.min(cnf.blocksZoom, 12)));
+        SyntaxElementMorph.prototype.setScale(
+            Math.max(1, Math.min(cnf.blocksZoom, 12))
+        );
         CommentMorph.prototype.refreshScale();
         SpriteMorph.prototype.initBlocks();
     }
 
-    this.buildPanes();
-    this.fixLayout();
-    this.newProject();
+    // language
+    if (cnf.lang) {
+        lang = cnf.lang;
+        translation = document.getElementById('language');
 
-    // hide controls in presentation mode
-    if (cnf.hideControls && cnf.mode === "presentation") {
-        this.controlBar.hide();
-        window.onbeforeunload = nop;
+        // this needs to be directed to something more generic:
+        src = this.resourceURL('../', 'locale', 'lang-' + lang + '.js');
+
+        SnapTranslator.unload();
+        if (translation) {
+            document.head.removeChild(translation);
+        }
+        SnapTranslator.language = lang;
+        if (lang !== 'en') {
+            refreshLater = true;
+            translation = document.createElement('script');
+            translation.id = 'language';
+            translation.onload = () => refresh();
+            document.head.appendChild(translation);
+            translation.src = src;
+        }
+    }
+
+    if (!refreshLater) {
+        refresh();
     }
 
     // disable cloud access
