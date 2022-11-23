@@ -69,6 +69,7 @@
 * gui: added configuration object to IDE initialization
 * gui: added configuration options for design, mode, blocksZoom, hideControls and noCloud
 * gui: added configuration option for language
+* gui: added configuration option for clickToRun
 
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites

@@ -716,6 +716,8 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
             this.buildPanes();
             this.fixLayout();
             this.newProject();
+            ThreadManager.prototype.disableClickToRun =
+                cnf.clickToRun === false ? true : false;
 
             // hide controls in presentation mode
             if (cnf.hideControls && cnf.mode === "presentation") {

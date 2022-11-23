@@ -33,11 +33,12 @@
                         false // don't take over the page
                     ),
                     ide = new IDE_Morph({
-                        design: "flat"
+                        design: "flat",
                         // lang: "de",
                         // mode: "presentation",
                         // hideControls: true,
-                        // blocksZoom: 1.5
+                        // blocksZoom: 1.5,
+                        // clickToRun: false
                     }),
                     loop = (timestamp) => {
                         requestAnimationFrame(loop);
