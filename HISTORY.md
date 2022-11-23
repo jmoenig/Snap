@@ -27,6 +27,7 @@
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
+    * SciSnap2 extension update, thanks, Eckart!
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
@@ -63,6 +64,7 @@
 
 ### 2022-11-23
 * set up a test page for the Snap!-Pyret connection project
+* SciSnap2 extension update, thanks, Eckart!
 
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
