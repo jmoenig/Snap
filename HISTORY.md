@@ -61,6 +61,9 @@
     * German
     * Catalan, thanks, Joan!
 
+### 2022-11-23
+* set up a test page for the Snap!-Pyret connection project
+
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
 * morphic: hide the keyboard handler text area better by reducing its dimensions to zero
