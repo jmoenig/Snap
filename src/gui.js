@@ -725,6 +725,16 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                 this.controlBar.hide();
                 window.onbeforeunload = nop;
             }
+
+            // no sprites
+            if (cnf.noSprites) {
+                this.removeSprite(this.currentSprite);
+                this.stage.hide();
+                this.corralBar.hide();
+                this.corral.hide();
+                this.spriteBar.hide();
+                this.stageHandle.hide();
+            }
         };
 
     // design
@@ -2422,14 +2432,21 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
         // spriteEditor
         if (this.spriteEditor.isVisible) {
-            this.spriteEditor.setPosition(new Point(
-                this.spriteBar.left(),
-                this.spriteBar.bottom() + padding
-            ));
-            this.spriteEditor.setExtent(new Point(
-                this.spriteBar.width(),
+            this.spriteEditor.setLeft(this.spriteBar.left());
+            this.spriteEditor.setTop(
+                cnf.noSprites ?
+                    (cnf.hideControls ? this.top
+                        : this.controlBar.bottom() + padding)
+                    : this.spriteBar.bottom() + padding
+            );
+            this.spriteEditor.setWidth(
+                cnf.noSprites ?
+                    this.right() - this.spriteEditor.left()
+                    : this.spriteBar.width()
+            );
+            this.spriteEditor.setHeight(
                 this.bottom() - this.spriteEditor.top()
-            ));
+            );
         }
 
         // corralBar
