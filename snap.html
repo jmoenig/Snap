@@ -37,28 +37,29 @@
         <script src="src/sha512.js?version=2019-06-27"></script>
         <script src="src/FileSaver.min.js?version=2019-06-27"></script>
         <script>
-            var world,
-                FPS = 67,
-                lastTime = 0;
             window.onload = function () {
+                var world = new WorldMorph(document.getElementById('world')),
+                    FPS = 67,
+                    lastTime = 0,
+
+                loop = (timestamp) => {
+                    requestAnimationFrame(loop);
+                    if (timestamp - lastTime < 1000 / FPS) {
+                        return;
+                    }
+                    world.doOneCycle();
+                    lastTime = Math.max(
+                        lastTime + 1000 / FPS,
+                        timestamp - 1000 / FPS
+                    );
+                };
+
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('sw.js');
                 }
-                world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
                 requestAnimationFrame(loop);
             };
-            function loop(timestamp) {
-                requestAnimationFrame(loop);
-                if (timestamp - lastTime < 1000 / FPS) {
-                    return;
-                }
-                world.doOneCycle();
-                lastTime = Math.max(
-                    lastTime + 1000 / FPS,
-                    timestamp - 1000 / FPS
-                );
-            }
         </script>
     </head>
     <body style="margin: 0;">
