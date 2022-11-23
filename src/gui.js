@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-18';
+modules.gui = '2022-November-23';
 
 // Declarations
 
@@ -3985,6 +3985,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         CamSnapshotDialogMorph.prototype.enableCamera,
         'uncheck to disable\ncamera support',
         'check to enable\ncamera support',
+        true
+    );
+    addPreference(
+        'Use CPU for graphics',
+        () => window.keepCanvasInCPU = !window.keepCanvasInCPU,
+        window.keepCanvasInCPU,
+        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
+            'using the "willReadFrequently" attribute at the expense\n' +
+            'of slowing down rendering in some web browsers',
+        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
+            'using the "willReadFrequently" attribute at the expense\n' +
+            'of slowing down rendering in some web browsers',
         true
     );
     menu.addLine(); // everything visible below is persistent

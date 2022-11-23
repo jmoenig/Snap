@@ -65,6 +65,7 @@
 ### 2022-11-23
 * set up a test page for the Snap!-Pyret connection project
 * SciSnap2 extension update, thanks, Eckart!
+* GUI: added hidden experimental 'Use CPU for graphics' preference setting for Canvas2D "willReadFrequently" property
 
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
