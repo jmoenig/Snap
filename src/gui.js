@@ -224,11 +224,11 @@ IDE_Morph.prototype.setDefaultDesign();
 
 // IDE_Morph instance creation:
 
-function IDE_Morph(isAutoFill) {
-    this.init(isAutoFill);
+function IDE_Morph(config = { autofill: true }) {
+    this.init(config);
 }
 
-IDE_Morph.prototype.init = function (isAutoFill) {
+IDE_Morph.prototype.init = function (config) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
@@ -241,6 +241,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.cloudMsg = null;
     this.source = null;
     this.serializer = new SnapSerializer();
+    this.config = config;
 
     // scenes
     this.scenes = new List([new Scene()]);
@@ -275,7 +276,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
+    this.isAutoFill = !!this.config.autofill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
