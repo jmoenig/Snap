@@ -720,7 +720,8 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                 cnf.clickToRun === false ? true : false;
 
             // hide controls in presentation mode
-            if (cnf.hideControls && cnf.mode === "presentation") {
+            if (cnf.hideControls) {
+                this.logo.hide();
                 this.controlBar.hide();
                 window.onbeforeunload = nop;
             }
@@ -2331,6 +2332,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = this.padding,
+        cnf = this.config,
         flag,
         maxPaletteWidth;
 
@@ -2342,7 +2344,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
         // categories
         this.categories.setLeft(this.logo.left());
-        this.categories.setTop(this.logo.bottom());
+        this.categories.setTop(
+            cnf.hideControls ? this.top() : this.logo.bottom()
+        );
         this.categories.setWidth(this.paletteWidth);
         if (this.categories.scroller) {
             this.categories.scroller.setWidth(this.paletteWidth);
@@ -2384,7 +2388,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stage.setCenter(this.center());
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
-            this.stage.setTop(this.logo.bottom() + padding);
+            this.stage.setTop(
+                cnf.hideControls ? this.top() : this.logo.bottom() + padding
+            );
             this.stage.setRight(this.right());
             maxPaletteWidth = Math.max(
                 200,
@@ -2403,12 +2409,15 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
         // spriteBar
         this.spriteBar.setLeft(this.paletteWidth + padding);
-        this.spriteBar.setTop(this.logo.bottom() + padding);
-        this.spriteBar.setExtent(new Point(
-            Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            //this.categories.bottom() - this.spriteBar.top() - padding - 8
-            this.spriteBar.top() + 44
-        ));
+        this.spriteBar.setTop(
+            cnf.hideControls ? this.top() : this.logo.bottom() + padding
+        );
+        this.spriteBar.setWidth(
+            Math.max(0, this.stage.left() - padding - this.spriteBar.left())
+        );
+        this.spriteBar.setHeight(
+            Math.round(this.logo.height() * 2.6)
+        );
         this.spriteBar.fixLayout();
 
         // spriteEditor

@@ -70,6 +70,7 @@
 * gui: added configuration options for design, mode, blocksZoom, hideControls and noCloud
 * gui: added configuration option for language
 * gui: added configuration option for clickToRun
+* gui: extended hideControls configuration for edit mode
 
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
