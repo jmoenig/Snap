@@ -276,7 +276,7 @@ IDE_Morph.prototype.init = function (config) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = !!this.config.autofill;
+    this.isAutoFill = true;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -305,6 +305,9 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // configure optional settings
+    this.applyPreLaunchConfigurations();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -693,6 +696,58 @@ IDE_Morph.prototype.openIn = function (world) {
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
     this.warnAboutDev();
+
+    // configure optional settings
+    this.applyPostLaunchConfigurations();
+};
+
+// IDE_Morph configuration
+
+IDE_Morph.prototype.applyPreLaunchConfigurations = function () {
+    this.isAutoFill = !!this.config.autofill;
+};
+
+IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
+    var cnf = this.config;
+
+    // design
+    if (cnf.design) {
+        if (cnf.design === 'flat') {
+            this.setFlatDesign();
+        } else if (cnf.design === 'classic') {
+            this.setDefaultDesign();
+        }
+        SpriteMorph.prototype.initBlocks();
+    }
+
+    // interaction mode
+    if (cnf.mode === "presentation") {
+        this.toggleAppMode(true);
+    } else {
+        this.toggleAppMode(false);
+    }
+
+    // blocks size
+    if (cnf.blocksZoom) {
+        SyntaxElementMorph.prototype.setScale(Math.max(1,Math.min(cnf.blocksZoom, 12)));
+        CommentMorph.prototype.refreshScale();
+        SpriteMorph.prototype.initBlocks();
+    }
+
+    this.buildPanes();
+    this.fixLayout();
+    this.newProject();
+
+    // hide controls in presentation mode
+    if (cnf.hideControls && cnf.mode === "presentation") {
+        this.controlBar.hide();
+        window.onbeforeunload = nop;
+    }
+
+    // disable cloud access
+    if (cnf.noCloud) {
+        this.cloud.disable();
+    }
 };
 
 // IDE_Morph construction

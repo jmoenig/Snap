@@ -32,14 +32,14 @@
                         document.getElementById('world'),
                         false // don't take over the page
                     ),
-                    ide = new IDE_Morph(),
+                    ide = new IDE_Morph({
+                        design: "flat"
+                    }),
                     loop = (timestamp) => {
                         requestAnimationFrame(loop);
                         world.doOneCycle();
                     };
                 ide.openIn(world);
-                ide.setFlatDesign();
-                ide.refreshIDE();
                 requestAnimationFrame(loop);
             };
         </script>
