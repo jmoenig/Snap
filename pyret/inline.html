@@ -3,32 +3,35 @@
     <head>
         <title>Using Snap! On Your Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="../src/morphic.js?version=2022-11-22"></script>
-        <script src="../src/symbols.js?version=2021-03-03"></script>
-        <script src="../src/widgets.js?version=2022-10-19"></script>
-        <script src="../src/blocks.js?version=2022-11-18"></script>
-        <script src="../src/threads.js?version=2022-11-15"></script>
-        <script src="../src/objects.js?version=2022-11-17"></script>
-        <script src="../src/scenes.js?version=2022-10-25"></script>
-        <script src="../src/gui.js?version=2022-11-18"></script>
-        <script src="../src/paint.js?version=2021-07-05"></script>
-        <script src="../src/lists.js?version=2022-07-19"></script>
-        <script src="../src/byob.js?version=2022-09-21"></script>
-        <script src="../src/tables.js?version=2022-10-25"></script>
-        <script src="../src/sketch.js?version=2021-11-03"></script>
-        <script src="../src/video.js?version=2019-06-27"></script>
-        <script src="../src/maps.js?version=2021-06-15"></script>
-        <script src="../src/extensions.js?version=2022-10-19"></script>
-        <script src="../src/xml.js?version=2021-07-05"></script>
-        <script src="../src/store.js?version=2022-10-25"></script>
-        <script src="../src/locale.js?version=2022-11-07"></script>
-        <script src="../src/cloud.js?version=2022-08-02"></script>
-        <script src="../src/api.js?version=2022-09-12"></script>
-        <script src="../src/sha512.js?version=2019-06-27"></script>
-        <script src="../src/FileSaver.min.js?version=2019-06-27"></script>
+        <script src="../src/morphic.js"></script>
+        <script src="../src/symbols.js"></script>
+        <script src="../src/widgets.js"></script>
+        <script src="../src/blocks.js"></script>
+        <script src="../src/threads.js"></script>
+        <script src="../src/objects.js"></script>
+        <script src="../src/scenes.js"></script>
+        <script src="../src/gui.js"></script>
+        <script src="../src/paint.js"></script>
+        <script src="../src/lists.js"></script>
+        <script src="../src/byob.js"></script>
+        <script src="../src/tables.js"></script>
+        <script src="../src/sketch.js"></script>
+        <script src="../src/video.js"></script>
+        <script src="../src/maps.js"></script>
+        <script src="../src/extensions.js?"></script>
+        <script src="../src/xml.js"></script>
+        <script src="../src/store.js"></script>
+        <script src="../src/locale.js"></script>
+        <script src="../src/cloud.js"></script>
+        <script src="../src/api.js"></script>
+        <script src="../src/sha512.js"></script>
+        <script src="../src/FileSaver.min.js"></script>
         <script>
             window.onload = function () {
-                var world = new WorldMorph(document.getElementById('world'), false),
+                var world = new WorldMorph(
+                        document.getElementById('world'),
+                        false // don't take over the page
+                    ),
                     ide = new IDE_Morph(),
                     loop = (timestamp) => {
                         requestAnimationFrame(loop);
@@ -52,7 +55,9 @@
         limited number of customized blocks and a little scripting area without
         any sprites or media assets for exercises and Parsons problems
         inside a larger narrative, such as an hour-of-code.</p>
+
         <canvas id="world" tabindex="1" width="900" height="500"></canvas>
+
         <p>This page is a work-in-progress to explore how we can use Snap! as
         an alternative / secondary block based scripting editor for the
         <a href="https://www.pyret.org/">Pyret</a> programming language
