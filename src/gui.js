@@ -2348,8 +2348,8 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         maxPaletteWidth;
 
     // logo
-    this.logo.setLeft(border);
-    this.logo.setTop(border);
+    this.logo.setLeft(this.left() + border);
+    this.logo.setTop(this.top() + border);
 
     if (situation !== 'refreshPalette') {
         // controlBar
