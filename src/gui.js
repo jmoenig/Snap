@@ -725,6 +725,17 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                 this.getURL(
                     cnf.load,
                     projectData => {
+
+                        if (projectData.indexOf('<snapdata') === 0) {
+                            this.rawOpenCloudDataString(projectData);
+                        } else if (
+                            projectData.indexOf('<project') === 0
+                        ) {
+                            this.rawOpenProjectString(projectData);
+                        }
+                        this.hasChangedMedia = true;
+
+/*
                         var msg;
                         this.nextSteps([
                             () => msg = this.showMessage('Opening project...'),
@@ -743,6 +754,7 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                                 // +++ this.toggleAppMode(false);
                             }
                         ]);
+*/
                     }
                 );
 
