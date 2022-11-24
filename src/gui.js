@@ -2343,19 +2343,26 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = this.padding,
         cnf = this.config,
+        border = cnf.border || 0,
         flag,
         maxPaletteWidth;
+
+    // logo
+    this.logo.setLeft(border);
+    this.logo.setTop(border);
 
     if (situation !== 'refreshPalette') {
         // controlBar
         this.controlBar.setPosition(this.logo.topRight());
-        this.controlBar.setWidth(this.right() - this.controlBar.left());
+        this.controlBar.setWidth(
+            this.right() - this.controlBar.left() - border
+        );
         this.controlBar.fixLayout();
 
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(
-            cnf.hideControls ? this.top() : this.logo.bottom()
+            cnf.hideControls ? this.top() + border : this.logo.bottom()
         );
         this.categories.setWidth(this.paletteWidth);
         if (this.categories.scroller) {
@@ -2366,7 +2373,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // palette
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
-    this.palette.setHeight(this.bottom() - this.palette.top());
+    this.palette.setHeight(this.bottom() - this.palette.top() - border);
     this.palette.setWidth(this.paletteWidth);
 
     if (situation !== 'refreshPalette') {
@@ -2399,15 +2406,18 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(
-                cnf.hideControls ? this.top() : this.logo.bottom() + padding
+                cnf.hideControls ?
+                    this.top() + border
+                        : this.logo.bottom() + padding
             );
-            this.stage.setRight(this.right());
+            this.stage.setRight(this.right() - border);
             maxPaletteWidth = Math.max(
                 200,
                 this.width() -
                     this.stage.width() -
                     this.spriteBar.tabBar.width() -
-                    (this.padding * 2)
+                    padding * 2 -
+                    border * 2
             );
             if (this.paletteWidth > maxPaletteWidth) {
                 this.paletteWidth = maxPaletteWidth;
@@ -2418,9 +2428,11 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         }
 
         // spriteBar
-        this.spriteBar.setLeft(this.paletteWidth + padding);
+        this.spriteBar.setLeft(this.paletteWidth + padding + border);
         this.spriteBar.setTop(
-            cnf.hideControls ? this.top() : this.logo.bottom() + padding
+            cnf.hideControls ?
+                this.top() + border
+                    : this.logo.bottom() + padding
         );
         this.spriteBar.setWidth(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left())
@@ -2435,17 +2447,17 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.spriteEditor.setLeft(this.spriteBar.left());
             this.spriteEditor.setTop(
                 cnf.noSprites ?
-                    (cnf.hideControls ? this.top
+                    (cnf.hideControls ? this.top() + border
                         : this.controlBar.bottom() + padding)
                     : this.spriteBar.bottom() + padding
             );
             this.spriteEditor.setWidth(
                 cnf.noSprites ?
-                    this.right() - this.spriteEditor.left()
+                    this.right() - this.spriteEditor.left() - border
                     : this.spriteBar.width()
             );
             this.spriteEditor.setHeight(
-                this.bottom() - this.spriteEditor.top()
+                this.bottom() - this.spriteEditor.top() - border
             );
         }
 
@@ -2458,7 +2470,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         if (!contains(['selectSprite', 'tabEditor'], situation)) {
             this.corral.setPosition(this.corralBar.bottomLeft());
             this.corral.setWidth(this.stage.width());
-            this.corral.setHeight(this.bottom() - this.corral.top());
+            this.corral.setHeight(this.bottom() - this.corral.top() - border);
             this.corral.fixLayout();
         }
     }

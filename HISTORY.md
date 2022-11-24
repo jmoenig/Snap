@@ -64,6 +64,7 @@
 
 ### 2022-11-24
 * gui: added configuration option for path (to the host's base directory)
+* gui: added configuration option for border (surrounding the IDE)
 
 ### 2022-11-23
 * set up a test page for the Snap!-Pyret connection project
