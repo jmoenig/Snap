@@ -719,28 +719,6 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
             ThreadManager.prototype.disableClickToRun =
                 cnf.clickToRun === false ? true : false;
 
-            // hide controls
-            if (cnf.hideControls) {
-                this.logo.hide();
-                this.controlBar.hide();
-                window.onbeforeunload = nop;
-            }
-
-            // hide categories
-            if (cnf.hideCategories) {
-                this.categories.hide();
-            }
-
-            // no sprites
-            if (cnf.noSprites) {
-                this.removeSprite(this.currentSprite);
-                this.stage.hide();
-                this.corralBar.hide();
-                this.corral.hide();
-                this.spriteBar.hide();
-                this.stageHandle.hide();
-            }
-
             // load project
             if (cnf.load) { // +++
 
@@ -770,6 +748,27 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
 
             }
 
+            // hide controls
+            if (cnf.hideControls) {
+                this.logo.hide();
+                this.controlBar.hide();
+                window.onbeforeunload = nop;
+            }
+
+            // hide categories
+            if (cnf.hideCategories) {
+                this.categories.hide();
+            }
+
+            // no sprites
+            if (cnf.noSprites) {
+                this.removeSprite(this.currentSprite);
+                this.stage.hide();
+                this.corralBar.hide();
+                this.corral.hide();
+                this.spriteBar.hide();
+                this.stageHandle.hide();
+            }
         };
 
     // design
