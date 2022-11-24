@@ -11689,7 +11689,7 @@ PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
         if (world.hand.mouseButton) {
             newPos = world.hand.bounds.origin.x + offset;
             ide.paletteWidth = Math.min(
-                Math.max(200, newPos),
+                Math.max(200, newPos - (ide.config.border || 0)),
                 ide.stageHandle.left() - ide.spriteBar.tabBar.width()
             );
             ide.setExtent(world.extent());
