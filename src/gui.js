@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-23';
+modules.gui = '2022-November-24';
 
 // Declarations
 
@@ -769,7 +769,7 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
         translation = document.getElementById('language');
 
         // this needs to be directed to something more generic:
-        src = this.resourceURL('../', 'locale', 'lang-' + lang + '.js');
+        src = this.resourceURL('locale', 'lang-' + lang + '.js');
 
         SnapTranslator.unload();
         if (translation) {
@@ -4632,8 +4632,13 @@ IDE_Morph.prototype.resourceURL = function () {
     // Take in variadic inputs that represent an a nested folder structure.
     // Method can be easily overridden if running in a custom location.
     // Default Snap! simply returns a path (relative to snap.html)
-    var args = Array.prototype.slice.call(arguments, 0);
-    return args.join('/');
+    // Note: You can specify a base path to the root directory in the
+    // configuration object's "path" property that's passed when creating
+    // an IDE instance, e.g. either a relative one: {path: '../' }
+    // or a full url, depending on where (your) Snap! distro ist hosted
+    var args = Array.prototype.slice.call(arguments, 0),
+        path = this.config.path ? [this.config.path] : [];
+    return path.concat(args).join('/');
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname, callback) {

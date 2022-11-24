@@ -62,6 +62,9 @@
     * German
     * Catalan, thanks, Joan!
 
+### 2022-11-24
+* gui: added configuration option for path (to the host's base directory)
+
 ### 2022-11-23
 * set up a test page for the Snap!-Pyret connection project
 * SciSnap2 extension update, thanks, Eckart!
