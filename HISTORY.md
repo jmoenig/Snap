@@ -31,6 +31,7 @@
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
+    * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
@@ -67,6 +68,7 @@
 * gui: added configuration option for border (surrounding the IDE)
 * gui: added configuration option for "hideCategories"
 * gui: added configuratino option for "load"
+* objects: hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
 
 ### 2022-11-23
 * set up a test page for the Snap!-Pyret connection project

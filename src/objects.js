@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-17';
+modules.objects = '2022-November-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -3229,7 +3229,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 // hide category names
                 if (!showCategories && category !== 'variables') {
                     primitives = primitives.filter(each =>
-                        each !== '-' && each !== '=');
+                        each !== '-' &&
+                        each !== '=' &&
+                        (each && !each.hideWithCategory));
                 }
 
                 // hide "make / delete a variable" buttons
@@ -9185,6 +9187,7 @@ StageMorph.prototype.blockTemplates = function (
         txt = new TextMorph(localize('Stage selected:\nno motion primitives'));
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
+        txt.hideWithCategory = true; // hide txt when category names are hidden
         blocks.push(txt);
 
     } else if (category === 'looks') {
