@@ -2415,14 +2415,22 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                         : this.logo.bottom() + padding
             );
             this.stage.setRight(this.right() - border);
-            maxPaletteWidth = Math.max(
-                200,
-                this.width() -
-                    this.stage.width() -
-                    this.spriteBar.tabBar.width() -
-                    padding * 2 -
+            if (cnf.noSprites) {
+                maxPaletteWidth = Math.max(
+                    200,
+                    this.width() -
                     border * 2
-            );
+                );
+            } else {
+                maxPaletteWidth = Math.max(
+                    200,
+                    this.width() -
+                        this.stage.width() -
+                        this.spriteBar.tabBar.width() -
+                        padding * 2 -
+                        border * 2
+                );
+            }
             if (this.paletteWidth > maxPaletteWidth) {
                 this.paletteWidth = maxPaletteWidth;
                 this.fixLayout();
@@ -2519,7 +2527,8 @@ IDE_Morph.prototype.setProjectNotes = function (string) {
 // IDE_Morph resizing
 
 IDE_Morph.prototype.setExtent = function (point) {
-    var padding = new Point(430, 110),
+    var cnf = this.config,
+        padding = new Point(430, 110),
         minExt,
         ext,
         maxWidth,
@@ -2537,6 +2546,8 @@ IDE_Morph.prototype.setExtent = function (point) {
                 this.controlBar.height() + 10
             );
         }
+    } else if (cnf.noSprites) {
+        minExt = new Point(100, 100);
     } else {
         if (this.stageRatio > 1) {
             minExt = padding.add(this.stage.dimensions);
@@ -2549,16 +2560,18 @@ IDE_Morph.prototype.setExtent = function (point) {
     ext = point.max(minExt);
 
     // adjust stage ratio if necessary
-    maxWidth = ext.x -
-        (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
-    minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
-    maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
-    minRatio = minWidth / this.stage.dimensions.x;
-    maxRatio = Math.min(
-        (maxWidth / this.stage.dimensions.x),
-        (maxHeight / this.stage.dimensions.y)
-    );
-    this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
+    if (!cnf.noSprites) {
+        maxWidth = ext.x -
+            (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
+        minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
+        maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
+        minRatio = minWidth / this.stage.dimensions.x;
+        maxRatio = Math.min(
+            (maxWidth / this.stage.dimensions.x),
+            (maxHeight / this.stage.dimensions.y)
+        );
+        this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
+    }
 
     // apply
     IDE_Morph.uber.setExtent.call(this, ext);
@@ -11683,7 +11696,9 @@ PaletteHandleMorph.prototype.step = null;
 PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
     var world = this.world(),
         offset = this.right() - pos.x,
-        ide = this.target.parentThatIsA(IDE_Morph);
+        ide = this.target.parentThatIsA(IDE_Morph),
+        cnf = ide.config,
+        border = cnf.border || 0;
 
     if (!this.target) {
         return null;
@@ -11693,8 +11708,12 @@ PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
         if (world.hand.mouseButton) {
             newPos = world.hand.bounds.origin.x + offset;
             ide.paletteWidth = Math.min(
-                Math.max(200, newPos - (ide.config.border || 0)),
-                ide.stageHandle.left() - ide.spriteBar.tabBar.width()
+                Math.max(
+                    200, newPos - ide.left() - border * 2),
+                    cnf.noSprites ?
+                        ide.width() - border * 2
+                        : ide.stageHandle.left() -
+                            ide.spriteBar.tabBar.width()
             );
             ide.setExtent(world.extent());
 
