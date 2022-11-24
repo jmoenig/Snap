@@ -713,9 +713,6 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
         lang, translation, src,
 
         refresh = () => {
-            this.buildPanes();
-            this.fixLayout();
-
             // load project
             if (cnf.load) {
                 this.getURL(
@@ -732,12 +729,10 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                     }
                 );
             } else {
+                this.buildPanes();
+                this.fixLayout();
                 this.newProject();
             }
-
-            // disable click-to-run
-            ThreadManager.prototype.disableClickToRun =
-                cnf.clickToRun === false ? true : false;
 
             // hide controls
             if (cnf.hideControls) {
@@ -819,6 +814,10 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
     if (cnf.noCloud) {
         this.cloud.disable();
     }
+
+    // disable click-to-run
+    ThreadManager.prototype.disableClickToRun =
+        cnf.clickToRun === false ? true : false;
 };
 
 // IDE_Morph construction
