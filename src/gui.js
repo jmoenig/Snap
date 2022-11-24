@@ -719,11 +719,16 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
             ThreadManager.prototype.disableClickToRun =
                 cnf.clickToRun === false ? true : false;
 
-            // hide controls in presentation mode
+            // hide controls
             if (cnf.hideControls) {
                 this.logo.hide();
                 this.controlBar.hide();
                 window.onbeforeunload = nop;
+            }
+
+            // hide categories
+            if (cnf.hideCategories) {
+                this.categories.hide();
             }
 
             // no sprites
@@ -2376,7 +2381,13 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     // palette
     this.palette.setLeft(this.logo.left());
-    this.palette.setTop(this.categories.bottom());
+    this.palette.setTop(
+        cnf.hideCategories ?
+            (cnf.hideControls ?
+                this.top() + border
+                : this.controlBar.bottom() + padding)
+            : this.categories.bottom()
+    );
     this.palette.setHeight(this.bottom() - this.palette.top() - border);
     this.palette.setWidth(this.paletteWidth);
 
