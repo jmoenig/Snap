@@ -1282,7 +1282,8 @@ IDE_Morph.prototype.createControlBar = function () {
         x = Math.min(
             startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
             myself.right() - myself.stage.dimensions.x *
-                (myself.isSmallStage ? myself.stageRatio : 1)
+                (myself.isSmallStage ? myself.stageRatio : 1) -
+                (myself.config.border || 0)
         );
         [stageSizeButton, appModeButton].forEach(button => {
                 x += padding;
