@@ -740,6 +740,36 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                 this.spriteBar.hide();
                 this.stageHandle.hide();
             }
+
+            // load project
+            if (cnf.load) { // +++
+
+                this.getURL(
+                    cnf.load,
+                    projectData => {
+                        var msg;
+                        this.nextSteps([
+                            () => msg = this.showMessage('Opening project...'),
+                            () => {
+                                if (projectData.indexOf('<snapdata') === 0) {
+                                    this.rawOpenCloudDataString(projectData);
+                                } else if (
+                                    projectData.indexOf('<project') === 0
+                                ) {
+                                    this.rawOpenProjectString(projectData);
+                                }
+                                this.hasChangedMedia = true;
+                            },
+                            () => {
+                                msg.destroy();
+                                // +++ this.toggleAppMode(false);
+                            }
+                        ]);
+                    }
+                );
+
+            }
+
         };
 
     // design

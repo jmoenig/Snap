@@ -34,6 +34,7 @@
                     ),
                     ide = new IDE_Morph({
                         path: '../',
+                        load: 'pyret.xml',
                         design: "flat",
                         border: 1,
                         // lang: "de",
@@ -42,7 +43,7 @@
                         hideCategories: true,
                         noSprites: true,
                         // blocksZoom: 1.5,
-                        // clickToRun: false
+                        clickToRun: false
                     }),
                     loop = () => {
                         requestAnimationFrame(loop);
