@@ -27,12 +27,9 @@
         <script src="../src/sha512.js"></script>
         <script src="../src/FileSaver.min.js"></script>
         <script>
+            var world;
             window.onload = function () {
-                var world = new WorldMorph(
-                        document.getElementById('world'),
-                        false // don't take over the page
-                    ),
-                    ide = new IDE_Morph({
+                var ide = new IDE_Morph({
                         path: '../',
                         load: 'pyret.xml',
                         design: "flat",
@@ -49,6 +46,8 @@
                         requestAnimationFrame(loop);
                         world.doOneCycle();
                     };
+
+                world = new WorldMorph(document.getElementById('world'), false),
                 ide.openIn(world);
                 requestAnimationFrame(loop);
             };

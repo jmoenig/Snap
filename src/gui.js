@@ -726,34 +726,14 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
                             this.rawOpenProjectString(projectData);
                         }
                         this.hasChangedMedia = true;
+                        this.applyPaneHidingConfigurations();
                     }
                 );
             } else {
                 this.buildPanes();
                 this.fixLayout();
                 this.newProject();
-            }
-
-            // hide controls
-            if (cnf.hideControls) {
-                this.logo.hide();
-                this.controlBar.hide();
-                window.onbeforeunload = nop;
-            }
-
-            // hide categories
-            if (cnf.hideCategories) {
-                this.categories.hide();
-            }
-
-            // no sprites
-            if (cnf.noSprites) {
-                this.removeSprite(this.currentSprite);
-                this.stage.hide();
-                this.corralBar.hide();
-                this.corral.hide();
-                this.spriteBar.hide();
-                this.stageHandle.hide();
+                this.applyPaneHidingConfigurations();
             }
         };
 
@@ -818,6 +798,34 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
     // disable click-to-run
     ThreadManager.prototype.disableClickToRun =
         cnf.clickToRun === false ? true : false;
+};
+
+IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
+    var cnf = this.config;
+
+    // hide controls
+    if (cnf.hideControls) {
+        this.logo.hide();
+        this.controlBar.hide();
+        window.onbeforeunload = nop;
+    }
+
+    // hide categories
+    if (cnf.hideCategories) {
+        this.categories.hide();
+    }
+
+    // no sprites
+    if (cnf.noSprites) {
+        if (this.currentSprite instanceof SpriteMorph) {
+            this.removeSprite(this.currentSprite);
+        }
+        this.stage.hide();
+        this.corralBar.hide();
+        this.corral.hide();
+        this.spriteBar.hide();
+        this.stageHandle.hide();
+    }
 };
 
 // IDE_Morph construction
