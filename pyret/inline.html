@@ -27,7 +27,7 @@
         <script src="../src/sha512.js"></script>
         <script src="../src/FileSaver.min.js"></script>
         <script>
-            var world;
+            var world, code;
             window.onload = function () {
                 var ide = new IDE_Morph({
                         path: '../',
@@ -41,12 +41,20 @@
                         noSprites: true,
                         // blocksZoom: 1.5,
                     }),
+
+                    version = ide.version,
+
                     loop = () => {
                         requestAnimationFrame(loop);
                         world.doOneCycle();
+                        if (ide.version !== version) {
+                            version = ide.version;
+                            code.value = ide.scriptsAsText().reduce((a, b) => a.concat('\n\n' + b));
+                        }
                     };
 
-                world = new WorldMorph(document.getElementById('world'), false),
+                world = new WorldMorph(document.getElementById('world'), false);
+                code = document.getElementById('code');
                 ide.openIn(world);
                 requestAnimationFrame(loop);
             };
@@ -65,6 +73,8 @@
         inside a larger narrative, such as an hour-of-code.</p>
 
         <canvas id="world" tabindex="1" width="500" height="300"></canvas>
+
+        <textarea id="code" rows="19" cols="80" readonly style="resize: none;"></textarea>
 
         <p>This page is a work-in-progress to explore how we can use Snap! as
         an alternative / secondary block based scripting editor for the

@@ -7813,6 +7813,17 @@ IDE_Morph.prototype.warnAboutDev = function () {
     );
 };
 
+// IDE_Morph access codified scripts - experimental!!!
+
+IDE_Morph.prototype.scriptsAsText = function () {
+    // return the contents of the currently active sprite's scripting pane
+    // converted to their textual equivalent. Requires that a code
+    // mapping is in place. EXPERIMENTAL and under construction.
+    return this.currentSprite.scripts.sortedElements().map(morph =>
+        morph.mappedCode()
+    );
+};
+
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
 // ProjectDialogMorph inherits from DialogBoxMorph:
