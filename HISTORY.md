@@ -56,6 +56,7 @@
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
     * hiding the keyboard handler text area better by reducing its visible dimensions to zero
+    * fixed a codification glitch for empty list slots
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -69,6 +70,7 @@
 * gui: simplified noSprites configuration
 * pyret: new codify tester
 * gui: added version property to IDE for external observers
+* blocks: fixed a codification glitch for empty list slots
 
 ### 2022-11-24
 * gui: added configuration option for path (to the host's base directory)

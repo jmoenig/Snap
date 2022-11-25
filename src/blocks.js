@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-22';
+modules.blocks = '2022-November-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4530,9 +4530,11 @@ BlockMorph.prototype.mappedCode = function (definitions) {
     }
 
     codeLines = code.split('\n');
-    this.inputs().forEach(input =>
-        parts.push(input.mappedCode(defs).toString())
-    );
+    this.inputs().forEach(input => {
+        var mapped = input.mappedCode(defs);
+        if (isNil(mapped)) {mapped = ''; }
+        parts.push(mapped.toString());
+    });
     parts.forEach(part => {
         var partLines = part.split('\n'),
             placeHolder = '<#' + count + '>',
