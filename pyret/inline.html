@@ -41,7 +41,10 @@
                         noSprites: true,
                         // blocksZoom: 1.5,
                     }),
+
                     version = ide.version,
+                    buttons = document.querySelectorAll('input[name="pl"]'),
+
                     loop = () => {
                         var scripts;
                         requestAnimationFrame(loop);
@@ -54,6 +57,17 @@
                                 : '';
                         }
                     };
+
+                buttons.forEach(bt =>
+                    bt.addEventListener(
+                        'click',
+                        function () {
+                            ide.broadcast(this.value);
+                            version = Date.now();
+                        }
+                    )
+                );
+
                 world = new WorldMorph(document.getElementById('world'), false);
                 code = document.getElementById('code');
                 ide.openIn(world);
@@ -73,9 +87,18 @@
         any sprites or media assets for exercises and Parsons problems
         inside a larger narrative, such as an hour-of-code.</p>
 
-        <canvas id="world" tabindex="1" width="500" height="300"></canvas>
 
-        <textarea id="code" rows="19" cols="80" readonly style="resize: none;"></textarea>
+        <canvas id="world" tabindex="1" width="500" height="300"></canvas>
+        <textarea id="code" rows="19" cols="50" readonly style="resize: none;"></textarea>
+        <br>
+        <input type="radio" id="py" name="pl" value="Python" checked>
+        <label for="py">Python</label>
+        <input type="radio" id="js" name="pl" value="JavaScript">
+        <label for="js">JavaScript</label>
+        <input type="radio" id="st" name="pl" value="Smalltalk">
+        <label for="st">Smalltalk</label>
+        <input type="radio" id="c" name="pl" value="C">
+        <label for="c">C</label>
 
         <p>This page is a work-in-progress to explore how we can use Snap! as
         an alternative / secondary block based scripting editor for the
