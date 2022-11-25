@@ -67,6 +67,7 @@
 * gui: removed clickToRun configuration option (because it's supported by the microworld)
 * gui: simplified configurations application
 * gui: simplified noSprites configuration
+* pyret: new codify tester
 
 ### 2022-11-24
 * gui: added configuration option for path (to the host's base directory)
