@@ -41,18 +41,19 @@
                         noSprites: true,
                         // blocksZoom: 1.5,
                     }),
-
                     version = ide.version,
-
                     loop = () => {
+                        var scripts;
                         requestAnimationFrame(loop);
                         world.doOneCycle();
                         if (ide.version !== version) {
                             version = ide.version;
-                            code.value = ide.scriptsAsText().reduce((a, b) => a.concat('\n\n' + b));
+                            scripts = ide.scriptsAsText();
+                            code.value = scripts.length ?
+                                scripts.reduce((a, b) => a.concat('\n\n' + b))
+                                : '';
                         }
                     };
-
                 world = new WorldMorph(document.getElementById('world'), false);
                 code = document.getElementById('code');
                 ide.openIn(world);
@@ -86,7 +87,7 @@
         it together with our friends over at Bootstrap to internally try stuff
         as we're testing some wild ideas. So please don't yet inquire about
         details and don't yet report any bugs you might encounter.</p>
-        <p>Instead, stay tuned for some exciting updates down the road!.</p>
+        <p>Instead, stay tuned for some exciting updates down the road!</p>
         <p>-Jens</p>
     </body>
 </html>
