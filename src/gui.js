@@ -806,9 +806,6 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
 
     // no sprites
     if (cnf.noSprites) {
-        if (this.currentSprite instanceof SpriteMorph) {
-            this.removeSprite(this.currentSprite);
-        }
         this.stage.hide();
         this.corralBar.hide();
         this.corral.hide();
