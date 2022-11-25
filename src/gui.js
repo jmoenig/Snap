@@ -276,7 +276,7 @@ IDE_Morph.prototype.init = function (config) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = true;
+    this.isAutoFill = !!config.autofill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -305,9 +305,6 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
-
-    // configure optional settings
-    this.applyPreLaunchConfigurations();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -698,16 +695,12 @@ IDE_Morph.prototype.openIn = function (world) {
     this.warnAboutDev();
 
     // configure optional settings
-    this.applyPostLaunchConfigurations();
+    this.applyConfigurations();
 };
 
 // IDE_Morph configuration
 
-IDE_Morph.prototype.applyPreLaunchConfigurations = function () {
-    this.isAutoFill = !!this.config.autofill;
-};
-
-IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
+IDE_Morph.prototype.applyConfigurations = function () {
     var cnf = this.config,
         refreshLater = false,
         lang, translation, src,
