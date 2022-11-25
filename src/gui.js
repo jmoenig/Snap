@@ -242,6 +242,7 @@ IDE_Morph.prototype.init = function (config) {
     this.source = null;
     this.serializer = new SnapSerializer();
     this.config = config;
+    this.version = Date.now(); // for outside observers
 
     // scenes
     this.scenes = new List([new Scene()]);
@@ -3280,6 +3281,9 @@ IDE_Morph.prototype.updateChanges = function () {
         (localStorage['-snap-bakuser-'] == this.cloud.username)) {
             localStorage['-snap-bakflag-'] = 'expired';
     }
+
+    // update the version timestamp so my observer can react
+    this.version = Date.now();
 
     // indicate unsaved changes in the project title display
     this.controlBar.updateLabel();

@@ -68,6 +68,7 @@
 * gui: simplified configurations application
 * gui: simplified noSprites configuration
 * pyret: new codify tester
+* gui: added version property to IDE for external observers
 
 ### 2022-11-24
 * gui: added configuration option for path (to the host's base directory)
