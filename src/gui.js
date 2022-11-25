@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-24';
+modules.gui = '2022-November-25';
 
 // Declarations
 
@@ -794,10 +794,6 @@ IDE_Morph.prototype.applyPostLaunchConfigurations = function () {
     if (cnf.noCloud) {
         this.cloud.disable();
     }
-
-    // disable click-to-run
-    ThreadManager.prototype.disableClickToRun =
-        cnf.clickToRun === false ? true : false;
 };
 
 IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
