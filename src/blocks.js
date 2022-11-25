@@ -2915,6 +2915,7 @@ BlockMorph.prototype.userSetSpec = function (spec) {
     tb.fullChanged();
     this.setSpec(spec);
     tb.fullChanged();
+    tb.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
 };
 
 BlockMorph.prototype.buildSpec = function () {
