@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-November-15';
+modules.threads = '2022-November-26';
 
 var ThreadManager;
 var Process;
@@ -5886,7 +5886,7 @@ Process.prototype.reportGet = function (query) {
             return thisObj.parentThatIsA(StageMorph);
         case 'scripts':
             return new List(
-                thisObj.scripts.children.filter(
+                thisObj.scripts.sortedElements().filter(
                     each => each instanceof BlockMorph
                 ).map(
                     each => each.fullCopy().reify()

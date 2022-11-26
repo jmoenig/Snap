@@ -32,6 +32,7 @@
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
     * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
+    * order "my scripts" list by their top-down position in the scripting area (not by the time of their placement)
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
@@ -63,6 +64,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-11-26
+* threads: order "my scripts" list by their top-down position in the scripting area
 
 ### 2022-11-25
 * gui: removed clickToRun configuration option (because it's supported by the microworld)
