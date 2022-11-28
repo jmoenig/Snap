@@ -27,7 +27,7 @@
         <script src="../src/sha512.js"></script>
         <script src="../src/FileSaver.min.js"></script>
         <script>
-            var world, code;
+            var world;
             window.onload = function () {
                 var ide = new IDE_Morph({
                         path: '../',
@@ -41,36 +41,17 @@
                         noSprites: true,
                         // blocksZoom: 1.5,
                     }),
-
-                    version = ide.version,
                     buttons = document.querySelectorAll('input[name="pl"]'),
-
+                    code = document.getElementById('code'),
                     loop = () => {
-                        var scripts;
                         requestAnimationFrame(loop);
                         world.doOneCycle();
-                        if (ide.version !== version) {
-                            version = ide.version;
-                            scripts = ide.scriptsAsText();
-                            code.value = scripts.length ?
-                                scripts.reduce((a, b) => a.concat('\n\n' + b))
-                                : '';
-                        }
                     };
-
-                buttons.forEach(bt =>
-                    bt.addEventListener(
-                        'click',
-                        function () {
-                            ide.broadcast(this.value);
-                            version = Date.now();
-                        }
-                    )
-                );
-
+                buttons.forEach(bt => bt.addEventListener('click', () =>
+                        ide.broadcast(btn.value)));
                 world = new WorldMorph(document.getElementById('world'), false);
-                code = document.getElementById('code');
                 ide.openIn(world);
+                ide.addMessageListener('update', (txt) => code.value = txt);
                 requestAnimationFrame(loop);
             };
         </script>
