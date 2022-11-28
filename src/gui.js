@@ -6191,7 +6191,8 @@ IDE_Morph.prototype.switchToScene = function (
     data,
     pauseHats
 ) {
-    var appMode = this.isAppMode;
+    var appMode = this.isAppMode,
+        listeners;
     if (!scene || !scene.stage) {
         return;
     }
@@ -6201,9 +6202,11 @@ IDE_Morph.prototype.switchToScene = function (
     this.scene.captureGlobalSettings();
     this.scene = scene;
     this.globalVariables = scene.globalVariables;
+    listeners = this.stage.messageCallbacks;
     this.stage.destroy();
     this.add(scene.stage);
     this.stage = scene.stage;
+    this.stage.messageCallbacks = listeners;
     this.sprites = scene.sprites;
     if (pauseHats) {
         this.stage.pauseGenericHatBlocks();
