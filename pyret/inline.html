@@ -48,7 +48,7 @@
                         world.doOneCycle();
                     };
                 buttons.forEach(bt => bt.addEventListener('click', () =>
-                        ide.broadcast(btn.value)));
+                        ide.broadcast(bt.value)));
                 world = new WorldMorph(document.getElementById('world'), false);
                 ide.openIn(world);
                 ide.addMessageListener('update', (txt) => code.value = txt);
