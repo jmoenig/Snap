@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-September-21';
+modules.byob = '2022-November-28';
 
 // Declarations
 
@@ -1556,7 +1556,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
     ide.flushPaletteCache();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    rcvr.recordUserEdit();
     new BlockEditorMorph(dup, rcvr).popUp();
 };
 
@@ -1598,8 +1598,8 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                ide.recordUnsavedChanges();
             }
+            rcvr.recordUserEdit();
         },
         this
     ).askYesNo(
@@ -1632,9 +1632,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
                 this.definition = def;
                 this.isGlobal = def.isGlobal;
                 this.refresh();
-                this.scriptTarget().parentThatIsA(
-                    IDE_Morph
-                ).recordUnsavedChanges();
+                this.scriptTarget().recordUserEdit();
             }
         );
     });
@@ -2819,7 +2817,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    this.target.recordUserEdit();
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -4976,7 +4974,7 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     ide.flushBlocksCache();
     ide.refreshPalette();
     ide.categories.refreshEmpty();
-    ide.recordUnsavedChanges();
+    this.target.recordUserEdit();
 };
 
 // BlockVisibilityDialogMorph layout
