@@ -3919,7 +3919,7 @@ Process.prototype.doBroadcast = function (message, options) {
             callback(msg) // for "any" message, pass it along as argument
         );
         (stage.messageCallbacks[msg] || []).forEach(callback =>
-            callback() // for a particular message
+            callback(payload) // for a particular message
         );
     }
     return procs;
