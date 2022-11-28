@@ -72,6 +72,7 @@
 * blocks: migrated custom blocks to new recordUserEdit mechanism
 * threads: migrated processes to new recordUserEdit mechanism
 * extensions: migrated extensions to new recordUserEdit mechanism 
+* gui: migrated IDE to new recordUserEdit mechanism 
 
 ### 2022-11-26
 * threads: order "my scripts" list by their top-down position in the scripting area

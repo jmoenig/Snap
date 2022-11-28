@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-25';
+modules.gui = '2022-November-28';
 
 // Declarations
 
@@ -1795,7 +1795,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
                     myself.currentSprite.changed();
                     myself.currentSprite.fixLayout();
                     myself.currentSprite.rerender();
-                    myself.recordUnsavedChanges();
+                    myself.currentSprite.recordUserEdit();
                 }
                 rotationStyleButtons.forEach(each =>
                     each.refresh()
@@ -1868,7 +1868,6 @@ IDE_Morph.prototype.createSpriteBar = function () {
             myself.newSpriteName(newName, myself.currentSprite)
         );
         nameField.setContents(myself.currentSprite.name);
-        myself.recordUnsavedChanges();
     };
     this.spriteBar.reactToEdit = nameField.accept;
 
@@ -1878,7 +1877,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         null,
         () => {
             this.currentSprite.isDraggable = !this.currentSprite.isDraggable;
-            this.recordUnsavedChanges();
+            this.currentSprite.recordUserEdit();
         },
         localize('draggable'),
         () => this.currentSprite.isDraggable
@@ -2332,7 +2331,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.corral.addSprite = function (sprite) {
         this.frame.contents.add(new SpriteIconMorph(sprite));
         this.fixLayout();
-        myself.recordUnsavedChanges();
+        sprite.recordUserEdit();
     };
 
     this.corral.refresh = function () {
@@ -2692,7 +2691,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
     this.hasChangedMedia = true;
-    this.recordUnsavedChanges();
+    this.currentSprite.recordUserEdit();
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
@@ -2795,7 +2794,7 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
     	this.spriteBar.tabBar.tabTo('sounds');
     	this.hasChangedMedia = true;
-        this.recordUnsavedChanges();
+        this.currentSprite.recordUserEdit();
     }
 };
 
@@ -3429,7 +3428,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
         () => {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
-            this.recordUnsavedChanges();
+            sprite.recordUserEdit();
         }
     );
 };
@@ -3449,9 +3448,10 @@ IDE_Morph.prototype.newCamSprite = function () {
         this,
         sprite,
         () => this.removeSprite(sprite),
-        function (costume) { // needs to be "function" to it can access "this"
+        function (costume) { // needs to be "function" so it can access "this"
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
+            sprite.recordUserEdit();
             this.close();
         });
 
@@ -3472,7 +3472,7 @@ IDE_Morph.prototype.recordNewSound = function () {
                 this.makeSureRecordingIsMono(sound);
                 this.spriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
-                this.recordUnsavedChanges();
+                this.currenSprite.recordUserEdit();
             }
         });
 
@@ -3644,7 +3644,7 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
     duplicate.keepWithin(this.stage);
     duplicate.isDown = sprite.isDown;
     this.selectSprite(duplicate);
-    this.recordUnsavedChanges();
+    duplicate.recordUserEdit();
 };
 
 IDE_Morph.prototype.instantiateSprite = function (sprite) {
@@ -3660,7 +3660,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
     }
     instance.isDown = sprite.isDown;
     this.selectSprite(instance);
-    this.recordUnsavedChanges();
+    instance.recordUserEdit();
 };
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
@@ -3670,6 +3670,7 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     );
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
+    sprite.recordUserEdit();
     sprite.corpsify();
     sprite.destroy();
     this.stage.watchers().forEach(watcher => {
@@ -3688,7 +3689,6 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     ) || this.stage;
 
     this.selectSprite(this.currentSprite);
-    this.recordUnsavedChanges();
 
     // remember the deleted sprite so it can be recovered again later
     this.scene.trash.push(sprite);
@@ -9905,11 +9905,8 @@ SpriteIconMorph.prototype.chooseExemplar = function () {
 };
 
 SpriteIconMorph.prototype.releaseSprite = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
     this.object.release();
-    if (ide) {
-        ide.recordUnsavedChanges();
-    }
+    this.object.recordUserEdit();
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
@@ -10262,7 +10259,7 @@ CostumeIconMorph.prototype.editRotationPointOnly = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     this.object.editRotationPointOnly(this.world(), ide);
     ide.hasChangedMedia = true;
-    ide.recordUnsavedChanges();
+    this.objects.recordUserEdit();
 };
 
 CostumeIconMorph.prototype.renameCostume = function () {
@@ -10280,11 +10277,11 @@ CostumeIconMorph.prototype.renameCostume = function () {
                 );
                 costume.version = Date.now();
                 ide.hasChangedMedia = true;
-                ide.recordUnsavedChanges();
+                wardrobe.sprite.recordUserEdit();
             }
         }
     ).prompt(
-        ide.currentSprite instanceof SpriteMorph ?
+        wardrobe.sprite instanceof SpriteMorph ?
             'rename costume' : 'rename background',
         costume.name,
         this.world()
@@ -10301,17 +10298,18 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
     if (ide) {
         ide.currentSprite.wearCostume(newcos);
     }
+    wardrobe.sprite.recordUserEdit();
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
-        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2,
-        ide = this.parentThatIsA(IDE_Morph);
+        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2;
     wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
-    if (ide.currentSprite.costume === this.object) {
-        ide.currentSprite.wearCostume(null);
+    if (wardrobe.sprite.costume === this.object) {
+        wardrobe.sprite.wearCostume(null);
     }
+    wardrobe.sprite.recordUserEdit();
 };
 
 CostumeIconMorph.prototype.importEmbeddedData = function () {
@@ -10754,10 +10752,8 @@ WardrobeMorph.prototype.paintNew = function () {
             this.sprite.shadowAttribute('costumes');
             this.sprite.addCostume(cos);
             this.updateList();
-            if (ide) {
-                ide.currentSprite.wearCostume(cos);
-                ide.recordUnsavedChanges();
-            }
+            this.sprite.wearCostume(cos);
+            this.sprite.recordUserEdit();
         }
     );
 };
@@ -10775,7 +10771,7 @@ WardrobeMorph.prototype.newFromCam = function () {
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
             this.updateList();
-            ide.recordUnsavedChanges();
+            sprite.recordUserEdit();
         });
 
     camDialog.key = 'camera';
