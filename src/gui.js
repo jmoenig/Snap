@@ -3428,7 +3428,6 @@ IDE_Morph.prototype.paintNewSprite = function () {
         () => {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
-            sprite.recordUserEdit();
         }
     );
 };
@@ -3451,7 +3450,6 @@ IDE_Morph.prototype.newCamSprite = function () {
         function (costume) { // needs to be "function" so it can access "this"
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
-            sprite.recordUserEdit();
             this.close();
         });
 
@@ -3472,7 +3470,6 @@ IDE_Morph.prototype.recordNewSound = function () {
                 this.makeSureRecordingIsMono(sound);
                 this.spriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
-                this.currenSprite.recordUserEdit();
             }
         });
 

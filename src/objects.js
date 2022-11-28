@@ -4046,6 +4046,7 @@ SpriteMorph.prototype.addCostume = function (costume) {
     }
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
+    this.recordUserEdit();
 };
 
 SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
@@ -4190,6 +4191,7 @@ SpriteMorph.prototype.addSound = function (audio, name) {
     var sound = new Sound(audio, name);
     this.shadowAttribute('sounds');
     this.sounds.add(sound);
+    this.recordUserEdit();
     return sound;
 };
 
