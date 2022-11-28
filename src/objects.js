@@ -2118,6 +2118,7 @@ SpriteMorph.prototype.appearIn = function (ide) {
 SpriteMorph.prototype.setName = function (string) {
     this.name = string || this.name;
     this.version = Date.now();
+    this.recordUserEdit();
 };
 
 // SpriteMorph rendering
@@ -3387,7 +3388,10 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
             delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
         }
     }
-    if (quick) {return; }
+    if (quick) {
+        this.recordUserEdit();
+        return;
+    }
     dict = {
         doWarp: 'control',
         reifyScript: 'operators',
@@ -3399,6 +3403,7 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+    this.recordUserEdit();
 };
 
 SpriteMorph.prototype.emptyCategories = function () {
