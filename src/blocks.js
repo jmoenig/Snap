@@ -10628,7 +10628,7 @@ InputSlotMorph.prototype.receiversMenu = function (searching) {
 InputSlotMorph.prototype.userEditMenu = function (searching) {
     var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
-        dict = {'any object': ['any object']};
+        dict = {'anything': ['anything']};
 
     if (searching) {return dict; }
     dict['~'] = null;

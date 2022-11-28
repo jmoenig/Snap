@@ -765,7 +765,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'when I receive %msgHat %message',
-            defaults: [''] // trigger the "message" expansion to refresh
+            defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
             type: 'hat',
@@ -920,7 +920,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'When %edit is edited',
-            defaults: [['any object']]
+            defaults: [['anything']]
         },
 
         // Custom Blocks & introspection
@@ -6696,7 +6696,7 @@ SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
             if (morph.selector === 'receiveUserEdit') {
                 var choice = morph.inputs()[0].evaluate(),
                     evt = choice instanceof Array ? choice[0] : choice;
-                return evt === spriteName || evt === 'any object';
+                return evt === spriteName || evt === 'anything';
             }
         }
         return false;
