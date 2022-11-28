@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-November-26';
+modules.threads = '2022-November-28';
 
 var ThreadManager;
 var Process;
@@ -7264,7 +7264,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    rcvr.recordUserEdit();
 };
 
 Process.prototype.doDefineBlock = function (upvar, label, context) {
@@ -7329,7 +7329,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    rcvr.recordUserEdit();
 
     // create the reference to the new block
     vars.addVar(upvar);
@@ -7427,7 +7427,7 @@ Process.prototype.doDeleteBlock = function (context) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    rcvr.recordUserEdit();
 };
 
 // Process: Compile (as of yet simple) block scripts to JS
