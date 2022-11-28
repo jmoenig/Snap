@@ -47,12 +47,11 @@
                         requestAnimationFrame(loop);
                         world.doOneCycle();
                     };
-                buttons.forEach(bt => bt.addEventListener('click',
-                    function () {ide.broadcast(this.value); }
-                ));
                 world = new WorldMorph(document.getElementById('world'), false);
                 ide.openIn(world);
                 ide.addMessageListener('update', (txt) => code.value = txt);
+                buttons.forEach(bt => bt.addEventListener('click', () =>
+                    ide.broadcast(bt.value));
                 requestAnimationFrame(loop);
             };
         </script>
