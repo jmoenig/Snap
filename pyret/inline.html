@@ -51,7 +51,7 @@
                 ide.openIn(world);
                 ide.addMessageListener('update', (txt) => code.value = txt);
                 buttons.forEach(bt => bt.addEventListener('click', () =>
-                    ide.broadcast(bt.value));
+                    ide.broadcast(bt.value)));
                 requestAnimationFrame(loop);
             };
         </script>
