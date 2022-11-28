@@ -8518,7 +8518,9 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     }
     this.dropRecord = record;
     this.updateToolbar();
-    this.scriptTarget().recordUserEdit();
+    if (this.parentThatIsA(IDE_Morph)) {
+        this.scriptTarget().recordUserEdit();
+    }
 };
 
 ScriptsMorph.prototype.addToolbar = function () {
