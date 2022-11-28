@@ -2907,7 +2907,7 @@ SpriteMorph.prototype.makeVariableButton = function () {
             myself.toggleVariableWatcher(pair[0], pair[1]);
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
-            myself.recordUnsavedChanges();
+            myself.recordUserEdit();
         }
     }
 
@@ -3082,7 +3082,7 @@ SpriteMorph.prototype.makeBlock = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                this.recordUnsavedChanges();
+                this.recordUserEdit();
                 new BlockEditorMorph(definition, this).popUp();
             }
         },
@@ -3622,7 +3622,7 @@ SpriteMorph.prototype.searchBlocks = function (
             if (selection) {
                 scriptFocus.insertBlock(selection);
             }
-            myself.recordUnsavedChanges();
+            myself.recordUserEdit();
         } else {
             search = searchBar.getValue();
             if (search.length > 0) {
@@ -3897,7 +3897,7 @@ SpriteMorph.prototype.deleteVariable = function (varName, isGlobal) {
     if (ide) {
         ide.flushBlocksCache('variables'); // b/c the var could be global
         ide.refreshPalette();
-        this.recordUnsavedChanges();
+        this.recordUserEdit();
     }
 };
 
@@ -3984,7 +3984,7 @@ SpriteMorph.prototype.renameVariable = function (
 
     ide.flushBlocksCache('variables');
     ide.refreshPalette();
-    this.recordUnsavedChanges();
+    this.recordUserEdit();
     return true; // success
 };
 
@@ -4696,7 +4696,7 @@ SpriteMorph.prototype.perpetuateAndEdit = function () {
     if (ide) {
         this.perpetuate();
         ide.selectSprite(this);
-        this.recordUnsavedChanges();
+        this.recordUserEdit();
     }
 };
 
@@ -6516,7 +6516,7 @@ SpriteMorph.prototype.setPivot = function (worldCoordinate) {
                 (cntr.y - worldCoordinate.y) / stage.scale
             )
         );
-        this.recordUnsavedChanges();
+        this.recordUserEdit();
     }
 };
 

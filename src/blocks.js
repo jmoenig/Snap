@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-25';
+modules.blocks = '2022-November-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
