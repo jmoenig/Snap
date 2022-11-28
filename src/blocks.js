@@ -3764,7 +3764,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.setSelector(selector, -offset);
-                this.recordUserEdit();
+                this.scriptTarget().recordUserEdit();
             }
         );
     });
