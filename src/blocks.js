@@ -2915,7 +2915,7 @@ BlockMorph.prototype.userSetSpec = function (spec) {
     tb.fullChanged();
     this.setSpec(spec);
     tb.fullChanged();
-    tb.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
+    tb.scriptTarget().recordUserEdit();
 };
 
 BlockMorph.prototype.buildSpec = function () {
@@ -3692,7 +3692,7 @@ BlockMorph.prototype.ringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
-    this.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
+    this.scriptTarget().recordUserEdit();
 };
 
 BlockMorph.prototype.unringify = function () {
@@ -3726,7 +3726,7 @@ BlockMorph.prototype.unringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
-    this.scriptTarget().parentThatIsA(IDE_Morph).recordUnsavedChanges();
+    this.scriptTarget().recordUserEdit();
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
@@ -3758,9 +3758,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
                 this.setSelector(selector, -offset);
-                this.scriptTarget().parentThatIsA(
-                    IDE_Morph
-                ).recordUnsavedChanges();
+                this.recordUserEdit();
             }
         );
     });
@@ -8499,8 +8497,7 @@ ScriptsMorph.prototype.clearDropInfo = function () {
 
 ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     // support for "undrop" / "redrop"
-    var ide, blockEditor,
-        record = {
+    var record = {
             lastDroppedBlock: this.lastDroppedBlock,
             lastReplacedInput: this.lastReplacedInput,
             lastDropTarget: this.lastDropTarget,
@@ -8521,18 +8518,7 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     }
     this.dropRecord = record;
     this.updateToolbar();
-
-    // notify the IDE of an unsaved user edit
-    ide = this.parentThatIsA(IDE_Morph);
-    if (!ide) {
-        blockEditor = this.parentThatIsA(BlockEditorMorph);
-        if (blockEditor) {
-            ide = blockEditor.target.parentThatIsA(IDE_Morph);
-        }
-    }
-    if (ide) {
-        ide.recordUnsavedChanges();
-    }
+    this.scriptTarget().recordUserEdit();
 };
 
 ScriptsMorph.prototype.addToolbar = function () {
@@ -10155,10 +10141,10 @@ InputSlotMorph.prototype.setContents = function (data) {
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
     // enable copy-on-edit for inherited scripts
     var block = this.parentThatIsA(BlockMorph),
-        ide = this.parentThatIsA(IDE_Morph);
+        trgt = block.scriptTarget();
     this.selectForEdit().setContents(aStringOrFloat);
-    if (ide && !block.isTemplate) {
-        ide.recordUnsavedChanges();
+    if (trgt && !block.isTemplate) {
+        trgt.recordUserEdit();
     }
 };
 
@@ -10188,7 +10174,7 @@ InputSlotMorph.prototype.menuFromDict = function (
     	myself = this,
         selector,
         block = this.parentThatIsA(BlockMorph),
-        ide = this.parentThatIsA(IDE_Morph),
+        trgt = block.scriptTarget(),
         menu = new MenuMorph(
             this.userSetContents,
             null,
@@ -10199,8 +10185,8 @@ InputSlotMorph.prototype.menuFromDict = function (
 	function update(num) {
     	myself.setContents(num);
         myself.reactToSliderEdit();
-        if (ide && !block.isTemplate) {
-            ide.recordUnsavedChanges();
+        if (trgt && !block.isTemplate) {
+            trgt.recordUserEdit();
         }
  	}
 
@@ -11063,10 +11049,10 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 
 InputSlotMorph.prototype.reactToEdit = function () {
     var block = this.parentThatIsA(BlockMorph),
-        ide = this.parentThatIsA(IDE_Morph);
+        trgt = block.scriptTarget();
     this.contents().clearSelection();
-    if (ide && !block.isTemplate) {
-        ide.recordUnsavedChanges();
+    if (trgt && !block.isTemplate) {
+        trgt.recordUserEdit();
     }
 };
 
@@ -11830,20 +11816,20 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull) {
 BooleanSlotMorph.prototype.toggleValue = function () {
     var target = this.selectForEdit(),
         block = this.parentThatIsA(BlockMorph),
+        sprite,
         ide;
     if (target !== this) {
         return this.toggleValue.call(target);
     }
-    ide = this.parentThatIsA(IDE_Morph);
     this.value = this.nextValue();
-    if (ide) {
-        if (!block.isTemplate) {
-            ide.recordUnsavedChanges();
-        }
-        if (!ide.isAnimating) {
-            this.rerender();
-            return;
-        }
+    sprite = block.scriptTarget();
+    if (!block.isTemplate) {
+        sprite.recordUserEdit();
+    }
+    ide = sprite.parentThatIsA(IDE_Morph);
+    if (ide && !ide.isAnimating) {
+        this.rerender();
+        return;
     }
     this.progress = 3;
     this.rerender();
@@ -13206,7 +13192,7 @@ MultiArgMorph.prototype.slotSpecFor = function (index) {
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
-    var ide = this.parentThatIsA(IDE_Morph);
+    var sprite = this.parentThatIsA(BlockMorph).scriptTarget();
     if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
@@ -13225,9 +13211,7 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.addInput();
             }
         }
-        if (ide) {
-            ide.recordUnsavedChanges();
-        }
+        sprite.recordUserEdit();
     } else if (
         leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
     ) {
@@ -13236,9 +13220,7 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.removeInput();
             }
         }
-        if (ide) {
-            ide.recordUnsavedChanges();
-        }
+        sprite.recordUserEdit();
     } else {
         target.escalateEvent('mouseClickLeft', pos);
     }
@@ -14546,13 +14528,11 @@ CommentMorph.prototype.mouseClickLeft = function () {
 
 CommentMorph.prototype.layoutChanged = function () {
     // react to a change of the contents area
-    var ide = this.parentThatIsA(IDE_Morph);
+    var sprite = this.parentThatIsA(ScriptsMorph).scriptTarget();
     this.fixLayout();
     this.align();
     this.comeToFront();
-    if (ide) {
-        ide.recordUnsavedChanges();
-    }
+    sprite.recordUserEdit();
 };
 
 CommentMorph.prototype.fixLayout = function () {
