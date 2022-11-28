@@ -14552,11 +14552,13 @@ CommentMorph.prototype.mouseClickLeft = function () {
 
 CommentMorph.prototype.layoutChanged = function () {
     // react to a change of the contents area
-    var sprite = this.parentThatIsA(ScriptsMorph).scriptTarget();
+    var scripts = this.parentThatIsA(ScriptsMorph);
     this.fixLayout();
     this.align();
     this.comeToFront();
-    sprite.recordUserEdit();
+    if (scripts) {
+        scripts.scriptTarget().recordUserEdit();
+    }
 };
 
 CommentMorph.prototype.fixLayout = function () {
