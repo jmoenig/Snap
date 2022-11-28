@@ -65,6 +65,9 @@
     * German
     * Catalan, thanks, Joan!
 
+### 2022-11-28
+* objects: new recordUserEdit() mechanism
+
 ### 2022-11-26
 * threads: order "my scripts" list by their top-down position in the scripting area
 

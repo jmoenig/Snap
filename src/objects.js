@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-24';
+modules.objects = '2022-November-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -2907,7 +2907,7 @@ SpriteMorph.prototype.makeVariableButton = function () {
             myself.toggleVariableWatcher(pair[0], pair[1]);
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
-            ide.recordUnsavedChanges();
+            myself.recordUnsavedChanges();
         }
     }
 
@@ -3082,7 +3082,7 @@ SpriteMorph.prototype.makeBlock = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                ide.recordUnsavedChanges();
+                this.recordUnsavedChanges();
                 new BlockEditorMorph(definition, this).popUp();
             }
         },
@@ -3622,9 +3622,7 @@ SpriteMorph.prototype.searchBlocks = function (
             if (selection) {
                 scriptFocus.insertBlock(selection);
             }
-            if (ide) {
-                ide.recordUnsavedChanges();
-            }
+            myself.recordUnsavedChanges();
         } else {
             search = searchBar.getValue();
             if (search.length > 0) {
@@ -3899,7 +3897,7 @@ SpriteMorph.prototype.deleteVariable = function (varName, isGlobal) {
     if (ide) {
         ide.flushBlocksCache('variables'); // b/c the var could be global
         ide.refreshPalette();
-        ide.recordUnsavedChanges();
+        this.recordUnsavedChanges();
     }
 };
 
@@ -3986,7 +3984,7 @@ SpriteMorph.prototype.renameVariable = function (
 
     ide.flushBlocksCache('variables');
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    this.recordUnsavedChanges();
     return true; // success
 };
 
@@ -4698,7 +4696,7 @@ SpriteMorph.prototype.perpetuateAndEdit = function () {
     if (ide) {
         this.perpetuate();
         ide.selectSprite(this);
-        ide.recordUnsavedChanges();
+        this.recordUnsavedChanges();
     }
 };
 
@@ -6509,7 +6507,6 @@ SpriteMorph.prototype.moveRotationCenter = function () {
 
 SpriteMorph.prototype.setPivot = function (worldCoordinate) {
     var stage = this.parentThatIsA(StageMorph),
-        ide = this.parentThatIsA(IDE_Morph),
         cntr;
     if (stage) {
         cntr = stage.center();
@@ -6519,9 +6516,7 @@ SpriteMorph.prototype.setPivot = function (worldCoordinate) {
                 (cntr.y - worldCoordinate.y) / stage.scale
             )
         );
-        if (ide) {
-            ide.recordUnsavedChanges();
-        }
+        this.recordUnsavedChanges();
     }
 };
 
@@ -8165,6 +8160,17 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
         newName = stem + '(' + count + ')';
     }
     return newName;
+};
+
+// SpriteMorph recording user edits
+
+SpriteMorph.prototype.recordUserEdit = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        this.parentThatIsA(IDE_Morph).recordUnsavedChanges();
+    }
+    // fire event for sprite
+    // fire event for "any" sprite
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
@@ -10353,6 +10359,11 @@ StageMorph.prototype.allBlocks = function (valuesOnly) {
 StageMorph.prototype.inheritedBlocks = function () {
     return [];
 };
+
+// StageMorph recording user edits
+
+StageMorph.prototype.recordUserEdit =
+    SpriteMorph.prototype.recordUserEdit;
 
 // StageMorph pen trails as costume
 
