@@ -536,6 +536,12 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'objectsMenuWithSelf'
     },
+    '%edit' : {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'userEditMenu',
+        value: ['any']
+    },
     '%col': { // collision detection
         type: 'input',
         tags: 'read-only',
@@ -10607,6 +10613,22 @@ InputSlotMorph.prototype.receiversMenu = function (searching) {
     var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         dict = {all: ['all']};
+
+    if (searching) {return dict; }
+    dict['~'] = null;
+    dict[stage.name] = stage.name;
+    stage.children.forEach(morph => {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+            dict[morph.name] = morph.name;
+        }
+    });
+    return dict;
+};
+
+InputSlotMorph.prototype.userEditMenu = function (searching) {
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        dict = {'any object': ['any object']};
 
     if (searching) {return dict; }
     dict['~'] = null;

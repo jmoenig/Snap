@@ -915,6 +915,14 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'delete this clone'
         },
 
+        // recording user edits
+        receiveUserEdit: {
+            type: 'hat',
+            category: 'control',
+            spec: 'When %edit is edited',
+            defaults: [['any object']]
+        },
+
         // Custom Blocks & introspection
         doDefineBlock: {
             type: 'command',
@@ -2678,6 +2686,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
+        blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
@@ -6681,6 +6690,19 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
     });
 };
 
+SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
+    return this.scripts.children.filter(morph => {
+        if (morph.selector) {
+            if (morph.selector === 'receiveUserEdit') {
+                var choice = morph.inputs()[0].evaluate(),
+                    evt = choice instanceof Array ? choice[0] : choice;
+                return evt === spriteName || evt === 'any object';
+            }
+        }
+        return false;
+    });
+};
+
 SpriteMorph.prototype.hasGenericHatBlocks = function () {
     return this.scripts.children.some(morph =>
         morph.selector === 'receiveCondition'
@@ -8174,10 +8196,8 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
 SpriteMorph.prototype.recordUserEdit = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
-        this.parentThatIsA(IDE_Morph).recordUnsavedChanges();
+        this.parentThatIsA(IDE_Morph).recordUnsavedChanges(this.name);
     }
-    // fire event for sprite
-    // fire event for "any" sprite
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
@@ -9030,6 +9050,40 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message, data) {
     return procs;
 };
 
+StageMorph.prototype.fireUserEditEvent = function (spriteName) {
+    var procs = [];
+
+    this.children.concat(this).forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksForUserEdit(spriteName).forEach(block => {
+                /* // data - currently under construction
+                var varName = block.inputs()[1].evaluate()[0],
+                    varFrame;
+                if (varName) {
+                    varFrame = new VariableFrame();
+                    varFrame.addVar(
+                        varName,
+                        key === 'space' ? ' ' : key // not lowercased
+                    );
+                }
+                */
+                procs.push(this.threads.startProcess(
+                    block,
+                    morph,
+                    true, // ignore running scripts, was: myself.isThreadSafe
+                    null, // exportResult (bool)
+                    null, // callback
+                    null, // isClicked
+                    null, // rightAway
+                    null, // atomic
+                    null // varFrame
+                ));
+            });
+        }
+    });
+    return procs;
+};
+
 StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],
         ide = this.parentThatIsA(IDE_Morph);
@@ -9333,6 +9387,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
+        blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
@@ -10100,6 +10155,9 @@ StageMorph.prototype.allHatBlocksForKey
 
 StageMorph.prototype.allHatBlocksForInteraction
     = SpriteMorph.prototype.allHatBlocksForInteraction;
+
+StageMorph.prototype.allHatBlocksForUserEdit =
+    SpriteMorph.prototype.allHatBlocksForUserEdit;
 
 StageMorph.prototype.hasGenericHatBlocks
     = SpriteMorph.prototype.hasGenericHatBlocks;

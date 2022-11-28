@@ -5,6 +5,7 @@
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
+    * new "When (sprite) is edited" event hat block
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -72,7 +73,8 @@
 * blocks: migrated custom blocks to new recordUserEdit mechanism
 * threads: migrated processes to new recordUserEdit mechanism
 * extensions: migrated extensions to new recordUserEdit mechanism 
-* gui: migrated IDE to new recordUserEdit mechanism 
+* gui: migrated IDE to new recordUserEdit mechanism
+* objects, blocks, gui: new "When (sprite) is edited" event hat block
 
 ### 2022-11-26
 * threads: order "my scripts" list by their top-down position in the scripting area
