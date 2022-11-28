@@ -75,6 +75,7 @@
 * extensions: migrated extensions to new recordUserEdit mechanism 
 * gui: migrated IDE to new recordUserEdit mechanism
 * objects, blocks, gui: new "When (sprite) is edited" event hat block
+* api: removed experimental scriptsAsText method (no longer needed)
 
 ### 2022-11-26
 * threads: order "my scripts" list by their top-down position in the scripting area

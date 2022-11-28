@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-November-25';
+modules.api = '2022-November-28';
 
 // IDE_Morph external communication API
 /*
@@ -274,13 +274,4 @@ IDE_Morph.prototype.setTranslation = function (countryCode, callback) {
     // opens Snap their own language setting again takes effect.
     this.loadNewProject = false;
     this.setLanguage(countryCode, callback, true); // don't save
-};
-
-IDE_Morph.prototype.scriptsAsText = function () {
-    // return the contents of the currently active sprite's scripting pane
-    // converted to their textual equivalent. Requires that a code
-    // mapping is in place. EXPERIMENTAL and under construction.
-    return this.currentSprite.scripts.sortedElements().map(morph =>
-        morph.mappedCode()
-    );
 };
