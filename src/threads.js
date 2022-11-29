@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-November-28';
+modules.threads = '2022-November-29';
 
 var ThreadManager;
 var Process;
@@ -7264,7 +7264,14 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    rcvr.recordUserEdit();
+    rcvr.recordUserEdit(
+        'scripts',
+        'custom block',
+        def.isGlobal ? 'global' : 'local',
+        'changed attribute',
+        def.abstractBlockSpec(),
+        choice
+    );
 };
 
 Process.prototype.doDefineBlock = function (upvar, label, context) {
@@ -7329,7 +7336,13 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    rcvr.recordUserEdit();
+    rcvr.recordUserEdit(
+        'palette',
+        'custom block',
+        def.isGlobal ? 'global' : 'local',
+        'new',
+        def.abstractBlockSpec()
+    );
 
     // create the reference to the new block
     vars.addVar(upvar);
@@ -7427,7 +7440,13 @@ Process.prototype.doDeleteBlock = function (context) {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    rcvr.recordUserEdit();
+    rcvr.recordUserEdit(
+        'palette',
+        'custom block',
+        def.isGlobal ? 'global' : 'local',
+        'delete definition',
+        def.abstractBlockSpec()
+    );
 };
 
 // Process: Compile (as of yet simple) block scripts to JS
