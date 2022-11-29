@@ -5,7 +5,7 @@
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
-    * new "When (sprite) is edited" event hat block
+    * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -71,6 +71,7 @@
 * gui: added configuration option for "noPalette"
 * objects: associate data with the "When (sprite) is edited" event hat block
 * gui, objects: more detailed user-event logging
+* blocks: more detailed user-event logging
 
 ### 2022-11-28
 * objects: new recordUserEdit() mechanism

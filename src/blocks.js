@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-28';
+modules.blocks = '2022-November-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2917,11 +2917,18 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
 };
 
 BlockMorph.prototype.userSetSpec = function (spec) {
-    var tb = this.topBlock();
+    var tb = this.topBlock(),
+        old = this.abstractBlockSpec();
     tb.fullChanged();
     this.setSpec(spec);
     tb.fullChanged();
-    tb.scriptTarget().recordUserEdit();
+    tb.scriptTarget().recordUserEdit(
+        'scripts',
+        'block',
+        'label',
+        old,
+        this.abstractBlockSpec()
+    );
 };
 
 BlockMorph.prototype.buildSpec = function () {
@@ -3698,7 +3705,12 @@ BlockMorph.prototype.ringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
-    this.scriptTarget().recordUserEdit();
+    this.scriptTarget().recordUserEdit(
+        'scripts',
+        'block',
+        'ringify',
+        this.abstractBlockSpec()
+    );
 };
 
 BlockMorph.prototype.unringify = function () {
@@ -3732,7 +3744,12 @@ BlockMorph.prototype.unringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
-    this.scriptTarget().recordUserEdit();
+    this.scriptTarget().recordUserEdit(
+        'scripts',
+        'block',
+        'unringify',
+        this.abstractBlockSpec()
+    );
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
@@ -3763,8 +3780,15 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block.doWithAlpha(1, () => block.fullImage()),
             () => {
+                var old = this.abstractBlockSpec();
                 this.setSelector(selector, -offset);
-                this.scriptTarget().recordUserEdit();
+                this.scriptTarget().recordUserEdit(
+                    'scripts',
+                    'block',
+                    'relabel',
+                    old,
+                    this.abstractBlockSpec()
+                );
             }
         );
     });
@@ -8525,7 +8549,12 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     this.dropRecord = record;
     this.updateToolbar();
     if (this.parentThatIsA(IDE_Morph)) {
-        this.scriptTarget().recordUserEdit();
+        this.scriptTarget().recordUserEdit(
+            'scripts',
+            'block',
+            'dropped',
+            this.lastDroppedBlock.abstractBlockSpec()
+        );
     }
 };
 
@@ -10152,7 +10181,13 @@ InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
         trgt = block.scriptTarget();
     this.selectForEdit().setContents(aStringOrFloat);
     if (trgt && !block.isTemplate) {
-        trgt.recordUserEdit();
+        trgt.recordUserEdit(
+            'scripts',
+            'input slot',
+            'set',
+            block.abstractBlockSpec(),
+            aStringOrFloat
+        );
     }
 };
 
@@ -10194,7 +10229,13 @@ InputSlotMorph.prototype.menuFromDict = function (
     	myself.setContents(num);
         myself.reactToSliderEdit();
         if (trgt && !block.isTemplate) {
-            trgt.recordUserEdit();
+            trgt.recordUserEdit(
+                'scripts',
+                'input slot',
+                'set choice',
+                block.abstractBlockSpec(),
+                num
+            );
         }
  	}
 
@@ -11076,7 +11117,13 @@ InputSlotMorph.prototype.reactToEdit = function () {
         trgt = block.scriptTarget();
     this.contents().clearSelection();
     if (trgt && !block.isTemplate) {
-        trgt.recordUserEdit();
+        trgt.recordUserEdit(
+            'scripts',
+            'input slot',
+            'edit',
+            block.abstractBlockSpec(),
+            this.evaluate()
+        );
     }
 };
 
@@ -11848,7 +11895,13 @@ BooleanSlotMorph.prototype.toggleValue = function () {
     this.value = this.nextValue();
     sprite = block.scriptTarget();
     if (!block.isTemplate) {
-        sprite.recordUserEdit();
+        sprite.recordUserEdit(
+            'scripts',
+            'boolean slot',
+            'toggle',
+            block.abstractBlockSpec(),
+            this.value
+        );
     }
     ide = sprite.parentThatIsA(IDE_Morph);
     if (ide && !ide.isAnimating) {
@@ -13216,7 +13269,8 @@ MultiArgMorph.prototype.slotSpecFor = function (index) {
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
-    var sprite = this.parentThatIsA(BlockMorph).scriptTarget();
+    var block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget();
     if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
@@ -13235,7 +13289,12 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.addInput();
             }
         }
-        sprite.recordUserEdit();
+        sprite.recordUserEdit(
+            'scripts',
+            'poly slot',
+            'expand',
+            block.abstractBlockSpec()
+        );
     } else if (
         leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
     ) {
@@ -13244,7 +13303,12 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 target.removeInput();
             }
         }
-        sprite.recordUserEdit();
+        sprite.recordUserEdit(
+            'scripts',
+            'poly slot',
+            'collapse',
+            block.abstractBlockSpec()
+        );
     } else {
         target.escalateEvent('mouseClickLeft', pos);
     }
@@ -14557,7 +14621,11 @@ CommentMorph.prototype.layoutChanged = function () {
     this.align();
     this.comeToFront();
     if (scripts) {
-        scripts.scriptTarget().recordUserEdit();
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            'edit'
+        );
     }
 };
 
