@@ -74,6 +74,7 @@
 * blocks: more detailed user-event logging
 * byob: more detailed user-event logging
 * threads: more detailed user-event logging
+* gui: more detailed user-event logging
 
 ### 2022-11-28
 * objects: new recordUserEdit() mechanism
