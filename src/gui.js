@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-28';
+modules.gui = '2022-November-29';
 
 // Declarations
 
@@ -780,6 +780,11 @@ IDE_Morph.prototype.applyConfigurations = function () {
         }
     }
 
+    // no palette
+    if (cnf.noPalette) {
+        ScriptsMorph.prototype.enableKeyboard = false;
+    }
+
     if (!refreshLater) {
         refresh();
     }
@@ -812,6 +817,13 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
         this.corral.hide();
         this.spriteBar.hide();
         this.stageHandle.hide();
+    }
+
+    // no palette
+    if (cnf.noPalette) {
+        this.categories.hide();
+        this.palette.hide();
+        this.paletteHandle.hide();
     }
 };
 
@@ -2464,7 +2476,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         }
 
         // spriteBar
-        this.spriteBar.setLeft(this.paletteWidth + padding + border);
+        this.spriteBar.setLeft(cnf.noPalette ?
+            this.left() + border
+            : this.paletteWidth + padding + border
+        );
         this.spriteBar.setTop(
             cnf.hideControls ?
                 this.top() + border

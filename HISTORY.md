@@ -18,6 +18,7 @@
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
+    * added configuration options for embedding Snap! into other websites
 * **Notable Changes:**
     * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -66,6 +67,9 @@
     * German
     * Catalan, thanks, Joan!
 
+### 2022-11-29
+* gui: added configuration option for "noPalette"
+
 ### 2022-11-28
 * objects: new recordUserEdit() mechanism
 * objects: migrated objects to new recordUserEdit mechanism
@@ -94,7 +98,7 @@
 * gui: added configuration option for path (to the host's base directory)
 * gui: added configuration option for border (surrounding the IDE)
 * gui: added configuration option for "hideCategories"
-* gui: added configuratino option for "load"
+* gui: added configuratiom option for "load"
 * objects: hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
 
 ### 2022-11-23
