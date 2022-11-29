@@ -10178,7 +10178,7 @@ InputSlotMorph.prototype.setContents = function (data) {
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
     // enable copy-on-edit for inherited scripts
     var block = this.parentThatIsA(BlockMorph),
-        trgt = block.scriptTarget();
+        trgt = block.scriptTarget(true);
     this.selectForEdit().setContents(aStringOrFloat);
     if (trgt && !block.isTemplate) {
         trgt.recordUserEdit(
@@ -10217,7 +10217,7 @@ InputSlotMorph.prototype.menuFromDict = function (
     	myself = this,
         selector,
         block = this.parentThatIsA(BlockMorph),
-        trgt = block.scriptTarget(),
+        trgt = block.scriptTarget(true),
         menu = new MenuMorph(
             this.userSetContents,
             null,
@@ -11114,7 +11114,7 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 
 InputSlotMorph.prototype.reactToEdit = function () {
     var block = this.parentThatIsA(BlockMorph),
-        trgt = block.scriptTarget();
+        trgt = block.scriptTarget(true);
     this.contents().clearSelection();
     if (trgt && !block.isTemplate) {
         trgt.recordUserEdit(
