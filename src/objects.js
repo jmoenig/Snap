@@ -2126,7 +2126,7 @@ SpriteMorph.prototype.appearIn = function (ide) {
 SpriteMorph.prototype.setName = function (string) {
     this.name = string || this.name;
     this.version = Date.now();
-    this.recordUserEdit();
+    this.recordUserEdit('sprite', 'name');
 };
 
 // SpriteMorph rendering
@@ -2917,7 +2917,13 @@ SpriteMorph.prototype.makeVariableButton = function () {
             myself.toggleVariableWatcher(pair[0], pair[1]);
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
-            myself.recordUserEdit();
+            myself.recordUserEdit(
+                'palette',
+                'variable',
+                pair[1] ? 'global' : 'local',
+                'new',
+                pair[0]
+            );
         }
     }
 
@@ -3092,7 +3098,13 @@ SpriteMorph.prototype.makeBlock = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                this.recordUserEdit();
+                this.recordUserEdit(
+                    'palette',
+                    'custom block',
+                    definition.isGlobal ? 'global' : 'local',
+                    'new',
+                    definition.abstractBlockSpec()
+                );
                 new BlockEditorMorph(definition, this).popUp();
             }
         },
@@ -3398,7 +3410,11 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
         }
     }
     if (quick) {
-        this.recordUserEdit();
+        this.recordUserEdit(
+            'palette',
+            hideIt ? 'hide' : 'show',
+            aBlock.abstractBlockSpec()
+        );
         return;
     }
     dict = {
@@ -3412,7 +3428,11 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
-    this.recordUserEdit();
+    this.recordUserEdit(
+        'palette',
+        hideIt ? 'hide' : 'show',
+        aBlock.abstractBlockSpec()
+    );
 };
 
 SpriteMorph.prototype.emptyCategories = function () {
@@ -3636,7 +3656,12 @@ SpriteMorph.prototype.searchBlocks = function (
             if (selection) {
                 scriptFocus.insertBlock(selection);
             }
-            myself.recordUserEdit();
+            myself.recordUserEdit(
+                'scripts',
+                'block',
+                'insert',
+                selection.abstractBlockSpec()
+            );
         } else {
             search = searchBar.getValue();
             if (search.length > 0) {
@@ -3911,7 +3936,13 @@ SpriteMorph.prototype.deleteVariable = function (varName, isGlobal) {
     if (ide) {
         ide.flushBlocksCache('variables'); // b/c the var could be global
         ide.refreshPalette();
-        this.recordUserEdit();
+        this.recordUserEdit(
+            'palette',
+            'variable',
+            isGlobal ? 'global' : 'local',
+            'delete',
+            varName
+        );
     }
 };
 
@@ -3998,7 +4029,15 @@ SpriteMorph.prototype.renameVariable = function (
 
     ide.flushBlocksCache('variables');
     ide.refreshPalette();
-    this.recordUserEdit();
+    this.recordUserEdit(
+        'palette',
+        'variable',
+        isGlobal ? 'global' : 'local',
+        'rename',
+        everywhere ? 'all' : 'once',
+        oldName,
+        newName
+    );
     return true; // success
 };
 
@@ -4055,7 +4094,11 @@ SpriteMorph.prototype.addCostume = function (costume) {
     }
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
-    this.recordUserEdit();
+    this.recordUserEdit(
+        'costumes',
+        'add',
+        costume.name
+    );
 };
 
 SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
@@ -4200,7 +4243,11 @@ SpriteMorph.prototype.addSound = function (audio, name) {
     var sound = new Sound(audio, name);
     this.shadowAttribute('sounds');
     this.sounds.add(sound);
-    this.recordUserEdit();
+    this.recordUserEdit(
+        'sounds',
+        'add',
+        sound.name
+    );
     return sound;
 };
 
@@ -4712,7 +4759,11 @@ SpriteMorph.prototype.perpetuateAndEdit = function () {
     if (ide) {
         this.perpetuate();
         ide.selectSprite(this);
-        this.recordUserEdit();
+        this.recordUserEdit(
+            'corral',
+            'permanent clone',
+            this.name
+        );
     }
 };
 
@@ -6532,7 +6583,12 @@ SpriteMorph.prototype.setPivot = function (worldCoordinate) {
                 (cntr.y - worldCoordinate.y) / stage.scale
             )
         );
-        this.recordUserEdit();
+        this.recordUserEdit(
+            'sprite',
+            'pivot',
+            this.xPosition(),
+            this.yPosition()
+        );
     }
 };
 
@@ -8193,10 +8249,13 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
 
 // SpriteMorph recording user edits
 
-SpriteMorph.prototype.recordUserEdit = function () {
+SpriteMorph.prototype.recordUserEdit = function (...details) {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
-        this.parentThatIsA(IDE_Morph).recordUnsavedChanges(this.name);
+        this.parentThatIsA(IDE_Morph).recordUnsavedChanges(
+            this.name,
+            Array.from(details)
+        );
     }
 };
 
@@ -9050,7 +9109,11 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message, data) {
     return procs;
 };
 
-StageMorph.prototype.fireUserEditEvent = function (spriteName) {
+StageMorph.prototype.fireUserEditEvent = function (
+    spriteName,
+    details,
+    timestamp
+) {
     var procs = [];
 
     this.children.concat(this).forEach(morph => {
@@ -9062,7 +9125,11 @@ StageMorph.prototype.fireUserEditEvent = function (spriteName) {
                     varFrame = new VariableFrame();
                     varFrame.addVar(
                         varName,
-                        spriteName || ''
+                        new List(
+                            [spriteName].concat(
+                                details
+                            ).concat([timestamp])
+                        )
                     );
                 }
                 procs.push(this.threads.startProcess(

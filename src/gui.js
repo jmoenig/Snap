@@ -3278,17 +3278,17 @@ IDE_Morph.prototype.hasUnsavedEdits = function () {
     return this.scenes.itemsArray().some(any => any.hasUnsavedEdits);
 };
 
-IDE_Morph.prototype.recordUnsavedChanges = function (spriteName) {
+IDE_Morph.prototype.recordUnsavedChanges = function (spriteName, details) {
     this.scene.hasUnsavedEdits = true;
-    this.updateChanges(spriteName);
+    this.updateChanges(spriteName, details);
 };
 
 IDE_Morph.prototype.recordSavedChanges = function () {
     this.scenes.itemsArray().forEach(scene => scene.hasUnsavedEdits = false);
-    this.updateChanges();
+    this.updateChanges(this.currentSprite.name, ['project', 'save']);
 };
 
-IDE_Morph.prototype.updateChanges = function (spriteName) {
+IDE_Morph.prototype.updateChanges = function (spriteName, details) {
     // private
     // invalidate saved backup, if any - but don't actually delete it yet
     if (this.hasLocalStorage() &&
@@ -3303,7 +3303,11 @@ IDE_Morph.prototype.updateChanges = function (spriteName) {
     this.controlBar.updateLabel();
 
     // trigger an event
-    this.stage.fireUserEditEvent(spriteName);
+    this.stage.fireUserEditEvent(
+        spriteName || this.currentSprite.name,
+        details || [],
+        this.version
+    );
 };
 
 // IDE_Morph project backup

@@ -70,6 +70,7 @@
 ### 2022-11-29
 * gui: added configuration option for "noPalette"
 * objects: associate data with the "When (sprite) is edited" event hat block
+* gui, objects: more detailed user-event logging
 
 ### 2022-11-28
 * objects: new recordUserEdit() mechanism
