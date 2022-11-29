@@ -72,6 +72,7 @@
 * objects: associate data with the "When (sprite) is edited" event hat block
 * gui, objects: more detailed user-event logging
 * blocks: more detailed user-event logging
+* byob: more detailed user-event logging
 
 ### 2022-11-28
 * objects: new recordUserEdit() mechanism

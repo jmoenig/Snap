@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-November-28';
+modules.byob = '2022-November-29';
 
 // Declarations
 
@@ -1556,7 +1556,13 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
     ide.flushPaletteCache();
     ide.refreshPalette();
-    rcvr.recordUserEdit();
+    rcvr.recordUserEdit(
+        'palette',
+        'custom block',
+        this.isGlobal ? 'global' : 'local',
+        'duplicate definition',
+        dup.abstractBlockSpec()
+    );
     new BlockEditorMorph(dup, rcvr).popUp();
 };
 
@@ -1599,7 +1605,13 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
             }
-            rcvr.recordUserEdit();
+            rcvr.recordUserEdit(
+                'palette',
+                'custom block',
+                this.isGlobal ? 'global' : 'local',
+                'delete definition',
+                this.abstractBlockSpec()
+            );
         },
         this
     ).askYesNo(
@@ -1620,6 +1632,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
     var menu = new MenuMorph(this),
+        oldSpec = this.abstractBlockSpec(),
         oldInputs = this.inputs().map(each => each.fullCopy());
     alternatives.forEach(def => {
         var block = def.blockInstance();
@@ -1632,7 +1645,13 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
                 this.definition = def;
                 this.isGlobal = def.isGlobal;
                 this.refresh();
-                this.scriptTarget().recordUserEdit();
+                this.scriptTarget().recordUserEdit(
+                    'scripts',
+                    'block',
+                    'relabel',
+                    oldSpec,
+                    this.abstractBlockSpec()
+                );
             }
         );
     });
@@ -2817,7 +2836,13 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    this.target.recordUserEdit();
+    this.target.recordUserEdit(
+        'scripts',
+        'custom block',
+        this.definition.isGlobal ? 'global' : 'local',
+        'update',
+        this.definition.abstractBlockSpec()
+    );
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -4974,7 +4999,10 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     ide.flushBlocksCache();
     ide.refreshPalette();
     ide.categories.refreshEmpty();
-    this.target.recordUserEdit();
+    this.target.recordUserEdit(
+        'palette',
+        'hide block'
+    );
 };
 
 // BlockVisibilityDialogMorph layout
