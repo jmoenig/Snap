@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-28';
+modules.objects = '2022-November-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -919,7 +919,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveUserEdit: {
             type: 'hat',
             category: 'control',
-            spec: 'When %edit is edited',
+            spec: 'When %edit is edited %message',
             defaults: [['anything']]
         },
 
@@ -9056,17 +9056,15 @@ StageMorph.prototype.fireUserEditEvent = function (spriteName) {
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allHatBlocksForUserEdit(spriteName).forEach(block => {
-                /* // data - currently under construction
                 var varName = block.inputs()[1].evaluate()[0],
                     varFrame;
                 if (varName) {
                     varFrame = new VariableFrame();
                     varFrame.addVar(
                         varName,
-                        key === 'space' ? ' ' : key // not lowercased
+                        spriteName || ''
                     );
                 }
-                */
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
@@ -9076,7 +9074,7 @@ StageMorph.prototype.fireUserEditEvent = function (spriteName) {
                     null, // isClicked
                     null, // rightAway
                     null, // atomic
-                    null // varFrame
+                    varFrame
                 ));
             });
         }
