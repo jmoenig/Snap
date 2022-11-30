@@ -8176,29 +8176,31 @@ ScriptsMorph.prototype.userMenu = function () {
                     + ' ' + obj.exemplar.name
             );
         }
-        menu.addItem(
-            'make a block...',
-            () => new BlockDialogMorph(
-                null,
-                definition => {
-                    if (definition.spec !== '') {
-                        if (definition.isGlobal) {
-                            stage.globalBlocks.push(definition);
-                        } else {
-                            obj.customBlocks.push(definition);
+        if (!ide.config.noOwnBlocks) {
+            menu.addItem(
+                'make a block...',
+                () => new BlockDialogMorph(
+                    null,
+                    definition => {
+                        if (definition.spec !== '') {
+                            if (definition.isGlobal) {
+                                stage.globalBlocks.push(definition);
+                            } else {
+                                obj.customBlocks.push(definition);
+                            }
+                            ide.flushPaletteCache();
+                            ide.refreshPalette();
+                            new BlockEditorMorph(definition, obj).popUp();
                         }
-                        ide.flushPaletteCache();
-                        ide.refreshPalette();
-                        new BlockEditorMorph(definition, obj).popUp();
-                    }
-                },
-                this
-            ).prompt(
-                'Make a block',
-                null,
-                this.world()
-            )
-        );
+                    },
+                    this
+                ).prompt(
+                    'Make a block',
+                    null,
+                    this.world()
+                )
+            );
+        }
     }
     return menu;
 };

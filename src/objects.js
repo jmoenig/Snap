@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-29';
+modules.objects = '2022-November-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -3147,7 +3147,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     var myself = this,
         palette = new ScrollFrameMorph(null, null, this.sliderColor),
         unit = SyntaxElementMorph.prototype.fontSize,
-        ide,
+        ide = this.parentThatIsA(IDE_Morph),
         showCategories,
         showButtons,
         x = 0,
@@ -3182,19 +3182,21 @@ SpriteMorph.prototype.freshPalette = function (category) {
     searchButton.fixLayout();
     palette.toolBar.add(searchButton);
 
-    makeButton = new PushButtonMorph(
-        this,
-        "makeBlock",
-        new SymbolMorph("cross", 16)
-    );
-    makeButton.alpha = 0.2;
-    makeButton.padding = 1;
-    makeButton.hint = localize('Make a block') + '...';
-    makeButton.labelShadowColor = shade;
-    makeButton.edge = 0;
-    makeButton.padding = 3;
-    makeButton.fixLayout();
-    palette.toolBar.add(makeButton);
+    if (!ide || !ide.config.noOwnBlocks) {
+        makeButton = new PushButtonMorph(
+            this,
+            "makeBlock",
+            new SymbolMorph("cross", 16)
+        );
+        makeButton.alpha = 0.2;
+        makeButton.padding = 1;
+        makeButton.hint = localize('Make a block') + '...';
+        makeButton.labelShadowColor = shade;
+        makeButton.edge = 0;
+        makeButton.padding = 3;
+        makeButton.fixLayout();
+        palette.toolBar.add(makeButton);
+    }
 
     palette.toolBar.fixLayout();
     palette.add(palette.toolBar);
@@ -3202,6 +3204,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     // menu:
     palette.userMenu = function () {
         var menu = new MenuMorph();
+            ide = ide || this.parentThatIsA(IDE_Morph);
 
         menu.addPair(
             [
@@ -3214,20 +3217,23 @@ SpriteMorph.prototype.freshPalette = function (category) {
             () => myself.searchBlocks(),
             '^F'
         );
-        menu.addItem(
-            'hide blocks...',
-            () => new BlockVisibilityDialogMorph(myself).popUp(myself.world())
-        );
-        menu.addLine();
-        menu.addItem(
-            'make a category...',
-            () => this.parentThatIsA(IDE_Morph).createNewCategory()
-        );
-        if (SpriteMorph.prototype.customCategories.size) {
+        if (!ide.config.noOwnBlocks) {
             menu.addItem(
-                'delete a category...',
-                () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
+                'hide blocks...',
+                () => new BlockVisibilityDialogMorph(myself).popUp(
+                    myself.world())
             );
+            menu.addLine();
+            menu.addItem(
+                'make a category...',
+                () => this.parentThatIsA(IDE_Morph).createNewCategory()
+            );
+            if (SpriteMorph.prototype.customCategories.size) {
+                menu.addItem(
+                    'delete a category...',
+                    () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
+                );
+            }
         }
         return menu;
     };
@@ -3235,7 +3241,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        ide = this.parentThatIsA(IDE_Morph);
+        ide = ide || this.parentThatIsA(IDE_Morph);
         showCategories = ide.scene.showCategories;
         showButtons = ide.scene.showPaletteButtons;
         blocks = SpriteMorph.prototype.allCategories().reduce(
@@ -3279,8 +3285,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     if (category !== 'unified' || showButtons) {
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(category));
+        ide = ide || this.parentThatIsA(IDE_Morph);
+        if (!ide || !ide.config.noOwnBlocks) {
+            blocks.push('=');
+            blocks.push(this.makeBlockButton(category));
+        }
     }
 
     if (category !== 'unified') {

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-November-29';
+modules.byob = '2022-November-30';
 
 // Declarations
 
@@ -1413,6 +1413,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
+        if (rcvr.parentThatIsA(IDE_Morph).config.noOwnBlocks) {
+            return menu;
+        }
         dlg = this.parentThatIsA(DialogBoxMorph);
         if (dlg && !(dlg instanceof BlockEditorMorph)) {
             return menu;

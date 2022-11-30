@@ -71,6 +71,7 @@
 * German translation update
 * gui: added configuration option for "noImports"
 * blocks: fixed an event recording glitch
+* blocks, byob, objects: added configuration option for "noOwnBlocks"
 
 ### 2022-11-29
 * gui: added configuration option for "noPalette"
