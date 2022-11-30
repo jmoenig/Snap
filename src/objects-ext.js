@@ -2,7 +2,7 @@
    Point, ScrollFrameMorph, MenuMorph, SyntaxElementMorph, IDE_Morph,
    localize, BlockEditorMorph, BlockDialogMorph, TextMorph, PushButtonMorph,
    MessageFrame, BlockMorph, ToggleMorph, MessageCreatorMorph,
-   VariableDialogMorph, SnapCloud, contains, List, CommandBlockMorph,
+   VariableDialogMorph, contains, List, CommandBlockMorph,
    MessageType, isNil, RingMorph, SnapActions, RoomEditorMorph, NetsBloxMorph,
    SnapUndo, newCanvas, ReplayControls, WatcherMorph */
 
@@ -167,7 +167,8 @@ StageMorph.prototype.getProjectIds =
 // SpriteMorph non-variable watchers
 
 SpriteMorph.prototype.reportUsername = function () {
-    return SnapCloud.username || '';
+    var ide = this.parentThatIsA(IDE_Morph);
+    return ide.cloud.username || '';
 };
 
 StageMorph.prototype.reportUsername =

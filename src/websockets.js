@@ -1,16 +1,15 @@
-/*globals nop, SnapCloud, SERVER_URL, SERVER_ADDRESS,
+/*globals nop, 
   StageMorph, SnapActions, DialogBoxMorph, IDE_Morph, isObject, NetsBloxSerializer,
   localize, VariableFrame, isSnapObject*/
 // WebSocket Manager
 
-var WebSocketManager = function (ide) {
+var WebSocketManager = function (ide, config) {
     this.ide = ide;
-    this.uuid = SnapCloud.clientId;
+    this.uuid = config.clientId;
     this.websocket = null;
     this.messages = [];
     this.msgHandlerQueues = [];
-    this._protocol = SERVER_URL.substring(0,5) === 'https' ? 'wss:' : 'ws:';
-    this.url = this._protocol + '//' + SERVER_ADDRESS;
+    this.url = config.cloudUrl.replace(/^http/, 'ws') + `/network/${config.clientId}/connect`;
     this.lastSocketActivity = Date.now();
     this._connectWebSocket();
     this.version = Date.now();
@@ -20,11 +19,169 @@ var WebSocketManager = function (ide) {
     this.hasConnected = false;
     this.connected = false;
     this.inActionRequest = false;
+    this._requests = {};
+    this._counter = 1;
     this.serializer = new NetsBloxSerializer();
 };
 
 WebSocketManager.HEARTBEAT_INTERVAL = 25*1000;  // 25 seconds
+class MessageHandler {
+    constructor() {
+        this._handlers = {};
+    }
+
+    handle(msg) {
+        if (this._handlers[type]) {
+            return this._handlers[type].call(self, msg);
+        } else {
+            console.error('Unknown message:', msg);
+        }
+    }
+
+    addHandler(type, fn) {
+        if (this._handlers[type]) {
+            throw new Error(`Handler already defined for ${type}`);
+        }
+        this._handlers[type] = fn;
+    }
+}
+
+WebSocketManager.IDEMessageHandlers = {
+    'action-rejected': function(msg) {
+        if (msg.reason) {
+            this.ide.showMessage(localize(msg.reason));
+        }
+    },
+    'user-action': function(msg, sender) {
+        const cloud = this.ide.cloud;
+        if (msg.projectId === cloud.projectId && msg.roleId === cloud.roleId) {
+            const response = SnapActions.onMessage(msg.action);
+            if (response) {
+                this.sendIDEMessage(response, sender);
+            }
+        }
+    },
+    'request-actions': function(msg, sender) {
+        const cloud = this.ide.cloud;
+        if (msg.projectId === cloud.projectId && msg.roleId === cloud.roleId) {
+            const actions = utils.takeWhile(
+                SnapUndo.allEvents.reverse(),
+                event => event.id > msg.actionId
+            ).reverse();
+
+            const starterAction = {id: actionId};
+            const actionAndNext = utils.zip([starterAction].concat(actions), actions);
+            const isMissingActions = actionAndNext.reduce(
+                (isMissingActions, [action, nextAction]) => isMissingActions ||
+                    (nextAction.id - action.id > 1),
+                false
+            );
+            if (isMissingActions) {
+                throw new Errors.MissingActionsError();
+            }
+            return actions;
+        } else {
+            // No longer at the given role, try again
+            throw new Errors.NoLongerLeaderError();
+        }
+    },
+    'share-msg-type': function(msg) {
+        // only share with intended role
+        const msgType = msg.data;
+        if (this.ide.cloud.roleId === msg.roleId) {
+            var myself = this,
+                dialog = new DialogBoxMorph();
+
+            // reject duplicates
+            if (this.ide.stage.messageTypes.msgTypes[msgType.name]) {
+                this.ide.showMessage(msg.from + ' tried sending you message type \'' + msgType.name + '\' when you already have it!', 2);
+            } else {
+                // Prepare dialog & prompt user
+                var request =
+                    msg.from + ' requested to send you a message type:\n\'' +
+                    msgType.name + '\' with ' +
+                    msgType.fields.length +
+                    (msgType.fields.length !== 1 ? ' fields.' : ' field.') + '\n' +
+                    'Would you like to accept?';
+
+                dialog.askYesNo('Message Share Request', request, myself.ide.root());
+
+                // Accept the request
+                dialog.ok = function() {
+                    var ide = myself.ide.root().children[0].parentThatIsA(IDE_Morph);
+                    SnapActions.addMessageType(msgType.name, msgType.fields)
+                        .then(function() {
+                            // format fields
+                            var fields = [];
+                            for (var i = 0; i < msgType.fields.length; i++) {
+                                fields.push(' ' + '\'' + msgType.fields[i] + '\'');
+                            }
+
+                            // format notification
+                            var notification = 'Received message type \'' + msgType.name + '\' with ' + msgType.fields.length +
+                                (msgType.fields.length === 0 ? ' fields.' : (msgType.fields.length === 1 ? ' field: ' + msgType.fields : ' fields: ' + msgType.fields));
+
+                            // notify
+                            myself.ide.showMessage(notification, 2);
+
+                            // refresh message palette
+                            if (ide && ide.currentTab === 'room') {
+                                ide.spriteBar.tabBar.tabTo('room');
+                            }
+                        });
+                    dialog.destroy();
+                };
+            }
+        }
+    },
+    'permission-elevation-request': function(msg) {
+        var myself = this,
+            username = msg.guest;
+
+        this.ide.confirm(
+            username + localize(' would like to be made a collaborator on ') +
+            myself.ide.room.name + '\n\n' + localize('Would you like to make ') + username +
+            localize(' a collaborator?'),
+            'Collaboration Request',
+            function() {
+                this.ide.cloud.addCollaborator(msg.projectId, username);
+            }
+        );
+    },
+
+};
+
 WebSocketManager.MessageHandlers = {
+    'ide-message': function(msg) {
+        const {data, sender} = msg;
+        let response, error;
+        try {
+            response = WebSocketManager.IDEMessageHandlers[data.type].call(this, data, sender);
+        } catch (err) {
+            error = err.message;
+        }
+        if (msg.reqID) {
+            this.sendIDEMessage({
+                type: 'response',
+                reqID,
+                response,
+                error,
+            });
+        }
+    },
+
+    'response': function(msg) {
+        const deferred = this._requests[msg.reqID];
+        if (deferred) {
+            if (msg.error) {
+                deferred.reject(new Error(msg.error));
+            } else {
+                deferred.resolve(msg.response);
+            }
+            delete this._requests[msg.reqID];
+        }
+    },
+
     'request-actions-complete': function() {
         this.inActionRequest = false;
     },
@@ -43,13 +200,8 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
-    'connected': function() {
-        this.onConnect();
-    },
-
     'message': function(msg) {
-        var dstId = msg.dstId,
-            messageType = msg.msgType,
+        var messageType = msg.msgType,
             content = msg.content;
 
         // When replaying a network trace, actual messages to the client are ignored
@@ -61,10 +213,8 @@ WebSocketManager.MessageHandlers = {
             return;
         }
 
-        if (dstId === this.ide.projectName || dstId === 'others in room' || dstId === 'everyone in room') {
-            content = this.deserializeMessage(msg);
-            this.onMessageReceived(messageType, content, msg);
-        }
+        content = this.deserializeMessage(msg);
+        this.onMessageReceived(messageType, content, msg);
     },
 
     // Update on the current roles at the given room
@@ -81,7 +231,11 @@ WebSocketManager.MessageHandlers = {
 
     // Receive an invite to join a room
     'room-invitation': function(msg) {
-        this.ide.room.promptInvite(msg.id, msg.role, msg.roomName, msg.inviter);
+        const {projectId, roleId, projectName, inviter} = msg;
+        const isCurrentRole = projectId === this.ide.cloud.projectId && roleId === this.ide.cloud.roleId;
+        if (!isCurrentRole) {
+            this.ide.room.promptInvite(projectId, roleId, projectName, inviter);
+        }
     },
 
     'collab-invitation': function(msg) {
@@ -95,103 +249,25 @@ WebSocketManager.MessageHandlers = {
         this.ide.newProject();
     },
 
-    'evicted': function(msg) {
-        const {state} = msg;
+    'eviction-notice': function() {
         this.ide.showMessage('You have been evicted from the project.');
-        this.ide.cloud.setLocalState(state.projectId, state.roleId);
-        this.ide.newProjectFromInfo(state);
+        this.ide.newProject();
     },
 
-    'permission-elevation-request': function(msg) {
-        var myself = this,
-            username = msg.guest;
-
-        this.ide.confirm(
-            username + localize(' would like to be made a collaborator on ') +
-            myself.ide.room.name + '\n\n' + localize('Would you like to make ') + username +
-            localize(' a collaborator?'),
-            'Collaboration Request',
-            function() {
-                myself.sendMessage({
-                    type: 'elevate-permissions',
-                    projectId: msg.projectId,
-                    username: username
-                });
-            }
-        );
-    },
-
-    'project-request': function(msg) {
-        var project = this.getSerializedProject();
-        msg.type = 'project-response';
-        msg.project = project;
-
-        this.sendMessage(msg);
-    },
-
-    'rename-role': function(msg) {
-        if (msg.roleId === this.ide.projectName) {  // role name and project name are the same
-            this.ide.silentSetProjectName(msg.name);
-        }
+    'role-data-request': function(msg) {
+        const data = this.getSerializedProject();
+        const id = msg.id;
+        this.ide.cloud.reportLatestRole(id, data);
     },
 
     'notification': function(msg) {
         this.ide.showMessage(msg.message);
     },
 
-    'share-msg-type': function(msg) {
-        // only share with intended role
-        if (this.ide.projectName === msg.roleId) {
-            var myself = this,
-                dialog = new DialogBoxMorph();
-            // reject duplicates
-            if (this.ide.stage.messageTypes.msgTypes[msg.name]) {
-                this.ide.showMessage(msg.from + ' tried sending you message type \'' + msg.name + '\' when you already have it!', 2);
-            } else {
-                // Prepare dialog & prompt user
-                var request =
-                    msg.from + ' requested to send you a message type:\n\'' +
-                    msg.name + '\' with ' +
-                    msg.fields.length +
-                    (msg.fields.length !== 1 ? ' fields.' : ' field.') + '\n' +
-                    'Would you like to accept?';
-
-                dialog.askYesNo('Message Share Request', request, myself.ide.root());
-
-                // Accept the request
-                dialog.ok = function() {
-                    var ide = myself.ide.root().children[0].parentThatIsA(IDE_Morph);
-                    SnapActions.addMessageType(msg.name, msg.fields)
-                        .then(function() {
-                            // format fields
-                            var fields = [];
-                            for (var i = 0; i < msg.fields.length; i++) {
-                                fields.push(' ' + '\'' + msg.fields[i] + '\'');
-                            }
-
-                            // format notification
-                            var notification = 'Received message type \'' + msg.name + '\' with ' + msg.fields.length +
-                                (msg.fields.length === 0 ? ' fields.' : (msg.fields.length === 1 ? ' field: ' + msg.fields : ' fields: ' + msg.fields));
-
-                            // notify
-                            myself.ide.showMessage(notification, 2);
-
-                            // refresh message palette
-                            if (ide && ide.currentTab === 'room') {
-                                ide.spriteBar.tabBar.tabTo('room');
-                            }
-                        });
-                    dialog.destroy();
-                };
-            }
-        }
+    'pong': function() {
+        setTimeout(() => this.sendMessage({type: 'ping'}), WebSocketManager.HEARTBEAT_INTERVAL);
     },
-    'ping': function() {
-        this.sendMessage({type: 'pong'});
-    },
-    'user-action': function(msg) {
-        SnapActions.onMessage(msg.action);
-    },
+
     'action-rejected': function(msg) {
         SnapActions.onActionReject(msg.action, msg.error.message);
     }
@@ -241,23 +317,19 @@ WebSocketManager.prototype._connectWebSocket = function() {
 
     this.websocket = new WebSocket(this.url);
     // Set up message firing queue
-    this.websocket.onopen = function() {
-        if (self.errored === true) {
-            self.ide.showMessage((self.hasConnected ? 're' : '') + 'connected!', 2);
-            self.errored = false;
+    this.websocket.onopen = () => {
+        if (this.errored === true) {
+            this.ide.showMessage((this.hasConnected ? 're' : '') + 'connected!', 2);
+            this.errored = false;
         }
-        if (!self.hasConnected) {
-            setInterval(self.checkAlive.bind(self), WebSocketManager.HEARTBEAT_INTERVAL);
+        if (!this.hasConnected) {
+            setInterval(this.checkAlive.bind(this), WebSocketManager.HEARTBEAT_INTERVAL);
         }
 
-        self.lastSocketActivity = Date.now();
-        self.connected = true;
-
-        self.sendMessage({
-            type: 'set-uuid',
-            clientId: SnapCloud.clientId
-        });
-        self.hasConnected = true;
+        this.lastSocketActivity = Date.now();
+        this.connected = true;
+        this.onConnect(this.hasConnected);
+        this.hasConnected = true;
     };
 
     // Set up message events
@@ -268,7 +340,7 @@ WebSocketManager.prototype._connectWebSocket = function() {
 
         self.lastSocketActivity = Date.now();
         if (WebSocketManager.MessageHandlers[type]) {
-            WebSocketManager.MessageHandlers[type].call(self, msg);
+            const response = WebSocketManager.MessageHandlers[type].call(self, msg);
         } else {
             console.error('Unknown message:', msg);
         }
@@ -316,9 +388,32 @@ WebSocketManager.prototype.send = function(message) {
 };
 
 WebSocketManager.prototype.sendMessage = function(message) {
-    message.projectId = SnapCloud.projectId;
+    message.projectId = this.ide.cloud.projectId;
     message = this.serializeMessage(message);
     this.send(message);
+};
+
+WebSocketManager.prototype.sendIDEMessage = function(data, ...recipients) {
+    // TODO: add support for req-reply
+    console.log('sending IDE message to', recipients, data);
+    return this.sendMessage({
+        type: 'ide-message',
+        recipients,
+        data,
+    });
+};
+
+WebSocketManager.prototype.sendIDERequest = async function(data, ...recipients) {
+    data.reqID = ++this._counter;
+    this._requests[data.reqID] = utils.defer();
+    setTimeout(() => {
+        const deferred = this._requests[data.reqID];
+        if (deferred) {
+            deferred.reject(new Error('Timeout exceeded.'));
+            delete this._requests[data.reqID];
+        }
+    }, 5000);
+    return this.sendIDEMessage(data, ...recipients);
 };
 
 WebSocketManager.prototype.serializeMessage = function(message) {
@@ -385,43 +480,22 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
     });
 };
 
-WebSocketManager.prototype.onConnect = function() {
+WebSocketManager.prototype.onConnect = async function(isReconnect) {
     var myself = this;
-    SnapActions.requestMissingActions(true);
-    return this.updateRoomInfo()
-        .then(function() {
-            while (myself.messages.length) {
-                myself.websocket.send(myself.messages.shift());
-            }
-        });
-};
-
-WebSocketManager.prototype.getClientState = function() {
-    var owner = this.ide.room.ownerId,
-        roleName = this.ide.projectName || 'myRole',
-        roomName = this.ide.room.name || '__new_project__',
-        state = {
-            room: roomName,
-            role: roleName
-        };
-
-    if (owner) {
-        state.owner = owner;
-        // Implicitly request actions
-        state.actionId = SnapActions.lastSeen;
+    this.sendMessage({type: 'ping'});
+    if (isReconnect) {
+        this.updateRoomInfo();
+        if (this.ide.cloud.projectId) {
+            SnapActions.requestMissingActions(true);
+        }
     }
-
-    return state;
+    while (myself.messages.length) {
+        myself.websocket.send(myself.messages.shift());
+    }
 };
 
 WebSocketManager.prototype.updateRoomInfo = function() {
-    var myself = this,
-        state = this.getClientState();
-
-    return SnapCloud.setClientState(state.room, state.role, state.actionId)
-        .catch(function() {
-            myself.ide.cloudError().apply(null, arguments);
-        });
+    return this.ide.cloud.setClientState();
 };
 
 /**
@@ -525,12 +599,9 @@ WebSocketManager.prototype.getSerializedProject = function() {
     ide.serializer.flush();
 
     return {
-        ProjectName: ide.projectName,
-        SourceCode: pdata,
-        Media: media,
-        SourceSize: pdata.length,
-        MediaSize: media ? media.length : 0,
-        RoomName: this.ide.room.name
+        name: ide.projectName,
+        code: pdata,
+        media: media,
     };
 };
 
@@ -608,5 +679,25 @@ class MessageHandlerQueue {
         return nextMsg;
     }
 }
+
+const Errors = (function() {
+    class NoLongerLeaderError extends Error {
+        constructor() {
+            super('No longer the leader.');
+        }
+    }
+
+    class MissingActionsError extends Error {
+        constructor() {
+            super('Could not retrieve all missing actions.');
+        }
+    }
+
+    return {
+        NoLongerLeaderError,
+        MissingActionsError,
+    };
+})();
+
 
 WebSocketManager.MessageHandlerQueue = MessageHandlerQueue;

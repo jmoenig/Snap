@@ -17,24 +17,7 @@
     };
 
     TestUtils.waitUntilProjectsLoaded = async function () {
-        const {ProjectDialogMorph} = driver.globals();
-        if (driver.dialog().source.id.includes('cloud')) {
-            await driver.expect(
-                () => {
-                    const isShowingUpdateMsg = driver.dialogs().length === 2;
-                    const projectDialog = driver.dialogs()
-                        .find(d => d instanceof ProjectDialogMorph);
-                    const hasLoadedProjects = projectDialog &&
-                            TestUtils.getProjectList(projectDialog)[0] !== '(empty)';
-                    return isShowingUpdateMsg || hasLoadedProjects;
-                },
-                'Did not see "update project list" message'
-            );
-            await driver.expect(
-                () => driver.dialogs().length === 1,
-                '"update project list" message did not disappear'
-            );
-        }
+        return await driver.waitUntilProjectsLoaded();
     };
 
     TestUtils.openProjectsBrowser = async function () {
@@ -48,7 +31,8 @@
 
         // Open the saved project
         await TestUtils.waitUntilProjectsLoaded();
-        return driver.dialog();
+        const {ProjectDialogMorph} = driver.globals();
+        return driver.dialogs().find(dialog => dialog instanceof ProjectDialogMorph);
     };
 
     TestUtils.setProjectsBrowserSource = function(dialog, sourceID) {
@@ -100,8 +84,9 @@
         confirmDialog.ok();
         dialog = await TestUtils.openProjectsBrowser();
         await driver.expect(
-            () => {
-                const project = dialog.itemsList.find(item => item.name === projectName);
+            async () => {
+                const projects = await dialog.source.list();
+                const project = projects.find(item => item.name === projectName);
                 return project.public;
             },
             `Project not set to public`
@@ -120,10 +105,10 @@
 
         dialog = await TestUtils.openProjectsBrowser();
         await driver.expect(
-            () => {
-                const project = dialog.itemsList.find(item => item.name === projectName);
-                const isPublic = project.Public !== 'false';
-                return !isPublic;
+            async () => {
+                const projects = await dialog.source.list();
+                const project = projects.find(item => item.name === projectName);
+                return !project.public;
             },
             `Project not set to private`
         );

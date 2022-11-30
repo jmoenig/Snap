@@ -1,0 +1,3 @@
+[submodule "src/cloud"]
+	path = src/cloud
+	url = git@github.com:NetsBlox/cloud.js.git

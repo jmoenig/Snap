@@ -1,46 +1,27 @@
-/* globals SnapCloud, SERVER_URL, NetsBloxMorph, WorldMorph, utils */
+/* globals NetsBloxMorph, WorldMorph, */
 
 var world;
+var CLIENT_ID;
 
+async function getConfiguration(serverUrl) {
+    const opts = {
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'},
+    };
+    const config = await (await fetch(serverUrl + '/configuration', opts)).json();
+    config.cloudUrl = serverUrl;  // TODO: Update the server?
+    return config;
+}
 
-window.onload = function () {
+async function startEnvironment(serverUrl) {
+    const config = await getConfiguration(serverUrl);
+    CLIENT_ID = config.clientId;
+
     world = new WorldMorph(document.getElementById('world'));
     world.worldCanvas.focus();
-    new NetsBloxMorph().openIn(world);
+    new NetsBloxMorph(true, config).openIn(world);
     loop();
-
-    // if not logged in, make sure
-    if (!SnapCloud.username) {
-        // gets user info: username, email
-        var getProfile = function() {
-            const request = new XMLHttpRequest();
-            request.open('POST', `${SERVER_URL}/api`, true);
-            request.withCredentials = true;
-            const data = {
-                api: false,
-                return_user: true,
-                silent: true
-            };
-            return utils.requestPromise(request, data)
-                .then(function(res) {
-                    if (res.responseText) {
-                        let user = JSON.parse(res.responseText);
-                        return user;
-                    }
-                });
-        };
-
-        // check to see if loggedin
-        getProfile().then(user => {
-            // notify the client that we are logged in
-            if (user) {
-                SnapCloud.username = user.username;
-                SnapCloud.password = true;
-            }
-        });
-
-    }
-};
+}
 
 function loop() {
     requestAnimationFrame(loop);

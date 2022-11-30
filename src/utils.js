@@ -71,6 +71,45 @@ utils.sleep = function(time=0) {
     return new Promise(resolve => setTimeout(resolve, time));
 };
 
+utils.takeWhile = (items, fn) => {
+    const newList = [];
+    for (let i = 0; i < items.length; i++) {
+        if (fn(items[i])) {
+            newList.push(items[i]);
+        } else {
+            return newList;
+        }
+    }
+
+    return newList;
+};
+
+utils.zip = (...lists) => {
+    const len = Math.min(...lists.map(l => l.length));
+    const zipped = [];
+    for (let i = 0; i < len; i++) {
+        zipped[i] = lists.map(l => l[i]);
+    }
+
+    return zipped;
+};
+
+utils.partition = (array, predicate) => {
+    const result = [[], []];
+    array.forEach(item => {
+        const index = predicate(item) ? 0 : 1;
+        result[index].push(item);
+    });
+    return result;
+};
+
+utils.pick = (obj, keys) => {
+    return keys.reduce((result, k) => {
+        result[k] = obj[k];
+        return result;
+    }, {});
+};
+
 utils.isNetsBloxDomain = function (url) {
     return !!url.match(/^(?:\w+:\/+)?[^/]*\bnetsblox\.org\b\/?/i)
 };

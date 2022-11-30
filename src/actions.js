@@ -1,5 +1,5 @@
 /* globals CommentMorph, CLIENT_ID, SnapSerializer, SnapUndo, isNil,
- SnapCloud, SyntaxElementMorph, BlockEditorMorph, Point, ArgMorph,
+ SyntaxElementMorph, BlockEditorMorph, Point, ArgMorph,
  ScriptsMorph, StageMorph, CommandBlockMorph, ReporterBlockMorph,
  PrototypeHatBlockMorph, BlockMorph, RingMorph, TemplateSlotMorph,
  SERVER_URL, detect, WorldMorph, ColorSlotMorph, JukeboxMorph,
@@ -15,7 +15,7 @@ var logger = {
 
 // If not the leader, send operations to the leader for approval
 function ActionManager() {
-    this.id = CLIENT_ID;
+    this.id = null;
     this.rank = null;
     this.isLeader = false;
     this._pendingLocalActions = [];
@@ -26,6 +26,7 @@ function ActionManager() {
 
 ActionManager.prototype.configure = function(ide) {
     this.__ide = ide;
+    this.id = ide.cloud.clientId;
 };
 
 ActionManager.prototype.addActions = function() {
@@ -41,7 +42,7 @@ ActionManager.prototype.addActions = function() {
     //  - onEventName
     //    - Update the Snap environment
     actions.forEach(function(method) {
-        myself[method] = function() {
+        myself[method] = async function() {
             var args = Array.prototype.slice.apply(arguments),
                 fn = '_' + method,
                 ownerId = this.ide().stage.id,
@@ -168,8 +169,6 @@ ActionManager.prototype.initializeEventMethods = function() {
         'toggleBoolean',
         'setColorField',
         'setField',
-
-        'openProject'
     );
 
     this.addUserActions(
@@ -216,69 +215,13 @@ ActionManager.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 };
 
-ActionManager.URL = 'ws://' + window.location.host;
-ActionManager.prototype.enableCollaboration = function() {
-    if (this.supportsCollaboration === false) {
-        // Display error message
-        this.ide().showMessage('Collaboration not supported');
-    }
-    this._ws = new WebSocket(ActionManager.URL);
-    this._enableCollaboration();
-};
-
-ActionManager.RECONNECT_INTERVAL = 1500;
-ActionManager.prototype._enableCollaboration = function() {
-    var self = this;
-
-    if (this._ws.readyState > WebSocket.OPEN) {  // closed or closing
-        this._ws = new WebSocket(ActionManager.URL);
-    }
-
-    this._ws.onopen = function() {
-        logger.debug('websocket connected!');
-        self.isLeader = false;
-        self.supportsCollaboration = true;
-    };
-
-    this._ws.onclose = function() {
-        self.isLeader = true;
-        if (self.supportsCollaboration !== true) {
-            self.supportsCollaboration = false;
-        }
-        if (self._ws) {  // network failure or something. Try to reconnect
-            self.reconnectId = setTimeout(self._enableCollaboration.bind(self), ActionManager.RECONNECT_INTERVAL);
-        }
-    };
-
-    this._ws.onmessage = function(raw) {
-        var msg = JSON.parse(raw.data);
-        self.onMessage(msg);
-    };
-};
-
-ActionManager.prototype.disableCollaboration = function() {
-    var ws = this._ws;
-
-    if (this.isCollaborating()) {
-        this._ws = null;
-        ws.close();
-        if (this.reconnectId) {
-            clearTimeout(this.reconnectId);
-        }
-        if (location.hash.indexOf('collaborate') !== -1) {
-            location.hash = '';
-        }
-    }
-};
-
 ActionManager.prototype.isCollaborating = function() {
-    return this._ws !== null;
+    return this.ide().room.getCurrentOccupants().length > 1;
 };
 
 ActionManager.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
     this.serializer.idProperty = 'actionSerializationID';
-    this._ws = null;
     this.supportsCollaboration = null;
     this.isLeader = true;
     this.isApplyingAction = false;
@@ -345,35 +288,6 @@ ActionManager.prototype.isAlwaysAllowed = function(action) {
     return action.type === 'openProject';
 };
 
-ActionManager.prototype.joinSession = function(sessionId, error) {
-    if (!SnapActions.id) {
-        this.onconnect = this._joinSession.bind(this, sessionId, error);
-    } else {
-        this._joinSession(sessionId, error);
-    }
-};
-
-ActionManager.prototype._joinSession = function(sessionId, error) {
-    var request = new XMLHttpRequest();
-    request.open(
-        'POST',
-        window.location.origin + '/collaboration/join'
-            + '?id=' + encodeURIComponent(SnapActions.id)
-            + '&sessionId=' + encodeURIComponent(sessionId),
-        true
-    );
-    request.withCredentials = true;
-    request.onreadystatechange = function () {
-        if (request.readyState === 4) {
-            if (request.responseText.indexOf('ERROR') === 0) {
-                return error(request.responseText, 'Collaborate');
-            }
-        }
-    };
-    request.send();
-    this.onconnect = null;
-};
-
 function Action(event) {
     this.id = event.id;
     this.data = event;
@@ -402,7 +316,7 @@ Action.prototype.equals = function(data) {
 
 ActionManager.prototype.applyEvent = function(event) {
     event.user = this.id;
-    event.username = SnapCloud.username;
+    event.username = this.ide().cloud.username;
     event.id = this.lastSeen + 1;
     event.time = event.time || Date.now();
 
@@ -543,23 +457,40 @@ ActionManager.prototype._rawApplyEvent = function(event) {
 };
 
 ActionManager.prototype.submitAction = function(event) {
+    event.user = this.ide().cloud.clientId;
+    if (!this.ide().sockets.isConnected()) {
+        throw new Error('Cannot edit projects while disconnected.');
+    }
 
-    if (this.isLeader || !this.isCollaborating() || this.isAlwaysAllowed(event)) {
+    if (this.isLeader) {
         this.acceptEvent(event);
     } else {
+        // TODO: send it to the leader
         this.send(event);
     }
 };
 
-ActionManager.prototype.send = function(json) {
-    var canSend = this._ws && this._ws.readyState === WebSocket.OPEN;
-    json.id = json.id || this.lastSeen + 1;
+ActionManager.prototype.send = function(event) {
+    const {sockets, cloud} = this.ide();
 
-    if (!this.isUserAction(json)) {
-        this.lastSent = json.id;
+    event.id = event.id || this.lastSeen + 1;
+    if (!this.isUserAction(event)) {
+        this.lastSent = event.id;
     }
-    if (this.isCollaborating() && json.type !== 'openProject' && canSend) {
-        this._ws.send(JSON.stringify(json));
+    if (event.type !== 'openProject') {
+        const {projectId, roleId} = this.ide().cloud;
+        const targets = this.ide().room.getCurrentOccupants()
+            .map(occupant => occupant.id)
+            .filter(clientId => clientId !== cloud.clientId);
+
+        if (targets.length) {
+            sockets.sendIDEMessage({
+                type: 'user-action',
+                projectId,
+                roleId,
+                action: event,
+            }, ...targets);
+        }
     }
 };
 
@@ -1230,11 +1161,6 @@ ActionManager.prototype._detachParts = function(parts) {
         partIds,
         currentAnchorIds
     ];
-};
-
-ActionManager.prototype._openProject = function(str) {
-    this.initializeRecords();
-    return [str];
 };
 
 ActionManager.prototype.assignUniqueIds = function (str) {
@@ -2162,7 +2088,7 @@ ActionManager.prototype.onAddVariable = function(name, ownerId) {
     if (!isGlobal) {
         owner = this._owners[ownerId];
     } else {
-        owner = this._owners[Object.keys(this._owners)[0]];
+        owner = this.ide().stage;
     }
 
     owner.addVariable(name, isGlobal);
@@ -2655,13 +2581,12 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
     this.completeAction(null, blocks);
 };
 
-ActionManager.prototype.onOpenProject = async function (str) {
-    
+ActionManager.prototype.openProject = async function (str) {
     var myself = this,
         project = null,
-        event = this.currentEvent,
         ide = this.ide();
 
+    const lastSeen = this.lastSeen;
     SnapUndo.reset();
     this.initializeRecords();
 
@@ -2681,33 +2606,17 @@ ActionManager.prototype.onOpenProject = async function (str) {
         return myself.loadOwner(sprite);
     });
 
-    this.lastSeen = event.id;  // don't reset lastSeen
-    this.completeAction(null, project);
+    this.lastSeen = lastSeen;
 
-    if (!ide.isReplayMode) {
-        // Load the replay and action manager state from project
-        var len = SnapUndo.allEvents.length;
-
-        // Remove the openProject event from the replay history.
-        // In the future, this information would be good to collect
-        // but it will not be recorded for now since it will exponentially
-        // inflate the project size...
-        if (event === SnapUndo.allEvents[len-1]) {
-            SnapUndo.allEvents.pop();
-        }
-
-        if (project && project.collabStartIndex !== undefined) {
-            this.lastSeen = project.collabStartIndex;
-        }
-
-        var roomName = ide.room.name,
-            roleName = ide.projectName;
-
-        await SnapCloud.setClientState(roomName, roleName, this.lastSeen);
-        this.requestMissingActions();
-
-        ide.extensions.onOpenRole();
+    if (project && project.collabStartIndex !== undefined) {
+        this.lastSeen = project.collabStartIndex;
     }
+
+    this.requestMissingActions();
+
+    ide.extensions.onOpenRole();
+
+    return project;
 };
 
 ActionManager.prototype._getCurrentTarget = function(block) {
@@ -3067,37 +2976,34 @@ ActionManager.prototype.afterActionApplied = function(action) {
 ActionManager.prototype.onMessage = function(msg) {
     var socket = this.ide().sockets;
 
-    if (msg.type === 'rank') {
-        this.rank = msg.value;
-        logger.info('assigned rank of', this.rank);
-    } else if (msg.type === 'leader-appoint') {
-        this.isLeader = msg.value;
-        if (msg.value) {
-            logger.info('Appointed leader!');
-        }
-    } else if (msg.type === 'uuid') {
-        this.id = msg.value;
-        logger.info('assigned id of', this.id);
-        if (this.onconnect) {
-            this.onconnect();
-        }
-    } else if (msg.type === 'session-project-request') {
-        // Return the serialized project
-        var str = this.serialize(this.ide().stage);
-        msg.args = [str];
-        msg.id = this.lastSeen;
-        this.send(msg);
-    } else if (msg.type === 'session-id') {
-        this.sessionId = msg.value;
-        location.hash = 'collaborate=' + this.sessionId;
-    } else if (this.isLeader && !socket.inActionRequest) {
+    if (this.isLeader) {
         // Verify that the lastSeen value is the same as the current
+        if (!this.isAllowed(msg)) {
+            return {
+                type: 'action-rejected',
+                reason: 'Cannot edit project. Edits can only be made by the owner or collaborators.',
+                action: msg,
+            };
+        }
+
         if (this.isNextAction(msg)) {
             this.acceptEvent(msg);
+        } else {
+            return {
+                type: 'action-rejected',
+                action: msg,
+            };
         }
     } else {
         this.onReceiveAction(msg);
     }
+};
+
+ActionManager.prototype.isAllowed = function(action) {
+    const {username} = action;
+    const {room} = this.ide();
+    // TODO: ensure that the username is not spoofed
+    return room.isOwner(username) || room.isCollaborator(username);
 };
 
 ActionManager.prototype.onActionReject = function(action, reason) {
@@ -3214,7 +3120,6 @@ ActionManager.OwnerFor.deleteVariable =
 ActionManager.OwnerFor.setStageSize =
 ActionManager.OwnerFor.importBlocks =
 ActionManager.OwnerFor.importSprites =
-ActionManager.OwnerFor.openProject =
 ActionManager.OwnerFor.duplicateSprite =
 ActionManager.OwnerFor.addSprite = function() {
     return null;

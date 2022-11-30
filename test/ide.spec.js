@@ -1,20 +1,19 @@
 /*globals driver, expect, assert, EmbeddedNetsBloxAPI */
 describe('ide', function() {
-    let SnapCloud, SnapActions, SnapUndo;
+    let cloud, SnapActions, SnapUndo;
 
-    this.timeout(5000);
-    before(() => {
-        SnapCloud = driver.globals().SnapCloud;
+    before(async () => {
+        cloud = driver.ide().cloud;
         SnapActions = driver.globals().SnapActions;
         SnapUndo = driver.globals().SnapUndo;
-        return driver.reset();
+        await driver.reset();
     });
 
     describe('login', function() {
         it('should show error on incorrect username/password', async function() {
             let loginFailed = false;
             try {
-                await driver.login('test', 'ThisPasswordIsIncorrect', {maxWait: 1800});
+                await driver.login('test', 'ThisPasswordIsIncorrect', {maxWait: 5000});
             } catch (err) {
                 const dialog = driver.dialog();
                 assert(
@@ -87,7 +86,7 @@ describe('ide', function() {
         it('should export correct xml locally', function(done) {
             var ide = driver.ide();
             var local = null;
-            ide.exportRoom = function(str) {
+            ide.exportRoom = str => {
                 // ignore the version number (client version may not match server version)
                 str = str.replace(/NetsBlox \d+\.\d+\.\d+,/, 'NetsBlox')
                     .replace(/ \(\d+\)" app="NetsBlox/, '" app="NetsBlox');
@@ -289,17 +288,17 @@ describe('ide', function() {
         before(() => driver.reset());
 
         after(function() {
-            SnapCloud.username = username;
+            cloud.username = username;
         });
 
         it('should have option to saveACopy if collaborator', function() {
             var ide = driver.ide();
 
             // make the user a collaborator
-            username = SnapCloud.username;
-            SnapCloud.username = 'test';
+            username = cloud.username;
+            cloud.username = 'test';
 
-            ide.room.collaborators.push(SnapCloud.username);
+            ide.room.collaborators.push(cloud.username);
             ide.room.ownerId = 'otherUser';
 
             // Click the project menu
@@ -433,11 +432,11 @@ describe('ide', function() {
 
     describe('newProject', function() {
         before(() => driver.reset().then(() => driver.addBlock('doIf')));
-        after(() => delete SnapCloud.request);
+        after(() => delete cloud.request);
 
         it('should be able to get new project on failed network request', function() {
-            const SnapCloud = driver.globals().SnapCloud;
-            SnapCloud.request = Promise.reject.bind(Promise, {responseText: 'Test error'});
+            const cloud = driver.ide().cloud;
+            cloud.request = Promise.reject.bind(Promise, {responseText: 'Test error'});
 
             driver.click(driver.ide().controlBar.projectButton);
             const newBtn = driver.dialog().children
@@ -495,38 +494,21 @@ describe('ide', function() {
             it('should load IDE w/o url anchors', async function() {
                 await reloadIframe(frame);
                 const {IDE_Morph} = driver.globals();
-                const ide = frame.contentWindow.world.children.find(morph => {
-                    return morph instanceof IDE_Morph;
-                });
+                const ide = frame.contentWindow.world.children
+                    .find(morph => morph instanceof IDE_Morph);
+
                 if (!ide) {
                     throw new Error('IDE not loaded!');
                 }
             });
 
-            it('should load IDE w/ url anchors', done => {
-                reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
-                frame.onload = () => {
-                    const {IDE_Morph} = driver.globals();
-                    const ide = frame.contentWindow.world.children.find(morph => {
-                        return morph instanceof IDE_Morph;
-                    });
-                    if (ide) {
-                        done();
-                    } else {
-                        done(new Error('IDE not loaded!'));
-                    }
-                };
+            it('should load IDE w/ url anchors', async () => {
+                await reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
+                assert(driver.ide(), 'IDE not loaded');
             });
 
             it('should import variable immediately (no url anchors)', async function() {
                 await reloadIframe(frame);
-                console.log('iframe reloaded');
-                const {IDE_Morph} = driver.globals();
-                const ide = frame.contentWindow.world.children
-                    .find(morph => morph instanceof IDE_Morph);
-
-                // TODO: we should wait for it to settle...
-                console.log('about to post message');
                 frame.contentWindow.postMessage({
                     type: 'import',
                     name: 'abc',
@@ -535,57 +517,48 @@ describe('ide', function() {
                 });
 
                 await driver.expect(
-                    () => ide.stage.globalVariables().allNames().includes('abc'),
+                    () => driver.ide().stage.globalVariables().allNames().includes('abc'),
                     'Imported variable not found.'
                 );
             });
 
-            it('should import CSV data', function(done) {
-                reloadIframe(frame);
-                frame.onload = async () => {
-                    frame.contentWindow.postMessage({
-                        type: 'import',
-                        name: 'csvData',
-                        content: 'a,b,c\n1,2,3',
-                        fileType: 'csv'
-                    });
+            it('should import CSV data', async () => {
+                await reloadIframe(frame);
+                frame.contentWindow.postMessage({
+                    type: 'import',
+                    name: 'csvData',
+                    content: 'a,b,c\n1,2,3',
+                    fileType: 'csv'
+                });
 
-                    const {IDE_Morph,List} = driver.globals();
-                    const ide = frame.contentWindow.world.children.find(morph => {
-                        return morph instanceof IDE_Morph;
-                    });
-                    await driver.expect(
-                        () => ide.stage.globalVariables().allNames().includes('csvData'),
-                        'Imported variable not found.'
-                    );
-                    const table = ide.stage.globalVariables().getVar('csvData');
-                    assert(typeof table !== 'string', 'CSV imported as string');
-                    const firstItem = table.asArray()[0];
-                    assert(
-                        table instanceof List && firstItem instanceof List,
-                        'CSV not imported as list of lists'
-                    );
-                    done();
-                };
+                await driver.expect(
+                    () => driver.ide().stage.globalVariables().allNames().includes('csvData'),
+                    'Imported variable not found.'
+                );
+                const {List} = driver.globals();
+                const table = driver.ide().stage.globalVariables().getVar('csvData');
+                assert(typeof table !== 'string', 'CSV imported as string');
+                const firstItem = table.asArray()[0];
+                assert(
+                    table instanceof List && firstItem instanceof List,
+                    'CSV not imported as list of lists'
+                );
             });
 
-            it('should set var immediately load IDE w/ url anchors', done => {
-                reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
-                frame.onload = async () => {
-                    const key = 'testVariable';
-                    const value = 'test variable value';
-                    frame.contentWindow.postMessage({
-                        type: 'set-variable',
-                        key: key,
-                        value: value,
-                    });
+            it('should set var immediately load IDE w/ url anchors', async () => {
+                await reloadIframe(frame, window.origin + '?action=example&ProjectName=Battleship');
+                const key = 'testVariable';
+                const value = 'test variable value';
+                frame.contentWindow.postMessage({
+                    type: 'set-variable',
+                    key: key,
+                    value: value,
+                });
 
-                    await driver.expect(
-                        () => driver.globals().externalVariables[key] === value,
-                        'Did not set external variable',
-                    );
-                    done();
-                };
+                await driver.expect(
+                    () => driver.globals().externalVariables[key] === value,
+                    'Did not set external variable',
+                );
             });
 
             function assert(cond, err) {
@@ -597,6 +570,7 @@ describe('ide', function() {
         });
 
         describe('api', function() {
+            before(() => driver.login('test'));
             after(() => delete driver.ide().droppedText);
 
             it('should be able to set variables', async function() {
@@ -644,6 +618,15 @@ describe('ide', function() {
                 api.import(name, content);
             });
 
+            it('should be able to get the username', async () => {
+                const [frame] = document.getElementsByTagName('iframe');
+
+                const api = new EmbeddedNetsBloxAPI(frame);
+                console.log('about to get the username');
+                const username = await api.getUsername();
+                expect(username).toBe('test');
+            });
+
             it('should be able to export the project', async () => {
                 const [frame] = document.getElementsByTagName('iframe');
 
@@ -659,14 +642,6 @@ describe('ide', function() {
                 const api = new EmbeddedNetsBloxAPI(frame);
                 const xml = await api.getProjectXML();
                 assert(xml.startsWith('<'), `Expected XML but found: ${xml}`);
-            });
-
-            it('should be able to get the username', async () => {
-                const [frame] = document.getElementsByTagName('iframe');
-
-                const api = new EmbeddedNetsBloxAPI(frame);
-                const username = await api.getUsername();
-                expect(username).toBe('test');
             });
 
             it('should be able to subscribe to actions', async () => {
@@ -708,12 +683,22 @@ describe('ide', function() {
     });
 
     async function reloadIframe(frame, url=window.origin) {
+        const {utils} = driver.globals();
         driver.disableExitPrompt();
         driver.setWindow(frame.contentWindow);
         frame.setAttribute('src', url);
-        return new Promise(resolve => {
-            frame.onload = resolve;
-        });
+
+        const deferred = utils.defer();
+        const id = setInterval(() => {
+            const isLoaded = !!frame.contentWindow.world;
+            console.log({isLoaded});
+            if (isLoaded) {
+                clearInterval(id);
+                return deferred.resolve();
+            }
+        }, 150);
+
+        return deferred.promise;
     }
 });
 

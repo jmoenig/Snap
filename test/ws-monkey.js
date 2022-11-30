@@ -21,9 +21,9 @@ class WSMonkey {
     setWorld(aWorld) {
         this._world = aWorld;
         const onConnect = this.ide.sockets.onConnect;
-        this.ide.sockets.onConnect = () => {
+        this.ide.sockets.onConnect = (...args) => {
             this.onStateChange(true);
-            onConnect.call(this.ide.sockets);
+            return onConnect.apply(this.ide.sockets, args);
         };
     }
 

@@ -2074,21 +2074,17 @@ Array.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var thumbnail = normalizeCanvas(
-            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
-            true
-        ),
-        thumbdata,
+    var thumbdata,
         costumeIdx = this.getCostumeIdx(),
         ide = this.parentThatIsA(IDE_Morph);
 
-    // catch cross-origin tainting exception when using SVG costumes
     if (!serializer.isSavingPortable) {
-        thumbnail = normalizeCanvas(
+        const thumbnail = normalizeCanvas(
             this.thumbnail(SnapSerializer.prototype.thumbnailSize),
             true
         );
         try {
+            // catch cross-origin tainting exception when using SVG costumes
             thumbdata = thumbnail.toDataURL('image/png');
         } catch (error) {
             thumbdata = null;

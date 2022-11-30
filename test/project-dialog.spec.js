@@ -1,7 +1,5 @@
 /*globals driver, TestUtils */
 describe('ProjectDialogMorph', function() {
-    this.timeout(5000);
-
     beforeEach(() => driver.reset());
 
     describe('cloud', function() {

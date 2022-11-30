@@ -1,6 +1,5 @@
 /*global driver, expect, assert */
 describe('room', function() {
-    this.timeout(10000);
     describe('isValidName', function() {
         it('should reject names including @', function() {
             const {RoomMorph} = driver.globals();
@@ -51,13 +50,15 @@ describe('room', function() {
 
             driver.click(toggleTraceBtn());
             const {projectName, room} = driver.ide();
-            const srcId = [projectName, room.name, room.ownerId].join('@');
+            const roleName = driver.ide().projectName;
+            const srcId = [roleName, room.name, room.ownerId].join('@');
+            const dstId = [`OtherRole@${room.name}@${room.ownerId}`];
             await messages.reduce(
                 (lastSend, content) => lastSend.then(async () => {
                     await driver.sleep(50);
                     driver.ide().sockets.sendMessage({
                         type: 'message',
-                        dstId: 'OtherRole',
+                        dstId,
                         srcId,
                         msgType: 'message',
                         content: {msg: content},
@@ -99,48 +100,46 @@ describe('room', function() {
     describe('new', function() {
         const name = 'newRoleName';
         let initialRoleName = '';
-        before(() => {
-            return driver.reset()
-                .then(() => driver.addBlock('forward'))
-                .then(() => {
-                    initialRoleName = driver.ide().projectName;
-                    driver.newRole(name);
+        before(async () => {
+            await driver.reset()
+            await driver.addBlock('forward');
+            initialRoleName = driver.ide().projectName;
+            driver.newRole(name);
 
-                    // wait for it to show up
-                    let room = driver.ide().room;
-                    return driver.expect(
-                        () => room.getRole(name),
-                        `new role (${name}) did not appear`
-                    );
-                });
+            // wait for it to show up
+            let room = driver.ide().room;
+            return driver.expect(
+                () => room.getRole(name),
+                `new role (${name}) did not appear`
+            );
         });
 
         describe('moveToRole', function() {
-            let SnapCloud, projectId, oldRoleId;
+            let cloud, projectId, oldRoleId;
             before(function() {
-                SnapCloud = driver.globals().SnapCloud;
-                projectId = SnapCloud.projectId;
-                oldRoleId = SnapCloud.projectId;
+                cloud = driver.ide().cloud;
+                projectId = cloud.projectId;
+                oldRoleId = cloud.projectId;
 
                 driver.moveToRole(name);
                 driver.dialogs().forEach(d => d.destroy());
             });
 
-            it('should be able to move to new role', function() {
+            it('should update role/project name', function() {
                 // wait for the project name to change
                 return driver
                     .expect(() => {
                         return driver.ide().projectName === name;
                     }, `could not move to ${name} role`)
-                    .then(() => expect(projectId).toBe(SnapCloud.projectId));
+                    .then(() => expect(projectId).toBe(cloud.projectId));
             });
 
             it('should not update projectId', function() {
-                expect(projectId).toBe(SnapCloud.projectId);
+                expect(projectId).toBe(cloud.projectId);
             });
 
             it('should update roleId', function() {
-                expect(oldRoleId).toNotBe(SnapCloud.roleId);
+                expect(oldRoleId).toNotBe(cloud.roleId);
             });
 
             it('should be able to move back and forth', async function() {
@@ -167,6 +166,16 @@ describe('room', function() {
                 return driver.expect(() => {
                     return !driver.ide().currentSprite.scripts.children.length;
                 }, `did not load empty role "${name}"`);
+            });
+
+            it('should update occupancy in room', function() {
+                const {room} = driver.ide();
+                driver.expect(() => 
+                    room.getRoles().every(role => {
+                        const count = role.name === initialRoleName ? 0 : 1;
+                        return role.users.length === count;
+                    }),
+                );
             });
 
             it('should be able to add block', function() {
@@ -215,9 +224,10 @@ describe('room', function() {
         });
 
         it('should change role name in room tab', function() {
-            return driver.expect(() => {
-                return driver.ide().room.getRole(newName);
-            }, 'role did not change names');
+            return driver.expect(
+                () => driver.ide().room.getRole(newName),
+                'role did not change names'
+            );
         });
     });
 
@@ -227,10 +237,10 @@ describe('room', function() {
             await driver.addBlock('forward');
             await driver.selectTab('Room');
 
-            await driver.expect(() => { // determine if the roleid update is recevied from the server
+            await driver.expect(() => { // determine if the role ID update is received from the server
                 const roleName = driver.ide().projectName;
                 const role = driver.ide().room.getRole(roleName);
-                return (role.id.match(/-\d{12,15}/) !== null); // FIXME
+                return role.id;
             }, 'didnt receive role update');
 
             // get a handle of the current/only role
@@ -303,6 +313,36 @@ describe('room', function() {
             return driver.expect(() => {
                 return room.name.startsWith(newName);  // may have (2) or (3) appended
             }, 'did not rename project: ' + room.name);
+        });
+    });
+
+    describe('share msg types', function() {
+        const msgType = 'testShareMessage';
+        const otherRole = 'recipient';
+        before(async () => {
+            const {SnapActions} = driver.globals();
+            await driver.reset();
+            await driver.newRole(otherRole);
+            await SnapActions.addMessageType(msgType, ['f1', 'f2']);
+        });
+
+        it('should be able to (queue and) send msg type to self', async function() {
+            const room = driver.ide().room;
+
+            driver.selectTab('room');
+
+            const [messageType] = driver.ide().spriteEditor.palette.contents.children;
+            const role = room.getRole(otherRole);
+            driver.dragAndDrop(messageType, role.center());
+            await driver.moveToRole(otherRole);
+            const shareMsgDialog = await driver.expect(
+                () => driver.dialogs().find(dialog => dialog.key?.includes(msgType)),
+                'Share message dialog not found.'
+            );
+
+            shareMsgDialog.ok();
+            await driver.actionsSettled();
+            assert(driver.ide().stage.messageTypes.names().includes(msgType));
         });
     });
 });

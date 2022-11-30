@@ -2,81 +2,42 @@
 describe('cloud', function() {
     this.timeout(5000);
 
-    let SnapCloud;
-    before(() => SnapCloud = driver.globals().SnapCloud);
+    let cloud;
+    before(() => cloud = driver.ide().cloud);
 
     it('should set clientId immediately', function() {
-        expect(SnapCloud.clientId).toBeTruthy();
+        expect(cloud.clientId).toBeTruthy();
     });
 
     it('should use clientId for socket uuid', function() {
         const ws = driver.ide().sockets;
-        expect(ws.uuid).toBe(SnapCloud.clientId);
+        expect(ws.uuid).toBe(cloud.clientId);
     });
 
     describe('newProject', function () {
-        before(() => SnapCloud.request = () => Promise.reject());
-        after(() => delete SnapCloud.request);
+        before(() => cloud.request = () => Promise.reject());
+        after(() => delete cloud.request);
 
         it('should set projectId on fail', function() {
-            const oldProjectId = SnapCloud.projectId;
-            return SnapCloud.newProject('myRole')
+            const oldProjectId = cloud.projectId;
+            return cloud.newProject('myRole')
                 .then(() => {throw new Error('request did not fail');})
                 .catch(() => {
-                    if (oldProjectId === SnapCloud.projectId) {
+                    if (oldProjectId === cloud.projectId) {
                         throw new Error('Did not update id');
                     }
                 });
         });
 
         it('should set roleId on fail', function() {
-            const oldId = SnapCloud.roleId;
-            return SnapCloud.newProject('myRole')
+            const oldId = cloud.roleId;
+            return cloud.newProject('myRole')
                 .then(() => {throw new Error('request did not fail');})
                 .catch(() => {
-                    if (oldId === SnapCloud.roleId) {
-                        throw new Error(`Did not update id (${SnapCloud.roleId} vs ${oldId})`);
+                    if (oldId === cloud.roleId) {
+                        throw new Error(`Did not update id (${cloud.roleId} vs ${oldId})`);
                     }
                 });
-        });
-    });
-
-    describe('isProjectActive', function () {
-        let clientId;
-
-        before(() => {
-            clientId = SnapCloud.clientId;
-            return driver.reset();
-        });
-        after(() => SnapCloud.clientId = clientId);
-
-        it('should return not active if I am only occupant', function(done) {
-            SnapCloud.isProjectActive(
-                SnapCloud.projectId,
-                isActive => {
-                    if (isActive) {
-                        done('Reported room as active');
-                    } else {
-                        done();
-                    }
-                },
-                done
-            );
-        });
-
-        it('should return active if there are other occupants', function(done) {
-            SnapCloud.clientId = '_someNewId';
-            SnapCloud.isProjectActive(
-                SnapCloud.projectId,
-                isActive => {
-                    if (isActive) {
-                        done();
-                    } else {
-                        done('Reported room as inactive');
-                    }
-                },
-                done
-            );
         });
     });
 });

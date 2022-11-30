@@ -10,9 +10,10 @@ describe('messages', function() {
     function sendMessage(opts={}) {
         const ide = driver.ide();
         const srcId = [ide.projectName, ide.room.name, ide.room.ownerId].join('@');
+        const targetAddresses = [srcId];
         const msg = {
             type: 'message',
-            dstId: opts.targetRole || 'everyone in room',
+            dstId: targetAddresses,
             srcId: srcId,
             msgType: opts.name || 'message',
             content: opts.contents || {msg: 'blah'},
@@ -52,7 +53,6 @@ describe('messages', function() {
         });
 
         it('should show queue message count', async function() {
-            this.timeout(5000);
             const MIN_DELAY = 50;
 
             driver.selectTab('scripts');

@@ -1,10 +1,9 @@
 /*globals driver, expect, TestUtils */
 describe('save', function() {
-    let SnapCloud;
+    let cloud;
     before(() => {
-        SnapCloud = driver.globals().SnapCloud;
+        cloud = driver.ide().cloud;
     });
-    this.timeout(15000);
 
     [
         //['w/o ws connection', () => driver.disconnect(), () => driver.connect()],
@@ -62,19 +61,19 @@ describe('save', function() {
                 let saveAsName;
 
                 describe('from saved', function() {
-                    before(function() {
-                        projectName = `save-as-${Date.now()}`;
+                    before(async () => {
+                        projectName = `save-as-from-saved-${Date.now()}`;
 
-                        return driver.reset()
-                            .then(() => driver.setProjectName(projectName))
-                            .then(() => driver.addBlock('doIfElse'))
-                            .then(() => TestUtils.saveProject())
-                            .then(() => driver.reset())
-                            .then(() => TestUtils.openProject(projectName))
-                            .then(() => {
-                                saveAsName = `new${projectName}-saveAs`;
-                                return driver.saveProjectAs(saveAsName);
-                            });
+                        await driver.reset()
+                        await driver.setProjectName(projectName);
+                        await driver.addBlock('doIfElse');
+                        await TestUtils.saveProject();
+                        console.log('save...', projectName);
+                        await driver.reset();
+                        await TestUtils.openProject(projectName);
+                        saveAsName = `new${projectName}-saveAs`;
+                        console.log('saving as', saveAsName);
+                        await driver.saveProjectAs(saveAsName);
                     });
 
                     it('should change name of current project', function() {
@@ -84,23 +83,21 @@ describe('save', function() {
                         );
                     });
 
-                    it('should make a copy on save as', function() {
-                        return TestUtils.openProjectsBrowser()
-                            .then(projectDialog => {
-                                // Check that both projects show up in the project list
-                                return driver.waitUntil(() => {
-                                    // Click the cloud icon
-                                    const cloudSrc = projectDialog.srcBar.children[0];
-                                    driver.click(cloudSrc);
+                    it('should make a copy on save as', async function() {
+                        const projectDialog = await TestUtils.openProjectsBrowser();
+                        // Check that both projects show up in the project list
+                        await driver.expect(() => {
+                            // Click the cloud icon
+                            const cloudSrc = projectDialog.srcBar.children[0];
+                            driver.click(cloudSrc);
 
-                                    const projectList = projectDialog.listField.listContents
-                                        .children.map(child => child.labelString);
-                                    const hasOriginal = projectList.includes(projectName);
-                                    const hasSaveAsVersion = projectList.includes(saveAsName);
+                            const projectList = projectDialog.listField.listContents
+                                .children.map(child => child.labelString);
+                            const hasOriginal = projectList.includes(projectName);
+                            const hasSaveAsVersion = projectList.includes(saveAsName);
 
-                                    return hasOriginal && hasSaveAsVersion;
-                                });
-                            });
+                            return hasOriginal && hasSaveAsVersion;
+                        });
                     });
                 });
 
@@ -139,6 +136,7 @@ describe('save', function() {
                     });
 
                     it('should prompt for overwrite if conflicting exists', async function() {
+                        this.timeout(5000);
                         await driver.saveProjectAs(existingName, false);
                         await driver.expect(
                             () => driver.isShowingDialogKey(key => key.includes('decideReplace')),
@@ -179,17 +177,17 @@ describe('save', function() {
                 const projectName = `saveACopy-${Date.now()}`;
 
                 beforeEach(() => driver.reset()
-                    .then(() => username = SnapCloud.username)
+                    .then(() => username = cloud.username)
                     .then(() => driver.setProjectName(projectName))
                 );
-                afterEach(() => SnapCloud.username = username);
+                afterEach(() => cloud.username = username);
 
                 it('should create "Copy of <project>" on saveACopy', function() {
                     const ide = driver.ide();
                     // make the user a collaborator
-                    SnapCloud.username = 'test';
+                    cloud.username = 'test';
 
-                    ide.room.collaborators.push(SnapCloud.username);
+                    ide.room.collaborators.push(cloud.username);
                     ide.room.ownerId = 'otherUser';
 
                     // Click the project menu

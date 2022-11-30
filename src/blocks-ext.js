@@ -1,11 +1,7 @@
 /* globals utils, nop, DialogBoxMorph, ScriptsMorph, BlockMorph, InputSlotMorph, StringMorph, Color
-   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, localize, SnapCloud, contains,
-   world, Services, BLACK, SERVER_URL*/
+   ReporterBlockMorph, CommandBlockMorph, MultiArgMorph, localize, contains,
+   world, BLACK, SERVER_URL*/
 // Extensions to the Snap blocks
-
-function getInputTypeMeta() {
-    return utils.getUrlSyncCached(`${SERVER_URL}/services/input-types`, x => JSON.parse(x));
-}
 
 function sortDict(dict) {
     var keys = Object.keys(dict).sort(),
@@ -35,6 +31,8 @@ BlockMorph.prototype.showHelp = async function() {
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
         isServiceURL = !!inputs[0].constant,
+        ide = this.parentThatIsA(IDE_Morph),  // FIXME: Is it possible that this is undefined?
+        services = ide.services,
         serviceNames,
         metadata;
 
@@ -43,8 +41,8 @@ BlockMorph.prototype.showHelp = async function() {
         // service description will go here
         // if a method is selected append rpc specific description
         metadata = isServiceURL ?
-            await Services.getServiceMetadataFromURL(serviceName) :
-            await Services.getServiceMetadata(serviceName);
+            await services.getServiceMetadataFromURL(serviceName) :
+            await services.getServiceMetadata(serviceName);
         if (methodName !== '') {
             metadata = metadata.rpcs[methodName];
             help = metadata.description;
@@ -63,7 +61,7 @@ BlockMorph.prototype.showHelp = async function() {
         }
         if (!help) help = 'Description not available';
     } else {
-        metadata = await Services.getServicesMetadata();
+        metadata = await services.getServicesMetadata();
         serviceNames = metadata.slice(0,3).map(function(md) {return md.name;});
         help = 'Get information from different providers, save information and more. \nTo get more help select one of the services: '
             + serviceNames.join(', ') + ' ...';
@@ -300,13 +298,17 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
     }
 };
 
-StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta) {
+StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={}) {
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
-        const typeMeta = getInputTypeMeta();
+        const hostUrl = this.parentThatIsA(IDE_Morph)?.services.defaultHost?.url;
+        if (!hostUrl) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
+
+        // FIXME: support type definitions from other hosts, too
+        const typeMeta = utils.getUrlSyncCached(`${hostUrl}/input-types`, x => JSON.parse(x));
 
         // follow the base type chain to see if we can make a strongly typed slot
-        for (let type = (meta || {}).type; type; type = (typeMeta[type.name] || {}).baseType) {
+        for (let type = meta.type; type; type = typeMeta[type.name].baseType) {
             if (type.name === 'Number') {
                 return new HintInputSlotMorph(value || '', fieldname, true, undefined, false);
             }
@@ -325,7 +327,8 @@ StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta) 
 };
 
 InputSlotMorph.prototype.serviceNames = async function () {
-    const services = await Services.getServicesMetadata();
+    const ide = this.parentThatIsA(IDE_Morph);  // FIXME: Is it possible that this is undefined?
+    const services = await ide.services.getServicesMetadata();
     let menuDict = {};
 
     for (let i = services.length; i--;) {
@@ -355,13 +358,14 @@ InputSlotMorph.prototype.serviceNames = async function () {
 
     menuDict = sortDict(menuDict);
 
-    const hasAuthoredServices = SnapCloud.username && menuDict.Community &&
-        menuDict.Community[SnapCloud.username];
+    const cloud = ide.cloud;
+    const hasAuthoredServices = cloud.username && menuDict.Community &&
+        menuDict.Community[cloud.username];
     if (hasAuthoredServices) {
         const subMenu = {};
-        subMenu[SnapCloud.username] = menuDict.Community[SnapCloud.username];
+        subMenu[cloud.username] = menuDict.Community[cloud.username];
         Object.keys(menuDict.Community).forEach(function(key) {
-            if (key !== SnapCloud.username) {
+            if (key !== cloud.username) {
                 subMenu[key] = menuDict.Community[key];
             }
         });
@@ -377,6 +381,10 @@ RPCInputSlotMorph.uber = StructInputSlotMorph.prototype;
 
 function RPCInputSlotMorph() {
     const getFields = rpcName => {
+        if (!rpcName) {
+            return [];
+        }
+
         if (!this.fieldsFor || !this.fieldsFor[rpcName]) {
             this.methodSignature();
             var isSupported = !!this.fieldsFor;
@@ -426,10 +434,21 @@ RPCInputSlotMorph.prototype.getServiceName = function () {
 
 RPCInputSlotMorph.prototype.getServiceMetadata = function () {
     const field = this.getServiceInputSlot();
-    const url = field.constant ? field.evaluate()[0] :
-        Services.defaultHost.url + '/' + field.evaluate();
+    const serviceName = field.constant ?
+        field.evaluate()[0] : field.evaluate();
 
-    return Services.getServiceMetadataFromURLSync(url);
+    // The IDE_Morph is undefined when cloning or dragging from the part browser.
+    // Collaborative edits result in the same issue.
+    let ide = this.parentThatIsA(IDE_Morph);
+    if (!ide) {  // FIXME: this is a bit of an ugly hack...
+        ide = world.children[0];
+    }
+
+    const services = ide.services;
+    const url = field.constant ? field.evaluate()[0] :
+        services.defaultHost.url + '/' + field.evaluate();
+
+    return services.getServiceMetadataFromURLSync(url);
 };
 
 // sets this.fieldsFor and returns the method signature dict

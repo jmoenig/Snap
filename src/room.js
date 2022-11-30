@@ -1,4 +1,4 @@
-/* global SnapCloud, StringMorph, DialogBoxMorph, localize, Point, Morph,
+/* global StringMorph, DialogBoxMorph, localize, Point, Morph,
  Color, nop, InputFieldMorph, ListMorph, IDE_Morph, TurtleIconMorph, SnapActions,
  TextMorph, MorphicPreferences, ScrollFrameMorph, ReporterBlockMorph,
  MessageOutputSlotMorph, MessageInputSlotMorph, SymbolMorph, PushButtonMorph, MenuMorph,
@@ -94,7 +94,7 @@ RoomMorph.prototype.init = function(ide) {
 
     // Set the initial values
     // Shared messages array for when messages are sent to unoccupied roles
-    this.sharedMsgs = [];
+    this.queuedRoleMsgs = [];
 
     this.blockHighlights = [];
 };
@@ -118,26 +118,23 @@ RoomMorph.prototype.silentSetRoomName = function(name) {
 };
 
 RoomMorph.prototype.setRoomName = function(name) {
-    var myself = this,
-        changed = this.name !== name;
+    const changed = this.name !== name;
 
     if (changed) {
-        return SnapCloud.setProjectName(name)
-            .then(function(state) {
-                return myself.onRoomStateUpdate(state);
-            })
-            .catch(this.ide.cloudError());
+        const cloud = this.ide.cloud;
+        return cloud.setProjectName(name);
     }
 
     return Promise.resolve(name);
 };
 
 RoomMorph.prototype.getDefaultRoles = function() {
+    const cloud = this.ide.cloud;
     var roleInfo = {},
         name = this.getCurrentRoleName(),
         occupant = {
-            uuid: this.myUuid(),
-            username: SnapCloud.username || 'me'
+            id: cloud.clientId,
+            name: cloud.username || 'me'
         };
 
     roleInfo[name] = {
@@ -151,12 +148,12 @@ RoomMorph.prototype.getDefaultRoles = function() {
 RoomMorph.prototype.getCurrentRoleName = function() {
     var myself = this,
         roleNames = this.getRoleNames(),
-        myUuid = myself.ide.sockets.uuid;
+        myId = myself.ide.cloud.clientId;
 
     // Look up the role name from the current room info
     return roleNames.find(function(name) {
         return myself.getCurrentOccupants(name).find(function(occupant) {
-            return occupant.uuid === myUuid;
+            return occupant.id === myId;
         });
     }) || this.ide.projectName;
 };
@@ -180,31 +177,36 @@ RoomMorph.prototype.getCurrentOccupants = function(name) {
     }
 };
 
-RoomMorph.prototype.isLeader = function() {
-    return this.getCurrentOccupants().length === 1;
+RoomMorph.prototype.getLeaderID = function() {
+    // since the order is the same on each client, agree that
+    // the first occupant is the leader. This user will accept/reject
+    // edits to the project.
+    const [leader] = this.getCurrentOccupants();
+    return leader?.id;
 };
 
-RoomMorph.prototype.myUuid = function() {
-    return this.ide.sockets.uuid;
+RoomMorph.prototype.isLeader = function() {
+    const leaderID = this.getLeaderID();
+    return leaderID && leaderID === this.ide.cloud.clientId;
 };
 
 RoomMorph.prototype.myUserId = function() {
-    return SnapCloud.username || localize('guest');
+    return this.ide.cloud.username || localize('guest');
 };
 
 RoomMorph.prototype.isOwner = function(user) {
     if (RoomMorph.isSocketUuid(this.ownerId) && !user) {
-        return this.ide.sockets.uuid === this.ownerId;
+        return this.ide.cloud.clientId === this.ownerId;
     }
 
     if (!user && this.ownerId === null) return true;
 
-    user = user || SnapCloud.username;
+    user = user || this.ide.cloud.username;
     return this.ownerId && this.ownerId === user;
 };
 
 RoomMorph.prototype.isCollaborator = function(user) {
-    user = user || SnapCloud.username;
+    user = user || this.ide.cloud.username;
     return this.collaborators.indexOf(user) > -1;
 };
 
@@ -222,7 +224,7 @@ RoomMorph.sameOccupants = function(list1, list2) {
         otherUuids,
         otherUsernames,
         getUuid = function(role) {return role.uuid;},
-        getUsername = function(role) {return role.username;};
+        getUsername = function(role) {return role.name;};
 
     uuids = list1.map(getUuid);
     otherUuids = list2.map(getUuid);
@@ -243,15 +245,13 @@ RoomMorph.equalLists = function(first, second) {
 };
 
 RoomMorph.prototype.onRoomStateUpdate = function(state) {
-    if (this.version < state.version) {
-        this.update(
-            state.owner,
-            state.name,
-            state.roles,
-            state.collaborators
-        );
-        this.version = state.version;
-    }
+    this.update(
+        state.owner,
+        state.name,
+        state.roles,
+        state.collaborators
+    );
+    this.version += 1;
 };
 
 RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
@@ -292,6 +292,8 @@ RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
 
     // Update collaborative editing
     SnapActions.isLeader = this.isLeader();
+
+    this.sendQueuedMessages();
 };
 
 RoomMorph.prototype.getRoleNames = function() {
@@ -311,6 +313,16 @@ RoomMorph.prototype.getRole = function(name) {
     return this.getRoles().find(function(role) {
         return role.name === name;
     });
+};
+
+// Get the role given a client state from NetsBlox cloud
+RoomMorph.prototype.getRoleFromState = function(state) {
+    if (!state.browser) return;
+    const {projectId, roleId} = state.browser;
+    const isCurrentProject = this.projectId === this.ide.cloud.projectId;
+    if (isCurrentProject) {
+        return this.getRoles().find(role => role.id === roleId);
+    }
 };
 
 RoomMorph.prototype.updateRoles = function(roleInfo) {
@@ -474,7 +486,7 @@ RoomMorph.prototype.setCollaborators = function(collaborators) {
 RoomMorph.prototype.mouseClickLeft = function() {
     if (!this.isEditable() && !this.isReadOnly) {
         // If logged in, prompt about leaving the room
-        if (SnapCloud.username) {
+        if (this.ide.cloud.username) {
             this.ide.confirm(
                 localize('would you like to leave "' + this.name + '"?'),
                 localize('Leave Room'),
@@ -546,18 +558,10 @@ RoomMorph.prototype.validateRoleName = function (name, onValid, onInvalid) {
 
 RoomMorph.prototype.createNewRole = function (defaultName = '') {
     // Ask for a new role name
-    var myself = this;
-
-    (new DialogBoxMorph(null, function (roleName) {
-        myself.validateRoleName(roleName, function() {
-            SnapCloud.addRole(
-                roleName,
-                function(state) {
-                    myself.onRoomStateUpdate(state);
-                },
-                myself.ide.cloudError()
-            )},
-            function () { myself.createNewRole(roleName); }
+    (new DialogBoxMorph(null, roleName => {
+        this.validateRoleName(roleName,
+            () => this.ide.cloud.addRole(roleName),
+            () => this.createNewRole(roleName),
         );
     })).withKey('createNewRole').prompt(
         'New Role Name',
@@ -607,70 +611,50 @@ RoomMorph.prototype.editRoleName = function(roleId, roleName = '') {
     );
 };
 
-RoomMorph.prototype.moveToRole = function(role) {
+RoomMorph.prototype.moveToRole = async function(role) {
     var myself = this;
 
     myself.ide.showMessage('moving to ' + role.name);
-    SnapCloud.getProject(
-        SnapCloud.projectId,
-        async project => {
-            this.ide.showMessage('moved to ' + role.name + '!');
-            this.ide.silentSetProjectName(role.name);
-            this.ide.source = 'cloud';
+    const {projectId} = this.ide.cloud;
+    const metadata = await this.ide.cloud.getProjectMetadata(projectId);
+    const roleData = await this.ide.cloud.getRole(projectId, role.id);
+    await this.ide.rawLoadCloudRole(metadata, roleData);
 
-            // Load the project or make the project empty
-            if (project) {
-                if (project.Public === 'true') {
-                    location.hash = '#present:Username=' +
-                        encodeURIComponent(SnapCloud.username) +
-                        '&ProjectName=' +
-                        encodeURIComponent(project.ProjectName);
-                }
+    this.ide.showMessage('moved to ' + role.name + '!');
+    this.ide.silentSetProjectName(role.name);
+    this.ide.source = 'cloud';
 
-                if (project.SourceCode) {
-                    this.ide.droppedText(project.SourceCode);
-                } else {  // newly created role
-                    await SnapActions.openProject();
-                }
-            } else {  // Empty the project FIXME
-                await SnapActions.openProject();
-            }
-        },
-        (err, lbl) => {
-            this.ide.cloudError().call(null, err, lbl);
-        },
-        role.id
-    );
+    // Load the project or make the project empty
+    if (metadata.public === true) {
+        location.hash = '#present:Username=' +
+            encodeURIComponent(metadata.owner) +
+            '&ProjectName=' +
+            encodeURIComponent(metadata.name);
+    }
+
+    if (roleData.code) {
+        // TODO: add media
+        this.ide.droppedText(roleData.code + roleData.media);
+    } else {  // newly created role
+        await SnapActions.openProject();
+    }
 };
 
-RoomMorph.prototype.deleteRole = function(role) {
-    var myself = this;
-    SnapCloud.deleteRole(
-        role.id,
-        function(state) {
-            myself.onRoomStateUpdate(state);
-            myself.ide.showMessage('deleted ' + role.name + '!');
-        },
-        function (err, lbl) {
-            myself.ide.cloudError().call(null, err, lbl);
-        }
-    );
+RoomMorph.prototype.deleteRole = async function(role) {
+    try {
+        await this.ide.cloud.deleteRole(role.id);
+    } catch (err) {
+        this.ide.cloudError().call(null, err.message);
+    }
 };
 
-RoomMorph.prototype.createRoleClone = function(roleId) {
+RoomMorph.prototype.createRoleClone = async function(roleId) {
     var myself = this;
     var roleName = this.getRoles().find(function(role) {
         return role.id === roleId;
     }).name;
 
-    SnapCloud.cloneRole(
-        roleId,
-        function(state) {
-            myself.onRoomStateUpdate(state);
-            myself.ide.showMessage('created copy of ' + roleName);
-        },
-        myself.ide.cloudError()
-    );
+    await this.ide.cloud.cloneRole(roleId);
 };
 
 RoomMorph.prototype.role = function() {
@@ -687,58 +671,32 @@ RoomMorph.prototype.setRoleName = function(roleId, name) {
         return;
     }
 
-    myself.validateRoleName(name, function() {
-        SnapCloud.renameRole(
-            roleId,
-            name,
-            function(state) {
-                myself.onRoomStateUpdate(state);
-            },
-            myself.ide.cloudError()
-        );
-    });
+    myself.validateRoleName(name, () => this.ide.cloud.renameRole(roleId, name));
 };
 
-RoomMorph.prototype.evictUser = function (user) {
-    var myself = this;
-    SnapCloud.evictUser(
-        user.uuid,
-        function(state) {
-            myself.onRoomStateUpdate(state);
-            myself.ide.showMessage('evicted ' + user.username + '!');
-        },
-        function (err, lbl) {
-            myself.ide.cloudError().call(null, err, lbl);
-        }
-    );
+RoomMorph.prototype.evictUser = async function (user) {
+    await this.ide.cloud.evictOccupant(user.id);
+    this.ide.showMessage('Evicted ' + user.name + '!');
 };
 
-RoomMorph.prototype.inviteUser = function (role) {
+RoomMorph.prototype.inviteUser = async function (role) {
     var myself = this,
-        callback;
-
-    callback = friends => {
-        friends.unshift('myself');
-        const world = this.world();
-        const dialog = new UserDialogMorph(this, user => {
-            if (user) {
-                this.inviteGuest(user, role.id);
-            }
-        }, friends);
-        dialog.popUp(world);
-        dialog.setCenter(world.center());
-        dialog.filterField.edit();
-    };
+        friends = [];
 
     if (this.isOwner() || this.isCollaborator()) {
-        SnapCloud.getFriendList(callback,
-            function (err, lbl) {
-                myself.ide.cloudError().call(null, err, lbl);
-            }
-        );
-    } else {
-        callback([]);
+        try {
+            friends = await this.ide.cloud.getFriendList();
+        } catch (err) {
+            myself.ide.cloudError().call(null, err.message);
+        }
     }
+
+    friends.unshift('myself');
+    const world = this.world();
+    const dialog = new InviteOccupantDialogMorph(this.ide, role.id);
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    dialog.filterField.edit();
 };
 
 // Accessed from right-clicking the TextMorph
@@ -759,23 +717,21 @@ RoomMorph.prototype.promptShare = function(name) {
         var dialog = new DialogBoxMorph();
         dialog.prompt('Send to...', '', world, false, choices);
         dialog.accept = function() {
-            var choice = dialog.getInput();
+            const choice = dialog.getInput();
             if (roles.indexOf(choice) !== -1) {
-                if (myself.getRole(choice)) {  // occupied
-                    myself.ide.sockets.sendMessage({
-                        type: 'share-msg-type',
-                        roleId: choice,
-                        from: myself.ide.projectName,
+                const role = myself.getRole(choice);
+                const shareMessage = {
+                    type: 'share-msg-type',
+                    data: {
                         name: name,
                         fields: myself.ide.stage.messageTypes.getMsgType(name).fields
-                    });
+                    }
+                };
+
+                const sent = myself.sendMessageToRole(shareMessage, role.id);
+                if (sent) {
                     myself.ide.showMessage('Successfully sent!', 2);
-                } else {  // not occupied, store in sharedMsgs array
-                    myself.sharedMsgs.push({
-                        roleId: choice,
-                        msg: {name: name, fields: myself.ide.stage.messageTypes.getMsgType(name).fields},
-                        from: myself.ide.projectName
-                    });
+                } else {
                     myself.ide.showMessage('The role will receive this message type on next occupation.', 2);
                 }
             } else {
@@ -788,34 +744,35 @@ RoomMorph.prototype.promptShare = function(name) {
     }
 };
 
-RoomMorph.prototype.inviteGuest = function (friend, role) {
-    // Use inviteGuest service
+RoomMorph.prototype.inviteOccupant = function (friend, roleId) {
+    // Use inviteOccupant service
     if (friend === 'myself') {
-        friend = SnapCloud.username;
+        friend = this.ide.cloud.username;
     }
-    SnapCloud.inviteGuest(friend, role);
+    this.ide.cloud.inviteOccupant(friend, roleId);
 };
 
-RoomMorph.prototype.promptInvite = function (id, role, roomName, inviter) {
+RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inviter) {
     // Create a confirm dialog about joining the group
     const dialog = new DialogBoxMorph(
         null,
-        () => this.respondToInvitation(id, role, true)
-    ).withKey(id);
-    const msg = inviter === SnapCloud.username ?
-        'Would you like to move to "' + roomName + '"?' :
-        inviter + ' has invited you to join\nhim/her at "' + roomName + '"';
+        async () => {
+            const metadata = await this.ide.cloud.getProjectMetadata(projectId);
+            const roleData = await this.ide.cloud.getRole(projectId, roleId);
+            await this.ide.rawLoadCloudRole(metadata, roleData);
+        }
+    ).withKey(projectId + '/' + roleId);
 
-    const superCancel = dialog.cancel;
-    dialog.cancel = () => {
-        this.respondToInvitation(id, role, false);
-        superCancel.call(dialog);
-    };
+    const msg = inviter === this.ide.cloud.username ?
+        'Would you like to move to "' + projectName + '"?' :
+        inviter + ' has invited you to join\nhim/her at "' + projectName + '"';
+
     dialog.askYesNo(
         'Room Invitation',
         localize(msg),
         this.ide.world()
     );
+
     setTimeout(
         () => dialog.destroy(),
         30000
@@ -823,7 +780,9 @@ RoomMorph.prototype.promptInvite = function (id, role, roomName, inviter) {
 };
 
 RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
-    SnapCloud.respondToInvitation(
+    // TODO: join the role (use the token?)
+    const cloud = this.ide.cloud;
+    cloud.respondToInvitation(
         id,
         accepted,
         async project => {
@@ -833,7 +792,7 @@ RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
             this.ide.source = 'cloud';
             if (project.Public === 'true') {
                 location.hash = '#present:Username=' +
-                    encodeURIComponent(SnapCloud.username) +
+                    encodeURIComponent(cloud.username) +
                     '&ProjectName=' +
                     encodeURIComponent(project.ProjectName);
             }
@@ -847,66 +806,56 @@ RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
             }
             msg.destroy();
             this.ide.silentSetProjectName(role);
-            SnapCloud.disconnect();
         },
         err => this.ide.showMessage(err, 2)
     );
 };
 
-RoomMorph.prototype.checkForSharedMsgs = function(role) {
-    // Send queried messages if possible
-    for (var i = 0 ; i < this.sharedMsgs.length; i++) {
-        if (this.sharedMsgs[i].roleId === role) {
-            this.ide.sockets.sendMessage({
-                type: 'share-msg-type',
-                name: this.sharedMsgs[i].msg.name,
-                fields: this.sharedMsgs[i].msg.fields,
-                from: this.sharedMsgs[i].from,
-                roleId: role
-            });
-            this.sharedMsgs.splice(i, 1);
-            i--;
+RoomMorph.prototype.sendMessageToRole = function(msg, roleId) {
+    msg.roleId = roleId;
+    msg.from = this.ide.projectName;
+    this.queuedRoleMsgs.push(msg);
+    const sentMsgs = this.sendQueuedMessages();
+    return sentMsgs.includes(msg);
+};
+
+RoomMorph.prototype.sendQueuedMessages = function() {
+    const [queuedRoleMsgs, sentMsgs] = utils.partition(
+        this.queuedRoleMsgs,
+        msg => {
+            const role = this.getRoles().find(role => role.id === msg.roleId);
+            if (!role) return false;  // role no longer exists
+
+            if (role.users.length > 0) {
+                const clientId = role.users[0].id;
+                this.ide.sockets.sendIDEMessage(msg, clientId);
+                return false;
+            }
+
+            return true;
         }
-    }
+    );
+
+    this.queuedRoleMsgs = queuedRoleMsgs;
+    return sentMsgs;
 };
 
 RoomMorph.prototype.showMessage = function(msg, msgIndex) {
-    var myself = this;
-
-    // Get the source role
-    var address = msg.srcId.split('@');
-    var relSrcId = address.shift();
-    var projectId = address.join('@');
-
-    // This will have problems if the role name has been changed...
+    const {source} = msg;
 
     // Get the target role(s)
-    var relDstIds = msg.recipients
-        .filter(function(id) {  // in the current project
-            var address = id.split('@');
-            var roleId = address.shift();
-            var inCurrentProject = address.join('@') === projectId;
-            var stillExists = !!myself.getRole(roleId);
-            return inCurrentProject && stillExists;
-        })
-        .map(function(id) {
-            return id.split('@').shift();
-        });
-
-    // If they are both in the room and they both exist, animate the message
-    if (this.getRole(relSrcId)) {
-        // get a message for each
-        relDstIds.forEach(function(dstId) {
-            myself.showSentMsg(msg, relSrcId, dstId, msgIndex);
-        });
-    }
+    msg.recipients.forEach(state => {
+        const srcRole = this.getRoleFromState(source);
+        const dstRole = this.getRoleFromState(state);
+        if (srcRole && dstRole) {
+            this.showSentMsg(msg, srcRole, dstRole, msgIndex);
+        }
+    });
 };
 
-RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId, msgLabel) {
-    var srcRole = this.getRole(srcId),
-        dstRole = this.getRole(dstId),
-        relEndpoint = dstRole.center().subtract(srcRole.center()),
-        msgMorph = new SentMessageMorph(msg, srcId, dstId, relEndpoint, msgLabel);
+RoomMorph.prototype.showSentMsg = function(msg, srcRole, dstRole, msgLabel) {
+    const relEndpoint = dstRole.center().subtract(srcRole.center());
+    const msgMorph = new SentMessageMorph(msg, srcRole.name, dstRole.name, relEndpoint, msgLabel);
 
     this.addBack(msgMorph);
     this.displayedMsgMorphs.push(msgMorph);
@@ -926,9 +875,7 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId, msgLabel) {
                     }
                     return blocks;
                 })
-                .reduce(function(l1, l2) {
-                    return l1.concat(l2);
-                }, []);
+                .flat();
 
         this.blockHighlights = blocks.map(function(block) {
             return block.addHighlight();
@@ -988,7 +935,7 @@ RoomMorph.prototype.hideSentMsgs = function() {
 };
 
 RoomMorph.prototype.isCapturingTrace = function() {
-    return this.trace.startTime && !this.trace.endTime;
+    return this.trace.id && !this.trace.messages;
 };
 
 RoomMorph.prototype.isReplayingTrace = function() {
@@ -1017,39 +964,21 @@ RoomMorph.prototype.resetTrace = function() {
     this.trace = {};
 };
 
-RoomMorph.prototype.startTrace = function() {
-    var ide = this.ide,
-        url = ide.resourceURL('api', 'trace', 'start', SnapCloud.projectId, SnapCloud.clientId),
-        startTime = +ide.getURL(url);
-
-    this.trace = {startTime: startTime};
+RoomMorph.prototype.startTrace = async function() {
+    const {projectId} = this.ide.cloud;
+    const id = await this.ide.cloud.startNetworkTrace(projectId);
+    this.trace = {id};
 };
 
-RoomMorph.prototype.endTrace = function() {
-    this.trace.endTime = Date.now();
-    this.trace.messages = this.getMessagesForTrace();
+RoomMorph.prototype.endTrace = async function() {
+    const {projectId} = this.ide.cloud;
+    this.trace.messages = await this.ide.cloud.getNetworkTrace(projectId, this.trace.id);
+    await this.ide.cloud.stopNetworkTrace(projectId, this.trace.id);
 
     if (this.trace.messages.length === 0) {
         this.ide.showMessage('No messages captured', 2);
         this.resetTrace();
     }
-};
-
-RoomMorph.prototype.getMessagesForTrace = function() {
-    var ide = this.ide;
-    var url = ide.resourceURL('api', 'trace', 'end', SnapCloud.projectId, SnapCloud.clientId);
-    var messages = [];
-
-    // Update this to request start/end times
-    try {
-        messages = JSON.parse(ide.getURL(url));
-    } catch(e) {
-        ide.showMessage('Failed to retrieve messages', 2);
-        this.resetTrace();
-        throw e;
-    }
-
-    return messages;
 };
 
 RoomMorph.prototype.inspectMessage = function(msg) {
@@ -1293,6 +1222,10 @@ NetworkReplayControls.prototype.applyEvent = function(event, next) {
     next();
 };
 
+NetworkReplayControls.prototype.getSliderPosition = function(message) {
+    return this.getSliderPositionFromTime(message.time.$date.$numberLong);
+};
+
 NetworkReplayControls.prototype.updateDisplayedMessages = function() {
     var ide = this.parentThatIsA(IDE_Morph),
         room = ide.room,
@@ -1342,12 +1275,12 @@ NetworkReplayControls.prototype.settingsMenu = function() {
     return menu;
 };
 
-NetworkReplayControls.prototype.getColorForTick = function(event) {
+NetworkReplayControls.prototype.getColorForTick = function(msgData) {
     var ide = this.parentThatIsA(IDE_Morph),
-        room = ide.room,
-        srcId = event.srcId.split('@').shift(),
-        role = room.getRole(srcId);
-
+        room = ide.room;
+    const {source} = msgData;
+    const roleId = source.browser?.roleId;
+    const role = room.getRoles().find(role => role.id === roleId);
 
     if (role) {
         return role.color;
@@ -1379,8 +1312,8 @@ RoleMorph.COLORS = [
 });
 
 // The role morph needs to know where to draw itself
-function RoleMorph(id, name, user) {
-    this.init(id, name, user);
+function RoleMorph(id, name, users) {
+    this.init(id, name, users);
 }
 
 RoleMorph.prototype.init = function(id, name, users) {
@@ -1451,7 +1384,7 @@ RoleMorph.prototype.setOccupants = function(users) {
     var userText = '<empty>';
     if (this.users.length) {
         userText = this.users.map(function(user){
-            return user.username || localize('guest');
+            return user.name || localize('guest');
         }).join(', ');
     }
 
@@ -1538,25 +1471,20 @@ RoleMorph.prototype.reactToDropOf = function(drop) {
 
     // Share the intended message type
     function shareMsgType(myself, name, fields) {
-        if (myself.users.length && myself.parent.ide.projectName === myself.name) {  // occupied & myself
+        if (myself.parent.ide.projectName === myself.name) {  // occupied & myself
             myself.parent.ide.showMessage('Can\'t send a message type to yourself!', 2);
             return;
         }
-        if (myself.users && myself.parent.ide.projectName !== myself.name) {  // occupied & not myself
-            myself.parent.ide.sockets.sendMessage({
-                type: 'share-msg-type',
-                roleId: myself.name,
-                from: myself.parent.ide.projectName,
-                name: name,
-                fields: fields
-            });
+
+        const shareMessage = {
+            type: 'share-msg-type',
+            data: { name, fields },
+        };
+
+        const sent = myself.parent.sendMessageToRole(shareMessage, myself.id);
+        if (sent) {
             myself.parent.ide.showMessage('Successfully sent!', 2);
-        } else {  // not occupied, store in sharedMsgs array
-            myself.parent.sharedMsgs.push({
-                roleId: myself.name,
-                msg: {name: name, fields: fields},
-                from: myself.parent.ide.projectName
-            });
+        } else {
             myself.parent.ide.showMessage('The role will receive this message type on next occupation.', 2);
         }
     }
@@ -1572,6 +1500,7 @@ function EditRoleMorph(room, role) {
 
 EditRoleMorph.prototype.init = function(room, role) {
     const {name} = role;
+    const cloud = room.ide.cloud;
     EditRoleMorph.uber.init.call(this);
     this.room = room;
     this.role = role;
@@ -1606,7 +1535,7 @@ EditRoleMorph.prototype.init = function(room, role) {
         this.addButton('inviteUser', 'Invite User');
 
         const hasEvictableUsers = this.role.users
-            .filter(user => user.uuid !== SnapCloud.clientId)
+            .filter(user => user.id !== cloud.clientId)
             .length;
         if (this.room.isOwner() && hasEvictableUsers) {
             this.addButton('evictUser', 'Evict User');
@@ -1640,7 +1569,7 @@ EditRoleMorph.prototype.fixLayout = function() {
 };
 
 EditRoleMorph.prototype.editRoleName = function() {
-    this.room.editRoleName(this.role.name);
+    this.room.editRoleName(this.role.id);
     this.destroy();
 };
 
@@ -1654,7 +1583,7 @@ EditRoleMorph.prototype.deleteRole = function() {
     this.destroy();
 };
 
-EditRoleMorph.prototype.moveToRole = function() {
+EditRoleMorph.prototype.moveToRole = async function() {
     var myself = this,
         ide = this.room.ide,
         dialog,
@@ -1669,16 +1598,16 @@ EditRoleMorph.prototype.moveToRole = function() {
         dialog = new DialogBoxMorph(null);
 
         // Prompt the user about saving the role...
-        dialog.accept = function() {
-            SnapCloud.saveProject(
-                ide,
-                function () {
-                    ide.showMessage('Saved ' + currentRole + ' to cloud!', 2);
-                    callback();
-                },
-                ide.cloudError()
-            );
+        dialog.accept = async function() {
+            try {
+                const roleData = ide.sockets.getSerializedProject();
+                await ide.cloud.saveRole(roleData);
+                ide.showMessage('Saved ' + currentRole + ' to cloud!', 2);
+            } catch (err) {
+                ide.cloudError()(err.message);
+            }
             dialog.destroy();
+            callback();
         };
 
         dialog.cancel = function() {  // don't overwrite
@@ -1697,7 +1626,8 @@ EditRoleMorph.prototype.moveToRole = function() {
 };
 
 EditRoleMorph.prototype.evictUser = function() {
-    const user = this.role.users.find(user => user.uuid !== SnapCloud.clientId);
+    const cloud = this.room.ide.cloud;
+    const user = this.role.users.find(user => user.id !== cloud.clientId);
     this.room.evictUser(user);
     this.destroy();
 };
@@ -1722,9 +1652,6 @@ RoomEditorMorph.prototype.init = function(room, sliderColor) {
 
     this.palette = this.createMsgPalette();
     this.add(this.palette);
-
-    // Check for queried shared messages
-    this.room.checkForSharedMsgs(this.room.getCurrentRoleName());
 
     // Replay Controls
     if (this.room.isReplayingTrace()) {
@@ -1845,12 +1772,12 @@ RoomEditorMorph.prototype.addToolbar = function() {
 
     var recordButton = new PushButtonMorph(
         this,
-        function() {
+        async () => {
             if (this.isReplayMode()) {
-                myself.exitReplayMode();
+                this.exitReplayMode();
             }
-            myself.toggleRecordMode();
-            myself.updateToolbar();
+            await this.toggleRecordMode();
+            this.updateToolbar();
         },
         this.isRecording() ? stopRecordSymbol : recordSymbol,
         null,
@@ -1901,13 +1828,13 @@ RoomEditorMorph.prototype.isRecording = function() {
 };
 
 RoomEditorMorph.prototype.hasNetworkRecording = function() {
-    var trace = this.room.trace;
-    return !!(trace.startTime && trace.endTime);
+    const trace = this.room.trace || {};
+    return trace.messages?.length;
 };
 
-RoomEditorMorph.prototype.toggleRecordMode = function() {
+RoomEditorMorph.prototype.toggleRecordMode = async function() {
     if (this.isRecording()) {
-        this.exitRecordMode();
+        await this.exitRecordMode();
     } else {
         this.enterRecordMode();
     }
@@ -1922,8 +1849,8 @@ RoomEditorMorph.prototype.enterRecordMode = function() {
     this.room.startTrace();
 };
 
-RoomEditorMorph.prototype.exitRecordMode = function() {
-    this.room.endTrace();
+RoomEditorMorph.prototype.exitRecordMode = async function() {
+    await this.room.endTrace();
 };
 
 RoomEditorMorph.prototype.isReplayMode = function() {
@@ -2050,20 +1977,22 @@ UserDialogMorph.uber = DialogBoxMorph.prototype;
 
 // UserDialogMorph instance creation:
 
-function UserDialogMorph(target, action, users) {
-    this.init(target, action, users);
+function UserDialogMorph(target, title='Friends') {
+    this.init(target, title);
 }
 
-UserDialogMorph.prototype.init = function(target, action, users) {
-    this.key = 'inviteGuest';
-    this.userList = users;
+UserDialogMorph.prototype.init = function(target, title) {
     UserDialogMorph.uber.init.call(
         this,
         target, // target
-        action, // function
+        nop, // function
         null // environment
     );
+    this.key = title;
+    this.labelString = localize(title);
+    this.userList = [];
     this.buildContents();
+    this.refresh();
 };
 
 UserDialogMorph.prototype.buildContents = function() {
@@ -2084,14 +2013,43 @@ UserDialogMorph.prototype.buildContents = function() {
 
     this.body.add(this.listField);
 
+    this.listField.action = item => {
+        if (item === undefined) {return; }
+        this.unfriendButton.show();
+        this.buttons.fixLayout();
+        this.fixLayout();
+        this.edit();
+    };
+
     // add buttons
-    this.labelString = 'Invite a Friend to the Room';
+    this.inviteFriendButton = this.addButton(
+        () => this.target.sendFriendRequest(),
+        'Add Friend'
+    );
+    this.inviteFriendButton.hint = localize('Send friend request to another user on NetsBlox. Only friends are shown in this window.');
+    this.unfriendButton = this.addButton(
+        async () => {
+            this.target.cloud.unfriend(this.listField.selected),
+            this.refresh();
+        },
+        'Unfriend'
+    );
+    this.unfriendButton.hide();
     this.createLabel();
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
+
+    this.addButton('cancel', 'Close');
 
     this.setHeight(300);
     this.fixLayout();
+};
+
+UserDialogMorph.prototype.refresh = async function () {
+    const userList = (await this.target.cloud.getFriendList())
+        .sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : 1)
+        .map(name => ({name}));
+
+    this.userList = userList;
+    this.showUserList(userList);
 };
 
 UserDialogMorph.prototype.fixLayout = function () {
@@ -2103,6 +2061,13 @@ UserDialogMorph.prototype.fixLayout = function () {
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
+        this.bounds.setWidth(Math.max(
+                this.width(),
+                this.buttons.width()
+                        + (2 * this.padding)
+            )
+        );
+        this.buttons.setCenter(this.center());
     }
 
     if (this.body) {
@@ -2119,7 +2084,7 @@ UserDialogMorph.prototype.fixLayout = function () {
             this.body.width() -  this.padding * 6
         );
         inputField.setLeft(this.body.left() + this.padding * 3);
-        inputField.rerender();  // FIXME: what should I passjk:
+        inputField.rerender();
 
         this.listField.setLeft(this.body.left() + this.padding);
         this.listField.setWidth(
@@ -2145,12 +2110,18 @@ UserDialogMorph.prototype.fixLayout = function () {
     }
 
     if (this.buttons && (this.buttons.children.length > 0)) {
-        this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
+    }
+
+    if (this.handle) {
+        this.handle.fixLayout();
     }
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
+
+    this.removeShadow();
+    this.addShadow();
 };
 
 UserDialogMorph.prototype.fixListFieldItemColors =
@@ -2179,23 +2150,25 @@ UserDialogMorph.prototype.buildFilterField = function () {
     this.filterField.reactToKeystroke = function () {
         var text = this.getValue();
 
-        myself.listField.elements =
-            // Netsblox addition: start
-            myself.userList.filter(function (username) {
-                return username.toLowerCase().indexOf(text.toLowerCase()) > -1;
-            });
-        // Netsblox addition: end
+        const matchingUsers = myself.userList
+            .filter(user => user.name.toLowerCase().includes(text.toLowerCase()));
 
-        if (myself.listField.elements.length === 0) {
-            myself.listField.elements.push('(no matches)');
+        if (matchingUsers.length === 0) {
+            myself.showUserList([{name: '(no matches)'}]);
+        } else {
+            myself.showUserList(matchingUsers);
         }
-
-        myself.listField.buildListContents();
-        myself.fixListFieldItemColors();
-        myself.listField.adjustScrollBars();
-        myself.listField.scrollY(myself.listField.top());
-        myself.fixLayout();
     };
+};
+
+UserDialogMorph.prototype.showUserList = function (users) {
+    this.listField.elements = users.map(user => user.name);
+
+    this.listField.buildListContents();
+    this.fixListFieldItemColors();
+    this.listField.adjustScrollBars();
+    this.listField.scrollY(this.listField.top());
+    this.fixLayout();
 };
 
 UserDialogMorph.prototype.popUp = function(wrrld) {
@@ -2216,14 +2189,14 @@ UserDialogMorph.prototype.popUp = function(wrrld) {
 
 // CollaboratorDialogMorph inherits from DialogBoxMorph:
 
-CollaboratorDialogMorph.prototype = new UserDialogMorph();
+CollaboratorDialogMorph.prototype = Object.create(UserDialogMorph.prototype);
 CollaboratorDialogMorph.prototype.constructor = CollaboratorDialogMorph;
 CollaboratorDialogMorph.uber = UserDialogMorph.prototype;
 
 // CollaboratorDialogMorph instance creation:
 
-function CollaboratorDialogMorph(target, action, users) {
-    this.init(target, action, users);
+function CollaboratorDialogMorph(target, title='Invite a Friend to Collaborate') {
+    this.init(target, title);
 }
 
 CollaboratorDialogMorph.prototype.buildContents = function() {
@@ -2238,13 +2211,13 @@ CollaboratorDialogMorph.prototype.buildContents = function() {
         this.userList,
         this.userList.length > 0 ?
             function (element) {
-                return element.username || element;
+                return element.name || element;
             } : null,
-        [ // format: display shared project names bold
+        [ // format: display collaborators names bold
             [
                 'bold',
                 function (user) {return user.collaborating; }
-            ]
+            ],
         ]//,
         //function () {myself.ok(); }
     );
@@ -2258,28 +2231,10 @@ CollaboratorDialogMorph.prototype.buildContents = function() {
             myself.uncollaborateButton.hide();
             myself.collaborateButton.show();
         }
+        myself.unfriendButton.show();
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
-    };
-
-    this.filterField.reactToKeystroke = function () {
-        var text = this.getValue();
-
-        myself.listField.elements =
-            myself.userList.filter(function (user) {
-                return user.username.toLowerCase().indexOf(text.toLowerCase()) > -1;
-            });
-
-        if (myself.listField.elements.length === 0) {
-            myself.listField.elements.push('(no matches)');
-        }
-
-        myself.listField.buildListContents();
-        myself.fixListFieldItemColors();
-        myself.listField.adjustScrollBars();
-        myself.listField.scrollY(myself.listField.top());
-        myself.fixLayout();
     };
 
     this.fixListFieldItemColors();
@@ -2294,17 +2249,152 @@ CollaboratorDialogMorph.prototype.buildContents = function() {
     this.body.add(this.listField);
 
     // add buttons
-    this.labelString = 'Invite a Friend to Collaborate';
     this.createLabel();
-    this.uncollaborateButton = this.addButton(function() {
-        SnapCloud.evictCollaborator(myself.listField.selected.username);
-        myself.destroy();
+
+    this.uncollaborateButton = this.addButton(() => {
+        this.target.cloud.removeCollaborator(this.listField.selected);
+        this.destroy();
     }, 'Remove');
-    this.collaborateButton = this.addButton('ok', 'Invite');
+    this.collaborateButton = this.addButton(() => {
+        this.target.cloud.sendCollaborateRequest(this.listField.selected);
+        this.destroy();
+    }, 'Invite');
     this.uncollaborateButton.hide();
     this.collaborateButton.hide();
-    this.addButton('cancel', 'Cancel');
+
+    this.inviteFriendButton = this.addButton(
+        () => this.target.sendFriendRequest(),
+        'Add Friend'
+    );
+    this.inviteFriendButton.hint = localize('Send friend request to another user on NetsBlox. Only friends are shown in this window.');
+    this.unfriendButton = this.addButton(
+        async () => {
+            this.target.cloud.unfriend(this.listField.selected),
+            this.refresh();
+        },
+        'Unfriend'
+    );
+    this.unfriendButton.hide();
+    this.addButton('cancel', 'Close');
 
     this.setHeight(300);
     this.fixLayout();
+};
+
+CollaboratorDialogMorph.prototype.refresh = async function () {
+    const [friends, collaborators] = await Promise.all([
+        this.target.cloud.getFriendList(),
+        this.target.cloud.getCollaboratorList(),
+    ]);
+    const collaboratorSet = new Set(collaborators);
+    const possibleCollaborators = friends
+        .map(name => ({
+            name,
+            collaborating: collaboratorSet.has(name)
+        }))
+        .sort(function(a, b) {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        });
+
+    this.userList = possibleCollaborators;
+    this.showUserList(this.userList);
+};
+
+// InviteOccupantDialogMorph ////////////////////////////////////////////////////
+
+// InviteOccupantDialogMorph inherits from DialogBoxMorph:
+
+InviteOccupantDialogMorph.prototype = Object.create(UserDialogMorph.prototype);
+InviteOccupantDialogMorph.prototype.constructor = InviteOccupantDialogMorph;
+InviteOccupantDialogMorph.uber = UserDialogMorph.prototype;
+
+// InviteOccupantDialogMorph instance creation:
+
+function InviteOccupantDialogMorph(target, roleId, title='Invite a Friend to the Project') {
+    this.init(target, roleId, title);
+}
+
+InviteOccupantDialogMorph.prototype.init = function (target, roleId, title) {
+    this.roleId = roleId;
+    InviteOccupantDialogMorph.uber.init.call(this, target, title);
+};
+
+InviteOccupantDialogMorph.prototype.buildContents = function() {
+    var myself = this;
+
+    this.addBody(new Morph());
+    this.body.color = this.color;
+
+    this.buildFilterField();
+
+    this.listField = new ListMorph(
+        this.userList,
+        this.userList.length > 0 ?
+            function (element) {
+                return element.name || element;
+            } : null,
+    );
+
+    this.listField.action = function (item) {
+        if (item === undefined) {return; }
+        myself.inviteButton.show();
+        myself.unfriendButton.show();
+        myself.buttons.fixLayout();
+        myself.fixLayout();
+        myself.edit();
+    };
+
+    this.fixListFieldItemColors();
+    this.listField.fixLayout = nop;
+    this.listField.edge = InputFieldMorph.prototype.edge;
+    this.listField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.listField.contrast = InputFieldMorph.prototype.contrast;
+    this.listField.render = InputFieldMorph.prototype.render;
+    this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.body.add(this.listField);
+
+    // add buttons
+    this.createLabel();
+
+    this.inviteButton = this.addButton(() => {
+        this.target.cloud.sendOccupantInvite(this.listField.selected, this.roleId);
+        this.destroy();
+    }, 'Invite');
+    this.inviteButton.hide();
+
+    this.inviteFriendButton = this.addButton(
+        () => this.target.sendFriendRequest(),
+        'Add Friend'
+    );
+    this.inviteFriendButton.hint = localize('Send friend request to another user on NetsBlox. Only friends are shown in this window.');
+    this.unfriendButton = this.addButton(
+        async () => {
+            this.target.cloud.unfriend(this.listField.selected),
+            this.refresh();
+        },
+        'Unfriend'
+    );
+    this.unfriendButton.hide();
+    this.addButton('cancel', 'Close');
+
+    this.setHeight(300);
+    this.fixLayout();
+};
+
+
+InviteOccupantDialogMorph.prototype.refresh = async function () {
+    this.userList = (await this.target.cloud.getOnlineFriendList())
+        .map(name => ({id: name, name}))
+        .sort(function(a, b) {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        });
+
+    this.userList.unshift({
+        name: localize('myself'),
+        // TODO: add support for an "id" field to avoid collisions with "myself"
+        //id: this.target.cloud.username,
+    });
+    this.showUserList(this.userList);
 };

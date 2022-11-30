@@ -1,5 +1,5 @@
 /* globals UndoManager, SERVER_ADDRESS, ActionManager, SnapActions, NetsBloxSerializer,
-   HintInputSlotMorph, SnapCloud, Action, copy*/
+   HintInputSlotMorph, Action, copy*/
 // NetsBlox Specific Actions
 SnapActions.addActions(
     'addMessageType',
@@ -56,34 +56,6 @@ UndoManager.Invert.deleteMessageType = function() {
 };
 
 SnapActions.serializer = new NetsBloxSerializer();
-SnapActions.enableCollaboration =
-SnapActions.disableCollaboration = function() {};
-SnapActions.isCollaborating = function() {
-    return this.ide().room.getCurrentOccupants().length > 1;
-};
-
-// Recording user actions
-SnapActions.send = function(event) {
-    // Netsblox addition: start
-    var socket = this.ide().sockets;
-
-    this._ws = socket.websocket;
-
-    // Netsblox addition: end
-    event.id = event.id || this.lastSeen + 1;
-    if (!this.isUserAction(event)) {
-        this.lastSent = event.id;
-    }
-    // Netsblox addition: start
-    const {projectId, roleId} = this.ide().cloud;
-    socket.send(JSON.stringify({
-        type: 'user-action',
-        projectId,
-        roleId,
-        action: event,
-    }));
-    // Netsblox addition: end
-};
 
 SnapActions.onMessage = function(msg) {
     ActionManager.prototype.onMessage.apply(this, arguments);
@@ -95,17 +67,19 @@ SnapActions.onMessage = function(msg) {
     }
 };
 
-SnapActions.requestMissingActions = function(silent) {
-    const {sockets, cloud} = this.ide();
-    if (!sockets.inActionRequest) {
+SnapActions.requestMissingActions = async function(silent) {
+    const {sockets, cloud, room} = this.ide();
+    if (!sockets.inActionRequest && !room.isLeader()) {
         sockets.inActionRequest = true;
-        return sockets.sendJSON({
+        const leader = room.getLeaderID();
+        const response = await sockets.sendIDERequest({
             type: 'request-actions',
             projectId: cloud.projectId,
             roleId: cloud.roleId,
             actionId: this.lastSeen,
-            silent: silent,
-        });
+        }, leader);
+        console.log({response});
+        sockets.inActionRequest = false;
     }
 };
 
@@ -160,8 +134,8 @@ SnapActions.submitIfAllowed = function(event) {
             function () {
                 ide.sockets.sendMessage({
                     type: 'permission-elevation-request',
-                    projectId: SnapCloud.projectId,
-                    guest: SnapCloud.username
+                    projectId: ide.cloud.projectId,
+                    guest: ide.cloud.username
                 });
             }
         );

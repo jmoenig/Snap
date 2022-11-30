@@ -1,4 +1,4 @@
-/* globals ensureFullUrl, localize, nop, Point, IDE_Morph, Process, SnapCloud,
+/* globals ensureFullUrl, localize, nop, Point, IDE_Morph, Process, 
    SaveOpenDialogMorph, SaveOpenDialogMorphSource, Morph, utils, MenuMorph,
    SERVER_URL, SnapActions, fontHeight, TextMorph, ScrollFrameMorph, SpriteMorph,
    InputFieldMorph,
@@ -394,6 +394,7 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
 
     receiveMessage = async event => {
         var data = event.data;
+        console.log('received message', event.data);
         switch (data.type) {
         case 'import':
             this.droppedText(data.content, data.name, data.fileType);
@@ -415,7 +416,7 @@ IDE_Morph.prototype.initializeEmbeddedAPI = function () {
         case 'get-username':
         {
             const {id} = data;
-            const {username} = SnapCloud;
+            const {username} = this.cloud;
             const type = 'reply';
             event.source.postMessage({id, type, username}, event.origin);
             break;
@@ -509,6 +510,205 @@ IDE_Morph.prototype.openRoleString = async function (role, parsed=false) {
 
     return SnapActions.openProject(projectXml);
 };
+
+IDE_Morph.prototype.manageFriends = async function () {
+    const dialog = new UserDialogMorph(this);
+    dialog.popUp(this.world());
+};
+
+IDE_Morph.prototype.sendFriendRequest = async function () {
+    this.prompt(localize('Send Friend Invitation to...'), async name => {
+        await this.cloud.sendFriendRequest(name);
+        this.showMessage(localize('Friend request sent!'), 2);
+    });
+};
+
+IDE_Morph.prototype.respondToFriendRequest = async function (request) {
+    const dialog = new DialogBoxMorph(
+        this,
+        () => this.cloud.respondToFriendRequest(request.sender, 'APPROVED'),
+    );
+    dialog.labelString = 'Respond to Friend Request';
+
+    const textString = localize('Received friend request from ') + request.sender +
+        '.\n\n' + localize('What would you like to do?');
+    const txt = new TextMorph(
+        textString,
+        dialog.fontSize,
+        dialog.fontStyle,
+        true,
+        false,
+        'center',
+        null,
+        null,
+        MorphicPreferences.isFlat ? null : new Point(1, 1),
+        WHITE
+    );
+    dialog.addBody(txt);
+    dialog.addButton('ok', localize('Accept'));
+    dialog.addButton(
+        () => {
+            this.cloud.respondToFriendRequest(request.sender, 'REJECTED');
+            dialog.destroy();
+        }, 
+        localize('Reject')
+    );
+    dialog.addButton(
+        async () => {
+            const confirmed = await this.confirm(
+                localize('Are you sure you would like to block ') + request.sender + '?',
+                localize('Block User?')
+            );
+            if (confirmed) {
+                this.cloud.respondToFriendRequest(request.sender, 'BLOCKED');
+            }
+            dialog.destroy();
+        }, 
+        localize('Block')
+    );
+    dialog.addButton('cancel', localize('Cancel'));
+    dialog.createLabel();
+    dialog.fixLayout = function() {
+        DialogBoxMorph.prototype.fixLayout.call(this);
+        horizontalCenter(this, this.label);
+        horizontalCenter(this, this.body);
+    };
+    function horizontalCenter(parent, child) {
+        const centerX = parent.center().x
+        const left = centerX - child.width()/2;
+        child.setLeft(left);
+    }
+
+    dialog.popUp(this.world());
+    dialog.fixLayout();
+};
+
+IDE_Morph.prototype.respondToCollaborateRequest = async function (request) {
+    const dialog = new DialogBoxMorph(
+        this,
+        async () => {
+            await this.cloud.respondToCollaborateRequest(request.id, true);
+            // TODO: ask if you want to open it now
+        },
+    );
+    dialog.labelString = 'Respond to Collaborate Request';
+
+    // TODO: get the name of the project
+    //const metadata = await this.cloud.getProjectMetadata(request.projectId);
+    const textString = request.sender + localize(' has invited you to collaborate on') +
+        //'\n\n' + metadata.name + '.\n\n' + localize('What would you like to do?');
+        '\n\n' + request.projectId + '\n\n' + localize('What would you like to do?');
+    const txt = new TextMorph(
+        textString,
+        dialog.fontSize,
+        dialog.fontStyle,
+        true,
+        false,
+        'center',
+        null,
+        null,
+        MorphicPreferences.isFlat ? null : new Point(1, 1),
+        WHITE
+    );
+    dialog.addBody(txt);
+    dialog.addButton('ok', localize('Accept'));
+    dialog.addButton(
+        async () => {
+            await this.cloud.respondToCollaborateRequest(request.id, false);
+            this.showMessage(localize('Invitation rejected.'));
+            dialog.destroy();
+        }, 
+        localize('Reject')
+    );
+    dialog.addButton('cancel', localize('Cancel'));
+    dialog.createLabel();
+    dialog.fixLayout = function() {
+        DialogBoxMorph.prototype.fixLayout.call(this);
+        horizontalCenter(this, this.label);
+        horizontalCenter(this, this.body);
+    };
+    function horizontalCenter(parent, child) {
+        const centerX = parent.center().x
+        const left = centerX - child.width()/2;
+        child.setLeft(left);
+    }
+
+    dialog.popUp(this.world());
+    dialog.fixLayout();
+
+};
+
+IDE_Morph.prototype.manageCollaborators = async function () {
+    const dialog = new CollaboratorDialogMorph(
+        this,
+    );
+    dialog.popUp();
+};
+
+IDE_Morph.prototype.promptCollabInvite = function (params) {  // id, room, roomName, role
+    // Create a confirm dialog about joining the group
+    var myself = this,
+        // unpack the params
+        roomName = params.roomName,
+        dialog,
+        msg;
+
+    if (params.inviter === this.cloud.username) {
+        msg = 'Would you like to collaborate at "' + roomName + '"?';
+    } else {
+        msg = params.inviter + ' has invited you to collaborate with\nhim/her at "' + roomName +
+            '"\nAccept?';
+    }
+
+    dialog = new DialogBoxMorph(null, function() {
+        myself.collabResponse(params, true);
+        dialog.destroy();
+    });
+
+    dialog.cancel = function() {
+        myself.collabResponse(params, false);
+        dialog.destroy();
+    };
+
+    dialog.askYesNo(
+        'Collaboration Invitation',
+        localize(msg),
+        this.world()
+    );
+};
+
+IDE_Morph.prototype.collabResponse = async function (invite, response) {
+    var myself = this;
+
+    try {
+        await this.cloud.respondToCollaborationInvite(invite.id, response);
+        var dialog,
+            msg;
+
+        if (response) {
+            dialog = new DialogBoxMorph(null, () => {
+                // Open the given project
+                this.cloud.joinActiveProject(
+                    invite.projectId,
+                    function (xml) {
+                        myself.rawLoadCloudProject(xml);
+                    },
+                    myself.cloudError()
+                );
+                dialog.destroy();
+            });
+            msg = 'Would you like to open the shared project now?';
+            dialog.askYesNo(
+                localize('Open Shared Project?'),
+                localize(msg),
+                this.world()
+            );
+        }
+    } catch (err) {
+        this.showMessage(err.message, 2);
+    }
+};
+
 
 // Events ///////////////////////////////////////////
 
@@ -607,37 +807,21 @@ function CloudLibrarySource(ide) {
     this.init(ide, 'Cloud', 'cloud', 'cloud');
 }
 
-CloudLibrarySource.prototype.list = function() {
-    const isLoggedIn = !!SnapCloud.username;
+CloudLibrarySource.prototype.list = async function() {
+    const isLoggedIn = !!this.ide.cloud.username;
     if (!isLoggedIn) {
         this.ide.showMessage(localize('You are not logged in'));
     }
 
-    const deferred = utils.defer();
-    const url = `${SERVER_URL}/api/v2/libraries/user/`;
-    this.ide.getURL(
-        url,
-        libJSON => {
-            const libraries = JSON.parse(libJSON).map(lib => {
-                lib.public = lib.public || lib.needsApproval;
-                return lib;
-            });
-            deferred.resolve(libraries);
-        }
-    );
-    return deferred.promise;
+    const libs = await this.ide.cloud.getLibraryList();
+    libs.forEach(lib => lib.public = lib.state === 'Public' || lib.state === 'PendingApproval');
+    return libs;
 };
 
 CloudLibrarySource.prototype.save = async function(item) {
     const {name, blocks, notes} = item;
-    const request = new XMLHttpRequest();
-    const username = SnapCloud.username;
-    request.open('POST', `${SERVER_URL}/api/v2/libraries/user/${username}/${name}`, true);
-    request.withCredentials = true;
-
-    await utils.requestPromise(request, {blocks, notes});
-    const {needsApproval} = JSON.parse(request.responseText);
-    if (needsApproval) {
+    const publishState = await this.ide.cloud.saveLibrary(name, blocks, notes);
+    if (publishState === 'PendingApproval') {
         this.ide.inform(
             'Approval Required',
             'Approval is required to re-publish the given library.\n\n' +
@@ -647,41 +831,23 @@ CloudLibrarySource.prototype.save = async function(item) {
 };
 
 CloudLibrarySource.prototype.getContent = async function(item) {
-    const deferred = utils.defer();
     const {owner, name} = item;
-    const url = `${SERVER_URL}/api/v2/libraries/user/${owner}/${name}`;
-    this.ide.getURL(
-        url,
-        libXML => {
-            deferred.resolve(libXML);
-        }
-    );
-    return deferred.promise;
+    return await this.ide.cloud.getLibrary(owner, name);
 };
 
 CloudLibrarySource.prototype.delete = async function(item) {
     const {name} = item;
-    const request = new XMLHttpRequest();
-    const username = SnapCloud.username;
-    request.open('DELETE', `${SERVER_URL}/api/v2/libraries/user/${username}/${name}`, true);
-    request.withCredentials = true;
-
-    await utils.requestPromise(request);
+    return await this.ide.cloud.deleteLibrary(name);
 };
 
 CloudLibrarySource.prototype.publish = async function(item, unpublish) {
-    const action = unpublish ? 'unpublish' : 'publish';
-    const username = SnapCloud.username;
     const {name} = item;
-    const url = `${SERVER_URL}/api/v2/libraries/user/${username}/${name}/${action}`;
-    const request = new XMLHttpRequest();
-    request.open('POST', url, true);
-    request.withCredentials = true;
-
-    await utils.requestPromise(request);
-    if (!unpublish) {
-        const {needsApproval} = JSON.parse(request.responseText);
-        if (needsApproval) {
+    const action = unpublish ? 'unpublish' : 'publish';
+    if (unpublish) {
+        await this.ide.cloud.unpublishLibrary(name);
+    } else {
+        const publishState = await this.ide.cloud.publishLibrary(name);
+        if (publishState === 'PendingApproval') {
             this.ide.inform(
                 'Approval Required',
                 'Approval is required to publish the given library.\n\n' +
@@ -699,22 +865,13 @@ function CommunityLibrarySource(ide) {
     this.init(ide, 'Community', 'cloud', 'community');
 }
 
-CommunityLibrarySource.prototype.list = function() {
-    const deferred = utils.defer();
-    const url = `${SERVER_URL}/api/v2/libraries/community/`;
-    this.ide.getURL(
-        url,
-        libJSON => {
-            const libraries = JSON.parse(libJSON);
-            libraries.forEach(lib => {
-                lib.libraryName = lib.name;
-                lib.name = `${lib.name} (author: ${lib.owner})`;
-            });
-
-            deferred.resolve(libraries);
-        }
-    );
-    return deferred.promise;
+CommunityLibrarySource.prototype.list = async function() {
+    const libs = await this.ide.cloud.getCommunityLibraryList();
+    libs.forEach(lib => {
+        lib.libraryName = lib.name;
+        lib.name = `${lib.name} (author: ${lib.owner})`;
+    });
+    return libs;
 };
 
 CommunityLibrarySource.prototype.getContent = function(item) {
@@ -763,6 +920,10 @@ LibraryDialogMorph.prototype.init = function (ide, name, xml, notes) {
         this.labelString = 'Import Library';
         this.createLabel();
     }
+};
+
+LibraryDialogMorph.prototype.getNewItemID = async function() {
+    return Date.now();
 };
 
 LibraryDialogMorph.prototype.saveItem = async function(newItem) {
