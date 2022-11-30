@@ -69,6 +69,7 @@
 
 ### 2022-11-30
 * German translation update
+* gui: added configuration option for "noImports"
 
 ### 2022-11-29
 * gui: added configuration option for "noPalette"
@@ -107,7 +108,7 @@
 * gui: added configuration option for path (to the host's base directory)
 * gui: added configuration option for border (surrounding the IDE)
 * gui: added configuration option for "hideCategories"
-* gui: added configuratiom option for "load"
+* gui: added configuration option for "load"
 * objects: hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
 
 ### 2022-11-23
