@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-29';
+modules.blocks = '2022-November-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8553,7 +8553,9 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
             'scripts',
             'block',
             'dropped',
-            this.lastDroppedBlock.abstractBlockSpec()
+            this.lastDroppedBlock instanceof BlockMorph ?
+                this.lastDroppedBlock.abstractBlockSpec()
+                : 'comment'
         );
     }
 };

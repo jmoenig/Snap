@@ -70,6 +70,7 @@
 ### 2022-11-30
 * German translation update
 * gui: added configuration option for "noImports"
+* blocks: fixed an event recording glitch
 
 ### 2022-11-29
 * gui: added configuration option for "noPalette"
