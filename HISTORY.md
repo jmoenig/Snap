@@ -68,6 +68,7 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+    * Dutch, thanks, Hans!
 
 ### 2022-12-01
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled
@@ -76,6 +77,7 @@
 * objects: fixed an event recording glitch
 * blocks: don't show block relabel options that are marked as hidden
 * byob: fixed disabling relabelling to hidden custom blocks
+* fixed #3139 (Dutch translation)
 
 ### 2022-11-30
 * German translation update
