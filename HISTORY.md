@@ -35,6 +35,7 @@
     * updated "Codification" example project
     * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
     * order "my scripts" list by their top-down position in the scripting area (not by the time of their placement)
+    * don't show "result pic" option in block context menu with "click-to-run" disabled
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
@@ -66,6 +67,9 @@
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2022-12-01
+* blocks: don't show "result pic" option in context menu with "click-to-run" disabled
 
 ### 2022-11-30
 * German translation update

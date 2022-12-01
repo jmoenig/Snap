@@ -155,13 +155,13 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG*/
+SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-November-30';
+modules.blocks = '2022-December-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3363,11 +3363,13 @@ BlockMorph.prototype.userMenu = function () {
         (!(top instanceof PrototypeHatBlockMorph) &&
             top.allChildren().some((any) => any.selector === 'doReport'))
     ) {
-        menu.addItem(
-            "result pic...",
-            () => top.exportResultPic(),
-            'save a picture of both\nthis script and its result'
-        );
+        if (!ThreadManager.prototype.disableClickToRun) {
+            menu.addItem(
+                "result pic...",
+                () => top.exportResultPic(),
+                'save a picture of both\nthis script and its result'
+            );
+        }
     }
     if (top instanceof PrototypeHatBlockMorph) {
         menu.addItem(
