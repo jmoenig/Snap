@@ -3434,7 +3434,10 @@ BlockMorph.prototype.userMenu = function () {
         return menu;
     }
     if (!hasLine) {menu.addLine(); }
-    menu.addItem("ringify", 'ringify');
+    rcvr = rcvr || this.scriptTarget(true);
+    if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
+        menu.addItem("ringify", 'ringify');
+    }
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();
         menu.addItem(
