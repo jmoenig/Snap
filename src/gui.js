@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-November-30';
+modules.gui = '2022-December-01';
 
 // Declarations
 
@@ -227,6 +227,32 @@ IDE_Morph.prototype.setDefaultDesign();
 function IDE_Morph(config = { autofill: true }) {
     this.init(config);
 }
+
+/*
+    Configuring the IDE for specialized uses, e.g. as DSL inside another IDE
+    can be achieved by passing in an optional configuration dictionary when
+    creating an instance. This is still very much under construction. Currently
+    the following options are available:
+
+        path            str, path to additional resources (translations)
+        load:           str, microworld file name (xml)
+        design:         str, currently "flat" (bright) or "classic" (dark)
+        border:         num, pixels surrounding the IDE, default is none (zero)
+        lang:           str, translation to be used, e.g. "de" for German
+        mode:           str, currently "presentation" or "edit"
+        hideControls:   bool, hide/show the tool bar
+        hideCategories: bool, hide/show the palette block category buttons
+        noSprites:      bool, hide/show the stage, corral, sprite editor
+        noPalette:      bool, hide/show the palette including the categories
+        noImports:      bool, disable/allow importing files via drag&drop
+        noOwnBlocks:    bool, hider/show "make a block" and "make a category"
+        noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
+        blocksZoom:     num, zoom factor for blocks, e.g. 1.5
+
+    Note that such configurations will not affect the user's own preference
+    settings, e.g. configuring the blocks zoom or language will not overwrite
+    the user's own settings which are kept in localstorage.
+*/
 
 IDE_Morph.prototype.init = function (config) {
     // global font setting
