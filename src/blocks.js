@@ -3174,8 +3174,9 @@ BlockMorph.prototype.userMenu = function () {
             );
         }
     } else {
-        alternatives = SpriteMorph.prototype.blockAlternatives[this.selector]
-            .filter(sel => StageMorph.prototype.hiddenPrimitives[sel] !== true);
+        alternatives = (SpriteMorph.prototype.blockAlternatives[
+            this.selector] || []).filter(sel =>
+                StageMorph.prototype.hiddenPrimitives[sel] !== true);
         if (alternatives.length > 0) {
             menu.addItem(
                 'relabel...',
