@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-November-30';
+modules.byob = '2022-December-01';
 
 // Declarations
 
@@ -1671,7 +1671,7 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         type = this instanceof CommandBlockMorph ? 'command'
             : (this.isPredicate ? 'predicate' : 'reporter');
     return allDefs.filter(each =>
-        each !== this.definition && each.type === type
+        each !== this.definition && each.type === type && !each.isHelper
     );
 };
 

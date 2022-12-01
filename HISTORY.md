@@ -75,6 +75,7 @@
 * blocks: fixed search
 * objects: fixed an event recording glitch
 * blocks: don't show block relabel options that are marked as hidden
+* byob: fixed disabling relabelling to hidden custom blocks
 
 ### 2022-11-30
 * German translation update
