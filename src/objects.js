@@ -3669,7 +3669,9 @@ SpriteMorph.prototype.searchBlocks = function (
                 'scripts',
                 'block',
                 'insert',
-                selection.abstractBlockSpec()
+                selection instanceof BlockMorph ?
+                    selection.abstractBlockSpec()
+                    : ''
             );
         } else {
             search = searchBar.getValue();
