@@ -72,6 +72,7 @@
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled
 * blocks: added configuration option for "noRingify"
 * blocks: fixed search
+* objects: fixed an event recording glitch
 
 ### 2022-11-30
 * German translation update
