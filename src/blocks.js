@@ -3165,15 +3165,17 @@ BlockMorph.prototype.userMenu = function () {
             renameVar,
             'rename only\nthis reporter'
         );
-    } else if (SpriteMorph.prototype.blockAlternatives[this.selector]) {
-        menu.addItem(
-            'relabel...',
-            () => this.relabel(
-                SpriteMorph.prototype.blockAlternatives[this.selector]
-            )
-        );
     } else if (this.isCustomBlock && this.alternatives) {
         alternatives = this.alternatives();
+        if (alternatives.length > 0) {
+            menu.addItem(
+                'relabel...',
+                () => this.relabel(alternatives)
+            );
+        }
+    } else {
+        alternatives = SpriteMorph.prototype.blockAlternatives[this.selector]
+            .filter(sel => StageMorph.prototype.hiddenPrimitives[sel] !== true);
         if (alternatives.length > 0) {
             menu.addItem(
                 'relabel...',

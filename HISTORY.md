@@ -41,6 +41,7 @@
     * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
     * improved touch-hold gesture on mobile Android devices, thanks, @ego-lay-atman-bay!
+    * don't show block relabel options that are marked as hidden
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
@@ -73,6 +74,7 @@
 * blocks: added configuration option for "noRingify"
 * blocks: fixed search
 * objects: fixed an event recording glitch
+* blocks: don't show block relabel options that are marked as hidden
 
 ### 2022-11-30
 * German translation update
