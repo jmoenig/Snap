@@ -10660,11 +10660,13 @@ InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
 };
 
 InputSlotMorph.prototype.receiversMenu = function (searching) {
-    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        dict = {all: ['all']};
+    var dict = {all: ['all']},
+    rcvr,
+    stage;
 
     if (searching) {return dict; }
+    rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
     dict['~'] = null;
     dict[stage.name] = stage.name;
     stage.children.forEach(morph => {
@@ -10676,11 +10678,13 @@ InputSlotMorph.prototype.receiversMenu = function (searching) {
 };
 
 InputSlotMorph.prototype.userEditMenu = function (searching) {
-    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        dict = {'anything': ['anything']};
+    var dict = {'anything': ['anything']},
+        rcvr,
+        stage;
 
     if (searching) {return dict; }
+    rcvr = this.parentThatIsA(BlockMorph).scriptTarget();
+    stage = rcvr.parentThatIsA(StageMorph);
     dict['~'] = null;
     dict[stage.name] = stage.name;
     stage.children.forEach(morph => {
