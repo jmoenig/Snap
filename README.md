@@ -31,7 +31,7 @@ Please reach out to us at [contact@snap.berkeley.edu](mailto:contact@snap.berkel
 
 ## Documentation
 
-The definitive source of how to use Snap! is the [Snap! Manual](help/Snap%20Manual.pdf).
+The definitive source of how to use Snap! is the [Snap! Manual](help/SnapManual.pdf).
 
 * [API.md](docs/API.md) describes the API for modifying the Snap! interface.
 * [Extensions.md](docs/Extensions.md) describes the basic interface for building JavaScript extensions for Snap!
