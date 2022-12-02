@@ -179,7 +179,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl', // optional
     'last_changed':
-        '2020-12-15', // this, too, will appear in the Translators tab
+        '2022-12-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1843,7 +1843,7 @@ SnapTranslator.dict.nl = {
     'letter':
         'letter',
     'word':
-        'Wort',
+        'woord',
     'whitespace':
         'witruimte',
     'line':
@@ -1851,7 +1851,7 @@ SnapTranslator.dict.nl = {
     'tab':
         'tab',
     'cr':
-        'regelterugloop',
+        'cr',
 
     // data types
     'number':

@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-October-19';
+modules.extensions = '2022-November-28';
 
 // Global stuff
 
@@ -725,7 +725,6 @@ SnapExtensions.primitives.set(
         name = name.toString();
         if (isSnapObject(obj)) {
             obj.setName(ide.newSpriteName(name, obj));
-            ide.recordUnsavedChanges();
         } else if (obj instanceof Costume) {
             obj.name = this.newCostumeName(name, obj);
             obj.version = Date.now();
@@ -953,7 +952,6 @@ SnapExtensions.primitives.set(
         ide.flushBlocksCache();
         ide.refreshPalette();
         ide.categories.refreshEmpty();
-        ide.recordUnsavedChanges();
     }
 );
 
@@ -966,7 +964,6 @@ SnapExtensions.primitives.set(
         ide.flushBlocksCache();
         ide.refreshPalette();
         ide.categories.refreshEmpty();
-        ide.recordUnsavedChanges();
     }
 );
 

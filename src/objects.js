@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-November-17';
+modules.objects = '2022-December-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -765,7 +765,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'when I receive %msgHat %message',
-            defaults: [''] // trigger the "message" expansion to refresh
+            defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
             type: 'hat',
@@ -913,6 +913,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'delete this clone'
+        },
+
+        // recording user edits
+        receiveUserEdit: {
+            type: 'hat',
+            category: 'control',
+            spec: 'When %edit is edited %message',
+            defaults: [['anything']]
         },
 
         // Custom Blocks & introspection
@@ -2118,6 +2126,7 @@ SpriteMorph.prototype.appearIn = function (ide) {
 SpriteMorph.prototype.setName = function (string) {
     this.name = string || this.name;
     this.version = Date.now();
+    this.recordUserEdit('sprite', 'name');
 };
 
 // SpriteMorph rendering
@@ -2677,6 +2686,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
+        blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
@@ -2907,7 +2917,13 @@ SpriteMorph.prototype.makeVariableButton = function () {
             myself.toggleVariableWatcher(pair[0], pair[1]);
             ide.flushBlocksCache('variables'); // b/c of inheritance
             ide.refreshPalette();
-            ide.recordUnsavedChanges();
+            myself.recordUserEdit(
+                'palette',
+                'variable',
+                pair[1] ? 'global' : 'local',
+                'new',
+                pair[0]
+            );
         }
     }
 
@@ -3082,7 +3098,13 @@ SpriteMorph.prototype.makeBlock = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                ide.recordUnsavedChanges();
+                this.recordUserEdit(
+                    'palette',
+                    'custom block',
+                    definition.isGlobal ? 'global' : 'local',
+                    'new',
+                    definition.abstractBlockSpec()
+                );
                 new BlockEditorMorph(definition, this).popUp();
             }
         },
@@ -3125,7 +3147,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     var myself = this,
         palette = new ScrollFrameMorph(null, null, this.sliderColor),
         unit = SyntaxElementMorph.prototype.fontSize,
-        ide,
+        ide = this.parentThatIsA(IDE_Morph),
         showCategories,
         showButtons,
         x = 0,
@@ -3160,19 +3182,21 @@ SpriteMorph.prototype.freshPalette = function (category) {
     searchButton.fixLayout();
     palette.toolBar.add(searchButton);
 
-    makeButton = new PushButtonMorph(
-        this,
-        "makeBlock",
-        new SymbolMorph("cross", 16)
-    );
-    makeButton.alpha = 0.2;
-    makeButton.padding = 1;
-    makeButton.hint = localize('Make a block') + '...';
-    makeButton.labelShadowColor = shade;
-    makeButton.edge = 0;
-    makeButton.padding = 3;
-    makeButton.fixLayout();
-    palette.toolBar.add(makeButton);
+    if (!ide || !ide.config.noOwnBlocks) {
+        makeButton = new PushButtonMorph(
+            this,
+            "makeBlock",
+            new SymbolMorph("cross", 16)
+        );
+        makeButton.alpha = 0.2;
+        makeButton.padding = 1;
+        makeButton.hint = localize('Make a block') + '...';
+        makeButton.labelShadowColor = shade;
+        makeButton.edge = 0;
+        makeButton.padding = 3;
+        makeButton.fixLayout();
+        palette.toolBar.add(makeButton);
+    }
 
     palette.toolBar.fixLayout();
     palette.add(palette.toolBar);
@@ -3180,6 +3204,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     // menu:
     palette.userMenu = function () {
         var menu = new MenuMorph();
+            ide = ide || this.parentThatIsA(IDE_Morph);
 
         menu.addPair(
             [
@@ -3192,20 +3217,23 @@ SpriteMorph.prototype.freshPalette = function (category) {
             () => myself.searchBlocks(),
             '^F'
         );
-        menu.addItem(
-            'hide blocks...',
-            () => new BlockVisibilityDialogMorph(myself).popUp(myself.world())
-        );
-        menu.addLine();
-        menu.addItem(
-            'make a category...',
-            () => this.parentThatIsA(IDE_Morph).createNewCategory()
-        );
-        if (SpriteMorph.prototype.customCategories.size) {
+        if (!ide.config.noOwnBlocks) {
             menu.addItem(
-                'delete a category...',
-                () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
+                'hide blocks...',
+                () => new BlockVisibilityDialogMorph(myself).popUp(
+                    myself.world())
             );
+            menu.addLine();
+            menu.addItem(
+                'make a category...',
+                () => this.parentThatIsA(IDE_Morph).createNewCategory()
+            );
+            if (SpriteMorph.prototype.customCategories.size) {
+                menu.addItem(
+                    'delete a category...',
+                    () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
+                );
+            }
         }
         return menu;
     };
@@ -3213,7 +3241,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'unified') {
         // In a Unified Palette custom blocks appear following each category,
         // but there is only 1 make a block button (at the end).
-        ide = this.parentThatIsA(IDE_Morph);
+        ide = ide || this.parentThatIsA(IDE_Morph);
         showCategories = ide.scene.showCategories;
         showButtons = ide.scene.showPaletteButtons;
         blocks = SpriteMorph.prototype.allCategories().reduce(
@@ -3229,7 +3257,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 // hide category names
                 if (!showCategories && category !== 'variables') {
                     primitives = primitives.filter(each =>
-                        each !== '-' && each !== '=');
+                        each !== '-' &&
+                        each !== '=' &&
+                        (each && !each.hideWithCategory));
                 }
 
                 // hide "make / delete a variable" buttons
@@ -3255,8 +3285,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     if (category !== 'unified' || showButtons) {
-        blocks.push('=');
-        blocks.push(this.makeBlockButton(category));
+        ide = ide || this.parentThatIsA(IDE_Morph);
+        if (!ide || !ide.config.noOwnBlocks) {
+            blocks.push('=');
+            blocks.push(this.makeBlockButton(category));
+        }
     }
 
     if (category !== 'unified') {
@@ -3385,7 +3418,14 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
             delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
         }
     }
-    if (quick) {return; }
+    if (quick) {
+        this.recordUserEdit(
+            'palette',
+            hideIt ? 'hide' : 'show',
+            aBlock.abstractBlockSpec()
+        );
+        return;
+    }
     dict = {
         doWarp: 'control',
         reifyScript: 'operators',
@@ -3397,6 +3437,11 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+    this.recordUserEdit(
+        'palette',
+        hideIt ? 'hide' : 'show',
+        aBlock.abstractBlockSpec()
+    );
 };
 
 SpriteMorph.prototype.emptyCategories = function () {
@@ -3620,9 +3665,14 @@ SpriteMorph.prototype.searchBlocks = function (
             if (selection) {
                 scriptFocus.insertBlock(selection);
             }
-            if (ide) {
-                ide.recordUnsavedChanges();
-            }
+            myself.recordUserEdit(
+                'scripts',
+                'block',
+                'insert',
+                selection instanceof BlockMorph ?
+                    selection.abstractBlockSpec()
+                    : ''
+            );
         } else {
             search = searchBar.getValue();
             if (search.length > 0) {
@@ -3897,7 +3947,13 @@ SpriteMorph.prototype.deleteVariable = function (varName, isGlobal) {
     if (ide) {
         ide.flushBlocksCache('variables'); // b/c the var could be global
         ide.refreshPalette();
-        ide.recordUnsavedChanges();
+        this.recordUserEdit(
+            'palette',
+            'variable',
+            isGlobal ? 'global' : 'local',
+            'delete',
+            varName
+        );
     }
 };
 
@@ -3984,7 +4040,15 @@ SpriteMorph.prototype.renameVariable = function (
 
     ide.flushBlocksCache('variables');
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    this.recordUserEdit(
+        'palette',
+        'variable',
+        isGlobal ? 'global' : 'local',
+        'rename',
+        everywhere ? 'all' : 'once',
+        oldName,
+        newName
+    );
     return true; // success
 };
 
@@ -4041,6 +4105,11 @@ SpriteMorph.prototype.addCostume = function (costume) {
     }
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
+    this.recordUserEdit(
+        'costume',
+        'add',
+        costume.name
+    );
 };
 
 SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
@@ -4185,6 +4254,11 @@ SpriteMorph.prototype.addSound = function (audio, name) {
     var sound = new Sound(audio, name);
     this.shadowAttribute('sounds');
     this.sounds.add(sound);
+    this.recordUserEdit(
+        'sounds',
+        'add',
+        sound.name
+    );
     return sound;
 };
 
@@ -4696,7 +4770,11 @@ SpriteMorph.prototype.perpetuateAndEdit = function () {
     if (ide) {
         this.perpetuate();
         ide.selectSprite(this);
-        ide.recordUnsavedChanges();
+        this.recordUserEdit(
+            'corral',
+            'permanent clone',
+            this.name
+        );
     }
 };
 
@@ -6507,7 +6585,6 @@ SpriteMorph.prototype.moveRotationCenter = function () {
 
 SpriteMorph.prototype.setPivot = function (worldCoordinate) {
     var stage = this.parentThatIsA(StageMorph),
-        ide = this.parentThatIsA(IDE_Morph),
         cntr;
     if (stage) {
         cntr = stage.center();
@@ -6517,9 +6594,12 @@ SpriteMorph.prototype.setPivot = function (worldCoordinate) {
                 (cntr.y - worldCoordinate.y) / stage.scale
             )
         );
-        if (ide) {
-            ide.recordUnsavedChanges();
-        }
+        this.recordUserEdit(
+            'sprite',
+            'pivot',
+            this.xPosition(),
+            this.yPosition()
+        );
     }
 };
 
@@ -6671,6 +6751,19 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
                 return morph.inputs()[0].evaluate()[0] === interaction;
+            }
+        }
+        return false;
+    });
+};
+
+SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
+    return this.scripts.children.filter(morph => {
+        if (morph.selector) {
+            if (morph.selector === 'receiveUserEdit') {
+                var choice = morph.inputs()[0].evaluate(),
+                    evt = choice instanceof Array ? choice[0] : choice;
+                return evt === spriteName || evt === 'anything';
             }
         }
         return false;
@@ -8165,6 +8258,18 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
     return newName;
 };
 
+// SpriteMorph recording user edits
+
+SpriteMorph.prototype.recordUserEdit = function (...details) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.recordUnsavedChanges(
+            this.name,
+            Array.from(details)
+        );
+    }
+};
+
 // SpriteHighlightMorph /////////////////////////////////////////////////
 
 // SpriteHighlightMorph inherits from Morph:
@@ -9015,6 +9120,45 @@ StageMorph.prototype.fireChangeOfSceneEvent = function (message, data) {
     return procs;
 };
 
+StageMorph.prototype.fireUserEditEvent = function (
+    spriteName,
+    details,
+    timestamp
+) {
+    var procs = [];
+    this.children.concat(this).forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksForUserEdit(spriteName).forEach(block => {
+                var varName = block.inputs()[1].evaluate()[0],
+                    varFrame;
+                if (varName) {
+                    varFrame = new VariableFrame();
+                    varFrame.addVar(
+                        varName,
+                        new List(
+                            [spriteName].concat(
+                                details
+                            ).concat([timestamp])
+                        )
+                    );
+                }
+                procs.push(this.threads.startProcess(
+                    block,
+                    morph,
+                    true, // ignore running scripts, was: myself.isThreadSafe
+                    null, // exportResult (bool)
+                    null, // callback
+                    null, // isClicked
+                    null, // rightAway
+                    null, // atomic
+                    varFrame
+                ));
+            });
+        }
+    });
+    return procs;
+};
+
 StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],
         ide = this.parentThatIsA(IDE_Morph);
@@ -9185,6 +9329,7 @@ StageMorph.prototype.blockTemplates = function (
         txt = new TextMorph(localize('Stage selected:\nno motion primitives'));
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
+        txt.hideWithCategory = true; // hide txt when category names are hidden
         blocks.push(txt);
 
     } else if (category === 'looks') {
@@ -9317,6 +9462,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
         blocks.push('-');
+        blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
@@ -10085,6 +10231,9 @@ StageMorph.prototype.allHatBlocksForKey
 StageMorph.prototype.allHatBlocksForInteraction
     = SpriteMorph.prototype.allHatBlocksForInteraction;
 
+StageMorph.prototype.allHatBlocksForUserEdit =
+    SpriteMorph.prototype.allHatBlocksForUserEdit;
+
 StageMorph.prototype.hasGenericHatBlocks
     = SpriteMorph.prototype.hasGenericHatBlocks;
 
@@ -10350,6 +10499,11 @@ StageMorph.prototype.allBlocks = function (valuesOnly) {
 StageMorph.prototype.inheritedBlocks = function () {
     return [];
 };
+
+// StageMorph recording user edits
+
+StageMorph.prototype.recordUserEdit =
+    SpriteMorph.prototype.recordUserEdit;
 
 // StageMorph pen trails as costume
 

@@ -5,6 +5,7 @@
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
+    * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -16,6 +17,8 @@
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * extensions can add custom buttons to the palette, thanks, Bernat!
+    * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
+    * added configuration options for embedding Snap! into other websites
 * **Notable Changes:**
     * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -26,14 +29,19 @@
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
+    * SciSnap2 extension update, thanks, Eckart!
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
+    * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
+    * order "my scripts" list by their top-down position in the scripting area (not by the time of their placement)
+    * don't show "result pic" option in block context menu with "click-to-run" disabled
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
     * improved touch-hold gesture on mobile Android devices, thanks, @ego-lay-atman-bay!
+    * don't show block relabel options that are marked as hidden
     * fixed aggressive cache issue, thanks, Michael!
     * fixed exporting pics of morphs in dev mode, thanks, @xBZZZZ!
     * fixed API->broadcast() to also accept a data payload, thanks, Zak!
@@ -49,14 +57,102 @@
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
     * fixed zebra coloring for polyadic read-only input slots 
     * fixed a label rendering glitch when flashing blocks
+    * prevented variables from being renamed to blanks 
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
+    * hiding the keyboard handler text area better by reducing its visible dimensions to zero
+    * fixed a codification glitch for empty list slots
+    * fixed deleting embedded reporters in keyboard-entry mode
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+    * Dutch, thanks, Hans!
+
+### 2022-12-02
+* gui: added configuration option for "blocksZoom"
+* gui: added user-event for dropping a costume icon in the wardrobe
+* objects: recategorized a costume user event
+* gui: removed redundant "duplicate costume" user event
+* gui: added costume # to "remove costume" user event
+* gui: added "rename sound" user event
+* gui: added "delete sound" user event
+* gui: added user-event for dropping a sound icon in the jukebox
+* blocks: fixed deleting embedded reporters in keyboard-entry mode
+
+### 2022-12-01
+* blocks: don't show "result pic" option in context menu with "click-to-run" disabled
+* blocks: added configuration option for "noRingify"
+* blocks: fixed search
+* objects: fixed an event recording glitch
+* blocks: don't show block relabel options that are marked as hidden
+* byob: fixed disabling relabelling to hidden custom blocks
+* fixed #3139 (Dutch translation)
+
+### 2022-11-30
+* German translation update
+* gui: added configuration option for "noImports"
+* blocks: fixed an event recording glitch
+* blocks, byob, objects: added configuration option for "noOwnBlocks"
+
+### 2022-11-29
+* gui: added configuration option for "noPalette"
+* objects: associate data with the "When (sprite) is edited" event hat block
+* gui, objects: more detailed user-event logging
+* blocks: more detailed user-event logging
+* byob: more detailed user-event logging
+* threads: more detailed user-event logging
+* gui: more detailed user-event logging
+
+### 2022-11-28
+* objects: new recordUserEdit() mechanism
+* objects: migrated objects to new recordUserEdit mechanism
+* blocks: migrated blocks to new recordUserEdit mechanism
+* blocks: migrated custom blocks to new recordUserEdit mechanism
+* threads: migrated processes to new recordUserEdit mechanism
+* extensions: migrated extensions to new recordUserEdit mechanism 
+* gui: migrated IDE to new recordUserEdit mechanism
+* objects, blocks, gui: new "When (sprite) is edited" event hat block
+* api: removed experimental scriptsAsText method (no longer needed)
+
+### 2022-11-26
+* threads: order "my scripts" list by their top-down position in the scripting area
+
+### 2022-11-25
+* gui: removed clickToRun configuration option (because it's supported by the microworld)
+* gui: simplified configurations application
+* gui: simplified noSprites configuration
+* pyret: new codify tester
+* gui: added version property to IDE for external observers
+* blocks: fixed a codification glitch for empty list slots
+* blocks: record unsaved changes when renaming a variable
+* api: new experimental scriptsAsText() method
+
+### 2022-11-24
+* gui: added configuration option for path (to the host's base directory)
+* gui: added configuration option for border (surrounding the IDE)
+* gui: added configuration option for "hideCategories"
+* gui: added configuration option for "load"
+* objects: hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
+
+### 2022-11-23
+* set up a test page for the Snap!-Pyret connection project
+* SciSnap2 extension update, thanks, Eckart!
+* gui: added hidden experimental 'Use CPU for graphics' preference setting for Canvas2D "willReadFrequently" property
+* gui: added configuration object to IDE initialization
+* gui: added configuration options for design, mode, blocksZoom, hideControls and noCloud
+* gui: added configuration option for language
+* gui: added configuration option for clickToRun
+* gui: extended hideControls configuration for edit mode
+* gui: added configuration option for noSprites
+* refactored snap.html
+
+### 2022-11-22
+* morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
+* morphic: hide the keyboard handler text area better by reducing its dimensions to zero
+* blocks: prevented variables from being renamed to blanks 
 
 ### 2022-11-21
 * morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay

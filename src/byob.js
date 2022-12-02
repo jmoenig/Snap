@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-September-21';
+modules.byob = '2022-December-01';
 
 // Declarations
 
@@ -1413,6 +1413,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
+        if (rcvr.parentThatIsA(IDE_Morph).config.noOwnBlocks) {
+            return menu;
+        }
         dlg = this.parentThatIsA(DialogBoxMorph);
         if (dlg && !(dlg instanceof BlockEditorMorph)) {
             return menu;
@@ -1556,7 +1559,13 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
     ide.flushPaletteCache();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    rcvr.recordUserEdit(
+        'palette',
+        'custom block',
+        this.isGlobal ? 'global' : 'local',
+        'duplicate definition',
+        dup.abstractBlockSpec()
+    );
     new BlockEditorMorph(dup, rcvr).popUp();
 };
 
@@ -1598,8 +1607,14 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
                 ide.flushPaletteCache();
                 ide.categories.refreshEmpty();
                 ide.refreshPalette();
-                ide.recordUnsavedChanges();
             }
+            rcvr.recordUserEdit(
+                'palette',
+                'custom block',
+                this.isGlobal ? 'global' : 'local',
+                'delete definition',
+                this.abstractBlockSpec()
+            );
         },
         this
     ).askYesNo(
@@ -1620,6 +1635,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
     var menu = new MenuMorph(this),
+        oldSpec = this.abstractBlockSpec(),
         oldInputs = this.inputs().map(each => each.fullCopy());
     alternatives.forEach(def => {
         var block = def.blockInstance();
@@ -1632,9 +1648,13 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
                 this.definition = def;
                 this.isGlobal = def.isGlobal;
                 this.refresh();
-                this.scriptTarget().parentThatIsA(
-                    IDE_Morph
-                ).recordUnsavedChanges();
+                this.scriptTarget().recordUserEdit(
+                    'scripts',
+                    'block',
+                    'relabel',
+                    oldSpec,
+                    this.abstractBlockSpec()
+                );
             }
         );
     });
@@ -1651,7 +1671,7 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         type = this instanceof CommandBlockMorph ? 'command'
             : (this.isPredicate ? 'predicate' : 'reporter');
     return allDefs.filter(each =>
-        each !== this.definition && each.type === type
+        each !== this.definition && each.type === type && !each.isHelper
     );
 };
 
@@ -2819,7 +2839,13 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     ide.flushPaletteCache();
     ide.categories.refreshEmpty();
     ide.refreshPalette();
-    ide.recordUnsavedChanges();
+    this.target.recordUserEdit(
+        'scripts',
+        'custom block',
+        this.definition.isGlobal ? 'global' : 'local',
+        'update',
+        this.definition.abstractBlockSpec()
+    );
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -4976,7 +5002,10 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     ide.flushBlocksCache();
     ide.refreshPalette();
     ide.categories.refreshEmpty();
-    ide.recordUnsavedChanges();
+    this.target.recordUserEdit(
+        'palette',
+        'hide block'
+    );
 };
 
 // BlockVisibilityDialogMorph layout
