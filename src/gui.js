@@ -11098,13 +11098,20 @@ SoundIconMorph.prototype.renameSound = function () {
     new DialogBoxMorph(
         null,
         answer => {
-            if (answer && (answer !== sound.name)) {
+            var old = sound.name;
+            if (answer && (answer !== old)) {
                 sound.name = answer;
                 sound.version = Date.now();
                 this.createLabel(); // can be omitted once I'm stepping
                 this.fixLayout(); // can be omitted once I'm stepping
                 ide.hasChangedMedia = true;
-                ide.recordUnsavedChanges();
+                ide.currentSprite.recordUserEdit(
+                    'sound',
+                    'rename',
+                    old,
+                    sound.name
+                );
+
             }
         }
     ).prompt(

@@ -76,6 +76,7 @@
 * objects: recategorized a costume user event
 * gui: removed redundant "duplicate costume" user event
 * gui: added costume # to "remove costume" user event
+* gui: added "rename sound" user event
 
 ### 2022-12-01
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled
