@@ -10408,11 +10408,6 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
     if (ide) {
         ide.currentSprite.wearCostume(newcos);
     }
-    wardrobe.sprite.recordUserEdit(
-        'costume',
-        'duplicate',
-        this.object.name
-    );
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {

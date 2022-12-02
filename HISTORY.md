@@ -74,6 +74,7 @@
 * gui: added configuration option for "blocksZoom"
 * gui: added user-event for dropping a costume icon in the wardrobe
 * objects: recategorized a costume user event
+* gui: removed redundant "duplicate costume" user event
 
 ### 2022-12-01
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled
