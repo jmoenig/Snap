@@ -78,6 +78,7 @@
 * gui: added costume # to "remove costume" user event
 * gui: added "rename sound" user event
 * gui: added "delete sound" user event
+* gui: added user-event for dropping a sound icon in the jukebox
 
 ### 2022-12-01
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled

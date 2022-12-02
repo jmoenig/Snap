@@ -11130,7 +11130,7 @@ SoundIconMorph.prototype.removeSound = function () {
         'delete',
         idx,
         this.object.name
-    )
+    );
 };
 
 SoundIconMorph.prototype.exportSound = function () {
@@ -11294,7 +11294,7 @@ JukeboxMorph.prototype.wantsDropOf = function (morph) {
 
 JukeboxMorph.prototype.reactToDropOf = function (icon) {
     var idx = 0,
-        costume = icon.object,
+        sound = icon.object,
         top = icon.top();
 
     icon.destroy();
@@ -11305,8 +11305,15 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     });
 
     this.sprite.shadowAttribute('sounds');
-    this.sprite.sounds.add(costume, idx + 1);
+    this.sprite.sounds.add(sound, idx + 1);
     this.updateList();
+
+    this.sprite.recordUserEdit(
+        'sound',
+        'add',
+        sound.name,
+        idx + 1
+    );
 };
 
 // SceneIconMorph ////////////////////////////////////////////////////
