@@ -8263,7 +8263,7 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
 SpriteMorph.prototype.recordUserEdit = function (...details) {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
-        this.parentThatIsA(IDE_Morph).recordUnsavedChanges(
+        ide.recordUnsavedChanges(
             this.name,
             Array.from(details)
         );
@@ -9126,7 +9126,6 @@ StageMorph.prototype.fireUserEditEvent = function (
     timestamp
 ) {
     var procs = [];
-
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allHatBlocksForUserEdit(spriteName).forEach(block => {
