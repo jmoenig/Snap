@@ -11125,6 +11125,12 @@ SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
         idx = this.parent.children.indexOf(this) - 1;
     jukebox.removeSound(idx);
+    jukebox.sprite.recordUserEdit(
+        'sound',
+        'delete',
+        idx,
+        this.object.name
+    )
 };
 
 SoundIconMorph.prototype.exportSound = function () {
