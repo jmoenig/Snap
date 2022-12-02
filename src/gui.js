@@ -10421,6 +10421,7 @@ CostumeIconMorph.prototype.removeCostume = function () {
     wardrobe.sprite.recordUserEdit(
         'costume',
         'delete',
+        idx - off,
         this.object.name
     );
 };
