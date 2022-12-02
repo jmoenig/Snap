@@ -10924,6 +10924,12 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.costumes.add(costume, idx + 1);
     this.updateList();
     icon.mouseClickLeft(); // select
+    this.sprite.recordUserEdit(
+        'costume',
+        'add',
+        costume.name,
+        idx + 1
+    );
 };
 
 // SoundIconMorph ///////////////////////////////////////////////////////
