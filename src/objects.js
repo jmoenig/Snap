@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-December-01';
+modules.objects = '2022-December-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -4106,7 +4106,7 @@ SpriteMorph.prototype.addCostume = function (costume) {
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
     this.recordUserEdit(
-        'costumes',
+        'costume',
         'add',
         costume.name
     );
