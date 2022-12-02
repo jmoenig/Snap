@@ -724,6 +724,8 @@ IDE_Morph.prototype.openIn = function (world) {
 
     // configure optional settings
     this.applyConfigurations();
+
+    return this;
 };
 
 // IDE_Morph configuration
