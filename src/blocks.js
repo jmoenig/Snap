@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-01';
+modules.blocks = '2022-December-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6889,7 +6889,9 @@ ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
         this.setPosition(oldPos);
     }
     ReporterBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
-    handMorph.alpha = this.alpha < 1 ? 1 : 0.85;
+    if (handMorph) {
+        handMorph.alpha = this.alpha < 1 ? 1 : 0.85;
+    }
     this.cachedSlotSpec = null;
 };
 

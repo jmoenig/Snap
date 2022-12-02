@@ -62,6 +62,7 @@
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
     * hiding the keyboard handler text area better by reducing its visible dimensions to zero
     * fixed a codification glitch for empty list slots
+    * fixed deleting embedded reporters in keyboard-entry mode
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -79,6 +80,7 @@
 * gui: added "rename sound" user event
 * gui: added "delete sound" user event
 * gui: added user-event for dropping a sound icon in the jukebox
+* blocks: fixed deleting embedded reporters in keyboard-entry mode
 
 ### 2022-12-01
 * blocks: don't show "result pic" option in context menu with "click-to-run" disabled
