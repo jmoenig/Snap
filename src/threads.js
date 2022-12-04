@@ -2742,6 +2742,45 @@ Process.prototype.doForEach = function (upvar, list, script) {
     this.evaluate(script, new List(/*[next]*/), true);
 };
 
+//TODO: don't duplicate code :)
+Process.prototype.indexedDoForEach = function (upvar, index, list, script) {
+    // perform a script for each element of a list, assigning the
+    // current iteration's element to a variable with the name
+    // specified in the "upvar" parameter, so it can be referenced
+    // within the script.
+    // Distinguish between linked and arrayed lists.
+
+    var next;
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            source : list,
+            remaining : list.length(),
+            idx : 0
+        };
+    }
+    if (this.context.accumulator.remaining === 0) {
+        return;
+    }
+    this.context.accumulator.remaining -= 1;
+    if (this.context.accumulator.source.isLinked) {
+        next = this.context.accumulator.source.at(1);
+        this.context.accumulator.source =
+            this.context.accumulator.source.cdr();
+    } else { // arrayed
+        this.context.accumulator.idx += 1;
+        next = this.context.accumulator.source.at(this.context.accumulator.idx);
+    }
+	var idx = this.context.accumulator.idx;
+    this.pushContext('doYield');
+    this.pushContext();
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(upvar, next);
+    this.context.outerContext.variables.addVar(index);
+    this.context.outerContext.variables.setVar(index, idx);
+    this.evaluate(script, new List(/*[next]*/), true);
+};
+
 Process.prototype.doFor = function (upvar, start, end, script) {
     // perform a script for every integer step between start and stop,
     // assigning the current iteration index to a variable with the

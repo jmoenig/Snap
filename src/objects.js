@@ -1567,6 +1567,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'for each %upvar in %l %cla',
             defaults: [localize('item')]
         },
+		indexedDoForEach: {
+			type: 'command',
+			category: 'lists',
+			spec: 'for each %upvar %upvar in %l %cla',
+			defaults: [localize('item'),localize('index')]
+		},
 
         // Tables - experimental
         doShowTable: {
@@ -1921,6 +1927,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reportKeep: ['reportFindFirst', 'reportMap'],
     reportFindFirst: ['reportKeep', 'reportMap'],
     doForEach: [['doFor', 1], ['doForever', -2], ['doRepeat', -1],
+        ['doUntil', -1]],
+	indexedDoForEach: [['doFor', 1], ['doForever', -2], ['doRepeat', -1],
         ['doUntil', -1]]
 };
 
@@ -2868,6 +2876,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
+		blocks.push(block('indexedDoForEach'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
@@ -9634,6 +9643,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportCombine'));
         blocks.push('-');
         blocks.push(block('doForEach'));
+		blocks.push(block('indexedDoForEach'));
         blocks.push('-');
         blocks.push(block('doAddToList'));
         blocks.push(block('doDeleteFromList'));
