@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-December-02';
+modules.gui = '2022-December-04';
 
 // Declarations
 
@@ -249,6 +249,7 @@ function IDE_Morph(config = { autofill: true }) {
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
+        zebra:          num, contrast percentage for nesting same-color blocks
 
     Note that such configurations will not affect the user's own preference
     settings, e.g. configuring the blocks zoom or language will not overwrite
@@ -789,6 +790,13 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // blocks fade
     if (cnf.blocksFade) {
         SyntaxElementMorph.prototype.setAlphaScaled(100 - cnf.blocksFade);
+    }
+
+    // zebra coloring //
+    if (isNil(cnf.zebra)) {
+        BlockMorph.prototype.zebraContrast = 40;
+    } else {
+        BlockMorph.prototype.zebraContrast = cnf.zebra;
     }
 
     // language

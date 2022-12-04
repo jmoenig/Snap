@@ -71,6 +71,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2022-12-04
+* gui: added configuration option for "zebra". Sigh.
+
 ### 2022-12-02
 * gui: added configuration option for "blocksZoom"
 * gui: added user-event for dropping a costume icon in the wardrobe
