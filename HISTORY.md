@@ -63,6 +63,7 @@
     * hiding the keyboard handler text area better by reducing its visible dimensions to zero
     * fixed a codification glitch for empty list slots
     * fixed deleting embedded reporters in keyboard-entry mode
+    * fixed zebra coloring when importing a script from file or smart PNG
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -70,6 +71,9 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2022-12-06
+* gui: fixed zebra coloring when importing a script from file or smart PNG
 
 ### 2022-12-04
 * gui: added configuration option for "zebra". Sigh.

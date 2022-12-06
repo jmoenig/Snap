@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-December-04';
+modules.gui = '2022-December-06';
 
 // Declarations
 
@@ -6163,6 +6163,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     } else {
         script = this.deserializeScriptString(str);
     }
+    script.fixBlockColor(null, true);
     this.spriteBar.tabBar.tabTo('scripts');
     script.pickUp(world);
     world.hand.grabOrigin = {
