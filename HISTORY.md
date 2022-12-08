@@ -72,6 +72,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2022-12-08
+* blocks: backmapping for codification, under construction
+
 ### 2022-12-06
 * gui: fixed zebra coloring when importing a script from file or smart PNG
 

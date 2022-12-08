@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-02';
+modules.blocks = '2022-December-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2511,6 +2511,16 @@ SyntaxElementMorph.prototype.mappedCode = function (definitions) {
     return result;
 };
 
+SyntaxElementMorph.prototype.elementsAtLOC = function (definitions) {
+    // return an Array indicating which syntax elements are codified at which
+    // line of textual code applying the current mapping
+    var result = this.evaluate();
+    if (result instanceof BlockMorph) {
+        return result.elementsAtLOC(definitions);
+    }
+    return [[this]];
+};
+
 // BlockLabelMorph ///////////////////////////////////////////////
 
 /*
@@ -4652,6 +4662,74 @@ BlockMorph.prototype.codeMappingHeader = function () {
         hat.alternateBlockColor();
     }
     return hat;
+};
+
+BlockMorph.prototype.elementsAtLOC = function (definitions) {
+    // return an Array indicating which syntax elements are codified at which
+    // line of textual code applying the current mapping
+    var key = this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector,
+        code,
+        codeLines,
+        count = 1,
+        headers,
+        defs = definitions || {},
+        elementLOC,
+        partsLOC = [],
+        insertionIdx,
+        i;
+
+    code = key === 'reportGetVar' ? this.blockSpec
+            : this.isCustomBlock ? this.definition.codeMapping || ''
+                    : StageMorph.prototype.codeMappings[key] || '';
+
+    codeLines = code.split('\n');
+    elementLOC = codeLines.map(() => [this]);
+    partsLOC = this.inputs().map(inp => inp.elementsAtLOC(defs) || []);
+    insertionIdx = 0;
+
+    partsLOC.forEach((partElements, partIdx) => {
+        var placeHolder = '<#' + count + '>',
+            rx = new RegExp(placeHolder, 'g');
+
+        codeLines.forEach(codeLine => {
+            // for every match on each codeline splice in the corresponding
+            // elements in the partsLOC
+            // add the elements of the first partsLOC item to he codelines,
+            // insert the following ones afterwards
+            var matches = (codeLine.match(rx) || []).length;
+            if (matches) {
+                // merge the first line with the current code line's elements
+                (partElements.shift() || []).forEach(each =>
+                    elementLOC[insertionIdx].unshift(each)
+                );
+
+                // insert the following lines behind the current code line
+                partElements.forEach(each => {
+                    insertionIdx += 1;
+                    elementLOC.splice(insertionIdx, 0, each);
+                });
+            }
+        });
+        count += 1;
+    });
+
+    if (this.nextBlock && this.nextBlock()) { // Command
+        elementLOC.push.apply(elementLOC, this.nextBlock().elementsAtLOC()); // +++
+    }
+
+    // prerix with empty lines in case of headers:
+    if (!definitions) { // top-level, add headers
+        headers = this.mappedCode().split('\n').length - elementLOC.length;
+        if (headers) {
+            for (i = 0; i < headers; i += 1) {
+            elementLOC.unshift([]);
+            }
+        }
+    }
+    // return code;
+
+    return elementLOC;
 };
 
 // Variable refactoring
@@ -9643,6 +9721,37 @@ CSlotMorph.prototype.mappedCode = function (definitions) {
     });
 
     return codeLines.join('\n');
+};
+
+CSlotMorph.prototype.elementsAtLOC = function (definitions) {
+    // return an Array indicating which syntax elements are codified at which
+    // line of textual code applying the current mapping
+    var code = StageMorph.prototype.codeMappings.reify || '<#1>',
+        codeLines = code.split('\n'),
+        nested = this.nestedBlock(),
+        part = nested ? nested.mappedCode(definitions) : '',
+        rx = new RegExp('<#1>', 'g'),
+        elementLOC = codeLines.map(() => [this]),
+        partElements = part instanceof SyntaxElementMorph ?
+                part.elementsAtLOC(definitions) : [],
+        insertionIdx = 0;
+
+    codeLines.forEach((codeLine) => {
+        var matches = (codeLine.match(rx) || []).length;
+        if (matches) {
+            // merge the first line with the current code line's elements
+            (partElements.shift() || []).forEach(each =>
+                elementLOC[insertionIdx].unshift(each)
+            );
+
+            // insert the following lines behind the current code line
+            partElements.forEach(each => {
+                insertionIdx += 1;
+                elementLOC.splice(insertionIdx, 0, each);
+            });
+        }
+    });
+    return elementLOC;
 };
 
 // CSlotMorph layout:
