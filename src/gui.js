@@ -261,10 +261,6 @@ IDE_Morph.prototype.init = function (config) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
-    // restore saved user preferences
-    this.userLanguage = null; // user language preference for startup
-    this.applySavedSettings();
-
     // additional properties:
     this.cloud = new Cloud();
     this.cloudMsg = null;
@@ -272,6 +268,10 @@ IDE_Morph.prototype.init = function (config) {
     this.serializer = new SnapSerializer();
     this.config = config;
     this.version = Date.now(); // for outside observers
+
+    // restore saved user preferences
+    this.userLanguage = null; // user language preference for startup
+    this.applySavedSettings();
 
     // scenes
     this.scenes = new List([new Scene()]);
