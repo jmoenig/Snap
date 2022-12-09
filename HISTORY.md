@@ -72,6 +72,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2022-12-09
+* gui: added configuration option for "noUserSettings". Sigh.
+
 ### 2022-12-08
 * blocks: backmapping for codification, under construction
 

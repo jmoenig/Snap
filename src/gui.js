@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-December-06';
+modules.gui = '2022-December-09';
 
 // Declarations
 
@@ -247,6 +247,7 @@ function IDE_Morph(config = { autofill: true }) {
         noImports:      bool, disable/allow importing files via drag&drop
         noOwnBlocks:    bool, hider/show "make a block" and "make a category"
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
+        noUserSettings: bool, disable/enable persistent user preferences
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -3221,6 +3222,8 @@ IDE_Morph.prototype.refreshIDE = function () {
 // IDE_Morph settings persistance
 
 IDE_Morph.prototype.applySavedSettings = function () {
+    if (this.config.noUserSettings) {return; }
+
     var design = this.getSetting('design'),
         zoom = this.getSetting('zoom'),
         fade = this.getSetting('fade'),
@@ -3311,7 +3314,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
-    if (!this.savingPreferences) {
+    if (!this.savingPreferences || this.config.noUserSettings) {
         return;
     }
     if (this.hasLocalStorage()) {
