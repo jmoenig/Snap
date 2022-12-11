@@ -53,6 +53,17 @@
                 ide.addMessageListener('update', (txt) => code.value = txt);
                 buttons.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
+                code.onmouseup = function () {
+                    var scripts = ide.currentSprite.scripts,
+                        ln = n => this.value.substr(0, n).split('\n').length;
+                    scripts.unflash();
+                    if (this.selectionStart < this.selectionEnd) {
+                        scripts.flashLOC(
+                            ln(this.selectionStart),
+                            ln(this.selectionEnd)
+                        );
+                    }
+                };
                 requestAnimationFrame(loop);
             };
         </script>
