@@ -4715,7 +4715,7 @@ BlockMorph.prototype.elementsAtLOC = function (definitions) {
     });
 
     if (this.nextBlock && this.nextBlock()) { // Command
-        elementLOC.push.apply(elementLOC, this.nextBlock().elementsAtLOC()); // +++
+        elementLOC.push.apply(elementLOC, this.nextBlock().elementsAtLOC());
     }
 
     // prerix with empty lines in case of headers:
@@ -4727,8 +4727,6 @@ BlockMorph.prototype.elementsAtLOC = function (definitions) {
             }
         }
     }
-    // return code;
-
     return elementLOC;
 };
 
