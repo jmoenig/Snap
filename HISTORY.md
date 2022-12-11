@@ -26,6 +26,7 @@
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
     * optional inputs "broadcast" and "switch to scene" blocks don't auto-fill when called with an input list
     * made formal parameters available in variable-menu dropdowns of all blocks inside of block editors
+    * hyperized "code of" reporter (codification primitive)
     * round watcher readouts to 6 decimal digits (like Scratch), instead of 9
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
@@ -74,6 +75,7 @@
 
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction
+* threads: hyperized "code of" reporter (codification primitive)
 
 ### 2022-12-09
 * gui: added configuration option for "noUserSettings". Sigh.

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-November-29';
+modules.threads = '2022-December-11';
 
 var ThreadManager;
 var Process;
@@ -6408,12 +6408,17 @@ Process.prototype.doMapListCode = function (part, kind, aString) {
 };
 
 Process.prototype.reportMappedCode = function (aContext) {
-    if (aContext instanceof Context) {
-        if (aContext.expression instanceof SyntaxElementMorph) {
-            return aContext.expression.mappedCode();
-        }
-    }
-    return '';
+    return this.hyper(
+        ctx => {
+            if (ctx instanceof Context) {
+                if (ctx.expression instanceof SyntaxElementMorph) {
+                    return ctx.expression.mappedCode();
+                }
+            }
+            return '';
+        },
+        aContext
+    );
 };
 
 // Process music primitives
