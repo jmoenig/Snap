@@ -8878,6 +8878,22 @@ ScriptsMorph.prototype.scriptTarget = function () {
     throw new Error('script target cannot be found for orphaned scripts');
 };
 
+// ScriptsMorph - codification
+
+ScriptsMorph.prototype.elementsAtLOC = function () {
+    // return an Array indicating which syntax elements are codified at which
+    // line of textual code applying the current mapping
+    var scripts = this.sortedElements().filter(each =>
+            each instanceof BlockMorph).map(block => block.elementsAtLOC()),
+        loc = [];
+
+    scripts.forEach(scr => {
+        scr.forEach(line => loc.push(line));
+        loc.push([]);
+    });
+
+    return loc;
+};
 
 // ArgMorph //////////////////////////////////////////////////////////
 
