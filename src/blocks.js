@@ -8895,6 +8895,26 @@ ScriptsMorph.prototype.elementsAtLOC = function () {
     return loc;
 };
 
+ScriptsMorph.prototype.flashLOC = function (start, end = start) {
+    // highlight all syntax elements located in the textual code indicated
+    // by start and end line numbers. End is optional.
+    var loc = this.elementsAtLOC(),
+        i;
+    this.unflash();
+    for (i = start; i <= end; i += 1) {
+        loc[i - 1].forEach(elem => elem.flash());
+    }
+};
+
+ScriptsMorph.prototype.unflash = function () {
+    this.forAllChildren(each => {
+        if (each instanceof SyntaxElementMorph && each.unflash) {
+            each.unflash();
+        }
+    });
+
+};
+
 // ArgMorph //////////////////////////////////////////////////////////
 
 /*
