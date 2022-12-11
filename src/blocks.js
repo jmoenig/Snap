@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-08';
+modules.blocks = '2022-December-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4692,7 +4692,7 @@ BlockMorph.prototype.elementsAtLOC = function (definitions) {
         var placeHolder = '<#' + count + '>',
             rx = new RegExp(placeHolder, 'g');
 
-        codeLines.forEach(codeLine => {
+        codeLines.forEach((codeLine, i) => {
             // for every match on each codeline splice in the corresponding
             // elements in the partsLOC
             // add the elements of the first partsLOC item to he codelines,
@@ -4701,13 +4701,13 @@ BlockMorph.prototype.elementsAtLOC = function (definitions) {
             if (matches) {
                 // merge the first line with the current code line's elements
                 (partElements.shift() || []).forEach(each =>
-                    elementLOC[insertionIdx].unshift(each)
+                    elementLOC[i + insertionIdx].unshift(each)
                 );
 
                 // insert the following lines behind the current code line
                 partElements.forEach(each => {
                     insertionIdx += 1;
-                    elementLOC.splice(insertionIdx, 0, each);
+                    elementLOC.splice(i + insertionIdx, 0, each);
                 });
             }
         });
@@ -9729,25 +9729,24 @@ CSlotMorph.prototype.elementsAtLOC = function (definitions) {
     var code = StageMorph.prototype.codeMappings.reify || '<#1>',
         codeLines = code.split('\n'),
         nested = this.nestedBlock(),
-        part = nested ? nested.mappedCode(definitions) : '',
         rx = new RegExp('<#1>', 'g'),
         elementLOC = codeLines.map(() => [this]),
-        partElements = part instanceof SyntaxElementMorph ?
-                part.elementsAtLOC(definitions) : [],
+        partElements = nested instanceof SyntaxElementMorph ?
+                nested.elementsAtLOC(definitions) : [],
         insertionIdx = 0;
 
-    codeLines.forEach((codeLine) => {
+    codeLines.forEach((codeLine, i) => {
         var matches = (codeLine.match(rx) || []).length;
         if (matches) {
             // merge the first line with the current code line's elements
             (partElements.shift() || []).forEach(each =>
-                elementLOC[insertionIdx].unshift(each)
+                elementLOC[i + insertionIdx].unshift(each)
             );
 
             // insert the following lines behind the current code line
             partElements.forEach(each => {
                 insertionIdx += 1;
-                elementLOC.splice(insertionIdx, 0, each);
+                elementLOC.splice(i + insertionIdx, 0, each);
             });
         }
     });
