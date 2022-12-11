@@ -50,7 +50,7 @@
                     };
                 world = new WorldMorph(document.getElementById('world'), false);
                 ide.openIn(world);
-                ide.addMessageListener('update', (txt) => code.value = txt);
+                ide.addMessageListener('update', txt => code.value = txt);
                 buttons.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
                 code.onmouseup = function () {
