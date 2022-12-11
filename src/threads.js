@@ -6410,10 +6410,19 @@ Process.prototype.doMapListCode = function (part, kind, aString) {
 Process.prototype.reportMappedCode = function (aContext) {
     return this.hyper(
         ctx => {
+            var scripts;
             if (ctx instanceof Context) {
                 if (ctx.expression instanceof SyntaxElementMorph) {
                     return ctx.expression.mappedCode();
                 }
+            } else if (isSnapObject(ctx)) {
+                scripts = ctx.scripts.sortedElements().filter(
+                    each => each instanceof BlockMorph
+                ).map(
+                    each => each.mappedCode()
+                );
+                return (scripts.length ? scripts : ['']).reduce((a, b) =>
+                    a + '\n\n' + b);
             }
             return '';
         },

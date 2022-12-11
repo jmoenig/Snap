@@ -16,6 +16,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
     * added configuration options for embedding Snap! into other websites
@@ -76,6 +77,7 @@
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction
 * threads: hyperized "code of" reporter (codification primitive)
+* threads: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
 
 ### 2022-12-09
 * gui: added configuration option for "noUserSettings". Sigh.
