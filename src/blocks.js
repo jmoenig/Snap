@@ -14821,14 +14821,8 @@ CommentMorph.prototype.mouseClickLeft = function () {
     this.comeToFront();
 };
 
-// CommentMorph layout:
-
-CommentMorph.prototype.layoutChanged = function () {
-    // react to a change of the contents area
+CommentMorph.prototype.reactToEdit = function () {
     var scripts = this.parentThatIsA(ScriptsMorph);
-    this.fixLayout();
-    this.align();
-    this.comeToFront();
     if (scripts) {
         scripts.scriptTarget().recordUserEdit(
             'scripts',
@@ -14836,6 +14830,15 @@ CommentMorph.prototype.layoutChanged = function () {
             'edit'
         );
     }
+};
+
+// CommentMorph layout:
+
+CommentMorph.prototype.layoutChanged = function () {
+    // react to a change of the contents area
+    this.fixLayout();
+    this.align();
+    this.comeToFront();
 };
 
 CommentMorph.prototype.fixLayout = function () {
