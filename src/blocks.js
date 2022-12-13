@@ -6128,9 +6128,13 @@ CommandBlockMorph.prototype.snap = function (hand) {
         }
         return;
     }
-
     scripts.lastDropTarget = target;
-
+    scripts.scriptTarget().recordUserEdit(
+        'scripts',
+        'block',
+        'snap',
+        this.abstractBlockSpec()
+    );
     if (target.loc === 'bottom') {
         if (target.type === 'slot') {
             this.removeHighlight();
@@ -7006,6 +7010,12 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         if (this.snapSound) {
             this.snapSound.play();
         }
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'block',
+            'snap',
+            this.abstractBlockSpec()
+        );
     }
     this.fixBlockColor();
     ReporterBlockMorph.uber.snap.call(this);
