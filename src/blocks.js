@@ -15032,6 +15032,12 @@ CommentMorph.prototype.snap = function (hand) {
             this.snapSound.play();
         }
         scripts.lastDropTarget = {element: target};
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            'snap',
+            this.block.abstractBlockSpec()
+        );
     }
     this.align();
     scripts.lastDroppedBlock = this;
