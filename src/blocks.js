@@ -14950,6 +14950,14 @@ CommentMorph.prototype.userMenu = function () {
 };
 
 CommentMorph.prototype.userDestroy = function () {
+    var scripts = this.parentThatIsA(ScriptsMorph);
+    if (scripts) {
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            'delete'
+        );
+    }
     this.selectForEdit().destroy(); // enable copy-on-edit
 };
 
@@ -14975,6 +14983,14 @@ CommentMorph.prototype.show = function () {
 
 CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     // disassociate from the block I'm posted to
+    var scripts = this.parentThatIsA(ScriptsMorph);
+    if (scripts) {
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            'grab'
+        );
+    }
     if (this.block) {
         this.block.comment = null;
         this.block = null;
