@@ -79,6 +79,7 @@
 * blocks: refined user-edits for comments: reactToEdit()
 * blocks: refined user-edits for comments: collapse / expand
 * blocks: refined user-edits for comments: grab
+* blocks: refined user-edits for comments: drop
 
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction

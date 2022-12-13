@@ -15001,6 +15001,17 @@ CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     }
 };
 
+CommentMorph.prototype.justDropped = function (hand) {
+    var scripts = this.parentThatIsA(ScriptsMorph);
+    if (scripts) {
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            'drop'
+        );
+    }
+};
+
 CommentMorph.prototype.selectForEdit =
     SyntaxElementMorph.prototype.selectForEdit;
 
