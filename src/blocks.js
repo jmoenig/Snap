@@ -14914,6 +14914,7 @@ CommentMorph.prototype.userMenu = function () {
             var dup = this.fullCopy(),
                 ide = this.parentThatIsA(IDE_Morph),
                 blockEditor = this.parentThatIsA(BlockEditorMorph),
+                scripts = this.parentThatIsA(ScriptsMorph),
                 world = this.world();
             dup.pickUp(world);
             // register the drop-origin, so the comment can
@@ -14927,6 +14928,13 @@ CommentMorph.prototype.userMenu = function () {
                     origin: ide.palette,
                     position: ide.palette.center()
                 };
+            }
+            if (scripts) {
+                scripts.scriptTarget().recordUserEdit(
+                    'scripts',
+                    'comment',
+                    'duplicate'
+                );
             }
         },
         'make a copy\nand pick it up'
