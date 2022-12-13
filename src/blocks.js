@@ -7142,7 +7142,8 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
-    var target = this.selectForEdit(); // enable copy-on-edit
+    var target = this.selectForEdit(), // enable copy-on-edit
+        rcvr = this.scriptTarget(true);
     if (target !== this) {
         return this.userDestroy.call(target);
     }
@@ -7159,6 +7160,15 @@ ReporterBlockMorph.prototype.userDestroy = function () {
     this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
+
+    if (rcvr) {
+        rcvr.recordUserEdit(
+            'scripts',
+            'block',
+            'delete',
+            this.abstractBlockSpec()
+        );
+    }
 };
 
 // ReporterBlockMorph drawing:
