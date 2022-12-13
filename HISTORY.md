@@ -77,6 +77,7 @@
 ### 2022-12-13
 * gui, blocks, objects: refined user-edit events for blocks
 * blocks: refined user-edits for comments: reactToEdit()
+* blocks: refined user-edits for comments: collapse / expand
 
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction

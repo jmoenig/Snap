@@ -14800,11 +14800,19 @@ CommentMorph.prototype.text = function () {
 };
 
 CommentMorph.prototype.toggleExpand = function () {
+    var scripts = this.parentThatIsA(ScriptsMorph);
     this.isCollapsed = !this.isCollapsed;
     this.fixLayout();
     this.align();
     if (!this.isCollapsed) {
         this.comeToFront();
+    }
+    if (scripts) {
+        scripts.scriptTarget().recordUserEdit(
+            'scripts',
+            'comment',
+            this.isCollapsed ? 'collapse' : 'expand'
+        );
     }
 };
 
