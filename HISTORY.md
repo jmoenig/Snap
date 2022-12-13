@@ -81,6 +81,7 @@
 * blocks: refined user-edits for comments: grab
 * blocks: refined user-edits for comments: drop
 * blocks: refined user-edits for comments: snap
+* blocks: refined user-edits for comments: delete by dropping on palette
 
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction

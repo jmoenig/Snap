@@ -1775,6 +1775,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             );
         } else {
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
+            if (droppedMorph instanceof CommentMorph) {
+                this.currentSprite.recordUserEdit(
+                    'scripts',
+                    'comment',
+                    'delete'
+                );
+            }
         }
     };
 
