@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-December-09';
+modules.gui = '2022-December-13';
 
 // Declarations
 
@@ -1767,6 +1767,12 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
                 hand.grabOrigin.origin.recordDrop(hand.grabOrigin);
             }
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
+            this.currentSprite.recordUserEdit(
+                'scripts',
+                'block',
+                'delete',
+                droppedMorph.abstractBlockSpec()
+            );
         } else {
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
         }

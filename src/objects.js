@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-December-02';
+modules.objects = '2022-December-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -9145,7 +9145,7 @@ StageMorph.prototype.fireUserEditEvent = function (
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    true, // ignore running scripts, was: myself.isThreadSafe
+                    false, // ignore running scripts, was: myself.isThreadSafe
                     null, // exportResult (bool)
                     null, // callback
                     null, // isClicked

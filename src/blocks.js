@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-11';
+modules.blocks = '2022-December-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3278,6 +3278,13 @@ BlockMorph.prototype.userMenu = function () {
                     origin: ide.palette,
                     position: ide.palette.center()
                 };
+
+                this.scriptTarget().recordUserEdit(
+                    'scripts',
+                    'block',
+                    'duplicate',
+                    this.abstractBlockSpec()
+                );
             }
         },
         'make a copy\nand pick it up'
@@ -5525,20 +5532,41 @@ BlockMorph.prototype.situation = function () {
 // BlockMorph sticky comments
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
-    var wrld = hand ? hand.world : this.world();
+    var wrld = hand ? hand.world : this.world(),
+        trgt = this.scriptTarget(true);
+
     this.allInputs().forEach(input =>
         delete input.bindingID
     );
     this.allComments().forEach(comment =>
         comment.startFollowing(this, wrld)
     );
+
+    if (trgt) {
+        trgt.recordUserEdit(
+            'scripts',
+            'block',
+            'grab',
+            this.abstractBlockSpec()
+        );
+    }
 };
 
 BlockMorph.prototype.justDropped = function () {
+    var trgt = this.scriptTarget(true);
     delete this.alpha;
     this.allComments().forEach(comment =>
         comment.stopFollowing()
     );
+
+    if (trgt) {
+        trgt.recordUserEdit(
+            'scripts',
+            'block',
+            'drop',
+            this.abstractBlockSpec()
+        );
+    }
 };
 
 BlockMorph.prototype.allComments = function () {
@@ -6206,7 +6234,9 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
-    var target = this.selectForEdit(); // enable copy-on-edit
+    var target = this.selectForEdit(), // enable copy-on-edit
+        rcvr = this.scriptTarget(true);
+
     if (target !== this) {
         return this.userDestroy.call(target);
     }
@@ -6242,12 +6272,22 @@ CommandBlockMorph.prototype.userDestroy = function () {
     if (parent) {
         parent.reactToGrabOf(this); // fix highlight
     }
+
+    if (rcvr) {
+        rcvr.recordUserEdit(
+            'scripts',
+            'block',
+            'delete',
+            this.abstractBlockSpec()
+        );
+    }
 };
 
 CommandBlockMorph.prototype.userDestroyJustThis = function () {
     // delete just this one block, reattach next block to the previous one,
     var scripts = this.parentThatIsA(ScriptsMorph),
-        nb = this.nextBlock();
+        nb = this.nextBlock(),
+        trgt = this.scriptTarget(true);
 
     // for undrop / redrop
     if (scripts) {
@@ -6259,6 +6299,15 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
     }
 
     this.extract();
+
+    if (trgt) {
+        trgt.recordUserEdit(
+            'scripts',
+            'block',
+            'delete',
+            this.abstractBlockSpec()
+        );
+    }
 };
 
 CommandBlockMorph.prototype.userExtractJustThis = function () {
@@ -6280,7 +6329,9 @@ CommandBlockMorph.prototype.extract = function () {
         nb = this.nextBlock(),
         above,
         parent = this.parentThatIsA(SyntaxElementMorph),
-        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph);
+        cslot = this.parentThatIsA(CSlotMorph, RingReporterSlotMorph),
+        trgt = this.scriptTarget(true);
+
 
     this.topBlock().fullChanged();
     if (this.parent) {
@@ -6291,6 +6342,14 @@ CommandBlockMorph.prototype.extract = function () {
     } else if (cs && (cs.nestedBlock() === this)) {
         above = cs;
         this.prepareToBeGrabbed(); // restore ring reporter slot, if any
+    }
+    if (trgt) {
+        trgt.recordUserEdit(
+            'scripts',
+            'block',
+            'extract',
+            this.abstractBlockSpec()
+        );
     }
     if (ide) {
         // also stop all active processes hatted by this block
@@ -8636,16 +8695,6 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     }
     this.dropRecord = record;
     this.updateToolbar();
-    if (this.parentThatIsA(IDE_Morph)) {
-        this.scriptTarget().recordUserEdit(
-            'scripts',
-            'block',
-            'dropped',
-            this.lastDroppedBlock instanceof BlockMorph ?
-                this.lastDroppedBlock.abstractBlockSpec()
-                : 'comment'
-        );
-    }
 };
 
 ScriptsMorph.prototype.addToolbar = function () {

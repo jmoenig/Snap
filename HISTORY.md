@@ -74,6 +74,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2022-12-13
+* gui, blocks, objects: refined user-edit events for blocks
+
 ### 2022-12-11
 * blocks: improved backmapping for codification, still under construction
 * threads: hyperized "code of" reporter (codification primitive)
