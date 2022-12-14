@@ -162,6 +162,10 @@
         return null;
     };
 
+    Extension.prototype.getSettings = function() {
+        return [];
+    };
+
     Extension.prototype.getCategories = function() {
         return [];
     };
@@ -181,6 +185,29 @@
     Extension.prototype.onNewProject =
     Extension.prototype.onOpenRole = function() {
     };
+
+    class ExtensionSetting {
+        constructor(label, toggle, test, onHint = '', offHint = '', hide = false) {
+            this.label = label;
+            this.toggle = toggle, 
+            this.test = test, 
+            this.onHint = onHint, 
+            this.offHint = offHint, 
+            this.hide = hide
+        }
+    }
+
+    ExtensionSetting.createFromLocalStorage = function(label, id, defaultValue = false, onHint = '', offHint = '', hide = false){
+        return new ExtensionSetting(
+            label,
+            () => {
+                window.localStorage.setItem(id, !(window.localStorage.getItem(id) ?? defaultValue));
+            },
+            () => window.localStorage.getItem(id) ?? defaultValue,
+            onHint, offHint, hide);
+    }
+
+    Extension.ExtensionSetting = ExtensionSetting;
 
     class LabelPart {
         constructor(spec, fn) {
