@@ -1391,7 +1391,7 @@ var MorphicPreferences = standardSettings;
     Snap! >> guis.js >> toggleRetina()
 */
 
-enableRetinaSupport();
+// enableRetinaSupport();
 
 // Global Functions ////////////////////////////////////////////////////
 
