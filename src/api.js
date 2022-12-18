@@ -57,15 +57,17 @@ modules.api = '2022-November-28';
 
 window.onmessage = function (event) {
     // make the API accessible from outside an iframe
-    var ide = world.children[0];
-    if (!isNil(event.data.selector)) {
-        window.top.postMessage(
-            {
-                selector: event.data.selector,
-                response: ide[event.data.selector].apply(ide, event.data.params)
-            },
-            '*'
-        );
+    if(!isNil(window.world)) {
+        var ide = world.children[0];
+        if (!isNil(event.data.selector)) {
+            window.top.postMessage(
+                {
+                    selector: event.data.selector,
+                    response: ide[event.data.selector].apply(ide, event.data.params)
+                },
+                '*'
+            );
+        }
     }
 };
 
