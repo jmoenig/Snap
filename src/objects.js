@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-December-13';
+modules.objects = '2022-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -6717,8 +6717,9 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (sel === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
                 return event === message ||
-                    (event instanceof Array && event[0] == message) ||
+                    (event instanceof Array && event[0] == message) || // nums
                     (event instanceof Array &&
+                        event[0] === 'any message' &&
                         message !== '__shout__go__' &&
                         message !== '__clone__init__');
             }

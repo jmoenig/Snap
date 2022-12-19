@@ -66,6 +66,7 @@
     * fixed a codification glitch for empty list slots
     * fixed deleting embedded reporters in keyboard-entry mode
     * fixed zebra coloring when importing a script from file or smart PNG
+    * fixed accidentally triggering "When I receive green flag" events for any broadcast message
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -73,6 +74,9 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2022-12-19
+* objects: fixed #3151 (accidentally triggering "When I receive green flag" events for any broadcast message)
 
 ### 2022-12-13
 * gui, blocks, objects: refined user-edit events for blocks
