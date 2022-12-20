@@ -29,7 +29,14 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_getcurrentnote()',
     function () {
-        return window.currentNote
+        return window._currentNote
+    }
+)
+
+SnapExtensions.primitives.set(
+    'ts_convertmiditojson(midiFile)',
+    function() {
+        return 0;
     }
 )
 
@@ -276,37 +283,43 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'ts_playMIDI(controller, instrument)',
-    function (controller_name, instrument) {
-        var current_controller = controller_name;
-        var midi_instrument = instrument;
+    function (controller_name, instrument_name) {
 
-        function onEnabled() {
-            let synth = window.WebMidi.getInputByName(current_controller);
+        function onEnabled(controller, instrument) {
+            let synth = window.WebMidi.getInputByName(controller);
             let keyboard = synth.channels[1];
+            //remove any existing listeners
+            keyboard.removeListener("noteon")
 
             // Listener for the keyboard, prints midi note number
             keyboard.addListener("noteon", e => {
-                window.playNote(e.note.identifier, 0.5, midi_instrument);
+                window.playNote(e.note.identifier, 0.5, instrument);
             });
         }
 
         const playMidiController = async (controller, instrument) => {
             if(controller === null || controller === "") return;
-            current_controller = controller;
 
             //enables the webmidi controller, doesn't record notes
             window.WebMidi.enable((err) => {
                 if (err) {
                     alert(err);
                 } else {
-                    onEnabled();
+                    onEnabled(controller, instrument);
                 }
             });
         }
 
-        playMidiController(controller_name, instrument);
+        playMidiController(controller_name, instrument_name);
     }
 );
+
+SnapExtensions.primitives.set(
+    'ts_stopMIDI()',
+    function() {
+        window.WebMidi.disable();
+    }
+)
 
 SnapExtensions.primitives.set(
     'ts_settone(id, frequency, amplitude, balance)',
