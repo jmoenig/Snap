@@ -19,6 +19,14 @@ for (var i = 0; i <= 127; i++) {
 window._currentNote = ""
 window._parsed = ""
 window._isParsed = false
+window.parent._ts_pausePlayback = false;
+
+const _ide = world.children[0];
+const original_stop = _ide.stopAllScripts.bind(_ide);
+_ide.stopAllScripts = function() {
+  original_stop();
+  window.parent._ts_pausePlayback = true;
+}
 
 const _convertToSharp = (note) => {
     const splitByFlat = note.split("b");

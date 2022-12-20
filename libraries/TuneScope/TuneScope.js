@@ -61,6 +61,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_playtracks(tracklist, timesignature)',
     function (tracksList, timeSignature, tempo) {
+        window.parent._ts_pausePlayback = false;
         const multiplyArray = (arr, length) =>
           Array.from({ length }, () => arr).flat()
 
@@ -80,6 +81,7 @@ SnapExtensions.primitives.set(
              * We can calculate in seconds how long the measure lasts in seconds and then simply calculate when we are past the elapsed time in seconds and this is how we synchronize measures
              */
             while (elapsedMeasureTime < timeEndIndex) {
+                if(window.parent._ts_pausePlayback) break;
                 const note = currTrack[measureIndex][0];
                 const noteLength = currTrack[measureIndex][1];
                 measureIndex++; //increment for the next index in the track
@@ -252,6 +254,7 @@ SnapExtensions.primitives.set(
 
             // Play Measures track by track
             for (let i = 0; i < totalMeasures; i++) {
+                if(window.parent._ts_pausePlayback) break;
                 console.log("Playing measure " + (i + 1));
                 const measureResults = [];
 
