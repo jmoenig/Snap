@@ -34,11 +34,29 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    'ts_convertmiditojson(midiFile)',
-    function() {
-        return 0;
+    'ts_parsemidifile()',
+    function () {
+        const getMidiFile = async () => {
+            window._parsed = "";
+            fileMidi = await window._selectFile(".mid", false);
+            const arrayBuffer = await fileMidi.arrayBuffer()
+            const _parsedMidi = await new window.Midi(arrayBuffer)
+            window._parsed = _parsedMidi.toJSON();
+            world.children[0].broadcast("ts_file_input_received")
+        }
+        getMidiFile();
     }
 )
+
+SnapExtensions.primitives.set(
+    'ts_getparsed()',
+    function() {
+        world.children[0].broadcast("ts_no_file_upload")
+        let temp = window._objToArray(window._parsed);
+        temp = window.convertArrayToListRecursive(temp);
+        return temp;
+    }
+);
 
 SnapExtensions.primitives.set(
     'ts_playtracks(tracklist, timesignature)',

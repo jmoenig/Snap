@@ -17,6 +17,8 @@ for (var i = 0; i <= 127; i++) {
 }
 
 window._currentNote = ""
+window._parsed = ""
+window._isParsed = false
 
 const _convertToSharp = (note) => {
     const splitByFlat = note.split("b");
@@ -426,6 +428,20 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
+const _isObject = (obj) => {
+  return (typeof obj === "object" || typeOf(obj) === "Array") && obj !== null;
+}
+
+const _objToArray = (obj) => {
+  return Object.keys(obj).map((key) => {
+    return [key, _isObject(obj[key]) ? 
+        _objToArray(obj[key]) :
+        obj[key]
+    ];
+  });    
+}
+window._objToArray = _objToArray;
+
 function isNumber(myString) {
   return /^\d+\.\d+$/.test(myString);
 }
@@ -440,6 +456,32 @@ function deep_copy(array) {
   return JSON.parse(JSON.stringify(array));
 }
 window.deep_copy = deep_copy;
+
+/**
+ * Select file(s).
+ * @param {String} contentType The content type of files you wish to select. For instance, use "image/*" to select all types of images.
+ * @param {Boolean} multiple Indicates if the user can select multiple files.
+ * @returns {Promise<File|File[]>} A promise of a file or array of files in case the multiple parameter is true.
+ */
+function _selectFile(contentType, multiple) {
+    return new Promise(resolve => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = multiple;
+        input.accept = contentType;
+
+        input.onchange = () => {
+            let files = Array.from(input.files);
+            if (multiple)
+                resolve(files);
+            else
+                resolve(files[0]);
+        };
+
+        input.click();
+    });
+}
+window._selectFile = _selectFile;
 
 // play dummy sound to initialize
 
