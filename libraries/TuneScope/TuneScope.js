@@ -55,23 +55,23 @@ SnapExtensions.primitives.set(
         }
 
         const playTrackMeasure = async (currTrack, measureIndex, beatsPerMeasure, tempo, instrument) => {
-            var beat = 0;
-            const beatEndIndex = beatsPerMeasure[0];
+            var elapsedMeasureTime = 0;
+            const timeEndIndex = beatsPerMeasure[0] * (window.baseTempo / tempo);
 
-         
-            while (beat < beatEndIndex) {
+            /**
+             * We can calculate in seconds how long the measure lasts in seconds and then simply calculate when we are past the elapsed time in seconds and this is how we synchronize measures
+             */
+            while (elapsedMeasureTime < timeEndIndex) {
                 const note = currTrack[measureIndex][0];
                 const noteLength = currTrack[measureIndex][1];
                 measureIndex++; //increment for the next index in the track
 
-                const durationInSeconds = noteLength * (window.baseTempo / tempo);
-
                 // play the note and wait
-                await window.playNote(note, durationInSeconds, instrument);
-                await wait(durationInSeconds * 1000)
+                await window.playNote(note, noteLength, instrument);
+                await wait(noteLength * 1000)
 
                 // we increment i with respect to the number of beats the current note occupies in a measure
-                beat += noteLength * beatsPerMeasure[1];
+                elapsedMeasureTime += noteLength;
             }
 
         }
@@ -120,9 +120,15 @@ SnapExtensions.primitives.set(
             for (let i = 0; i < tracks.length; i++) {
                 let currTrack = tracks[i];
                 for (let j = 1; j < currTrack.length; j++) { //index from 1 to avoid the header
-                    //Reassign the durations list to numerical duration values from strings
+                    //Reassign the durations list to duration in seconds 
                     //jth (Note, Duration) pair
-                    currTrack[j][1] = window.noteLengthToTimeValue[currTrack[j][1]]
+                    if (!window.isNumber(currTrack[j][1])) {
+                        currTrack[j][1] = window.noteLengthToTimeValue[currTrack[j][1]] * (window.baseTempo / tempo);
+                        console.log("the number is " + currTrack[j][1]);
+                    } else {
+                        currTrack[j][1] = parseFloat(currTrack[j][1]);
+                        console.log("the number is " + currTrack[j][1]);
+                    }
                 }
             }
 
@@ -144,25 +150,17 @@ SnapExtensions.primitives.set(
                         } else { //(" ", duration) encode a rest
                             currTrack[j][0] = "R";
                         }
-
-                        //converting the duration length to the appropriate value based on the timesignature
-                        // If eighth notes get the beat, subdivide drum tracks into sixteenth notes
-                        if (beatsPerMeasure[1] == 0.5) {
-                            currTrack[j][1] = 0.25;
-                        }
                     }
                 }
             }
 
-            // calculates the total number of beats in the song
-            var totalBeats = 0;
+            var totalSeconds = 0.0;
             var defTrack = tracks[definitiveTrackIndex];
             for (let j = 1; j < defTrack.length; j++) {
-                totalBeats += parseFloat(defTrack[j][1]);
+                totalSeconds += defTrack[j][1];
             }
-
-            // length of measure = total number of beats (w.r.t which note gets the beat) / beats per measure
-            const totalMeasures = (totalBeats) / (beatsPerMeasure[0] * beatsPerMeasure[1]);
+            const secondsPerMeasure = (window.baseTempo / tempo) * beatsPerMeasure[0]
+            const totalMeasures = Math.floor(totalSeconds / secondsPerMeasure)
 
             //convert any melody/chord/drum loop to a regular track
             // done by repeatedly appending the array to itself
@@ -170,11 +168,11 @@ SnapExtensions.primitives.set(
                 let currTrack = tracks[i];
                 //check if the current track is a loop
                 if (currTrack[0][0] === "loop-melody" || currTrack[0][0] === "loop-chords" || currTrack[0][0] === "loop-drums") {
-                    let beatsInLoop = 0;
+                    let secondsInLoop = 0;
                     for (let j = 1; j < currTrack.length; j++) {
-                        beatsInLoop += parseFloat(currTrack[j][1]);
+                        secondsInLoop += parseFloat(currTrack[j][1]);
                     }
-                    let loopCount = parseInt(totalBeats / beatsInLoop);
+                    let loopCount = parseInt(totalSeconds / secondsInLoop);
 
                     //appending the track to itself
                     //we don't repeat the header
@@ -242,7 +240,7 @@ SnapExtensions.primitives.set(
                 // count for the number of beats that have passed since the last measure
                 // e.g. in 4/4, measure 3 will have 2*4 = 8 beats elapsed. Next measure starts
                 // on beat 8 (0 indexed)
-                let elapsedBeats = i * beatsPerMeasure[0];
+                let elapsedTime = i * (window.baseTempo / tempo) * beatsPerMeasure[0];
 
                 //per track
                 for (let j = 0; j < tracks.length; j++) {
@@ -256,12 +254,12 @@ SnapExtensions.primitives.set(
                     // the same amount of beats, they will align at each measure
                     // beat-wise, but have different starting indices measure-wise
                     for (let k = 1; k < currTrack.length; k++) {
-                        if (elapsedSum >= elapsedBeats) {
+                        if (elapsedSum >= elapsedTime) {
                             measureIndex = k;
                             break;
                         } else {
                             // add the value of the kth duration
-                            elapsedSum += parseFloat(currTrack[k][1]);
+                            elapsedSum += currTrack[k][1];
                         }
                     }
 

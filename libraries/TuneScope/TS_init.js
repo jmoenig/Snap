@@ -426,6 +426,11 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
+function isNumber(myString) {
+  return /^\d+\.\d+$/.test(myString);
+}
+window.isNumber = isNumber;
+
 function hasNumber(myString) {
   return /\d/.test(myString);
 }
