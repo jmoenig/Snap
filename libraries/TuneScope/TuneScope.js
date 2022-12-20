@@ -152,28 +152,6 @@ SnapExtensions.primitives.set(
                 }
             }
 
-            // properly encodes drum tracks
-            for (let i = 0; i < tracks.length; i++) {
-                let currTrack = tracks[i];
-                // check each track's header to see whether it is a drum track
-                // Header: (Instrument, Type)
-                if (currTrack[0][0] === "loop-drums") {
-                    var isBassDrum = (currTrack[0][1] === "bass drum");
-                    for (let j = 1; j < currTrack.length; j++) {
-                        if (currTrack[j][0] === "x") { // ("x", duration) encode a note
-                            //check if the instrument is a bass drum
-                            if (isBassDrum) {
-                                currTrack[j][0] = "C2";
-                            } else {
-                                currTrack[j][0] = "C4";
-                            }
-                        } else { //(" ", duration) encode a rest
-                            currTrack[j][0] = "R";
-                        }
-                    }
-                }
-            }
-
             var totalSeconds = 0.0;
             var defTrack = tracks[definitiveTrackIndex];
             for (let j = 1; j < defTrack.length; j++) {
@@ -187,7 +165,7 @@ SnapExtensions.primitives.set(
             for (let i = 0; i < tracks.length; i++) {
                 let currTrack = tracks[i];
                 //check if the current track is a loop
-                if (currTrack[0][0] === "loop-melody" || currTrack[0][0] === "loop-chords" || currTrack[0][0] === "loop-drums") {
+                if (currTrack[0][0] === "loop-melody" || currTrack[0][0] === "loop-chords") {
                     let secondsInLoop = 0;
                     for (let j = 1; j < currTrack.length; j++) {
                         secondsInLoop += parseFloat(currTrack[j][1]);
