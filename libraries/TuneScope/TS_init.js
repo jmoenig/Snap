@@ -436,8 +436,23 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
+const convertArrayToListRecursive = (array) => {
+    if (Array.isArray(array)) {
+        for (var i = 0; i < array.length; i++) {
+            array[i] = convertArrayToListRecursive(array[i]);
+        }
+        return IDE_Morph.prototype.newList(array);
+    }
+    return array;
+}
+window.convertArrayToListRecursive = convertArrayToListRecursive;
+
+function _typeOf(value) {
+    return Object.prototype.toString.call(value).slice(8, -1);
+}
+
 const _isObject = (obj) => {
-  return (typeof obj === "object" || typeOf(obj) === "Array") && obj !== null;
+  return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
 }
 
 const _objToArray = (obj) => {
