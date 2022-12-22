@@ -3868,8 +3868,9 @@ IDE_Morph.prototype.loadExtension = async function (url) {
 };
 
 IDE_Morph.prototype.isTrustedExtension = async function (url) {
-    const trustedSources = [ '/', window.location.origin, 'https://extensions.netsblox.org'];
-    const isAutoTrusted = trustedSources.some(source => url.startsWith(source));
+    const trustedLit = [ '/', window.location.origin];
+    const trustedPat = [/^https?:\/\/([a-zA-Z0-9\-]+\.)*netsblox.org/];
+    const isAutoTrusted = trustedLit.some(lit => url.startsWith(lit)) || trustedPat.some(pat => !!url.match(pat));
     if (isAutoTrusted) {
         return true;
     }
