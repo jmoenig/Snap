@@ -1473,7 +1473,18 @@ IDE_Morph.prototype.createControlBar = function () {
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    var myself = this,
+    var cnf = this.config,
+        categoryConfig = cnf.categories || [
+            'motion',
+            'looks',
+            'sound',
+            'pen',
+            'control',
+            'sensing',
+            'operators',
+            'variables',
+        ];
+        myself = this,
         categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
@@ -1538,7 +1549,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function addCategoryButton(category) {
-        var labelWidth = 75,
+        var labelWidth = 168,
             colors = [
                 myself.frameColor,
                 myself.frameColor.darker(MorphicPreferences.isFlat ? 5 : 50),
@@ -1569,8 +1580,10 @@ IDE_Morph.prototype.createCategories = function () {
         }
         button.fixLayout();
         button.refresh();
-        myself.categories.add(button);
-        myself.categories.buttons.push(button);
+        if (categoryConfig.includes(category)) {
+            myself.categories.add(button);
+            myself.categories.buttons.push(button);
+        }
         return button;
     }
 
@@ -1612,7 +1625,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function fixCategoriesLayout() {
-        var buttonWidth = myself.categories.children[0].width(),
+        var buttonWidth = 81,
             buttonHeight = myself.categories.children[0].height(),
             more = SpriteMorph.prototype.customCategories.size,
             border = 3,
@@ -1628,12 +1641,12 @@ IDE_Morph.prototype.createCategories = function () {
             i;
 
         myself.categories.children.forEach((button, i) => {
-            row = i < 8 ? i % 4 : i - 4;
-            col = (i < 4 || i > 7) ? 1 : 2;
+            row = i;
+            col = 1;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
-                    (i > 7 ? border + 2 : 0)
+                (i > categoryConfig.length - 1 ? border + 2 : 0)
             ));
         });
 
@@ -1643,26 +1656,26 @@ IDE_Morph.prototype.createCategories = function () {
             scroller.acceptsDrops = false;
             scroller.contents.acceptsDrops = false;
             scroller.setPosition(
-                new Point(0, myself.categories.children[8].top())
+                new Point(0, myself.categories.children[categoryConfig.length].top())
             );
             scroller.setWidth(myself.paletteWidth);
             scroller.setHeight(buttonHeight * 6 + yPadding * 5);
 
             for (i = 0; i < more; i += 1) {
-                scroller.addContents(myself.categories.children[8]);
+                scroller.addContents(myself.categories.children[categoryConfig.length]);
             }
             myself.categories.add(scroller);
             myself.categories.scroller = scroller;
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (categoryConfig.length + 1) * yPadding
+                    + categoryConfig.length * buttonHeight
                     + 6 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (categoryConfig.length + 1) * yPadding
+                    + categoryConfig.length * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
                             : 0)
