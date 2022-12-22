@@ -1111,7 +1111,7 @@
    * @since 3.0.0
    */
 
-  class Note {
+  class TS_WebMIDI_Note {
     /**
      * Creates a `Note` object.
      *
@@ -1665,7 +1665,7 @@
      * @param {number} [options.octaveOffset=0] An integer to offset the octave by. **This is only
      * used when the input value is a note identifier.**
      *
-     * @returns {Note}
+     * @returns {TS_WebMIDI_Note}
      *
      * @throws TypeError The input could not be parsed to a note
      *
@@ -1677,7 +1677,7 @@
     static buildNote(input, options = {}) {
       options.octaveOffset = parseInt(options.octaveOffset) || 0; // If it's already a Note, we're done
 
-      if (input instanceof Note) return input;
+      if (input instanceof TS_WebMIDI_Note) return input;
       let number = this.guessNoteNumber(input, options.octaveOffset);
 
       if (number === false) {
@@ -1688,11 +1688,11 @@
 
 
       options.octaveOffset = undefined;
-      return new Note(number, options);
+      return new TS_WebMIDI_Note(number, options);
     }
     /**
      * Converts an input value, which can be an unsigned integer (0-127), a note identifier, a
-     * [`Note`]{@link Note}  object or an array of the previous types, to an array of
+     * [`Note`]{@link TS_WebMIDI_Note}  object or an array of the previous types, to an array of
      * [`Note`]{@link Note}  objects.
      *
      * [`Note`]{@link Note}  objects are returned as is. For note numbers and identifiers, a
@@ -6193,7 +6193,7 @@
          */
         // The object created when a noteoff event arrives is a Note with an attack velocity of 0.
 
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
           rawAttack: 0,
           rawRelease: data2
         });
@@ -6226,7 +6226,7 @@
          * and 127).
          */
 
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
           rawAttack: data2
         });
         event.value = Utilities.from7bitToFloat(data2);
@@ -6257,7 +6257,7 @@
          * @property {number} rawValue The aftertouch amount expressed as an integer (between 0 and
          * 127).
          */
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset)); // Aftertouch value
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset)); // Aftertouch value
 
         event.value = Utilities.from7bitToFloat(data2);
         event.rawValue = data2; // @deprecated
@@ -6971,7 +6971,7 @@
 
     getNoteState(note) {
       // If it's a note object, we simply use the identifier
-      if (note instanceof Note) note = note.identifier;
+      if (note instanceof TS_WebMIDI_Note) note = note.identifier;
       const number = Utilities.guessNoteNumber(note, wm.octaveOffset + this.input.octaveOffset + this.octaveOffset);
       return this.notesState[number];
     }
@@ -9431,7 +9431,7 @@
   exports.Input = Input;
   exports.InputChannel = InputChannel;
   exports.Message = Message;
-  exports.Note = Note;
+  exports.TS_WebMIDI_Note = TS_WebMIDI_Note;
   exports.Output = Output;
   exports.OutputChannel = OutputChannel;
   exports.Utilities = Utilities;
