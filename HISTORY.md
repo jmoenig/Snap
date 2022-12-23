@@ -78,6 +78,7 @@
 
 ### 2022-12-23
 * blocks, threads: added "translations" selector to metaprogramming blocks
+* German translation update for "translations" selector
 
 ### 2022-12-19
 * objects: fixed #3151 (accidentally triggering "When I receive green flag" events for any broadcast message)
