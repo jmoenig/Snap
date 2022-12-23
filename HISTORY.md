@@ -9,7 +9,8 @@
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
-    * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette 
+    * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
+    * added "translations" selector to metaprogramming blocks
     * new "disable dragging data" preference setting for (kids') MicroWorld creators
     * pixels library: Added command blocks to rename and export costumes
     * new "ide_blocks" extension primitive
@@ -74,6 +75,9 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2022-12-23
+* blocks, threads: added "translations" selector to metaprogramming blocks
 
 ### 2022-12-19
 * objects: fixed #3151 (accidentally triggering "When I receive green flag" events for any broadcast message)

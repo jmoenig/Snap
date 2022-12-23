@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-13';
+modules.blocks = '2022-December-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -818,7 +818,8 @@ SyntaxElementMorph.prototype.labelParts = {
             '~' : null,
             'defaults': ['defaults'],
             'menus' : ['menus'],
-            'editables' : ['editables']
+            'editables' : ['editables'],
+            'translations' : ['translations']
         }
     },
     '%byob': {
@@ -834,7 +835,8 @@ SyntaxElementMorph.prototype.labelParts = {
             '~' : null,
             'defaults': ['defaults'],
             'menus' : ['menus'],
-            'editables' : ['editables']
+            'editables' : ['editables'],
+            'translations' : ['translations']
         }
     },
 

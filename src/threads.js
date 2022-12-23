@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-December-11';
+modules.threads = '2022-December-23';
 
 var ThreadManager;
 var Process;
@@ -6811,7 +6811,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, def, info;
+        expr, body, slots, def, info, loc;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -6923,6 +6923,18 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             });
         }
         return slots;
+    case 'translations':
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            loc = new List();
+            Object.keys(def.translations).forEach(lang =>
+                loc.add(new List([lang, def.translations[lang]]))
+            );
+            return loc;
+        }
+        return '';
     }
     return '';
 };
@@ -7069,7 +7081,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
         scopes = ['global', 'local'],
-        idx, oldSpec, expr, def, inData, template, oldType, type;
+        idx, oldSpec, expr, def, inData, template, oldType, type, loc;
 
     this.assertType(block, types);
     expr = block.expression;
@@ -7247,6 +7259,14 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 def.declarations.set(name, info);
             }
         });
+        break;
+    case 'translations':
+        this.assertType(val, 'list');
+        loc = {};
+        val.map(row =>
+            loc[row.at(1).toString()] = row.at(2).toString()
+        );
+        def.translations = loc;
         break;
     default:
         return;
