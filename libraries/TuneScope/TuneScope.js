@@ -330,7 +330,7 @@ SnapExtensions.primitives.set(
         window.tones[id].setFreq(freq);
         window.tones[id].setAmpl(ampl * 100);
         window.tones[id].setPan(bal);
-        created && window.tones[id].turnOn();
+        window.tones[id].turnOn();
     }
 );
 
