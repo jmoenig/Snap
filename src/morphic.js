@@ -12277,6 +12277,7 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.addEventListener(
         "keydown",
          event => {
+            event.stopPropagation();
             // remember the keyCode in the world's currentKey property
             kbd.world.currentKey = event.keyCode;
             if (kbd.world.activeMenu && !kbd.world.activeMenu.hasFocus) {
