@@ -158,7 +158,7 @@ SnapExtensions.primitives.set(
                 totalSeconds += defTrack[j][1];
             }
             const secondsPerMeasure = (window.baseTempo / tempo) * beatsPerMeasure[0]
-            const totalMeasures = Math.floor(totalSeconds / secondsPerMeasure)
+            const totalMeasures = Math.ceil(totalSeconds / secondsPerMeasure)
 
             //convert any melody/chord/drum loop to a regular track
             // done by repeatedly appending the array to itself
