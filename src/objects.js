@@ -2598,6 +2598,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));
         blocks.push('-');
+        blocks.push(block('doTryCatch'));
+        blocks.push(block('doThrow'));
+        blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
@@ -8891,6 +8894,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push(block('doStopThis'));
+        blocks.push('-');
+        blocks.push(block('doTryCatch'));
+        blocks.push(block('doThrow'));
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
