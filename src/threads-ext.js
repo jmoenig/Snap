@@ -551,10 +551,11 @@ Process.prototype.doTryCatch = function (code, upvar, handler) {
             this.context.outerContext.variables.addVar(upvar);
             this.context.outerContext.variables.setVar(upvar, (error.message || error).toString());
 
+            this.pushContext(); // push a sacrificial context so we don't kill the current context
             this.evaluate(handler, new List([]), true); // this returns right away
         };
 
-        this.pushContext(); // push a sacrificial context so we'll re-run this function when we're done
+        this.pushContext(); // push a sacrificial context so we don't kill the current context
         this.evaluate(code, new List([]), true); // this returns right away
     } else { // second pass through this function
         resetOnce();
