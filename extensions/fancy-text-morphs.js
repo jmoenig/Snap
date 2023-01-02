@@ -245,6 +245,9 @@ FancyTextMorph.prototype.totalTextHeight = function() {
     }
 
     );
+
+    height += fontHeight(this.fontSize) * 0.2;
+
     return height;
 }
 
