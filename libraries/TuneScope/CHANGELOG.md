@@ -10,6 +10,7 @@
 *   Fixed bug where clicking `Play MIDI` twice would result in instrument layering
 *   Updated `webmidi` distribution to latest release
 *   Fixed issue where the Snap! stop button failed to halt playback of `Play Tracks`  blocks
+*   Added `Note to MIDI` and `MIDI to Note` blocks
 
 ### September 2022
 *   Enabled panning for `Play Tone` block via native Snap! balance block
