@@ -29,6 +29,19 @@ SpriteMorph.prototype.initBlocks = function () {
                 spec: '%axis rotation',
                 defaults: [['x']]
             },
+            reportCardScale: {
+                only: SpriteMorph,
+                type: 'reporter',
+                category: 'looks',
+                spec: 'scale'
+            },
+            reportCardAxisScale: {
+                only: SpriteMorph,
+                type: 'reporter',
+                category: 'looks',
+                spec: '%axis scale',
+                defaults: [['x']]
+            },
         }
     );
 }
@@ -58,6 +71,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportCardAxisPosition'));
         blocks.push(block('reportCardRotation'));
         blocks.push(block('reportCardAxisRotation'));
+    } else if (category === 'looks') {
+        blocks.push(block('reportCardScale'));
+        blocks.push(block('reportCardAxisScale'));
     }
 
     return blocks;
@@ -110,6 +126,29 @@ SpriteMorph.prototype.reportCardAxisRotation = function (axis) {
                 return Math.atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z);
             case 'z':
                 return Math.asin(2 * x * y + 2 * z * w);
+        }
+    }
+    throw new Error('unsupported property');
+};
+
+SpriteMorph.prototype.reportCardScale = function () {
+    const scale = this.getCardProperty('scale');
+    if (scale instanceof Array) {
+        return new List(scale);
+    }
+    throw new Error('unsupported property');
+};
+
+SpriteMorph.prototype.reportCardAxisScale = function (axis) {
+    const scale = this.getCardProperty('scale');
+    if (scale instanceof Array) {
+        switch (Process.prototype.inputOption(axis)) {
+            case 'x':
+                return scale[0];
+            case 'y':
+                return scale[1];
+            case 'z':
+                return scale[2];
         }
     }
     throw new Error('unsupported property');
