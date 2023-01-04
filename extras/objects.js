@@ -15,7 +15,20 @@ SpriteMorph.prototype.initBlocks = function () {
                 category: 'motion',
                 spec: '%axis position',
                 defaults: [['x']]
-            }
+            },
+            reportCardRotation: {
+                only: SpriteMorph,
+                type: 'reporter',
+                category: 'motion',
+                spec: 'rotation'
+            },
+            reportCardAxisRotation: {
+                only: SpriteMorph,
+                type: 'reporter',
+                category: 'motion',
+                spec: '%axis rotation',
+                defaults: [['x']]
+            },
         }
     );
 }
@@ -43,6 +56,8 @@ SpriteMorph.prototype.blockTemplates = function (
     if (category === 'motion') {
         blocks.push(block('reportCardPosition'));
         blocks.push(block('reportCardAxisPosition'));
+        blocks.push(block('reportCardRotation'));
+        blocks.push(block('reportCardAxisRotation'));
     }
 
     return blocks;
@@ -71,9 +86,39 @@ SpriteMorph.prototype.reportCardAxisPosition = function (axis) {
     throw new Error('unsupported property');
 };
 
+SpriteMorph.prototype.reportCardRotation = function () {
+    const q = this.getCardProperty('rotation');
+    if (q instanceof Array) {
+        const x = q[0], y = q[1], z = q[2], w = q[3];
+        return new List([
+            Math.atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z),
+            Math.atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z),
+            Math.asin(2 * x * y + 2 * z * w)
+        ]);
+    }
+    throw new Error('unsupported property');
+};
+
+SpriteMorph.prototype.reportCardAxisRotation = function (axis) {
+    const q = this.getCardProperty('rotation');
+    if (q instanceof Array) {
+        const x = q[0], y = q[1], z = q[2], w = q[3];
+        switch (Process.prototype.inputOption(axis)) {
+            case 'x':
+                return Math.atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z);
+            case 'y':
+                return Math.atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z);
+            case 'z':
+                return Math.asin(2 * x * y + 2 * z * w);
+        }
+    }
+    throw new Error('unsupported property');
+};
+
 SpriteMorph.prototype.getCardProperty = function (prop) {
     const card = this.card;
     if (card) {
+        console.log(card.collectCardData());
         return card[prop];
     }
     throw new Error('card does not exist');
