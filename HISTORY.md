@@ -68,6 +68,7 @@
     * fixed deleting embedded reporters in keyboard-entry mode
     * fixed zebra coloring when importing a script from file or smart PNG
     * fixed accidentally triggering "When I receive green flag" events for any broadcast message
+    * COMBINing an empty list with JOIN results in an empty text rather than in the number zero
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -75,6 +76,9 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2023-10-05
+* threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero
 
 ### 2022-12-23
 * blocks, threads: added "translations" selector to metaprogramming blocks

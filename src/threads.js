@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2022-December-23';
+modules.threads = '2023-January-05';
 
 var ThreadManager;
 var Process;
@@ -3034,7 +3034,13 @@ Process.prototype.reportCombine = function (list, reporter) {
 
             // test for base cases
             if (list.length() < 2) {
-                this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+                this.returnValueToParentContext(
+                    list.length() ?
+                        list.at(1)
+                        : (reporter.expression.selector === 'reportJoinWords' ?
+                            ''
+                            : 0)
+                );
                 return;
             }
 
@@ -3069,7 +3075,13 @@ Process.prototype.reportCombine = function (list, reporter) {
 
             // test for base cases
             if (list.length() < 2) {
-                this.returnValueToParentContext(list.length() ? list.at(1) : 0);
+                this.returnValueToParentContext(
+                    list.length() ?
+                        list.at(1)
+                        : (reporter.expression.selector === 'reportJoinWords' ?
+                            ''
+                            : 0)
+                );
                 return;
             }
 
