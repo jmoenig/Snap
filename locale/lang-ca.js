@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks', // optional
     'last_changed':
-        '2022-11-07', // this, too, will appear in the Translators tab
+        '2022-12-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -575,6 +575,10 @@ SnapTranslator.dict.ca = {
         'digues a %spr que faci %cmdRing %inputs',
     'ask %spr for %repRing %inputs':
         'pregunta a %spr per %repRing %inputs',
+    'When %edit is edited %message':
+        'Quan %edit sigui editat %message',
+    'anything':
+        'qualsevol element',
 
     // sensing:
     'touching %col ?':
@@ -669,6 +673,8 @@ SnapTranslator.dict.ca = {
         'menús',
     'editables':
         'editables',
+    'translations':
+        'traduccions',
     'set %byob of block %repRing to %s':
         'assigna a %byob de %repRing el valor %s',
     'define %upvar %s %repRing':
@@ -2907,6 +2913,10 @@ SnapTranslator.dict.ca = {
 //
     'translations...':
          'traduccions...',
+    'Custom Block Translations':
+        'Traduccions del bloc personalitzat',
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs':
+        'S\'ha d\'escriure un traducció per línia, utilitzant els dos punts (":") per indicar la llengua\ni guionet baix ("_") indicant les ranures, exemple:\n\nca:digues _ durant _ segons',
     'in palette':
         'a la paleta',
     'check to\nshow in palette':
@@ -3057,6 +3067,10 @@ SnapTranslator.dict.ca = {
     'Web Audio API is not supported\nin this browser':
         'aquest navegador no és compatible\namb l\'API de Web Audio',
     'several block definitions\nalready match this label':
-        'algun bloc definit\nja utilitza aquest nom'
+        'algun bloc definit\nja utilitza aquest nom',
+    'Use CPU for graphics':
+        'Utiliza la CPU pels gràfics',
+    'EXPERIMENTAL! optimize Canvas2D readback operations\nusing the "willReadFrequently" attribute at the expense\nof slowing down rendering in some web browsers':
+        'EXPERIMENTAL! per optimitzar les operacions de lectures en un Canvas 2D\nutilitzant la propietat "willReadFrequently" encara que\npot alentir la renderització en alguns navegadors'
 
 };
