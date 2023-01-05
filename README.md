@@ -8,7 +8,7 @@
 a visual, blocks based programming language
 inspired by Scratch
 
-written by Jens Mönig and Brian Harvey
+written by Jens Mönig and Brian Harvey  
 jens@moenig.org, bh@cs.berkeley.edu
 
 ## Snap<em>!</em> Community
