@@ -81,6 +81,7 @@
 ### 2023-10-05
 * threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero
 * gui: enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
+* Catalan translation update, thanks, Joan!
 
 ### 2022-12-23
 * blocks, threads: added "translations" selector to metaprogramming blocks
