@@ -1765,7 +1765,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 };
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
-    var selectors = [];
+    var selectors = ['reportJSFunction'];
     if (version < 8.1) {
         selectors.push(
             'reportPipe',

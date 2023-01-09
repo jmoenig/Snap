@@ -40,6 +40,7 @@
     * order "my scripts" list by their top-down position in the scripting area (not by the time of their placement)
     * don't show "result pic" option in block context menu with "click-to-run" disabled
     * enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
+    * enable "JavaScript function" primitive to be hidden / shown independently from enabling JavaScript extensions
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
@@ -81,6 +82,7 @@
 
 ### 2023-10-09
 * store, objects: hide new primitives in old microworlds
+* gui, objects: enable "JS function" primitive to be hidden / shown independently from enabling JavaScript extensions
 
 ### 2023-10-05
 * threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero

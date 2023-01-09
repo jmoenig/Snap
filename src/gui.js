@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-05';
+modules.gui = '2022-January-09';
 
 // Declarations
 
@@ -4181,6 +4181,10 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             */
             Process.prototype.enableJS = !Process.prototype.enableJS;
+            if (Process.prototype.enableJS) {
+                // show JS-func primitive in case a microworld hides it
+                delete StageMorph.prototype.hiddenPrimitives.reportJSFunction;
+            }
             this.flushBlocksCache('operators');
             this.refreshPalette();
             this.categories.refreshEmpty();
