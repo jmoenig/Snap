@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-October-25';
+modules.store = '2023-January-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 8.1, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -329,6 +329,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
     var appInfo = xmlNode.attributes.app,
         app = appInfo ? appInfo.split(' ')[0] : null,
+        appVersion = appInfo ? parseFloat(appInfo.split(' ')[1]) || 0 : 0,
         scenesModel = xmlNode.childNamed('scenes'),
         project = new Project();
 
@@ -346,16 +347,16 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         }
         scenesModel.childrenNamed('scene').forEach(model => {
             ide.scene.captureGlobalSettings();
-            project.scenes.add(this.loadScene(model));
+            project.scenes.add(this.loadScene(model, appVersion));
             ide.scene.applyGlobalSettings();
         });
     } else {
-        project.scenes.add(this.loadScene(xmlNode, remixID));
+        project.scenes.add(this.loadScene(xmlNode, appVersion, remixID));
     }
     return project.initialize();
 };
 
-SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
+SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
@@ -474,6 +475,19 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
+            sel => {
+                var selector, migration;
+                if (sel) {
+                    migration = SpriteMorph.prototype.blockMigrations[sel];
+                    selector = migration ? migration.selector : sel;
+                    scene.hiddenPrimitives[selector] = true;
+                }
+            }
+        );
+
+        // hide new primitives that have been added to the palette
+        // since the project has been last saved
+        SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
             sel => {
                 var selector, migration;
                 if (sel) {

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2022-December-19';
+modules.objects = '2023-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1762,6 +1762,28 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             variadic: true
         }
     };
+};
+
+SpriteMorph.prototype.newPrimitivesSince = function (version) {
+    var selectors = [];
+    if (version < 8.1) {
+        selectors.push(
+            'reportPipe',
+            'receiveUserEdit'
+        );
+    }
+    if (version < 8) {
+        selectors.push(
+            'getPosition',
+            'reportMousePosition',
+            'doDefineBlock',
+            'doSetBlockAttribute',
+            'doDeleteBlock',
+            'reportBlockAttribute',
+            'reportThisContext'
+        );
+    }
+    return selectors;
 };
 
 SpriteMorph.prototype.initBlockMigrations();
