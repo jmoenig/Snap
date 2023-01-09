@@ -72,6 +72,7 @@
     * fixed accidentally triggering "When I receive green flag" events for any broadcast message
     * COMBINing an empty list with JOIN results in an empty text rather than in the number zero
     * hide new primitives in old microworlds
+    * explicitly garbage collect (i.e. remove) terminated audio elements
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -83,6 +84,7 @@
 ### 2023-10-09
 * store, objects: hide new primitives in old microworlds
 * gui, objects: enable "JS function" primitive to be hidden / shown independently from enabling JavaScript extensions
+* threads: explicitly garbage collect (i.e. remove) terminated audio elements in case they haven't been removed already
 
 ### 2023-10-05
 * threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero
