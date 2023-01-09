@@ -4434,6 +4434,7 @@ SpriteMorph.prototype.playFreq = function (hz) {
     }
     note = this.freqPlayer;
     note.fader = ctx.createGain();
+    hz = +hz || 0;
     if (note.oscillator) {
         note.oscillator.frequency.value = hz;
     } else {
