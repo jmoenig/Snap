@@ -188,7 +188,7 @@ IDE_Morph.prototype.broadcast = function(message, callback, payload) {
         callback => callback(message)
     );
     (this.stage.messageCallbacks[message] || []).forEach(
-        callback => callback()
+        callback => callback(payload)
     );
 };
 
