@@ -3,39 +3,39 @@ SpriteMorph.prototype.initBlocks = function () {
     this._initBlocks();
     Object.assign(
         SpriteMorph.prototype.blocks, {
-            reportCardPosition: {
+            reportTranslation: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'motion',
                 spec: 'position'
             },
-            reportCardAxisPosition: {
+            reportAxisTranslation: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'motion',
                 spec: '%axis position',
                 defaults: [['x']]
             },
-            reportCardRotation: {
+            reportRotation: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'motion',
                 spec: 'rotation'
             },
-            reportCardAxisRotation: {
+            reportAxisRotation: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'motion',
                 spec: '%axis rotation',
                 defaults: [['x']]
             },
-            reportCardScale: {
+            reportScale: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'looks',
                 spec: 'scale'
             },
-            reportCardAxisScale: {
+            reportAxisScale: {
                 only: SpriteMorph,
                 type: 'reporter',
                 category: 'looks',
@@ -44,7 +44,7 @@ SpriteMorph.prototype.initBlocks = function () {
             },
         }
     );
-}
+};
 SpriteMorph.prototype.initBlocks();
 
 SpriteMorph.prototype._blockTemplates = SpriteMorph.prototype.blockTemplates;
@@ -67,19 +67,19 @@ SpriteMorph.prototype.blockTemplates = function (
     }
 
     if (category === 'motion') {
-        blocks.push(block('reportCardPosition'));
-        blocks.push(block('reportCardAxisPosition'));
-        blocks.push(block('reportCardRotation'));
-        blocks.push(block('reportCardAxisRotation'));
+        blocks.push(block('reportTranslation'));
+        blocks.push(block('reportAxisTranslation'));
+        blocks.push(block('reportRotation'));
+        blocks.push(block('reportAxisRotation'));
     } else if (category === 'looks') {
-        blocks.push(block('reportCardScale'));
-        blocks.push(block('reportCardAxisScale'));
+        blocks.push(block('reportScale'));
+        blocks.push(block('reportAxisScale'));
     }
 
     return blocks;
 }
 
-SpriteMorph.prototype.reportCardPosition = function () {
+SpriteMorph.prototype.reportTranslation = function () {
     const translation = this.getCardProperty('translation');
     if (translation instanceof Array) {
         return new List(translation);
@@ -87,7 +87,7 @@ SpriteMorph.prototype.reportCardPosition = function () {
     throw new Error('unsupported property');
 };
 
-SpriteMorph.prototype.reportCardAxisPosition = function (axis) {
+SpriteMorph.prototype.reportAxisTranslation = function (axis) {
     const translation = this.getCardProperty('translation');
     if (translation instanceof Array) {
         switch (Process.prototype.inputOption(axis)) {
@@ -102,7 +102,7 @@ SpriteMorph.prototype.reportCardAxisPosition = function (axis) {
     throw new Error('unsupported property');
 };
 
-SpriteMorph.prototype.reportCardRotation = function () {
+SpriteMorph.prototype.reportRotation = function () {
     const q = this.getCardProperty('rotation');
     if (q instanceof Array) {
         const x = q[0], y = q[1], z = q[2], w = q[3];
@@ -115,7 +115,7 @@ SpriteMorph.prototype.reportCardRotation = function () {
     throw new Error('unsupported property');
 };
 
-SpriteMorph.prototype.reportCardAxisRotation = function (axis) {
+SpriteMorph.prototype.reportAxisRotation = function (axis) {
     const q = this.getCardProperty('rotation');
     if (q instanceof Array) {
         const x = q[0], y = q[1], z = q[2], w = q[3];
@@ -131,7 +131,7 @@ SpriteMorph.prototype.reportCardAxisRotation = function (axis) {
     throw new Error('unsupported property');
 };
 
-SpriteMorph.prototype.reportCardScale = function () {
+SpriteMorph.prototype.reportScale = function () {
     const scale = this.getCardProperty('scale');
     if (scale instanceof Array) {
         return new List(scale);
@@ -139,7 +139,7 @@ SpriteMorph.prototype.reportCardScale = function () {
     throw new Error('unsupported property');
 };
 
-SpriteMorph.prototype.reportCardAxisScale = function (axis) {
+SpriteMorph.prototype.reportAxisScale = function (axis) {
     const scale = this.getCardProperty('scale');
     if (scale instanceof Array) {
         switch (Process.prototype.inputOption(axis)) {
