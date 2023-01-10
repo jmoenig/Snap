@@ -62,6 +62,20 @@ SpriteMorph.prototype.initBlocks = function () {
                 spec: '%axis rotation',
                 defaults: [['x']]
             },
+            scaleTo: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'looks',
+                spec: 'scale to x: %n y: %n z: %n',
+                defaults: [1, 1, 1]
+            },
+            setScale: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'looks',
+                spec: 'set scale x: %n y: %n z: %n',
+                defaults: [1, 1, 1]
+            },
             reportScale: {
                 only: SpriteMorph,
                 type: 'reporter',
@@ -158,6 +172,20 @@ SpriteMorph.prototype.reportAxisRotation = function (axis) {
         }
     }
     throw new Error('unsupported property');
+};
+
+SpriteMorph.prototype.scaleTo = function (x, y, z) {
+    const cmd = 'scaleTo';
+    const args = [x, y, z];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
+
+SpriteMorph.prototype.setScale = function (x, y, z) {
+    const cmd = 'setScale';
+    const args = [x, y, z];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
 };
 
 SpriteMorph.prototype.reportScale = function () {
@@ -292,6 +320,8 @@ SpriteMorph.prototype.blockTemplates = function (
 
     } else if (category === 'looks') {
 
+        blocks.push(block('scaleTo'));
+        blocks.push(block('setScale'));
         blocks.push(block('reportScale'));
         blocks.push(block('reportAxisScale'));
 
