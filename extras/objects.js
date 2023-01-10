@@ -15,6 +15,20 @@ SpriteMorph.prototype.initBlocks = function () {
                 spec: 'move %dir3 steps %n',
                 defaults: [['forward'], 1]
             },
+            turnTo: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'motion',
+                spec: 'turn %dir3 degrees %n',
+                defaults: [['left'], 90]
+            },
+            rollTo: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'motion',
+                spec: 'roll %dir3 degrees %n',
+                defaults: [['left'], 90]
+            },
             translateTo: {
                 only: SpriteMorph,
                 type: 'command',
@@ -105,6 +119,24 @@ SpriteMorph.prototype.move = function (dir, dist) {
     const cmd = 'move';
     dir = Process.prototype.inputOption(dir);
     const args = [dir, dist];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
+
+SpriteMorph.prototype.turnTo = function (dir, deg) {
+    const cmd = 'turn';
+    dir = Process.prototype.inputOption(dir);
+    const rad = deg * Math.PI / 180;
+    const args = [dir, rad];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
+
+SpriteMorph.prototype.rollTo = function (dir, deg) {
+    const cmd = 'roll';
+    dir = Process.prototype.inputOption(dir);
+    const rad = deg * Math.PI / 180;
+    const args = [dir, rad];
     const options = [cmd, args];
     this.sendToWorld('doCommand', options);
 };
@@ -325,6 +357,8 @@ SpriteMorph.prototype.blockTemplates = function (
     if (category === 'motion') {
 
         blocks.push(block('move'));
+        blocks.push(block('turnTo'));
+        blocks.push(block('rollTo'));
         blocks.push(block('translateTo'));
         blocks.push(block('rotateTo'));
         blocks.push(block('setTranslation'));
