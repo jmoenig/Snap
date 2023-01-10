@@ -11089,62 +11089,54 @@ Costume.prototype.shrinkWrap = function () {
 
 Costume.prototype.canvasBoundingBox = function (pic) {
     // answer the rectangle surrounding my contents' non-transparent pixels
-    var row,
-        col,
+    var x,
+        y,
         w = pic.width,
         h = pic.height,
-        ctx = pic.getContext('2d'),
-        dta = ctx.getImageData(0, 0, w, h);
+        dta = pic.getContext('2d').getImageData(0, 0, w, h).data;
 
-    function getAlpha(x, y) {
-        return dta.data[((y * w * 4) + (x * 4)) + 3];
-    }
+    // the stage is usually wider than tall, but costumes usually around square
+    // left/right is done first because it usually reduces the amount of pixels checked twice
+    // (not by a lot, it would be less than half the height of the stage)
 
-    function getLeft() {
-        for (col = 0; col < w; col += 1) {
-            for (row = 0; row < h; row += 1) {
-                if (getAlpha(col, row)) {
-                    return col;
+    var left, top, right, bottom;
+
+    getLeft: {
+        for (x=0; x<w; x+=1)
+            for (y=0; y<h; y+=1)
+                if (dta[(x + y * w) * 4 + 3]) { // get alpha
+                    left = x;
+                    break getLeft;
                 }
-            }
-        }
-        return 0;
+        // all the pixels are transparent since the loop went through all of them, this will create a 1x1 costume
+        return new Rectangle(0, 0, 1, 1);
     }
+    // note that since at least ONE pixel isn't transparent, all of the other loops must finish
+    // because of this some conditions are left out (if there's a mistake in this code it'll be bad though)
 
-    function getTop() {
-        for (row = 0; row < h; row += 1) {
-            for (col = 0; col < w; col += 1) {
-                if (getAlpha(col, row)) {
-                    return row;
-                }
-            }
-        }
-        return 0;
-    }
 
-    function getRight() {
-        for (col = w - 1; col >= 0; col -= 1) {
-            for (row = h - 1; row >= 0; row -= 1) {
-                if (getAlpha(col, row)) {
-                    return Math.min(col + 1, w);
-                }
-            }
-        }
-        return w;
-    }
+    right = (function getRight() {
+        for (x=h-1;; x-=1)
+            for (y=0; y<h; y+=1)
+                if (dta[(x + y * w) * 4 + 3])
+                    return x + 1;
+    })()
 
-    function getBottom() {
-        for (row = h - 1; row >= 0; row -= 1) {
-            for (col = w - 1; col >= 0; col -= 1) {
-                if (getAlpha(col, row)) {
-                    return Math.min(row + 1, h);
-                }
-            }
-        }
-        return h;
-    }
+    top = (function getTop() {
+        for (y=0;; y+=1)
+            for (x=left; x<right; x+=1)
+                if (dta[(x + y * w) * 4 + 3])
+                    return y;
+    })()
 
-    return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
+    bottom = (function getBottom() {
+        for (y=h-1;; y-=1)
+            for (x=left; x<right; x+=1)
+                if (dta[(x + y * w) * 4 + 3])
+                    return y + 1;
+    })()
+
+    return new Rectangle(left, top, right, bottom);
 };
 
 Costume.prototype.boundingBox = function () {
