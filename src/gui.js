@@ -2948,7 +2948,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     if (aString.indexOf('<block') === 0) {
         aString = '<script>' + aString + '</script>';
     }
-    if (aString.indexOf('<scripts') === 0) {
+    if (aString.indexOf('<scriptsonly') === 0) {
         return this.openScriptsOnlyString(aString);
     }
     if (aString.indexOf('<script') === 0) {
@@ -6253,13 +6253,13 @@ IDE_Morph.prototype.rawOpenScriptsOnlyString = function (str) {
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            xml = this.serializer.parse(str);
+            xml = this.serializer.parse(str, true);
             this.serializer.loadScripts(object, scripts, xml);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        xml = this.serializer.parse(str);
+        xml = this.serializer.parse(str, true);
         this.serializer.loadScripts(object, scripts, xml);
     }
     scripts.changed();
