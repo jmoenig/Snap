@@ -136,6 +136,17 @@ SpriteMorph.prototype.getCardProperty = function (prop) {
     throw new Error('card does not exist');
 };
 
+SpriteMorph.prototype.sendToWorld = function (message, options) {
+    const card = this.card;
+    if (card) {
+        const ide = this.parentThatIsA(IDE_Morph);
+        const payload = options instanceof Array ? new List([card.id, ...options]) : new List([card.id]);
+        ide.broadcast(message, null, payload);
+    } else {
+        throw new Error('card does not exist');
+    }
+};
+
 SpriteMorph.prototype.blockTemplates = function (
     category = 'motion',
     all = false // include hidden blocks
