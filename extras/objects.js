@@ -8,6 +8,13 @@ SpriteMorph.prototype.initBlocks = function () {
     });
     Object.assign(
         SpriteMorph.prototype.blocks, {
+            move: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'motion',
+                spec: 'move %dir3 steps %n',
+                defaults: [['forward'], 1]
+            },
             translateTo: {
                 only: SpriteMorph,
                 type: 'command',
@@ -93,6 +100,14 @@ SpriteMorph.prototype.initBlocks = function () {
     );
 };
 SpriteMorph.prototype.initBlocks();
+
+SpriteMorph.prototype.move = function (dir, dist) {
+    const cmd = 'move';
+    dir = Process.prototype.inputOption(dir);
+    const args = [dir, dist];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
 
 SpriteMorph.prototype.translateTo = function (x, y, z) {
     const cmd = 'translateTo';
@@ -309,6 +324,7 @@ SpriteMorph.prototype.blockTemplates = function (
 
     if (category === 'motion') {
 
+        blocks.push(block('move'));
         blocks.push(block('translateTo'));
         blocks.push(block('rotateTo'));
         blocks.push(block('setTranslation'));
