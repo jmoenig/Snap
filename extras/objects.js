@@ -8,6 +8,20 @@ SpriteMorph.prototype.initBlocks = function () {
     });
     Object.assign(
         SpriteMorph.prototype.blocks, {
+            setTranslation: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'motion',
+                spec: 'set position x: %n y: %n z: %n',
+                defaults: [0, 0, 0]
+            },
+            setRotation: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'motion',
+                spec: 'set rotation x: %n y: %n z: %n',
+                defaults: [0, 0, 0]
+            },
             reportTranslation: {
                 only: SpriteMorph,
                 type: 'reporter',
@@ -51,6 +65,20 @@ SpriteMorph.prototype.initBlocks = function () {
     );
 };
 SpriteMorph.prototype.initBlocks();
+
+SpriteMorph.prototype.setTranslation = function (x, y, z) {
+    const cmd = 'setTranslation';
+    const args = [x, y, z];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
+
+SpriteMorph.prototype.setRotation = function (x, y, z) {
+    const cmd = 'setRotation';
+    const args = [x, y, z];
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
+};
 
 SpriteMorph.prototype.reportTranslation = function () {
     const translation = this.getCardProperty('translation');
@@ -225,6 +253,8 @@ SpriteMorph.prototype.blockTemplates = function (
 
     if (category === 'motion') {
 
+        blocks.push(block('setTranslation'));
+        blocks.push(block('setRotation'));
         blocks.push(block('reportTranslation'));
         blocks.push(block('reportAxisTranslation'));
         blocks.push(block('reportRotation'));
