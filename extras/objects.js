@@ -1,6 +1,11 @@
 SpriteMorph.prototype._initBlocks = SpriteMorph.prototype.initBlocks;
 SpriteMorph.prototype.initBlocks = function () {
     this._initBlocks();
+    Object.keys(this.blocks).forEach(key => {
+        if (['motion', 'looks', 'sound', 'pen'].includes(this.blocks[key].category)) {
+            delete this.blocks[key];
+        }
+    });
     Object.assign(
         SpriteMorph.prototype.blocks, {
             reportTranslation: {
