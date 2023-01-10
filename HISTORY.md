@@ -82,6 +82,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-10
+* gui: added openScriptsOnlyString() method to IDE, experimental
+
 ### 2023-10-09
 * store, objects: hide new primitives in old microworlds
 * gui, objects: enable "JS function" primitive to be hidden / shown independently from enabling JavaScript extensions

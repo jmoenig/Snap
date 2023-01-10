@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-09';
+modules.gui = '2022-January-10';
 
 // Declarations
 
@@ -2947,6 +2947,9 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
     if (aString.indexOf('<block') === 0) {
         aString = '<script>' + aString + '</script>';
+    }
+    if (aString.indexOf('<scripts') === 0) {
+        return this.openScriptsOnlyString(aString);
     }
     if (aString.indexOf('<script') === 0) {
         return this.openScriptString(aString);
@@ -6226,6 +6229,45 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
         this.fixLayout();
     }
     return this.serializer.loadScriptModel(scriptModel, this.currentSprite);
+};
+
+IDE_Morph.prototype.openScriptsOnlyString = function (str) {
+    // open scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var msg;
+    this.nextSteps([
+        () => msg = this.showMessage('Opening scripts...'),
+        () => {
+            this.rawOpenScriptsOnlyString(str);
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenScriptsOnlyString = function (str) {
+    // import scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var object = this.currentSprite,
+        scripts = object.scripts,
+        xml;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            xml = this.serializer.parse(str);
+            this.serializer.loadScripts(object, scripts, xml);
+        } catch (err) {
+            this.showMessage('Load failed: ' + err);
+        }
+    } else {
+        xml = this.serializer.parse(str);
+        this.serializer.loadScripts(object, scripts, xml);
+    }
+    scripts.changed();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.showMessage(
+        'Imported Scripts.',
+        2
+    );
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
