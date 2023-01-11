@@ -17,6 +17,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * new extension primitive: "ide_synchscripts(obj, xml)", experimental, might change
     * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
@@ -84,6 +85,7 @@
 
 ### 2023-10-11
 * objects: added serialized scripts (w/o dependencies) to scripts-related user-logging events
+* extensions: new extension primitive: "ide_synchscripts(obj, xml)", experimental, might change
 
 ### 2023-10-10
 * gui: added openScriptsOnlyString() method to IDE, experimental
