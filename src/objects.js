@@ -10543,6 +10543,9 @@ StageMorph.prototype.inheritedBlocks = function () {
 StageMorph.prototype.recordUserEdit =
     SpriteMorph.prototype.recordUserEdit;
 
+StageMorph.prototype.scriptsOnlyXML =
+    SpriteMorph.prototype.scriptsOnlyXML;
+
 // StageMorph pen trails as costume
 
 StageMorph.prototype.reportPenTrailsAsCostume = function () {
