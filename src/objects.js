@@ -90,9 +90,9 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions*/
+embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 modules.objects = '2023-January-11';
 
@@ -8290,13 +8290,22 @@ SpriteMorph.prototype.recordUserEdit = function (...details) {
         ide.recordUnsavedChanges(
             this.name,
             Array.from(details).concat(details[0] === 'scripts' ?
-                ['<scriptsonly>' +
-                    ide.serializer.serialize(this.scripts) +
-                    '</scriptsonly>']
+                [this.scriptsOnlyXML()]
                 : []
             )
         );
     }
+};
+
+SpriteMorph.prototype.scriptsOnlyXML = function () {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+        new SnapSerializer();
+    return '<scriptsonly' +
+        ' app="' + serializer.app +
+        '" version="' + serializer.version +
+        '">' +
+        serializer.serialize(this.scripts) +
+        '</scriptsonly>';
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
