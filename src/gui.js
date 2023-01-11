@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-10';
+modules.gui = '2022-January-11';
 
 // Declarations
 
@@ -248,6 +248,7 @@ function IDE_Morph(config = { autofill: true }) {
         noOwnBlocks:    bool, hider/show "make a block" and "make a category"
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
+        noDevWarning:   bool, ignore development version incompatibility warning
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -724,11 +725,11 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
-    this.warnAboutDev();
 
     // configure optional settings
     this.applyConfigurations();
 
+    this.warnAboutDev();
     return this;
 };
 
@@ -7969,7 +7970,7 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-    if (!SnapVersion.includes('-dev')) {
+    if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
     this.inform(

@@ -86,6 +86,7 @@
 ### 2023-10-11
 * objects: added serialized scripts (w/o dependencies) to scripts-related user-logging events
 * extensions: new extension primitive: "ide_synchscripts(obj, xml)", experimental, might change
+* gui: added configuration option for "noDevWarning"
 
 ### 2023-10-10
 * gui: added openScriptsOnlyString() method to IDE, experimental
