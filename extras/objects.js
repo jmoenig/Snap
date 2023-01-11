@@ -12,21 +12,21 @@ SpriteMorph.prototype.initBlocks = function () {
                 only: SpriteMorph,
                 type: 'command',
                 category: 'motion',
-                spec: 'move %dir3 steps %n',
+                spec: 'move %dir3 %n steps',
                 defaults: [['forward'], 1]
             },
             turnTo: {
                 only: SpriteMorph,
                 type: 'command',
                 category: 'motion',
-                spec: 'turn %dir3 degrees %n',
+                spec: 'turn %dir3 %n degrees',
                 defaults: [['left'], 90]
             },
             rollTo: {
                 only: SpriteMorph,
                 type: 'command',
                 category: 'motion',
-                spec: 'roll %dir3 degrees %n',
+                spec: 'roll %dir3 %n degrees',
                 defaults: [['left'], 90]
             },
             translateTo: {
