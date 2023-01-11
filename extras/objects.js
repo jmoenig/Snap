@@ -116,6 +116,12 @@ SpriteMorph.prototype.initBlocks = function () {
                 category: 'control',
                 spec: 'create a clone',
             },
+            removeCardClone: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'control',
+                spec: 'delete this clone',
+            },
         }
     );
 };
@@ -271,10 +277,18 @@ SpriteMorph.prototype.createCardClone = function () {
     this.sendToWorld('doCommand', options);
 };
 
+SpriteMorph.prototype.removeCardClone = function () {
+    const cmd = 'removeCardClone';
+    const options = [cmd];
+    this.removeClone();
+    this.sendToWorld('doCommand', options);
+};
+
 SpriteMorph.prototype.getCardProperty = function (prop) {
     const card = this.card;
     if (card) {
-        console.log(card.collectCardData());
+        console.log("card", card);
+        console.log("cardData", card.collectCardData());
         return card[prop];
     }
     throw new Error('card does not exist');
@@ -429,6 +443,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createCardClone'));
+        blocks.push(block('removeCardClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));

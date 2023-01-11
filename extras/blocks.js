@@ -44,3 +44,17 @@ InputSlotMorph.prototype.directionMenu = function () {
     }
     return dict;
 };
+
+CommandBlockMorph.prototype.isStop = function () {
+    if (this.selector === 'doStopThis') {
+        const choice = this.inputs()[0].evaluate();
+        return choice instanceof Array && choice[0].length < 12;
+    }
+    return ([
+        'doForever',
+        'doReport',
+        'removeClone',
+        'removeCardClone',
+        'doSwitchToScene'
+    ].indexOf(this.selector) > -1);
+};
