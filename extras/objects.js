@@ -110,6 +110,12 @@ SpriteMorph.prototype.initBlocks = function () {
                 spec: '%axis scale',
                 defaults: [['x']]
             },
+            createCardClone: {
+                only: SpriteMorph,
+                type: 'command',
+                category: 'control',
+                spec: 'create a clone',
+            },
         }
     );
 };
@@ -256,6 +262,13 @@ SpriteMorph.prototype.reportAxisScale = function (axis) {
         }
     }
     throw new Error('unsupported property');
+};
+
+SpriteMorph.prototype.createCardClone = function () {
+    const cmd = 'createCardClone';
+    const args = this.name;
+    const options = [cmd, args];
+    this.sendToWorld('doCommand', options);
 };
 
 SpriteMorph.prototype.getCardProperty = function (prop) {
@@ -415,9 +428,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportCallCC'));
         blocks.push('-');
         blocks.push(block('receiveOnClone'));
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push(block('removeClone'));
+        blocks.push(block('createCardClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
         blocks.push(block('doSwitchToScene'));
