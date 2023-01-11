@@ -82,6 +82,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-11
+* objects: added serialized scripts (w/o dependencies) to scripts-related user-logging events
+
 ### 2023-10-10
 * gui: added openScriptsOnlyString() method to IDE, experimental
 

@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
-modules.objects = '2023-January-09';
+modules.objects = '2023-January-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -8289,7 +8289,12 @@ SpriteMorph.prototype.recordUserEdit = function (...details) {
     if (ide) {
         ide.recordUnsavedChanges(
             this.name,
-            Array.from(details)
+            Array.from(details).concat(details[0] === 'scripts' ?
+                ['<scriptsonly>' +
+                    ide.serializer.serialize(this.scripts) +
+                    '</scriptsonly>']
+                : []
+            )
         );
     }
 };
