@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-January-11';
+modules.objects = '2023-January-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -2146,9 +2146,11 @@ SpriteMorph.prototype.appearIn = function (ide) {
 // SpriteMorph versioning
 
 SpriteMorph.prototype.setName = function (string) {
+    var old = this.name;
+    if (old === string) {return; }
     this.name = string || this.name;
     this.version = Date.now();
-    this.recordUserEdit('sprite', 'name');
+    this.recordUserEdit('sprite', 'name', old);
 };
 
 // SpriteMorph rendering
