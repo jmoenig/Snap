@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-11';
+modules.gui = '2022-January-13';
 
 // Declarations
 
@@ -2778,6 +2778,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.isScollingByDragging = false;
     this.hasChangedMedia = true;
     this.currentSprite.recordUserEdit(
         'costume',

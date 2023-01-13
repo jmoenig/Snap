@@ -85,6 +85,7 @@
 
 ### 2023-10-13
 * morphic: catch occasional stack overflow when embedding data into a PNG
+* gui: fixed #3158
 
 ### 2023-10-12
 * updated inline.html test page with "noDevWarning" configuration
