@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2022-December-23';
+modules.blocks = '2023-January-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8404,29 +8404,20 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
         ide = this.world().children[0],
         xml = this.scriptsXML();
 
-    function fallback() {
-        ide.saveCanvasAs(
-            pic,
-            (ide.getProjectName() || localize('untitled')) + ' ' +
-                localize('script pic')
-        );
-    }
-
     if (pic) {
         if (xml) {
-            try {
-                ide.saveFileAs(
-                    embedMetadataPNG(pic, xml),
-                    'image/png',
-                    (ide.getProjectName() || localize('untitled')) + ' ' +
-                        localize('script pic')
-                );
-            } catch (err) {
-                console.log(err);
-                fallback();
-            }
+            ide.saveFileAs(
+                embedMetadataPNG(pic, xml),
+                'image/png',
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
+            );
         } else {
-            fallback();
+            ide.saveCanvasAs(
+                pic,
+                (ide.getProjectName() || localize('untitled')) + ' ' +
+                    localize('script pic')
+            );
         }
     }
 };
