@@ -83,6 +83,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-13
+* morphic: catch occasional stack overflow when embedding data into a PNG
+
 ### 2023-10-12
 * updated inline.html test page with "noDevWarning" configuration
 * objects: tweaked sprite name-change user edit event details
