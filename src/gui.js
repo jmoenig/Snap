@@ -2778,7 +2778,6 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
-    this.spriteEditor.isScollingByDragging = false;
     this.hasChangedMedia = true;
     this.currentSprite.recordUserEdit(
         'costume',
