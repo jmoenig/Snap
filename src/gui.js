@@ -2778,6 +2778,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
     this.currentSprite.recordUserEdit(
         'costume',
@@ -2863,6 +2864,7 @@ IDE_Morph.prototype.loadSVG = function (anImage, name) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
 };
 
