@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-January-11';
+modules.extensions = '2023-January-16';
 
 // Global stuff
 
@@ -1051,30 +1051,34 @@ SnapExtensions.primitives.set(
     }
 );
 
+// Synchronization
+
 SnapExtensions.primitives.set(
-    'ide_synchscripts(obj, xml)',
-    function (obj, xml, proc) {
-        var ide = this.parentThatIsA(IDE_Morph),
-            bak;
-        proc.assertType(obj, ['sprite', 'stage']);
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        var ide, bak;
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
         proc.assertType(xml, 'text');
-        bak = obj.scripts.children;
+        ide = this.parentThatIsA(IDE_Morph);
+        bak = this.scripts.children;
         try {
-            obj.scripts.children = [];
+            this.scripts.children = [];
             ide.serializer.loadScripts(
-                obj,
-                obj.scripts,
+                this,
+                this.scripts,
                 ide.serializer.parse(xml, true)
             );
-            obj.scripts.changed();
-            obj.recordUserEdit(
+            this.scripts.changed();
+            this.recordUserEdit(
                 'sprite',
                 'synch',
                 'scripts',
                 xml
             );
         } catch (err) {
-            obj.scripts.children = bak;
+            this.scripts.children = bak;
             throw(err);
         }
     }
