@@ -10564,13 +10564,16 @@ StageMorph.prototype.inheritedBlocks = function () {
     return [];
 };
 
-// StageMorph recording user edits
+// StageMorph recording and synching user edits
 
 StageMorph.prototype.recordUserEdit =
     SpriteMorph.prototype.recordUserEdit;
 
 StageMorph.prototype.scriptsOnlyXML =
     SpriteMorph.prototype.scriptsOnlyXML;
+
+StageMorph.prototype.synchScriptsFrom =
+    SpriteMorph.prototype.synchScriptsFrom;
 
 // StageMorph pen trails as costume
 
