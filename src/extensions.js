@@ -1056,31 +1056,11 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'syn_scripts([xml])',
     function (xml, proc) {
-        var ide, bak;
         if (xml instanceof Process) {
             return this.scriptsOnlyXML();
         }
         proc.assertType(xml, 'text');
-        ide = this.parentThatIsA(IDE_Morph);
-        bak = this.scripts.children;
-        try {
-            this.scripts.children = [];
-            ide.serializer.loadScripts(
-                this,
-                this.scripts,
-                ide.serializer.parse(xml, true)
-            );
-            this.scripts.changed();
-            this.recordUserEdit(
-                'sprite',
-                'synch',
-                'scripts',
-                xml
-            );
-        } catch (err) {
-            this.scripts.children = bak;
-            throw(err);
-        }
+        this.synchScriptsFrom(xml);
     }
 );
 
