@@ -85,6 +85,7 @@
 
 ### 2023-10-16
 * extensions: refactored extension primitive "ide_synchscripts(obj, xml)" into "syn_scripts([xml])"
+* objects: added Sprite >> synchScriptsFrom(xml) method (internal)
 
 ### 2023-10-13
 * morphic: catch occasional stack overflow when embedding data into a PNG

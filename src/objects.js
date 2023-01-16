@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-January-12';
+modules.objects = '2023-January-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -8284,7 +8284,7 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
     return newName;
 };
 
-// SpriteMorph recording user edits
+// SpriteMorph recording and synching user edits
 
 SpriteMorph.prototype.recordUserEdit = function (...details) {
     var ide = this.parentThatIsA(IDE_Morph);
@@ -8308,6 +8308,30 @@ SpriteMorph.prototype.scriptsOnlyXML = function () {
         '">' +
         serializer.serialize(this.scripts) +
         '</scriptsonly>';
+};
+
+SpriteMorph.prototype.synchScriptsFrom = function (xml) {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+            new SnapSerializer(),
+        bak = this.scripts.children;
+    try {
+        this.scripts.children = [];
+        serializer.loadScripts(
+            this,
+            this.scripts,
+            serializer.parse(xml, true)
+        );
+        this.scripts.changed();
+        this.recordUserEdit(
+            'sprite',
+            'synch',
+            'scripts',
+            xml
+        );
+    } catch (err) {
+        this.scripts.children = bak;
+        throw(err);
+    }
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
