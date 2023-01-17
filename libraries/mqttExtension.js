@@ -8,6 +8,7 @@
  * V1.2.0 added in code from pixavier to improve sub and unsub 9May2022 
  * V1.3.0 added in code from pixavier brokerKey to enable more than one connection to the same broker with different users  
  * V1.4.0 30Jun22 handle binary payloads correctly
+ * V1.4.1 17Jan23 change reference to simplesi.cloud to cymplecy.uk in mqt_connect
  */
 
 
@@ -73,9 +74,9 @@ SnapExtensions.primitives.set(
             wsbroker = wsbroker + ':8080'
         } else if (broker == 'broker.xmqtt.net') {
             wsbroker = wsbroker + '/mqtt'
-        } else if (wsbroker == 'wss://simplesi.cloud') {
+        } else if (wsbroker == 'wss://cymplecy.uk') {
             wsbroker = wsbroker + ':8084'
-        } else if (wsbroker == 'ws://simplesi.cloud') {
+        } else if (wsbroker == 'ws://cymplecy.uk') {
             wsbroker = wsbroker + ':8083'
         } else if (wsbroker == 'ws://localhost') {
             wsbroker = wsbroker + ':9001'
