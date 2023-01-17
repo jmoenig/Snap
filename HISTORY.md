@@ -34,6 +34,7 @@
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * SciSnap2 extension update, thanks, Eckart!
+    * MQTT library update, thanks, Simon!
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
@@ -82,6 +83,10 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2023-10-17
+* TuneScope update, thanks, Harsh, Jo and Glen!
+* MQTT library update, thanks, Simon!
 
 ### 2023-10-16
 * extensions: refactored extension primitive "ide_synchscripts(obj, xml)" into "syn_scripts([xml])"
