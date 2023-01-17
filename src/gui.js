@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-December-13';
+modules.gui = '2022-January-13';
 
 // Declarations
 
@@ -248,6 +248,7 @@ function IDE_Morph(config = { autofill: true }) {
         noOwnBlocks:    bool, hider/show "make a block" and "make a category"
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
+        noDevWarning:   bool, ignore development version incompatibility warning
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -710,7 +711,9 @@ IDE_Morph.prototype.openIn = function (world) {
         interpretUrlAnchors.call(this);
     }
 
-    if (location.protocol !== 'file:') {
+    if (location.protocol === 'file:') {
+        Process.prototype.enableJS = true;
+    } else {
         if (!sessionStorage.username) {
             // check whether login should persist across browser sessions
             this.cloud.initSession(initUser);
@@ -722,11 +725,11 @@ IDE_Morph.prototype.openIn = function (world) {
 
     world.keyboardFocus = this.stage;
     this.warnAboutIE();
-    this.warnAboutDev();
 
     // configure optional settings
     this.applyConfigurations();
 
+    this.warnAboutDev();
     return this;
 };
 
@@ -2775,6 +2778,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
     this.currentSprite.recordUserEdit(
         'costume',
@@ -2860,6 +2864,7 @@ IDE_Morph.prototype.loadSVG = function (anImage, name) {
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
 };
 
@@ -2945,6 +2950,9 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
     if (aString.indexOf('<block') === 0) {
         aString = '<script>' + aString + '</script>';
+    }
+    if (aString.indexOf('<scriptsonly') === 0) {
+        return this.openScriptsOnlyString(aString);
     }
     if (aString.indexOf('<script') === 0) {
         return this.openScriptString(aString);
@@ -4179,6 +4187,10 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             */
             Process.prototype.enableJS = !Process.prototype.enableJS;
+            if (Process.prototype.enableJS) {
+                // show JS-func primitive in case a microworld hides it
+                delete StageMorph.prototype.hiddenPrimitives.reportJSFunction;
+            }
             this.flushBlocksCache('operators');
             this.refreshPalette();
             this.categories.refreshEmpty();
@@ -5131,7 +5143,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2022 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2023 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -6220,6 +6232,45 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
         this.fixLayout();
     }
     return this.serializer.loadScriptModel(scriptModel, this.currentSprite);
+};
+
+IDE_Morph.prototype.openScriptsOnlyString = function (str) {
+    // open scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var msg;
+    this.nextSteps([
+        () => msg = this.showMessage('Opening scripts...'),
+        () => {
+            this.rawOpenScriptsOnlyString(str);
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenScriptsOnlyString = function (str) {
+    // import scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var object = this.currentSprite,
+        scripts = object.scripts,
+        xml;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            xml = this.serializer.parse(str, true);
+            this.serializer.loadScripts(object, scripts, xml);
+        } catch (err) {
+            this.showMessage('Load failed: ' + err);
+        }
+    } else {
+        xml = this.serializer.parse(str, true);
+        this.serializer.loadScripts(object, scripts, xml);
+    }
+    scripts.changed();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.showMessage(
+        'Imported Scripts.',
+        2
+    );
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
@@ -7921,7 +7972,7 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-    if (!SnapVersion.includes('-dev')) {
+    if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
     this.inform(

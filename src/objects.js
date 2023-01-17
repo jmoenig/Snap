@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -90,11 +90,11 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions*/
+embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
-modules.objects = '2022-December-19';
+modules.objects = '2023-January-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -1764,6 +1764,28 @@ SpriteMorph.prototype.initBlockMigrations = function () {
     };
 };
 
+SpriteMorph.prototype.newPrimitivesSince = function (version) {
+    var selectors = ['reportJSFunction'];
+    if (version < 8.1) {
+        selectors.push(
+            'reportPipe',
+            'receiveUserEdit'
+        );
+    }
+    if (version < 8) {
+        selectors.push(
+            'getPosition',
+            'reportMousePosition',
+            'doDefineBlock',
+            'doSetBlockAttribute',
+            'doDeleteBlock',
+            'reportBlockAttribute',
+            'reportThisContext'
+        );
+    }
+    return selectors;
+};
+
 SpriteMorph.prototype.initBlockMigrations();
 
 SpriteMorph.prototype.blockAlternatives = {
@@ -2124,9 +2146,11 @@ SpriteMorph.prototype.appearIn = function (ide) {
 // SpriteMorph versioning
 
 SpriteMorph.prototype.setName = function (string) {
+    var old = this.name;
+    if (old === string) {return; }
     this.name = string || this.name;
     this.version = Date.now();
-    this.recordUserEdit('sprite', 'name');
+    this.recordUserEdit('sprite', 'name', old);
 };
 
 // SpriteMorph rendering
@@ -4412,6 +4436,7 @@ SpriteMorph.prototype.playFreq = function (hz) {
     }
     note = this.freqPlayer;
     note.fader = ctx.createGain();
+    hz = +hz || 0;
     if (note.oscillator) {
         note.oscillator.frequency.value = hz;
     } else {
@@ -8259,15 +8284,53 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
     return newName;
 };
 
-// SpriteMorph recording user edits
+// SpriteMorph recording and synching user edits
 
 SpriteMorph.prototype.recordUserEdit = function (...details) {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.recordUnsavedChanges(
             this.name,
-            Array.from(details)
+            Array.from(details).concat(details[0] === 'scripts' ?
+                [this.scriptsOnlyXML()]
+                : []
+            )
         );
+    }
+};
+
+SpriteMorph.prototype.scriptsOnlyXML = function () {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+        new SnapSerializer();
+    return '<scriptsonly' +
+        ' app="' + serializer.app +
+        '" version="' + serializer.version +
+        '">' +
+        serializer.serialize(this.scripts) +
+        '</scriptsonly>';
+};
+
+SpriteMorph.prototype.synchScriptsFrom = function (xml) {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+            new SnapSerializer(),
+        bak = this.scripts.children;
+    try {
+        this.scripts.children = [];
+        serializer.loadScripts(
+            this,
+            this.scripts,
+            serializer.parse(xml, true)
+        );
+        this.scripts.changed();
+        this.recordUserEdit(
+            'sprite',
+            'synch',
+            'scripts',
+            xml
+        );
+    } catch (err) {
+        this.scripts.children = bak;
+        throw(err);
     }
 };
 
@@ -10501,10 +10564,16 @@ StageMorph.prototype.inheritedBlocks = function () {
     return [];
 };
 
-// StageMorph recording user edits
+// StageMorph recording and synching user edits
 
 StageMorph.prototype.recordUserEdit =
     SpriteMorph.prototype.recordUserEdit;
+
+StageMorph.prototype.scriptsOnlyXML =
+    SpriteMorph.prototype.scriptsOnlyXML;
+
+StageMorph.prototype.synchScriptsFrom =
+    SpriteMorph.prototype.synchScriptsFrom;
 
 // StageMorph pen trails as costume
 

@@ -8,7 +8,7 @@
 a visual, blocks based programming language
 inspired by Scratch
 
-written by Jens Mönig and Brian Harvey
+written by Jens Mönig and Brian Harvey  
 jens@moenig.org, bh@cs.berkeley.edu
 
 ## Snap<em>!</em> Community
@@ -41,7 +41,7 @@ The definitive source of how to use Snap! is the [Snap! Manual](help/SnapManual.
 _Please read the [Contribution Guidelines](docs/CONTRIBUTING.md) before making an issue or pull request. Thanks!_
 
 ## License
-Copyright (C) 2008-2022 by Jens Mönig and Brian Harvey
+Copyright (C) 2008-2023 by Jens Mönig and Brian Harvey
 
 Snap! is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

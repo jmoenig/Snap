@@ -40,10 +40,13 @@
                         noImports: true,
                         noOwnBlocks: true,
                         noRingify: true,
-                        noUserSettings: true
+                        noUserSettings: true,
+                        noDevWarning: true
                     }),
-                    buttons = document.querySelectorAll('input[name="pl"]'),
                     code = document.getElementById('code'),
+                    save = document.getElementById('save'),
+                    load = document.getElementById('load'),
+                    radio = document.querySelectorAll('input[name="pl"]'),
                     loop = () => {
                         requestAnimationFrame(loop);
                         world.doOneCycle();
@@ -51,7 +54,18 @@
                 world = new WorldMorph(document.getElementById('world'), false);
                 ide.openIn(world);
                 ide.addMessageListener('update', txt => code.value = txt);
-                buttons.forEach(bt => bt.addEventListener('click', () =>
+                save.addEventListener('click', () => ide.saveXMLAs(
+                    ide.currentSprite.scriptsOnlyXML(), 'snap-scripts'));
+                clear.addEventListener('click', () =>
+                    ide.currentSprite.synchScriptsFrom('<>'));
+                load.addEventListener("change", () => {
+                    var frd = new FileReader();
+                    if (!load.files[0]) {return; }
+                    frd.onloadend = (e) =>
+                        ide.currentSprite.synchScriptsFrom(e.target.result);
+                    frd.readAsText(load.files[0]);
+                });
+                radio.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
                 code.onmouseup = function () {
                     var scripts = ide.currentSprite.scripts,
@@ -91,6 +105,10 @@
         <label for="st">Smalltalk</label>
         <input type="radio" id="c" name="pl" value="C">
         <label for="c">C</label>
+        <br>
+        <button id="save">Save</button>
+        <button id="clear">Clear</button>
+        <input type="file" id="load" accept=".xml">
 
         <p>This page is a work-in-progress to explore how we can use Snap! as
         an alternative / secondary block based scripting editor for the

@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2022 by Jens Mönig
+    Copyright (C) 2010-2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-November-22';
+var morphicVersion = '2023-January-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 var keepCanvasInCPU = false;
@@ -1622,8 +1622,12 @@ function embedMetadataPNG(aCanvas, aString) {
             encodeURIComponent(aString) +
             embedTag
         );
-    bPart.splice(-12, 0, ...newChunk);
-    parts[1] = btoa(bPart.join(""));
+    try {
+        bPart.splice(-12, 0, ...newChunk);
+        parts[1] = btoa(bPart.join(""));
+    } catch (err) {
+        console.log(err);
+    }
     return parts.join(',');
 }
 
@@ -12269,7 +12273,7 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.autofocus = true;
-    kbd.style.width = '0px'
+    kbd.style.width = '0px';
     kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;

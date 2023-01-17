@@ -17,6 +17,7 @@
     * new extension primitives: "txt_to_utf8(txt)" and "txt_from_utf8(utf8List)", thanks, John!
     * new extension primitive "txt_transform(name, txt)" for encoding, decoding, escaping, unescaping and hashing text
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
+    * new extension primitive: "syn_scripts([xml])" for getting & setting (and deleting!) the scripts of a sprite
     * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
@@ -33,12 +34,15 @@
     * updated "for each" help screen, thanks, Brian!
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * SciSnap2 extension update, thanks, Eckart!
+    * MQTT library update, thanks, Simon!
     * optimized canvas for reading back image data
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
     * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
     * order "my scripts" list by their top-down position in the scripting area (not by the time of their placement)
     * don't show "result pic" option in block context menu with "click-to-run" disabled
+    * enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
+    * enable "JavaScript function" primitive to be hidden / shown independently from enabling JavaScript extensions
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed displaying message senders
@@ -68,6 +72,10 @@
     * fixed deleting embedded reporters in keyboard-entry mode
     * fixed zebra coloring when importing a script from file or smart PNG
     * fixed accidentally triggering "When I receive green flag" events for any broadcast message
+    * COMBINing an empty list with JOIN results in an empty text rather than in the number zero
+    * hide new primitives in old microworlds
+    * explicitly garbage collect (i.e. remove) terminated audio elements
+    * don't crash the "play frequency" block when passing a non-numerical input
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
@@ -75,6 +83,42 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2023-10-17
+* TuneScope update, thanks, Harsh, Jo and Glen!
+* MQTT library update, thanks, Simon!
+
+### 2023-10-16
+* extensions: refactored extension primitive "ide_synchscripts(obj, xml)" into "syn_scripts([xml])"
+* objects: added Sprite >> synchScriptsFrom(xml) method (internal)
+* updated pyret.html with example code for exporting & importing xml
+
+### 2023-10-13
+* morphic: catch occasional stack overflow when embedding data into a PNG
+* gui: fixed #3158
+
+### 2023-10-12
+* updated inline.html test page with "noDevWarning" configuration
+* objects: tweaked sprite name-change user edit event details
+
+### 2023-10-11
+* objects: added serialized scripts (w/o dependencies) to scripts-related user-logging events
+* extensions: new extension primitive: "ide_synchscripts(obj, xml)", experimental, might change
+* gui: added configuration option for "noDevWarning"
+
+### 2023-10-10
+* gui: added openScriptsOnlyString() method to IDE, experimental
+
+### 2023-10-09
+* store, objects: hide new primitives in old microworlds
+* gui, objects: enable "JS function" primitive to be hidden / shown independently from enabling JavaScript extensions
+* threads: explicitly garbage collect (i.e. remove) terminated audio elements in case they haven't been removed already
+* objects: don't crash the "play frequency" block when passing a non-numerical input
+
+### 2023-10-05
+* threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero
+* gui: enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
+* Catalan translation update, thanks, Joan!
 
 ### 2022-12-23
 * blocks, threads: added "translations" selector to metaprogramming blocks

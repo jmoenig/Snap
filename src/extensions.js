@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-November-28';
+modules.extensions = '2023-January-16';
 
 // Global stuff
 
@@ -1048,6 +1048,19 @@ SnapExtensions.primitives.set(
                 new List([SnapTranslator.languageName(lang), lang])
             )
         );
+    }
+);
+
+// Synchronization
+
+SnapExtensions.primitives.set(
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
+        proc.assertType(xml, 'text');
+        this.synchScriptsFrom(xml);
     }
 );
 
