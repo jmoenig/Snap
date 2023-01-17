@@ -1,10 +1,10 @@
 /**
- * WebMidi.js v3.0.0-alpha.26
+ * WEBMIDI.js v3.0.19
  * A JavaScript library to kickstart your MIDI projects
  * https://webmidijs.org
- * Build generated on November 25th, 2021.
+ * Build generated on April 3rd, 2022.
  *
- * © Copyright 2015-2021, Jean-Philippe Côté.
+ * © Copyright 2015-2022, Jean-Philippe Côté.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,140 +17,548 @@
  * the License.
  */
 
-/* Version: 3.0.0-alpha.26 - November 25, 2021 21:31:49 */
+/* Version: 3.0.19 - April 3, 2022 11:02:25 */
 (function (exports) {
   'use strict';
 
   /**
-   * djipevents v2.0.1
-   * https://github.com/djipco/djipevents
-   * Build generated on November 10th, 2021.
+   * The `EventEmitter` class provides methods to implement the _observable_ design pattern. This
+   * pattern allows one to _register_ a function to execute when a specific event is _emitted_ by the
+   * emitter.
    *
-   * © Copyright 2019-2021, Jean-Philippe Côté.
-   *
-   * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-   * in compliance with the License. You may obtain a copy of the License at
-   *
-   * http://www.apache.org/licenses/LICENSE-2.0
-   *
-   * Unless required by applicable law or agreed to in writing, software distributed under the License
-   * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-   * or implied. See the License for the specific language governing permissions and limitations under
-   * the License.
+   * It is intended to be an abstract class meant to be extended by (or mixed into) other objects.
    */
-  class e {
-    constructor(e = !1) {
-      this.eventMap = {}, this.eventsSuspended = 1 == e;
-    }
+  class EventEmitter {
+    /**
+     * Creates a new `EventEmitter`object.
+     *
+     * @param {boolean} [eventsSuspended=false] Whether the `EventEmitter` is initially in a suspended
+     * state (i.e. not executing callbacks).
+     */
+    constructor(eventsSuspended = false) {
+      /**
+       * An object containing a property for each event with at least one registered listener. Each
+       * event property contains an array of all the [`Listener`]{@link Listener} objects registered
+       * for the event.
+       *
+       * @type {Object}
+       * @readonly
+       */
+      this.eventMap = {};
+      /**
+       * Whether or not the execution of callbacks is currently suspended for this emitter.
+       *
+       * @type {boolean}
+       */
 
-    addListener(n, r, i = {}) {
-      if ("string" == typeof n && n.length < 1 || n instanceof String && n.length < 1 || "string" != typeof n && !(n instanceof String) && n !== e.ANY_EVENT) throw new TypeError("The 'event' parameter must be a string or EventEmitter.ANY_EVENT.");
-      if ("function" != typeof r) throw new TypeError("The callback must be a function.");
-      const s = new t(n, this, r, i);
-      return this.eventMap[n] || (this.eventMap[n] = []), i.prepend ? this.eventMap[n].unshift(s) : this.eventMap[n].push(s), s;
+      this.eventsSuspended = eventsSuspended == true ? true : false;
     }
+    /**
+     * The callback function is executed when the associated event is triggered via [`emit()`](#emit).
+     * The [`emit()`](#emit) method relays all additional arguments it received to the callback
+     * functions. Since [`emit()`](#emit) can be passed a variable number of arguments, it is up to
+     * the developer to make sure the arguments match those of the associated callback. In addition,
+     * the callback also separately receives all the arguments present in the listener's
+     * [`arguments`](Listener#arguments) property. This makes it easy to pass data from where the
+     * listener is added to where the listener is executed.
+     *
+     * @callback EventEmitter~callback
+     * @param {...*} [args] A variable number of arguments matching the ones (if any) that were passed
+     * to the [`emit()`](#emit) method (except, the first one) followed by the arguments found in the
+     * listener's [`arguments`](Listener#arguments) array.
+     */
 
-    addOneTimeListener(e, t, n = {}) {
-      n.remaining = 1, this.addListener(e, t, n);
+    /**
+     * Adds a listener for the specified event. It returns the [`Listener`]{@link Listener} object
+     * that was created and attached to the event.
+     *
+     * To attach a global listener that will be triggered for any events, use
+     * [`EventEmitter.ANY_EVENT`]{@link #ANY_EVENT} as the first parameter. Note that a global
+     * listener will also be triggered by non-registered events.
+     *
+     * @param {string|Symbol} event The event to listen to.
+     * @param {EventEmitter~callback} callback The callback function to execute when the event occurs.
+     * @param {Object} [options={}]
+     * @param {Object} [options.context=this] The value of `this` in the callback function.
+     * @param {boolean} [options.prepend=false] Whether the listener should be added at the beginning
+     * of the listeners array and thus executed first.
+     * @param {number} [options.duration=Infinity] The number of milliseconds before the listener
+     * automatically expires.
+     * @param {number} [options.remaining=Infinity] The number of times after which the callback
+     * should automatically be removed.
+     * @param {array} [options.arguments] An array of arguments which will be passed separately to the
+     * callback function. This array is stored in the [`arguments`]{@link Listener#arguments}
+     * property of the [`Listener`]{@link Listener} object and can be retrieved or modified as
+     * desired.
+     *
+     * @returns {Listener} The newly created [`Listener`]{@link Listener} object.
+     *
+     * @throws {TypeError} The `event` parameter must be a string or
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}.
+     * @throws {TypeError} The `callback` parameter must be a function.
+     */
+
+
+    addListener(event, callback, options = {}) {
+      if (typeof event === "string" && event.length < 1 || event instanceof String && event.length < 1 || typeof event !== "string" && !(event instanceof String) && event !== EventEmitter.ANY_EVENT) {
+        throw new TypeError("The 'event' parameter must be a string or EventEmitter.ANY_EVENT.");
+      }
+
+      if (typeof callback !== "function") throw new TypeError("The callback must be a function.");
+      const listener = new Listener(event, this, callback, options);
+      if (!this.eventMap[event]) this.eventMap[event] = [];
+
+      if (options.prepend) {
+        this.eventMap[event].unshift(listener);
+      } else {
+        this.eventMap[event].push(listener);
+      }
+
+      return listener;
     }
+    /**
+     * Adds a one-time listener for the specified event. The listener will be executed once and then
+     * destroyed. It returns the [`Listener`]{@link Listener} object that was created and attached
+     * to the event.
+     *
+     * To attach a global listener that will be triggered for any events, use
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} as the first parameter. Note that a
+     * global listener will also be triggered by non-registered events.
+     *
+     * @param {string|Symbol} event The event to listen to
+     * @param {EventEmitter~callback} callback The callback function to execute when the event occurs
+     * @param {Object} [options={}]
+     * @param {Object} [options.context=this] The context to invoke the callback function in.
+     * @param {boolean} [options.prepend=false] Whether the listener should be added at the beginning
+     * of the listeners array and thus executed first.
+     * @param {number} [options.duration=Infinity] The number of milliseconds before the listener
+     * automatically expires.
+     * @param {array} [options.arguments] An array of arguments which will be passed separately to the
+     * callback function. This array is stored in the [`arguments`]{@link Listener#arguments}
+     * property of the [`Listener`]{@link Listener} object and can be retrieved or modified as
+     * desired.
+     *
+     * @returns {Listener} The newly created [`Listener`]{@link Listener} object.
+     *
+     * @throws {TypeError} The `event` parameter must be a string or
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}.
+     * @throws {TypeError} The `callback` parameter must be a function.
+     */
+
+
+    addOneTimeListener(event, callback, options = {}) {
+      options.remaining = 1;
+      this.addListener(event, callback, options);
+    }
+    /**
+     * Identifier to use when adding or removing a listener that should be triggered when any events
+     * occur.
+     *
+     * @type {Symbol}
+     */
+
 
     static get ANY_EVENT() {
       return Symbol.for("Any event");
     }
+    /**
+     * Returns `true` if the specified event has at least one registered listener. If no event is
+     * specified, the method returns `true` if any event has at least one listener registered (this
+     * includes global listeners registered to
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}).
+     *
+     * Note: to specifically check for global listeners added with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}, use
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} as the parameter.
+     *
+     * @param {string|Symbol} [event=(any event)] The event to check
+     * @param {function|Listener} [callback=(any callback)] The actual function that was added to the
+     * event or the {@link Listener} object returned by `addListener()`.
+     * @returns {boolean}
+     */
 
-    hasListener(n, r) {
-      if (void 0 === n) return !!(this.eventMap[e.ANY_EVENT] && this.eventMap[e.ANY_EVENT].length > 0) || Object.entries(this.eventMap).some(([, e]) => e.length > 0);
 
-      if (this.eventMap[n] && this.eventMap[n].length > 0) {
-        if (r instanceof t) {
-          return this.eventMap[n].filter(e => e === r).length > 0;
+    hasListener(event, callback) {
+      if (event === undefined) {
+        // Check for ANY_EVENT
+        if (this.eventMap[EventEmitter.ANY_EVENT] && this.eventMap[EventEmitter.ANY_EVENT].length > 0) {
+          return true;
+        } // Check for any regular events
+
+
+        return Object.entries(this.eventMap).some(([, value]) => {
+          return value.length > 0;
+        });
+      } else {
+        if (this.eventMap[event] && this.eventMap[event].length > 0) {
+          if (callback instanceof Listener) {
+            let result = this.eventMap[event].filter(listener => listener === callback);
+            return result.length > 0;
+          } else if (typeof callback === "function") {
+            let result = this.eventMap[event].filter(listener => listener.callback === callback);
+            return result.length > 0;
+          } else if (callback != undefined) {
+            return false;
+          }
+
+          return true;
+        } else {
+          return false;
         }
-
-        if ("function" == typeof r) {
-          return this.eventMap[n].filter(e => e.callback === r).length > 0;
-        }
-
-        return null == r;
       }
-
-      return !1;
     }
+    /**
+     * An array of all the unique event names for which the emitter has at least one registered
+     * listener.
+     *
+     * Note: this excludes global events registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} because they are not tied to a
+     * specific event.
+     *
+     * @type {string[]}
+     * @readonly
+     */
+
 
     get eventNames() {
       return Object.keys(this.eventMap);
     }
+    /**
+     * Returns an array of all the [`Listener`]{@link Listener} objects that have been registered for
+     * a specific event.
+     *
+     * Please note that global events (those added with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}) are not returned for "regular"
+     * events. To get the list of global listeners, specifically use
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} as the parameter.
+     *
+     * @param {string|Symbol} event The event to get listeners for.
+     * @returns {Listener[]} An array of [`Listener`]{@link Listener} objects.
+     */
 
-    getListeners(e) {
-      return this.eventMap[e] || [];
+
+    getListeners(event) {
+      return this.eventMap[event] || [];
     }
+    /**
+     * Suspends execution of all callbacks functions registered for the specified event type.
+     *
+     * You can suspend execution of callbacks registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} by passing
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} to `suspendEvent()`. Beware that this
+     * will not suspend all callbacks but only those registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}. While this may seem counter-intuitive
+     * at first glance, it allows the selective suspension of global listeners while leaving other
+     * listeners alone. If you truly want to suspends all callbacks for a specific
+     * [`EventEmitter`]{@link EventEmitter}, simply set its `eventsSuspended` property to `true`.
+     *
+     * @param {string|Symbol} event The event name (or `EventEmitter.ANY_EVENT`) for which to suspend
+     * execution of all callback functions.
+     */
 
-    suspendEvent(e) {
-      this.getListeners(e).forEach(e => {
-        e.suspended = !0;
+
+    suspendEvent(event) {
+      this.getListeners(event).forEach(listener => {
+        listener.suspended = true;
       });
     }
+    /**
+     * Resumes execution of all suspended callback functions registered for the specified event type.
+     *
+     * You can resume execution of callbacks registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} by passing
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} to `unsuspendEvent()`. Beware that
+     * this will not resume all callbacks but only those registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}. While this may seem
+     * counter-intuitive, it allows the selective unsuspension of global listeners while leaving other
+     * callbacks alone.
+     *
+     * @param {string|Symbol} event The event name (or `EventEmitter.ANY_EVENT`) for which to resume
+     * execution of all callback functions.
+     */
 
-    unsuspendEvent(e) {
-      this.getListeners(e).forEach(e => {
-        e.suspended = !1;
+
+    unsuspendEvent(event) {
+      this.getListeners(event).forEach(listener => {
+        listener.suspended = false;
       });
     }
+    /**
+     * Returns the number of listeners registered for a specific event.
+     *
+     * Please note that global events (those added with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}) do not count towards the remaining
+     * number for a "regular" event. To get the number of global listeners, specifically use
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} as the parameter.
+     *
+     * @param {string|Symbol} event The event which is usually a string but can also be the special
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} symbol.
+     * @returns {number} An integer representing the number of listeners registered for the specified
+     * event.
+     */
 
-    getListenerCount(e) {
-      return this.getListeners(e).length;
+
+    getListenerCount(event) {
+      return this.getListeners(event).length;
     }
+    /**
+     * Executes the callback function of all the [`Listener`]{@link Listener} objects registered for
+     * a given event. The callback functions are passed the additional arguments passed to `emit()`
+     * (if any) followed by the arguments present in the [`arguments`](Listener#arguments) property of
+     * the [`Listener`](Listener) object (if any).
+     *
+     * If the [`eventsSuspended`]{@link #eventsSuspended} property is `true` or the
+     * [`Listener.suspended`]{@link Listener#suspended} property is `true`, the callback functions
+     * will not be executed.
+     *
+     * This function returns an array containing the return values of each of the callbacks.
+     *
+     * It should be noted that the regular listeners are triggered first followed by the global
+     * listeners (those added with [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}).
+     *
+     * @param {string} event The event
+     * @param {...*} args Arbitrary number of arguments to pass along to the callback functions
+     *
+     * @returns {Array} An array containing the return value of each of the executed listener
+     * functions.
+     *
+     * @throws {TypeError} The `event` parameter must be a string.
+     */
 
-    emit(t, ...n) {
-      if ("string" != typeof t && !(t instanceof String)) throw new TypeError("The 'event' parameter must be a string.");
-      if (this.eventsSuspended) return;
-      let r = [],
-          i = this.eventMap[e.ANY_EVENT] || [];
-      return this.eventMap[t] && (i = i.concat(this.eventMap[t])), i.forEach(e => {
-        if (e.suspended) return;
-        let t = [...n];
-        Array.isArray(e.arguments) && (t = t.concat(e.arguments)), e.remaining > 0 && (r.push(e.callback.apply(e.context, t)), e.count++), --e.remaining < 1 && e.remove();
-      }), r;
+
+    emit(event, ...args) {
+      if (typeof event !== "string" && !(event instanceof String)) {
+        throw new TypeError("The 'event' parameter must be a string.");
+      }
+
+      if (this.eventsSuspended) return; // We collect return values from all listeners here
+
+      let results = []; // We must make sure that we do not have undefined otherwise concat() will add an undefined
+      // entry in the array.
+
+      let listeners = this.eventMap[EventEmitter.ANY_EVENT] || [];
+      if (this.eventMap[event]) listeners = listeners.concat(this.eventMap[event]);
+      listeners.forEach(listener => {
+        // This is the per-listener suspension check
+        if (listener.suspended) return;
+        let params = [...args];
+        if (Array.isArray(listener.arguments)) params = params.concat(listener.arguments);
+
+        if (listener.remaining > 0) {
+          results.push(listener.callback.apply(listener.context, params));
+          listener.count++;
+        }
+
+        if (--listener.remaining < 1) listener.remove();
+      });
+      return results;
     }
+    /**
+     * Removes all the listeners that match the specified criterias. If no parameters are passed, all
+     * listeners will be removed. If only the `event` parameter is passed, all listeners for that
+     * event will be removed. You can remove global listeners by using
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} as the first parameter.
+     *
+     * To use more granular options, you must at least define the `event`. Then, you can specify the
+     * callback to match or one or more of the additional options.
+     *
+     * @param {string} [event] The event name.
+     * @param {EventEmitter~callback} [callback] Only remove the listeners that match this exact
+     * callback function.
+     * @param {Object} [options]
+     * @param {*} [options.context] Only remove the listeners that have this exact context.
+     * @param {number} [options.remaining] Only remove the listener if it has exactly that many
+     * remaining times to be executed.
+     */
 
-    removeListener(e, t, n = {}) {
-      if (void 0 === e) return void (this.eventMap = {});
-      if (!this.eventMap[e]) return;
-      let r = this.eventMap[e].filter(e => t && e.callback !== t || n.remaining && n.remaining !== e.remaining || n.context && n.context !== e.context);
-      r.length ? this.eventMap[e] = r : delete this.eventMap[e];
+
+    removeListener(event, callback, options = {}) {
+      if (event === undefined) {
+        this.eventMap = {};
+        return;
+      } else if (!this.eventMap[event]) {
+        return;
+      } // Find listeners that do not match the criterias (those are the ones we will keep)
+
+
+      let listeners = this.eventMap[event].filter(listener => {
+        return callback && listener.callback !== callback || options.remaining && options.remaining !== listener.remaining || options.context && options.context !== listener.context;
+      });
+
+      if (listeners.length) {
+        this.eventMap[event] = listeners;
+      } else {
+        delete this.eventMap[event];
+      }
     }
+    /**
+     * The `waitFor()` method is an async function which returns a promise. The promise is fulfilled
+     * when the specified event occurs. The event can be a regular event or
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} (if you want to resolve as soon as any
+     * event is emitted).
+     *
+     * If the `duration` option is set, the promise will only be fulfilled if the event is emitted
+     * within the specified duration. If the event has not been fulfilled after the specified
+     * duration, the promise is rejected. This makes it super easy to wait for an event and timeout
+     * after a certain time if the event is not triggered.
+     *
+     * @param {string|Symbol} event The event to wait for
+     * @param {Object} [options={}]
+     * @param {number} [options.duration=Infinity] The number of milliseconds to wait before the
+     * promise is automatically rejected.
+     */
 
-    async waitFor(e, t = {}) {
-      return t.duration = parseInt(t.duration), (isNaN(t.duration) || t.duration <= 0) && (t.duration = 1 / 0), new Promise((n, r) => {
-        let i,
-            s = this.addListener(e, () => {
-          clearTimeout(i), n();
+
+    async waitFor(event, options = {}) {
+      options.duration = parseInt(options.duration);
+      if (isNaN(options.duration) || options.duration <= 0) options.duration = Infinity;
+      return new Promise((resolve, reject) => {
+        let timeout;
+        let listener = this.addListener(event, () => {
+          clearTimeout(timeout);
+          resolve();
         }, {
           remaining: 1
         });
-        t.duration !== 1 / 0 && (i = setTimeout(() => {
-          s.remove(), r("The duration expired before the event was emitted.");
-        }, t.duration));
+
+        if (options.duration !== Infinity) {
+          timeout = setTimeout(() => {
+            listener.remove();
+            reject("The duration expired before the event was emitted.");
+          }, options.duration);
+        }
       });
     }
+    /**
+     * The number of unique events that have registered listeners.
+     *
+     * Note: this excludes global events registered with
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT} because they are not tied to a
+     * specific event.
+     *
+     * @type {number}
+     * @readonly
+     */
+
 
     get eventCount() {
       return Object.keys(this.eventMap).length;
     }
 
   }
+  /**
+   * The `Listener` class represents a single event listener object. Such objects keep all relevant
+   * contextual information such as the event being listened to, the object the listener was attached
+   * to, the callback function and so on.
+   *
+   */
 
-  class t {
-    constructor(t, n, r, i = {}) {
-      if ("string" != typeof t && !(t instanceof String) && t !== e.ANY_EVENT) throw new TypeError("The 'event' parameter must be a string or EventEmitter.ANY_EVENT.");
-      if (!n) throw new ReferenceError("The 'target' parameter is mandatory.");
-      if ("function" != typeof r) throw new TypeError("The 'callback' must be a function.");
-      void 0 === i.arguments || Array.isArray(i.arguments) || (i.arguments = [i.arguments]), (i = Object.assign({
-        context: n,
-        remaining: 1 / 0,
-        arguments: void 0,
-        duration: 1 / 0
-      }, i)).duration !== 1 / 0 && setTimeout(() => this.remove(), i.duration), this.arguments = i.arguments, this.callback = r, this.context = i.context, this.count = 0, this.event = t, this.remaining = parseInt(i.remaining) >= 1 ? parseInt(i.remaining) : 1 / 0, this.suspended = !1, this.target = n;
+  class Listener {
+    /**
+     * Creates a new `Listener` object
+     *
+     * @param {string|Symbol} event The event being listened to
+     * @param {EventEmitter} target The [`EventEmitter`]{@link EventEmitter} object that the listener
+     * is attached to.
+     * @param {EventEmitter~callback} callback The function to call when the listener is triggered
+     * @param {Object} [options={}]
+     * @param {Object} [options.context=target] The context to invoke the listener in (a.k.a. the
+     * value of `this` inside the callback function).
+     * @param {number} [options.remaining=Infinity] The remaining number of times after which the
+     * callback should automatically be removed.
+     * @param {array} [options.arguments] An array of arguments that will be passed separately to the
+     * callback function upon execution. The array is stored in the [`arguments`]{@link #arguments}
+     * property and can be retrieved or modified as desired.
+     *
+     * @throws {TypeError} The `event` parameter must be a string or
+     * [`EventEmitter.ANY_EVENT`]{@link EventEmitter#ANY_EVENT}.
+     * @throws {ReferenceError} The `target` parameter is mandatory.
+     * @throws {TypeError} The `callback` must be a function.
+     */
+    constructor(event, target, callback, options = {}) {
+      if (typeof event !== "string" && !(event instanceof String) && event !== EventEmitter.ANY_EVENT) {
+        throw new TypeError("The 'event' parameter must be a string or EventEmitter.ANY_EVENT.");
+      }
+
+      if (!target) {
+        throw new ReferenceError("The 'target' parameter is mandatory.");
+      }
+
+      if (typeof callback !== "function") {
+        throw new TypeError("The 'callback' must be a function.");
+      } // Convert single value argument to array
+
+
+      if (options.arguments !== undefined && !Array.isArray(options.arguments)) {
+        options.arguments = [options.arguments];
+      } // Define default options and merge declared options into them,
+
+
+      options = Object.assign({
+        context: target,
+        remaining: Infinity,
+        arguments: undefined,
+        duration: Infinity
+      }, options); // Make sure it is eventually deleted if a duration is supplied
+
+      if (options.duration !== Infinity) {
+        setTimeout(() => this.remove(), options.duration);
+      }
+      /**
+       * An array of arguments to pass to the callback function upon execution.
+       * @type {array}
+       */
+
+
+      this.arguments = options.arguments;
+      /**
+       * The callback function to execute.
+       * @type {Function}
+       */
+
+      this.callback = callback;
+      /**
+       * The context to execute the callback function in (a.k.a. the value of `this` inside the
+       * callback function)
+       * @type {Object}
+       */
+
+      this.context = options.context;
+      /**
+       * The number of times the listener function was executed.
+       * @type {number}
+       */
+
+      this.count = 0;
+      /**
+       * The event name.
+       * @type {string}
+       */
+
+      this.event = event;
+      /**
+       * The remaining number of times after which the callback should automatically be removed.
+       * @type {number}
+       */
+
+      this.remaining = parseInt(options.remaining) >= 1 ? parseInt(options.remaining) : Infinity;
+      /**
+       * Whether this listener is currently suspended or not.
+       * @type {boolean}
+       */
+
+      this.suspended = false;
+      /**
+       * The object that the event is attached to (or that emitted the event).
+       * @type {EventEmitter}
+       */
+
+      this.target = target;
     }
+    /**
+     * Removes the listener from its target.
+     */
+
 
     remove() {
       this.target.removeListener(this.event, this.callback, {
@@ -206,7 +614,7 @@
       };
     }
     /**
-     * An simple array of the 16 valid MIDI channel numbers (`1` to `16`):
+     * A simple array of the 16 valid MIDI channel numbers (`1` to `16`):
      *
      * @type {number[]}
      * @readonly
@@ -660,6 +1068,21 @@
         unknownsystemmessage: -1
       };
     }
+    /**
+     * Array of channel-specific event names that can be listened for. This includes channel mode
+     * events and RPN/NRPN events.
+     *
+     * @type {string[]}
+     * @readonly
+     */
+
+
+    static get CHANNEL_EVENTS() {
+      return [// MIDI channel message events
+      "noteoff", "controlchange", "noteon", "keyaftertouch", "programchange", "channelaftertouch", "pitchbend", // MIDI channel mode events
+      "allnotesoff", "allsoundoff", "localcontrol", "monomode", "omnimode", "resetallcontrollers", // RPN/NRPN events
+      "nrpn", "nrpn-dataentrycoarse", "nrpn-dataentryfine", "nrpn-databuttonincrement", "nrpn-databuttondecrement", "rpn", "rpn-dataentrycoarse", "rpn-dataentryfine", "rpn-databuttonincrement", "rpn-databuttondecrement"];
+    }
 
   }
 
@@ -684,45 +1107,48 @@
    * method such as [`OutputChannel.stopNote()`]{@link OutputChannel#stopNote},
    * [`Output.stopNote()`]{@link Output#stopNote} or similar.
    *
-   * @param value {string|number} The value used to create the note. If an identifier string is used,
-   * it must start with the note letter, optionally followed by an accidental and followed by the
-   * octave number (`"C3"`, `"G#4"`, `"F-1"`, `"Db7"`, etc.). If a number is used, it must be an
-   * integer between 0 and 127. In this case, middle C is considered to be C4 (note number 60).
-   *
-   * @param {object} [options={}]
-   *
-   * @param {number} [options.duration=Infinity] The number of milliseconds before the note should be
-   * explicitly stopped.
-   *
-   * @param {number} [options.attack=0.5] The note's attack velocity as a float between 0 and 1. If
-   * you wish to use an integer between 0 and 127, use the `rawAttack` option instead. If both
-   * `attack` and `rawAttack` are specified, the latter has precedence.
-   *
-   * @param {number} [options.release=0.5] The note's release velocity as a float between 0 and 1. If
-   * you wish to use an integer between 0 and 127, use the `rawRelease` option instead. If both
-   * `release` and `rawRelease` are specified, the latter has precedence.
-   *
-   * @param {number} [options.rawAttack=64] The note's attack velocity as an integer between 0 and
-   * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
-   * `attack` and `rawAttack` are specified, the latter has precedence.
-   *
-   * @param {number} [options.rawRelease=64] The note's release velocity as an integer between 0 and
-   * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
-   * `release` and `rawRelease` are specified, the latter has precedence.
-   *
-   * @throws {Error} Invalid note identifier
-   * @throws {RangeError} Invalid name value
-   * @throws {RangeError} Invalid accidental value
-   * @throws {RangeError} Invalid octave value
-   * @throws {RangeError} Invalid duration value
-   * @throws {RangeError} Invalid attack value
-   * @throws {RangeError} Invalid release value
-   *
    * @license Apache-2.0
    * @since 3.0.0
    */
 
-  class _Note {
+  class TS_WebMIDI_Note {
+    /**
+     * Creates a `Note` object.
+     *
+     * @param value {string|number} The value used to create the note. If an identifier string is used,
+     * it must start with the note letter, optionally followed by an accidental and followed by the
+     * octave number (`"C3"`, `"G#4"`, `"F-1"`, `"Db7"`, etc.). If a number is used, it must be an
+     * integer between 0 and 127. In this case, middle C is considered to be C4 (note number 60).
+     *
+     * @param {object} [options={}]
+     *
+     * @param {number} [options.duration=Infinity] The number of milliseconds before the note should be
+     * explicitly stopped.
+     *
+     * @param {number} [options.attack=0.5] The note's attack velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawAttack` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
+     *
+     * @param {number} [options.release=0.5] The note's release velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawRelease` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
+     *
+     * @param {number} [options.rawAttack=64] The note's attack velocity as an integer between 0 and
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
+     *
+     * @param {number} [options.rawRelease=64] The note's release velocity as an integer between 0 and
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
+     *
+     * @throws {Error} Invalid note identifier
+     * @throws {RangeError} Invalid name value
+     * @throws {RangeError} Invalid accidental value
+     * @throws {RangeError} Invalid octave value
+     * @throws {RangeError} Invalid duration value
+     * @throws {RangeError} Invalid attack value
+     * @throws {RangeError} Invalid release value
+     */
     constructor(value, options = {}) {
       // Assign property defaults
       this.duration = wm.defaults.note.duration;
@@ -928,6 +1354,7 @@
      * using C4 as a reference for middle C.
      *
      * @type {number}
+     * @readonly
      * @since 3.0.0
      */
 
@@ -1070,7 +1497,7 @@
      * @param [channel] {number|number[]} An integer or an array of integers to parse as channel
      * numbers.
      *
-     * @returns {Array} An array of 0 or more valid MIDI channel numbers.
+     * @returns {number[]} An array of 0 or more valid MIDI channel numbers.
      *
      * @since 3.0.0
      * @static
@@ -1146,6 +1573,7 @@
      * -2, the resulting MIDI note number will be 36.
      *
      * @param input {string|number} A string or number to extract the MIDI note number from.
+     * @param octaveOffset {number} An integer to offset the octave by
      *
      * @returns {number|false} A valid MIDI note number (0-127) or `false` if the input could not
      * successfully be parsed to a note number.
@@ -1218,15 +1646,26 @@
      * @param {number} [options.duration=Infinity] The number of milliseconds before the note should
      * be explicitly stopped.
      *
-     * @param {number} [options.attack=64] The note's attack velocity as an integer between 0 and 127.
+     * @param {number} [options.attack=0.5] The note's attack velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawAttack` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
      *
-     * @param {number} [options.release=64] The note's release velocity as an integer between 0 and
-     * 127.
+     * @param {number} [options.release=0.5] The note's release velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawRelease` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
+     *
+     * @param {number} [options.rawAttack=64] The note's attack velocity as an integer between 0 and
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
+     *
+     * @param {number} [options.rawRelease=64] The note's release velocity as an integer between 0 and
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
      *
      * @param {number} [options.octaveOffset=0] An integer to offset the octave by. **This is only
      * used when the input value is a note identifier.**
      *
-     * @returns {Note}
+     * @returns {TS_WebMIDI_Note}
      *
      * @throws TypeError The input could not be parsed to a note
      *
@@ -1238,7 +1677,7 @@
     static buildNote(input, options = {}) {
       options.octaveOffset = parseInt(options.octaveOffset) || 0; // If it's already a Note, we're done
 
-      if (input instanceof Note) return input;
+      if (input instanceof TS_WebMIDI_Note) return input;
       let number = this.guessNoteNumber(input, options.octaveOffset);
 
       if (number === false) {
@@ -1249,16 +1688,19 @@
 
 
       options.octaveOffset = undefined;
-      return new Note(number, options);
+      return new TS_WebMIDI_Note(number, options);
     }
     /**
      * Converts an input value, which can be an unsigned integer (0-127), a note identifier, a
-     * [`Note`]{@link Note}  object or an array of the previous types, to an array of
+     * [`Note`]{@link TS_WebMIDI_Note}  object or an array of the previous types, to an array of
      * [`Note`]{@link Note}  objects.
      *
      * [`Note`]{@link Note}  objects are returned as is. For note numbers and identifiers, a
      * [`Note`]{@link Note} object is created with the options specified. An error will be thrown when
      * encountering invalid input.
+     *
+     * Note: if both the `attack` and `rawAttack` options are specified, the later has priority. The
+     * same goes for `release` and `rawRelease`.
      *
      * @param [notes] {number|string|Note|number[]|string[]|Note[]}
      *
@@ -1267,17 +1709,21 @@
      * @param {number} [options.duration=Infinity] The number of milliseconds before the note should
      * be explicitly stopped.
      *
-     * @param {number} [options.attack=0.5] The note's attack velocity as a decimal number between 0
-     * and 1.
+     * @param {number} [options.attack=0.5] The note's attack velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawAttack` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
      *
-     * @param {number} [options.release=0.5] The note's release velocity as a decimal number between 0
-     * and 1.
+     * @param {number} [options.release=0.5] The note's release velocity as a float between 0 and 1. If
+     * you wish to use an integer between 0 and 127, use the `rawRelease` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
      *
      * @param {number} [options.rawAttack=64] The note's attack velocity as an integer between 0 and
-     * 127.
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `attack` and `rawAttack` are specified, the latter has precedence.
      *
      * @param {number} [options.rawRelease=64] The note's release velocity as an integer between 0 and
-     * 127.
+     * 127. If you wish to use a float between 0 and 1, use the `release` option instead. If both
+     * `release` and `rawRelease` are specified, the latter has precedence.
      *
      * @param {number} [options.octaveOffset=0] An integer to offset the octave by. **This is only
      * used when the input value is a note identifier.**
@@ -1307,7 +1753,7 @@
      * Passing `Infinity` will return `1` and passing `-Infinity` will return `0`. Otherwise, when the
      * input value cannot be converted to an integer, the method returns 0.
      *
-     * @param value A positive integer between 0 and 127 (inclusive)
+     * @param value {number} A positive integer between 0 and 127 (inclusive)
      * @returns {number} A number between 0 and 1 (inclusive)
      * @static
      */
@@ -1319,15 +1765,15 @@
       return Math.min(Math.max(value / 127, 0), 1);
     }
     /**
-     * Returns a number between 0 and 127 which is the result of multiplying the input value by 127.
-     * The input value should be number between 0 and 1 (inclusively). The returned value is
+     * Returns an integer between 0 and 127 which is the result of multiplying the input value by
+     * 127. The input value should be a number between 0 and 1 (inclusively). The returned value is
      * restricted between 0 and 127 even if the input is greater than 1 or smaller than 0.
      *
      * Passing `Infinity` will return `127` and passing `-Infinity` will return `0`. Otherwise, when
      * the input value cannot be converted to a number, the method returns 0.
      *
-     * @param value A positive integer between 0 and 127 (inclusive)
-     * @returns {number} A number between 0 and 1 (inclusive)
+     * @param value {number} A positive float between 0 and 1 (inclusive)
+     * @returns {number} A number between 0 and 127 (inclusive)
      * @static
      */
 
@@ -1380,7 +1826,9 @@
      * the calculated value is less than 0, 0 will be returned. If the calculated value is more than
      * 127, 127 will be returned. If an invalid offset value is supplied, 0 will be used.
      *
-     * @param offset
+     * @param number {number} The MIDI note to offset as an integer between 0 and 127.
+     * @param octaveOffset {number} An integer to offset the note by (in octave)
+     * @param octaveOffset {number} An integer to offset the note by (in semitones)
      * @returns {number} An integer between 0 and 127
      *
      * @throws {Error} Invalid note number
@@ -1400,11 +1848,12 @@
     }
     /**
      * Returns the name of the first property of the supplied object whose value is equal to the one
-     * supplied.
+     * supplied. If nothing is found, `undefined` is returned.
      *
-     * @param object {object}
-     * @param value {*}
-     * @returns {string} The name of the matching property
+     * @param object {object} The object to look for the property in.
+     * @param value {*} Any value that can be expected to be found in the object's properties.
+     * @returns {string|undefined} The name of the matching property or `undefined` if nothing is
+     * found.
      * @static
      */
 
@@ -1413,13 +1862,13 @@
       return Object.keys(object).find(key => object[key] === value);
     }
     /**
-     * Returns the name of a control change message matching the specified number. Some valid control
-     * change numbers do not have a specific name or purpose assigned in the MIDI
+     * Returns the name of a control change message matching the specified number (0-127). Some valid
+     * control change numbers do not have a specific name or purpose assigned in the MIDI
      * [spec](https://midi.org/specifications-old/item/table-3-control-change-messages-data-bytes-2).
-     * In this case, the method returns `undefined`.
+     * In these cases, the method returns `controllerXXX` (where XXX is the number).
      *
-     * @param {number} number An integer representing the control change message
-     * @returns {string|undefined} The matching control change name or `undefined` if not match was
+     * @param {number} number An integer (0-127) representing the control change message
+     * @returns {string|undefined} The matching control change name or `undefined` if no match was
      * found.
      *
      * @static
@@ -1433,8 +1882,8 @@
      * Returns the channel mode name matching the specified number. If no match is found, the function
      * returns `false`.
      *
-     * @param {number} number An integer representing the channel mode message.
-     * @returns {string|false} The name of the matching channel mode or `false` if not match could be
+     * @param {number} number An integer representing the channel mode message (120-127)
+     * @returns {string|false} The name of the matching channel mode or `false` if no match could be
      * found.
      *
      * @since 2.0.0
@@ -1451,6 +1900,24 @@
       }
 
       return false;
+    }
+    /**
+     * Indicates whether the execution environment is Node.js (`true`) or not (`false`)
+     * @type {boolean}
+     */
+
+
+    static get isNode() {
+      return new Function("try { return this === global; } catch(e) { return false; }")();
+    }
+    /**
+     * Indicates whether the execution environment is a browser (`true`) or not (`false`)
+     * @type {boolean}
+     */
+
+
+    static get isBrowser() {
+      return new Function("try { return this === window; } catch(e) { return false; }")();
     }
 
   }
@@ -1472,7 +1939,13 @@
    * @since 3.0.0
    */
 
-  class OutputChannel extends e {
+  class OutputChannel extends EventEmitter {
+    /**
+     * Creates an `OutputChannel` object.
+     *
+     * @param {Output} output The [`Output`](Output) this channel belongs to.
+     * @param {number} number The MIDI channel number (`1` - `16`).
+     */
     constructor(output, number) {
       super();
       /**
@@ -1529,11 +2002,12 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time=0] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a positive
-     * number
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
      * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
-     * the operation will be scheduled for that point time. If `time` is omitted, or in the past, the
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The first byte (status) must be an integer between 128 and 255.
@@ -1555,7 +2029,7 @@
      * aftertouch. For a channel-wide aftertouch message, use
      * [`sendChannelAftertouch()`]{@link #sendChannelAftertouch}.
      *
-     * @param note {number|Note|string|number[]|Note[]|string[]} The note(s) for which you are sending
+     * @param target {number|Note|string|number[]|Note[]|string[]} The note(s) for which you are sending
      * an aftertouch value. The notes can be specified by using a MIDI note number (`0` - `127`), a
      * [`Note`](Note) object, a note identifier (e.g. `C3`, `G#4`, `F-1`, `Db7`) or an array of the
      * previous types. When using a note identifier, octave range must be between `-1` and `9`. The
@@ -1573,12 +2047,14 @@
      *
      * @param {object} [options={}]
      *
-     * @param {boolean} [options.useRawValue=false] A boolean indicating whether the value should be
+     * @param {boolean} [options.rawValue=false] A boolean indicating whether the value should be
      * considered a float between `0` and `1.0` (default) or a raw integer between `0` and `127`.
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -1720,9 +2196,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -1946,9 +2424,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2009,9 +2489,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2087,23 +2569,25 @@
      * `1`). If the `rawAttack` option is also defined, it will have priority. An invalid velocity
      * value will silently trigger the default of `0.5`.
      *
-     * @param {number} [options.rawAttack=0.5] The attack velocity at which to play the note (between
+     * @param {number} [options.rawAttack=64] The attack velocity at which to play the note (between
      * `0` and `127`). This has priority over the `attack` property. An invalid velocity value will
-     * silently trigger the default of `0.5`.
+     * silently trigger the default of 64.
      *
      * @param {number} [options.release=0.5] The velocity at which to release the note (between `0`
      * and `1`). If the `rawRelease` option is also defined, it will have priority. An invalid
      * velocity value will silently trigger the default of `0.5`. This is only used with the
      * **note off** event triggered when `options.duration` is set.
      *
-     * @param {number} [options.rawRelease=0.5] The velocity at which to release the note (between `0`
+     * @param {number} [options.rawRelease=64] The velocity at which to release the note (between `0`
      * and `127`). This has priority over the `release` property. An invalid velocity value will
-     * silently trigger the default of `0.5`. This is only used with the **note off** event triggered
+     * silently trigger the default of 64. This is only used with the **note off** event triggered
      * when `options.duration` is set.
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2149,9 +2633,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2209,16 +2695,6 @@
       return this;
     }
     /**
-     * This is an alias to the [sendNoteOff()]{@link OutputChannel#sendNoteOff} method.
-     *
-     * @see {@link OutputChannel#sendNoteOff}
-     *
-     * @param note
-     * @param options
-     * @returns {Output}
-     */
-
-    /**
      * Sends a **note off** message for the specified MIDI note number. The first parameter is the
      * note to stop. It can be a single value or an array of the following valid values:
      *
@@ -2237,20 +2713,21 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {boolean} [options.rawValue=false] Controls whether the release velocity is set using
-     * integers between `0` and `127` (`true`) or a decimal number between `0` and `1` (`false`,
-     * default).
+     * @param {number} [options.release=0.5] The velocity at which to release the note
+     * (between `0` and `1`).  If the `rawRelease` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `0.5`.
+     *
+     * @param {number} [options.rawRelease=64] The velocity at which to release the note
+     * (between `0` and `127`). If the `release` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `64`.
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
-     *
-     * @param {number} [options.release=0.5] The velocity at which to release the note (between `0`
-     * and `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -2288,9 +2765,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2377,9 +2856,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2420,9 +2901,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2455,9 +2938,11 @@
      * @param {boolean} [options.rawValue=false] A boolean indicating whether the value should be
      * considered a float between `0` and `1.0` (default) or a raw integer between `0` and `127`.
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2502,9 +2987,11 @@
      *
      * @param {object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2547,9 +3034,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2600,7 +3089,7 @@
      *
      * For further implementation details, refer to the manufacturer's documentation.
      *
-     * @param parameter {number[]} A two-position array specifying the two control bytes (0x63,
+     * @param nrpn {number[]} A two-position array specifying the two control bytes (0x63,
      * 0x62) that identify the non-registered parameter.
      *
      * @param [data=[]] {number|number[]} An integer or an array of integers with a length of 1 or 2
@@ -2608,9 +3097,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2673,9 +3164,11 @@
      * considered as a float between -1.0 and 1.0 (default) or as raw integer between 0 and 127 (or
      * an array of 2 integers if using both MSB and LSB).
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2743,9 +3236,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2778,9 +3273,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2845,9 +3342,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2894,9 +3393,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2924,9 +3425,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2956,9 +3459,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2980,9 +3485,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -2999,9 +3506,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -3018,9 +3527,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -3040,9 +3551,11 @@
      *
      * @param {Object} [options={}]
      *
-     * @param {number|string} [options.time] If `time` is a string prefixed with `"+"` and followed by
-     * a number, the message will be delayed by that many milliseconds. If the value is a number, the
-     * operation will be scheduled for that time. The current time can be retrieved with
+     * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
+     * followed by a number, the message will be delayed by that many milliseconds. If the value is a
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
      * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
      * operation will be carried out as soon as possible.
      *
@@ -3121,9 +3634,6 @@
    * [`WebMidi.getOutputByName()`](WebMidi#getOutputByName) or
    * [`WebMidi.getOutputById()`](WebMidi#getOutputById).
    *
-   * @param {MIDIOutput} midiOutput [`MIDIOutput`](https://developer.mozilla.org/en-US/docs/Web/API/MIDIOutput)
-   * object as provided by the MIDI subsystem.
-   *
    * @fires Output#opened
    * @fires Output#disconnected
    * @fires Output#closed
@@ -3132,7 +3642,13 @@
    * @license Apache-2.0
    */
 
-  class Output extends e {
+  class Output extends EventEmitter {
+    /**
+     * Creates an `Output` object.
+     *
+     * @param {MIDIOutput} midiOutput [`MIDIOutput`](https://developer.mozilla.org/en-US/docs/Web/API/MIDIOutput)
+     * object as provided by the MIDI subsystem.
+     */
     constructor(midiOutput) {
       super();
       /**
@@ -3196,10 +3712,13 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `"opened"`
-         * @property {Output} target The object that triggered the event
+         * @property {Output} target The object to which the listener was originally added (`Output`).
+         * @property {Output} port The port that was opened
          */
         event.type = "opened";
         event.target = this;
+        event.port = event.target; // for consistency
+
         this.emit("opened", event);
       } else if (e.port.connection === "closed" && e.port.state === "connected") {
         /**
@@ -3211,10 +3730,13 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `"closed"`
-         * @property {Output} target The object that triggered the event
+         * @property {Output} target The object to which the listener was originally added (`Output`).
+         * @property {Output} port The port that was closed
          */
         event.type = "closed";
         event.target = this;
+        event.port = event.target; // for consistency
+
         this.emit("closed", event);
       } else if (e.port.connection === "closed" && e.port.state === "disconnected") {
         /**
@@ -3226,17 +3748,12 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp0 when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `"disconnected"`
-         * @property {object} target Object with properties describing the {@link Output} that
-         * triggered the event. This is not the actual `Output` as it is no longer available.
-         * @property {string} target.connection `"closed"`
-         * @property {string} target.id ID of the input
-         * @property {string} target.manufacturer Manufacturer of the device that provided the input
-         * @property {string} target.name Name of the device that provided the input
-         * @property {string} target.state `"disconnected"`
-         * @property {string} target.type `"output"`
+         * @property {Output} target The object to which the listener was originally added (`Output`).
+         * @property {object} port Object with properties describing the {@link Output} that was
+         * disconnected. This is not the actual `Output` as it is no longer available.
          */
         event.type = "disconnected";
-        event.target = {
+        event.port = {
           connection: e.port.connection,
           id: e.port.id,
           manufacturer: e.port.manufacturer,
@@ -3308,10 +3825,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The first byte (status) must be an integer between 128 and 255.
      *
@@ -3323,16 +3841,16 @@
 
     send(message, options = {
       time: 0
-    }, legacy = undefined) {
+    }, legacy = 0) {
       // If a Message object is passed in we extract the message data (the jzz plugin used on Node.js
       // does not support using Uint8Array).
       if (message instanceof Message) {
-        message = wm.isNode ? message.data : message.rawData;
+        message = Utilities.isNode ? message.data : message.rawData;
       } // If the data is a Uint8Array and we are on Node, we must convert it to array so it works with
       // the jzz module.
 
 
-      if (message instanceof Uint8Array && wm.isNode) {
+      if (message instanceof Uint8Array && Utilities.isNode) {
         message = Array.from(message);
       } // Validation
 
@@ -3342,10 +3860,10 @@
         if (!Array.isArray(message) && !(message instanceof Uint8Array)) {
           message = [message];
           if (Array.isArray(options)) message = message.concat(options);
-          options = legacy ? {
-            time: legacy
-          } : {
+          options = isNaN(legacy) ? {
             time: 0
+          } : {
+            time: legacy
           };
         }
 
@@ -3373,12 +3891,27 @@
     /**
      * Sends a MIDI [**system exclusive**]{@link
       * https://www.midi.org/specifications-old/item/table-4-universal-system-exclusive-messages}
-     * (*sysex*) message. The `data` parameter should only contain the data of the message. When
-     * sending out the actual MIDI message, WEBMIDI.js will automatically prepend the data with the
-     * **sysex byte** (`0xF0`) and the manufacturer ID byte(s). It will also automatically terminate
-     * the message with the **sysex end byte** (`0xF7`).
+     * (*sysex*) message. There are two categories of system exclusive messages: manufacturer-specific
+     * messages and universal messages. Universal messages are further divided into three subtypes:
      *
-     * The data can be an array of unsigned integers (`0` - `127`) or a `Uint8Array` object.
+     *   * Universal non-commercial (for research and testing): `0x7D`
+     *   * Universal non-realtime: `0x7E`
+     *   * Universal realtime: `0x7F`
+     *
+     * The method's first parameter (`identification`) identifies the type of message. If the value of
+     * `identification` is `0x7D` (125), `0x7E` (126) or `0x7F` (127), the message will be identified
+     * as a **universal non-commercial**, **universal non-realtime** or **universal realtime** message
+     * (respectively).
+     *
+     * If the `identification` value is an array or an integer between 0 and 124, it will be used to
+     * identify the manufacturer targeted by the message. The *MIDI Manufacturers Association*
+     * maintains a full list of
+     * [Manufacturer ID Numbers](https://www.midi.org/specifications-old/item/manufacturer-id-numbers).
+     *
+     * The `data` parameter should only contain the data of the message. When sending out the actual
+     * MIDI message, WEBMIDI.js will automatically prepend the data with the **sysex byte** (`0xF0`)
+     * and the identification byte(s). It will also automatically terminate the message with the
+     * **sysex end byte** (`0xF7`).
      *
      * To use the `sendSysex()` method, system exclusive message support must have been enabled. To
      * do so, you must set the `sysex` option to `true` when calling
@@ -3389,7 +3922,7 @@
      *   .then(() => console.log("System exclusive messages are enabled");
      * ```
      *
-     * ##### Examples
+     * ##### Examples of manufacturer-specific system exclusive messages
      *
      * If you want to send a sysex message to a Korg device connected to the first output, you would
      * use the following code:
@@ -3415,28 +3948,44 @@
      * WebMidi.outputs[0].sendSysex([0x00, 0x21, 0x09], [0x1, 0x2, 0x3, 0x4, 0x5]);
      * ```
      *
-     * The **MIDI Manufacturers Association** is in charge of maintaining the full updated list of
-     * [Manufacturer ID Numbers](https://www.midi.org/specifications-old/item/manufacturer-id-numbers).
-     *
      * There is no limit for the length of the data array. However, it is generally suggested to keep
      * system exclusive messages to 64Kb or less.
      *
-     * @param manufacturer {number|number[]} An unsigned integer or an array of three unsigned
-     * integers between `0` and `127` that identify the targeted manufacturer. The *MIDI Manufacturers
-     * Association* maintains a full list of
+     * ##### Example of universal system exclusive message
+     *
+     * If you want to send a universal sysex message, simply assign the correct identification number
+     * in the first parameter. Number `0x7D` (125) is for non-commercial, `0x7E` (126) is for
+     * non-realtime and `0x7F` (127) is for realtime.
+     *
+     * So, for example, if you wanted to send an identity request non-realtime message (`0x7E`), you
+     * could use the following:
+     *
+     * ```js
+     * WebMidi.outputs[0].sendSysex(0x7E, [0x7F, 0x06, 0x01]);
+     * ```
+     *
+     * For more details on the format of universal messages, consult the list of
+     * [universal sysex messages](https://www.midi.org/specifications-old/item/table-4-universal-system-exclusive-messages).
+     *
+     * @param {number|number[]} identification An unsigned integer or an array of three unsigned
+     * integers between `0` and `127` that either identify the manufacturer or sets the message to be
+     * a **universal non-commercial message** (`0x7D`), a **universal non-realtime message** (`0x7E`)
+     * or a **universal realtime message** (`0x7F`). The *MIDI Manufacturers Association* maintains a
+     * full list of
      * [Manufacturer ID Numbers](https://www.midi.org/specifications-old/item/manufacturer-id-numbers).
      *
-     * @param {number[]|Uint8Array} [data=[]] A `Uint8Array` or an array of unsigned integers between
-     * `0` and `127`. This is the data you wish to transfer.
+     * @param {number[]|Uint8Array} [data] A `Uint8Array` or an array of unsigned integers between `0`
+     * and `127`. This is the data you wish to transfer.
      *
      * @param {object} [options={}]
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {DOMException} Failed to execute 'send' on 'MIDIOutput': System exclusive message is
      * not allowed.
@@ -3448,20 +3997,20 @@
      */
 
 
-    sendSysex(manufacturer, data = [], options = {}) {
-      manufacturer = [].concat(manufacturer); // Check if data is Uint8Array
+    sendSysex(identification, data = [], options = {}) {
+      identification = [].concat(identification); // Check if data is Uint8Array
 
       if (data instanceof Uint8Array) {
-        const merged = new Uint8Array(1 + manufacturer.length + data.length + 1);
+        const merged = new Uint8Array(1 + identification.length + data.length + 1);
         merged[0] = Enumerations.MIDI_SYSTEM_MESSAGES.sysex;
-        merged.set(Uint8Array.from(manufacturer), 1);
-        merged.set(data, 1 + manufacturer.length);
+        merged.set(Uint8Array.from(identification), 1);
+        merged.set(data, 1 + identification.length);
         merged[merged.length - 1] = Enumerations.MIDI_SYSTEM_MESSAGES.sysexend;
         this.send(merged, {
           time: options.time
         });
       } else {
-        const merged = manufacturer.concat(data, Enumerations.MIDI_SYSTEM_MESSAGES.sysexend);
+        const merged = identification.concat(data, Enumerations.MIDI_SYSTEM_MESSAGES.sysexend);
         this.send([Enumerations.MIDI_SYSTEM_MESSAGES.sysex].concat(merged), {
           time: options.time
         });
@@ -3503,10 +4052,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3537,10 +4087,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      *
@@ -3565,10 +4116,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws The song number must be between 0 and 127.
      *
@@ -3599,10 +4151,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      *
@@ -3624,10 +4177,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3648,10 +4202,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3672,10 +4227,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3695,10 +4251,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3719,10 +4276,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3742,10 +4300,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -3797,10 +4356,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @return {Output} Returns the `Output` object so methods can be chained.
      *
@@ -3911,10 +4471,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} Controller numbers must be between 0 and 127.
      * @throws {RangeError} Invalid controller name.
@@ -3960,10 +4521,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The msb value must be between 0 and 127.
      * @throws {RangeError} The lsb value must be between 0 and 127.
@@ -4039,10 +4601,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -4089,10 +4652,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @return {Output} Returns the `Output` object so methods can be chained.
      * @since 3.0.0
@@ -4145,10 +4709,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      *
@@ -4186,10 +4751,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {TypeError} Failed to execute 'send' on 'MIDIOutput': The value at index 1 is greater
      * than 0xFF.
@@ -4235,10 +4801,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The msb value must be between 0 and 127
      * @throws {RangeError} The lsb value must be between 0 and 127
@@ -4289,10 +4856,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The value must be a decimal number between larger than -65 and smaller
      * than 64.
@@ -4339,10 +4907,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The program value must be between 0 and 127.
      *
@@ -4388,10 +4957,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The bank value must be between 0 and 127.
      *
@@ -4457,10 +5027,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {TypeError} Invalid channel mode message name.
      * @throws {RangeError} Channel mode controller numbers must be between 120 and 127.
@@ -4500,10 +5071,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output}
      *
@@ -4531,10 +5103,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output}
      *
@@ -4561,10 +5134,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output}
      */
@@ -4602,10 +5176,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @return {Output} Returns the `Output` object so methods can be chained.
      *
@@ -4646,10 +5221,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @return {Output} Returns the `Output` object so methods can be chained.
      *
@@ -4690,10 +5266,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {TypeError} Invalid channel mode message name.
      * @throws {RangeError} Channel mode controller numbers must be between 120 and 127.
@@ -4768,10 +5345,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws {RangeError} The control value must be between 0 and 127.
      * @throws {RangeError} The msb value must be between 0 and 127
@@ -4834,10 +5412,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -4897,10 +5476,11 @@
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @throws TypeError The specified parameter is not available.
      *
@@ -4954,20 +5534,21 @@
      * The MIDI channel number (between `1` and `16`) or an array of channel numbers to use. If no
      * channel is specified, all channels will be used.
      *
-     * @param {boolean} [options.rawValue=false] Controls whether the release velocity is set using
-     * integers between `0` and `127` (`true`) or a decimal number between `0` and `1` (`false`,
-     * default).
+     * @param {number} [options.release=0.5] The velocity at which to release the note
+     * (between `0` and `1`).  If the `rawRelease` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `0.5`.
+     *
+     * @param {number} [options.rawRelease=64] The velocity at which to release the note
+     * (between `0` and `127`). If the `release` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `64`.
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
-     *
-     * @param {number} [options.release=0.5] The velocity at which to release the note (between `0`
-     * and `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -5014,20 +5595,21 @@
      * The MIDI channel number (between `1` and `16`) or an array of channel numbers to use. If no
      * channel is specified, all channels will be used.
      *
-     * @param {boolean} [options.rawValue=false] Controls whether the release velocity is set using
-     * integers between `0` and `127` (`true`) or a decimal number between `0` and `1` (`false`,
-     * default).
+     * @param {number} [options.release=0.5] The velocity at which to release the note
+     * (between `0` and `1`).  If the `rawRelease` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `0.5`.
+     *
+     * @param {number} [options.rawRelease=64] The velocity at which to release the note
+     * (between `0` and `127`). If the `release` option is also defined, `rawRelease` will have
+     * priority. An invalid velocity value will silently trigger the default of `64`.
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
-     *
-     * @param {number} [options.release=0.5] The velocity at which to release the note (between `0`
-     * and `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -5080,25 +5662,31 @@
      * @param {number} [options.duration=undefined] The number of milliseconds after which a
      * **note off** message will be scheduled. If left undefined, only a **note on** message is sent.
      *
-     * @param {boolean} [options.rawValue=false] Controls whether the attack and release velocities
-     * are set using integers between `0` and `127` (`true`) or a decimal number between `0` and `1`
-     * (`false`, default).
+     * @param {number} [options.attack=0.5] The velocity at which to play the note (between `0` and
+     * `1`). If the `rawAttack` option is also defined, it will have priority. An invalid velocity
+     * value will silently trigger the default of `0.5`.
+     *
+     * @param {number} [options.rawAttack=64] The attack velocity at which to play the note (between
+     * `0` and `127`). This has priority over the `attack` property. An invalid velocity value will
+     * silently trigger the default of 64.
      *
      * @param {number} [options.release=0.5] The velocity at which to release the note (between `0`
-     * and `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
-     * This is only used with the **note off** event triggered when `options.duration` is set.
+     * and `1`). If the `rawRelease` option is also defined, it will have priority. An invalid
+     * velocity value will silently trigger the default of `0.5`. This is only used with the
+     * **note off** event triggered when `options.duration` is set.
+     *
+     * @param {number} [options.rawRelease=64] The velocity at which to release the note (between `0`
+     * and `127`). This has priority over the `release` property. An invalid velocity value will
+     * silently trigger the default of 64. This is only used with the **note off** event triggered
+     * when `options.duration` is set.
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
-     *
-     * @param {number} [options.attack=0.5] The attack velocity to use when playing the note (between
-     * `0` and `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -5157,20 +5745,21 @@
      * The MIDI channel number (between `1` and `16`) or an array of channel numbers to use. If no
      * channel is specified, all channels will be used.
      *
-     * @param {boolean} [options.rawValue=false] Controls whether the attack velocity is set using
-     * integers between `0` and `127` (`true`) or a decimal number between `0` and `1` (`false`,
-     * default).
+     * @param {number} [options.attack=0.5] The velocity at which to play the note (between `0` and
+     * `1`).  If the `rawAttack` option is also defined, `rawAttack` will have priority. An invalid
+     * velocity value will silently trigger the default of `0.5`.
+     *
+     * @param {number} [options.rawAttack=64] The velocity at which to release the note (between `0`
+     * and `127`). If the `attack` option is also defined, `rawAttack` will have priority. An invalid
+     * velocity value will silently trigger the default of `64`.
      *
      * @param {number|string} [options.time=(now)] If `time` is a string prefixed with `"+"` and
      * followed by a number, the message will be delayed by that many milliseconds. If the value is a
-     * number
-     * [`DOMHighResTimeStamp`](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp),
-     * the operation will be scheduled for that specific time. If `time` is omitted, or in the past,
-     * the operation will be carried out as soon as possible.
-     *
-     * @param {number} [options.attack=0.5] The velocity at which to play the note (between `0` and
-     * `1`). If the `rawValue` option is `true`, the value should be specified as an integer
-     * between `0` and `127`. An invalid velocity value will silently trigger the default of `0.5`.
+     * positive number
+     * ([`DOMHighResTimeStamp`]{@link https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp}),
+     * the operation will be scheduled for that time. The current time can be retrieved with
+     * [`WebMidi.time`]{@link WebMidi#time}. If `options.time` is omitted, or in the past, the
+     * operation will be carried out as soon as possible.
      *
      * @returns {Output} Returns the `Output` object so methods can be chained.
      */
@@ -5301,24 +5890,28 @@
    * While it can be manually instantiated, you are more likely to come across a `Forwarder` object as
    * the return value of the [`Input.addForwarder()`](Input#addForwarder) method.
    *
-   * @param {Output|Output[]} [destinations=\[\]] An [`Output`](Output) object, or an array of such objects,
-   * to forward the message to.
-   *
-   * @param {object} [options={}]
-   * @param {string|string[]} [options.types=(all messages)] A MIDI message type or an array of such types
-   * (`"noteon"`, `"controlchange"`, etc.), that the specified message must match in order to be
-   * forwarded. If this option is not specified, all types of messages will be forwarded. Valid
-   * messages are the ones found in either [`MIDI_SYSTEM_MESSAGES`](Enumerations#MIDI_SYSTEM_MESSAGES)
-   * or [`MIDI_CHANNEL_MESSAGES`](Enumerations#MIDI_CHANNEL_MESSAGES).
-   * @param {number} [options.channels=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
-   * A MIDI channel number or an array of channel numbers that the message must match in order to be
-   * forwarded. By default all MIDI channels are included (`1` to `16`).
-   *
    * @license Apache-2.0
    * @since 3.0.0
    */
 
   class Forwarder {
+    /**
+     * Creates a `Forwarder` object.
+     *
+     * @param {Output|Output[]} [destinations=\[\]] An [`Output`](Output) object, or an array of such
+     * objects, to forward the message to.
+     *
+     * @param {object} [options={}]
+     * @param {string|string[]} [options.types=(all messages)] A MIDI message type or an array of such
+     * types (`"noteon"`, `"controlchange"`, etc.), that the specified message must match in order to
+     * be forwarded. If this option is not specified, all types of messages will be forwarded. Valid
+     * messages are the ones found in either
+     * [`MIDI_SYSTEM_MESSAGES`](Enumerations#MIDI_SYSTEM_MESSAGES)
+     * or [`MIDI_CHANNEL_MESSAGES`](Enumerations#MIDI_CHANNEL_MESSAGES).
+     * @param {number|number[]} [options.channels=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
+     * A MIDI channel number or an array of channel numbers that the message must match in order to be
+     * forwarded. By default all MIDI channels are included (`1` to `16`).
+     */
     constructor(destinations = [], options = {}) {
       /**
        * An array of [`Output`](Output) objects to forward the message to.
@@ -5414,10 +6007,8 @@
    * All 16 `InputChannel` objects can be found inside the input's [`channels`](Input#channels)
    * property.
    *
-   * @param {Input} input The [`Input`](Input) object this channel belongs to.
-   * @param {number} number The channel's MIDI number (1-16).
-   *
    * @fires InputChannel#midimessage
+   * @fires InputChannel#unknownmessage
    *
    * @fires InputChannel#noteoff
    * @fires InputChannel#noteon
@@ -5451,7 +6042,13 @@
    * @since 3.0.0
    */
 
-  class InputChannel extends e {
+  class InputChannel extends EventEmitter {
+    /**
+     * Creates an `InputChannel` object.
+     *
+     * @param {Input} input The [`Input`](Input) object this channel belongs to.
+     * @param {number} number The channel's MIDI number (1-16).
+     */
     constructor(input, number) {
       super();
       /**
@@ -5532,6 +6129,7 @@
     _processMidiMessageEvent(e) {
       // Create and emit a new 'midimessage' event based on the incoming one
       const event = Object.assign({}, e);
+      event.port = this.input;
       event.target = this;
       event.type = "midimessage";
       /**
@@ -5542,7 +6140,8 @@
        * @type {object}
        *
        * @property {string} type `midimessage`
-       * @property {Input} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5562,12 +6161,14 @@
 
     _parseEventForStandardMessages(e) {
       const event = Object.assign({}, e);
-      event.type = event.message.type || "unknownmidimessage";
+      event.type = event.message.type || "unknownmessage";
       const data1 = e.message.dataBytes[0];
       const data2 = e.message.dataBytes[1];
 
       if (event.type === "noteoff" || event.type === "noteon" && data2 === 0) {
         this.notesState[data1] = false;
+        event.type = "noteoff"; // necessary for note on with 0 velocity
+
         /**
          * Event emitted when a **note off** MIDI message has been received on the channel.
          *
@@ -5576,8 +6177,8 @@
          * @type {object}
          * @property {string} type `noteoff`
          *
-         * @property {InputChannel} target The object that triggered the event (the
-         * [`InputChannel`](InputChannel) object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the incoming
          * MIDI message.
          * @property {number} timestamp The moment
@@ -5592,7 +6193,7 @@
          */
         // The object created when a noteoff event arrives is a Note with an attack velocity of 0.
 
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
           rawAttack: 0,
           rawRelease: data2
         });
@@ -5611,8 +6212,8 @@
          *
          * @type {object}
          * @property {string} type `noteon`
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5625,7 +6226,7 @@
          * and 127).
          */
 
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset), {
           rawAttack: data2
         });
         event.value = Utilities.from7bitToFloat(data2);
@@ -5643,31 +6244,27 @@
          * @type {object}
          * @property {string} type `"keyaftertouch"`
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          *
-         * @property {string} identifier The note identifier of the key to apply the aftertouch to.
-         * This includes any octave offset applied at the channel, input or global level.
-         * @property {number} key The MIDI note number of the key to apply the aftertouch to. This
-         * includes any octave offset applied at the channel, input or global level.
-         * @property {number} rawKey The MIDI note number of the key to apply the aftertouch to. This
-         * excludes any octave offset defined at the channel, input or global level.
+         * @property {object} note A [`Note`](Note) object containing information such as note name
+         * and number.
          * @property {number} value The aftertouch amount expressed as a float between 0 and 1.
          * @property {number} rawValue The aftertouch amount expressed as an integer (between 0 and
          * 127).
          */
-        event.identifier = Utilities.toNoteIdentifier(data1, wm.octaveOffset + this.input.octaveOffset + this.octaveOffset);
-        event.key = Utilities.toNoteNumber(event.identifier);
-        event.rawKey = data1;
-        event.value = Utilities.from7bitToFloat(data2);
-        event.rawValue = data2; // This is kept for backwards-compatibility but is gone from the documentation. It will be
-        // removed from future versions (@deprecated).
+        event.note = new TS_WebMIDI_Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset)); // Aftertouch value
 
-        event.note = new Note(Utilities.offsetNumber(data1, this.octaveOffset + this.input.octaveOffset + wm.octaveOffset));
+        event.value = Utilities.from7bitToFloat(data2);
+        event.rawValue = data2; // @deprecated
+
+        event.identifier = event.note.identifier;
+        event.key = event.note.number;
+        event.rawKey = data1;
       } else if (event.type === "controlchange") {
         /**
          * Event emitted when a **control change** MIDI message has been received.
@@ -5678,8 +6275,8 @@
          * @property {string} type `controlchange`
          * @property {string} subtype The type of control change message that was received.
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5709,8 +6306,8 @@
          * @property {string} type `controlchange-controllerxxx`
          * @property {string} subtype The type of control change message that was received.
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5742,18 +6339,18 @@
          * @type {object}
          * @property {string} type `programchange`
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          *
-         * @property {number} value The value expressed as an integer between 1 and 128.
-         * @property {number} rawValue The value expressed as an integer between 0 and 127..
+         * @property {number} value The value expressed as an integer between 0 and 127.
+         * @property {number} rawValue  The raw MIDI value expressed as an integer between 0 and 127.
          */
-        event.value = data1 + 1;
-        event.rawValue = data1;
+        event.value = data1;
+        event.rawValue = event.value;
       } else if (event.type === "channelaftertouch") {
         /**
          * Event emitted when a control change MIDI message has been received.
@@ -5763,15 +6360,15 @@
          * @type {object}
          * @property {string} type `channelaftertouch`
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          *
          * @property {number} value The value expressed as a float between 0 and 1.
-         * @property {number} rawValue The value expressed as an integer (between 0 and 127).
+         * @property {number} rawValue The raw MIDI value expressed as an integer between 0 and 127.
          */
         event.value = Utilities.from7bitToFloat(data1);
         event.rawValue = data1;
@@ -5784,15 +6381,16 @@
          * @type {object}
          * @property {string} type `pitchbend`
          *
-         * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-         * object).
+         * @property {InputChannel} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          * @property {Message} message A [`Message`](Message) object containing information about the
          * incoming MIDI message.
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          *
          * @property {number} value The value expressed as a float between 0 and 1.
-         * @property {number} rawValue The value expressed as an integer (between 0 and 16383).
+         * @property {number} rawValue The raw MIDI value expressed as an integer (between 0 and
+         * 16383).
          */
         event.value = ((data2 << 7) + data1 - 8192) / 8192;
         event.rawValue = (data2 << 7) + data1;
@@ -5802,6 +6400,11 @@
 
       this.emit(event.type, event);
     }
+    /**
+     * @param e {Object}
+     * @private
+     */
+
 
     _parseChannelModeMessage(e) {
       // Make a shallow copy of the incoming event so we can use it as the new event.
@@ -5815,8 +6418,8 @@
        * @type {object}
        * @property {string} type `allsoundoff`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5829,10 +6432,9 @@
        * @event InputChannel#resetallcontrollers
        *
        * @type {object}
-       * @property {string} type `resetallcontrollers`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5849,8 +6451,8 @@
        * @type {object}
        * @property {string} type `localcontrol`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5858,10 +6460,13 @@
        *
        * @property {boolean} value For local control on, the value is `true`. For local control off,
        * the value is `false`.
+       * @property {boolean} rawValue For local control on, the value is `127`. For local control off,
+       * the value is `0`.
        */
 
       if (event.type === "localcontrol") {
         event.value = event.message.data[2] === 127 ? true : false;
+        event.rawValue = event.message.data[2];
       }
       /**
        * Event emitted when an "all notes off" channel-mode MIDI message has been received.
@@ -5871,8 +6476,8 @@
        * @type {object}
        * @property {string} type `allnotesoff`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -5888,23 +6493,26 @@
        * @type {object}
        * @property {string} type `"omnimode"`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
        *
        * @property {boolean} value The value is `true` for omni mode on and false for omni mode off.
+       * @property {boolean} rawValue The raw MIDI value
        */
 
 
       if (event.type === "omnimodeon") {
         event.type = "omnimode";
         event.value = true;
+        event.rawValue = event.message.data[2];
       } else if (event.type === "omnimodeoff") {
         event.type = "omnimode";
         event.value = false;
+        event.rawValue = event.message.data[2];
       }
       /**
        * Event emitted when a "mono/poly mode" MIDI message has been received. The value property of
@@ -5916,23 +6524,26 @@
        * @type {object}
        * @property {string} type `monomode`
        *
-       * @property {InputChannel} target The object that triggered the event (the `InputChannel`
-       * object).
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
        *
        * @property {boolean} value The value is `true` for omni mode on and false for omni mode off.
+       * @property {boolean} rawValue The raw MIDI value
        */
 
 
       if (event.type === "monomodeon") {
         event.type = "monomode";
         event.value = true;
+        event.rawValue = event.message.data[2];
       } else if (event.type === "polymodeon") {
         event.type = "monomode";
         event.value = false;
+        event.rawValue = event.message.data[2];
       }
 
       this.emit(event.type, event);
@@ -6023,6 +6634,10 @@
       controller === Enumerations.MIDI_CONTROL_CHANGE_MESSAGES.registeredparametercoarse || // 100
       controller === Enumerations.MIDI_CONTROL_CHANGE_MESSAGES.registeredparameterfine; // 101
     }
+    /**
+     * @private
+     */
+
 
     _dispatchParameterNumberEvent(type, paramMsb, paramLsb, e) {
       type = type === "nrpn" ? "nrpn" : "rpn";
@@ -6037,9 +6652,12 @@
        * @type {object}
        *
        * @property {string} type `rpn-dataentrycoarse`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6058,9 +6676,12 @@
        * @type {object}
        *
        * @property {string} type `rpn-dataentryfine`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6079,9 +6700,12 @@
        * @type {object}
        *
        * @property {string} type `rpn-databuttonincrement`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6100,9 +6724,12 @@
        * @type {object}
        *
        * @property {string} type `rpn-databuttondecrement`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6121,9 +6748,12 @@
        * @type {object}
        *
        * @property {string} type `nrpn-dataentrycoarse`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6142,9 +6772,12 @@
        * @type {object}
        *
        * @property {string} type `nrpn-dataentryfine`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6163,9 +6796,12 @@
        * @type {object}
        *
        * @property {string} type `nrpn-databuttonincrement`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6184,9 +6820,12 @@
        * @type {object}
        *
        * @property {string} type `nrpn-databuttondecrement`
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6197,6 +6836,7 @@
       const event = {
         target: e.target,
         timestamp: e.timestamp,
+        message: e.message,
         parameterMsb: paramMsb,
         parameterLsb: paramLsb,
         value: Utilities.from7bitToFloat(e.message.dataBytes[1]),
@@ -6233,9 +6873,12 @@
        *
        * @property {string} type `nrpn`
        * @property {string} subtype The precise type of NRPN message that was received.
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {number} parameter The non-registered parameter number (0-16383)
        * @property {number} parameterMsb The MSB portion of the non-registered parameter number
        * (0-127)
@@ -6264,9 +6907,12 @@
        *
        * @property {string} type `rpn`
        * @property {string} subtype The precise type of RPN message that was received.
-       * @property {InputChannel} target The `InputChannel` that triggered the event.
+       * @property {InputChannel} target The object that dispatched the event.
+       * @property {Input} port The `Input` that triggered the event.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
        * milliseconds since the navigation start of the document).
+       * @property {Message} message A [`Message`](Message) object containing information about the
+       * incoming MIDI message.
        * @property {string} parameter The registered parameter's name
        * @property {number} parameterMsb The MSB portion of the registered parameter (0-127)
        * @property {number} parameterLsb: The LSB portion of the registered parameter (0-127)
@@ -6309,15 +6955,15 @@
       return Utilities.getCcNameByNumber(number);
     }
     /**
-     * Return the playing status of the specified note. The `note` parameter can be an unsigned
-     * integer (0-127), a note identifier (`"C4"`, `"G#5"`, etc.) or a [`Note`]{@link Note} object.
+     * Returns the playing status of the specified note (`true` if the note is currently playing,
+     * `false` if it is not). The `note` parameter can be an unsigned integer (0-127), a note
+     * identifier (`"C4"`, `"G#5"`, etc.) or a [`Note`]{@link Note} object.
      *
-     * If a  is passed in, the method will take into account any [`octaveOffset`](#octaveOffset)
-     * defined.
+     * IF the note is specified using an integer (0-127), no octave offset will be applied.
      *
-     * @param [input] {number|string|Note} The note to get the state for. The
-     * [`octaveOffset`](#octaveOffset) will be factored in for note identifiers and
-     * [`Note`]{@link Note} objects.
+     * @param {number|string|Note} note The note to get the state for. The
+     * [`octaveOffset`](#octaveOffset) (channel, input and global) will be factored in for note
+     * identifiers and [`Note`]{@link Note} objects.
      * @returns {boolean}
      * @since version 3.0.0
      */
@@ -6325,7 +6971,7 @@
 
     getNoteState(note) {
       // If it's a note object, we simply use the identifier
-      if (note instanceof Note) note = note.identifier;
+      if (note instanceof TS_WebMIDI_Note) note = note.identifier;
       const number = Utilities.guessNoteNumber(note, wm.octaveOffset + this.input.octaveOffset + this.octaveOffset);
       return this.notesState[number];
     }
@@ -6399,19 +7045,6 @@
 
       this.parameterNumberEventsEnabled = value;
     }
-    /**
-     * Array of channel-specific event names that can be listened to.
-     * @type {string[]}
-     * @readonly
-     */
-
-
-    static get EVENTS() {
-      return [// MIDI channel message events
-      "noteoff", "controlchange", "noteon", "keyaftertouch", "programchange", "channelaftertouch", "pitchbend", // MIDI channel mode events
-      "allnotesoff", "allsoundoff", "localcontrol", "monomode", "omnimode", "resetallcontrollers", // RPN/NRPN events
-      "nrpn", "nrpn-dataentrycoarse", "nrpn-dataentryfine", "nrpn-databuttonincrement", "nrpn-databuttondecrement", "rpn", "rpn-dataentrycoarse", "rpn-dataentryfine", "rpn-databuttonincrement", "rpn-databuttondecrement"];
-    }
 
   }
 
@@ -6419,15 +7052,18 @@
    * The `Message` class represents a single MIDI message. It has several properties that make it
    * easy to make sense of the binary data it contains.
    *
-   * @param {Uint8Array} data The raw data of the MIDI message as a
-   * [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)
-   * of integers between `0` and `255`.
-   *
    * @license Apache-2.0
    * @since 3.0.0
    */
 
   class Message {
+    /**
+     * Creates a new `Message` object from raw MIDI data.
+     *
+     * @param {Uint8Array} data The raw data of the MIDI message as a
+     * [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)
+     * of integers between `0` and `255`.
+     */
     constructor(data) {
       /**
        * A
@@ -6584,13 +7220,11 @@
    * [`Input.addListener()`](#addListener) method to listen to channel-specific events on multiple
    * [`InputChannel`](InputChannel) objects at once.
    *
-   * @param {MIDIInput} midiInput [`MIDIInput`](https://developer.mozilla.org/en-US/docs/Web/API/MIDIInput)
-   * object as provided by the MIDI subsystem (Web MIDI API).
-   *
    * @fires Input#opened
    * @fires Input#disconnected
    * @fires Input#closed
    * @fires Input#midimessage
+   *
    * @fires Input#sysex
    * @fires Input#timecode
    * @fires Input#songposition
@@ -6602,13 +7236,20 @@
    * @fires Input#stop
    * @fires Input#activesensing
    * @fires Input#reset
+   *
    * @fires Input#unknownmidimessage
    *
    * @extends EventEmitter
    * @license Apache-2.0
    */
 
-  class Input extends e {
+  class Input extends EventEmitter {
+    /**
+     * Creates an `Input` object.
+     *
+     * @param {MIDIInput} midiInput [`MIDIInput`](https://developer.mozilla.org/en-US/docs/Web/API/MIDIInput)
+     * object as provided by the MIDI subsystem (Web MIDI API).
+     */
     constructor(midiInput) {
       super();
       /**
@@ -6633,6 +7274,11 @@
       this.channels = [];
 
       for (let i = 1; i <= 16; i++) this.channels[i] = new InputChannel(this, i);
+      /**
+       * @type {Forwarder[]}
+       * @private
+       */
+
 
       this._forwarders = []; // Setup listeners
 
@@ -6672,7 +7318,9 @@
     _onStateChange(e) {
       let event = {
         timestamp: wm.time,
-        target: this
+        target: this,
+        port: this // for consistency
+
       };
 
       if (e.port.connection === "open") {
@@ -6685,7 +7333,8 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `opened`
-         * @property {Input} target The `Input` that triggered the event.
+         * @property {Input} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          */
         event.type = "opened";
         this.emit("opened", event);
@@ -6699,7 +7348,8 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `closed`
-         * @property {Input} target The `Input` that triggered the event.
+         * @property {Input} target The object that dispatched the event.
+         * @property {Input} port The `Input` that triggered the event.
          */
         event.type = "closed";
         this.emit("closed", event);
@@ -6713,17 +7363,12 @@
          * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
          * milliseconds since the navigation start of the document).
          * @property {string} type `disconnected`
-         * @property {object} target Object with properties describing the {@link Input} that
-         * triggered the event. This is not the actual `Input` as it is no longer available.
-         * @property {string} target.connection `"closed"`
-         * @property {string} target.id ID of the input
-         * @property {string} target.manufacturer Manufacturer of the device that provided the input
-         * @property {string} target.name Name of the device that provided the input
-         * @property {string} target.state `disconnected`
-         * @property {string} target.type `input`
+         * @property {Input} port Object with properties describing the {@link Input} that was
+         * disconnected. This is not the actual `Input` as it is no longer available.
+         * @property {Input} target The object that dispatched the event.
          */
         event.type = "disconnected";
-        event.target = {
+        event.port = {
           connection: e.port.connection,
           id: e.port.id,
           manufacturer: e.port.manufacturer,
@@ -6753,7 +7398,8 @@
        *
        * @type {object}
        *
-       * @property {Input} target The `Input`that triggered the event.
+       * @property {Input} port The `Input` that triggered the event.
+       * @property {Input} target The object that dispatched the event.
        * @property {Message} message A [`Message`](Message) object containing information about the
        * incoming MIDI message.
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -6764,6 +7410,7 @@
        */
 
       const event = {
+        port: this,
         target: this,
         message: message,
         timestamp: e.timeStamp,
@@ -6802,7 +7449,10 @@
       event.type = event.message.type || "unknownmidimessage"; // Add custom property for 'songselect'
 
       if (event.type === "songselect") {
-        event.song = e.data[1] + 1;
+        event.song = e.data[1] + 1; // deprecated
+
+        event.value = e.data[1];
+        event.rawValue = event.value;
       } // Emit event
 
 
@@ -6982,7 +7632,7 @@
      *    * [`rpn-databuttonincrement`]{@link InputChannel#event:rpn-databuttonincrement}
      *    * [`rpn-databuttondecrement`]{@link InputChannel#event:rpn-databuttondecrement}
      *
-     * @param event {string} The type of the event.
+     * @param event {string | EventEmitter.ANY_EVENT} The type of the event.
      *
      * @param listener {function} A callback function to execute when the specified event is detected.
      * This function will receive an event parameter object. For details on this object's properties,
@@ -7007,7 +7657,7 @@
      * @param {boolean} [options.prepend=false] Whether the listener should be added at the beginning
      * of the listeners array and thus be triggered before others.
      *
-     * @param {boolean} [options.remaining=Infinity] The number of times after which the callback
+     * @param {number} [options.remaining=Infinity] The number of times after which the callback
      * should automatically be removed.
      *
      * @returns {Listener|Listener[]} If the event is input-wide, a single [`Listener`](Listener)
@@ -7030,7 +7680,7 @@
       } // Check if the event is channel-specific or input-wide
 
 
-      if (InputChannel.EVENTS.includes(event)) {
+      if (Enumerations.CHANNEL_EVENTS.includes(event)) {
         // If no channel defined, use all.
         if (options.channels === undefined) options.channels = Enumerations.MIDI_CHANNEL_NUMBERS;
         let listeners = [];
@@ -7200,7 +7850,7 @@
      * function. For channel-specific events, the function will return `true` only if all channels
      * have the listener defined.
      *
-     * @param event {string} The type of the event.
+     * @param event {string|Symbol} The type of the event.
      *
      * @param listener {function} The callback function to check for.
      *
@@ -7228,7 +7878,7 @@
         }
       }
 
-      if (InputChannel.EVENTS.includes(event)) {
+      if (Enumerations.CHANNEL_EVENTS.includes(event)) {
         // If no channel defined, use all.
         if (options.channels === undefined) options.channels = Enumerations.MIDI_CHANNEL_NUMBERS;
         return Utilities.sanitizeChannels(options.channels).every(ch => {
@@ -7249,7 +7899,7 @@
      *
      * @param [type] {string} The type of the event.
      *
-     * @param [listener] {Function} The callback function to check for.
+     * @param [listener] {function} The callback function to check for.
      *
      * @param {object} [options={}]
      *
@@ -7287,7 +7937,7 @@
       } // If the event is specified, check if it's channel-specific or input-wide.
 
 
-      if (InputChannel.EVENTS.includes(event)) {
+      if (Enumerations.CHANNEL_EVENTS.includes(event)) {
         Utilities.sanitizeChannels(options.channels).forEach(ch => {
           this.channels[ch].removeListener(event, listener, options);
         });
@@ -7300,7 +7950,7 @@
      * specified [`Output`](Output) destination(s). This is akin to the hardware MIDI THRU port, with
      * the added benefit of being able to filter which data is forwarded.
      *
-     * @param {Output|Output[]} [destinations=\[\]] An [`Output`](Output) object, or an array of such
+     * @param {Output|Output[]} output An [`Output`](Output) object, or an array of such
      * objects, to forward messages to.
      * @param {object} [options={}]
      * @param {string|string[]} [options.types=(all messages)] A message type, or an array of such
@@ -7309,8 +7959,8 @@
      * messages are the ones found in either
      * [`MIDI_SYSTEM_MESSAGES`](Enumerations#MIDI_SYSTEM_MESSAGES) or
      * [`MIDI_CHANNEL_MESSAGES`](Enumerations#MIDI_CHANNEL_MESSAGES).
-     * @param {number} [options.channels=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]] A
-     * MIDI channel number or an array of channel numbers that the message must match in order to be
+     * @param {number|number[]} [options.channels=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
+     * A MIDI channel number or an array of channel numbers that the message must match in order to be
      * forwarded. By default all MIDI channels are included (`1` to `16`).
      *
      * @returns {Forwarder} The [`Forwarder`](Forwarder) object created to handle the forwarding. This
@@ -7482,7 +8132,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7499,7 +8150,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7516,7 +8168,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7533,13 +8186,14 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
    * milliseconds since the navigation start of the document).
-   * @property {string} type `songselect`
-   * @property {string} song Song (or sequence) number to select (1-128)
+   * @property {string} value Song (or sequence) number to select (0-127)
+   * @property {string} rawValue Song (or sequence) number to select (0-127)
    *
    * @since 2.1
    */
@@ -7551,7 +8205,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7568,7 +8223,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7585,7 +8241,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7602,7 +8259,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7619,7 +8277,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7636,7 +8295,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7653,7 +8313,8 @@
    *
    * @type {object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
@@ -7667,16 +8328,17 @@
    * Input-wide (system) event emitted when an unknown MIDI message has been received. It could
    * be, for example, one of the undefined/reserved messages.
    *
-   * @event Input#unknownmidimessage
+   * @event Input#unknownmessage
    *
    * @type {Object}
    *
-   * @property {Input} target The `Input` that triggered the event.
+   * @property {Input} port The `Input` that triggered the event.
+   * @property {Input} target The object that dispatched the event.
    * @property {Message} message A [`Message`](Message) object containing information about the
    * incoming MIDI message.
    * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred (in
    * milliseconds since the navigation start of the document).
-   * @property {string} type `unknownmidimessage`
+   * @property {string} type `unknownmessage`
    *
    * @since 2.1
    */
@@ -7694,13 +8356,19 @@
    * @fires WebMidi#disabled
    * @fires WebMidi#disconnected
    * @fires WebMidi#enabled
+   * @fires WebMidi#error
    * @fires WebMidi#midiaccessgranted
+   * @fires WebMidi#portschanged
    *
    * @extends EventEmitter
    * @license Apache-2.0
    */
 
-  class WebMidi extends e {
+  class WebMidi extends EventEmitter {
+    /**
+     * The WebMidi class is a singleton and you cannot instantiate it directly. It has already been
+     * instantiated for you.
+     */
     constructor() {
       super();
       /**
@@ -7730,7 +8398,7 @@
        * instance used to talk to the lower-level Web MIDI API. This should not be used directly
        * unless you know what you are doing.
        *
-       * @type {?MIDIAccess}
+       * @type {MIDIAccess}
        * @readonly
        */
 
@@ -7854,6 +8522,11 @@
      * @param [options.software=false] {boolean} Whether to request access to software synthesizers on
      * the host system. This is part of the spec but has not yet been implemented by most browsers as
      * of April 2020.
+     * 
+     * @param [options.requestMIDIAccessFunction] {function} A custom function to use to return 
+     * the MIDIAccess object. This is useful if you want to use a polyfill for the Web MIDI API 
+     * or if you want to use a custom implementation of the Web MIDI API - probably for testing
+     * purposes.
      *
      * @async
      *
@@ -7964,10 +8637,17 @@
       }; // Request MIDI access (this iw where the prompt will appear)
 
       try {
-        this.interface = await navigator.requestMIDIAccess({
-          sysex: options.sysex,
-          software: options.software
-        });
+        if (typeof options.requestMIDIAccessFunction === "function") {
+          this.interface = await options.requestMIDIAccessFunction({
+            sysex: options.sysex,
+            software: options.software
+          });
+        } else {
+          this.interface = await navigator.requestMIDIAccess({
+            sysex: options.sysex,
+            software: options.software
+          });
+        }
       } catch (err) {
         errorEvent.error = err;
         this.emit("error", errorEvent);
@@ -8005,7 +8685,7 @@
      * are also destroyed.
      *
      * @async
-     * @returns {Promise}
+     * @returns {Promise<Array>}
      *
      * @throws {Error} The Web MIDI API is not supported by your environment.
      *
@@ -8015,7 +8695,8 @@
 
     async disable() {
       return this._destroyInputsAndOutputs().then(() => {
-        if (typeof navigator.close === "function") navigator.close();
+        if (navigator && typeof navigator.close === "function") navigator.close(); // jzz
+
         if (this.interface) this.interface.onstatechange = undefined;
         this.interface = null; // also resets enabled, sysexEnabled
 
@@ -8051,25 +8732,33 @@
      * @param id {string} The ID string of the input. IDs can be viewed by looking at the
      * [`WebMidi.inputs`](WebMidi#inputs) array. Even though they sometimes look like integers, IDs
      * are strings.
+     * @param [options] {object}
+     * @param [options.disconnected] {boolean} Whether to retrieve a disconnected input
      *
-     * @returns {Input|false} An [`Input`](Input) object matching the specified ID string or `false`
+     * @returns {Input} An [`Input`](Input) object matching the specified ID string or `undefined`
      * if no matching input can be found.
      *
      * @throws {Error} WebMidi is not enabled.
      *
      * @since 2.0.0
      */
-    getInputById(id) {
+    getInputById(id, options = {
+      disconnected: false
+    }) {
       if (this.validation) {
         if (!this.enabled) throw new Error("WebMidi is not enabled.");
-        if (!id) return false;
+        if (!id) return;
       }
 
-      for (let i = 0; i < this.inputs.length; i++) {
-        if (this.inputs[i].id === id.toString()) return this.inputs[i];
+      if (options.disconnected) {
+        for (let i = 0; i < this._disconnectedInputs.length; i++) {
+          if (this._disconnectedInputs[i].id === id.toString()) return this._disconnectedInputs[i];
+        }
+      } else {
+        for (let i = 0; i < this.inputs.length; i++) {
+          if (this.inputs[i].id === id.toString()) return this.inputs[i];
+        }
       }
-
-      return false;
     }
 
     /**
@@ -8080,25 +8769,33 @@
      * @param name {string} The non-empty string to look for within the name of MIDI inputs (such as
      * those visible in the [inputs](WebMidi#inputs) array).
      *
-     * @returns {Input|false} The [`Input`](Input) that was found or `false` if no input contained the
+     * @returns {Input} The [`Input`](Input) that was found or `undefined` if no input contained the
      * specified name.
+     * @param [options] {object}
+     * @param [options.disconnected] {boolean} Whether to retrieve a disconnected input
      *
      * @throws {Error} WebMidi is not enabled.
      *
      * @since 2.0.0
      */
-    getInputByName(name) {
+    getInputByName(name, options = {
+      disconnected: false
+    }) {
       if (this.validation) {
         if (!this.enabled) throw new Error("WebMidi is not enabled.");
-        if (!name) return false;
+        if (!name) return;
         name = name.toString();
       }
 
-      for (let i = 0; i < this.inputs.length; i++) {
-        if (~this.inputs[i].name.indexOf(name)) return this.inputs[i];
+      if (options.disconnected) {
+        for (let i = 0; i < this._disconnectedInputs.length; i++) {
+          if (~this._disconnectedInputs[i].name.indexOf(name)) return this._disconnectedInputs[i];
+        }
+      } else {
+        for (let i = 0; i < this.inputs.length; i++) {
+          if (~this.inputs[i].name.indexOf(name)) return this.inputs[i];
+        }
       }
-
-      return false;
     }
 
     /**
@@ -8108,26 +8805,34 @@
      *
      * @param name {string} The non-empty string to look for within the name of MIDI inputs (such as
      * those visible in the [`outputs`](#outputs) array).
+     * @param [options] {object}
+     * @param [options.disconnected] {boolean} Whether to retrieve a disconnected output
      *
-     * @returns {Output|false} The [`Output`](Output) that was found or `false` if no output matched
+     * @returns {Output} The [`Output`](Output) that was found or `undefined` if no output matched
      * the specified name.
      *
      * @throws {Error} WebMidi is not enabled.
      *
      * @since 2.0.0
      */
-    getOutputByName(name) {
+    getOutputByName(name, options = {
+      disconnected: false
+    }) {
       if (this.validation) {
         if (!this.enabled) throw new Error("WebMidi is not enabled.");
-        if (!name) return false;
+        if (!name) return;
         name = name.toString();
       }
 
-      for (let i = 0; i < this.outputs.length; i++) {
-        if (~this.outputs[i].name.indexOf(name)) return this.outputs[i];
+      if (options.disconnected) {
+        for (let i = 0; i < this._disconnectedOutputs.length; i++) {
+          if (~this._disconnectedOutputs[i].name.indexOf(name)) return this._disconnectedOutputs[i];
+        }
+      } else {
+        for (let i = 0; i < this.outputs.length; i++) {
+          if (~this.outputs[i].name.indexOf(name)) return this.outputs[i];
+        }
       }
-
-      return false;
     }
 
     /**
@@ -8140,25 +8845,33 @@
      *
      * @param id {string} The ID string of the port. IDs can be viewed by looking at the
      * [`WebMidi.outputs`](WebMidi#outputs) array.
+     * @param [options] {object}
+     * @param [options.disconnected] {boolean} Whether to retrieve a disconnected output
      *
-     * @returns {Output|false} An [`Output`](Output) object matching the specified ID string. If no
-     * matching output can be found, the method returns `false`.
+     * @returns {Output} An [`Output`](Output) object matching the specified ID string. If no
+     * matching output can be found, the method returns `undefined`.
      *
      * @throws {Error} WebMidi is not enabled.
      *
      * @since 2.0.0
      */
-    getOutputById(id) {
+    getOutputById(id, options = {
+      disconnected: false
+    }) {
       if (this.validation) {
         if (!this.enabled) throw new Error("WebMidi is not enabled.");
-        if (!id) return false;
+        if (!id) return;
       }
 
-      for (let i = 0; i < this.outputs.length; i++) {
-        if (this.outputs[i].id === id.toString()) return this.outputs[i];
+      if (options.disconnected) {
+        for (let i = 0; i < this._disconnectedOutputs.length; i++) {
+          if (this._disconnectedOutputs[i].id === id.toString()) return this._disconnectedOutputs[i];
+        }
+      } else {
+        for (let i = 0; i < this.outputs.length; i++) {
+          if (this.outputs[i].id === id.toString()) return this.outputs[i];
+        }
       }
-
-      return false;
     }
 
     /**
@@ -8278,6 +8991,24 @@
     _onInterfaceStateChange(e) {
       this._updateInputsAndOutputs();
       /**
+       * Event emitted when an [`Input`](Input) or [`Output`](Output) port is connected or
+       * disconnected. This event is typically fired whenever a MIDI device is plugged in or
+       * unplugged. Please note that it may fire several times if a device possesses multiple inputs
+       * and/or outputs (which is often the case).
+       *
+       * @event WebMidi#portschanged
+       * @type {object}
+       * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred
+       * (in milliseconds since the navigation start of the document).
+       * @property {string} type `portschanged`
+       * @property {WebMidi} target The object to which the listener was originally added (`WebMidi`)
+       * @property {Input|Output} port The [`Input`](Input) or [`Output`](Output) object that
+       * triggered the event.
+       *
+       * @since 3.0.2
+       */
+
+      /**
        * Event emitted when an [`Input`](Input) or [`Output`](Output) becomes available. This event is
        * typically fired whenever a MIDI device is plugged in. Please note that it may fire several
        * times if a device possesses multiple inputs and/or outputs (which is often the case).
@@ -8286,8 +9017,9 @@
        * @type {object}
        * @property {number} timestamp The moment (DOMHighResTimeStamp) when the event occurred
        * (in milliseconds since the navigation start of the document).
-       * @property {string} type `"connected"`
-       * @property {Input|Output} target The [`Input`](Input) or [`Output`](Output) object that
+       * @property {string} type `connected`
+       * @property {WebMidi} target The object to which the listener was originally added (`WebMidi`)
+       * @property {Input|Output} port The [`Input`](Input) or [`Output`](Output) object that
        * triggered the event.
        */
 
@@ -8300,49 +9032,50 @@
        * @type {object}
        * @property {DOMHighResTimeStamp} timestamp The moment when the event occurred (in milliseconds
        * since the navigation start of the document).
-       * @property {string} type `"disconnected"`
-       * @property {object} target Object with properties describing the [`Input`](Input) or
-       * [`Output`](Output) that triggered the event.
-       * @property {string} target.connection `"closed"`
-       * @property {string} target.id ID of the input
-       * @property {string} target.manufacturer Manufacturer of the device that provided the input
-       * @property {string} target.name Name of the device that provided the input
-       * @property {string} target.state `disconnected`
-       * @property {string} target.type `input` or `output`
+       * @property {string} type `disconnected`
+       * @property {WebMidi} target The object to which the listener was originally added (`WebMidi`)
+       * @property {Input|Output} port The [`Input`](Input) or [`Output`](Output) object that
+       * triggered the event.
        */
 
 
       let event = {
         timestamp: e.timeStamp,
-        type: e.port.state
+        type: e.port.state,
+        target: this
       }; // We check if "connection" is "open" because connected events are also triggered with
       // "connection=closed"
 
       if (e.port.state === "connected" && e.port.connection === "open") {
         if (e.port.type === "output") {
-          event.port = this.getOutputById(e.port.id); // legacy
-
-          event.target = event.port;
+          event.port = this.getOutputById(e.port.id);
         } else if (e.port.type === "input") {
-          event.port = this.getInputById(e.port.id); // legacy
+          event.port = this.getInputById(e.port.id);
+        } // Emit "connected" event
 
-          event.target = event.port;
-        }
 
-        this.emit(e.port.state, event); // We check if "connection" is "pending" because we do not always get the "closed" event
+        this.emit(e.port.state, event); // Make a shallow copy of the event so we can use it for the "portschanged" event
+
+        const portsChangedEvent = Object.assign({}, event);
+        portsChangedEvent.type = "portschanged";
+        this.emit(portsChangedEvent.type, portsChangedEvent); // We check if "connection" is "pending" because we do not always get the "closed" event
       } else if (e.port.state === "disconnected" && e.port.connection === "pending") {
-        // It feels more logical to include a `target` property instead of a `port` property. This is
-        // the terminology used everywhere in the library.
-        event.port = {
-          connection: "closed",
-          id: e.port.id,
-          manufacturer: e.port.manufacturer,
-          name: e.port.name,
-          state: e.port.state,
-          type: e.port.type
-        };
-        event.target = event.port;
-        this.emit(e.port.state, event);
+        if (e.port.type === "input") {
+          event.port = this.getInputById(e.port.id, {
+            disconnected: true
+          });
+        } else if (e.port.type === "output") {
+          event.port = this.getOutputById(e.port.id, {
+            disconnected: true
+          });
+        } // Emit "disconnected" event
+
+
+        this.emit(e.port.state, event); // Make a shallow copy of the event so we can use it for the "portschanged" event
+
+        const portsChangedEvent = Object.assign({}, event);
+        portsChangedEvent.type = "portschanged";
+        this.emit(portsChangedEvent.type, portsChangedEvent);
       }
     }
 
@@ -8440,7 +9173,7 @@
     // injectPluginMarkup(parent) {
     //
     //   // Silently ignore on Node.js
-    //   if (this.isNode) return;
+    //   if (Utilities.isNode) return;
     //
     //   // Default to <body> if no parent is specified
     //   if (!(parent instanceof Element) && !(parent instanceof HTMLDocument)) {
@@ -8473,7 +9206,7 @@
      * An array of all currently available MIDI inputs.
      *
      * @readonly
-     * @type {Array}
+     * @type {Input[]}
      */
 
 
@@ -8481,30 +9214,30 @@
       return this._inputs;
     }
     /**
-     * Indicates whether the current environment is Node.js or not. If you need to check if we are in
-     * browser, use [`isBrowser`](#isBrowser). In certain environments (such as Electron and
-     * NW.js) [`isNode`](#isNode) and [`isBrowser`](#isBrowser) can both be true at the
-     * same time.
-     * @type {boolean}
+     * @private
+     * @deprecated
      */
 
 
     get isNode() {
-      return Object.prototype.toString.call(typeof process !== "undefined" ? process : 0) === "[object process]"; // Alternative way to try
-      // return typeof process !== "undefined" &&
-      //   process.versions != null &&
-      //   process.versions.node != null;
+      if (this.validation) {
+        console.warn("WebMidi.isNode has been deprecated. Use Utilities.isNode instead.");
+      }
+
+      return Utilities.isNode;
     }
     /**
-     * Indicates whether the current environment is a browser environment or not. If you need to check
-     * if we are in Node.js, use [`isNode`](#isNode). In certain environments (such as Electron and
-     * NW.js) [`isNode`](#isNode) and [`isBrowser`](#isBrowser) can both be true at the same time.
-     * @type {boolean}
+     * @private
+     * @deprecated
      */
 
 
     get isBrowser() {
-      return typeof window !== "undefined" && typeof window.document !== "undefined";
+      if (this.validation) {
+        console.warn("WebMidi.isBrowser has been deprecated. Use Utilities.isBrowser instead.");
+      }
+
+      return Utilities.isBrowser;
     }
     /**
      * An integer to offset the octave of notes received from external devices or sent to external
@@ -8540,7 +9273,7 @@
      * An array of all currently available MIDI outputs as [`Output`](Output) objects.
      *
      * @readonly
-     * @type {Array}
+     * @type {Output[]}
      */
 
 
@@ -8585,6 +9318,8 @@
      * time should be accurate to 5 µs (microseconds). However, due to various constraints, the
      * browser might only be accurate to one millisecond.
      *
+     * Note: `WebMidi.time` is simply an alias to `performance.now()`.
+     *
      * @type {DOMHighResTimeStamp}
      * @readonly
      */
@@ -8602,20 +9337,20 @@
 
 
     get version() {
-      return "3.0.0-alpha.26";
+      return "3.0.19";
     }
     /**
      * @private
-     * @deprecated since 3.0.0. Use InputChannel.EVENTS instead.
+     * @deprecated since 3.0.0. Use Enumerations.CHANNEL_EVENTS instead.
      */
 
 
     get CHANNEL_EVENTS() {
       if (this.validation) {
-        console.warn("The CHANNEL_EVENTS enum has been moved to InputChannel.EVENTS.");
+        console.warn("The CHANNEL_EVENTS enum has been moved to Enumerations.CHANNEL_EVENTS.");
       }
 
-      return InputChannel.EVENTS;
+      return Enumerations.CHANNEL_EVENTS;
     }
     /**
      * @private
@@ -8693,8 +9428,12 @@
 
   exports.Enumerations = Enumerations;
   exports.Forwarder = Forwarder;
+  exports.Input = Input;
+  exports.InputChannel = InputChannel;
   exports.Message = Message;
-  exports.Note = Note;
+  exports.TS_WebMIDI_Note = TS_WebMIDI_Note;
+  exports.Output = Output;
+  exports.OutputChannel = OutputChannel;
   exports.Utilities = Utilities;
   exports.WebMidi = wm;
 

@@ -16,7 +16,17 @@ for (var i = 0; i <= 127; i++) {
     tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
 }
 
-window.currentNote = ""
+window._currentNote = ""
+window._parsed = ""
+window._isParsed = false
+window.parent._ts_pausePlayback = false;
+
+const _ide = world.children[0];
+const original_stop = _ide.stopAllScripts.bind(_ide);
+_ide.stopAllScripts = function() {
+  original_stop();
+  window.parent._ts_pausePlayback = true;
+}
 
 const _convertToSharp = (note) => {
     const splitByFlat = note.split("b");
@@ -40,7 +50,7 @@ window.parent.midiFreqs = tempMidiFreqs;
 
 
 window.playNote = (note, noteLength, instrumentName, volume) => {
-  window.currentNote = note
+  window._currentNote = note
    if (note == "R" || note == "r") return;
 
    note = _convertToSharp(note);
@@ -426,6 +436,40 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
+const convertArrayToListRecursive = (array) => {
+    if (Array.isArray(array)) {
+        for (var i = 0; i < array.length; i++) {
+            array[i] = convertArrayToListRecursive(array[i]);
+        }
+        return IDE_Morph.prototype.newList(array);
+    }
+    return array;
+}
+window.convertArrayToListRecursive = convertArrayToListRecursive;
+
+function _typeOf(value) {
+    return Object.prototype.toString.call(value).slice(8, -1);
+}
+
+const _isObject = (obj) => {
+  return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
+}
+
+const _objToArray = (obj) => {
+  return Object.keys(obj).map((key) => {
+    return [key, _isObject(obj[key]) ? 
+        _objToArray(obj[key]) :
+        obj[key]
+    ];
+  });    
+}
+window._objToArray = _objToArray;
+
+function isNumber(myString) {
+  return /^\d+\.\d+$/.test(myString);
+}
+window.isNumber = isNumber;
+
 function hasNumber(myString) {
   return /\d/.test(myString);
 }
@@ -435,6 +479,32 @@ function deep_copy(array) {
   return JSON.parse(JSON.stringify(array));
 }
 window.deep_copy = deep_copy;
+
+/**
+ * Select file(s).
+ * @param {String} contentType The content type of files you wish to select. For instance, use "image/*" to select all types of images.
+ * @param {Boolean} multiple Indicates if the user can select multiple files.
+ * @returns {Promise<File|File[]>} A promise of a file or array of files in case the multiple parameter is true.
+ */
+function _selectFile(contentType, multiple) {
+    return new Promise(resolve => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = multiple;
+        input.accept = contentType;
+
+        input.onchange = () => {
+            let files = Array.from(input.files);
+            if (multiple)
+                resolve(files);
+            else
+                resolve(files[0]);
+        };
+
+        input.click();
+    });
+}
+window._selectFile = _selectFile;
 
 // play dummy sound to initialize
 
