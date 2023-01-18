@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2022-December-01';
+modules.byob = '2023-January-18';
 
 // Declarations
 
@@ -810,6 +810,39 @@ CustomBlockDefinition.prototype.isSending = function (message, receiverName) {
     ).some(script => script instanceof BlockMorph &&
         script.isSending(message, receiverName)
     );
+};
+
+CustomBlockDefinition.prototype.dataDependencies = function () {
+    // return an array of variable names referenced in this custom block
+    // definition which are not declared here.
+    // only scan the body, not any unconnected other scripts
+    var names = [],
+        inputNames;
+    if (this.body) {
+        inputNames = this.inputNames();
+        this.body.expression.forAllChildren(morph => {
+            var vName,
+                dec;
+            if (morph instanceof BlockMorph) {
+                vName = morph.getVarName();
+                if (vName) {
+                    dec = morph.rewind(true).find(elem =>
+                        elem.selector === 'reportGetVar' &&
+                        elem.isTemplate &&
+                        (elem.instantiationSpec || elem.blockSpec) === vName
+                    );
+                    if (!dec &&
+                            !this.variableNames.includes(vName) &&
+                            !inputNames.includes(vName) &&
+                            !names.includes(vName)
+                    ) {
+                        names.push(vName);
+                    }
+                }
+            }
+        });
+    }
+    return names.sort();
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////

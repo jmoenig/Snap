@@ -86,6 +86,7 @@
 
 ### 2023-10-18
 * blocks: added "scriptOnly" flag to rewind()
+* byob: added CustomBlockDefinition >> dataDependencies()
 
 ### 2023-10-17
 * TuneScope update, thanks, Harsh, Jo and Glen!
