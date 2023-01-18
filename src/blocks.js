@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-January-13';
+modules.blocks = '2023-January-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5779,11 +5779,13 @@ BlockMorph.prototype.unwindAfter = function (element) {
     return this.inputs()[idx + 1].unwind();
 };
 
-BlockMorph.prototype.rewind = function () {
+BlockMorph.prototype.rewind = function (scriptOnly = false) {
     // return an array of blocks and inputs roughly mimicking the visible
     // sequence of operations leading up to this block. Used to trace
     // variable accessors back to their nearest variable declaration within
     // lexical scope.
+    // scriptOnly is optional, if set to <true> scanning stops at the script's
+    // top block, excluding sprite-local and global variable declarations
 
     var ide = this.scriptTarget().parentThatIsA(IDE_Morph),
         current = this,
@@ -5839,7 +5841,7 @@ BlockMorph.prototype.rewind = function () {
         current = current.parent?.parentThatIsA(BlockMorph);
     }
 
-    if (ide) {
+    if (ide && !scriptOnly) {
         declarations = ide.palette.contents.children.filter(morph =>
             morph instanceof BlockMorph && morph.selector === 'reportGetVar'
         ).reverse();

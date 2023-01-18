@@ -84,6 +84,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-18
+* blocks: added "scriptOnly" flag to rewind()
+
 ### 2023-10-17
 * TuneScope update, thanks, Harsh, Jo and Glen!
 * MQTT library update, thanks, Simon!
