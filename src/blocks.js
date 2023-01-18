@@ -5787,10 +5787,10 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
     // scriptOnly is optional, if set to <true> scanning stops at the script's
     // top block, excluding sprite-local and global variable declarations
 
-    var ide = this.scriptTarget().parentThatIsA(IDE_Morph),
-        current = this,
+    var current = this,
         trace = [],
-        declarations;
+        declarations,
+        ide;
 
     function log(block) {
         if (trace.includes(block)) {return; }
@@ -5841,11 +5841,14 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
         current = current.parent?.parentThatIsA(BlockMorph);
     }
 
-    if (ide && !scriptOnly) {
-        declarations = ide.palette.contents.children.filter(morph =>
-            morph instanceof BlockMorph && morph.selector === 'reportGetVar'
-        ).reverse();
-        declarations.forEach(block => trace.push(block));
+    if (!scriptOnly) {
+        ide = this.scriptTarget().parentThatIsA(IDE_Morph);
+        if (ide) {
+            declarations = ide.palette.contents.children.filter(morph =>
+                morph instanceof BlockMorph && morph.selector === 'reportGetVar'
+            ).reverse();
+            declarations.forEach(block => trace.push(block));
+        }
     }
 
     return trace;
