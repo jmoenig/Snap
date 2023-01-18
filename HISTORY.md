@@ -35,7 +35,7 @@
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * SciSnap2 extension update, thanks, Eckart!
     * MQTT library update, thanks, Simon!
-    * optimized canvas for reading back image data
+    * optimized canvas for reading back image data (slows down rendering, turned off by default)
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
     * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
