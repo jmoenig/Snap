@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-13';
+modules.gui = '2022-January-19';
 
 // Declarations
 
@@ -7016,7 +7016,14 @@ IDE_Morph.prototype.languageMenu = function () {
             ],
             () => {
                 this.loadNewProject = false;
-                this.setLanguage(lang);
+                this.setLanguage(
+                    lang,
+                    () => this.stage.fireUserEditEvent(
+                        this.currentSprite.name,
+                        ['project', 'language', lang],
+                        this.version
+                    )
+                );
             }
         )
     );

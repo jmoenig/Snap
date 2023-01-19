@@ -84,6 +84,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-19
+* gui, extensions: added user edit event for language change
+
 ### 2023-10-18
 * blocks: added "scriptOnly" flag to rewind()
 * byob: added CustomBlockDefinition >> dataDependencies()

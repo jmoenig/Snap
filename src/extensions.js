@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-January-16';
+modules.extensions = '2023-January-19';
 
 // Global stuff
 
@@ -1025,7 +1025,14 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
             flag = ide.isAppMode,
-            restoreMode = () => ide.toggleAppMode(flag),
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', lang],
+                        ide.version
+                    );
+                },
             callback = restoreMode;
         proc.assertType(lang, 'text');
         ide.loadNewProject = false;
