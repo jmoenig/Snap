@@ -8220,7 +8220,7 @@ VariableFrame.prototype.branch = function (names = []) {
     // and only has values for primitive data.
     // used for including data dependencies in libraries.
     var frame = new VariableFrame();
-    this.names().forEach(vName => {
+    this.names(true).forEach(vName => {
         var v, val, typ;
         if (names.includes(vName)) {
             v = frame.vars[vName];
