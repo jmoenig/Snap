@@ -8242,6 +8242,16 @@ VariableFrame.prototype.branch = function (names = []) {
     return frame;
 };
 
+VariableFrame.prototype.merge = function (otherFrame) {
+    // add another frame's variables overwriting existing values and
+    // settings (transient, hidden) if any. Merge only replaces and
+    // adds to the frame, does not delete any entries.
+    // used for handling data dependencies in libraries.
+    otherFrame.names(true).forEach(vName =>
+        this.vars[vName] = otherFrame.vars[vName]
+    );
+};
+
 // Variable Frame ops
 
 VariableFrame.prototype.root = function () {

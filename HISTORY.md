@@ -87,6 +87,7 @@
 ### 2023-10-20
 * lists: refactored some helper functions
 * threads: added VariableFrame >> branch()
+* threads: added VariableFrame >> merge()
 
 ### 2023-10-19
 * gui, extensions: added user edit event for language change
