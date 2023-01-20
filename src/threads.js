@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-09';
+modules.threads = '2023-January-20';
 
 var ThreadManager;
 var Process;
@@ -8212,6 +8212,37 @@ VariableFrame.prototype.fullCopy = function () {
     frame.vars = copy(this.vars);
     return frame;
 };
+
+// Variable Frame branching and merging for libraries
+
+VariableFrame.prototype.branch = function (names = []) {
+    // answer a copy that only has entries for the given array of variable names
+    // and only has values for primitive data.
+    // used for including data dependencies in libraries.
+    var frame = new VariableFrame();
+    this.names().forEach(vName => {
+        var v, val, typ;
+        if (names.includes(vName)) {
+            v = frame.vars[vName];
+            if (v.isTransient) {
+                val = '';
+            } else {
+                typ = this.reportTypeOf(val);
+                if (['text', 'number', 'Boolean'].includes(typ) ||
+                    (v instanceof List && (v.canBeCSV() || v.canBeJSON()))
+                ) {
+                    val = v.value;
+                } else {
+                    val = '';
+                }
+            }
+            frame.vars[vName] = new Variable(val, v.isTransient, v.isHidden);
+        }
+    });
+    return frame;
+};
+
+// Variable Frame ops
 
 VariableFrame.prototype.root = function () {
     if (this.parentFrame) {
