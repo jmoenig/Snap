@@ -8213,9 +8213,9 @@ VariableFrame.prototype.fullCopy = function () {
     return frame;
 };
 
-// Variable Frame branching and merging for libraries
+// Variable Frame forking and merging for libraries
 
-VariableFrame.prototype.branch = function (names = []) {
+VariableFrame.prototype.fork = function (names = []) {
     // answer a copy that only has entries for the given array of variable names
     // and only has values for primitive data.
     // used for including data dependencies in libraries.
