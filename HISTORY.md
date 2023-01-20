@@ -84,6 +84,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-20
+* lists: refactored some helper functions
+
 ### 2023-10-19
 * gui, extensions: added user edit event for language change
 
