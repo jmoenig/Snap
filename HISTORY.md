@@ -84,6 +84,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-21
+* threads: fixed fork()
+
 ### 2023-10-20
 * lists: refactored some helper functions
 * threads: added VariableFrame >> branch()
