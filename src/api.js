@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-September-12';
+modules.api = '2022-November-28';
 
 // IDE_Morph external communication API
 /*

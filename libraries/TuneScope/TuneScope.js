@@ -29,13 +29,39 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_getcurrentnote()',
     function () {
-        return window.currentNote
+        return window._currentNote
     }
 )
 
 SnapExtensions.primitives.set(
+    'ts_parsemidifile()',
+    function () {
+        const getMidiFile = async () => {
+            window._parsed = "";
+            fileMidi = await window._selectFile(".mid", false);
+            const arrayBuffer = await fileMidi.arrayBuffer()
+            const _parsedMidi = await new window.Midi(arrayBuffer)
+            window._parsed = _parsedMidi.toJSON();
+            world.children[0].broadcast("ts_file_input_received")
+        }
+        getMidiFile();
+    }
+)
+
+SnapExtensions.primitives.set(
+    'ts_getparsed()',
+    function() {
+        world.children[0].broadcast("ts_no_file_upload")
+        let temp = window._objToArray(window._parsed);
+        temp = window.convertArrayToListRecursive(temp);
+        return temp;
+    }
+);
+
+SnapExtensions.primitives.set(
     'ts_playtracks(tracklist, timesignature)',
     function (tracksList, timeSignature, tempo) {
+        window.parent._ts_pausePlayback = false;
         const multiplyArray = (arr, length) =>
           Array.from({ length }, () => arr).flat()
 
@@ -48,23 +74,24 @@ SnapExtensions.primitives.set(
         }
 
         const playTrackMeasure = async (currTrack, measureIndex, beatsPerMeasure, tempo, instrument) => {
-            var beat = 0;
-            const beatEndIndex = beatsPerMeasure[0];
+            var elapsedMeasureTime = 0;
+            const timeEndIndex = beatsPerMeasure[0] * (window.baseTempo / tempo);
 
-         
-            while (beat < beatEndIndex) {
+            /**
+             * We can calculate in seconds how long the measure lasts in seconds and then simply calculate when we are past the elapsed time in seconds and this is how we synchronize measures
+             */
+            while (elapsedMeasureTime < timeEndIndex) {
+                if(window.parent._ts_pausePlayback) break;
                 const note = currTrack[measureIndex][0];
                 const noteLength = currTrack[measureIndex][1];
                 measureIndex++; //increment for the next index in the track
 
-                const durationInSeconds = noteLength * (window.baseTempo / tempo);
-
                 // play the note and wait
-                await window.playNote(note, durationInSeconds, instrument);
-                await wait(durationInSeconds * 1000)
+                await window.playNote(note, noteLength, instrument);
+                await wait(noteLength * 1000)
 
                 // we increment i with respect to the number of beats the current note occupies in a measure
-                beat += noteLength * beatsPerMeasure[1];
+                elapsedMeasureTime += noteLength;
             }
 
         }
@@ -113,61 +140,37 @@ SnapExtensions.primitives.set(
             for (let i = 0; i < tracks.length; i++) {
                 let currTrack = tracks[i];
                 for (let j = 1; j < currTrack.length; j++) { //index from 1 to avoid the header
-                    //Reassign the durations list to numerical duration values from strings
+                    //Reassign the durations list to duration in seconds 
                     //jth (Note, Duration) pair
-                    currTrack[j][1] = window.noteLengthToTimeValue[currTrack[j][1]]
-                }
-            }
-
-            // properly encodes drum tracks
-            for (let i = 0; i < tracks.length; i++) {
-                let currTrack = tracks[i];
-                // check each track's header to see whether it is a drum track
-                // Header: (Instrument, Type)
-                if (currTrack[0][0] === "loop-drums") {
-                    var isBassDrum = (currTrack[0][1] === "bass drum");
-                    for (let j = 1; j < currTrack.length; j++) {
-                        if (currTrack[j][0] === "x") { // ("x", duration) encode a note
-                            //check if the instrument is a bass drum
-                            if (isBassDrum) {
-                                currTrack[j][0] = "C2";
-                            } else {
-                                currTrack[j][0] = "C4";
-                            }
-                        } else { //(" ", duration) encode a rest
-                            currTrack[j][0] = "R";
-                        }
-
-                        //converting the duration length to the appropriate value based on the timesignature
-                        // If eighth notes get the beat, subdivide drum tracks into sixteenth notes
-                        if (beatsPerMeasure[1] == 0.5) {
-                            currTrack[j][1] = 0.25;
-                        }
+                    if (!window.isNumber(currTrack[j][1])) {
+                        currTrack[j][1] = window.noteLengthToTimeValue[currTrack[j][1]] * (window.baseTempo / tempo);
+                        console.log("the number is " + currTrack[j][1]);
+                    } else {
+                        currTrack[j][1] = parseFloat(currTrack[j][1]);
+                        console.log("the number is " + currTrack[j][1]);
                     }
                 }
             }
 
-            // calculates the total number of beats in the song
-            var totalBeats = 0;
+            var totalSeconds = 0.0;
             var defTrack = tracks[definitiveTrackIndex];
             for (let j = 1; j < defTrack.length; j++) {
-                totalBeats += parseFloat(defTrack[j][1]);
+                totalSeconds += defTrack[j][1];
             }
-
-            // length of measure = total number of beats (w.r.t which note gets the beat) / beats per measure
-            const totalMeasures = (totalBeats) / (beatsPerMeasure[0] * beatsPerMeasure[1]);
+            const secondsPerMeasure = (window.baseTempo / tempo) * beatsPerMeasure[0]
+            const totalMeasures = Math.ceil(totalSeconds / secondsPerMeasure)
 
             //convert any melody/chord/drum loop to a regular track
             // done by repeatedly appending the array to itself
             for (let i = 0; i < tracks.length; i++) {
                 let currTrack = tracks[i];
                 //check if the current track is a loop
-                if (currTrack[0][0] === "loop-melody" || currTrack[0][0] === "loop-chords" || currTrack[0][0] === "loop-drums") {
-                    let beatsInLoop = 0;
+                if (currTrack[0][0] === "loop-melody" || currTrack[0][0] === "loop-chords") {
+                    let secondsInLoop = 0;
                     for (let j = 1; j < currTrack.length; j++) {
-                        beatsInLoop += parseFloat(currTrack[j][1]);
+                        secondsInLoop += parseFloat(currTrack[j][1]);
                     }
-                    let loopCount = parseInt(totalBeats / beatsInLoop);
+                    let loopCount = parseInt(totalSeconds / secondsInLoop);
 
                     //appending the track to itself
                     //we don't repeat the header
@@ -229,13 +232,14 @@ SnapExtensions.primitives.set(
 
             // Play Measures track by track
             for (let i = 0; i < totalMeasures; i++) {
+                if(window.parent._ts_pausePlayback) break;
                 console.log("Playing measure " + (i + 1));
                 const measureResults = [];
 
                 // count for the number of beats that have passed since the last measure
                 // e.g. in 4/4, measure 3 will have 2*4 = 8 beats elapsed. Next measure starts
                 // on beat 8 (0 indexed)
-                let elapsedBeats = i * beatsPerMeasure[0];
+                let elapsedTime = i * (window.baseTempo / tempo) * beatsPerMeasure[0];
 
                 //per track
                 for (let j = 0; j < tracks.length; j++) {
@@ -249,12 +253,12 @@ SnapExtensions.primitives.set(
                     // the same amount of beats, they will align at each measure
                     // beat-wise, but have different starting indices measure-wise
                     for (let k = 1; k < currTrack.length; k++) {
-                        if (elapsedSum >= elapsedBeats) {
+                        if (elapsedSum >= elapsedTime) {
                             measureIndex = k;
                             break;
                         } else {
                             // add the value of the kth duration
-                            elapsedSum += parseFloat(currTrack[k][1]);
+                            elapsedSum += currTrack[k][1];
                         }
                     }
 
@@ -276,37 +280,43 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     'ts_playMIDI(controller, instrument)',
-    function (controller_name, instrument) {
-        var current_controller = controller_name;
-        var midi_instrument = instrument;
+    function (controller_name, instrument_name) {
 
-        function onEnabled() {
-            let synth = window.WebMidi.getInputByName(current_controller);
+        function onEnabled(controller, instrument) {
+            let synth = window.WebMidi.getInputByName(controller);
             let keyboard = synth.channels[1];
+            //remove any existing listeners
+            keyboard.removeListener("noteon")
 
             // Listener for the keyboard, prints midi note number
             keyboard.addListener("noteon", e => {
-                window.playNote(e.note.identifier, 0.5, midi_instrument);
+                window.playNote(e.note.identifier, 0.5, instrument);
             });
         }
 
         const playMidiController = async (controller, instrument) => {
             if(controller === null || controller === "") return;
-            current_controller = controller;
 
             //enables the webmidi controller, doesn't record notes
             window.WebMidi.enable((err) => {
                 if (err) {
                     alert(err);
                 } else {
-                    onEnabled();
+                    onEnabled(controller, instrument);
                 }
             });
         }
 
-        playMidiController(controller_name, instrument);
+        playMidiController(controller_name, instrument_name);
     }
 );
+
+SnapExtensions.primitives.set(
+    'ts_stopMIDI()',
+    function() {
+        window.WebMidi.disable();
+    }
+)
 
 SnapExtensions.primitives.set(
     'ts_settone(id, frequency, amplitude, balance)',
@@ -320,7 +330,7 @@ SnapExtensions.primitives.set(
         window.tones[id].setFreq(freq);
         window.tones[id].setAmpl(ampl * 100);
         window.tones[id].setPan(bal);
-        created && window.tones[id].turnOn();
+        window.tones[id].turnOn();
     }
 );
 

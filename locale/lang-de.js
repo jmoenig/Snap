@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-10-25', // this, too, will appear in the Translators tab
+        '2022-12-33', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -613,6 +613,10 @@ SnapTranslator.dict.de = {
         'lasse %spr %cmdRing tun %inputs',
     'ask %spr for %repRing %inputs':
         'frage %spr nach %repRing %inputs',
+    'When %edit is edited %message':
+        'Wenn %edit bearbeitet wird %message',
+    'anything':
+        'beliebiges',
 
     // sensing:
     'touching %col ?':
@@ -757,6 +761,8 @@ SnapTranslator.dict.de = {
         'Menüs',
     'editables':
         'Eingaben',
+    'translations':
+        'Übersetzungen',
     'set %byob of block %repRing to %s':
         'setze %byob von Block %repRing auf %s',
     'define %upvar %s %repRing':
