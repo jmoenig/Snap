@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-18';
+modules.byob = '2023-January-21';
 
 // Declarations
 
@@ -4476,6 +4476,8 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
+    this.data = null; // a forked global VariableFrame with data dependencies
+    this.varNames = null;
     this.handle = null;
 
     // initialize inherited properties:
@@ -4490,8 +4492,30 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     this.labelString = 'Export blocks';
     this.createLabel();
 
+    // determine data dependencies
+    this.initDataDependencies();
+
     // build contents
     this.buildContents();
+};
+
+BlockExportDialogMorph.prototype.initDataDependencies = function () {
+    var names = [];
+
+    // collect names of all data dependencies
+    this.blocks.forEach(def =>
+        def.dataDependencies().forEach(name => {
+            if (!names.includes(name)) {
+                names.push(name);
+            }
+        })
+    );
+
+    // fork the global variables frame
+    this.data = this.target.stage.globalVariables().fork(names);
+
+    // collect the forked frame's variable names
+    this.varNames = this.data.names(true).sort(); // include hidden variables
 };
 
 BlockExportDialogMorph.prototype.buildContents = function () {

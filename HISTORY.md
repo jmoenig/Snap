@@ -86,6 +86,7 @@
 
 ### 2023-10-21
 * threads: fixed fork()
+* byob: init data dependencies for block export dialog
 
 ### 2023-10-20
 * lists: refactored some helper functions
