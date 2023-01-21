@@ -4493,13 +4493,13 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     this.createLabel();
 
     // determine data dependencies
-    this.initDataDependencies();
+    this.collectDataDependencies();
 
     // build contents
     this.buildContents();
 };
 
-BlockExportDialogMorph.prototype.initDataDependencies = function () {
+BlockExportDialogMorph.prototype.collectDataDependencies = function () {
     var names = [];
 
     // collect names of all data dependencies
@@ -4537,6 +4537,40 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     // populate palette
     x = palette.left() + padding;
     y = palette.top() + padding;
+
+    // - create selectors for variables
+    this.varNames.forEach(vName => {
+        block = SpriteMorph.prototype.variableBlock(vName);
+        block.isDraggable = false;
+        block.isTemplate = true;
+        block.isToggleLabel = true; // mark as unrefreshable label
+        checkBox = new ToggleMorph(
+            'checkbox',
+            this,
+            () => {
+                var idx = this.varNames.indexOf(vName);
+                if (idx > -1) {
+                    this.varNames.splice(idx, 1);
+                } else {
+                    this.varNames.push(vName);
+                }
+            },
+            null,
+            () => contains(this.varNames, vName),
+            null,
+            null,
+            this.target ? block : block.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+    y += padding;
+
+    // - create selectors for blocks
     SpriteMorph.prototype.allCategories().forEach(category => {
         this.blocks.forEach(definition => {
             if (definition.category === category) {
@@ -4632,6 +4666,7 @@ BlockExportDialogMorph.prototype.collectDependencies = function () {
             this.blocks.push(def);
         }
     });
+    this.collectDataDependencies();
     // refresh the checkmarks
     this.body.contents.children.forEach(checkBox => {
         checkBox.refresh();
