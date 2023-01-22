@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-21';
+modules.threads = '2023-January-22';
 
 var ThreadManager;
 var Process;
@@ -8227,9 +8227,10 @@ VariableFrame.prototype.fork = function (names = []) {
             if (v.isTransient) {
                 val = '';
             } else {
-                typ = Process.prototype.reportTypeOf(val);
+                typ = Process.prototype.reportTypeOf(v.value);
                 if (['text', 'number', 'Boolean'].includes(typ) ||
-                    (v instanceof List && (v.canBeCSV() || v.canBeJSON()))
+                    (v.value instanceof List &&
+                        (v.value.canBeCSV() || v.value.canBeJSON()))
                 ) {
                     val = v.value;
                 } else {

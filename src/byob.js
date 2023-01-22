@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-21';
+modules.byob = '2023-January-22';
 
 // Declarations
 
@@ -4690,7 +4690,12 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 
     if (this.blocks.length) {
         ide.saveXMLAs(
-            ide.blocksLibraryXML(this.blocks, null, true), // as file
+            ide.blocksLibraryXML(
+                this.blocks,
+                null,
+                true, // as file
+                this.data.fork(this.varNames)
+            ),
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'

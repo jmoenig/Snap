@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * include global data dependencies in libraries, eliminates the need for initialization routines creating and populainge variables required by custom blocks
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
@@ -83,6 +84,9 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+
+### 2023-10-22
+* byob, gui, threads: new file structure for libraries to include global data dependencies
 
 ### 2023-10-21
 * threads: fixed fork()

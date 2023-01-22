@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-19';
+modules.gui = '2022-January-22';
 
 // Declarations
 
@@ -7859,13 +7859,17 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
 IDE_Morph.prototype.blocksLibraryXML = function (
     definitions,
     moreCategories,
-    asFile
+    asFile,
+    dataFrame // optional: include global variable dependencies in libraries
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
     var globals = definitions.filter(def => def.isGlobal),
         locals = definitions.filter(def => !def.isGlobal),
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        dtaStr = dataFrame && dataFrame.names().length ?
+            this.serializer.serialize(dataFrame, true)
+            : '',
         cats = moreCategories || [],
         appStr = ' app="' +
             this.serializer.app +
@@ -7879,6 +7883,7 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
+        (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
         '</blocks>';
 };
 
