@@ -3991,7 +3991,7 @@ SpriteMorph.prototype.renameVariable = function (
         ide = stage.parentThatIsA(IDE_Morph),
         oldWatcher = this.findVariableWatcher(oldName, isGlobal),
         scope = isGlobal ? this.globalVariables() : this.variables,
-        oldValue, newWatcher, targets;
+        container, newWatcher, targets;
 
     function renameVariableInCustomBlock(definition) {
         definition.scripts.forEach(eachScript =>
@@ -4013,10 +4013,9 @@ SpriteMorph.prototype.renameVariable = function (
         return false;
 
     }
-    oldValue = scope.getVar(oldName);
+    container = scope.vars[oldName];
     this.deleteVariable(oldName, isGlobal);
-    this.addVariable(newName, isGlobal);
-    scope.setVar(newName, oldValue);
+    scope.vars[newName] = container;
 
     if (oldWatcher && oldWatcher.isVisible) {
         newWatcher = this.toggleVariableWatcher(newName, isGlobal);

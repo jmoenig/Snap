@@ -46,6 +46,7 @@
     * enable "JavaScript function" primitive to be hidden / shown independently from enabling JavaScript extensions
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
+    * fixed retaining transience when renaming a global or sprite-local variable
     * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
     * improved touch-hold gesture on mobile Android devices, thanks, @ego-lay-atman-bay!
@@ -92,6 +93,7 @@
 * blocks, gui: include custom block data dependencies in exported single scripts
 * blocks: only include data dependencies in exported block definitions
 * objects, gui: include global custom block data dependencies in exported sprites
+* objects: fixed #3150 - renaming a transient variable removes its transience
 
 ### 2023-10-22
 * byob, gui, threads: new file structure for libraries to include global data dependencies
