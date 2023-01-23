@@ -4120,8 +4120,8 @@ BlockMorph.prototype.toXMLString = function (receiver) {
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
         isReporter = this instanceof ReporterBlockMorph,
+        varNames = [],
         dependencies,
-        varNames,
         localVarNames,
         globalData,
         localData;
@@ -4136,8 +4136,7 @@ BlockMorph.prototype.toXMLString = function (receiver) {
     // collect custom block definitions referenced in this script:
     dependencies = this.dependencies(false, receiver); // both global and local
 
-    // collect variables referenced but not declared by this script:
-    varNames = this.dependencies();
+    // collect variables referenced by included custom block definitions:
     dependencies.forEach(def =>
         def.dataDependencies().forEach(name => {
             if (!varNames.includes(name)) {
@@ -4198,30 +4197,6 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
         }
     });
     return dependencies;
-};
-
-BlockMorph.prototype.dataDependencies = function () {
-    // return an array of variable names referenced in this block and all the
-    // following ones attached to it which are not declared here.
-    var names = [];
-    this.forAllChildren(morph => {
-        var vName,
-            dec;
-        if (morph instanceof BlockMorph) {
-            vName = morph.getVarName();
-            if (vName) {
-                dec = morph.rewind(true).find(elem =>
-                    elem.selector === 'reportGetVar' &&
-                    elem.isTemplate &&
-                    (elem.instantiationSpec || elem.blockSpec) === vName
-                );
-                if (!dec && !names.includes(vName)) {
-                    names.push(vName);
-                }
-            }
-        }
-    });
-    return names.sort();
 };
 
 // BlockMorph syntax analysis
