@@ -7864,7 +7864,8 @@ IDE_Morph.prototype.blocksLibraryXML = function (
     definitions,
     moreCategories,
     asFile,
-    dataFrame // optional: include global variable dependencies in libraries
+    dataFrame, // optional: include global variable dependencies in libraries
+    localData // optional: include sprite-local variable dependencies
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
     var globals = definitions.filter(def => def.isGlobal),
@@ -7873,6 +7874,9 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
         dtaStr = dataFrame && dataFrame.names().length ?
             this.serializer.serialize(dataFrame, true)
+            : '',
+        ldtStr = localData && localData.names().length ?
+            this.serializer.serialize(localData, true)
             : '',
         cats = moreCategories || [],
         appStr = ' app="' +
@@ -7888,6 +7892,7 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
+        (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +
         '</blocks>';
 };
 

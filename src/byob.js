@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-22';
+modules.byob = '2023-January-23';
 
 // Declarations
 
@@ -4476,8 +4476,10 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
-    this.data = null; // a forked global VariableFrame with data dependencies
-    this.varNames = null;
+    this.globalData = null; // forked global var frame with data dependencies
+    this.localData = null; // forked local var frame with data dependencies
+    this.globalVarNames = null;
+    this.localVarNames = null;
     this.handle = null;
 
     // initialize inherited properties:
@@ -4511,11 +4513,14 @@ BlockExportDialogMorph.prototype.collectDataDependencies = function () {
         })
     );
 
-    // fork the global variables frame
-    this.data = this.target.stage.globalVariables().fork(names);
+    // collect sprite-local data dependencies
+    this.localData = this.target.currentSprite.variables.fork(names);
+    this.localVarNames = this.localData.names(true).sort(); // include hidden
 
-    // collect the forked frame's variable names
-    this.varNames = this.data.names(true).sort(); // include hidden variables
+    // collect remaining global data dependencies
+    names = names.filter(name => !this.localVarNames.includes(name));
+    this.globalData = this.target.stage.globalVariables().fork(names);
+    this.globalVarNames = this.globalData.names(true).sort(); // include hidden
 };
 
 BlockExportDialogMorph.prototype.buildContents = function () {
@@ -4538,8 +4543,8 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     x = palette.left() + padding;
     y = palette.top() + padding;
 
-    // - create selectors for variables
-    this.varNames.forEach(vName => {
+    // - create selectors for global variables
+    this.globalVarNames.forEach(vName => {
         block = SpriteMorph.prototype.variableBlock(vName);
         block.isDraggable = false;
         block.isTemplate = true;
@@ -4548,15 +4553,47 @@ BlockExportDialogMorph.prototype.buildContents = function () {
             'checkbox',
             this,
             () => {
-                var idx = this.varNames.indexOf(vName);
+                var idx = this.globalVarNames.indexOf(vName);
                 if (idx > -1) {
-                    this.varNames.splice(idx, 1);
+                    this.globalVarNames.splice(idx, 1);
                 } else {
-                    this.varNames.push(vName);
+                    this.globalVarNames.push(vName);
                 }
             },
             null,
-            () => contains(this.varNames, vName),
+            () => contains(this.globalVarNames, vName),
+            null,
+            null,
+            this.target ? block : block.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+    y += padding;
+
+    // - create selectors for local variables
+    this.localVarNames.forEach(vName => {
+        block = SpriteMorph.prototype.variableBlock(vName, true); // isLocal
+        block.isDraggable = false;
+        block.isTemplate = true;
+        block.isToggleLabel = true; // mark as unrefreshable label
+        checkBox = new ToggleMorph(
+            'checkbox',
+            this,
+            () => {
+                var idx = this.localVarNames.indexOf(vName);
+                if (idx > -1) {
+                    this.localVarNames.splice(idx, 1);
+                } else {
+                    this.localVarNames.push(vName);
+                }
+            },
+            null,
+            () => contains(this.localVarNames, vName),
             null,
             null,
             this.target ? block : block.fullImage()
@@ -4694,7 +4731,8 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
                 this.blocks,
                 null,
                 true, // as file
-                this.data.fork(this.varNames)
+                this.globalData.fork(this.globalVarNames),
+                this.localData.fork(this.localVarNames)
             ),
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
