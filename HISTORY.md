@@ -2,7 +2,7 @@
 
 ## in development:
 * **New Features:**
-    * include data dependencies in libraries, eliminates the need for initialization routines creating and populating variables required by custom blocks
+    * include data dependencies in libraries and exported scripts, eliminates the need for initialization routines creating and populating variables required by custom blocks or referenced by scripts
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
@@ -89,6 +89,7 @@
 * gui, store: read back data dependencies included in exported libraries
 * byob, gui: distinguish between global and sprite-local data dependencies
 * gui, store: read back local data dependencies included in exported libraries
+* blocks, gui: include data dependencies in exported single scripts
 
 ### 2023-10-22
 * byob, gui, threads: new file structure for libraries to include global data dependencies
