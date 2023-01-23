@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-January-09';
+modules.store = '2023-January-23';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -694,7 +694,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
-    var stage;
+    var stage, varModel, varFrame;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
@@ -713,6 +713,11 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    varModel = model.childNamed('variables');
+    if (varModel) {
+        varFrame = new VariableFrame();
+        this.loadVariables(varFrame, varModel);
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
@@ -720,7 +725,8 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     this.mediaDict = {};
     return {
         global : stage.globalBlocks,
-        local : stage.customBlocks
+        local : stage.customBlocks,
+        data : varFrame
     };
 };
 

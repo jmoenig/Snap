@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-22';
+modules.gui = '2022-January-23';
 
 // Declarations
 
@@ -6083,6 +6083,10 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             this.currentSprite.customBlocks.push(def);
             this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
         this.flushPaletteCache();
         this.refreshPalette();
         this.showMessage(
