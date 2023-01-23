@@ -6087,6 +6087,10 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             this.globalVariables.merge(blocks.data);
             this.flushBlocksCache('variables');
         }
+        if (blocks.localData) {
+            this.currentSprite.variables.merge(blocks.localData);
+            this.flushBlocksCache('variables');
+        }
         this.flushPaletteCache();
         this.refreshPalette();
         this.showMessage(

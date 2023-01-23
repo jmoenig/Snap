@@ -88,6 +88,7 @@
 ### 2023-10-23
 * gui, store: read back data dependencies included in exported libraries
 * byob, gui: distinguish between global and sprite-local data dependencies
+* gui, store: read back local data dependencies included in exported libraries
 
 ### 2023-10-22
 * byob, gui, threads: new file structure for libraries to include global data dependencies

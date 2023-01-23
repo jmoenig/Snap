@@ -694,7 +694,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
-    var stage, varModel, varFrame;
+    var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
@@ -718,6 +718,11 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         varFrame = new VariableFrame();
         this.loadVariables(varFrame, varModel);
     }
+    varModel = model.childNamed('local-variables');
+    if (varModel) {
+        localVarFrame = new VariableFrame();
+        this.loadVariables(localVarFrame, varModel);
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
@@ -726,7 +731,8 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     return {
         global : stage.globalBlocks,
         local : stage.customBlocks,
-        data : varFrame
+        data : varFrame,
+        localData : localVarFrame
     };
 };
 
