@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-January-16';
+modules.objects = '2023-January-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -4611,6 +4611,9 @@ SpriteMorph.prototype.toXMLString = function () {
         all = this.allParts(),
         dependencies = [],
         categories = [],
+        varNames = [],
+        localVarNames,
+        globalData,
         blocksXML = '';
 
     function collect(item, array) {
@@ -4652,11 +4655,30 @@ SpriteMorph.prototype.toXMLString = function () {
 
     });
 
+    // collect global data dependencies of the custom block definitions
+    // to be included in the file
+
+    dependencies.forEach(def =>
+        def.dataDependencies().forEach(name => {
+            if (!varNames.includes(name)) {
+                varNames.push(name);
+            }
+        })
+    );
+    localVarNames = this.variables.fork(varNames).names(true); // incl. hidden
+    varNames = varNames.filter(name => !localVarNames.includes(name));
+    globalData = this.globalVariables().fork(varNames);
+
     // encode both parts of the export-file:
     // the blocks library and the sprites
 
     if (dependencies.length || categories.length) {
-        blocksXML = ide.blocksLibraryXML(dependencies, categories);
+        blocksXML = ide.blocksLibraryXML(
+            dependencies,
+            categories,
+            false, // as file
+            globalData
+        );
     }
 
     return '<sprites app="' +

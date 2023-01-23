@@ -6149,7 +6149,12 @@ IDE_Morph.prototype.deserializeSpritesString = function (str) {
             this.stage.globalBlocks.push(def);
             this.stage.replaceDoubleDefinitionsFor(def);
         });
-        // notice, there should not be any local blocks in this part of
+        // load global variables which the custom blocks rely on
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        // notice, there should not be any local blocks or datain this part of
         // the model instead we're expecting them inside each sprite
         this.flushPaletteCache();
         this.refreshPalette();
