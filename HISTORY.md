@@ -86,6 +86,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
 
+### 2023-10-25
+* gui: experimental autoLoadExtensions() mechanism
+
 ### 2023-10-23
 * gui, store: read back data dependencies included in exported libraries
 * byob, gui: distinguish between global and sprite-local data dependencies

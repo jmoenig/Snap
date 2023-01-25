@@ -80,13 +80,13 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-23';
+modules.gui = '2022-January-25';
 
 // Declarations
 
@@ -6374,6 +6374,46 @@ IDE_Morph.prototype.openProject = function (project) {
         null, // data
         true // pause generic WHEN hat blocks
     );
+};
+
+IDE_Morph.prototype.autoLoadExtensions = function () {
+    // experimental - allow auto-loading extensions from urls specified
+    // in global variables whose names start with "__module__".
+    // Still very much under construction, also needs to be tweaked for
+    // asynch operation
+    var urls = [];
+    Object.keys(this.globalVariables).forEach(vName => {
+        var val;
+        if (vName.startWith('__module__')) {
+            val = this.globalVariables.getVar(vName);
+            if (isString(val)) {
+                urls.push(val);
+            }
+        }
+    });
+    urls.forEach(url => {
+        var scriptElement;
+        if (contains(SnapExtensions.scripts, url)) {
+            return;
+        }
+        if (Process.prototype.enableJS || SnapExtensions.urls.some(
+            any => url.indexOf(any) === 0)
+        ) {
+            scriptElement = document.createElement('script');
+            scriptElement.onload = () => {
+                SnapExtensions.scripts.push(url);
+            };
+            document.head.appendChild(scriptElement);
+            scriptElement.src = url;
+        /*
+        } else {
+            // throw new Error(
+                'unlisted extension url:\n"' + url + '"\n' +
+                'JavaScript extensions for Snap!\nare turned off'
+            );
+        */
+        }
+    });
 };
 
 IDE_Morph.prototype.switchToScene = function (
