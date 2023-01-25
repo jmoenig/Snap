@@ -1836,7 +1836,7 @@ SnapTranslator.dict.pt_BR = {
     'uncheck to turn off\nlogging pen vectors':
         'Desarque para não registrar movimento da caneta como vetores',
     'Single palette':
-        'Paleta única'
+        'Paleta única',
     'check to show all blocks in a single palette':
         'marque para mostrar todos os blocos em uma única paleta',
     'HSL pen color model':
