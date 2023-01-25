@@ -90,7 +90,8 @@
 
 ### 2023-10-25
 * gui: experimental autoLoadExtensions() mechanism
-* Brazilian Portuguese translation update, thanks, Artur! 
+* Brazilian Portuguese translation update, thanks, Artur!
+* updated version history
 
 ### 2023-10-23
 * gui, store: read back data dependencies included in exported libraries
