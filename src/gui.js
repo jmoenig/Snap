@@ -5995,6 +5995,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this.serializer.load(str, this)
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
 };
 
@@ -6042,6 +6043,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             )
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
     this.isAddingScenes = setting;
     this.isAddingNextScene = false;
@@ -6109,6 +6111,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
@@ -6134,6 +6137,7 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
     } else {
         this.deserializeSpritesString(str);
     }
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.deserializeSpritesString = function (str) {
@@ -6215,6 +6219,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         'Imported Script.',
         2
     );
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.deserializeScriptString = function (str) {
@@ -6346,6 +6351,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
         dlg.createLabel();
         dlg.popUp(this.world());
     }
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.openProjectName = function (name) {
@@ -6382,9 +6388,9 @@ IDE_Morph.prototype.autoLoadExtensions = function () {
     // Still very much under construction, also needs to be tweaked for
     // asynch operation
     var urls = [];
-    Object.keys(this.globalVariables).forEach(vName => {
+    Object.keys(this.globalVariables.vars).forEach(vName => {
         var val;
-        if (vName.startWith('__module__')) {
+        if (vName.startsWith('__module__')) {
             val = this.globalVariables.getVar(vName);
             if (isString(val)) {
                 urls.push(val);
