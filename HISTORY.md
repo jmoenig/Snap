@@ -86,9 +86,11 @@
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+    * Brazilian Portuguese, thanks, Artur!
 
 ### 2023-10-25
 * gui: experimental autoLoadExtensions() mechanism
+* Brazilian Portuguese translation update, thanks, Artur! 
 
 ### 2023-10-23
 * gui, store: read back data dependencies included in exported libraries
