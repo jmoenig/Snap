@@ -20,6 +20,7 @@
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * new extension primitive: "syn_scripts([xml])" for getting & setting (and deleting!) the scripts of a sprite
     * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
+    * extensions can auto-load and auto-exec allowed or allow-listed external JS scripts that modify the IDE, e.g. to add buttons by storing the external url in global (optionally hidden) variables whose name starts with "__module__"  
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
     * added configuration options for embedding Snap! into other websites
