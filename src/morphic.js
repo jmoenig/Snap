@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2022 by Jens Mönig
+    Copyright (C) 2010-2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -317,7 +317,6 @@
                 var	world1, world2;
 
                 window.onload = function () {
-                    disableRetinaSupport();
                     world1 = new WorldMorph(
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
@@ -326,7 +325,7 @@
                 };
 
                 function loop() {
-            requestAnimationFrame(loop);
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -1307,9 +1306,10 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-April-26';
+var morphicVersion = '2023-January-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
+var keepCanvasInCPU = false;
 
 const ZERO = new Point();
 const BLACK = new Color();
@@ -1495,6 +1495,9 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas = document.createElement('canvas');
         canvas.width = ext.x;
         canvas.height = ext.y;
+        canvas.getContext("2d", {
+            willReadFrequently: keepCanvasInCPU
+        });
     }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
@@ -1528,7 +1531,9 @@ function getMinimumFontHeight() {
         y;
     canvas.width = size;
     canvas.height = size;
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d', {
+        willReadFrequently: keepCanvasInCPU
+    });
     ctx.font = '1px serif';
     maxX = ctx.measureText(str).width;
     ctx.fillStyle = 'black';
@@ -1617,8 +1622,12 @@ function embedMetadataPNG(aCanvas, aString) {
             encodeURIComponent(aString) +
             embedTag
         );
-    bPart.splice(-12, 0, ...newChunk);
-    parts[1] = btoa(bPart.join(""));
+    try {
+        bPart.splice(-12, 0, ...newChunk);
+        parts[1] = btoa(bPart.join(""));
+    } catch (err) {
+        console.log(err);
+    }
     return parts.join(',');
 }
 
@@ -1689,7 +1698,9 @@ function enableRetinaSupport() {
 
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
-    var ctx = document.createElement("canvas").getContext("2d"),
+    var ctx = document.createElement("canvas").getContext("2d", {
+            willReadFrequently: keepCanvasInCPU
+        }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -1775,7 +1786,7 @@ function enableRetinaSupport() {
                 this.height = prevHeight;
             }
         },
-        configurable: true // [Jens]: allow to be deleted an reconfigured
+        configurable: true // [Jens]: allow to be deleted and reconfigured
     });
 
     Object.defineProperty(canvasProto, 'width', {
@@ -1788,12 +1799,14 @@ function enableRetinaSupport() {
                 var pixelRatio = getPixelRatio(this),
                     context;
                 uber.width.set.call(this, width * pixelRatio);
-                context = this.getContext('2d');
+                context = this.getContext('2d', {
+                    willReadFrequently: keepCanvasInCPU
+                });
                 /*
                 context.restore();
                 context.save();
                 */
-                context.scale(pixelRatio, pixelRatio);
+                context?.scale(pixelRatio, pixelRatio);
             } catch (err) {
                 console.log('Retina Display Support Problem', err);
                 uber.width.set.call(this, width);
@@ -1809,12 +1822,14 @@ function enableRetinaSupport() {
             var pixelRatio = getPixelRatio(this),
                 context;
             uber.height.set.call(this, height * pixelRatio);
-            context = this.getContext('2d');
+            context = this.getContext('2d', {
+                willReadFrequently: keepCanvasInCPU
+            });
             /*
             context.restore();
             context.save();
             */
-            context.scale(pixelRatio, pixelRatio);
+            context?.scale(pixelRatio, pixelRatio);
         }
     });
 
@@ -1913,7 +1928,9 @@ function enableRetinaSupport() {
 }
 
 function isRetinaSupported () {
-    var ctx = document.createElement("canvas").getContext("2d"),
+    var ctx = document.createElement("canvas").getContext("2d", {
+            willReadFrequently: keepCanvasInCPU
+        }),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -4510,7 +4527,28 @@ Morph.prototype.developersMenu = function () {
     );
     menu.addItem(
         "pic...",
-        () => window.open(this.fullImage().toDataURL()),
+        () => {
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
+            try {
+                doc = window.open('', '_blank', 'popup').document;
+                body = doc.getElementsByTagName('body')[0];
+                str = '' + this;
+                doc.title = str;
+                tag = doc.createElement('h1');
+                tag.textContent = str;
+                body.appendChild(tag);
+                tag = doc.createElement('img');
+                tag.alt = str;
+                tag.src = imgURL;
+                body.appendChild(tag);
+            } catch (error) {
+                console.warn(
+                    'failed to popup pic, morph:%O, error:%O, image URL:%O',
+                    this, error, [imgURL]
+                );
+            }
+        },
         'open a new window\nwith a picture of this morph'
     );
     menu.addLine();
@@ -9343,7 +9381,25 @@ TextMorph.prototype.parse = function () {
                         this.maxLineWidth,
                         context.measureText(oldline).width
                     );
-                    oldline = word + ' ';
+                    w = context.measureText(word).width;
+                    if (w > this.maxWidth) {
+                        oldline = '';
+                        word.split('').forEach((letter, idx) => {
+                            w = context.measureText(oldline + letter).width;
+                            if (w > this.maxWidth && oldline.length) {
+                                this.lines.push(oldline);
+                                this.lineSlots.push(slot + idx);
+                                this.maxLineWidth = Math.max(
+                                    this.maxLineWidth,
+                                    context.measureText(oldline).width
+                                );
+                                oldline = '';
+                            }
+                            oldline += letter;
+                        });
+                    } else {
+                        oldline = word + ' ';
+                    }
                 } else {
                     oldline = newline;
                 }
@@ -11217,6 +11273,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
+    this.touchStartPosition = null;
 
     // properties for caching dragged objects:
     this.cachedFullImage = null;
@@ -11463,6 +11520,10 @@ HandMorph.prototype.processTouchStart = function (event) {
     MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
+        this.touchStartPosition = new Point(
+            event.touches[0].pageX,
+            event.touches[0].pageY
+        );
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             () => {
                 this.processMouseDown({button: 2});
@@ -11479,7 +11540,12 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    var pos = new Point(event.touches[0].pageX, event.touches[0].pageY);
     MorphicPreferences.isTouchDevice = true;
+    if (this.touchStartPosition.distanceTo(pos) <
+            MorphicPreferences.grabThreshold) {
+        return;
+    }
     if (event.touches.length === 1) {
         var touch = event.touches[0];
         this.processMouseMove(touch);
@@ -12008,6 +12074,9 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.worldCanvas.getContext("2d", {
+        willReadFrequently: keepCanvasInCPU
+    });
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups
@@ -12028,6 +12097,10 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.lastEditedText = null;
     this.activeMenu = null;
     this.activeHandle = null;
+
+    if (!fillPage && aCanvas.isRetinaEnabled) {
+        this.initRetina();
+    }
 
     this.initKeyboardHandler();
     this.resetKeyboardHandler();
@@ -12157,6 +12230,17 @@ WorldMorph.prototype.fillPage = function () {
     });
 };
 
+WorldMorph.prototype.initRetina = function () {
+    var canvasHeight = this.worldCanvas.getBoundingClientRect().height,
+        canvasWidth = this.worldCanvas.getBoundingClientRect().width;
+    this.worldCanvas.style.width = canvasWidth + 'px';
+    this.worldCanvas.width = canvasWidth;
+    this.setWidth(canvasWidth);
+    this.worldCanvas.style.height = canvasHeight + 'px';
+    this.worldCanvas.height = canvasHeight;
+    this.setHeight(canvasHeight);
+};
+
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
@@ -12189,6 +12273,8 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.autofocus = true;
+    kbd.style.width = '0px';
+    kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;
 

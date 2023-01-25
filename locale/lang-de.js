@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-06-28', // this, too, will appear in the Translators tab
+        '2022-12-33', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -306,7 +306,7 @@ SnapTranslator.dict.de = {
     'turn %counterclockwise %n degrees':
         'drehe %counterclockwise %n Grad',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'setze Richtung auf %dir Grad',
     'point towards %dst':
         'zeige auf %dst',
     'go to x: %n y: %n':
@@ -531,12 +531,16 @@ SnapTranslator.dict.de = {
         'sende %msg %receive und warte',
     'to':
         'an',
+    'with data':
+        'mit Daten',
     'Message name':
         'Nachricht',
     'message':
         'Nachricht',
     'any message':
         'eine beliebige Nachricht',
+    'data':
+        'Daten',
     'wait %n secs':
         'warte %n Sek.',
     'wait until %b':
@@ -609,6 +613,10 @@ SnapTranslator.dict.de = {
         'lasse %spr %cmdRing tun %inputs',
     'ask %spr for %repRing %inputs':
         'frage %spr nach %repRing %inputs',
+    'When %edit is edited %message':
+        'Wenn %edit bearbeitet wird %message',
+    'anything':
+        'beliebiges',
 
     // sensing:
     'touching %col ?':
@@ -753,6 +761,8 @@ SnapTranslator.dict.de = {
         'Menüs',
     'editables':
         'Eingaben',
+    'translations':
+        'Übersetzungen',
     'set %byob of block %repRing to %s':
         'setze %byob von Block %repRing auf %s',
     'define %upvar %s %repRing':
@@ -1255,6 +1265,12 @@ SnapTranslator.dict.de = {
         'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
     'check to disable\ndirectly running blocks\nby clicking on them':
         'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
+    'Disable dragging data':
+        'Daten-Herausziehen deaktivieren',
+    'uncheck to drag media\nand blocks out of\nwatchers and balloons':
+        'ausschalten, um Medien und Blöcke\naus Variablen und Sprechblasen\nherauszuziehen',
+    'disable dragging media\nand blocks out of\nwatchers and balloons':
+        'verhindert, dass Medien und Blöcke\naus Variablen und Sprechblasen\nherausgezogen werden können',
 
     // inputs
     'with inputs':
@@ -2118,6 +2134,8 @@ SnapTranslator.dict.de = {
         'Rand unten',
     'position':
         'Position',
+    'variables':
+        'Variablen',
     'costume name':
         'Kostümname',
     'categories':
@@ -2176,8 +2194,6 @@ SnapTranslator.dict.de = {
         'bekomme aber',
     'expecting':
         'Erwarte',
-    'input(s), but getting':
-        'Input(s), bekomme aber',
     'Inside a custom block':
         'In einem benutzerdefinierten Block',
     'The question came up at':

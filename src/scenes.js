@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2022-March-04';
+modules.scenes = '2022-October-25';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -141,6 +141,7 @@ function Scene(aStageMorph) {
     this.enableLiveCoding = false;
     this.enableHyperOps = true;
     this.disableClickToRun = false;
+    this.disableDraggingData = false;
     this.penColorModel = 'hsv'; // can also bei 'hsl'
 
     // for deserializing - do not persist
@@ -199,6 +200,7 @@ Scene.prototype.captureGlobalSettings = function () {
     this.enableHyperOps = Process.prototype.enableHyperOps;
     this.customCategories = SpriteMorph.prototype.customCategories;
     this.disableClickToRun = ThreadManager.prototype.disableClickToRun;
+    this.disableDraggingData = SpriteMorph.prototype.disableDraggingData;
     this.penColorModel = SpriteMorph.prototype.penColorModel;
 };
 
@@ -216,6 +218,7 @@ Scene.prototype.applyGlobalSettings = function () {
     Process.prototype.enableHyperOps = this.enableHyperOps;
     SpriteMorph.prototype.customCategories = this.customCategories;
     ThreadManager.prototype.disableClickToRun = this.disableClickToRun;
+    SpriteMorph.prototype.disableDraggingData = this.disableDraggingData;
     SpriteMorph.prototype.penColorModel = this.penColorModel;
 };
 

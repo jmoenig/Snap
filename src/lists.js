@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2022 by Jens Mönig and Brian Harvey
+    Copyright (C) 2023 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2022-May-19';
+modules.lists = '2023-January-20';
 
 var List;
 var ListWatcherMorph;
@@ -406,7 +406,7 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
     return v;
 };
 
-// List matrix operations and utilities - very experimental
+// List matrix operations and utilities
 
 List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
@@ -1059,31 +1059,29 @@ List.prototype.equalTo = function (other) {
 };
 
 List.prototype.canBeCSV = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
-            (value instanceof List && value.hasOnlyAtomicData());
-    });
+            (value instanceof List && value.hasOnlyAtomicData())
+    );
 };
 
 List.prototype.canBeJSON = function () {
-    return this.itemsArray().every(value => {
-        return !isNaN(+value) ||
-            isString(value) ||
-            value === true ||
-            value === false ||
-            (value instanceof List && value.canBeJSON());
-    });
+    return this.itemsArray().every(value => !isNaN(+value) ||
+        isString(value) ||
+        value === true ||
+        value === false ||
+        (value instanceof List && value.canBeJSON())
+    );
 };
 
 List.prototype.hasOnlyAtomicData = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
-            isString(value);
-    });
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') || isString(value)
+    );
 };
 
-// List-to-block (experimental)
+// List-to-block
 
 List.prototype.blockify = function (limit = 500, count = [0]) {
     var block = SpriteMorph.prototype.blockForSelector('reportNewList'),

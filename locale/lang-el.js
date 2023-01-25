@@ -185,7 +185,7 @@ SnapTranslator.dict.el = {
     'translator_e-mail':
         'ino.samaras@berkeley.edu, aprekates@sch.gr' , // optional
     'last_changed':
-        '2020-10-09', // this, too, will appear in the Translators tab
+        '2022-07-30', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -534,6 +534,8 @@ SnapTranslator.dict.el = {
         'στείλε το %msg %receive και περίμενε',
     'to':
         'στο',
+    'with data':
+        'με δεδομένα',
     'send %msg to %spr':
         'αποστολή του %msg στο %spr',
     'Message name':
@@ -566,6 +568,8 @@ SnapTranslator.dict.el = {
         'σταμάτα %stopChoices',
     'all':
         'τα πάντα',
+    'all scenes':
+        'όλες τις σκηνές',
     'this script':
         'αυτό το σενάριο',
     'this block':
@@ -600,6 +604,14 @@ SnapTranslator.dict.el = {
         'ο εαυτός μου',
     'delete this clone':
          'κατάργησε αυτόν τον κλόνο',
+    'switch to scene %scn %send':
+        'αλλαγή στην σκηνή %scn %send',
+    'and send':
+        'και στείλε',
+    'next':
+        'επόμενη',
+    'previous':
+        'προηγούμενη',
     'tell %spr to %cmdRing %inputs':
         'πες το %spr να %cmdRing  %inputs',
     'ask %spr for %repRing %inputs':
@@ -618,6 +630,8 @@ SnapTranslator.dict.el = {
         'Ποιο είναι το όνομά σου;',
     'answer':
         'απάντηση',
+    'mouse position':
+        'θέση ποντικιού',
     'mouse x':
         'ποντίκι x-θέση',
     'mouse y':
@@ -708,6 +722,38 @@ SnapTranslator.dict.el = {
         'κατοπτρισμός βίντεο',
     'turbo mode':
         'λειτουργεία τούρμπο',
+    '%block of block %repRing':
+        '%block του μπλοκ %repRing',
+    'label':
+        'ετικέτα',
+    'definition':
+        'ορισμός',
+    'category':
+        'κατηγορία',
+    'custom?':
+        'προσαρμοσμένο?',
+    'global?':
+        'καθολικό?',
+    'type':
+        'τύπος',
+    'scope':
+        'έκταση',
+    'slots':
+        'θέσεις',
+    'defaults':
+        'προεπιλογές',
+    'menus':
+        'μενού',
+    'editables':
+        'επεξεργάσιμα',
+    'set %byob of block %repRing to %s':
+        'θέσε %byob της εντολής %repRing σε %s',
+    'define %upvar %s %repRing':
+        'ορισμός %upvar %s %repRing',
+    'delete block %repRing':
+        'διαγραφή μπλοκ %repRing',
+    'block':
+        'μπλοκ',
 
     // operators:
     '%n mod %n':
@@ -782,12 +828,28 @@ SnapTranslator.dict.el = {
     // lists:
     'list %exp':
         'λίστα %exp',
+    'numbers from %n to %n':
+        'νούμερα από το %n εως το %n',
     '%s in front of %l':
         '%s μπροστά από το %l',
     'item %idx of %l':
         'στοιχείο %idx του %l',
     'all but first of %l':
         'όλα εκτός από το πρώτο του %l',
+    '%la of %l':
+        '%la του %l',
+    'rank':
+        'κατάταξη',
+    'dimensions':
+        'διαστάσεις',
+    'flatten':
+        'ισοπέδωση',
+    'columns':
+        'στείλες',
+    'reverse':
+        'αναστροφή',
+    'lines':
+        'γραμμές',
     'length of %l':
         'μήκος του %l',
     '%l contains %s':
@@ -824,6 +886,10 @@ SnapTranslator.dict.el = {
         'εύρος',
     'append %lists':
         'προσάρτηση %lists',
+    'combinations %lists':
+        'συνδιασμοί %lists',
+    'reshape %l to %nums':
+        'ανασχημάτιση του %l σε %nums',
     'add %s to %l':
         'πρόσθεσε το %s στο %l',
     'delete %ida of %l':
@@ -891,6 +957,18 @@ SnapTranslator.dict.el = {
           'Αχρησιμοποίητα μπλοκ...',
     'find unused global custom blocks\nand remove their definitions':
         'βρείτε αχρησιμοποίητα καθολικά μπλοκ\nκαι αφαίρεσε τους ορισμούς τους',
+    'Hide blocks...':
+        'Απόκρυψη μπλοκ...',
+    'New category...':
+        'Νέα κατηγορία...',
+    'Remove a category...':
+        'Διαγραφή κατηγορίας...',
+    'Scenes...':
+        'Σκηνές...',
+    'New scene':
+        'Νέα σκηνή',
+    'Add scene...':
+        'Προσθήκη σκηνής...',
     'Import tools':
         'Εισαγωγή εργαλείων',
     'load the official library of\npowerful blocks':
@@ -948,6 +1026,8 @@ SnapTranslator.dict.el = {
         'Ύψος σκηνής',
     'Default':
         'Προεπιλογή',
+    'JavaScript extensions':
+        'Επεκτάσεις JavaScript',
     'Blurred shadows':
         'Θολές σκιές',
     'uncheck to use solid drop\nshadows and highlights':
@@ -1006,6 +1086,8 @@ SnapTranslator.dict.el = {
         'ενεργοποιήστε για να βάλετε σε\nπροτεραιότητα την εκτέλεση του κώδικα',
     'uncheck to run scripts\nat normal speed':
         'απενεργοποιήστε για να εκτελέσετε τον κώδικα\nμε κανονική ταχύτητα',
+    'Flat design':
+        'Επίπεδη σχεδίαση',
     'check for alternative\nGUI design':
         'ενεργοποιήστε για εναλακτική\nσχεδίαση GUI',
     'uncheck for default\nGUI design':
@@ -1030,6 +1112,26 @@ SnapTranslator.dict.el = {
         'Γραμμές πίνακα',
     'Visible stepping':
         'Ορατός βηματισμός',
+    'Single palette':
+        'Μονή παλέτα',
+    'check to show all blocks in a single palette':
+        'ενεργοποιήστε για να εμφανίσετε όλα τα μπλοκ σε μονή παλέτα',
+    'uncheck to show only the selected category\'s blocks':
+        'απενεργοποιήστε για να εμφανίσετε μόνο τα μπλοκ τις επιλεγμένης κατηγορίας',
+    'Show categories':
+        'Εμφάνιση κατηγοριών',
+    'uncheck to hide\ncategory names\nin the palette':
+        'απενεργοποιήστε για να κρύψετε\nτα ονόματα κατηγοριών\nστην παλέτα',
+    'check to show\ncategory names\nin the palette':
+        'ενεργοποιήστε για να εμφανίσετε\nτα ονόματα κατηγοριών\nστην παλέτα',
+    'Show buttons':
+        'Εμφάνιση κουμιών',
+    'uncheck to hide buttons\nin the palette':
+        'απενεργοποιήστε για να κρύψετε τα κουμιά\nστην παλέτα',
+    'check to show buttons\nin the palette':
+        'ενεργοποιήστε για να εμφανίσετε τα κουμιά\nστην παλέτα',
+    'HSL pen color model':
+        'Χρωματικό μοντέλο στυλού HSL',
 
 
     // inputs
@@ -1049,6 +1151,28 @@ SnapTranslator.dict.el = {
     // palette:
     'find blocks':
         'εύρεση μπλοκ',
+    'hide blocks...':
+        'απόκρυψη μπλοκ...',
+    'Hide blocks in palette':
+        'Απόκρυψη μπλοκ στην παλέτα',
+    'unused':
+        'αχρησιμοποίητα',
+    'make a category...':
+        'δημιουργία μιας κατηγορίας...',
+    'New Category':
+        'Νέα κατηγορία',
+    'Blocks category name:':
+        'Όνομα κατηγορίας μπλοκ:',
+    'Category color':
+        'Χρώμα κατηγορίας',
+    'red':
+        'κόκκινο',
+    'green':
+        'πράσινο',
+    'blue':
+        'μπλε',
+    'delete a category...':
+        'διαγραφή μιας κατηγορίας...',
     'hide primitives':
         'Απόκρυψη αρχέτυπων',
     'show primitives':
@@ -1059,6 +1183,10 @@ SnapTranslator.dict.el = {
         'βοήθεια...',
     'relabel...':
         'μετονόμαση...',
+    'compile':
+        'μεταγλώτηση',
+    'uncompile':
+        'ξε-μεταγλώτηση',
     'duplicate':
         'διπλασίαση',
     'make a copy\nand pick it up':
@@ -1095,6 +1223,12 @@ SnapTranslator.dict.el = {
         'εξαγωγή του προσαρμοσμένου μπλοκ',
     'edit...':
         'επεξεργασία...',
+    'translations...':
+        'μεταφράσεις...',
+    'block variables...':
+        'μεταβλητές μπλοκ...',
+    'in palette':
+        'στην παλέτα',
 
     // sprites:
     'edit':
@@ -1497,6 +1631,8 @@ SnapTranslator.dict.el = {
     // coments
     'add comment here...':
         'πρόσθεσε κάποιο σχόλιο εδώ...',
+    'comment pic...':
+        'εικόνα σχόλιου...',
     'save a picture\nof this comment':
         'αππθήκευση εικόνας\nαυτού του σχόλιου',
 
@@ -1510,6 +1646,10 @@ SnapTranslator.dict.el = {
         '(0) πάνω',
     '(180) down':
         '(180) κάτω',
+    'random':
+    	'τυχαία',
+     'random position':
+     	'τυχαία θέση',
 
     // collision detection
     'mouse-pointer':
@@ -1526,6 +1666,8 @@ SnapTranslator.dict.el = {
         'Χελώνα',
     'Empty':
         'Άδειο',
+    'Paint a new costume':
+        'Σχεδίαση νέου κοστουμιού',
     'Camera':
         'Κάμερα',
 
@@ -1763,6 +1905,52 @@ SnapTranslator.dict.el = {
     'top':
         'επάνω',
     'bottom':
-        'κάτω'
+        'κάτω',
+    'position':
+        'θέση',
+    'costume name':
+        'όνομα κοστουμιού',
+    'categories':
+        'κατηγορίες',
+        
+    // attributes in the SET block's dropdown
+    'my anchor':
+        'δικό μου άγκυρά',
+    'my parent':
+        'δικό μου γονέας',
+    'my name':
+        'δικό μου ονομά',
+    'my temporary?':
+        'δικό μου προσωρινός;',
+    'my dangling?':
+        'δικό μου κουνιέμαι;',
+    'my draggable?':
+        'δικό μου συρόμενο;',
+    'my rotation style':
+        'δικό μου στύλ περιστροφής',
+    'my rotation x':
+        'δικό μου x-περιστροφή',
+    'my rotation y':
+        'δικό μου y περιστροφή',
+
+    // inheritance
+    'inherited':
+        'κληρονομημένο',
+    'check to inherit\nfrom':
+        'επιλογή για κληρονόμηση\naπό',
+    'uncheck to\ndisinherit':
+        'αποεπιλογή για \nκατάργηση κληρονόμησης',
+
+    // editing slots inside variadic inputs
+    'insert a slot':
+        'εισαγωγή μιας θέσης',
+    'delete slot':
+        'διαγραφή θέσης',
+    'insert a variable':
+        'εισαγωγή μιας θέσης',
+    'delete variable':
+        'διαγραφή μεταβλητής',
+    'variable':
+        'μεταβλητή'
 
 };

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -30,17 +30,20 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph*/
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-July-01';
+modules.extensions = '2023-January-19';
 
 // Global stuff
 
 var SnapExtensions = {
     primitives: new Map(),
     menus: new Map(),
+    buttons: {
+        palette: []
+    },
     scripts: [],
     urls: [ // allow-list of trusted servers
         'libraries/',
@@ -51,17 +54,19 @@ var SnapExtensions = {
 };
 
 /*
-    SnapExtensions is a set of two global dictionaries of named functions to be
-    used as extension primitives for blocks or dynamic dropdown menus. Block
-    extensions are stored in the "primitives" dictionary of SnapExtensions,
-    dynamic dropdown menus in the "menus" section.
-    
-    You can also extend Snap! with your own externally hosted JavaScript file(s)
-    and have them add your own extension primitives and menus to the global
-    SnapExtensions dictionaries. This lets you provide libraries to support
-    special APIs and custom hardware.
+    SnapExtensions is a set of three global dictionaries of named functions to
+    be used as extension primitives for blocks, dynamic dropdown menus and
+    custom push-buttons inside block palette categories. Block extensions are
+    stored in the "primitives" dictionary of SnapExtensions, dynamic dropdown
+    menus in the "menus" section and custom palette push-buttons in the
+    "buttons" collection.
 
-    
+    You can also extend Snap! with your own externally hosted JavaScript file(s)
+    and have them add your own extension primitives, menus and buttons to the
+    global SnapExtensions dictionaries. This lets you provide libraries to
+    support special APIs and custom hardware.
+
+
     1. Primitives (additional blocks)
     =================================
     The names under which primitives are stored will apear in the dropdown
@@ -126,14 +131,40 @@ var SnapExtensions = {
       You can access the contents of an input slot by calling "slot.evaluate()"
 
 
-    3. External JavaScript files
+    3. Buttons
+    ==========
+    You can have your extension add buttons at the top of the palette in a
+    particular category. Usually, you will want to add these buttons to the
+    category created by your XML library.
+
+    To do so, just add a button entry in your JS extension file:
+
+    SnapExtensions.buttons.palette.push(
+        {
+            category: 'My Extension',
+            label: 'Do Something',
+            action: function () { doYourStuffWith(this); },
+            hint: 'This button does things',
+            hideable: false
+        }
+    );
+
+    Inside the action, "this" points to the currently selected object, be it a
+    sprite or the Stage.
+
+    The "hideable" attribute defines whether the button will be hidden when
+    turning off "Show buttons" in single palette mode. By default, extension
+    buttons will not be hidden.
+
+
+    4. External JavaScript files
     ============================
     You can provide extensions for your custom hardware or for arbitrary APIs
     or extend Snap! with JavaScript libraries from other parties. You can
     load additional JavaScript files using the
-    
+
         src_load(url)
-    
+
     extension primitive inside Snap, which you can find using Snap's search bar
     in the IDE. The loading primitive will wait until the source file has fully
     loaded and its defined functions are ready to be called.
@@ -142,9 +173,9 @@ var SnapExtensions = {
     This lets you lazily initialize your extension by simply adding a
     "src_load(url)" command for your external JS file before calling any of its
     added functions.
-    
 
-    4. Miscellaneous
+
+    5. Miscellaneous
     ================
 
     calling extension primitives in other JavaScript functions
@@ -182,7 +213,6 @@ var SnapExtensions = {
 
     publishing an extension
     -----------------------
-
     When you're ready to publish your extension you can contact us to allow-list
     the url hosting your JS file, or you can send me a Github pull-request to
     include it in the main Snap branch.
@@ -260,54 +290,93 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'txt_to_utf8(txt)',
+    function (txt) {
+        var lst = new List(Array.from(new TextEncoder().encode(txt)));
+        // lst.type = 'number';
+        return lst;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_from_utf8(utf8List)',
+    function (utf8List) {
+        var arr = utf8List.itemsArray();
+        if (!(arr instanceof Uint8Array)) {
+            arr = new Uint8Array(arr);
+        }
+        return new TextDecoder("utf-8").decode(arr);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_transform(name, txt)',
+    /*
+        supported transformation names:
+        -------------------------------
+        encode URI
+        decode URI
+        encode URI component
+        decode URI component
+        XML escape
+        XML unescape
+        JS escape
+        hex sha512 hash
+    */
+    function (name, txt) {
+        return Process.prototype.reportTextFunction(name, txt);
+    }
+);
+
 // bitwise operations
 
 SnapExtensions.primitives.set(
     'bit_and(a, b)',
-    function (a, b) {
-        return a & b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a & b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_or(a, b)',
-    function (a, b) {
-        return a | b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a | b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_xor(a, b)',
-    function (a, b) {
-        return a ^ b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a ^ b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_not(a)',
-    function (a) {
-        return ~ a;
+    function (a, proc) {
+        return proc.hyper(n => ~ n, a);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_left_shift(a, b)',
-    function (a, b) {
-        return a << b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a << b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_right_shift(a, b)',
-    function (a, b) {
-        return a >> b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a >> b), a, b);
     }
 );
 
 SnapExtensions.primitives.set(
     'bit_unsigned_right_shift(a, b)',
-    function (a, b) {
-        return a >>> b;
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a >>> b), a, b);
     }
 );
 
@@ -653,9 +722,9 @@ SnapExtensions.primitives.set(
     function (obj, name, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(obj, ['sprite', 'stage', 'costume', 'sound']);
+        name = name.toString();
         if (isSnapObject(obj)) {
             obj.setName(ide.newSpriteName(name, obj));
-            ide.recordUnsavedChanges();
         } else if (obj instanceof Costume) {
             obj.name = this.newCostumeName(name, obj);
             obj.version = Date.now();
@@ -694,6 +763,25 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'cst_export(cst, name)',
+    function (cst, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        name = name || cst.name || localize('costume');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        if (cst instanceof SVG_Costume) {
+            ide.saveFileAs(cst.contents.src, 'text/svg', name);
+        } else if (cst.embeddedData) {
+            // embed payload data (e.g blocks)  inside the PNG image data
+            ide.saveFileAs(cst.pngData(), 'image/png', name);
+        } else { // rasterized Costume
+            ide.saveCanvasAs(cst.contents, name);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
     // experimental, will probably be taken out again, don't rely on this
     'cst_embed(cst, data)',
     function (cst, data, proc) {
@@ -715,7 +803,7 @@ SnapExtensions.primitives.set(
     'var_declare(scope, name)',
     function (scope, name, proc) {
         var ide, frame;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         if (scope === 'script') {
             frame = proc.context.isInCustomBlock() ?
@@ -756,7 +844,8 @@ SnapExtensions.primitives.set(
     'var_delete(name)',
     function (name, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables
@@ -772,7 +861,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'var_get(name)',
     function (name, proc) {
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         return proc.homeContext.variables.getVar(name);
     }
 );
@@ -781,7 +870,7 @@ SnapExtensions.primitives.set(
     'var_set(name, val)',
     function (name, val, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables
@@ -837,19 +926,44 @@ SnapExtensions.primitives.set(
 
 // IDE (ide_):
 
+// Returns all blocks of the current sprite, regardless of visibility
+SnapExtensions.primitives.set(
+    'ide_blocks',
+    function () {
+        return new List(
+            this.allPaletteBlocks().filter(
+                each => each instanceof BlockMorph &&
+                    !(each instanceof HatBlockMorph)
+            ).map(block => {
+                let instance = block.fullCopy();
+                instance.isTemplate = false;
+                return instance.reify();
+            })
+        );
+    }
+);
+
 SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(context, ['command', 'reporter', 'predicate']);
         this.changeBlockVisibility(context.expression, true);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
     }
 );
 
 SnapExtensions.primitives.set(
     'ide_show(block)',
     function (context, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(context, ['command', 'reporter', 'predicate']);
         this.changeBlockVisibility(context.expression, false);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
     }
 );
 
@@ -871,42 +985,35 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_translate(text)',
     function (text, proc) {
-        if (proc.enableHyperOps) {
-            if (text instanceof List) {
-                return text.map(each =>
-                    SnapExtensions.primitives.get('ide_translate(text)')
-                        (each, proc)
-                );
-            }
-        }
-        proc.assertType(text, ['text']);
-        return localize(text);
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return localize(txt);
+            },
+            text
+        );
     }
 );
 
 SnapExtensions.primitives.set(
     'ide_translateback(text)',
     function (text, proc) {
-        var dict;
-        if (proc.enableHyperOps) {
-            if (text instanceof List) {
-                return text.map(each =>
-                    SnapExtensions.primitives.get('ide_translateback(text)')
-                        (each, proc)
-                );
-            }
-        }
-        dict = SnapTranslator.dict[SnapTranslator.language];
-        proc.assertType(text, 'text');
-        return detect(
-            Object.keys(dict),
-            key => dict[key] === text
-        ) || text;
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return detect(
+                    Object.keys(dict),
+                    key => dict[key] === txt
+                ) || txt;
+            },
+            text
+        );
     }
 );
 
 SnapExtensions.primitives.set(
-    'ide_language()',
+    'ide_language',
     function () {
         return SnapTranslator.language;
     }
@@ -918,7 +1025,14 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
             flag = ide.isAppMode,
-            restoreMode = () => ide.toggleAppMode(flag),
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', lang],
+                        ide.version
+                    );
+                },
             callback = restoreMode;
         proc.assertType(lang, 'text');
         ide.loadNewProject = false;
@@ -934,13 +1048,26 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ide_translations()',
+    'ide_translations',
     function () {
         return new List(
             SnapTranslator.languages().map(lang =>
                 new List([SnapTranslator.languageName(lang), lang])
             )
         );
+    }
+);
+
+// Synchronization
+
+SnapExtensions.primitives.set(
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
+        proc.assertType(xml, 'text');
+        this.synchScriptsFrom(xml);
     }
 );
 
@@ -1112,14 +1239,14 @@ SnapExtensions.primitives.set(
             }
             if (reader) {await reader.releaseLock(); }
         }) (port);
-     
+
         if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
             }
             return acc.result;
         }
-     
+
         return (port._bklog?.length > 0) ?
             new List( Array.from( port._bklog.splice(0)))
             : true;

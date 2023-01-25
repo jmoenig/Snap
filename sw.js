@@ -1,5 +1,5 @@
-var snapVersion = '7.4.0-dev',
-    cacheName = 'snap-pwa',
+var snapVersion = '8.1.0-dev-221021',
+    cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
 
@@ -88,6 +88,7 @@ var snapVersion = '7.4.0-dev',
         'libraries/bbtSnapExtension.js',
         'libraries/cases.xml',
         'libraries/colors.xml',
+        'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
         'libraries/frequency_distribution_module.xml',
         'libraries/httpBlocks.xml',
@@ -99,6 +100,7 @@ var snapVersion = '7.4.0-dev',
         'libraries/localstorage_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
+        'libraries/menu_module.xml',
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
@@ -107,6 +109,49 @@ var snapVersion = '7.4.0-dev',
         'libraries/schemeNumber.js',
         'libraries/SciSnapExtensions.js',
         'libraries/SciSnap!2Blocks.xml',
+
+        'libraries/TuneScope.xml',
+
+            // TuneScope dependencies
+            'libraries/TuneScope/TuneScope.js',
+            'libraries/TuneScope/TS_init.js',
+            'libraries/TuneScope/webmidi.iife.js',
+            'libraries/TuneScope/WebAudioFontPlayer.js',
+
+            // TuneScope instruments
+            'libraries/TuneScope/12849_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12848_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12847_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12846_0_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12842_0_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12835_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12840_6_JCLive_sf2_file.js',
+            'libraries/TuneScope/12869_6_JCLive_sf2_file.js',
+            'libraries/TuneScope/0580_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0560_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0110_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0680_JCLive_sf2_file.js',
+            'libraries/TuneScope/0121_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1070_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/0460_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0600_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0730_JCLive_sf2_file.js',
+            'libraries/TuneScope/0710_Chaos_sf2_file.js',
+            'libraries/TuneScope/0420_JCLive_sf2_file.js',
+            'libraries/TuneScope/0400_JCLive_sf2_file.js',
+            'libraries/TuneScope/0700_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1040_Aspirin_sf2_file.js',
+            'libraries/TuneScope/0770_SBLive_sf2.js',
+            'libraries/TuneScope/0650_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1050_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/0180_Chaos_sf2_file.js',
+            'libraries/TuneScope/0020_JCLive_sf2_file.js',
+            'libraries/TuneScope/0260_JCLive_sf2_file.js',
+            'libraries/TuneScope/0241_JCLive_sf2_file.js',
+            'libraries/TuneScope/0350_JCLive_sf2_file.js',
+            'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0230_Aspirin_sf2_file.js',
+
         'libraries/serial_module.xml',
         'libraries/signada.js',
         'libraries/signada.xml',
@@ -310,6 +355,12 @@ var snapVersion = '7.4.0-dev',
         'Costumes/dee-c.svg',
         'Costumes/dee-d.svg',
         'Costumes/dee-e.svg',
+        'Costumes/derec01.png',
+        'Costumes/derec02.png',
+        'Costumes/derec03.png',
+        'Costumes/derec04.png',
+        'Costumes/derec05.png',
+        'Costumes/derec06.png',
         'Costumes/devin-a.svg',
         'Costumes/devin-b.svg',
         'Costumes/devin-c.svg',
@@ -427,6 +478,12 @@ var snapVersion = '7.4.0-dev',
         'Costumes/home_button.svg',
         'Costumes/horse1-a.svg',
         'Costumes/horse1-b.svg',
+        'Costumes/jahrd01.png',
+        'Costumes/jahrd02.png',
+        'Costumes/jahrd03.png',
+        'Costumes/jahrd04.png',
+        'Costumes/jahrd05.png',
+        'Costumes/jahrd06.png',
         'Costumes/jaime-a.png',
         'Costumes/jaime-b.png',
         'Costumes/jaime_walking-a.png',
@@ -434,6 +491,13 @@ var snapVersion = '7.4.0-dev',
         'Costumes/jaime_walking-c.png',
         'Costumes/jaime_walking-d.png',
         'Costumes/jaime_walking-e.png',
+        'Costumes/jamet01.png',
+        'Costumes/jamet02.png',
+        'Costumes/jamet03.png',
+        'Costumes/jamet04.png',
+        'Costumes/jamet05.png',
+        'Costumes/jamet06.png',
+        'Costumes/jamet06-wall.png',
         'Costumes/jay.gif',
         'Costumes/jeans-a.svg',
         'Costumes/jeans-b.svg',
@@ -609,6 +673,12 @@ var snapVersion = '7.4.0-dev',
         'Costumes/trombone-b.svg',
         'Costumes/trumpet-a2.svg',
         'Costumes/trumpet-a.svg',
+        'Costumes/turtle01_colour.png',
+        'Costumes/turtle02_colour_resized.png',
+        'Costumes/turtle03.png',
+        'Costumes/turtle04.png',
+        'Costumes/turtle05.png',
+        'Costumes/turtle06.png',
         'Costumes/ukulele.svg',
         'Costumes/umbrella.png',
         'Costumes/unicorn1.png',
@@ -668,9 +738,10 @@ var snapVersion = '7.4.0-dev',
         'Examples/live-tree.xml',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
-        'Examples/vee.xml',
+        'Examples/vee.xml'
     ];
 
+console.log('service worker executed')
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(
@@ -694,13 +765,12 @@ self.addEventListener('activate', (evt) => {
 });
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
-    e.respondWith(
-        caches.match(
-            e.request,
-            {'ignoreSearch': true}
-        ).then(function(response) {
-            return response || fetch(e.request);
-        })
-    );
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+      fetch(event.request).catch(function(e) {
+        return caches.open(cacheName).then(function(cache) {
+          return cache.match(event.request,
+                             {'ignoreSearch': true}).then(response => response);
+        });
+    }));
 });

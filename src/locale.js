@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2022-June-28';
+modules.locale = '2023-January-25';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -187,7 +187,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2022-06-28'
+        '2022-12-23'
 };
 
 SnapTranslator.dict.it = {
@@ -330,7 +330,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl',
     'last_changed':
-        '2020-12-15'
+        '2022-12-01'
 };
 
 SnapTranslator.dict.pl = {
@@ -385,18 +385,18 @@ SnapTranslator.dict.el = {
     'translator_e-mail':
         'ino.samaras@berkeley.edu, aprekates@sch.gr',
     'last_changed':
-        '2020-11-23'
+        '2022-07-30'
 };
 
 SnapTranslator.dict.ca = {
     'language_name':
         'Català',
     'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
+        'Joan Guillén i Pelegay, Bernat Romagosa Carrasquer',
     'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
+        'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2022-01-05'
+        '2022-12-26'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -440,7 +440,7 @@ SnapTranslator.dict.pt_BR = {
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2021-11-11',
+        '2023-01-25',
 };
 
 SnapTranslator.dict.bn = {

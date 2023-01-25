@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-April-26';
+modules.store = '2023-January-23';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 8.1, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -329,6 +329,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
     var appInfo = xmlNode.attributes.app,
         app = appInfo ? appInfo.split(' ')[0] : null,
+        appVersion = appInfo ? parseFloat(appInfo.split(' ')[1]) || 0 : 0,
         scenesModel = xmlNode.childNamed('scenes'),
         project = new Project();
 
@@ -346,16 +347,16 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         }
         scenesModel.childrenNamed('scene').forEach(model => {
             ide.scene.captureGlobalSettings();
-            project.scenes.add(this.loadScene(model));
+            project.scenes.add(this.loadScene(model, appVersion));
             ide.scene.applyGlobalSettings();
         });
     } else {
-        project.scenes.add(this.loadScene(xmlNode, remixID));
+        project.scenes.add(this.loadScene(xmlNode, appVersion, remixID));
     }
     return project.initialize();
 };
 
-SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
+SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
@@ -388,6 +389,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     scene.showCategories = model.scene.attributes.categories !== 'false';
     scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
+    scene.disableDraggingData = model.scene.attributes.dragdata === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
@@ -473,6 +475,19 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
         model.hiddenPrimitives.contents.split(' ').forEach(
+            sel => {
+                var selector, migration;
+                if (sel) {
+                    migration = SpriteMorph.prototype.blockMigrations[sel];
+                    selector = migration ? migration.selector : sel;
+                    scene.hiddenPrimitives[selector] = true;
+                }
+            }
+        );
+
+        // hide new primitives that have been added to the palette
+        // since the project has been last saved
+        SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
             sel => {
                 var selector, migration;
                 if (sel) {
@@ -679,7 +694,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
-    var stage;
+    var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
@@ -698,6 +713,16 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    varModel = model.childNamed('variables');
+    if (varModel) {
+        varFrame = new VariableFrame();
+        this.loadVariables(varFrame, varModel);
+    }
+    varModel = model.childNamed('local-variables');
+    if (varModel) {
+        localVarFrame = new VariableFrame();
+        this.loadVariables(localVarFrame, varModel);
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
@@ -705,7 +730,9 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     this.mediaDict = {};
     return {
         global : stage.globalBlocks,
-        local : stage.customBlocks
+        local : stage.customBlocks,
+        data : varFrame,
+        localData : localVarFrame
     };
 };
 
@@ -1792,7 +1819,7 @@ Scene.prototype.toXML = function (serializer) {
     serializer.scene = this; // keep the order of sprites in the corral
 
     xml = serializer.format(
-        '<scene name="@"%%%%%>' +
+        '<scene name="@"%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -1809,6 +1836,7 @@ Scene.prototype.toXML = function (serializer) {
         this.unifiedPalette && !this.showPaletteButtons ?
             ' buttons="false"' : '',
         this.disableClickToRun ? ' clickrun="false"' : '',
+        this.disableDraggingData ? ' dragdata="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
@@ -1889,6 +1917,48 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.root.sprites.asArray().indexOf(
             serializer.root.currentSprite) + 1,
         serializer.store(this.children)
+    );
+};
+
+StageMorph.prototype.toSpriteXML = function (serializer) {
+    // special case: export the stage as a sprite, so it can be
+    // imported into another project or scene
+    var costumeIdx = this.getCostumeIdx();
+
+    return serializer.format(
+        '<sprite name="@" idx="1" x="0" y="0"' +
+            ' heading="90"' +
+            ' scale="1"' +
+            ' volume="@"' +
+            ' pan="@"' +
+            ' rotation="0"' +
+            '%' +
+            ' draggable="true"' +
+            ' costume="@" color="80,80,80,1" pen="tip" ~>' +
+            '%' + // current costume
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+            '<scripts>%</scripts>' +
+            '</sprite>',
+        this.name,
+        this.volume,
+        this.pan,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
+        costumeIdx,
+
+        // current costume, if it's not in the wardrobe
+        !costumeIdx && this.costume ?
+            '<wear>' + serializer.store(this.costume) + '</wear>'
+                : '',
+
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        !this.customBlocks ? '' : serializer.store(this.customBlocks),
+        serializer.store(this.variables),
+        serializer.store(this.scripts)
     );
 };
 
