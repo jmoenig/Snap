@@ -88,6 +88,10 @@
     * Dutch, thanks, Hans!
     * Brazilian Portuguese, thanks, Artur!
 
+### 2023-10-26
+* locale: added Artur to the translators credits
+* blocks: enabled scope-highlighting for touch devices, experimental
+
 ### 2023-10-25
 * gui: experimental autoLoadExtensions() mechanism
 * Brazilian Portuguese translation update, thanks, Artur!

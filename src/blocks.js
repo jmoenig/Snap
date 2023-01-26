@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-January-23';
+modules.blocks = '2023-January-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5416,7 +5416,7 @@ BlockMorph.prototype.activeProcess = function () {
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
     var rcvr, vName, dec;
 
-    if (dragged) {return; }
+    if (dragged && !MorphicPreferences.isTouchDevice) {return; }
 
     // slightly increase my opacity if block-fading is active
     if (this.alpha < 1) {
@@ -5478,7 +5478,9 @@ BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
         this.rerender();
     }
 
-    if (Process.prototype.enableSingleStepping && !dragged) {
+    if (Process.prototype.enableSingleStepping &&
+            (!dragged || MorphicPreferences.isTouchDevice)
+    ) {
         // highlight the lexical scope of a variable declaration when visible
         // stepping is turned on in the IDE.
         if (this.selector === 'reportGetVar' &&
