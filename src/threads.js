@@ -6736,11 +6736,11 @@ Process.prototype.returnValueToParentContext = function (value) {
         target.addInput(value);
 
         // if the script has been clicked on by the user in visible stepping
-        // mode show the result of evaluating a reporter in a speech balloon
-        // Thanks, Vic!
+        // mode show the result of evaluating a primitive reporter in a
+        // speech balloon. Thanks, Vic!
         if (this.isClicked &&
-                this.context.isFlashing &&
-                this.context.expression instanceof ReporterBlockMorph
+            this.enableSingleStepping &&
+            this.context.expression instanceof ReporterBlockMorph
         ) {
             this.context.expression.showBubble(
                 value,
