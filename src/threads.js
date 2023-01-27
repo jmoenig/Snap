@@ -6736,17 +6736,27 @@ Process.prototype.returnValueToParentContext = function (value) {
         target.addInput(value);
 
         // if the script has been clicked on by the user in visible stepping
-        // mode show the result of evaluating a primitive reporter in a
+        // mode show the result of evaluating a reporter in a
         // speech balloon. Thanks, Vic!
         if (this.isClicked &&
             this.enableSingleStepping &&
             this.context.expression instanceof ReporterBlockMorph
         ) {
-            this.context.expression.showBubble(
-                value,
-                this.exportResult,
-                this.receiver
-            );
+            if (value instanceof List) {
+                this.context.expression.showBubble(
+                    value.isTable() ?
+                        new TableFrameMorph(new TableMorph(value, 10))
+                        : new ListWatcherMorph(value),
+                    this.exportResult,
+                    this.receiver
+                );
+            } else {
+                this.context.expression.showBubble(
+                    value,
+                    this.exportResult,
+                    this.receiver
+                );
+            }
         }
     }
 };
