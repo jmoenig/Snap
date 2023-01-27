@@ -91,6 +91,7 @@
 
 ### 2023-10-27
 * threads: show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
+* threads: tweaked above to correctly display lists and tables, and also handle custom reporters
 
 ### 2023-10-26
 * locale: added Artur to the translators credits

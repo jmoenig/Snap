@@ -6738,12 +6738,17 @@ Process.prototype.returnValueToParentContext = function (value) {
         // if the script has been clicked on by the user in visible stepping
         // mode show the result of evaluating a reporter in a
         // speech balloon. Thanks, Vic!
-        if (this.isClicked &&
-            this.enableSingleStepping &&
+        if (this.enableSingleStepping &&
+            this.isClicked &&
             this.context.expression instanceof ReporterBlockMorph
         ) {
+            let anchor = this.context.expression;
+            if (!anchor.world()) {
+                // find a place to display the result of custon reporters
+                anchor = this.topBlock;
+            }
             if (value instanceof List) {
-                this.context.expression.showBubble(
+                anchor.showBubble(
                     value.isTable() ?
                         new TableFrameMorph(new TableMorph(value, 10))
                         : new ListWatcherMorph(value),
@@ -6751,7 +6756,7 @@ Process.prototype.returnValueToParentContext = function (value) {
                     this.receiver
                 );
             } else {
-                this.context.expression.showBubble(
+                anchor.showBubble(
                     value,
                     this.exportResult,
                     this.receiver
