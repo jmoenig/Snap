@@ -7,6 +7,7 @@
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
     * new "When (sprite) is edited" event hat block, supports light user interaction logging
+    * show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
@@ -87,6 +88,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
     * Brazilian Portuguese, thanks, Artur!
+
+### 2023-10-27
+* threads: show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
 
 ### 2023-10-26
 * locale: added Artur to the translators credits

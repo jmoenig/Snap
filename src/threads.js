@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-22';
+modules.threads = '2023-January-27';
 
 var ThreadManager;
 var Process;
@@ -6734,6 +6734,20 @@ Process.prototype.returnValueToParentContext = function (value) {
                 this.context.parentContext || this.homeContext
             : this.homeContext;
         target.addInput(value);
+
+        // if the script has been clicked on by the user in visible stepping
+        // mode show the result of evaluating a reporter in a speech balloon
+        // Thanks, Vic!
+        if (this.isClicked &&
+                this.context.isFlashing &&
+                this.context.expression instanceof ReporterBlockMorph
+        ) {
+            this.context.expression.showBubble(
+                value,
+                this.exportResult,
+                this.receiver
+            );
+        }
     }
 };
 
