@@ -1110,9 +1110,9 @@ Process.prototype.evaluateNextInput = function (element) {
 
 Process.prototype.evaluateNextInputSet = function (element) {
     // Optimization to use instead of evaluateNextInput(), bums out a few
-    // frames and function calls to save a some milliseconds.
+    // frames and function calls to save some milliseconds.
     // the idea behind this optimization is to keep evaluating the inputs
-    // while we know for sure that we aren't boing to yield anyway
+    // while we know for sure that we aren't going to yield anyway
     var args = element.inputs(),
         sel = this.context.expression.selector,
         outer = this.context.outerContext, // for tail call elimination
