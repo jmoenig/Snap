@@ -6727,7 +6727,6 @@ Process.prototype.popContext = function () {
     this.context = this.context ? this.context.parentContext : null;
 };
 
-// vic's edits for
 Process.prototype.returnValueToParentContext = function (value) {
     // if no parent context exists treat value as result
     if (value !== undefined) {
@@ -6735,12 +6734,7 @@ Process.prototype.returnValueToParentContext = function (value) {
                 this.context.parentContext || this.homeContext
             : this.homeContext;
         target.addInput(value);
-        if (this.context.isFlashing && this.context.expression instanceof ReporterBlockMorph && this.isClicked) {
-            this.context.expression.showBubble(value, this.exportResult, this.receiver);
-        }
-        
     }
-
 };
 
 Process.prototype.reportStackSize = function () {
