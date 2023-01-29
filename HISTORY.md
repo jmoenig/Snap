@@ -46,6 +46,7 @@
     * don't show "result pic" option in block context menu with "click-to-run" disabled
     * enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
     * enable "JavaScript function" primitive to be hidden / shown independently from enabling JavaScript extensions
+    * shrunk some new built-in costumes, to make them load faster
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
     * fixed retaining transience when renaming a global or sprite-local variable
@@ -88,6 +89,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
     * Brazilian Portuguese, thanks, Artur!
+
+### 2023-10-29
+* shrunk some new built-in costumes, to make them load faster
 
 ### 2023-10-27
 * threads: show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
