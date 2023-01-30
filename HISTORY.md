@@ -94,6 +94,7 @@
 * gui: added spriteNamed() helper
 * api: added getSpriteScriptsXML()
 * api: added loadSpriteScriptsXML()
+* api: added unflashSpritScripts()
 
 ### 2023-10-29
 * shrunk some new built-in costumes, to make them load faster

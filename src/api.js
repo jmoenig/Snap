@@ -278,6 +278,12 @@ IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
     return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
 };
 
+IDE_Morph.prototype.unflashSpriteScripts = function (name) {
+    // un-highlight the scripts of the sprite indicated by name or the current
+    // sprite or stage if none
+    this.spriteNamed(name).scripts.unflash();
+};
+
 IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits();
 };
