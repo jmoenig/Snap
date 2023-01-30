@@ -100,6 +100,7 @@
 * api: added unflashSpritScripts()
 * api: added flashSpritScripts()
 * updated and extended API documentation
+* v8.1-rc1
 
 ### 2023-10-29
 * shrunk some new built-in costumes, to make them load faster
