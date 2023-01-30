@@ -25,6 +25,8 @@
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
     * added configuration options for embedding Snap! into other websites
+    * new API methods for synchronizing scripts across sprites and Snap! instances
+    * new API methods for signalling scripts through highlighting blocks that correspond to marked portions of mapped text code
 * **Notable Changes:**
     * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -84,6 +86,7 @@
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
+    * extended API documentation
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
@@ -96,6 +99,7 @@
 * api: added loadSpriteScriptsXML()
 * api: added unflashSpritScripts()
 * api: added flashSpritScripts()
+* updated and extended API documentation
 
 ### 2023-10-29
 * shrunk some new built-in costumes, to make them load faster
