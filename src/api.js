@@ -269,6 +269,15 @@ IDE_Morph.prototype.getSpriteScriptsXML = function (name) {
     return this.spriteNamed(name).scriptsOnlyXML();
 };
 
+IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
+    // load the scripts encoded as xml-String and replace the scripts of the
+    // specified sprite or stage with them, no questions asked.
+    // Note: No dependency handling is expected, i.e. the xml-String is
+    // meant to be stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
+};
+
 IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits();
 };
