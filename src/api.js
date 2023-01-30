@@ -278,6 +278,16 @@ IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
     return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
 };
 
+IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name) {
+    // highlight the blocks of the scripts of the sprite indicated by name or
+    // the current sprite or stage if none that correspond to the portion of the
+    // text between the start- and end lines when using the current codification
+    // mapping
+    var scripts = this.spriteNamed(name).scripts;
+    scripts.unflash();
+    scripts.flashLOC(fromLOC, toLOC);
+};
+
 IDE_Morph.prototype.unflashSpriteScripts = function (name) {
     // un-highlight the scripts of the sprite indicated by name or the current
     // sprite or stage if none

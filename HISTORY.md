@@ -95,6 +95,7 @@
 * api: added getSpriteScriptsXML()
 * api: added loadSpriteScriptsXML()
 * api: added unflashSpritScripts()
+* api: added flashSpritScripts()
 
 ### 2023-10-29
 * shrunk some new built-in costumes, to make them load faster
