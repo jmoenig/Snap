@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, April 05, 2022
+Jens Mönig, Bernat Romagosa, January 30, 2023
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -45,11 +45,21 @@ Currently the API consists of the following methods:
 * IDE_Morph.prototype.loadProjectXML()
 * IDE_Morph.prototype.unsavedChanges()
 
+#### Synchronize Scripts
+
+#### Highlight Blocks
+
 #### Set the Language
 
 * IDE_Morph.prototype.setTranslation()
 
 ## Referencing the IDE
+
+There are two ways in which Snap! can be used as an extension editor for other web applications: Either by directly embedding the Snap! IDE as a Canvas element in another web page, or by embedding Snap! in an iframe.
+
+### Embedding Snap! as a Canvas
+
+### Embedding Snap! in an iframe
 
 Getting hold of an ide can usually be achieved by
 evaluating:
