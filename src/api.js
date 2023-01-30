@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-November-28';
+modules.api = '2023-January-30';
 
 // IDE_Morph external communication API
 /*
@@ -260,6 +260,13 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
     this.onNextStep = null;
     this.world().animations = [];
     this.openProjectString(projectXML);
+};
+
+IDE_Morph.prototype.getSpriteScriptsXML = function (name) {
+    // return the scripts of the sprite identified by name or the currently
+    // edited sprite as xml-String stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).scriptsOnlyXML();
 };
 
 IDE_Morph.prototype.unsavedChanges = function () {
