@@ -68,11 +68,9 @@
                 radio.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
                 code.onmouseup = function () {
-                    var scripts = ide.currentSprite.scripts,
-                        ln = n => this.value.substr(0, n).split('\n').length;
-                    scripts.unflash();
+                    var ln = n => this.value.substr(0, n).split('\n').length;
                     if (this.selectionStart < this.selectionEnd) {
-                        scripts.flashLOC(
+                        ide.flashSpriteScripts(
                             ln(this.selectionStart),
                             ln(this.selectionEnd)
                         );
