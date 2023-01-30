@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-25';
+modules.gui = '2022-January-30';
 
 // Declarations
 
@@ -3858,6 +3858,30 @@ IDE_Morph.prototype.newName = function (name, elements) {
         newName = name + '(' + count + ')';
     }
     return newName;
+};
+
+// IDE_Morph identifying sprites by name
+
+IDE_Morph.prototype.spriteNamed = function (name) {
+    // answer the SnapObject (sprite or stage) indicated by its name
+    // or the currently edited object if no name is given or none is found
+    var match;
+    if (name === this.stage.name) {
+        return this.stage;
+    }
+    match = detect(
+        this.sprites,
+        sprite => sprite.name === name
+    );
+    if (!match) {
+        // check if the sprite in question is currently being
+        // dragged around
+        match = detect(
+            this.world().hand.children,
+            morph => morph instanceof SpriteMorph && morph.name === name
+        );
+    }
+    return match || this.currentSprite;
 };
 
 // IDE_Morph deleting scripts
