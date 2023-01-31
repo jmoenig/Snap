@@ -761,8 +761,8 @@ SnapTranslator.dict.hu = {
         'hello',
     'world':
         'világ',
-    'letter %idx of %s':
-        '%idx karaktere ennek: %s',
+    'letter %ix of %s':
+        '%ix karaktere ennek: %s',
     'length of %s':
         '%s hossza',
     'unicode of %s':
