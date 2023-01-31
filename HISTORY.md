@@ -95,7 +95,8 @@
     * Brazilian Portuguese, thanks, Artur!
 
 ### 2023-10-31
-* blocks, threads, objects, lists: alphanumeric indices for lists, experimental 
+* blocks, threads, objects, lists: alphanumeric indices for lists, experimental
+* byob: fixed "unused blocks" dialog
 
 ### 2023-10-30
 * gui: added spriteNamed() helper

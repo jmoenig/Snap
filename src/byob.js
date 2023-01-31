@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-23';
+modules.byob = '2023-January-31';
 
 // Declarations
 
@@ -4892,8 +4892,74 @@ BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
     this.buildContents();
 };
 
-BlockRemovalDialogMorph.prototype.buildContents
-    = BlockExportDialogMorph.prototype.buildContents;
+BlockRemovalDialogMorph.prototype.buildContents = function () {
+    var palette, x, y, block, checkBox, lastCat,
+        padding = 4;
+
+    // create plaette
+    palette = new ScrollFrameMorph(
+        null,
+        null,
+        SpriteMorph.prototype.sliderColor
+    );
+    palette.color = SpriteMorph.prototype.paletteColor;
+    palette.padding = padding;
+    palette.isDraggable = false;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = false;
+
+    // populate palette
+    x = palette.left() + padding;
+    y = palette.top() + padding;
+
+    // - create selectors for blocks
+    SpriteMorph.prototype.allCategories().forEach(category => {
+        this.blocks.forEach(definition => {
+            if (definition.category === category) {
+                if (lastCat && (category !== lastCat)) {
+                    y += padding;
+                }
+                lastCat = category;
+                block = definition.templateInstance();
+                block.isToggleLabel = true; // mark as unrefreshable label
+                checkBox = new ToggleMorph(
+                    'checkbox',
+                    this,
+                    () => {
+                        var idx = this.blocks.indexOf(definition);
+                        if (idx > -1) {
+                            this.blocks.splice(idx, 1);
+                        } else {
+                            this.blocks.push(definition);
+                        }
+                        this.collectDependencies();
+                    },
+                    null,
+                    () => contains(this.blocks, definition),
+                    null,
+                    null,
+                    this.target ? block : block.fullImage()
+                );
+                checkBox.setPosition(new Point(
+                    x,
+                    y + (checkBox.top() - checkBox.toggleElement.top())
+                ));
+                palette.addContents(checkBox);
+                y += checkBox.fullBounds().height() + padding;
+            }
+        });
+    });
+
+    palette.scrollX(padding);
+    palette.scrollY(padding);
+    this.addBody(palette);
+
+    this.addButton('ok', 'OK');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(220, 300));
+    this.fixLayout();
+};
 
 BlockRemovalDialogMorph.prototype.popUp
     = BlockExportDialogMorph.prototype.popUp;
