@@ -11,6 +11,7 @@
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
+    * alphanumeric indices for lists, experimental
     * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
     * added "translations" selector to metaprogramming blocks
     * new "disable dragging data" preference setting for (kids') MicroWorld creators
@@ -92,6 +93,9 @@
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
     * Brazilian Portuguese, thanks, Artur!
+
+### 2023-10-31
+* blocks, threads, objects, lists: alphanumeric indices for lists, experimental 
 
 ### 2023-10-30
 * gui: added spriteNamed() helper

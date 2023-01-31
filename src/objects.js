@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-January-23';
+modules.objects = '2023-January-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -1409,7 +1409,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportListItem: {
             type: 'reporter',
             category: 'lists',
-            spec: 'item %idx of %l',
+            spec: 'item %assoc of %l',
             defaults: [1]
         },
         reportCDR: {
@@ -1467,7 +1467,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doReplaceInList: {
             type: 'command',
             category: 'lists',
-            spec: 'replace item %idx of %l with %s',
+            spec: 'replace item %assoc of %l with %s',
             defaults: [1, null, localize('thing')]
         },
 

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-27';
+modules.threads = '2023-January-30';
 
 var ThreadManager;
 var Process;
@@ -1989,10 +1989,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
-    } else if (isNaN(+this.inputOption(index))) {
-        return null;
     }
-    list.remove(idx);
+    list.forget(idx);
 };
 
 Process.prototype.doInsertInList = function (element, index, list) {
@@ -2030,7 +2028,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     if (this.inputOption(index) === 'last') {
         idx = list.length();
     }
-    list.put(element, idx);
+    list.bind(idx, element);
 };
 
 Process.prototype.shadowListAttribute = function (list) {
@@ -2066,7 +2064,7 @@ Process.prototype.reportListItem = function (index, list) {
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
     }
-    return list.at(index);
+    return list.lookup(index);
 };
 
 // Process - tabular list ops

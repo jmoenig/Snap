@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-January-26';
+modules.blocks = '2023-January-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -310,7 +310,7 @@ SyntaxElementMorph.prototype.labelParts = {
         Input slots
 
         type: 'input'
-        tags: 'numeric read-only unevaluated landscape static'
+        tags: 'numeric alphanum read-only unevaluated landscape static'
         menu: dictionary or selector
         react: selector
         value: string, number or Array for localized strings / constants
@@ -456,7 +456,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%ida': {
         type: 'input',
-        tags: 'numeric',
+        tags: 'alphanum',
         menu: {
             '1' : 1,
             last : ['last'],
@@ -467,6 +467,15 @@ SyntaxElementMorph.prototype.labelParts = {
     '%idx': {
         type: 'input',
         tags: 'numeric',
+        menu: {
+            '1' : 1,
+            last : ['last'],
+            any : ['any']
+        }
+    },
+    '%assoc': {
+        type: 'input',
+        tags: 'alphanum',
         menu: {
             '1' : 1,
             last : ['last'],
@@ -1764,7 +1773,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // apply the tags
         // ---------------
-        // input: numeric, read-only, unevaluated, landscape, static
+        // input: numeric, alphanum, read-only, unevaluated, landscape, static
         // text entry: monospace
         // boolean: unevaluated, static
         // symbol: static, fading, protected
@@ -1784,6 +1793,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     switch (tag) {
                     case 'numeric':
                         part.isNumeric = true;
+                        break;
+                    case 'alphanum':
+                        part.isNumeric = true;
+                        part.isAlphanumeric = true;
                         break;
                     case 'read-only':
                         part.isReadOnly = true;
@@ -10327,6 +10340,7 @@ InputSlotMorph.prototype.init = function (
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
+    this.isAlphanumeric = false; // temporary override for allowing text
     this.isReadOnly = isReadOnly || false;
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
     this.constant = null;
@@ -11254,7 +11268,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         arrow = this.arrow(),
         tp = this.topBlock();
 
-    contents.isNumeric = this.isNumeric;
+    contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
     contents.isEditable = (!this.isReadOnly);
     if (this.isReadOnly) {
         contents.disableSelecting();
