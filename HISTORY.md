@@ -100,6 +100,8 @@
 * v8.1-rc2
 * alphanumeric index for insert
 * v8.1-rc3
+* adjusted translations to changed block spec for "letter of"
+* v8.1-rc4
 
 ### 2023-10-30
 * gui: added spriteNamed() helper
