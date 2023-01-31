@@ -566,8 +566,8 @@ SnapTranslator.dict.hr = {
         'pozdrav',
     'world':
         'svijet',
-    'letter %idx of %s':
-        'znak %idx od %s',
+    'letter %ix of %s':
+        'znak %ix od %s',
     'length of %s':
         'duljina od %s',
     'unicode of %s':
