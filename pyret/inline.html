@@ -69,12 +69,10 @@
                     ide.broadcast(bt.value)));
                 code.onmouseup = function () {
                     var ln = n => this.value.substr(0, n).split('\n').length;
-                    if (this.selectionStart < this.selectionEnd) {
-                        ide.flashSpriteScripts(
-                            ln(this.selectionStart),
-                            ln(this.selectionEnd)
-                        );
-                    }
+                    ide.flashSpriteScripts(
+                        ln(this.selectionStart),
+                        ln(this.selectionEnd)
+                    );
                 };
                 requestAnimationFrame(loop);
             };
