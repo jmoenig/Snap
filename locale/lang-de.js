@@ -807,8 +807,8 @@ SnapTranslator.dict.de = {
         'Hallo',
     'world':
         'Welt',
-    'letter %idx of %s':
-        'Zeichen %idx von %s',
+    'letter %ix of %s':
+        'Zeichen %ix von %s',
     'length of %s':
         'L\u00e4nge von Text %s',
     'unicode of %s':
