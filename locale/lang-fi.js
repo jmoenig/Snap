@@ -558,8 +558,8 @@ SnapTranslator.dict.fi = {
         'Hei',
     'world':
         'maailma',
-    'letter %idx of %s':
-        'kirjain nro %idx tekstist\u00e4 %s',
+    'letter %ix of %s':
+        'kirjain nro %ix tekstist\u00e4 %s',
     'length of %s':
         'tekstin %s pituus',
     'unicode of %s':
