@@ -466,16 +466,16 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%idx': {
         type: 'input',
-        tags: 'numeric',
+        tags: 'alphanum',
         menu: {
             '1' : 1,
             last : ['last'],
             any : ['any']
         }
     },
-    '%assoc': {
+    '%ix': {
         type: 'input',
-        tags: 'alphanum',
+        tags: 'numeric',
         menu: {
             '1' : 1,
             last : ['last'],

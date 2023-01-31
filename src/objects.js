@@ -1294,7 +1294,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportLetter: {
             type: 'reporter',
             category: 'operators',
-            spec: 'letter %idx of %s',
+            spec: 'letter %ix of %s',
             defaults: [1, localize('world')]
         },
         reportStringSize: {
@@ -1409,7 +1409,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportListItem: {
             type: 'reporter',
             category: 'lists',
-            spec: 'item %assoc of %l',
+            spec: 'item %idx of %l',
             defaults: [1]
         },
         reportCDR: {
@@ -1461,13 +1461,13 @@ SpriteMorph.prototype.initBlocks = function () {
         doInsertInList: {
             type: 'command',
             category: 'lists',
-            spec: 'insert %s at %assoc of %l',
+            spec: 'insert %s at %idx of %l',
             defaults: [localize('thing'), 1]
         },
         doReplaceInList: {
             type: 'command',
             category: 'lists',
-            spec: 'replace item %assoc of %l with %s',
+            spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')]
         },
 
