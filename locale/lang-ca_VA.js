@@ -570,8 +570,8 @@ SnapTranslator.dict.ca_VA = {
         'hola',
     'world':
         'món',
-    'letter %idx of %s':
-        'lletra %idx de %s',
+    'letter %ix of %s':
+        'lletra %ix de %s',
     'length of %s':
         'longitud de %s',
     'unicode of %s':
