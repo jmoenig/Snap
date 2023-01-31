@@ -2009,6 +2009,9 @@ Process.prototype.doInsertInList = function (element, index, list) {
     if (this.inputOption(index) === 'last') {
         idx = list.length() + 1;
     }
+    if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
+        return list.bind(idx, element);
+    }
     list.add(element, idx);
 };
 

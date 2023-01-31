@@ -1461,7 +1461,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doInsertInList: {
             type: 'command',
             category: 'lists',
-            spec: 'insert %s at %idx of %l',
+            spec: 'insert %s at %assoc of %l',
             defaults: [localize('thing'), 1]
         },
         doReplaceInList: {
