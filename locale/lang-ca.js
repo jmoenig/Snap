@@ -719,8 +719,8 @@ SnapTranslator.dict.ca = {
         'hola',
     'world':
         'món',
-    'letter %idx of %s':
-        'lletra %idx de %s',
+    'letter %ix of %s':
+        'lletra %ix de %s',
     'length of %s':
         'longitud del text %s',
     'unicode of %s':
