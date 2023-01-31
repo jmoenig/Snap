@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-30';
+modules.gui = '2022-January-31';
 
 // Declarations
 
-var SnapVersion = '8.1.0-rc1';
+var SnapVersion = '8.1.0-rc2';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4314,18 +4314,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         CamSnapshotDialogMorph.prototype.enableCamera,
         'uncheck to disable\ncamera support',
         'check to enable\ncamera support',
-        true
-    );
-    addPreference(
-        'Use CPU for graphics',
-        () => window.keepCanvasInCPU = !window.keepCanvasInCPU,
-        window.keepCanvasInCPU,
-        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
-            'using the "willReadFrequently" attribute at the expense\n' +
-            'of slowing down rendering in some web browsers',
-        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
-            'using the "willReadFrequently" attribute at the expense\n' +
-            'of slowing down rendering in some web browsers',
         true
     );
     menu.addLine(); // everything visible below is persistent
