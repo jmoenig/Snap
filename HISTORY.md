@@ -98,6 +98,8 @@
 * byob: fixed "unused blocks" dialog
 * morphic, gui: removed experimental canvas image data optimization
 * v8.1-rc2
+* alphanumeric index for insert
+* v8.1-rc3
 
 ### 2023-10-30
 * gui: added spriteNamed() helper
