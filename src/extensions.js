@@ -48,6 +48,8 @@ var SnapExtensions = {
     urls: [ // allow-list of trusted servers
         'libraries/',
         'https://snap.berkeley.edu/',
+        'https://bjc.berkeley.edu/',
+        'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
         'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
     ]
