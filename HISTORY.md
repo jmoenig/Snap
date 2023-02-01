@@ -99,6 +99,8 @@
 * added remote modules for CS10 and BJC, thanks, Michael!
 * updated version history
 * v8.1-rc5
+* fixed another "unused blocks" glitch for dependencies
+* v8.1-rc6
 
 ### 2023-10-31
 * blocks, threads, objects, lists: alphanumeric indices for lists, experimental

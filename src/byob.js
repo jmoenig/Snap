@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-31';
+modules.byob = '2023-February-01';
 
 // Declarations
 
@@ -4855,7 +4855,7 @@ BlockImportDialogMorph.prototype.fixLayout
 // BlockRemovalDialogMorph inherits from DialogBoxMorph
 // and pseudo-inherits from BlockExportDialogMorph:
 
-BlockRemovalDialogMorph.prototype = new DialogBoxMorph(); // +++
+BlockRemovalDialogMorph.prototype = new DialogBoxMorph();
 BlockRemovalDialogMorph.prototype.constructor = BlockImportDialogMorph;
 BlockRemovalDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -4977,8 +4977,18 @@ BlockRemovalDialogMorph.prototype.selectNone
 
 // BlockRemovelDialogMorph dependency management
 
-BlockRemovalDialogMorph.prototype.collectDependencies =
-    BlockExportDialogMorph.prototype.collectDependencies;
+BlockRemovalDialogMorph.prototype.collectDependencies = function () {
+    // add dependencies to the blocks:
+    this.dependencies().forEach(def => {
+        if (!contains(this.blocks, def)) {
+            this.blocks.push(def);
+        }
+    });
+    // refresh the checkmarks
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
 
 BlockRemovalDialogMorph.prototype.dependencies =
     BlockExportDialogMorph.prototype.dependencies;
