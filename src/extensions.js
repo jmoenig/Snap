@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-January-19';
+modules.extensions = '2023-February-01';
 
 // Global stuff
 
