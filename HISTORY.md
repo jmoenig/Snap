@@ -2,7 +2,7 @@
 
 ## in development:
 
-## 8.1.0 release candidate:
+## 8.1.0:
 * **New Features:**
     * lists as dictionaries: alphanumeric indices for lists, access fields (JSON) and columns (CSV) by name
     * include custom block data dependencies in libraries, eliminates the need for initialization routines creating and populating variables required by custom block definitions
@@ -103,6 +103,7 @@
 * v8.1-rc6
 * added Victoria to the credits tab
 * v8.1-rc7
+* prepared v8.1 release
 
 ### 2023-10-31
 * blocks, threads, objects, lists: alphanumeric indices for lists, experimental
