@@ -90,7 +90,7 @@ modules.gui = '2022-February-01';
 
 // Declarations
 
-var SnapVersion = '8.1.0-rc6';
+var SnapVersion = '8.1.0-rc7';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5210,6 +5210,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'
         + '\nSimon Walters & Xavier Pi: MQTT extension'
+        + '\nVictoria Phelps: Reporter results tracing'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'

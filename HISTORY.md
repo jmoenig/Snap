@@ -4,16 +4,16 @@
 
 ## 8.1.0 release candidate:
 * **New Features:**
+    * lists as dictionaries: alphanumeric indices for lists, access fields (JSON) and columns (CSV) by name
     * include custom block data dependencies in libraries, eliminates the need for initialization routines creating and populating variables required by custom block definitions
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
-    * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
+    * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
-    * alphanumeric indices for lists, experimental
     * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
     * added "translations" selector to metaprogramming blocks
     * new "disable dragging data" preference setting for (kids') MicroWorld creators
@@ -101,6 +101,8 @@
 * v8.1-rc5
 * fixed another "unused blocks" glitch for dependencies
 * v8.1-rc6
+* added Victoria to the credits tab
+* v8.1-rc7
 
 ### 2023-10-31
 * blocks, threads, objects, lists: alphanumeric indices for lists, experimental
