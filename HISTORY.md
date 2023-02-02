@@ -5,12 +5,16 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * loading old projects only hides new blocks if they already contain hidden ones 
+    * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-02-03
+* threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys 
+
 ### 2023-02-02
 * new dev version
-* fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones 
+* store: fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones 
 
 ## 8.1.0:
 * **New Features:**

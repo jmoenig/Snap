@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-30';
+modules.threads = '2023-February-03';
 
 var ThreadManager;
 var Process;
@@ -2058,11 +2058,14 @@ Process.prototype.reportListItem = function (index, list) {
     if (index === '') {
         return '';
     }
-    if (this.inputOption(index) === 'any') {
-        return list.at(this.reportBasicRandom(1, list.length()));
-    }
-    if (this.inputOption(index) === 'last') {
-        return list.at(list.length());
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            return list.at(this.reportBasicRandom(1, list.length()));
+        }
+        if (index[0] === 'last') {
+            return list.at(list.length());
+        }
+        return '';
     }
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
