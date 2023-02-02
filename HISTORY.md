@@ -4,11 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * loading old projects only hides new blocks if they already contain hidden ones 
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-02-02
 * new dev version
+* fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones 
 
 ## 8.1.0:
 * **New Features:**

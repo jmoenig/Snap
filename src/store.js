@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-January-23';
+modules.store = '2023-February-02';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -360,6 +360,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
+        hidden,
         nameID;
 
     this.scene = scene;
@@ -474,29 +475,33 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
 
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
-        model.hiddenPrimitives.contents.split(' ').forEach(
-            sel => {
-                var selector, migration;
-                if (sel) {
-                    migration = SpriteMorph.prototype.blockMigrations[sel];
-                    selector = migration ? migration.selector : sel;
-                    scene.hiddenPrimitives[selector] = true;
+        hidden = model.hiddenPrimitives.contents.split(' ').filter(word =>
+            word.length > 0);
+        if (hidden.length) {
+            hidden.forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
                 }
-            }
-        );
+            );
 
-        // hide new primitives that have been added to the palette
-        // since the project has been last saved
-        SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
-            sel => {
-                var selector, migration;
-                if (sel) {
-                    migration = SpriteMorph.prototype.blockMigrations[sel];
-                    selector = migration ? migration.selector : sel;
-                    scene.hiddenPrimitives[selector] = true;
+            // hide new primitives that have been added to the palette
+            // since the project has been last saved
+            SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     model.codeHeaders = model.scene.childNamed('headers');
