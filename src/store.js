@@ -2662,8 +2662,19 @@ BlockMorph.prototype.toXML = BlockMorph.prototype.toScriptXML = function (
 };
 
 BlockMorph.prototype.toBlockXML = function (serializer) {
+    let xml = '<block collabId="@" s="@"';
+
+    // Add extra attribute for RPC blocks to list inputs
+    if(this instanceof ReporterBlockMorph && this.selector == "getJSFromRPCStruct" ||
+       this instanceof CommandBlockMorph && this.selector == "doRunRPC"){
+        const inputs = this.children.filter(child => child instanceof HintInputSlotMorph).map(slot => encodeURIComponent(slot.hintText)).join(";");
+        xml += ` inputNames="${inputs}"`; 
+    }
+
+    xml += '>%%</block>';
+
     return serializer.format(
-        '<block collabId="@" s="@">%%</block>',
+        xml,
         this.id,
         this.selector,
         serializer.store(this.inputs()),
