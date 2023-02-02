@@ -1,6 +1,14 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+### 2023-02-02
+* new dev version
 
 ## 8.1.0:
 * **New Features:**
