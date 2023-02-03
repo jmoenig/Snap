@@ -2006,11 +2006,11 @@ Process.prototype.doInsertInList = function (element, index, list) {
     if (index instanceof Array) {
         if (index[0] === 'any') {
             idx = this.reportBasicRandom(1, list.length() + 1);
-        }
-        if (index[0] === 'last') {
+        } else if (index[0] === 'last') {
+            idx = list.length() + 1;
+        } else {
             idx = list.length() + 1;
         }
-        idx = list.length() + 1;
     }
     if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
         return list.bind(idx, element);
@@ -2031,11 +2031,11 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     if (index instanceof Array) {
         if (index[0] === 'any') {
             idx = this.reportBasicRandom(1, list.length() + 1);
-        }
-        if (index[0] === 'last') {
+        } else if (index[0] === 'last') {
             idx = list.length();
+        } else {
+            idx = 0;
         }
-        idx = 0;
     }
     list.bind(idx, element);
 };
