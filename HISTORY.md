@@ -4,12 +4,16 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.1.1:
+* **Notable Fixes:**
     * loading old projects only hides new blocks if they already contain hidden ones 
     * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
     * fixed opening projects when the language is set to non-English 
 * **Documentation Updates:**
     * updated API documentation for "noAutoFill" configuration setting
-* **Translation Updates:**
 
 ### 2023-02-03
 * threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys
@@ -17,6 +21,7 @@
 * blocks: disabled automatic translation of typed-in arguments that match translatable drop-down choices
 * gui: fixed opening projects when the language is set to non-English
 * updated API documentation for "noAutoFill" configuration setting
+* prepared v8.1.1 patch
 
 ### 2023-02-02
 * new dev version
