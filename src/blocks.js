@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-January-31';
+modules.blocks = '2023-February-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10406,11 +10406,14 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta instanceof BlockMorph) {
     	this.selectedBlock = dta;
       	dta = ''; // make sure the contents text emptied
-    } else { // assume dta is a localizable choice if it's a key in my choices
+    } else {
         cnts.isItalic = false;
+        /*
+        // assume dta is a localizable choice if it's a key in my choices
         if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
             return this.setContents(this.choices[dta]);
         }
+        */
     }
     cnts.text = dta;
     if (isNil(dta)) {

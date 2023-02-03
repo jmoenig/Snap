@@ -11,7 +11,8 @@
 
 ### 2023-02-03
 * threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys
-* store: tweaked loading literal input slots 
+* store: tweaked loading literal input slots
+* blocks: disabled automatic translation of typed-in arguments that match translatable drop-down choices
 
 ### 2023-02-02
 * new dev version
