@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-February-02';
+modules.store = '2023-February-03';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1419,7 +1419,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             // checking whether "input" is nil should not
             // be necessary, but apparently is after retina support
             // was added.
-            input.setContents(this.loadValue(model));
+            input.setContents(val);
         }
     }
 };

@@ -10,7 +10,8 @@
 * **Translation Updates:**
 
 ### 2023-02-03
-* threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys 
+* threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys
+* store: tweaked loading literal input slots 
 
 ### 2023-02-02
 * new dev version
