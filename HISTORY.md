@@ -6,6 +6,7 @@
 * **Notable Fixes:**
     * loading old projects only hides new blocks if they already contain hidden ones 
     * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
+    * fixed opening projects when the language is set to non-English 
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -13,6 +14,7 @@
 * threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys
 * store: tweaked loading literal input slots
 * blocks: disabled automatic translation of typed-in arguments that match translatable drop-down choices
+* gui: fixed opening projects when the language is set to non-English 
 
 ### 2023-02-02
 * new dev version

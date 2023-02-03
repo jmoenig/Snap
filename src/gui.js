@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-02';
+modules.gui = '2022-February-03';
 
 // Declarations
 
@@ -224,7 +224,7 @@ IDE_Morph.prototype.setDefaultDesign();
 
 // IDE_Morph instance creation:
 
-function IDE_Morph(config = { autofill: true }) {
+function IDE_Morph(config = {}) {
     this.init(config);
 }
 
@@ -234,6 +234,7 @@ function IDE_Morph(config = { autofill: true }) {
     creating an instance. This is still very much under construction. Currently
     the following options are available:
 
+        noAutoFill      bool, do not take over the whole browser tab
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
         design:         str, currently "flat" (bright) or "classic" (dark)
@@ -307,7 +308,7 @@ IDE_Morph.prototype.init = function (config) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = !!config.autofill;
+    this.isAutoFill = !config.noAutoFill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -764,6 +765,10 @@ IDE_Morph.prototype.applyConfigurations = function () {
                 this.applyPaneHidingConfigurations();
             }
         };
+
+    if (!Object.keys(cnf).length) {
+        return;
+    }
 
     // design
     if (cnf.design) {
