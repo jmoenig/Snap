@@ -108,7 +108,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 
 |keyword	|type	|setting					|
 |-			|-		|-							|
-|noAutoFill |bool   |do not take over the whole browser tab|
+|noAutoFill |bool   |do not let the IDE fill the whole World canvas|
 |path: 		|str 	|path to additional resources (translations)|
 |load: 		|str	|microworld file name (xml)|
 |design:	|str	|currently `"flat"` (bright) or `"classic"` (dark)|

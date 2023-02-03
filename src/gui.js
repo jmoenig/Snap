@@ -234,7 +234,7 @@ function IDE_Morph(config = {}) {
     creating an instance. This is still very much under construction. Currently
     the following options are available:
 
-        noAutoFill      bool, do not take over the whole browser tab
+        noAutoFill      bool, do not let the IDE fill the whole World canvas
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
         design:         str, currently "flat" (bright) or "classic" (dark)
