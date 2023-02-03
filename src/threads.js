@@ -2003,10 +2003,13 @@ Process.prototype.doInsertInList = function (element, index, list) {
     if (index === '') {
         return null;
     }
-    if (this.inputOption(index) === 'any') {
-        idx = this.reportBasicRandom(1, list.length() + 1);
-    }
-    if (this.inputOption(index) === 'last') {
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            idx = this.reportBasicRandom(1, list.length() + 1);
+        }
+        if (index[0] === 'last') {
+            idx = list.length() + 1;
+        }
         idx = list.length() + 1;
     }
     if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
@@ -2025,11 +2028,14 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     if (index === '') {
         return null;
     }
-    if (this.inputOption(index) === 'any') {
-        idx = this.reportBasicRandom(1, list.length());
-    }
-    if (this.inputOption(index) === 'last') {
-        idx = list.length();
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            idx = this.reportBasicRandom(1, list.length() + 1);
+        }
+        if (index[0] === 'last') {
+            idx = list.length();
+        }
+        idx = 0;
     }
     list.bind(idx, element);
 };
