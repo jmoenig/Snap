@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-January-31';
+modules.objects = '2023-February-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -6797,7 +6797,11 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
-                return morph.inputs()[0].evaluate()[0] === interaction;
+                var choice = morph.inputs()[0].evaluate();
+                return (choice instanceof Array ?
+                    choice[0]
+                    : choice
+                ) === interaction;
             }
         }
         return false;

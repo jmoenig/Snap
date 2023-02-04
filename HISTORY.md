@@ -9,6 +9,14 @@
 
 ## 8.1.1:
 * **Notable Fixes:**
+    * fixed #3176 - triggering user interaction hat blocks
+
+### 2023-02-03
+* objects: fixed #3176 - triggering user interaction hat blocks
+* gui: prepared v8.1.2 patch
+
+## 8.1.1:
+* **Notable Fixes:**
     * loading old projects only hides new blocks if they already contain hidden ones 
     * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
     * fixed opening projects when the language is set to non-English 
