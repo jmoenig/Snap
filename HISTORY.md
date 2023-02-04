@@ -7,6 +7,14 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 8.1.4:
+* **Notable Fixes:**
+    * blocks: fixed setting a default value for Boolean input slots in custom blocks
+
+### 2023-02-05
+    * blocks: fixed setting a default value for Boolean input slots in custom blocks
+    * gui: prepared v8.1.4 patch
+
 ## 8.1.3:
 * **Notable Fixes:**
     * fixed jit-compiling dropdown choices (e.g. "item /last/ of list")

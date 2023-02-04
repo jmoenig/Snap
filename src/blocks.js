@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-February-03';
+modules.blocks = '2023-February-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12165,20 +12165,22 @@ BooleanSlotMorph.prototype.toggleValue = function () {
         return this.toggleValue.call(target);
     }
     this.value = this.nextValue();
-    sprite = block.scriptTarget();
-    if (!block.isTemplate) {
-        sprite.recordUserEdit(
-            'scripts',
-            'boolean slot',
-            'toggle',
-            block.abstractBlockSpec(),
-            this.value
-        );
-    }
-    ide = sprite.parentThatIsA(IDE_Morph);
-    if (ide && !ide.isAnimating) {
-        this.rerender();
-        return;
+    if (block) {
+        sprite = block.scriptTarget();
+        if (!block.isTemplate) {
+            sprite.recordUserEdit(
+                'scripts',
+                'boolean slot',
+                'toggle',
+                block.abstractBlockSpec(),
+                this.value
+            );
+        }
+        ide = sprite.parentThatIsA(IDE_Morph);
+        if (ide && !ide.isAnimating) {
+            this.rerender();
+            return;
+        }
     }
     this.progress = 3;
     this.rerender();

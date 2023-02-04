@@ -86,11 +86,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-04';
+modules.gui = '2022-February-05';
 
 // Declarations
 
-var SnapVersion = '8.1.3';
+var SnapVersion = '8.1.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
