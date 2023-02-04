@@ -7,11 +7,19 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
-## 8.1.1:
+## 8.1.3:
+* **Notable Fixes:**
+    * fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
+
+### 2023-02-04
+    * threads: fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
+    * gui: prepared v8.1.3 patch
+
+## 8.1.2:
 * **Notable Fixes:**
     * fixed #3176 - triggering user interaction hat blocks
 
-### 2023-02-03
+### 2023-02-04
 * objects: fixed #3176 - triggering user interaction hat blocks
 * gui: prepared v8.1.2 patch
 

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-03';
+modules.threads = '2023-February-04';
 
 var ThreadManager;
 var Process;
@@ -8782,7 +8782,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             return 'new List([' + this.compileInputs(value) + '])';
         default:
             if (value instanceof Array) {
-                return '"' + this.escape(value[0]) + '"';
+                return '["' + this.escape(value[0]) + '"]';
             }
             throw new Error(
                 'compiling does not yet support\n' +
