@@ -647,8 +647,9 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
         const msg = myself.showMessage('Opening ' + name + ' example...');
         try {
-            const xml = await this.cloud.getProjectByName(this.cloud.username, dict.ProjectName);
-            await myself.rawLoadCloudProject(xml);
+            const metadata = await this.cloud.getProjectByName(this.cloud.username, dict.ProjectName);
+            const source = new CloudProjectsSource(this);
+            await source.open(metadata);
             applyFlags(dict);
         } catch (err) {
             this.cloudError()(err.message);
