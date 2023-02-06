@@ -7,6 +7,14 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 8.1.5:
+* **Notable Fixes:**
+    * fixed a scope highlighting bug
+
+### 2023-02-06
+    * blocks: fixed a scope highlighting bug
+    * gui: prepared v8.1.5 patch
+
 ## 8.1.4:
 * **Notable Fixes:**
     * blocks: fixed setting a default value for Boolean input slots in custom blocks

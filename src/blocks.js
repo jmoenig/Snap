@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-February-05';
+modules.blocks = '2023-February-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5739,7 +5739,7 @@ BlockMorph.prototype.fullScopeFor = function (varName, afterThis) {
         return scope;
     }
 
-    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
+    return select(this.unwind().slice(afterThis ? 1 : 0)).flat(Infinity);
 };
 
 // BlockMorph op-sequence analysis
