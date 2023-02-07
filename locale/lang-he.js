@@ -743,8 +743,8 @@ SnapTranslator.dict.he = {
         'שלום',
     'world':
         'עולם',
-    'letter %idx of %s':
-        'מיקום_אות_במילה %idx  %s',
+    'letter %ix of %s':
+        'מיקום_אות_במילה %ix  %s',
     'length of %s':
         '%s האורך_של',
     'unicode of %s':

@@ -2,9 +2,71 @@
 
 ## in development:
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.1.5:
+* **Notable Fixes:**
+    * fixed a scope highlighting bug
+
+### 2023-02-06
+    * blocks: fixed a scope highlighting bug
+    * gui: prepared v8.1.5 patch
+
+## 8.1.4:
+* **Notable Fixes:**
+    * blocks: fixed setting a default value for Boolean input slots in custom blocks
+
+### 2023-02-05
+    * blocks: fixed setting a default value for Boolean input slots in custom blocks
+    * gui: prepared v8.1.4 patch
+
+## 8.1.3:
+* **Notable Fixes:**
+    * fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
+
+### 2023-02-04
+    * threads: fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
+    * gui: prepared v8.1.3 patch
+
+## 8.1.2:
+* **Notable Fixes:**
+    * fixed #3176 - triggering user interaction hat blocks
+
+### 2023-02-04
+* objects: fixed #3176 - triggering user interaction hat blocks
+* gui: prepared v8.1.2 patch
+
+## 8.1.1:
+* **Notable Fixes:**
+    * loading old projects only hides new blocks if they already contain hidden ones 
+    * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
+    * fixed opening projects when the language is set to non-English 
+* **Documentation Updates:**
+    * updated API documentation for "noAutoFill" configuration setting
+
+### 2023-02-03
+* threads: fixed distinguishing selected named indices ("random", "last") from same-named typed-in dictionary keys
+* store: tweaked loading literal input slots
+* blocks: disabled automatic translation of typed-in arguments that match translatable drop-down choices
+* gui: fixed opening projects when the language is set to non-English
+* updated API documentation for "noAutoFill" configuration setting
+* prepared v8.1.1 patch
+
+### 2023-02-02
+* new dev version
+* store: fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones 
+
+## 8.1.0:
+* **New Features:**
+    * lists as dictionaries: alphanumeric indices for lists, access fields (JSON) and columns (CSV) by name
+    * include custom block data dependencies in libraries, eliminates the need for initialization routines creating and populating variables required by custom block definitions
     * visually highlight variable scope when mouse-hovering over a variable declaration in visible stepping mode
     * visually highlight the variable declaration of variable accessor blocks when mouse-hovering over them in visible stepping mode
     * visually highlight senders / receivers when mouse-hovering over messaging blocks in visible stepping mode
+    * show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
     * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * new PIPE primitive in the control category
     * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
@@ -19,9 +81,12 @@
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * new extension primitive: "syn_scripts([xml])" for getting & setting (and deleting!) the scripts of a sprite
     * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
+    * extensions can auto-load and auto-exec allowed or allow-listed external JS scripts that modify the IDE, e.g. to add buttons by storing the external url in global (optionally hidden) variables whose name starts with "__module__"  
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
     * added configuration options for embedding Snap! into other websites
+    * new API methods for synchronizing scripts across sprites and Snap! instances
+    * new API methods for signalling scripts through highlighting blocks that correspond to marked portions of mapped text code
 * **Notable Changes:**
     * enabled same-named global and sprite-local variables 
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
@@ -35,7 +100,6 @@
     * TuneScope extension update, thanks, Harsh, Jo and Glen!
     * SciSnap2 extension update, thanks, Eckart!
     * MQTT library update, thanks, Simon!
-    * optimized canvas for reading back image data (slows down rendering, turned off by default)
     * removed PIPE from all libraries (b/c it is now a built-in primitive in the control blocks palette)
     * updated "Codification" example project
     * hide "stage selected - no motion primitives" text when hiding the category names in single palette mode
@@ -43,8 +107,10 @@
     * don't show "result pic" option in block context menu with "click-to-run" disabled
     * enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
     * enable "JavaScript function" primitive to be hidden / shown independently from enabling JavaScript extensions
+    * shrunk some new built-in costumes, to make them load faster
 * **Notable Fixes:**
     * fixed refactoring (renaming) variables (I hope, haha!)
+    * fixed retaining transience when renaming a global or sprite-local variable
     * fixed displaying message senders
     * improved text wrapping - wrap words that are too wide for a line by letters
     * improved touch-hold gesture on mobile Android devices, thanks, @ego-lay-atman-bay!
@@ -79,61 +145,120 @@
 * **Documentation Updates:**
     * new "docs" folder for documentation files, thanks, Michael!
     * new doc for extensions, thanks, Michael!
+    * extended API documentation
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
     * Dutch, thanks, Hans!
+    * Brazilian Portuguese, thanks, Artur!
 
-### 2023-10-21
+### 2023-02-01
+* added remote modules for CS10 and BJC, thanks, Michael!
+* updated version history
+* v8.1-rc5
+* fixed another "unused blocks" glitch for dependencies
+* v8.1-rc6
+* added Victoria to the credits tab
+* v8.1-rc7
+* prepared v8.1 release
+
+### 2023-10-31
+* blocks, threads, objects, lists: alphanumeric indices for lists, experimental
+* byob: fixed "unused blocks" dialog
+* morphic, gui: removed experimental canvas image data optimization
+* v8.1-rc2
+* alphanumeric index for insert
+* v8.1-rc3
+* adjusted translations to changed block spec for "letter of"
+* v8.1-rc4
+
+### 2023-01-30
+* gui: added spriteNamed() helper
+* api: added getSpriteScriptsXML()
+* api: added loadSpriteScriptsXML()
+* api: added unflashSpritScripts()
+* api: added flashSpritScripts()
+* updated and extended API documentation
+* v8.1-rc1
+
+### 2023-01-29
+* shrunk some new built-in costumes, to make them load faster
+
+### 2023-01-27
+* threads: show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
+* threads: tweaked above to correctly display lists and tables, and also handle custom reporters
+
+### 2023-01-26
+* locale: added Artur to the translators credits
+* blocks: enabled scope-highlighting for touch devices, experimental
+
+### 2023-01-25
+* gui: experimental autoLoadExtensions() mechanism
+* Brazilian Portuguese translation update, thanks, Artur!
+* updated version history
+
+### 2023-01-23
+* gui, store: read back data dependencies included in exported libraries
+* byob, gui: distinguish between global and sprite-local data dependencies
+* gui, store: read back local data dependencies included in exported libraries
+* blocks, gui: include custom block data dependencies in exported single scripts
+* blocks: only include data dependencies in exported block definitions
+* objects, gui: include global custom block data dependencies in exported sprites
+* objects: fixed #3150 - renaming a transient variable removes its transience
+
+### 2023-01-22
+* byob, gui, threads: new file structure for libraries to include global data dependencies
+
+### 2023-01-21
 * threads: fixed fork()
 * byob: init data dependencies for block export dialog
 * byob: added data dependencies UI to block export dialog
 
-### 2023-10-20
+### 2023-01-20
 * lists: refactored some helper functions
 * threads: added VariableFrame >> branch()
 * threads: added VariableFrame >> merge()
 * threads: renamed branch() to fork()
 
-### 2023-10-19
+### 2023-01-19
 * gui, extensions: added user edit event for language change
 
-### 2023-10-18
+### 2023-01-18
 * blocks: added "scriptOnly" flag to rewind()
 * byob: added CustomBlockDefinition >> dataDependencies()
 
-### 2023-10-17
+### 2023-01-17
 * TuneScope update, thanks, Harsh, Jo and Glen!
 * MQTT library update, thanks, Simon!
 
-### 2023-10-16
+### 2023-01-16
 * extensions: refactored extension primitive "ide_synchscripts(obj, xml)" into "syn_scripts([xml])"
 * objects: added Sprite >> synchScriptsFrom(xml) method (internal)
 * updated pyret.html with example code for exporting & importing xml
 
-### 2023-10-13
+### 2023-01-13
 * morphic: catch occasional stack overflow when embedding data into a PNG
 * gui: fixed #3158
 
-### 2023-10-12
+### 2023-01-12
 * updated inline.html test page with "noDevWarning" configuration
 * objects: tweaked sprite name-change user edit event details
 
-### 2023-10-11
+### 2023-01-11
 * objects: added serialized scripts (w/o dependencies) to scripts-related user-logging events
 * extensions: new extension primitive: "ide_synchscripts(obj, xml)", experimental, might change
 * gui: added configuration option for "noDevWarning"
 
-### 2023-10-10
+### 2023-01-10
 * gui: added openScriptsOnlyString() method to IDE, experimental
 
-### 2023-10-09
+### 2023-01-09
 * store, objects: hide new primitives in old microworlds
 * gui, objects: enable "JS function" primitive to be hidden / shown independently from enabling JavaScript extensions
 * threads: explicitly garbage collect (i.e. remove) terminated audio elements in case they haven't been removed already
 * objects: don't crash the "play frequency" block when passing a non-numerical input
 
-### 2023-10-05
+### 2023-01-05
 * threads: COMBINing an empty list with JOIN results in an empty text rather than in the number zero
 * gui: enable JavaScript extensions when running Snap! locally without a webserver (location.protocoll "file:")
 * Catalan translation update, thanks, Joan!

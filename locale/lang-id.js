@@ -568,8 +568,8 @@ SnapTranslator.dict.id = {
         'halo',
     'world':
         'dunia',
-    'letter %idx of %s':
-        'huruf %idx dari %s',
+    'letter %ix of %s':
+        'huruf %ix dari %s',
     'length of %s':
         'panjang dari %s',
     'unicode of %s':

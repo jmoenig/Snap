@@ -80,17 +80,17 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-January-19';
+modules.gui = '2022-February-06';
 
 // Declarations
 
-var SnapVersion = '8.1.0';
+var SnapVersion = '8.1.5';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -224,7 +224,7 @@ IDE_Morph.prototype.setDefaultDesign();
 
 // IDE_Morph instance creation:
 
-function IDE_Morph(config = { autofill: true }) {
+function IDE_Morph(config = {}) {
     this.init(config);
 }
 
@@ -234,6 +234,7 @@ function IDE_Morph(config = { autofill: true }) {
     creating an instance. This is still very much under construction. Currently
     the following options are available:
 
+        noAutoFill      bool, do not let the IDE fill the whole World canvas
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
         design:         str, currently "flat" (bright) or "classic" (dark)
@@ -307,7 +308,7 @@ IDE_Morph.prototype.init = function (config) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = !!config.autofill;
+    this.isAutoFill = !config.noAutoFill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -764,6 +765,10 @@ IDE_Morph.prototype.applyConfigurations = function () {
                 this.applyPaneHidingConfigurations();
             }
         };
+
+    if (!Object.keys(cnf).length) {
+        return;
+    }
 
     // design
     if (cnf.design) {
@@ -3860,6 +3865,30 @@ IDE_Morph.prototype.newName = function (name, elements) {
     return newName;
 };
 
+// IDE_Morph identifying sprites by name
+
+IDE_Morph.prototype.spriteNamed = function (name) {
+    // answer the SnapObject (sprite or stage) indicated by its name
+    // or the currently edited object if no name is given or none is found
+    var match;
+    if (name === this.stage.name) {
+        return this.stage;
+    }
+    match = detect(
+        this.sprites,
+        sprite => sprite.name === name
+    );
+    if (!match) {
+        // check if the sprite in question is currently being
+        // dragged around
+        match = detect(
+            this.world().hand.children,
+            morph => morph instanceof SpriteMorph && morph.name === name
+        );
+    }
+    return match || this.currentSprite;
+};
+
 // IDE_Morph deleting scripts
 
 IDE_Morph.prototype.removeBlock = function (aBlock, justThis) {
@@ -4290,18 +4319,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         CamSnapshotDialogMorph.prototype.enableCamera,
         'uncheck to disable\ncamera support',
         'check to enable\ncamera support',
-        true
-    );
-    addPreference(
-        'Use CPU for graphics',
-        () => window.keepCanvasInCPU = !window.keepCanvasInCPU,
-        window.keepCanvasInCPU,
-        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
-            'using the "willReadFrequently" attribute at the expense\n' +
-            'of slowing down rendering in some web browsers',
-        'EXPERIMENTAL! optimize Canvas2D readback operations\n' +
-            'using the "willReadFrequently" attribute at the expense\n' +
-            'of slowing down rendering in some web browsers',
         true
     );
     menu.addLine(); // everything visible below is persistent
@@ -5198,6 +5215,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'Sound primitives'
         + '\nJadga Hügle: Icons and countless other contributions'
         + '\nSimon Walters & Xavier Pi: MQTT extension'
+        + '\nVictoria Phelps: Reporter results tracing'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
@@ -5995,6 +6013,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this.serializer.load(str, this)
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
 };
 
@@ -6042,6 +6061,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             )
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
     this.isAddingScenes = setting;
     this.isAddingNextScene = false;
@@ -6083,6 +6103,14 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             this.currentSprite.customBlocks.push(def);
             this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        if (blocks.localData) {
+            this.currentSprite.variables.merge(blocks.localData);
+            this.flushBlocksCache('variables');
+        }
         this.flushPaletteCache();
         this.refreshPalette();
         this.showMessage(
@@ -6101,6 +6129,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
@@ -6126,6 +6155,7 @@ IDE_Morph.prototype.rawOpenSpritesString = function (str) {
     } else {
         this.deserializeSpritesString(str);
     }
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.deserializeSpritesString = function (str) {
@@ -6141,7 +6171,12 @@ IDE_Morph.prototype.deserializeSpritesString = function (str) {
             this.stage.globalBlocks.push(def);
             this.stage.replaceDoubleDefinitionsFor(def);
         });
-        // notice, there should not be any local blocks in this part of
+        // load global variables which the custom blocks rely on
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        // notice, there should not be any local blocks or datain this part of
         // the model instead we're expecting them inside each sprite
         this.flushPaletteCache();
         this.refreshPalette();
@@ -6202,6 +6237,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         'Imported Script.',
         2
     );
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.deserializeScriptString = function (str) {
@@ -6223,6 +6259,14 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
             this.currentSprite.customBlocks.push(def);
             this.currentSprite.replaceDoubleDefinitionsFor(def);
         });
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        if (blocks.localData) {
+            this.currentSprite.variables.merge(blocks.localData);
+            this.flushBlocksCache('variables');
+        }
         this.flushPaletteCache();
         this.refreshPalette();
         this.createCategories();
@@ -6325,6 +6369,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
         dlg.createLabel();
         dlg.popUp(this.world());
     }
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.openProjectName = function (name) {
@@ -6353,6 +6398,46 @@ IDE_Morph.prototype.openProject = function (project) {
         null, // data
         true // pause generic WHEN hat blocks
     );
+};
+
+IDE_Morph.prototype.autoLoadExtensions = function () {
+    // experimental - allow auto-loading extensions from urls specified
+    // in global variables whose names start with "__module__".
+    // Still very much under construction, also needs to be tweaked for
+    // asynch operation
+    var urls = [];
+    Object.keys(this.globalVariables.vars).forEach(vName => {
+        var val;
+        if (vName.startsWith('__module__')) {
+            val = this.globalVariables.getVar(vName);
+            if (isString(val)) {
+                urls.push(val);
+            }
+        }
+    });
+    urls.forEach(url => {
+        var scriptElement;
+        if (contains(SnapExtensions.scripts, url)) {
+            return;
+        }
+        if (Process.prototype.enableJS || SnapExtensions.urls.some(
+            any => url.indexOf(any) === 0)
+        ) {
+            scriptElement = document.createElement('script');
+            scriptElement.onload = () => {
+                SnapExtensions.scripts.push(url);
+            };
+            document.head.appendChild(scriptElement);
+            scriptElement.src = url;
+        /*
+        } else {
+            // throw new Error(
+                'unlisted extension url:\n"' + url + '"\n' +
+                'JavaScript extensions for Snap!\nare turned off'
+            );
+        */
+        }
+    });
 };
 
 IDE_Morph.prototype.switchToScene = function (
@@ -7859,13 +7944,21 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
 IDE_Morph.prototype.blocksLibraryXML = function (
     definitions,
     moreCategories,
-    asFile
+    asFile,
+    dataFrame, // optional: include global variable dependencies in libraries
+    localData // optional: include sprite-local variable dependencies
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
     var globals = definitions.filter(def => def.isGlobal),
         locals = definitions.filter(def => !def.isGlobal),
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        dtaStr = dataFrame && dataFrame.names().length ?
+            this.serializer.serialize(dataFrame, true)
+            : '',
+        ldtStr = localData && localData.names().length ?
+            this.serializer.serialize(localData, true)
+            : '',
         cats = moreCategories || [],
         appStr = ' app="' +
             this.serializer.app +
@@ -7879,6 +7972,8 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
+        (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
+        (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +
         '</blocks>';
 };
 

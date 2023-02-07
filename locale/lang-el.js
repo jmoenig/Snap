@@ -782,8 +782,8 @@ SnapTranslator.dict.el = {
         'γεια',
     'world':
         'κόσμος',
-    'letter %idx of %s':
-        'γράμμα %idx του %s',
+    'letter %ix of %s':
+        'γράμμα %ix του %s',
     'length of %s':
         'μήκος του %s',
     'unicode of %s':

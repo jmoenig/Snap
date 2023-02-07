@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-January-21';
+modules.threads = '2023-February-04';
 
 var ThreadManager;
 var Process;
@@ -1110,9 +1110,9 @@ Process.prototype.evaluateNextInput = function (element) {
 
 Process.prototype.evaluateNextInputSet = function (element) {
     // Optimization to use instead of evaluateNextInput(), bums out a few
-    // frames and function calls to save a some milliseconds.
+    // frames and function calls to save some milliseconds.
     // the idea behind this optimization is to keep evaluating the inputs
-    // while we know for sure that we aren't boing to yield anyway
+    // while we know for sure that we aren't going to yield anyway
     var args = element.inputs(),
         sel = this.context.expression.selector,
         outer = this.context.outerContext, // for tail call elimination
@@ -1989,10 +1989,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
-    } else if (isNaN(+this.inputOption(index))) {
-        return null;
     }
-    list.remove(idx);
+    list.forget(idx);
 };
 
 Process.prototype.doInsertInList = function (element, index, list) {
@@ -2005,11 +2003,17 @@ Process.prototype.doInsertInList = function (element, index, list) {
     if (index === '') {
         return null;
     }
-    if (this.inputOption(index) === 'any') {
-        idx = this.reportBasicRandom(1, list.length() + 1);
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            idx = this.reportBasicRandom(1, list.length() + 1);
+        } else if (index[0] === 'last') {
+            idx = list.length() + 1;
+        } else {
+            idx = list.length() + 1;
+        }
     }
-    if (this.inputOption(index) === 'last') {
-        idx = list.length() + 1;
+    if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
+        return list.bind(idx, element);
     }
     list.add(element, idx);
 };
@@ -2024,13 +2028,16 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     if (index === '') {
         return null;
     }
-    if (this.inputOption(index) === 'any') {
-        idx = this.reportBasicRandom(1, list.length());
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            idx = this.reportBasicRandom(1, list.length() + 1);
+        } else if (index[0] === 'last') {
+            idx = list.length();
+        } else {
+            idx = 0;
+        }
     }
-    if (this.inputOption(index) === 'last') {
-        idx = list.length();
-    }
-    list.put(element, idx);
+    list.bind(idx, element);
 };
 
 Process.prototype.shadowListAttribute = function (list) {
@@ -2057,16 +2064,19 @@ Process.prototype.reportListItem = function (index, list) {
     if (index === '') {
         return '';
     }
-    if (this.inputOption(index) === 'any') {
-        return list.at(this.reportBasicRandom(1, list.length()));
-    }
-    if (this.inputOption(index) === 'last') {
-        return list.at(list.length());
+    if (index instanceof Array) {
+        if (index[0] === 'any') {
+            return list.at(this.reportBasicRandom(1, list.length()));
+        }
+        if (index[0] === 'last') {
+            return list.at(list.length());
+        }
+        return '';
     }
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
     }
-    return list.at(index);
+    return list.lookup(index);
 };
 
 // Process - tabular list ops
@@ -6734,6 +6744,35 @@ Process.prototype.returnValueToParentContext = function (value) {
                 this.context.parentContext || this.homeContext
             : this.homeContext;
         target.addInput(value);
+
+        // if the script has been clicked on by the user in visible stepping
+        // mode show the result of evaluating a reporter in a
+        // speech balloon. Thanks, Vic!
+        if (this.enableSingleStepping &&
+            this.isClicked &&
+            this.context.expression instanceof ReporterBlockMorph
+        ) {
+            let anchor = this.context.expression;
+            if (!anchor.world()) {
+                // find a place to display the result of custon reporters
+                anchor = this.topBlock;
+            }
+            if (value instanceof List) {
+                anchor.showBubble(
+                    value.isTable() ?
+                        new TableFrameMorph(new TableMorph(value, 10))
+                        : new ListWatcherMorph(value),
+                    this.exportResult,
+                    this.receiver
+                );
+            } else {
+                anchor.showBubble(
+                    value,
+                    this.exportResult,
+                    this.receiver
+                );
+            }
+        }
     }
 };
 
@@ -8227,9 +8266,10 @@ VariableFrame.prototype.fork = function (names = []) {
             if (v.isTransient) {
                 val = '';
             } else {
-                typ = Process.prototype.reportTypeOf(val);
+                typ = Process.prototype.reportTypeOf(v.value);
                 if (['text', 'number', 'Boolean'].includes(typ) ||
-                    (v instanceof List && (v.canBeCSV() || v.canBeJSON()))
+                    (v.value instanceof List &&
+                        (v.value.canBeCSV() || v.value.canBeJSON()))
                 ) {
                     val = v.value;
                 } else {
@@ -8742,7 +8782,7 @@ JSCompiler.prototype.compileInput = function (inp) {
             return 'new List([' + this.compileInputs(value) + '])';
         default:
             if (value instanceof Array) {
-                return '"' + this.escape(value[0]) + '"';
+                return '["' + this.escape(value[0]) + '"]';
             }
             throw new Error(
                 'compiling does not yet support\n' +

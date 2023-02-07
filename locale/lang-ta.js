@@ -553,8 +553,8 @@ SnapTranslator.dict.ta = {
         'வணக்கம்',
     'world':
         'உலகம்',
-    'letter %idx of %s':
-        '%idx வது எழுத்து , %s ன்',
+    'letter %ix of %s':
+        '%ix வது எழுத்து , %s ன்',
     'length of %s':
         '%s ன் நீளம்',
     'unicode of %s':

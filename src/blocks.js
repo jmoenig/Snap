@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-January-18';
+modules.blocks = '2023-February-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -310,7 +310,7 @@ SyntaxElementMorph.prototype.labelParts = {
         Input slots
 
         type: 'input'
-        tags: 'numeric read-only unevaluated landscape static'
+        tags: 'numeric alphanum read-only unevaluated landscape static'
         menu: dictionary or selector
         react: selector
         value: string, number or Array for localized strings / constants
@@ -456,7 +456,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%ida': {
         type: 'input',
-        tags: 'numeric',
+        tags: 'alphanum',
         menu: {
             '1' : 1,
             last : ['last'],
@@ -465,6 +465,15 @@ SyntaxElementMorph.prototype.labelParts = {
         }
     },
     '%idx': {
+        type: 'input',
+        tags: 'alphanum',
+        menu: {
+            '1' : 1,
+            last : ['last'],
+            any : ['any']
+        }
+    },
+    '%ix': {
         type: 'input',
         tags: 'numeric',
         menu: {
@@ -1764,7 +1773,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // apply the tags
         // ---------------
-        // input: numeric, read-only, unevaluated, landscape, static
+        // input: numeric, alphanum, read-only, unevaluated, landscape, static
         // text entry: monospace
         // boolean: unevaluated, static
         // symbol: static, fading, protected
@@ -1784,6 +1793,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     switch (tag) {
                     case 'numeric':
                         part.isNumeric = true;
+                        break;
+                    case 'alphanum':
+                        part.isNumeric = true;
+                        part.isAlphanumeric = true;
                         break;
                     case 'read-only':
                         part.isReadOnly = true;
@@ -4120,7 +4133,11 @@ BlockMorph.prototype.toXMLString = function (receiver) {
     var ide = this.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
         isReporter = this instanceof ReporterBlockMorph,
-        dependencies;
+        varNames = [],
+        dependencies,
+        localVarNames,
+        globalData,
+        localData;
 
     if (!ide && blockEditor) {
         ide = blockEditor.target.parentThatIsA(IDE_Morph);
@@ -4132,12 +4149,34 @@ BlockMorph.prototype.toXMLString = function (receiver) {
     // collect custom block definitions referenced in this script:
     dependencies = this.dependencies(false, receiver); // both global and local
 
+    // collect variables referenced by included custom block definitions:
+    dependencies.forEach(def =>
+        def.dataDependencies().forEach(name => {
+            if (!varNames.includes(name)) {
+                varNames.push(name);
+            }
+        })
+    );
+    localData = (receiver || ide.currentSprite).variables.fork(varNames);
+    localVarNames = localData.names(true); // include hidden
+    varNames = varNames.filter(name => !localVarNames.includes(name));
+    globalData = ide.globalVariables.fork(varNames);
+
     return '<script app="' +
         ide.serializer.app +
         '" version="' +
         ide.serializer.version +
         '">' +
-        (dependencies.length ? ide.blocksLibraryXML(dependencies) : '') +
+        (dependencies.length ?
+            ide.blocksLibraryXML(
+                dependencies,
+                null, // more categories
+                false, // as file
+                globalData,
+                localData
+            )
+            : ''
+        ) +
         (isReporter ? '<script>' : '') +
         ide.serializer.serialize(this) +
         (isReporter ? '</script>' : '') +
@@ -5389,7 +5428,7 @@ BlockMorph.prototype.activeProcess = function () {
 BlockMorph.prototype.mouseEnterBounds = function (dragged) {
     var rcvr, vName, dec;
 
-    if (dragged) {return; }
+    if (dragged && !MorphicPreferences.isTouchDevice) {return; }
 
     // slightly increase my opacity if block-fading is active
     if (this.alpha < 1) {
@@ -5451,7 +5490,9 @@ BlockMorph.prototype.mouseLeaveBounds = function (dragged) {
         this.rerender();
     }
 
-    if (Process.prototype.enableSingleStepping && !dragged) {
+    if (Process.prototype.enableSingleStepping &&
+            (!dragged || MorphicPreferences.isTouchDevice)
+    ) {
         // highlight the lexical scope of a variable declaration when visible
         // stepping is turned on in the IDE.
         if (this.selector === 'reportGetVar' &&
@@ -5698,7 +5739,7 @@ BlockMorph.prototype.fullScopeFor = function (varName, afterThis) {
         return scope;
     }
 
-    return select(this.unwind().slice(afterThis ? 1 : 0)).flat();
+    return select(this.unwind().slice(afterThis ? 1 : 0)).flat(Infinity);
 };
 
 // BlockMorph op-sequence analysis
@@ -10299,6 +10340,7 @@ InputSlotMorph.prototype.init = function (
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
+    this.isAlphanumeric = false; // temporary override for allowing text
     this.isReadOnly = isReadOnly || false;
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
     this.constant = null;
@@ -10364,11 +10406,14 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta instanceof BlockMorph) {
     	this.selectedBlock = dta;
       	dta = ''; // make sure the contents text emptied
-    } else { // assume dta is a localizable choice if it's a key in my choices
+    } else {
         cnts.isItalic = false;
+        /*
+        // assume dta is a localizable choice if it's a key in my choices
         if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
             return this.setContents(this.choices[dta]);
         }
+        */
     }
     cnts.text = dta;
     if (isNil(dta)) {
@@ -11226,7 +11271,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         arrow = this.arrow(),
         tp = this.topBlock();
 
-    contents.isNumeric = this.isNumeric;
+    contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
     contents.isEditable = (!this.isReadOnly);
     if (this.isReadOnly) {
         contents.disableSelecting();
@@ -12120,20 +12165,22 @@ BooleanSlotMorph.prototype.toggleValue = function () {
         return this.toggleValue.call(target);
     }
     this.value = this.nextValue();
-    sprite = block.scriptTarget();
-    if (!block.isTemplate) {
-        sprite.recordUserEdit(
-            'scripts',
-            'boolean slot',
-            'toggle',
-            block.abstractBlockSpec(),
-            this.value
-        );
-    }
-    ide = sprite.parentThatIsA(IDE_Morph);
-    if (ide && !ide.isAnimating) {
-        this.rerender();
-        return;
+    if (block) {
+        sprite = block.scriptTarget();
+        if (!block.isTemplate) {
+            sprite.recordUserEdit(
+                'scripts',
+                'boolean slot',
+                'toggle',
+                block.abstractBlockSpec(),
+                this.value
+            );
+        }
+        ide = sprite.parentThatIsA(IDE_Morph);
+        if (ide && !ide.isAnimating) {
+            this.rerender();
+            return;
+        }
     }
     this.progress = 3;
     this.rerender();

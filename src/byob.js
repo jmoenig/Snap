@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-January-21';
+modules.byob = '2023-February-01';
 
 // Declarations
 
@@ -4476,8 +4476,10 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks, target) {
     // additional properties:
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
-    this.data = null; // a forked global VariableFrame with data dependencies
-    this.varNames = null;
+    this.globalData = null; // forked global var frame with data dependencies
+    this.localData = null; // forked local var frame with data dependencies
+    this.globalVarNames = null;
+    this.localVarNames = null;
     this.handle = null;
 
     // initialize inherited properties:
@@ -4511,11 +4513,14 @@ BlockExportDialogMorph.prototype.collectDataDependencies = function () {
         })
     );
 
-    // fork the global variables frame
-    this.data = this.target.stage.globalVariables().fork(names);
+    // collect sprite-local data dependencies
+    this.localData = this.target.currentSprite.variables.fork(names);
+    this.localVarNames = this.localData.names(true).sort(); // include hidden
 
-    // collect the forked frame's variable names
-    this.varNames = this.data.names(true).sort(); // include hidden variables
+    // collect remaining global data dependencies
+    names = names.filter(name => !this.localVarNames.includes(name));
+    this.globalData = this.target.stage.globalVariables().fork(names);
+    this.globalVarNames = this.globalData.names(true).sort(); // include hidden
 };
 
 BlockExportDialogMorph.prototype.buildContents = function () {
@@ -4538,8 +4543,8 @@ BlockExportDialogMorph.prototype.buildContents = function () {
     x = palette.left() + padding;
     y = palette.top() + padding;
 
-    // - create selectors for variables
-    this.varNames.forEach(vName => {
+    // - create selectors for global variables
+    this.globalVarNames.forEach(vName => {
         block = SpriteMorph.prototype.variableBlock(vName);
         block.isDraggable = false;
         block.isTemplate = true;
@@ -4548,15 +4553,47 @@ BlockExportDialogMorph.prototype.buildContents = function () {
             'checkbox',
             this,
             () => {
-                var idx = this.varNames.indexOf(vName);
+                var idx = this.globalVarNames.indexOf(vName);
                 if (idx > -1) {
-                    this.varNames.splice(idx, 1);
+                    this.globalVarNames.splice(idx, 1);
                 } else {
-                    this.varNames.push(vName);
+                    this.globalVarNames.push(vName);
                 }
             },
             null,
-            () => contains(this.varNames, vName),
+            () => contains(this.globalVarNames, vName),
+            null,
+            null,
+            this.target ? block : block.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+    y += padding;
+
+    // - create selectors for local variables
+    this.localVarNames.forEach(vName => {
+        block = SpriteMorph.prototype.variableBlock(vName, true); // isLocal
+        block.isDraggable = false;
+        block.isTemplate = true;
+        block.isToggleLabel = true; // mark as unrefreshable label
+        checkBox = new ToggleMorph(
+            'checkbox',
+            this,
+            () => {
+                var idx = this.localVarNames.indexOf(vName);
+                if (idx > -1) {
+                    this.localVarNames.splice(idx, 1);
+                } else {
+                    this.localVarNames.push(vName);
+                }
+            },
+            null,
+            () => contains(this.localVarNames, vName),
             null,
             null,
             this.target ? block : block.fullImage()
@@ -4690,7 +4727,13 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 
     if (this.blocks.length) {
         ide.saveXMLAs(
-            ide.blocksLibraryXML(this.blocks, null, true), // as file
+            ide.blocksLibraryXML(
+                this.blocks,
+                null,
+                true, // as file
+                this.globalData.fork(this.globalVarNames),
+                this.localData.fork(this.localVarNames)
+            ),
             (ide.getProjectName() || localize('untitled')) +
                 ' ' +
                 localize('blocks'
@@ -4812,7 +4855,7 @@ BlockImportDialogMorph.prototype.fixLayout
 // BlockRemovalDialogMorph inherits from DialogBoxMorph
 // and pseudo-inherits from BlockExportDialogMorph:
 
-BlockRemovalDialogMorph.prototype = new DialogBoxMorph(); // +++
+BlockRemovalDialogMorph.prototype = new DialogBoxMorph();
 BlockRemovalDialogMorph.prototype.constructor = BlockImportDialogMorph;
 BlockRemovalDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -4849,8 +4892,74 @@ BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
     this.buildContents();
 };
 
-BlockRemovalDialogMorph.prototype.buildContents
-    = BlockExportDialogMorph.prototype.buildContents;
+BlockRemovalDialogMorph.prototype.buildContents = function () {
+    var palette, x, y, block, checkBox, lastCat,
+        padding = 4;
+
+    // create plaette
+    palette = new ScrollFrameMorph(
+        null,
+        null,
+        SpriteMorph.prototype.sliderColor
+    );
+    palette.color = SpriteMorph.prototype.paletteColor;
+    palette.padding = padding;
+    palette.isDraggable = false;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = false;
+
+    // populate palette
+    x = palette.left() + padding;
+    y = palette.top() + padding;
+
+    // - create selectors for blocks
+    SpriteMorph.prototype.allCategories().forEach(category => {
+        this.blocks.forEach(definition => {
+            if (definition.category === category) {
+                if (lastCat && (category !== lastCat)) {
+                    y += padding;
+                }
+                lastCat = category;
+                block = definition.templateInstance();
+                block.isToggleLabel = true; // mark as unrefreshable label
+                checkBox = new ToggleMorph(
+                    'checkbox',
+                    this,
+                    () => {
+                        var idx = this.blocks.indexOf(definition);
+                        if (idx > -1) {
+                            this.blocks.splice(idx, 1);
+                        } else {
+                            this.blocks.push(definition);
+                        }
+                        this.collectDependencies();
+                    },
+                    null,
+                    () => contains(this.blocks, definition),
+                    null,
+                    null,
+                    this.target ? block : block.fullImage()
+                );
+                checkBox.setPosition(new Point(
+                    x,
+                    y + (checkBox.top() - checkBox.toggleElement.top())
+                ));
+                palette.addContents(checkBox);
+                y += checkBox.fullBounds().height() + padding;
+            }
+        });
+    });
+
+    palette.scrollX(padding);
+    palette.scrollY(padding);
+    this.addBody(palette);
+
+    this.addButton('ok', 'OK');
+    this.addButton('cancel', 'Cancel');
+
+    this.setExtent(new Point(220, 300));
+    this.fixLayout();
+};
 
 BlockRemovalDialogMorph.prototype.popUp
     = BlockExportDialogMorph.prototype.popUp;
@@ -4868,8 +4977,18 @@ BlockRemovalDialogMorph.prototype.selectNone
 
 // BlockRemovelDialogMorph dependency management
 
-BlockRemovalDialogMorph.prototype.collectDependencies =
-    BlockExportDialogMorph.prototype.collectDependencies;
+BlockRemovalDialogMorph.prototype.collectDependencies = function () {
+    // add dependencies to the blocks:
+    this.dependencies().forEach(def => {
+        if (!contains(this.blocks, def)) {
+            this.blocks.push(def);
+        }
+    });
+    // refresh the checkmarks
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
 
 BlockRemovalDialogMorph.prototype.dependencies =
     BlockExportDialogMorph.prototype.dependencies;

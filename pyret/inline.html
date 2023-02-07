@@ -55,24 +55,23 @@
                 ide.openIn(world);
                 ide.addMessageListener('update', txt => code.value = txt);
                 save.addEventListener('click', () => ide.saveXMLAs(
-                    ide.currentSprite.scriptsOnlyXML(), 'snap-scripts'));
+                    ide.getSpriteScriptsXML(), 'snap-scripts'));
                 clear.addEventListener('click', () =>
-                    ide.currentSprite.synchScriptsFrom('<>'));
+                    ide.loadSpriteScriptsXML('<>'));
                 load.addEventListener("change", () => {
                     var frd = new FileReader();
                     if (!load.files[0]) {return; }
                     frd.onloadend = (e) =>
-                        ide.currentSprite.synchScriptsFrom(e.target.result);
+                        ide.loadSpriteScriptsXML(e.target.result);
                     frd.readAsText(load.files[0]);
                 });
                 radio.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
                 code.onmouseup = function () {
-                    var scripts = ide.currentSprite.scripts,
-                        ln = n => this.value.substr(0, n).split('\n').length;
-                    scripts.unflash();
+                    var ln = n => this.value.substr(0, n).split('\n').length;
+                    ide.unflashSpriteScripts();
                     if (this.selectionStart < this.selectionEnd) {
-                        scripts.flashLOC(
+                        ide.flashSpriteScripts(
                             ln(this.selectionStart),
                             ln(this.selectionEnd)
                         );

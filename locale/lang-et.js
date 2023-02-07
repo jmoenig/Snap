@@ -390,8 +390,8 @@ SnapTranslator.dict.et = {
         'Tere',
     'world':
         'maailm',
-    'letter %idx of %s':
-        'sümbol nr %idx tekstis %s',
+    'letter %ix of %s':
+        'sümbol nr %ix tekstis %s',
     'length of %s':
         'teksti %s pikkus',
     'unicode of %s':

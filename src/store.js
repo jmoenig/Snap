@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-January-09';
+modules.store = '2023-February-03';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -360,6 +360,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
+        hidden,
         nameID;
 
     this.scene = scene;
@@ -474,29 +475,33 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
 
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
-        model.hiddenPrimitives.contents.split(' ').forEach(
-            sel => {
-                var selector, migration;
-                if (sel) {
-                    migration = SpriteMorph.prototype.blockMigrations[sel];
-                    selector = migration ? migration.selector : sel;
-                    scene.hiddenPrimitives[selector] = true;
+        hidden = model.hiddenPrimitives.contents.split(' ').filter(word =>
+            word.length > 0);
+        if (hidden.length) {
+            hidden.forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
                 }
-            }
-        );
+            );
 
-        // hide new primitives that have been added to the palette
-        // since the project has been last saved
-        SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
-            sel => {
-                var selector, migration;
-                if (sel) {
-                    migration = SpriteMorph.prototype.blockMigrations[sel];
-                    selector = migration ? migration.selector : sel;
-                    scene.hiddenPrimitives[selector] = true;
+            // hide new primitives that have been added to the palette
+            // since the project has been last saved
+            SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 
     model.codeHeaders = model.scene.childNamed('headers');
@@ -694,7 +699,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
-    var stage;
+    var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
@@ -713,6 +718,16 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    varModel = model.childNamed('variables');
+    if (varModel) {
+        varFrame = new VariableFrame();
+        this.loadVariables(varFrame, varModel);
+    }
+    varModel = model.childNamed('local-variables');
+    if (varModel) {
+        localVarFrame = new VariableFrame();
+        this.loadVariables(localVarFrame, varModel);
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
@@ -720,7 +735,9 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     this.mediaDict = {};
     return {
         global : stage.globalBlocks,
-        local : stage.customBlocks
+        local : stage.customBlocks,
+        data : varFrame,
+        localData : localVarFrame
     };
 };
 
@@ -1402,7 +1419,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             // checking whether "input" is nil should not
             // be necessary, but apparently is after retina support
             // was added.
-            input.setContents(this.loadValue(model));
+            input.setContents(val);
         }
     }
 };

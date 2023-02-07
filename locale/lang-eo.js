@@ -571,8 +571,8 @@ SnapTranslator.dict.eo = {
         'saluton',
     'world':
         'mondo',
-    'letter %idx of %s':
-        'litero %idx el %s',
+    'letter %ix of %s':
+        'litero %ix el %s',
     'length of %s':
         'longeco de %s',
     'unicode of %s':

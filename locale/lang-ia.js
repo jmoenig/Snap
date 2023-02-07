@@ -576,8 +576,8 @@ SnapTranslator.dict.ia = {
         'Hallo',
     'world':
         'Mundo',
-    'letter %idx of %s':
-        'character %idx de %s',
+    'letter %ix of %s':
+        'character %ix de %s',
     'length of %s':
         'longor de %s',
     'unicode of %s':

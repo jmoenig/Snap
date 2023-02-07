@@ -595,8 +595,8 @@ SnapTranslator.dict.sv = {
         'hej',
     'world':
         'v\u00E4rlden',
-    'letter %idx of %s':
-        'bokstav %idx av %s',
+    'letter %ix of %s':
+        'bokstav %ix av %s',
     'length of %s':
         'l\u00E4ngden av %s',
     'unicode of %s':

@@ -740,8 +740,8 @@ SnapTranslator.dict.no = {
         'hallo',
     'world':
         'verden',
-    'letter %idx of %s':
-        'tegn %idx av %s',
+    'letter %ix of %s':
+        'tegn %ix av %s',
     'length of %s':
         'lengde av %s',
     'unicode of %s':

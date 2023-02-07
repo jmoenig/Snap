@@ -554,8 +554,8 @@ SnapTranslator.dict.te = {
         'హలో',
     'world':
         'ప్రపంచం',
-    'letter %idx of %s':
-        'Zeichen %idx von %s',
+    'letter %ix of %s':
+        'Zeichen %ix von %s',
     'length of %s':
         'L\u00e4nge von %s',
     'unicode of %s':
