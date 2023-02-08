@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, February 03, 2023
+Jens Mönig, Bernat Romagosa, February 08, 2023
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -111,6 +111,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noAutoFill |bool   |do not let the IDE fill the whole World canvas|
 |path: 		|str 	|path to additional resources (translations)|
 |load: 		|str	|microworld file name (xml)|
+|onload:	|callback	|called when the microworld is loaded|
 |design:	|str	|currently `"flat"` (bright) or `"classic"` (dark)|
 |border:	|num	|pixels surrounding the IDE, default is none (zero)|
 |lang:		|str	|translation to be used, e.g. `"de"` for German|
