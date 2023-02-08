@@ -32,6 +32,7 @@
                 var ide = new IDE_Morph({
                         path: '../',
                         load: 'transpile.xml',
+                        onload: () => console.log('"' + ide.scene.name + '" is ready'),
                         design: "flat",
                         border: 1,
                         hideControls: true,

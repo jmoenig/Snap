@@ -237,6 +237,7 @@ function IDE_Morph(config = {}) {
         noAutoFill      bool, do not let the IDE fill the whole World canvas
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
+        onload:         callback, called when the microworld is loaded
         design:         str, currently "flat" (bright) or "classic" (dark)
         border:         num, pixels surrounding the IDE, default is none (zero)
         lang:           str, translation to be used, e.g. "de" for German
@@ -756,6 +757,9 @@ IDE_Morph.prototype.applyConfigurations = function () {
                         }
                         this.hasChangedMedia = true;
                         this.applyPaneHidingConfigurations();
+                        if (cnf.onload) {
+                            cnf.onload();
+                        }
                     }
                 );
             } else {
