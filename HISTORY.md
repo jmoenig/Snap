@@ -5,12 +5,13 @@
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
+    * updated API documentation for onload() configuration callback option
 * **Translation Updates:**
 
 ### 2023-02-08
 * new dev version
 * gui: added onload() callback to configuration dictionary
-* updated API documentation with onload() configuration callback option
+* updated API documentation for onload() configuration callback option
 
 ## 8.1.5:
 * **Notable Fixes:**
