@@ -4,6 +4,7 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
 * **Documentation Updates:**
     * updated API documentation for onload() configuration callback option
 * **Translation Updates:**
@@ -12,6 +13,7 @@
 * new dev version
 * gui: added onload() callback to configuration dictionary
 * updated API documentation for onload() configuration callback option
+* threads: fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
 
 ## 8.1.5:
 * **Notable Fixes:**
