@@ -529,6 +529,10 @@ NetsBloxMorph.prototype.exportSingleRoleXml = function () {
 
 NetsBloxMorph.prototype.getProjectXML = async function () {
     const projectData = await this.cloud.getProjectData();
+    return this.getXMLFromProjectData(projectData);
+};
+
+NetsBloxMorph.prototype.getXMLFromProjectData = function (projectData) {
     const roles = Object.values(projectData.roles)
         .map(role => this.getSerializedRole(role));
 

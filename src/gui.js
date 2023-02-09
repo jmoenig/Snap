@@ -540,9 +540,10 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         }
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
             const msg = myself.showMessage('Opening project...');
-            await myself.droppedText(projectData);  // TODO: TEST THIS
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            await myself.droppedText(xml);
             myself.hasChangedMedia = true;
             myself.shield.destroy();
             myself.shield = null;
@@ -558,14 +559,13 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         this.parent.add(this.shield);
         myself.showMessage('Fetching project\nfrom the cloud...');
 
-        // make sure to lowercase the username
         dict = this.cloud.parseDict(loc.hash.substr(7));
-        dict.Username = dict.Username.toLowerCase();
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
             const msg = this.showMessage(localize('Opening project...'));
-            await SnapActions.openProject(projectData);
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            await SnapActions.openProject(xml);
             this.hasChangedMedia = true;
             this.shield.destroy();
             this.shield = null;
@@ -582,8 +582,9 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         dict.Username = dict.Username.toLowerCase();
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
-            const blob = new Blob([projectData], {type: 'text/xml'});
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            const blob = new Blob([xml], {type: 'text/xml'});
             const url = URL.createObjectURL(blob);
 
             // Create temporary link for download
@@ -647,7 +648,7 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
         const msg = myself.showMessage('Opening ' + name + ' example...');
         try {
-            const metadata = await this.cloud.getProjectByName(this.cloud.username, dict.ProjectName);
+            const metadata = await this.cloud.getProjectMetadataByName(this.cloud.username, dict.ProjectName);
             const source = new CloudProjectsSource(this);
             await source.open(metadata);
             applyFlags(dict);
@@ -3274,22 +3275,19 @@ IDE_Morph.prototype.cloudMenu = function () {
             () => {
                 this.prompt('Author name…', usr => {
                     this.prompt('Project name...', async prj => {
-                        var id = 'Username=' +
-                            encodeURIComponent(usr.toLowerCase()) +
-                            '&ProjectName=' +
-                            encodeURIComponent(prj);
                         this.showMessage(
                             'Fetching project\nfrom the cloud...'
                         );
                         try {
-                            const projectData = await this.cloud.getPublicProject(id);
+                            const msg = this.showMessage('Opening project...');
+                            const projectData = await this.cloud.getProjectByName(usr, prj);
+                            const xml = this.getXMLFromProjectData(projectData);
                             if (!Process.prototype.isCatchingErrors) {
                                 window.open(
-                                    'data:text/xml,' + projectData
+                                    'data:text/xml,' + xml
                                 );
                             }
-                            const msg = this.showMessage('Opening project...');
-                            await SnapActions.openProject(projectData);
+                            await this.droppedText(xml);
                             msg.destroy();
                         } catch (err) {
                             this.cloudError()(err.message);
