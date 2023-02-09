@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-08';
+modules.gui = '2022-February-09';
 
 // Declarations
 
@@ -2678,18 +2678,24 @@ IDE_Morph.prototype.setExtent = function (point) {
     }
     ext = point.max(minExt);
 
-    // adjust stage ratio if necessary
-    if (!cnf.noSprites) {
-        maxWidth = ext.x -
-            (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
-        minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
-        maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
-        minRatio = minWidth / this.stage.dimensions.x;
-        maxRatio = Math.min(
-            (maxWidth / this.stage.dimensions.x),
-            (maxHeight / this.stage.dimensions.y)
-        );
-        this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
+    if (!this.isAppMode) {
+        // in edit mode adjust stage ratio if necessary
+        // (in presentation mode this is already handled separately)
+        if (!cnf.noSprites) {
+            maxWidth = ext.x -
+                (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
+            minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
+            maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
+            minRatio = minWidth / this.stage.dimensions.x;
+            maxRatio = Math.min(
+                (maxWidth / this.stage.dimensions.x),
+                (maxHeight / this.stage.dimensions.y)
+            );
+            this.stageRatio = Math.min(
+                maxRatio,
+                Math.max(minRatio,this.stageRatio)
+            );
+        }
     }
 
     // apply

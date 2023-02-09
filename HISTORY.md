@@ -5,9 +5,13 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
+    * fixed messed up stage layout when switching back from presentation to edit mode on small displays, thanks for the report, Eckart!
 * **Documentation Updates:**
     * updated API documentation for onload() configuration callback option
 * **Translation Updates:**
+
+### 2023-02-09
+* gui: fixed messed up stage layout when switching back from presentation to edit mode on small displays, thanks for the report, Eckart!
 
 ### 2023-02-08
 * new dev version
