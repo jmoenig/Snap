@@ -4,15 +4,20 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.1.5:
+* **Notable Fixes:**
     * fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
     * fixed messed up stage layout when switching back from presentation to edit mode on small displays, thanks for the report, Eckart!
     * fixed scaling down large stage sizes in presentation mode on small screens
 * **Documentation Updates:**
     * updated API documentation for onload() configuration callback option
-* **Translation Updates:**
 
 ### 2023-02-10
 * gui: fixed scaling down large stage sizes in presentation mode on small screens
+* gui: prepared v8.1.6 patch
 
 ### 2023-02-09
 * gui: fixed messed up stage layout when switching back from presentation to edit mode on small displays, thanks for the report, Eckart!
@@ -28,24 +33,24 @@
     * fixed a scope highlighting bug
 
 ### 2023-02-06
-    * blocks: fixed a scope highlighting bug
-    * gui: prepared v8.1.5 patch
+* blocks: fixed a scope highlighting bug
+* gui: prepared v8.1.5 patch
 
 ## 8.1.4:
 * **Notable Fixes:**
     * blocks: fixed setting a default value for Boolean input slots in custom blocks
 
 ### 2023-02-05
-    * blocks: fixed setting a default value for Boolean input slots in custom blocks
-    * gui: prepared v8.1.4 patch
+* blocks: fixed setting a default value for Boolean input slots in custom blocks
+* gui: prepared v8.1.4 patch
 
 ## 8.1.3:
 * **Notable Fixes:**
     * fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
 
 ### 2023-02-04
-    * threads: fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
-    * gui: prepared v8.1.3 patch
+* threads: fixed jit-compiling dropdown choices (e.g. "item /last/ of list")
+* gui: prepared v8.1.3 patch
 
 ## 8.1.2:
 * **Notable Fixes:**
