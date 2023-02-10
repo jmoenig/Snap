@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-09';
+modules.gui = '2022-February-10';
 
 // Declarations
 
@@ -1373,6 +1373,7 @@ IDE_Morph.prototype.createControlBar = function () {
                     (myself.isSmallStage ? myself.stageRatio : 1) -
                     (myself.config.border || 0)
             );
+            x = Math.max(x, this.left());
         }
         [stageSizeButton, appModeButton].forEach(button => {
                 x += padding;
@@ -2658,12 +2659,9 @@ IDE_Morph.prototype.setExtent = function (point) {
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
-        if (this.isEmbedMode) {
-            minExt = new Point(100, 100);
-        } else {
-            minExt = this.stage.dimensions.add(
-                this.controlBar.height() + 10
-            );
+        minExt = new Point(100, 100);
+        if (!this.isEmbedMode) {
+            minExt = minExt.add(this.controlBar.height() + 10);
         }
     } else if (cnf.noSprites) {
         minExt = new Point(100, 100);
