@@ -7,7 +7,7 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
-## 8.1.5:
+## 8.1.6:
 * **Notable Fixes:**
     * fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
     * fixed messed up stage layout when switching back from presentation to edit mode on small displays, thanks for the report, Eckart!
