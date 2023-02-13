@@ -7,6 +7,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-02-13
+* new dev version
+
 ## 8.1.6:
 * **Notable Fixes:**
     * fixed playing back a list of samples "until done", thanks for the report, @mjguzdial!
