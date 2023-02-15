@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-January-26';
+modules.locale = '2023-February-15';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -144,15 +144,13 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2020-07-09',
+        '2023-02-15',
 
     // symbols in dropdowns
     '__shout__go__':
         'green flag clicked',
 
     // rewordings in English avoiding having to adjust all other translations
-    'any':
-        'random',
     'length of %s':
         'length of text %s',
 
