@@ -505,10 +505,10 @@ SnapTranslator.dict.bg = {
         '%fun от %n',
     'pick random %n to %n':
         'произволно число между %n и %n',
-    '%b and %b':
-        '%b и %b',
-    '%b or %b':
-        '%b или %b',
+    'and':
+        'и',
+    'or':
+        'или',
     'not %b':
         'не %b',
     'true':
@@ -1118,7 +1118,7 @@ SnapTranslator.dict.bg = {
     // list indices
     'last':
         'последен',
-    'any':
+    'random':
         'някой',
     'now connected':
         'конектиран',

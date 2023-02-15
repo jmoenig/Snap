@@ -11,6 +11,7 @@
 
 ### 2023-02-16
 * adjusted Arabic translation for Boolean ops
+* adjusted Bulgarian translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2
