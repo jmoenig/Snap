@@ -13412,7 +13412,7 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     }
     newPart.parent = this;
     if (this.infix !== '') {
-        infix = this.labelPart(this.infix);
+        infix = this.labelPart(localize(this.infix));
         infix.parent = this;
         this.children.splice(idx, 0, newPart, infix);
     } else {
@@ -13476,7 +13476,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
 
 MultiArgMorph.prototype.addInfix = function () {
     var infix,
-        label = this.infix ? this.infix
+        label = this.infix ? localize(this.infix)
         : (this.labelText instanceof Array ?
             this.labelText[this.inputs().length]
             : '');
