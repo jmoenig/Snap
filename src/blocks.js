@@ -470,7 +470,7 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            any : ['any']
+            random : ['random']
         }
     },
     '%ix': {
@@ -479,7 +479,7 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            any : ['any']
+            random : ['random']
         }
     },
     '%la': {
@@ -549,7 +549,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only',
         menu: 'userEditMenu',
-        value: ['any']
+        value: ['anything']
     },
     '%col': { // collision detection
         type: 'input',
@@ -2714,7 +2714,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor = function () {
     %dir    - white roundish type-in slot with drop-down for directions
     %inst   - white roundish type-in slot with drop-down for instruments
     %ida    - white roundish type-in slot with drop-down for list indices
-    %idx    - white roundish type-in slot for indices incl. "any"
+    %idx    - white roundish type-in slot for indices incl. "random"
     %dim    - white roundish type-in slot for dimensinos incl. "current"
     %obj    - specially drawn slot for object reporters
     %rel    - chameleon colored rectangular drop-down for relation options
@@ -10409,6 +10409,10 @@ InputSlotMorph.prototype.setContents = function (data) {
 	}
 
     if (isConstant) {
+        // migrate old "any" constants
+        if (dta[0] === 'any') {
+            dta[0] = 'random';
+        }
         if (dta[0] === '__shout__go__') {
             this.symbol = this.labelPart('%greenflag');
             this.add(this.symbol);
@@ -11526,7 +11530,7 @@ InputSlotMorph.prototype.evaluate = function () {
     answer my contents, which can be a "wish", i.e. a block that refers to
     another sprite's local method, or a text string. If I am numerical convert
     that string to a number. If the conversion fails answer the string
-    (e.g. for special choices like 'any', 'all' or 'last') otherwise
+    (e.g. for special choices like 'random', 'all' or 'last') otherwise
     the numerical value.
 */
     var num, contents;
