@@ -9,6 +9,7 @@
 * **Translation Updates:**
 
 ### 2023-02-15
+* pushed dev version to 8.2
 * blocks, objects, threads: made AND variadic
 
 ### 2023-02-13
