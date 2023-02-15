@@ -14,6 +14,7 @@
 * blocks, objects, threads: made OR variadic
 * adjusted English translation: removed "any" -> "random" rewording
 * blocks: renamed all 'any' selectors in dropdowns into 'random'
+* help: adjusted help screen file names for AND / OR 
 
 ### 2023-02-13
 * new dev version
