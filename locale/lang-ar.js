@@ -547,10 +547,10 @@ SnapTranslator.dict.ar = {
         '%fun قيمة إحسب %n للعدد',
     'pick random %n to %n':
         ' %n و %n بين عشوائي عدد إختر',
-    '%b and %b':
-        '%b و %b',
-    '%b or %b':
-        '%b أو %b',
+    'and':
+        'و',
+    'or':
+        'أو',
     'not %b':
         'ليس %b',
     'true':
@@ -1319,7 +1319,7 @@ SnapTranslator.dict.ar = {
     // list indices
     'last':
         'الاخير',
-    'any':
+    'random':
         'أي موضع',
 		
 		

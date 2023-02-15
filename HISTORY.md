@@ -9,6 +9,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-02-16
+* adjusted Arabic translation for Boolean ops
+
 ### 2023-02-15
 * pushed dev version to 8.2
 * blocks, objects, threads: made AND variadic
