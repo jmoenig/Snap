@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-February-04';
+modules.objects = '2023-February-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1256,10 +1256,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%s \u2265 %s'
         },
-        reportAnd: {
+        reportVariadicAnd: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b and %b'
+            spec: '%all',
+            alias: '&'
         },
         reportOr: {
             type: 'predicate',
@@ -1760,6 +1761,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportMax: {
             selector: 'reportVariadicMax',
             variadic: true
+        },
+        reportAnd: {
+            selector: 'reportVariadicAnd',
+            variadic: true
         }
     };
 };
@@ -1925,8 +1930,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
-    reportAnd: ['reportOr'],
-    reportOr: ['reportAnd'],
+    reportAnd: ['reportOr'], // +++
+    reportOr: ['reportAnd'], // +++
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -2802,7 +2807,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportEquals'));
         blocks.push(block('reportGreaterThan'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
+        blocks.push(block('reportVariadicAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
@@ -3864,7 +3869,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '=': 'reportEquals',
             '<': 'reportLessThan',
             '>': 'reportGreaterThan',
-            '&': 'reportAnd',
+            '&': 'reportVariadicAnd',
             '|': 'reportOr',
             round: 'reportRound',
             not: 'reportNot'
@@ -9639,7 +9644,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportEquals'));
         blocks.push(block('reportGreaterThan'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
+        blocks.push(block('reportVariadicAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));

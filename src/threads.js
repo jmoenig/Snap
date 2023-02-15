@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-08';
+modules.threads = '2023-February-15';
 
 var ThreadManager;
 var Process;
@@ -788,7 +788,7 @@ Process.prototype.evaluateContext = function () {
     if (exp instanceof ArgLabelMorph) {
         return this.evaluateArgLabel(exp);
     }
-    if (exp instanceof ArgMorph || exp.bindingID) {
+    if (exp instanceof ArgMorph || (exp && exp.bindingID)) {
         return this.evaluateInput(exp);
     }
     if (exp instanceof BlockMorph) {
@@ -809,7 +809,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 
     // check for special forms
     if (selector === 'reportOr' ||
-            selector ===  'reportAnd' ||
+            selector ===  'reportVariadicAnd' ||
             selector === 'reportIfElse' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
@@ -901,28 +901,60 @@ Process.prototype.reportBasicOr = function (a, b) {
     return a || b;
 };
 
-Process.prototype.reportAnd = function (block) {
-    var inputs = this.context.inputs;
-
+Process.prototype.reportVariadicAnd = function (block) {
+    var inputs = this.context.inputs,
+        tests = block.inputs()[0],
+        inline = tests instanceof MultiArgMorph,
+        outer = this.context.outerContext,
+        acc = this.context.accumulator;
     if (inputs.length < 1) {
-        this.evaluateNextInput(block);
+        if (inline) {
+            acc = this.context.accumulator = {
+                slots: tests.inputs(),
+                len: tests.inputs().length,
+                pc: 1
+            };
+            this.pushContext(acc.slots[0], outer);
+        } else { // tests is an ArgLabelMorph
+            this.pushContext(tests.argMorph(), outer);
+        }
     } else if (inputs.length === 1) {
-        // this.assertType(inputs[0], 'Boolean');
-        if (!inputs[0]) {
-            if (this.flashContext()) {return; }
-            this.returnValueToParentContext(false);
-            this.popContext();
-        } else {
-            this.evaluateNextInput(block);
+        if (acc) { // inline - acc has been initialized
+            if (!inputs[0]) {
+                if (this.flashContext()) {return; }
+                this.returnValueToParentContext(false);
+                this.popContext();
+            } else if (acc.pc === acc.len) {
+                if (this.flashContext()) {return; }
+                this.returnValueToParentContext(inputs[0]);
+                this.popContext();
+            } else {
+                if (inline) {
+                    this.pushContext(acc.slots[acc.pc], outer);
+                } else {
+                    this.pushContext();
+                    this.evaluate(acc.slots[acc.pc], new List());
+                }
+            }
+        } else { // "with input list" variant
+            this.context.accumulator = {
+                slots: inputs[0].itemsArray(),
+                len: inputs[0].length(),
+                pc: 1
+            };
+            inputs.pop();
+            acc = this.context.accumulator;
+            this.pushContext();
+            this.evaluate(acc.slots[0], new List());
         }
     } else {
-        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        // this.returnValueToParentContext(inputs[1] === true);
-        this.returnValueToParentContext(
-            this.hyper(this.reportBasicAnd, inputs[0], inputs[1])
-        );
-        this.popContext();
+        inputs.push(this.hyper(
+            this.reportBasicAnd,
+            inputs.pop(),
+            inputs.pop()
+        ));
+        acc.pc += 1;
     }
 };
 
@@ -1114,7 +1146,7 @@ Process.prototype.evaluateNextInputSet = function (element) {
     // the idea behind this optimization is to keep evaluating the inputs
     // while we know for sure that we aren't going to yield anyway
     var args = element.inputs(),
-        sel = this.context.expression.selector,
+        sel = this.context.expression?.selector,
         outer = this.context.outerContext, // for tail call elimination
         exp, ans;
 
@@ -8613,7 +8645,7 @@ JSCompiler.prototype.compileExpression = function (block) {
     switch (selector) {
     case 'reportOr':
         return this.compileInfix('||', inputs);
-    case 'reportAnd':
+    case 'reportVariadicAnd':
         return this.compileInfix('&&', inputs);
     case 'reportIfElse':
         return '(' +

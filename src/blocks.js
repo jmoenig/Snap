@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-February-06';
+modules.blocks = '2023-February-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1167,6 +1167,13 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: 'max',
         collapse: 'maximum'
+    },
+    '%all': {
+        type: 'multi',
+        slots: '%b',
+        min: 2,
+        infix: 'and',
+        collapse: 'all'
     }
 };
 

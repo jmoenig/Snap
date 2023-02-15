@@ -3,9 +3,13 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * AND is now variadic
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-02-15
+* blocks, objects, threads: made AND variadic
 
 ### 2023-02-13
 * new dev version
