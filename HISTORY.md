@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
-    * AND is now variadic
+    * AND / OR are now variadic
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
@@ -11,6 +11,7 @@
 ### 2023-02-15
 * pushed dev version to 8.2
 * blocks, objects, threads: made AND variadic
+* blocks, objects, threads: made OR variadic
 
 ### 2023-02-13
 * new dev version

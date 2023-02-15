@@ -1262,10 +1262,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%all',
             alias: '&'
         },
-        reportOr: {
+        reportVariadicOr: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b or %b'
+            spec: '%any',
+            alias: '|'
         },
         reportNot: {
             type: 'predicate',
@@ -1765,6 +1766,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportAnd: {
             selector: 'reportVariadicAnd',
             variadic: true
+        },
+        reportOr: {
+            selector: 'reportVariadicOr',
+            variadic: true
         }
     };
 };
@@ -1931,8 +1936,8 @@ SpriteMorph.prototype.blockAlternatives = {
     reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
         'reportLessThanOrEquals', 'reportGreaterThan',
         'reportGreaterThanOrEquals'],
-    reportAnd: ['reportOr'], // +++
-    reportOr: ['reportAnd'], // +++
+    reportVariadicAnd: ['reportVariadicOr'],
+    reportVariadicOr: ['reportVariadicAnd'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -2809,7 +2814,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGreaterThan'));
         blocks.push('-');
         blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportVariadicOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');
@@ -3871,7 +3876,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '<': 'reportLessThan',
             '>': 'reportGreaterThan',
             '&': 'reportVariadicAnd',
-            '|': 'reportOr',
+            '|': 'reportVariadicOr',
             round: 'reportRound',
             not: 'reportNot'
         };
@@ -9646,7 +9651,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportGreaterThan'));
         blocks.push('-');
         blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportVariadicOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');

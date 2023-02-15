@@ -808,7 +808,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     	selector = block.selector;
 
     // check for special forms
-    if (selector === 'reportOr' ||
+    if (selector === 'reportVariadicOr' ||
             selector ===  'reportVariadicAnd' ||
             selector === 'reportIfElse' ||
             selector === 'doReport') {
@@ -872,28 +872,60 @@ Process.prototype.reportApplyExtension = function (prim, args) {
 
 // Process: Special Forms Blocks Primitives
 
-Process.prototype.reportOr = function (block) {
-    var inputs = this.context.inputs;
-
+Process.prototype.reportVariadicOr = function (block) {
+    var inputs = this.context.inputs,
+        tests = block.inputs()[0],
+        inline = tests instanceof MultiArgMorph,
+        outer = this.context.outerContext,
+        acc = this.context.accumulator;
     if (inputs.length < 1) {
-        this.evaluateNextInput(block);
+        if (inline) {
+            acc = this.context.accumulator = {
+                slots: tests.inputs(),
+                len: tests.inputs().length,
+                pc: 1
+            };
+            this.pushContext(acc.slots[0], outer);
+        } else { // tests is an ArgLabelMorph
+            this.pushContext(tests.argMorph(), outer);
+        }
     } else if (inputs.length === 1) {
-        // this.assertType(inputs[0], 'Boolean');
-        if (inputs[0] === true) {
-            if (this.flashContext()) {return; }
-            this.returnValueToParentContext(true);
-            this.popContext();
-        } else {
-            this.evaluateNextInput(block);
+        if (acc) { // inline - acc has been initialized
+            if (inputs[0] === true) {
+                if (this.flashContext()) {return; }
+                this.returnValueToParentContext(true);
+                this.popContext();
+            } else if (acc.pc === acc.len) {
+                if (this.flashContext()) {return; }
+                this.returnValueToParentContext(inputs[0]);
+                this.popContext();
+            } else {
+                if (inline) {
+                    this.pushContext(acc.slots[acc.pc], outer);
+                } else {
+                    this.pushContext();
+                    this.evaluate(acc.slots[acc.pc], new List());
+                }
+            }
+        } else { // "with input list" variant
+            this.context.accumulator = {
+                slots: inputs[0].itemsArray(),
+                len: inputs[0].length(),
+                pc: 1
+            };
+            inputs.pop();
+            acc = this.context.accumulator;
+            this.pushContext();
+            this.evaluate(acc.slots[0], new List());
         }
     } else {
-        // this.assertType(inputs[1], 'Boolean');
         if (this.flashContext()) {return; }
-        // this.returnValueToParentContext(inputs[1] === true);
-        this.returnValueToParentContext(
-            this.hyper(this.reportBasicOr, inputs[0], inputs[1])
-        );
-        this.popContext();
+        inputs.push(this.hyper(
+            this.reportBasicOr,
+            inputs.pop(),
+            inputs.pop()
+        ));
+        acc.pc += 1;
     }
 };
 
@@ -8643,7 +8675,7 @@ JSCompiler.prototype.compileExpression = function (block) {
 
     // first check for special forms and infix operators
     switch (selector) {
-    case 'reportOr':
+    case 'reportVariadicOr':
         return this.compileInfix('||', inputs);
     case 'reportVariadicAnd':
         return this.compileInfix('&&', inputs);

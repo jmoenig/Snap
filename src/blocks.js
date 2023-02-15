@@ -1174,6 +1174,13 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: 'and',
         collapse: 'all'
+    },
+    '%any': {
+        type: 'multi',
+        slots: '%b',
+        min: 2,
+        infix: 'or',
+        collapse: 'any'
     }
 };
 
