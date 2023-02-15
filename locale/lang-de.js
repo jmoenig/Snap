@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2022-12-33', // this, too, will appear in the Translators tab
+        '2023-02-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -789,10 +789,12 @@ SnapTranslator.dict.de = {
         '%fun von %n',
     'pick random %n to %n':
         'Zufallszahl von %n bis %n',
-    '%b and %b':
-        '%b und %b',
-    '%b or %b':
-        '%b oder %b',
+    'and':
+        'und',
+    'or':
+        'oder',
+    'any':
+        'irgendein',
     'not %b':
         'nicht %b',
     'true':
@@ -2068,8 +2070,6 @@ SnapTranslator.dict.de = {
     // list indices
     'last':
         'letztes',
-    'any':
-        'beliebig',
 
     // attributes
     'my':

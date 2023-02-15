@@ -7,6 +7,7 @@
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2023-02-15
 * pushed dev version to 8.2
@@ -14,7 +15,8 @@
 * blocks, objects, threads: made OR variadic
 * adjusted English translation: removed "any" -> "random" rewording
 * blocks: renamed all 'any' selectors in dropdowns into 'random'
-* help: adjusted help screen file names for AND / OR 
+* help: adjusted help screen file names for AND / OR
+* adjusted German translation for Boolean ops
 
 ### 2023-02-13
 * new dev version
