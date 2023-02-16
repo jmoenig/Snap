@@ -50,6 +50,7 @@
 * adjusted Tamil translation for Boolean ops
 * adjusted Telagu translation for Boolean ops
 * adjusted Turkish translation for Boolean ops
+* adjusted Ukrainian translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2

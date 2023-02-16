@@ -698,10 +698,10 @@ SnapTranslator.dict.ua = {
         '%fun %n',
     'pick random %n to %n':
         'випадкове значення від %n до %n',
-    '%b and %b':
-        '%b та %b',
-    '%b or %b':
-        '%b або %b',
+    'and':
+        'та',
+    'or':
+        'або',
     'not %b':
         'не %b',
     'true':
