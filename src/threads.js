@@ -862,7 +862,9 @@ Process.prototype.doApplyExtension = function (prim, args) {
 Process.prototype.reportApplyExtension = function (prim, args) {
     var ext = SnapExtensions.primitives.get(prim);
     if (isNil(ext)) {
-        throw new Error(localize('missing / unspecified extension') + ': ' + prim);
+        throw new Error(
+            localize('missing / unspecified extension') + ': ' + prim
+        );
     }
     return ext.apply(
         this.blockReceiver(),
@@ -876,7 +878,6 @@ Process.prototype.reportVariadicOr = function (block) {
     this.reportAssociativeBool(
         block,
         this.reportBasicOr,
-        value => value === true,
         true
     );
 };
@@ -885,24 +886,28 @@ Process.prototype.reportVariadicAnd = function (block) {
     this.reportAssociativeBool(
         block,
         this.reportBasicAnd,
-        value => value !== true,
         false
     );
 };
 
-Process.prototype.reportAssociativeBool = function (
+Process.prototype.reportAssociativeBool = function (block, baseOp, short) {
     // private - evaluate special form variadic associative Boolean operations
     // such as AND, OR
-    block,
-    baseOp, // dyadic base operation (AND, OR)
-    shortCircuit, // monadic predicate
-    shortCut // return value if shortCircuit evaluates to TRUE
-) {
+    // baseOp - dyadic base operation (AND, OR)
+    // short - value at which to immediately return (short circuit)
     var inputs = this.context.inputs,
         tests = block.inputs()[0],
         inline = tests instanceof MultiArgMorph,
         outer = this.context.outerContext,
-        acc = this.context.accumulator;
+        acc = this.context.accumulator,
+        check = slot => {
+            if (slot instanceof List || typeof slot === 'boolean') {
+                inputs.push(slot);
+            } else {
+                this.pushContext();
+                this.evaluate(slot, new List());
+            }
+        };
     if (inputs.length < 1) {
         if (inline) {
             acc = this.context.accumulator = {
@@ -916,9 +921,9 @@ Process.prototype.reportAssociativeBool = function (
         }
     } else if (inputs.length === 1) {
         if (acc) { // inline - acc has been initialized
-            if (shortCircuit(inputs[0])) {
+            if (inputs[0] === short) {
                 if (this.flashContext()) {return; }
-                this.returnValueToParentContext(shortCut);
+                this.returnValueToParentContext(short);
                 this.popContext();
             } else if (acc.pc === acc.len) {
                 if (this.flashContext()) {return; }
@@ -928,8 +933,7 @@ Process.prototype.reportAssociativeBool = function (
                 if (inline) {
                     this.pushContext(acc.slots[acc.pc], outer);
                 } else {
-                    this.pushContext();
-                    this.evaluate(acc.slots[acc.pc], new List());
+                    check(acc.slots[acc.pc]);
                 }
             }
         } else { // "with input list" variant
@@ -939,9 +943,7 @@ Process.prototype.reportAssociativeBool = function (
                 pc: 1
             };
             inputs.pop();
-            acc = this.context.accumulator;
-            this.pushContext();
-            this.evaluate(acc.slots[0], new List());
+            check(this.context.accumulator.slots[0]);
         }
     } else {
         if (this.flashContext()) {return; }
@@ -953,6 +955,7 @@ Process.prototype.reportAssociativeBool = function (
         acc.pc += 1;
     }
 };
+
 Process.prototype.reportBasicOr = function (a, b) {
     return a || b;
 };
