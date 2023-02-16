@@ -927,7 +927,9 @@ Process.prototype.reportAssociativeBool = function (block, baseOp, short) {
                 this.popContext();
             } else if (acc.pc >= acc.len) {
                 if (this.flashContext()) {return; }
-                this.returnValueToParentContext(inputs[0] || false);
+                this.returnValueToParentContext(
+                    inputs[0] === null ? !short : inputs[0]
+                );
                 this.popContext();
             } else {
                 if (inline) {

@@ -60,6 +60,7 @@
 * threads: accept Boolean values in "with input list" variant of variadic Boolean ops
 * threads: let associative Boolean ops handle empty input lists
 * threads: refactored evaluation to lazy initialize args
+* threads: fixed base cases for variadic associative Boolean ops 
 
 ### 2023-02-15
 * pushed dev version to 8.2
