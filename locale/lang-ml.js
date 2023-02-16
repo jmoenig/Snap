@@ -535,10 +535,10 @@ SnapTranslator.dict.ml = {
         '%fun ന്‍റ %n',
     'pick random %n to %n':
         '%n മുതല്‍ %n വരെയുള്ള ഏതെങ്കിലും സംഖ്യ എടുക്കുക',
-    '%b and %b':
-        '%b കൂടാത %b',
-    '%b or %b':
-        '%b അഥവ %b',
+    'and':
+        'കൂടാത',
+    'or':
+        'അഥവ',
     'not %b':
         '%b അല്ല',
     'true':
@@ -1277,6 +1277,6 @@ SnapTranslator.dict.ml = {
     // list indices
     'last':
         'letztes',
-    'any':
-        'beliebiges'
+    'random':
+        'random'
 };
