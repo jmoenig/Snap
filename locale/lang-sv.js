@@ -579,10 +579,10 @@ SnapTranslator.dict.sv = {
         '%fun av %n',
     'pick random %n to %n':
         'slumptal fr\u00E5n %n till %n',
-    '%b and %b':
-        '%b och %b',
-    '%b or %b':
-        '%b eller %b',
+    'and':
+        'och',
+    'or':
+        'eller',
     'not %b':
         'inte %b',
     'true':
@@ -1220,7 +1220,7 @@ SnapTranslator.dict.sv = {
     // list indices
     'last':
         'sista',
-    'any':
+    'random':
         'vilken som helst',
     
 
