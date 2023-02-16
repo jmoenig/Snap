@@ -730,10 +730,10 @@ SnapTranslator.dict.pl = {
         '%fun z %n',
     'pick random %n to %n':
         'losuj od %n do %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b lub %b',
+    'and':
+        'i',
+    'or':
+        'lub',
     'not %b':
         'nie %b',
     'true':
