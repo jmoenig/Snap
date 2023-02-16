@@ -548,10 +548,10 @@ SnapTranslator.dict.hr = {
         '%fun od %n',
     'pick random %n to %n':
         'slu\u010Dajni broj od %n do %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b ili %b',
+    'and':
+        'i',
+    'or':
+        'ili',
     'not %b':
         'ne %b',
     'true':
@@ -1320,7 +1320,7 @@ SnapTranslator.dict.hr = {
     // list indices
     'last':
         'zadnji',
-    'any':
+    'random':
         'bilo koji',
     
 	//added manually

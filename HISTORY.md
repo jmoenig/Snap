@@ -29,6 +29,7 @@
 * adjusted Galician translation for Boolean ops
 * adjusted Hebrew translation for Boolean ops
 * adjusted Hindi translation for Boolean ops
+* adjusted Croatian translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2
