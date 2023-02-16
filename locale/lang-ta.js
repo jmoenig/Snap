@@ -535,10 +535,10 @@ SnapTranslator.dict.ta = {
         '%fun ன் %n',
     'pick random %n to %n':
         'இளஞ்சிவப்பு சீரற்ற %n to %n',
-    '%b and %b':
-        '%b மற்றும் %b',
-    '%b or %b':
-        '%b அல்லத %b',
+    'and':
+        'மற்றும்',
+    'or':
+        'அல்லத',
     'not %b':
         'இல்ல %b',
     'true':
@@ -1275,8 +1275,8 @@ SnapTranslator.dict.ta = {
     // list indices
     'last':
         'last',
-    'any':
-        'any'
+    'random':
+        'random'
 };
 /* Tamil Language locale is completed upto 85% by 
 Revision 1 and 2:- vinayakumar 40
