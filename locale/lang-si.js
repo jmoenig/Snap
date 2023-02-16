@@ -565,10 +565,10 @@ SnapTranslator.dict.si = {
         '%fun von %n',
     'pick random %n to %n':
         'naklju\u010Dno \u0161tevilo od %n do %n',
-    '%b and %b':
-        '%b in %b',
-    '%b or %b':
-        '%b ali %b',
+    'and':
+        'in',
+    'or':
+        'ali',
     'not %b':
         'ne %b',
     'true':
@@ -1330,6 +1330,6 @@ SnapTranslator.dict.si = {
     // list indices
     'last':
         'zadnji',
-    'any':
+    'random':
         'poljuben'
 };
