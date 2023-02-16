@@ -574,10 +574,10 @@ SnapTranslator.dict.bn = {
         '%fun নির্ণয় কর  %n',
     'pick random %n to %n':
         'যে কোনো একটি সংখ্যা  %n থেকে   %n পর্যন্ত',
-    '%b and %b':
-        '%b এবং %b',
-    '%b or %b':
-        '%b অথবা %b',
+    'and':
+        'এবং',
+    'or':
+        'অথবা',
     'not %b':
         'না %b',
     'true':
@@ -1231,6 +1231,6 @@ SnapTranslator.dict.bn = {
     // list indices
     'last':
         'সর্বশেষ',
-    'any':
+    'random':
         'যেকোনো'
 };
