@@ -722,10 +722,10 @@ SnapTranslator.dict.no = {
         '%fun av %n',
     'pick random %n to %n':
         'tilfeldig tall fra %n til %n',
-    '%b and %b':
-        '%b OG %b',
-    '%b or %b':
-        '%b ELLER %b',
+    'and':
+        'OG',
+    'or':
+        'ELLER',
     'not %b':
         'IKKE %b',
     'true':
@@ -1869,7 +1869,7 @@ SnapTranslator.dict.no = {
     'last':
         'siste',
     'any':
-        'tilfeldig',
+        'noen',
 
     // attributes
     'my':
