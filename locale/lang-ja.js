@@ -521,10 +521,10 @@ SnapTranslator.dict.ja = {
         '%fun %n',
     'pick random %n to %n':
         '%n から %n までの乱数',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
+    'and':
+        'かつ',
+    'or':
+        'または',
     'not %b':
         '%b ではない',
     'true':
@@ -1190,7 +1190,7 @@ SnapTranslator.dict.ja = {
     // list indices
     'last':
         '最後',
-    'any':
+    'random':
         '任意',
 
     // missing entries
