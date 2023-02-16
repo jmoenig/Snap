@@ -919,10 +919,10 @@ SnapTranslator.dict.es = {
         '%fun de %n',
     'pick random %n to %n':
         'n\u00FAmero al azar entre %n y %n',
-    '%b and %b':
-        '%b y %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'y',
+    'or':
+        'o',
     'not %b':
         'no %b',
     'true':
@@ -1120,8 +1120,6 @@ SnapTranslator.dict.es = {
     // %idx values for (item %idx of %l):
     'last':
         '\u00FAltimo',
-    'any':
-        'aleatorio',
 
     // default value for (%l contains %s):
     'thing':
