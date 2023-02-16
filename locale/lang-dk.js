@@ -531,10 +531,10 @@ SnapTranslator.dict.dk = {
         '%fun af %n',
     'pick random %n to %n':
         'v\u00E6lg tilf\u00E6ldig %n til %n',
-    '%b and %b':
-        '%b og %b',
-    '%b or %b':
-        '%b eller %b',
+    'and':
+        'og',
+    'or':
+        'eller',
     'not %b':
         'ikke %b',
     'true':
@@ -1246,5 +1246,7 @@ SnapTranslator.dict.dk = {
     'last':
         'sidste',
     'any':
-        'hvilken som helst'
+        'noen', // 'hvilken som helst',
+    'random':
+        'tifeldig'
 };
