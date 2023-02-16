@@ -521,10 +521,10 @@ SnapTranslator.dict.ja_HIRA = {
         '%fun %n',
     'pick random %n to %n':
         '%n から %n までのらんすう',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
+    'and':
+        'かつ',
+    'or':
+        'または',
     'not %b':
         '%b ではない',
     'true':
@@ -1190,7 +1190,7 @@ SnapTranslator.dict.ja_HIRA = {
     // list indices
     'last':
         'さいご',
-    'any':
+    'random':
         'にんい',
 
     // missing entries
