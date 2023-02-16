@@ -632,10 +632,10 @@ SnapTranslator.dict.fr = {
         '%fun appliqu\u00E9 \u00E0 %n',
     'pick random %n to %n':
         'nombre al\u00E9atoire entre %n et %n',
-    '%b and %b':
-        '%b et %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'et',
+    'or':
+        'ou',
     'not %b':
         'non %b',
     'true':
@@ -1365,6 +1365,8 @@ SnapTranslator.dict.fr = {
         'dernier',
     'any':
         'n\u0027importe quel',
+    'random':
+        'aléatoire',
 
     // miscellaneous
     'find blocks...':
