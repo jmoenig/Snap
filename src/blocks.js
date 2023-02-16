@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-February-15';
+modules.blocks = '2023-February-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4848,6 +4848,10 @@ BlockMorph.prototype.refactorInlineTemplate = function () {
         // rename the template
         myself.changed();
         myself.setSpec(newName);
+        myself.instantiationSpec = newName;
+        if (myself.parent instanceof BlockInputFragmentMorph) {
+            myself.parent.fragment.labelString = newName;
+        }
         myself.fixLabelColor();
         myself.changed();
         // rename the following blocks in the lexical scope
