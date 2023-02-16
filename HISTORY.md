@@ -59,6 +59,7 @@
 * adjusted Brazilian Portuguese translation for Boolean ops
 * threads: accept Boolean values in "with input list" variant of variadic Boolean ops
 * threads: let associative Boolean ops handle empty input lists
+* threads: refactored evaluation to lazy initialize args
 
 ### 2023-02-15
 * pushed dev version to 8.2

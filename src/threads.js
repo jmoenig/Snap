@@ -877,16 +877,16 @@ Process.prototype.reportApplyExtension = function (prim, args) {
 Process.prototype.reportVariadicOr = function (block) {
     this.reportAssociativeBool(
         block,
-        this.reportBasicOr,
-        true
+        this.reportBasicOr, // base op
+        true // short-circuit return value
     );
 };
 
 Process.prototype.reportVariadicAnd = function (block) {
     this.reportAssociativeBool(
         block,
-        this.reportBasicAnd,
-        false
+        this.reportBasicAnd, // base op
+        false // short-circuit return value
     );
 };
 
@@ -905,7 +905,7 @@ Process.prototype.reportAssociativeBool = function (block, baseOp, short) {
                 inputs.push(slot);
             } else {
                 this.pushContext();
-                this.evaluate(slot, new List());
+                this.evaluate(slot);
             }
         };
     if (inputs.length < 1) {
@@ -1362,8 +1362,8 @@ Process.prototype.doRun = function (context, args) {
 
 Process.prototype.evaluate = function (
     context,
-    args,
-    isCommand
+    args = new List(),
+    isCommand = false
 ) {
     if (!context) {
         return this.returnValueToParentContext(null);
