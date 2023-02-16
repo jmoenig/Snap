@@ -722,10 +722,10 @@ SnapTranslator.dict.hi = {
         '%fun का %n',
     'pick random %n to %n':
         'यादृच्छिक चुनें %n से %n',
-    '%b and %b':
-        '%b और %b',
-    '%b or %b':
-        '%b या %b',
+    'and':
+        'और',
+    'or':
+        'या',
     'not %b':
         'नहीं %b',
     'true':
@@ -791,7 +791,7 @@ SnapTranslator.dict.hi = {
     '%s in front of %l':
         '%s in front of %l',
     'item %idx of %l':
-        'item %idx of %l',
+        'मद %idx of %l',
     'all but first of %l':
         'all but first of %l',
     '%la of %l':
