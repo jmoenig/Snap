@@ -544,10 +544,10 @@ SnapTranslator.dict.ro = {
         '%fun din %n',
     'pick random %n to %n':
         'alege aleator de la %n la %n',
-    '%b and %b':
-        '%b si %b',
-    '%b or %b':
-        '%b sau %b',
+    'and':
+        'si',
+    'or':
+        'sau',
     'not %b':
         'not %b',
     'true':
@@ -1317,6 +1317,6 @@ SnapTranslator.dict.ro = {
     // list indices
     'last':
         'ultimul',
-    'any':
+    'random':
         'oricare'
 };
