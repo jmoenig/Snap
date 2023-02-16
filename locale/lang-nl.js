@@ -721,10 +721,10 @@ SnapTranslator.dict.nl = {
         '%fun van %n',
     'pick random %n to %n':
         'willekeurig getal tussen %n en %n',
-    '%b and %b':
-        '%b en %b',
-    '%b or %b':
-        '%b of %b',
+    'and':
+        'en',
+    'or':
+        'of',
     'not %b':
         'niet %b',
     'true':
