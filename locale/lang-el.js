@@ -764,10 +764,10 @@ SnapTranslator.dict.el = {
         '%fun του %n',
     'pick random %n to %n':
         'δίαλεξε στην τύχη μεταξύ του %n και του %n',
-    '%b and %b':
-        '%b και %b',
-    '%b or %b':
-        '%b ή %b',
+    'and':
+        'και',
+    'or':
+        'ή',
     'not %b':
         'όχι το %b',
     'true':
