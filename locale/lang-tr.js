@@ -720,10 +720,10 @@ SnapTranslator.dict.tr = {
         '%fun bunun: %n',
     'pick random %n to %n':
         '%n ile %n arasında rastgele sayı',
-    '%b and %b':
-        '%b ve %b',
-    '%b or %b':
-        '%b veya %b',
+    'and':
+        've',
+    'or':
+        'veya',
     'not %b':
         '%b değil',
     'true':
