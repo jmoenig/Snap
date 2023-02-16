@@ -536,10 +536,10 @@ SnapTranslator.dict.te = {
         '%fun లో %n',
     'pick random %n to %n':
         '%n నుండి %n ను యాదృచ్ఛికంగా ఎంచుకోండి',
-    '%b and %b':
-        '%b మరియ %b',
-    '%b or %b':
-        '%b లేదా %b',
+    'and':
+        'మరియ',
+    'or':
+        'లేదా',
     'not %b':
         'లేద %b',
     'true':
@@ -1278,6 +1278,6 @@ SnapTranslator.dict.te = {
     // list indices
     'last':
         'letztes',
-    'any':
-        'beliebiges'
+    'random':
+        'random'
 };
