@@ -540,10 +540,10 @@ SnapTranslator.dict.fi = {
         '%fun %n',
     'pick random %n to %n':
         'arvo satunnaisluku %n .. %n',
-    '%b and %b':
-        '%b ja %b',
-    '%b or %b':
-        '%b tai %b',
+    'and':
+        'ja',
+    'or':
+        'tai',
     'not %b':
         'ei %b',
     'true':
@@ -1277,6 +1277,6 @@ SnapTranslator.dict.fi = {
     // list indices
     'last':
         'viimeinen',
-    'any':
+    'random':
         'mik\u00e4 tahansa'
 };
