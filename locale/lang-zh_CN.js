@@ -926,10 +926,10 @@ SnapTranslator.dict.zh_CN = {
         '%fun %n',
     'pick random %n to %n':
         '在 %n 到 %n 间随机选一个数',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
+    'and':
+        '且',
+    'or':
+        '或',
     'not %b':
         '%b 不成立',
     'true':
