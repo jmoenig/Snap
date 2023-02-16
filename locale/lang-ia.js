@@ -558,10 +558,10 @@ SnapTranslator.dict.ia = {
         '%fun de %n',
     'pick random %n to %n':
         'al aventura inter %n e %n',  // 'al hasardo'
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'e',
+    'or':
+        'o',
     'not %b':
         'non %b',
     'true':
@@ -1335,5 +1335,7 @@ SnapTranslator.dict.ia = {
     'last':
         'ultime',
     'any':
-        'alcuno'  // 'qualcun'
+        'alcuno',  // 'qualcun'
+    'random':
+        'aleatori'
 };
