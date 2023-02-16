@@ -558,10 +558,10 @@ SnapTranslator.dict.cs = {
         '%fun z %n',
     'pick random %n to %n':
         'zvol náhodné číslo od %n do %n',
-    '%b and %b':
-        '%b a %b',
-    '%b or %b':
-        '%b nebo %b',
+    'and':
+        'a',
+    'or':
+        'nebo',
     'not %b':
         'není %b',
     'true':
@@ -1052,8 +1052,6 @@ SnapTranslator.dict.cs = {
         'Tento projekt nyní nemá žádné globální bloky',
     'select':
         'vybrat',
-    'all':
-        'vše',
     'none':
         'nic',
 
@@ -1344,5 +1342,7 @@ SnapTranslator.dict.cs = {
     'last':
         'poslední',
     'any':
-        'kterákoli'
+        'kterákoli',
+    'random':
+        'nahodilý'
 };
