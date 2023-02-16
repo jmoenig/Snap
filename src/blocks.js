@@ -3044,15 +3044,27 @@ BlockMorph.prototype.userMenu = function () {
     }
 
     function renameVar() {
-        var blck = myself.fullCopy();
+        var blck = myself.fullCopy(),
+            frag = myself.parent instanceof BlockInputFragmentMorph ?
+                myself.parent.fragment
+                : null;
         blck.addShadow();
+
         new DialogBoxMorph(
             myself,
-            myself.userSetSpec,
+            frag ?
+                newName => {
+                    myself.userSetSpec(newName);
+                    myself.instantiationSpec = newName;
+                    myself.parent.fragment.labelString = newName;
+                }
+                : myself.userSetSpec,
             myself
         ).prompt(
             "Variable name",
-            myself.blockSpec,
+            frag ?
+                frag.labelString
+                : myself.blockSpec,
             world,
             blck.doWithAlpha(1, () => blck.fullImage()), // pic
             InputSlotMorph.prototype.getVarNamesDict.call(myself)
