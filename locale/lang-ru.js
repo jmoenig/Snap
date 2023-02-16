@@ -727,10 +727,10 @@ SnapTranslator.dict.ru = {
         '%fun %n',
     'pick random %n to %n':
         'случайное число от %n до %n',
-    '%b and %b':
-        '%b и %b',
-    '%b or %b':
-        '%b или %b',
+    'and':
+        'и',
+    'or':
+        'или',
     'not %b':
         'не %b',
     'true':
