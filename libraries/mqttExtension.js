@@ -11,6 +11,7 @@
  * V1.5.0 29Dec22 handle utf8 character payloads correctly
  * V1.5.2 20Jan23 change subscribe default to be text and accept boolean to change to binary (corrected 18:23)
  * V1.5.3 22Jan23 make old subscribe block be compatible with new extension code
+ * V1.5.4 15Feb22 When returning text to Snap!, restore explicitly making payload into a string.  Also restore cymplecy.uk instead of simplesi.cloud
  */
 
 
@@ -78,9 +79,9 @@ SnapExtensions.primitives.set(
 			wsbroker = wsbroker + ':8080'
 		} else if (broker == 'broker.xmqtt.net') {
 			wsbroker = wsbroker + '/mqtt'
-		} else if (wsbroker == 'wss://simplesi.cloud') {
+		} else if (wsbroker == 'wss://cymplecy.uk') {
 			wsbroker = wsbroker + ':8084'
-		} else if (wsbroker == 'ws://simplesi.cloud') {
+		} else if (wsbroker == 'ws://cymplecy.uk') {
 			wsbroker = wsbroker + ':8083'
 		} else if (wsbroker == 'ws://localhost') {
 			wsbroker = wsbroker + ':9001'
@@ -175,7 +176,7 @@ SnapExtensions.primitives.set(
 			if (opts.mode && (opts.mode == true || opts.mode == 'binary')) {
 				newPayload = payload.reduce( (res, val) => res+String.fromCharCode( val), "");
 			} else {
-				newPayload = payload;
+				newPayload = payload.toString();
 			}
 
 			try {
