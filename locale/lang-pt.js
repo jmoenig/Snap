@@ -723,10 +723,10 @@ SnapTranslator.dict.pt = {
         '%fun de %n',
     'pick random %n to %n':
         'um valor ao acaso entre %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'e',
+    'or':
+        'ou',
     'not %b':
         'é falso que %b',
     'true':
