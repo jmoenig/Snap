@@ -703,10 +703,10 @@ SnapTranslator.dict.eu = {
         '%fun %n',
     'pick random %n to %n':
         'hartu ausaz %n eta %n artean',
-    '%b and %b':
-        '%b eta %b',
-    '%b or %b':
-        '%b edo %b',
+    'and':
+        'eta',
+    'or':
+        'edo',
     'not %b':
         'ez %b',
     'true':
