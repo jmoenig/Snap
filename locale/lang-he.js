@@ -725,10 +725,10 @@ SnapTranslator.dict.he = {
         '%fun של %n',
     'pick random %n to %n':
         'בחר_מספר_אקראי_בתחום %n - %n',
-    '%b and %b':
-        '%b וגם %b',
-    '%b or %b':
-        '%b או %b',
+    'and':
+    'וגם',
+    'or':
+        'או',
     'not %b':
         'לא %b',
     'true':
