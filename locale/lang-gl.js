@@ -616,10 +616,10 @@ SnapTranslator.dict.gl = {
         '%fun de %n',
     'pick random %n to %n':
         'número ao chou entre %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'e',
+    'or':
+        'ou',
     'not %b':
         'non %b',
     'true':
