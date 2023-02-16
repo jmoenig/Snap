@@ -550,10 +550,10 @@ SnapTranslator.dict.id = {
         '%fun dari %n',
     'pick random %n to %n':
         'pilih angka acak dari %n ke %n',
-    '%b and %b':
-        '%b dan %b',
-    '%b or %b':
-        '%b atau %b',
+    'and':
+        'dan',
+    'or':
+        'atau',
     'not %b':
         'tidak %b',
     'true':
@@ -1355,6 +1355,6 @@ SnapTranslator.dict.id = {
     // list indices
     'last':
         'terakhir',
-    'any':
+    'random':
         'apapun'
 };
