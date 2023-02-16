@@ -22,6 +22,7 @@
 * adjusted Danish translation for Boolean ops
 * adjusted Esperanto translation for Boolean ops
 * adjusted Spanish translation for Boolean ops
+* adjusted Estonian translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2

@@ -372,10 +372,10 @@ SnapTranslator.dict.et = {
         '%fun %n',
     'pick random %n to %n':
         'juhuslik arv %n ja %n vahel',
-    '%b and %b':
-        '%b ja %b',
-    '%b or %b':
-        '%b või %b',
+    'and':
+        'ja',
+    'or':
+        'või',
     'not %b':
         'pole %b',
     'true':
@@ -1170,7 +1170,7 @@ SnapTranslator.dict.et = {
     // list indices
     'last':
         'viimane',
-    'any':
+    'random':
         'mistahes',
 
     // Saksa keele failist puuduvad stringid
