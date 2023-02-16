@@ -17,6 +17,7 @@
 * blocks: fixed "rename" for custom block formal parameters
 * threads: refactored variadic AND, OR into generalized reportAssociativeBool()
 * adjusted Bangla translation for Boolean ops
+* adjusted Valencian Catalan translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2

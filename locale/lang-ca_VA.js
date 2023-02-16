@@ -552,10 +552,10 @@ SnapTranslator.dict.ca_VA = {
         '%fun de %n',
     'pick random %n to %n':
         'nombre a l\'atzar entre %n i %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'i',
+    'or':
+        'o',
     'not %b':
         'no %b',
     'true':
@@ -1358,7 +1358,7 @@ SnapTranslator.dict.ca_VA = {
     // list indices
     'last':
         'últim',
-    'any':
+    'random':
         'qualsevol',
 
     // attributes
