@@ -1246,7 +1246,7 @@ SnapTranslator.dict.dk = {
     'last':
         'sidste',
     'any':
-        'noen', // 'hvilken som helst',
+        'nogen', // 'hvilken som helst',
     'random':
-        'tifeldig'
+        'tilfældig'
 };
