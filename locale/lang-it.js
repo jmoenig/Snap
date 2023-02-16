@@ -742,10 +742,10 @@ SnapTranslator.dict.it = {
         '%fun di %n',
     'pick random %n to %n':
         'numero a caso tra %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'e',
+    'or':
+        'o',
     'not %b':
         'non %b',
     'true':
