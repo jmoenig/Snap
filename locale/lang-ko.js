@@ -562,10 +562,10 @@ SnapTranslator.dict.ko = {
         '%fun ( %n 에 대한)',
     'pick random %n to %n':
         '%n 부터 %n 사이의 난수',
-    '%b and %b':
-        '%b 그리고 %b',
-    '%b or %b':
-        '%b 또는 %b',
+    'and':
+        '그리고',
+    'or':
+        '또는',
     'not %b':
         '%b 이(가) 아니다',
     'true':
@@ -1364,7 +1364,7 @@ SnapTranslator.dict.ko = {
     // list indices
     'last':
         '마지막',
-    'any':
+    'random':
         '임의',
 
     // missing entries

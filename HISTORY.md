@@ -37,6 +37,7 @@
 * adjusted Japanese translation for Boolean ops
 * adjusted Japanese Hiragana translation for Boolean ops
 * adjusted Kannada translation for Boolean ops
+* adjusted Korean translation for Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2
