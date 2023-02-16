@@ -743,10 +743,10 @@ SnapTranslator.dict.hu = {
         '%fun %n',
     'pick random %n to %n':
         'véletlen %n és %n között',
-    '%b and %b':
-        '%b és %b',
-    '%b or %b':
-        '%b vagy %b',
+    'and':
+        'és',
+    'or':
+        'vagy',
     'not %b':
         'nem %b',
     'true':
