@@ -719,10 +719,10 @@ SnapTranslator.dict.sk = {
         '%fun z %n',
     'pick random %n to %n':
         'zvo\u013E n\u00E1hodn\u00E9 \u010D\u00EDslo od %n do %n',
-    '%b and %b':
-        '%b a %b',
-    '%b or %b':
-        '%b alebo %b',
+    'and':
+        'a',
+    'or':
+        'alebo',
     'not %b':
         'nie je %b',
     'true':
