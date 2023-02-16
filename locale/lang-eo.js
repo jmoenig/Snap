@@ -553,10 +553,10 @@ SnapTranslator.dict.eo = {
         '%fun de %n',
     'pick random %n to %n':
         'elekti stokaston inter %n kaj %n',
-    '%b and %b':
-        '%b kaj %b',
-    '%b or %b':
-        '%b a\u016d %b',
+    'and':
+        'kaj',
+    'or':
+        'a\u016d',
     'not %b':
         'ne %b',
     'true':
@@ -1382,6 +1382,8 @@ SnapTranslator.dict.eo = {
         'lasta',
     'any':
         'ajna',
+    'random':
+        'hazarda',
 
     // attributes
     'neighbors':
