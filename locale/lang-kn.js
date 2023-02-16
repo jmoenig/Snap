@@ -528,10 +528,10 @@ SnapTranslator.dict.kn = {
         '%fun \u0CB0\u0CA6\u0CCD\u0CA6\u0CC1 %n',
     'pick random %n to %n':
         '\u0C8E\u0CB7\u0CCD\u0C9F\u0CA8\u0CBE\u0CA6\u0CB0\u0CC1\u0020\u0CAF\u0CBE\u0CA6\u0CC3\u0C9A\u0CBF\u0C95\u0CB5\u0CBE\u0C97\u0CBF\u0020\u0C86\u0CAF\u0CCD\u0CA6\u0CC1\u0C95\u0CCB %n \u0CB0\u0CBF\u0C82\u0CA6 %n',
-    '%b and %b':
-        '%b \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 %b',
-    '%b or %b':
-        '%b \u0C85\u0CA5\u0CB5\u0CBE %b',
+    'and':
+        '\u0CAE\u0CA4\u0CCD\u0CA4\u0CC1',
+    'or':
+        '\u0C85\u0CA5\u0CB5\u0CBE',
     'not %b':
         '\u0C87\u0CB2\u0CCD\u0CB2 %b',
     '\u0CB8\u0CB0\u0CBF':
@@ -1268,6 +1268,6 @@ SnapTranslator.dict.kn = {
     // list indices
     'last':
         '\u0C95\u0CCA\u0CA8\u0CC6',
-    'any':
+    'random':
         '\u0CAF\u0CBE\u0CB5\u0CC1\u0CA6\u0CBE\u0CA6\u0CB0\u0CC1\u0020'
 };
