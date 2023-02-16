@@ -520,10 +520,10 @@ SnapTranslator.dict.zh_TW = {
         '%fun %n',
     'pick random %n to %n':
         '隨機在 %n 到 %n 間選一個數',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
+    'and':
+        '且',
+    'or':
+        '或',
     'not %b':
         '%b 不成立',
     'true':
@@ -1184,7 +1184,7 @@ SnapTranslator.dict.zh_TW = {
     // list indices
     'last':
         '最後',
-    'any':
+    'random':
         '任意',
 
     // missing entries
