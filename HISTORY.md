@@ -3,7 +3,8 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
-    * AND / OR are now variadic
+    * AND / OR are now variadic, thanks, Dan, for the 
+    * MQTT library update, thanks, Simon and Xavier!
 * **Notable Fixes:**
     * fixed "rename" and "rename all" for custom block formal parameters
 * **Documentation Updates:**
