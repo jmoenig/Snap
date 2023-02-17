@@ -2,14 +2,19 @@
 
 ## in development:
 * **New Features:**
+    * AND / OR are now variadic (and hyper!), thanks, Dan, for the suggestion
 * **Notable Changes:**
-    * AND / OR are now variadic, thanks, Dan, for the 
-    * MQTT library update, thanks, Simon and Xavier!
+    * removed variadic reporters library (because the primitives are now variadic)
+    * MQTT library update, thanks, Simon and Xavier
 * **Notable Fixes:**
     * fixed "rename" and "rename all" for custom block formal parameters
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-02-17
+* MQTT library update, thanks Simon and Xavier!
+* removed variadic reporters library (because the primitives are now variadic)
 
 ### 2023-02-16
 * adjusted Arabic translation for Boolean ops

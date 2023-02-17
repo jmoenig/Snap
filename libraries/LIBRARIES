@@ -7,7 +7,6 @@ cases.xml	Multi-branched conditional	Like "switch" in C-like languages or "cond"
 try-catch.xml	Catch errors	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
 parallel_module.xml	Parallelization	Run several scripts in parallel and wait until all are done.
 Eisenbergification.xml	Getters and setters	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
-variadic-reporters.xml	Variadic reporters	Versions of AND and OR that take more than two inputs.
 list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you "hyperize" any dyadic function
 ~	~
 ~	~
