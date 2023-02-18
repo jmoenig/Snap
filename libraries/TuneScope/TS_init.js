@@ -62,7 +62,7 @@ window.playNote = (note, noteLength, instrumentName, volume) => {
    let currentInstrumentData = window.parent.instrumentData[instrumentName]
 			player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
 			function play(){
-    const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
+    const vol = window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume || volume;
     console.log(note, noteLength, instrumentName, vol)
 				player.queueWaveTable(audioContext, audioContext.destination
 					, window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
@@ -512,6 +512,7 @@ setTimeout(() => {
   console.log("playing initialization sound")
   for (let i = 0; i < instrumentNames.length; i++) {
     let instrumentName = instrumentNames[i];
+    window.parent.instrumentVolumes[instrumentName] = window.parent.globalInstrumentVolume;
     if (instrumentName === "shakuhachi") return;
     window.playNote("C4", 1, instrumentName, 0);
   }
