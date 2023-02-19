@@ -263,7 +263,7 @@ window.parent.instrumentVolumes = {}
 window.parent.globalInstrumentVolume = 0.5;
 
 // tones
-class Tone {
+class _Tone {
   constructor(id) {
     this.id = id;
     this.on = false;
@@ -326,7 +326,7 @@ class Tone {
   }
 
 }
-window.Tone = Tone;
+window._Tone = _Tone;
 window.tones = {};
 
 /* Auxillary Functions */

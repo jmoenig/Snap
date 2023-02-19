@@ -9,7 +9,7 @@ SnapExtensions.primitives.set(
     'ts_setvol(percent)',
     function (percent) {
         let adjusted_percent = (percent === 0) ? 0.0001: percent;
-        window.parent.globalInstrumentVolume = adjusted_percent/100;
+        window.parent.globalInstrumentVolume = adjusted_percent/100.0;
     }
 );
 
@@ -18,7 +18,7 @@ SnapExtensions.primitives.set(
     function (name, percent) {
         name = name.toLowerCase();
         let adjusted_percent = (percent === 0) ? 0.0001: percent;
-        window.parent.instrumentVolumes[name] = adjusted_percent/100;
+        window.parent.instrumentVolumes[name] = adjusted_percent/100.0;
     }
 );
 
@@ -326,7 +326,7 @@ SnapExtensions.primitives.set(
     function (id, freq, ampl, bal) {
         var created = false;
         if (!window.tones[id]) {
-          window.tones[id] = new window.Tone(id);
+          window.tones[id] = new window._Tone(id);
           created = true;
         }
 
