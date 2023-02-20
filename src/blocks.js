@@ -2177,16 +2177,18 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             blockWidth,
             maxX - this.left() + this.labelPadding - this.edge
         );
-        // adjust right padding if rightmost input has arrows
-        rightMost = parts[parts.length - 1];
-        if (rightMost instanceof MultiArgMorph && rightMost.isVisible &&
-                (lines.length === 1)) {
-            blockWidth -= space;
-        }
-        // adjust width to hat width
-        if (this instanceof HatBlockMorph) {
-            blockWidth = Math.max(blockWidth, this.hatWidth * 1.5);
-        }
+    }
+
+    // adjust right padding if rightmost input has arrows
+    rightMost = parts[parts.length - 1];
+    if (rightMost instanceof MultiArgMorph && rightMost.isVisible &&
+            (lines.length === 1)) {
+        blockWidth -= space * this.isPredicate ? 5 : 1;
+    }
+
+    // adjust width to hat width
+    if (this instanceof HatBlockMorph) {
+        blockWidth = Math.max(blockWidth, this.hatWidth * 1.5);
     }
 
     // set my extent (silently, because we'll redraw later anyway):
