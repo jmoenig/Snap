@@ -3,16 +3,20 @@
 ## in development:
 * **New Features:**
     * AND / OR are now variadic (and hyper!), thanks, Dan, for the suggestion
+    * all comparison operators are now variadic
 * **Notable Changes:**
     * removed variadic reporters library (because the primitives are now variadic)
     * MQTT library update, thanks, Simon and Xavier
 * **Notable Fixes:**
     * fixed "rename" and "rename all" for custom block formal parameters
     * fixed accessing random list elements
-    * TuneScope hotfix, thanks, Harsh & team!
+    * TuneScope hotfix, thanks, Harsh, Glen & team!
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-02-21
+* blocks, objects, threads: made all comparison operators variadic
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!

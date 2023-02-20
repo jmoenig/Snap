@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-February-16';
+modules.blocks = '2023-February-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1181,6 +1181,55 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: 'or',
         collapse: 'any'
+    },
+    '%all<': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '<',
+        collapse: 'all <'
+    },
+    '%all>': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '>',
+        collapse: 'all >'
+    },
+    '%all<=': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '\u2264',
+        collapse: 'all \u2264'
+    },
+    '%all>=': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '\u2265',
+        collapse: 'all \u2265'
+    },
+    '%all=': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '=',
+        collapse: 'all ='
+    },
+    '%any!=': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: '\u2260',
+        collapse: 'any \u2260'
+    },
+    '%all==': {
+        type: 'multi',
+        slots: '%s',
+        min: 2,
+        infix: 'identical to',
+        collapse: 'all identical'
     }
 };
 

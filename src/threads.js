@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-20';
+modules.threads = '2023-February-21';
 
 var ThreadManager;
 var Process;
@@ -4322,6 +4322,82 @@ Process.prototype.reportBasicMax = function (a, b) {
         y = b;
     }
     return x > y ? x : y;
+};
+
+// Process logic primitives - hyper-variadic applicative order
+
+Process.prototype.reportVariadicLessThan = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportLessThan(a, b),
+        items
+    );
+};
+
+Process.prototype.reportVariadicGreaterThan = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportGreaterThan(a, b),
+        items
+    );
+};
+
+Process.prototype.reportVariadicLessThanOrEquals = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportLessThanOrEquals(a, b),
+        items
+    );
+};
+
+Process.prototype.reportVariadicGreaterThanOrEquals = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportGreaterThanOrEquals(a, b),
+        items
+    );
+};
+
+Process.prototype.reportVariadicEquals = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportEquals(a, b),
+        items,
+        true // not hyper
+    );
+};
+
+Process.prototype.reportVariadicNotEquals = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportNotEquals(a, b),
+        items,
+        true // not hyper
+    );
+};
+
+Process.prototype.reportVariadicIsIdentical = function (items) {
+    return this.reportSequentialComparison(
+        (a, b) => this.reportIsIdentical(a, b),
+        items,
+        true // not hyper
+    );
+};
+
+Process.prototype.reportSequentialComparison = function (op, items, notHyper) {
+    // private - apply a comparison op to a sequence of values
+    var len = items.length(),
+        step, result, i;
+    if (len < 2) {return true; }
+    for (i = 1; i < len; i += 1) {
+        step = op(items.at(i), items.at(i + 1));
+        if (isNil(result)) {
+            result = step;
+        } else if (notHyper) {
+            result = result && step;
+        } else {
+            result = this.hyper(
+                (a, b) => a && b,
+                result,
+                step
+            );
+        }
+    }
+    return result;
 };
 
 // Process logic primitives - hyper where applicable

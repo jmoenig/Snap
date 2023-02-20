@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-February-15';
+modules.objects = '2023-February-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1226,35 +1226,35 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'pick random %n to %n',
             defaults: [1, 10]
         },
-        reportEquals: {
+        reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s = %s'
+            spec: '%all='
         },
-        reportNotEquals: {
+        reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2260 %s'
+            spec: '%any!='
         },
-        reportLessThan: {
+        reportVariadicLessThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s < %s'
+            spec: '%all<'
         },
-        reportLessThanOrEquals: {
+        reportVariadicLessThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2264 %s'
+            spec: '%all<='
         },
-        reportGreaterThan: {
+        reportVariadicGreaterThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s > %s'
+            spec: '%all>'
         },
-        reportGreaterThanOrEquals: {
+        reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2265 %s'
+            spec: '%all>='
         },
         reportVariadicAnd: {
             type: 'predicate',
@@ -1323,10 +1323,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'is %s a %typ ?',
             defaults: [5, ['number']]
         },
-        reportIsIdentical: {
+        reportVariadicIsIdentical: {
             type: 'predicate',
             category: 'operators',
-            spec: 'is %s identical to %s ?'
+            spec: 'is %all== ?'
         },
         reportTextSplit: {
             type: 'reporter',
@@ -1770,6 +1770,34 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportOr: {
             selector: 'reportVariadicOr',
             variadic: true
+        },
+        reportLessThan: {
+            selector: 'reportVariadicLessThan',
+            variadic: true
+        },
+        reportGreaterThan: {
+            selector: 'reportVariadicGreaterThan',
+            variadic: true
+        },
+        reportLessThanOrEquals: {
+            selector: 'reportVariadicLessThanOrEquals',
+            variadic: true
+        },
+        reportGreaterThanOrEquals: {
+            selector: 'reportVariadicGreaterThanOrEquals',
+            variadic: true
+        },
+        reportEquals: {
+            selector: 'reportVariadicEquals',
+            variadic: true
+        },
+        reportNotEquals: {
+            selector: 'reportVariadicNotEquals',
+            variadic: true
+        },
+        reportIsIdentical: {
+            selector: 'reportVariadicIsIdentical',
+            variadic: true
         }
     };
 };
@@ -1915,27 +1943,34 @@ SpriteMorph.prototype.blockAlternatives = {
     reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
         'reportDifference', 'reportVariadicProduct', 'reportQuotient',
         'reportPower', 'reportModulus', 'reportAtan2'],
-    reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportNotEquals: ['reportEquals', 'reportIsIdentical', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
+    reportVariadicLessThan: ['reportVariadicLessThanOrEquals',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicEquals: ['reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicNotEquals: ['reportVariadicEquals',
+        'reportVariadicIsIdentical', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicGreaterThan: ['reportVariadicGreaterThanOrEquals',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals'],
+    reportVariadicLessThanOrEquals: ['reportVariadicLessThan',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicGreaterThanOrEquals: ['reportVariadicGreaterThan',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals'],
+    reportVariadicIsIdentical: ['reportVariadicEquals',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
     reportVariadicAnd: ['reportVariadicOr'],
     reportVariadicOr: ['reportVariadicAnd'],
 
@@ -2809,9 +2844,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportVariadicLessThan'));
+        blocks.push(block('reportVariadicEquals'));
+        blocks.push(block('reportVariadicGreaterThan'));
         blocks.push('-');
         blocks.push(block('reportVariadicAnd'));
         blocks.push(block('reportVariadicOr'));
@@ -2827,7 +2862,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportVariadicIsIdentical'));
 
         if (Process.prototype.enableJS) {
             blocks.push('-');
@@ -3872,9 +3907,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
-            '=': 'reportEquals',
-            '<': 'reportLessThan',
-            '>': 'reportGreaterThan',
+            '=': 'reportVariadicEquals',
+            '<': 'reportVariadicLessThan',
+            '>': 'reportVariadicGreaterThan',
             '&': 'reportVariadicAnd',
             '|': 'reportVariadicOr',
             round: 'reportRound',
@@ -9646,9 +9681,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportVariadicLessThan'));
+        blocks.push(block('reportVariadicEquals'));
+        blocks.push(block('reportVariadicGreaterThan'));
         blocks.push('-');
         blocks.push(block('reportVariadicAnd'));
         blocks.push(block('reportVariadicOr'));
@@ -9664,7 +9699,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportVariadicIsIdentical'));
 
         if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
             blocks.push('-');
