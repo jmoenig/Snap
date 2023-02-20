@@ -8,6 +8,7 @@
     * MQTT library update, thanks, Simon and Xavier
 * **Notable Fixes:**
     * fixed "rename" and "rename all" for custom block formal parameters
+    * fixed accessing random list elements
     * TuneScope hotfix, thanks, Harsh & team!
 * **Documentation Updates:**
 * **Translation Updates:**
@@ -15,6 +16,7 @@
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!
+* threads: fixed accessing random list elements
 
 ### 2023-02-17
 * MQTT library update, thanks Simon and Xavier!

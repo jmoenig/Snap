@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-16';
+modules.threads = '2023-February-20';
 
 var ThreadManager;
 var Process;
@@ -2101,7 +2101,7 @@ Process.prototype.reportListItem = function (index, list) {
         return '';
     }
     if (index instanceof Array) {
-        if (index[0] === 'any') {
+        if (index[0] === 'random') {
             return list.at(this.reportBasicRandom(1, list.length()));
         }
         if (index[0] === 'last') {
