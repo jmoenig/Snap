@@ -8,9 +8,13 @@
     * MQTT library update, thanks, Simon and Xavier
 * **Notable Fixes:**
     * fixed "rename" and "rename all" for custom block formal parameters
+    * TuneScope hotfix, thanks, Harsh & team!
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-02-20
+* TuneScope hotfix, thanks, Harsh & team!
 
 ### 2023-02-17
 * MQTT library update, thanks Simon and Xavier!
