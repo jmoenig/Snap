@@ -9093,10 +9093,10 @@ CostumeIconMorph.prototype.prepareToBeGrabbed = function () {
 CostumeIconMorph.prototype.localRemoveCostume = function () {
     // Only remove the costume locally for the drag
     var wardrobe = this.parentThatIsA(WardrobeMorph),
-        idx = this.parent.children.indexOf(this),
-        ide = this.parentThatIsA(IDE_Morph);
+        ide = this.parentThatIsA(IDE_Morph),
+        idx = ide.currentSprite.costumes.indexOf(this.object);
 
-    wardrobe.removeCostumeAt(idx - 2);
+    wardrobe.removeCostumeAt(idx);
     if (ide.currentSprite.costume === this.object) {
         ide.currentSprite.wearCostume(null);
     }
