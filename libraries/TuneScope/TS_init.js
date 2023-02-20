@@ -129,6 +129,10 @@ window.parent.instrumentData = {
         path: "https://surikov.github.io/webaudiofontdata/sound/0260_JCLive_sf2_file.js",
         name: "_tone_0260_JCLive_sf2_file"
     },
+    "guitar, overdrive": {
+        path: "https://surikov.github.io/webaudiofontdata/sound/0291_LesPaul_sf2_file.js",
+        name: "_tone_0291_LesPaul_sf2_file"
+    },
     "piano": {
         path: "https://surikov.github.io/webaudiofontdata/sound/0020_JCLive_sf2_file.js",
         name: "_tone_0020_JCLive_sf2_file"
@@ -193,6 +197,10 @@ window.parent.instrumentData = {
         path: "https://surikov.github.io/webaudiofontdata/sound/0121_FluidR3_GM_sf2_file.js",
         name: "_tone_0121_FluidR3_GM_sf2_file"
     },
+    "music box": {
+        path: "https://surikov.github.io/webaudiofontdata/sound/0100_SBLive_sf2.js",
+        name: "_tone_0100_SBLive_sf2"
+    },
     "oboe": {
         path: "https://surikov.github.io/webaudiofontdata/sound/0680_JCLive_sf2_file.js",
         name: "_tone_0680_JCLive_sf2_file"
@@ -255,7 +263,7 @@ window.parent.instrumentVolumes = {}
 window.parent.globalInstrumentVolume = 0.5;
 
 // tones
-class Tone {
+class _Tone {
   constructor(id) {
     this.id = id;
     this.on = false;
@@ -318,7 +326,7 @@ class Tone {
   }
 
 }
-window.Tone = Tone;
+window._Tone = _Tone;
 window.tones = {};
 
 /* Auxillary Functions */

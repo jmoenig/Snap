@@ -2,6 +2,13 @@
 
 ## Added to the Official Snap Extension Library with Snap! 8.0.0
 
+### February 2023
+*   Fixed issue where `Set Volume` (and `Set Instrument Volume`) wasn't working at 0%
+*   Added missing Overdriven Guitar and Music Box files
+*   Fixed `Interval Between` block reporting incorrectly
+*   Fixed some blocks missing dependencies
+*   Rearranged blocks in the palette, moved Initialize TuneScope to the top
+
 ### December 2022
 *   Added MIDI file conversion to TuneScope. Users can now import MIDI files and convert them to TuneScope track format with the `Import MIDI File` and `Convert MIDI to TuneScope` blocks
 *   Enabled users to specify note duration in seconds for Track blocks
