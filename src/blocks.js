@@ -1994,6 +1994,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         ico = this instanceof BlockMorph && this.hasLocationPin() ?
         	this.methodIconExtent().x + space : 0,
         bottomCorrection,
+        rightCorrection = 0,
         rightMost,
         hasLoopCSlot = false,
         hasLoopArrow = false;
@@ -2166,6 +2167,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             blockWidth,
             maxX - this.left() + this.rounding
         );
+        rightCorrection = space;
     } else if ((this instanceof MultiArgMorph && this.slotSpec !== '%cs')
             || this instanceof ArgLabelMorph) {
         blockWidth = Math.max(
@@ -2177,13 +2179,14 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             blockWidth,
             maxX - this.left() + this.labelPadding - this.edge
         );
+        rightCorrection = space;
     }
 
     // adjust right padding if rightmost input has arrows
     rightMost = parts[parts.length - 1];
     if (rightMost instanceof MultiArgMorph && rightMost.isVisible &&
             (lines.length === 1)) {
-        blockWidth -= space * this.isPredicate ? 5 : 1;
+        blockWidth -= rightCorrection;
     }
 
     // adjust width to hat width
