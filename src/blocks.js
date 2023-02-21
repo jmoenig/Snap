@@ -1222,7 +1222,7 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%s',
         min: 2,
         infix: '\u2260',
-        collapse: 'all pairs \u2260'
+        collapse: 'neighbors \u2260'
     },
     '%all==': {
         type: 'multi',
