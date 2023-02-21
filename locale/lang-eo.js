@@ -581,8 +581,24 @@ SnapTranslator.dict.eo = {
         'unikodo %n kiel litero',
     'is %s a %typ ?':
         '\u0109u %s estas %typ ?',
-    'is %s identical to %s ?':
-        'estas %s identa kun %s ?',
+    'is %all== ?':
+        'estas %all== ?',
+    'identical to':
+        'identa kun',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'tipo de %s',
 
