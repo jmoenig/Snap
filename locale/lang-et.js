@@ -400,8 +400,24 @@ SnapTranslator.dict.et = {
         'Unicode %n sümbol',
     'is %s a %typ ?':
         'on %s %typ ?',
-    'is %s identical to %s ?':
-        'on %s sama kui %s ?',
+    'is %all== ?':
+        'on %all== ?',
+    'identical to':
+        'sama kui',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s tüüp',
