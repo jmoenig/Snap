@@ -824,7 +824,7 @@ SnapTranslator.dict.de = {
     'identical to':
         'identisch mit',
     'all identical':
-        'alles identisch',
+        'alles identisch in',
     'all <':
         'alle <',
     'all >':
