@@ -549,6 +549,24 @@ SnapTranslator.dict.ja_HIRA = {
         '%s は %typ がた',
     'is %s identical to %s ?':
         '%s は %s とどういつ',
+    'is %all== ?':
+        'は %all== ?',
+    'identical to':
+        'とどういつ',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s のかた',
