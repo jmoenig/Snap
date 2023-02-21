@@ -17,7 +17,8 @@
 
 ### 2023-02-21
 * blocks, objects, threads: made all comparison operators variadic
-* blocks: tweaked layout for variadic predicates 
+* blocks: tweaked layout for variadic predicates
+* blocks, objects: changed "any !=" to "all pairs !=", thanks, Dan!
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!

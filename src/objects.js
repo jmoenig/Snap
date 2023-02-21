@@ -1234,7 +1234,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%any!='
+            spec: '%all!='
         },
         reportVariadicLessThan: {
             type: 'predicate',

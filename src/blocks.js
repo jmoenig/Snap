@@ -1217,12 +1217,12 @@ SyntaxElementMorph.prototype.labelParts = {
         infix: '=',
         collapse: 'all ='
     },
-    '%any!=': {
+    '%all!=': {
         type: 'multi',
         slots: '%s',
         min: 2,
         infix: '\u2260',
-        collapse: 'any \u2260'
+        collapse: 'all pairs \u2260'
     },
     '%all==': {
         type: 'multi',
