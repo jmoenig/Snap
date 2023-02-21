@@ -25,6 +25,7 @@
 * German translation update
 * adjusted Bulgarian translation for variadic comparison ops
 * adjusted Bangla translation for variadic comparison ops
+* adjusted Valencian Catalan translation for variadic comparison ops
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!
