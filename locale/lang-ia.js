@@ -586,8 +586,24 @@ SnapTranslator.dict.ia = {
         'Unicode character pro %n',
     'is %s a %typ ?':
         'a es %s de %typ ?',
-    'is %s identical to %s ?':
-        'a es %s identic a %s ?', // 'mesme' ?
+    'is %all== ?':
+        'a es %all== ?',
+    'identical to':
+        'identic a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'typo de %s',
