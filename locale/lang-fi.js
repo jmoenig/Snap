@@ -568,8 +568,24 @@ SnapTranslator.dict.fi = {
         'Unicode-arvoa %n vastaava merkki',
     'is %s a %typ ?':
         'onko %s %typ ?',
-    'is %s identical to %s ?':
-        'onko %s sama kuin %s ?',
+    'is %all== ?':
+        'onko %all== ?',
+    'identical to':
+        'sama kuin',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s:n tyyppi',
