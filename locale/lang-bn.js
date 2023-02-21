@@ -600,8 +600,24 @@ SnapTranslator.dict.bn = {
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
         '%s এই প্রকারের কিনা %typ ?',
-    'is %s identical to %s ?':
-        '%s এর সমতুল্য %s কিনা?',
+    'is %all== ?':
+        '%all== কিনা?',
+    'identical to':
+        'এর সমতুল্য',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s -এর প্রকার',

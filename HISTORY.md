@@ -24,6 +24,7 @@
 * gui: fixed #3186 - include hidden variables when exporting blocks
 * German translation update
 * adjusted Bulgarian translation for variadic comparison ops
+* adjusted Bangla translation for variadic comparison ops
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!
