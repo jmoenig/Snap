@@ -644,8 +644,24 @@ SnapTranslator.dict.gl = {
         'carácter cuxo código Unicode é %n',
     'is %s a %typ ?':
         '%s é un/unha %typ ?',
-    'is %s identical to %s ?':
-        '%s é idéntico a %s ?',
+    'is %all== ?':
+        'é %all== ?',
+    'identical to':
+        'idéntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipo de %s',
