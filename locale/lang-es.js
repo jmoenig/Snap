@@ -943,8 +943,25 @@ SnapTranslator.dict.es = {
         'unic\u00F3digo %n como letra',
     'is %s a %typ ?':
         '\u00BFes %s un %typ ?',
-    'is %s identical to %s ?':
-        '\u00BFes %s id\u00E9ntico a %s ?',
+    'is %all== ?':
+        '\u00BFes %all== ?',
+    'identical to':
+        'id\u00E9ntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
+
     'JavaScript function ( %mult%s ) { %code }':
         'funci\u00F3n JavaScript ( %mult%s ) { %code }',
 

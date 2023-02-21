@@ -29,6 +29,7 @@
 * adjusted Czech translation for variadic comparison ops
 * adjusted Danish translation for variadic comparison ops
 * adjusted Esperanto translation for variadic comparison ops
+* adjusted Spanish translation for variadic comparison ops
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!
