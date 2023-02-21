@@ -577,6 +577,24 @@ SnapTranslator.dict.ar = {
         '%s يوافق %typ النوع',
     'is %s identical to %s ?':
         '؟ %s مع متماثل %s هل',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'مطابق ل',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'من نوع %s',
 
