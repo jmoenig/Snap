@@ -549,6 +549,24 @@ SnapTranslator.dict.ja = {
         '%s は %typ 型',
     'is %s identical to %s ?':
         '%s は %s と同一',
+    'is %all== ?':
+        'は %all== ?',
+    'identical to':
+        'と同一',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s の型',

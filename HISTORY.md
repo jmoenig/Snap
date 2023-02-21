@@ -43,6 +43,7 @@
 * adjusted Interlingua translation for variadic comparison ops
 * adjusted Indonesian translation for variadic comparison ops
 * adjusted Italian translation for variadic comparison ops
+* adjusted Japanese translation for variadic comparison ops
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!
