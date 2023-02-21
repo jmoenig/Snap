@@ -771,8 +771,24 @@ SnapTranslator.dict.hu = {
         'unicode %n betűként',
     'is %s a %typ ?':
         '%s egy %typ ?',
-    'is %s identical to %s ?':
-        '%s ugyanaz, mint %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'ugyanaz, mint',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript függvény ( %mult%s ) { %code }',
