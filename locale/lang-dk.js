@@ -557,8 +557,24 @@ SnapTranslator.dict.dk = {
         'unicode %n som bogstav',
     'is %s a %typ ?':
         'er %s et %typ ?',
-    'is %s identical to %s ?':
-        'er %s identisk med %s ?',
+    'is %all== ?':
+        'er %all== ?',
+    'identical to':
+        'identisk med',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'type af %s',
