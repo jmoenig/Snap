@@ -586,8 +586,24 @@ SnapTranslator.dict.cs = {
         'Unicode %n jako znak',
     'is %s a %typ ?':
         'je %s typu %typ ?',
-    'is %s identical to %s ?':
-        'je %s stejný jako %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'stejný jako',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'Typ %s',
