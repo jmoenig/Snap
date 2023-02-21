@@ -1456,26 +1456,39 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
+    const restoreDroppedMorph = morph => {
+        const situation = world.hand.grabOrigin;
+        if (morph.justDropped) {
+            morph.justDropped();
+        }
+        if (situation.origin.reactToDropOf) {
+            situation.origin.reactToDropOf(morph);
+        }
+    };
     this.palette.reactToDropOf = (droppedMorph, hand) => {
         if (droppedMorph instanceof DialogBoxMorph) {
             this.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
-            droppedMorph.destroy();
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            SnapActions.removeCostume(droppedMorph.object);
-            droppedMorph.perish();
+            SnapActions.removeCostume(droppedMorph.object)
+                .catch(_err => restoreDroppedMorph(droppedMorph))
+                .then(() => droppedMorph.perish());
         } else if (droppedMorph instanceof SoundIconMorph) {
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSound(droppedMorph.object);
-            droppedMorph.destroy();
         } else if (droppedMorph instanceof BlockMorph) {
             this.stage.threads.stopAllForBlock(droppedMorph);
             if (droppedMorph.id) {
+                restoreDroppedMorph(droppedMorph);
                 SnapActions.removeBlock(droppedMorph);
+            } else {
+                droppedMorph.perish();
             }
-            droppedMorph.perish();
         }
     };
 
