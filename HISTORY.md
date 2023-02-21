@@ -11,6 +11,7 @@
     * fixed "rename" and "rename all" for custom block formal parameters
     * fixed accessing random list elements
     * TuneScope hotfix, thanks, Harsh, Glen & team!
+    * fixed including hidden variables when exporting blocks
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
@@ -20,6 +21,7 @@
 * blocks: tweaked layout for variadic predicates
 * blocks, objects: changed "any !=" to "all pairs !=", thanks, Dan!
 * blocks: changed "all pairs !=" to "neighbors !=", thanks, Brian!
+* gui: fixed #3186 - include hidden variables when exporting blocks
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!

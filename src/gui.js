@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2022-February-13';
+modules.gui = '2023-February-21';
 
 // Declarations
 
@@ -7961,10 +7961,10 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         locals = definitions.filter(def => !def.isGlobal),
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
-        dtaStr = dataFrame && dataFrame.names().length ?
+        dtaStr = dataFrame && dataFrame.names(true).length ?
             this.serializer.serialize(dataFrame, true)
             : '',
-        ldtStr = localData && localData.names().length ?
+        ldtStr = localData && localData.names(true).length ?
             this.serializer.serialize(localData, true)
             : '',
         cats = moreCategories || [],
