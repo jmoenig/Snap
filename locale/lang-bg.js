@@ -531,8 +531,24 @@ SnapTranslator.dict.bg = {
         'буква с Unicode %n',
     'is %s a %typ ?':
         '%s от тип %typ ли е ?',
-    'is %s identical to %s ?':
-        '%s идентичен с %s ?',
+    'is %all== ?':
+        'is %all== ?',
+    'identical to':
+        'идентичен с',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'тип на %s',
