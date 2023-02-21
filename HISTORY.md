@@ -36,6 +36,7 @@
 * adjusted French translation for variadic comparison ops
 * adjusted Galician translation for variadic comparison ops
 * adjusted Hebrew translation for variadic comparison ops
+* adjusted Hindi translation for variadic comparison ops
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!

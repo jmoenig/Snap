@@ -750,8 +750,24 @@ SnapTranslator.dict.hi = {
         'Unicode %n as letter',
     'is %s a %typ ?':
         'यह %s प्रकार %typ ?',
-    'is %s identical to %s ?':
-        ' %s के समान है %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'के समान है',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'Javascript function ( %mult%s ) { %code }',
     'compile %repRing':
