@@ -753,8 +753,24 @@ SnapTranslator.dict.he = {
         'המר_יוניקוד_לאות %n ',
     'is %s a %typ ?':
         'האם_משתנה_מסוג %s %typ ?',
-    'is %s identical to %s ?':
-        '? %s האם_זהים %s',
+    'is %all== ?':
+        '? %all==',
+    'identical to':
+        'האם_זהים',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'הסוג של %s',
     'compile %repRing':
