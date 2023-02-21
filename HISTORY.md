@@ -22,6 +22,7 @@
 * blocks, objects: changed "any !=" to "all pairs !=", thanks, Dan!
 * blocks: changed "all pairs !=" to "neighbors !=", thanks, Brian!
 * gui: fixed #3186 - include hidden variables when exporting blocks
+* German translation update
 
 ### 2023-02-20
 * TuneScope hotfix, thanks, Harsh & team!

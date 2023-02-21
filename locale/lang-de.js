@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2023-02-15', // this, too, will appear in the Translators tab
+        '2023-02-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -819,8 +819,24 @@ SnapTranslator.dict.de = {
         'Unicode %n als Buchstabe',
     'is %s a %typ ?':
         'ist %s ein(e) %typ ?',
-    'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+    'is %all== ?':
+        'ist %all== ?',
+    'identical to':
+        'identisch mit',
+    'all identical':
+        'alles identisch',
+    'all <':
+        'alle <',
+    'all >':
+        'alle >',
+    'all \u2264':
+        'alle \u2264',
+    'all \u2265':
+        'alle \u2265',
+    'all =':
+        'alle =',
+    'neighbors \u2260':
+        'benachbarte \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript Funktion ( %mult%s ) { %code }',
     'compile %repRing':
