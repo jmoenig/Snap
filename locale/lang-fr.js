@@ -660,8 +660,24 @@ SnapTranslator.dict.fr = {
         'unicode %n comme lettre',
     'is %s a %typ ?':
         '%s est un(e) %typ ?',
-    'is %s identical to %s ?':
-        '%s est identique \u00E0 %s ?',
+    'is %all== ?':
+        'est %all== ?',
+    'identical to':
+        'identique \u00E0',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'type de %s',
