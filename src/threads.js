@@ -4664,7 +4664,7 @@ Process.prototype.reportLetter = function (idx, string) {
 Process.prototype.reportBasicLetter = function (idx, string) {
     var str, i;
 
-    str = isNil(string) ? '' : string.toString();
+    str = isNil(string) ? '' : Array.from(string.toString());
     if (this.inputOption(idx) === 'any') {
         idx = this.reportBasicRandom(1, str.length);
     }
