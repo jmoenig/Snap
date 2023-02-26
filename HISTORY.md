@@ -12,9 +12,13 @@
     * fixed accessing random list elements
     * TuneScope hotfix, thanks, Harsh, Glen & team!
     * fixed including hidden variables when exporting blocks
+    * fixed #3183 - determining the length of huge strings fails
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-02-26
+* threads: fixed #3183 - determining the length of huge strings fails
 
 ### 2023-02-21
 * blocks, objects, threads: made all comparison operators variadic

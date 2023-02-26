@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-21';
+modules.threads = '2023-February-26';
 
 var ThreadManager;
 var Process;
@@ -4677,7 +4677,11 @@ Process.prototype.reportBasicLetter = function (idx, string) {
 
 Process.prototype.reportStringSize = function (data) {
     return this.hyper(
-        str => isNil(data) ? 0 : Array.from(str.toString()).length,
+        str => isString(str) ? str.length
+                : (parseFloat(str) === +str ? str.toString().length : 0),
+        // proposed scheme by Michael to address text with emojis, has
+        // memory issue when the stringd get very large:
+        // str => isNil(data) ? 0 : Array.from(str.toString()).length,
         data
     );
 };
