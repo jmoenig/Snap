@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-January-31';
+modules.lists = '2023-February-26';
 
 var List;
 var ListWatcherMorph;
@@ -875,6 +875,28 @@ List.prototype.strideTranspose = function () {
 List.prototype.reversed = function () {
     // only for arrayed lists
     return new List(this.itemsArray().slice().reverse());
+};
+
+// List analysis
+
+List.prototype.distribution = function () {
+    if (this.rank() > 1) {throw new Error('can only analyze flat lists'); }
+    var dict = new Map(),
+        data = this.itemsArray(),
+        len = data.length,
+        isNum = thing => parseFloat(thing) === +thing,
+        item, i;
+    for (i = 0; i < len; i += 1) {
+        item = isNum(data[i]) ? data[i].toString() : data[i];
+        if (dict.has(item)) {
+            dict.set(item, dict.get(item) + 1);
+        } else {
+            dict.set(item, 1);
+        }
+    }
+    return new List([...dict].sort((a, b) => b[1] - a[1])
+        .map(pair => new List(pair))
+    );
 };
 
 // List conversion:

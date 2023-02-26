@@ -2167,6 +2167,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'transpose':
         this.assertType(list, 'list');
         return list.transpose();
+    case 'distribution':
+        this.assertType(list, 'list');
+        return list.distribution();
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();

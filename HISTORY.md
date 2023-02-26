@@ -4,6 +4,7 @@
 * **New Features:**
     * AND / OR are now variadic (and hyper!), thanks, Dan, for the suggestion
     * all comparison operators are now variadic
+    * new  "distribution" selector in the list attribute reporter's dropdown menu
 * **Notable Changes:**
     * removed variadic reporters library (because the primitives are now variadic)
     * MQTT library update, thanks, Simon and Xavier
@@ -19,6 +20,7 @@
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails
+* blocks, threads, lists: added "distribution" selector to list attribute reporter
 
 ### 2023-02-21
 * blocks, objects, threads: made all comparison operators variadic
