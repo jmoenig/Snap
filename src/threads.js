@@ -4779,7 +4779,8 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         break;
     case '':
     case 'letter':
-        return new List(Array.from(str));
+        // return new List(Array.from(str)); // proposed by Michael for emojis
+        return new List(str.split(''));
     case 'csv':
         return this.parseCSV(string);
     case 'json':
