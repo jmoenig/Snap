@@ -20,6 +20,7 @@
 
 ### 2023-02-27
 * adjusted Kannada translation for variadic comparison ops
+* adjusted Korean translation for variadic comparison ops
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails

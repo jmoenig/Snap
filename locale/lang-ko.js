@@ -592,6 +592,24 @@ SnapTranslator.dict.ko = {
         '%s 이(가) %typ 인가?',
     'is %s identical to %s ?':
         '%s 와(과) %s 가 동일한가?',
+    'is %all== ?':
+        '와(과) %all== ?',
+    'identical to':
+        '가 동일한가',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         '%s 의 타입',
 
