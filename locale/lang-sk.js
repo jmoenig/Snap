@@ -749,6 +749,24 @@ SnapTranslator.dict.sk = {
         'je %s typu %typ ?',
     'is %s identical to %s ?':
         'je %s rovnak\u00FD jako %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'rovnak\u00FD jako',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript funkcia ( %mult%s ) { %code }',
     'compile %repRing':
