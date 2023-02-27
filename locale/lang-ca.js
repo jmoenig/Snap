@@ -575,7 +575,7 @@ SnapTranslator.dict.ca = {
         'digues a %spr que faci %cmdRing %inputs',
     'ask %spr for %repRing %inputs':
         'pregunta a %spr per %repRing %inputs',
-    'When %edit is edited %message':
+    'when %edit is edited %message':
         'Quan %edit sigui editat %message',
     'anything':
         'qualsevol element',
