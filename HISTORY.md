@@ -37,6 +37,7 @@
 * adjusted Simplified Chinese translation for variadic comparison ops
 * adjusted Traditional Chinese translation for variadic comparison ops
 * adjusted Greek translation for variadic comparison ops
+* adjusted Dutch translation for variadic comparison ops
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails
