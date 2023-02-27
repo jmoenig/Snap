@@ -956,6 +956,24 @@ SnapTranslator.dict.zh_CN = {
         '%s 的类型是 %typ 吗？',
     'is %s identical to %s ?':
         '%s 与 %s 是相同的？',
+    'is %all== ?':
+        '%all== 是相同的?',
+    'identical to':
+        '与',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s 的类型',
