@@ -632,6 +632,24 @@ SnapTranslator.dict.pt_BR = {
         '%s é um/uma %typ',
     'is %s identical to %s ?':
         '%s é idêntico a %s',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'é idêntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'o tipo de %s',
