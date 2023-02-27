@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-February-26';
+modules.lists = '2023-February-27';
 
 var List;
 var ListWatcherMorph;
@@ -129,6 +129,11 @@ var ListWatcherMorph;
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
     slice()                 - same as query() turning negative indices into slices
+
+    analysis:
+    ---------
+    distribution()          - answer the occurrence count for each element
+
 */
 
 // List instance creation:
@@ -880,7 +885,9 @@ List.prototype.reversed = function () {
 // List analysis
 
 List.prototype.distribution = function () {
-    if (this.rank() > 1) {throw new Error('can only analyze flat lists'); }
+    // return a table representing a dictionary indicating the occurrence count
+    // of each unique elements
+    // note: for compound data this method uses identity rather than equqlity
     var dict = new Map(),
         data = this.itemsArray(),
         len = data.length,
