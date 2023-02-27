@@ -595,6 +595,24 @@ SnapTranslator.dict.si = {
         'je %s tipa %typ ?',
     'is %s identical to %s ?':
         'je %s identi\u010Den %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'identi\u010Den',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'Tip od %s',
