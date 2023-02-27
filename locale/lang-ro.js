@@ -574,6 +574,24 @@ SnapTranslator.dict.ro = {
         'este %s un/o %typ ?',
     'is %s identical to %s ?':
         'este %s identic cu %s ?',
+    'is %all== ?':
+        'este %all== ?',
+    'identical to':
+        'identic cu',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipul lui %s',

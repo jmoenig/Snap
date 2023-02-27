@@ -25,6 +25,7 @@
 * adjusted Norwegian translation for variadic comparison ops
 * adjusted Polish translation for variadic comparison ops
 * adjusted Portuguese translation for variadic comparison ops
+* adjusted Romanian translation for variadic comparison ops
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails
