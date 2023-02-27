@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks', // optional
     'last_changed':
-        '2022-12-26', // this, too, will appear in the Translators tab
+        '2023-02-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -734,19 +734,19 @@ SnapTranslator.dict.ca = {
     'identical to':
         'idèntic a',
     'all identical':
-        'all identical',
+        'tot idèntic',
     'all <':
-        'all <',
+        'tot < en',
     'all >':
-        'all >',
+        'tot > en',
     'all \u2264':
-        'all \u2264',
+        'tot \u2264 en',
     'all \u2265':
-        'all \u2265',
+        'tot \u2265 en',
     'all =':
-        'all =',
+        'tots =',
     'neighbors \u2260':
-        'neighbors \u2260',
+        'tots els veïns \u2260 en',
 
     'type of %s':
         'tipus de %s',
@@ -798,6 +798,8 @@ SnapTranslator.dict.ca = {
         'aplanament',
     'columns':
         'columnes',
+    'distribution':
+        'distribució',
     'reverse':
         'revers',
     'lines':
@@ -1744,7 +1746,7 @@ SnapTranslator.dict.ca = {
 
     // attributes
     'neighbors':
-        'veins',
+        'veïns',
     'self':
         'un mateix',
     'other sprites':
