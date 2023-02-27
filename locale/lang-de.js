@@ -613,7 +613,7 @@ SnapTranslator.dict.de = {
         'lasse %spr %cmdRing tun %inputs',
     'ask %spr for %repRing %inputs':
         'frage %spr nach %repRing %inputs',
-    'When %edit is edited %message':
+    'when %edit is edited %message':
         'Wenn %edit bearbeitet wird %message',
     'anything':
         'beliebiges',
