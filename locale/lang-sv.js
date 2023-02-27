@@ -607,6 +607,24 @@ SnapTranslator.dict.sv = {
         '%s \u00E4r %typ ?',
     'is %s identical to %s ?':
         '%s identisk med %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'identisk med',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'typ %s',
