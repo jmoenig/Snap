@@ -558,6 +558,24 @@ SnapTranslator.dict.kn = {
         '\u0C87\u0CA6\u0CC1 %s \u0C87\u0CA6\u0CB0\u0CA6\u0CC7 %typ ?',
     'is %s identical to %s ?':
        '\u0C87\u0CA6\u0CC1 %s \u0C92\u0C82\u0CA6\u0CC7\u0020\u0CB0\u0CC0\u0CA4\u0CBF\u0CAF\u0CBE\u0C97\u0CBF\u0CA6\u0CC6 %s ?',
+    'is %all== ?':
+        '\u0C87\u0CA6\u0CC1 %all== ?',
+    'identical to':
+        '\u0C92\u0C82\u0CA6\u0CC7\u0020\u0CB0\u0CC0\u0CA4\u0CBF\u0CAF\u0CBE\u0C97\u0CBF\u0CA6\u0CC6',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '\u0CAC\u0C97\u0CC6\u0020 %s',
