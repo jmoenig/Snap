@@ -760,6 +760,24 @@ SnapTranslator.dict.pl = {
         'jest %s typu %typ ?',
     'is %s identical to %s ?':
         'jest %s identyczne z %s ?',
+    'is %all== ?':
+        'jest %all== ?',
+    'identical to':
+        'identyczne z',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'funkcja JavaScript ( %mult%s ) { %code }',
     'compile %repRing':
