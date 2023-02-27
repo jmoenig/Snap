@@ -794,6 +794,24 @@ SnapTranslator.dict.el = {
         'είναι το %s καποιο %typ ;',
     'is %s identical to %s ?':
         'είναι το %s παρόμοιο με το %s ?',
+    'is %all== ?':
+        'είναι το %all== ?',
+    'identical to':
+        'παρόμοιο με το',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript συνάρτηση( %mult%s ) { %code }',
     'compile %repRing':
