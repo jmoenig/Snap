@@ -41,6 +41,7 @@
 * adjusted Catalan translation for variadic comparison ops
 * adjusted Brazilian Portuguese translation for variadic comparison ops
 * lists: tweaked distribution()
+* German translation update for list "distribution"
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails
