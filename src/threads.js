@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-February-26';
+modules.threads = '2023-February-27';
 
 var ThreadManager;
 var Process;
@@ -4699,7 +4699,8 @@ Process.prototype.reportUnicode = function (string) {
             return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
-        unicodeList = Array.from(str);
+        // unicodeList = Array.from(str); // emoji-friendly version
+        unicodeList = str.split('');
         if (unicodeList.length > 1) {
             return this.reportUnicode(new List(unicodeList));
         }
