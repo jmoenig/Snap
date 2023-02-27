@@ -752,6 +752,24 @@ SnapTranslator.dict.no = {
         'er %s type %typ ?',
     'is %s identical to %s ?':
         'er %s identisk %s ?',
+    'is %all== ?':
+        'er %all== ?',
+    'identical to':
+        'identisk',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript funktion ( %mult%s ) { %code }',
     'compile %repRing':
