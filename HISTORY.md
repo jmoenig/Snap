@@ -43,6 +43,7 @@
 * lists: tweaked distribution()
 * German translation update for list "distribution"
 * threads: tweaked "unicode of"
+* objects: changed 'When ... is edited' hat block label to lowercase
 
 ### 2023-02-26
 * threads: fixed #3183 - determining the length of huge strings fails

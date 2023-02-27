@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-February-21';
+modules.objects = '2023-February-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -919,7 +919,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveUserEdit: {
             type: 'hat',
             category: 'control',
-            spec: 'When %edit is edited %message',
+            spec: 'when %edit is edited %message',
             defaults: [['anything']]
         },
 
