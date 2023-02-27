@@ -729,8 +729,24 @@ SnapTranslator.dict.ca = {
         'lletra amb valor Unicode %n',
     'is %s a %typ ?':
         'és %s un %typ ?',
-    'is %s identical to %s ?':
-        'és %s idèntic a %s ?',
+    'is %all== ?':
+        'és %all== ?',
+    'identical to':
+        'idèntic a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipus de %s',
