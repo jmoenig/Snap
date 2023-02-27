@@ -548,6 +548,24 @@ SnapTranslator.dict.zh_TW = {
         '%s 是 %typ 類型？',
     'is %s identical to %s ?':
         '%s 與 %s 相同嗎？',
+    'is %all== ?':
+        '%all== 相同嗎?',
+    'identical to':
+        '與',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s 類型',
