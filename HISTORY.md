@@ -17,6 +17,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+    * Catalan, thanks, Joan!
+
+### 2023-02-28
+* Catalan translation update, thanks, Joan!
 
 ### 2023-02-27
 * adjusted Kannada translation for variadic comparison ops
