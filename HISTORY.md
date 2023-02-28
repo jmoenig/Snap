@@ -21,6 +21,7 @@
 
 ### 2023-02-28
 * Catalan translation update, thanks, Joan!
+* v8.2-rc2
 
 ### 2023-02-27
 * adjusted Kannada translation for variadic comparison ops
