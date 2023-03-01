@@ -2,6 +2,13 @@
 
 ## in development:
 * **New Features:**
+* **Notable Changes:**
+* **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.2.0:
+* **New Features:**
     * AND / OR are now variadic (and hyper!), thanks, Dan, for the suggestion
     * all comparison operators are now variadic
     * new  "distribution" selector in the list attribute reporter's dropdown menu
@@ -14,10 +21,12 @@
     * TuneScope hotfix, thanks, Harsh, Glen & team!
     * fixed including hidden variables when exporting blocks
     * fixed #3183 - determining the length of huge strings fails
-* **Documentation Updates:**
 * **Translation Updates:**
     * German
     * Catalan, thanks, Joan!
+
+### 2023-03-01
+* prepared v8.1 release
 
 ### 2023-02-28
 * Catalan translation update, thanks, Joan!
