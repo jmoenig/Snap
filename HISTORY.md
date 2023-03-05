@@ -5,12 +5,14 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed #3190 - unable to search blocks in the stage
+    * fixed finding blocks by typing their infix or collapse variants (e.g. "and", "or", "sum", "product" etc.)
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-03-05
 * new dev version
-* fixed #3190 - unable to search blocks in the stage
+* objects: fixed #3190 - unable to search blocks in the stage
+* objects: fixed finding blocks by typing their infix or collapse variants (e.g. "and", "or", "sum", "product" etc.)
 
 ## 8.2.0:
 * **New Features:**
