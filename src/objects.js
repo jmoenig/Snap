@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-February-27';
+modules.objects = '2023-March-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -10139,6 +10139,7 @@ StageMorph.prototype.allPaletteBlocks
     = SpriteMorph.prototype.allPaletteBlocks;
 
 StageMorph.prototype.isHidingBlock = SpriteMorph.prototype.isHidingBlock;
+StageMorph.prototype.isDisablingBlock = SpriteMorph.prototype.isDisablingBlock;
 
 StageMorph.prototype.changeBlockVisibility
     = SpriteMorph.prototype.changeBlockVisibility;

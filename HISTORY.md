@@ -4,11 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed #3190 - unable to search blocks in the stage
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-03-05
 * new dev version
+* fixed #3190 - unable to search blocks in the stage
 
 ## 8.2.0:
 * **New Features:**
