@@ -326,9 +326,9 @@ SnapTranslator.dict.ti = {
     'if on edge, bounce':
         'ደረት እንተ ተንኪፍካ፡ ተመለስ',
     'x position':
-        'ቦታ ሀ',
+        'ነቑጣ ሀ',
     'y position':
-        'ቦታ ሰ',
+        'ነቑጣ ሰ',
     'direction':
         'ኣንፈት',
 
@@ -512,9 +512,9 @@ SnapTranslator.dict.ti = {
     'dropped':
         'ምስ ጠፋእኩ',
     'mouse-entered':
-        'ኣመልካቲ ኣንጭዋ ምስ ዝዓልበኒ',
+        'ኣንጭዋ ምስ ዝትንክፈኒ',
     'mouse-departed':
-        'ኣመልካቲ ኣንጭዋ ምስ ዝገድፈኒ',
+        'ኣንጭዋ ምስ ዝፍንተተኒ',
     'scrolled-down':
     	'ንታሕቲ ምስ ዝጥቕለል',
     'scrolled-up':
@@ -590,185 +590,185 @@ SnapTranslator.dict.ti = {
     'call %cmdRing w/continuation':
         '%cmdRing ጸውዕ ምስ መቐጸልታ',
     'warp %c':
-        'Warp %c',
+        'ፍጡን %c',
     'when I start as a clone':
-        'Wenn ich als Klon starte',
+        'ከም ቅዳሕ እንተ ጀሚረ',
     'create a clone of %cln':
-        'klone %cln',
+        ' ናይ %cln ቅዳሕ ኣዳሉ',
     'a new clone of %cln':
-        'neuer Klon von %cln',
+        'ሓድሽ ናይ ቅዳሕ %cln',
     'myself':
-        'selbst',
+        'ባዕለይ',
     'delete this clone':
-        'entferne diesen Klon',
+        'ነዚ ቅዳሕ ደምስስ',
     'switch to scene %scn %send':
-        'wechsle zur Szene %scn %send',
+        'ናብ ዓውደ ፍጻመ %scn ቀይር %send',
     'and send':
-        'und sende',
+        'እሞ ልኣኽ',
     'next':
-        'nächste',
+        'ቀዳሚ',
     'previous':
-        'vorherige',
+        'ሰዓቢ',
     'tell %spr to %cmdRing %inputs':
-        'lasse %spr %cmdRing tun %inputs',
+        'ን %spr %cmdRing ንገር %inputs',
     'ask %spr for %repRing %inputs':
-        'frage %spr nach %repRing %inputs',
+        'ን %spr ሕተት %repRing %inputs',
     'When %edit is edited %message':
-        'Wenn %edit bearbeitet wird %message',
+        'ኣብልዕሊ %edit ኣርትዖት ምስዝፍጸም %message',
     'anything':
-        'beliebiges',
+        'ዝኾነ ነገር',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        '%col እንተ ተተንኪፉ፧',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        '%clr እንተ ተተንኪፉ፧',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        'ሕብሪ %clr ን %clr እንተ ተተንኪፉ፧',
     'ask %s and wait':
-        'frage %s und warte',
+        'ሕተት %s እሞ ተጸበ',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'መን እዩ ስምካ፧',
     'answer':
-        'Antwort',
+        'መልሲ',
     'mouse position':
-        'Mausposition',
+        'ነቑጣ ኣንጭዋ',
     'mouse x':
-        'Maus x-Position',
+        'ሀ ነቑጣ ኣንጭዋ',
     'mouse y':
-        'Maus y-Position',
+        'ሰ ነቑጣ ኣንጭዋ',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'መጥልዕ ኣንጭዋ ተጸቒጡ፧',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        'መፍትሕ %key ተጸቒጡ፧',
     '%rel to %dst':
-        '%rel zu %dst',
+        '%rel ናብ %dst',
     'distance':
-    	'Entfernung',
+    	'ርሕቀት',
     'ray length':
-        'Strahlenlänge',
+        'ቁመት ጩራ',
     '%asp at %loc' :
-        '%asp bei %loc',
+        '%asp ኣብ %loc',
     'r-g-b-a':
-        'R-G-B-A Farbwerte',
+        'ቀ-ቀ-ሰ-ጋ (R-G-B-A) መጠናት ሕብሪ',
     'sprites' :
-        'Objekte',
+        'ውዱዓት',
     'reset timer':
-        'starte Stoppuhr neu',
+        'ሰዓት ዓቐን ከም ብሓድሽ ጀምር',
     'timer':
-        'Stoppuhr',
+        'ሰዓት ዓቐን',
     '%att of %spr':
-        '%att von %spr',
+        '%att ናይ %spr',
     'my %get':
-        'Attribut %get',
+        'መለለዪ %get',
     'object %self':
-        'Objekt %self',
+        'ውዱዕ %self',
     'http:// %s':
         'http:// %s',
     'turbo mode':
-        'Turbomodus',
+        'ፈጣን',
     'flat line ends':
-        'flache Pinselstriche',
+        'ገፊሕ ሕንጻጽ',
     'is %setting on?':
-        'ist %setting an?',
+        ' %setting ዶ እዩ፧?',
     'set %setting to %b':
-        'setze %setting auf %b',
+        '%setting ናብ %b ቀይር',
     'current %dates':
-        'Kalender %dates',
+        'ህሉው %dates',
     'year':
-        'Jahr',
+        'ዓመት',
     'month':
-        'Monat',
+        'ወርሒ',
     'date':
-        'Datum',
+        'ዕለት',
     'day of week':
-        'Wochentag',
+        'መዓልቲ',
     'hour':
-        'Stunde',
+        'ሰዓት',
     'minute':
-        'Minute',
+        'ደቒቕ',
     'second':
-        'Sekunde',
+        'ካልኢት',
     'time in milliseconds':
-        'Zeit in Millisekunden',
+        'ግዜ ብ ሚሊካልኢት',
     'microphone %audio':
-        'Mikrofon %audio',
+        'ማይክሮፎን %audio',
     'volume':
-        'Lautstärke',
+        'ዓውታ',
     'note':
-        'Note',
+        'ቃና',
     'frequency':
-        'Frequenz',
+        'ድግግም',
     'samples':
         'Signale',
     'sample rate':
-        'Abtastrate',
+        'መጠን ናሙና',
     'spectrum':
-        'Frequenzspektrum',
+        'ዝርገሐ ድግግም',
     'resolution':
-        'Auflösung',
+        'ንጻረ',
     'Microphone resolution...':
-        'Mikrofonauflösung...',
+        'ንጻረ ማይክሮፎን...',
     'Microphone':
-        'Mikrofon',
+        'ማይክሮፎን',
     'low':
-        'niedrig',
+        'ታሕቲ',
     'high':
-        'hoch',
+        'ላዕሊ',
     'max':
-        'max',
+        'ዝለዓለ',
     'video %vid on %self':
-        'Video %vid auf %self',
+        'ቪድዮ %vid ኣብ %self',
     'motion':
         'ምንቅስቓስ',
     'snap':
-        'Snap',
+        'ስናፕ',
     'set video transparency to %n':
-        'setze Videotransparenz auf %n',
+        'ናይ ቪዲዮ ሽፋፍ ናብ %n ቀይር',
     'video capture':
-        'Videoaufnahme',
+        'ቪድዮ ምቕራጽ',
     'mirror video':
-        'Video gespiegelt',
+        'ቪድዮ መረጼን',
     'filtered for %clr':
-        'nach %clr gefiltert',
+        'ን %clr ዝተመምየ',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'ዓቐን ቅሚጦ',
     'frames':
-        'Rahmenz\u00e4hler',
+        'መቓናት',
     'log pen vectors':
-        'Vektoraufzeichnung',
+        'መዝገብ ሕንጻጻት ብርዒ',
     '%block of block %repRing':
-        '%block von Block %repRing',
+        '%block ናይ ሕጡብ %repRing',
     'label':
-        'Aufschrift',
+        'ዕላመት',
     'definition':
-        'Definition',
+        'መግለጺ',
     'category':
-        'Kategorie',
+        'ምድብ',
     'custom?':
-        'benutzerdefiniert?',
+        'ዓሚላዊ?',
     'global?':
-        'global?',
+        'ሓፈሻዊ?',
     'type':
-        'Art',
+        'ዓይነት',
     'scope':
-        'Bereich',
+        'ዓውዲ',
     'slots':
-        'Felder',
+        'ቃጽዖታት',
     'defaults':
-        'Defaults',
+        'ውህብቶታት',
     'menus':
-        'Menüs',
+        'ዝርዝራት',
     'editables':
-        'Eingaben',
+        'ኣተውቲ',
     'set %byob of block %repRing to %s':
-        'setze %byob von Block %repRing auf %s',
+        '%byob ናይ ሕጡብ %repRing ናብ %s ቀይር',
     'define %upvar %s %repRing':
-        'definiere %upvar %s %repRing',
+        '%upvar %s %repRing ኣቑም',
     'delete block %repRing':
-        'lösche Block %repRing',
+        'ሕጡብ %repRing ደምስስ',
     'block':
-        'Block',
+        'ሕጡብ',
 
     // operators:
     'sum':
