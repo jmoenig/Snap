@@ -4,17 +4,21 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.2.1:
+* **Notable Fixes:**
     * fixed #3190 - unable to search blocks in the stage
     * fixed finding blocks by typing their infix or collapse variants (e.g. "and", "or", "sum", "product" etc.)
     * fixed #3191 - keep certain warning dialogs open when switching scenes
-* **Documentation Updates:**
-* **Translation Updates:**
 
 ### 2023-03-05
 * new dev version
 * objects: fixed #3190 - unable to search blocks in the stage
 * objects: fixed finding blocks by typing their infix or collapse variants (e.g. "and", "or", "sum", "product" etc.)
 * gui, widgets, store: fixed #3191 - keep warning dialogs open when switching scenes
+* prepared v8.2.1 release
 
 ## 8.2.0:
 * **New Features:**
