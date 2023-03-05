@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-February-15';
+modules.store = '2023-March-05';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -339,7 +339,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
             'This project has been created by a different app:\n\n' +
                 app +
                 '\n\nand may be incompatible or fail to load here.'
-        );
+        ).nag = true;
     }
     if (scenesModel) {
         if (scenesModel.attributes.select) {
