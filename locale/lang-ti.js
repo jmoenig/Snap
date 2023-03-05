@@ -772,58 +772,58 @@ SnapTranslator.dict.ti = {
 
     // operators:
     'sum':
-        'Summe',
+        'ድምር',
     'product':
-        'Produkt',
+        'ርባሕ',
     'minimum':
-        'Minimum',
+        'ዝተሓተ',
     'maximum':
-        'Maximum',
+        'ዝለዓለ',
     '%n mod %n':
-        '%n modulo %n',
+        '%n ተረፍ %n',
     'round %n':
-        '%n gerundet',
+        '%n ኣጸጋግዕ',
     '%fun of %n':
-        '%fun von %n',
+        '%fun ናይ %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'ናይ ሃውሪ ቁጽሪ ካብ %n ናብ %n',
     '%b and %b':
-        '%b und %b',
+        '%b ምስ %b',
     '%b or %b':
-        '%b oder %b',
+        '%b ወይ %b',
     'not %b':
-        'nicht %b',
+        'ዘይ %b',
     'true':
-        'wahr',
+        'ቅኑዕ',
     'false':
-        'falsch',
+        'ጌጋ',
     'join %words':
-        'verbinde %words',
+        'ኣታሓሕዝ %words',
     'split %s by %delim':
-        'trenne %s nach %delim',
+        '%s ኣብ %delim ፍለ',
     'hello':
-        'Hallo',
+        'ከመዓልኪ',
     'world':
-        'Welt',
+        'ዓለም',
     'letter %idx of %s':
-        'Zeichen %idx von %s',
+        '%idx ፊደል ናይ %s',
     'length of %s':
-        'L\u00e4nge von Text %s',
+        'ንውሓት ናይ ጽሕፈት %s',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'ዩኒኮደ ናይ %s',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'ዩኒኮደ %n ብፊደል',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        '%s %typ ዶ እዩ፧',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        '%s ምስ %s ሓደ ዓይነት ዶ እዮም፧',
     'JavaScript function ( %mult%s ) { %code }':
-        'JavaScript Funktion ( %mult%s ) { %code }',
+        'ጃቫስክሪፕት ተግባር ( %mult%s ) { %code }',
     'compile %repRing':
-    	'kompiliere %repRing',
+    	'%repRing ኣርንብ',
 
     'type of %s':
-        'Typ von %s',
+        'ዓይነት ናይ %s',
 
     // variables:
     'Make a variable':
