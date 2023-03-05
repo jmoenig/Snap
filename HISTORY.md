@@ -7,6 +7,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-05
+* new dev version
+
 ## 8.2.0:
 * **New Features:**
     * AND / OR are now variadic (and hyper!), thanks, Dan, for the suggestion
@@ -26,7 +29,7 @@
     * Catalan, thanks, Joan!
 
 ### 2023-03-01
-* prepared v8.1 release
+* prepared v8.2 release
 
 ### 2023-02-28
 * Catalan translation update, thanks, Joan!
