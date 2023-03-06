@@ -827,26 +827,26 @@ SnapTranslator.dict.ti = {
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'ሓድሽ ተቐያያሪ',
     'Variable name':
-        'Variablenname',
+        'ስም ተቐያያሪ',
     'Script variable name':
-        'Skriptvariablenname',
+        'ናይ መርሓ ስም ተቐያያሪ',
     'inherit %shd':
-        'erbe %shd',
+        'ውረስ %shd',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'ተቐያያሪ ደምስስ',
 
     'set %var to %s':
-        'setze %var auf %s',
+        '%var ብ %s ምላእ',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        '%var ብ %n ለውጥ',
     'show variable %var':
-        'zeige Variable %var',
+        'ተቐያያሪ %var ኣርኢ',
     'hide variable %var':
-        'verstecke Variable %var',
+        'ተቐያያሪ %var ከውል',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'ናይ መርሓ ተቐያያሪ %scriptVars',
 
     // lists:
     'list %exp':
