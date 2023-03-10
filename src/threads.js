@@ -2065,7 +2065,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
         return null;
     }
     if (index instanceof Array) {
-        if (index[0] === 'any') {
+        if (index[0] === 'random') {
             idx = this.reportBasicRandom(1, list.length() + 1);
         } else if (index[0] === 'last') {
             idx = list.length();
