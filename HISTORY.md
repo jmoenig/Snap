@@ -5,12 +5,14 @@
 * **Notable Changes:**
 * **Notable Fixes:**
     * fixed "letter random of text" selector
+    * fixed "insert thing at randon of list" selector
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-03-10
 * new dev version
 * threads: fixed "letter random of text" selector
+* threads: fixed "insert thing at randon of list" selector
 
 ## 8.2.1:
 * **Notable Fixes:**
