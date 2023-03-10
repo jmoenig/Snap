@@ -7,6 +7,7 @@
     * fixed "letter random of text" selector
     * fixed "insert thing at random of list" selector
     * fixed "replace item random of list with thing" selector
+    * fixed #3193 (invoking the scenes menu inside a custom block editor)
 * **Documentation Updates:**
 * **Translation Updates:**
 
@@ -15,6 +16,7 @@
 * threads: fixed "letter random of text" selector
 * threads: fixed "insert thing at random of list" selector
 * threads: fixed "replace item random of list with thing" selector
+* blocks: fixed #3193 (invoking the scenes menu inside a custom block editor)
 
 ## 8.2.1:
 * **Notable Fixes:**
