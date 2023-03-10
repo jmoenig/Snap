@@ -4,11 +4,13 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+    * fixed "letter random of text" selector
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-03-10
 * new dev version
+* threads: fixed "letter random of text" selector
 
 ## 8.2.1:
 * **Notable Fixes:**
