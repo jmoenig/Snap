@@ -850,79 +850,79 @@ SnapTranslator.dict.ti = {
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'ዝርዝር %exp',
     'numbers from %n to %n':
-        'Zahlen von %n bis %n',
+        'ኣሃዛት ካብ %n ናብ %n',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        '%s ኣብ መጀመርታ ናይ %l',
     'item %idx of %l':
-        'Element %idx von %l',
+        'ኣባል %idx ናይ %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        'ኵሉ ብዘይካ ቀዳማይ ናይ %l',
     '%la of %l':
-        '%la von %l',
+        '%la ናይ %l',
     'rank':
-        'Rang',
+        'ጽፍሒ',
     'dimensions':
-        'Dimensionen',
+        'ዓቐናት',
     'flatten':
-        'Auflistung',
+        'ዘርዝር',
     'columns':
-        'Spalten',
+        'ዓምድታት',
     'reverse':
-        'Umkehrung',
+        'ግልባጥ',
     'lines':
-        'Textzeilen',
+        'መስመራት ጽሑፍ',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        '%l አጠቓልል ን %s',
     'thing':
-        'etwas',
+        'ገለ ነገር',
     'is %l empty?':
-        'ist %l leer?',
+        '%l ባዶ ዶ እዩ?',
     'index of %s in %l':
-        'Index von %s in %l',
+        'ተርታ ናይ %s ኣብ %l',
     'map %repRing over %l':
-        'wende %repRing an auf %l',
+        'ኣተግብር %repRing ኣብ ልዕሊ %l',
     'keep items %predRing from %l':
-        'behalte Elemente, die %predRing aus %l',
+        'ኣባላት መሚኻ ኣትርፍ፡ %predRing ካብ %l',
     'find first item %predRing in %l':
-        'finde das erste Element, das %predRing in %l',
+        'ቀዳማይ ኣባል ርኸብ፡ %predRing ኣብ %l',
     'combine %l using %repRing':
-        'kombiniere die Elemente von %l mit %repRing',
+        'ጸንብር ንኣባልት ናይ %l ምስ %repRing',
     '%blitz map %repRing over %l':
-        '%blitz wende %repRing an auf %l',
+        '%blitz ኣተግብር %repRing ኣብ ልዕሊ %l',
     '%blitz keep items %predRing from %l':
-        '%blitz behalte Elemente, die %predRing aus %l',
+        '%blitz ኣባላት መሚኻ ኣትርፍ፡ %predRing ካብ %l',
     '%blitz find first item %predRing in %l':
-        '%blitz finde das erste Element, das %predRing in %l',
+        '%blitz ቀዳማይ ኣባል ርኸብ፡ %predRing ኣብ %l',
     '%blitz combine %l using %repRing':
-        '%blitz kombiniere die Elemente von %l mit %repRing',
+        '%blitz ጸንብር ንኣባልት ናይ %l ምስ %repRing',
     'for each %upvar in %l %cla':
-        'für jedes %upvar von %l %cla',
+        'ንነፍሲ-ወከፍ %upvar ኣብ %l %cla',
     'item':
-        'Element',
+        'ኣባል',
     'value':
-        'Wert',
+        'ትሕዝቶ',
     'index':
-        'Index',
+        'ተርታ',
     'append %lists':
-        'verbinde %lists',
+        'ለቅብ %lists',
     'combinations %lists':
-        'Kombinationen %lists',
+        'ጽንባረታት %lists',
     'reshape %l to %nums':
-        'strukturiere %l in %nums',
+        'ዳግም ስራዕ %l ብ %nums',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        'ን %s ናብ %l መልእ',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        '%ida ካብ %l እለ',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        '%s ኣብ %idx ናይ %l ኣእቱ',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'ንኣባል %idx ናይ %l ብ %s ተክእ',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'ሓድሽ ሕጡብ',
 
     // menus
     // snap menu
