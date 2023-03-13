@@ -7,6 +7,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+## 8.2.3:
+* **Notable Fixes:**
+    * fixed blocks search for scenes, thanks, Peter, for the report!
+
 ## 8.2.2:
 * **Notable Fixes:**
     * fixed "letter random of text" selector

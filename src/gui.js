@@ -90,7 +90,7 @@ modules.gui = '2023-March-13';
 
 // Declarations
 
-var SnapVersion = '8.2.2';
+var SnapVersion = '8.2.3';
 
 var IDE_Morph;
 var ProjectDialogMorph;

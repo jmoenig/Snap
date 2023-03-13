@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-March-10';
+modules.blocks = '2023-March-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11315,11 +11315,11 @@ InputSlotMorph.prototype.audioMenu = function (searching) {
 
 InputSlotMorph.prototype.scenesMenu = function (searching) {
     var dict = {},
+        ide, scenes;
+    if (!searching) {
         ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
-                .target.parentThatIsA(IDE_Morph),
-        scenes;
-    if (!searching) {
+                .target.parentThatIsA(IDE_Morph);
         scenes = ide.scenes;
         if (scenes.length() > 1) {
             scenes.itemsArray().forEach(scn => {
