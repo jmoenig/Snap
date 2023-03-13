@@ -4,12 +4,18 @@
 * **New Features:**
 * **Notable Changes:**
 * **Notable Fixes:**
+* **Documentation Updates:**
+* **Translation Updates:**
+
+## 8.2.2:
+* **Notable Fixes:**
     * fixed "letter random of text" selector
     * fixed "insert thing at random of list" selector
     * fixed "replace item random of list with thing" selector
     * fixed #3193 (invoking the scenes menu inside a custom block editor)
-* **Documentation Updates:**
-* **Translation Updates:**
+
+### 2023-03-13
+* prepared v8.2.2 release
 
 ### 2023-03-10
 * new dev version
