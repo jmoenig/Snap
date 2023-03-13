@@ -2501,7 +2501,12 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
 	morphToShow = new Morph();
 	morphToShow.setExtent(new Point(40,40));
         morphToShow.color = value;
-        this.showBubble.call(morphToShow,[value.toString()]);
+        morphToShow.addChild(new TextMorph(
+            value.toString(),
+            this.fontSize
+        ));
+        morphToShow.children[0].bounds.origin = new Point(40,0));
+        morphToShow.children[0].fixLayout();
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
