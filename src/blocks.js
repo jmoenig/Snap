@@ -2497,6 +2497,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return menu;
         };
 
+    } else if (value instanceof Color) {
+	morphToShow = new Morph();
+	morphToShow.setExtent(new Point(40,40));
+        morphToShow.color = value;
+        this.showBubble.call(morphToShow,[value.toString()]);
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
