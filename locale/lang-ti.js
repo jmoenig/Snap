@@ -192,7 +192,7 @@ SnapTranslator.dict.ti = {
     'untitled':
         'ኣርእስቲ ዘይተዋህቦ',
     'development mode':
-        'ኩርናዕ ጠቢብ',
+        'መዳይ ጠቢብ',
 
     // categories:
     'Motion':
@@ -387,7 +387,7 @@ SnapTranslator.dict.ti = {
         '%n ቀጸላ ንድሕሪት ተመለስ',
 
     'development mode \ndebugging primitives:':
-        'ኩርናዕ ጠቢብ \n መጸጸይ መስረቲ ሕጡባት',
+        'መዳይ ጠቢብ \n መጸጸይ መስረቲ ሕጡባት',
     'console log %mult%s':
         'ኣብ ሰደቓ መዝግብ፥ %mult%s ',
     'alert %mult%s':
@@ -927,21 +927,21 @@ SnapTranslator.dict.ti = {
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'ብዛዕባ ስናፕ!...',
     'Reference manual':
-        'Handbuch lesen',
+        'መወከሲ መጽሓፍ',
     'Snap! website':
-        'Snap! Webseite',
+        'ስናፕ! መርበብ ሓበሬታ',
     'Download source':
-        'Quellcode runterladen',
+        'መበቆላዊ ኮድ ኣራግፍ',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'ናብ መዳይ ተጠቃሚ ተመለስ',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
+        'ሞርፊክ ደው ኣብል',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'ናብ መዳይ ጠቢብ ቀይር',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'ተግባራት ሞርፊክ ኣበራብር',
 
     // project menu
     'Project notes...':
