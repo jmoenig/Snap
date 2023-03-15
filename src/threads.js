@@ -2762,33 +2762,20 @@ Process.prototype.doForEach = function (upvar, list, script) {
     // specified in the "upvar" parameter, so it can be referenced
     // within the script.
     // Distinguish between linked and arrayed lists.
-
-    var next;
-    if (this.context.accumulator === null) {
-        this.assertType(list, 'list');
-        this.context.accumulator = {
-            source : list,
-            remaining : list.length(),
-            idx : 0
-        };
+    var result = this.context.accumulator;
+    if (result === null) {
+        result = this.context.accumulator = new ListIterator(list);
     }
-    if (this.context.accumulator.remaining === 0) {
+    result.next();
+    if (result.done) {
         return;
-    }
-    this.context.accumulator.remaining -= 1;
-    if (this.context.accumulator.source.isLinked) {
-        next = this.context.accumulator.source.at(1);
-        this.context.accumulator.source =
-            this.context.accumulator.source.cdr();
-    } else { // arrayed
-        this.context.accumulator.idx += 1;
-        next = this.context.accumulator.source.at(this.context.accumulator.idx);
     }
     this.pushContext('doYield');
     this.pushContext();
-    this.context.outerContext.variables.addVar(upvar);
-    this.context.outerContext.variables.setVar(upvar, next);
-    this.evaluate(script, new List(/*[next]*/), true);
+    var vars = this.context.outerContext.variables;
+    vars.addVar(upvar);
+    vars.setVar(upvar, result.value);
+    this.evaluate(script, new List(/*[result.value]*/), true);
 };
 
 Process.prototype.doFor = function (upvar, start, end, script) {
@@ -2985,6 +2972,58 @@ Process.prototype.reportKeep = function (predicate, list) {
         parms.push(list);
     }
     this.evaluate(predicate, new List(parms));
+};
+
+Process.prototype.reportSort = function (list, predicate) {
+    var sorter = this.context.accumulator;
+    if (sorter === null) {
+        this.assertType(list, 'list');
+        sorter = this.context.accumulator = new ArraySorter(
+            list.itemsArray().slice()
+        );
+    } else {
+        // this.context.accumulator is not null
+        // means not first time running
+        // means compared something before
+        sorter.cmpResult = !!this.context.inputs.pop();
+    }
+    if (sorter.step()) {
+        // need to compare
+        this.pushContext();
+        this.evaluate(predicate, new List([sorter.cmp1, sorter.cmp2]));
+    } else {
+        // done
+        this.returnValueToParentContext(new List(sorter.array));
+    }
+};
+
+Process.prototype.reportGroup = function (list, reporter) {
+    var groupKey, groupArr, acc = this.context.accumulator;
+    if (acc === null) {
+        this.assertType(list, 'list');
+        acc = this.context.accumulator = new Map();
+        acc.array = list.itemsArray();
+        acc.arrayLen = acc.array.length;
+        acc.arrayPos = 0;
+    } else {
+        groupKey = this.context.inputs.pop();
+        if (groupArr = acc.get(groupKey)) {
+            groupArr.push(acc.array[acc.arrayPos++]);
+        } else {
+            acc.set(groupKey, [acc.array[acc.arrayPos++]]);
+        }
+    }
+    if (acc.arrayPos === acc.arrayLen) {
+        // done
+        groupArr = [];
+        acc.forEach((value, key) => {
+            groupArr.push(new List([key, value.length, new List(value)]));
+        });
+        this.returnValueToParentContext(new List(groupArr));
+    } else {
+        this.pushContext();
+        this.evaluate(reporter, new List([acc.array[acc.arrayPos]]));
+    }
 };
 
 Process.prototype.reportFindFirst = function (predicate, list) {
@@ -3739,9 +3778,9 @@ Process.prototype.setMicrophoneModifier = function (modifier) {
         stage.microphone.stop();
         return;
     }
-    stage.microphone.modifier = modifier;
     stage.microphone.compiledModifier = this.reportCompiled(modifier, 1);
     stage.microphone.compilerProcess = this;
+    stage.microphone.modifier = modifier;
 };
 
 // Process user prompting primitives (interpolated)
@@ -7662,17 +7701,18 @@ Process.prototype.doDeleteBlock = function (context) {
 // Process: Compile (as of yet simple) block scripts to JS
 
 /*
-	with either only explicit formal parameters or a specified number of
-	implicit formal parameters mapped to empty input slots
-	*** highly experimental and heavily under construction ***
+    with either only explicit formal parameters or a specified number of
+    implicit formal parameters mapped to empty input slots
+    *** highly experimental and heavily under construction ***
 */
 
-Process.prototype.reportCompiled = function (context, implicitParamCount) {
-	// implicitParamCount is optional and indicates the number of
- 	// expected parameters, if any. This is only used to handle
-  	// implicit (empty slot) parameters and can otherwise be
-   	// ignored
-    return new JSCompiler(this).compileFunction(context, implicitParamCount);
+Process.prototype.reportCompiled = function (context, /*implicitParamCount*/) {
+    // implicitParamCount is unused because implicit paramerers are handled
+    // at runtime
+    if (typeof context === 'function') {
+        return context;
+    }
+    return new JSCompiler().compileFunction(context);
 };
 
 Process.prototype.capture = function (aContext) {
@@ -7743,56 +7783,11 @@ Process.prototype.reportAtomicMap = function (reporter, list) {
     // #2 - optional | index
     // #3 - optional | source list
 
-    this.assertType(list, 'list');
-	var result = [],
-    	src = list.itemsArray(),
-    	len = src.length,
-        formalParameterCount = reporter.inputs.length,
-        parms,
-     	func,
-    	i;
-
-	// try compiling the reporter into generic JavaScript
- 	// fall back to the morphic reporter if unsuccessful
-    try {
-    	func = this.reportCompiled(reporter, 1); // a single expected input
-    } catch (err) {
-        console.log(err.message);
-     	func = reporter;
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportMap(reporter, list);
+        return;
     }
-
-	// iterate over the data in a single frame:
- 	// to do: Insert some kind of user escape mechanism
-
-	for (i = 0; i < len; i += 1) {
-        parms = [src[i]];
-        if (formalParameterCount > 1) {
-            parms.push(i + 1);
-        }
-        if (formalParameterCount > 2) {
-            parms.push(list);
-        }
-  		result.push(
-        	invoke(
-            	func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this.capture(reporter) // process
-            )
-        );
-	}
-	return new List(result);
-};
-
-Process.prototype.reportAtomicKeep = function (reporter, list) {
-    // if the reporter uses formal parameters instead of implicit empty slots
-    // there are two additional optional parameters:
-    // #1 - element
-    // #2 - optional | index
-    // #3 - optional | source list
 
     this.assertType(list, 'list');
     var result = [],
@@ -7804,12 +7799,60 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.warn('JavaScript compiler error:', err);
+        this.reportMap(reporter, list);
+        return;
+    }
+
+    // iterate over the data in a single frame:
+    // to do: Insert some kind of user escape mechanism
+
+    for (i = 0; i < len; i += 1) {
+        parms = [src[i]];
+        if (formalParameterCount > 1) {
+            parms.push(i + 1);
+        }
+        if (formalParameterCount > 2) {
+            parms.push(list);
+        }
+        parms.push(this);
+        result.push(func.apply(null, parms));
+    }
+    return new List(result);
+};
+
+Process.prototype.reportAtomicKeep = function (reporter, list) {
+    // if the reporter uses formal parameters instead of implicit empty slots
+    // there are two additional optional parameters:
+    // #1 - element
+    // #2 - optional | index
+    // #3 - optional | source list
+
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportKeep(reporter, list);
+        return;
+    }
+
+    this.assertType(list, 'list');
+    var result = [],
+        src = list.itemsArray(),
+        len = src.length,
+        formalParameterCount = reporter.inputs.length,
+        parms,
+        func,
+        i;
+
+    // try compiling the reporter into generic JavaScript
+    try {
+        func = this.reportCompiled(reporter, 1); // a single expected input
+    } catch (err) {
+        console.warn('JavaScript compiler error:', err);
+        this.reportKeep(reporter, list);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7822,19 +7865,10 @@ Process.prototype.reportAtomicKeep = function (reporter, list) {
         if (formalParameterCount > 2) {
             parms.push(list);
         }
-    	if (
-        	invoke(
-            	func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this.capture(reporter) // process
-            )
-        ) {
-     		result.push(src[i]);
-     	}
+        parms.push(this);
+        if (func.apply(null, parms)) {
+            result.push(src[i]);
+        }
     }
     return new List(result);
 };
@@ -7846,6 +7880,12 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
     // #2 - optional | index
     // #3 - optional | source list
 
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportFindFirst(reporter, list);
+        return;
+    }
+
     this.assertType(list, 'list');
     var src = list.itemsArray(),
         len = src.length,
@@ -7855,12 +7895,12 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.warn('JavaScript compiler error:', err);
+        this.reportFindFirst(reporter, list);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7873,19 +7913,10 @@ Process.prototype.reportAtomicFindFirst = function (reporter, list) {
         if (formalParameterCount > 2) {
             parms.push(list);
         }
-        if (
-            invoke(
-                func,
-                new List(parms),
-                null,
-                null,
-                null,
-                null,
-                this.capture(reporter) // process
-            )
-        ) {
+        parms.push(this);
+        if (func.apply(null, parms)) {
             return src[i];
-         }
+        }
     }
     return '';
 };
@@ -7898,11 +7929,17 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     // #3 - optional | index
     // #4 - optional | source list
 
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportCombine(list, reporter);
+        return;
+    }
+
     var result, src, len, formalParameterCount, parms, func, i;
     this.assertType(list, 'list');
 
     // check for special cases to speed up
-    if (this.canRunOptimizedForCombine(reporter)) {
+    if (reporter instanceof Context && this.canRunOptimizedForCombine(reporter)) {
         return this.reportListAggregation(
             list,
             reporter.expression.selector
@@ -7914,18 +7951,18 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
     len = src.length;
     formalParameterCount = reporter.inputs.length;
 
-	if (len === 0) {
- 		return result;
- 	}
-  	result = src[0];
+    if (len === 0) {
+        return result;
+    }
+    result = src[0];
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 2); // a single expected input
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.warn('JavaScript compiler error:', err);
+        this.reportCombine(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
@@ -7938,90 +7975,80 @@ Process.prototype.reportAtomicCombine = function (list, reporter) {
         if (formalParameterCount > 3) {
             parms.push(list);
         }
-    	result = invoke(
-        	func,
-            new List(parms),
-            null,
-            null,
-            null,
-            null,
-            this.capture(reporter) // process
-        );
+        parms.push(this);
+        result = func.apply(null, parms);
     }
     return result;
 };
 
 Process.prototype.reportAtomicSort = function (list, reporter) {
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportSort(list, reporter);
+        return;
+    }
+
     this.assertType(list, 'list');
     var func;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
-    	func = this.reportCompiled(reporter, 2); // two inputs expected
+        func = this.reportCompiled(reporter, 2); // two inputs expected
     } catch (err) {
-        console.log(err.message);
-        func = reporter;
+        console.warn('JavaScript compiler error:', err);
+        this.reportSort(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
-	return new List(
-  		list.itemsArray().slice().sort((a, b) =>
-            invoke(
-                func,
-                new List([a, b]),
-                null,
-                null,
-                null,
-                null,
-                this.capture(reporter) // process
-            ) ? -1 : 1
-        )
-    );
+    var sorter = new ArraySorter(list.itemsArray().slice());
+    while (sorter.step()) {
+        sorter.cmpResult = !!func(sorter.cmp1, sorter.cmp2, this);
+    }
+    return new List(sorter.array);
 };
 
 Process.prototype.reportAtomicGroup = function (list, reporter) {
+    if (this.context.accumulator !== null) {
+        // fallback multi call
+        this.reportGroup(list, reporter);
+        return;
+    }
+
     this.assertType(list, 'list');
     var result = [],
         dict = new Map(),
         groupKey,
+        groupArr,
         src = list.itemsArray(),
         len = src.length,
         func,
         i;
 
     // try compiling the reporter into generic JavaScript
-    // fall back to the morphic reporter if unsuccessful
     try {
         func = this.reportCompiled(reporter, 1); // a single expected input
     } catch (err) {
-        console.log(err.message);
-         func = reporter;
+        console.warn('JavaScript compiler error:', err);
+        this.reportGroup(list, reporter);
+        return;
     }
 
     // iterate over the data in a single frame:
     // to do: Insert some kind of user escape mechanism
 
     for (i = 0; i < len; i += 1) {
-        groupKey = invoke(
-            func,
-            new List([src[i]]),
-            null,
-            null,
-            null,
-            null,
-            this.capture(reporter) // process
-        );
-        if (dict.has(groupKey)) {
-            dict.get(groupKey).push(src[i]);
+        groupKey = func(src[i], this);
+        if (groupArr = dict.get(groupKey)) {
+            groupArr.push(src[i]);
         } else {
             dict.set(groupKey, [src[i]]);
         }
     }
 
-    dict.forEach((value, key) =>
-        result.push(new List([key, value.length, new List(value)]))
-    );
+    dict.forEach((value, key) => {
+        result.push(new List([key, value.length, new List(value)]));
+    });
     return new List(result);
 };
 
@@ -8589,10 +8616,9 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
     *** highly experimental and heavily under construction ***
 */
 
-function JSCompiler(aProcess, outerScope) {
-    this.process = aProcess;
-    this.source = null; // a context
-    this.paramCount = 0;
+function JSCompiler(outerScope) {
+    this.implicitParamCount = 0;
+    this.implicitMultiArgCount = 0;
     this.params = 0;
     this.gensymArgIndexes = new Map();
     this.scope = new Map();
@@ -8604,6 +8630,20 @@ function JSCompiler(aProcess, outerScope) {
     this.scope.depth = 1 + outerScope.depth;
     this.scope.outerScope = outerScope;
 }
+
+JSCompiler.prototype.C = {
+    // functions used in compiled rings
+    'ring': (func, ...inputs) => (func.inputs = inputs, func),
+    'invoke': (proc, func, argsList) =>
+        func ? (
+            typeof func === 'function' ?
+            func.apply(
+                proc.blockReceiver(),
+                argsList.itemsArray().concat(proc)
+            ) :
+            invoke(func, argsList)
+        ) : null
+};
 
 JSCompiler.prototype.toString = () => 'a JSCompiler';
 
@@ -8625,13 +8665,13 @@ JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
 
 JSCompiler.prototype.getGensym = function (varName) {
     var scope = this.scope, gensym;
-    while (null == (gensym = scope.get(varName)) && 
+    while (null == (gensym = scope.get(varName)) &&
         null != (scope = scope.outerScope));
     return gensym;
 };
 
 JSCompiler.prototype.functionHead = function () {
-    var str1 = 'var ', str2 = '';
+    var str1 = 'var ', str2 = '', params = this.params;
     this.gensymArgIndexes.forEach((argIndex, gensym) => {
         if (argIndex === -1) {
             str1 += gensym + '=0,';
@@ -8640,17 +8680,62 @@ JSCompiler.prototype.functionHead = function () {
         str2 += ',' + argIndex + ':' + gensym;
     });
     str1 += 'proc=params.pop();\n';
-    if (this.params) {
-        str1 += 'while(' + this.params + '>params.length)params.push(0);\n';
+    switch (params) {
+    case -1:
+        params = this.implicitParamCount;
+        // implicit parameters mode
+        if (this.implicitMultiArgCount) {
+            if (params === this.implicitMultiArgCount) {
+                return str1 + 'var plist=new List(params);\n';
+            }
+            str1 += 'var plist=new List(params.slice());\n';
+        }
+        switch (params) {
+        case 0:
+            return str1;
+        case 1:
+            return str1 + 'if(1!=params.length)params[0]="";\n'
+        default:
+            return str1 + 'if(' + params + '!=params.length)\
+params.fill(1==params.length?params[0]:"",0,params.length=' + params +
+            ');\n';
+        }
+    case 0:
+        break;
+    case 1:
+        str1 += 'if(!params.length)params.push(0);\n';
+        break;
+    default:
+        str1 += 'while(' + params + '>params.length)params.push(0);\n';
+        break;
     }
     if (str2) {
-        str1 += 'var{' + str2.substring(1) + '}=params;\n';
+        return str1 + 'var{' + str2.substring(1) + '}=params;\n';
     }
     return str1;
 };
 
-JSCompiler.prototype.compileFunction = function () {
-    return window.eval(this.compileFunctionBody.apply(this, arguments));
+JSCompiler.prototype.functionCache = [];
+JSCompiler.prototype.maxFunctionCache = 300;
+
+JSCompiler.prototype.compileFunction = function (aContext) {
+    if (this.scope.outerScope != null) {
+        throw new Error('can\'t compile function with outer scope');
+    }
+    var fc = this.functionCache,
+        c = aContext.components(),
+        cc = fc.find(c.equalTo, c);
+    if (cc != null) {
+        return cc.returnCompiledRing(this.C);
+    }
+    var returnCompiledRing = Function('C', '"use strict";\nreturn ' +
+        this.compileFunctionBody(aContext));
+    if (fc.length >= this.maxFunctionCache) {
+        fc.length = 0;
+    }
+    fc.push(c);
+    c.returnCompiledRing = returnCompiledRing;
+    return returnCompiledRing(this.C);
 };
 
 JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
@@ -8659,6 +8744,9 @@ JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
     }
     if (m instanceof RingMorph) {
         // don't look in rings (they are not current scope)
+        return false;
+    }
+    if (m.selector === 'reportJSFunction') {
         return false;
     }
     m = m.children;
@@ -8671,48 +8759,22 @@ JSCompiler.prototype.findEmptySlot = function findEmptySlot(m) {
     return false;
 };
 
-JSCompiler.prototype.compileFunctionBody = function (
-    aContext,
-    implicitParamCount
-) {
+JSCompiler.prototype.compileFunctionBody = function (aContext) {
     var block = aContext.expression,
         parameters = aContext.inputs,
-        hasEmptySlots,
         code;
 
-    if (block instanceof Array) {
-        throw new Error('can\'t compile empty ring');
-    }
-   
-    this.source = aContext;
-    if (implicitParamCount === '' || isNil(implicitParamCount)) {
-        this.implicitParams = 1;
-    } else {
-        this.implicitParams = Math.floor(implicitParamCount);
-        if (!(this.implicitParams > 0 && this.implicitParams < 128)) {
-            // use 1 if implicitParamCount doesn't make sense
-            this.implicitParams = 1;
-        }
+    if (!(block instanceof BlockMorph)) {
+        throw new Error('compiling does not yet support\nempty rings');
     }
 
-    // scan for empty input slots
-    hasEmptySlots = this.findEmptySlot(block);
-
-    // translate formal parameters into gensyms
     if (parameters.length) {
-        // test for conflicts
-        if (hasEmptySlots) {
-            throw new Error(
-                'compiling does not yet support\n' +
-                'mixing explicit formal parameters\n' +
-                'with empty input slots'
-            );
-        }
         // map explicit formal parameters
         this.params = parameters.length;
         parameters.forEach(this.gensymForVar, this);
-    } else if (hasEmptySlots) {
-        this.params = this.implicitParams;
+    } else if (this.findEmptySlot(block)) {
+        // implicit parameters mode (put parameters in empty slots)
+        this.params = -1;
     }
 
     // compile using gensyms
@@ -8721,14 +8783,20 @@ JSCompiler.prototype.compileFunctionBody = function (
     } else {
         code = 'return ' + this.compileExpression(block) + ';\n';
     }
-    return '(function func(...params){\n' + this.functionHead() + code + '})';
+    code = 'C.ring(function ring(...params){\n' +
+        this.functionHead() +
+        code +
+        '}';
+    parameters.forEach(p => {
+        code += ',"' + this.escape(p) + '"';
+    });
+    return code + ')';
 };
 
 JSCompiler.prototype.compileExpression = function (block) {
     var selector = block.selector,
         inputs = block.inputs(),
-        target,
-        args;
+        target;
 
     // first check for special forms and infix operators
     switch (selector) {
@@ -8752,9 +8820,11 @@ JSCompiler.prototype.compileExpression = function (block) {
     // special evaluation primitives
     case 'doRun':
     case 'evaluate':
-        return 'invoke(' + this.compileInput(inputs[0]) + ',' +
+        return 'C.invoke(proc,' +
+            this.compileInput(inputs[0]) +
+            ',' +
             this.compileInput(inputs[1]) +
-            ',proc.blockReceiver(),null,null,null,proc,null)';
+            ')';
     // special command forms
     case 'doDeclareVariables':
         block = '';
@@ -8779,7 +8849,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         // redirect var to process
         return 'proc.setVarNamed(' +
             this.compileInput(inputs[0]) +
-            ', ' +
+            ',' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doChangeVar':
@@ -8792,7 +8862,7 @@ JSCompiler.prototype.compileExpression = function (block) {
         // redirect var to process
         return 'proc.incrementVarNamed(' +
             this.compileInput(inputs[0]) +
-            ', ' +
+            ',' +
             this.compileInput(inputs[1]) +
             ')';
     case 'doReport':
@@ -8814,29 +8884,73 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'doWarp':
         // synchronous javascript is already like warp
         return this.compileSequence(inputs[0].evaluate());
+    case 'doForEach':
+        return 'for(' +
+            this.gensymForVar(inputs[0].children[0].blockSpec, -1) +
+            ' of new ListIterator(' +
+            this.compileInput(inputs[1]) +
+            ')){\n' +
+            this.compileSequence(inputs[2].evaluate()) +
+            '}';
     case 'reportBoolean':
     case 'reportNewList':
         return this.compileInput(inputs[0]);
     case 'reportThisContext':
-        return 'func';
+        return 'ring';
+    case 'reportEquals':
+        return 'snapEquals(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'reportNotEquals':
+        return '!snapEquals(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+    case 'reportNot':
+        return '!' + this.compileInput(inputs[0]);
+    case 'reifyScript':
+    case 'reifyReporter':
+    case 'reifyPredicate':
+        return new JSCompiler(this.scope).compileFunctionBody({
+            'expression': inputs[0].children[0],
+            'inputs': inputs[1].inputs().map(x => x.children[0].blockSpec),
+        });
+    case 'reportJSFunction':
+        // don't fill empty slots inside JavaScript function block
+        target = this.params;
+        this.params = -2;
+        selector = 'proc.reportJSFunction(' +
+            this.compileInput(inputs[0]) +
+            ',' +
+            this.compileInput(inputs[1]) +
+            ')';
+        this.params = target;
+        return selector;
     default:
-        target = this.process[selector] ? this.process
-            : (this.source.receiver || this.process.receiver);
-        args = this.compileInputs(inputs);
-        if (isSnapObject(target)) {
-            return 'proc.blockReceiver().' + selector + '(' + args + ')';
+        if (Process.prototype[selector]) {
+            if (selector.substring(0, 6) === 'report') {
+                // use atomic (lightning symbol) block if available
+                target = 'reportAtomic' + selector.substring(6);
+                if (Process.prototype[target]) {
+                    selector = target;
+                }
+            }
+            target = 'proc.';
         } else {
-            return 'proc.' + selector + '(' + args + ')';
+            target = 'proc.blockReceiver().';
         }
+        return target + selector + '(' + this.compileInputs(inputs) + ')';
     }
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
-    if (commandBlock == null) return '';
-    commandBlock = commandBlock.blockSequence();
-    var l = commandBlock.length, i = 0, body = '';
-    while (l > i) {
-        body += this.compileExpression(commandBlock[i++]) + ';\n';
+    var body = '';
+    while (commandBlock) {
+        body += this.compileExpression(commandBlock) + ';\n';
+        commandBlock = commandBlock.nextBlock();
     }
     return body;
 };
@@ -8847,40 +8961,30 @@ JSCompiler.prototype.compileInfix = function (operator, inputs) {
 };
 
 JSCompiler.prototype.compileInputs = function (array) {
-    var args = '';
-    array.forEach(inp => {
-        if (args) {
-            args += ', ';
-        }
-        args += this.compileInput(inp);
-    });
-    return args;
+    var l = array.length, i = 0, args = '';
+    while (l > i) {
+        args += ',' + this.compileInput(array[i++]);
+    }
+    return args.substring(1);
 };
 
 JSCompiler.prototype.compileInput = function (inp) {
-    var value, type;
+    var value;
 
-    if (inp.isEmptySlot && inp.isEmptySlot()) {
-        // implicit formal parameter
-        if (this.implicitParams > 1) {
-            if (this.paramCount < this.implicitParams) {
-                return 'params[' + this.paramCount++ + ']';
+    if (inp.isEmptySlot != null && inp.isEmptySlot()) {
+        if (this.params === -1) {
+            // implicit parameter
+            if (inp instanceof MultiArgMorph) {
+                this.implicitParamCount += 1;
+                this.implicitMultiArgCount += 1;
+                return 'plist';
             }
-            throw new Error(
-                localize('expecting') + ' ' + this.implicitParams + ' '
-                    + localize('input(s), but getting') + ' '
-                    + this.paramCount
-            );
+            return 'params[' + this.implicitParamCount++ + ']';
         }
-        return 'params[0]';
-    }
-    if (inp instanceof RingMorph) {
-        inp = inp.children;
-        return new JSCompiler(this.process,this.scope).compileFunctionBody({
-            'expression': inp[0].children[0],
-            'inputs': inp[1].inputs().map(x => x.children[0].blockSpec),
-            'receiver': this.source.receiver
-        }, '');
+        if (inp instanceof MultiArgMorph) {
+            return 'new List()';
+        }
+        return '""';
     }
     if (inp instanceof MultiArgMorph) {
         return 'new List([' + this.compileInputs(inp.inputs()) + '])';
@@ -8891,24 +8995,37 @@ JSCompiler.prototype.compileInput = function (inp) {
     if (inp instanceof ArgMorph) {
         // literal - evaluate inline
         value = inp.evaluate();
-        type = this.process.reportTypeOf(value);
-        switch (type) {
+        switch (typeof value) {
+        case 'boolean':
         case 'number':
-        case 'Boolean':
-            return '' + value;
-        case 'text':
-            // escape and enclose in double quotes
+            return value.toString();
+        case 'string':
             return '"' + this.escape(value) + '"';
-        case 'list':
-            return 'new List([' + this.compileInputs(value) + '])';
-        default:
+        case 'undefined':
+            throw new Error('can\'t compile input undefined');
+        case 'object':
+            if (value === null) {
+                throw new Error('can\'t compile input null');
+            }
+            if (value instanceof List) {
+                // not sure if value can be a List
+                return 'new List([' +
+                    this.compileInputs(value.itemsArray()) + '])';
+            }
+            if (value instanceof Color) {
+                return 'new Color(' +
+                    value.r + ',' +
+                    value.g + ',' +
+                    value.b + ',' +
+                    value.a + ')';
+            }
             if (value instanceof Array) {
                 return '["' + this.escape(value[0]) + '"]';
             }
+        default:
             throw new Error(
-                'compiling does not yet support\n' +
-                'inputs of type\n' +
-                 type
+                'can\'t compile input of type\n' + value.constructor.name,
+                {'cause': value}
             );
         }
     }
@@ -8926,8 +9043,8 @@ JSCompiler.prototype.escape = string => {
     // make sure string is a string
     string += '';
     var len = string.length, i = 0, char, escaped = '', safe_chars =
-        ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$' +
-        "%&'()*+,-./:;<=>?@[]^_`{|}~";
+        " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&\
+'()*+,-./:;<=>?@[]^_`{|}~";
     while (len > i) {
         char = string.charAt(i++);
         if (safe_chars.indexOf(char) === -1) {
@@ -8938,4 +9055,137 @@ JSCompiler.prototype.escape = string => {
         }
     }
     return escaped;
+};
+
+function ArraySorter(array) {
+    // stepable array merge sort
+    // overwrites contents of array
+    // basic synchronous usage sort numbers ascending order:
+    /*
+        var sorter = new ArraySorter([1,4,3,6,2,5,7,8,10,9,0,-1]);
+        while (sorter.step()) {
+            sorter.cmpResult = sorter.cmp1 < sorter.cmp2;
+        }
+        console.log('sorted:', sorter.array);
+    */
+    // don't set sorter.cmpResult to null
+    this.array = array;
+    this.todo = [];
+    this.cmpWanted = false;
+    this.cmpResult = null;
+    this.cmp1 = null;
+    this.cmp2 = null;
+    new SubArraySorter(this, 0, array.length);
+}
+
+ArraySorter.prototype.step = function () {
+    var todo = this.todo;
+    this.cmpWanted = false;
+    while (todo.length) {
+        todo[todo.length - 1].step();
+        if (this.cmpWanted) {
+            return true;
+        }
+    }
+    return false;
+};
+
+function SubArraySorter(sorter, start, end) {
+    // used by ArraySorter
+    if (end - start < 2) {
+        return;
+    }
+    this.sorter = sorter;
+    this.start = start;
+    this.end = end;
+    this.mid = Math.ceil((start + end) / 2);
+    this.mode = 0;
+    this.sub = null;
+    this.sub1pos = 0;
+    this.sub1end = this.sub2pos = this.mid - this.start;
+    this.sub2end = this.end - this.start;
+    sorter.todo.push(this);
+}
+
+SubArraySorter.prototype.step = function () {
+    switch (this.mode) {
+    case 0:
+        // need array[start:mid] and array[mid:end] to be sorted
+        if (this.end - this.start > 2) {
+            new SubArraySorter(this.sorter, this.start, this.mid);
+            new SubArraySorter(this.sorter, this.mid, this.end);
+            this.mode = 1;
+            return;
+        }
+        // no need to return or break here because nothing new in todo
+    case 1:
+        // array[start:mid] and array[mid:end] are sorted
+        // prepare to merge
+        this.sub = this.sorter.array.slice(this.start, this.end);
+        this.mode = 2;
+        // no need to return or break here because nothing new in todo
+    case 2:
+        // merge
+        var cres = this.sorter.cmpResult,
+            subPos,
+            arrPos,
+            arrEnd,
+            array,
+            sub = this.sub;
+        if (cres !== null) {
+            this.sorter.cmpResult = null;
+            array = this.sorter.array;
+            array[this.start++] = sub[
+                cres ? this.sub1pos++ : this.sub2pos++
+            ];
+            subPos = this.sub1pos === this.sub1end;
+            if (subPos || this.sub2pos === this.sub2end) {
+                // finished one of sections
+                // write elements from unfinished section
+                subPos = subPos ? this.sub2pos : this.sub1pos;
+                arrPos = this.start;
+                arrEnd = this.end;
+                while (arrPos !== arrEnd) {
+                    array[arrPos++] = sub[subPos++];
+                }
+                // done sorting array[start:end]
+                this.sorter.todo.pop();
+                return;
+            }
+        }
+        this.sorter.cmp1 = sub[this.sub1pos];
+        this.sorter.cmp2 = sub[this.sub2pos];
+        this.sorter.cmpWanted = true;
+    }
+};
+
+function ListIterator(list) {
+    Process.prototype.assertType(list, 'list');
+    // behave like for each (item) in [=] block
+    this.source = list;
+    this.remaining = list.length();
+    this.idx = 0;
+    this.done = false;
+    this.value = null;
+}
+
+ListIterator.prototype[Symbol.iterator] = function () {
+    return this;
+};
+
+ListIterator.prototype.next = function () {
+    if (this.remaining) {
+        this.remaining -= 1;
+        if (this.source.isLinked) {
+            // linked
+            this.value = this.source.at(1);
+            this.source = this.source.cdr();
+        } else {
+            // arrayed
+            this.value = this.source.at(this.idx += 1);
+        }
+    } else {
+        this.done = true;
+    }
+    return this;
 };

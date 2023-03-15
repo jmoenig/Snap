@@ -11995,7 +11995,6 @@ function Microphone() {
 
     // memory alloc
     this.correlations = [];
-    this.wrapper = new List([0]);
     this.outChannels = [];
 
     // metered values:
@@ -12201,16 +12200,7 @@ Microphone.prototype.detectPitchAndVolume = function (buf, sampleRate) {
 
         // apply modifier, if any
         if (this.modifier) {
-            this.wrapper.contents[0] = val;
-            modified = invoke(
-                this.compiledModifier,
-                this.wrapper,
-                null,
-                null,
-                null,
-                null,
-                this.compilerProcess
-            );
+            modified = this.compiledModifier(val, this.compilerProcess);
             for (k = 0; k < channels; k += 1) {
                 this.outChannels[k][i] = modified;
             }

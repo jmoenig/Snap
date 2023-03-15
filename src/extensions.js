@@ -270,6 +270,13 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'lst_sort(list, fn) without JS compiling',
+    function (data, fn, proc) {
+        proc.reportSort(data, fn);
+    }
+);
+
+SnapExtensions.primitives.set(
     'lst_linked(list)',
     function (data) {
         return data.isLinked;
@@ -412,6 +419,13 @@ SnapExtensions.primitives.set(
     'dta_group(list, fn)',
     function (data, fn, proc) {
         return proc.reportAtomicGroup(data, fn);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_group(list, fn) without JS compiling',
+    function (data, fn, proc) {
+        proc.reportGroup(data, fn);
     }
 );
 
