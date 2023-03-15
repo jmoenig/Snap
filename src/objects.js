@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-05';
+modules.objects = '2023-March-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -2075,7 +2075,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     SpriteMorph.uber.init.call(this);
 
-    this.isCachingImage = true;
+    // this.isCachingImage = true;
     this.isFreeForm = true;
     this.cachedColorDimensions = this.color[this.penColorModel]();
     this.isDraggable = true;

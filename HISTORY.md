@@ -7,6 +7,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-15
+* objects: turned off image caching for sprites, experimental
+
 ### 2023-03-14
 * new dev version
 
