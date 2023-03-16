@@ -4,6 +4,7 @@
 * **New Features:**
 * **Notable Changes:**
     * improved browser resource management for graphics and sounds
+    * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
@@ -12,6 +13,7 @@
 * objects: dynamically cache sprite image depending on graphic effects
 * morphic: fixed scale when grabbing uncached image morphs
 * objects, threads: fixed #3075 (except Chrome still sabotages sounds, browsers suck)
+* updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
 
 ### 2023-03-15
 * objects: turned off image caching for sprites, experimental
