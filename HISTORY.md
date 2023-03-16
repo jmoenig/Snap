@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
 * **Notable Changes:**
+    * improved browser resource management for graphics and sounds
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
