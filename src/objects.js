@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-15';
+modules.objects = '2023-March-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -2075,7 +2075,6 @@ SpriteMorph.prototype.init = function (globals) {
 
     SpriteMorph.uber.init.call(this);
 
-    // this.isCachingImage = true;
     this.isFreeForm = true;
     this.cachedColorDimensions = this.color[this.penColorModel]();
     this.isDraggable = true;
@@ -2318,6 +2317,13 @@ SpriteMorph.prototype.fixLayout = function () {
         this.setCenter(currentCenter, true); // just me
         this.rotationOffset = this.extent().divideBy(2);
     }
+};
+
+SpriteMorph.prototype.fullDrawOn = function (aContext, aRect) {
+    if (!this.isVisible) {return; }
+    this.isCachingImage = this.graphicsChanged();
+    this.drawOn(aContext, aRect);
+    this.children.forEach(child => child.fullDrawOn(aContext, aRect));
 };
 
 SpriteMorph.prototype.render = function (ctx) {
