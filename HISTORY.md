@@ -9,6 +9,7 @@
 
 ### 2023-03-16
 * objects: dynamically cache sprite image depending on graphic effects
+* morphic: fixed scale when grabbing uncached image morphs
 
 ### 2023-03-15
 * objects: turned off image caching for sprites, experimental

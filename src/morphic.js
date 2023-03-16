@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2023-January-31';
+var morphicVersion = '2023-March-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11381,12 +11381,12 @@ HandMorph.prototype.grab = function (aMorph) {
         if (!aMorph.noDropShadow) {
             aMorph.addShadow();
         }
-        this.add(aMorph);
 
         // cache the dragged object's display resources
         this.cachedFullImage = aMorph.fullImage();
         this.cachedFullBounds = aMorph.fullBounds();
 
+        this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
             oldParent.reactToGrabOf(aMorph);
