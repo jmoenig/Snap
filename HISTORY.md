@@ -10,6 +10,7 @@
 ### 2023-03-16
 * objects: dynamically cache sprite image depending on graphic effects
 * morphic: fixed scale when grabbing uncached image morphs
+* objects, threads: fixed #3075 (except Chrome still sabotages sounds, browsers suck)
 
 ### 2023-03-15
 * objects: turned off image caching for sprites, experimental

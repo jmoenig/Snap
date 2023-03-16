@@ -4375,6 +4375,14 @@ SpriteMorph.prototype.doPlaySound = function (name) {
         }
         this.setVolume(this.getVolume()); // probably redundant as well
         aud.play();
+
+        aud.onended = function() {
+            this.currentSrc = null;
+            this.src = "";
+            this.srcObject = null;
+            this.remove();
+        };
+
         if (stage) {
             stage.activeSounds.push(aud);
             stage.activeSounds = stage.activeSounds.filter(snd =>
