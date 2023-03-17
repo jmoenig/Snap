@@ -5,12 +5,14 @@
 * **Notable Changes:**
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
+    * new "fade-in" block in the audio comp library that lets you reduce audible "clicks" in sounds computed from raw samples
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-03-17
 * objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes
+* audio comp library: new "fade-in" block that lets you reduce audible "clicks" in sounds computed from raw samples
 
 ### 2023-03-16
 * objects: dynamically cache sprite image depending on graphic effects
