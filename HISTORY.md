@@ -9,6 +9,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-17
+* objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes
+
 ### 2023-03-16
 * objects: dynamically cache sprite image depending on graphic effects
 * morphic: fixed scale when grabbing uncached image morphs

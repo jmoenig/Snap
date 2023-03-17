@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-March-13';
+modules.gui = '2023-March-17';
 
 // Declarations
 
@@ -4327,6 +4327,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         CamSnapshotDialogMorph.prototype.enableCamera,
         'uncheck to disable\ncamera support',
         'check to enable\ncamera support',
+        true
+    );
+    addPreference(
+        'Dynamic sprite rendering',
+        () => SpriteMorph.prototype.isCachingImage =
+            !SpriteMorph.prototype.isCachingImage,
+        !SpriteMorph.prototype.isCachingImage,
+        'uncheck to render\nsprites dynamically',
+        'check to cache\nsprite renderings',
         true
     );
     menu.addLine(); // everything visible below is persistent

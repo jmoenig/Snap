@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-16';
+modules.objects = '2023-March-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -2321,7 +2321,8 @@ SpriteMorph.prototype.fixLayout = function () {
 
 SpriteMorph.prototype.fullDrawOn = function (aContext, aRect) {
     if (!this.isVisible) {return; }
-    this.isCachingImage = this.graphicsChanged();
+    this.isCachingImage = SpriteMorph.prototype.isCachingImage ||
+        this.graphicsChanged();
     this.drawOn(aContext, aRect);
     this.children.forEach(child => child.fullDrawOn(aContext, aRect));
 };
