@@ -374,7 +374,7 @@ SnapTranslator.dict.ti = {
     'show':
         'ኣርኢ',
     'hide':
-        'ሕባእ',
+        'ከውል',
     'shown?':
         'ተራእዩ፧',
     'go to %layer layer':
@@ -532,7 +532,7 @@ SnapTranslator.dict.ti = {
     'to':
         'ናብ',
     'with data':
-        'ምስ ጭብጥታት',
+        'ምስ ሰነድ',
     'Message name':
         'ስም መልእኽቲ',
     'message':
@@ -540,7 +540,7 @@ SnapTranslator.dict.ti = {
     'any message':
         'ዝኾነ መልእኽቲ',
     'data':
-        'ጭብጥታት',
+        'ሰነድ',
     'wait %n secs':
         '%n ካልኢት ተጸበ',
     'wait until %b':
@@ -945,90 +945,89 @@ SnapTranslator.dict.ti = {
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'ምልክታታት ፕሮጀክት...',
     'New':
-        'Neu',
+        'ሓድሽ',
     'Open...':
-        '\u00d6ffnen...',
+        'ክፈት...',
     'Save':
-        'Sichern',
+        'ዓቅብ',
     'Save to disk':
-        'Abpeichern',
+        'ዓቅብ ኣብ መኽዘን ጭብጥታት',
     'store this project\nin the downloads folder\n(in supporting browsers)':
-        'dieses Projekt herunterladen\nund lokal speichern\n'
-            + '(nicht von allen Browsern unters\u00fctzt)',
+        'ነዛ ፕሮጀክት ኣራግፍ\nኣብ ውሽጣዊ መኽዘን ዓቅብ\n'
+            + '(ብኩለን ባባት መርበብ ሓበሬታ ክይድገፍ ይኽእል)',
     'Save As...':
-        'Sichern als...',
+        'ዓቅብ ኣብ...',
     'Import...':
-        'Importieren...',
+        'ኣእቱ...',
     'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken,\n'
-            + 'ein Kost\u00fcm oder einen Klang',
+        'ፕሮጀክት ካብ ደገ ጸዓን,\nእኩብ ሕጡባት,\n'
+            + 'ልብሲ ወይ ድምጺ',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'ፕሮጀክት ከም ተራ ጽሑፍ ናብ ደገ ስደድ...',
     'Export project...':
-        'Projekt exportieren...',
+        'ፕሮጀክት ናብ ደገ ስደድ...',
     'save project data as XML\nto your downloads folder':
-        'Projekt als XML-Datei in den Download-\nOrdner des Browsers speichern',
+        'ፕሮጀክት ከም ሰነድ XML\n ኣብ መኽዘን ዝተራገፈ ሰነዳት\nናይ ባብ መርበብ ሓበሬታ ዓቅብ',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'ፕሮጀክት ከም XML\nኣብ መስኮት ባብ መርበብ ሓበሬታ ኣርኢ',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'ሕጡባት ናብ ደገ ስደድ...',
     'save global custom block\ndefinitions as XML':
-        'globale Benutzerblockdefinitionen\nals XML-Datei speichern',
+        'ኩሎም ዓሚላውያን ሕጡባት\nከም ሰነድ XML ዓቅብ',
     'Unused blocks...':
-          'Nicht verwendete Bl\u00f6cke...',
+          'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት...',
     'find unused global custom blocks\nand remove their definitions':
-        'nicht verwendete Bl\u00f6cke finden\nund entfernen',
+        'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት\nረኺብካ እለይ',
     'Remove unused blocks':
-        'nicht verwendete Bl\u00f6cke entfernen',
+        'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት እለይ',
     'there are currently no unused\nglobal custom blocks in this project':
-        'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
+        'እዚ ፕሮጀክት ኣብዚ ህሞት\nኣብ ጥቕሚ ዘይወዓሉ ሕጡባት የብሉን',
     'unused block(s) removed':
-        'nicht verwendete Bl\u00f6cke entfernt',
+        'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት ተኣልዮም',
     'Hide blocks...':
-        'Blöcke verbergen...',
+        'ሕጡባት ከውል...',
     'New category...':
-        'Neue Kategorie...',
+        'ሓድሽ ምድብ...',
     'Remove a category...':
-        'Kategorie löschen...',
+        'ምድብ እለይ...',
     'Scenes...':
-        'Szenen...',
+        'ዓውደ ፍጻመታት...',
     'New scene':
-        'Neue Szene',
+        'ሓድሽ ዓውደ ፍጻመ',
     'Add scene...':
-        'Szene hinzufügen...',
+        'ዓውደ ፍጻመ ወስኽ...',
     'Export summary...':
-        'Zusammenfassung exportieren...',
+        'ጽማቝ ሓበሬታ ናብ ደገ ስደድ...',
     'save a summary\nof this project':
-        'eine Zusammenfassung\ndieses Projekts speichern',
+        'ናይ ፕሮጀክት ጽማቝ ሓበሬታ ዓቅብ',
     'Contents':
-        'Inhalt',
+        'ትሕዝቶ',
     'Kind of':
-        'Eine Art',
+        'ዓይነት ናይ',
     'Part of':
-        'Ein Teil von',
+        'ክፋል ናይ',
     'Parts':
-        'Teile',
+        'ክፋላት',
     'Blocks':
-        'Bausteine',
+        'ሕጡባት',
     'For all Sprites':
-        'Allen gemeinsam',
+        'ንኩሉ ብሓባር',
     'Libraries...':
-        'Module...',
+        'ኣሃዱታት...',
     'Select categories of additional blocks to add to this project.':
-        'Zusätzliche Auswahl thematisch gruppierter\nBlöcke zu diesem Projekt hinzufügen',
+        'ብቴማ ዝተጠርነፉ ሕጡባት መሪጽካ\nናብ እዚ ፕሮጀክት ወስኽ',
     'Select a costume from the media library':
-        'Kostüm aus der Medienbibliothek auswählen',
+        'ልብሲ ካብ ማዕከን ስእላዊ ሓበሬታ ምረጽ',
     'Select a sound from the media library':
-        'Klang aus der Medienbibliothek auswählen',
+        'ድምጺ ካብ ማዕከን ድምጻዊ ሓበሬታ ምረጽ',
     'Undelete sprites...':
-        'Objekte wiederherstellen...',
+        'ድምሰሳ ውዱዓት ሰርዝ...',
     'Bring back deleted sprites':
-        'Gelöschte Objekte zurückholen',
+        'ዝተደምሰሱ ውዱዓት ምለስ',
     'trash is empty':
-        'der Mülleimer ist leer',
+        'ዘንቢል ጉሓፍ ጥራዩ እዩ',
 
     //Libraries
     'Import library':
