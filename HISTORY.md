@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * "this script" reporter now has a dropdown menu offering 2 environments: "script" and "caller"
 * **Notable Changes:**
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
@@ -14,6 +15,7 @@
 ### 2023-03-20
 * threads: fixed #3154 (let "this script" capture variables in rings)
 * objects, threads: capture the dynamic scope in "this caller" (temporary & experimental)
+* blocks, objects, threads: collapsed "this script" and "this caller" into new "this (environment)" reporter 
 
 ### 2023-03-17
 * objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes

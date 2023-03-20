@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-March-13';
+modules.blocks = '2023-March-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -593,6 +593,14 @@ SyntaxElementMorph.prototype.labelParts = {
             // duplicate: ['duplicate'],
             // comic: ['comic'],
             // confetti: ['confetti']
+        }
+    },
+    '%env': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            script: ['script'],
+            caller: ['caller']
         }
     },
     '%snd': {

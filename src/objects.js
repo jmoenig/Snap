@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-17';
+modules.objects = '2023-March-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -947,19 +947,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%block of block %repRing',
             defaults: [['definition']]
         },
-        reportThisContext: {
+        reportEnvironment: {
             type: 'reporter',
             category: 'control',
-            spec: 'this script'
+            spec: 'this %env',
+            defaults: [['script']]
         },
-
-// +++ temporary experiment, will be foldet into "this script" once it's ready
-        reportThisCaller: {
-            type: 'reporter',
-            category: 'control',
-            spec: 'this caller'
-        },
-// +++
 
         // Debugging - pausing
         doPauseAll: {
@@ -1806,6 +1799,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportIsIdentical: {
             selector: 'reportVariadicIsIdentical',
             variadic: true
+        },
+        reportThisContext: {
+            selector: 'reportEnvironment',
+            inputs: [['script']]
         }
     };
 };
@@ -1827,7 +1824,7 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'doSetBlockAttribute',
             'doDeleteBlock',
             'reportBlockAttribute',
-            'reportThisContext'
+            'reportEnvironment'
         );
     }
     return selectors;
@@ -2776,8 +2773,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportThisContext'));
-        blocks.push(block('reportThisCaller')); // +++
+        blocks.push(block('reportEnvironment'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -9636,8 +9632,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportThisContext'));
-        blocks.push(block('reportThisCaller')); // +++
+        blocks.push(block('reportEnvironment'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

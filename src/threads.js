@@ -1418,11 +1418,12 @@ Process.prototype.evaluate = function (
     outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign a self-reference for introspection and recursion
-    self = copy(runnable);
+    self = copy(context);
+    self.outerContext = outer;
     outer.variables.addVar(Symbol.for('self'), self);
 
     // capture the dynamic scope in "this caller"
-    calr.expression = calr.expression.topBlock().fullCopy();
+    calr.expression = calr.expression?.topBlock().fullCopy();
     calr.inputs = [];
     outer.variables.addVar(Symbol.for('caller'), calr);
 
@@ -1580,7 +1581,14 @@ Process.prototype.initializeFor = function (context, args) {
 
 // Process introspection
 
-Process.prototype.reportThisContext = function () {
+Process.prototype.reportEnvironment = function (choice) {
+    if (this.inputOption(choice) === 'caller') {
+        return this.reportCaller();
+    }
+    return this.reportSelf();
+};
+
+Process.prototype.reportSelf = function () {
     var sym = Symbol.for('self'),
         frame = this.context.variables.silentFind(sym),
         ctx;
@@ -1595,8 +1603,7 @@ Process.prototype.reportThisContext = function () {
     return ctx;
 };
 
-Process.prototype.reportThisCaller = function () {
-    // +++ temporary and experimental
+Process.prototype.reportCaller = function () {
     var sym = Symbol.for('caller'),
         frame = this.context.variables.silentFind(sym);
     if (frame) {
@@ -1719,11 +1726,13 @@ Process.prototype.evaluateCustomBlock = function () {
     this.context.parentContext = runnable;
 
     // capture the runtime environment in "this script"
-    self = copy(runnable);
+    self = copy(context);
+    self.outerContext = outer;
+
 
     // capture the dynamic scope in "this caller"
     calr = copy(this.context);
-    calr.expression = calr.expression.topBlock().fullCopy();
+    calr.expression = calr.expression?.topBlock().fullCopy();
     calr.inputs = [];
 
     // passing parameters if any were passed
@@ -7528,7 +7537,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     this.assertType(context, ['command', 'reporter', 'predicate']);
 
     // replace upvar self references inside the definition body
-    // with "reportThisContext" reporters
+    // with "reportEnvironment" reporters
     if (context.expression instanceof BlockMorph) {
         this.compileBlockReferences(context, upvar);
     }
@@ -7591,8 +7600,8 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
 
 Process.prototype.compileBlockReferences = function (context, varName) {
     // private - replace self references inside the definition body
-    // with "reportThisContext" reporters
-    var report, declare, assign;
+    // with "this script" reporters
+    var report, declare, assign, self;
 
     function block(selector) {
         return SpriteMorph.prototype.blockForSelector(selector);
@@ -7612,14 +7621,13 @@ Process.prototype.compileBlockReferences = function (context, varName) {
         }
         // add a script var to capture the outer definition
         // don't replace any references, because they now should just work
+        self = block('reportEnvironment');
+        self.inputs()[0].setContents(['script']);
         declare = block('doDeclareVariables');
         declare.inputs()[0].setContents([varName]);
         assign = block('doSetVar');
         assign.inputs()[0].setContents(varName);
-        assign.replaceInput(
-            assign.inputs()[1],
-            block('reportThisContext')
-        );
+        assign.replaceInput(assign.inputs()[1], self);
         declare.nextBlock(assign);
         assign.nextBlock(context.expression.fullCopy());
         context.expression = declare;
@@ -7632,7 +7640,8 @@ Process.prototype.compileBlockReferences = function (context, varName) {
             if (morph.selector === 'reportGetVar' &&
                 (morph.blockSpec === varName))
             {
-                ref = block('reportThisContext');
+                ref = block('reportEnvironment');
+                ref.inputs()[0].setContents(['script']);
                 if (morph.parent instanceof SyntaxElementMorph) {
                     morph.parent.replaceInput(morph, ref);
                 } else {
@@ -8847,7 +8856,7 @@ JSCompiler.prototype.compileExpression = function (block) {
     case 'reportBoolean':
     case 'reportNewList':
         return this.compileInput(inputs[0]);
-    case 'reportThisContext':
+    case 'reportEnvironment':
         return 'func';
     default:
         target = this.process[selector] ? this.process
