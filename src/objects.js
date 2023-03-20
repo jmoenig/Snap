@@ -953,6 +953,14 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'this script'
         },
 
+// +++ temporary experiment, will be foldet into "this script" once it's ready
+        reportThisCaller: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'this caller'
+        },
+// +++
+
         // Debugging - pausing
         doPauseAll: {
             type: 'command',
@@ -2769,6 +2777,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));
+        blocks.push(block('reportThisCaller')); // +++
 
         // for debugging: ///////////////
         if (devMode) {
@@ -9628,6 +9637,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportThisContext'));
+        blocks.push(block('reportThisCaller')); // +++
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

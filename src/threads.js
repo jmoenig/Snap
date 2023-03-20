@@ -1385,6 +1385,7 @@ Process.prototype.evaluate = function (
 
     var outer = new Context(null, null, context.outerContext),
         caller = this.context.parentContext,
+        calr = copy(this.context),
         self,
         exit,
         runnable,
@@ -1419,6 +1420,11 @@ Process.prototype.evaluate = function (
     // assign a self-reference for introspection and recursion
     self = copy(runnable);
     outer.variables.addVar(Symbol.for('self'), self);
+
+    // capture the dynamic scope in "this caller"
+    calr.expression = calr.expression.topBlock().fullCopy();
+    calr.inputs = [];
+    outer.variables.addVar(Symbol.for('caller'), calr);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1589,6 +1595,16 @@ Process.prototype.reportThisContext = function () {
     return ctx;
 };
 
+Process.prototype.reportThisCaller = function () {
+    // +++ temporary and experimental
+    var sym = Symbol.for('caller'),
+        frame = this.context.variables.silentFind(sym);
+    if (frame) {
+        return frame.vars[sym].value;
+    }
+    return this.blockReceiver();
+};
+
 // Process stopping blocks primitives
 
 Process.prototype.doStopBlock = function () {
@@ -1658,6 +1674,7 @@ Process.prototype.runContinuation = function (aContext, args) {
 
 Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
+        calr = copy(this.context),
         block = this.context.expression,
         method = block.isGlobal ? block.definition
                 : this.blockReceiver().getMethod(block.semanticSpec),
@@ -1703,6 +1720,11 @@ Process.prototype.evaluateCustomBlock = function () {
 
     // capture the runtime environment in "this script"
     self = copy(runnable);
+
+    // capture the dynamic scope in "this caller"
+    calr = copy(this.context);
+    calr.expression = calr.expression.topBlock().fullCopy();
+    calr.inputs = [];
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1763,6 +1785,7 @@ Process.prototype.evaluateCustomBlock = function () {
         }
     }
     outer.variables.addVar(Symbol.for('self'), self);
+    outer.variables.addVar(Symbol.for('caller'), calr);
     runnable.expression = runnable.expression.blockSequence();
 };
 

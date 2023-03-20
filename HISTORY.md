@@ -13,6 +13,7 @@
 
 ### 2023-03-20
 * threads: fixed #3154 (let "this script" capture variables in rings)
+* objects, threads: capture the dynamic scope in "this caller" (temporary & experimental)
 
 ### 2023-03-17
 * objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes
