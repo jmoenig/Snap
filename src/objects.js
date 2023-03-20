@@ -1809,7 +1809,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
     var selectors = ['reportJSFunction'];
-    // 8.2: no new primitives
+    // 8.2, 8.3: no new primitives
     if (version < 8.1) {
         selectors.push(
             'reportPipe',
