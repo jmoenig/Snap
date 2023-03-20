@@ -1,3 +1,5 @@
+// 2023-03-20
+
 var ide = world.children.find(child => {
     return child instanceof IDE_Morph;
 }),
@@ -30,5 +32,12 @@ SnapExtensions.primitives.set(
     prefix+'stop_all_speech_synthesis',
     () => {
         window.speechSynthesis.cancel();
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'is_speaking?',
+    () => {
+        return window.speechSynthesis.speaking;
     }
 )
