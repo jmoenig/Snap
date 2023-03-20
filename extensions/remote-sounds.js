@@ -36,7 +36,7 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'is_speaking?',
+    prefix+'is_speaking',
     () => {
         return window.speechSynthesis.speaking;
     }
