@@ -7,8 +7,12 @@
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * new "fade-in" block in the audio comp library that lets you reduce audible "clicks" in sounds computed from raw samples
 * **Notable Fixes:**
+    * fixed #3154 (let "this script" capture variables in rings)
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-03-20
+* threads: fixed #3154 (let "this script" capture variables in rings)
 
 ### 2023-03-17
 * objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-16';
+modules.threads = '2023-March-20';
 
 var ThreadManager;
 var Process;
@@ -1385,6 +1385,7 @@ Process.prototype.evaluate = function (
 
     var outer = new Context(null, null, context.outerContext),
         caller = this.context.parentContext,
+        self,
         exit,
         runnable,
         expr,
@@ -1416,7 +1417,8 @@ Process.prototype.evaluate = function (
     outer.variables.addVar(Symbol.for('arguments'), args);
 
     // assign a self-reference for introspection and recursion
-    outer.variables.addVar(Symbol.for('self'), context);
+    self = copy(runnable);
+    outer.variables.addVar(Symbol.for('self'), self);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1700,8 +1702,7 @@ Process.prototype.evaluateCustomBlock = function () {
     this.context.parentContext = runnable;
 
     // capture the runtime environment in "this script"
-    self = copy(context);
-    self.outerContext = outer;
+    self = copy(runnable);
 
     // passing parameters if any were passed
     if (parms.length > 0) {
