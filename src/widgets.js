@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2022-October-19';
+modules.widgets = '2023-March-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1531,6 +1531,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     this.action = action || null;
     this.environment = environment || null;
     this.key = null; // keep track of my purpose to prevent mulitple instances
+    this.nag = false; // enable nag boxes that cannot be closed by the user
 
     this.labelString = null;
     this.label = null;
@@ -1585,6 +1586,7 @@ DialogBoxMorph.prototype.inform = function (
     this.addButton('ok', 'OK');
     this.fixLayout();
     this.popUp(world);
+    return this;
 };
 
 DialogBoxMorph.prototype.askYesNo = function (

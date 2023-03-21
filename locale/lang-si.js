@@ -565,10 +565,10 @@ SnapTranslator.dict.si = {
         '%fun von %n',
     'pick random %n to %n':
         'naklju\u010Dno \u0161tevilo od %n do %n',
-    '%b and %b':
-        '%b in %b',
-    '%b or %b':
-        '%b ali %b',
+    'and':
+        'in',
+    'or':
+        'ali',
     'not %b':
         'ne %b',
     'true':
@@ -583,8 +583,8 @@ SnapTranslator.dict.si = {
         'Halo',
     'world':
         'Svet',
-    'letter %idx of %s':
-        '\u010Drka %idx od %s',
+    'letter %ix of %s':
+        '\u010Drka %ix od %s',
     'length of %s':
         'dol\u017Eina %s',
     'unicode of %s':
@@ -595,6 +595,24 @@ SnapTranslator.dict.si = {
         'je %s tipa %typ ?',
     'is %s identical to %s ?':
         'je %s identi\u010Den %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'identi\u010Den',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'Tip od %s',
@@ -1330,6 +1348,6 @@ SnapTranslator.dict.si = {
     // list indices
     'last':
         'zadnji',
-    'any':
+    'random':
         'poljuben'
 };

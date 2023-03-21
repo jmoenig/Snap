@@ -722,10 +722,10 @@ SnapTranslator.dict.hi = {
         '%fun का %n',
     'pick random %n to %n':
         'यादृच्छिक चुनें %n से %n',
-    '%b and %b':
-        '%b और %b',
-    '%b or %b':
-        '%b या %b',
+    'and':
+        'और',
+    'or':
+        'या',
     'not %b':
         'नहीं %b',
     'true':
@@ -740,8 +740,8 @@ SnapTranslator.dict.hi = {
         'नमस्ते',
     'world':
         'विश्व',
-    'letter %idx of %s':
-        'वर्ण %idx का %s',
+    'letter %ix of %s':
+        'वर्ण %ix का %s',
     'length of %s':
         'लंबाई का  %s',
     'unicode of %s':
@@ -750,8 +750,24 @@ SnapTranslator.dict.hi = {
         'Unicode %n as letter',
     'is %s a %typ ?':
         'यह %s प्रकार %typ ?',
-    'is %s identical to %s ?':
-        ' %s के समान है %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'के समान है',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'Javascript function ( %mult%s ) { %code }',
     'compile %repRing':
@@ -791,7 +807,7 @@ SnapTranslator.dict.hi = {
     '%s in front of %l':
         '%s in front of %l',
     'item %idx of %l':
-        'item %idx of %l',
+        'मद %idx of %l',
     'all but first of %l':
         'all but first of %l',
     '%la of %l':

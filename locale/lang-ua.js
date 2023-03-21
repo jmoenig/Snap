@@ -698,10 +698,10 @@ SnapTranslator.dict.ua = {
         '%fun %n',
     'pick random %n to %n':
         'випадкове значення від %n до %n',
-    '%b and %b':
-        '%b та %b',
-    '%b or %b':
-        '%b або %b',
+    'and':
+        'та',
+    'or':
+        'або',
     'not %b':
         'не %b',
     'true':
@@ -714,8 +714,8 @@ SnapTranslator.dict.ua = {
         'Привіт',
     'world':
         'світ',
-    'letter %idx of %s':
-        '%idx літера слова %s',
+    'letter %ix of %s':
+        '%ix літера слова %s',
     'length of %s':
         'довжина %s',
     'unicode of %s':
@@ -726,6 +726,24 @@ SnapTranslator.dict.ua = {
         '%s це %typ ?',
     'is %s identical to %s ?':
         '%s тотожно %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'тотожно',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'split %s by %delim':
         'розділити %s по %delim',
     'JavaScript function ( %mult%s ) { %code }':

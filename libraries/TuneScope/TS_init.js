@@ -18,6 +18,17 @@ class TuneScope {
         // console.log(instrumentName);
         let currentInstrumentData = this.instrumentData[instrumentName]
         player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
+window._currentNote = ""
+window._parsed = ""
+window._isParsed = false
+window.parent._ts_pausePlayback = false;
+
+const _ide = world.children[0];
+const original_stop = _ide.stopAllScripts.bind(_ide);
+_ide.stopAllScripts = function() {
+  original_stop();
+  window.parent._ts_pausePlayback = true;
+}
 
         play = () => {
             const vol = volume || this.instrumentVolumes[instrumentName] || this.globalInstrumentVolume;
@@ -27,6 +38,29 @@ class TuneScope {
         }
         play();
     }
+
+    _playNote = (note, noteLength, instrumentName, volume) => {
+        window._currentNote = note
+         if (note == "R" || note == "r") return;
+      
+         note = _convertToSharp(note);
+         
+                  var player=new WebAudioFontPlayer();
+         instrumentName = instrumentName || window.parent.currentInstrumentName;
+         instrumentName = instrumentName.toLowerCase()
+         // console.log(instrumentName);
+         let currentInstrumentData = window.parent.instrumentData[instrumentName]
+                  player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
+                  function play(){
+          const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
+          console.log(note, noteLength, instrumentName, vol)
+                      player.queueWaveTable(audioContext, audioContext.destination
+                          , window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
+          );
+                      return false;
+                  }
+         play();
+      }
 
     timeSignatureToBeatsPerMeasure = function (time) {
         timeSig = time.split('/')
@@ -186,6 +220,10 @@ class TuneScope {
             path: "libraries/TuneScope/0260_JCLive_sf2_file.js",
             name: "_tone_0260_JCLive_sf2_file"
         },
+        "guitar, overdrive": {
+            path: "libraries/TuneScope/0291_LesPaul_sf2_file.js",
+            name: "_tone_0291_LesPaul_sf2_file"
+        },
         "piano": {
             path: "libraries/TuneScope/0020_JCLive_sf2_file.js",
             name: "_tone_0020_JCLive_sf2_file"
@@ -250,6 +288,10 @@ class TuneScope {
             path: "libraries/TuneScope/0121_FluidR3_GM_sf2_file.js",
             name: "_tone_0121_FluidR3_GM_sf2_file"
         },
+        "music box": {
+            path: "libraries/TuneScope/0100_SBLive_sf2.js",
+            name: "_tone_0100_SBLive_sf2"
+        },
         "oboe": {
             path: "libraries/TuneScope/0680_JCLive_sf2_file.js",
             name: "_tone_0680_JCLive_sf2_file"
@@ -266,9 +308,9 @@ class TuneScope {
             path: "libraries/TuneScope/0110_GeneralUserGS_sf2_file.js",
             name: "_tone_0110_GeneralUserGS_sf2_file"
         },
-
+    
         // drums
-
+    
         "cabasa": {
             path: "libraries/TuneScope/12869_6_JCLive_sf2_file.js",
             name: "_drum_69_6_JCLive_sf2_file"
@@ -300,10 +342,6 @@ class TuneScope {
         "crash cymbal": {
             path: "libraries/TuneScope/12849_21_FluidR3_GM_sf2_file.js",
             name: "_drum_49_21_FluidR3_GM_sf2_file"
-        },
-        "vibraphone": {
-            path: "libraries/TuneScope/0110_GeneralUserGS_sf2_file.js",
-            name: "_tone_0110_GeneralUserGS_sf2_file"
         },
     }
 
@@ -503,6 +541,40 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
+const convertArrayToListRecursive = (array) => {
+    if (Array.isArray(array)) {
+        for (var i = 0; i < array.length; i++) {
+            array[i] = convertArrayToListRecursive(array[i]);
+        }
+        return IDE_Morph.prototype.newList(array);
+    }
+    return array;
+}
+window.convertArrayToListRecursive = convertArrayToListRecursive;
+
+function _typeOf(value) {
+    return Object.prototype.toString.call(value).slice(8, -1);
+}
+
+const _isObject = (obj) => {
+  return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
+}
+
+const _objToArray = (obj) => {
+  return Object.keys(obj).map((key) => {
+    return [key, _isObject(obj[key]) ? 
+        _objToArray(obj[key]) :
+        obj[key]
+    ];
+  });    
+}
+window._objToArray = _objToArray;
+
+function isNumber(myString) {
+  return /^\d+\.\d+$/.test(myString);
+}
+window.isNumber = isNumber;
+
 function hasNumber(myString) {
     return /\d/.test(myString);
 }
@@ -512,6 +584,32 @@ function deep_copy(array) {
     return JSON.parse(JSON.stringify(array));
 }
 window.deep_copy = deep_copy;
+
+/**
+ * Select file(s).
+ * @param {String} contentType The content type of files you wish to select. For instance, use "image/*" to select all types of images.
+ * @param {Boolean} multiple Indicates if the user can select multiple files.
+ * @returns {Promise<File|File[]>} A promise of a file or array of files in case the multiple parameter is true.
+ */
+function _selectFile(contentType, multiple) {
+    return new Promise(resolve => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = multiple;
+        input.accept = contentType;
+
+        input.onchange = () => {
+            let files = Array.from(input.files);
+            if (multiple)
+                resolve(files);
+            else
+                resolve(files[0]);
+        };
+
+        input.click();
+    });
+}
+window._selectFile = _selectFile;
 
 // play dummy sound to initialize
 

@@ -579,10 +579,10 @@ SnapTranslator.dict.sv = {
         '%fun av %n',
     'pick random %n to %n':
         'slumptal fr\u00E5n %n till %n',
-    '%b and %b':
-        '%b och %b',
-    '%b or %b':
-        '%b eller %b',
+    'and':
+        'och',
+    'or':
+        'eller',
     'not %b':
         'inte %b',
     'true':
@@ -595,8 +595,8 @@ SnapTranslator.dict.sv = {
         'hej',
     'world':
         'v\u00E4rlden',
-    'letter %idx of %s':
-        'bokstav %idx av %s',
+    'letter %ix of %s':
+        'bokstav %ix av %s',
     'length of %s':
         'l\u00E4ngden av %s',
     'unicode of %s':
@@ -607,6 +607,24 @@ SnapTranslator.dict.sv = {
         '%s \u00E4r %typ ?',
     'is %s identical to %s ?':
         '%s identisk med %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'identisk med',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'typ %s',
@@ -1220,7 +1238,7 @@ SnapTranslator.dict.sv = {
     // list indices
     'last':
         'sista',
-    'any':
+    'random':
         'vilken som helst',
     
 

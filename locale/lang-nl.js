@@ -721,10 +721,10 @@ SnapTranslator.dict.nl = {
         '%fun van %n',
     'pick random %n to %n':
         'willekeurig getal tussen %n en %n',
-    '%b and %b':
-        '%b en %b',
-    '%b or %b':
-        '%b of %b',
+    'and':
+        'en',
+    'or':
+        'of',
     'not %b':
         'niet %b',
     'true':
@@ -739,8 +739,8 @@ SnapTranslator.dict.nl = {
         'hallo',
     'world':
         'wereld',
-    'letter %idx of %s':
-        'letter %idx van %s',
+    'letter %ix of %s':
+        'letter %ix van %s',
     'length of %s':
         'lengte van %s',
     'unicode of %s':
@@ -751,6 +751,24 @@ SnapTranslator.dict.nl = {
         'is %s een %typ ?',
     'is %s identical to %s ?':
         'is %s identiek aan %s ?',
+    'is %all== ?':
+        'is %all== ?',
+    'identical to':
+        'identiek aan',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript functie ( %mult%s ) { %code }',
     'compile %repRing':

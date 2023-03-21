@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2022 by Jens Mönig
+    Copyright (C) 2010-2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1306,10 +1306,9 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2022-November-22';
+var morphicVersion = '2023-March-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
-var keepCanvasInCPU = false;
 
 const ZERO = new Point();
 const BLACK = new Color();
@@ -1495,9 +1494,6 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
         canvas = document.createElement('canvas');
         canvas.width = ext.x;
         canvas.height = ext.y;
-        canvas.getContext("2d", {
-            willReadFrequently: keepCanvasInCPU
-        });
     }
     if (nonRetina && canvas.isRetinaEnabled) {
         canvas.isRetinaEnabled = false;
@@ -1531,9 +1527,7 @@ function getMinimumFontHeight() {
         y;
     canvas.width = size;
     canvas.height = size;
-    ctx = canvas.getContext('2d', {
-        willReadFrequently: keepCanvasInCPU
-    });
+    ctx = canvas.getContext('2d');
     ctx.font = '1px serif';
     maxX = ctx.measureText(str).width;
     ctx.fillStyle = 'black';
@@ -1622,8 +1616,12 @@ function embedMetadataPNG(aCanvas, aString) {
             encodeURIComponent(aString) +
             embedTag
         );
-    bPart.splice(-12, 0, ...newChunk);
-    parts[1] = btoa(bPart.join(""));
+    try {
+        bPart.splice(-12, 0, ...newChunk);
+        parts[1] = btoa(bPart.join(""));
+    } catch (err) {
+        console.log(err);
+    }
     return parts.join(',');
 }
 
@@ -1694,9 +1692,7 @@ function enableRetinaSupport() {
 
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
-    var ctx = document.createElement("canvas").getContext("2d", {
-            willReadFrequently: keepCanvasInCPU
-        }),
+    var ctx = document.createElement("canvas").getContext("2d"),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -1795,9 +1791,7 @@ function enableRetinaSupport() {
                 var pixelRatio = getPixelRatio(this),
                     context;
                 uber.width.set.call(this, width * pixelRatio);
-                context = this.getContext('2d', {
-                    willReadFrequently: keepCanvasInCPU
-                });
+                context = this.getContext('2d');
                 /*
                 context.restore();
                 context.save();
@@ -1818,9 +1812,7 @@ function enableRetinaSupport() {
             var pixelRatio = getPixelRatio(this),
                 context;
             uber.height.set.call(this, height * pixelRatio);
-            context = this.getContext('2d', {
-                willReadFrequently: keepCanvasInCPU
-            });
+            context = this.getContext('2d');
             /*
             context.restore();
             context.save();
@@ -1924,9 +1916,7 @@ function enableRetinaSupport() {
 }
 
 function isRetinaSupported () {
-    var ctx = document.createElement("canvas").getContext("2d", {
-            willReadFrequently: keepCanvasInCPU
-        }),
+    var ctx = document.createElement("canvas").getContext("2d"),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -11391,12 +11381,12 @@ HandMorph.prototype.grab = function (aMorph) {
         if (!aMorph.noDropShadow) {
             aMorph.addShadow();
         }
-        this.add(aMorph);
 
         // cache the dragged object's display resources
         this.cachedFullImage = aMorph.fullImage();
         this.cachedFullBounds = aMorph.fullBounds();
 
+        this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
             oldParent.reactToGrabOf(aMorph);
@@ -12070,9 +12060,6 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
-    this.worldCanvas.getContext("2d", {
-        willReadFrequently: keepCanvasInCPU
-    });
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups
@@ -12269,7 +12256,7 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.autofocus = true;
-    kbd.style.width = '0px'
+    kbd.style.width = '0px';
     kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;

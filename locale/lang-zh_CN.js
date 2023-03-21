@@ -926,10 +926,10 @@ SnapTranslator.dict.zh_CN = {
         '%fun %n',
     'pick random %n to %n':
         '在 %n 到 %n 间随机选一个数',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
+    'and':
+        '且',
+    'or':
+        '或',
     'not %b':
         '%b 不成立',
     'true':
@@ -944,8 +944,8 @@ SnapTranslator.dict.zh_CN = {
         '你好',
     'world':
         '世界',
-    'letter %idx of %s':
-        '第 %idx 个字符在文字 %s 中',
+    'letter %ix of %s':
+        '第 %ix 个字符在文字 %s 中',
     'length of %s':
         '%s 的长度',
     'unicode of %s':
@@ -956,6 +956,24 @@ SnapTranslator.dict.zh_CN = {
         '%s 的类型是 %typ 吗？',
     'is %s identical to %s ?':
         '%s 与 %s 是相同的？',
+    'is %all== ?':
+        '%all== 是相同的?',
+    'identical to':
+        '与',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s 的类型',

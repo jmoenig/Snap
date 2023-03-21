@@ -548,10 +548,10 @@ SnapTranslator.dict.hr = {
         '%fun od %n',
     'pick random %n to %n':
         'slu\u010Dajni broj od %n do %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b ili %b',
+    'and':
+        'i',
+    'or':
+        'ili',
     'not %b':
         'ne %b',
     'true':
@@ -566,8 +566,8 @@ SnapTranslator.dict.hr = {
         'pozdrav',
     'world':
         'svijet',
-    'letter %idx of %s':
-        'znak %idx od %s',
+    'letter %ix of %s':
+        'znak %ix od %s',
     'length of %s':
         'duljina od %s',
     'unicode of %s':
@@ -576,8 +576,24 @@ SnapTranslator.dict.hr = {
         'unicode %n kao znak',
     'is %s a %typ ?':
         'da li je %s tipa %typ ?',
-    'is %s identical to %s ?':
-        'da li je %s isti kao %s ?',
+    'is %all== ?':
+        'da li je %all== ?',
+    'identical to':
+        'isti kao',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tip od %s',
@@ -1320,7 +1336,7 @@ SnapTranslator.dict.hr = {
     // list indices
     'last':
         'zadnji',
-    'any':
+    'random':
         'bilo koji',
     
 	//added manually

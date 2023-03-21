@@ -919,10 +919,10 @@ SnapTranslator.dict.es = {
         '%fun de %n',
     'pick random %n to %n':
         'n\u00FAmero al azar entre %n y %n',
-    '%b and %b':
-        '%b y %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'y',
+    'or':
+        'o',
     'not %b':
         'no %b',
     'true':
@@ -933,8 +933,8 @@ SnapTranslator.dict.es = {
         'unir %words',
     'split %s by %delim':
         'separar %s por %delim',
-    'letter %idx of %s':
-        'letra %idx de %s',
+    'letter %ix of %s':
+        'letra %ix de %s',
     'length of %s':
         'longitud de %s',
     'unicode of %s':
@@ -943,8 +943,25 @@ SnapTranslator.dict.es = {
         'unic\u00F3digo %n como letra',
     'is %s a %typ ?':
         '\u00BFes %s un %typ ?',
-    'is %s identical to %s ?':
-        '\u00BFes %s id\u00E9ntico a %s ?',
+    'is %all== ?':
+        '\u00BFes %all== ?',
+    'identical to':
+        'id\u00E9ntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
+
     'JavaScript function ( %mult%s ) { %code }':
         'funci\u00F3n JavaScript ( %mult%s ) { %code }',
 
@@ -1120,8 +1137,6 @@ SnapTranslator.dict.es = {
     // %idx values for (item %idx of %l):
     'last':
         '\u00FAltimo',
-    'any':
-        'aleatorio',
 
     // default value for (%l contains %s):
     'thing':

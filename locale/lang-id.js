@@ -550,10 +550,10 @@ SnapTranslator.dict.id = {
         '%fun dari %n',
     'pick random %n to %n':
         'pilih angka acak dari %n ke %n',
-    '%b and %b':
-        '%b dan %b',
-    '%b or %b':
-        '%b atau %b',
+    'and':
+        'dan',
+    'or':
+        'atau',
     'not %b':
         'tidak %b',
     'true':
@@ -568,8 +568,8 @@ SnapTranslator.dict.id = {
         'halo',
     'world':
         'dunia',
-    'letter %idx of %s':
-        'huruf %idx dari %s',
+    'letter %ix of %s':
+        'huruf %ix dari %s',
     'length of %s':
         'panjang dari %s',
     'unicode of %s':
@@ -578,8 +578,24 @@ SnapTranslator.dict.id = {
         'Unicode %n sebagai huruf',
     'is %s a %typ ?':
         'apakah %s sebuah %typ ?',
-    'is %s identical to %s ?':
-        'apakah %s identik dengan %s ?',
+    'is %all== ?':
+        'apakah %all== ?',
+    'identical to':
+        'identik dengan',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipe dari %s',
@@ -1355,6 +1371,6 @@ SnapTranslator.dict.id = {
     // list indices
     'last':
         'terakhir',
-    'any':
+    'random':
         'apapun'
 };

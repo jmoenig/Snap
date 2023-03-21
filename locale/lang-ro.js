@@ -544,10 +544,10 @@ SnapTranslator.dict.ro = {
         '%fun din %n',
     'pick random %n to %n':
         'alege aleator de la %n la %n',
-    '%b and %b':
-        '%b si %b',
-    '%b or %b':
-        '%b sau %b',
+    'and':
+        'si',
+    'or':
+        'sau',
     'not %b':
         'not %b',
     'true':
@@ -562,8 +562,8 @@ SnapTranslator.dict.ro = {
         'salut',
     'world':
         'lume',
-    'letter %idx of %s':
-        'litera %idx din %s',
+    'letter %ix of %s':
+        'litera %ix din %s',
     'length of %s':
         'lungimea lui %s',
     'unicode of %s':
@@ -574,6 +574,24 @@ SnapTranslator.dict.ro = {
         'este %s un/o %typ ?',
     'is %s identical to %s ?':
         'este %s identic cu %s ?',
+    'is %all== ?':
+        'este %all== ?',
+    'identical to':
+        'identic cu',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipul lui %s',
@@ -1317,6 +1335,6 @@ SnapTranslator.dict.ro = {
     // list indices
     'last':
         'ultimul',
-    'any':
+    'random':
         'oricare'
 };

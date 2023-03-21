@@ -730,10 +730,10 @@ SnapTranslator.dict.pl = {
         '%fun z %n',
     'pick random %n to %n':
         'losuj od %n do %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b lub %b',
+    'and':
+        'i',
+    'or':
+        'lub',
     'not %b':
         'nie %b',
     'true':
@@ -748,8 +748,8 @@ SnapTranslator.dict.pl = {
         'witaj',
     'world':
         '\u015Bwiecie',
-    'letter %idx of %s':
-        'litera %idx z %s',
+    'letter %ix of %s':
+        'litera %ix z %s',
     'length of %s':
         'd\u0142ugo\u015B\u0107 %s',
     'unicode of %s':
@@ -760,6 +760,24 @@ SnapTranslator.dict.pl = {
         'jest %s typu %typ ?',
     'is %s identical to %s ?':
         'jest %s identyczne z %s ?',
+    'is %all== ?':
+        'jest %all== ?',
+    'identical to':
+        'identyczne z',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'funkcja JavaScript ( %mult%s ) { %code }',
     'compile %repRing':

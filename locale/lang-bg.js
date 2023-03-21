@@ -505,10 +505,10 @@ SnapTranslator.dict.bg = {
         '%fun от %n',
     'pick random %n to %n':
         'произволно число между %n и %n',
-    '%b and %b':
-        '%b и %b',
-    '%b or %b':
-        '%b или %b',
+    'and':
+        'и',
+    'or':
+        'или',
     'not %b':
         'не %b',
     'true':
@@ -521,8 +521,8 @@ SnapTranslator.dict.bg = {
         'здравейте',
     'world':
         'хора',
-    'letter %idx of %s':
-        'буква %idx от %s',
+    'letter %ix of %s':
+        'буква %ix от %s',
     'length of %s':
         'дължина на %s',
     'unicode of %s':
@@ -531,8 +531,24 @@ SnapTranslator.dict.bg = {
         'буква с Unicode %n',
     'is %s a %typ ?':
         '%s от тип %typ ли е ?',
-    'is %s identical to %s ?':
-        '%s идентичен с %s ?',
+    'is %all== ?':
+        'is %all== ?',
+    'identical to':
+        'идентичен с',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'тип на %s',
@@ -1118,7 +1134,7 @@ SnapTranslator.dict.bg = {
     // list indices
     'last':
         'последен',
-    'any':
+    'random':
         'някой',
     'now connected':
         'конектиран',

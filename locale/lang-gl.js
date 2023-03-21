@@ -616,10 +616,10 @@ SnapTranslator.dict.gl = {
         '%fun de %n',
     'pick random %n to %n':
         'número ao chou entre %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'e',
+    'or':
+        'ou',
     'not %b':
         'non %b',
     'true':
@@ -634,8 +634,8 @@ SnapTranslator.dict.gl = {
         'ola',
     'world':
         'mundo',
-    'letter %idx of %s':
-        'letra %idx de %s',
+    'letter %ix of %s':
+        'letra %ix de %s',
     'length of %s':
         'lonxitude de %s',
     'unicode of %s':
@@ -644,8 +644,24 @@ SnapTranslator.dict.gl = {
         'carácter cuxo código Unicode é %n',
     'is %s a %typ ?':
         '%s é un/unha %typ ?',
-    'is %s identical to %s ?':
-        '%s é idéntico a %s ?',
+    'is %all== ?':
+        'é %all== ?',
+    'identical to':
+        'idéntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipo de %s',

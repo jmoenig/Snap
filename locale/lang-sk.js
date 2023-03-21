@@ -719,10 +719,10 @@ SnapTranslator.dict.sk = {
         '%fun z %n',
     'pick random %n to %n':
         'zvo\u013E n\u00E1hodn\u00E9 \u010D\u00EDslo od %n do %n',
-    '%b and %b':
-        '%b a %b',
-    '%b or %b':
-        '%b alebo %b',
+    'and':
+        'a',
+    'or':
+        'alebo',
     'not %b':
         'nie je %b',
     'true':
@@ -737,8 +737,8 @@ SnapTranslator.dict.sk = {
         'ahoj',
     'world':
         'svet',
-    'letter %idx of %s':
-        'p\u00EDsmeno %idx z %s',
+    'letter %ix of %s':
+        'p\u00EDsmeno %ix z %s',
     'length of %s':
         'd\u013A\u017Eka %s',
     'unicode of %s':
@@ -749,6 +749,24 @@ SnapTranslator.dict.sk = {
         'je %s typu %typ ?',
     'is %s identical to %s ?':
         'je %s rovnak\u00FD jako %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'rovnak\u00FD jako',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript funkcia ( %mult%s ) { %code }',
     'compile %repRing':

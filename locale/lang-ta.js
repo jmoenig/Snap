@@ -535,10 +535,10 @@ SnapTranslator.dict.ta = {
         '%fun ன் %n',
     'pick random %n to %n':
         'இளஞ்சிவப்பு சீரற்ற %n to %n',
-    '%b and %b':
-        '%b மற்றும் %b',
-    '%b or %b':
-        '%b அல்லத %b',
+    'and':
+        'மற்றும்',
+    'or':
+        'அல்லத',
     'not %b':
         'இல்ல %b',
     'true':
@@ -553,8 +553,8 @@ SnapTranslator.dict.ta = {
         'வணக்கம்',
     'world':
         'உலகம்',
-    'letter %idx of %s':
-        '%idx வது எழுத்து , %s ன்',
+    'letter %ix of %s':
+        '%ix வது எழுத்து , %s ன்',
     'length of %s':
         '%s ன் நீளம்',
     'unicode of %s':
@@ -565,6 +565,24 @@ SnapTranslator.dict.ta = {
         'இது %s ஒரு %typ ?',
     'is %s identical to %s ?':
         'இது %s ஒத்த %s ?',
+    'is %all== ?':
+        'இது %all== ?',
+    'identical to':
+        'ஒத்த',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'வகை %s',
@@ -1275,8 +1293,8 @@ SnapTranslator.dict.ta = {
     // list indices
     'last':
         'last',
-    'any':
-        'any'
+    'random':
+        'random'
 };
 /* Tamil Language locale is completed upto 85% by 
 Revision 1 and 2:- vinayakumar 40

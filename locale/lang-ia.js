@@ -558,10 +558,10 @@ SnapTranslator.dict.ia = {
         '%fun de %n',
     'pick random %n to %n':
         'al aventura inter %n e %n',  // 'al hasardo'
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'e',
+    'or':
+        'o',
     'not %b':
         'non %b',
     'true':
@@ -576,8 +576,8 @@ SnapTranslator.dict.ia = {
         'Hallo',
     'world':
         'Mundo',
-    'letter %idx of %s':
-        'character %idx de %s',
+    'letter %ix of %s':
+        'character %ix de %s',
     'length of %s':
         'longor de %s',
     'unicode of %s':
@@ -586,8 +586,24 @@ SnapTranslator.dict.ia = {
         'Unicode character pro %n',
     'is %s a %typ ?':
         'a es %s de %typ ?',
-    'is %s identical to %s ?':
-        'a es %s identic a %s ?', // 'mesme' ?
+    'is %all== ?':
+        'a es %all== ?',
+    'identical to':
+        'identic a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'typo de %s',
@@ -1335,5 +1351,7 @@ SnapTranslator.dict.ia = {
     'last':
         'ultime',
     'any':
-        'alcuno'  // 'qualcun'
+        'alcuno',  // 'qualcun'
+    'random':
+        'aleatori'
 };

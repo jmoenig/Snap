@@ -723,10 +723,10 @@ SnapTranslator.dict.pt = {
         '%fun de %n',
     'pick random %n to %n':
         'um valor ao acaso entre %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'e',
+    'or':
+        'ou',
     'not %b':
         'é falso que %b',
     'true':
@@ -741,8 +741,8 @@ SnapTranslator.dict.pt = {
         'Olá',
     'world':
         'mundo!',
-    'letter %idx of %s':
-        'o caractere %idx de %s',
+    'letter %ix of %s':
+        'o caractere %ix de %s',
     'length of %s':
         'o comprimento de %s',
     'unicode of %s':
@@ -753,6 +753,24 @@ SnapTranslator.dict.pt = {
         '%s é um/uma %typ',
     'is %s identical to %s ?':
         '%s é idêntico a %s',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'é idêntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'a função JavaScript ( %mult%s ) { %code }',
     'compile %repRing':

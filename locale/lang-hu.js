@@ -743,10 +743,10 @@ SnapTranslator.dict.hu = {
         '%fun %n',
     'pick random %n to %n':
         'véletlen %n és %n között',
-    '%b and %b':
-        '%b és %b',
-    '%b or %b':
-        '%b vagy %b',
+    'and':
+        'és',
+    'or':
+        'vagy',
     'not %b':
         'nem %b',
     'true':
@@ -761,8 +761,8 @@ SnapTranslator.dict.hu = {
         'hello',
     'world':
         'világ',
-    'letter %idx of %s':
-        '%idx karaktere ennek: %s',
+    'letter %ix of %s':
+        '%ix karaktere ennek: %s',
     'length of %s':
         '%s hossza',
     'unicode of %s':
@@ -771,8 +771,24 @@ SnapTranslator.dict.hu = {
         'unicode %n betűként',
     'is %s a %typ ?':
         '%s egy %typ ?',
-    'is %s identical to %s ?':
-        '%s ugyanaz, mint %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'ugyanaz, mint',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript függvény ( %mult%s ) { %code }',

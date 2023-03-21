@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -90,11 +90,11 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions*/
+embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
-modules.objects = '2022-December-02';
+modules.objects = '2023-March-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -919,7 +919,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveUserEdit: {
             type: 'hat',
             category: 'control',
-            spec: 'When %edit is edited %message',
+            spec: 'when %edit is edited %message',
             defaults: [['anything']]
         },
 
@@ -947,10 +947,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%block of block %repRing',
             defaults: [['definition']]
         },
-        reportThisContext: {
+        reportEnvironment: {
             type: 'reporter',
             category: 'control',
-            spec: 'this script'
+            spec: 'this %env',
+            defaults: [['script']]
         },
 
         // Debugging - pausing
@@ -1226,45 +1227,47 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'pick random %n to %n',
             defaults: [1, 10]
         },
-        reportEquals: {
+        reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s = %s'
+            spec: '%all='
         },
-        reportNotEquals: {
+        reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2260 %s'
+            spec: '%all!='
         },
-        reportLessThan: {
+        reportVariadicLessThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s < %s'
+            spec: '%all<'
         },
-        reportLessThanOrEquals: {
+        reportVariadicLessThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2264 %s'
+            spec: '%all<='
         },
-        reportGreaterThan: {
+        reportVariadicGreaterThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s > %s'
+            spec: '%all>'
         },
-        reportGreaterThanOrEquals: {
+        reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%s \u2265 %s'
+            spec: '%all>='
         },
-        reportAnd: {
+        reportVariadicAnd: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b and %b'
+            spec: '%all',
+            alias: '&'
         },
-        reportOr: {
+        reportVariadicOr: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b or %b'
+            spec: '%any',
+            alias: '|'
         },
         reportNot: {
             type: 'predicate',
@@ -1294,7 +1297,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportLetter: {
             type: 'reporter',
             category: 'operators',
-            spec: 'letter %idx of %s',
+            spec: 'letter %ix of %s',
             defaults: [1, localize('world')]
         },
         reportStringSize: {
@@ -1321,10 +1324,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'is %s a %typ ?',
             defaults: [5, ['number']]
         },
-        reportIsIdentical: {
+        reportVariadicIsIdentical: {
             type: 'predicate',
             category: 'operators',
-            spec: 'is %s identical to %s ?'
+            spec: 'is %all== ?'
         },
         reportTextSplit: {
             type: 'reporter',
@@ -1760,8 +1763,71 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportMax: {
             selector: 'reportVariadicMax',
             variadic: true
+        },
+        reportAnd: {
+            selector: 'reportVariadicAnd',
+            variadic: true
+        },
+        reportOr: {
+            selector: 'reportVariadicOr',
+            variadic: true
+        },
+        reportLessThan: {
+            selector: 'reportVariadicLessThan',
+            variadic: true
+        },
+        reportGreaterThan: {
+            selector: 'reportVariadicGreaterThan',
+            variadic: true
+        },
+        reportLessThanOrEquals: {
+            selector: 'reportVariadicLessThanOrEquals',
+            variadic: true
+        },
+        reportGreaterThanOrEquals: {
+            selector: 'reportVariadicGreaterThanOrEquals',
+            variadic: true
+        },
+        reportEquals: {
+            selector: 'reportVariadicEquals',
+            variadic: true
+        },
+        reportNotEquals: {
+            selector: 'reportVariadicNotEquals',
+            variadic: true
+        },
+        reportIsIdentical: {
+            selector: 'reportVariadicIsIdentical',
+            variadic: true
+        },
+        reportThisContext: {
+            selector: 'reportEnvironment',
+            inputs: [['script']]
         }
     };
+};
+
+SpriteMorph.prototype.newPrimitivesSince = function (version) {
+    var selectors = ['reportJSFunction'];
+    // 8.2, 8.3: no new primitives
+    if (version < 8.1) {
+        selectors.push(
+            'reportPipe',
+            'receiveUserEdit'
+        );
+    }
+    if (version < 8) {
+        selectors.push(
+            'getPosition',
+            'reportMousePosition',
+            'doDefineBlock',
+            'doSetBlockAttribute',
+            'doDeleteBlock',
+            'reportBlockAttribute',
+            'reportEnvironment'
+        );
+    }
+    return selectors;
 };
 
 SpriteMorph.prototype.initBlockMigrations();
@@ -1882,29 +1948,36 @@ SpriteMorph.prototype.blockAlternatives = {
     reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
         'reportDifference', 'reportVariadicProduct', 'reportQuotient',
         'reportPower', 'reportModulus', 'reportAtan2'],
-    reportLessThan: ['reportLessThanOrEquals', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportEquals: ['reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportNotEquals: ['reportEquals', 'reportIsIdentical', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThan: ['reportGreaterThanOrEquals', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportLessThanOrEquals: ['reportLessThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportGreaterThanOrEquals: ['reportGreaterThan', 'reportEquals',
-        'reportIsIdentical', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals'],
-    reportIsIdentical: ['reportEquals', 'reportNotEquals', 'reportLessThan',
-        'reportLessThanOrEquals', 'reportGreaterThan',
-        'reportGreaterThanOrEquals'],
-    reportAnd: ['reportOr'],
-    reportOr: ['reportAnd'],
+    reportVariadicLessThan: ['reportVariadicLessThanOrEquals',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicEquals: ['reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicNotEquals: ['reportVariadicEquals',
+        'reportVariadicIsIdentical', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicGreaterThan: ['reportVariadicGreaterThanOrEquals',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals'],
+    reportVariadicLessThanOrEquals: ['reportVariadicLessThan',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicGreaterThanOrEquals: ['reportVariadicGreaterThan',
+        'reportVariadicEquals', 'reportVariadicIsIdentical',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals'],
+    reportVariadicIsIdentical: ['reportVariadicEquals',
+        'reportVariadicNotEquals', 'reportVariadicLessThan',
+        'reportVariadicLessThanOrEquals', 'reportVariadicGreaterThan',
+        'reportVariadicGreaterThanOrEquals'],
+    reportVariadicAnd: ['reportVariadicOr'],
+    reportVariadicOr: ['reportVariadicAnd'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -2007,7 +2080,6 @@ SpriteMorph.prototype.init = function (globals) {
 
     SpriteMorph.uber.init.call(this);
 
-    this.isCachingImage = true;
     this.isFreeForm = true;
     this.cachedColorDimensions = this.color[this.penColorModel]();
     this.isDraggable = true;
@@ -2124,9 +2196,11 @@ SpriteMorph.prototype.appearIn = function (ide) {
 // SpriteMorph versioning
 
 SpriteMorph.prototype.setName = function (string) {
+    var old = this.name;
+    if (old === string) {return; }
     this.name = string || this.name;
     this.version = Date.now();
-    this.recordUserEdit('sprite', 'name');
+    this.recordUserEdit('sprite', 'name', old);
 };
 
 // SpriteMorph rendering
@@ -2250,6 +2324,14 @@ SpriteMorph.prototype.fixLayout = function () {
     }
 };
 
+SpriteMorph.prototype.fullDrawOn = function (aContext, aRect) {
+    if (!this.isVisible) {return; }
+    this.isCachingImage = SpriteMorph.prototype.isCachingImage ||
+        this.graphicsChanged();
+    this.drawOn(aContext, aRect);
+    this.children.forEach(child => child.fullDrawOn(aContext, aRect));
+};
+
 SpriteMorph.prototype.render = function (ctx) {
     var myself = this,
         facing, // actual costume heading based on my rotation style
@@ -2298,7 +2380,7 @@ SpriteMorph.prototype.render = function (ctx) {
         }
     }
     // apply graphics effects to image
-    this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
+    this.applyGraphicsEffects(this.cachedImage);
     this.version = Date.now();
 };
 
@@ -2691,7 +2773,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportThisContext'));
+        blocks.push(block('reportEnvironment'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -2774,12 +2856,12 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportVariadicLessThan'));
+        blocks.push(block('reportVariadicEquals'));
+        blocks.push(block('reportVariadicGreaterThan'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportVariadicAnd'));
+        blocks.push(block('reportVariadicOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');
@@ -2792,7 +2874,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportVariadicIsIdentical'));
 
         if (Process.prototype.enableJS) {
             blocks.push('-');
@@ -3502,24 +3584,31 @@ SpriteMorph.prototype.blocksMatching = function (
             ),
             slots = words.filter(each =>
                 each.length > 1 && each.indexOf('%') === 0
-            ).map(spec => menuOf(spec));
+            ).map(spec => moreTextIn(spec));
         return filtered.join(' ') + ' ' + slots.join(' ');
     }
 
-    function menuOf(aSlotSpec) {
+    function moreTextIn(aSlotSpec) {
         var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
-            menu = info.menu;
-        if (!menu) {return ''; }
-        if (isString(menu)) {
-            menu = InputSlotMorph.prototype[menu](true);
-        }
-        return Object.values(menu).map(entry => {
-            if (isNil(entry)) {return ''; }
-            if (entry instanceof Array) {
-                return localize(entry[0]);
+            menu = info.menu,
+            more;
+        if (menu) {
+            if (isString(menu)) {
+                menu = InputSlotMorph.prototype[menu](true);
             }
-            return entry.toString();
-        }).join(' ');
+            more = Object.values(menu).map(entry => {
+                if (isNil(entry)) {return ''; }
+                if (entry instanceof Array) {
+                    return localize(entry[0]);
+                }
+                return entry.toString();
+            }).join(' ');
+        }
+        return [
+            more || '',
+            localize(info.infix || ''),
+            localize(info.collapse || '')
+        ].join(' ');
     }
 
     function fillDigits(anInt, totalDigits, fillChar) {
@@ -3572,8 +3661,11 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.alias || block.spec),
+                spec = localize(block.spec),
                 rel = relevance(labelOf(spec), search);
+            if (rel === -1 && block.alias) {
+                rel = relevance(block.alias, search);
+            }
             if (
                 (rel !== -1) &&
                     (!block.dev) &&
@@ -3837,11 +3929,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '/': 'reportQuotient',
             '%': 'reportModulus',
             '^': 'reportPower',
-            '=': 'reportEquals',
-            '<': 'reportLessThan',
-            '>': 'reportGreaterThan',
-            '&': 'reportAnd',
-            '|': 'reportOr',
+            '=': 'reportVariadicEquals',
+            '<': 'reportVariadicLessThan',
+            '>': 'reportVariadicGreaterThan',
+            '&': 'reportVariadicAnd',
+            '|': 'reportVariadicOr',
             round: 'reportRound',
             not: 'reportNot'
         };
@@ -3967,7 +4059,7 @@ SpriteMorph.prototype.renameVariable = function (
         ide = stage.parentThatIsA(IDE_Morph),
         oldWatcher = this.findVariableWatcher(oldName, isGlobal),
         scope = isGlobal ? this.globalVariables() : this.variables,
-        oldValue, newWatcher, targets;
+        container, newWatcher, targets;
 
     function renameVariableInCustomBlock(definition) {
         definition.scripts.forEach(eachScript =>
@@ -3989,10 +4081,9 @@ SpriteMorph.prototype.renameVariable = function (
         return false;
 
     }
-    oldValue = scope.getVar(oldName);
+    container = scope.vars[oldName];
     this.deleteVariable(oldName, isGlobal);
-    this.addVariable(newName, isGlobal);
-    scope.setVar(newName, oldValue);
+    scope.vars[newName] = container;
 
     if (oldWatcher && oldWatcher.isVisible) {
         newWatcher = this.toggleVariableWatcher(newName, isGlobal);
@@ -4290,6 +4381,14 @@ SpriteMorph.prototype.doPlaySound = function (name) {
         }
         this.setVolume(this.getVolume()); // probably redundant as well
         aud.play();
+
+        aud.onended = function() {
+            this.currentSrc = null;
+            this.src = "";
+            this.srcObject = null;
+            this.remove();
+        };
+
         if (stage) {
             stage.activeSounds.push(aud);
             stage.activeSounds = stage.activeSounds.filter(snd =>
@@ -4412,6 +4511,7 @@ SpriteMorph.prototype.playFreq = function (hz) {
     }
     note = this.freqPlayer;
     note.fader = ctx.createGain();
+    hz = +hz || 0;
     if (note.oscillator) {
         note.oscillator.frequency.value = hz;
     } else {
@@ -4586,6 +4686,9 @@ SpriteMorph.prototype.toXMLString = function () {
         all = this.allParts(),
         dependencies = [],
         categories = [],
+        varNames = [],
+        localVarNames,
+        globalData,
         blocksXML = '';
 
     function collect(item, array) {
@@ -4627,11 +4730,30 @@ SpriteMorph.prototype.toXMLString = function () {
 
     });
 
+    // collect global data dependencies of the custom block definitions
+    // to be included in the file
+
+    dependencies.forEach(def =>
+        def.dataDependencies().forEach(name => {
+            if (!varNames.includes(name)) {
+                varNames.push(name);
+            }
+        })
+    );
+    localVarNames = this.variables.fork(varNames).names(true); // incl. hidden
+    varNames = varNames.filter(name => !localVarNames.includes(name));
+    globalData = this.globalVariables().fork(varNames);
+
     // encode both parts of the export-file:
     // the blocks library and the sprites
 
     if (dependencies.length || categories.length) {
-        blocksXML = ide.blocksLibraryXML(dependencies, categories);
+        blocksXML = ide.blocksLibraryXML(
+            dependencies,
+            categories,
+            false, // as file
+            globalData
+        );
     }
 
     return '<sprites app="' +
@@ -6717,8 +6839,9 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (sel === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
                 return event === message ||
-                    (event instanceof Array && event[0] == message) ||
+                    (event instanceof Array && event[0] == message) || // nums
                     (event instanceof Array &&
+                        event[0] === 'any message' &&
                         message !== '__shout__go__' &&
                         message !== '__clone__init__');
             }
@@ -6750,7 +6873,11 @@ SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
     return this.scripts.children.filter(morph => {
         if (morph.selector) {
             if (morph.selector === 'receiveInteraction') {
-                return morph.inputs()[0].evaluate()[0] === interaction;
+                var choice = morph.inputs()[0].evaluate();
+                return (choice instanceof Array ?
+                    choice[0]
+                    : choice
+                ) === interaction;
             }
         }
         return false;
@@ -8258,15 +8385,53 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
     return newName;
 };
 
-// SpriteMorph recording user edits
+// SpriteMorph recording and synching user edits
 
 SpriteMorph.prototype.recordUserEdit = function (...details) {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.recordUnsavedChanges(
             this.name,
-            Array.from(details)
+            Array.from(details).concat(details[0] === 'scripts' ?
+                [this.scriptsOnlyXML()]
+                : []
+            )
         );
+    }
+};
+
+SpriteMorph.prototype.scriptsOnlyXML = function () {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+        new SnapSerializer();
+    return '<scriptsonly' +
+        ' app="' + serializer.app +
+        '" version="' + serializer.version +
+        '">' +
+        serializer.serialize(this.scripts) +
+        '</scriptsonly>';
+};
+
+SpriteMorph.prototype.synchScriptsFrom = function (xml) {
+    var serializer = this.parentThatIsA(IDE_Morph)?.serializer ||
+            new SnapSerializer(),
+        bak = this.scripts.children;
+    try {
+        this.scripts.children = [];
+        serializer.loadScripts(
+            this,
+            this.scripts,
+            serializer.parse(xml, true)
+        );
+        this.scripts.changed();
+        this.recordUserEdit(
+            'sprite',
+            'synch',
+            'scripts',
+            xml
+        );
+    } catch (err) {
+        this.scripts.children = bak;
+        throw(err);
     }
 };
 
@@ -8497,7 +8662,7 @@ StageMorph.prototype.render = function (ctx) {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
-        this.cachedImage = this.applyGraphicsEffects(this.cachedImage);
+        this.applyGraphicsEffects(this.cachedImage);
     }
     ctx.restore();
     this.version = Date.now(); // for observer optimization
@@ -9145,7 +9310,7 @@ StageMorph.prototype.fireUserEditEvent = function (
                 procs.push(this.threads.startProcess(
                     block,
                     morph,
-                    true, // ignore running scripts, was: myself.isThreadSafe
+                    false, // ignore running scripts, was: myself.isThreadSafe
                     null, // exportResult (bool)
                     null, // callback
                     null, // isClicked
@@ -9467,7 +9632,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doDeleteBlock'));
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportThisContext'));
+        blocks.push(block('reportEnvironment'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
@@ -9546,12 +9711,12 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportMonadic'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
-        blocks.push(block('reportLessThan'));
-        blocks.push(block('reportEquals'));
-        blocks.push(block('reportGreaterThan'));
+        blocks.push(block('reportVariadicLessThan'));
+        blocks.push(block('reportVariadicEquals'));
+        blocks.push(block('reportVariadicGreaterThan'));
         blocks.push('-');
-        blocks.push(block('reportAnd'));
-        blocks.push(block('reportOr'));
+        blocks.push(block('reportVariadicAnd'));
+        blocks.push(block('reportVariadicOr'));
         blocks.push(block('reportNot'));
         blocks.push(block('reportBoolean'));
         blocks.push('-');
@@ -9564,7 +9729,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportUnicodeAsLetter'));
         blocks.push('-');
         blocks.push(block('reportIsA'));
-        blocks.push(block('reportIsIdentical'));
+        blocks.push(block('reportVariadicIsIdentical'));
 
         if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
             blocks.push('-');
@@ -10004,6 +10169,7 @@ StageMorph.prototype.allPaletteBlocks
     = SpriteMorph.prototype.allPaletteBlocks;
 
 StageMorph.prototype.isHidingBlock = SpriteMorph.prototype.isHidingBlock;
+StageMorph.prototype.isDisablingBlock = SpriteMorph.prototype.isDisablingBlock;
 
 StageMorph.prototype.changeBlockVisibility
     = SpriteMorph.prototype.changeBlockVisibility;
@@ -10500,10 +10666,16 @@ StageMorph.prototype.inheritedBlocks = function () {
     return [];
 };
 
-// StageMorph recording user edits
+// StageMorph recording and synching user edits
 
 StageMorph.prototype.recordUserEdit =
     SpriteMorph.prototype.recordUserEdit;
+
+StageMorph.prototype.scriptsOnlyXML =
+    SpriteMorph.prototype.scriptsOnlyXML;
+
+StageMorph.prototype.synchScriptsFrom =
+    SpriteMorph.prototype.synchScriptsFrom;
 
 // StageMorph pen trails as costume
 

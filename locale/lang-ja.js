@@ -521,10 +521,10 @@ SnapTranslator.dict.ja = {
         '%fun %n',
     'pick random %n to %n':
         '%n から %n までの乱数',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
+    'and':
+        'かつ',
+    'or':
+        'または',
     'not %b':
         '%b ではない',
     'true':
@@ -537,8 +537,8 @@ SnapTranslator.dict.ja = {
         'ハロー',
     'world':
         'ワールド',
-    'letter %idx of %s':
-        '%idx 文字目の文字 %s',
+    'letter %ix of %s':
+        '%ix 文字目の文字 %s',
     'length of %s':
         '%s の長さ',
     'unicode of %s':
@@ -549,6 +549,24 @@ SnapTranslator.dict.ja = {
         '%s は %typ 型',
     'is %s identical to %s ?':
         '%s は %s と同一',
+    'is %all== ?':
+        'は %all== ?',
+    'identical to':
+        'と同一',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s の型',
@@ -1190,7 +1208,7 @@ SnapTranslator.dict.ja = {
     // list indices
     'last':
         '最後',
-    'any':
+    'random':
         '任意',
 
     // missing entries

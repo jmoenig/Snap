@@ -535,10 +535,10 @@ SnapTranslator.dict.ml = {
         '%fun ന്‍റ %n',
     'pick random %n to %n':
         '%n മുതല്‍ %n വരെയുള്ള ഏതെങ്കിലും സംഖ്യ എടുക്കുക',
-    '%b and %b':
-        '%b കൂടാത %b',
-    '%b or %b':
-        '%b അഥവ %b',
+    'and':
+        'കൂടാത',
+    'or':
+        'അഥവ',
     'not %b':
         '%b അല്ല',
     'true':
@@ -553,8 +553,8 @@ SnapTranslator.dict.ml = {
         'ഹലോ',
     'world':
         'ലോകം',
-    'letter %idx of %s':
-        '%idx ന്‍റെ %n മത്തെ അക്ഷരം',
+    'letter %ix of %s':
+        '%ix ന്‍റെ %n മത്തെ അക്ഷരം',
     'length of %s':
         '%s ന്‍റെ നീള',
     'unicode of %s':
@@ -565,6 +565,24 @@ SnapTranslator.dict.ml = {
         'ist %s ein(e) %typ ?',
     'is %s identical to %s ?':
         'ist %s identisch mit %s ?',
+    'is %all== ?':
+        'is %all== ?',
+    'identical to':
+        'identical to',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'Typ von %s',
@@ -1277,6 +1295,6 @@ SnapTranslator.dict.ml = {
     // list indices
     'last':
         'letztes',
-    'any':
-        'beliebiges'
+    'random':
+        'random'
 };

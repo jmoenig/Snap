@@ -574,10 +574,10 @@ SnapTranslator.dict.bn = {
         '%fun নির্ণয় কর  %n',
     'pick random %n to %n':
         'যে কোনো একটি সংখ্যা  %n থেকে   %n পর্যন্ত',
-    '%b and %b':
-        '%b এবং %b',
-    '%b or %b':
-        '%b অথবা %b',
+    'and':
+        'এবং',
+    'or':
+        'অথবা',
     'not %b':
         'না %b',
     'true':
@@ -590,8 +590,8 @@ SnapTranslator.dict.bn = {
         'হ্যালো',
     'world':
         'পৃথিবী',
-    'letter %idx of %s':
-        '%idx -তম বর্ণ %s এর',
+    'letter %ix of %s':
+        '%ix -তম বর্ণ %s এর',
     'length of %s':
         '%s -এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
@@ -600,8 +600,24 @@ SnapTranslator.dict.bn = {
         'ইউনিকোড %n বর্ণ হিসেবে',
     'is %s a %typ ?':
         '%s এই প্রকারের কিনা %typ ?',
-    'is %s identical to %s ?':
-        '%s এর সমতুল্য %s কিনা?',
+    'is %all== ?':
+        '%all== কিনা?',
+    'identical to':
+        'এর সমতুল্য',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s -এর প্রকার',
@@ -1231,6 +1247,6 @@ SnapTranslator.dict.bn = {
     // list indices
     'last':
         'সর্বশেষ',
-    'any':
+    'random':
         'যেকোনো'
 };

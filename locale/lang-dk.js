@@ -531,10 +531,10 @@ SnapTranslator.dict.dk = {
         '%fun af %n',
     'pick random %n to %n':
         'v\u00E6lg tilf\u00E6ldig %n til %n',
-    '%b and %b':
-        '%b og %b',
-    '%b or %b':
-        '%b eller %b',
+    'and':
+        'og',
+    'or':
+        'eller',
     'not %b':
         'ikke %b',
     'true':
@@ -547,8 +547,8 @@ SnapTranslator.dict.dk = {
         'hej',
     'world':
         'verden',
-    'letter %idx of %s':
-        'bogstav %idx af %s',
+    'letter %ix of %s':
+        'bogstav %ix af %s',
     'length of %s':
         'l\u00E6ngde af %s',
     'unicode of %s':
@@ -557,8 +557,24 @@ SnapTranslator.dict.dk = {
         'unicode %n som bogstav',
     'is %s a %typ ?':
         'er %s et %typ ?',
-    'is %s identical to %s ?':
-        'er %s identisk med %s ?',
+    'is %all== ?':
+        'er %all== ?',
+    'identical to':
+        'identisk med',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'type af %s',
@@ -1246,5 +1262,7 @@ SnapTranslator.dict.dk = {
     'last':
         'sidste',
     'any':
-        'hvilken som helst'
+        'nogen', // 'hvilken som helst',
+    'random':
+        'tilfældig'
 };

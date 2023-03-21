@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-November-28';
+modules.extensions = '2023-February-01';
 
 // Global stuff
 
@@ -48,6 +48,8 @@ var SnapExtensions = {
     urls: [ // allow-list of trusted servers
         'libraries/',
         'https://snap.berkeley.edu/',
+        'https://bjc.berkeley.edu/',
+        'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
         'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
     ]
@@ -1025,7 +1027,14 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
             flag = ide.isAppMode,
-            restoreMode = () => ide.toggleAppMode(flag),
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', lang],
+                        ide.version
+                    );
+                },
             callback = restoreMode;
         proc.assertType(lang, 'text');
         ide.loadNewProject = false;
@@ -1048,6 +1057,19 @@ SnapExtensions.primitives.set(
                 new List([SnapTranslator.languageName(lang), lang])
             )
         );
+    }
+);
+
+// Synchronization
+
+SnapExtensions.primitives.set(
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
+        proc.assertType(xml, 'text');
+        this.synchScriptsFrom(xml);
     }
 );
 

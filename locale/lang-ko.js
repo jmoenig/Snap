@@ -562,10 +562,10 @@ SnapTranslator.dict.ko = {
         '%fun ( %n 에 대한)',
     'pick random %n to %n':
         '%n 부터 %n 사이의 난수',
-    '%b and %b':
-        '%b 그리고 %b',
-    '%b or %b':
-        '%b 또는 %b',
+    'and':
+        '그리고',
+    'or':
+        '또는',
     'not %b':
         '%b 이(가) 아니다',
     'true':
@@ -580,8 +580,8 @@ SnapTranslator.dict.ko = {
         '안녕',
     'world':
         '세상',
-    'letter %idx of %s':
-        '%idx 번째 글자 ( %s 에 대한)',
+    'letter %ix of %s':
+        '%ix 번째 글자 ( %s 에 대한)',
     'length of %s':
         '%s 의 길이',
     'unicode of %s':
@@ -592,6 +592,24 @@ SnapTranslator.dict.ko = {
         '%s 이(가) %typ 인가?',
     'is %s identical to %s ?':
         '%s 와(과) %s 가 동일한가?',
+    'is %all== ?':
+        '와(과) %all== ?',
+    'identical to':
+        '가 동일한가',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         '%s 의 타입',
 
@@ -1364,7 +1382,7 @@ SnapTranslator.dict.ko = {
     // list indices
     'last':
         '마지막',
-    'any':
+    'random':
         '임의',
 
     // missing entries

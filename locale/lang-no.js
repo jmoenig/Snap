@@ -722,10 +722,10 @@ SnapTranslator.dict.no = {
         '%fun av %n',
     'pick random %n to %n':
         'tilfeldig tall fra %n til %n',
-    '%b and %b':
-        '%b OG %b',
-    '%b or %b':
-        '%b ELLER %b',
+    'and':
+        'OG',
+    'or':
+        'ELLER',
     'not %b':
         'IKKE %b',
     'true':
@@ -740,8 +740,8 @@ SnapTranslator.dict.no = {
         'hallo',
     'world':
         'verden',
-    'letter %idx of %s':
-        'tegn %idx av %s',
+    'letter %ix of %s':
+        'tegn %ix av %s',
     'length of %s':
         'lengde av %s',
     'unicode of %s':
@@ -752,6 +752,24 @@ SnapTranslator.dict.no = {
         'er %s type %typ ?',
     'is %s identical to %s ?':
         'er %s identisk %s ?',
+    'is %all== ?':
+        'er %all== ?',
+    'identical to':
+        'identisk',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript funktion ( %mult%s ) { %code }',
     'compile %repRing':
@@ -1869,7 +1887,7 @@ SnapTranslator.dict.no = {
     'last':
         'siste',
     'any':
-        'tilfeldig',
+        'noen',
 
     // attributes
     'my':

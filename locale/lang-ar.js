@@ -547,10 +547,10 @@ SnapTranslator.dict.ar = {
         '%fun قيمة إحسب %n للعدد',
     'pick random %n to %n':
         ' %n و %n بين عشوائي عدد إختر',
-    '%b and %b':
-        '%b و %b',
-    '%b or %b':
-        '%b أو %b',
+    'and':
+        'و',
+    'or':
+        'أو',
     'not %b':
         'ليس %b',
     'true':
@@ -565,8 +565,8 @@ SnapTranslator.dict.ar = {
         'مرحبا',
     'world':
         'ايها العالم',
-    'letter %idx of %s':
-        '%idx الحرف أوجد %s العبارة من',
+    'letter %ix of %s':
+        '%ix الحرف أوجد %s العبارة من',
     'length of %s':
         '%s أحرف عدد',
     'unicode of %s':
@@ -577,6 +577,24 @@ SnapTranslator.dict.ar = {
         '%s يوافق %typ النوع',
     'is %s identical to %s ?':
         '؟ %s مع متماثل %s هل',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'مطابق ل',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'من نوع %s',
 
@@ -1319,7 +1337,7 @@ SnapTranslator.dict.ar = {
     // list indices
     'last':
         'الاخير',
-    'any':
+    'random':
         'أي موضع',
 		
 		

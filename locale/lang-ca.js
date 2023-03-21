@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks', // optional
     'last_changed':
-        '2022-11-07', // this, too, will appear in the Translators tab
+        '2023-02-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -575,6 +575,10 @@ SnapTranslator.dict.ca = {
         'digues a %spr que faci %cmdRing %inputs',
     'ask %spr for %repRing %inputs':
         'pregunta a %spr per %repRing %inputs',
+    'when %edit is edited %message':
+        'Quan %edit sigui editat %message',
+    'anything':
+        'qualsevol element',
 
     // sensing:
     'touching %col ?':
@@ -669,6 +673,8 @@ SnapTranslator.dict.ca = {
         'menús',
     'editables':
         'editables',
+    'translations':
+        'traduccions',
     'set %byob of block %repRing to %s':
         'assigna a %byob de %repRing el valor %s',
     'define %upvar %s %repRing':
@@ -695,10 +701,10 @@ SnapTranslator.dict.ca = {
         '%fun de %n',
     'pick random %n to %n':
         'nombre a l\'atzar entre %n i %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'i',
+    'or':
+        'o',
     'not %b':
         'no %b',
     'true':
@@ -713,8 +719,8 @@ SnapTranslator.dict.ca = {
         'hola',
     'world':
         'món',
-    'letter %idx of %s':
-        'lletra %idx de %s',
+    'letter %ix of %s':
+        'lletra %ix de %s',
     'length of %s':
         'longitud del text %s',
     'unicode of %s':
@@ -723,8 +729,24 @@ SnapTranslator.dict.ca = {
         'lletra amb valor Unicode %n',
     'is %s a %typ ?':
         'és %s un %typ ?',
-    'is %s identical to %s ?':
-        'és %s idèntic a %s ?',
+    'is %all== ?':
+        'és %all== ?',
+    'identical to':
+        'idèntic a',
+    'all identical':
+        'tot idèntic',
+    'all <':
+        'tot < en',
+    'all >':
+        'tot > en',
+    'all \u2264':
+        'tot \u2264 en',
+    'all \u2265':
+        'tot \u2265 en',
+    'all =':
+        'tots =',
+    'neighbors \u2260':
+        'tots els veïns \u2260 en',
 
     'type of %s':
         'tipus de %s',
@@ -776,6 +798,8 @@ SnapTranslator.dict.ca = {
         'aplanament',
     'columns':
         'columnes',
+    'distribution':
+        'distribució',
     'reverse':
         'revers',
     'lines':
@@ -1722,7 +1746,7 @@ SnapTranslator.dict.ca = {
 
     // attributes
     'neighbors':
-        'veins',
+        'veïns',
     'self':
         'un mateix',
     'other sprites':
@@ -2907,6 +2931,10 @@ SnapTranslator.dict.ca = {
 //
     'translations...':
          'traduccions...',
+    'Custom Block Translations':
+        'Traduccions del bloc personalitzat',
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs':
+        'S\'ha d\'escriure un traducció per línia, utilitzant els dos punts (":") per indicar la llengua\ni guionet baix ("_") indicant les ranures, exemple:\n\nca:digues _ durant _ segons',
     'in palette':
         'a la paleta',
     'check to\nshow in palette':
@@ -3057,6 +3085,10 @@ SnapTranslator.dict.ca = {
     'Web Audio API is not supported\nin this browser':
         'aquest navegador no és compatible\namb l\'API de Web Audio',
     'several block definitions\nalready match this label':
-        'algun bloc definit\nja utilitza aquest nom'
+        'algun bloc definit\nja utilitza aquest nom',
+    'Use CPU for graphics':
+        'Utiliza la CPU pels gràfics',
+    'EXPERIMENTAL! optimize Canvas2D readback operations\nusing the "willReadFrequently" attribute at the expense\nof slowing down rendering in some web browsers':
+        'EXPERIMENTAL! per optimitzar les operacions de lectures en un Canvas 2D\nutilitzant la propietat "willReadFrequently" encara que\npot alentir la renderització en alguns navegadors'
 
 };

@@ -372,10 +372,10 @@ SnapTranslator.dict.et = {
         '%fun %n',
     'pick random %n to %n':
         'juhuslik arv %n ja %n vahel',
-    '%b and %b':
-        '%b ja %b',
-    '%b or %b':
-        '%b või %b',
+    'and':
+        'ja',
+    'or':
+        'või',
     'not %b':
         'pole %b',
     'true':
@@ -390,8 +390,8 @@ SnapTranslator.dict.et = {
         'Tere',
     'world':
         'maailm',
-    'letter %idx of %s':
-        'sümbol nr %idx tekstis %s',
+    'letter %ix of %s':
+        'sümbol nr %ix tekstis %s',
     'length of %s':
         'teksti %s pikkus',
     'unicode of %s':
@@ -400,8 +400,24 @@ SnapTranslator.dict.et = {
         'Unicode %n sümbol',
     'is %s a %typ ?':
         'on %s %typ ?',
-    'is %s identical to %s ?':
-        'on %s sama kui %s ?',
+    'is %all== ?':
+        'on %all== ?',
+    'identical to':
+        'sama kui',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s tüüp',
@@ -1170,7 +1186,7 @@ SnapTranslator.dict.et = {
     // list indices
     'last':
         'viimane',
-    'any':
+    'random':
         'mistahes',
 
     // Saksa keele failist puuduvad stringid

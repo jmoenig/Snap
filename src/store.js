@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2022-October-25';
+modules.store = '2023-March-20';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 7, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 8.3, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -329,6 +329,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
 
     var appInfo = xmlNode.attributes.app,
         app = appInfo ? appInfo.split(' ')[0] : null,
+        appVersion = appInfo ? parseFloat(appInfo.split(' ')[1]) || 0 : 0,
         scenesModel = xmlNode.childNamed('scenes'),
         project = new Project();
 
@@ -338,7 +339,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
             'This project has been created by a different app:\n\n' +
                 app +
                 '\n\nand may be incompatible or fail to load here.'
-        );
+        ).nag = true;
     }
     if (scenesModel) {
         if (scenesModel.attributes.select) {
@@ -346,19 +347,20 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         }
         scenesModel.childrenNamed('scene').forEach(model => {
             ide.scene.captureGlobalSettings();
-            project.scenes.add(this.loadScene(model));
+            project.scenes.add(this.loadScene(model, appVersion));
             ide.scene.applyGlobalSettings();
         });
     } else {
-        project.scenes.add(this.loadScene(xmlNode, remixID));
+        project.scenes.add(this.loadScene(xmlNode, appVersion, remixID));
     }
     return project.initialize();
 };
 
-SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
+SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
+        hidden,
         nameID;
 
     this.scene = scene;
@@ -473,16 +475,33 @@ SnapSerializer.prototype.loadScene = function (xmlNode, remixID) {
 
     model.hiddenPrimitives = model.scene.childNamed('hidden');
     if (model.hiddenPrimitives) {
-        model.hiddenPrimitives.contents.split(' ').forEach(
-            sel => {
-                var selector, migration;
-                if (sel) {
-                    migration = SpriteMorph.prototype.blockMigrations[sel];
-                    selector = migration ? migration.selector : sel;
-                    scene.hiddenPrimitives[selector] = true;
+        hidden = model.hiddenPrimitives.contents.split(' ').filter(word =>
+            word.length > 0);
+        if (hidden.length) {
+            hidden.forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
                 }
-            }
-        );
+            );
+
+            // hide new primitives that have been added to the palette
+            // since the project has been last saved
+            SpriteMorph.prototype.newPrimitivesSince(appVersion).forEach(
+                sel => {
+                    var selector, migration;
+                    if (sel) {
+                        migration = SpriteMorph.prototype.blockMigrations[sel];
+                        selector = migration ? migration.selector : sel;
+                        scene.hiddenPrimitives[selector] = true;
+                    }
+                }
+            );
+        }
     }
 
     model.codeHeaders = model.scene.childNamed('headers');
@@ -680,7 +699,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
 SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node
-    var stage;
+    var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
     this.scene.targetStage = targetStage; // for secondary block def look-up
@@ -699,6 +718,16 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    varModel = model.childNamed('variables');
+    if (varModel) {
+        varFrame = new VariableFrame();
+        this.loadVariables(varFrame, varModel);
+    }
+    varModel = model.childNamed('local-variables');
+    if (varModel) {
+        localVarFrame = new VariableFrame();
+        this.loadVariables(localVarFrame, varModel);
+    }
     this.objects = {};
     stage.globalBlocks.forEach(def => def.receiver = null);
     this.objects = {};
@@ -706,7 +735,9 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     this.mediaDict = {};
     return {
         global : stage.globalBlocks,
-        local : stage.customBlocks
+        local : stage.customBlocks,
+        data : varFrame,
+        localData : localVarFrame
     };
 };
 
@@ -1388,7 +1419,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             // checking whether "input" is nil should not
             // be necessary, but apparently is after retina support
             // was added.
-            input.setContents(this.loadValue(model));
+            input.setContents(val);
         }
     }
 };

@@ -725,10 +725,10 @@ SnapTranslator.dict.he = {
         '%fun של %n',
     'pick random %n to %n':
         'בחר_מספר_אקראי_בתחום %n - %n',
-    '%b and %b':
-        '%b וגם %b',
-    '%b or %b':
-        '%b או %b',
+    'and':
+    'וגם',
+    'or':
+        'או',
     'not %b':
         'לא %b',
     'true':
@@ -743,8 +743,8 @@ SnapTranslator.dict.he = {
         'שלום',
     'world':
         'עולם',
-    'letter %idx of %s':
-        'מיקום_אות_במילה %idx  %s',
+    'letter %ix of %s':
+        'מיקום_אות_במילה %ix  %s',
     'length of %s':
         '%s האורך_של',
     'unicode of %s':
@@ -753,8 +753,24 @@ SnapTranslator.dict.he = {
         'המר_יוניקוד_לאות %n ',
     'is %s a %typ ?':
         'האם_משתנה_מסוג %s %typ ?',
-    'is %s identical to %s ?':
-        '? %s האם_זהים %s',
+    'is %all== ?':
+        '? %all==',
+    'identical to':
+        'האם_זהים',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'הסוג של %s',
     'compile %repRing':

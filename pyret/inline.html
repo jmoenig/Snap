@@ -32,6 +32,7 @@
                 var ide = new IDE_Morph({
                         path: '../',
                         load: 'transpile.xml',
+                        // onload: () => /* runs when "transpile.xml" is loaded */,
                         design: "flat",
                         border: 1,
                         hideControls: true,
@@ -39,19 +40,44 @@
                         noSprites: true,
                         noImports: true,
                         noOwnBlocks: true,
-                        noRingify: true
+                        noRingify: true,
+                        noUserSettings: true,
+                        noDevWarning: true
                     }),
-                    buttons = document.querySelectorAll('input[name="pl"]'),
                     code = document.getElementById('code'),
+                    save = document.getElementById('save'),
+                    load = document.getElementById('load'),
+                    radio = document.querySelectorAll('input[name="pl"]'),
                     loop = () => {
                         requestAnimationFrame(loop);
                         world.doOneCycle();
                     };
                 world = new WorldMorph(document.getElementById('world'), false);
                 ide.openIn(world);
-                ide.addMessageListener('update', (txt) => code.value = txt);
-                buttons.forEach(bt => bt.addEventListener('click', () =>
+                ide.addMessageListener('update', txt => code.value = txt);
+                save.addEventListener('click', () => ide.saveXMLAs(
+                    ide.getSpriteScriptsXML(), 'snap-scripts'));
+                clear.addEventListener('click', () =>
+                    ide.loadSpriteScriptsXML('<>'));
+                load.addEventListener("change", () => {
+                    var frd = new FileReader();
+                    if (!load.files[0]) {return; }
+                    frd.onloadend = (e) =>
+                        ide.loadSpriteScriptsXML(e.target.result);
+                    frd.readAsText(load.files[0]);
+                });
+                radio.forEach(bt => bt.addEventListener('click', () =>
                     ide.broadcast(bt.value)));
+                code.onmouseup = function () {
+                    var ln = n => this.value.substr(0, n).split('\n').length;
+                    ide.unflashSpriteScripts();
+                    if (this.selectionStart < this.selectionEnd) {
+                        ide.flashSpriteScripts(
+                            ln(this.selectionStart),
+                            ln(this.selectionEnd)
+                        );
+                    }
+                };
                 requestAnimationFrame(loop);
             };
         </script>
@@ -79,6 +105,10 @@
         <label for="st">Smalltalk</label>
         <input type="radio" id="c" name="pl" value="C">
         <label for="c">C</label>
+        <br>
+        <button id="save">Save</button>
+        <button id="clear">Clear</button>
+        <input type="file" id="load" accept=".xml">
 
         <p>This page is a work-in-progress to explore how we can use Snap! as
         an alternative / secondary block based scripting editor for the

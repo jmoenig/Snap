@@ -720,10 +720,10 @@ SnapTranslator.dict.tr = {
         '%fun bunun: %n',
     'pick random %n to %n':
         '%n ile %n arasında rastgele sayı',
-    '%b and %b':
-        '%b ve %b',
-    '%b or %b':
-        '%b veya %b',
+    'and':
+        've',
+    'or':
+        'veya',
     'not %b':
         '%b değil',
     'true':
@@ -738,8 +738,8 @@ SnapTranslator.dict.tr = {
         'merhaba',
     'world':
         'dünya',
-    'letter %idx of %s':
-        '%idx harfi bunun: %s',
+    'letter %ix of %s':
+        '%ix harfi bunun: %s',
     'length of %s':
         '%s kaç harf',
     'unicode of %s':
@@ -750,6 +750,24 @@ SnapTranslator.dict.tr = {
         '%s bir %typ mi?',
     'is %s identical to %s ?':
         '%s ile %s özdeş mi?',
+    'is %all== ?':
+        '%all== özdeş mi?',
+    'identical to':
+        'ile',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript fonksiyonu ( %mult%s ) { %code }',
     'compile %repRing':

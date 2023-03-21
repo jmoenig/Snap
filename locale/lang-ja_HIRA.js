@@ -521,10 +521,10 @@ SnapTranslator.dict.ja_HIRA = {
         '%fun %n',
     'pick random %n to %n':
         '%n から %n までのらんすう',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
+    'and':
+        'かつ',
+    'or':
+        'または',
     'not %b':
         '%b ではない',
     'true':
@@ -537,8 +537,8 @@ SnapTranslator.dict.ja_HIRA = {
         'ハロー',
     'world':
         'ワールド',
-    'letter %idx of %s':
-        '%idx もじめのもじ %s',
+    'letter %ix of %s':
+        '%ix もじめのもじ %s',
     'length of %s':
         '%s のながさ',
     'unicode of %s':
@@ -549,6 +549,24 @@ SnapTranslator.dict.ja_HIRA = {
         '%s は %typ がた',
     'is %s identical to %s ?':
         '%s は %s とどういつ',
+    'is %all== ?':
+        'は %all== ?',
+    'identical to':
+        'とどういつ',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s のかた',
@@ -1190,7 +1208,7 @@ SnapTranslator.dict.ja_HIRA = {
     // list indices
     'last':
         'さいご',
-    'any':
+    'random':
         'にんい',
 
     // missing entries

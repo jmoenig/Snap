@@ -727,10 +727,10 @@ SnapTranslator.dict.ru = {
         '%fun %n',
     'pick random %n to %n':
         'случайное число от %n до %n',
-    '%b and %b':
-        '%b и %b',
-    '%b or %b':
-        '%b или %b',
+    'and':
+        'и',
+    'or':
+        'или',
     'not %b':
         'не %b',
     'true':
@@ -745,8 +745,8 @@ SnapTranslator.dict.ru = {
         'Привет',
     'world':
         'мир',
-    'letter %idx of %s':
-        '%idx буква слова %s',
+    'letter %ix of %s':
+        '%ix буква слова %s',
     'length of %s':
         'длина %s',
     'unicode of %s':
@@ -757,6 +757,24 @@ SnapTranslator.dict.ru = {
         '%s это %typ ?',
     'is %s identical to %s ?':
         '%s тождественно %s ?',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'тождественно',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'функция на JavaScript ( %mult%s ) { %code }',
     'compile %repRing':

@@ -553,10 +553,10 @@ SnapTranslator.dict.eo = {
         '%fun de %n',
     'pick random %n to %n':
         'elekti stokaston inter %n kaj %n',
-    '%b and %b':
-        '%b kaj %b',
-    '%b or %b':
-        '%b a\u016d %b',
+    'and':
+        'kaj',
+    'or':
+        'a\u016d',
     'not %b':
         'ne %b',
     'true':
@@ -571,8 +571,8 @@ SnapTranslator.dict.eo = {
         'saluton',
     'world':
         'mondo',
-    'letter %idx of %s':
-        'litero %idx el %s',
+    'letter %ix of %s':
+        'litero %ix el %s',
     'length of %s':
         'longeco de %s',
     'unicode of %s':
@@ -581,8 +581,24 @@ SnapTranslator.dict.eo = {
         'unikodo %n kiel litero',
     'is %s a %typ ?':
         '\u0109u %s estas %typ ?',
-    'is %s identical to %s ?':
-        'estas %s identa kun %s ?',
+    'is %all== ?':
+        'estas %all== ?',
+    'identical to':
+        'identa kun',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
     'type of %s':
         'tipo de %s',
 
@@ -1382,6 +1398,8 @@ SnapTranslator.dict.eo = {
         'lasta',
     'any':
         'ajna',
+    'random':
+        'hazarda',
 
     // attributes
     'neighbors':

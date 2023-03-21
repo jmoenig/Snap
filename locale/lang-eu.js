@@ -703,10 +703,10 @@ SnapTranslator.dict.eu = {
         '%fun %n',
     'pick random %n to %n':
         'hartu ausaz %n eta %n artean',
-    '%b and %b':
-        '%b eta %b',
-    '%b or %b':
-        '%b edo %b',
+    'and':
+        'eta',
+    'or':
+        'edo',
     'not %b':
         'ez %b',
     'true':
@@ -721,8 +721,8 @@ SnapTranslator.dict.eu = {
         'kaixo',
     'world':
         'mundua',
-    'letter %idx of %s':
-        '%idx . letra hemendik %s',
+    'letter %ix of %s':
+        '%ix . letra hemendik %s',
     'length of %s':
         'honen luzera %s',
     'unicode of %s':
@@ -731,8 +731,25 @@ SnapTranslator.dict.eu = {
         'unicode %n letra bezala',
     'is %s a %typ ?':
         '%s %typ da?',
-    'is %s identical to %s ?':
-        '%s eta %s berdinak dira?',
+    'is %all== ?':
+        'dira %all== ?',
+    'identical to':
+        'berdinak',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
+
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript funtzioa ( %mult%s ) { %code }',
     'compile %repRing':

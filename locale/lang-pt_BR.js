@@ -181,11 +181,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2021-11-11',
+        '2023-01-25',
 
     // GUI
     // control bar:
@@ -602,10 +602,10 @@ SnapTranslator.dict.pt_BR = {
         '%fun de %n',
     'pick random %n to %n':
         'escolha um valor aleatório entre %n e %n',
-    '%b and %b':
-        '%b e %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'e',
+    'or':
+        'ou',
     'not %b':
         'não %b',
     'true':
@@ -620,8 +620,8 @@ SnapTranslator.dict.pt_BR = {
         'Olá',
     'world':
         'mundo',
-    'letter %idx of %s':
-        'o caractere %idx de %s',
+    'letter %ix of %s':
+        'o caractere %ix de %s',
     'length of %s':
         'o comprimento de %s',
     'unicode of %s':
@@ -632,6 +632,24 @@ SnapTranslator.dict.pt_BR = {
         '%s é um/uma %typ',
     'is %s identical to %s ?':
         '%s é idêntico a %s',
+    'is %all== ?':
+        '%all== ?',
+    'identical to':
+        'é idêntico a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'o tipo de %s',
@@ -1418,7 +1436,7 @@ SnapTranslator.dict.pt_BR = {
     'last':
         'último item',
     'any':
-        'qualquer (aleatório)',
+        'qualquer',
 
     // em falta no ficheiro lang-de.js
     'costume name':
@@ -1741,4 +1759,130 @@ SnapTranslator.dict.pt_BR = {
         'captura de vídeo',
     'mirror video':
         'espelhamento de vídeo',
+    'switch to scene %scn %send':
+        'trocar para a cena %scn %send',
+    'define %upvar %s %repRing':
+        'define %upvar %s %repRing',
+    'block':
+        'bloco',
+    'set %byob of block %repRing to %s':
+        'define o/a %byob do bloco %repRing para %s',
+    '%block of block %repRing':
+        '%block do bloco %repRing',
+    'next':
+        'proximo',
+    'previous':
+        'anterior',
+    'type':
+        'Tipo',
+    'definition':
+        'definição',
+    'category':
+        'categoria',
+    'global?':
+        'global?',
+    'label':
+        'rótulo',
+    'custom?':
+        'customizado?',
+    'scope':
+        'área',
+    'slots':
+        'campos',
+    'defaults':
+        'defaults',
+    'menus':
+        'menu',
+    'editables':
+        'entradas',
+    'combinations %lists':
+        'combinações %lists',
+    'Import a new costume from your webcam':
+        'importar uma nova fantasia da sua webcam',
+    'Record a new sound':
+        'Gravar novo som',
+    'Hide blocks...':
+        'Esconder blocos...',
+    'New category...':
+        'Nova categoria...',
+    'Remove a category...':
+        'Apagar uma categoria...',
+    'New scene':
+        'Nova cena',
+    'Add scene...':
+        'Adicionar cena...',
+    'Blocks category name:':
+        'Nome da nova categoria de blocos:',
+    'Hide blocks in palette':
+        'Esconder blocos',
+    'trash is empty':
+        'O lixo está vazio',
+    'expecting':
+        'Esperando',
+    'expecting a':
+        'Esperando',
+    'but getting a':
+        'Mas ganhando',
+    'Select a sound from the media library':
+        'Escolha um som da biblioteca de mídia',
+    'Select a costume from the media library':
+        'Escolha uma fantasia da biblioteca de mídia',
+    'Select categories of additional blocks to add to this project.':
+        'Selecionar categorias de blocos adicionais para este projeto',
+    'save a summary\nof this project':
+        'Salvar um resumo deste projeto',
+    'save project data as XML\nto your downloads folder':
+        'Salve os dados do projeto como XML na sua pasta de downloads',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'Tire uma foto com a webcam importe-o como um novo ator',
+    'sprites' :
+        'Atores',
+    'Repeat password' :
+        'Repetir senha',
+    'check to support\nnative JavaScript functions':
+        'Marque para suportar funções JavaScript nativas',
+    'uncheck to disable support for\nnative JavaScript functions':
+        'Desmarque para desabilitar o suporte para funções JavaScript nativas',
+    'Extension blocks':
+        'Blocos de extensão',
+    'check to show extension\nprimitives in the palette':
+        'Marque para mostrar extensões primitivas na paleta',
+    'uncheck to hide extension\nprimitives in the palette':
+        'desmarque para esconder extensões primitivas na paleta',
+    'check to turn on\nlogging pen vectors':
+        'Marque para registrar movimento da caneta como vetores',
+    'uncheck to turn off\nlogging pen vectors':
+        'Desarque para não registrar movimento da caneta como vetores',
+    'Single palette':
+        'Paleta única',
+    'check to show all blocks in a single palette':
+        'marque para mostrar todos os blocos em uma única paleta',
+    'HSL pen color model':
+        'Modelo de cor HSL',
+    'check to switch pen colors\nand graphic effects to HSL':
+        'Marque para mudar as cores da caneta e efeitos gráficos para HSL',
+     'uncheck to switch pen colors\nand graphic effects to HSV':
+        'Desmarque para mudar as cores da caneta e efeitos gráficos para HSV',
+    'Disable click-to-run':
+        'Desativar clique para executar',
+    'check to disable\ndirectly running blocks\nby clicking on them':
+        'Marque para desativar a execução direta dos blocos clicando neles',
+    'uncheck to enable\ndirectly running blocks\nby clicking on them':
+        'Desmarque para ativar a execução direta dos blocos clicando neles',
+    'Show categories':
+        'Mostrar as categorias',
+    'Show buttons':
+        'Mostrar botões',
+    'uncheck to show only the selected category\'s blocks':
+        'Desmarque para mostrar apenas os blocos da categoria selecionada',
+    'uncheck to hide\ncategory names\nin the palette':
+        'Desmarque para ocultar os nomes das categorias na paleta',
+    'check to show\ncategory names\nin the palette':
+        'Marque para mostrar os nomes das categorias na paleta',
+    'uncheck to hide buttons\nin the palette':
+        'Desmarque para ocultar botões na paleta',
+    'check to show buttons\nin the palette':
+        'Marque para mostrar os botões na paleta',
+    'use the keyboard\nto enter blocks':
+    	'Use o teclado para inserir blocos',
 };

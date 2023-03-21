@@ -14,14 +14,17 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_setvol(percent)',
     function (percent) {
-        TuneScope.globalInstrumentVolume = percent/100;
+        let adjusted_percent = (percent === 0) ? 0.0001: percent;
+        TuneScope.globalInstrumentVolume = adjusted_percent/100.0;
     }
 );
 
 SnapExtensions.primitives.set(
     'ts_setinstvol(name, percent)',
     function (instrumentName, percent) {
-        TuneScope.instrumentVolumes[instrumentName] = percent/100;
+        instrumentName = instrumentName.toLowerCase();
+        let adjusted_percent = (percent === 0) ? 0.0001: percent;
+        TuneScope.instrumentVolumes[instrumentName] = adjusted_percent/100.0;
     }
 );
 
@@ -48,38 +51,69 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    'ts_playMIDI(controller, instrument)',
-    function (controller_name, instrument) {
-        var current_controller = controller_name;
-        var midi_instrument = instrument;
+    'ts_parsemidifile()',
+    function () {
+        const getMidiFile = async () => {
+            window._parsed = "";
+            fileMidi = await window._selectFile(".mid", false);
+            const arrayBuffer = await fileMidi.arrayBuffer()
+            const _parsedMidi = await new window.Midi(arrayBuffer)
+            window._parsed = _parsedMidi.toJSON();
+            world.children[0].broadcast("ts_file_input_received")
+        }
+        getMidiFile();
+    }
+)
 
-        function onEnabled() {
-            let synth = window.WebMidi.getInputByName(current_controller);
+SnapExtensions.primitives.set(
+    'ts_getparsed()',
+    function() {
+        world.children[0].broadcast("ts_no_file_upload")
+        let temp = window._objToArray(window._parsed);
+        temp = window.convertArrayToListRecursive(temp);
+        return temp;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ts_playMIDI(controller, instrument)',
+    function (controller_name, instrument_name) {
+
+        function onEnabled(controller, instrument) {
+            let synth = window.WebMidi.getInputByName(controller);
             let keyboard = synth.channels[1];
+            //remove any existing listeners
+            keyboard.removeListener("noteon")
 
             // Listener for the keyboard, prints midi note number
             keyboard.addListener("noteon", e => {
-                window.playNote(e.note.identifier, 0.5, midi_instrument);
+                window.playNote(e.note.identifier, 0.5, instrument);
             });
         }
 
         const playMidiController = async (controller, instrument) => {
             if(controller === null || controller === "") return;
-            current_controller = controller;
 
             //enables the webmidi controller, doesn't record notes
             window.WebMidi.enable((err) => {
                 if (err) {
                     alert(err);
                 } else {
-                    onEnabled();
+                    onEnabled(controller, instrument);
                 }
             });
         }
 
-        playMidiController(controller_name, instrument);
+        playMidiController(controller_name, instrument_name);
     }
 );
+
+SnapExtensions.primitives.set(
+    'ts_stopMIDI()',
+    function() {
+        window.WebMidi.disable();
+    }
+)
 
 SnapExtensions.primitives.set(
     'ts_settone(id, frequency, amplitude, balance)',

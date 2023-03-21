@@ -520,10 +520,10 @@ SnapTranslator.dict.zh_TW = {
         '%fun %n',
     'pick random %n to %n':
         '隨機在 %n 到 %n 間選一個數',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
+    'and':
+        '且',
+    'or':
+        '或',
     'not %b':
         '%b 不成立',
     'true':
@@ -536,8 +536,8 @@ SnapTranslator.dict.zh_TW = {
         '歡迎',
     'world':
         '光臨',
-    'letter %idx of %s':
-        '第 %idx 位元在文字 %s 中',
+    'letter %ix of %s':
+        '第 %ix 位元在文字 %s 中',
     'length of %s':
         '%s 的長度',
     'unicode of %s':
@@ -548,6 +548,24 @@ SnapTranslator.dict.zh_TW = {
         '%s 是 %typ 類型？',
     'is %s identical to %s ?':
         '%s 與 %s 相同嗎？',
+    'is %all== ?':
+        '%all== 相同嗎?',
+    'identical to':
+        '與',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '%s 類型',
@@ -1184,7 +1202,7 @@ SnapTranslator.dict.zh_TW = {
     // list indices
     'last':
         '最後',
-    'any':
+    'random':
         '任意',
 
     // missing entries

@@ -528,10 +528,10 @@ SnapTranslator.dict.kn = {
         '%fun \u0CB0\u0CA6\u0CCD\u0CA6\u0CC1 %n',
     'pick random %n to %n':
         '\u0C8E\u0CB7\u0CCD\u0C9F\u0CA8\u0CBE\u0CA6\u0CB0\u0CC1\u0020\u0CAF\u0CBE\u0CA6\u0CC3\u0C9A\u0CBF\u0C95\u0CB5\u0CBE\u0C97\u0CBF\u0020\u0C86\u0CAF\u0CCD\u0CA6\u0CC1\u0C95\u0CCB %n \u0CB0\u0CBF\u0C82\u0CA6 %n',
-    '%b and %b':
-        '%b \u0CAE\u0CA4\u0CCD\u0CA4\u0CC1 %b',
-    '%b or %b':
-        '%b \u0C85\u0CA5\u0CB5\u0CBE %b',
+    'and':
+        '\u0CAE\u0CA4\u0CCD\u0CA4\u0CC1',
+    'or':
+        '\u0C85\u0CA5\u0CB5\u0CBE',
     'not %b':
         '\u0C87\u0CB2\u0CCD\u0CB2 %b',
     '\u0CB8\u0CB0\u0CBF':
@@ -546,8 +546,8 @@ SnapTranslator.dict.kn = {
         '\u0CA8\u0CAE\u0CB8\u0CCD\u0C95\u0CBE\u0CB0',
     'world':
         '\u0CAA\u0CCD\u0CB0\u0CAA\u0C82\u0C9A',
-    'letter %idx of %s':
-        '\u0C85\u0C95\u0CCD\u0CB7\u0CB0 %idx \u0CB0\u0CB2\u0CCD\u0CB2\u0CBF %s',
+    'letter %ix of %s':
+        '\u0C85\u0C95\u0CCD\u0CB7\u0CB0 %ix \u0CB0\u0CB2\u0CCD\u0CB2\u0CBF %s',
     'length of %s':
         '\u0CA8\u0020\u0C89\u0CA6\u0CCD\u0CA6 %s',
     'unicode of %s':
@@ -558,6 +558,24 @@ SnapTranslator.dict.kn = {
         '\u0C87\u0CA6\u0CC1 %s \u0C87\u0CA6\u0CB0\u0CA6\u0CC7 %typ ?',
     'is %s identical to %s ?':
        '\u0C87\u0CA6\u0CC1 %s \u0C92\u0C82\u0CA6\u0CC7\u0020\u0CB0\u0CC0\u0CA4\u0CBF\u0CAF\u0CBE\u0C97\u0CBF\u0CA6\u0CC6 %s ?',
+    'is %all== ?':
+        '\u0C87\u0CA6\u0CC1 %all== ?',
+    'identical to':
+        '\u0C92\u0C82\u0CA6\u0CC7\u0020\u0CB0\u0CC0\u0CA4\u0CBF\u0CAF\u0CBE\u0C97\u0CBF\u0CA6\u0CC6',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         '\u0CAC\u0C97\u0CC6\u0020 %s',
@@ -1268,6 +1286,6 @@ SnapTranslator.dict.kn = {
     // list indices
     'last':
         '\u0C95\u0CCA\u0CA8\u0CC6',
-    'any':
+    'random':
         '\u0CAF\u0CBE\u0CB5\u0CC1\u0CA6\u0CBE\u0CA6\u0CB0\u0CC1\u0020'
 };

@@ -552,10 +552,10 @@ SnapTranslator.dict.ca_VA = {
         '%fun de %n',
     'pick random %n to %n':
         'nombre a l\'atzar entre %n i %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b o %b',
+    'and':
+        'i',
+    'or':
+        'o',
     'not %b':
         'no %b',
     'true':
@@ -570,8 +570,8 @@ SnapTranslator.dict.ca_VA = {
         'hola',
     'world':
         'món',
-    'letter %idx of %s':
-        'lletra %idx de %s',
+    'letter %ix of %s':
+        'lletra %ix de %s',
     'length of %s':
         'longitud de %s',
     'unicode of %s':
@@ -580,8 +580,24 @@ SnapTranslator.dict.ca_VA = {
         'lletra amb valor Unicode %n',
     'is %s a %typ ?':
         'és %s un %typ ?',
-    'is %s identical to %s ?':
-        'és %s idèntic a %s ?',
+    'is %all== ?':
+        'és %all== ?',
+    'identical to':
+        'idèntic a',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'tipus de %s',
@@ -1358,7 +1374,7 @@ SnapTranslator.dict.ca_VA = {
     // list indices
     'last':
         'últim',
-    'any':
+    'random':
         'qualsevol',
 
     // attributes

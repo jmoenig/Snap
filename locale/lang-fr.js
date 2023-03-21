@@ -632,10 +632,10 @@ SnapTranslator.dict.fr = {
         '%fun appliqu\u00E9 \u00E0 %n',
     'pick random %n to %n':
         'nombre al\u00E9atoire entre %n et %n',
-    '%b and %b':
-        '%b et %b',
-    '%b or %b':
-        '%b ou %b',
+    'and':
+        'et',
+    'or':
+        'ou',
     'not %b':
         'non %b',
     'true':
@@ -650,8 +650,8 @@ SnapTranslator.dict.fr = {
         'Bonjour',
     'world':
         'Monde',
-    'letter %idx of %s':
-        'lettre %idx de %s',
+    'letter %ix of %s':
+        'lettre %ix de %s',
     'length of %s':
         'longueur de %s',
     'unicode of %s':
@@ -660,8 +660,24 @@ SnapTranslator.dict.fr = {
         'unicode %n comme lettre',
     'is %s a %typ ?':
         '%s est un(e) %typ ?',
-    'is %s identical to %s ?':
-        '%s est identique \u00E0 %s ?',
+    'is %all== ?':
+        'est %all== ?',
+    'identical to':
+        'identique \u00E0',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'type de %s',
@@ -1365,6 +1381,8 @@ SnapTranslator.dict.fr = {
         'dernier',
     'any':
         'n\u0027importe quel',
+    'random':
+        'aléatoire',
 
     // miscellaneous
     'find blocks...':

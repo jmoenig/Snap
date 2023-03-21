@@ -558,10 +558,10 @@ SnapTranslator.dict.cs = {
         '%fun z %n',
     'pick random %n to %n':
         'zvol náhodné číslo od %n do %n',
-    '%b and %b':
-        '%b a %b',
-    '%b or %b':
-        '%b nebo %b',
+    'and':
+        'a',
+    'or':
+        'nebo',
     'not %b':
         'není %b',
     'true':
@@ -576,8 +576,8 @@ SnapTranslator.dict.cs = {
         'světe',
     'split %s by %delim':
         'rozděl %s podle %delim',
-    'letter %idx of %s':
-        'písmeno %idx z %s',
+    'letter %ix of %s':
+        'písmeno %ix z %s',
     'length of %s':
         'délka %s',
     'unicode of %s':
@@ -586,8 +586,24 @@ SnapTranslator.dict.cs = {
         'Unicode %n jako znak',
     'is %s a %typ ?':
         'je %s typu %typ ?',
-    'is %s identical to %s ?':
-        'je %s stejný jako %s ?',
+    'is %all== ?':
+        'je %all== ?',
+    'identical to':
+        'stejný jako',
+    'all identical':
+        'all identical',
+    'all <':
+        'all <',
+    'all >':
+        'all >',
+    'all \u2264':
+        'all \u2264',
+    'all \u2265':
+        'all \u2265',
+    'all =':
+        'all =',
+    'neighbors \u2260':
+        'neighbors \u2260',
 
     'type of %s':
         'Typ %s',
@@ -1052,8 +1068,6 @@ SnapTranslator.dict.cs = {
         'Tento projekt nyní nemá žádné globální bloky',
     'select':
         'vybrat',
-    'all':
-        'vše',
     'none':
         'nic',
 
@@ -1344,5 +1358,7 @@ SnapTranslator.dict.cs = {
     'last':
         'poslední',
     'any':
-        'kterákoli'
+        'kterákoli',
+    'random':
+        'nahodilý'
 };
