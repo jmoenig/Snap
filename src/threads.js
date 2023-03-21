@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-20';
+modules.threads = '2023-March-21';
 
 var ThreadManager;
 var Process;
@@ -1423,8 +1423,6 @@ Process.prototype.evaluate = function (
     outer.variables.addVar(Symbol.for('self'), self);
 
     // capture the dynamic scope in "this caller"
-    calr.expression = calr.expression?.topBlock().fullCopy();
-    calr.inputs = [];
     outer.variables.addVar(Symbol.for('caller'), calr);
 
     // assign arguments that are actually passed
@@ -1605,9 +1603,13 @@ Process.prototype.reportSelf = function () {
 
 Process.prototype.reportCaller = function () {
     var sym = Symbol.for('caller'),
-        frame = this.context.variables.silentFind(sym);
+        frame = this.context.variables.silentFind(sym),
+        ctx;
     if (frame) {
-        return frame.vars[sym].value;
+        ctx = frame.vars[sym].value;
+        ctx.expression = ctx.expression?.topBlock().fullCopy();
+        ctx.inputs = [];
+        return ctx;
     }
     return this.blockReceiver();
 };
@@ -1728,12 +1730,6 @@ Process.prototype.evaluateCustomBlock = function () {
     // capture the runtime environment in "this script"
     self = copy(context);
     self.outerContext = outer;
-
-
-    // capture the dynamic scope in "this caller"
-    calr = copy(this.context);
-    calr.expression = calr.expression?.topBlock().fullCopy();
-    calr.inputs = [];
 
     // passing parameters if any were passed
     if (parms.length > 0) {

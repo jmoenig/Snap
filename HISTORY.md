@@ -12,6 +12,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-21
+* threads: optimized and simplified "this caller" infrastructure
+
 ### 2023-03-20
 * threads: fixed #3154 (let "this script" capture variables in rings)
 * objects, threads: capture the dynamic scope in "this caller" (temporary & experimental)
