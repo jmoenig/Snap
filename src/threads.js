@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-21';
+modules.threads = '2023-March-22';
 
 var ThreadManager;
 var Process;
@@ -1385,8 +1385,7 @@ Process.prototype.evaluate = function (
 
     var outer = new Context(null, null, context.outerContext),
         caller = this.context.parentContext,
-        calr = copy(this.context),
-        self,
+        cont = this.context.rawContinuation(!isCommand),
         exit,
         runnable,
         expr,
@@ -1411,19 +1410,20 @@ Process.prototype.evaluate = function (
         this.readyToYield = (this.currentTime - this.lastYield > this.timeout);
     }
 
+    // assign a self-reference for introspection and recursion
+    outer.variables.addVar(Symbol.for('self'), context);
+
+    // capture the dynamic scope in "this caller"
+    outer.variables.addVar(Symbol.for('caller'), this.context);
+
+    // capture the current continuation
+    outer.variables.addVar(Symbol.for('continuation'), cont);
+
     // assign arguments to parameters
 
     // assign the actual arguments list to the special
     // parameter ID Symbol.for('arguments'), to be used for variadic inputs
     outer.variables.addVar(Symbol.for('arguments'), args);
-
-    // assign a self-reference for introspection and recursion
-    self = copy(context);
-    self.outerContext = outer;
-    outer.variables.addVar(Symbol.for('self'), self);
-
-    // capture the dynamic scope in "this caller"
-    outer.variables.addVar(Symbol.for('caller'), calr);
 
     // assign arguments that are actually passed
     if (parms.length > 0) {
@@ -1580,10 +1580,14 @@ Process.prototype.initializeFor = function (context, args) {
 // Process introspection
 
 Process.prototype.reportEnvironment = function (choice) {
-    if (this.inputOption(choice) === 'caller') {
+    switch (this.inputOption(choice)) {
+    case 'caller':
         return this.reportCaller();
+    case 'continuation':
+        return this.reportContinuation();
+    default:
+        return this.reportSelf();
     }
-    return this.reportSelf();
 };
 
 Process.prototype.reportSelf = function () {
@@ -1591,9 +1595,10 @@ Process.prototype.reportSelf = function () {
         frame = this.context.variables.silentFind(sym),
         ctx;
     if (frame) {
-        return frame.vars[sym].value;
+        ctx = copy(frame.vars[sym].value);
+    } else {
+        ctx = this.topBlock.reify();
     }
-    ctx = this.topBlock.reify();
     ctx.outerContext = this.context.outerContext;
     if (ctx.outerContext) {
         ctx.variables.parentFrame = ctx.outerContext.variables;
@@ -1601,17 +1606,37 @@ Process.prototype.reportSelf = function () {
     return ctx;
 };
 
+
 Process.prototype.reportCaller = function () {
     var sym = Symbol.for('caller'),
         frame = this.context.variables.silentFind(sym),
         ctx;
     if (frame) {
-        ctx = frame.vars[sym].value;
+        ctx = copy(frame.vars[sym].value);
         ctx.expression = ctx.expression?.topBlock().fullCopy();
         ctx.inputs = [];
         return ctx;
     }
     return this.blockReceiver();
+};
+
+Process.prototype.reportContinuation = function () {
+    var sym = Symbol.for('continuation'),
+        frame = this.context.variables.silentFind(sym),
+        cont;
+    if (frame) {
+        cont = frame.vars[sym].value;
+        cont = cont.copyForContinuation();
+        cont.tag = null;
+        cont.isContinuation = true;
+    } else {
+        cont = new Context(
+            null,
+            'popContext'
+        );
+        cont.isContinuation = true;
+    }
+    return cont;
 };
 
 // Process stopping blocks primitives
@@ -1683,20 +1708,19 @@ Process.prototype.runContinuation = function (aContext, args) {
 
 Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
-        calr = copy(this.context),
         block = this.context.expression,
         method = block.isGlobal ? block.definition
                 : this.blockReceiver().getMethod(block.semanticSpec),
         context = method.body,
         declarations = method.declarations,
+        cont = this.context.rawContinuation(method.type !== 'command'),
         args = new List(this.context.inputs),
         parms = args.itemsArray(),
         runnable,
         exit,
         i,
         value,
-        outer,
-        self;
+        outer;
 
     if (!context) {return null; }
     this.procedureCount += 1;
@@ -1726,10 +1750,6 @@ Process.prototype.evaluateCustomBlock = function () {
     );
     runnable.isCustomBlock = true;
     this.context.parentContext = runnable;
-
-    // capture the runtime environment in "this script"
-    self = copy(context);
-    self.outerContext = outer;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1789,8 +1809,12 @@ Process.prototype.evaluateCustomBlock = function () {
             this.readyToYield = true;
         }
     }
-    outer.variables.addVar(Symbol.for('self'), self);
-    outer.variables.addVar(Symbol.for('caller'), calr);
+
+    // keep track of the environment for recursion and introspection
+    outer.variables.addVar(Symbol.for('self'), context);
+    outer.variables.addVar(Symbol.for('caller'), this.context);
+    outer.variables.addVar(Symbol.for('continuation'), cont);
+
     runnable.expression = runnable.expression.blockSequence();
 };
 
@@ -8196,7 +8220,24 @@ Context.prototype.toBlock = function () {
 
 // Context continuations:
 
+Context.prototype.rawContinuation = function (isReporter) {
+    var cont;
+    if (this.expression instanceof Array) {
+        return this;
+    }
+    if (this.parentContext) {
+        return this.parentContext;
+    }
+    cont = new Context(
+        null,
+        isReporter ? 'expectReport' : 'popContext'
+    );
+    cont.isContinuation = true;
+    return cont;
+};
+
 Context.prototype.continuation = function (isReporter) {
+    // retained for legacy compatibility for deprecated run/cc and call/cc
     var cont;
     if (this.expression instanceof Array) {
         cont = this;

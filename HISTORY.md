@@ -2,7 +2,7 @@
 
 ## in development:
 * **New Features:**
-    * "this script" reporter now has a dropdown menu offering 2 environments: "script" and "caller"
+    * "this script" reporter now has a dropdown menu offering 3 environments: "script", "caller" and "continuation"
 * **Notable Changes:**
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
@@ -11,6 +11,9 @@
     * fixed #3154 (let "this script" capture variables in rings)
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-03-22
+* blocks, threads: optimized and simplified continuations
 
 ### 2023-03-21
 * threads: optimized and simplified "this caller" infrastructure
