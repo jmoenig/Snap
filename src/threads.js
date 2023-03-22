@@ -1585,6 +1585,8 @@ Process.prototype.reportEnvironment = function (choice) {
         return this.reportCaller();
     case 'continuation':
         return this.reportContinuation();
+    case 'inputs':
+        return this.reportInputs();
     default:
         return this.reportSelf();
     }
@@ -1637,6 +1639,12 @@ Process.prototype.reportContinuation = function () {
         cont.isContinuation = true;
     }
     return cont;
+};
+
+Process.prototype.reportInputs = function () {
+    var sym = Symbol.for('arguments'),
+        frame = this.context.variables.silentFind(sym);
+    return frame ? frame.vars[sym].value : new List();
 };
 
 // Process stopping blocks primitives

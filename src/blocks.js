@@ -601,7 +601,9 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             script: ['script'],
             caller: ['caller'],
-            continuation: ['continuation']
+            continuation: ['continuation'],
+            '~' : null,
+            inputs : ['inputs']
         }
     },
     '%snd': {
