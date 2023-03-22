@@ -2,8 +2,10 @@
 
 ## in development:
 * **New Features:**
-    * "this script" reporter now has a dropdown menu offering access to "script", "caller", "continuation" and "inputs"
+    * new "current" reporter offering access to "script", "caller", "continuation" and "inputs"
 * **Notable Changes:**
+    * "this script" reporter has been morphed into the new general "current" introspection/self reflection reporter 
+    * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * new "fade-in" block in the audio comp library that lets you reduce audible "clicks" in sounds computed from raw samples
