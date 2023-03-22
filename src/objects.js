@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-20';
+modules.objects = '2023-March-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -863,11 +863,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'report %s'
         },
         doCallCC: {
+            // deprecated - superseded by reportEnviornment - kept for legacy
             type: 'command',
             category: 'control',
             spec: 'run %cmdRing w/continuation'
         },
         reportCallCC: {
+            // deprecated - superseded by reportEnviornment - kept for legacy
             type: 'reporter',
             category: 'control',
             spec: 'call %cmdRing w/continuation'
@@ -950,7 +952,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportEnvironment: {
             type: 'reporter',
             category: 'control',
-            spec: 'this %env',
+            spec: 'current %env',
             defaults: [['script']]
         },
 
@@ -2756,9 +2758,13 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
+
+    /* deprecated - superseded by reportEnviornment - retained for legacy comp
         blocks.push('-');
         blocks.push(block('doCallCC'));
         blocks.push(block('reportCallCC'));
+    */
+
         blocks.push('-');
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
@@ -9617,9 +9623,13 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
+
+    /* deprecated - superseded by reportEnviornment - retained for legacy comp
         blocks.push('-');
         blocks.push(block('doCallCC'));
         blocks.push(block('reportCallCC'));
+    */
+
         blocks.push('-');
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));

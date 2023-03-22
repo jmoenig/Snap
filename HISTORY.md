@@ -15,6 +15,7 @@
 ### 2023-03-22
 * blocks, threads: optimized and simplified continuations
 * blocks, threads: added "inputs" selector to "this" reporter dropdown
+* objects: removed RUN/CC and CALL/CC from the blocks palette
 
 ### 2023-03-21
 * threads: optimized and simplified "this caller" infrastructure
