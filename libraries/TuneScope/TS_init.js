@@ -2,22 +2,6 @@
 var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
 
-class TuneScope {
-    playNote = function (note, noteLength, instrumentName, volume) {
-        this.currentNote = note
-        if (note == "R" || note == "r") return;
-
-        note = this.noteNum(note)
-        noteLength = this.noteLengthToTimeValue(noteLength)
-
-        // note = _convertToSharp(note);
-
-        var player = new WebAudioFontPlayer();
-        instrumentName = instrumentName || this.currentInstrumentName;
-        instrumentName = instrumentName.toLowerCase()
-        // console.log(instrumentName);
-        let currentInstrumentData = this.instrumentData[instrumentName]
-        player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
 window._currentNote = ""
 window._parsed = ""
 window._isParsed = false
@@ -25,181 +9,22 @@ window.parent._ts_pausePlayback = false;
 
 const _ide = world.children[0];
 const original_stop = _ide.stopAllScripts.bind(_ide);
-_ide.stopAllScripts = function() {
-  original_stop();
-  window.parent._ts_pausePlayback = true;
+_ide.stopAllScripts = function () {
+    original_stop();
+    window.parent._ts_pausePlayback = true;
 }
 
-        play = () => {
-            const vol = volume || this.instrumentVolumes[instrumentName] || this.globalInstrumentVolume;
-            // console.log(note, noteLength, instrumentName, vol)
-            player.queueWaveTable(audioContext, audioContext.destination, window[currentInstrumentData.name], 0, this.noteNum(note), noteLength, vol);
-            return false;
-        }
-        play();
-    }
-
-    _playNote = (note, noteLength, instrumentName, volume) => {
-        window._currentNote = note
-         if (note == "R" || note == "r") return;
-      
-         note = _convertToSharp(note);
-         
-                  var player=new WebAudioFontPlayer();
-         instrumentName = instrumentName || window.parent.currentInstrumentName;
-         instrumentName = instrumentName.toLowerCase()
-         // console.log(instrumentName);
-         let currentInstrumentData = window.parent.instrumentData[instrumentName]
-                  player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
-                  function play(){
-          const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
-          console.log(note, noteLength, instrumentName, vol)
-                      player.queueWaveTable(audioContext, audioContext.destination
-                          , window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
-          );
-                      return false;
-                  }
-         play();
-      }
-
-    timeSignatureToBeatsPerMeasure = function (time) {
-        timeSig = time.split('/')
-        // newTime = (timeSig[0]*4)/timeSig[1]
-        newTime = [parseInt(timeSig[0]), 4 / timeSig[1]]
-        console.log(newTime)
-        return newTime
-    }
-
-    baseTempo = 60;
-
-    // converts note lengths (quarter, half, whole)
-    // to corresponding time value (1, 2, 4)
-    noteLengthToTimeValue = function (duration) {
-        if (parseFloat(duration) != duration) {
-            splitDuration = duration.split(' ');
-
-            let notes = {
-                'whole': 4,
-                'half': 2,
-                'quarter': 1,
-                'eighth': 0.5,
-                'sixteenth': 0.25,
-                'thirtysecond': 0.125
-            };
-
-            var dots = 0;
-
-            function dotted(duration) {
-                dots += 1;
-                return duration + (start * Math.pow(0.5, dots));
-            };
-
-            modifiers = {
-                'dotted': dotted,
-                'tie': (d) => {
-                    return d * 2;
-                },
-                'triplet': (d) => {
-                    return (((d > 0) ? d : 1) * 2) / 3;
-                }
-            }
-
-            for (let i = 0; i < splitDuration.length; i++) {
-                splitDuration[i] = splitDuration[i].toLowerCase();
-            }
-
-            var noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
-            start = noteDur;
-
-            console.log(splitDuration);
-            for (let keyword = 0; keyword < splitDuration.length; keyword++) {
-                console.log(keyword, splitDuration[keyword]);
-                console.log(noteDur);
-                if (modifiers[splitDuration[keyword]] != undefined) {
-                    noteDur = modifiers[splitDuration[keyword]](noteDur);
-                }
-            }
-            return noteDur;
-        } else {
-            return parseFloat(duration);
-        }
-    }
-
-    noteNum = function (noteName) {
-        if (Array.isArray(noteName)) {
-            return noteName.map((e) => {
-                return noteNum(e);
-            })
-        }
-
-        if (typeof noteName == 'string' && isNaN(noteName)) {
-            function range(start, end) {
-                if (end == undefined) {
-                    end = start;
-                    start = 0;
-                }
-
-                if (start > end) {
-                    return Array.from(new Array(start - end + 1), (x, i) => i + end).reverse()
-                } else if (start == end) {
-                    return [start];
-                } else {
-                    return Array.from(new Array(end - start + 1), (x, i) => i + start);
-                }
-            }
-
-            function letter(string, list) {
-                var result = [];
-                if (typeof list == 'object') {
-                    for (let i = 0; i < list.length; i++) {
-                        result.push(string[list[i]]);
-                    }
-                } else {
-                    result = string[list];
-                }
-                return result;
-            }
-
-            splitNoteName = noteName.split('')
-            var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
-            var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
-            console.log(octiveNum)
-            var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
-            let notes = {
-                'c': 1,
-                'd': 3,
-                'e': 5,
-                'f': 6,
-                'g': 8,
-                'a': 10,
-                'b': 12
-            };
-            var note = notes[letter(noteName, 0).toLowerCase()];
-
-            var accidentals = letter(noteName, range(0, (index > 0) ? index - 1 : noteName.length));
-
-            for (i = 0; i < accidentals.length; i++) {
-                item = accidentals[i];
-
-                if (item == undefined) {
-                    continue;
-                }
-
-                if (item == '#' || item == 's') {
-                    note += 1;
-                } else if (item == '♭' || item == 'b') {
-                    note -= 1;
-                }
-            }
-
-            return ((note + ((13 * (octive + 1)) - octive)) - 2);
-        } else {
-            return parseFloat(noteName);
-        }
-    }
+var TuneScope = {
+    currentNote: '',
+    pausePlayback: false,
+    midi: {
+        parsed: '',
+        isParsed: false
+    },
+    baseTempo: 60,
 
     // instrument data
-    instrumentData = {
+    instrumentData: {
         "accordion": {
             path: "libraries/TuneScope/0230_Aspirin_sf2_file.js",
             name: "_tone_0230_Aspirin_sf2_file"
@@ -308,9 +133,9 @@ _ide.stopAllScripts = function() {
             path: "libraries/TuneScope/0110_GeneralUserGS_sf2_file.js",
             name: "_tone_0110_GeneralUserGS_sf2_file"
         },
-    
+
         // drums
-    
+
         "cabasa": {
             path: "libraries/TuneScope/12869_6_JCLive_sf2_file.js",
             name: "_drum_69_6_JCLive_sf2_file"
@@ -343,16 +168,208 @@ _ide.stopAllScripts = function() {
             path: "libraries/TuneScope/12849_21_FluidR3_GM_sf2_file.js",
             name: "_drum_49_21_FluidR3_GM_sf2_file"
         },
+    },
+}
+
+TuneScope.playNote = function (note, noteLength, instrumentName, volume) {
+    this.currentNote = note
+    if (note == "R" || note == "r") return;
+
+    note = this.noteNum(note)
+    noteLength = this.noteLengthToTimeValue(noteLength)
+
+    // note = _convertToSharp(note);
+
+    var player = new WebAudioFontPlayer();
+    instrumentName = instrumentName || this.currentInstrumentName;
+    instrumentName = instrumentName.toLowerCase()
+    // console.log(instrumentName);
+    let currentInstrumentData = this.instrumentData[instrumentName]
+    player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
+
+    play = () => {
+        console.log(volume, this.instrumentVolumes[instrumentName], this.globalInstrumentVolume)
+        const vol = volume || this.instrumentVolumes[instrumentName] || this.globalInstrumentVolume;
+        console.log(note, noteLength, instrumentName, vol)
+        console.log(window[currentInstrumentData.name])
+        player.queueWaveTable(
+            audioContext,
+            audioContext.destination,
+            window[currentInstrumentData.name],
+            0,
+            note,
+            noteLength,
+            vol,
+        );
+        return false;
+    }
+    play();
+}
+
+TuneScope._playNote = (note, noteLength, instrumentName, volume) => {
+    window._currentNote = note
+    if (note == "R" || note == "r") return;
+
+    note = _convertToSharp(note);
+
+    var player = new WebAudioFontPlayer();
+    instrumentName = instrumentName || this.currentInstrumentName;
+    instrumentName = instrumentName.toLowerCase()
+    // console.log(instrumentName);
+    let currentInstrumentData = this.instrumentData[instrumentName]
+    player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
+    function play() {
+        const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
+        console.log(note, noteLength, instrumentName, vol)
+        player.queueWaveTable(audioContext, audioContext.destination
+            , window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
+        );
+        return false;
+    }
+    play();
+}
+
+TuneScope.timeSignatureToBeatsPerMeasure = function (time) {
+    timeSig = time.split('/')
+    // newTime = (timeSig[0]*4)/timeSig[1]
+    newTime = [parseInt(timeSig[0]), 4 / timeSig[1]]
+    console.log(newTime)
+    return newTime
+}
+
+// converts note lengths (quarter, half, whole)
+// to corresponding time value (1, 2, 4)
+TuneScope.noteLengthToTimeValue = function (duration) {
+    if (parseFloat(duration) != duration) {
+        splitDuration = duration.split(' ');
+
+        let notes = {
+            'whole': 4,
+            'half': 2,
+            'quarter': 1,
+            'eighth': 0.5,
+            'sixteenth': 0.25,
+            'thirtysecond': 0.125
+        };
+
+        var dots = 0;
+
+        function dotted(duration) {
+            dots += 1;
+            return duration + (start * Math.pow(0.5, dots));
+        };
+
+        modifiers = {
+            'dotted': dotted,
+            'tie': (d) => {
+                return d * 2;
+            },
+            'triplet': (d) => {
+                return (((d > 0) ? d : 1) * 2) / 3;
+            }
+        }
+
+        for (let i = 0; i < splitDuration.length; i++) {
+            splitDuration[i] = splitDuration[i].toLowerCase();
+        }
+
+        var noteDur = notes[splitDuration.find(e => notes[e] != undefined)]
+        start = noteDur;
+
+        console.log(splitDuration);
+        for (let keyword = 0; keyword < splitDuration.length; keyword++) {
+            console.log(keyword, splitDuration[keyword]);
+            console.log(noteDur);
+            if (modifiers[splitDuration[keyword]] != undefined) {
+                noteDur = modifiers[splitDuration[keyword]](noteDur);
+            }
+        }
+        return noteDur;
+    } else {
+        return parseFloat(duration);
+    }
+}
+
+TuneScope.noteNum = function (noteName) {
+    if (Array.isArray(noteName)) {
+        return noteName.map((e) => {
+            return noteNum(e);
+        })
     }
 
-    // load all instruments
-    instrumentNames = Object.keys(TuneScope.instrumentData);
-    currentInstrumentName = "piano";
+    if (typeof noteName == 'string' && isNaN(noteName)) {
+        function range(start, end) {
+            if (end == undefined) {
+                end = start;
+                start = 0;
+            }
 
-    // initialize volumes
-    instrumentVolumes = {}
-    globalInstrumentVolume = 0.5;
+            if (start > end) {
+                return Array.from(new Array(start - end + 1), (x, i) => i + end).reverse()
+            } else if (start == end) {
+                return [start];
+            } else {
+                return Array.from(new Array(end - start + 1), (x, i) => i + start);
+            }
+        }
+
+        function letter(string, list) {
+            var result = [];
+            if (typeof list == 'object') {
+                for (let i = 0; i < list.length; i++) {
+                    result.push(string[list[i]]);
+                }
+            } else {
+                result = string[list];
+            }
+            return result;
+        }
+
+        splitNoteName = noteName.split('')
+        var index = splitNoteName.indexOf(splitNoteName.find(e => !isNaN(e) || e == '-'))
+        var octiveNum = ((index > 0) ? letter(noteName, range(index, noteName.length)) : ['4']).join('')
+        console.log(octiveNum)
+        var octive = parseFloat((!isNaN(octiveNum) ? octiveNum : 4))
+        let notes = {
+            'c': 1,
+            'd': 3,
+            'e': 5,
+            'f': 6,
+            'g': 8,
+            'a': 10,
+            'b': 12
+        };
+        var note = notes[letter(noteName, 0).toLowerCase()];
+
+        var accidentals = letter(noteName, range(0, (index > 0) ? index - 1 : noteName.length));
+
+        for (i = 0; i < accidentals.length; i++) {
+            item = accidentals[i];
+
+            if (item == undefined) {
+                continue;
+            }
+
+            if (item == '#' || item == 's') {
+                note += 1;
+            } else if (item == '♭' || item == 'b') {
+                note -= 1;
+            }
+        }
+
+        return ((note + ((13 * (octive + 1)) - octive)) - 2);
+    } else {
+        return parseFloat(noteName);
+    }
 }
+
+// load all instruments
+TuneScope.instrumentNames = Object.keys(TuneScope.instrumentData)
+TuneScope.currentInstrumentName = "piano"
+
+// initialize volumes
+TuneScope.instrumentVolumes = {}
+TuneScope.globalInstrumentVolume = 0.5
 
 // tones
 class Tone {
@@ -541,7 +558,7 @@ function convertListToArrayRecursive(list) {
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
 
-const convertArrayToListRecursive = (array) => {
+function convertArrayToListRecursive (array) {
     if (Array.isArray(array)) {
         for (var i = 0; i < array.length; i++) {
             array[i] = convertArrayToListRecursive(array[i]);
@@ -557,21 +574,21 @@ function _typeOf(value) {
 }
 
 const _isObject = (obj) => {
-  return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
+    return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
 }
 
 const _objToArray = (obj) => {
-  return Object.keys(obj).map((key) => {
-    return [key, _isObject(obj[key]) ? 
-        _objToArray(obj[key]) :
-        obj[key]
-    ];
-  });    
+    return Object.keys(obj).map((key) => {
+        return [key, _isObject(obj[key]) ?
+            _objToArray(obj[key]) :
+            obj[key]
+        ];
+    });
 }
 window._objToArray = _objToArray;
 
 function isNumber(myString) {
-  return /^\d+\.\d+$/.test(myString);
+    return /^\d+\.\d+$/.test(myString);
 }
 window.isNumber = isNumber;
 

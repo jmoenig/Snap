@@ -1,7 +1,3 @@
-// Load urls
-
-// SnapExtensions.primitives.get('src_load(url)')()
-
 // extension functions
 
 SnapExtensions.primitives.set(
@@ -31,7 +27,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_playnote(note, duration)',
     function (note, noteLength) {
-        TuneScope.playNote(note, noteLength);
+        TuneScope.playNote(note, noteLength, );
     }
 );
 
@@ -43,7 +39,6 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'ts_playtracks(tracklist, timesignature, tempo)',
     'ts_getcurrentnote()',
     function () {
         return TuneScope.currentNote
@@ -54,11 +49,11 @@ SnapExtensions.primitives.set(
     'ts_parsemidifile()',
     function () {
         const getMidiFile = async () => {
-            window._parsed = "";
+            TuneScope.midi.parsed = "";
             fileMidi = await window._selectFile(".mid", false);
             const arrayBuffer = await fileMidi.arrayBuffer()
-            const _parsedMidi = await new window.Midi(arrayBuffer)
-            window._parsed = _parsedMidi.toJSON();
+            const parsedMidi = await new window.Midi(arrayBuffer)
+            TuneScope.midi.parsed = parsedMidi.toJSON();
             world.children[0].broadcast("ts_file_input_received")
         }
         getMidiFile();
@@ -69,7 +64,7 @@ SnapExtensions.primitives.set(
     'ts_getparsed()',
     function() {
         world.children[0].broadcast("ts_no_file_upload")
-        let temp = window._objToArray(window._parsed);
+        let temp = window._objToArray(TuneScope.midi.parsed);
         temp = window.convertArrayToListRecursive(temp);
         return temp;
     }
@@ -87,7 +82,7 @@ SnapExtensions.primitives.set(
 
             // Listener for the keyboard, prints midi note number
             keyboard.addListener("noteon", e => {
-                window.playNote(e.note.identifier, 0.5, instrument);
+                TuneScope.playNote(e.note.identifier, 0.5, instrument);
             });
         }
 
@@ -137,7 +132,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ts_turntoneon(id, bool)',
     function (id, on) {
-        if (!window.tones[id]) {
+        if (!TuneScope.tones[id]) {
           return;
         }
 
