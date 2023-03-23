@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-22';
+modules.objects = '2023-March-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -6215,11 +6215,9 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         context = this.parent.penTrails().getContext('2d'),
         from = start.subtract(stagePos).divideBy(stageScale),
         to = dest.subtract(stagePos).divideBy(stageScale),
-        damagedFrom = from.multiplyBy(stageScale).add(stagePos),
-        damagedTo = to.multiplyBy(stageScale).add(stagePos),
-        damaged = damagedFrom.rectangle(damagedTo).expandBy(
-            Math.max(this.size * stageScale / 2, 1)
-        ).intersect(this.parent.visibleBounds()).spread();
+        damagedFrom,
+        damagedTo,
+        damaged;
 
     if (this.isDown) {
         // record for later svg conversion
@@ -6250,6 +6248,11 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         context.lineTo(to.x, to.y);
         context.stroke();
         if (this.isWarped === false) {
+            damagedFrom = from.multiplyBy(stageScale).add(stagePos);
+            damagedTo = to.multiplyBy(stageScale).add(stagePos);
+            damaged = damagedFrom.rectangle(damagedTo).expandBy(
+                Math.max(this.size * stageScale / 2, 1)
+            ).intersect(this.parent.visibleBounds()).spread();
             this.world().broken.push(damaged);
         }
         this.parent.cachedPenTrailsMorph = null;

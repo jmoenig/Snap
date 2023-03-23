@@ -10,6 +10,7 @@
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * new "fade-in" block in the audio comp library that lets you reduce audible "clicks" in sounds computed from raw samples
+    * slightly optimized pen drawing performance when WARPed
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
 * **Documentation Updates:**
@@ -17,6 +18,7 @@
 
 ### 2023-03-23
 * blocks, threads: added 'sorted' selector to list properties dropdown
+* objects: slightly optimized pen drawing performance when WARPed
 
 ### 2023-03-22
 * blocks, threads: optimized and simplified continuations
