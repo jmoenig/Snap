@@ -2299,11 +2299,11 @@ Process.prototype.doShowTable = function (list) {
 
 Process.prototype.reportSorted = function (data) {
     return new List(data.itemsArray().slice().sort((a, b) =>
-        this.sortingLessThan(a, b) ? - 1 : 1
+        this.reportIsBefore(a, b) ? - 1 : 1
     ));
 };
 
-Process.prototype.sortingLessThan = function (a, b) {
+Process.prototype.reportIsBefore = function (a, b) {
     // private - this is an elaborate version of reportBasicLessThan()
     // that is similar to snapEquals in that it will work with heterogeneous
     // data types but is too slow for everyday use. Therefore it is currently
@@ -2341,9 +2341,9 @@ Process.prototype.sortingLessThan = function (a, b) {
         return lenA > lenB || (
             lenA === lenB && (
                 !lenA ||
-                this.sortingLessThan(a.at(1), b.at(1)) ||
+                this.reportIsBefore(a.at(1), b.at(1)) ||
                     (snapEquals(a.at(1), b.at(1)) &&
-                    this.sortingLessThan(a.cdr(), b.cdr()))
+                    this.reportIsBefore(a.cdr(), b.cdr()))
             )
         );
     case 'command':
