@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-22';
+modules.threads = '2023-March-23';
 
 var ThreadManager;
 var Process;
@@ -2231,6 +2231,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'distribution':
         this.assertType(list, 'list');
         return list.distribution();
+    case 'sorted':
+        this.assertType(list, 'list');
+        return this.reportSorted(list);
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();
@@ -2287,6 +2290,73 @@ Process.prototype.doShowTable = function (list) {
     // experimental
     this.assertType(list, 'list');
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
+};
+
+// process - sorting a list (general utility)
+
+Process.prototype.reportSorted = function (data) {
+    return new List(data.itemsArray().slice().sort((a, b) =>
+        this.sortingLessThan(a, b) ? - 1 : 1
+    ));
+};
+
+Process.prototype.sortingLessThan = function (a, b) {
+    // private - this is an elaborate version of reportBasicLessThan()
+    // that is similar to snapEquals in that it will work with heterogeneous
+    // data types but is too slow for everyday use. Therefore it is currently
+    // only used for the generalized sorting of arbitrary data (lists)
+    // and not exposed as the (better) semantics behind "<"
+    var order = [
+            'list',
+            'text',
+            'number',
+            'Boolean',
+            'command',
+            'reporter',
+            'predicate',
+            'costume',
+            'sound',
+            'sprite',
+            'stage',
+            'nothing',
+            'undefined'
+        ],
+        typeA = this.reportTypeOf(a),
+        typeB = this.reportTypeOf(b),
+        lenA, lenB;
+
+    if (typeA !== typeB) {
+        return order.indexOf(typeA) < order.indexOf(typeB);
+    }
+    switch (typeA) {
+    case 'list':
+        // primary: length of list descending (!)
+        // secondary: contents of columns from left to right
+        // recursive, hope this doesn't crash on large tables
+        lenA = a.length();
+        lenB = b.length();
+        return lenA > lenB || (
+            lenA === lenB && (
+                !lenA ||
+                this.sortingLessThan(a.at(1), b.at(1)) ||
+                    (snapEquals(a.at(1), b.at(1)) &&
+                    this.sortingLessThan(a.cdr(), b.cdr()))
+            )
+        );
+    case 'command':
+    case 'reporter':
+    case 'predicate':
+        return a.expression.abstractBlockSpec() <
+            b.expression.abstractBlockSpec();
+    case 'costume':
+    case 'sound':
+    case 'sprite':
+    case 'stage':
+        return a.name < b.name;
+    default:
+        // number, Boolean, text or other
+        return this.reportBasicLessThan(a, b);
+    }
 };
 
 // Process non-HOF list primitives
