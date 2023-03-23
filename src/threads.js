@@ -2234,6 +2234,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'sorted':
         this.assertType(list, 'list');
         return this.reportSorted(list);
+    case 'shuffled':
+        this.assertType(list, 'list');
+        return this.reportShuffled(list);
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();
@@ -2292,7 +2295,7 @@ Process.prototype.doShowTable = function (list) {
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
-// process - sorting a list (general utility)
+// process - sorting and shuffling a list (general utility)
 
 Process.prototype.reportSorted = function (data) {
     return new List(data.itemsArray().slice().sort((a, b) =>
@@ -2357,6 +2360,19 @@ Process.prototype.sortingLessThan = function (a, b) {
         // number, Boolean, text or other
         return this.reportBasicLessThan(a, b);
     }
+};
+
+Process.prototype.reportShuffled = function (data) {
+    // Fisher-Yates algorithm
+    var array = [...data.itemsArray()],
+        i, k, tmp;
+    for (i = array.length - 1; i > 0; i -= 1) {
+        k = Math.floor(Math.random() * (i + 1));
+        tmp = array[i];
+        array[i] = array[k];
+        array[k] = tmp;
+    }
+    return new List(array);
 };
 
 // Process non-HOF list primitives

@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
     * new "current" reporter offering access to "script", "caller", "continuation" and "inputs"
-    * new "sorted" selector in list properties reporter's dropdown
+    * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "current" introspection/self reflection reporter 
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
@@ -19,6 +19,7 @@
 ### 2023-03-23
 * blocks, threads: added 'sorted' selector to list properties dropdown
 * objects: slightly optimized pen drawing performance when WARPed
+* blocks, threads: added 'shuffled' selector to list properties dropdown
 
 ### 2023-03-22
 * blocks, threads: optimized and simplified continuations
