@@ -16,6 +16,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-24
+* objects: made deprecated CALLCC and RUN/CC available in the palette in dev for debugging + testing for compatibility
+
 ### 2023-03-23
 * blocks, threads: added 'sorted' selector to list properties dropdown
 * objects: slightly optimized pen drawing performance when WARPed

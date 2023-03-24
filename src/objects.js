@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-23';
+modules.objects = '2023-March-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -864,12 +864,14 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         doCallCC: {
             // deprecated - superseded by reportEnviornment - kept for legacy
+            dev: true,
             type: 'command',
             category: 'control',
             spec: 'run %cmdRing w/continuation'
         },
         reportCallCC: {
             // deprecated - superseded by reportEnviornment - kept for legacy
+            dev: true,
             type: 'reporter',
             category: 'control',
             spec: 'call %cmdRing w/continuation'
@@ -2758,13 +2760,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
-
-    /* deprecated - superseded by reportEnviornment - retained for legacy comp
-        blocks.push('-');
-        blocks.push(block('doCallCC'));
-        blocks.push(block('reportCallCC'));
-    */
-
         blocks.push('-');
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
@@ -2788,6 +2783,10 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+        // deprecated - superseded by reportEnviornment - retained for legacy
+            blocks.push('-');
+            blocks.push(block('doCallCC'));
+            blocks.push(block('reportCallCC'));
         }
 
     } else if (category === 'sensing') {
@@ -9626,13 +9625,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doTellTo'));
         blocks.push(block('reportAskFor'));
-
-    /* deprecated - superseded by reportEnviornment - retained for legacy comp
-        blocks.push('-');
-        blocks.push(block('doCallCC'));
-        blocks.push(block('reportCallCC'));
-    */
-
         blocks.push('-');
         blocks.push(block('createClone'));
         blocks.push(block('newClone'));
@@ -9654,6 +9646,10 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+        // deprecated - superseded by reportEnviornment - retained for legacy
+            blocks.push('-');
+            blocks.push(block('doCallCC'));
+            blocks.push(block('reportCallCC'));
         }
 
     } else if (category === 'sensing') {
