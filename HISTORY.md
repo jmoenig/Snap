@@ -2,7 +2,7 @@
 
 ## in development:
 * **New Features:**
-    * new "current" reporter offering access to "script", "caller", "continuation" and "inputs"
+    * new "current" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "current" introspection/self reflection reporter 
@@ -15,6 +15,9 @@
     * fixed #3154 (let "this script" capture variables in rings)
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-03-26
+* threads: tweaked (attribute OF object) primitive to let scripts access their dynamic scope and runtime call-stack
 
 ### 2023-03-24
 * objects: made deprecated CALLCC and RUN/CC available in the palette in dev for debugging + testing for compatibility

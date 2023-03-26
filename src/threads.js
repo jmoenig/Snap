@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-23';
+modules.threads = '2023-March-26';
 
 var ThreadManager;
 var Process;
@@ -1579,29 +1579,29 @@ Process.prototype.initializeFor = function (context, args) {
 
 // Process introspection
 
-Process.prototype.reportEnvironment = function (choice) {
+Process.prototype.reportEnvironment = function (choice, trgt = this.context) {
     switch (this.inputOption(choice)) {
     case 'caller':
-        return this.reportCaller();
+        return this.reportCaller(trgt);
     case 'continuation':
-        return this.reportContinuation();
+        return this.reportContinuation(trgt);
     case 'inputs':
-        return this.reportInputs();
+        return this.reportInputs(trgt);
     default:
-        return this.reportSelf();
+        return this.reportSelf(trgt);
     }
 };
 
-Process.prototype.reportSelf = function () {
+Process.prototype.reportSelf = function (trgt) {
     var sym = Symbol.for('self'),
-        frame = this.context.variables.silentFind(sym),
+        frame = trgt.variables.silentFind(sym),
         ctx;
     if (frame) {
         ctx = copy(frame.vars[sym].value);
     } else {
         ctx = this.topBlock.reify();
     }
-    ctx.outerContext = this.context.outerContext;
+    ctx.outerContext = trgt.outerContext;
     if (ctx.outerContext) {
         ctx.variables.parentFrame = ctx.outerContext.variables;
     }
@@ -1609,9 +1609,9 @@ Process.prototype.reportSelf = function () {
 };
 
 
-Process.prototype.reportCaller = function () {
+Process.prototype.reportCaller = function (trgt) {
     var sym = Symbol.for('caller'),
-        frame = this.context.variables.silentFind(sym),
+        frame = trgt.variables.silentFind(sym),
         ctx;
     if (frame) {
         ctx = copy(frame.vars[sym].value);
@@ -1622,9 +1622,9 @@ Process.prototype.reportCaller = function () {
     return this.blockReceiver();
 };
 
-Process.prototype.reportContinuation = function () {
+Process.prototype.reportContinuation = function (trgt) {
     var sym = Symbol.for('continuation'),
-        frame = this.context.variables.silentFind(sym),
+        frame = trgt.variables.silentFind(sym),
         cont;
     if (frame) {
         cont = frame.vars[sym].value;
@@ -1641,9 +1641,9 @@ Process.prototype.reportContinuation = function () {
     return cont;
 };
 
-Process.prototype.reportInputs = function () {
+Process.prototype.reportInputs = function (trgt) {
     var sym = Symbol.for('arguments'),
-        frame = this.context.variables.silentFind(sym);
+        frame = trgt.variables.silentFind(sym);
     return frame ? frame.vars[sym].value : new List();
 };
 
@@ -6010,6 +6010,13 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
         stage;
 
     if (name instanceof Context && attribute instanceof Context) {
+        if (attribute?.expression.selector === 'reportEnvironment') {
+            this.returnValueToParentContext(this.reportEnvironment(
+                attribute.expression.inputs()[0].evaluate(),
+                name
+            ));
+            return;
+        }
         return this.reportContextFor(attribute, name);
     }
     if (thisObj) {
