@@ -24,6 +24,7 @@
 * new Sarron sprite character costume series, thanks, Meghan and Brian!
 * gui: catch misspelled translation keys in urls, thanks, Joan!
 * German translation update
+* gui: updated credits to Meghan for Sarron costumes
 
 ### 2023-03-26
 * threads: tweaked (attribute OF object) primitive to let scripts access their dynamic scope and runtime call-stack
