@@ -17,11 +17,13 @@
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan! 
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2023-03-27
 * gui, objects, store: incremented dev version to v9
 * new Sarron sprite character costume series, thanks, Meghan and Brian!
 * gui: catch misspelled translation keys in urls, thanks, Joan!
+* German translation update
 
 ### 2023-03-26
 * threads: tweaked (attribute OF object) primitive to let scripts access their dynamic scope and runtime call-stack

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2023-02-27', // this, too, will appear in the Translators tab
+        '2023-03-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -771,6 +771,16 @@ SnapTranslator.dict.de = {
         'lösche Block %repRing',
     'block':
         'Block',
+    'current %env':
+        'Laufzeit %env',
+    'script':
+        'Skript',
+    'caller':
+        'Aufrufer',
+    'continuation':
+        'Continuation',
+    'inputs':
+        'Eingaben',
 
     // operators:
     'sum':
@@ -891,6 +901,10 @@ SnapTranslator.dict.de = {
         'Spalten',
     'distribution':
         'Verteilung',
+    'sorted':
+        'Sortierung',
+    'shuffled':
+        'Mischung',
     'reverse':
         'Umkehrung',
     'lines':
