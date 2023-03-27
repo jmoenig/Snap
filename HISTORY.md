@@ -16,6 +16,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-03-27
+* gui, objects, store: incremented dev version to v9
+
 ### 2023-03-26
 * threads: tweaked (attribute OF object) primitive to let scripts access their dynamic scope and runtime call-stack
 
