@@ -4,6 +4,7 @@
 * **New Features:**
     * new "current" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
+    * new "Sarron" costume series, thanks, Meghan and Brian!
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "current" introspection/self reflection reporter 
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
@@ -18,6 +19,7 @@
 
 ### 2023-03-27
 * gui, objects, store: incremented dev version to v9
+* new Sarron sprite character costume series, thanks, Meghan and Brian!
 
 ### 2023-03-26
 * threads: tweaked (attribute OF object) primitive to let scripts access their dynamic scope and runtime call-stack
