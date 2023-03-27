@@ -7136,14 +7136,23 @@ IDE_Morph.prototype.languageMenu = function () {
 
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
-        src = this.resourceURL('locale', 'lang-' + lang + '.js');
+        src;
     SnapTranslator.unload();
     if (translation) {
         document.head.removeChild(translation);
     }
+    if (!(lang in SnapTranslator.dict)) {
+        if (lang.includes('_') && lang.split('_')[0] in SnapTranslator.dict) {
+            lang = lang.split('_')[0];
+        } else {
+            lang = 'en';
+        }
+    }
     if (lang === 'en') {
         return this.reflectLanguage('en', callback, noSave);
     }
+
+    src = this.resourceURL('locale', 'lang-' + lang + '.js');
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = () =>
