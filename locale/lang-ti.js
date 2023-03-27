@@ -1031,41 +1031,41 @@ SnapTranslator.dict.ti = {
 
     //Libraries
     'Import library':
-        'Modul laden',
+        'ኣሃዱ ጸዓን',
     'Loading':
-        'Lädt',
+        'እጻዓን ኣሎ',
     'Imported':
-        'Importiert',
+        'ኣትዩ',
     'Iteration, composition':
-        'Iteration, Komposition',
+        'ምድግጋም, ምቛም',
     'List utilities':
-        'Listen bearbeiten',
+        'ናውቲ ዝርዝር',
     'Variadic reporters':
-        'Variadische Funktionen',
+        'ቫርያዳውያን (Variadic) ተግባራት',
     'Web services access (https)':
-        'Zugriff auf Webservices',
+        'ኣገልግሎታት መርበብ ሓበሬታ ምብጻሕ (https)',
     'Multi-branched conditional (switch)':
-        'Mehrfach verzweigte Conditionals (Switch)',
+        'ብዙሕ ዝጨንፈሮም ኩነታውያን (Switch)',
     'LEAP Motion controller':
-        'LEAP Motion Controller',
+        'ሊፕ ተቖጻጻሪ ምንቅስቓስ (LEAP Motion Controller)',
     'Words, sentences':
-        'Wörter, Sätze',
+        'ቃላት ፡ ምሉእ ሓሳባት',
     'Catch errors in a script':
-        'Fehlerhandhabung im Skript',
+        'ኣተኣላልያ ጌጋታተ ኣብ መርሓ',
     'Set RGB or HSV pen color':
-        'Stiftfarbe auf RGB oder HSV Werte setzen',
+        'ሕብሪ ብርዒ ናብ RGB ወይ HSV ቀይር',
     'Text to speech':
-        'Sprachausgabe',
+        'ጽሑፍ ናብ ዘረባ',
     'Provide 100 selected colors':
-        '100 ausgewählte Farben',
+        '100 ዝተመርጹ ሕብርታት',
     'Infinite precision integers, exact rationals, complex':
-        'Beliebig präzise Ganzzahlen, exakte rationale Zahlen, komplexe Zahlen',
+        'ደረት ኣልቦ ትኽክል ምሉኣት ቁጽርታት, ትኽክል ተመቕራሒ ቁጽርታት, ሓሳባውያን ቁጽርታት',
     'Provide getters and setters for all GUI-controlled global settings':
-        'GUI Elemente programmatisch bearbeiten',
+        'ባእታታት ባብ ተጠቃሚ (GUI) ብመርሓ ተቖጻጸር',
     'Allow multi-line text input to a block':
-        'Mehrzeiliger Text als Eingabe für Blöcke',
+        ' ብዓል ብዙሕ መስመር ጽሕፍ ናብ ሕጡብ ምውሳኽ ኣኽእል',
     'Create variables in program':
-        'Variablen im Skript erstellen',
+        'ተቓያየርቲ ኣብ መርሓ ኣእቱ',
 
     // cloud menu
     'Login...':
