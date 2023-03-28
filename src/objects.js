@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-27';
+modules.objects = '2023-March-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -759,7 +759,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'when I am %interaction',
-            defaults: ['clicked']
+            defaults: [['clicked']]
         },
         receiveMessage: {
             type: 'hat',

@@ -14,10 +14,14 @@
     * slightly optimized pen drawing performance when WARPed
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
-    * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan! 
+    * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
+    * fixed a bug that led to the default input of "When I am clicked" not being translated
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-03-28
+* objects: fixed a bug that led to the default input of "When I am clicked" not being translated
 
 ### 2023-03-27
 * gui, objects, store: incremented dev version to v9
