@@ -274,7 +274,12 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
                 this.rpcRequest = null;
             }
             return image;
-        } else {  // assume text
+        } 
+        else if(contentType && contentType.startsWith('audio')){
+            debugger;
+            throw new ERROR('IVE GOT AUDIO');
+        }
+        else {  // assume text
             var text = new TextDecoder('utf-8').decode(new Uint8Array(this.rpcRequest.response));
             response = decodeURIComponent(encodeURIComponent(text));
             stage = this.homeContext.receiver.parentThatIsA(StageMorph);
