@@ -3136,7 +3136,8 @@ function BlockLabelFragment(labelString) {
     this.type = '%s';    // null for label, a spec for an input
     this.defaultValue = '';
     this.options = '';
-    this.isReadOnly = false; // for input slots
+    this.isReadOnly = false; 
+    this.isStatic = false; // for input slots
     this.isDeleted = false;
 }
 
@@ -3158,7 +3159,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \u2191';
     } else if (this.isMultipleInput()) {
         suff = '...';
-    } else if (this.type === '%cs' || this.type === '%ca') {
+    } else if (this.type === '%cs' || this.type === '%ca' || this.type === '%cl' || this.type === '%cla') {
         suff = ' \u03BB'; // ' [\u03BB'
     } else if (this.type === '%b') {
         suff = ' ?';
@@ -3254,17 +3255,13 @@ BlockLabelFragment.prototype.isUpvar = function () {
 
 BlockLabelFragment.prototype.setToSingleInput = function () {
     if (!this.type) {return null; } // not an input at all
-    if (this.type === '%upvar') {
-        this.type = '%s';
-    } else {
-        this.type = this.singleInputType();
-    }
+    this.type = this.singleInputType();
 };
 
 BlockLabelFragment.prototype.setToMultipleInput = function () {
     if (!this.type) {return null; } // not an input at all
-    if (this.type === '%upvar') {
-        this.type = '%s';
+    if (this.type === '%ca') {
+        this.type = '%cs';
     } else if (this.type === '%ca') {
         this.type = '%cs';
     }
@@ -3872,7 +3869,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(inline)', '%cmdRing'); //'%cmd');
     this.addSlotTypeButton('Reporter', '%repRing'); //'%r');
     this.addSlotTypeButton('Predicate', '%predRing'); //'%p');
-    this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
+    this.addSlotTypeButton('Command\n(C-shape)', ['%cl', '%cla']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
 
@@ -3954,14 +3951,14 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         'checkbox',
         this, // target
         () => { // action
-            if (this.fragment.type === '%ca') {
-                this.setType('%cs');
+            if (this.fragment.type === '%cla') {
+                this.setType('%cl');
             } else {
-                this.setType('%ca');
+                this.setType('%cla');
             }
         },
         null, // label string
-        () => this.fragment.type === '%ca',
+        () => this.fragment.type === '%cla',
         null, // environment
         null, // hint
         new SymbolMorph(
@@ -3974,7 +3971,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     loopArrow.refresh = () => {
         ToggleMorph.prototype.refresh.call(loopArrow);
         if (this.isExpanded && contains(
-                ['%cs', '%ca'],
+                ['%cl', '%cla'],
                 this.fragment.type
             )) {
             loopArrow.show();
@@ -4267,6 +4264,9 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('unringified preedicate', '%rp');
+    addSpecialSlotType('unringified reporter', '%rr');
+    addSpecialSlotType('unringified command', '%rc');
     return menu;
 };
 
@@ -4287,7 +4287,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('(none)', '');
     addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
-    // addSpecialOptions('data types', '§_typesMenu');
+    addSpecialOptions('data types', '§_typesMenu');
     addSpecialOptions('costumes', '§_costumesMenu');
     addSpecialOptions('sounds', '§_soundsMenu');
     addSpecialOptions('variables', '§_getVarNamesDict');
@@ -5009,7 +5009,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
         ide.categories.refreshEmpty();
         ide.refreshPalette();
         ide.showMessage(
-            this.blocks.length + ' ' + localize('unused block(s) removed'),
+            (this.blocks.length>1)?(this.blocks.length + ' ' + localize('unused blocks removed')):'1 ' + localize('unused block removed'),
             2
         );
     } else {
