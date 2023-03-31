@@ -16,9 +16,13 @@
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
     * fixed a bug that led to the default input of "When I am clicked" not being translated
+    * fixed serializing complex inputs to contexts (procedure objects)
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-03-31
+* store: fixed serializing complex inputs to contexts (procedure objects)
 
 ### 2023-03-28
 * objects: fixed a bug that led to the default input of "When I am clicked" not being translated
