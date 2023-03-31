@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-26';
+modules.threads = '2023-March-31';
 
 var ThreadManager;
 var Process;
@@ -1607,7 +1607,6 @@ Process.prototype.reportSelf = function (trgt) {
     }
     return ctx;
 };
-
 
 Process.prototype.reportCaller = function (trgt) {
     var sym = Symbol.for('caller'),
