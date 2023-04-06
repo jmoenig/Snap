@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-February-01';
+modules.byob = '2023-April-06';
 
 // Declarations
 
@@ -3674,13 +3674,13 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
     this.types.fixLayout();
 
     // configure arrow button
-    arrow.refresh = () => {
+    arrow.refresh = (initial) => {
         if (this.fragment.type === null) {
             this.isExpanded = false;
             arrow.hide();
         } else {
             arrow.show();
-            if (this.isExpanded) {
+            if (initial || this.isExpanded) {
                 arrow.direction = 'down';
             } else {
                 arrow.direction = 'right';
@@ -3701,7 +3701,7 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
         }
     };
 
-    arrow.refresh();
+    arrow.refresh(this.isLaunchingExpanded);
 };
 
 InputSlotDialogMorph.prototype.addTypeButton

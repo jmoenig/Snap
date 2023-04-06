@@ -17,6 +17,7 @@
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
     * fixed a bug that led to the default input of "When I am clicked" not being translated
     * fixed serializing complex inputs to contexts (procedure objects)
+    * fixed #3207 (initial arrow head orientation for long form input slot dialog)
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
@@ -24,6 +25,7 @@
 
 ### 2023-04-06
 * Greek translation update, thanks, HM100!
+* byob: fixed #3207
 
 ### 2023-03-31
 * store: fixed serializing complex inputs to contexts (procedure objects)
