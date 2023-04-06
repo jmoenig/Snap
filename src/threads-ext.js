@@ -276,8 +276,13 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
             return image;
         } 
         else if(contentType && contentType.startsWith('audio')){
-            audio = btoa(String.fromCharCode(...new Uint8Array(this.rpcRequest.response)));
-            var snapString = `<sound collabId=\"item_-1_2\" name=\"sound\" sound=\"data:audio/mpeg;base64,${audio}\" id=\"1\"/>`
+            var audioTo64 = btoa(
+                new Uint8Array(this.rpcRequest.response)
+                  .reduce((data, byte) => data + String.fromCharCode(byte), '')
+              );
+            base64 = `data:audio/mpeg;base64,${audioTo64}`;
+            const sound = new Sound(base64, "name");
+            var snapString = `<sound name=\"sound\" sound=\"${base64}\" id=\"1\"/>`;
             return snapString;
         }
         else {  // assume text
