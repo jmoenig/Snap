@@ -20,6 +20,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+    * Greek, thanks, HM100!
+
+### 2023-04-06
+* Greek translation update, thanks, HM100!
 
 ### 2023-03-31
 * store: fixed serializing complex inputs to contexts (procedure objects)
