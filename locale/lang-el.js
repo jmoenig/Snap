@@ -544,6 +544,8 @@ SnapTranslator.dict.el = {
         'μήνυμα',
     'any message':
         'οποιοδήποτε μήνυμα',
+    'data':
+        'δεδομένα',
     'wait %n secs':
         'περίμενε %n δευτ.',
     'wait until %b':
@@ -616,7 +618,10 @@ SnapTranslator.dict.el = {
         'πες το %spr να %cmdRing  %inputs',
     'ask %spr for %repRing %inputs':
         'ρώτα το %spr για %repRing %inputs',
-
+    'when %edit is edited %message':
+        'όταν το %edit επεξεργαστεί %message',
+    'anything':
+        'οτιδηποτε',
     // sensing:
     'touching %col ?':
         'ακουμπάει %col ?',
@@ -746,6 +751,8 @@ SnapTranslator.dict.el = {
         'μενού',
     'editables':
         'επεξεργάσιμα',
+    'translations':
+        'μεταφράσεις',
     'set %byob of block %repRing to %s':
         'θέσε %byob της εντολής %repRing σε %s',
     'define %upvar %s %repRing':
@@ -754,8 +761,25 @@ SnapTranslator.dict.el = {
         'διαγραφή μπλοκ %repRing',
     'block':
         'μπλοκ',
-
+    'current %env':
+        'τρέχον %env',
+    'script':
+        'σενάριο',
+    'caller':
+        'καλούντος',
+    'continuation':
+        'συνέχια',
+    'inputs':
+        'εισόδους',
     // operators:
+    'sum':
+        'άθροισμα',
+    'product':
+        'γινόμενο',
+    'minimum':
+        'ελάχιστο',
+    'maximum':
+        'μέγιστο',
     '%n mod %n':
         'το υπόλοιπο του %n διαίρεμενο από %n',
     'round %n':
@@ -799,19 +823,19 @@ SnapTranslator.dict.el = {
     'identical to':
         'παρόμοιο με το',
     'all identical':
-        'all identical',
+        'όλα παρόμια',
     'all <':
-        'all <',
+        'όλα <',
     'all >':
-        'all >',
+        'όλα >',
     'all \u2264':
-        'all \u2264',
+        'όλα \u2264',
     'all \u2265':
-        'all \u2265',
+        'όλα \u2265',
     'all =':
-        'all =',
+        'όλα =',
     'neighbors \u2260':
-        'neighbors \u2260',
+        'γειτόνοι \u2260',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript συνάρτηση( %mult%s ) { %code }',
     'compile %repRing':
