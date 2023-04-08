@@ -4175,7 +4175,10 @@ BlockMorph.prototype.showHelp = function () {
             return;
         }
     }
-    pic.src = ide.resourceURL('help', spec + '.png');
+    var tmpimg = new Image();
+    tmpimg.src = ide.resourceURL('help'+'/'+SnapTranslator.language, spec + '.png');
+    tmpimg.onload = function(){pic.src = ide.resourceURL('help'+'/'+SnapTranslator.language, spec + '.png');};
+    tmpimg.onerror = function(){pic.src = ide.resourceURL('help', spec + '.png');}; 
 };
 
 // BlockMorph exporting picture with result bubble
