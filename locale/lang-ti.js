@@ -1069,43 +1069,43 @@ SnapTranslator.dict.ti = {
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'እቶ...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'ተመዝገብ...',
     'Logout':
-        'Abmelden',
+        'ውጻእ',
     'Change Password...':
-        'Passwort ändern...',
+        'ቃለ-ምስጢር ቀይር...',
     'Reset Password...':
-        'Passwort zurücksetzen...',
+        'ቃለ-ምስጢር ናብ ፋልማይ ምለስ...',
     'Resend Verification Email...':
-        'Bestätigungsmail nochmal senden...',
+        'መረጋገጺ ኢ-መይል (ኤ-ድብዳበ) ከም ብሓደሽ ስደድ...',
     'Open in Community Site':
-        'Projektseite anzeigen',
+        'ገጽ ሓበሬታ ናይ ፕሮጀክት ክፈት',
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'ቋንቋ...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'ሕጡባት ኣጉልሕ...',
     'Fade blocks...':
-        'Bl\u00f6cke ausblenden...',
+        'ሕጡባት ኣህስስ...',
     'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
+        'ዓቐን መድረኽ...',
     'Stage size':
-        'B\u00fchnengr\u00f6\u00dfe',
+        'ዓቐን መድረኽ',
     'Stage width':
-        'B\u00fchnenbreite',
+        'ጎድኒ መድረኽ',
     'Stage height':
-        'B\u00fchnenh\u00f6he',
+        'ቁመት መድረኽ',
     'Default':
-        'Normal',
+        'ውህብ',
     'Blurred shadows':
-        'Weiche Schatten',
+        'ደብዛዝ ጽላሎት',
     'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'ድሙቐ ጽላሎትን ብርሃንን\nንምጥቃም ኣጥፍእ',
     'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'ደብዛዝ ጽላሎትን ብርሃንን\nንምጥቃም ወልዕ',
     'Zebra coloring':
         'Zebrafarben',
     'check to enable alternating\ncolors for nested blocks':
