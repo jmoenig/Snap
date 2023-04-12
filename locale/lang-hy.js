@@ -361,8 +361,8 @@ SnapTranslator.dict.hy = {
         'ցույց տալ',
     'hide':
         'թաքցնել',
-    'go to front':
-        'գնալ վերին շերտ',
+    'go to %layer layer':
+        'գնալ %layer շերտ',
     'go back %n layers':
         'վերադառնալ %n շերտ',
 
@@ -382,8 +382,8 @@ SnapTranslator.dict.hy = {
         'դադարեցնել բոլոր ձայները',
     'rest for %n beats':
         'սպասել %n տակտ',
-    'play note %n for %n beats':
-        'նվագել %n նոտան %n տակտ',
+    'play note %note for %n beats':
+        'նվագել %note նոտան %n տակտ',
     'change tempo by %n':
         'փոխել տեմպը %n -ով',
     'set tempo to %n bpm':
@@ -396,14 +396,16 @@ SnapTranslator.dict.hy = {
         'մաքրել',
     'pen down':
         'գրիչն իջեցնել',
+    'pen down?':
+        'գրիչը ցած?',
     'pen up':
         'գրիչը բարձրացնել',
     'set pen color to %clr':
         'գրչի գույնը՝ %clr',
-    'change pen color by %n':
-        'թոխել գրիչի գույնը %n -ով',
-    'set pen color to %n':
-        'գրիչի գույնը՝ %n',
+    'change pen %clrdim by %n':
+        'թոխել գրիչի %clrdim %n -ով',
+    'set pen %clrdim to %n':
+        'գրիչի %clrdim %n',
     'change pen shade by %n':
         'փոխել գրչի ստվերը %n -ով',
     'set pen shade to %n':
@@ -420,8 +422,8 @@ SnapTranslator.dict.hy = {
     // control:
     'when %greenflag clicked':
         'Երբ %greenflag սեղմված է',
-    'when %keyHat key pressed':
-        'Երբ %keyHat ստեղնը սեղմված է',
+    'when %keyHat key pressed %keyName':
+        'Երբ %keyHat ստեղնը սեղմված է %keyName',
     'when I am %interaction':
         'Երբ %interaction',
     'clicked':
@@ -436,12 +438,12 @@ SnapTranslator.dict.hy = {
         'մկնիկը բաց է թողնված',
     'when %b':
         'երբ %b',
-    'when I receive %msgHat':
-        'երբ ստանում եմ %msgHat',
-    'broadcast %msg':
-        'հաղորդել %msg',
-    'broadcast %msg and wait':
-        'հաղորդել %msg և սպասել',
+    'when I receive %msgHat %message':
+        'երբ ստանում եմ %msgHat %message',
+    'broadcast %msg %receive':
+        'հաղորդել %msg %receive',
+    'broadcast %msg %receive and wait':
+        'հաղորդել %msg %receive և սպասել',
     'Message name':
         'հաղորդագրության անունը',
     'message':
@@ -452,12 +454,12 @@ SnapTranslator.dict.hy = {
         'սպասել %n վայրկյան',
     'wait until %b':
         'սպասել մինչև %b',
-    'forever %c':
-        'անվերջ %c',
-    'repeat %n %c':
-        'կրկնել %n %c',
-    'repeat until %b %c':
-        'կրկնել մինչև %b %c',
+    'forever %loop':
+        'անվերջ %loop',
+    'repeat %n %loop':
+        'կրկնել %n %loop',
+    'repeat until %b %loop':
+        'կրկնել մինչև %b %loop',
     'if %b %c':
         'եթե %b %c',
     'if %b %c else %c':
@@ -522,8 +524,8 @@ SnapTranslator.dict.hy = {
         'մկնիկը սեղմվա՞ծ է',
     'key %key pressed?':
         '%key ստեղնը սեղմվա՞ծ է',
-    'distance to %dst':
-        'հեռավորությունը մինչև %dst',
+    '%rel to %dst':
+        '%rel մինչև %dst',
     'reset timer':
         'զրոյացնել վարկյանաչափը',
     'timer':
@@ -555,10 +557,10 @@ SnapTranslator.dict.hy = {
         '%fun %n -ից',
     'pick random %n to %n':
         'պատահական թիվ՝ %n -ից %n -ը',
-    '%b and %b':
-        '%b և %b',
-    '%b or %b':
-        '%b կամ %b',
+    'and':
+        'և',
+    'or':
+        'կամ',
     'not %b':
         'ոչ %b',
     'true':
@@ -573,8 +575,8 @@ SnapTranslator.dict.hy = {
         'բարև',
     'world':
         'աշխարհ',
-    'letter %n of %s':
-        '%n -ի %s -րդ տառը',
+    'letter %ix of %s':
+        '%ix -ի %s -րդ տառը',
     'length of %s':
         '%s տողիի երկարությունը',
     'unicode of %s':
@@ -585,6 +587,8 @@ SnapTranslator.dict.hy = {
         'արդյո՞ք %s -ը %typ է',
     'is %s identical to %s ?':
         '%s -ը նույնակա՞ն է %s -ի հետ',
+    'identical to':
+        '-ը նույնակա՞ն է -ի հետ',
 
     'type of %s':
         '%s -ի տիպը',
@@ -619,8 +623,8 @@ SnapTranslator.dict.hy = {
         '%idx տարրը %l -ում',
     'all but first of %l':
         'բոլորը, բացի %l -ի առաջինից',
-    'length of %l':
-        '%l -ի երկարությունը',
+    '%la of %l':
+        '%la -ի %l',
     '%l contains %s':
         '%l -ը պարունակում է %s',
     'thing':
