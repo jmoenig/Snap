@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-April-06';
+modules.locale = '2023-April-12';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -649,6 +649,7 @@ SnapTranslator.dict.he = {
     'last_changed':
         '2020-04-21'
 };
+
 SnapTranslator.dict.hi = {
 	'language_name':
         'हिंदी',
@@ -658,4 +659,15 @@ SnapTranslator.dict.hi = {
         'barathkumarbasker2007@gmail.com',
     'last_changed':
         '2021-05-08'
+};
+
+SnapTranslator.dict.hy = {
+    'language_name':
+        'Հայերեն',
+    'language_translator':
+        'Symotec LLC and Armath team',
+    'translator_e-mail':
+        'info@symotec.am and info@armath.am',
+    'last_changed':
+        '2023-04-12',
 };

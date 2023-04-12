@@ -187,7 +187,7 @@ SnapTranslator.dict.hy = {
     'translator_e-mail':
         'info@symotec.am and info@armath.am', // optional
     'last_changed':
-        '2022-10-30', // this, too, will appear in the Translators tab
+        '2023-04-12', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
