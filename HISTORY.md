@@ -23,6 +23,9 @@
     * German
     * Greek, thanks, HM100!
 
+### 2023-04-12
+* cloud: switched to new backend url format, thanks, Bernat!
+
 ### 2023-04-06
 * Greek translation update, thanks, HM100!
 * byob: fixed #3207
