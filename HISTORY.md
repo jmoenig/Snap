@@ -11,7 +11,8 @@
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
-    * new "fade-in" block in the audio comp library that lets you reduce audible "clicks" in sounds computed from raw samples
+    * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
+    * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
     * slightly optimized pen drawing performance when WARPed
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
@@ -24,6 +25,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-04-13
+* updated "animation" library: simplified "glide" and added "steps" selector to the "animate" command
 
 ### 2023-04-12
 * cloud: switched to new backend url format, thanks, Bernat!
