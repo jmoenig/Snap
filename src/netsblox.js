@@ -21,6 +21,9 @@ NetsBloxMorph.prototype.init = function (isAutoFill, config) {
     this.services = new ServicesRegistry(config, this.cloud);
     this.services.onInvalidHosts = this.onInvalidHosts.bind(this);
     this.room = null;
+    if (this.cloud.username) {
+        this.services.fetchHosts(this.cloud.username);
+    }
 
     // initialize inherited properties:
     this.serializer = new NetsBloxSerializer();
