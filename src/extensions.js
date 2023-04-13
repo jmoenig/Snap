@@ -135,7 +135,8 @@
                     type: block.type,
                     category: block.category,
                     spec: block.spec,
-                    defaults: block.defaults
+                    defaults: block.defaults,
+                    help: block.help,
                 };
                 const receivers = this.findWatcherReceivers(palettes, block.name);
                 receivers.forEach(rcvr => {
@@ -240,6 +241,12 @@
             this.defaults = defaults;
             this.impl = impl;
             this.receivers = [];
+            this.help = null;
+        }
+
+        help(info) {
+            this.help = info;
+            return this;
         }
 
         for(...receivers) {
