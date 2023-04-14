@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-March-31';
+modules.threads = '2023-April-14';
 
 var ThreadManager;
 var Process;
@@ -4175,7 +4175,15 @@ Process.prototype.getLastMessage = function () {
 // Process type inference
 
 Process.prototype.reportIsA = function (thing, typeString) {
-    return this.reportTypeOf(thing) === this.inputOption(typeString);
+    var choice = this.inputOption(typeString);
+    switch (choice) {
+    case 'agent':
+        return isSnapObject(thing);
+    case 'script':
+        return thing instanceof Context;
+    default:
+        return this.reportTypeOf(thing) === choice;
+    }
 };
 
 Process.prototype.assertType = function (thing, typeString, ...exempt) {

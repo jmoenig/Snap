@@ -4,7 +4,7 @@
 * **New Features:**
     * new "context" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
-    * new "stage" selector in "is a?" reporter's dropdown
+    * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
@@ -32,6 +32,7 @@
 * updated German translation for "current" -> "context" rename
 * updated Greed translation for "current" -> "context" rename
 * blocks: added "stage" selector to "is a?" reporter's dropdown
+* blocks: added "agent" and "script" selectors to "is a?" reporter's dropdown
 
 ### 2023-04-13
 * updated "animation" library: simplified "glide" and added "steps" selector to the "animate" command
