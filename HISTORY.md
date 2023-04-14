@@ -29,6 +29,7 @@
 ### 2023-04-14
 * renamed "current" environment reporter to "context"
 * updated German translation for "current" -> "context" rename
+* updated Greed translation for "current" -> "context" rename
 
 ### 2023-04-13
 * updated "animation" library: simplified "glide" and added "steps" selector to the "animate" command

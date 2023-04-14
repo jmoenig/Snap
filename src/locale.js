@@ -383,7 +383,7 @@ SnapTranslator.dict.el = {
     'translator_e-mail':
         'ino.samaras@berkeley.edu, aprekates@sch.gr',
     'last_changed':
-        '2023-04-06'
+        '2023-04-14'
 };
 
 SnapTranslator.dict.ca = {
