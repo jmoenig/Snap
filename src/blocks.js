@@ -11064,16 +11064,20 @@ InputSlotMorph.prototype.typesMenu = function () {
         list : ['list']
     };
     if (SpriteMorph.prototype.enableFirstClass) {
-        dict.agent = ['agent'];
         dict.sprite = ['sprite'];
         dict.stage = ['stage'];
     }
     dict.costume = ['costume'];
     dict.sound = ['sound'];
-    dict.script = ['script'];
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
+    dict['~'] = null;
+    // the following entries are collective types and thus not unique:
+    if (SpriteMorph.prototype.enableFirstClass) {
+        dict.agent = ['agent'];
+    }
+    dict.script = ['script'];
     return dict;
 };
 
