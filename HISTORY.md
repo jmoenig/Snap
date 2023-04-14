@@ -33,6 +33,7 @@
 * updated Greed translation for "current" -> "context" rename
 * blocks: added "stage" selector to "is a?" reporter's dropdown
 * blocks: added "agent" and "script" selectors to "is a?" reporter's dropdown
+* updated German translation for "agent" - hold your horses as we're discussing terminology
 
 ### 2023-04-13
 * updated "animation" library: simplified "glide" and added "steps" selector to the "animate" command

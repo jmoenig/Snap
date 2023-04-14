@@ -2092,6 +2092,8 @@ SnapTranslator.dict.de = {
         'Funktionsblock',
     'predicate':
         'Pr\u00e4dikat',
+    'agent':
+        'Agent',
     'sprite':
         'Objekt',
     'ring':
