@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-March-28';
+modules.objects = '2023-April-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -954,7 +954,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportEnvironment: {
             type: 'reporter',
             category: 'control',
-            spec: 'current %env',
+            spec: 'context %env',
             defaults: [['script']]
         },
 
