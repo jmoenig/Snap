@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-March-23';
+modules.blocks = '2023-April-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11065,6 +11065,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     };
     if (SpriteMorph.prototype.enableFirstClass) {
         dict.sprite = ['sprite'];
+        dict.stage = ['stage'];
     }
     dict.costume = ['costume'];
     dict.sound = ['sound'];
