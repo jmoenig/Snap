@@ -29,6 +29,7 @@
 
 ### 2023-04-15
 * renamed "context" environment reporter (back) to "this"
+* updated German and Greek translations for "context" -> "this" renaming
 
 ### 2023-04-14
 * renamed "current" environment reporter to "context"

@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2023-04-14', // this, too, will appear in the Translators tab
+        '2023-04-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -771,7 +771,7 @@ SnapTranslator.dict.de = {
         'lösche Block %repRing',
     'block':
         'Block',
-    'context %env':
+    'this %env':
         'Laufzeit %env',
     'script':
         'Skript',
