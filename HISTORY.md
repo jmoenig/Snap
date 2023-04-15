@@ -2,13 +2,13 @@
 
 ## in development:
 * **New Features:**
-    * new "context" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
+    * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
-    * "this script" reporter has been morphed into the new general "context" introspection/self reflection reporter 
+    * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter 
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * improved browser resource management for graphics and sounds
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
@@ -26,6 +26,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-04-15
+* renamed "context" environment reporter (back) to "this"
 
 ### 2023-04-14
 * renamed "current" environment reporter to "context"
