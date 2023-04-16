@@ -10,8 +10,7 @@ SnapExtensions.primitives.set(
 
       var cols = tableMorph.columns.length;
       var widths = [];
-
-      var widthPadding = 125;
+      var widthPadding = 10;
       var heightPadding = 12;
 
       var requestedTotalWidth = 0;
