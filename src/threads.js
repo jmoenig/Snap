@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-14';
+modules.threads = '2023-April-16';
 
 var ThreadManager;
 var Process;
@@ -1611,10 +1611,15 @@ Process.prototype.reportSelf = function (trgt) {
 Process.prototype.reportCaller = function (trgt) {
     var sym = Symbol.for('caller'),
         frame = trgt.variables.silentFind(sym),
-        ctx;
+        ctx, nb;
     if (frame) {
         ctx = copy(frame.vars[sym].value);
-        ctx.expression = ctx.expression?.topBlock().fullCopy();
+        // ctx.expression = ctx.expression?.topBlock().fullCopy();
+        ctx.expression = ctx.expression?.fullCopy();
+        nb = ctx.expression?.nextBlock ? ctx.expression.nextBlock() : null;
+        if (nb) {
+            nb.destroy();
+        }
         ctx.inputs = [];
         return ctx;
     }

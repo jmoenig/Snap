@@ -27,6 +27,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-04-16
+* changed "this caller" to return only a single block. Use "this script of (this caller)" to get the procedure script
+
 ### 2023-04-15
 * renamed "context" environment reporter (back) to "this"
 * updated German and Greek translations for "context" -> "this" renaming
