@@ -1,9 +1,8 @@
 SnapExtensions.primitives.set(
-  'ftd_' + 'format(widths)', 
-  (widthList, proc) => { 
-    var sprite = proc.receiver;
+  'ftd_' + 'format(widths)',
+    function(widthList, proc) {
+    var sprite = this;
     var bubble = sprite.talkBubble();
-
     if(bubble instanceof SpriteBubbleMorph && bubble.contentsMorph instanceof TableFrameMorph){
 
       var tableMorph = bubble.contentsMorph.children[0];
