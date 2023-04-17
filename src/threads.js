@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-16';
+modules.threads = '2023-April-17';
 
 var ThreadManager;
 var Process;
@@ -5759,7 +5759,7 @@ Process.prototype.reportBasicRelationTo = function (relation, name) {
     	return this.reportDirectionTo(name);
     }
     if (this.reportTypeOf(rel) === 'number') {
-        return this.reportRayLengthTo(name, rel);
+        return this.reportRayLengthTo(name, +rel);
     }
     return 0;
 };
