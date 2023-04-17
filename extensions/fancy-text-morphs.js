@@ -10,9 +10,24 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'say(data, size, maxWidth, color, anchor)',
+    function (data, size, maxWidth, color, anchor, proc) {
+        console.log(anchor);
+        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor);
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color)',
     function (data, size, maxWidth, color, proc) {
         makeFancyBubble(this, data, true, false, proc, size, maxWidth, color);
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'think(data, size, maxWidth, color, anchor)',
+    function (data, size, maxWidth, color, anchor, proc) {
+        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor);
     }
 )
 
@@ -38,7 +53,7 @@ function validateColor(color) {
     }
 }
 
-function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color) {
+function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color, anchor) {
     const stage = sprite.parentThatIsA(StageMorph);
 
     validateColor(color);
@@ -54,11 +69,87 @@ function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWi
         isQuestion,
         size,
         maxWidth,
-        color
+        color,
+        anchor
     );
 
     sprite.add(bubble);
     sprite.positionTalkBubble();
+}
+
+if(!SpriteMorph.prototype.oldPositionTalkBubble) {
+    SpriteMorph.prototype.oldPositionTalkBubble = SpriteMorph.prototype.positionTalkBubble;
+    SpriteMorph.prototype.positionTalkBubble = function() {
+
+        if(!(this.talkBubble() instanceof FancySpriteBubbleMorph)) {
+            return SpriteMorph.prototype.oldPositionTalkBubble.call(this);
+        }
+
+        var stage = this.parentThatIsA(StageMorph),
+            stageScale = stage ? stage.scale : 1,
+            bubble = this.talkBubble(),
+            top = this.top(),
+            bottom = this.bottom(),
+            anchor = bubble.anchor,
+            vAnchor = anchor.split(" ")[0],
+            hAnchor = anchor.split(" ")[1];
+
+
+        if (!bubble) {return null; }
+        bubble.show();
+
+        bubble.isPointingRight = hAnchor === 'right';
+        bubble.fixLayout();
+        bubble.rerender();
+
+        var yMultiply = vAnchor === 'top' ? 1 : -1;
+        var xMultiply = hAnchor === 'right' ? -1 : 1;
+
+        var step = this.extent().divideBy(10)
+            .max(new Point(5, 5).scaleBy(stageScale))
+            .multiplyBy(new Point(xMultiply, yMultiply));
+
+        if(hAnchor === 'right' ) {
+            bubble.setLeft(this.right());
+        }
+        else {
+            bubble.setRight(this.left());
+        }
+
+        bubble.setBottom(vAnchor === 'top' ? this.top() : this.bottom());
+
+        while (vAnchor === 'top' && !this.isTouching(bubble) && bubble.bottom() < bottom) {
+            bubble.moveBy(step);
+        }
+        while (vAnchor === 'bottom' && !this.isTouching(bubble) && bubble.top() > top) {
+            bubble.moveBy(step);
+        }
+
+        var multiplier = new Point(1,1);
+
+        if(anchor === 'top left' || anchor === 'bottom right') {
+            multiplier = new Point(-1, -1);
+        }
+
+        bubble.moveBy(step.mirror().multiplyBy(multiplier));
+
+        if (!stage) {return null; }
+        if (bubble.right() > stage.right()) {
+            bubble.isPointingRight = false;
+            bubble.fixLayout();
+            bubble.rerender();
+            bubble.setRight(this.center().x);
+        }
+
+        if (bubble.left() < stage.left()) {
+            bubble.isPointingRight = true;
+            bubble.fixLayout();
+            bubble.rerender();
+            bubble.setLeft(this.center().x);
+        }
+        bubble.keepWithin(stage);
+    }
+
 }
 
 FancyTextMorph.prototype = new TextMorph();
@@ -488,15 +579,14 @@ FancyTextMorph.prototype.render = function (ctx) {
     }
 };
 
-function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color) {
-        this.init(data, stage, isThought, isQuestion, size, maxWidth, color);
+function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor) {
+        this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor);
 }
 
 FancySpriteBubbleMorph.prototype = new SpriteBubbleMorph('');
 FancySpriteBubbleMorph.prototype.constructor = FancySpriteBubbleMorph;
 FancySpriteBubbleMorph.uber = SpriteBubbleMorph.prototype;
-
-FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color){
+FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color, anchor){
 
     maxWidth = parseInt(maxWidth);
 
@@ -506,6 +596,7 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
     this.maxWidth = maxWidth;
     this.size = size || SpriteMorph.prototype.bubbleFontSize;
     this.textColor = color || new Color();
+    this.anchor = anchor || 'top right';
 
     FancySpriteBubbleMorph.uber.init.call(this, data, stage, isThought, isQuestion);
 }
