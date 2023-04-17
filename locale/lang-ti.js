@@ -1107,29 +1107,27 @@ SnapTranslator.dict.ti = {
     'check to use blurred drop\nshadows and highlights':
         'ደብዛዝ ጽላሎትን ብርሃንን\nንምጥቃም ወልዕ',
     'Zebra coloring':
-        'Zebrafarben',
+        'ሕብሪ ዘብራ',
     'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
+        'ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት ወልዕ',
     'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
+        'ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት ኣጥፍእ',
     'Dynamic input labels':
-        'Eingabenbeschriftung',
+        'ተለወዋጢ ዕላመት ኣታዊ',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
+        'ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመታት ንምኽልካል ኣጥፍእ',
     'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
+        'ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመትታት ንምሃብ ወልዕ',
     'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
+        'ባዶ ተሓዝ-ቦታ ሕረ',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'ኣብ ምምባር ሕጡባት\nባዶ ትሓዝቲ-ቦታ ንምሕራይ ወልዕ',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'ዝተነብሩ ሕጡባት ምልጋስ ንምኻል ኣጥፍእ',
     'check to turn on\n visible stepping (slow)':
-        'einschalten um Programmausführung\nzu verfolgen (schrittweise)',
+        'መስርሕ መርሓ\nንምክትታል (ዘገምታዊ መስርሕ) ወልዕ',
     'uncheck to turn off\nvisible stepping':
-        'ausschalten um Programmausführung\nnicht mehr zu verfolgen',
+        'ዘገምታዊ መስርሕ መርሓ\nደው ንምባል ኣጥፍእ',
     'Long form input dialog':
         'Ausf\u00fchrlicher Input-Dialog',
     'Plain prototype labels':
