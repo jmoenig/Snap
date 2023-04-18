@@ -2,11 +2,10 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This section show supported version.
 
-| Version | Supported          |
-| ------- | ------------------ |
+| Version | Supported          |<br>
+|  8.2.3  | :white_check_mark: |<br>
 
 
 ## Reporting a Vulnerability
