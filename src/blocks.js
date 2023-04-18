@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-April-14';
+modules.blocks = '2023-April-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13528,7 +13528,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
 
     this.addInfix();
     idx = this.children.length - 1;
-    if (contents) {
+    if (!isNil(contents)) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {

@@ -21,12 +21,15 @@
     * fixed a bug that led to the default input of "When I am clicked" not being translated
     * fixed serializing complex inputs to contexts (procedure objects)
     * fixed #3207 (initial arrow head orientation for long form input slot dialog)
-    * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets 
+    * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
+    * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+* blocks: fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
 
 ### 2023-04-17
 * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets 
