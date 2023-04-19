@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-17';
+modules.threads = '2023-April-19';
 
 var ThreadManager;
 var Process;
@@ -3913,6 +3913,9 @@ Process.prototype.doAsk = function (data) {
         rightSpace;
 
     stage.keysPressed = {};
+    if (this.readyToTerminate) {
+        return;
+    }
     if (!data) {
         // terminate all other processes currently asking a question
         // or waiting to ask one

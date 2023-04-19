@@ -23,12 +23,17 @@
     * fixed #3207 (initial arrow head orientation for long form input slot dialog)
     * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
     * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
+    * fixed stopping ASK prompter under certain race conditions
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-04-19
+* threads: fixed stopping ASK prompter under certain race conditions
+
+### 2023-04-18
 * blocks: fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
 
 ### 2023-04-17
