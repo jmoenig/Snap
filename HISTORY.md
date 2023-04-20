@@ -33,6 +33,7 @@
 
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
+* byob: make sure the input slot dialog is fully visible and within the World when toggling between title text and input name
 
 ### 2023-04-19
 * threads: fixed stopping ASK prompter under certain race conditions

@@ -3720,6 +3720,7 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.types.children.forEach(c => c.refresh());
     this.changed();
     this.fixLayout();
+    this.keepWithin(this.world());
     this.rerender();
     this.edit();
 };
