@@ -11,10 +11,11 @@
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter 
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * improved browser resource management for graphics and sounds
+    * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
+    * slightly optimized pen drawing performance when WARPed
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
-    * slightly optimized pen drawing performance when WARPed
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -29,6 +30,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-04-20
+* byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
 
 ### 2023-04-19
 * threads: fixed stopping ASK prompter under certain race conditions
