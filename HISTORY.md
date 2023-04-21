@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
+    * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to literal (text, number) inputs 
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new "Sarron" costume series, thanks, Meghan and Brian!
@@ -35,7 +36,7 @@
 * threads: hyperized CALL (without parameters)
 * threads: added support for literal parameters to hyperEval()
 * threads: added type assertion for literal parameters to hyperEval()
-* threaes: refactored assertType() to return the test value instead of a Boolean
+* threads: refactored assertType() to return the test value instead of a Boolean
 
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
