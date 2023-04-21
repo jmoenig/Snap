@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-19';
+modules.threads = '2023-April-21';
 
 var ThreadManager;
 var Process;
@@ -1378,6 +1378,26 @@ Process.prototype.evaluate = function (
     }
     if (context.isContinuation) {
         return this.runContinuation(context, args);
+    }
+    if (context instanceof List) {
+        // hyper-monadic deep-map (!)
+        if (!args.isEmpty()) {
+            throw new Error(
+                'expecting 0 inputs in hyper-call\n' +
+                    'but getting ' + args.length()
+            );
+        }
+        this.popContext();
+        this.pushContext(SpriteMorph.prototype.blockForSelector('reportMap'));
+        this.context.inputs = [
+            this.reify(
+                SpriteMorph.prototype.blockForSelector('evaluate'),
+                new List()
+            ),
+            context
+        ];
+        this.pushContext();
+        return;
     }
     if (!(context instanceof Context)) {
         throw new Error('expecting a ring but getting ' + context);

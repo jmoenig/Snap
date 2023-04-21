@@ -31,6 +31,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-04-21
+* threads: hyperized CALL (without parameters)
+
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
 * byob: make sure the input slot dialog is fully visible and within the World when toggling between title text and input name
