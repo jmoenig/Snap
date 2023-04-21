@@ -1500,10 +1500,9 @@ Process.prototype.hyperEval = function (context, args) {
     var mapBlock = SpriteMorph.prototype.blockForSelector('reportMap'),
         callBlock = SpriteMorph.prototype.blockForSelector('evaluate'),
         varBlock = SpriteMorph.prototype.variableBlock('fn'),
-        argsBlock, funArg;
+        argsBlock = this.assertType(args, 'JSON').blockify(),
+        funArg;
 
-    // check if args.canBeJSON()
-    argsBlock = args.blockify();
     callBlock.replaceInput(callBlock.inputs()[0], varBlock);
     callBlock.replaceInput(callBlock.inputs()[1], argsBlock);
     funArg = this.reify(callBlock, new List(['fn']));
@@ -4229,6 +4228,9 @@ Process.prototype.assertType = function (thing, typeString, ...exempt) {
         return thing;
     }
     if (exempt.length && contains(exempt, thing)) {return thing; }
+    if (typeString === 'JSON' && thing instanceof List && thing.canBeJSON()) {
+        return thing;
+    }
     throw new Error(
         localize('expecting a') + ' ' +
         (typeString instanceof Array ?
