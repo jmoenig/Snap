@@ -1380,24 +1380,7 @@ Process.prototype.evaluate = function (
         return this.runContinuation(context, args);
     }
     if (context instanceof List) {
-        // hyper-monadic deep-map (!)
-        if (!args.isEmpty()) {
-            throw new Error(
-                'expecting 0 inputs in hyper-call\n' +
-                    'but getting ' + args.length()
-            );
-        }
-        this.popContext();
-        this.pushContext(SpriteMorph.prototype.blockForSelector('reportMap'));
-        this.context.inputs = [
-            this.reify(
-                SpriteMorph.prototype.blockForSelector('evaluate'),
-                new List()
-            ),
-            context
-        ];
-        this.pushContext();
-        return;
+        return this.hyperEval(context, args);
     }
     if (!(context instanceof Context)) {
         throw new Error('expecting a ring but getting ' + context);
@@ -1510,6 +1493,26 @@ Process.prototype.evaluate = function (
         }
     }
 };
+
+Process.prototype.hyperEval = function (context, args) {
+    // hyper-monadic deep-map (!)
+    if (!args.isEmpty()) {
+        throw new Error(
+            'expecting 0 inputs in hyper-call\n' +
+                'but getting ' + args.length()
+        );
+    }
+    this.popContext();
+    this.pushContext(SpriteMorph.prototype.blockForSelector('reportMap'));
+    this.context.inputs = [
+        this.reify(
+            SpriteMorph.prototype.blockForSelector('evaluate'),
+            new List()
+        ),
+        context
+    ];
+    this.pushContext();
+}
 
 Process.prototype.fork = function (context, args) {
     if (this.readyToTerminate) {return; }
