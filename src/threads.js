@@ -3071,11 +3071,13 @@ Process.prototype.reportMap = function (reporter, list) {
     }
     this.pushContext();
     parms = [next];
-    if (reporter.inputs.length > 1) {
-        parms.push(index);
-    }
-    if (reporter.inputs.length > 2) {
-        parms.push(list);
+    if (reporter instanceof Context) { // can also be a list of rings
+        if (reporter.inputs.length > 1) {
+            parms.push(index);
+        }
+        if (reporter.inputs.length > 2) {
+            parms.push(list);
+        }
     }
     this.evaluate(reporter, new List(parms));
 };
