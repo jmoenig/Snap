@@ -1496,23 +1496,21 @@ Process.prototype.evaluate = function (
 
 Process.prototype.hyperEval = function (context, args) {
     // hyper-monadic deep-map (!)
-    if (!args.isEmpty()) {
-        throw new Error(
-            'expecting 0 inputs in hyper-call\n' +
-                'but getting ' + args.length()
-        );
-    }
+    var mapBlock = SpriteMorph.prototype.blockForSelector('reportMap'),
+        callBlock = SpriteMorph.prototype.blockForSelector('evaluate'),
+        varBlock = SpriteMorph.prototype.variableBlock('fn'),
+        inps, funArg;
+
+    callBlock.replaceInput(callBlock.inputs()[0], varBlock);
+    inps = callBlock.inputs()[1];
+    args.map(each => inps.addInput(each)); // only for literals
+    funArg = this.reify(callBlock, new List(['fn']));
+
     this.popContext();
-    this.pushContext(SpriteMorph.prototype.blockForSelector('reportMap'));
-    this.context.inputs = [
-        this.reify(
-            SpriteMorph.prototype.blockForSelector('evaluate'),
-            new List()
-        ),
-        context
-    ];
+    this.pushContext(mapBlock);
+    this.context.inputs = [funArg, context];
     this.pushContext();
-}
+};
 
 Process.prototype.fork = function (context, args) {
     if (this.readyToTerminate) {return; }
