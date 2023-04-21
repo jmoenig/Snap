@@ -34,6 +34,7 @@
 ### 2023-04-21
 * threads: hyperized CALL (without parameters)
 * threads: added support for literal parameters to hyperEval()
+* threads: added type assertion for literal parameters to hyperEval()
 
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view

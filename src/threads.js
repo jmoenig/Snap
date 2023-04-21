@@ -1495,7 +1495,8 @@ Process.prototype.evaluate = function (
 };
 
 Process.prototype.hyperEval = function (context, args) {
-    // hyper-monadic deep-map (!)
+    // hyper-monadic deep-map
+    // note: currently only literal inputs are supported in hyper-calls
     var mapBlock = SpriteMorph.prototype.blockForSelector('reportMap'),
         callBlock = SpriteMorph.prototype.blockForSelector('evaluate'),
         varBlock = SpriteMorph.prototype.variableBlock('fn'),
@@ -1503,7 +1504,10 @@ Process.prototype.hyperEval = function (context, args) {
 
     callBlock.replaceInput(callBlock.inputs()[0], varBlock);
     inps = callBlock.inputs()[1];
-    args.map(each => inps.addInput(each)); // only for literals
+    args.map(each => {
+        this.assertType(each, ['text', 'number']);
+        inps.addInput(each);
+    });
     funArg = this.reify(callBlock, new List(['fn']));
 
     this.popContext();
