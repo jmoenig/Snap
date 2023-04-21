@@ -1504,10 +1504,7 @@ Process.prototype.hyperEval = function (context, args) {
 
     callBlock.replaceInput(callBlock.inputs()[0], varBlock);
     inps = callBlock.inputs()[1];
-    args.map(each => {
-        this.assertType(each, ['text', 'number']);
-        inps.addInput(each);
-    });
+    args.map(each => inps.addInput(this.assertType(each, ['text', 'number'])));
     funArg = this.reify(callBlock, new List(['fn']));
 
     this.popContext();
