@@ -11,6 +11,7 @@
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter 
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
+    * changed the first input slot of the "reshape" block from "list" type to "any" type
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
@@ -31,6 +32,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-04-22
+* objects: changed the first input slot of the "reshape" block from "list" type to "any" type
 
 ### 2023-04-21
 * threads: hyperized CALL (without parameters)

@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-April-15';
+modules.objects = '2023-April-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -1511,7 +1511,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportReshape: {
             type: 'reporter',
             category: 'lists',
-            spec: 'reshape %l to %nums',
+            spec: 'reshape %s to %nums',
             defaults: [null, [4, 3]]
         },
     /*
