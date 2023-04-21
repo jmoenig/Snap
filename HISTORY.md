@@ -38,6 +38,7 @@
 * threads: added type assertion for literal parameters to hyperEval()
 * threads: refactored assertType() to return the test value instead of a Boolean
 * threads: tweaked "map" primitive for hyperEval()
+* threads: refactored hyperEval() for non-scalar inputs
 
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view

@@ -1500,11 +1500,12 @@ Process.prototype.hyperEval = function (context, args) {
     var mapBlock = SpriteMorph.prototype.blockForSelector('reportMap'),
         callBlock = SpriteMorph.prototype.blockForSelector('evaluate'),
         varBlock = SpriteMorph.prototype.variableBlock('fn'),
-        inps, funArg;
+        argsBlock, funArg;
 
+    // check if args.canBeJSON()
+    argsBlock = args.blockify();
     callBlock.replaceInput(callBlock.inputs()[0], varBlock);
-    inps = callBlock.inputs()[1];
-    args.map(each => inps.addInput(this.assertType(each, ['text', 'number'])));
+    callBlock.replaceInput(callBlock.inputs()[1], argsBlock);
     funArg = this.reify(callBlock, new List(['fn']));
 
     this.popContext();
