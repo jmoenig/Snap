@@ -35,6 +35,7 @@
 * threads: hyperized CALL (without parameters)
 * threads: added support for literal parameters to hyperEval()
 * threads: added type assertion for literal parameters to hyperEval()
+* threaes: refactored assertType() to return the test value instead of a Boolean
 
 ### 2023-04-20
 * byob: changed long-form input dialog setting's behavior to automatically expand / collapse slot type view

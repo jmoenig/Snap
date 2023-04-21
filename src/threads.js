@@ -4224,11 +4224,11 @@ Process.prototype.assertType = function (thing, typeString, ...exempt) {
     // or a particular exempt value and raise an error if not
     // use responsibly wrt performance implications
     var thingType = this.reportTypeOf(thing);
-    if (thingType === typeString) {return true; }
+    if (thingType === typeString) {return thing; }
     if (typeString instanceof Array && contains(typeString, thingType)) {
-        return true;
+        return thing;
     }
-    if (exempt.length && contains(exempt, thing)) {return true; }
+    if (exempt.length && contains(exempt, thing)) {return thing; }
     throw new Error(
         localize('expecting a') + ' ' +
         (typeString instanceof Array ?
