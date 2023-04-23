@@ -868,8 +868,8 @@ SnapTranslator.dict.pl = {
         'indeks',
     'append %lists':
         'przy\u0142\u0105cz %lists',
-    'reshape %l to %nums':
-        'przebuduj %l do %nums',
+    'reshape %s to %nums':
+        'przebuduj %s do %nums',
     'add %s to %l':
         'dodaj %s do %l',
     'delete %ida of %l':
