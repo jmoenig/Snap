@@ -880,8 +880,8 @@ SnapTranslator.dict.hu = {
         'index',
     'append %lists':
         'fűzd hozzá %lists',
-    'reshape %l to %nums':
-        'formáld át %l így %nums',
+    'reshape %s to %nums':
+        'formáld át %s így %nums',
     'add %s to %l':
         '%s hozzáadása %l listához',
     'delete %ida of %l':
