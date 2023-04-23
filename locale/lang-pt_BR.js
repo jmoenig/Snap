@@ -718,8 +718,8 @@ SnapTranslator.dict.pt_BR = {
         'repita para cada %upvar de %l %cla',
     'append %lists':
         'concatene %lists',
-    'reshape %l to %nums':
-        'altere as dimensões de %l para %nums',
+    'reshape %s to %nums':
+        'altere as dimensões de %s para %nums',
 
     // Outros
     'Make a block':
