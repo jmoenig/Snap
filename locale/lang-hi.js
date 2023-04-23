@@ -858,8 +858,8 @@ SnapTranslator.dict.hi = {
         'Index',
     'append %lists':
         'सूची %lists',
-    'reshape %l to %nums':
-        'reshape %l to %nums',
+    'reshape %s to %nums':
+        'reshape %s to %nums',
     'add %s to %l':
         'add %s to %l',
     'delete %ida of %l':
