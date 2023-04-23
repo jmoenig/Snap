@@ -1060,8 +1060,8 @@ SnapTranslator.dict.zh_CN = {
         '%s 在 %l 中的索引',
     'append %lists':
         '追加合并 %lists',
-    'reshape %l to %nums':
-        '重构列表 %l 为 %nums',
+    'reshape %s to %nums':
+        '重构列表 %s 为 %nums',
 
     // other
     'Make a block':

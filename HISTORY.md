@@ -43,6 +43,7 @@
 * adjusted Italian translation for "reshape"
 * adjusted Polish translation for "reshape"
 * adjusted Brazilian Portuguese translation for "reshape"
+* adjusted Simplified Chinese translation for "reshape"
 
 ### 2023-04-22
 * objects: changed the first input slot of the "reshape" block from "list" type to "any" type
