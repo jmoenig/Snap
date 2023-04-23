@@ -882,8 +882,8 @@ SnapTranslator.dict.it = {
         'posizione',
     'append %lists':
         'unisci %lists',
-    'reshape %l to %nums':
-        'riorganizza %l su %nums',
+    'reshape %s to %nums':
+        'riorganizza %s su %nums',
     'add %s to %l':
         'aggiungi %s a %l',
     'delete %ida of %l':

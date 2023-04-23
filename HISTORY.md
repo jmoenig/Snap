@@ -40,6 +40,7 @@
 * adjusted Hindi translation for "reshape"
 * adjusted Hindi translation stub for "reshape"
 * adjusted Hungarian translation for "reshape"
+* adjusted Italian translation for "reshape"
 
 ### 2023-04-22
 * objects: changed the first input slot of the "reshape" block from "list" type to "any" type
