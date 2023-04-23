@@ -840,8 +840,8 @@ SnapTranslator.dict.ca = {
         'annexa %lists',
     'combinations %lists':
         'combinacions de %lists',
-   'reshape %l to %nums':
-        'redimensiona %l a %nums',
+   'reshape %s to %nums':
+        'redimensiona %s a %nums',
     'add %s to %l':
         'afegeix %s a %l',
     'delete %ida of %l':
