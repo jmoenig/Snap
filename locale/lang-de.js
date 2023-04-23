@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2023-04-15', // this, too, will appear in the Translators tab
+        '2023-04-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -945,8 +945,8 @@ SnapTranslator.dict.de = {
         'verbinde %lists',
     'combinations %lists':
         'Kombinationen %lists',
-    'reshape %l to %nums':
-        'strukturiere %l in %nums',
+    'reshape %s to %nums':
+        'strukturiere %s in %nums',
     'add %s to %l':
         'f\u00fcge %s zu %l hinzu',
     'delete %ida of %l':
