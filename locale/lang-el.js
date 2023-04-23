@@ -930,8 +930,8 @@ SnapTranslator.dict.el = {
         'προσάρτηση %lists',
     'combinations %lists':
         'συνδιασμοί %lists',
-    'reshape %l to %nums':
-        'ανασχημάτιση του %l σε %nums',
+    'reshape %s to %nums':
+        'ανασχημάτιση του %s σε %nums',
     'add %s to %l':
         'πρόσθεσε το %s στο %l',
     'delete %ida of %l':
