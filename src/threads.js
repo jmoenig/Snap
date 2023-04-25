@@ -3153,13 +3153,15 @@ Process.prototype.reportKeep = function (predicate, list) {
     }
     this.pushContext();
     parms = [next];
-    if (predicate.inputs.length > 1) {
-        parms.push(index);
+    if (predicate instanceof Context) { // can also be a list of rings
+        if (predicate.inputs.length > 1) {
+            parms.push(index);
+        }
+        if (predicate.inputs.length > 2) {
+            parms.push(list);
+        }
     }
-    if (predicate.inputs.length > 2) {
-        parms.push(list);
-    }
-    this.evaluate(predicate, new List(parms));
+    return this.evaluate(predicate, new List(parms));
 };
 
 Process.prototype.reportFindFirst = function (predicate, list) {
