@@ -870,12 +870,12 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     if (cnf.noSprites) {
         this.stage.hide();
         cnf.noSpriteEdits = true;
-        this.spriteBar.hide();
-        this.stageHandle.hide();
     }
 
     // hide sprite editing widgets
     if (cnf.noSpriteEdits) {
+        this.spriteBar.hide();
+        this.stageHandle.hide();
         this.corralBar.hide();
         this.corral.hide();
     }
@@ -2584,7 +2584,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         if (this.spriteEditor.isVisible) {
             this.spriteEditor.setLeft(this.spriteBar.left());
             this.spriteEditor.setTop(
-                cnf.noSprites ?
+                cnf.noSprites || cnf.noSpriteEdits ?
                     (cnf.hideControls ? this.top() + border
                         : this.controlBar.bottom() + padding)
                     : this.spriteBar.bottom() + padding
@@ -6903,6 +6903,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.currentSprite.scripts.updateToolbar();
         // hide hidden panes
         if (this.config.noSpriteEdits) {
+            this.spriteBar.hide();
+            this.stageHandle.hide();
             this.corralBar.hide();
             this.corral.hide();
         }
