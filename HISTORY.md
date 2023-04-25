@@ -30,6 +30,7 @@
     * fixed stopping ASK prompter under certain race conditions
     * fixed MAP, KEEP, FIND and COMBINE primitives to work with JS-funargs
 * **Documentation Updates:**
+    * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
@@ -43,6 +44,7 @@
 * gui, objects: added configuration option for hideCorral
 * gui, objects: renamed "hideCorral" configuration option to "noSpriteEdits"
 * gui: also hide sprite bar and stage handle in "noSpriteEdits" configuration
+* updated API documentation
 
 ### 2023-04-23
 * adjusted German translation for "reshape"
