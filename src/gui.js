@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-March-27';
+modules.gui = '2023-April-25';
 
 // Declarations
 
@@ -244,6 +244,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
+        hideCorral:     bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
         noImports:      bool, disable/allow importing files via drag&drop
@@ -868,10 +869,15 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     // no sprites
     if (cnf.noSprites) {
         this.stage.hide();
-        this.corralBar.hide();
-        this.corral.hide();
+        cnf.hideCorral = true;
         this.spriteBar.hide();
         this.stageHandle.hide();
+    }
+
+    // hide corral
+    if (cnf.hideCorral) {
+        this.corralBar.hide();
+        this.corral.hide();
     }
 
     // no palette
@@ -6895,6 +6901,11 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
         // update undrop controls
         this.currentSprite.scripts.updateToolbar();
+        // hide hidden panes
+        if (this.config.hideCorral) {
+            this.corralBar.hide();
+            this.corral.hide();
+        }
     }
     this.setExtent(this.world().extent());
 };
