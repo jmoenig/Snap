@@ -3253,7 +3253,8 @@ Process.prototype.reportCombine = function (list, reporter) {
     if (list.isLinked) {
         if (this.context.accumulator === null) {
             // check for special cases to speed up
-            if (this.canRunOptimizedForCombine(reporter)) {
+            if (reporter instanceof Context &&
+                    this.canRunOptimizedForCombine(reporter)) {
                 return this.reportListAggregation(
                     list,
                     reporter.expression.selector
@@ -3294,7 +3295,8 @@ Process.prototype.reportCombine = function (list, reporter) {
     } else { // arrayed
         if (this.context.accumulator === null) {
             // check for special cases to speed up
-            if (this.canRunOptimizedForCombine(reporter)) {
+            if (reporter instanceof Context &&
+                    this.canRunOptimizedForCombine(reporter)) {
                 return this.reportListAggregation(
                     list,
                     reporter.expression.selector
@@ -3332,13 +3334,15 @@ Process.prototype.reportCombine = function (list, reporter) {
     current = this.context.accumulator.target;
     this.pushContext();
     parms = [current, next];
-    if (reporter.inputs.length > 2) {
-        parms.push(index);
+    if (reporter instanceof Context) { // can also be a list of rings
+        if (reporter.inputs.length > 2) {
+            parms.push(index);
+        }
+        if (reporter.inputs.length > 3) {
+            parms.push(list);
+        }
     }
-    if (reporter.inputs.length > 3) {
-        parms.push(list);
-    }
-    this.evaluate(reporter, new List(parms));
+    return this.evaluate(reporter, new List(parms));
 };
 
 Process.prototype.reportListAggregation = function (list, selector) {

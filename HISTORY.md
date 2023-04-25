@@ -27,7 +27,7 @@
     * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
     * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
     * fixed stopping ASK prompter under certain race conditions
-    * fixed MAP, KEEP, FIND primitives to work with JS-funargs
+    * fixed MAP, KEEP, FIND and COMBINE primitives to work with JS-funargs
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
@@ -38,6 +38,7 @@
 * threads: fixed MAP primitive to work with JS-funargs
 * threads: fixed KEEP primitive to work with JS-funargs
 * threads: fixed FIND primitive to work with JS-funargs
+* threads: fixed COMBINE primitive to work with JS-funargs
 
 ### 2023-04-23
 * adjusted German translation for "reshape"
