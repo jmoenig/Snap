@@ -6,7 +6,7 @@
     * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data) 
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
-    * more embedding configuration options: hideCorral
+    * new embedding configuration options: noSpriteEdits
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
@@ -41,6 +41,7 @@
 * threads: fixed FIND primitive to work with JS-funargs
 * threads: fixed COMBINE primitive to work with JS-funargs
 * gui, objects: added configuration option for hideCorral
+* gui, objects: renamed "hideCorral" configuration option to "noSpriteEdits"
 
 ### 2023-04-23
 * adjusted German translation for "reshape"

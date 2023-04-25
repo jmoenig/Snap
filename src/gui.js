@@ -244,7 +244,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
-        hideCorral:     bool, hide/show the corral & sprite controls/menus
+        noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
         noImports:      bool, disable/allow importing files via drag&drop
@@ -869,13 +869,13 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     // no sprites
     if (cnf.noSprites) {
         this.stage.hide();
-        cnf.hideCorral = true;
+        cnf.noSpriteEdits = true;
         this.spriteBar.hide();
         this.stageHandle.hide();
     }
 
-    // hide corral
-    if (cnf.hideCorral) {
+    // hide sprite editing widgets
+    if (cnf.noSpriteEdits) {
         this.corralBar.hide();
         this.corral.hide();
     }
@@ -6902,7 +6902,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         // update undrop controls
         this.currentSprite.scripts.updateToolbar();
         // hide hidden panes
-        if (this.config.hideCorral) {
+        if (this.config.noSpriteEdits) {
             this.corralBar.hide();
             this.corral.hide();
         }

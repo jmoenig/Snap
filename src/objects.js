@@ -4570,7 +4570,7 @@ SpriteMorph.prototype.userMenu = function () {
         allParts,
         anchors;
 
-    if (ide && (ide.isAppMode || ide.config.hideCorral)) {
+    if (ide && (ide.isAppMode || ide.config.noSpriteEdits)) {
         // menu.addItem('help', 'nop');
         return menu;
     }
@@ -4648,7 +4648,7 @@ SpriteMorph.prototype.exportSprite = function () {
 
 SpriteMorph.prototype.edit = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    if (ide && !ide.isAppMode && !ide.config.hideCorral) {
+    if (ide && !ide.isAppMode && !ide.config.noSpriteEdits) {
         ide.selectSprite(this);
     }
 };
@@ -9858,7 +9858,7 @@ StageMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(this);
 
-    if (ide && (ide.isAppMode || ide.config.hideCorral)) {
+    if (ide && (ide.isAppMode || ide.config.noSpriteEdits)) {
         // menu.addItem('help', 'nop');
         return menu;
     }
