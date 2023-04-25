@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-21';
+modules.threads = '2023-April-25';
 
 var ThreadManager;
 var Process;
@@ -3079,7 +3079,7 @@ Process.prototype.reportMap = function (reporter, list) {
             parms.push(list);
         }
     }
-    this.evaluate(reporter, new List(parms));
+    return this.evaluate(reporter, new List(parms));
 };
 
 Process.prototype.reportKeep = function (predicate, list) {
