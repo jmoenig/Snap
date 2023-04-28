@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-April-18';
+modules.blocks = '2023-April-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3075,6 +3075,40 @@ BlockMorph.prototype.abstractBlockSpec = function () {
     return this.parseSpec(this.blockSpec).map(str =>
         (str.length > 1 && (str[0]) === '%') ? '_' : str
     ).join(' ');
+};
+
+BlockMorph.prototype.localizeBlockSpec = function (spec) {
+    // answer the translated block spec where the translation itself
+    // is in the form of an abstract spec, i.e. with padded underscores
+    // in place for percent-sign prefixed slot specs.
+    // Under construction, currently not (yet) in use.
+    var slotSpecs = [],
+        slotCount = -1,
+        abstractSpec,
+        translation;
+
+    abstractSpec = this.parseSpec(spec).map(str => {
+        if (str.length > 1 && (str[0]) === '%') {
+            slotSpecs.push(str);
+            return '_';
+        }
+        return str;
+    }).join(' ');
+
+    // make sure to also remove any explicit slot specs from the translation
+    translation = this.parseSpec(localize(abstractSpec)).map(str =>
+        (str.length > 1 && (str[0]) === '%') ? '_' : str
+    ).join(' ');
+
+    // replace abstract slot placeholders in the translation with their
+    // concrete specs from the original block spec
+    return translation.split(' ').map(word => {
+        if (word === '_') {
+            slotCount += 1;
+            return slotSpecs[slotCount] || '';
+        }
+        return word;
+    }).join(' ');
 };
 
 // BlockMorph menu:

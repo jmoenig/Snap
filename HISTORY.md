@@ -36,6 +36,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-04-28
+* blocks, objects: use abstract block specs for all translations (under construction)
+
 ### 2023-04-25
 * threads: fixed MAP primitive to work with JS-funargs
 * threads: fixed KEEP primitive to work with JS-funargs
