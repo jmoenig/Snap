@@ -8,6 +8,7 @@
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new embedding configuration options: noSpriteEdits
     * experimental hidden session preference settings for "case sensitive text comparison"
+    * new "txt_case_sensitive([bool])" extension primitive
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
@@ -39,6 +40,7 @@
 
 ### 2023-04-29
 * threads, gui: experimental hidden session preference settings for "case sensitive text comparison"
+* extensions: new "txt_case_sensitive([bool])" extension primitive
 
 ### 2023-04-28
 * blocks, objects: use abstract block specs for all translations (under construction)

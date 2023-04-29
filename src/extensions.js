@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-February-01';
+modules.extensions = '2023-April-29';
 
 // Global stuff
 
@@ -328,6 +328,16 @@ SnapExtensions.primitives.set(
     */
     function (name, txt) {
         return Process.prototype.reportTextFunction(name, txt);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_case_sensitive([bool])',
+    function (bool) {
+        if (bool === true || bool === false)  {
+            Process.prototype.isCaseInsensitive = !bool;
+        }
+        return !Process.prototype.isCaseInsensitive;
     }
 );
 
