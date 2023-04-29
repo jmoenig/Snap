@@ -7,6 +7,7 @@
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new embedding configuration options: noSpriteEdits
+    * experimental hidden session preference settings for "case sensitive text comparison"
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
@@ -35,6 +36,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-04-29
+* threads, gui: experimental hidden session preference settings for "case sensitive text comparison"
 
 ### 2023-04-28
 * blocks, objects: use abstract block specs for all translations (under construction)

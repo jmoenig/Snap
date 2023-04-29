@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-25';
+modules.threads = '2023-April-29';
 
 var ThreadManager;
 var Process;
@@ -115,7 +115,10 @@ function snapEquals(a, b) {
 
     // handle text comparison case-insensitive.
     if (isString(x) && isString(y)) {
-        return x.toLowerCase() === y.toLowerCase();
+        if (Process.prototype.isCaseInsensitive) {
+            return x.toLowerCase() === y.toLowerCase();
+        }
+        return x === y;
     }
 
     return x === y;
@@ -599,6 +602,7 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
+Process.prototype.isCaseInsensitive = true; // text comparison
 Process.prototype.enableHyperOps = true;
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false;

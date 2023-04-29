@@ -86,7 +86,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-April-25';
+modules.gui = '2023-April-29';
 
 // Declarations
 
@@ -4317,6 +4317,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to turn off\nlogging pen vectors',
         'check to turn on\nlogging pen vectors',
         false
+    );
+    addPreference(
+        'Case sensitive text comparison',
+        () => Process.prototype.isCaseInsensitive =
+            !Process.prototype.isCaseInsensitive,
+        !Process.prototype.isCaseInsensitive,
+        'uncheck to ignore upper- and\n lowercase when comparing texts',
+        'check to distinguish upper- and\n lowercase when comparing texts',
+        true
     );
     addPreference(
         'Ternary Boolean slots',
