@@ -6954,7 +6954,7 @@ Process.prototype.costumeNamed = function (name) {
     }
     return detect(
         this.blockReceiver().costumes.asArray(),
-        c => c.name === name.toString()
+        c => snapEquals(c.name, name.toString())
     );
 };
 

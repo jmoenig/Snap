@@ -21,7 +21,7 @@
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
-    * messages and identifying sprites by their names is now case-insensitive by default (e.g. in "object", "broadcast", "of" blocks)
+    * messages and identifying sprites and costumes by their names is now case-insensitive by default (e.g. in "object", "broadcast", "of" blocks)
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -44,6 +44,7 @@
 * threads: made sprite name identification case-insensitive by default
 * objects: made messages (broadcasts) case-insensitive by default
 * objects: made "switch to costume" case-insensitive by default
+* threads: made costume name identification case-insensitive by default
 
 ### 2023-04-29
 * threads, gui: experimental hidden session preference settings for "case sensitive text comparison"
