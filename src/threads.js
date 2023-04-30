@@ -5187,7 +5187,7 @@ Process.prototype.getOtherObject = function (name, thisObj, stageObj) {
         // find the corresponding sprite on the stage
         thatObj = detect(
             stage.children,
-            morph => morph.name === name
+            morph => snapEquals(morph.name, name)
         );
         if (!thatObj) {
             // check if the sprite in question is currently being
@@ -6327,7 +6327,7 @@ Process.prototype.reportObject = function (name) {
     if (thisObj) {
         this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
-        if (stage.name === name) {
+        if (snapEquals(stage.name, name)) {
             thatObj = stage;
         } else {
             thatObj = this.getOtherObject(name, thisObj, stage);
