@@ -90,11 +90,11 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions, SnapSerializer*/
+embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-April-28';
+modules.objects = '2023-April-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -6857,8 +6857,8 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
         if (sel) {
             if (sel === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
-                return event === message ||
-                    (event instanceof Array && event[0] == message) || // nums
+                return snapEquals(event, message) ||
+                    (event instanceof Array && snapEquals(event[0], message)) ||
                     (event instanceof Array &&
                         event[0] === 'any message' &&
                         message !== '__shout__go__' &&
