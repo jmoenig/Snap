@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-29';
+modules.threads = '2023-April-30';
 
 var ThreadManager;
 var Process;
@@ -118,7 +118,6 @@ function snapEquals(a, b) {
         if (Process.prototype.isCaseInsensitive) {
             return x.toLowerCase() === y.toLowerCase();
         }
-        return x === y;
     }
 
     return x === y;

@@ -38,6 +38,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-04-30
+* threads: simplified snapEquals()
+
 ### 2023-04-29
 * threads, gui: experimental hidden session preference settings for "case sensitive text comparison"
 * extensions: new "txt_case_sensitive([bool])" extension primitive
