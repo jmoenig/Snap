@@ -4375,7 +4375,7 @@ SpriteMorph.prototype.doPlaySound = function (name) {
             : (typeof name === 'number' ? this.sounds.at(name)
                 : detect(
                     this.sounds.asArray(),
-                    s => s.name === name.toString()
+                    s => snapEquals(s.name, name.toString())
             )),
         ctx = this.audioContext(),
         gain =  this.getGainNode(),
