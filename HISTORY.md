@@ -43,6 +43,7 @@
 * threads: simplified snapEquals()
 * threads: made sprite name identification case-insensitive by default
 * objects: made messages (broadcasts) case-insensitive by default
+* objects: made "switch to costume" case-insensitive by default
 
 ### 2023-04-29
 * threads, gui: experimental hidden session preference settings for "case sensitive text comparison"

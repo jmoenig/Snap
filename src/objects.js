@@ -4338,7 +4338,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
             this.doWearPreviousCostume();
             return;
         }
-        costume = detect(arr, cst => cst.name === id);
+        costume = detect(arr, cst => snapEquals(cst.name, id));
         if (costume === null) {
             num = parseFloat(id);
             if (num === 0) {
