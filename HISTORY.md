@@ -45,6 +45,7 @@
 * blocks: changed sound-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed object-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed receiver-names dropdown menu to reflect the case-sensitivity preference setting
+* blocks: changed collidables-names dropdown menu to reflect the case-sensitivity preference setting
 
 ### 2023-04-30
 * threads: simplified snapEquals()
