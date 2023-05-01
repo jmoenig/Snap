@@ -11248,9 +11248,11 @@ InputSlotMorph.prototype.costumesMenu = function (searching) {
     if (block.selector !== 'doSwitchToCostume') {
         dict.current = ['current'];
     }
-    rcvr.costumes.asArray().forEach(costume =>
-        allNames = allNames.concat(costume.name)
-    );
+    rcvr.costumes.asArray().forEach(costume => {
+        if (!allNames.some(n => snapEquals(n, costume.name))) {
+            allNames.push(costume.name);
+        }
+    });
     if (allNames.length > 0) {
         dict['~'] = null;
         allNames.forEach(name =>
