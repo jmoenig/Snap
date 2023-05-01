@@ -11269,9 +11269,11 @@ InputSlotMorph.prototype.soundsMenu = function (searching) {
         allNames = [],
         dict = {};
 
-    rcvr.sounds.asArray().forEach(sound =>
-        allNames = allNames.concat(sound.name)
-    );
+    rcvr.sounds.asArray().forEach(sound => {
+        if (!allNames.some(n => snapEquals(n, sound.name))) {
+            allNames.push(sound.name);
+        }
+    });
     if (allNames.length > 0) {
         allNames.sort().forEach(name =>
             dict[name] = name
