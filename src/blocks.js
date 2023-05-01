@@ -11099,7 +11099,9 @@ InputSlotMorph.prototype.userEditMenu = function (searching) {
     dict['~'] = null;
     dict[stage.name] = stage.name;
     stage.children.forEach(morph => {
-        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary &&
+            !Object.keys(dict).some(k => snapEquals(k, morph.name))
+        ) {
             dict[morph.name] = morph.name;
         }
     });
