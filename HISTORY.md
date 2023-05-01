@@ -50,6 +50,7 @@
 * blocks: changed distance-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed clonable-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed user-edit-names dropdown menu to reflect the case-sensitivity preference setting
+* gui: changed new sprite name function to reflect the case-sensitivity preference setting
 
 ### 2023-04-30
 * threads: simplified snapEquals()

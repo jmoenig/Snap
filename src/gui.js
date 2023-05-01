@@ -80,13 +80,14 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
+*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-April-29';
+modules.gui = '2023-May-01';
 
 // Declarations
 
@@ -3870,9 +3871,10 @@ IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
 
 IDE_Morph.prototype.newName = function (name, elements) {
     var count = 1,
-        newName = name;
+        newName = name,
+        exist = e => snapEquals(e, newName);
 
-    while (contains(elements, newName)) {
+    while (elements.some(exist)) {
         count += 1;
         newName = name + '(' + count + ')';
     }
