@@ -11046,7 +11046,9 @@ InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
     dict[stage.name] = stage.name;
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
-            allNames.push(morph.name);
+            if (!allNames.some(n => snapEquals(n, morph.name))) {
+                allNames.push(morph.name);
+            }
         }
     });
     if (allNames.length > 0) {
