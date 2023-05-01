@@ -11072,7 +11072,9 @@ InputSlotMorph.prototype.receiversMenu = function (searching) {
     dict[stage.name] = stage.name;
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
-            dict[morph.name] = morph.name;
+            if (!Object.keys(dict).some(k => snapEquals(k, morph.name))) {
+                dict[morph.name] = morph.name;
+            }
         }
     });
     return dict;
