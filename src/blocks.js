@@ -10992,8 +10992,10 @@ InputSlotMorph.prototype.distancesMenu = function (searching) {
 
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
-            if (morph.name !== rcvr.name) {
-                allNames = allNames.concat(morph.name);
+            if (morph.name !== rcvr.name &&
+                !allNames.some(n => snapEquals(n, morph.name))
+            ) {
+                allNames.push(morph.name);
             }
         }
     });

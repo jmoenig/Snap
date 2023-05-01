@@ -47,6 +47,7 @@
 * blocks: changed receiver-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed collidables-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed location-names dropdown menu to reflect the case-sensitivity preference setting
+* blocks: changed distance-names dropdown menu to reflect the case-sensitivity preference setting
 
 ### 2023-04-30
 * threads: simplified snapEquals()
