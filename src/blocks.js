@@ -11021,7 +11021,9 @@ InputSlotMorph.prototype.clonablesMenu = function (searching) {
     }
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
-            allNames = allNames.concat(morph.name);
+            if (!allNames.some(n => snapEquals(n, morph.name))) {
+                allNames.push(morph.name);
+            }
         }
     });
     if (allNames.length > 0) {
