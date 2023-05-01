@@ -155,13 +155,13 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-April-28';
+modules.blocks = '2023-May-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10822,7 +10822,11 @@ InputSlotMorph.prototype.messagesMenu = function (searching) {
 
     stage.children.concat(stage).forEach(morph => {
         if (isSnapObject(morph)) {
-            allNames = allNames.concat(morph.allMessageNames());
+            morph.allMessageNames().forEach(msg => {
+                if (!allNames.some(m => snapEquals(m, msg))) {
+                    allNames.push(msg);
+                }
+            });
         }
     });
     allNames.sort().forEach(name =>

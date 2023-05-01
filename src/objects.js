@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-April-30';
+modules.objects = '2023-May-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -6831,7 +6831,7 @@ SpriteMorph.prototype.allMessageNames = function () {
             )) {
                 txt = morph.evaluate();
                 if (isString(txt) && txt !== '') {
-                    if (!contains(msgs, txt)) {
+                    if (!msgs.some(m => snapEquals(m, txt))) {
                         msgs.push(txt);
                     }
                 }

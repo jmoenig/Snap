@@ -39,6 +39,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-01
+* blocks, objects: changed messages dropdown menu to reflect the case-sensitivity preference setting
+
 ### 2023-04-30
 * threads: simplified snapEquals()
 * threads: made sprite name identification case-insensitive by default
