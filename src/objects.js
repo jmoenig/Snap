@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-01';
+modules.objects = '2023-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -8361,8 +8361,9 @@ SpriteMorph.prototype.newCostumeName = function (name, ignoredCostume) {
         newName = stem,
         all = this.costumes.asArray().filter(each =>
             each !== ignoredCostume
-        ).map(each => each.name);
-    while (contains(all, newName)) {
+        ).map(each => each.name),
+        exist = e => snapEquals(e, newName);
+    while (all.some(exist)) {
         count += 1;
         newName = stem + '(' + count + ')';
     }

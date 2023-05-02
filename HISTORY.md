@@ -40,6 +40,9 @@
     * Armenian, thanks to the contributors!
 
 ### 2023-05-01
+* gui: changed new costume name function to reflect the case-sensitivity preference setting
+
+### 2023-05-01
 * blocks, objects: changed messages dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed costume-names dropdown menu to reflect the case-sensitivity preference setting
 * blocks: changed sound-names dropdown menu to reflect the case-sensitivity preference setting
