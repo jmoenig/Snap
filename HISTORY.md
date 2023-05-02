@@ -44,6 +44,7 @@
 * objects: changed new costume name function to reflect the case-sensitivity preference setting
 * objects, threads: fixed costume naming rule for video snaps
 * objects: changed new sound name function to reflect the case-sensitivity preference setting
+* objects: fixed costume naming rule for nameless costumes
 
 ### 2023-05-01
 * blocks, objects: changed messages dropdown menu to reflect the case-sensitivity preference setting

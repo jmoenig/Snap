@@ -4208,7 +4208,7 @@ SpriteMorph.prototype.visibleScopeFor = function (varName, isGlobal) {
 
 SpriteMorph.prototype.addCostume = function (costume) {
     if (!costume.name) {
-        costume.name = 'costume' + (this.costumes.length() + 1);
+        costume.name = this.newCostumeName(localize('costume'));
     }
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
