@@ -33,6 +33,7 @@
     * fixed stopping ASK prompter under certain race conditions
     * fixed MAP, KEEP, FIND and COMBINE primitives to work with JS-funargs
     * fixed assigning same costume names to recurrent video snaps
+    * fixed sound naming rules for same-named imports
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
@@ -45,6 +46,7 @@
 * objects, threads: fixed costume naming rule for video snaps
 * objects: changed new sound name function to reflect the case-sensitivity preference setting
 * objects: fixed costume naming rule for nameless costumes
+* objects: fixed sound naming rules for same-named imports
 
 ### 2023-05-01
 * blocks, objects: changed messages dropdown menu to reflect the case-sensitivity preference setting
