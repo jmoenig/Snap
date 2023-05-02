@@ -8397,8 +8397,9 @@ SpriteMorph.prototype.newSoundName = function (name, ignoredSound) {
         newName = stem,
         all = this.sounds.asArray().filter(each =>
             each !== ignoredSound
-        ).map(each => each.name);
-    while (contains(all, newName)) {
+        ).map(each => each.name),
+        exist = e => snapEquals(e, newName);
+    while (all.some(exist)) {
         count += 1;
         newName = stem + '(' + count + ')';
     }
