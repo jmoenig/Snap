@@ -32,6 +32,7 @@
     * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
     * fixed stopping ASK prompter under certain race conditions
     * fixed MAP, KEEP, FIND and COMBINE primitives to work with JS-funargs
+    * fixed assigning same costume names to recurrent video snaps
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
@@ -40,7 +41,8 @@
     * Armenian, thanks to the contributors!
 
 ### 2023-05-01
-* gui: changed new costume name function to reflect the case-sensitivity preference setting
+* objects: changed new costume name function to reflect the case-sensitivity preference setting
+* objects, threads: fixed costume naming rule for video snaps
 
 ### 2023-05-01
 * blocks, objects: changed messages dropdown menu to reflect the case-sensitivity preference setting

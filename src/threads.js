@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-April-30';
+modules.threads = '2023-May-02';
 
 var ThreadManager;
 var Process;
@@ -6669,9 +6669,9 @@ Process.prototype.reportVideo = function(attribute, name) {
         return stage.videoMotion.motionDirection;
     case 'snap':
         if (thatObj instanceof SpriteMorph) {
-            return thatObj.projectionSnap();
+            return thatObj.projectionSnap(thisObj);
         }
-        return stage.projectionSnap();
+        return stage.projectionSnap(thisObj);
     }
     return -1;
 };

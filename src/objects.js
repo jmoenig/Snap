@@ -8865,7 +8865,7 @@ StageMorph.prototype.stopVideo = function() {
     this.videoMotion = null;
 };
 
-StageMorph.prototype.stopProjection = function() {
+StageMorph.prototype.stopProjection = function () {
     if (this.projectionSource) {
         this.stopProjectionSource();
         this.projectionSource.remove();
@@ -8875,11 +8875,11 @@ StageMorph.prototype.stopProjection = function() {
     this.clearProjectionLayer();
 };
 
-StageMorph.prototype.projectionSnap = function() {
+StageMorph.prototype.projectionSnap = function (target) {
     var snap = newCanvas(this.dimensions, true),
         ctx = snap.getContext('2d');
     ctx.drawImage(this.projectionLayer(), 0, 0);
-    return new Costume(snap, this.newCostumeName(localize('snap')));
+    return new Costume(snap, (target || this).newCostumeName(localize('snap')));
 };
 
 // StageMorph pixel access:
