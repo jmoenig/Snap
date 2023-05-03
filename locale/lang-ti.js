@@ -232,7 +232,7 @@ SnapTranslator.dict.ti = {
 
     // names:
     'Sprite':
-        'ውዱዕ',
+        'ትንኩሊብ',
     'Stage':
         'መድረኽ',
 
@@ -246,11 +246,11 @@ SnapTranslator.dict.ti = {
 
     // new sprite button:
     'add a new sprite':
-        'ሓድሽ ውዱዕ ወስኽ',
+        'ሓድሽ ትንኩሊብ ወስኽ',
     'add a new Turtle sprite':
-        'ሓድሽ ውዱዕ ወስኽ',
+        'ሓድሽ ትንኩሊብ ወስኽ',
     'paint a new sprite':
-        'ሓድሽ ውዱዕ ስኣል',
+        'ሓድሽ ትንኩሊብ ስኣል',
     'take a camera snapshot and\nimport it as a new sprite':
         'ብመስኣሊት ዝተላዕለ ዉዱዕ ወስኽ',
     
@@ -296,8 +296,8 @@ SnapTranslator.dict.ti = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'መድረኽ ተመሪጹ፥\nመስረቲ ምንቅስቓስ \n'
-            + 'ሕጡባት ኣይተረኽቡን',
+        'መድረኽ ተመሪጹ፥\nመባእታውይን\n'
+            + 'ናይ ምንቅስቓስ ሕጡባት ኣይተረኽቡን',
 
     'move %n steps':
         '%n ስጉምቲ ኪድ',
@@ -387,7 +387,7 @@ SnapTranslator.dict.ti = {
         '%n ቀጸላ ንድሕሪት ተመለስ',
 
     'development mode \ndebugging primitives:':
-        'መዳይ ጠቢብ \n መጸጸይ መስረቲ ሕጡባት',
+        'መዳይ ጠቢብ \n መጸጸይ መባእታውይን ሕጡባት',
     'console log %mult%s':
         'ኣብ ሰደቓ መዝግብ፥ %mult%s ',
     'alert %mult%s':
@@ -652,7 +652,7 @@ SnapTranslator.dict.ti = {
     'r-g-b-a':
         'ቀ-ቀ-ሰ-ጋ (R-G-B-A) መጠናት ሕብሪ',
     'sprites' :
-        'ውዱዓት',
+        'ትንኩሊባት',
     'reset timer':
         'ሰዓት ዓቐን ከም ብሓድሽ ጀምር',
     'timer':
@@ -668,7 +668,7 @@ SnapTranslator.dict.ti = {
     'turbo mode':
         'ፈጣን',
     'flat line ends':
-        'ገፊሕ ሕንጻጽ',
+        'ትኽ ዝበለ መወዳእታ ሕንጻጽ',
     'is %setting on?':
         ' %setting ዶ እዩ፧?',
     'set %setting to %b':
@@ -736,7 +736,7 @@ SnapTranslator.dict.ti = {
     'frames':
         'መቓናት',
     'log pen vectors':
-        'መዝገብ ሕንጻጻት ብርዒ',
+        'ሕንጻጻት ብርዒ መዝገብ',
     '%block of block %repRing':
         '%block ናይ ሕጡብ %repRing',
     'label':
@@ -818,7 +818,7 @@ SnapTranslator.dict.ti = {
     'is %s identical to %s ?':
         '%s ምስ %s ሓደ ዓይነት ዶ እዮም፧',
     'JavaScript function ( %mult%s ) { %code }':
-        'ጃቫስክሪፕት ተግባር ( %mult%s ) { %code }',
+        'ተግባር ጃቫስክሪፕት ( %mult%s ) { %code }',
     'compile %repRing':
     	'%repRing ኣርንብ',
 
@@ -1023,9 +1023,9 @@ SnapTranslator.dict.ti = {
     'Select a sound from the media library':
         'ድምጺ ካብ ማዕከን ድምጻዊ ሓበሬታ ምረጽ',
     'Undelete sprites...':
-        'ድምሰሳ ውዱዓት ሰርዝ...',
+        'ድምሰሳ ትንኩሊባት ሰርዝ...',
     'Bring back deleted sprites':
-        'ዝተደምሰሱ ውዱዓት ምለስ',
+        'ዝተደምሰሱ ትንኩሊባት ምለስ',
     'trash is empty':
         'ዘንቢል ጉሓፍ ጥራዩ እዩ',
 
@@ -1103,169 +1103,169 @@ SnapTranslator.dict.ti = {
     'Blurred shadows':
         'ደብዛዝ ጽላሎት',
     'uncheck to use solid drop\nshadows and highlights':
-        'ድሙቐ ጽላሎትን ብርሃንን\nንምጥቃም ኣጥፍእ',
+        'ኣጥፍእ፡ ድሙቐ ጽላሎትን ብርሃንን\nንምጥቃም',
     'check to use blurred drop\nshadows and highlights':
-        'ደብዛዝ ጽላሎትን ብርሃንን\nንምጥቃም ወልዕ',
+        'ወልዕ፡ ደብዛዝ ጽላሎትን ብርሃንን\nንምጥቃም',
     'Zebra coloring':
         'ሕብሪ ዘብራ',
     'check to enable alternating\ncolors for nested blocks':
-        'ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት ወልዕ',
+        'ወልዕ፡ ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት',
     'uncheck to disable alternating\ncolors for nested block':
-        'ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት ኣጥፍእ',
+        'ኣጥፍእ፡ ተለወዋጢ ሕብሪ\nዝተሳኹዑ ሕጡባት',
     'Dynamic input labels':
         'ተለወዋጢ ዕላመት ኣታዊ',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመታት ንምኽልካል ኣጥፍእ',
+        'ኣጥፍእ፡ ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመታት ንምኽልካል',
     'check to enable dynamic\nlabels for variadic inputs':
-        'ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመትታት ንምሃብ ወልዕ',
+        'ወልዕ፡ ንቫርያዳውያን (variadic) ኣትውቲ\nተለወዋጢ ዕላመትታት ንምሃብ',
     'Prefer empty slot drops':
         'ባዶ ተሓዝ-ቦታ ሕረ',
     'settings menu prefer empty slots hint':
-        'ኣብ ምምባር ሕጡባት\nባዶ ትሓዝቲ-ቦታ ንምሕራይ ወልዕ',
+        'ወልዕ፡ ኣብ ምንባር ሕጡባት\nባዶ ትሓዝቲ-ቦታ ንምሕራይ',
     'uncheck to allow dropped\nreporters to kick out others':
         'ዝተነብሩ ሕጡባት ምልጋስ ንምኻል ኣጥፍእ',
     'check to turn on\n visible stepping (slow)':
-        'መስርሕ መርሓ\nንምክትታል (ዘገምታዊ መስርሕ) ወልዕ',
+        'ወልዕ፡ መስርሕ መርሓ\nንምክትታል (ዘገምታዊ መስርሕ) ',
     'uncheck to turn off\nvisible stepping':
-        'ዘገምታዊ መስርሕ መርሓ\nደው ንምባል ኣጥፍእ',
+        'ኣጥፍእ፡ ዘገምታዊ መስርሕ መርሓ\nደው ንምባል ',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'ስፊሕ ቅጥዒ ኣታዊ',
     'Plain prototype labels':
-        'Einfache Prototyp-Beschriftung',
+        'ተራ ዕላመት ቅድመ-መርኣያ',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+        'ኣጥፍእ፡ ንምልክት (+)\nካብ ዕላመት ሕጡባት ቅድመ-መርኣያ ክትስውር',
     'check to hide (+) symbols\nin block prototype labels':
-        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
+        'ወልዕ፡ ንምልክት (+)\nኣብ ዕላመት ሕጡባት ቅድመ-መርኣያ ክተርኢ',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'ወልዕ፡ ዓይነት ሰነድ\nኣብ ቅጥዒ ኣታዊ ንምርኣይ',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'ኣጥፍእ፡ ሓጺር ቅጥዒ ኣታዊ\nንምጥቃም',
     'JavaScript extensions':
-        'JavaScript Erweiterungen',
+        'ተወሰኽቲ ጃቫስችሪፕት ',
     'check to support\nnative JavaScript functions':
-        'einschalten um JavaScript-Funktionen\ndirekt in Snap! zu ermöglichen',
+        'ወልዕ፡ ተግባራት ጃቫስክሪፕት\nብቐጥታ ኣብ ስናፕ(Snap!) ንምጥቃም',
     'uncheck to disable support for\nnative JavaScript functions':
-        'ausschalten, um potentiell gefährliche\nJavaScript-Funktionen zu verhindern',
+        'ኣጥፍእ፡ ዝውታረ መበቆላውያን\nተግባራት ጃቫስክሪፕት ንምውጋድ',
     'JavaScript extensions for Snap!\nare turned off':
-        'JavaScript Erweiterungen für Snap!\nsind ausgeschaltet',
+        'ተወሰኽቲ ጃቫስችሪፕት ናይ ስናፕ(Snap!)\nካብ ንጥፈት ደው ኢሎም',
     'Extension blocks':
-        'Erweiterungsblöcke',
+        'ተወሰኽቲ ሕጡባት',
     'uncheck to hide extension\nprimitives in the palette':
-        'ausschalten um Blöcke für Erweiterungen\nin der Palette zu verbergen',
+        'ኣጥፍእ፡ ተወሰኽቲ ሕጡባት\nካብ ጽላት ንምኽዋል',
     'check to show extension\nprimitives in the palette':
-        'einschalten um Blöcke für Erweiterungen\nin der Palette anzuzeigen',
+        'ወልዕ፡ ተወሰኽቲ ሕጡባት\nኣብ ጽላት ንምርኣይ',
     'Input sliders':
-        'Eingabeschieber',
+        'ኣንሻታቲ ኣታዊ',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'ኣጥፍእ፡ ኣንሻታቲ ኣታዊ\nካብ ሳጹን ምዝገባ ንምውጋድ',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'ወልዕ፡ ኣንሻታቲ ኣታዊ\nኣብ ሳጹን ምዝገባ ንምጥቃም',
     'Retina display support':
-        'Retina Bildschirmauflösung',
+        'ረቲና ጉልሒ ዓልባ-ምርኢት',
     'uncheck for lower resolution,\nsaves computing resources':
-        'ausschalten um eine niedrigere Auflösung zu erhalten\nund weniger Rechenleistung zu benötigen',
+        'ኣጥፍእ፡ ብትሑት ጉልሒ\nናይ ቅምራ ሓይሊ ንምዕቃብ',
     'check for higher resolution,\nuses more computing resources':
-        'einschalten um eine höhere Auflösung zu erhalten,\nbenötigt mehr Rechenleistung',
+        'ወልዕ፡ ልዑል ጉልሒ ንምጥቃም፡\nአዚ ብዙሕ ናይ ቅምራ ሓይሊ ይጠልብ',
     'Codification support':
-        'Kodifikation',
+        'ናብ ኮደ ተርጎሚ',
     'Clicking sound':
-        'Akustisches Klicken',
+        'ድምጺ ቃዕታ',
     'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
+        'ኣጥፍእ፡ ድምጺ ቃዕታ ንምውጋድ',
     'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'ወልዕ፡ ድምጺ ቃዕታ ንምቅላሕ',
     'Animations':
-        'Animationen',
+        'ምንቅስቓሳት',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'ኣጥፍእ፡ ምንቅስቓሳት\nስደቓ-ዕዮ (IDE) ንምግታእ',
     'Turbo mode':
-        'Turbomodus',
+        'ፈጣን',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'ወልዕ፡ ፍጻመ\nመርሓ ንምቕዳም',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'ኣጥፍእ፡ ፍጻመ መርሓ\nናብ ንቡር ቅልጣፈ ንምምላስ',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
+        'ወልዕ፡ ምንቅስቓሳት\nስደቓ፡ዕዮ (IDE) ንምፍቃድ',
     'Flat design':
-        'Helles Design',
+        'ብሩህ ንድፊ',
     'check for alternative\nGUI design':
-        'einschalten für alternative Nutzeroberfläche',
+        'ወልዕ፡ ንኣማራጺ ንድፊ\nባብ ተጠቃሚ (GUI)',
     'uncheck for default\nGUI design':
-        'ausschalten für Standard-Nutzeroberfläche',
+        'ኣጥፍእ፡ ንልሙድ ንድፊ\nባብ ተጠቃሚ (GUI) ',
     'Nested auto-wrapping':
-        'Automatisches Umklammern',
+        'ዝተሳኹዐ ጥማር',
     'Keyboard Editing':
-        'Tastaturunterstützung',
+        'ኣርትዖት ብሰሌዳ መፋትሕ',
     'Table support':
-        'Tabellenunterstützung',
+        'ሰንጠረዥ ምጥቃም ኣኽእል',
     'Table lines':
-        'Tabellen mit Linien',
+        'መስመራት ሰንጠረዥ',
     'Visible stepping':
-        'Programmausführung verfolgen',
+        'ዘገምታዊ መስርሕ መርሓ መደብ',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'ሰንስለታት-መስርሕ(Thread)\nዝጻወሩ መርሓታት',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'ኣጥፍእ፡ ኣብ መፈጸምታ ዘይበጽሐ መስርሕ\nመርሓታት ምቕጻል ንምኽኣል',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'ወልዕ፡ ኣብ መፈጸምታ ዘይበጽሐ መስርሕ\nመርሓታት ካብ ምቕጻል ንምግታእ',
     'Flat line ends':
-        'Flache Pinselstriche',
+        'ትኽ ዝበለ መወዳእታ ሕንጻጽ',
     'check for flat ends of lines':
-        'einschalten f\u00fcr flache\nPinselstrichenden',
+        'ወልዕ፡ ንትኽ ዝበለ\nመወዳእታ ሕንጻጽ',
     'uncheck for round ends of lines':
-        'auschalten f\u00fcr runde\nPinselstrichenden',
+        'ኣጥፍእ፡ ንዓንኬላዊ\nመወዳእታ ሕንጻጽ',
     'Ternary Boolean slots':
-        'Ternäre Bool\'sche Inputs',
+        'ኣተውቲ ስለስተ ትሕዝቶኡ\nመንጠቕያ (Boolean) ',
     'Inheritance support':
-        'Prototypische Vererbung',
+        'ዓይነታዊ ምውራስ',
     'Hyper blocks support':
-        'Hyper-Blöcke',
+        'ንጡፋት ሕጡባት',
     'uncheck to disable\nusing operators on lists and tables':
-         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
+         'ኣጥፍእ፡ ምጥቃም ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምግታእ',
     'check to enable\nusing operators on lists and tables':
-         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
+         'ወልዕ፡ ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምጥቃም',
     'Log pen vectors':
-        'Malstiftvektoren aufzeichnen',
+        'ሕንጻጻት ብርዒ መዝገብ',
     'uncheck to turn off\nlogging pen vectors':
-        'ausschalten, um Malstiftbewegungen\nnicht mehr aufzuzeichnen',
+        'ኣጥፍእ፡ ምዝገባ\nሕንጻጻት ብርዒ ደው ንምባል',
     'check to turn on\nlogging pen vectors':
-        'einschalten, um Malstiftbewegungen\nals Vektor aufzuzeichnen',
+        'ወልዕ፡ ሕንጻጻት ብርዒ\nንምምዝጋብ',
     'Single palette':
-        'Einheitliche Palette',
+        'ንጽል ጽላት',
     'check to show all blocks in a single palette':
-        'einschalten, um alle Blöcke in\neiner einzigen Palette zu sehen',
+        'ወልዕ፡ ኩሎም ሕጡባት\nኣብ ንጽል ጽላት ንምርኣይ',
     'uncheck to show only the selected category\'s blocks':
-        'ausschalten, um nur die Blöcke der ausgewählten Kategorie zu sehen',
+        'ኣጥፍእ፡ ሕጡባት\nናይ ዝተመርጸ ምድብ ጥራይ ንምርኣይ',
     'Show categories':
-        'Kategorien anzeigen',
+        'ምድባት ኣርኢ',
     'uncheck to hide\ncategory names\nin the palette':
-        'ausschalten, um die\nNamen der Kategorien\nin der Palette zu verbergen',
+        'ኣጥፍእ፡ ኣስማት ምድባት\nካብ ጽላት ንምኽዋል',
     'check to show\ncategory names\nin the palette':
-        'einschalten, umd die\nNamen der Kategorien\nin der Palette anzuzeigen',
+        'ወልዕ፡ ኣስማት ምድባት\nኣብ ጽላት ንምርኣይ',
     'Show buttons':
-        'Knöpfe anzeigen',
+        'መላጉም ኣርኢ',
     'uncheck to hide buttons\nin the palette':
-        'ausschalten, um Knöpfe in\nder Palette zu verbergen',
+        'ኣጥፍእ፡ መላጉም\nካብ ጽላት ንምኽዋል',
     'check to show buttons\nin the palette':
-        'einschalten, um Knöpfe in\nder Palette anzuzeigen',
+        'ወልዕ፡ መላጉም\nኣብ ጽላት ንምርኣይ',
     'HSL pen color model':
-        'HSL Farbmodell',
+        'HSL ዓይነት ሕብሪ',
      'uncheck to switch pen colors\nand graphic effects to HSV':
-        'ausschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSV zurückzusetzen',
+        'ኣጥፍእ፡ ሕብሪ ብርዒን\nስእላዊ ጽልዋታትን ናብ HSV ንምቕያር',
     'check to switch pen colors\nand graphic effects to HSL':
-        'einschalten, um das Farbmodell\nfür den Malstift und die Grafikeffekte\nauf HSL zu setzen',
+        'ወልዕ፡ ሕብሪ ብርዒን\nስእላዊ ጽልዋታትን ናብ HSL ንምቕያር',
     'Disable click-to-run':
-        'Block-Klicks deaktivieren',
+        'ሕጡባት ምጥዋቕ ግታእ',
     'uncheck to enable\ndirectly running blocks\nby clicking on them':
-        'ausschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu ermöglichen',
+        'ኣጥፍእ፡ ሕጡባት\nምስተጠወቑ ብቐጥታ ስራሕ\nከምዝጅምሩ ንምግባር',
     'check to disable\ndirectly running blocks\nby clicking on them':
-        'einschhalten, um direktes Ausführen\nvon Blöcken durch Anklicken\nzu verhindern',
+        'ወልዕ፡ ሕጡባት\nምስተጠወቑ ብቐጥታ ስራሕ\nከምዘይጅምሩ ንምግባር',
     'Disable dragging data':
-        'Daten-Herausziehen deaktivieren',
+        'ምስሓብ ሰነድ ግታእ',
     'uncheck to drag media\nand blocks out of\nwatchers and balloons':
-        'ausschalten, um Medien und Blöcke\naus Variablen und Sprechblasen\nherauszuziehen',
+        'ኣጥፍእ፡ ሰነዳትን ሕጡባትን\nካብ ትቓያየርትን ዓፍራታት ዘረባን\nስሒብካ ንምውጻእ',
     'disable dragging media\nand blocks out of\nwatchers and balloons':
-        'verhindert, dass Medien und Blöcke\naus Variablen und Sprechblasen\nherausgezogen werden können',
+        'ወልዕ፡ ሰነዳትን ሕጡባትን\nካብ ትቓያየርትን ዓፍራታት ዘረባን\nስሒብካ ካብ ምውጻእ ምግታእ',
 
     // inputs
     'with inputs':
