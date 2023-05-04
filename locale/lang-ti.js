@@ -914,7 +914,7 @@ SnapTranslator.dict.ti = {
     'add %s to %l':
         'ን %s ናብ %l መልእ',
     'delete %ida of %l':
-        '%ida ካብ %l እለ',
+        '%ida ካብ %l ደምስስ',
     'insert %s at %idx of %l':
         '%s ኣብ %idx ናይ %l ኣእቱ',
     'replace item %idx of %l with %s':
@@ -965,15 +965,15 @@ SnapTranslator.dict.ti = {
         'ፕሮጀክት ካብ ደገ ጸዓን,\nእኩብ ሕጡባት,\n'
             + 'ልብሲ ወይ ድምጺ',
     'Export project as plain text...':
-        'ፕሮጀክት ከም ተራ ጽሑፍ ናብ ደገ ስደድ...',
+        'ፕሮጀክት ከም ተራ ጽሑፍ ናብ ደገ ልኣኽ...',
     'Export project...':
-        'ፕሮጀክት ናብ ደገ ስደድ...',
+        'ፕሮጀክት ናብ ደገ ልኣኽ...',
     'save project data as XML\nto your downloads folder':
         'ፕሮጀክት ከም ሰነድ XML\n ኣብ መኽዘን ዝተራገፈ ሰነዳት\nናይ ባብ መርበብ ሓበሬታ ዓቅብ',
     'show project data as XML\nin a new browser window':
         'ፕሮጀክት ከም XML\nኣብ መስኮት ባብ መርበብ ሓበሬታ ኣርኢ',
     'Export blocks...':
-        'ሕጡባት ናብ ደገ ስደድ...',
+        'ሕጡባት ናብ ደገ ልኣኽ...',
     'save global custom block\ndefinitions as XML':
         'ኩሎም ዓሚላውያን ሕጡባት\nከም ሰነድ XML ዓቅብ',
     'Unused blocks...':
@@ -999,7 +999,7 @@ SnapTranslator.dict.ti = {
     'Add scene...':
         'ዓውደ ፍጻመ ወስኽ...',
     'Export summary...':
-        'ጽማቝ ሓበሬታ ናብ ደገ ስደድ...',
+        'ጽማቝ ሓበሬታ ናብ ደገ ልኣኽ....',
     'save a summary\nof this project':
         'ናይ ፕሮጀክት ጽማቝ ሓበሬታ ዓቅብ',
     'Contents':
@@ -1269,93 +1269,93 @@ SnapTranslator.dict.ti = {
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'ምስ ኣተውቲ',
     'input names:':
-        'Eingaben:',
+        'ኣስማት ኣተውቲ፦',
     'Input Names:':
-        'Eingaben:',
+        'ኣስማት ኣተውቲ፦',
     'input list:':
-        'Eingabeliste:',
+        'ዝርዝር ኣተውቲ፦',
 
     // context menus:
     'help':
-        'Hilfe',
+        'ሓገዝ',
 
     // palette:
     'find blocks':
-        'Blöcke finden',
+        'ሕጡባት ኣናዲ',
     'hide blocks...':
-        'Blöcke verbergen...',
+        'ሕጡባት ከውል...',
     'Hide blocks in palette':
-        'Blöcke verbergen',
+        'ናይ ጽላት ሕጡባት ከውል',
     'unused':
-        'nicht verwendete',
+        'ኣብ ጥቕሚ ዘይወዓለ',
     'make a category...':
-        'Neue Kategorie...',
+        'ሓድሽ ምድብ ኣዳሉ...',
     'New Category':
-        'Neue Kategorie',
+        'ሓድሽ ምድብ',
     'Blocks category name:':
-        'Name der neuen Block-Gruppe:',
+        'ስም ምድብ፦',
     'Category color':
-        'Kategoriefarbe',
+        'ሕብሪ ምድብ',
     'red':
-        'rot',
+        'ቀይሕ',
     'green':
-        'grün',
+        'ቀጠልያ',
     'blue':
-        'blau',
+        'ሰመያዊ',
     'delete a category...':
-        'Kategorie löschen...',
+        'ምድብ ደምስስ...',
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'ሓገዝ...',
     'relabel...':
-        'Umbenennen...',
+        'ዕላመት ቀይር...',
     'compile':
-        'Kompilieren',
+        'ኣርንብ',
     'uncompile':
-        'Entkompilieren',
+        'ዝተኣርነበ ፍታሕ',
     'duplicate':
-        'Duplizieren',
+        'ቅዳሕ',
     'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
+        'ቅዳሕ\nንቕዳሕ ካኣ ሓዝ',
     'only duplicate this block':
-        'nur diesen Block duplizieren',
+        'ነዛ ሕጡብ ጥራይ ቅዳሕ',
     'extract':
-        'herausziehen',
+        'ኣውጽእ',
     'only grab this block':
-        'nur diesen Block bewegen',
+        'ነዛ ሕጡብ ጥራይ ኣንቀሳቕስ',
     'delete':
-        'L\u00f6schen',
+        'ደምስስ',
     'senders...':
-        'Sender...',
+        'ሰዳዲ...',
     'receivers...':
-        'Empfänger...',
+        'ተቐባሊ...',
     'script pic...':
-        'Skriptbild...',
+        'ስእሊ መርሓ...',
     'save a picture\nof this script':
-        'ein Bild dieses\nSkripts speichern',
+        'ስእሊ ናይ\nእዚ መርሓ ዓቅብ',
     'result pic...':
-        'Ergebnisbild...',
+        'ስእሊ ውጽኢት...',
     'save a picture of both\nthis script and its result':
-        'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
+        'ስእሊ ናይ እዚ መርሓን\nውጽኢቱን ዓቅብ',
     'export script':
-        'Skript exportieren',
+        'መርሓ ናብ ደገ ልኣኽ',
     'download this script\nas an XML file':
-        'dieses Skript als XML\nDatei herunterladen',
+        'ነዚ መርሓ ከም\nሰነድ XML ኣራግፍ',
     'ringify':
-        'Umringen',
+        'ኣብ ቀለቤት ኣእቱ',
     'unringify':
-        'Entringen',
+        'ካብ ቀለቤት ኣውጽእ',
     'transient':
-        'nicht persistent',
+        'ግዜያዊ',
     'uncheck to save contents\nin the project':
-        'ausschalten, um den Inhalt\nim Projekt zu speichern',
+        'ወልዕ፡ ትሕዝቶ ኣብ ውሽጢ\nፕሮጀክት ንምዕቃብ',
     'check to prevent contents\nfrom being saved':
-        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
+        'ኣጥፍእ፡ ምዕቃብ ትሕዝቶ\nኣብ ውሽጢ ፕሮጀክት ንምግትእ',
     'new line':
-        'neue Zeile',
+        'ሓድሽ መስመር',
 
     // custom blocks:
     'delete block definition...':
