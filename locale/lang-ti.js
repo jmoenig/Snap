@@ -614,7 +614,7 @@ SnapTranslator.dict.ti = {
     'ask %spr for %repRing %inputs':
         'ን %spr ሕተት %repRing %inputs',
     'When %edit is edited %message':
-        'ኣብልዕሊ %edit ኣርትዖት ምስዝፍጸም %message',
+        '%edit ምስ ዝእረም %message',
     'anything':
         'ዝኾነ ነገር',
 
@@ -1195,7 +1195,7 @@ SnapTranslator.dict.ti = {
     'Nested auto-wrapping':
         'ዝተሳኹዐ ጥማር',
     'Keyboard Editing':
-        'ኣርትዖት ብሰሌዳ መፋትሕ',
+        'መአረምታ ብሰሌዳ መፋትሕ',
     'Table support':
         'ሰንጠረዥ ምጥቃም ኣኽእል',
     'Table lines':
@@ -1359,51 +1359,51 @@ SnapTranslator.dict.ti = {
 
     // custom blocks:
     'delete block definition...':
-        'Blockdefinition l\u00f6schen...',
+        'መምርሒ ሕጡብ ደምስስ...',
     'duplicate block definition...':
-        'Blockdefinition duplizieren...',
+        'መምርሒ ሕጡብ ቅዳሕ...',
     'export block definition...':
-        'Blockdefinition exportieren...',
+        'መምርሒ ሕጡብ ናብ ደገ ልኣኽ...',
     'including dependencies':
-        'mit allen verwendeten Blöcken',
+        'ምስ ኩሎም ኣብ ጥቕሚ ዘለው ሕጥባት',
     'edit...':
-        'Bearbeiten...',
+        'ኣሳናድእ...',
     'translations...':
-        'Übersetzungen...',
+        'ትርጉማት...',
     'block variables...':
-        'Blockvariablen...',
+        'ተቓያየርቲ ናይ ሕጡብ...',
     'in palette':
-        'In der Palette',
+        'ኣብ ጽላት',
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'ኣሳናድእ',
     'clone':
-        'Klonen',
+        'ቅዳሕ',
     'move':
-        'Verschieben',
+        'ኣንቀሳቕስ',
     'pivot':
-        'Angelpunkt',
+        'መቐልስ',
     'edit the costume\'s\nrotation center':
-        'Drehpunkt des Kostüms\nanzeigen und verschieben',
+        'ዙረት ማእከል ናይ ልብሲ\nኣርኢን ኣተዓራርን',
     'rotate':
-    	'Drehen',
+    	'ኣዙር',
     'stick to':
-        'Befestigen an',
+        'ኣጥብቕ ኣብ',
     'detach from':
-        'Abtrennen von',
+        'ፍለ ካብ',
     'detach all parts':
-        'Alle Teile abtrennen',
+        'ኩሎም ኣባላት ፈላሊ',
     'export...':
-        'Exportieren...',
+        'ናብ ደገ ልኣኽ...',
     'parent...':
-        'Vorfahr...',
+        'ወላዲ...',
     'current parent':
-        'aktueller Vorfahr',
+        'እዋናዊ ወላዲ',
     'release':
-        'Entlassen',
+        'ፍታሕ',
     'make temporary and\nhide in the sprite corral':
-        'temporär machen\nund Icon verstecken',
+        'ግዜያዊ ግበር\nኣብመዕቆቢ ትንኩሊብ ድማ ሕባእ',
 
     // stage:
     'show all':
