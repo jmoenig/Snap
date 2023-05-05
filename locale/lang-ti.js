@@ -1407,21 +1407,21 @@ SnapTranslator.dict.ti = {
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'ኩሉ ኣርኢ',
     'pic...':
-        'Bild exportieren...',
+        'ስእሊ ናብ ደገ ልኣኽ...',
     'save a picture\nof the stage':
-        'ein Bild der\nBühne speichern',
+        'ስእሊ ናይ መድረኽ\nዓቅብ',
     'svg...':
-        'SVG exportieren...',
+        'SVG ናብ ደገ ልኣኽ...',
     'export pen trails\nline segments as SVG':
-        'Striche in Malspuren als\nVektorgraphik exportieren',
+        'ሕንጻጻት ኣብ ኣሰራት ብርዒ\nከም SVG ናብ ደገ ልኣኽ',
     'there are currently no\nvectorizable pen trail segments':
-        'momentan gibt es keine\nvektorisierbaren Malspuren',
+        'ሕጂ ናብ SVG ክቕየሩ ዝኽእሉ\nኣሰራት ብርዒ የለዉን',
     'turn all pen trails and stamps\ninto a new background for the stage':
-        'Hintergrund aus allen Malspuren und\nStempelabdrücken auf der Bühne erstellen',
+        'ኩሉ ኣሰራት ብርዒን ማሕተማትን\nናብ ድሕረ ባይታ ናይ መድረኽ ቀይር',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'aus allen Malspuren und Stempelabdrücken ein\nKostüm für die momentan ausgewählte Figur erstellen',
+        'ካብ ኩሉ ኣሰራት ብርዒን ማሕተማትን\nሓድሽ ልብሲ ነታ ተመሪጻ ዘላ ትንኩሊብ ሰንዕ',
 
     // scripting area
     'clean up':
