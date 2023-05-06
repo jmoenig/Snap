@@ -1530,57 +1530,57 @@ SnapTranslator.dict.ti = {
 
     // fade blocks
     'Fade blocks':
-        'Bl\u00f6cke ausblenden',
+        'ሕጡባት ኣህስስ',
     'block-solid (0)':
-        'normal (0)',
+        'ልሙድ (0)',
     'medium (50)':
-        'mittel (50)',
+        'ማእከላይ (50)',
     'light (70)':
-        'leicht (70)',
+        'ፈኵስ (70)',
     'shimmering (80)':
-        'schimmernd (80)',
+        'ዘብለጭልጭ (80)',
     'elegant (90)':
-        'elegant (90)',
+        'ምዕሩግ (90)',
     'subtle (95)':
-        'angedeutet (95)',
+        'ደብዛዝ (95)',
     'text-only (100)':
-        'nur Text (100)',
+        'ጽሑፍ ጥራይ (100)',
 
     // Project Manager
     'Untitled':
         'ኣርእስቲ ዘይተዋህቦ',
     'Open Project':
-        'Projekt \u00f6ffnen',
+        'ፕሮጀክት ክፈት',
     'Open':
-        '\u00d6ffnen',
+        'ክፈት',
     '(empty)':
-        '(leer)',
+        '(ጥራዩ)',
     'Saved!':
-        'Gesichert!',
+        'ተዓቂቡ!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'ፕሮጀክት ደምስስ',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'ብርግጽ ክትድምስስ ደሊኻ፧',
     'rename...':
-        'Umbenennen...',
+        'ዳግም ሰይም...',
     'Examples':
-        'Beispiele',
+        'ኣብነታት',
     'Share':
-        'Teilen',
+        'ኣካፍል',
     'Unshare':
-        'Nicht mehr teilen',
+        'ምክፋል ደው ኣብል',
     'Publish':
-        'Veröffentlichen',
+        'ዘርግሕ',
     'Unpublish':
-        'Nicht mehr veröffentlichen',
+        'ምዝርግሕ ደው ኣብል',
     'Updating\nproject list...':
-        'Projektliste laden',
+        'ዝርዝር ፕሮጀክታት\nእዝምን...',
     'Recover':
-        'Wiederherstellen',
+        'ኣምለሰ',
     'Today':
-        'Heute',
+        'ሎሚ',
     'Yesterday':
-        'Gestern',
+        'ትማሊ',
 
     // costume editor
     'Costume Editor':
