@@ -1425,108 +1425,108 @@ SnapTranslator.dict.ti = {
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'ኣጽሪ',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'መርሓ ንትኹል ስራዕ',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'መብርሂ ወስኽ',
     'undrop':
-        'R\u00fcckg\u00e4ngig',
+        'ኣልዕል',
     'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
+        'ኣብ መወዳእ\nዝተንብረት\nሕጡብ ኣልዕል',
     'redrop':
-        'Wiederherstellen',
+        'ዳግም ኣንብር',
     'use the keyboard\nto enter blocks':
-    	'Blöcke per Tastatur\neingeben',
+    	'ሕጡባት ንምምባር\nሰሌዳ መፋትሕ ተጠቀም',
     'scripts pic...':
-        'Bild aller Skripte...',
+        'ስእሊ ናይ መርሓ...',
     'save a picture\nof all scripts':
-        'ein Bild aller\nSkripte speichern',
+        'ስእሊ ናይ ኩሎም\nመርሓታት ዓቅብ',
     'make a block...':
-        'Neuen Block bauen...',
+        'ሓድሽ ሕጡብ ህነጽ...',
 
     // costumes
     'rename':
-        'Umbenennen',
+        'ዳግም ሰይም',
     'export':
-        'Exportieren',
+        'ናብ ደገ ልኣኽ',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'ልብሲ ዳግም ሰይም',
     'rename background':
-        'Hintergrund umbenennen',
+        'ድሕረ ባይታ ዳግም ሰይም',
     'get blocks':
-        'Blöcke extrahieren',
+        'ሕጡባት ኣምጽእ',
     'get data':
-        'Daten extrahieren',
+        'ሰነዳት ኣምጽእ',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'ድምጺ ኣቃልሕ',
     'Stop sound':
-        'Klang\nanhalten',
+        'ምቅላሕ ደው ኣብል',
     'Stop':
-        'Halt',
+        'ደው ኣብል',
     'Play':
-        'Los',
+        'ኣቃልሕ',
     'rename sound':
-        'Klang umbenennen',
+        'ድምጺ ዳግም ሰይም',
 
     // lists and tables
     'list view...':
-        'Listenansicht...',
+        'ትርኢት ዝርዝር...',
     'table view...':
-        'tabellarische Ansicht...',
+        'ትርኢት ሰንጠረጅ...',
     'Table view':
-        'Tabelle',
+        'ትርኢት ሰንጠረጅ',
     'open in dialog...':
-        'in neuem Fenster \u00f6ffnen',
+        'ኣብ ሓድሽ መስኮት ክፈት',
     'blockify':
-        'als Block',
+        'ከም ሕጡብ',
     'reset columns':
-        'Spaltenbreiten zur\u00fccksetzen',
+        'ግፍሒ ዓምዲታት ናብ ፈለማ ምለስ',
     'items':
-        'Elemente',
+        'ባእታታት',
 
     // dialogs
     // buttons
     'OK':
-        'OK',
+        'ሕራይ',
     'Ok':
-        'OK',
+        'ሕራይ',
     'Cancel':
-        'Abbrechen',
+        'ሰርዝ',
     'Yes':
-        'Ja',
+        'እወ',
     'No':
-        'Nein',
+        'ኣይፋል',
 
     // help
     'Help':
-        'Hilfe',
+        'ሓገዝ',
 
     // zoom blocks
     'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
+        'ሕጡባት ኣጉልሕ',
     'build':
-        'baue',
+        'ህነጽ',
     'your own':
-        'eigene',
+        'ናትካ',
     'blocks':
-        'Bl\u00f6cke',
+        'ሕጡባት',
     'normal (1x)':
-        'normal (1x)',
+        'ልሙድ (1x)',
     'demo (1.2x)':
-        'Demo (1.2x)',
+        'መፈተኒ (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'መርኣይ (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'ዓቢ (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'ገዚፍ (4x)',
     'giant (8x)':
-        'gigantisch (8x)',
+        'ደርማስ (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'ዓርሞሸሽ (10x)',
 
     // fade blocks
     'Fade blocks':
