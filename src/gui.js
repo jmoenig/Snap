@@ -468,6 +468,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
+            console.log(hash);
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
@@ -479,6 +480,35 @@ IDE_Morph.prototype.openIn = function (world) {
                     1
                 )) {
                 this.droppedText(hash);
+            } else if (hash.match(/\.png$/)) {
+                // Import a PNG, which could contain a script pic.
+                this.getURL(
+                    hash,
+                    blob => {
+                        let pic = new Image(),
+                            imgURL = URL.createObjectURL(blob),
+                            dataMarker = MorphicPreferences.pngPayloadMarker;
+
+                        pic.src = imgURL;
+                        pic.onload = (async () => {
+                            let buff = new Uint8Array(await blob.arrayBuffer()),
+                                strBuff = buff.reduce((acc, b) => acc + String.fromCharCode(b), ""),
+                                embedded;
+
+                            if (strBuff.includes(dataMarker)) {
+                                embedded = decodeURIComponent(strBuff.split(dataMarker)[1]);
+                                if (['blocks', 'block', 'script', 'sprite'].some(tag =>
+                                    embedded.slice(1).startsWith(tag))) {
+                                    return this.rawOpenScriptString(embedded, true);
+                                }
+                            } else {
+                                canvas = newCanvas(new Point(pic.width, pic.height), true);
+                                canvas.getContext('2d').drawImage(pic, 0, 0);
+                                this.droppedImage(canvas, decodeURIComponent(hash));
+                            }
+                    })();
+                },
+                'blob');
             } else {
                 idx = hash.indexOf("&");
                 if (idx > 0) {
@@ -2892,9 +2922,9 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     if (this.config.noImports) {return; }
 
     if (anAudio.src.indexOf('data:audio') !== 0) {
-    	// fetch and base 64 encode samples using FileReader
-    	this.getURL(
-        	anAudio.src,
+        // fetch and base 64 encode samples using FileReader
+        this.getURL(
+            anAudio.src,
             blob => {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
@@ -6247,7 +6277,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenScriptString = function (str) {
+IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
     var world = this.world(),
         script;
 
@@ -6262,11 +6292,17 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     }
     script.fixBlockColor(null, true);
     this.spriteBar.tabBar.tabTo('scripts');
-    script.pickUp(world);
-    world.hand.grabOrigin = {
-        origin: this.palette,
-        position: this.palette.center()
-    };
+    if (silently) {
+        this.currentSprite.scripts.add(script);
+        this.currentSprite.scripts.cleanUp();
+
+    } else {
+        script.pickUp(world);
+        world.hand.grabOrigin = {
+            origin: this.palette,
+            position: this.palette.center()
+        };
+    }
     this.showMessage(
         'Imported Script.',
         2

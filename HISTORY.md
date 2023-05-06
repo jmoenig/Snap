@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
     * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
-    * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data) 
+    * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data)
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new embedding configuration options: noSpriteEdits
@@ -11,8 +11,9 @@
     * new "txt_case_sensitive([bool])" extension primitive
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
+    * Expanded the `#open:` URL scheme to accept image URLs.
 * **Notable Changes:**
-    * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter 
+    * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
     * improved browser resource management for graphics and sounds
@@ -120,7 +121,7 @@
 * blocks: fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
 
 ### 2023-04-17
-* fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets 
+* fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
 
 ### 2023-04-16
 * changed "this caller" to return only a single block. Use "this script of (this caller)" to get the procedure script
@@ -184,7 +185,7 @@
 * threads: fixed #3154 (let "this script" capture variables in rings)
 * objects, threads: capture the dynamic scope in "this caller" (temporary & experimental)
 * blocks, objects, threads: collapsed "this script" and "this caller" into new "this (environment)" reporter
-* gui, store: pushed dev version to 8.3 
+* gui, store: pushed dev version to 8.3
 
 ### 2023-03-17
 * objects, guj: added "dynamic sprites rendering" hidden option setting for debugging purposes
@@ -381,7 +382,7 @@
 * threads: accept Boolean values in "with input list" variant of variadic Boolean ops
 * threads: let associative Boolean ops handle empty input lists
 * threads: refactored evaluation to lazy initialize args
-* threads: fixed base cases for variadic associative Boolean ops 
+* threads: fixed base cases for variadic associative Boolean ops
 
 ### 2023-02-15
 * pushed dev version to 8.2
@@ -451,9 +452,9 @@
 
 ## 8.1.1:
 * **Notable Fixes:**
-    * loading old projects only hides new blocks if they already contain hidden ones 
+    * loading old projects only hides new blocks if they already contain hidden ones
     * distinguish selected named list indices ("random", "last") from same-named typed-in dictionary keys
-    * fixed opening projects when the language is set to non-English 
+    * fixed opening projects when the language is set to non-English
 * **Documentation Updates:**
     * updated API documentation for "noAutoFill" configuration setting
 
@@ -467,7 +468,7 @@
 
 ### 2023-02-02
 * new dev version
-* store: fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones 
+* store: fixed #3175 - loading old projects only hides new blocks if they already contain hidden ones
 
 ## 8.1.0:
 * **New Features:**
@@ -479,7 +480,7 @@
     * show intermediate results when debugging a script, i.e. when clicking on a script in visible stepping mode. Thanks, Vic!
     * new "When (sprite) is edited" event hat block, supports light user interaction logging
     * new PIPE primitive in the control category
-    * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point 
+    * "touching" predicate now  also accepts a 2-item list representing x/y-coordinates to check for collision with an arbitrary point
     * hyper-rays: support lists of relative angles in the left "ray length TO sprite" input slot for instant fields of vision
     * added "delete" option to context menu of global and sprite-local variable declarations in the blocks palette
     * added "translations" selector to metaprogramming blocks
@@ -491,14 +492,14 @@
     * new extension primitive "cst_export(cst, name)" for exporting/downloading a costume
     * new extension primitive: "syn_scripts([xml])" for getting & setting (and deleting!) the scripts of a sprite
     * codification: calling "code of" on a sprite returns a text version of its scripting area (concatenated codified scripts delimited by empty lines)
-    * extensions can auto-load and auto-exec allowed or allow-listed external JS scripts that modify the IDE, e.g. to add buttons by storing the external url in global (optionally hidden) variables whose name starts with "__module__"  
+    * extensions can auto-load and auto-exec allowed or allow-listed external JS scripts that modify the IDE, e.g. to add buttons by storing the external url in global (optionally hidden) variables whose name starts with "__module__"
     * extensions can add custom buttons to the palette, thanks, Bernat!
     * added retina support for inlined morphic worlds, enabling high-res embedding of Snap! components into other websites
     * added configuration options for embedding Snap! into other websites
     * new API methods for synchronizing scripts across sprites and Snap! instances
     * new API methods for signalling scripts through highlighting blocks that correspond to marked portions of mapped text code
 * **Notable Changes:**
-    * enabled same-named global and sprite-local variables 
+    * enabled same-named global and sprite-local variables
     * no more error messages when the number of actual arguments doesn't match the number of implicit parameters
     * removed empty parens from extension prims "ide_all_blocks", "ide_language" and "ide_translations"
     * hyperized bitwise operators, and gave them more mnemonic block names, thanks, Bernat and Brian!
@@ -538,9 +539,9 @@
     * fixed "Make Variables" extension for numerical names
     * fixed palette category ghosting update when hiding / unhiding blocks using extension primitives
     * fixed accidentally drawing unwanted dots when changing a pen color dimension thanks, Joan!
-    * fixed zebra coloring for polyadic read-only input slots 
+    * fixed zebra coloring for polyadic read-only input slots
     * fixed a label rendering glitch when flashing blocks
-    * prevented variables from being renamed to blanks 
+    * prevented variables from being renamed to blanks
     * caught an occasional maximimum call-stack size range error when embedding blocks into a scripts pic
     * improved frame scheduling, prevent excessive frame drops, thanks, SArpnt!
     * hiding the keyboard handler text area better by reducing its visible dimensions to zero
@@ -750,7 +751,7 @@
 * blocks: migrated blocks to new recordUserEdit mechanism
 * blocks: migrated custom blocks to new recordUserEdit mechanism
 * threads: migrated processes to new recordUserEdit mechanism
-* extensions: migrated extensions to new recordUserEdit mechanism 
+* extensions: migrated extensions to new recordUserEdit mechanism
 * gui: migrated IDE to new recordUserEdit mechanism
 * objects, blocks, gui: new "When (sprite) is edited" event hat block
 * api: removed experimental scriptsAsText method (no longer needed)
@@ -790,7 +791,7 @@
 ### 2022-11-22
 * morphic: added retina support for inlined worlds, enabling high-res embedding of Snap! components into other websites
 * morphic: hide the keyboard handler text area better by reducing its dimensions to zero
-* blocks: prevented variables from being renamed to blanks 
+* blocks: prevented variables from being renamed to blanks
 
 ### 2022-11-21
 * morphic: added threshold to right-click on mobile, thanks, @ego-lay-atman-bay
@@ -963,7 +964,7 @@
     * formatting a list of texts displays it as chat-history in an ASK menu
     * ASK nothing or a falsy value terminates all threads currently displaying a question or waiting to ask one and clears the last "answer"
     * new "Menus" library
-    * broadcasting now supports optional additional data transmission, also when switching scenes 
+    * broadcasting now supports optional additional data transmission, also when switching scenes
     * export script (including dependencies) via its context menu
     * export / import sprite-local custom block definitions from the palette
     * export block definitions from inside the block editor
@@ -993,7 +994,7 @@
 * **Notable Changes:**
     * exporting a library includes dependencies (auto-select all referenced blocks)
     * exporting / importing a sprite includes dependencies (global custom blocks and palette categories)
-    * imported single scripts are now placed into the hand, for the user to position them in the scripting area 
+    * imported single scripts are now placed into the hand, for the user to position them in the scripting area
     * moved "append", "reshape", "combinations" blocks down one group in the palette
     * moved "current date" block up to "timer" group in the palette
     * moved "attribute of block" block from the sensing category to control
@@ -1079,7 +1080,7 @@
 ### 2022-07-18
 * German translation update: Changed translation of "point in direction" to "setze Richtung auf ... Grad"
 * threads: JSCompiler scope fixes and redesign, thanks, xBZZZZ!
-* blocks: added support for mixed-typed polyadic inputs 
+* blocks: added support for mixed-typed polyadic inputs
 * threads, blocks, objects, gui: added support for additional data transmission for broadcasts and scene switches
 * German translation update for "with data" and "data" strings
 
@@ -1093,7 +1094,7 @@
 * gui: import smart pic as costume via "Import..." item in the project menu
 
 ### 2022-07-01
-* extensions: added a slash-suffix to the EDC url allow-list entry 
+* extensions: added a slash-suffix to the EDC url allow-list entry
 
 ### 2022-06-30
 * MQTT extension update, thanks, Simon and Xavier!
@@ -1166,13 +1167,13 @@
 * byob: update manual custom block-type changes in data references
 
 ### 2022-05-23
-* blocks: fixed block label color when expanding or inserting variadic infix slots 
+* blocks: fixed block label color when expanding or inserting variadic infix slots
 
 ### 2022-05-20
 * byob, objects, threads: update sprite-local custom blocks in data
 
 ### 2022-05-19
-* blocks, lists, objects, threads: made global Contexts observable 
+* blocks, lists, objects, threads: made global Contexts observable
 * gui: pushed dev version to 8
 * byob: update global custom blocks in data
 
@@ -1258,7 +1259,7 @@
 * MQTT library update, thanks, Simon!
 * gui: library import dialog make-over for custom categories and hidden blocks, thanks, Michael!
 * extensions: restore presentation mode when using the extension prim to change languages
-* store: fixed a watcher positioning bug when saving / loading a project into a scaled stage 
+* store: fixed a watcher positioning bug when saving / loading a project into a scaled stage
 
 ### 2022-04-04
 * objects: added speech-balloon-value-association support for ASK menu items
@@ -1358,7 +1359,7 @@
 * objects: adjusted library-import for sprite-local blocks
 
 ### 2022-03-10
-* gui: made dev-warning closeable and added official url 
+* gui: made dev-warning closeable and added official url
 
 ### 2022-03-09
 * new dev version
@@ -1401,7 +1402,7 @@
 * SciSnap2 extension update (FFT), thanks, Eckart!
 * threads: removed experimental code
 * scenes, gui: shift-click on STOP button to stop all scenes
-* blocks, threads: STOP "all scenes" dropdown option 
+* blocks, threads: STOP "all scenes" dropdown option
 
 ### 2022-03-02
 * gui: never close a dev-warning
@@ -1452,7 +1453,7 @@
 ### 2022-02-25
 * new dev version
 * threads: tweaked JOIN BLOCKS for variables
-* prepared patch 
+* prepared patch
 
 ## 7.2.3:
 * **Notable Fix:**
@@ -2530,7 +2531,7 @@
 ## 6.9.0
 * **Notable Changes:**
     * JS-functions are now disabled by default until switched on in the settings menu per session
-    * error messages in presentation mode are now shown as pop-up messages onstage  
+    * error messages in presentation mode are now shown as pop-up messages onstage
 * **Notable Fixes:**
     * register unsaved changes when the user edits a comment
     * fixed bignums library and and made colors library faster, thanks, Brian!
@@ -2548,7 +2549,7 @@
 * German translation update
 
 ### 2021-06-10
-* threads: error messages in presentation mode are now shown as pop-up messages onstage  
+* threads: error messages in presentation mode are now shown as pop-up messages onstage
 * store: commented out modal prompt to enable JS when loading a project that uses it
 * gui: renamed setting to "JavaScript extensions"
 
@@ -3061,7 +3062,7 @@
 
 ### 2020-12-05
 * objects: alternative collision detection method using the video-cache, commented out for reference.
-* German translation update for "ray length"  
+* German translation update for "ray length"
 
 ### 2020-12-04
 * threads: refactored raycasting
