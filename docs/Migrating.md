@@ -27,7 +27,7 @@ The second section is a recipe how to actually migrate your code. It's a list of
     - `silentSetWidth` => use `bounds.setWidth()` to avoid infinite recursion
     - `silentSetHeight` = use `bounds.setHeight()` to avoid infinite recursion
 * likewise "silent" parameters to functions are no longer needed and supported and should simply be removed
-* `cachedFullImage` has been removed and is no longer available (except internally for the HandMorph) 
+* `cachedFullImage` has been removed and is no longer available (except internally for the HandMorph)
 * `cachedFullBounds` has been removed and is no longer available (except internally for the HandMorph)
 * `trackChanges` and other damage-list housekeeping tweaks are no longer needed and no longer supported, except for the Pen constructor's isWarped property and its methods, such as `startWarp()` and `endWarp()`.
 * Pen >> `wantsRedraw` is no longer needed and deprecated
@@ -40,7 +40,7 @@ The second section is a recipe how to actually migrate your code. It's a list of
 * `fullImageClassic()` => is now always just `fullImage()`
 * `keyboardReceiver` => `keyboardFocus`
 * keyboard navigation can be activated for any visible menu by pressing an arbitrary key
-* new `noDropShadow` property for Morphs that already have built-in shadows (Menus, SpeechBubbles) 
+* new `noDropShadow` property for Morphs that already have built-in shadows (Menus, SpeechBubbles)
 * new `fullShadowSource` flag for Morphs, default is `true`, turn off (`false`) to only use the simple image instead of `fullImage()`
 
 ## Migrating Your Sources
@@ -53,9 +53,9 @@ Search your code for these words and replace them according to the instructions.
     - rename method definitions to `render`, notice that the first argument needs to be the 2D context, therefore remove the part in the code that makes a new canvas and queries its context.
     - factor out the parts of the code that determine and set the extent and add or arrange submorphs and move them into a - possibly new - method named `fixLayout()`
     - rename function calls to `drawNew()` to `fixLayout()` and/or `rerender()`, check whether the call is at all needed as it might be redundant in the new system
-* **wantsRedraw** => replace with `rerender()` 
-* **noticesTransparentClick** => replace with `!isFreeForm`, use with caution, as free forms should also cache their image for performance reason, which in turn strains memory usage 
-* **.image** => rename getters to `getImage()`, use with caution because of performance bottlenecks 
+* **wantsRedraw** => replace with `rerender()`
+* **noticesTransparentClick** => replace with `!isFreeForm`, use with caution, as free forms should also cache their image for performance reason, which in turn strains memory usage
+* **.image** => rename getters to `getImage()`, use with caution because of performance bottlenecks
 * **cachedFullImage** => no longer supported, remove all references
 * **fullImageClassic** => rename method calls to just `fullImage()`
 * **silentSet**
