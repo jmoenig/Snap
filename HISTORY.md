@@ -9,7 +9,6 @@
     * new embedding configuration options: noSpriteEdits
     * new "case sensitivity" preference setting
     * new "case sensitivity" selector to the setting blocks' dropdowns 
-    * new "txt_case_sensitive([bool])" extension primitive
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
 * **Notable Changes:**
@@ -44,7 +43,8 @@
 
 ### 2023-05-08
 * gui: made "case sensitivity" setting official
-* blocks, threads: added "case sensitivity" selector to the setting blocks' dropdowns 
+* blocks, threads: added "case sensitivity" selector to the setting blocks' dropdowns
+* extensions: removed experimental case sensitivity primitive (because it's now official)
 
 ### 2023-05-01
 * objects: changed new costume name function to reflect the case-sensitivity preference setting
