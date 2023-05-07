@@ -6292,7 +6292,6 @@ IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
     if (silently) {
         this.currentSprite.scripts.add(script);
         this.currentSprite.scripts.cleanUp();
-
     } else {
         script.pickUp(world);
         world.hand.grabOrigin = {
