@@ -7,8 +7,8 @@
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new embedding configuration options: noSpriteEdits
-    * experimental hidden session preference settings for "case sensitive text comparison"
     * new "case sensitivity" preference setting
+    * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new "txt_case_sensitive([bool])" extension primitive
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
@@ -44,6 +44,7 @@
 
 ### 2023-05-08
 * gui: made "case sensitivity" setting official
+* blocks, threads: added "case sensitivity" selector to the setting blocks' dropdowns 
 
 ### 2023-05-01
 * objects: changed new costume name function to reflect the case-sensitivity preference setting

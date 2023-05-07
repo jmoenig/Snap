@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-02';
+modules.threads = '2023-May-07';
 
 var ThreadManager;
 var Process;
@@ -2801,6 +2801,9 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     case 'turbo mode':
         this.doSetFastTracking(bool);
         break;
+    case 'case sensitivity':
+        Process.prototype.isCaseInsensitive = !bool;
+        break;
     case 'flat line ends':
         SpriteMorph.prototype.useFlatLineEnds = bool;
         break;
@@ -2826,6 +2829,8 @@ Process.prototype.reportGlobalFlag = function (name) {
     switch (name) {
     case 'turbo mode':
         return this.reportIsFastTracking();
+    case 'case sensitivity':
+        return !Process.prototype.isCaseInsensitive;
     case 'flat line ends':
         return SpriteMorph.prototype.useFlatLineEnds;
     case 'log pen vectors':

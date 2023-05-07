@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-01';
+modules.blocks = '2023-May-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -746,6 +746,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'turbo mode' : ['turbo mode'],
+            'case sensitivity' : ['case sensitivity'],
             'flat line ends' : ['flat line ends'],
             'log pen vectors' : ['log pen vectors'],
             'video capture' : ['video capture'],
