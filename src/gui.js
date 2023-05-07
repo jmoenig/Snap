@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-01';
+modules.gui = '2023-May-07';
 
 // Declarations
 
@@ -4321,13 +4321,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
-        'Case sensitive text comparison',
+        'Case sensitivity',
         () => Process.prototype.isCaseInsensitive =
             !Process.prototype.isCaseInsensitive,
         !Process.prototype.isCaseInsensitive,
         'uncheck to ignore upper- and\n lowercase when comparing texts',
         'check to distinguish upper- and\n lowercase when comparing texts',
-        true
+        false
     );
     addPreference(
         'Ternary Boolean slots',

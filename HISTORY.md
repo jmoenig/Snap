@@ -8,6 +8,7 @@
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new embedding configuration options: noSpriteEdits
     * experimental hidden session preference settings for "case sensitive text comparison"
+    * new "case sensitivity" preference setting
     * new "txt_case_sensitive([bool])" extension primitive
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
@@ -40,6 +41,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-05-08
+* gui: made "case sensitivity" setting official
 
 ### 2023-05-01
 * objects: changed new costume name function to reflect the case-sensitivity preference setting
