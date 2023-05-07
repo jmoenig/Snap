@@ -468,7 +468,6 @@ IDE_Morph.prototype.openIn = function (world) {
 
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
-            console.log(hash);
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
@@ -480,35 +479,33 @@ IDE_Morph.prototype.openIn = function (world) {
                     1
                 )) {
                 this.droppedText(hash);
-            } else if (hash.match(/\.png$/)) {
-                // Import a PNG, which could contain a script pic.
-                this.getURL(
-                    hash,
-                    blob => {
-                        let pic = new Image(),
-                            imgURL = URL.createObjectURL(blob),
-                            dataMarker = MorphicPreferences.pngPayloadMarker;
+            } else if (hash.match(/\.(png|gif|svg|jpe?g|tiff)$/i)) {
+                // Import an image, which could contain embedded scripts
+                fetch(hash).then(res => res.blob()).then(blob => {
+                    let pic = new Image(),
+                        imgURL = URL.createObjectURL(blob),
+                        dataMarker = MorphicPreferences.pngPayloadMarker;
 
-                        pic.src = imgURL;
-                        pic.onload = (async () => {
-                            let buff = new Uint8Array(await blob.arrayBuffer()),
-                                strBuff = buff.reduce((acc, b) => acc + String.fromCharCode(b), ""),
-                                embedded;
+                    pic.src = imgURL;
+                    pic.onload = (async () => {
+                        let buff = new Uint8Array(await blob.arrayBuffer()),
+                            strBuff = buff.reduce((acc, b) => acc + String.fromCharCode(b), ""),
+                            hasImportanbleCode =
+                                (txt) => txt.match(/^<(blocks|block|script|sprite)/i),
+                            embeddedData, canvas;
 
                             if (strBuff.includes(dataMarker)) {
-                                embedded = decodeURIComponent(strBuff.split(dataMarker)[1]);
-                                if (['blocks', 'block', 'script', 'sprite'].some(tag =>
-                                    embedded.slice(1).startsWith(tag))) {
-                                    return this.rawOpenScriptString(embedded, true);
-                                }
-                            } else {
-                                canvas = newCanvas(new Point(pic.width, pic.height), true);
-                                canvas.getContext('2d').drawImage(pic, 0, 0);
-                                this.droppedImage(canvas, decodeURIComponent(hash));
+                            embeddedData = decodeURIComponent(strBuff.split(dataMarker)[1]);
+                            if (hasImportanbleCode(embeddedData)) {
+                                return this.rawOpenScriptString(embeddedData, true);
                             }
+                        } else {
+                            canvas = newCanvas(new Point(pic.width, pic.height), true);
+                            canvas.getContext('2d').drawImage(pic, 0, 0);
+                            this.droppedImage(canvas, decodeURIComponent(hash));
+                        }
                     })();
-                },
-                'blob');
+                })
             } else {
                 idx = hash.indexOf("&");
                 if (idx > 0) {
