@@ -46,6 +46,7 @@
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)
 * blocks, objects, threads: added dropdown menu with 'lower case' and 'upper case' selectors to "length of text" reporter
+* locale: removed "length of %s" from English translation
 
 ### 2023-05-07
 * gui: made "case sensitivity" setting official

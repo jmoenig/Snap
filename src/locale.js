@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-April-15';
+modules.locale = '2023-May-08';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -151,8 +151,7 @@ SnapTranslator.dict.en = {
         'green flag clicked',
 
     // rewordings in English avoiding having to adjust all other translations
-    'length of %s':
-        'length of text %s',
+    // -- currently none --
 
     // long strings look-up only
     'file menu import hint':
