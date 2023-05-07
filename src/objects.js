@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-02';
+modules.objects = '2023-May-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -1304,11 +1304,17 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'letter %ix of %s',
             defaults: [1, localize('world')]
         },
-        reportStringSize: {
+        reportStringSize: { // deprecated as of v9
             type: 'reporter',
             category: 'operators',
             spec: 'length of %s',
             defaults: [localize('world')]
+        },
+        reportTextAttribute: {
+            type: 'reporter',
+            category: 'operators',
+            spec: '%ta of text %s',
+            defaults: [['length'], localize('world')]
         },
         reportUnicode: {
             type: 'reporter',
@@ -1807,6 +1813,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportThisContext: {
             selector: 'reportEnvironment',
             inputs: [['script']]
+        },
+        reportStringSize: {
+            selector: 'reportTextAttribute',
+            inputs: [['length']],
+            offset: 1
         }
     };
 };
@@ -2884,7 +2895,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
-        blocks.push(block('reportStringSize'));
+        blocks.push(block('reportTextAttribute'));
         blocks.push('-');
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));
@@ -9745,7 +9756,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
-        blocks.push(block('reportStringSize'));
+        blocks.push(block('reportTextAttribute'));
         blocks.push('-');
         blocks.push(block('reportUnicode'));
         blocks.push(block('reportUnicodeAsLetter'));

@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-07';
+modules.blocks = '2023-May-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -501,6 +501,15 @@ SyntaxElementMorph.prototype.labelParts = {
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
+        }
+    },
+    '%ta': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'length' : ['length'],
+            'lower case' : ['lower case'],
+            'upper case' : ['upper case']
         }
     },
     '%mlfunc': {

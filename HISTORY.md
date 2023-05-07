@@ -9,6 +9,7 @@
     * new embedding configuration options: noSpriteEdits
     * new "case sensitivity" preference setting
     * new "case sensitivity" selector to the setting blocks' dropdowns 
+    * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * Expanded the `#open:` URL scheme to accept image URLs.
@@ -44,6 +45,7 @@
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)
+* blocks, objects, threads: added dropdown menu with 'lower case' and 'upper case' selectors to "length of text" reporter
 
 ### 2023-05-07
 * gui: made "case sensitivity" setting official

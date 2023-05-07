@@ -4889,6 +4889,26 @@ Process.prototype.reportBasicLetter = function (idx, string) {
     return str[i - 1] || '';
 };
 
+Process.prototype.reportTextAttribute = function (choice, text) {
+    var option = this.inputOption(choice);
+    switch (option) {
+    case 'length':
+        return this.reportStringSize(text);
+    case 'lower case':
+        return this.hyper(
+            str => isString(str) ? str.toLowerCase() : str,
+            text
+        );
+    case 'upper case':
+        return this.hyper(
+            str => isString(str) ? str.toUpperCase() : str,
+            text
+        );
+    default:
+        return 0;
+    }
+};
+
 Process.prototype.reportStringSize = function (data) {
     return this.hyper(
         str => isString(str) ? str.length
