@@ -479,6 +479,33 @@ IDE_Morph.prototype.openIn = function (world) {
                     1
                 )) {
                 this.droppedText(hash);
+            } else if (hash.match(/\.(png|gif|svg|jpe?g|tiff)$/i)) {
+                // Import an image, which could contain embedded scripts
+                fetch(hash).then(res => res.blob()).then(blob => {
+                    let pic = new Image(),
+                        imgURL = URL.createObjectURL(blob),
+                        dataMarker = MorphicPreferences.pngPayloadMarker;
+
+                    pic.src = imgURL;
+                    pic.onload = (async () => {
+                        let buff = new Uint8Array(await blob.arrayBuffer()),
+                            strBuff = buff.reduce((acc, b) => acc + String.fromCharCode(b), ""),
+                            hasImportanbleCode =
+                                (txt) => txt.match(/^<(blocks|block|script|sprite)/i),
+                            embeddedData, canvas;
+
+                            if (strBuff.includes(dataMarker)) {
+                            embeddedData = decodeURIComponent(strBuff.split(dataMarker)[1]);
+                            if (hasImportanbleCode(embeddedData)) {
+                                return this.rawOpenScriptString(embeddedData, true);
+                            }
+                        } else {
+                            canvas = newCanvas(new Point(pic.width, pic.height), true);
+                            canvas.getContext('2d').drawImage(pic, 0, 0);
+                            this.droppedImage(canvas, decodeURIComponent(hash));
+                        }
+                    })();
+                })
             } else {
                 idx = hash.indexOf("&");
                 if (idx > 0) {
@@ -2892,9 +2919,9 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     if (this.config.noImports) {return; }
 
     if (anAudio.src.indexOf('data:audio') !== 0) {
-    	// fetch and base 64 encode samples using FileReader
-    	this.getURL(
-        	anAudio.src,
+        // fetch and base 64 encode samples using FileReader
+        this.getURL(
+            anAudio.src,
             blob => {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
@@ -6247,7 +6274,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
     ]);
 };
 
-IDE_Morph.prototype.rawOpenScriptString = function (str) {
+IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
     var world = this.world(),
         script;
 
@@ -6262,11 +6289,16 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
     }
     script.fixBlockColor(null, true);
     this.spriteBar.tabBar.tabTo('scripts');
-    script.pickUp(world);
-    world.hand.grabOrigin = {
-        origin: this.palette,
-        position: this.palette.center()
-    };
+    if (silently) {
+        this.currentSprite.scripts.add(script);
+        this.currentSprite.scripts.cleanUp();
+    } else {
+        script.pickUp(world);
+        world.hand.grabOrigin = {
+            origin: this.palette,
+            position: this.palette.center()
+        };
+    }
     this.showMessage(
         'Imported Script.',
         2
