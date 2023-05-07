@@ -43,6 +43,9 @@
     * Armenian, thanks to the contributors!
 
 ### 2023-05-08
+* gui: reformatted some code to please JSHint ;)
+
+### 2023-05-07
 * gui: made "case sensitivity" setting official
 * blocks, threads: added "case sensitivity" selector to the setting blocks' dropdowns
 * extensions: removed experimental case sensitivity primitive (because it's now official)

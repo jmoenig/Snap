@@ -83,11 +83,11 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
 BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 */
 
-/*jshint esversion: 6*/
+/*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-07';
+modules.gui = '2023-May-08';
 
 // Declarations
 
@@ -489,23 +489,34 @@ IDE_Morph.prototype.openIn = function (world) {
                     pic.src = imgURL;
                     pic.onload = (async () => {
                         let buff = new Uint8Array(await blob.arrayBuffer()),
-                            strBuff = buff.reduce((acc, b) => acc + String.fromCharCode(b), ""),
-                            hasImportanbleCode =
-                                (txt) => txt.match(/^<(blocks|block|script|sprite)/i),
+                            strBuff = buff.reduce((acc, b) =>
+                                acc + String.fromCharCode(b), ""),
+                            hasImportanbleCode = (txt) =>
+                                txt.match(
+                                    /^<(blocks|block|script|sprite)/i
+                                ),
                             embeddedData, canvas;
 
                             if (strBuff.includes(dataMarker)) {
-                            embeddedData = decodeURIComponent(strBuff.split(dataMarker)[1]);
+                            embeddedData = decodeURIComponent(
+                                strBuff.split(dataMarker)[1]
+                            );
                             if (hasImportanbleCode(embeddedData)) {
-                                return this.rawOpenScriptString(embeddedData, true);
+                                return this.rawOpenScriptString(
+                                    embeddedData,
+                                    true
+                                );
                             }
                         } else {
-                            canvas = newCanvas(new Point(pic.width, pic.height), true);
+                            canvas = newCanvas(
+                                new Point(pic.width, pic.height),
+                                true
+                            );
                             canvas.getContext('2d').drawImage(pic, 0, 0);
                             this.droppedImage(canvas, decodeURIComponent(hash));
                         }
                     })();
-                })
+                });
             } else {
                 idx = hash.indexOf("&");
                 if (idx > 0) {
