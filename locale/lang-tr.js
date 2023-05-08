@@ -740,8 +740,8 @@ SnapTranslator.dict.tr = {
         'dünya',
     'letter %ix of %s':
         '%ix harfi bunun: %s',
-    'length of %s':
-        '%s kaç harf',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         '%s harfinin unicode değeri',
     'unicode %n as letter':
