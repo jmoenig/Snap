@@ -751,7 +751,7 @@ SnapTranslator.dict.pl = {
     'letter %ix of %s':
         'litera %ix z %s',
     'length of %s':
-        'd\u0142ugo\u015B\u0107 %s',
+        '%ta z %s',
     'unicode of %s':
         'Unicode z %s',
     'unicode %n as letter':
