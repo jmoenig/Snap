@@ -577,8 +577,8 @@ SnapTranslator.dict.hy = {
         'աշխարհ',
     'letter %ix of %s':
         '%ix -ի %s -րդ տառը',
-    'length of %s':
-        '%s տողիի երկարությունը',
+    '%ta of text %s':
+        '%ta տողիի %s',
     'unicode of %s':
         '%s -ի յունիկոդը',
     'unicode %n as letter':
