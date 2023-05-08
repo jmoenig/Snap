@@ -623,7 +623,7 @@ SnapTranslator.dict.pt_BR = {
     'letter %ix of %s':
         'o caractere %ix de %s',
     '%ta of text %s':
-        '%ta de %s',
+        '%ta de texto %s',
     'unicode of %s':
         'o código Unicode do caractere %s',
     'unicode %n as letter':
