@@ -721,8 +721,8 @@ SnapTranslator.dict.ca = {
         'món',
     'letter %ix of %s':
         'lletra %ix de %s',
-    'length of %s':
-        'longitud del text %s',
+    '%ta of text %s':
+        '%ta del text %s',
     'unicode of %s':
         'valor Unicode de %s',
     'unicode %n as letter':
