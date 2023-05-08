@@ -2487,17 +2487,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
         block.isStatic = true;
     }
-
-    block.setSpec(localize(info.spec));
-
-    // localize the block. Replace the above line with the following one to
-    // enable translations for block specs to use padded underscores as
-    // placeholders for input slots.
-    // Under construction. Commented out for now (jens, 04/2023)
-    /*
-        block.setSpec(block.localizeBlockSpec(info.spec));
-    */
-
+    block.setSpec(block.localizeBlockSpec(info.spec));
     if (migration && migration.expand) {
         block.inputs()[migration.expand].addInput();
     }
