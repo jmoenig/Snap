@@ -13,6 +13,7 @@
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * Expanded the `#open:` URL scheme to accept image URLs.
+    * new "ide_translation_dict" extension primitive
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
@@ -47,6 +48,7 @@
 * gui: reformatted some code to please JSHint ;)
 * blocks, objects, threads: added dropdown menu with 'lower case' and 'upper case' selectors to "length of text" reporter
 * locale: removed "length of %s" from English translation
+* extensions: added "ide_translation_dict" extension primitive
 
 ### 2023-05-07
 * gui: made "case sensitivity" setting official
