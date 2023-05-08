@@ -762,8 +762,8 @@ SnapTranslator.dict.it = {
         'mondo',
     'letter %ix of %s':
         'lettera in posizione %ix di %s',
-    'length of %s':
-        'lunghezza di %s',
+    '%ta of text %s':
+        '%ta di %s',
     'unicode of %s':
         'codice unicode di %s',
     'unicode %n as letter':
