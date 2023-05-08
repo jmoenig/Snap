@@ -742,8 +742,8 @@ SnapTranslator.dict.hi = {
         'विश्व',
     'letter %ix of %s':
         'वर्ण %ix का %s',
-    'length of %s':
-        'लंबाई का  %s',
+    '%ta of text %s':
+        '%ta का  %s',
     'unicode of %s':
         'Unicode Of %s',
     'unicode %n as letter':
