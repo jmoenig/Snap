@@ -750,7 +750,7 @@ SnapTranslator.dict.pl = {
         '\u015Bwiecie',
     'letter %ix of %s':
         'litera %ix z %s',
-    'length of %s':
+    '%ta of text %s':
         '%ta z %s',
     'unicode of %s':
         'Unicode z %s',
