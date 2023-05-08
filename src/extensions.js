@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-May-08';
+modules.extensions = '2023-May-09';
 
 // Global stuff
 
@@ -1068,6 +1068,18 @@ SnapExtensions.primitives.set(
             Object.keys(dict).slice().sort().map(key =>
                 new List([key, dict[key]]))
         );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_set_translation_dict(data)',
+    function (data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            dict = {};
+        proc.assertType(data, 'list');
+        data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
+        SnapTranslator.dict[SnapTranslator.language] = dict;
+        ide.reflectLanguage(SnapTranslator.language);
     }
 );
 
