@@ -821,8 +821,8 @@ SnapTranslator.dict.de = {
         'Welt',
     'letter %ix of %s':
         'Zeichen %ix von %s',
-    'length of %s':
-        'L\u00e4nge von Text %s',
+    '%ta of text %s':
+        '%ta von Text %s',
     'unicode of %s':
         'Unicode Wert von %s',
     'unicode %n as letter':
