@@ -597,8 +597,10 @@ SnapTranslator.dict.sv = {
         'v\u00E4rlden',
     'letter %ix of %s':
         'bokstav %ix av %s',
-    'length of %s':
-        'l\u00E4ngden av %s',
+    '%ta of text %s':
+        '%ta av %s',
+    'length':
+        'l\u00E4ngden',
     'unicode of %s':
         'unicode av %s',
     'unicode %n as letter':
