@@ -556,8 +556,8 @@ SnapTranslator.dict.te = {
         'ప్రపంచం',
     'letter %ix of %s':
         'Zeichen %ix von %s',
-    'length of %s':
-        'L\u00e4nge von %s',
+    '%ta of text %s':
+        '%ta of text %s',
     'unicode of %s':
         'Unicode Wert von %s',
     'unicode %n as letter':
