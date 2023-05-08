@@ -555,8 +555,8 @@ SnapTranslator.dict.ta = {
         'உலகம்',
     'letter %ix of %s':
         '%ix வது எழுத்து , %s ன்',
-    'length of %s':
-        '%s ன் நீளம்',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'யூனிகோட் %s',
     'unicode %n as letter':
