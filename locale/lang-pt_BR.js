@@ -622,7 +622,7 @@ SnapTranslator.dict.pt_BR = {
         'mundo',
     'letter %ix of %s':
         'o caractere %ix de %s',
-    '%ta of %s':
+    '%ta of text %s':
         '%ta de %s',
     'unicode of %s':
         'o código Unicode do caractere %s',
