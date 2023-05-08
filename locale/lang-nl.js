@@ -741,8 +741,8 @@ SnapTranslator.dict.nl = {
         'wereld',
     'letter %ix of %s':
         'letter %ix van %s',
-    'length of %s':
-        'lengte van %s',
+    '%ta of text %s':
+        '%ta van %s',
     'unicode of %s':
         'unicode waarde van %s',
     'unicode %n as letter':
