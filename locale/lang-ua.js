@@ -716,8 +716,8 @@ SnapTranslator.dict.ua = {
         'світ',
     'letter %ix of %s':
         '%ix літера слова %s',
-    'length of %s':
-        'довжина %s',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'Unicode  літери %s',
     'unicode %n as letter':
