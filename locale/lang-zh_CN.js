@@ -947,7 +947,7 @@ SnapTranslator.dict.zh_CN = {
     'letter %ix of %s':
         '第 %ix 个字符在文字 %s 中',
     '%ta of text %s':
-        '%ta 的 %s',
+        '%ta 的 文本 %s',
     'unicode of %s':
         '字符 %s 的Unicode码',
     'unicode %n as letter':
