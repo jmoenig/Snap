@@ -808,8 +808,8 @@ SnapTranslator.dict.el = {
         'κόσμος',
     'letter %ix of %s':
         'γράμμα %ix του %s',
-    'length of %s':
-        'μήκος του %s',
+    '%ta of text %s':
+        '%ta του %s',
     'unicode of %s':
         'unicode του %s',
     'unicode %n as letter':
