@@ -25,7 +25,8 @@
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
     * messages and identifying sprites, costumes and sounds by their names is now case-insensitive by default (e.g. in "object", "broadcast", "of" blocks)
-    * translations now use abstract block specs 
+    * translations now use abstract block specs
+    * updated the strings library for and with the new case sensitivity and lower case primitives
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -48,6 +49,7 @@
 ### 2023-05-09
 * extensions: added "ide_set_translation_dict(data)" extension primitive
 * extensions: added "txt_export(txt, name)" extension primitive
+* updated strings library with new case sensitivity and lower case primitives
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)
