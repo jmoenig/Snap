@@ -742,8 +742,8 @@ SnapTranslator.dict.no = {
         'verden',
     'letter %ix of %s':
         'tegn %ix av %s',
-    'length of %s':
-        'lengde av %s',
+    '%ta of text %s':
+        '%ta av %s',
     'unicode of %s':
         'unicode til %s',
     'unicode %n as letter':
