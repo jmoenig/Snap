@@ -572,8 +572,8 @@ SnapTranslator.dict.ca_VA = {
         'món',
     'letter %ix of %s':
         'lletra %ix de %s',
-    'length of %s':
-        'longitud de %s',
+    '%ta of text %s':
+        '%ta de %s',
     'unicode of %s':
         'valor Unicode de %s',
     'unicode %n as letter':
@@ -1185,6 +1185,8 @@ SnapTranslator.dict.ca_VA = {
     // list watchers
     'length: ':
         'longitud: ',
+    'length':
+        'longitud',
 
     // coments
     'add comment here...':
