@@ -636,8 +636,8 @@ SnapTranslator.dict.gl = {
         'mundo',
     'letter %ix of %s':
         'letra %ix de %s',
-    'length of %s':
-        'lonxitude de %s',
+    '%ta of text %s':
+        '%ta de %s',
     'unicode of %s':
         'código Unicode do carácter %s',
     'unicode %n as letter':
