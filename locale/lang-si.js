@@ -585,8 +585,8 @@ SnapTranslator.dict.si = {
         'Svet',
     'letter %ix of %s':
         '\u010Drka %ix od %s',
-    'length of %s':
-        'dol\u017Eina %s',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'Unicode vrednost od %s',
     'unicode %n as letter':
