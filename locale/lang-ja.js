@@ -539,8 +539,8 @@ SnapTranslator.dict.ja = {
         'ワールド',
     'letter %ix of %s':
         '%ix 文字目の文字 %s',
-    'length of %s':
-        '%s の長さ',
+    '%ta of text %s':
+        '%ta %s の長さ',
     'unicode of %s':
         '%s のUnicode',
     'unicode %n as letter':
