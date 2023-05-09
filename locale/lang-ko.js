@@ -582,8 +582,8 @@ SnapTranslator.dict.ko = {
         '세상',
     'letter %ix of %s':
         '%ix 번째 글자 ( %s 에 대한)',
-    'length of %s':
-        '%s 의 길이',
+    '%ta of text %s':
+        '%ta 의 %s',
     'unicode of %s':
         '%s 의 유니코드',
     'unicode %n as letter':
