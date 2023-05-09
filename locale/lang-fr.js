@@ -652,8 +652,8 @@ SnapTranslator.dict.fr = {
         'Monde',
     'letter %ix of %s':
         'lettre %ix de %s',
-    'length of %s':
-        'longueur de %s',
+    '%ta of text %s':
+        '%ta de %s',
     'unicode of %s':
         'valeur unicode de %s',
     'unicode %n as letter':
@@ -1190,6 +1190,8 @@ SnapTranslator.dict.fr = {
     // list watchers
     'length: ':
         'Longueur : ',
+    'length':
+        'Longueur',
 
     // coments
     'add comment here...':
