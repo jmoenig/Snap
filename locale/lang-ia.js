@@ -578,8 +578,8 @@ SnapTranslator.dict.ia = {
         'Mundo',
     'letter %ix of %s':
         'character %ix de %s',
-    'length of %s':
-        'longor de %s',
+    '%ta of text %s':
+        '%ta de %s',
     'unicode of %s':
         'Unicode valor de %s',
     'unicode %n as letter':
@@ -1165,6 +1165,9 @@ SnapTranslator.dict.ia = {
     // list watchers
     'length: ':
         'Longor: ',
+
+    'length':
+        'Longor',
 
     // coments
     'add comment here...':
