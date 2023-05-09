@@ -578,8 +578,8 @@ SnapTranslator.dict.cs = {
         'rozděl %s podle %delim',
     'letter %ix of %s':
         'písmeno %ix z %s',
-    'length of %s':
-        'délka %s',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'Unicode %s',
     'unicode %n as letter':
@@ -1183,6 +1183,8 @@ SnapTranslator.dict.cs = {
     // list watchers
     'length: ':
         'délka: ',
+    'length':
+        'délka',
 
     // coments
     'add comment here...':
