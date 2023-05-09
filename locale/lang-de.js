@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com', // optional
     'last_changed':
-        '2023-04-23', // this, too, will appear in the Translators tab
+        '2023-05-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -397,6 +397,12 @@ SnapTranslator.dict.de = {
         'Pixel',
     'current':
         'aktuell',
+
+    // text:
+    'lower case':
+        'Kleinbuchstaben',
+    'upper case':
+        'Großbuchstaben',
 
     // sound:
     'play sound %snd':
@@ -667,6 +673,14 @@ SnapTranslator.dict.de = {
         'http:// %s',
     'turbo mode':
         'Turbomodus',
+    'Case sensitivity':
+        'Groß- und Kleinschreibung',
+    'case sensitivity':
+        'Groß- und Kleinschreibung',
+    'uncheck to ignore upper- and\n lowercase when comparing texts':
+        'ausschalten, um Groß- und Kleinschreibung\nbeim Vergleichen von Texten zu ignorieren',
+    'check to distinguish upper- and\n lowercase when comparing texts':
+        'einschalten, um Groß- und Kleinschreibung\beim Vergleichen von Texten zu berücksichtigen',
     'flat line ends':
         'flache Pinselstriche',
     'is %setting on?':

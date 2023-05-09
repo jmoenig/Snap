@@ -50,6 +50,7 @@
 * extensions: added "ide_set_translation_dict(data)" extension primitive
 * extensions: added "txt_export(txt, name)" extension primitive
 * updated strings library with new case sensitivity and lower case primitives
+* updated German translation with new case sensitivity strings
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)
