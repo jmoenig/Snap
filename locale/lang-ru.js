@@ -747,8 +747,8 @@ SnapTranslator.dict.ru = {
         'мир',
     'letter %ix of %s':
         '%ix буква слова %s',
-    'length of %s':
-        'длина %s',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'Unicode  буквы %s',
     'unicode %n as letter':
