@@ -723,8 +723,8 @@ SnapTranslator.dict.eu = {
         'mundua',
     'letter %ix of %s':
         '%ix . letra hemendik %s',
-    'length of %s':
-        'honen luzera %s',
+    '%ta of text %s':
+        'honen %ta %s',
     'unicode of %s':
         'honen unicode %s',
     'unicode %n as letter':
@@ -1801,6 +1801,8 @@ SnapTranslator.dict.eu = {
     // list watchers
     'length: ':
         'luzera: ',
+    'length':
+        'luzera',
 
     // coments
     'add comment here...':
