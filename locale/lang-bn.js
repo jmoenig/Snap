@@ -592,8 +592,8 @@ SnapTranslator.dict.bn = {
         'পৃথিবী',
     'letter %ix of %s':
         '%ix -তম বর্ণ %s এর',
-    'length of %s':
-        '%s -এর বর্ণদৈর্ঘ্য ',
+    '%ta of text %s':
+        '%ta %s -এর বর্ণদৈর্ঘ্য ',
     'unicode of %s':
         '%s -এর ইউনিকোড',
     'unicode %n as letter':
