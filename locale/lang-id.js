@@ -570,8 +570,8 @@ SnapTranslator.dict.id = {
         'dunia',
     'letter %ix of %s':
         'huruf %ix dari %s',
-    'length of %s':
-        'panjang dari %s',
+    '%ta of text %s':
+        '%ta dari %s',
     'unicode of %s':
         'nilai unicode dari %s',
     'unicode %n as letter':
@@ -1182,6 +1182,9 @@ SnapTranslator.dict.id = {
     // list watchers
     'length: ':
         'panjang: ',
+
+    'length':
+        'panjang',
 
     // coments
     'add comment here...':
