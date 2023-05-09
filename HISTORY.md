@@ -13,7 +13,7 @@
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * Expanded the `#open:` URL scheme to accept image URLs.
-    * new "ide_translation_dict" and "ide_set_translation_dict(data)" extension primitives
+    * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
@@ -45,8 +45,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
-### 2023-05-08
+### 2023-05-09
 * extensions: added "ide_set_translation_dict(data)" extension primitive
+* extensions: added "txt_export(txt, name)" extension primitive
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)

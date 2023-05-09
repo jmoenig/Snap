@@ -331,6 +331,18 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'txt_export(txt, name)',
+    function (txt, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(txt, ['text', 'number']);
+        name = name || localize('data');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        ide.saveFileAs(txt.toString(), 'text/txt', name);
+    }
+);
+
 // bitwise operations
 
 SnapExtensions.primitives.set(
