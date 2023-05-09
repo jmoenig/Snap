@@ -573,8 +573,8 @@ SnapTranslator.dict.eo = {
         'mondo',
     'letter %ix of %s':
         'litero %ix el %s',
-    'length of %s':
-        'longeco de %s',
+    '%ta of test %s':
+        '%ta de %s',
     'unicode of %s':
         'unikodo de %s',
     'unicode %n as letter':
@@ -1193,6 +1193,8 @@ SnapTranslator.dict.eo = {
     // list watchers
     'length: ':
         'longeco: ',
+    'length':
+        'longeco',
 
     // coments
     'add comment here...':
