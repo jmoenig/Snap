@@ -555,8 +555,8 @@ SnapTranslator.dict.ml = {
         'ലോകം',
     'letter %ix of %s':
         '%ix ന്‍റെ %n മത്തെ അക്ഷരം',
-    'length of %s':
-        '%s ന്‍റെ നീള',
+    '%ta of text %s':
+        '%ta %s ന്‍റെ നീള',
     'unicode of %s':
         'Unicode Wert von %s',
     'unicode %n as letter':
