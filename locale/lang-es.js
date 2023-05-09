@@ -935,8 +935,8 @@ SnapTranslator.dict.es = {
         'separar %s por %delim',
     'letter %ix of %s':
         'letra %ix de %s',
-    'length of %s':
-        'longitud de %s',
+    '%ta of text %s':
+        '%ta de %s',
     'unicode of %s':
         'unic\u00F3digo de %s',
     'unicode %n as letter':
