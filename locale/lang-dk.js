@@ -549,8 +549,8 @@ SnapTranslator.dict.dk = {
         'verden',
     'letter %ix of %s':
         'bogstav %ix af %s',
-    'length of %s':
-        'l\u00E6ngde af %s',
+    '%ta of text %s':
+        '%ta af %s',
     'unicode of %s':
         'unicode af %s',
     'unicode %n as letter':
@@ -1078,6 +1078,8 @@ SnapTranslator.dict.dk = {
     // list watchers
     'length: ':
         'l\u00E6ngde: ',
+    'length':
+        'l\u00E6ngde',
 
     // coments
     'add comment here...':
