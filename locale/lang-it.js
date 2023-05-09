@@ -1,2116 +1,858 @@
-/*
-
-	lang-it.js
-
-	Italian  translation for SNAP!
-
-	written by Jens MÃ¶nig
-
-    Copyright (C) 2021 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.it = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ã„, Ã¤   \u00c4, \u00e4
-    Ã–, Ã¶   \u00d6, \u00f6
-    Ãœ, Ã¼   \u00dc, \u00fc
-    ÃŸ      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Italiano', // the name as it should appear in the language menu
-    'language_translator':
-        'Stefano Federici, Alice Andrea Deiana, Alberto Firpo, Massimo Ghisalberti', // your name for the Translators tab
-    'translator_e-mail':
-        's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com', // optional
-    'last_changed':
-        '2021-12-26', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'SenzaTitolo',
-    'development mode':
-        'modalit\u00E0 sviluppo',
-
-    // categories:
-    'Motion':
-        'Movimento',
-    'Looks':
-        'Aspetto',
-    'Sound':
-        'Suono',
-    'Pen':
-        'Penna',
-    'Control':
-        'Controllo',
-    'Sensing':
-        'Sensori',
-    'Operators':
-        'Operatori',
-    'Variables':
-        'Variabili',
-    'Lists':
-        'Liste',
-    'Other':
-        'Altro',
-
-    // editor:
-    'draggable':
-        'trascinabile',
-
-    // tabs:
-    'Scripts':
-        'Script',
-    'Costumes':
-        'Costumi',
-    'Backgrounds':
-        'Sfondi',
-    'Sounds':
-        'Suoni',
-
-    // names:
-    'Sprite':
-        'Sprite',
-    'Stage':
-        'Stage',
-
-    // rotation styles:
-    'don\'t rotate':
-        'non ruotare',
-    'can rotate':
-        'pu\u00F2 ruotare',
-    'only face left/right':
-        'voltati solo a destra/sinistra',
-
-    // new sprite button:
-    'add a new sprite':
-        'aggiungi un nuovo sprite',
-    'add a new Turtle sprite':
-        'aggiungi una nuova Tartaruga',
-    'paint a new sprite':
-        'disegna un nuovo sprite',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'scatta una foto\ne usala come un nuovo sprite',
-
-
-    // tab help
-    'costumes tab help':
-        'Importa un\'immagine da una pagina web\n'
-            + 'o da un file sul tuo computer trascinandolo qui',
-    'import a sound from your computer\nby dragging it into here':
-        'Importa un suono dal tuo computer trascinandolo qui',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Stage selezionato:\nNessun blocco per il movimento\n',
-
-    'move %n steps':
-        'fai %n passi',
-    'turn %clockwise %n degrees':
-        'ruota di %clockwise %n gradi',
-    'turn %counterclockwise %n degrees':
-        'ruota di %counterclockwise %n gradi',
-    'point in direction %dir':
-        'punta in direzione %dir',
-    'point towards %dst':
-        'punta verso %dst',
-    'go to x: %n y: %n':
-        'vai a x: %n y: %n',
-    'go to %dst':
-        'raggiungi %dst',
-    'glide %n secs to x: %n y: %n':
-        'scivola in %n secondi a x: %n y: %n',
-    'change x by %n':
-        'cambia x di %n',
-    'set x to %n':
-        'vai dove x \u00E8 %n',
-    'change y by %n':
-        'cambia y di %n',
-    'set y to %n':
-        'vai dove y \u00E8 %n',
-    'if on edge, bounce':
-        'rimbalza quando tocchi il bordo',
-    'x position':
-        'posizione x',
-    'y position':
-        'posizione y',
-    'direction':
-        'direzione',
-
-    // looks:
-    'switch to costume %cst':
-        'passa al costume %cst',
-    'next costume':
-        'passa al costume seguente',
-    'costume #':
-        'numero costume',
-    'say %s for %n secs':
-        'dire %s per %n secondi',
-    'say %s':
-        'dire %s',
-    'think %s for %n secs':
-        'pensa %s per %n secondi',
-    'think %s':
-        'pensa %s',
-    'Hello!':
-        'Ciao!',
-    'Hmm...':
-        'Hmm...',
-    '%img of costume %cst':
-        '%img del costume %cst',
-    'new costume %l width %dim height %dim':
-        'nuovo costume %l larghezza %dim altezza %dim',
-    'stretch %cst x: %n y: %n %':
-        'allunga %cst del %n % in orizzontale e del %n % in verticale',
-    'change %eff effect by %n':
-        'cambia effetto %eff di %n',
-    'set %eff effect to %n':
-        'porta effetto %eff a %n',
-    'clear graphic effects':
-        'rimuovi effetti grafici',
-    '%eff effect':
-        'effetto %eff',
-    'change size by %n':
-        'cambia dimensione di %n',
-    'set size to %n %':
-        'porta dimensione a %n %',
-    'size':
-        'dimensione',
-    'show':
-        'mostra',
-    'hide':
-        'nascondi',
-    'shown?':
-        'visibile',
-    'go to %layer layer':
-        'vai in %layer piano',
-    'front':
-        'primo',
-    'back':
-        'secondo',
-    'go back %n layers':
-        'vai indietro di %n livelli',
-
-    'development mode \ndebugging primitives:':
-        'modalit\u00E0 sviluppo\nComandi di debug',
-    'console log %mult%s':
-        'console log: %mult%s',
-    'alert %mult%s':
-        'avviso: %mult%s',
-
-    'pixels':
-        'pixel',
-    'current':
-        'attuale',
-
-    // sound:
-    'play sound %snd':
-        'produci suono %snd',
-    'play sound %snd until done':
-        'produci suono %snd e attendi la fine',
-    'stop all sounds':
-        'arresta tutti i suoni',
-    'rest for %n beats':
-        'fai una pausa di %n battute',
-    'play sound %snd at %rate Hz':
-        'riproduci suono %snd a %rate Hz',
-    '%aa of sound %snd':
-        '%aa del suono %snd',
-    'duration':
-        'durata',
-    'length':
-        'lunghezza',
-    'number of channels':
-        'numero di canali',
-    'new sound %l rate %rate Hz':
-        'nuovo suono %l frequenza %rate Hz',
-    'play note %note for %n beats':
-        'riproduci nota %note per %n battute',
-    'set instrument to %inst':
-        'passa a strumento %inst',
-    'change tempo by %n':
-        'cambia tempo di %n',
-    'set tempo to %n bpm':
-        'porta tempo a %n bpm',
-    'tempo':
-        'tempo',
-    'change volume by %n':
-        'cambia volume di %n',
-    'set volume to %n %':
-        'porta volume a %n %',
-    'change balance by %n':
-        'cambia bilanciamento di %n',
-    'set balance to %n':
-        'porta bilanciamento a %n',
-    'balance':
-        'bilanciamento',
-    'play frequency %n Hz':
-        'riproduci frequenza %n Hz',
-    'stop frequency':
-        'interrompi riproduzione frequenza',
-    'play %n Hz for %n secs':
-        'riproduci %n Hz per %n secondi',
-
-    // "instruments", i.e. wave forms
-    '(1) sine':
-        '(1) con onda sinusoidale',
-    '(2) square':
-        '(2) con onda quadrata',
-    '(3) sawtooth':
-        '(3) con onda a dente di sega',
-    '(4) triangle':
-        '(4) con onda triangolare',
-
-    // pen:
-    'clear':
-        'pulisci',
-    'pen down':
-        'penna gi\u00F9',
-    'pen up':
-        'penna su',
-    'pen down?':
-        'penna giÃ¹',
-    'set pen color to %clr':
-        'usa penna di colore %clr',
-    'set background color to %clr':
-        'porta colore sfondo a %clr',
-    'change pen %clrdim by %n':
-        'cambia %clrdim della penna di %n',
-    'change background %clrdim by %n':
-        'cambia %clrdim sfondo di %n',
-    'set pen %clrdim to %n':
-        'porta %clrdim della penna a %n',
-    'set background %clrdim to %n':
-        'porta %clrdim sfondo a %n',
-    'pen %pen':
-        '%pen della penna',
-    'change pen size by %n':
-        'cambia dimensione penna di %n',
-    'set pen size to %n':
-        'porta dimensione penna a %n',
-    'stamp':
-        'timbra',
-    'fill':
-        'riempi',
-    'write %s size %n':
-        'scrivi %s di dimensione %n',
-    'paste on %spr':
-        'timbra su %spr',
-    'cut from %spr':
-        'ritaglia da %spr',
-    'pen vectors':
-        'vettori penna',
-
-    // control:
-    'when %greenflag clicked':
-        'quando si clicca su %greenflag',
-    'when %keyHat key pressed %keyName':
-        'quando si preme il tasto %keyHat %keyName',
-	'key':
-        'tasto',
-    'when I am %interaction':
-        'quando sono %interaction',
-    'clicked':
-        'cliccato',
-    'pressed':
-        'premuto',
-    'dropped':
-        'lasciato',
-    'mouse-entered':
-        'a contatto con il mouse',
-    'mouse-departed':
-        'non a contatto con il mouse',
-    'scrolled-down':
-    	'scrollato verso il basso',
-    'scrolled-up':
-        'scrollato verso l\u0027alto',
-    'stopped':
-        'fermo',
-    'when %b':
-        'quando %b',
-    'when I receive %msgHat %message':
-        'quando ricevo %msgHat %message',
-    'broadcast %msg %receive':
-        'invia %msg %receive',
-    'broadcast %msg %receive and wait':
-        'invia %msg %receive e attendi',
-    'to':
-        'a',
-    'Message name':
-        'Nome messaggio',
-    'message':
-        'messaggio',
-    'any message':
-        'qualunque messaggio',
-    'wait %n secs':
-        'attendi %n secondi',
-    'wait until %b':
-        'attendi fino a quando %b',
-    'forever %loop':
-        'per sempre %loop',
-    'repeat %n %loop':
-        'ripeti %n volte %loop',
-    'repeat until %b %loop':
-        'ripeti fino a quando %b %loop',
-    'for %upvar = %n to %n %cla':
-        'per %upvar = %n a %n %cla',
-    'if %b %c':
-        'se %b %c',
-    'if %b %c else %c':
-        'se %b %c altrimenti %c',
-    'if %b then %s else %s':
-        'se %b allora %s altrimenti %s',
-    'report %s':
-        'risultato %s',
-    'stop %stopChoices':
-		  'ferma %stopChoices',
-    'all':
-        'tutti',
-    'this script':
-        'questo script',
-    'this block':
-        'questo blocco',
-    'stop %stopOthersChoices':
-        'ferma %stopOthersChoices',
-    'all but this script':
-        'tutto tranne questo script',
-    'other scripts in sprite':
-        'altri script dello sprite',
-    'pause all %pause':
-        'pausa tutto %pause',
-    'run %cmdRing %inputs':
-        'esegui %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'lancia %cmdRing %inputs',
-    'call %repRing %inputs':
-        'chiama %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'esegui %cmdRing con continuazione',
-    'call %cmdRing w/continuation':
-        'chiama %cmdRing con continuazione',
-    'warp %c':
-        'esegui in modalit\u00E0 turbo %c',
-    'when I start as a clone':
-        'quando vengo clonato',
-    'create a clone of %cln':
-        'crea un clone di %cln',
-    'a new clone of %cln':
-        'un nuovo clone di %cln',
-    'myself':
-        'me stesso',
-    'delete this clone':
-        'elimina questo clone',
-    'switch to scene %scn %send':
-        'passa alla scena %scn %send',
-    'and send':
-        'e invia',
-    'next':
-        'successiva',
-    'previous':
-        'precedente',
-     'tell %spr to %cmdRing %inputs':
-        'chiedi a %spr di eseguire %cmdRing %inputs',
-    'ask %spr for %repRing %inputs':
-        'chiedi a %spr il valore di %repRing %inputs',
-
-    // sensing:
-    'touching %col ?':
-        'sta toccando %col',
-    'touching %clr ?':
-        'sta toccando il colore %clr',
-    'color %clr is touching %clr ?':
-        'il colore %clr sta toccando il colore %clr',
-    'ask %s and wait':
-        'chiedi %s e attendi',
-    'what\'s your name?':
-        'come ti chiami?',
-    'answer':
-        'risposta',
-    'mouse x':
-        'x del mouse',
-    'mouse y':
-        'y del mouse',
-    'mouse down?':
-        'tasto del mouse premuto',
-    'key %key pressed?':
-        'tasto %key premuto',
-    '%rel to %dst':
-        '%rel da %dst',
-    'distance':
-    	'distanza',
-    'ray length':
-        'lunghezza raggio',
-    '%asp at %loc' :
-        'valore di %asp alla posizione %loc',
-    'r-g-b-a':
-        'RGBA',
-    'sprites' :
-        'elenco sprite',
-    'reset timer':
-        'azzera cronometro',
-    'timer':
-        'cronometro',
-    '%att of %spr':
-        '%att di %spr',
-    'my %get':
-        'attributo %get',
-    'object %self':
-        'oggetto %self',
-    'http:// %s':
-        'leggi pagina web http:// %s',
-    'turbo mode?':
-        'modalit\u00E0 turbo attiva',
-    'flat line ends':
-        'terminazione piatta delle linee',
-    'is %setting on?':
-        '%setting attivo',
-    'set %setting to %b':
-        'porta %setting a %b',
-    'current %dates':
-        '%dates attuale',
-  	'year':
-          'anno',
-    'month':
-          'mese',
-    'date':
-          'giorno',
-    'day of week':
-	    'giorno della settimana',
-    'hour':
-          'ora',
-    'minute':
-          'minuto',
-    'second':
-          'secondo',
-    'time in milliseconds':
-	    'ora in millisecondi',
-    'microphone %audio':
-        '%audio del microfono',
-    'volume':
-        'volume',
-    'note':
-        'nota',
-    'frequency':
-        'frequenza',
-    'samples':
-        'campioni',
-    'sample rate':
-        'frequenza di campionamento',
-    'spectrum':
-        'spettro',
-    'resolution':
-        'risoluzione',
-    'Microphone resolution...':
-        'Risoluzione microfono...',
-    'Microphone':
-        'microfono',
-    'low':
-        'basso',
-    'high':
-        'alto',
-    'max':
-        'max',
-    'video %vid on %self':
-        '%vid del  video su %self',
-    'motion':
-        'movimento',
-    'snap':
-        'porzione',
-    'set video transparency to %n':
-        'porta trasparenza del video a %n',
-    'video capture':
-        'cattura video',
-    'mirror video':
-        'video riflesso',
-    'filtered for %clr':
-        'selezionati per colore %clr',
-    'stack size':
-        'dimensione stack',
-    'frames':
-        'frame',
-    'log pen vectors':
-        'log vettori della penna',
-    '%block of block %repRing':
-        '%block blocco %repRing',
-    'definition':
-        'definizione',
-    'custom?':
-        '\u00E8 personalizzato',
-    'global?':
-        '\u00E8 globale',
-
-    // operators:
-    '%n mod %n':
-        'resto della divisione di %n diviso %n',
-    'round %n':
-        'arrotonda %n',
-    '%fun of %n':
-        '%fun di %n',
-    'pick random %n to %n':
-        'numero a caso tra %n e %n',
-    'and':
-        'e',
-    'or':
-        'o',
-    'not %b':
-        'non %b',
-    'true':
-        'vero',
-    'false':
-        'falso',
-    'join %words':
-        'unione di %words',
-   'split %s by %delim':
-        'separa %s ad ogni %delim',
-    'hello':
-        'ciao',
-    'world':
-        'mondo',
-    'letter %ix of %s':
-        'lettera in posizione %ix di %s',
-    '%ta of text %s':
-        '%ta di %s',
-    'unicode of %s':
-        'codice unicode di %s',
-    'unicode %n as letter':
-        'lettera con codice unicode %n',
-    'is %s a %typ ?':
-        '%s \u00E8 di tipo %typ',
-    'is %s identical to %s ?':
-        '%s \u00E8 identico a %s ',
-    'is %all== ?':
-        '%all== ?',
-    'identical to':
-        '\u00E8 identico a',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-    'JavaScript function ( %mult%s ) { %code }':
-        'funzione JavaScript ( %mult%s ) { %code }',
-    'compile %repRing':
-    	'compila %repRing',
-
-    'type of %s':
-        'tipo di %s',
-
-    // variables:
-    'Make a variable':
-        'Nuova variabile',
-    'Variable name':
-        'Nome della variabile?',
-    'Script variable name':
-        'Nome della variabile locale?',
-    'inherit %shd':
-        'eredita %shd',
-    'Delete a variable':
-        'Cancella variabile',
-
-    'set %var to %s':
-        'porta %var a %s',
-    'change %var by %n':
-        'cambia %var di %n',
-    'show variable %var':
-        'mostra variabile %var',
-    'hide variable %var':
-        'nascondi variabile %var',
-    'script variables %scriptVars':
-        'variabili dello script: %scriptVars',
-
-    // lists:
-    'list %exp':
-        'lista %exp',
-    'numbers from %n to %n':
-        'numeri da %n a %n',
-    '%s in front of %l':
-        '%s davanti a %l',
-    'item %idx of %l':
-        'elemento %idx di %l',
-    'all but first of %l':
-        'tutto meno il primo elemento di %l',
-    'length of %l':
-        'lunghezza di %l',
-    '%la of %l':
-        '%la di %l',
-    'rank':
-        'rango',
-    'dimensions':
-        'dimensione',
-    'flatten':
-        'appiattimento',
-    'columns':
-        'colonne',
-    'reverse':
-        'inversa',
-    'lines':
-        'linee',
-    '%l contains %s':
-        '%l contiene %s',
-    'thing':
-        'cosa',
-    'is %l empty?':
-        '%l \u00E8 vuota',
-    'index of %s in %l':
-        'posizione di %s in %l',
-    'map %repRing over %l':
-        'applica %repRing su %l',
-    'keep items %predRing from %l':
-        'seleziona elementi %predRing in %l',
-    'find first item %predRing in %l':
-        'trova il primo elemento %predRing di %l',
-    'combine %l using %repRing':
-        'combina elementi di %l usando %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz applica %repRing su %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz seleziona elementi %predRing in %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz trova il primo elemento %predRing di %l',
-    '%blitz combine %l using %repRing':
-        '%blitz combina elementi di %l usando %repRing',
-    'for each %upvar in %l %cla':
-        'per ogni %upvar di %l %cla',
-    'item':
-        'elemento',
-    'value':
-        'Wert',
-    'index':
-        'posizione',
-    'append %lists':
-        'unisci %lists',
-    'reshape %s to %nums':
-        'riorganizza %s su %nums',
-    'add %s to %l':
-        'aggiungi %s a %l',
-    'delete %ida of %l':
-        'cancella %ida da %l',
-    'insert %s at %idx of %l':
-        'inserisci %s alla posizione %idx di %l',
-    'replace item %idx of %l with %s':
-        'sostituisci elemento %idx di %l con %s',
-
-    // other
-    'Make a block':
-        'Crea un blocco',
-
-    // menus
-    // snap menu
-    'About...':
-        'Informazioni su Snap!...',
-   'Reference manual':
-        'Manuale',
-    'Snap! website':
-        'Sito web di Snap!',
-    'Download source':
-        'Scarica il codice sorgente',
-    'Switch back to user mode':
-        'Torna alla modalit\u00E0 utente',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'disabilita i menu contestuali\ndi Morphic e mostra quelli user-friendly',
-    'Switch to dev mode':
-        'Passa alla modalit\u00E0 sviluppo',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'Abilita i menu contestuali\ndi Morphic e l\'inspector,\n non user-friendly',
-
-    // project menu
-    'Project notes...':
-        'Note di Progetto...',
-    'New':
-        'Nuovo',
-    'Open...':
-        'Apri...',
-    'Save':
-        'Salva',
-    'Save to disk':
-        'Salva su disco',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-	    'salva questo progetto\nnella cartella Download\n'
-            + '(nei browser compatibili)',
-    'Save As...':
-        'Salva con nome...',
-    'Import...':
-        'Importa...',
-    'file menu import hint':
-        'carica un file di progetto,\nuna libreria di blocchi,'
-            + '\nun costume o un suono esportati'
-            + '\n\nNon supportato da tutti i browser',
-    'Export project as plain text...':
-        'Esporta il progetto come un file di testo...',
-    'Export project...':
-        'Esporta il progetto...',
-    'save project data as XML\nto your downloads folder':
-        'salva i dati del progetto in formato XML\nnella cartella Download',
-    'show project data as XML\nin a new browser window':
-        'mostra i dati del progetto in formato XML\nin una nuova finestra del browser',
-    'Export blocks...':
-        'Esporta blocchi...',
-    'save global custom block\ndefinitions as XML':
-        'salva le definizioni dei nuovi blocchi globali\nin formato XML',
-    'Unused blocks...':
-        'Blocchi inutilizzati...',
-    'Hide blocks...':
-        'Nascondi blocchi...',
-    'New category...':
-        'Nuova categoria...',
-    'Remove a category...':
-        'Rimuovi una categoria...',
-    'Scenes...':
-        'Scene...',
-    'New scene':
-        'Nuova scena',
-    'Add scene...':
-        'Aggiungi scena...',
-    'find unused global custom blocks\nand remove their definitions':
-        'trova i nuobi blocchi inutilizzati\ne rimuove le loro definizioni',
-    'Remove unused blocks':
-        'Rimuovi blocchi inutilizzati',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'al momento non sono presenti\nin questo progetto nuovi blocchi inutilizzati',
-    'unused block(s) removed':
-        'blocchi inutilizzati rimossi',
-    'Export summary...':
-        'Esporta sommario...',
-    'save a summary\nof this project':
-        'salva un sommario\ndi questo progetto',
-    'Contents':
-        'Contenuti',
-    'Kind of':
-        'Tipo di',
-    'Part of':
-        'Parte di',
-    'Parts':
-        'Parti',
-    'Blocks':
-        'Blocchi',
-    'For all Sprites':
-        'Per tutti gli sprite',
-    'Libraries...':
-        'Modulo...',
-    'Select categories of additional blocks to add to this project.':
-        'Seleziona le categorie di blocchi addizionali da aggiungere al progetto.',
-    'Select a costume from the media library':
-        'Seleziona un costume dalla libreria dei media',
-    'Select a sound from the media library':
-        'Seleziona un suono dalla libreria dei media',
-    'Undelete sprites...':
-        'Ripristina sprite...',
-    'Bring back deleted sprites':
-        'Ripristina gli sprite rimossi',
-    'trash is empty':
-        'il cestino \u00E8 vuoto',
-
-    //Libraries
-    'Import library':
-        'Importa modulo',
-    'Loading':
-        'Caricamento in corso',
-    'Imported':
-        'Importato',
-    'Iteration, composition':
-        'Iterazione, composizione',
-    'List utilities':
-        'Operazioni su liste',
-    'Variadic reporters':
-        'Monitor con argomenti variabili',
-    'Web services access (https)':
-        'Accesso ai servizi web (https)',
-    'Multi-branched conditional (switch)':
-        'Strutture di controllo ramificate (switch)',
-    'Controller LEAP Motion':
-        'LEAP Motion Controller',
-    'Words, sentences':
-        'Parole, frasi',
-    'Catch errors in a script':
-        'Intercettare errori degli script',
-    'Set RGB or HSV pen color':
-        'Colori della penna RGB o HSV',
-    'Text to speech':
-        'Da testo a voce',
-    'Provide 100 selected colors':
-        '100 colori',
-    'Infinite precision integers, exact rationals, complex':
-        'Interi a precisione arbitraria, razionali esatti, complessi',
-    'Provide getters and setters for all GUI-controlled global settings':
-        'Getter e setter per le impostazioni che controllano la GUI',
-    'Allow multi-line text input to a block':
-        'Argomenti multilinea di tipo testo per i blocchi',
-    'Create variables in program':
-        'Creare variabili programmaticamente',
-
-    // cloud menu
-    'Login...':
-        'Accedi...',
-    'Signup...':
-        'Registrati...',
-    'Logout':
-        'Logout',
-    'Change Password...':
-        'Cambia Password...',
-    'Reset Password...':
-        'Azzera Password...',
-    'Resend Verification Email...':
-        'Invia di nuovo Email di Verifica...',
-    'Open in Community Site':
-        'Apri nel Sito di Snap',
-
-    // settings menu
-    'Language...':
-        'Lingua...',
-    'Zoom blocks...':
-        'Zoom dei blocchi...',
-    'Fade blocks...':
-        'Trasparenza dei blocchi...',
-    'Stage size...':
-        'Dimensione pannello...',
-    'Stage size':
-        'Dimensione pannello',
-    'Stage width':
-        'Larghezza pannello',
-    'Stage height':
-        'Altezza pannello',
-    'Default':
-        'Default',
-    'Blurred shadows':
-        'Ombreggiature attenuate',
-    'uncheck to use solid drop\nshadows and highlights':
-        'disabilitare per visualizzare ombreggiature\ned evidenziature solide',
-    'check to use blurred drop\nshadows and highlights':
-        'abilitare per visualizzare ombreggiature\ned evidenziature attenuate',
-    'Zebra coloring':
-        'Colorazione alternata',
-    'check to enable alternating\ncolors for nested blocks':
-        'abilitare per visualizzare a colori\nalternati i blocchi annidati',
-    'uncheck to disable alternating\ncolors for nested block':
-        'disabilitare per non visualizzare a colori\nalternati i blocchi annidati',
-    'Dynamic input labels':
-        'Etichette degli input dinamiche',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'disabilitare per non avere etichette\ndinamiche per input variabili',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'abilitare per avere etichette\ndinamiche per input variabili',
-    'Prefer empty slot drops':
-        'Favorisci l\'aggancio a slot vuoti',
-    'settings menu prefer empty slots hint':
-        'abilitare per favorire l\'inserimento in slot vuoti\nquando si trascinano e rilasciano dei reporter',
-
-    'uncheck to allow dropped\nreporters to kick out others':
-        'disabilitare per permettere agli slot di espellere\ni reporter inclusi al loro interno',
-
-    'check to turn on\n visible stepping (slow)':
-        'abilitare per avviare\nesecuzione passo passo (lenta)',
-    'uncheck to turn off\nvisible stepping':
-        'disabilitare per interrompere\nesecuzione passo passo',
-    'Long form input dialog':
-        'Usa finestra degli input estesa',
-    'Plain prototype labels':
-        'Etichetta prototipo base',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'disabilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
-    'check to hide (+) symbols\nin block prototype labels':
-        'abilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
-    'check to always show slot\ntypes in the input dialog':
-        'abilitare per mostrare sempre i tipi degli slot\nnella finestra di creazione degli input',
-    'uncheck to use the input\ndialog in short form':
-        'disabilitare per non mostrare automaticamente i tipi degli slot\nnella finestra di creazione degli input',
-    'JavaScript extensions':
-        'Estensioni JavaScript',
-    'check to support\nnative JavaScript functions':
-        'abilitare per supportare\nfunzioni JavaScript native',
-    'uncheck to disable support for\nnative JavaScript functions':
-        'disabilitare per rimuovere il supporto\nalle funzioni JavaScript native',
-    'JavaScript extensions for Snap!\nare turned off':
-        'Le estensioni JavaScript per Snap!\nsono disabilitate',
-    'Extension blocks':
-        'Blocchi estensione',
-    'uncheck to hide extension\nprimitives in the palette':
-        'disabilitare per nascondere le primitive\ndelle estensioni nell\u0027elenco dei blocchi',
-    'check to show extension\nprimitives in the palette':
-        'abilitare per mostrare le primitive\ndelle estensioni nell\u0027elenco dei blocchi',
-    'Input sliders':
-        'Usa cursore per gli input',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'disabilitare per non visualizzare i cursori\n per inserire valori numerici',
-    'check to enable\ninput sliders for\nentry fields':
-        'abilitare per visualizzare i cursori\n per inserire valori numerici',
-    'Retina display support':
-        'Supporto schermo Retina',
-    'uncheck for lower resolution,\nsaves computing resources':
-	    'disabilitare per bassa risoluzione,\nrisparmi risorse di calcolo',
-    'check for higher resolution,\nuses more computing resources':
-	    'abilitare per alta risoluzione,\nusa maggiori risorse di calcolo',
-    'Codification support':
-        'Supporto codificazione',
-    'Clicking sound':
-        'Click di aggancio dei blocchi',
-    'uncheck to turn\nblock clicking\nsound off':
-        'disabilitare per non riprodurre il suono di aggancio dei blocchi',
-    'check to turn\nblock clicking\nsound on':
-        'abilitare per riprodurre il suono di aggancio dei blocchi',
-    'Animations':
-        'Animazioni',
-    'uncheck to disable\nIDE animations':
-        'disabilitare per non consentire\nanimazioni dell\u0027IDE',
-    'Turbo mode':
-        'Modalit\u00E0 Turbo',
-    'check to prioritize\nscript execution':
-        'abilitare per dare priorit\u00E0\nall\u0027esecuzione degli script',
-    'uncheck to run scripts\nat normal speed':
-        'disabilitare per eseguire gli script\na velocitÃ  normale',
-    'check to enable\nIDE animations':
-        'abilitare per nconsentire\nanimazioni dell\u0027IDE',
-    'Flat design':
-        'Aspetto piatto interfaccia',
-    'check for alternative\nGUI design':
-        'abilitare per GUI alternativa',
-    'uncheck for default\nGUI design':
-        'disabilitare per GUI standard',
-    'Nested auto-wrapping':
-        'Autowrapping annidato',
-    'Keyboard Editing':
-        'Modifica della tastiera',
-    'Table support':
-        'Supporto per le tabelle',
-    'Table lines':
-        'Tabelle con linee',
-    'Visible stepping':
-        'Esecuzione passo-passo',
-    'Thread safe scripts':
-        'Script interrompibili',
-    'uncheck to allow\nscript reentrance':
-	    'disabilitare per\npermettere di interrompere gli script',
-    'check to disallow\nscript reentrance':
-	    'abilitare per\nimpedire di interrompere gli script',
-    'Flat line ends':
-        'Estremit\u00E0 delle linee squadrata',
-    'check for flat ends of lines':
-        'abilitare per estremit\u00E0 delle linee squadrate',
-    'uncheck for round ends of lines':
-        'disabilitare per estremit\u00E0 delle linee arrotondate',
-    'Ternary Boolean slots':
-        'Argomenti Booleani Ternari',
-    'Inheritance support':
-        'Supporto ereditarietÃ  degli sprite',
-    'Hyper blocks support':
-        'Supporto Iperblocchi',
-    'uncheck to disable\nusing operators on lists and tables':
-         'disabilitare per non usare\ngli operatori su liste e tabelle',
-    'check to enable\nusing operators on lists and tables':
-         'abilitare per usare\ngli operatori su liste e tabelle',
-    'Log pen vectors':
-        'Log dei vettori della penna',
-    'uncheck to turn off\nlogging pen vectors':
-        'disabilitare per non loggare\ni vettori della penna',
-    'check to turn on\nlogging pen vectors':
-        'abilitare per loggare\ni vettori della penna',
-    'Single palette':
-        'Elenco dei blocchi continuo',
-    'check to show all blocks in a single palette':
-        'abilitare per mostrare tutti\ni blocchi in un unico elenco',
-    'uncheck to show only the selected category\'s blocks':
-        'disabilitare per mostrare solo i blocchi\ndella categoria selezionata',
-    'Show categories':
-        'Mostra categorie',
-    'uncheck to hide\ncategory names\nin the palette':
-        'disabilitare per nascondere\ni nomi delle categorie\nnell\'elenco dei blocchi',
-    'check to show\ncategory names\nin the palette':
-        'abilitare per mostrare\ni nomi delle categorie\nnell\'elenco dei blocchi',
-    'Show buttons':
-        'Mostra pulsanti',
-    'uncheck to hide buttons\nin the palette':
-        'disabilitare per nascondere\ni pulsanti delle categorie',
-    'check to show buttons\nin the palette':
-        'abilitare per mostrare\ni pulsanti delle categorie',
-    'HSL pen color model':
-        'Modello HSL per i colori della penna',
-    'uncheck to switch pen colors\nand graphic effects to HSV':
-        'disabilitare per passare a colori della penna\ne effetti grafici HSV',
-    'check to switch pen colors\nand graphic effects to HSL':
-        'disabilitare per passare a colori della penna\ne effetti grafici HSL',
-    'Disable click-to-run':
-        'Disabilitare esecuzione con click',
-    'enable\ndirectly running blocks\nby clicking on them':
-	    'abilitare per\neseguire direttamente i blocchi\ncliccandoli',
-    'check to disable\ndirectly running blocks\nby clicking on them':
-	    'disabilitare per\nnon eseguire direttamente i blocchi\ncliccandoli',
-
-    // inputs
-    'with inputs':
-        'con argomenti',
-    'input names:':
-        'con variabili:',
-    'Input Names:':
-        'Con Variabili:',
-    'input list:':
-        'con liste:',
-
-    // context menus:
-    'help':
-        'aiuto',
-
-    // palette:
-    'find blocks':
-        'trova blocchi',
-    'hide blocks...':
-        'nascondi blocchi...',
-    'Hide blocks in palette':
-        'Nascondi i blocchi nell\'elenco dei blocchi',
-    'unused':
-        'non usati',
-    'make a category...':
-        'crea una categoria...',
-    'New Category':
-        'Nuova Categoria',
-    'Blocks category name:':
-        'Nome della nuova categoria di blocchi:',
-    'Category color':
-        'Colore della categoria',
-    'red':
-        'rosso',
-    'green':
-        'verde',
-    'blue':
-        'blu',
-    'delete a category...':
-        'rimuovi una categoria...',
-
-    // blocks:
-    'help...':
-        'aiuto...',
-    'relabel...':
-        'rinomina...',
-    'compile':
-        'compila',
-    'uncompile':
-        'decompila',
-    'duplicate':
-        'duplica',
-    'make a copy\nand pick it up':
-        'crea una copia',
-    'only duplicate this block':
-        'duplica solo questo blocco',
-    'extract':
-        'estrai',
-    'only grab this block':
-        'estrae solo questo blocco',
-    'delete':
-        'cancella',
-    'senders...':
-        'mittenti...',
-    'receivers...':
-        'destinatari...',
-    'script pic...':
-        'immagine script...',
-    'save a picture\nof this script':
-        'salva un\'immagine\ndi questo script',
-    'result pic...':
-        'immagine risultato...',
-    'save a picture of both\nthis script and its result':
-        'salva un\'immagine\ndello scrip e del risultato',
-    'ringify':
-        'inserisci in un anello',
-    'unringify':
-        'estrai dall\'anello',
-    'transient':
-        'non persistente',
-    'uncheck to save contents\nin the project':
-        'disabilitare per salvare i contenuti\nnel progetto',
-    'check to prevent contents\nfrom being saved':
-        'abilitare per prevenire\nil salvataggio dei contenuti',
-    'new line':
-        'neue Zeile',
-
-    // custom blocks:
-    'delete block definition...':
-        'cancella la definizione del blocco...',
-    'duplicate block definition...':
-        'duplica la definizione del blocco...',
-    'export block definition...':
-        'esporta la definizione del blocco...',
-    'including dependencies':
-        'incluse le dipendenze',
-    'edit...':
-        'modifica...',
-    'translations...':
-        'traduzioni...',
-    'block variables...':
-        'variabili del blocco...',
-    'in palette':
-        'nell\'elenco dei blocchi',
-
-    // sprites
-    'edit':
-        'modifica',
-    'clone':
-        'clona',
-    'move':
-        'muovi',
-    'pivot':
-        'Angelpunkt',
-    'edit the costume\'s\nrotation center':
-        'cambia il centro di rotazione\ndel costume',
-    'rotate':
-    	'ruota',
-    'stick to':
-        'attacca a',
-    'detach from':
-        'stacca da',
-    'detach all parts':
-        'stacca tutte le parti',
-    'export...':
-        'esporta...',
-    'parent...':
-        'genitore...',
-    'current parent':
-        'genitore attuale',
-    'release':
-        'rilascia',
-    'make temporary and\nhide in the sprite corral':
-        'diventa temporaneo e\nnasconditi nel corral degli sprite',
-
-    // stage:
-    'show all':
-        'mostra tutti gli sprite',
-    'pic...':
-        'salva immagine dello Stage...',
-    'save a picture\nof the stage':
-        'salva immagine\ndello Stage',
-    'svg...':
-        'esporta come SVG...',
-    'export pen trails\nline segments as SVG':
-        'esporta i tratti\ndella penna come SVG',
-    'there are currently no\nvectorizable pen trail segments':
-        'al momento non sono presenti\ntratti della penna vettoriali',
-    'turn all pen trails and stamps\ninto a new background for the stage':
-        'crea un nuovo sfondo\nusando tratti della penna e timbri',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'crea un nuovo costume\nper lo sprite selezionato\nusando i tratti della penna e i timbri',
-
-    // scripting area
-    'clean up':
-        'riordina',
-    'arrange scripts\nvertically':
-        'riordina gli script\nuno sotto l\'altro',
-    'add comment':
-        'aggiungi un commento',
-    'undrop':
-        'annulla inserimento',
-    'undo the last\nblock drop\nin this pane':
-        'annulla ultimo inserimento\ndi un blocco\n in questo pannello',
-    'redrop':
-        'ripristina ultimo inserimento\ndi un blocco\n in questo pannello',
-    'use the keyboard\nto enter blocks':
-    	'usa la tastiera\nper inserire blocchi',
-    'scripts pic...':
-        'immagine script...',
-    'save a picture\nof all scripts':
-        'salva immagine\ndi tutti gli script',
-    'make a block...':
-        'crea un blocco...',
-
-    // costumes
-    'rename':
-        'rinomina',
-    'export':
-        'esporta',
-    'rename costume':
-        'rinomina costume',
-    'rename background':
-        'rinomina sfondo',
-
-    // sounds
-    'Play sound':
-        'Riproduci\nquesto suono',
-    'Stop sound':
-        'Ferma\nil suono',
-    'Stop':
-        'Stop',
-    'Play':
-        'Play',
-    'rename sound':
-        'rinomina suono',
-
-    // lists and tables
-    'list view...':
-        'vista lista...',
-    'table view...':
-        'vista tabella...',
-    'Table view':
-        'Vista tabella',
-    'open in dialog...':
-        'apri in una finestra...',
-    'blockify':
-        'crea script',
-    'reset columns':
-        'resetta colonne',
-    'items':
-        'elementi',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'Annulla',
-    'Yes':
-        'Si',
-    'No':
-        'No',
-
-    // help
-    'Help':
-        'Aiuto',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Zoom dei blocchi',
-    'build':
-        'costruisci',
-    'your own':
-        'i tuoi',
-    'blocks':
-        'blocchi',
-    'normal (1x)':
-        'normale (1x)',
-    'demo (1.2x)':
-        'Demo (1.2x)',
-    'presentation (1.4x)':
-        'presentazione(1.4x)',
-    'big (2x)':
-        'grandi (2x)',
-    'huge (4x)':
-        'molto grandi (4x)',
-    'giant (8x)':
-        'giganti (8x)',
-    'monstrous (10x)':
-        'grandissimi (10x)',
-
-    // fade blocks
-    'Fade blocks':
-        'Trasparenza blocchi',
-    'block-solid (0)':
-        'nessuna (0)',
-    'medium (50)':
-        'media (50)',
-    'light (70)':
-        'leggera (70)',
-    'shimmering (80)':
-        'accentuata (80)',
-    'elegant (90)':
-        'elevata(90)',
-    'subtle (95)':
-        'molto elevata (95)',
-    'text-only (100)':
-        'solo testo (100)',
-
-    // Project Manager
-    'Untitled':
-        'Senza Titolo',
-    'Open Project':
-        'Apri Progetto',
-    'Open':
-        'Apri',
-    '(empty)':
-        '(vuoto)',
-    'Saved!':
-        'Salvato!',
-    'Delete Project':
-        'Elimina Progetto',
-    'Are you sure you want to delete':
-        'Sei sicuro di voler eliminare',
-    'rename...':
-        'rinomina...',
-    'Examples':
-        'Esempi',
-    'Share':
-        'Condividi',
-    'Unshare':
-        'Non condividere',
-    'Publish':
-        'Pubblica',
-    'Unpublish':
-        'Non pubblicare',
-    'Updating\nproject list...':
-        'Aggiornamento\nlista dei progetti...',
-    'Recover':
-        'Recupera',
-    'Today':
-        'Oggi',
-    'Yesterday':
-        'Ieri',
-
-    // costume editor
-    'Costume Editor':
-        'Editor di Costumi',
-    'Paint Editor':
-        'Editor di Immagini',
-    'click or drag crosshairs to move the rotation center':
-        'clicca e trascina la croce per spostare il centro di rotazione',
-    'undo':
-        'annulla',
-    'Vector':
-        'Immagine vettoriale',
-    'Paintbrush tool\n(free draw)':
-        'Pennello\n(disegno a mano libera)',
-    'Stroked Rectangle\n(shift: square)':
-        'Rettangolo\n(shift: quadrato)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Ellisse\n(shift: cerchio)',
-    'Eraser tool':
-        'Gomma',
-    'Set the rotation center':
-        'Imposta il centro di rotazione',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Linea\n(shift: verticale/orizzontale)',
-    'Filled Rectangle\n(shift: square)':
-        'Rettangolo pieno\n(shift: quadrato)',
-    'Filled Ellipse\n(shift: circle)':
-        'Ellisse piena\n(shift: cerchio)',
-    'Fill a region':
-        'Riempie un\'area',
-    'Pipette tool\n(pick a color anywhere)':
-        'Contagocce\n(seleziona un colore)',
-    'Brush size':
-        'Dimensione pennello',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Vincola proporzioni delle forme?\n(in alternativa puoi\ntenere premuto shift)',
-    //'grow':
-    //    'grÃ¶ÃŸer',
-    //'shrink':
-    //    'kleiner',
-    //'flip â†”':
-    //    'drehen â†”',
-    //'flip â†•':
-    //    'drehen â†•',
-
-    'Vector Paint Editor':
-        'Editor di Immagini Vettoriale',
-    'Rectangle\n(shift: square)':
-        'Rettangolo\n(shift: quadrato)',
-    'Ellipse\n(shift: circle)':
-        'Ellisse\n(shift: cerchio)',
-    'Selection tool':
-        'Selezione',
-    'Line tool\n(shift: constrain to 45Âº)':
-        'Linea\n(shift: linee a 45Â°)',
-    'Closed brush\n(free draw)':
-        'Pennello\n(disegno a mano libera)',
-    'Paint a shape\n(shift: secondary color)':
-        'Colora una forma\n(shift: colore secondario)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Contagocce\n(seleziona un colore\nshift: colore secondario)',
-    'Edge color\n(left click)':
-        'Colore Bordo\n(click sinistro)',
-    'Fill color\n(right click)':
-        'Colore riempimento\n(click destro)',
-   // 'Top':
-   //     'oben',
-   // 'Bottom':
-   //     'unten',
-   // 'Up':
-   //     'nach oben',
-   // 'Down':
-   //     'nach unten',
-
-
-    // project notes
-    'Project Notes':
-        'Note di Progetto',
-
-    // new project
-    'New Project':
-        'Nuovo Progetto',
-    'Unsaved Changes!':
-        'Ci sono modifiche non salvate!',
-    'Replace the current project with a new one?':
-        'Vuoi sostituire il progetto attuale con uno nuovo?',
-    'Backup failed.\nThis cannot be undone, proceed anyway?':
-        'Backup fallito.\nQuesta operazione non può essere annullata, vuoi procedere?',
-
-    // save project
-    'Save Project As...':
-        'Salva Progetto Come...',
-    'Save Project':
-        'Salva Progetto',
-
-    // export blocks
-    'Export blocks':
-        'Esporta blocchi',
-    'Import blocks':
-        'Importa blocchi',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'in questo progetto non sono stati ancora definiti dei nuovi blocchi',
-    'select':
-        'seleziona',
-    'none':
-        'nessuno',
-
-    // variable dialog
-    'for all sprites':
-        'per tutti gli sprite',
-    'for this sprite only':
-        'solo per questo sprite',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        'rinomina solo\nquesto blocco',
-    'rename all...':
-        'rinomina tutto...',
-    'rename all blocks that\naccess this variable':
-        'rinomina tutti i blocchi che\naccedono questa variabile',
-
-
-    // block dialog
-    'Change block':
-        'Cambia categoria e tipo del blocco',
-    'Command':
-        'Comando',
-    'Reporter':
-        'Monitor',
-    'Predicate':
-        'Condizione',
-
-    // block editor
-    'Block Editor':
-        'Editor di Blocchi',
-    'Method Editor':
-        'Editor di Metodi',
-    'Apply':
-        'Applica',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Cancella Blocco',
-    'block deletion dialog text':
-        'Sei sicuro di voler cancellare questo blocco\n' +
-            'e tutte le sue occorrenze?',
-
-    // input dialog
-    'Create input name':
-        'Crea parametro',
-    'Edit input name':
-        'Modifica parametro',
-    'Edit label fragment':
-        'Modifica porzione di etichetta',
-    'Title text':
-        'Parole della definizione',
-    'Input name':
-        'Parametro',
-    'Delete':
-        'Cancella',
-    'Object':
-        'Oggetto',
-    'Number':
-        'Numero',
-    'Text':
-        'Testo',
-    'List':
-        'Lista',
-    'Any type':
-        'Qualunque tipo',
-    'Boolean (T/F)':
-        'Booleano (V/F)',
-    'Command\n(inline)':
-        'Comando\n(in linea)',
-    'Command\n(C-shape)':
-        'Comando \n(a forma di C)',
-    'Any\n(unevaluated)':
-        'Qualunque\n(non valutato)',
-    'Boolean\n(unevaluated)':
-        'Booleano\n(non valutato)',
-    'Single input.':
-        'Un solo valore.',
-    'Default Value:':
-        'Valore predefinito:',
-    'Multiple inputs (value is list of inputs)':
-        'Molti valori (il valore \u00E8 una lista di argomenti)',
-    'Upvar - make internal variable visible to caller':
-        'Rendi il parametro visibile all\'esterno',
-
-    // About Snap
-    'About Snap':
-        'Informazioni su Snap',
-    'Back...':
-        'Indietro...',
-    'License...':
-        'Licenza...',
-    'Modules...':
-        'Moduli...',
-    'Credits...':
-        'Crediti...',
-    'Translators...':
-        'Traduttori',
-    'License':
-        'Licenza',
-    'current module versions:':
-        'versione corrente dei moduli:',
-    'Contributors':
-        'Hanno contribuito:',
-    'Translations':
-        'Traduzioni',
-
-    // variable watchers
-    'normal':
-        'normale',
-    'large':
-        'grande',
-    'slider':
-        'cursore',
-    'slider min...':
-        'Scegli il min del cursore...',
-    'slider max...':
-        'Scegli il max del cursore...',
-    'import...':
-        'importa...',
-    'raw data...':
-        'formato originale...',
-    'import without attempting to\nparse or format data':
-        'importa i dati senza tentare\ndi elaborarli o formattarli',
-    'Slider minimum value':
-        'Valore minimo del cursore',
-    'Slider maximum value':
-        'Valore massimo del cursore',
-
-    // list watchers
-    'length: ':
-        'lunghezza: ',
-
-    // coments
-    'add comment here...':
-        'aggiunto un commento in questo punto...',
-    'comment pic...':
-        'immagine commento...',
-    'save a picture\nof this comment':
-        'salva un\'immagine\ndi questo commento',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) destra',
-    '(-90) left':
-        '(-90) sinistra',
-    '(0) up':
-        '(0) su',
-    '(180) down':
-        '(180) gi\u00F9',
-    'random':
-    	'casuale',
-     'random position':
-     	'posizione casuale',
-
-    // collision detection
-    'mouse-pointer':
-        'puntatore del mouse',
-    'edge':
-        'bordo',
-    'pen trails':
-        'tratti della penna',
-    'center':
-        'centro dello Stage',
-
-    // costumes
-    'Turtle':
-        'Tartaruga',
-    'Empty':
-        'Vuoto',
-    'Paint a new costume':
-        'Disegna un nuovo costume',
-    'Import a new costume from your webcam':
-        'Scatta una foto con la webcam',
-	'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Assicurati che il tuo browser sia aggiornato\ne che la webcam sia correttamente configurata. \n\nAlcuni browser richiedono di accedere a Snap!\via HTTPS"',
-    'Camera':
-        'Webcam',
-
-    // sounds
-    'Record a new sound':
-        'Registra un suono',
-
-
-    // graphical effects
-    'color':
-        'colore',
-    'hue':
-        'tonalit\u00E0',
-    'fisheye':
-        'fisheye',
-    'whirl':
-        'mulinello',
-    'pixelate':
-        'pixel',
-    'mosaic':
-        'mosaico',
-    'saturation':
-        'saturazione',
-    'brightness':
-        'luminosit\u00E0',
-    'lightness':
-        'luminosit\u00E0',
-    'transparency':
-        'trasparenza',
-    'ghost':
-        'fantasma',
-    'negative':
-        'negativo',
-    'comic':
-        'fumetto',
-    'confetti':
-        'coriandoli',
-
-    // keys
-    'space':
-        'spazio',
-    'enter':
-        'invio',
-     'up arrow':
-        'freccia su',
-    'down arrow':
-        'freccia gi\u00F9',
-    'right arrow':
-        'freccia destra',
-    'left arrow':
-        'freccia sinistra',
-    'any key':
-        'qualsiasi tasto',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'nuovo...',
-    '__shout__go__':
-        'cliccata bandiera verde',
-
-    // math functions
-    'abs':
-        'abs',
-    'ceiling':
-        'intero superiore',
-    'floor':
-        'intero superiore',
-    'sqrt':
-        'sqrt',
-    'sin':
-        'sen',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asen',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'non',
-
-    // delimiters
-    'letter':
-        'lettera',
-    'word':
-        'parola',
-    'whitespace':
-        'spazio',
-    'line':
-        'linea',
-    'tab':
-        'tabulatore',
-    'cr':
-        'Accapo',
-
-    // data types
-    'number':
-        'numero',
-    'text':
-        'testo',
-    'Boolean':
-        'booleano',
-    'list':
-        'lista',
-    'command':
-        'comando',
-    'reporter':
-        'monitor',
-    'predicate':
-        'condizione',
-    'sprite':
-        'oggetto',
-
-    // list indices
-    'last':
-        'ultimo',
-    'any':
-        'qualunque',
-
-    // attributes
-    'my':
-        'attributo',
-    'neighbors':
-        'vicini',
-    'self':
-        'me stesso',
-    'other sprites':
-        'altri sprite',
-    'parts':
-        'parti',
-    'anchor':
-        'ancoraggio',
-    'parent':
-        'genitore',
-    'temporary?':
-        'temporaneo',
-    'children':
-        'figli',
-    'clones':
-        'cloni',
-    'other clones':
-        'altri cloni',
-    'dangling?':
-        'appeso',
-    'draggable?':
-        'trascinabile',
-    'rotation style':
-        'stile di rotazione',
-    'rotation x':
-        'x del centro di rotazione',
-    'rotation y':
-        'y del centro di rotazione',
-    'center x':
-        'x del centro',
-    'center y':
-        'y del centro',
-    'name':
-        'nome',
-    'costume':
-        'costume',
-    'stage':
-        'stage',
-    'costumes':
-        'costumi',
-    'sounds':
-        'suoni',
-    'scripts':
-        'script',
-    'width':
-        'larghezza',
-    'height':
-        'altezza',
-    'left':
-        'estremo sinistro',
-    'right':
-        'estremo destro',
-    'top':
-        'estremo superiore',
-    'bottom':
-        'estremo inferiore',
-
-    // attributes in the SET block's dropdown
-    'my anchor':
-        'ancora',
-    'my parent':
-        'genitore',
-    'my name':
-        'nome',
-    'my temporary?':
-        'temporaneo',
-    'my dangling?':
-        'appeso',
-    'my draggable?':
-        'trascinabile',
-    'my rotation style':
-        'stile di rotazione',
-    'my rotation x':
-        'rotazione x',
-    'my rotation y':
-        'rotazione y',
-
-    // inheritance
-    'inherited':
-        'ereditato',
-    'check to inherit\nfrom':
-        'abilita per ereditare',
-    'uncheck to\ndisinherit':
-        'disabilita per non ereditare'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) sinistra",
+    "(0) up": "(0) su",
+    "(1) sine": "(1) con onda sinusoidale",
+    "(180) down": "(180) giù",
+    "(2) square": "(2) con onda quadrata",
+    "(3) sawtooth": "(3) con onda a dente di sega",
+    "(4) triangle": "(4) con onda triangolare",
+    "(90) right": "(90) destra",
+    "(empty)": "(vuoto)",
+    "About Snap": "Informazioni su Snap",
+    "About...": "Informazioni su Snap!...",
+    "Add scene...": "Aggiungi scena...",
+    "Allow multi-line text input to a block": "Argomenti multilinea di tipo testo per i blocchi",
+    "Animations": "Animazioni",
+    "Any (unevaluated)": "Qualunque (non valutato)",
+    "Any type": "Qualunque tipo",
+    "Apply": "Applica",
+    "Are you sure you want to delete": "Sei sicuro di voler eliminare",
+    "Back...": "Indietro...",
+    "Backgrounds": "Sfondi",
+    "Backup failed. This cannot be undone, proceed anyway?": "Backup fallito. Questa operazione non può essere annullata, vuoi procedere?",
+    "Block Editor": "Editor di Blocchi",
+    "Blocks": "Blocchi",
+    "Blocks category name:": "Nome della nuova categoria di blocchi:",
+    "Blurred shadows": "Ombreggiature attenuate",
+    "Boolean": "booleano",
+    "Boolean (T/F)": "Booleano (V/F)",
+    "Boolean (unevaluated)": "Booleano (non valutato)",
+    "Bring back deleted sprites": "Ripristina gli sprite rimossi",
+    "Brush size": "Dimensione pennello",
+    "Camera": "Webcam",
+    "Cancel": "Annulla",
+    "Catch errors in a script": "Intercettare errori degli script",
+    "Category color": "Colore della categoria",
+    "Change Password...": "Cambia Password...",
+    "Change block": "Cambia categoria e tipo del blocco",
+    "Clicking sound": "Click di aggancio dei blocchi",
+    "Closed brush (free draw)": "Pennello (disegno a mano libera)",
+    "Codification support": "Supporto codificazione",
+    "Command": "Comando",
+    "Command (C-shape)": "Comando (a forma di C)",
+    "Command (inline)": "Comando (in linea)",
+    "Constrain proportions of shapes? (you can also hold shift)": "Vincola proporzioni delle forme? (in alternativa puoi tenere premuto shift)",
+    "Contents": "Contenuti",
+    "Contributors": "Hanno contribuito:",
+    "Control": "Controllo",
+    "Controller LEAP Motion": "LEAP Motion Controller",
+    "Costume Editor": "Editor di Costumi",
+    "Costumes": "Costumi",
+    "Create input name": "Crea parametro",
+    "Create variables in program": "Creare variabili programmaticamente",
+    "Credits...": "Crediti...",
+    "Default": "Default",
+    "Default Value:": "Valore predefinito:",
+    "Delete": "Cancella",
+    "Delete Custom Block": "Cancella Blocco",
+    "Delete Project": "Elimina Progetto",
+    "Delete a variable": "Cancella variabile",
+    "Disable click-to-run": "Disabilitare esecuzione con click",
+    "Download source": "Scarica il codice sorgente",
+    "Dynamic input labels": "Etichette degli input dinamiche",
+    "Edge color (left click)": "Colore Bordo (click sinistro)",
+    "Edit input name": "Modifica parametro",
+    "Edit label fragment": "Modifica porzione di etichetta",
+    "Ellipse (shift: circle)": "Ellisse (shift: cerchio)",
+    "Empty": "Vuoto",
+    "Eraser tool": "Gomma",
+    "Examples": "Esempi",
+    "Export blocks": "Esporta blocchi",
+    "Export blocks...": "Esporta blocchi...",
+    "Export project as plain text...": "Esporta il progetto come un file di testo...",
+    "Export project...": "Esporta il progetto...",
+    "Export summary...": "Esporta sommario...",
+    "Extension blocks": "Blocchi estensione",
+    "Fade blocks": "Trasparenza blocchi",
+    "Fade blocks...": "Trasparenza dei blocchi...",
+    "Fill a region": "Riempie un'area",
+    "Fill color (right click)": "Colore riempimento (click destro)",
+    "Filled Ellipse (shift: circle)": "Ellisse piena (shift: cerchio)",
+    "Filled Rectangle (shift: square)": "Rettangolo pieno (shift: quadrato)",
+    "Flat design": "Aspetto piatto interfaccia",
+    "Flat line ends": "Estremità delle linee squadrata",
+    "For all Sprites": "Per tutti gli sprite",
+    "HSL pen color model": "Modello HSL per i colori della penna",
+    "Hello!": "Ciao!",
+    "Help": "Aiuto",
+    "Hide blocks in palette": "Nascondi i blocchi nell'elenco dei blocchi",
+    "Hide blocks...": "Nascondi blocchi...",
+    "Hmm...": "Hmm...",
+    "Hyper blocks support": "Supporto Iperblocchi",
+    "Import a new costume from your webcam": "Scatta una foto con la webcam",
+    "Import blocks": "Importa blocchi",
+    "Import library": "Importa modulo",
+    "Import...": "Importa...",
+    "Imported": "Importato",
+    "Infinite precision integers, exact rationals, complex": "Interi a precisione arbitraria, razionali esatti, complessi",
+    "Inheritance support": "Supporto ereditarietÃ degli sprite",
+    "Input Names:": "Con Variabili:",
+    "Input name": "Parametro",
+    "Input sliders": "Usa cursore per gli input",
+    "Iteration, composition": "Iterazione, composizione",
+    "JavaScript extensions": "Estensioni JavaScript",
+    "JavaScript extensions for Snap! are turned off": "Le estensioni JavaScript per Snap! sono disabilitate",
+    "JavaScript function ( _ ) { _ }": "funzione JavaScript ( _ ) { _ }",
+    "Keyboard Editing": "Modifica della tastiera",
+    "Kind of": "Tipo di",
+    "Language...": "Lingua...",
+    "Libraries...": "Modulo...",
+    "License": "Licenza",
+    "License...": "Licenza...",
+    "Line tool (shift: constrain to 45Âº)": "Linea (shift: linee a 45Â°)",
+    "Line tool (shift: vertical/horizontal)": "Linea (shift: verticale/orizzontale)",
+    "List": "Lista",
+    "List utilities": "Operazioni su liste",
+    "Lists": "Liste",
+    "Loading": "Caricamento in corso",
+    "Log pen vectors": "Log dei vettori della penna",
+    "Login...": "Accedi...",
+    "Logout": "Logout",
+    "Long form input dialog": "Usa finestra degli input estesa",
+    "Looks": "Aspetto",
+    "Make a block": "Crea un blocco",
+    "Make a variable": "Nuova variabile",
+    "Message name": "Nome messaggio",
+    "Method Editor": "Editor di Metodi",
+    "Microphone": "microfono",
+    "Microphone resolution...": "Risoluzione microfono...",
+    "Modules...": "Moduli...",
+    "Motion": "Movimento",
+    "Multi-branched conditional (switch)": "Strutture di controllo ramificate (switch)",
+    "Multiple inputs (value is list of inputs)": "Molti valori (il valore è una lista di argomenti)",
+    "Nested auto-wrapping": "Autowrapping annidato",
+    "New": "Nuovo",
+    "New Category": "Nuova Categoria",
+    "New Project": "Nuovo Progetto",
+    "New category...": "Nuova categoria...",
+    "New scene": "Nuova scena",
+    "No": "No",
+    "Number": "Numero",
+    "OK": "OK",
+    "Object": "Oggetto",
+    "Ok": "OK",
+    "Open": "Apri",
+    "Open Project": "Apri Progetto",
+    "Open in Community Site": "Apri nel Sito di Snap",
+    "Open...": "Apri...",
+    "Operators": "Operatori",
+    "Other": "Altro",
+    "Paint Editor": "Editor di Immagini",
+    "Paint a new costume": "Disegna un nuovo costume",
+    "Paint a shape (shift: secondary color)": "Colora una forma (shift: colore secondario)",
+    "Paintbrush tool (free draw)": "Pennello (disegno a mano libera)",
+    "Part of": "Parte di",
+    "Parts": "Parti",
+    "Pen": "Penna",
+    "Pipette tool (pick a color anywhere)": "Contagocce (seleziona un colore)",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "Contagocce (seleziona un colore shift: colore secondario)",
+    "Plain prototype labels": "Etichetta prototipo base",
+    "Play": "Play",
+    "Play sound": "Riproduci questo suono",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Assicurati che il tuo browser sia aggiornato e che la webcam sia correttamente configurata. Alcuni browser richiedono di accedere a Snap! ia HTTPS\"",
+    "Predicate": "Condizione",
+    "Prefer empty slot drops": "Favorisci l'aggancio a slot vuoti",
+    "Project Notes": "Note di Progetto",
+    "Project notes...": "Note di Progetto...",
+    "Provide 100 selected colors": "100 colori",
+    "Provide getters and setters for all GUI-controlled global settings": "Getter e setter per le impostazioni che controllano la GUI",
+    "Publish": "Pubblica",
+    "Record a new sound": "Registra un suono",
+    "Recover": "Recupera",
+    "Rectangle (shift: square)": "Rettangolo (shift: quadrato)",
+    "Reference manual": "Manuale",
+    "Remove a category...": "Rimuovi una categoria...",
+    "Remove unused blocks": "Rimuovi blocchi inutilizzati",
+    "Replace the current project with a new one?": "Vuoi sostituire il progetto attuale con uno nuovo?",
+    "Reporter": "Monitor",
+    "Resend Verification Email...": "Invia di nuovo Email di Verifica...",
+    "Reset Password...": "Azzera Password...",
+    "Retina display support": "Supporto schermo Retina",
+    "Save": "Salva",
+    "Save As...": "Salva con nome...",
+    "Save Project": "Salva Progetto",
+    "Save Project As...": "Salva Progetto Come...",
+    "Save to disk": "Salva su disco",
+    "Saved!": "Salvato!",
+    "Scenes...": "Scene...",
+    "Script variable name": "Nome della variabile locale?",
+    "Scripts": "Script",
+    "Select a costume from the media library": "Seleziona un costume dalla libreria dei media",
+    "Select a sound from the media library": "Seleziona un suono dalla libreria dei media",
+    "Select categories of additional blocks to add to this project.": "Seleziona le categorie di blocchi addizionali da aggiungere al progetto.",
+    "Selection tool": "Selezione",
+    "Sensing": "Sensori",
+    "Set RGB or HSV pen color": "Colori della penna RGB o HSV",
+    "Set the rotation center": "Imposta il centro di rotazione",
+    "Share": "Condividi",
+    "Show buttons": "Mostra pulsanti",
+    "Show categories": "Mostra categorie",
+    "Signup...": "Registrati...",
+    "Single input.": "Un solo valore.",
+    "Single palette": "Elenco dei blocchi continuo",
+    "Slider maximum value": "Valore massimo del cursore",
+    "Slider minimum value": "Valore minimo del cursore",
+    "Snap! website": "Sito web di Snap!",
+    "Sound": "Suono",
+    "Sounds": "Suoni",
+    "Sprite": "Sprite",
+    "Stage": "Stage",
+    "Stage height": "Altezza pannello",
+    "Stage selected: no motion primitives": "Stage selezionato: Nessun blocco per il movimento",
+    "Stage size": "Dimensione pannello",
+    "Stage size...": "Dimensione pannello...",
+    "Stage width": "Larghezza pannello",
+    "Stop": "Stop",
+    "Stop sound": "Ferma il suono",
+    "Stroked Ellipse (shift: circle)": "Ellisse (shift: cerchio)",
+    "Stroked Rectangle (shift: square)": "Rettangolo (shift: quadrato)",
+    "Switch back to user mode": "Torna alla modalità utente",
+    "Switch to dev mode": "Passa alla modalità sviluppo",
+    "Table lines": "Tabelle con linee",
+    "Table support": "Supporto per le tabelle",
+    "Table view": "Vista tabella",
+    "Ternary Boolean slots": "Argomenti Booleani Ternari",
+    "Text": "Testo",
+    "Text to speech": "Da testo a voce",
+    "Thread safe scripts": "Script interrompibili",
+    "Title text": "Parole della definizione",
+    "Today": "Oggi",
+    "Translations": "Traduzioni",
+    "Translators...": "Traduttori",
+    "Turbo mode": "Modalità Turbo",
+    "Turtle": "Tartaruga",
+    "Undelete sprites...": "Ripristina sprite...",
+    "Unpublish": "Non pubblicare",
+    "Unsaved Changes!": "Ci sono modifiche non salvate!",
+    "Unshare": "Non condividere",
+    "Untitled": "Senza Titolo",
+    "Unused blocks...": "Blocchi inutilizzati...",
+    "Updating project list...": "Aggiornamento lista dei progetti...",
+    "Upvar - make internal variable visible to caller": "Rendi il parametro visibile all'esterno",
+    "Variable name": "Nome della variabile?",
+    "Variables": "Variabili",
+    "Variadic reporters": "Monitor con argomenti variabili",
+    "Vector": "Immagine vettoriale",
+    "Vector Paint Editor": "Editor di Immagini Vettoriale",
+    "Visible stepping": "Esecuzione passo-passo",
+    "Web services access (https)": "Accesso ai servizi web (https)",
+    "Words, sentences": "Parole, frasi",
+    "Yes": "Si",
+    "Yesterday": "Ieri",
+    "Zebra coloring": "Colorazione alternata",
+    "Zoom blocks": "Zoom dei blocchi",
+    "Zoom blocks...": "Zoom dei blocchi...",
+    "_ at _": "valore di _ alla posizione _",
+    "_ combine _ using _": "_ combina elementi di _ usando _",
+    "_ contains _": "_ contiene _",
+    "_ effect": "effetto _",
+    "_ find first item _ in _": "_ trova il primo elemento _ di _",
+    "_ in front of _": "_ davanti a _",
+    "_ keep items _ from _": "_ seleziona elementi _ in _",
+    "_ map _ over _": "_ applica _ su _",
+    "_ mod _": "resto della divisione di _ diviso _",
+    "_ of _": "_ di _",
+    "_ of block _": "_ blocco _",
+    "_ of costume _": "_ del costume _",
+    "_ of sound _": "_ del suono _",
+    "_ to _": "_ da _",
+    "__shout__go__": "cliccata bandiera verde",
+    "a": "a",
+    "a new clone of _": "un nuovo clone di _",
+    "abs": "abs",
+    "acos": "acos",
+    "add _ to _": "aggiungi _ a _",
+    "add a new Turtle sprite": "aggiungi una nuova Tartaruga",
+    "add a new sprite": "aggiungi un nuovo sprite",
+    "add comment": "aggiungi un commento",
+    "add comment here...": "aggiunto un commento in questo punto...",
+    "alert _": "avviso: _",
+    "all": "tutti",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "tutto meno il primo elemento di _",
+    "all but this script": "tutto tranne questo script",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "anchor": "ancoraggio",
+    "and": "e",
+    "and send": "e invia",
+    "answer": "risposta",
+    "any": "qualunque",
+    "any key": "qualsiasi tasto",
+    "any message": "qualunque messaggio",
+    "append _": "unisci _",
+    "arrange scripts vertically": "riordina gli script uno sotto l'altro",
+    "asin": "asen",
+    "ask _ and wait": "chiedi _ e attendi",
+    "ask _ for _ _": "chiedi a _ il valore di _ _",
+    "atan": "atan",
+    "b": "b",
+    "back": "secondo",
+    "balance": "bilanciamento",
+    "big (2x)": "grandi (2x)",
+    "block deletion dialog text": "Sei sicuro di voler cancellare questo blocco e tutte le sue occorrenze?",
+    "block variables...": "variabili del blocco...",
+    "block-solid (0)": "nessuna (0)",
+    "blockify": "crea script",
+    "blocks": "blocchi",
+    "blue": "blu",
+    "bottom": "estremo inferiore",
+    "brightness": "luminosità",
+    "broadcast _ _": "invia _ _",
+    "broadcast _ _ and wait": "invia _ _ e attendi",
+    "build": "costruisci",
+    "c": "c",
+    "call _ _": "chiama _ _",
+    "call _ w/continuation": "chiama _ con continuazione",
+    "can rotate": "può ruotare",
+    "ceiling": "intero superiore",
+    "center": "centro dello Stage",
+    "center x": "x del centro",
+    "center y": "y del centro",
+    "change _ by _": "cambia _ di _",
+    "change _ effect by _": "cambia effetto _ di _",
+    "change background _ by _": "cambia _ sfondo di _",
+    "change balance by _": "cambia bilanciamento di _",
+    "change pen _ by _": "cambia _ della penna di _",
+    "change pen size by _": "cambia dimensione penna di _",
+    "change size by _": "cambia dimensione di _",
+    "change tempo by _": "cambia tempo di _",
+    "change volume by _": "cambia volume di _",
+    "change x by _": "cambia x di _",
+    "change y by _": "cambia y di _",
+    "check for alternative GUI design": "abilitare per GUI alternativa",
+    "check for flat ends of lines": "abilitare per estremità delle linee squadrate",
+    "check for higher resolution, uses more computing resources": "abilitare per alta risoluzione, usa maggiori risorse di calcolo",
+    "check to always show slot types in the input dialog": "abilitare per mostrare sempre i tipi degli slot nella finestra di creazione degli input",
+    "check to disable directly running blocks by clicking on them": "disabilitare per non eseguire direttamente i blocchi cliccandoli",
+    "check to disallow script reentrance": "abilitare per impedire di interrompere gli script",
+    "check to enable IDE animations": "abilitare per nconsentire animazioni dell'IDE",
+    "check to enable alternating colors for nested blocks": "abilitare per visualizzare a colori alternati i blocchi annidati",
+    "check to enable dynamic labels for variadic inputs": "abilitare per avere etichette dinamiche per input variabili",
+    "check to enable input sliders for entry fields": "abilitare per visualizzare i cursori per inserire valori numerici",
+    "check to enable using operators on lists and tables": "abilitare per usare gli operatori su liste e tabelle",
+    "check to hide (+) symbols in block prototype labels": "abilitare per visualizzare sempre (+) nelle etichette dei blocchi prototipo",
+    "check to inherit from": "abilita per ereditare",
+    "check to prevent contents from being saved": "abilitare per prevenire il salvataggio dei contenuti",
+    "check to prioritize script execution": "abilitare per dare priorità all'esecuzione degli script",
+    "check to show all blocks in a single palette": "abilitare per mostrare tutti i blocchi in un unico elenco",
+    "check to show buttons in the palette": "abilitare per mostrare i pulsanti delle categorie",
+    "check to show category names in the palette": "abilitare per mostrare i nomi delle categorie nell'elenco dei blocchi",
+    "check to show extension primitives in the palette": "abilitare per mostrare le primitive delle estensioni nell'elenco dei blocchi",
+    "check to support native JavaScript functions": "abilitare per supportare funzioni JavaScript native",
+    "check to switch pen colors and graphic effects to HSL": "disabilitare per passare a colori della penna e effetti grafici HSL",
+    "check to turn block clicking sound on": "abilitare per riprodurre il suono di aggancio dei blocchi",
+    "check to turn on logging pen vectors": "abilitare per loggare i vettori della penna",
+    "check to turn on visible stepping (slow)": "abilitare per avviare esecuzione passo passo (lenta)",
+    "check to use blurred drop shadows and highlights": "abilitare per visualizzare ombreggiature ed evidenziature attenuate",
+    "children": "figli",
+    "clean up": "riordina",
+    "clear": "pulisci",
+    "clear graphic effects": "rimuovi effetti grafici",
+    "click or drag crosshairs to move the rotation center": "clicca e trascina la croce per spostare il centro di rotazione",
+    "clicked": "cliccato",
+    "clone": "clona",
+    "clones": "cloni",
+    "color": "colore",
+    "color _ is touching _ ?": "il colore _ sta toccando il colore _",
+    "columns": "colonne",
+    "combine _ using _": "combina elementi di _ usando _",
+    "comic": "fumetto",
+    "command": "comando",
+    "comment pic...": "immagine commento...",
+    "compile": "compila",
+    "compile _": "compila _",
+    "confetti": "coriandoli",
+    "console log _": "console log: _",
+    "cos": "cos",
+    "costume": "costume",
+    "costume #": "numero costume",
+    "costumes": "costumi",
+    "costumes tab help": "Importa un'immagine da una pagina web o da un file sul tuo computer trascinandolo qui",
+    "cr": "Accapo",
+    "create a clone of _": "crea un clone di _",
+    "current": "attuale",
+    "current _": "_ attuale",
+    "current module versions:": "versione corrente dei moduli:",
+    "current parent": "genitore attuale",
+    "custom?": "è personalizzato",
+    "cut from _": "ritaglia da _",
+    "d": "d",
+    "dangling?": "appeso",
+    "date": "giorno",
+    "day of week": "giorno della settimana",
+    "definition": "definizione",
+    "delete": "cancella",
+    "delete _ of _": "cancella _ da _",
+    "delete a category...": "rimuovi una categoria...",
+    "delete block definition...": "cancella la definizione del blocco...",
+    "delete this clone": "elimina questo clone",
+    "demo (1.2x)": "Demo (1.2x)",
+    "detach all parts": "stacca tutte le parti",
+    "detach from": "stacca da",
+    "development mode": "modalità sviluppo",
+    "development mode debugging primitives:": "modalità sviluppo Comandi di debug",
+    "dimensions": "dimensione",
+    "direction": "direzione",
+    "disable deep-Morphic context menus and show user-friendly ones": "disabilita i menu contestuali di Morphic e mostra quelli user-friendly",
+    "distance": "distanza",
+    "don't rotate": "non ruotare",
+    "down arrow": "freccia giù",
+    "draggable": "trascinabile",
+    "draggable?": "trascinabile",
+    "dropped": "lasciato",
+    "duplicate": "duplica",
+    "duplicate block definition...": "duplica la definizione del blocco...",
+    "duration": "durata",
+    "e": "e",
+    "e^": "e^",
+    "edge": "bordo",
+    "edit": "modifica",
+    "edit the costume's rotation center": "cambia il centro di rotazione del costume",
+    "edit...": "modifica...",
+    "elegant (90)": "elevata(90)",
+    "enable Morphic context menus and inspectors, not user-friendly!": "Abilita i menu contestuali di Morphic e l'inspector, non user-friendly",
+    "enable directly running blocks by clicking on them": "abilitare per eseguire direttamente i blocchi cliccandoli",
+    "enter": "invio",
+    "export": "esporta",
+    "export block definition...": "esporta la definizione del blocco...",
+    "export pen trails line segments as SVG": "esporta i tratti della penna come SVG",
+    "export...": "esporta...",
+    "extract": "estrai",
+    "f": "f",
+    "false": "falso",
+    "file menu import hint": "carica un file di progetto, una libreria di blocchi, un costume o un suono esportati Non supportato da tutti i browser",
+    "fill": "riempi",
+    "filtered for _": "selezionati per colore _",
+    "find blocks": "trova blocchi",
+    "find first item _ in _": "trova il primo elemento _ di _",
+    "find unused global custom blocks and remove their definitions": "trova i nuobi blocchi inutilizzati e rimuove le loro definizioni",
+    "fisheye": "fisheye",
+    "flat line ends": "terminazione piatta delle linee",
+    "flatten": "appiattimento",
+    "floor": "intero superiore",
+    "for _ = _ to _ _": "per _ = _ a _ _",
+    "for all sprites": "per tutti gli sprite",
+    "for each _ in _ _": "per ogni _ di _ _",
+    "for this sprite only": "solo per questo sprite",
+    "forever _": "per sempre _",
+    "frames": "frame",
+    "frequency": "frequenza",
+    "front": "primo",
+    "g": "g",
+    "ghost": "fantasma",
+    "giant (8x)": "giganti (8x)",
+    "glide _ secs to x: _ y: _": "scivola in _ secondi a x: _ y: _",
+    "global?": "è globale",
+    "go back _ layers": "vai indietro di _ livelli",
+    "go to _": "raggiungi _",
+    "go to _ layer": "vai in _ piano",
+    "go to x: _ y: _": "vai a x: _ y: _",
+    "green": "verde",
+    "h": "h",
+    "height": "altezza",
+    "hello": "ciao",
+    "help": "aiuto",
+    "help...": "aiuto...",
+    "hide": "nascondi",
+    "hide blocks...": "nascondi blocchi...",
+    "hide variable _": "nascondi variabile _",
+    "high": "alto",
+    "hour": "ora",
+    "http:// _": "leggi pagina web http:// _",
+    "hue": "tonalità",
+    "huge (4x)": "molto grandi (4x)",
+    "i": "i",
+    "identical to": "è identico a",
+    "if _ _": "se _ _",
+    "if _ _ else _": "se _ _ altrimenti _",
+    "if _ then _ else _": "se _ allora _ altrimenti _",
+    "if on edge, bounce": "rimbalza quando tocchi il bordo",
+    "import a sound from your computer by dragging it into here": "Importa un suono dal tuo computer trascinandolo qui",
+    "import without attempting to parse or format data": "importa i dati senza tentare di elaborarli o formattarli",
+    "import...": "importa...",
+    "in palette": "nell'elenco dei blocchi",
+    "including dependencies": "incluse le dipendenze",
+    "index": "posizione",
+    "index of _ in _": "posizione di _ in _",
+    "inherit _": "eredita _",
+    "inherited": "ereditato",
+    "input list:": "con liste:",
+    "input names:": "con variabili:",
+    "insert _ at _ of _": "inserisci _ alla posizione _ di _",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "_ è di tipo _",
+    "is _ empty?": "_ è vuota",
+    "is _ identical to _ ?": "_ è identico a _",
+    "is _ on?": "_ attivo",
+    "item": "elemento",
+    "item _ of _": "elemento _ di _",
+    "items": "elementi",
+    "j": "j",
+    "join _": "unione di _",
+    "k": "k",
+    "keep items _ from _": "seleziona elementi _ in _",
+    "key": "tasto",
+    "key _ pressed?": "tasto _ premuto",
+    "l": "l",
+    "language_name": "Italiano",
+    "language_translator": "Stefano Federici, Alice Andrea Deiana, Alberto Firpo, Massimo Ghisalberti",
+    "large": "grande",
+    "last": "ultimo",
+    "last_changed": "2021-12-26",
+    "launch _ _": "lancia _ _",
+    "left": "estremo sinistro",
+    "left arrow": "freccia sinistra",
+    "length": "lunghezza",
+    "length of _": "lunghezza di _",
+    "length:": "lunghezza:",
+    "letter": "lettera",
+    "letter _ of _": "lettera in posizione _ di _",
+    "light (70)": "leggera (70)",
+    "lightness": "luminosità",
+    "line": "linea",
+    "lines": "linee",
+    "list": "lista",
+    "list _": "lista _",
+    "list view...": "vista lista...",
+    "ln": "ln",
+    "log pen vectors": "log vettori della penna",
+    "low": "basso",
+    "m": "m",
+    "make a block...": "crea un blocco...",
+    "make a category...": "crea una categoria...",
+    "make a copy and pick it up": "crea una copia",
+    "make temporary and hide in the sprite corral": "diventa temporaneo e nasconditi nel corral degli sprite",
+    "map _ over _": "applica _ su _",
+    "max": "max",
+    "medium (50)": "media (50)",
+    "message": "messaggio",
+    "microphone _": "_ del microfono",
+    "minute": "minuto",
+    "mirror video": "video riflesso",
+    "monstrous (10x)": "grandissimi (10x)",
+    "month": "mese",
+    "mosaic": "mosaico",
+    "motion": "movimento",
+    "mouse down?": "tasto del mouse premuto",
+    "mouse x": "x del mouse",
+    "mouse y": "y del mouse",
+    "mouse-departed": "non a contatto con il mouse",
+    "mouse-entered": "a contatto con il mouse",
+    "mouse-pointer": "puntatore del mouse",
+    "move": "muovi",
+    "move _ steps": "fai _ passi",
+    "my": "attributo",
+    "my _": "attributo _",
+    "my anchor": "ancora",
+    "my dangling?": "appeso",
+    "my draggable?": "trascinabile",
+    "my name": "nome",
+    "my parent": "genitore",
+    "my rotation style": "stile di rotazione",
+    "my rotation x": "rotazione x",
+    "my rotation y": "rotazione y",
+    "my temporary?": "temporaneo",
+    "myself": "me stesso",
+    "n": "n",
+    "name": "nome",
+    "negative": "negativo",
+    "neighbors": "vicini",
+    "neighbors ≠": "neighbors ≠",
+    "new costume _ width _ height _": "nuovo costume _ larghezza _ altezza _",
+    "new line": "neue Zeile",
+    "new sound _ rate _ Hz": "nuovo suono _ frequenza _ Hz",
+    "new...": "nuovo...",
+    "next": "successiva",
+    "next costume": "passa al costume seguente",
+    "none": "nessuno",
+    "normal": "normale",
+    "normal (1x)": "normale (1x)",
+    "not": "non",
+    "not _": "non _",
+    "note": "nota",
+    "number": "numero",
+    "number of channels": "numero di canali",
+    "numbers from _ to _": "numeri da _ a _",
+    "o": "o",
+    "object _": "oggetto _",
+    "only duplicate this block": "duplica solo questo blocco",
+    "only face left/right": "voltati solo a destra/sinistra",
+    "only grab this block": "estrae solo questo blocco",
+    "open in dialog...": "apri in una finestra...",
+    "or": "o",
+    "other clones": "altri cloni",
+    "other scripts in sprite": "altri script dello sprite",
+    "other sprites": "altri sprite",
+    "p": "p",
+    "paint a new sprite": "disegna un nuovo sprite",
+    "parent": "genitore",
+    "parent...": "genitore...",
+    "parts": "parti",
+    "paste on _": "timbra su _",
+    "pause all _": "pausa tutto _",
+    "pen _": "_ della penna",
+    "pen down": "penna giù",
+    "pen down?": "penna giÃ¹",
+    "pen trails": "tratti della penna",
+    "pen up": "penna su",
+    "pen vectors": "vettori penna",
+    "pic...": "salva immagine dello Stage...",
+    "pick random _ to _": "numero a caso tra _ e _",
+    "pivot": "Angelpunkt",
+    "pixelate": "pixel",
+    "pixels": "pixel",
+    "play _ Hz for _ secs": "riproduci _ Hz per _ secondi",
+    "play frequency _ Hz": "riproduci frequenza _ Hz",
+    "play note _ for _ beats": "riproduci nota _ per _ battute",
+    "play sound _": "produci suono _",
+    "play sound _ at _ Hz": "riproduci suono _ a _ Hz",
+    "play sound _ until done": "produci suono _ e attendi la fine",
+    "point in direction _": "punta in direzione _",
+    "point towards _": "punta verso _",
+    "predicate": "condizione",
+    "presentation (1.4x)": "presentazione(1.4x)",
+    "pressed": "premuto",
+    "previous": "precedente",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "RGBA",
+    "random": "casuale",
+    "random position": "posizione casuale",
+    "rank": "rango",
+    "raw data...": "formato originale...",
+    "ray length": "lunghezza raggio",
+    "receivers...": "destinatari...",
+    "red": "rosso",
+    "redrop": "ripristina ultimo inserimento di un blocco in questo pannello",
+    "relabel...": "rinomina...",
+    "release": "rilascia",
+    "rename": "rinomina",
+    "rename all blocks that access this variable": "rinomina tutti i blocchi che accedono questa variabile",
+    "rename all...": "rinomina tutto...",
+    "rename background": "rinomina sfondo",
+    "rename costume": "rinomina costume",
+    "rename only this reporter": "rinomina solo questo blocco",
+    "rename sound": "rinomina suono",
+    "rename...": "rinomina...",
+    "repeat _ _": "ripeti _ volte _",
+    "repeat until _ _": "ripeti fino a quando _ _",
+    "replace item _ of _ with _": "sostituisci elemento _ di _ con _",
+    "report _": "risultato _",
+    "reporter": "monitor",
+    "reset columns": "resetta colonne",
+    "reset timer": "azzera cronometro",
+    "reshape _ to _": "riorganizza _ su _",
+    "resolution": "risoluzione",
+    "rest for _ beats": "fai una pausa di _ battute",
+    "result pic...": "immagine risultato...",
+    "reverse": "inversa",
+    "right": "estremo destro",
+    "right arrow": "freccia destra",
+    "ringify": "inserisci in un anello",
+    "rotate": "ruota",
+    "rotation style": "stile di rotazione",
+    "rotation x": "x del centro di rotazione",
+    "rotation y": "y del centro di rotazione",
+    "round _": "arrotonda _",
+    "run _ _": "esegui _ _",
+    "run _ w/continuation": "esegui _ con continuazione",
+    "s": "s",
+    "sample rate": "frequenza di campionamento",
+    "samples": "campioni",
+    "saturation": "saturazione",
+    "save a picture of all scripts": "salva immagine di tutti gli script",
+    "save a picture of both this script and its result": "salva un'immagine dello scrip e del risultato",
+    "save a picture of the stage": "salva immagine dello Stage",
+    "save a picture of this comment": "salva un'immagine di questo commento",
+    "save a picture of this script": "salva un'immagine di questo script",
+    "save a summary of this project": "salva un sommario di questo progetto",
+    "save global custom block definitions as XML": "salva le definizioni dei nuovi blocchi globali in formato XML",
+    "save project data as XML to your downloads folder": "salva i dati del progetto in formato XML nella cartella Download",
+    "say _": "dire _",
+    "say _ for _ secs": "dire _ per _ secondi",
+    "script pic...": "immagine script...",
+    "script variables _": "variabili dello script: _",
+    "scripts": "script",
+    "scripts pic...": "immagine script...",
+    "scrolled-down": "scrollato verso il basso",
+    "scrolled-up": "scrollato verso l'alto",
+    "second": "secondo",
+    "select": "seleziona",
+    "self": "me stesso",
+    "senders...": "mittenti...",
+    "set _ effect to _": "porta effetto _ a _",
+    "set _ to _": "porta _ a _",
+    "set background _ to _": "porta _ sfondo a _",
+    "set background color to _": "porta colore sfondo a _",
+    "set balance to _": "porta bilanciamento a _",
+    "set instrument to _": "passa a strumento _",
+    "set pen _ to _": "porta _ della penna a _",
+    "set pen color to _": "usa penna di colore _",
+    "set pen size to _": "porta dimensione penna a _",
+    "set size to _ %": "porta dimensione a _ %",
+    "set tempo to _ bpm": "porta tempo a _ bpm",
+    "set video transparency to _": "porta trasparenza del video a _",
+    "set volume to _ %": "porta volume a _ %",
+    "set x to _": "vai dove x è _",
+    "set y to _": "vai dove y è _",
+    "settings menu prefer empty slots hint": "abilitare per favorire l'inserimento in slot vuoti quando si trascinano e rilasciano dei reporter",
+    "shimmering (80)": "accentuata (80)",
+    "show": "mostra",
+    "show all": "mostra tutti gli sprite",
+    "show project data as XML in a new browser window": "mostra i dati del progetto in formato XML in una nuova finestra del browser",
+    "show variable _": "mostra variabile _",
+    "shown?": "visibile",
+    "sin": "sen",
+    "size": "dimensione",
+    "slider": "cursore",
+    "slider max...": "Scegli il max del cursore...",
+    "slider min...": "Scegli il min del cursore...",
+    "snap": "porzione",
+    "sounds": "suoni",
+    "space": "spazio",
+    "spectrum": "spettro",
+    "split _ by _": "separa _ ad ogni _",
+    "sprite": "oggetto",
+    "sprites": "elenco sprite",
+    "sqrt": "sqrt",
+    "stack size": "dimensione stack",
+    "stage": "stage",
+    "stamp": "timbra",
+    "stick to": "attacca a",
+    "stop _": "ferma _",
+    "stop all sounds": "arresta tutti i suoni",
+    "stop frequency": "interrompi riproduzione frequenza",
+    "stopped": "fermo",
+    "store this project in the downloads folder (in supporting browsers)": "salva questo progetto nella cartella Download (nei browser compatibili)",
+    "stretch _ x: _ y: _ %": "allunga _ del _ % in orizzontale e del _ % in verticale",
+    "subtle (95)": "molto elevata (95)",
+    "svg...": "esporta come SVG...",
+    "switch to costume _": "passa al costume _",
+    "switch to scene _ _": "passa alla scena _ _",
+    "t": "t",
+    "tab": "tabulatore",
+    "table view...": "vista tabella...",
+    "take a camera snapshot and import it as a new sprite": "scatta una foto e usala come un nuovo sprite",
+    "tan": "tan",
+    "tell _ to _ _": "chiedi a _ di eseguire _ _",
+    "tempo": "tempo",
+    "temporary?": "temporaneo",
+    "text": "testo",
+    "text-only (100)": "solo testo (100)",
+    "there are currently no unused global custom blocks in this project": "al momento non sono presenti in questo progetto nuovi blocchi inutilizzati",
+    "there are currently no vectorizable pen trail segments": "al momento non sono presenti tratti della penna vettoriali",
+    "thing": "cosa",
+    "think _": "pensa _",
+    "think _ for _ secs": "pensa _ per _ secondi",
+    "this block": "questo blocco",
+    "this project doesn't have any custom global blocks yet": "in questo progetto non sono stati ancora definiti dei nuovi blocchi",
+    "this script": "questo script",
+    "time in milliseconds": "ora in millisecondi",
+    "timer": "cronometro",
+    "to": "a",
+    "top": "estremo superiore",
+    "touching _ ?": "sta toccando il colore _",
+    "transient": "non persistente",
+    "translations...": "traduzioni...",
+    "translator_e-mail": "s_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com",
+    "transparency": "trasparenza",
+    "trash is empty": "il cestino è vuoto",
+    "true": "vero",
+    "turbo mode?": "modalità turbo attiva",
+    "turn _ _ degrees": "ruota di _ _ gradi",
+    "turn all pen trails and stamps into a new background for the stage": "crea un nuovo sfondo usando tratti della penna e timbri",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "crea un nuovo costume per lo sprite selezionato usando i tratti della penna e i timbri",
+    "type of _": "tipo di _",
+    "u": "u",
+    "uncheck for default GUI design": "disabilitare per GUI standard",
+    "uncheck for lower resolution, saves computing resources": "disabilitare per bassa risoluzione, risparmi risorse di calcolo",
+    "uncheck for round ends of lines": "disabilitare per estremità delle linee arrotondate",
+    "uncheck to allow dropped reporters to kick out others": "disabilitare per permettere agli slot di espellere i reporter inclusi al loro interno",
+    "uncheck to allow script reentrance": "disabilitare per permettere di interrompere gli script",
+    "uncheck to always show (+) symbols in block prototype labels": "disabilitare per visualizzare sempre (+) nelle etichette dei blocchi prototipo",
+    "uncheck to disable IDE animations": "disabilitare per non consentire animazioni dell'IDE",
+    "uncheck to disable alternating colors for nested block": "disabilitare per non visualizzare a colori alternati i blocchi annidati",
+    "uncheck to disable dynamic labels for variadic inputs": "disabilitare per non avere etichette dinamiche per input variabili",
+    "uncheck to disable input sliders for entry fields": "disabilitare per non visualizzare i cursori per inserire valori numerici",
+    "uncheck to disable support for native JavaScript functions": "disabilitare per rimuovere il supporto alle funzioni JavaScript native",
+    "uncheck to disable using operators on lists and tables": "disabilitare per non usare gli operatori su liste e tabelle",
+    "uncheck to disinherit": "disabilita per non ereditare",
+    "uncheck to hide buttons in the palette": "disabilitare per nascondere i pulsanti delle categorie",
+    "uncheck to hide category names in the palette": "disabilitare per nascondere i nomi delle categorie nell'elenco dei blocchi",
+    "uncheck to hide extension primitives in the palette": "disabilitare per nascondere le primitive delle estensioni nell'elenco dei blocchi",
+    "uncheck to run scripts at normal speed": "disabilitare per eseguire gli script a velocitÃ normale",
+    "uncheck to save contents in the project": "disabilitare per salvare i contenuti nel progetto",
+    "uncheck to show only the selected category's blocks": "disabilitare per mostrare solo i blocchi della categoria selezionata",
+    "uncheck to switch pen colors and graphic effects to HSV": "disabilitare per passare a colori della penna e effetti grafici HSV",
+    "uncheck to turn block clicking sound off": "disabilitare per non riprodurre il suono di aggancio dei blocchi",
+    "uncheck to turn off logging pen vectors": "disabilitare per non loggare i vettori della penna",
+    "uncheck to turn off visible stepping": "disabilitare per interrompere esecuzione passo passo",
+    "uncheck to use solid drop shadows and highlights": "disabilitare per visualizzare ombreggiature ed evidenziature solide",
+    "uncheck to use the input dialog in short form": "disabilitare per non mostrare automaticamente i tipi degli slot nella finestra di creazione degli input",
+    "uncompile": "decompila",
+    "undo": "annulla",
+    "undo the last block drop in this pane": "annulla ultimo inserimento di un blocco in questo pannello",
+    "undrop": "annulla inserimento",
+    "unicode _ as letter": "lettera con codice unicode _",
+    "unicode of _": "codice unicode di _",
+    "unringify": "estrai dall'anello",
+    "untitled": "SenzaTitolo",
+    "unused": "non usati",
+    "unused block(s) removed": "blocchi inutilizzati rimossi",
+    "up arrow": "freccia su",
+    "use the keyboard to enter blocks": "usa la tastiera per inserire blocchi",
+    "v": "v",
+    "value": "Wert",
+    "video _ on _": "_ del video su _",
+    "video capture": "cattura video",
+    "volume": "volume",
+    "w": "w",
+    "wait _ secs": "attendi _ secondi",
+    "wait until _": "attendi fino a quando _",
+    "warp _": "esegui in modalità turbo _",
+    "what's your name?": "come ti chiami?",
+    "when I am _": "quando sono _",
+    "when I receive _ _": "quando ricevo _ _",
+    "when I start as a clone": "quando vengo clonato",
+    "when _": "quando _",
+    "when _ clicked": "quando si clicca su _",
+    "when _ key pressed _": "quando si preme il tasto _ _",
+    "whirl": "mulinello",
+    "whitespace": "spazio",
+    "width": "larghezza",
+    "with inputs": "con argomenti",
+    "word": "parola",
+    "world": "mondo",
+    "write _ size _": "scrivi _ di dimensione _",
+    "x": "x",
+    "x position": "posizione x",
+    "y": "y",
+    "y position": "posizione y",
+    "year": "anno",
+    "your own": "i tuoi",
+    "z": "z"
+}

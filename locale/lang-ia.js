@@ -1,1360 +1,479 @@
-/*
-
-    lang-ia.js
-
-    Interlingua translation for SNAP!
-
-    edited for Interlingua by Ken Dickey
-
-    Copyright (C) 2015 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-    Or via GitHub:
-	git clone https://github.com/jmoenig/Snap--Build-Your-Own-Blocks.git
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-        ia - Interlingua => => SnapTranslator.dict.ia = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-        ia - Interlingua => lange-ia.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*
- * De nota:
- * 
- * https://translatewiki.net/wiki/Portal:Ia
- * 
- * In my view, a "variable" is a box (cassa) in which one
- * stores a value -- vs a "constant", which is a named value.
- */
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ia = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-	None
-*/
-
-    // translations meta information
-    'language_name':
-        'Interlingua', // the name as it should appear in the language menu
-    'language_translator':
-        'Ken Dickey', // your name for the Translators tab
-    'translator_e-mail':
-        'Ken.Dickey@whidbey.com', // optional
-    'last_changed':
-        '2015-08-09', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'innominate', // 'nulle titulo'
-    'development mode':
-        'disveloppation moda',
-
-    // categories:
-    'Motion':
-        'Movimento',
-    'Looks':
-        'Apparentia',
-    'Sound':
-        'Sono',
-    'Pen':
-        'Penna',
-    'Control':
-        'Reger',
-    'Sensing':
-        'Sensation',
-    'Operators':
-        'Operators',
-    'Variables':
-        'Cassas',
-    'Lists':
-        'Listas',
-    'Other':
-        'Altere',
-
-    // editor:
-    'draggable':
-        'traheribile',
-
-    // tabs:
-    'Scripts':
-        'Scriptes',
-    'Costumes':
-        'Costumes',
-    'Sounds':
-        'Sonas',
-
-    // names:
-    'Sprite':
-        'Spirito', // 'Animo'
-    'Stage':
-        'Scena',
-
-    // rotation styles:
-    'don\'t rotate':
-        'non rota',
-    'can rotate':
-        'capabile de rota',
-    'only face left/right':
-        'sol facie sinistre o dextre',
-
-    // new sprite button:
-    'add a new sprite':
-        'adde spirito nove',
-
-    // tab help
-    'costumes tab help':
-        'costumes adjuta',
-    'import a sound from your computer\nby dragging it into here':
-        'face importa un sono per trahe hic',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Scena selecte:\n'
-	+ 'nulle motion primitives',
-
-    'move %n steps':
-        'move %n passos',
-    'turn %clockwise %n degrees':
-        'torna %clockwise %n grados',  // dirige
-    'turn %counterclockwise %n degrees':
-        'torna %counterclockwise %n grados',
-    'point in direction %dir':
-        'puncta direction %dir',
-    'point towards %dst':
-        'puncta erga %dst',
-    'go to x: %n y: %n':
-        'ir a x: %n y: %n',  // 'adi'
-    'go to %dst':
-        'ir a %dst',
-    'glide %n secs to x: %n y: %n':
-        'glissa %n secundes a x: %n y: %n',
-    'change x by %n':
-        'cambia x per %n',
-    'set x to %n':
-        'in x pone %n', // 'pone in x le valo %n',
-    'change y by %n':
-        'cambia y per %n',
-    'set y to %n':
-        'in y pone %n',
-    'if on edge, bounce':
-        'si in bordo talia, recula',
-    'x position':
-        'x position',
-    'y position':
-        'y position',
-    'direction':
-        'direction',
-
-    // looks:
-    'switch to costume %cst':
-        'cambio a costume %cst',
-    'next costume':
-        'proxime costume',
-    'costume #':
-        'costume numero',
-    'say %s for %n secs':
-        'dice %s per %n secundes',
-    'say %s':
-        'dice %s',
-    'think %s for %n secs':
-        'pensa %s per %n secundes',
-    'think %s':
-        'pensa %s',
-    'Hello!':
-        'Hallo!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        'cambia %eff effecto per %n',
-    'set %eff effect to %n':
-        'in %eff pone effecto %n',
-    'clear graphic effects':
-        'depura effectos graphic',
-    'change size by %n':
-        'accrescimento dimensiones per %n',
-    'set size to %n %':
-        'delimita dimentiones a %n %',
-    'size':
-        'dimentiones',
-    'show':
-        'expone',  // 'monstra'
-    'hide':
-        'cela',   // 'occulta'
-    'go to front':
-        'antepone',  // 'ir maxima ante',
-    'go back %n layers':
-        'ir detra %n strato',
-
-    'development mode \ndebugging primitives:':
-        'disveloppa modo \n'
-	+ 'anti-defacto primitives',
-    'console log %mult%s':
-        'entra in registration %mult%s',
-    'alert %mult%s':
-        'alerte %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'sona %snd',  // 'face sono %snd',
-    'play sound %snd until done':
-        'sona %snd usque complete', // 'sona %snd integral',
-    'stop all sounds':
-        'cessar sona tote',
-    'rest for %n beats':
-        'pausa per %n pulsia',
-    'play note %n for %n beats':
-        'sona nota %n per %n pulsia',
-    'change tempo by %n':
-        'cambio tempo per %n',
-    'set tempo to %n bpm':
-        'face tempo a %n pulsia per minuta',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'depura',
-    'pen down':
-        'face penna a basso',
-    'pen up':
-        'face penna in alto',
-    'set pen color to %clr':
-        'face color del penna a %clr',
-    'change pen color by %n':
-        'cambia color del penna a %n',
-    'set pen color to %n':
-        'face color del penna a %n',
-    'change pen shade by %n':
-        'cambio tinta del penna per %n', 
-    'set pen shade to %n':
-        'face tinta del penna a %n',
-    'change pen size by %n':
-        'cambio dimension del penna per %n',
-    'set pen size to %n':
-        'face dimension del penna a %n',
-    'stamp':
-        'timbra',  // 'cunea' 'stampa'
-
-    // control:
-    'when %greenflag clicked':
-        'cuando %greenflag clic',
-    'when %keyHat key pressed %keyName':
-        'cuando %keyHat clave pressa %keyName',
-    'when I am %interaction':
-        'cuando io es %interaction',
-    'clicked':
-        'clicco',
-    'pressed':
-        'pressa',
-    'dropped':
-        'depone',
-    'mouse-entered':
-        'mure entra',
-    'mouse-departed':
-        'mure parti',  // 'quita'
-    'when I receive %msgHat %message':
-        'cuando io recipe %msgHat %message',
-    'broadcast %msg %receive':
-        'mitte %msg %receive',
-    'broadcast %msg %receive and wait':
-        'mitte %msg %receive e attende',
-    'to':
-        'a',
-    'Message name':
-        'Nomine de message',
-    'message':
-        'message',
-    'any message':
-        'qualcosa message',  // 'cualcunque message'
-    'wait %n secs':
-        'attende %n secundes',
-    'wait until %b':
-        'attende donec %b',
-    'forever %loop':
-        'sin termino %loop',
-    'repeat %n %loop':
-        'itera %n %loop',
-    'repeat until %b %loop':
-        'itera donec %b %loop',
-    'if %b %c':
-        'si %b %c',
-    'if %b %c else %c':
-        'si %b %c nisi %c',
-    'report %s':
-        'reporta %s', // 'valor restituite'
-    'stop %stopChoices':
-        'cessa %stopChoices',
-    'all':
-        'omni',
-    'this script':
-        'iste scripte',  // 'este'
-    'this block':
-        'iste bloco',
-    'stop %stopOthersChoices':
-        'cessa %stopOthersChoices',
-    'all but this script':
-        'omni excepte iste scripte',
-    'other scripts in sprite':
-        'altere scriptes in iste spirito',
-    'pause all %pause':
-        'pausa omni %pause',
-    'run %cmdRing %inputs':
-        'comencia %cmdRing %inputs', // 'initio'
-    'launch %cmdRing %inputs':
-        'lancea %cmdRing %inputs',
-    'call %repRing %inputs':
-        'evoca %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'comencia %cmdRing con continuation',
-    'call %cmdRing w/continuation':
-        'evoca %cmdRing con continuation',
-    'warp %c':
-        'ordi %c',  // 'ordito'
-    'when I start as a clone':
-        'quando io comencia como copia',
-    'create a clone of %cln':
-        'face un copia de %cln',
-    'myself':
-        'io mesme',
-    'delete this clone':
-        'dele ista copia',
-
-    // sensing:
-    'touching %col ?':
-        'continge %col ?',
-    'touching %clr ?':
-        'continge %clr ?',
-    'color %clr is touching %clr ?':
-        'color %clr es continge %clr ?',
-    'ask %s and wait':
-        'demanda %s e attende',
-    'what\'s your name?':
-        'que es tu nomine?',
-    'answer':
-        'responde',
-    'mouse x':
-        'mure x position',
-    'mouse y':
-        'mure y position',
-    'mouse down?':
-        'a mure es a basso?',
-    'key %key pressed?':
-        'a clave %key pressa?',
-    'distance to %dst':
-        'distantia a %dst',
-    'reset timer':
-        'recomenciar le chronometria',
-    'timer':
-        'chronometria',
-    '%att of %spr':
-        '%att de %spr',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'a turbo modo?',
-    'set turbo mode to %b':
-        'face turbo modo a %b',
-
-    'filtered for %clr':
-        'filtra per %clr',
-    'stack size':
-        'pila dimensione',
-    'frames':
-        'quadros',
-
-    // operators:
-    '%n mod %n':
-        '%n modulo %n',
-    'round %n':
-        '%n rotunda',
-    '%fun of %n':
-        '%fun de %n',
-    'pick random %n to %n':
-        'al aventura inter %n e %n',  // 'al hasardo'
-    'and':
-        'e',
-    'or':
-        'o',
-    'not %b':
-        'non %b',
-    'true':
-        'ver',
-    'false':
-        'false',
-    'join %words':
-        'junge %words',
-    'split %s by %delim':
-        'fisse %s de %delim',
-    'hello':
-        'Hallo',
-    'world':
-        'Mundo',
-    'letter %ix of %s':
-        'character %ix de %s',
-    '%ta of text %s':
-        '%ta de %s',
-    'unicode of %s':
-        'Unicode valor de %s',
-    'unicode %n as letter':
-        'Unicode character pro %n',
-    'is %s a %typ ?':
-        'a es %s de %typ ?',
-    'is %all== ?':
-        'a es %all== ?',
-    'identical to':
-        'identic a',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-
-    'type of %s':
-        'typo de %s',
-
-    // variables:
-    'Make a variable':
-        'Nove Cassa',  // 'Face Cassa'
-    'Variable name':
-        'Nomine de Cassa',  // global?
-    'Script variable name':
-        'Nomine de Scripte Cassa',
-    'Delete a variable':
-        'Dele un Cassa',
-
-    'set %var to %s':
-        'in %var pone %s',
-    'change %var by %n':
-        'cambio %var per %n',
-    'show variable %var':
-        'expone cassa %var',
-    'hide variable %var':
-        'cella cassa %var',  // 'occulta'
-    'script variables %scriptVars':
-        'cassas de scripte %scriptVars',
-
-    // lists:
-    'list %exp':
-        'Liste %exp',
-    '%s in front of %l':
-        '%s es ante que %l',
-    'item %idx of %l':
-        'elemento %idx de %l',
-    'all but first of %l':
-        'onme excepte prime de %l',
-    'length of %l':
-        'longor de %l',
-    '%l contains %s':
-        '%l contine %s',
-    'thing':
-        'cosa',
-    'add %s to %l':
-        'adde %s e %l',
-    'delete %ida of %l':
-        'dele %ida de %l',
-    'insert %s at %idx of %l':
-        'inserta %s in %idx de %l',
-    'replace item %idx of %l with %s':
-        'reimplacia elemento %idx de %l con %s',  // surroga
-
-    // other
-    'Make a block':
-        'Face un bloco',
-
-    // menus
-    // snap menu
-    'About...':
-        'In re Snap!...',  
-    'Reference manual':
-        'Manual referentia ',
-    'Snap! website':
-        'Snap! sito web',
-    'Download source':
-        'Discarga fonte',
-    'Switch back to user mode':
-        'Cambio retro a modo usator',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'Face inactive profunde Morphic\n'
-        + 'menus contexto e\n'
-        + 'expone se usator amicabile',
-    'Switch to dev mode':
-        'Cambio a modo disveloppator',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'Face active Morphic\n'
-		+ 'menus contexto e inspector,\n'
-		+ 'non amicabile de usatores',
-
-    // project menu
-    'Project notes...':
-        'Annotos de projecto...',
-    'New':
-        'Nova',
-    'Open...':
-        'Aperte...',
-    'Save':
-        'Salvo', // 'Secur'
-    'Save to disk':
-        'Salvo in file',  // 'Salve/Secur a systema de files'
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'Pone esti projecto\n'
-        + 'in dossier discarga\n'
-        + '(per navigators sustene)',
-    'Save As...':
-        'Salvo como nomine...',
-    'Import...':
-        'Importa...',
-    'file menu import hint':
-        'Importa insinua per menu de file ',
-    'Export project as plain text...':
-        'Exporta projecto in texto simple...',
-    'Export project...':
-        'Exporta projecto...',
-    'show project data as XML\nin a new browser window':
-        'Expone dato de projecto in XML\n'
-        + 'immane nove fenestra de navigator',
-        // vitrina
-    'Export blocks...':
-        'Exporta blocos...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'Expone blocos artificiose global como XML\n'
-        + 'immane nove fenestra de navigator',
-    'Import tools':
-        'Importa utensiles',
-    'load the official library of\npowerful blocks':
-        'Incarga bibliotheca official de blocos potente',
-    'Libraries...':
-        'Bibliothecas...',
-    'Import library':
-        'Importa bibliotheca',
-
-    // cloud menu
-    'Login...':
-        'Authenticar se...',
-    'Signup...':
-        'Abonamento...',
-
-    // settings menu
-    'Language...':
-        'Lingua...',
-    'Zoom blocks...':
-        'Zoom blocos...',
-    'Stage size...':
-        'Scena dimensiones...',
-    'Stage size':
-        'Scena dimensiones',
-    'Stage width':
-        'Scena traverso',
-    'Stage height':
-        'Scena statura',
-    'Default':
-        'Normal',
-    'Blurred shadows':
-        'Umbre indistincte',
-    'uncheck to use solid drop\nshadows and highlights':
-        'dismarca por usa gutta umbras\n'
-        + 'e accentuas solide',
-    'check to use blurred drop\nshadows and highlights':
-        'marca a selecte por usa gutta umbras\n'
-        + 'e accentuas indistincte',
-    'Zebra coloring':
-        'Zebra colorito',
-    'check to enable alternating\ncolors for nested blocks':
-        'marca a selecta colors alternative\n'
-        + 'por blocos annida',
-    'uncheck to disable alternating\ncolors for nested block':
-        'dismarca a disactiva colors alternative\n'
-        + 'por blocos annida',
-    'Dynamic input labels':
-        'Dynamic etiquettas entrata',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'dismarca a disactiva dynamic\n'
-        + 'etiquettas varia entrata', // 'variante'
-    'check to enable dynamic\nlabels for variadic inputs':
-        'marca a activa dynamic\n'
-        + 'etiquetta varia entrata',
-    'Prefer empty slot drops':
-        'Dar le preferentia a cader in apatur vacue', 
-				// ..' in foramine vacue'
-    'settings menu prefer empty slots hint':
-        'Dar le preferentia in menu predefinite\n'
-        + ' per apatur vacue insinua',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'dismarca a activar reporters cadera\n'
-            + 'a capabile displacia alteres',
-    'Long form input dialog':
-        'Usa dialogo entrata forma longe',
-    'Plain prototype labels':
-        'Face plan le etiquettas prototypic',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'dismarca a expone (+) symbolos\n'
-        + 'in etiquettas prototypic per blocos ',
-    'check to hide (+) symbols\nin block prototype labels':
-        'marca a cella (+) symbols\n'
-        + 'in etiquettas prototypic per blocos',
-    'check to always show slot\ntypes in the input dialog':
-        'marca a expone apatur typos\n'
-        + 'in dialogo entrata',
-    'uncheck to use the input\ndialog in short form':
-        'dismarka a usa dialogo entrata forma curte',
-    'Virtual keyboard':
-        'Virtual claviero',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'dismarca a disactivar virtual claviero\n'
-            + 'per dispositivo mobile',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marca a activar virtual claviero\n'
-            + 'per dispositivo mobile',
-    'Input sliders':
-        'Entrata glissatores',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'dismarca a disactivar\n'
-        + 'entrata glissatores\n'
-        + 'pro campos entrate',
-    'check to enable\ninput sliders for\nentry fields':
-        'marca a activar\n'
-         + 'entrata glissatores\n'
-         + 'pro campos entrate',
-    'Clicking sound':
-        'Sona de clicca',
-    'uncheck to turn\nblock clicking\nsound off':
-        'dismarca a disactivar\nsona de clicca',
-    'check to turn\nblock clicking\nsound on':
-        'marca a activar\nsona de clicca',
-    'Animations':
-        'Animations',
-    'uncheck to disable\nIDE animations':
-        'dismarca a disactivar\nIDE-Animations',
-    'Turbo mode':
-        'Turbo modo',
-    'check to prioritize\nscript execution':
-        'marca a prioitate\nexecution de scripte', // 'exequer'
-    'uncheck to run scripts\nat normal speed':
-        'dismarca a comencia scriptes\n'
-        + 'a velocitate normal', // 'celeritate'
-    'check to enable\nIDE animations':
-        'marca a activar \nIDE animations',
-    'Thread safe scripts':
-        'Filo secur scriptes',
-    'uncheck to allow\nscript reentrance':
-        'dismarca a permitte\nscripte readmitte',
-    'check to disallow\nscript reentrance':
-        'marca a prohibi\nscripte readmitte',
-    'Prefer smooth animations':
-        'Prefere aminationes lisia',
-    'uncheck for greater speed\nat variable frame rates':
-        'dismarca pro plus veloce\n'  // 'accelera'
-         + 'ma variable rata\n'
-         + 'de frame monstra',
-    'check for smooth, predictable\nanimations across computers':
-        'marca pro predice lisia\n'
-        + 'animationes trans computator systemas', // multi-platteforma
-    'Flat line ends':
-        'Lineas fin quadrate',
-    'check for flat ends of lines':
-        'marca pro lineas fin quadrate',
-    'uncheck for round ends of lines':
-        'dismarca pro lineas fin rotunde',
-
-    // inputs
-    'with inputs':
-        'Con entratas',
-    'input names:':
-        'Entrata nomines:',
-    'Input Names:':
-        'Entrata nomines:',
-    'input list:':
-        'Entrata Listes:',
-
-    // context menus:
-    'help':
-        'adjuva',
-
-    // palette:
-    'hide primitives':
-        'cela primativos',
-    'show primitives':
-        'expone primativos',
-
-    // blocks:
-    'help...':
-        'adjunta...',
-    'relabel...':
-        'redacto etiquettas...',
-    'duplicate':
-        'duplica',
-    'make a copy\nand pick it up':
-        'duplica e prende in mano',
-    'only duplicate this block':
-        'duploca solo esto bloco',
-    'delete':
-        'dele',
-    'script pic...':
-        'scripte pictura...',
-    'open a new window\nwith a picture of this script':
-        'Aperte fenestra nove\n'
-        + 'con pictura de este scripte',
-    'ringify':
-        'Anulamento',
-    'unringify':
-        'Disanulamento',
-
-    // custom blocks:
-    'delete block definition...':
-        'dele definition del bloco',
-    'edit...':
-        'edita...',
-
-    // sprites:
-    'edit':
-        'edita',
-    'move':
-        'move',
-    'detach from':
-        'distacca de',
-    'detach all parts':
-        'distacca omni partes',
-    'export...':
-        'exporta...',
-
-    // stage:
-    'show all':
-        'monstra omni',
-    'pic...':
-        'pictura...',
-    'open a new window\nwith a picture of the stage':
-        'expone nove fenestra\n'
-		+ 'con pictura del scena',
-
-    // scripting area
-    'clean up':
-        'abluenta',
-    'arrange scripts\nvertically':
-        'presentar scriptes\n' + 'verticalitate',
-    'add comment':
-        'adde un commento',
-    'undrop':
-        'disdepone',
-    'undo the last\nblock drop\nin this pane':
-        'disfacer bloco depone antea\n'
-		+ 'in este pannello',
-    'scripts pic...':
-        'scriptes pictura...',
-    'open a new window\nwith a picture of all scripts':
-        'expone nove fenestra\n'
-		+ 'con pictura del omni scriptes',
-    'make a block...':
-        'face un bloco...',
-
-    // costumes
-    'rename':
-        'edita le nomine',
-    'export':
-        'exporta',
-    'rename costume':
-        'edita le nomine del costume',
-
-    // sounds
-    'Play sound':
-        'Sona le sono',
-    'Stop sound':
-        'Arresta sono',
-    'Stop':
-        'Halto',
-    'Play':
-        'Sona',
-    'rename sound':
-        'Edita le nomine del sono',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'Revoca',
-    'Yes':
-        'Si',
-    'No':
-        'Non',
-
-    // help
-    'Help':
-        'Adjuta',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Zoom blocos',
-    'build':
-        'edifica',
-    'your own':
-        'vostre',
-    'blocks':
-        'blocos',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'por demonstration (1.2x)',
-    'presentation (1.4x)':
-        'por presentation (1.4x)',
-    'big (2x)':
-        'grande (2x)',
-    'huge (4x)':
-        'grosse (4x)',
-    'giant (8x)':
-        'gigante (8x)',
-    'monstrous (10x)':  // 'monstruose'
-        'maxima (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Nulle titulo',  // 'Innominate'
-    'Open Project':
-        'Aperte Projecto',
-    '(empty)':
-        '(vacue)',
-    'Saved!':
-        'Secur!',  // 'Faceva secur per salvo a file'
-    'Delete Project':
-        'Dele Projecto',
-    'Are you sure you want to delete':
-        'A certe que vos vole a dele?',
-    'rename...':
-        'Edita le nomine...',
-
-    // costume editor
-    'Costume Editor':
-        'Costume Editor',
-    'click or drag crosshairs to move the rotation center':
-        'clicca o trahe capilo cruce \n'
-        + 'a move le centro de rotation',
-
-    // project notes
-    'Project Notes':
-        'Annotos del projecto',
-
-    // new project
-    'New Project':
-        'Projecto Nove',
-    'Replace the current project with a new one?':
-        'A surroga le projecto existente pro un nove?',
-
-    // save project
-    'Save Project As...':
-        'Secur Projecto Como...',
-
-    // export blocks
-    'Export blocks':
-        'Exporta blocos',
-    'Import blocks':
-        'Importa blocos',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'esti projecto no trova\n'
-        + 'blocos artificiose global',
-    'select':
-        'selecta',
-    'none':
-        'necun',  // 'necuno'
-
-    // variable dialog
-    'for all sprites':
-        'por omni spiritos',
-    'for this sprite only':
-        'solo por este spirito',
-
-    // block dialog
-    'Change block':
-        'Cambia bloco',
-    'Command':
-        'Commando',
-    'Reporter':
-        'Reporter',
-    'Predicate':
-        'Proposition',
-
-    // block editor
-    'Block Editor':
-        'Editor de blocos',
-    'Apply':
-        'Applica',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Dele bloco artificiose',
-    'block deletion dialog text':
-        'Edita bloco dele dialogo texto',  //??
-
-    // input dialog
-    'Create input name':
-        'Crea entrata nomine',
-    'Edit input name':
-        'Edita entrata nomine',
-    'Edit label fragment':
-        'Edita etiquetta fragmento',  // 'Edit texto clasma'
-    'Title text':
-        'Titulo texto',
-    'Input name':
-        'Entrata nomine',
-    'Delete':
-        'Dele',
-    'Object':
-        'Objecto',
-    'Number':
-        'Numero',
-    'Text':
-        'Texto',
-    'List':
-        'Liste',
-    'Any type':
-        'Qualcunque Typo',
-    'Boolean (T/F)':
-        'Ver o False (V/F)',
-    'Command\n(inline)':
-        'Commando\n(in linea)',
-    'Command\n(C-shape)':
-        'Commando\n(C-forma)',
-    'Any\n(unevaluated)':
-        'Qualcunque\n(non-evaluta)',
-    'Boolean\n(unevaluated)':
-        'Ver o False\n(non-evaluta)',
-    'Single input.':
-        'Sol entrata',
-    'Default Value:':
-        'Valor predefiniva:', // normal
-    'Multiple inputs (value is list of inputs)':
-        'entrata plure (valor es lista)',  // 'aliquot'
-    'Upvar - make internal variable visible to caller':
-        'Cassa in Alto - face cassa interne visible a evocator', 
-
-    // About Snap
-    'About Snap':
-        'in re Snap',
-    'Back...':
-        'a retro!...',
-    'License...':
-        'Licentia...',
-    'Modules...':
-        'Modulos...',
-    'Credits...':
-        'Credito...',
-    'Translators...':
-        'Traductores...',
-    'License':
-        'Licentia',
-    'current module versions:':
-        'currente modulo versiones',
-    'Contributors':
-        'Contribuentes',
-    'Translations':
-        'Traductiones..',
-
-    // variable watchers (observa loco de valores = cassa)
-    'normal':
-        'normal',
-    'large':
-        'grande',
-    'slider':
-        'glissator',
-    'slider min...':
-        'glissator minime...',
-    'slider max...':
-        'glissator maxime...',
-    'import...':
-        'importa...',
-    'Slider minimum value':
-        'glissator minime valor',
-    'Slider maximum value':
-        'glissator maxime valor',
-
-    // list watchers
-    'length: ':
-        'Longor: ',
-
-    'length':
-        'Longor',
-
-    // coments
-    'add comment here...':
-        'adde commento hic',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) dextera',
-    '(-90) left':
-        '(-90) sinistra',
-    '(0) up':
-        '(0) alto',
-    '(180) down':
-        '(180) basso',
-
-    // collision detection
-    'mouse-pointer':
-        'mure punctator',
-    'edge':
-        'bordo talia',
-    'pen trails':
-        'penna tracia',
-
-    // costumes
-    'Turtle':
-        'Tortuca',
-    'Empty':
-        'Vacue',
-
-    // graphical effects
-    'brightness':
-        'brillantia', // 'nitor'
-    'ghost':
-        'apparition',  // 'spectro'
-    'negative':
-        'negative',
-    'comic':
-        'comic',
-    'confetti':
-        'confetti',
-
-    // keys
-    'space':
-        'spatio vacue',
-    'up arrow':
-        'alto flecha',  // 'sagitta'
-    'down arrow':
-        'basso flecha',
-    'right arrow':
-        'dextera flecha',
-    'left arrow':
-        'sinistra flecha',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'Nove...',
-
-    // math functions
-    'abs':
-        'abs',
-    'floor':
-        'floor',
-    'sqrt':
-        'sqrt',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'character',
-    'whitespace':
-        'spatio blanco',  // spatio vacue'
-    'line':
-        'linea',
-    'tab':
-        'tabulator',
-    'cr':
-        'fin de linea',
-
-    // data types
-    'number':
-        'Numero',
-    'text':
-        'Texto',
-    'Boolean':
-        'Ver o False',
-    'list':
-        'Lista',
-    'command':
-        'Commando',
-    'reporter':
-        'Reporter',
-    'predicate':
-        'Proposition',
-
-    // list indices
-    'last':
-        'ultime',
-    'any':
-        'alcuno',  // 'qualcun'
-    'random':
-        'aleatori'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) sinistra",
+    "(0) up": "(0) alto",
+    "(180) down": "(180) basso",
+    "(90) right": "(90) dextera",
+    "(empty)": "(vacue)",
+    "About Snap": "in re Snap",
+    "About...": "In re Snap!...",
+    "Animations": "Animations",
+    "Any (unevaluated)": "Qualcunque (non-evaluta)",
+    "Any type": "Qualcunque Typo",
+    "Apply": "Applica",
+    "Are you sure you want to delete": "A certe que vos vole a dele?",
+    "Back...": "a retro!...",
+    "Block Editor": "Editor de blocos",
+    "Blurred shadows": "Umbre indistincte",
+    "Boolean": "Ver o False",
+    "Boolean (T/F)": "Ver o False (V/F)",
+    "Boolean (unevaluated)": "Ver o False (non-evaluta)",
+    "Cancel": "Revoca",
+    "Change block": "Cambia bloco",
+    "Clicking sound": "Sona de clicca",
+    "Command": "Commando",
+    "Command (C-shape)": "Commando (C-forma)",
+    "Command (inline)": "Commando (in linea)",
+    "Contributors": "Contribuentes",
+    "Control": "Reger",
+    "Costume Editor": "Costume Editor",
+    "Costumes": "Costumes",
+    "Create input name": "Crea entrata nomine",
+    "Credits...": "Credito...",
+    "Default": "Normal",
+    "Default Value:": "Valor predefiniva:",
+    "Delete": "Dele",
+    "Delete Custom Block": "Dele bloco artificiose",
+    "Delete Project": "Dele Projecto",
+    "Delete a variable": "Dele un Cassa",
+    "Download source": "Discarga fonte",
+    "Dynamic input labels": "Dynamic etiquettas entrata",
+    "Edit input name": "Edita entrata nomine",
+    "Edit label fragment": "Edita etiquetta fragmento",
+    "Empty": "Vacue",
+    "Export blocks": "Exporta blocos",
+    "Export blocks...": "Exporta blocos...",
+    "Export project as plain text...": "Exporta projecto in texto simple...",
+    "Export project...": "Exporta projecto...",
+    "Flat line ends": "Lineas fin quadrate",
+    "Hello!": "Hallo!",
+    "Help": "Adjuta",
+    "Hmm...": "Hmm...",
+    "Import blocks": "Importa blocos",
+    "Import library": "Importa bibliotheca",
+    "Import tools": "Importa utensiles",
+    "Import...": "Importa...",
+    "Input Names:": "Entrata nomines:",
+    "Input name": "Entrata nomine",
+    "Input sliders": "Entrata glissatores",
+    "Language...": "Lingua...",
+    "Libraries...": "Bibliothecas...",
+    "License": "Licentia",
+    "License...": "Licentia...",
+    "List": "Liste",
+    "Lists": "Listas",
+    "Login...": "Authenticar se...",
+    "Long form input dialog": "Usa dialogo entrata forma longe",
+    "Looks": "Apparentia",
+    "Make a block": "Face un bloco",
+    "Make a variable": "Nove Cassa",
+    "Message name": "Nomine de message",
+    "Modules...": "Modulos...",
+    "Motion": "Movimento",
+    "Multiple inputs (value is list of inputs)": "entrata plure (valor es lista)",
+    "New": "Nova",
+    "New Project": "Projecto Nove",
+    "No": "Non",
+    "Number": "Numero",
+    "OK": "OK",
+    "Object": "Objecto",
+    "Ok": "OK",
+    "Open Project": "Aperte Projecto",
+    "Open...": "Aperte...",
+    "Operators": "Operators",
+    "Other": "Altere",
+    "Pen": "Penna",
+    "Plain prototype labels": "Face plan le etiquettas prototypic",
+    "Play": "Sona",
+    "Play sound": "Sona le sono",
+    "Predicate": "Proposition",
+    "Prefer empty slot drops": "Dar le preferentia a cader in apatur vacue",
+    "Prefer smooth animations": "Prefere aminationes lisia",
+    "Project Notes": "Annotos del projecto",
+    "Project notes...": "Annotos de projecto...",
+    "Reference manual": "Manual referentia",
+    "Replace the current project with a new one?": "A surroga le projecto existente pro un nove?",
+    "Reporter": "Reporter",
+    "Save": "Salvo",
+    "Save As...": "Salvo como nomine...",
+    "Save Project As...": "Secur Projecto Como...",
+    "Save to disk": "Salvo in file",
+    "Saved!": "Secur!",
+    "Script variable name": "Nomine de Scripte Cassa",
+    "Scripts": "Scriptes",
+    "Sensing": "Sensation",
+    "Signup...": "Abonamento...",
+    "Single input.": "Sol entrata",
+    "Slider maximum value": "glissator maxime valor",
+    "Slider minimum value": "glissator minime valor",
+    "Snap! website": "Snap! sito web",
+    "Sound": "Sono",
+    "Sounds": "Sonas",
+    "Sprite": "Spirito",
+    "Stage": "Scena",
+    "Stage height": "Scena statura",
+    "Stage selected: no motion primitives": "Scena selecte: nulle motion primitives",
+    "Stage size": "Scena dimensiones",
+    "Stage size...": "Scena dimensiones...",
+    "Stage width": "Scena traverso",
+    "Stop": "Halto",
+    "Stop sound": "Arresta sono",
+    "Switch back to user mode": "Cambio retro a modo usator",
+    "Switch to dev mode": "Cambio a modo disveloppator",
+    "Text": "Texto",
+    "Thread safe scripts": "Filo secur scriptes",
+    "Title text": "Titulo texto",
+    "Translations": "Traductiones..",
+    "Translators...": "Traductores...",
+    "Turbo mode": "Turbo modo",
+    "Turtle": "Tortuca",
+    "Untitled": "Nulle titulo",
+    "Upvar - make internal variable visible to caller": "Cassa in Alto - face cassa interne visible a evocator",
+    "Variable name": "Nomine de Cassa",
+    "Variables": "Cassas",
+    "Virtual keyboard": "Virtual claviero",
+    "Yes": "Si",
+    "Zebra coloring": "Zebra colorito",
+    "Zoom blocks": "Zoom blocos",
+    "Zoom blocks...": "Zoom blocos...",
+    "_ contains _": "_ contine _",
+    "_ in front of _": "_ es ante que _",
+    "_ mod _": "_ modulo _",
+    "_ of _": "_ de _",
+    "a": "a",
+    "abs": "abs",
+    "acos": "acos",
+    "add _ to _": "adde _ e _",
+    "add a new sprite": "adde spirito nove",
+    "add comment": "adde un commento",
+    "add comment here...": "adde commento hic",
+    "alert _": "alerte _",
+    "all": "omni",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "onme excepte prime de _",
+    "all but this script": "omni excepte iste scripte",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "and": "e",
+    "answer": "responde",
+    "any": "alcuno",
+    "any message": "qualcosa message",
+    "arrange scripts vertically": "presentar scriptes verticalitate",
+    "asin": "asin",
+    "ask _ and wait": "demanda _ e attende",
+    "atan": "atan",
+    "b": "b",
+    "big (2x)": "grande (2x)",
+    "block deletion dialog text": "Edita bloco dele dialogo texto",
+    "blocks": "blocos",
+    "brightness": "brillantia",
+    "broadcast _ _": "mitte _ _",
+    "broadcast _ _ and wait": "mitte _ _ e attende",
+    "build": "edifica",
+    "c": "c",
+    "call _ _": "evoca _ _",
+    "call _ w/continuation": "evoca _ con continuation",
+    "can rotate": "capabile de rota",
+    "change _ by _": "cambio _ per _",
+    "change _ effect by _": "cambia _ effecto per _",
+    "change pen color by _": "cambia color del penna a _",
+    "change pen shade by _": "cambio tinta del penna per _",
+    "change pen size by _": "cambio dimension del penna per _",
+    "change size by _": "accrescimento dimensiones per _",
+    "change tempo by _": "cambio tempo per _",
+    "change x by _": "cambia x per _",
+    "change y by _": "cambia y per _",
+    "check for flat ends of lines": "marca pro lineas fin quadrate",
+    "check for smooth, predictable animations across computers": "marca pro predice lisia animationes trans computator systemas",
+    "check to always show slot types in the input dialog": "marca a expone apatur typos in dialogo entrata",
+    "check to disallow script reentrance": "marca a prohibi scripte readmitte",
+    "check to enable IDE animations": "marca a activar IDE animations",
+    "check to enable alternating colors for nested blocks": "marca a selecta colors alternative por blocos annida",
+    "check to enable dynamic labels for variadic inputs": "marca a activa dynamic etiquetta varia entrata",
+    "check to enable input sliders for entry fields": "marca a activar entrata glissatores pro campos entrate",
+    "check to enable virtual keyboard support for mobile devices": "marca a activar virtual claviero per dispositivo mobile",
+    "check to hide (+) symbols in block prototype labels": "marca a cella (+) symbols in etiquettas prototypic per blocos",
+    "check to prioritize script execution": "marca a prioitate execution de scripte",
+    "check to turn block clicking sound on": "marca a activar sona de clicca",
+    "check to use blurred drop shadows and highlights": "marca a selecte por usa gutta umbras e accentuas indistincte",
+    "clean up": "abluenta",
+    "clear": "depura",
+    "clear graphic effects": "depura effectos graphic",
+    "click or drag crosshairs to move the rotation center": "clicca o trahe capilo cruce a move le centro de rotation",
+    "clicked": "clicco",
+    "color _ is touching _ ?": "color _ es continge _ ?",
+    "comic": "comic",
+    "command": "Commando",
+    "confetti": "confetti",
+    "console log _": "entra in registration _",
+    "cos": "cos",
+    "costume #": "costume numero",
+    "costumes tab help": "costumes adjuta",
+    "cr": "fin de linea",
+    "create a clone of _": "face un copia de _",
+    "current module versions:": "currente modulo versiones",
+    "d": "d",
+    "delete": "dele",
+    "delete _ of _": "dele _ de _",
+    "delete block definition...": "dele definition del bloco",
+    "delete this clone": "dele ista copia",
+    "demo (1.2x)": "por demonstration (1.2x)",
+    "detach all parts": "distacca omni partes",
+    "detach from": "distacca de",
+    "development mode": "disveloppation moda",
+    "development mode debugging primitives:": "disveloppa modo anti-defacto primitives",
+    "direction": "direction",
+    "disable deep-Morphic context menus and show user-friendly ones": "Face inactive profunde Morphic menus contexto e expone se usator amicabile",
+    "distance to _": "distantia a _",
+    "don't rotate": "non rota",
+    "down arrow": "basso flecha",
+    "draggable": "traheribile",
+    "dropped": "depone",
+    "duplicate": "duplica",
+    "e": "e",
+    "e^": "e^",
+    "edge": "bordo talia",
+    "edit": "edita",
+    "edit...": "edita...",
+    "enable Morphic context menus and inspectors, not user-friendly!": "Face active Morphic menus contexto e inspector, non amicabile de usatores",
+    "export": "exporta",
+    "export...": "exporta...",
+    "f": "f",
+    "false": "false",
+    "file menu import hint": "Importa insinua per menu de file",
+    "filtered for _": "filtra per _",
+    "floor": "floor",
+    "for all sprites": "por omni spiritos",
+    "for this sprite only": "solo por este spirito",
+    "forever _": "sin termino _",
+    "frames": "quadros",
+    "g": "g",
+    "ghost": "apparition",
+    "giant (8x)": "gigante (8x)",
+    "glide _ secs to x: _ y: _": "glissa _ secundes a x: _ y: _",
+    "go back _ layers": "ir detra _ strato",
+    "go to _": "ir a _",
+    "go to front": "antepone",
+    "go to x: _ y: _": "ir a x: _ y: _",
+    "h": "h",
+    "hello": "Hallo",
+    "help": "adjuva",
+    "help...": "adjunta...",
+    "hide": "cela",
+    "hide primitives": "cela primativos",
+    "hide variable _": "cella cassa _",
+    "http:// _": "http:// _",
+    "huge (4x)": "grosse (4x)",
+    "i": "i",
+    "identical to": "identic a",
+    "if _ _": "si _ _",
+    "if _ _ else _": "si _ _ nisi _",
+    "if on edge, bounce": "si in bordo talia, recula",
+    "import a sound from your computer by dragging it into here": "face importa un sono per trahe hic",
+    "import...": "importa...",
+    "input list:": "Entrata Listes:",
+    "input names:": "Entrata nomines:",
+    "insert _ at _ of _": "inserta _ in _ de _",
+    "is _ ?": "a es _ ?",
+    "is _ a _ ?": "a es _ de _ ?",
+    "item _ of _": "elemento _ de _",
+    "j": "j",
+    "join _": "junge _",
+    "k": "k",
+    "key _ pressed?": "a clave _ pressa?",
+    "l": "l",
+    "language_name": "Interlingua",
+    "language_translator": "Ken Dickey",
+    "large": "grande",
+    "last": "ultime",
+    "last_changed": "2015-08-09",
+    "launch _ _": "lancea _ _",
+    "left arrow": "sinistra flecha",
+    "length of _": "longor de _",
+    "length:": "Longor:",
+    "letter": "character",
+    "letter _ of _": "character _ de _",
+    "line": "linea",
+    "list": "Lista",
+    "list _": "Liste _",
+    "ln": "ln",
+    "load the official library of powerful blocks": "Incarga bibliotheca official de blocos potente",
+    "m": "m",
+    "make a block...": "face un bloco...",
+    "make a copy and pick it up": "duplica e prende in mano",
+    "message": "message",
+    "monstrous (10x)": "maxima (10x)",
+    "mouse down?": "a mure es a basso?",
+    "mouse x": "mure x position",
+    "mouse y": "mure y position",
+    "mouse-departed": "mure parti",
+    "mouse-entered": "mure entra",
+    "mouse-pointer": "mure punctator",
+    "move": "move",
+    "move _ steps": "move _ passos",
+    "myself": "io mesme",
+    "n": "n",
+    "negative": "negative",
+    "neighbors ≠": "neighbors ≠",
+    "new...": "Nove...",
+    "next costume": "proxime costume",
+    "none": "necun",
+    "normal": "normal",
+    "normal (1x)": "normal (1x)",
+    "not _": "non _",
+    "number": "Numero",
+    "o": "o",
+    "only duplicate this block": "duploca solo esto bloco",
+    "only face left/right": "sol facie sinistre o dextre",
+    "open a new window with a picture of all scripts": "expone nove fenestra con pictura del omni scriptes",
+    "open a new window with a picture of the stage": "expone nove fenestra con pictura del scena",
+    "open a new window with a picture of this script": "Aperte fenestra nove con pictura de este scripte",
+    "or": "o",
+    "other scripts in sprite": "altere scriptes in iste spirito",
+    "p": "p",
+    "pause all _": "pausa omni _",
+    "pen down": "face penna a basso",
+    "pen trails": "penna tracia",
+    "pen up": "face penna in alto",
+    "pic...": "pictura...",
+    "pick random _ to _": "al aventura inter _ e _",
+    "play note _ for _ beats": "sona nota _ per _ pulsia",
+    "play sound _": "sona _",
+    "play sound _ until done": "sona _ usque complete",
+    "point in direction _": "puncta direction _",
+    "point towards _": "puncta erga _",
+    "predicate": "Proposition",
+    "presentation (1.4x)": "por presentation (1.4x)",
+    "pressed": "pressa",
+    "q": "q",
+    "r": "r",
+    "random": "aleatori",
+    "relabel...": "redacto etiquettas...",
+    "rename": "edita le nomine",
+    "rename costume": "edita le nomine del costume",
+    "rename sound": "Edita le nomine del sono",
+    "rename...": "Edita le nomine...",
+    "repeat _ _": "itera _ _",
+    "repeat until _ _": "itera donec _ _",
+    "replace item _ of _ with _": "reimplacia elemento _ de _ con _",
+    "report _": "reporta _",
+    "reporter": "Reporter",
+    "reset timer": "recomenciar le chronometria",
+    "rest for _ beats": "pausa per _ pulsia",
+    "right arrow": "dextera flecha",
+    "ringify": "Anulamento",
+    "round _": "_ rotunda",
+    "run _ _": "comencia _ _",
+    "run _ w/continuation": "comencia _ con continuation",
+    "s": "s",
+    "say _": "dice _",
+    "say _ for _ secs": "dice _ per _ secundes",
+    "script pic...": "scripte pictura...",
+    "script variables _": "cassas de scripte _",
+    "scripts pic...": "scriptes pictura...",
+    "select": "selecta",
+    "set _ effect to _": "in _ pone effecto _",
+    "set _ to _": "in _ pone _",
+    "set pen color to _": "face color del penna a _",
+    "set pen shade to _": "face tinta del penna a _",
+    "set pen size to _": "face dimension del penna a _",
+    "set size to _ %": "delimita dimentiones a _ %",
+    "set tempo to _ bpm": "face tempo a _ pulsia per minuta",
+    "set turbo mode to _": "face turbo modo a _",
+    "set x to _": "in x pone _",
+    "set y to _": "in y pone _",
+    "settings menu prefer empty slots hint": "Dar le preferentia in menu predefinite per apatur vacue insinua",
+    "show": "expone",
+    "show all": "monstra omni",
+    "show global custom block definitions as XML in a new browser window": "Expone blocos artificiose global como XML immane nove fenestra de navigator",
+    "show primitives": "expone primativos",
+    "show project data as XML in a new browser window": "Expone dato de projecto in XML immane nove fenestra de navigator",
+    "show variable _": "expone cassa _",
+    "sin": "sin",
+    "size": "dimentiones",
+    "slider": "glissator",
+    "slider max...": "glissator maxime...",
+    "slider min...": "glissator minime...",
+    "space": "spatio vacue",
+    "split _ by _": "fisse _ de _",
+    "sqrt": "sqrt",
+    "stack size": "pila dimensione",
+    "stamp": "timbra",
+    "stop _": "cessa _",
+    "stop all sounds": "cessar sona tote",
+    "store this project in the downloads folder (in supporting browsers)": "Pone esti projecto in dossier discarga (per navigators sustene)",
+    "switch to costume _": "cambio a costume _",
+    "t": "t",
+    "tab": "tabulator",
+    "tan": "tan",
+    "tempo": "tempo",
+    "text": "Texto",
+    "thing": "cosa",
+    "think _": "pensa _",
+    "think _ for _ secs": "pensa _ per _ secundes",
+    "this block": "iste bloco",
+    "this project doesn't have any custom global blocks yet": "esti projecto no trova blocos artificiose global",
+    "this script": "iste scripte",
+    "timer": "chronometria",
+    "to": "a",
+    "touching _ ?": "continge _ ?",
+    "translator_e-mail": "Ken.Dickey@whidbey.com",
+    "true": "ver",
+    "turbo mode?": "a turbo modo?",
+    "turn _ _ degrees": "torna _ _ grados",
+    "type of _": "typo de _",
+    "u": "u",
+    "uncheck for greater speed at variable frame rates": "dismarca pro plus veloce ma variable rata de frame monstra",
+    "uncheck for round ends of lines": "dismarca pro lineas fin rotunde",
+    "uncheck to allow dropped reporters to kick out others": "dismarca a activar reporters cadera a capabile displacia alteres",
+    "uncheck to allow script reentrance": "dismarca a permitte scripte readmitte",
+    "uncheck to always show (+) symbols in block prototype labels": "dismarca a expone (+) symbolos in etiquettas prototypic per blocos",
+    "uncheck to disable IDE animations": "dismarca a disactivar IDE-Animations",
+    "uncheck to disable alternating colors for nested block": "dismarca a disactiva colors alternative por blocos annida",
+    "uncheck to disable dynamic labels for variadic inputs": "dismarca a disactiva dynamic etiquettas varia entrata",
+    "uncheck to disable input sliders for entry fields": "dismarca a disactivar entrata glissatores pro campos entrate",
+    "uncheck to disable virtual keyboard support for mobile devices": "dismarca a disactivar virtual claviero per dispositivo mobile",
+    "uncheck to run scripts at normal speed": "dismarca a comencia scriptes a velocitate normal",
+    "uncheck to turn block clicking sound off": "dismarca a disactivar sona de clicca",
+    "uncheck to use solid drop shadows and highlights": "dismarca por usa gutta umbras e accentuas solide",
+    "uncheck to use the input dialog in short form": "dismarka a usa dialogo entrata forma curte",
+    "undo the last block drop in this pane": "disfacer bloco depone antea in este pannello",
+    "undrop": "disdepone",
+    "unicode _ as letter": "Unicode character pro _",
+    "unicode of _": "Unicode valor de _",
+    "unringify": "Disanulamento",
+    "untitled": "innominate",
+    "up arrow": "alto flecha",
+    "v": "v",
+    "w": "w",
+    "wait _ secs": "attende _ secundes",
+    "wait until _": "attende donec _",
+    "warp _": "ordi _",
+    "what's your name?": "que es tu nomine?",
+    "when I am _": "cuando io es _",
+    "when I receive _ _": "cuando io recipe _ _",
+    "when I start as a clone": "quando io comencia como copia",
+    "when _ clicked": "cuando _ clic",
+    "when _ key pressed _": "cuando _ clave pressa _",
+    "whitespace": "spatio blanco",
+    "with inputs": "Con entratas",
+    "world": "Mundo",
+    "x": "x",
+    "x position": "x position",
+    "y": "y",
+    "y position": "y position",
+    "your own": "vostre",
+    "z": "z"
+}

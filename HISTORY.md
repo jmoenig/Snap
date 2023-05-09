@@ -53,6 +53,7 @@
 * updated strings library with new case sensitivity and lower case primitives
 * updated German translation with new case sensitivity strings
 * lists: pretty print generated JSON strings
+* migrated all translations to the new consolidated underscore notation for marking input slots
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)

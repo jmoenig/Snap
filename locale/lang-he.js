@@ -1,1955 +1,786 @@
-/*
-
-    lang-he.js
-
-    Hebrew transelation  for SNAP!
-
-    written by Yossi Cohen
-
-    Copyright (C) 2014 by Yossi Cohen
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.he = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ã„, Ã¤   \u00c4, \u00e4
-    Ã–, Ã¶   \u00d6, \u00f6
-    Ãœ, Ã¼   \u00dc, \u00fc
-    ÃŸ      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'עברית', // the name as it should appear in the language menu
-    'language_translator':
-        'יוסי כהן', // your name for the Translators tab
-    'translator_e-mail':
-        'cohenyossi81@gmail.com', // optional
-    'last_changed':
-        '2020-04-21', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'ללא כותרת',
-    'development mode':
-        'מצב פיתוח',
-
-    // categories:
-    'Motion':
-        'תנועה',
-    'Looks':
-        'מראה',
-    'Sound':
-        'צליל',
-    'Pen':
-        'עט',
-    'Control':
-        'בקרה',
-    'Sensing':
-        'חיישנים',
-    'Operators':
-        'הפעלה',
-    'Variables':
-        'משתנים',
-    'Lists':
-        'רשימות',
-    'Other':
-        'אחר',
-
-    // editor:
-    'draggable':
-        'פריטים נגררים',
-
-    // tabs:
-    'Scripts':
-        'תסריטים',
-    'Costumes':
-        'תלבושות',
-    'Sounds':
-        'צלילים',
-    'Backgrounds':
-        'רקעים',
-
-
-    // names:
-    'Sprite':
-        'דמות',
-    'Stage':
-        'במה',
-
-    // rotation styles:
-    'don\'t rotate':
-        'ללא סיבוב',
-    'can rotate':
-        'ניתן לסובב',
-    'only face left/right':
-        'רק פנים ימינה-שמאלה',
-
-    // new sprite button:
-    'add a new sprite':
-        'הוסף דמות חדשה',
-    'add a new Turtle sprite':
-        'הוסף דמות צב חדשה',
-    'paint a new sprite':
-        'צייר דמות חדשה',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'השתמש במצלמה לייצר דמות חדשה',
-
-    // tab help
-    'costumes tab help':
-        // 'import a picture from another web page or from\n'
-        // + 'a file on your computer by dropping it here\n',
-        'ייבא תמונה מאתר אינטרנט\n' + 'או מהמחשב שלך על ידי גרירתה לכאן',
-    'import a sound from your computer\nby dragging it into here':
-        'ייבא צלילים מהמחשב שלך על-ידי גרירתם לכאן',
-
-
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'במה נבחרה: ללא תנועה',
-
-    'move %n steps':
-        'צעדים %n זוז',
-    'turn %clockwise %n degrees':
-        'מעלות %n %clockwise פנה',
-    'turn %counterclockwise %n degrees':
-        'מעלות %n %counterclockwise פנה',
-    'point in direction %dir':
-        ' %dir פנה_לכיוון',
-    'point towards %dst':
-        ' %dst פנה_לעבר ',
-    'go to x: %n y: %n':
-        'לך_אל  x: %n y: %n',
-    'go to %dst':
-        ' %dst לך_אל',
-    'glide %n secs to x: %n y: %n':
-        'שניות %n גלוש_במשך x: %n y: %n',
-    'change x by %n':
-        ' %n ב x שנה',
-    'set x to %n':
-        '%n ל x הגדר',
-    'change y by %n':
-        ' %n ב y שנה',
-    'set y to %n':
-        '%n ל y הגדר',
-    'if on edge, bounce':
-        'אם_בקצה_אז_קפוץ',
-    'x position':
-        ' x מיקום ',
-    'y position':
-        ' y מיקום ',
-    'direction':
-        'כיוון',
-
-    // looks:
-    'switch to costume %cst':
-        '%cst החלף_לתלבושת',
-    'next costume':
-        'התלבושת_הבאה',
-    'costume #':
-        'תלבושת_מספר',
-    'say %s for %n secs':
-        ' %s שניות_אמור %n למשך ',
-    'say %s':
-        '%s אמור',
-    'think %s for %n secs':
-        ' %s שניות_תחשוב %n למשך ',
-    'think %s':
-        ' %s תחשוב',
-    'Hello!':
-        '!שלום',
-    'Hmm...':
-        'המממ...',
-    'change %eff effect by %n':
-        '%eff שינוי_ב_אפקט %n',
-    'set %eff effect to %n':
-        '%eff קביעת_ערך_אפקט %n',
-    'clear graphic effects':
-        'נקה_אפקטים_גרפיים',
-    'change size by %n':
-        ' שנוי_גודל %n',
-    'set size to %n %':
-        '% %n קבע_גודל_ל',
-    'size':
-        'גודל',
-    'show':
-        'הראה',
-    'hide':
-        'הסתר',
-    'go to front':
-        'העבר_לחזית',
-    'go back %n layers':
-        'שכבות %n הזז_לאחור',
-    '%img of costume %cst':
-        '%img מאפיין_של_תלבושת %cst',
-    'new costume %l width %dim height %dim':
-        'תלבושת_חדשה %l רוחב %dim גובה %dim',
-    'stretch %cst x: %n y: %n %':
-        'מתיחה %cst x: %n y: %n %',
-    '%eff effect':
-        '%eff אפקט',
-    'shown?':
-        'מוצגת?',
-    'go to %layer layer':
-        'לך_אל %layer',
-    'front':
-        'חזית',
-    'back':
-        'רקע',
-
-    'development mode \ndebugging primitives:':
-        'מצב פיתוח\nמשתני דיבאג',
-    'console log %mult%s':
-        'console log %mult%s',
-    'alert %mult%s':
-        'התראה %mult%s',
-
-    'pixels':
-        'פיקסלים',
-    'current':
-        'נוכחי',
-
-    // sound:
-    'play sound %snd':
-        '%snd נגן_צליל',
-    'play sound %snd until done':
-        'נגן_צליל_והמתן_לסיום %snd',
-    'stop all sounds':
-        'עצור_את_כל_הצלילים',
-    'rest for %n beats':
-        'נוח_למשך %n',
-    'play note %n for %n beats':
-        'נגן תו %n למשך %n ביטים',
-    'change tempo by %n':
-        '%n שנה קצב ביטים ב',
-    'set tempo to %n bpm':
-        'קבע קצב ל %n ביטים בדקה',
-    'tempo':
-        'קצב',
-    'play sound %snd at %rate Hz':
-        'נגן_צליל %snd בקצב %rate Hz',
-    '%aa of sound %snd':
-        '%aa של_צליל %snd',
-    'duration':
-        'למשך',
-    'length':
-        'אורך',
-    'number of channels':
-        'מספר ערוצים',
-    'new sound %l rate %rate Hz':
-        'צליל_חדש %l בקצב %rate Hz',
-    'play note %note for %n beats':
-        '%note ביטים_עם_טון %n נגן_תו_למשך',
-    'set instrument to %inst':
-        'קבע_כלי_נגינה %inst',
-    'change volume by %n':
-        'שנה_עוצמת_צליל_ב %n',
-    'set volume to %n %':
-        'קבע_עוצמת_צליל_ל %n %',
-    'change balance by %n':
-        'שנה_איזון_ב %n',
-    'set balance to %n':
-        'קבע_איזון_ל %n',
-    'balance':
-        'איזון',
-    'volume':
-        'עוצמת_צליל',
-    'play frequency %n Hz':
-        'נגן_תדר %n Hz',
-    'stop frequency':
-        'עצור_(ניגון_תדר',
-    'play %n Hz for %n secs':
-        'נגן %n Hz למשך %n שניות',
-    'Record a new sound':
-        'הקלט צליל חדש',
-
-    // "instruments", i.e. wave forms
-    '(1) sine':
-        '(1) סינוס',
-    '(2) square':
-        '(2) ריבועי',
-    '(3) sawtooth':
-        '(3) שיני_מסור',
-    '(4) triangle':
-        '(4) משולש',
-
-
-    // pen:
-    'clear':
-        'נקה',
-    'pen down':
-        'עט_למטה',
-    'pen up':
-        'עט_למעלה',
-    'set pen color to %clr':
-        ' %clr קבע_צבע_עט_ל',
-    'change pen color by %n':
-        ' %n שנה_צבע_עט_ב',
-    'set pen color to %n':
-        ' %n קבע_צבע_עט_ל',
-    'change pen shade by %n':
-        '%n שנה_גוון_עט_ב',
-    'set pen shade to %n':
-        '%n קווע_גוון_עט_ל',
-    'change pen size by %n':
-        '%n שנה_גודל_עט_ב',
-    'set pen size to %n':
-        ' %n קבע_גודל_עט_ל',
-    'stamp':
-        'חותמת',
-    'pen down?':
-        'עט_למטה?',
-    'set background color to %clr':
-        'קבע_צבע_רקע %clr',
-    'change pen %clrdim by %n':
-        'שנה_עט_ב %clrdim %n',
-    'change background %clrdim by %n':
-        'שנה_רקע_ב %clrdim %n',
-    'set pen %clrdim to %n':
-        'קבע_עט_ל %clrdim %n',
-    'set background %clrdim to %n':
-        'קבע_רקע_ל %clrdim  %n',
-    'pen %pen':
-        'עט %pen',
-    'fill':
-        'מלא',
-    'write %s size %n':
-        'כתוב_בגודל %s %n',
-    'paste on %spr':
-        'הדבק_על %spr',
-    'pen vectors':
-        'סימוני_עט_וקטור',
-
-
-    // control:
-    'when %greenflag clicked':
-        'נלחץ %greenflag כאשר_כפתור',
-    'when %keyHat key pressed %keyName':
-        'נלחץ %keyHat כאשר_כפתור %keyName',
-    'when I am %interaction':
-        'כאשר_אני %interaction',
-    'clicked':
-        'הקלקה',
-    'pressed':
-        'לחיצה',
-    'dropped':
-        'הפלה',
-    'mouse-entered':
-        'עכבר-נכנס',
-    'mouse-departed':
-        'עכבר-יוצא',
-    'when %b':
-        '%b כאשר',
-    'when I receive %msgHat %message':
-        '%message %msgHat כאשר_אני_מקבל',
-    'broadcast %msg %receive':
-        'שדר_הודעה %msg %receive',
-    'broadcast %msg %receive and wait':
-        'והמתן %msg %receive שדר_הודעה',
-    'Message name':
-        'שם ההודעה',
-    'message':
-        'הודעה',
-    'any message':
-        'כל הודעה',
-    'wait %n secs':
-        'שניות %n המתן',
-    'wait until %b':
-        '%b המתן_עד_ש',
-    'forever %loop':
-        'לנצח %loop',
-    'repeat %n %loop':
-        'חזור %n %loop',
-    'repeat until %b %loop':
-        'חזור_עד_ש %b %loop',
-    'if %b %c':
-        'אם %b %c',
-    'if %b %c else %c':
-        'אם %b %c אחרת %c',
-    'report %s':
-        '%s דווח',
-    'stop %stopChoices':
-        '%stopChoices עצור',
-    'all':
-        'לכל',
-    'this script':
-        'התסריט הזה',
-    'this block':
-        'הבלוק הזה',
-    'stop %stopOthersChoices':
-        '%stopOthersChoices עצור',
-    'all but this script':
-        'הכל מלבד תסריט זה',
-    'other scripts in sprite':
-        'תסריטים אחרים בדמות',
-    'pause all %pause':
-        '%pause הקפא הכל',
-    'run %cmdRing %inputs':
-        'הרץ %cmdRing  %inputs',
-    'launch %cmdRing %inputs':
-        'הפעל %cmdRing %inputs',
-    'call %repRing %inputs':
-        'קרא %repRing  %inputs',
-    'run %cmdRing w/continuation':
-        'הרץ %cmdRing מתמשך',
-    'call %cmdRing w/continuation':
-        'קרא_ל %cmdRing מתמשך',
-    'warp %c':
-        'מעטפת %c',
-    'when I start as a clone':
-        'כשאני_מתחיל_בתור_שכפול',
-    'create a clone of %cln':
-        '%cln צור_שכפול_של',
-    'myself':
-        'אני',
-    'delete this clone':
-        'מחק_את_השכפול_הזה',
-    'scrolled-down':
-        'נגלל_למטה',
-    'scrolled-up':
-        'נגלל_למעלה',
-    'stopped':
-        'נעצר',
-    'for %upvar = %n to %n %cla':
-        'ספור_במשתנה_בטווח %upvar = %n %n %cla',
-    'if %b then %s else %s':
-        '→אם %b אז %s אחרת %s',
-    'a new clone of %cln':
-        'שכפול_חדש_של %cln',
-    'tell %spr to %cmdRing %inputs':
-        'תודיע_לעצם_אחר_לבצע %spr %cmdRing %inputs',
-    'ask %spr for %repRing %inputs':
-        'שאל_עצם_אחר %spr %repRing %inputs',
-
-    // sensing:
-    'touching %col ?':
-        'נוגע %col ?',
-    'touching %clr ?':
-        'נוגע %clr ?',
-    'color %clr is touching %clr ?':
-        '%clr צבע_נוגע_בצבע %clr ?',
-    'ask %s and wait':
-        '%s שאל_והמתן',
-    'what\'s your name?':
-        '?מה_השם_שלך',
-    'answer':
-        'תשובה',
-    'mouse x':
-        'x עכבר',
-    'mouse y':
-        'y עכבר',
-    'mouse down?':
-        'עכבר_למטה?',
-    'key %key pressed?':
-        'מקש_נלחץ %key ?',
-    'distance to %dst':
-        ' %dst מרחק_אל',
-    'reset timer':
-        'איפוס טיימר',
-    'timer':
-        'טיימר',
-    '%att of %spr':
-        '%att של %spr',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'מצב מהיר?',
-    'set turbo mode to %b':
-        'קבע_מצב_מהיר_ל %b',
-    'filtered for %clr':
-        'סינון_עבור %clr',
-    'stack size':
-        'גודל מחסנית',
-    'frames':
-        'פריימים',
-    '%rel to %dst':
-        '%rel חשב %dst',
-    'distance':
-        'מרחק',
-    '%asp at %loc' :
-        '%asp של %loc',
-    'r-g-b-a':
-        'R-G-B-A ערכי_צבע',
-    'sprites' :
-        'דמויות',
-    'my %get':
-        'מאפיין %get',
-    'object %self':
-        'אובייקט %self',
-    'turbo mode':
-        'מצב מהיר',
-    'flat line ends':
-        'סיום קו ישר',
-    'is %setting on?':
-        '%setting האם_הגדרה_פעילה',
-    'set %setting to %b':
-        'קבע_הגדרה %setting  %b',
-    'microphone %audio':
-        'מיקרופון %audio',
-    'note':
-        'תו',
-    'frequency':
-        'תדר',
-    'samples':
-        'דגימות',
-    'sample rate':
-        'קצב דגימה',
-    'spectrum':
-        'ספקטרום',
-    'resolution':
-        'רזולוציה',
-    'Microphone resolution...':
-        'רזולוציית_מיקרופון...',
-    'Microphone':
-        'מיקרופון',
-    'low':
-        'נמוך',
-    'high':
-        'גבוה',
-    'max':
-        'מקסימום',
-    'video %vid on %self':
-        'וידאו_על %vid  %self',
-    'motion':
-        'תנועה',
-    'snap':
-        'הצמדה',
-    'set video transparency to %n':
-        'קבע_שקיפות_וידאו_ל %n',
-    'video capture':
-        'לכוד_וידאו',
-    'mirror video':
-        'וידאו_תמונת_ראי',
-    'log pen vectors':
-        'קווים_ישרים_וארוכים',
-
-    // operators:
-    '%n mod %n':
-        '%n שארית_חלוקה %n',
-    'round %n':
-        'עגל_למספר_שלם %n',
-    '%fun of %n':
-        '%fun של %n',
-    'pick random %n to %n':
-        'בחר_מספר_אקראי_בתחום %n - %n',
-    'and':
-    'וגם',
-    'or':
-        'או',
-    'not %b':
-        'לא %b',
-    'true':
-        ' אמת ',
-    'false':
-        ' שקר ',
-    'join %words':
-        'שרשר_מילים %words',
-    'split %s by %delim':
-        'הפרדת_אותיות_לפי_סימן_מפריד %s  %delim',
-    'hello':
-        'שלום',
-    'world':
-        'עולם',
-    'letter %ix of %s':
-        'מיקום_אות_במילה %ix  %s',
-    '%ta of text %s':
-        '%ta %s האורך_של',
-    'unicode of %s':
-        'יוניקוד_של %s',
-    'unicode %n as letter':
-        'המר_יוניקוד_לאות %n ',
-    'is %s a %typ ?':
-        'האם_משתנה_מסוג %s %typ ?',
-    'is %all== ?':
-        '? %all==',
-    'identical to':
-        'האם_זהים',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-    'type of %s':
-        'הסוג של %s',
-    'compile %repRing':
-        'קומפייל %repRing',
-
-    // variables:
-    'Make a variable':
-        'צור משתנה',
-    'Variable name':
-        'שם משתנה',
-    'Script variable name':
-        'שם משתנה תסריט',
-    'Delete a variable':
-        'מחק משתנה',
-    'set %var to %s':
-        '%var הכנסת_ערך_ל %s',
-    'change %var by %n':
-        ' %var שנה_ערך_משתנה_ב %n',
-    'show variable %var':
-        ' %var הצג_משתנה',
-    'hide variable %var':
-        ' %var הסתר_משתנהِ',
-    'script variables %scriptVars':
-        '%scriptVars משתניי_תסריט',
-    'inherit %shd':
-        'הורש %shd',
-
-    // lists:
-    'list %exp':
-        '%exp רשימה',
-    'numbers from %n to %n':
-        'מערך_מספרים_בטווח %n עד %n',
-    '%s in front of %l':
-        '%s בתחילת_רשימה %l',
-    'item %idx of %l':
-        ' %idx בחר_פריט_מתוך %l',
-    'all but first of %l':
-        'הכל_מלבד_הראשון %l',
-    'length of %l':
-        '%l מספר_פריטים ',
-    '%l contains %s':
-        '%l נמצא_בתוך %s',
-    'thing':
-        'פריט',
-    'add %s to %l':
-        'הוסף_את %s ל %l',
-    'delete %ida of %l':
-        'מחק_פריט_מספר %ida %l',
-    'insert %s at %idx of %l':
-        'הוסף_פריט_במיקום %s %idx %l',
-    'replace item %idx of %l with %s':
-        'החלף_פריט_במיקום %idx %l %s',
-    'is %l empty?':
-        'האם_ריקה %l ?',
-    'map %repRing over %l':
-        'צור_מיפוי %repRing  %l',
-    'keep items %predRing from %l':
-        'שמור_פריטים_של %predRing %l',
-    'find first item %predRing in %l':
-        'מצא_פריט_ראשון %predRing  %l',
-    'combine %l using %repRing':
-        'מזג_רשימה_באמצעות %l mit %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz צור_מיפוי %repRing %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz שמור_פריטים_של %predRing %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz מצא_פריט_ראשון %predRing %l',
-    '%blitz combine %l using %repRing':
-        '%blitz מזג_רשימה_באמצעות %l %repRing',
-    'for each %upvar in %l %cla':
-        ' %upvar עבור_כל %l %cla',
-    'item':
-        'פריט',
-    'value':
-        'ערך',
-    'index':
-        'אינדקס',
-
-    // other
-    'Make a block':
-        'צור בלוק',
-
-     // menus
-    // snap menu
-    'About...':
-        'אודות SNAP!...',
-    'Reference manual':
-        'מדריך משתמש',
-    'Snap! website':
-        'אתר רשמי',
-    'Download source':
-        'הורדה...',
-    'Switch back to user mode':
-        'חזור למצב משתמש',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'בטל תכונות מתקדמות',
-    'Switch to dev mode':
-        'עבור למצב מפתח',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'הפעל תכונות מתקדמות',
-        
-     // project menu
-    'Project notes...':
-        'הערות לפרוייקט...',
-    'New':
-        'חדש',
-    'Open...':
-        'פתח...',
-    'Save':
-        'שמור',
-    'Save to disk':
-        'שמור לדיסק',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'הפרוייקט יישמר בתקיית הורדות',
-    'Save As...':
-        'שמור בשם...',
-    'Import...':
-        'ייבוא...',
-    'file menu import hint':
-        'ייבא פרוייק מקובץ',
-    'Export project as plain text...':
-        'ייצא פרוייקט כטקסט בלבד...',
-    'Export project...':
-        'ייצא פרוייקט...',
-    'show project data as XML\nin a new browser window':
-        'הצג את מידע הפרוייקט\nבחלון חדש (XML)',
-    'Export blocks...':
-        'ייצא בלוקים...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'הצג מידע אודות בלוקים מותאמים\nאישית בחלון חדש (XML)',
-		
-	'Unused blocks...':
-          'בלוקים לא בשימוש...',
-    'find unused global custom blocks\nand remove their definitions':
-        'מצא בלוקים שאינם בשימוש והסר את הגדרתם',
-    'Remove unused blocks':
-        'הסר בלוקים שאינם בשימוש',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'אין כרגע בלוקים שאינם בשימוש בפרוייקט זה',
-    'unused block(s) removed':
-        'בלוקים שאינם בשימוש הוסרו',
-    'Export summary...':
-        'דוח ייצוא...',
-    'open a new browser browser window\n with a summary of this project':
-        'פתח חלון חדש עם סיכום על פרוייקט זה',
-    'Contents':
-        'תכולה',
-    'Kind of':
-        'סוג',
-    'Part of':
-        'חלק מ',
-    'Parts':
-        'חלקים',
-    'Blocks':
-        'בלוקים',
-    'For all Sprites':
-        'עבור כל הדמויות',
-	'Import tools':
-        'כליי יבוא',
-    'load the official library of\npowerful blocks':
-        'טען את הספריה הרשמית של\n powerful blocks',
-    'Libraries...':
-        'ספריות...',
-    'save project data as XML\nto your downloads folder':
-        'שמור פרוייקט בתיקיית הורדות כקובץ XML',
-    'Select categories of additional blocks to add to this project.':
-        'בחר קטגוריית בלוקיי הרחבה לפרוייקט זה',
-    'Select a costume from the media library':
-        'בחר תלבושת מספריית המדיה',
-    'Select a sound from the media library':
-        'בחר צליל מבפריית המדיה',
-
-    //Libraries
-    'Import library':
-        'ייבא ספריה',
-    'Loading':
-        'טוען',
-    'Imported':
-        'מיובא',
-    'Iteration, composition':
-        'איטרציה, קומפוזיציה',
-    'List utilities':
-        'עזריי רשימות',
-    'Variadic reporters':
-        'מדווחי משתנים',
-    'Web services access (https)':
-        'גישה לשירותי רשת מאובטחים',
-    'Multi-branched conditional (switch)':
-        'תנאי מרובה ענפים (סוויצ)',
-    'LEAP Motion controller':
-        'LEAP בקר_תנועה',
-    'Words, sentences':
-        'מילים, משפטים',
-    'Catch errors in a script':
-        'תפוס שגיאות בתסריט',
-    'Set RGB or HSV pen color':
-        'קביעת צבע מתקדמת',
-    'Text to speech':
-        'טקסט לדיבור',
-    'Provide 100 selected colors':
-        '100 צבעים נבחרים',
-    'Infinite precision integers, exact rationals, complex':
-        'מספרים מדוייקים, רציונאלים ומרוכבים',
-    'Provide getters and setters for all GUI-controlled global settings':
-        ' הגדרת מאפייני ממשק ',
-    'Allow multi-line text input to a block':
-        'אפשר קליטת משפטים מרוביי שורות',
-    'Create variables in program':
-        'צור משתנים בתוכנית',
-        
-    // cloud menu
-    'Login...':
-        'הכנס...',
-    'Signup...':
-        'הירשם...',
-    'Logout':
-        'התנתק',
-    'Change Password...':
-        'שנה סיסמה...',
-    'Resend Verification Email...':
-        'שלח מחדש מייל ווידוא...',
-    'Open in Community Site':
-        'פתח באתר הקהילתי',
-        
-    // settings menu
-    'Language...':
-        'שפה...',
-    'Zoom blocks...':
-        'גודל בלוקים...',
-    'Stage size...':
-        'גודל במה...',
-    'Stage width':
-        'רוחב במה',
-    'Stage height':
-        'גובה במה',
-    'Default':
-        'ברירת מחדל',
-    'Blurred shadows':
-        'צללים מעומעמים',
-    'uncheck to use solid drop\nshadows and highlights':
-        'בטל סימון לצל והדגשה רגילים',
-    'check to use blurred drop\nshadows and highlights':
-        'הוסף סימון לצל והדגשה מעומעמים',
-    'Zebra coloring':
-        'צביעת זברה',
-    'check to enable alternating\ncolors for nested blocks':
-        'הוסף סימון כדי לאפשר צבעים מתחלפים\nעבור בלוקים משורשרים',
-    'uncheck to disable alternating\ncolors for nested block':
-        'בטל סימון כדי לבטל צבעים מתחלפים\nעבור בלוקים משורשרים',
-    'Dynamic input labels':
-        'תגיות קלט דינאמיות',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'בטל סימון כדי לבטל תווית\nדינאמית למשתנים',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'הוסף סימון כדי לבצע תווית\nדינאמית למשתנים',
-    'Prefer empty slot drops':
-        'העדף הפלה לתאים ריקים',
-    'settings menu prefer empty slots hint':
-        'תפרית העדפת רמיזה לתאים ריקים',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'בטל סימון לאפשר החלפת הקיימים\nעל ידי החדשים',
-    'Long form input dialog':
-        'פקד קלט ארוך',
-    'Plain prototype labels':
-        'תויות אבטיפוס בסיסיות',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'בטל סימון כדי להציג (+) \n בתוית בלוק אבטיפוס',
-    'check to hide (+) symbols\nin block prototype labels':
-        'הוסף סימון כדי להסתיר (+) \n בתוית בלוק אבטיפוס',
-    'check to always show slot\ntypes in the input dialog':
-        'הוסף סימון כדי להציג תמיד\nסוג כניסה בדיאלוג קלט',
-    'uncheck to use the input\ndialog in short form':
-        'בטל סימון כדי להשתמש בדיאלוג קלט מקוצר',
-    'Virtual keyboard':
-        'מקלדת וירטואלית',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'בטל סימון כדי להסתיר\nמקלדת וירטואלית במכשירים ניידים',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'הוסף סימון כדי להציג\nמקלדת וירטואלית במכשירים ניידים',
-    'Input sliders':
-        'סרגלי קלט',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'בטל סימון כדי לבטל סרגלי קלט',
-    'check to enable\ninput sliders for\nentry fields':
-        'הוסף סימון כדי לאפשר סרגלי קלט',
-    'Retina display support':
-        'תמיכה במסך רטינה',
-    'uncheck for lower resolution,\nsaves computing resources':
-        'בטל סימון כדי לשפר ביצועים על חשבון רזולוציה איכותית',
-    'check for higher resolution,\nuses more computing resources':
-        'הוסף סימון כדי להעדיף רזולוציה איכותית על חשבון ביצועים',
-    'Clicking sound':
-        'צלילי לחיצה',
-    'uncheck to turn\nblock clicking\nsound off':
-        'בטל סימון כדי לכבות צלילי לחיצת בלוקים',
-    'check to turn\nblock clicking\nsound on':
-        'הוסף סימון כדי להפעיל צלילי לחיצת בלוקים',
-    'Animations':
-        'הנפשה',
-    'uncheck to disable\nIDE animations':
-        'בטל סימון כדי לכבות הנפשת סביבת עבודה',
-    'check to enable\nIDE animations':
-        'הוסף סימון כדי להפעיל הנפשת סביבת עבודה',
-    'Turbo mode':
-        'מצב עבודה מהיר',
-    'check to prioritize\nscript execution':
-        'הוסף סימון כדי להפעיל העדפת הפעלת תסריטים',
-    'uncheck to run scripts\nat normal speed':
-        'בטל סימון כדי להפעיל תסריטים במהירות רגילה',
-	'Flat design':
-        'עיצוב שטוח',
-    'check for alternative\nGUI design':
-        'הוסף סימון למראה אלטרנטיבי - שטוח',
-    'uncheck for default\nGUI design':
-        'בטל סימון למראה רגיל תבליטי',
-    'Keyboard Editing':
-        'עריכת מקלדת',
-    'Thread safe scripts':
-        'תסריטים מוגני מיקבול',
-    'uncheck to allow\nscript reentrance':
-        'בטל סימון כדי לאפשר תסריטים ממוקבלים',
-    'check to disallow\nscript reentrance':
-        'הוסף סימון כדי למנוע תסריטים ממוקבלים',
-    'Prefer smooth animations':
-        'העדף הנפשה חלקה',
-    'uncheck for greater speed\nat variable frame rates':
-        'בטל סימון כדי להעדיף מהירות גבוהה בקצב שעשוי להשתנות',
-    'check for smooth, predictable\nanimations across computers':
-        'הוסף סימון להנפשה בקצב קבוע וחזוי מראש',
-    'Flat line ends':
-        'סוף קו ישר',
-    'check for flat ends of lines':
-        'הוסף סימון לקימור ישר של קווים',
-    'uncheck for round ends of lines':
-        'בטל סימון לגימור מעוגל של קווים',
-    'Inheritance support':
-        'תמיכה בהורשה',
-	'uncheck to disable\nsprite inheritance features':
-        'בטל סימון לבטל הורשת\nתכונות מאפייני דמות',
-    'check for sprite\ninheritance features':
-        'הוסף סימון לאפשר הורשת\nתכונות מאפייני דמות',
-    'Stage size':
-        'גודל הבמה',
-    'check to turn on\n visible stepping (slow)':
-        'הוסף סימון כדי להפעיל המחשת צעדים (איטי)',
-    'uncheck to turn off\nvisible stepping':
-        'בטל סימון כדי לא להמחיש צעדים',
-    'Nested auto-wrapping':
-        'עטיפה אוטומטית',
-    'Table support':
-        'תמיכה בטבלאות',
-    'Table lines':
-        'שורות של טבלאות',
-    'Visible stepping':
-        'המחשת צעדים',
-    'Ternary Boolean slots':
-        'בולאני עם שלושה אפשרויות',
-    'Log pen vectors':
-        'הקלט מיקומי עט',
-    'uncheck to turn off\nlogging pen vectors':
-        'בטל סימון כדי לא לזכור מיקומי עט',
-    'check to turn on\nlogging pen vectors':
-        'הוסף סימון להקליט מיקומי עט',
-
-    // inputs
-    'with inputs':
-        'עם קלטים',
-    'input names:':
-        'שמות קלט:',
-    'Input Names:':
-        'שמות קלט:',
-    'input list:':
-        'רשימת קלט:',
-
-    // context menus:
-    'help':
-        'עזרה',
-
-    // palette:
-    'find blocks':
-        'מצא בלוקים',
-    'hide primitives':
-        'הסתר בסיסיים',
-    'show primitives':
-        'הצג בסיסיים',
-
-    // blocks:
-    'help...':
-        'עזרה...',
-    'relabel...':
-        'תייג מחדש...',
-    'duplicate':
-        'שכפל',
-    'make a copy\nand pick it up':
-        'צור עותק\nוהרם',
-    'only duplicate this block':
-        'שכפול בלוק זה בלבד',
-    'delete':
-        'מחק',
-    'script pic...':
-        'תסריט תמונה...',
-    'open a new window\nwith a picture of this script':
-        'פתח חלון חדש\nעם תמונה של תסריט זה',
-    'ringify':
-        'מיסגור',
-    'unringify':
-        'ביטול מיסגור',
-    'compile':
-        'בצע קומפילציה',
-    'uncompile':
-        'בטל קומפילציה',
-    'transient':
-        'זמני',
-    'uncheck to save contents\nin the project':
-        'בטל סימון כדי לשמור תוכן בפרוייקט',
-    'check to prevent contents\nfrom being saved':
-        'הוסף סימון כדי לא לשמור תוכן בפרוייקט',
-    'new line':
-        'שורה חדשה',
-
-    // custom blocks:
-    'delete block definition...':
-        'הגדרת מחיקת בלוקים...',
-    'duplicate block definition...':
-        'שכפל הגדרת בלוק...',
-    'edit...':
-        'ערוך...',
-
-    // sprites:
-    'edit':
-        'ערוך',
-    'move':
-        'הזז',
-    'detach from':
-        'נתק מ...',
-    'detach all parts':
-        'נתק כל החלקים',
-    'export...':
-        'ייצא...',
-    'clone':
-        'שכפל',
-    'pivot':
-        'ציר',
-    'edit the costume\'s\nrotation center':
-        'ערוך את מרכז הסיבוב של הדמות',
-    'rotate':
-        'סובב',
-    'stick to':
-        'הצמד_אל',
-    'parent...':
-        'הורה...',
-    'current parent':
-        'ההורה הנוכחי',
-    'release':
-        'שחרר',
-    'make temporary and\nhide in the sprite corral':
-        'הפוך לזמני והסתר תחום דמות',
-
-    // stage:
-    'show all':
-        'הצג הכל',
-    'pic...':
-        'תמונה...',
-    'open a new window\nwith a picture of the stage':
-        'פתח חלון חדש\nעם תמונת הבמה',
-    'svg...':
-        'SVG ייצא_לקובץ...',
-    'export pen trails\nline segments as SVG':
-        'ייצא את עקבות העט לקובץ SVG',
-    'there are currently no\nvectorizable pen trail segments':
-        'אין כרגע עקבות עט הניתנון לוקטוריזציה',
-    'turn all pen trails and stamps\ninto a new background for the stage':
-        'הפוך את סימוני העט והחותמת לרקע חדש לבמה',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'הפוך את סימוני העט והחותמת לתלבושת חדשה עבור הדמות הנוכחית',
-
-    // scripting area
-    'clean up':
-        'נקה',
-    'arrange scripts\nvertically':
-        'סדר תסריטים במאונך',
-    'add comment':
-        'הוסף הערה',
-    'undrop':
-        'בטל הפלה',
-    'undo the last\nblock drop\nin this pane':
-        'בטל את הפלת\nהבלוק האחרונה',
-    'scripts pic...':
-        'תמונת תסריטים...',
-    'open a new window\nwith a picture of all scripts':
-        'פתח חלון חדש\nעם תמונה של כל התסריטים',
-    'make a block...':
-        'צור בלוק...',
-    'redrop':
-        'נתב מחדש',
-    'use the keyboard\nto enter blocks':
-        'השתמש במקלדת להכנס לבלוקים',
-
-    // costumes
-    'rename':
-        'שנה שם',
-    'export':
-        'ייצא',
-    'rename costume':
-        'שנה שם לתלבושת',
-    'Turtle':
-        'צב',
-    'Empty':
-        'ריק',
-    'Paint a new costume':
-        'צייר תלבושת חדשה',
-    'Import a new costume from your webcam':
-        'ייבא תלבושת ממצלמה',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'נא וודא שהדפדפן מעודכן \n' +
-        'ושהמצלמה מתואמת כראוי.\n\n' +
-        'חלק מהדפדפנים יבקשו אישור גישה למצלמה\n' +
-        'בחיבור מאובטח.\n\n' +
-        'נסה להחליף בתחילת הכתובת את  "http://"-ב "https://"',
-    'Camera':
-        'מצלמה',
-
-    // sounds
-    'Play sound':
-        'נגן צליל',
-    'Stop sound':
-        'עצור צליל',
-    'Stop':
-        'עצור',
-    'Play':
-        'נגן',
-    'rename sound':
-        'שנה שם לצליל',
-
-    // lists and tables
-    'list view...':
-        'תצוגת רשימה...',
-    'table view...':
-        'תצוגת טבלה...',
-    'Table view':
-        'הצג טבלא',
-    'open in dialog...':
-        'פתח בחלונית דיאלוג',
-    'reset columns':
-        'אתחל עמודות',
-    'items':
-        'פריטים',
-
-    // dialogs
-    // buttons
-    'OK':
-        'אישור',
-    'Ok':
-        'אישור',
-    'Cancel':
-        'ביטול',
-    'Yes':
-        'כן',
-    'No':
-        'לא',
-
-    // help
-    'Help':
-        'עזרה',
-
-    // zoom blocks
-    'Zoom blocks':
-        'הקדל בלוקים',
-    'build':
-        'בנה',
-    'your own':
-        'משלך',
-    'blocks':
-        'בלוקים',
-    'normal (1x)':
-        'רגיל (1x)',
-    'demo (1.2x)':
-        'הדגמה (1.2x)',
-    'presentation (1.4x)':
-        'מצגת (1.4x)',
-    'big (2x)':
-        'גדול (2x)',
-    'huge (4x)':
-        'ענק (4x)',
-    'giant (8x)':
-        'ענקי (8x)',
-    'monstrous (10x)':
-        'מפלצתי (10x)',
- 
- // Project Manager
-    'Untitled':
-        'ללא שם',
-    'Open Project':
-        'פתח פרוייקט',
-    '(empty)':
-        '(ריק)',
-    'Saved!':
-        'נשמר!',
-    'Delete Project':
-        'מחק פרוייקט',
-    'Are you sure you want to delete':
-        'האם אתה בטוח שברצונך למחוק?',
-    'rename...':
-        'שנה שם...',
-    'Open':
-        '\u00d6ffnen',
-    'Examples':
-        'דוגמאות',
-    'Share':
-        'שתף',
-    'Unshare':
-        'בטל שיתוף',
-    'Publish':
-        'פרסם',
-    'Unpublish':
-        'בטל פרסום',
-    'Updating\nproject list...':
-        'מעדכן רשימת פרוייקטים',
-    'Recover':
-        'שחזר',
-    'Today':
-        'היום',
-    'Yesterday':
-        'אתמול',
-
-
-
-    // costume editor
-    'Costume Editor':
-        'עורך תלבושות',
-    'click or drag crosshairs to move the rotation center':
-        'גרור את הכוונת כדי לקבע את מרכז הסיבוב',
-    'Vector Paint Editor':
-        'עריכה ווקטורית',
-    'Rectangle\n(shift: square)':
-        'מלבן (^ריבוע)',
-    'Ellipse\n(shift: circle)':
-        'אליפסה (^עיגול)',
-    'Selection tool':
-        'כלי בחירה',
-    'Line tool\n(shift: constrain to 45º)':
-        'קווים ישרים\n(Shift: בזווית 45°)',
-    'Closed brush\n(free draw)':
-        'צורה סגורה \n ציור חופשי',
-    'Paint a shape\n(shift: secondary color)':
-        'צבע צורה \n(Shift: צבע שני)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'דגום צבע\n (Shift: צבע שני)',
-    'Edge color\n(left click)':
-        'צבע חיצוני\n(קליק שמאלי)',
-    'Fill color\n(right click)':
-        'צבע פנימי\n(קליק ימני)',
-    'Paint Editor':
-        'עורך ציור',
-    'Vector':
-        'ווקטור',
-
-
-    // project notes
-    'Project Notes':
-        'הערות לפרוייקט',
-
-    // new project
-    'New Project':
-        'פרוייקט חדש',
-    'Replace the current project with a new one?':
-        'להחליף את הפרוייקט הזה בחדש?',
-
-    // save project
-    'Save Project As...':
-        'שמור פרוייקט בשם...',
-    'Save Project':
-        'שמור פרוייקט',
-
-    // export blocks
-    'Export blocks':
-        'ייצא בלוקים',
-    'Import blocks':
-        'ייבא בלוקים',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'בפרוייקט אין בלוקים מותאמים אישית',
-    'select':
-        'בחר',
-    'none':
-        'שום דבר',
-
-    // variable dialog
-    'for all sprites':
-        'עבור כל הדמויות',
-    'for this sprite only':
-        'עבור דמות זו בלבד',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        'שנה שם של מדווח זה בלבד',
-    'rename all...':
-        'שנה שם להכל...',
-    'rename all blocks that\naccess this variable':
-        'שנה שם לכל הבלוקים \n  הניגשים למשתנה זה',
-
-    // block dialog
-    'Change block':
-        'שנה בלוק',
-    'Command':
-        'פקודה',
-    'Reporter':
-        'מדווח',
-    'Predicate':
-        'עבור תנאי',
-
-    // block editor
-    'Block Editor':
-        'עורך הבלוקים',
-    'Apply':
-        'החל',
-    'Method Editor':
-        'עורך השיטות',
-
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'מחק בלוק מותאם אישית',
-    'block deletion dialog text':
-        'מלל דיאלוג מניעת מחיקה',
-
-    // input dialog
-    'Create input name':
-        'צור שם קלט',
-    'Edit input name':
-        'ערוך שם קלט',
-    'Edit label fragment':
-        'ערוך את התווית',
-    'Title text':
-        'מלל כותרת',
-    'Input name':
-        'הכנס שם',
-    'Delete':
-        'מחק',
-    'Object':
-        'אובייקט',
-    'Number':
-        'מספר',
-    'Text':
-        'טקסט',
-    'List':
-        'רשימה',
-    'Any type':
-        'כל סוג',
-    'Boolean (T/F)':
-        'בולאני (T/F)',
-    'Command\n(inline)':
-        'פקודה\nבאותה השורה',
-    'Command\n(C-shape)':
-        'פקודה\n (C-shape)',
-    'Any\n(unevaluated)':
-        'לכל\n(לא ידוע)',
-    'Boolean\n(unevaluated)':
-        'בולאני\n(לא ידוע)',
-    'Single input.':
-        'ערך יחיד.',
-    'Default Value:':
-        'ערך ברירת מחדל:',
-    'Multiple inputs (value is list of inputs)':
-        'קלטים מרובים (הערך הוא רשימה של קלטים)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - גרום למשתנה פנימי להיות חשוף לקורא',
-
-    // About Snap
-    'About Snap':
-        'אודות Snap',
-    'Back...':
-        'חזרה...',
-    'License...':
-        'רשיון...',
-    'Modules...':
-        'רכיבים...',
-    'Credits...':
-        'תודות...',
-    'Translators...':
-        'מתרגמים...',
-    'License':
-        'רישיון',
-    'current module versions:':
-        'גרסה נוכחית',
-    'Contributors':
-        'תורמים',
-    'Translations':
-        'תרגומים',
-
-    // variable watchers
-    'normal':
-        'רגיל',
-    'large':
-        'גדול',
-    'slider':
-        'סליידר - סרגל בחירה',
-    'slider min...':
-        'מינימום סליידר...',
-    'slider max...':
-        'מקסימום סליידר...',
-    'import...':
-        'ייבא...',
-    'Slider minimum value':
-        'ערך מינימלי של הסליידר',
-    'Slider maximum value':
-        'ערך מקסימלי של הסליידר',
-    'raw data...':
-        'מידע גולמי...',
-    'import without attempting to\nparse or format data':
-        'ייבא מבלי לעבד את המידע',
-
-    // list watchers
-    'length: ':
-        'אורך: ',
-
-    // coments
-    'add comment here...':
-        'הוסף הערה כאן',
-    'comment pic...':
-        'הערה לצמונה',
-    'open a new window\nwith a picture of this comment':
-        'פתח תמונה והערה בחלון חדש',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) ימינה',
-    '(-90) left':
-        '(-90) שמאלה',
-    '(0) up':
-        '(0) למעלה',
-    '(180) down':
-        '(180) למטה',
-    'random':
-        'אקראי',
-    'random position':
-        'מיקום אקראי',
-
-    // collision detection
-    'mouse-pointer':
-        'סמן עכבר',
-    'edge':
-        'קצה',
-    'pen trails':
-        'סימוני_עט',
-    'center':
-        'מרכז',
-
-    // graphical effects
-    'brightness':
-        'בהירות',
-    'ghost':
-        'רוח רפאים',
-    'negative':
-        'נגטיב',
-    'comic':
-        'קומיקס',
-    'confetti':
-        'קונפטי',
-    'color':
-        'צבע',
-    'hue':
-        'גוון',
-    'fisheye':
-        'עין_הדג',
-    'whirl':
-        'מערבולת',
-    'pixelate':
-        'פיקסלים',
-    'mosaic':
-        'פסיפס',
-    'saturation':
-        'רוויה',
-    'transparency':
-        'שקיפות',
-
-    // keys
-    'space':
-        'רווח',
-    'up arrow':
-        'חץ למעלה',
-    'down arrow':
-        'חץ למטה',
-    'right arrow':
-        'חץ ימינה',
-    'left arrow':
-        'חץ שמאלה',
-    'any key':
-        'מקש כלשהו',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'חדש...',
-    '__shout__go__':
-        'לחץ על דגל ירוק',
-
-    // math functions
-    'abs':
-        'ערך מוחלט',
-    'ceiling':
-        'תקרה',
-    'floor':
-        'רצפה',
-    'sqrt':
-        'שורש ריבועי',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'שלילה',
-
-    // delimiters
-    'letter':
-        'אות',
-    'word':
-        'מילה',
-    'whitespace':
-        'רווח',
-    'line':
-        'שורה',
-    'tab':
-        'מרווח טאב',
-    'cr':
-        'תחילת שורה',
-
-    // data types
-    'number':
-        'מספר',
-    'text':
-        'טקסט',
-    'Boolean':
-        'בולאני',
-    'list':
-        'רשימה',
-    'command':
-        'פקודה',
-    'reporter':
-        'מדווח',
-    'predicate':
-        'הצהרה',
-    'sprite':
-        'דמות',
-    'sound':
-        'צליל',
-    // list indices
-    'last':
-        'אחרון',
-    'any':
-        'כלשהו',
-		
-		
-		// miscellaneous
-	'find blocks...':
-		'מצא בלוקים...',
-	
-	'Reset Password...':
-		'אפס סיסמה',
-	
-	'Codification support':
-		'תמיכה בקידוד',
-	'uncheck to disable\nblock to text mapping features':
-		'בטל סימון לביטול מיפוי בין טקסט לבלוק',
-	'check for block\nto text mapping features':
-		'סמן למיפוי טקסט לבלוק',
-	'current %dates':
-		'הנוכחי %dates',
-	'year':'שנה',
-	'month':'חודש',
-	'date':'תאריך',
-	'hour':'שעה',
-	'minute':'דקה',
-	'second':'שניה',
-	'time in milliseconds':
-		'זמן במילי שניות',
-	'day of week':
-		'יום בשבוע',
-
-	'JavaScript function ( %mult%s ) { %code }':
-		' ( %mult%s ) { %code } פונקציית_גאווהסקריפט',
-
-
-	// Copy / Paste
-	'Press CTRL+C one more time to effectively copy to clipboard.':
-		'לחץ CTRL+C פעם נוספת כדי להעתיק ביעילות.',
-	'Press CTRL+V one more time to effectively paste from clipboard.':
-        'לחץ CTRL+V פעם נוספת כדי להדביק ביעילות.',
-	'Press CTRL+X one more time to effectively cut to clipboard.':
-        'לחץ CTRL+X פעם נוספת כדי לגזור ביעילות.',
-
-	// Paint.js
-	'undo':'בטל',
-	'Paintbrush tool\n(free draw)':
-		'מברשת לצביעה חופשית',
-	'Stroked Rectangle\n(shift: square)':
-		'מסגרת מלבן (^ריבוע)',
-	'Stroked Ellipse\n(shift: circle)':
-        'מסגרת אליפסה (^עיגול)',
-	'Eraser tool':
-		'מחק',
-	'Set the rotation center':
-		'קבע את מרכז הסיבוב',
-	'Line tool\n(shift: vertical/horizontal)':
-		'ציור קו חופשי (^קו מאוזן/מאונך)',
-	'Filled Rectangle\n(shift: square)':
-        'מלבן מלא (^ריבוע)',
-	'Filled Ellipse\n(shift: circle)':
-        'אליפסה מלאה (^עיגול)',
-	'Fill a region':
-		'דלי צבע',
-	'Pipette tool\n(pick a color anywhere)':
-		'דגימת צבע',
-	'grow':'הגדל',
-	'shrink':'כווץ',
-	'flip \u2194':
-		'הפוך \u2194',
-	'flip \u2195':
-		'הפוך \u2195',
-	'Brush size':
-		'גודל מברשת',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'כדי לשמור על פרופורציות\n אפשר ללחוץ על SHIFT',
-
-
-    // attributes
-    'my':
-        'מאפיינים',
-    'neighbors':
-        'שכנים',
-    'self':
-        'עצמי',
-    'other sprites':
-        'דמויות_אחרות',
-    'parts':
-        'חלקים',
-    'anchor':
-        'עוגן',
-    'parent':
-        'הורה',
-    'temporary?':
-        'זמני?',
-    'children':
-        'צאצא',
-    'clones':
-        'שיכפולים',
-    'other clones':
-        'שכפול אחר',
-    'dangling?':
-        'מתנדנד?',
-    'draggable?':
-        'ניתן_לגרור?',
-    'rotation style':
-        'סוג סיבוב',
-    'rotation x':
-        'סיבוב x',
-    'rotation y':
-        'סיבוב y',
-    'center x':
-        'מרכז x',
-    'center y':
-        'מרכז y',
-    'name':
-        'שם',
-    'costume':
-        'תלבושת',
-    'stage':
-        'במה',
-    'costumes':
-        'תלבושות',
-    'sounds':
-        'צלילים',
-    'scripts':
-        'תסריטים',
-    'width':
-        'רוחב',
-    'height':
-        'גובה',
-    'left':
-        'שמאל',
-    'right':
-        'ימין',
-    'top':
-        'למעלה',
-    'bottom':
-        'למטה',
-
-    // inheritance
-    'inherited':
-        'נורש',
-    'check to inherit\nfrom':
-        'סמן_לרשת_מ',
-    'uncheck to\ndisinherit':
-        'בטל_סימון_לביטול_הורשה'
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) שמאלה",
+    "(0) up": "(0) למעלה",
+    "(1) sine": "(1) סינוס",
+    "(180) down": "(180) למטה",
+    "(2) square": "(2) ריבועי",
+    "(3) sawtooth": "(3) שיני_מסור",
+    "(4) triangle": "(4) משולש",
+    "(90) right": "(90) ימינה",
+    "(empty)": "(ריק)",
+    "About Snap": "אודות Snap",
+    "About...": "אודות SNAP!...",
+    "Allow multi-line text input to a block": "אפשר קליטת משפטים מרוביי שורות",
+    "Animations": "הנפשה",
+    "Any (unevaluated)": "לכל (לא ידוע)",
+    "Any type": "כל סוג",
+    "Apply": "החל",
+    "Are you sure you want to delete": "האם אתה בטוח שברצונך למחוק?",
+    "Back...": "חזרה...",
+    "Backgrounds": "רקעים",
+    "Block Editor": "עורך הבלוקים",
+    "Blocks": "בלוקים",
+    "Blurred shadows": "צללים מעומעמים",
+    "Boolean": "בולאני",
+    "Boolean (T/F)": "בולאני (T/F)",
+    "Boolean (unevaluated)": "בולאני (לא ידוע)",
+    "Brush size": "גודל מברשת",
+    "Camera": "מצלמה",
+    "Cancel": "ביטול",
+    "Catch errors in a script": "תפוס שגיאות בתסריט",
+    "Change Password...": "שנה סיסמה...",
+    "Change block": "שנה בלוק",
+    "Clicking sound": "צלילי לחיצה",
+    "Closed brush (free draw)": "צורה סגורה ציור חופשי",
+    "Codification support": "תמיכה בקידוד",
+    "Command": "פקודה",
+    "Command (C-shape)": "פקודה (C-shape)",
+    "Command (inline)": "פקודה באותה השורה",
+    "Constrain proportions of shapes? (you can also hold shift)": "כדי לשמור על פרופורציות אפשר ללחוץ על SHIFT",
+    "Contents": "תכולה",
+    "Contributors": "תורמים",
+    "Control": "בקרה",
+    "Costume Editor": "עורך תלבושות",
+    "Costumes": "תלבושות",
+    "Create input name": "צור שם קלט",
+    "Create variables in program": "צור משתנים בתוכנית",
+    "Credits...": "תודות...",
+    "Default": "ברירת מחדל",
+    "Default Value:": "ערך ברירת מחדל:",
+    "Delete": "מחק",
+    "Delete Custom Block": "מחק בלוק מותאם אישית",
+    "Delete Project": "מחק פרוייקט",
+    "Delete a variable": "מחק משתנה",
+    "Download source": "הורדה...",
+    "Dynamic input labels": "תגיות קלט דינאמיות",
+    "Edge color (left click)": "צבע חיצוני (קליק שמאלי)",
+    "Edit input name": "ערוך שם קלט",
+    "Edit label fragment": "ערוך את התווית",
+    "Ellipse (shift: circle)": "אליפסה (^עיגול)",
+    "Empty": "ריק",
+    "Eraser tool": "מחק",
+    "Examples": "דוגמאות",
+    "Export blocks": "ייצא בלוקים",
+    "Export blocks...": "ייצא בלוקים...",
+    "Export project as plain text...": "ייצא פרוייקט כטקסט בלבד...",
+    "Export project...": "ייצא פרוייקט...",
+    "Export summary...": "דוח ייצוא...",
+    "Fill a region": "דלי צבע",
+    "Fill color (right click)": "צבע פנימי (קליק ימני)",
+    "Filled Ellipse (shift: circle)": "אליפסה מלאה (^עיגול)",
+    "Filled Rectangle (shift: square)": "מלבן מלא (^ריבוע)",
+    "Flat design": "עיצוב שטוח",
+    "Flat line ends": "סוף קו ישר",
+    "For all Sprites": "עבור כל הדמויות",
+    "Hello!": "!שלום",
+    "Help": "עזרה",
+    "Hmm...": "המממ...",
+    "Import a new costume from your webcam": "ייבא תלבושת ממצלמה",
+    "Import blocks": "ייבא בלוקים",
+    "Import library": "ייבא ספריה",
+    "Import tools": "כליי יבוא",
+    "Import...": "ייבוא...",
+    "Imported": "מיובא",
+    "Infinite precision integers, exact rationals, complex": "מספרים מדוייקים, רציונאלים ומרוכבים",
+    "Inheritance support": "תמיכה בהורשה",
+    "Input Names:": "שמות קלט:",
+    "Input name": "הכנס שם",
+    "Input sliders": "סרגלי קלט",
+    "Iteration, composition": "איטרציה, קומפוזיציה",
+    "JavaScript function ( _ ) { _ }": "( _ ) { _ } פונקציית_גאווהסקריפט",
+    "Keyboard Editing": "עריכת מקלדת",
+    "Kind of": "סוג",
+    "LEAP Motion controller": "LEAP בקר_תנועה",
+    "Language...": "שפה...",
+    "Libraries...": "ספריות...",
+    "License": "רישיון",
+    "License...": "רשיון...",
+    "Line tool (shift: constrain to 45º)": "קווים ישרים (Shift: בזווית 45°)",
+    "Line tool (shift: vertical/horizontal)": "ציור קו חופשי (^קו מאוזן/מאונך)",
+    "List": "רשימה",
+    "List utilities": "עזריי רשימות",
+    "Lists": "רשימות",
+    "Loading": "טוען",
+    "Log pen vectors": "הקלט מיקומי עט",
+    "Login...": "הכנס...",
+    "Logout": "התנתק",
+    "Long form input dialog": "פקד קלט ארוך",
+    "Looks": "מראה",
+    "Make a block": "צור בלוק",
+    "Make a variable": "צור משתנה",
+    "Message name": "שם ההודעה",
+    "Method Editor": "עורך השיטות",
+    "Microphone": "מיקרופון",
+    "Microphone resolution...": "רזולוציית_מיקרופון...",
+    "Modules...": "רכיבים...",
+    "Motion": "תנועה",
+    "Multi-branched conditional (switch)": "תנאי מרובה ענפים (סוויצ)",
+    "Multiple inputs (value is list of inputs)": "קלטים מרובים (הערך הוא רשימה של קלטים)",
+    "Nested auto-wrapping": "עטיפה אוטומטית",
+    "New": "חדש",
+    "New Project": "פרוייקט חדש",
+    "No": "לא",
+    "Number": "מספר",
+    "OK": "אישור",
+    "Object": "אובייקט",
+    "Ok": "אישור",
+    "Open": "Öffnen",
+    "Open Project": "פתח פרוייקט",
+    "Open in Community Site": "פתח באתר הקהילתי",
+    "Open...": "פתח...",
+    "Operators": "הפעלה",
+    "Other": "אחר",
+    "Paint Editor": "עורך ציור",
+    "Paint a new costume": "צייר תלבושת חדשה",
+    "Paint a shape (shift: secondary color)": "צבע צורה (Shift: צבע שני)",
+    "Paintbrush tool (free draw)": "מברשת לצביעה חופשית",
+    "Part of": "חלק מ",
+    "Parts": "חלקים",
+    "Pen": "עט",
+    "Pipette tool (pick a color anywhere)": "דגימת צבע",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "דגום צבע (Shift: צבע שני)",
+    "Plain prototype labels": "תויות אבטיפוס בסיסיות",
+    "Play": "נגן",
+    "Play sound": "נגן צליל",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "נא וודא שהדפדפן מעודכן ושהמצלמה מתואמת כראוי. חלק מהדפדפנים יבקשו אישור גישה למצלמה בחיבור מאובטח. נסה להחליף בתחילת הכתובת את \"http://\"-ב \"https://\"",
+    "Predicate": "עבור תנאי",
+    "Prefer empty slot drops": "העדף הפלה לתאים ריקים",
+    "Prefer smooth animations": "העדף הנפשה חלקה",
+    "Press CTRL+C one more time to effectively copy to clipboard.": "לחץ CTRL+C פעם נוספת כדי להעתיק ביעילות.",
+    "Press CTRL+V one more time to effectively paste from clipboard.": "לחץ CTRL+V פעם נוספת כדי להדביק ביעילות.",
+    "Press CTRL+X one more time to effectively cut to clipboard.": "לחץ CTRL+X פעם נוספת כדי לגזור ביעילות.",
+    "Project Notes": "הערות לפרוייקט",
+    "Project notes...": "הערות לפרוייקט...",
+    "Provide 100 selected colors": "100 צבעים נבחרים",
+    "Provide getters and setters for all GUI-controlled global settings": "הגדרת מאפייני ממשק",
+    "Publish": "פרסם",
+    "Record a new sound": "הקלט צליל חדש",
+    "Recover": "שחזר",
+    "Rectangle (shift: square)": "מלבן (^ריבוע)",
+    "Reference manual": "מדריך משתמש",
+    "Remove unused blocks": "הסר בלוקים שאינם בשימוש",
+    "Replace the current project with a new one?": "להחליף את הפרוייקט הזה בחדש?",
+    "Reporter": "מדווח",
+    "Resend Verification Email...": "שלח מחדש מייל ווידוא...",
+    "Reset Password...": "אפס סיסמה",
+    "Retina display support": "תמיכה במסך רטינה",
+    "Save": "שמור",
+    "Save As...": "שמור בשם...",
+    "Save Project": "שמור פרוייקט",
+    "Save Project As...": "שמור פרוייקט בשם...",
+    "Save to disk": "שמור לדיסק",
+    "Saved!": "נשמר!",
+    "Script variable name": "שם משתנה תסריט",
+    "Scripts": "תסריטים",
+    "Select a costume from the media library": "בחר תלבושת מספריית המדיה",
+    "Select a sound from the media library": "בחר צליל מבפריית המדיה",
+    "Select categories of additional blocks to add to this project.": "בחר קטגוריית בלוקיי הרחבה לפרוייקט זה",
+    "Selection tool": "כלי בחירה",
+    "Sensing": "חיישנים",
+    "Set RGB or HSV pen color": "קביעת צבע מתקדמת",
+    "Set the rotation center": "קבע את מרכז הסיבוב",
+    "Share": "שתף",
+    "Signup...": "הירשם...",
+    "Single input.": "ערך יחיד.",
+    "Slider maximum value": "ערך מקסימלי של הסליידר",
+    "Slider minimum value": "ערך מינימלי של הסליידר",
+    "Snap! website": "אתר רשמי",
+    "Sound": "צליל",
+    "Sounds": "צלילים",
+    "Sprite": "דמות",
+    "Stage": "במה",
+    "Stage height": "גובה במה",
+    "Stage selected: no motion primitives": "במה נבחרה: ללא תנועה",
+    "Stage size": "גודל הבמה",
+    "Stage size...": "גודל במה...",
+    "Stage width": "רוחב במה",
+    "Stop": "עצור",
+    "Stop sound": "עצור צליל",
+    "Stroked Ellipse (shift: circle)": "מסגרת אליפסה (^עיגול)",
+    "Stroked Rectangle (shift: square)": "מסגרת מלבן (^ריבוע)",
+    "Switch back to user mode": "חזור למצב משתמש",
+    "Switch to dev mode": "עבור למצב מפתח",
+    "Table lines": "שורות של טבלאות",
+    "Table support": "תמיכה בטבלאות",
+    "Table view": "הצג טבלא",
+    "Ternary Boolean slots": "בולאני עם שלושה אפשרויות",
+    "Text": "טקסט",
+    "Text to speech": "טקסט לדיבור",
+    "Thread safe scripts": "תסריטים מוגני מיקבול",
+    "Title text": "מלל כותרת",
+    "Today": "היום",
+    "Translations": "תרגומים",
+    "Translators...": "מתרגמים...",
+    "Turbo mode": "מצב עבודה מהיר",
+    "Turtle": "צב",
+    "Unpublish": "בטל פרסום",
+    "Unshare": "בטל שיתוף",
+    "Untitled": "ללא שם",
+    "Unused blocks...": "בלוקים לא בשימוש...",
+    "Updating project list...": "מעדכן רשימת פרוייקטים",
+    "Upvar - make internal variable visible to caller": "Upvar - גרום למשתנה פנימי להיות חשוף לקורא",
+    "Variable name": "שם משתנה",
+    "Variables": "משתנים",
+    "Variadic reporters": "מדווחי משתנים",
+    "Vector": "ווקטור",
+    "Vector Paint Editor": "עריכה ווקטורית",
+    "Virtual keyboard": "מקלדת וירטואלית",
+    "Visible stepping": "המחשת צעדים",
+    "Web services access (https)": "גישה לשירותי רשת מאובטחים",
+    "Words, sentences": "מילים, משפטים",
+    "Yes": "כן",
+    "Yesterday": "אתמול",
+    "Zebra coloring": "צביעת זברה",
+    "Zoom blocks": "הקדל בלוקים",
+    "Zoom blocks...": "גודל בלוקים...",
+    "_ at _": "_ של _",
+    "_ combine _ using _": "_ מזג_רשימה_באמצעות _ _",
+    "_ contains _": "_ נמצא_בתוך _",
+    "_ effect": "_ אפקט",
+    "_ find first item _ in _": "_ מצא_פריט_ראשון _ _",
+    "_ in front of _": "_ בתחילת_רשימה _",
+    "_ keep items _ from _": "_ שמור_פריטים_של _ _",
+    "_ map _ over _": "_ צור_מיפוי _ _",
+    "_ mod _": "_ שארית_חלוקה _",
+    "_ of _": "_ של _",
+    "_ of costume _": "_ מאפיין_של_תלבושת _",
+    "_ of sound _": "_ של_צליל _",
+    "_ to _": "_ חשב _",
+    "__shout__go__": "לחץ על דגל ירוק",
+    "a": "a",
+    "a new clone of _": "שכפול_חדש_של _",
+    "abs": "ערך מוחלט",
+    "acos": "acos",
+    "add _ to _": "הוסף_את _ ל _",
+    "add a new Turtle sprite": "הוסף דמות צב חדשה",
+    "add a new sprite": "הוסף דמות חדשה",
+    "add comment": "הוסף הערה",
+    "add comment here...": "הוסף הערה כאן",
+    "alert _": "התראה _",
+    "all": "לכל",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "הכל_מלבד_הראשון _",
+    "all but this script": "הכל מלבד תסריט זה",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "anchor": "עוגן",
+    "and": "וגם",
+    "answer": "תשובה",
+    "any": "כלשהו",
+    "any key": "מקש כלשהו",
+    "any message": "כל הודעה",
+    "arrange scripts vertically": "סדר תסריטים במאונך",
+    "asin": "asin",
+    "ask _ and wait": "_ שאל_והמתן",
+    "ask _ for _ _": "שאל_עצם_אחר _ _ _",
+    "atan": "atan",
+    "b": "b",
+    "back": "רקע",
+    "balance": "איזון",
+    "big (2x)": "גדול (2x)",
+    "block deletion dialog text": "מלל דיאלוג מניעת מחיקה",
+    "blocks": "בלוקים",
+    "bottom": "למטה",
+    "brightness": "בהירות",
+    "broadcast _ _": "שדר_הודעה _ _",
+    "broadcast _ _ and wait": "והמתן _ _ שדר_הודעה",
+    "build": "בנה",
+    "c": "c",
+    "call _ _": "קרא _ _",
+    "call _ w/continuation": "קרא_ל _ מתמשך",
+    "can rotate": "ניתן לסובב",
+    "ceiling": "תקרה",
+    "center": "מרכז",
+    "center x": "מרכז x",
+    "center y": "מרכז y",
+    "change _ by _": "_ שנה_ערך_משתנה_ב _",
+    "change _ effect by _": "_ שינוי_ב_אפקט _",
+    "change background _ by _": "שנה_רקע_ב _ _",
+    "change balance by _": "שנה_איזון_ב _",
+    "change pen _ by _": "שנה_עט_ב _ _",
+    "change pen color by _": "_ שנה_צבע_עט_ב",
+    "change pen shade by _": "_ שנה_גוון_עט_ב",
+    "change pen size by _": "_ שנה_גודל_עט_ב",
+    "change size by _": "שנוי_גודל _",
+    "change tempo by _": "_ שנה קצב ביטים ב",
+    "change volume by _": "שנה_עוצמת_צליל_ב _",
+    "change x by _": "_ ב x שנה",
+    "change y by _": "_ ב y שנה",
+    "check for alternative GUI design": "הוסף סימון למראה אלטרנטיבי - שטוח",
+    "check for block to text mapping features": "סמן למיפוי טקסט לבלוק",
+    "check for flat ends of lines": "הוסף סימון לקימור ישר של קווים",
+    "check for higher resolution, uses more computing resources": "הוסף סימון כדי להעדיף רזולוציה איכותית על חשבון ביצועים",
+    "check for smooth, predictable animations across computers": "הוסף סימון להנפשה בקצב קבוע וחזוי מראש",
+    "check for sprite inheritance features": "הוסף סימון לאפשר הורשת תכונות מאפייני דמות",
+    "check to always show slot types in the input dialog": "הוסף סימון כדי להציג תמיד סוג כניסה בדיאלוג קלט",
+    "check to disallow script reentrance": "הוסף סימון כדי למנוע תסריטים ממוקבלים",
+    "check to enable IDE animations": "הוסף סימון כדי להפעיל הנפשת סביבת עבודה",
+    "check to enable alternating colors for nested blocks": "הוסף סימון כדי לאפשר צבעים מתחלפים עבור בלוקים משורשרים",
+    "check to enable dynamic labels for variadic inputs": "הוסף סימון כדי לבצע תווית דינאמית למשתנים",
+    "check to enable input sliders for entry fields": "הוסף סימון כדי לאפשר סרגלי קלט",
+    "check to enable virtual keyboard support for mobile devices": "הוסף סימון כדי להציג מקלדת וירטואלית במכשירים ניידים",
+    "check to hide (+) symbols in block prototype labels": "הוסף סימון כדי להסתיר (+) בתוית בלוק אבטיפוס",
+    "check to inherit from": "סמן_לרשת_מ",
+    "check to prevent contents from being saved": "הוסף סימון כדי לא לשמור תוכן בפרוייקט",
+    "check to prioritize script execution": "הוסף סימון כדי להפעיל העדפת הפעלת תסריטים",
+    "check to turn block clicking sound on": "הוסף סימון כדי להפעיל צלילי לחיצת בלוקים",
+    "check to turn on logging pen vectors": "הוסף סימון להקליט מיקומי עט",
+    "check to turn on visible stepping (slow)": "הוסף סימון כדי להפעיל המחשת צעדים (איטי)",
+    "check to use blurred drop shadows and highlights": "הוסף סימון לצל והדגשה מעומעמים",
+    "children": "צאצא",
+    "clean up": "נקה",
+    "clear": "נקה",
+    "clear graphic effects": "נקה_אפקטים_גרפיים",
+    "click or drag crosshairs to move the rotation center": "גרור את הכוונת כדי לקבע את מרכז הסיבוב",
+    "clicked": "הקלקה",
+    "clone": "שכפל",
+    "clones": "שיכפולים",
+    "color": "צבע",
+    "color _ is touching _ ?": "_ צבע_נוגע_בצבע _ ?",
+    "combine _ using _": "מזג_רשימה_באמצעות _ mit _",
+    "comic": "קומיקס",
+    "command": "פקודה",
+    "comment pic...": "הערה לצמונה",
+    "compile": "בצע קומפילציה",
+    "compile _": "קומפייל _",
+    "confetti": "קונפטי",
+    "console log _": "console log _",
+    "cos": "cos",
+    "costume": "תלבושת",
+    "costume #": "תלבושת_מספר",
+    "costumes": "תלבושות",
+    "costumes tab help": "ייבא תמונה מאתר אינטרנט או מהמחשב שלך על ידי גרירתה לכאן",
+    "cr": "תחילת שורה",
+    "create a clone of _": "_ צור_שכפול_של",
+    "current": "נוכחי",
+    "current _": "הנוכחי _",
+    "current module versions:": "גרסה נוכחית",
+    "current parent": "ההורה הנוכחי",
+    "d": "d",
+    "dangling?": "מתנדנד?",
+    "date": "תאריך",
+    "day of week": "יום בשבוע",
+    "delete": "מחק",
+    "delete _ of _": "מחק_פריט_מספר _ _",
+    "delete block definition...": "הגדרת מחיקת בלוקים...",
+    "delete this clone": "מחק_את_השכפול_הזה",
+    "demo (1.2x)": "הדגמה (1.2x)",
+    "detach all parts": "נתק כל החלקים",
+    "detach from": "נתק מ...",
+    "development mode": "מצב פיתוח",
+    "development mode debugging primitives:": "מצב פיתוח משתני דיבאג",
+    "direction": "כיוון",
+    "disable deep-Morphic context menus and show user-friendly ones": "בטל תכונות מתקדמות",
+    "distance": "מרחק",
+    "distance to _": "_ מרחק_אל",
+    "don't rotate": "ללא סיבוב",
+    "down arrow": "חץ למטה",
+    "draggable": "פריטים נגררים",
+    "draggable?": "ניתן_לגרור?",
+    "dropped": "הפלה",
+    "duplicate": "שכפל",
+    "duplicate block definition...": "שכפל הגדרת בלוק...",
+    "duration": "למשך",
+    "e": "e",
+    "e^": "e^",
+    "edge": "קצה",
+    "edit": "ערוך",
+    "edit the costume's rotation center": "ערוך את מרכז הסיבוב של הדמות",
+    "edit...": "ערוך...",
+    "enable Morphic context menus and inspectors, not user-friendly!": "הפעל תכונות מתקדמות",
+    "export": "ייצא",
+    "export pen trails line segments as SVG": "ייצא את עקבות העט לקובץ SVG",
+    "export...": "ייצא...",
+    "f": "f",
+    "false": "שקר",
+    "file menu import hint": "ייבא פרוייק מקובץ",
+    "fill": "מלא",
+    "filtered for _": "סינון_עבור _",
+    "find blocks": "מצא בלוקים",
+    "find blocks...": "מצא בלוקים...",
+    "find first item _ in _": "מצא_פריט_ראשון _ _",
+    "find unused global custom blocks and remove their definitions": "מצא בלוקים שאינם בשימוש והסר את הגדרתם",
+    "fisheye": "עין_הדג",
+    "flat line ends": "סיום קו ישר",
+    "flip ↔": "הפוך ↔",
+    "flip ↕": "הפוך ↕",
+    "floor": "רצפה",
+    "for _ = _ to _ _": "ספור_במשתנה_בטווח _ = _ _ _",
+    "for all sprites": "עבור כל הדמויות",
+    "for each _ in _ _": "_ עבור_כל _ _",
+    "for this sprite only": "עבור דמות זו בלבד",
+    "forever _": "לנצח _",
+    "frames": "פריימים",
+    "frequency": "תדר",
+    "front": "חזית",
+    "g": "g",
+    "ghost": "רוח רפאים",
+    "giant (8x)": "ענקי (8x)",
+    "glide _ secs to x: _ y: _": "שניות _ גלוש_במשך x: _ y: _",
+    "go back _ layers": "שכבות _ הזז_לאחור",
+    "go to _": "_ לך_אל",
+    "go to _ layer": "לך_אל _",
+    "go to front": "העבר_לחזית",
+    "go to x: _ y: _": "לך_אל x: _ y: _",
+    "grow": "הגדל",
+    "h": "h",
+    "height": "גובה",
+    "hello": "שלום",
+    "help": "עזרה",
+    "help...": "עזרה...",
+    "hide": "הסתר",
+    "hide primitives": "הסתר בסיסיים",
+    "hide variable _": "_ הסתר_משתנהِ",
+    "high": "גבוה",
+    "hour": "שעה",
+    "http:// _": "http:// _",
+    "hue": "גוון",
+    "huge (4x)": "ענק (4x)",
+    "i": "i",
+    "identical to": "האם_זהים",
+    "if _ _": "אם _ _",
+    "if _ _ else _": "אם _ _ אחרת _",
+    "if _ then _ else _": "→אם _ אז _ אחרת _",
+    "if on edge, bounce": "אם_בקצה_אז_קפוץ",
+    "import a sound from your computer by dragging it into here": "ייבא צלילים מהמחשב שלך על-ידי גרירתם לכאן",
+    "import without attempting to parse or format data": "ייבא מבלי לעבד את המידע",
+    "import...": "ייבא...",
+    "index": "אינדקס",
+    "inherit _": "הורש _",
+    "inherited": "נורש",
+    "input list:": "רשימת קלט:",
+    "input names:": "שמות קלט:",
+    "insert _ at _ of _": "הוסף_פריט_במיקום _ _ _",
+    "is _ ?": "? _",
+    "is _ a _ ?": "האם_משתנה_מסוג _ _ ?",
+    "is _ empty?": "האם_ריקה _ ?",
+    "is _ on?": "_ האם_הגדרה_פעילה",
+    "item": "פריט",
+    "item _ of _": "_ בחר_פריט_מתוך _",
+    "items": "פריטים",
+    "j": "j",
+    "join _": "שרשר_מילים _",
+    "k": "k",
+    "keep items _ from _": "שמור_פריטים_של _ _",
+    "key _ pressed?": "מקש_נלחץ _ ?",
+    "l": "l",
+    "language_name": "עברית",
+    "language_translator": "יוסי כהן",
+    "large": "גדול",
+    "last": "אחרון",
+    "last_changed": "2020-04-21",
+    "launch _ _": "הפעל _ _",
+    "left": "שמאל",
+    "left arrow": "חץ שמאלה",
+    "length": "אורך",
+    "length of _": "_ מספר_פריטים",
+    "length:": "אורך:",
+    "letter": "אות",
+    "letter _ of _": "מיקום_אות_במילה _ _",
+    "line": "שורה",
+    "list": "רשימה",
+    "list _": "_ רשימה",
+    "list view...": "תצוגת רשימה...",
+    "ln": "ln",
+    "load the official library of powerful blocks": "טען את הספריה הרשמית של powerful blocks",
+    "log pen vectors": "קווים_ישרים_וארוכים",
+    "low": "נמוך",
+    "m": "m",
+    "make a block...": "צור בלוק...",
+    "make a copy and pick it up": "צור עותק והרם",
+    "make temporary and hide in the sprite corral": "הפוך לזמני והסתר תחום דמות",
+    "map _ over _": "צור_מיפוי _ _",
+    "max": "מקסימום",
+    "message": "הודעה",
+    "microphone _": "מיקרופון _",
+    "minute": "דקה",
+    "mirror video": "וידאו_תמונת_ראי",
+    "monstrous (10x)": "מפלצתי (10x)",
+    "month": "חודש",
+    "mosaic": "פסיפס",
+    "motion": "תנועה",
+    "mouse down?": "עכבר_למטה?",
+    "mouse x": "x עכבר",
+    "mouse y": "y עכבר",
+    "mouse-departed": "עכבר-יוצא",
+    "mouse-entered": "עכבר-נכנס",
+    "mouse-pointer": "סמן עכבר",
+    "move": "הזז",
+    "move _ steps": "צעדים _ זוז",
+    "my": "מאפיינים",
+    "my _": "מאפיין _",
+    "myself": "אני",
+    "n": "n",
+    "name": "שם",
+    "negative": "נגטיב",
+    "neighbors": "שכנים",
+    "neighbors ≠": "neighbors ≠",
+    "new costume _ width _ height _": "תלבושת_חדשה _ רוחב _ גובה _",
+    "new line": "שורה חדשה",
+    "new sound _ rate _ Hz": "צליל_חדש _ בקצב _ Hz",
+    "new...": "חדש...",
+    "next costume": "התלבושת_הבאה",
+    "none": "שום דבר",
+    "normal": "רגיל",
+    "normal (1x)": "רגיל (1x)",
+    "not": "שלילה",
+    "not _": "לא _",
+    "note": "תו",
+    "number": "מספר",
+    "number of channels": "מספר ערוצים",
+    "numbers from _ to _": "מערך_מספרים_בטווח _ עד _",
+    "o": "o",
+    "object _": "אובייקט _",
+    "only duplicate this block": "שכפול בלוק זה בלבד",
+    "only face left/right": "רק פנים ימינה-שמאלה",
+    "open a new browser browser window with a summary of this project": "פתח חלון חדש עם סיכום על פרוייקט זה",
+    "open a new window with a picture of all scripts": "פתח חלון חדש עם תמונה של כל התסריטים",
+    "open a new window with a picture of the stage": "פתח חלון חדש עם תמונת הבמה",
+    "open a new window with a picture of this comment": "פתח תמונה והערה בחלון חדש",
+    "open a new window with a picture of this script": "פתח חלון חדש עם תמונה של תסריט זה",
+    "open in dialog...": "פתח בחלונית דיאלוג",
+    "or": "או",
+    "other clones": "שכפול אחר",
+    "other scripts in sprite": "תסריטים אחרים בדמות",
+    "other sprites": "דמויות_אחרות",
+    "p": "p",
+    "paint a new sprite": "צייר דמות חדשה",
+    "parent": "הורה",
+    "parent...": "הורה...",
+    "parts": "חלקים",
+    "paste on _": "הדבק_על _",
+    "pause all _": "_ הקפא הכל",
+    "pen _": "עט _",
+    "pen down": "עט_למטה",
+    "pen down?": "עט_למטה?",
+    "pen trails": "סימוני_עט",
+    "pen up": "עט_למעלה",
+    "pen vectors": "סימוני_עט_וקטור",
+    "pic...": "תמונה...",
+    "pick random _ to _": "בחר_מספר_אקראי_בתחום _ - _",
+    "pivot": "ציר",
+    "pixelate": "פיקסלים",
+    "pixels": "פיקסלים",
+    "play _ Hz for _ secs": "נגן _ Hz למשך _ שניות",
+    "play frequency _ Hz": "נגן_תדר _ Hz",
+    "play note _ for _ beats": "נגן תו _ למשך _ ביטים",
+    "play sound _": "_ נגן_צליל",
+    "play sound _ at _ Hz": "נגן_צליל _ בקצב _ Hz",
+    "play sound _ until done": "נגן_צליל_והמתן_לסיום _",
+    "point in direction _": "_ פנה_לכיוון",
+    "point towards _": "_ פנה_לעבר",
+    "predicate": "הצהרה",
+    "presentation (1.4x)": "מצגת (1.4x)",
+    "pressed": "לחיצה",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "R-G-B-A ערכי_צבע",
+    "random": "אקראי",
+    "random position": "מיקום אקראי",
+    "raw data...": "מידע גולמי...",
+    "redrop": "נתב מחדש",
+    "relabel...": "תייג מחדש...",
+    "release": "שחרר",
+    "rename": "שנה שם",
+    "rename all blocks that access this variable": "שנה שם לכל הבלוקים הניגשים למשתנה זה",
+    "rename all...": "שנה שם להכל...",
+    "rename costume": "שנה שם לתלבושת",
+    "rename only this reporter": "שנה שם של מדווח זה בלבד",
+    "rename sound": "שנה שם לצליל",
+    "rename...": "שנה שם...",
+    "repeat _ _": "חזור _ _",
+    "repeat until _ _": "חזור_עד_ש _ _",
+    "replace item _ of _ with _": "החלף_פריט_במיקום _ _ _",
+    "report _": "_ דווח",
+    "reporter": "מדווח",
+    "reset columns": "אתחל עמודות",
+    "reset timer": "איפוס טיימר",
+    "resolution": "רזולוציה",
+    "rest for _ beats": "נוח_למשך _",
+    "right": "ימין",
+    "right arrow": "חץ ימינה",
+    "ringify": "מיסגור",
+    "rotate": "סובב",
+    "rotation style": "סוג סיבוב",
+    "rotation x": "סיבוב x",
+    "rotation y": "סיבוב y",
+    "round _": "עגל_למספר_שלם _",
+    "run _ _": "הרץ _ _",
+    "run _ w/continuation": "הרץ _ מתמשך",
+    "s": "s",
+    "sample rate": "קצב דגימה",
+    "samples": "דגימות",
+    "saturation": "רוויה",
+    "save project data as XML to your downloads folder": "שמור פרוייקט בתיקיית הורדות כקובץ XML",
+    "say _": "_ אמור",
+    "say _ for _ secs": "_ שניות_אמור _ למשך",
+    "script pic...": "תסריט תמונה...",
+    "script variables _": "_ משתניי_תסריט",
+    "scripts": "תסריטים",
+    "scripts pic...": "תמונת תסריטים...",
+    "scrolled-down": "נגלל_למטה",
+    "scrolled-up": "נגלל_למעלה",
+    "second": "שניה",
+    "select": "בחר",
+    "self": "עצמי",
+    "set _ effect to _": "_ קביעת_ערך_אפקט _",
+    "set _ to _": "קבע_הגדרה _ _",
+    "set background _ to _": "קבע_רקע_ל _ _",
+    "set background color to _": "קבע_צבע_רקע _",
+    "set balance to _": "קבע_איזון_ל _",
+    "set instrument to _": "קבע_כלי_נגינה _",
+    "set pen _ to _": "קבע_עט_ל _ _",
+    "set pen color to _": "_ קבע_צבע_עט_ל",
+    "set pen shade to _": "_ קווע_גוון_עט_ל",
+    "set pen size to _": "_ קבע_גודל_עט_ל",
+    "set size to _ %": "% _ קבע_גודל_ל",
+    "set tempo to _ bpm": "קבע קצב ל _ ביטים בדקה",
+    "set turbo mode to _": "קבע_מצב_מהיר_ל _",
+    "set video transparency to _": "קבע_שקיפות_וידאו_ל _",
+    "set volume to _ %": "קבע_עוצמת_צליל_ל _ %",
+    "set x to _": "_ ל x הגדר",
+    "set y to _": "_ ל y הגדר",
+    "settings menu prefer empty slots hint": "תפרית העדפת רמיזה לתאים ריקים",
+    "show": "הראה",
+    "show all": "הצג הכל",
+    "show global custom block definitions as XML in a new browser window": "הצג מידע אודות בלוקים מותאמים אישית בחלון חדש (XML)",
+    "show primitives": "הצג בסיסיים",
+    "show project data as XML in a new browser window": "הצג את מידע הפרוייקט בחלון חדש (XML)",
+    "show variable _": "_ הצג_משתנה",
+    "shown?": "מוצגת?",
+    "shrink": "כווץ",
+    "sin": "sin",
+    "size": "גודל",
+    "slider": "סליידר - סרגל בחירה",
+    "slider max...": "מקסימום סליידר...",
+    "slider min...": "מינימום סליידר...",
+    "snap": "הצמדה",
+    "sound": "צליל",
+    "sounds": "צלילים",
+    "space": "רווח",
+    "spectrum": "ספקטרום",
+    "split _ by _": "הפרדת_אותיות_לפי_סימן_מפריד _ _",
+    "sprite": "דמות",
+    "sprites": "דמויות",
+    "sqrt": "שורש ריבועי",
+    "stack size": "גודל מחסנית",
+    "stage": "במה",
+    "stamp": "חותמת",
+    "stick to": "הצמד_אל",
+    "stop _": "_ עצור",
+    "stop all sounds": "עצור_את_כל_הצלילים",
+    "stop frequency": "עצור_(ניגון_תדר",
+    "stopped": "נעצר",
+    "store this project in the downloads folder (in supporting browsers)": "הפרוייקט יישמר בתקיית הורדות",
+    "stretch _ x: _ y: _ %": "מתיחה _ x: _ y: _ %",
+    "svg...": "SVG ייצא_לקובץ...",
+    "switch to costume _": "_ החלף_לתלבושת",
+    "t": "t",
+    "tab": "מרווח טאב",
+    "table view...": "תצוגת טבלה...",
+    "take a camera snapshot and import it as a new sprite": "השתמש במצלמה לייצר דמות חדשה",
+    "tan": "tan",
+    "tell _ to _ _": "תודיע_לעצם_אחר_לבצע _ _ _",
+    "tempo": "קצב",
+    "temporary?": "זמני?",
+    "text": "טקסט",
+    "there are currently no unused global custom blocks in this project": "אין כרגע בלוקים שאינם בשימוש בפרוייקט זה",
+    "there are currently no vectorizable pen trail segments": "אין כרגע עקבות עט הניתנון לוקטוריזציה",
+    "thing": "פריט",
+    "think _": "_ תחשוב",
+    "think _ for _ secs": "_ שניות_תחשוב _ למשך",
+    "this block": "הבלוק הזה",
+    "this project doesn't have any custom global blocks yet": "בפרוייקט אין בלוקים מותאמים אישית",
+    "this script": "התסריט הזה",
+    "time in milliseconds": "זמן במילי שניות",
+    "timer": "טיימר",
+    "top": "למעלה",
+    "touching _ ?": "נוגע _ ?",
+    "transient": "זמני",
+    "translator_e-mail": "cohenyossi81@gmail.com",
+    "transparency": "שקיפות",
+    "true": "אמת",
+    "turbo mode": "מצב מהיר",
+    "turbo mode?": "מצב מהיר?",
+    "turn _ _ degrees": "מעלות _ _ פנה",
+    "turn all pen trails and stamps into a new background for the stage": "הפוך את סימוני העט והחותמת לרקע חדש לבמה",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "הפוך את סימוני העט והחותמת לתלבושת חדשה עבור הדמות הנוכחית",
+    "type of _": "הסוג של _",
+    "u": "u",
+    "uncheck for default GUI design": "בטל סימון למראה רגיל תבליטי",
+    "uncheck for greater speed at variable frame rates": "בטל סימון כדי להעדיף מהירות גבוהה בקצב שעשוי להשתנות",
+    "uncheck for lower resolution, saves computing resources": "בטל סימון כדי לשפר ביצועים על חשבון רזולוציה איכותית",
+    "uncheck for round ends of lines": "בטל סימון לגימור מעוגל של קווים",
+    "uncheck to allow dropped reporters to kick out others": "בטל סימון לאפשר החלפת הקיימים על ידי החדשים",
+    "uncheck to allow script reentrance": "בטל סימון כדי לאפשר תסריטים ממוקבלים",
+    "uncheck to always show (+) symbols in block prototype labels": "בטל סימון כדי להציג (+) בתוית בלוק אבטיפוס",
+    "uncheck to disable IDE animations": "בטל סימון כדי לכבות הנפשת סביבת עבודה",
+    "uncheck to disable alternating colors for nested block": "בטל סימון כדי לבטל צבעים מתחלפים עבור בלוקים משורשרים",
+    "uncheck to disable block to text mapping features": "בטל סימון לביטול מיפוי בין טקסט לבלוק",
+    "uncheck to disable dynamic labels for variadic inputs": "בטל סימון כדי לבטל תווית דינאמית למשתנים",
+    "uncheck to disable input sliders for entry fields": "בטל סימון כדי לבטל סרגלי קלט",
+    "uncheck to disable sprite inheritance features": "בטל סימון לבטל הורשת תכונות מאפייני דמות",
+    "uncheck to disable virtual keyboard support for mobile devices": "בטל סימון כדי להסתיר מקלדת וירטואלית במכשירים ניידים",
+    "uncheck to disinherit": "בטל_סימון_לביטול_הורשה",
+    "uncheck to run scripts at normal speed": "בטל סימון כדי להפעיל תסריטים במהירות רגילה",
+    "uncheck to save contents in the project": "בטל סימון כדי לשמור תוכן בפרוייקט",
+    "uncheck to turn block clicking sound off": "בטל סימון כדי לכבות צלילי לחיצת בלוקים",
+    "uncheck to turn off logging pen vectors": "בטל סימון כדי לא לזכור מיקומי עט",
+    "uncheck to turn off visible stepping": "בטל סימון כדי לא להמחיש צעדים",
+    "uncheck to use solid drop shadows and highlights": "בטל סימון לצל והדגשה רגילים",
+    "uncheck to use the input dialog in short form": "בטל סימון כדי להשתמש בדיאלוג קלט מקוצר",
+    "uncompile": "בטל קומפילציה",
+    "undo": "בטל",
+    "undo the last block drop in this pane": "בטל את הפלת הבלוק האחרונה",
+    "undrop": "בטל הפלה",
+    "unicode _ as letter": "המר_יוניקוד_לאות _",
+    "unicode of _": "יוניקוד_של _",
+    "unringify": "ביטול מיסגור",
+    "untitled": "ללא כותרת",
+    "unused block(s) removed": "בלוקים שאינם בשימוש הוסרו",
+    "up arrow": "חץ למעלה",
+    "use the keyboard to enter blocks": "השתמש במקלדת להכנס לבלוקים",
+    "v": "v",
+    "value": "ערך",
+    "video _ on _": "וידאו_על _ _",
+    "video capture": "לכוד_וידאו",
+    "volume": "עוצמת_צליל",
+    "w": "w",
+    "wait _ secs": "שניות _ המתן",
+    "wait until _": "_ המתן_עד_ש",
+    "warp _": "מעטפת _",
+    "what's your name?": "?מה_השם_שלך",
+    "when I am _": "כאשר_אני _",
+    "when I receive _ _": "_ _ כאשר_אני_מקבל",
+    "when I start as a clone": "כשאני_מתחיל_בתור_שכפול",
+    "when _": "_ כאשר",
+    "when _ clicked": "נלחץ _ כאשר_כפתור",
+    "when _ key pressed _": "נלחץ _ כאשר_כפתור _",
+    "whirl": "מערבולת",
+    "whitespace": "רווח",
+    "width": "רוחב",
+    "with inputs": "עם קלטים",
+    "word": "מילה",
+    "world": "עולם",
+    "write _ size _": "כתוב_בגודל _ _",
+    "x": "x",
+    "x position": "x מיקום",
+    "y": "y",
+    "y position": "y מיקום",
+    "year": "שנה",
+    "your own": "משלך",
+    "z": "z"
+}

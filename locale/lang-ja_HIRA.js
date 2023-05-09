@@ -1,1270 +1,457 @@
-/*
-
-	lang-ja_HIRA.js
-
-	Japanese Hiragana translation for SNAP!
-
-	written by Jens Mönig
-
-	Copyright (C) 2012 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ja_HIRA = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'にほんご', // the name as it should appear in the language menu
-    'language_translator':
-        'Kazuhiro Abe', // your name for the Translators tab
-    'translator_e-mail':
-        'abee@squeakland.jp', // optional
-    'last_changed':
-        '2013-04-02', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'めいしょうみせってい',
-    'development mode':
-        'かいはつしゃモード',
-
-    // categories:
-    'Motion':
-        'うごき',
-    'Looks':
-        'みため',
-    'Sound':
-        'おと',
-    'Pen':
-        'ペン',
-    'Control':
-        'せいぎょ',
-    'Sensing':
-        'しらべる',
-    'Operators':
-        'えんざん',
-    'Variables':
-        'へんすう',
-    'Lists':
-        'リスト',
-    'Other':
-        'そのた',
-
-    // editor:
-    'draggable':
-        'ドラッグかのう',
-
-    // tabs:
-    'Scripts':
-        'スクリプト',
-    'Costumes':
-        'コスチューム',
-    'Sounds':
-        'おと',
-
-    // names:
-    'Sprite':
-        'スプライト',
-    'Stage':
-        'ステージ',
-
-    // rotation styles:
-    'don\'t rotate':
-        'かいてんしない',
-    'can rotate':
-        'かいてんする',
-    'only face left/right':
-        'さゆうにはんてんするだけ',
-
-    // new sprite button:
-    'add a new sprite':
-        'あたらしいスプライトをついかする',
-
-    // tab help
-    'costumes tab help':
-        'ほかのWebページやコンピューターじょうのがぞうを\n'
-            + 'ここにドロップしてよみこみます',
-    'import a sound from your computer\nby dragging it into here':
-        'コンピューターじょうのサウンドを\nここにドラッグしてよみこみます',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'せんたくされたステージ:\nうごきのプリミティブがありません',
-
-    'move %n steps':
-        '%n ほうごかす',
-    'turn %clockwise %n degrees':
-        '%clockwise %n どまわす',
-    'turn %counterclockwise %n degrees':
-        '%counterclockwise %n どまわす',
-    'point in direction %dir':
-        '%dir どにむける',
-    'point towards %dst':
-        '%dst へむける',
-    'go to x: %n y: %n':
-        'xざひょうを %n 、yざひょうを %n にする',
-    'go to %dst':
-        '%dst へいく',
-    'glide %n secs to x: %n y: %n':
-        '%n びょうでxざひょうを %n に、yざひょうを %n にかえる',
-    'change x by %n':
-        'xざひょうを %n ずつかえる',
-    'set x to %n':
-        'xざひょうを %n にする',
-    'change y by %n':
-        'yざひょうを %n ずつかえる',
-    'set y to %n':
-        'yざひょうを %n にする',
-    'if on edge, bounce':
-        'もしはしについたら、はねかえる',
-    'x position':
-        'xざひょう',
-    'y position':
-        'yざひょう',
-    'direction':
-        'むき',
-
-    // looks:
-    'switch to costume %cst':
-        'コスチュームを %cst にする',
-    'next costume':
-        'つぎのコスチュームにする',
-    'costume #':
-        'コスチュームのばんごう',
-    'say %s for %n secs':
-        '%s と %n びょういう',
-    'say %s':
-        '%s という',
-    'think %s for %n secs':
-        '%s と %n びょうかんがえる',
-    'think %s':
-        '%s とかんがえる',
-    'Hello!':
-        'こんにちは!',
-    'Hmm...':
-        'うーん...',
-    'change %eff effect by %n':
-        '%eff のこうかを %n ずつかえる',
-    'set %eff effect to %n':
-        '%eff のこうかを %n にする',
-    'clear graphic effects':
-        'がぞうこうかをなくす',
-    'change size by %n':
-        'おおきさを %n ずつかえる',
-    'set size to %n %':
-        'おおきさを %n にする',
-    'size':
-        'おおきさ',
-    'show':
-        'ひょうじする',
-    'hide':
-        'かくす',
-    'go to front':
-        'まえにだす',
-    'go back %n layers':
-        '%n そうさげる',
-
-    'development mode \ndebugging primitives:':
-        'かいはつしゃモード\nデバッグようプリミティブ:',
-    'console log %mult%s':
-        'コンソールログ %mult%s',
-    'alert %mult%s':
-        'けいこく: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd のおとをならす',
-    'play sound %snd until done':
-        'おわるまで %snd のおとをならす',
-    'stop all sounds':
-        'すべてのおとをとめる',
-    'rest for %n beats':
-        '%n はくやすむ',
-    'play note %n for %n beats':
-        '%n のおんぷを %n はくならす',
-    'change tempo by %n':
-        'テンポを %n ずつかえる',
-    'set tempo to %n bpm':
-        'テンポを %n BPMにする',
-    'tempo':
-        'テンポ',
-
-    // pen:
-    'clear':
-        'けす',
-    'pen down':
-        'ペンをおろす',
-    'pen up':
-        'ペンをあげる',
-    'set pen color to %clr':
-        'ペンのいろを %clr にする',
-    'change pen color by %n':
-        'ペンのいろを %n ずつかえる',
-    'set pen color to %n':
-        'ペンのいろを %n にする',
-    'change pen shade by %n':
-        'ペンのこさを %n ずつかえる',
-    'set pen shade to %n':
-        'ペンのこさを %n にする',
-    'change pen size by %n':
-        'ペンのふとさを %n ずつかえる',
-    'set pen size to %n':
-        'ペンのふとさを %n にする',
-    'stamp':
-        'スタンプ',
-    'fill':
-        'ぬりつぶす',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag がおされたとき',
-    'when %keyHat key pressed %keyName':
-        '%keyHat %keyName がおされたとき',
-    'when I am %interaction':
-        '%interaction じぶんがクリックされたとき',
-    'when I receive %msgHat %message':
-        '%msgHat %message をうけとったとき',
-    'broadcast %msg %receive':
-        '%msg %receive をおくる',
-    'broadcast %msg %receive and wait':
-        '%msg %receive をおくってまつ',
-    'Message name':
-        'メッセージめい',
-    'wait %n secs':
-        '%n びょうまつ',
-    'wait until %b':
-        '%b までまつ',
-    'forever %loop':
-        'ずっと %loop',
-    'repeat %n %loop':
-        '%n かいくりかえす %loop',
-    'repeat until %b %loop':
-        '%b までくりかえす %loop',
-    'if %b %c':
-        'もし %b なら %c',
-    'if %b %c else %c':
-        'もし %b なら %c でなければ %c',
-    'report %s':
-        '%s をかえす',
-    'stop block':
-        'ブロックをとめる',
-    'stop script':
-        'スクリプトをとめる',
-    'stop all %stop':
-        'すべてをとめる %stop',
-    'run %cmdRing %inputs':
-        '%cmdRing を %inputs でじっこうする',
-    'launch %cmdRing %inputs':
-        '%cmdRing を %inputs できどうする',
-    'call %repRing %inputs':
-        '%repRing を %inputs でよぶ',
-    'run %cmdRing w/continuation':
-        'けいぞくつきで %cmdRing をじっこうする',
-    'call %cmdRing w/continuation':
-        'けいぞくつきで %cmdRing をよぶ',
-    'warp %c':
-        'ワープする %c',
-    'when I start as a clone':
-        'クローンされたとき',
-    'create a clone of %cln':
-        '%cln のクローンをつくる',
-    'myself':
-        'じぶんじしん',
-    'delete this clone':
-        'このクローンをさくじょする',
-
-    // sensing:
-    'touching %col ?':
-        '%col にふれた',
-    'touching %clr ?':
-        '%clr いろにふれた',
-    'color %clr is touching %clr ?':
-        '%clr いろが %clr いろにふれた',
-    'ask %s and wait':
-        '%s ときいてまつ',
-    'what\'s your name?':
-        'あなたのなまえはなんですか?',
-    'answer':
-        'こたえ',
-    'mouse x':
-        'マウスのxざひょう',
-    'mouse y':
-        'マウスのyざひょう',
-    'mouse down?':
-        'マウスがおされた',
-    'key %key pressed?':
-        '%key がおされた',
-    'distance to %dst':
-        '%dst までのきょり',
-    'reset timer':
-        'タイマーをリセット',
-    'timer':
-        'タイマー',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'ターボモード?',
-    'set turbo mode to %b':
-        'ターボーモードを %b にする',
-
-    'filtered for %clr':
-        '%clr いろをちゅうしゅつ',
-    'stack size':
-        'スタックのおおきさ',
-    'frames':
-        'フレーム',
-
-    // operators:
-    '%n mod %n':
-        '%n を %n でわったあまり',
-    'round %n':
-        '%n をまるめる',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        '%n から %n までのらんすう',
-    'and':
-        'かつ',
-    'or':
-        'または',
-    'not %b':
-        '%b ではない',
-    'true':
-        'はい',
-    'false':
-        'いいえ',
-    'join %words':
-        '%words をつなぐ',
-    'hello':
-        'ハロー',
-    'world':
-        'ワールド',
-    'letter %ix of %s':
-        '%ix もじめのもじ %s',
-    '%ta of text %s':
-        '%ta %s のながさ',
-    'unicode of %s':
-        '%s のUnicode',
-    'unicode %n as letter':
-        'Unicodeで %n のもじ',
-    'is %s a %typ ?':
-        '%s は %typ がた',
-    'is %s identical to %s ?':
-        '%s は %s とどういつ',
-    'is %all== ?':
-        'は %all== ?',
-    'identical to':
-        'とどういつ',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-
-    'type of %s':
-        '%s のかた',
-
-    // variables:
-    'Make a variable':
-        'あたらしいへんすうをつくる',
-    'Variable name':
-        'へんすうめい',
-    'Delete a variable':
-        'へんすうをさくじょ',
-
-    'set %var to %s':
-        '%var を %s にする',
-    'change %var by %n':
-        '%var を %n ずつかえる',
-    'show variable %var':
-        '%var ひょうじする',
-    'hide variable %var':
-        '%var をかくす',
-    'script variables %scriptVars':
-        'スクリプトへんすう %scriptVars',
-
-    // lists:
-    'list %exp':
-        'リスト %exp',
-    '%s in front of %l':
-        '%s を %l のせんとうにおく',
-    'item %idx of %l':
-        '%idx ばんめ %l',
-    'all but first of %l':
-        '%l のせんとういがい',
-    'length of %l':
-        '%l のながさ',
-    '%l contains %s':
-        '%l に %s がふくまれているか',
-    'thing':
-        'なにか',
-    'add %s to %l':
-        '%s を %l についかする',
-    'delete %ida of %l':
-        '%ida を %l からさくじょする',
-    'insert %s at %idx of %l':
-        '%s を %idx ばんめにそうにゅうする %l',
-    'replace item %idx of %l with %s':
-        '%idx ばんめ %l を %s でおきかえる',
-
-    // other
-    'Make a block':
-        'ブロックをつくる',
-
-    // menus
-    // snap menu
-    'About...':
-        'Snap!について...',
-    'Snap! website':
-        'Snap!のWebサイト',
-    'Download source':
-        'ソースをダウンロード',
-    'Switch back to user mode':
-        'ユーザーモードにきりかえ',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'こうどなモーフィックコンテクストメニューをむこうにして\nユーザーフレンドリーなメニューをひょうじする',
-    'Switch to dev mode':
-        'かいはつしゃモードにきりかえる',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターをゆうこうにする',
-
-    // project menu
-    'Project notes...':
-        'プロジェクトのメモ...',
-    'New':
-        'しんき',
-    'Open...':
-        'ひらく...',
-    'Save':
-        'ほぞん',
-    'Save As...':
-        'なまえをつけてほぞん...',
-    'Import...':
-        'よみこみ...',
-    'file menu import hint':
-        'チェックするとレポーターをドラッグ&ドロップするとき\n'
-		+ 'そらのレポーターにフォーカスします\n\n'
-		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text...':
-        'テキストファイルとしてプロジェクトをかきだす...',
-    'Export project...':
-        'プロジェクトをかきだす...',
-    'show project data as XML\nin a new browser window':
-        'プロジェクトのデータをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Export blocks...':
-        'ブロックをかきだす...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'グローバルカスタムブロックのていぎをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Import tools':
-        'ツールをよみこむ',
-    'load the official library of\npowerful blocks':
-        'きょうりょくなブロックのこうしき\nライブラリをよみこむ',
-
-    // cloud menu
-    'Login...':
-        'ログイン...',
-    'Signup...':
-        'サインアップ...',
-
-    // settings menu
-    'Language...':
-        'げんご...',
-    'Zoom blocks...':
-        'ブロックをズーム...',
-    'Blurred shadows':
-        'はんとうめいのかげ',
-    'uncheck to use solid drop\nshadows and highlights':
-        'チェックをはずすとたんしょくのかげと\nハイライトになります',
-    'check to use blurred drop\nshadows and highlights':
-        'チェックするとはんとうめいのかげと\nハイライトになります',
-    'Zebra coloring':
-        'じま々でひょうじ',
-    'check to enable alternating\ncolors for nested blocks':
-        'チェックするといれこになった\nブロックをじま々でひょうじします',
-    'uncheck to disable alternating\ncolors for nested block':
-        'チェックをはずすといれこになった\nブロックをふつうにひょうじします',
-    'Dynamic input labels':
-        'どうてきなにゅうりょくラベル',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'チェックをはずすとかへんこひきすうの\nどうてきラベルをふかにします',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'チェックするとかへんこひきすうの\nどうてきラベルをかのうにします',
-    'Prefer empty slot drops':
-        'そらのスロットのドロップをゆるす',
-    'settings menu prefer empty slots hint':
-        'せっていメニューがそらのスロットのヒントをゆるします',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'チェックをはずすとドロップしたレポーターが\nほかをおしだせるようになります',
-    'Long form input dialog':
-        'ひきすうダイアログをながいけいしきにする',
-    'check to always show slot\ntypes in the input dialog':
-        'チェックするとひきすうダイアログに\nつねにスロットのかたをひょうじします',
-    'uncheck to use the input\ndialog in short form':
-        'チェックをはずすとひきすうダイアログをみじかくひょうじします',
-    'Virtual keyboard':
-        'かそうキーボード',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'チェックをはずすとモバイルききようの\nかそうキーボードをむこうにします',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'チェックするとモバイルききようの\nかそうキーボードをゆうこうにします',
-    'Input sliders':
-        'にゅうりょくスライダー',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'チェックをはずすとにゅうりょくフィールドのスライダーをむこうにします',
-    'check to enable\ninput sliders for\nentry fields':
-        'チェックするとにゅうりょくフィールドのスライダーをゆうこうにします',
-    'Clicking sound':
-        'クリックおん',
-    'uncheck to turn\nblock clicking\nsound off':
-        'チェックをはずすとブロックの\nクリックおんをきります',
-    'check to turn\nblock clicking\nsound on':
-        'チェックをはずすとブロックの\nクリックおんをいれます',
-    'Animations':
-        'アニメーション',
-    'uncheck to disable\nIDE animations':
-        'チェックをはずすとIDEの\nアニメーションをきります',
-    'check to prioritize\nscript execution':
-        'チェックするとスクリプトの\nしょりをゆうせんします',
-    'uncheck to run scripts\nat normal speed':
-        'チェックをはずすとスクリプトを\nつうじょうのそくどでじっこうします',
-    'check to enable\nIDE animations':
-        'チェックするとIDEの\nアニメーションをいれます',
-    'Turbo mode':
-        'ターボモード',
-    'Thread safe scripts':
-        'スクリプトをスレッドセーフにする',
-    'uncheck to allow\nscript reentrancy':
-        'チェックをはずすとスクリプトを\nさいにゅうかのうにします',
-    'check to disallow\nscript reentrancy':
-        'チェックするとスクリプトを\nさいにゅうふのうにします',
-    'Prefer smooth animations':
-        'なめらかなアニメーションにする',
-    'uncheck for greater speed\nat variable frame rates':
-        'チェックをはずすとフレームレート\nあたりのそくどをあげます',
-    'check for smooth, predictable\nanimations across computers':
-        'チェックするとコンピューターかんで\nなめらかでよそくかのうなアニメーションにします',
-
-    // inputs
-    'with inputs':
-        'ひきすう',
-    'input names:':
-        'ひきすうめい:',
-    'Input Names:':
-        'ひきすうめい:',
-    'input list:':
-        'ひきすうリスト:',
-
-    // context menus:
-    'help':
-        'ヘルプ',
-
-    // blocks:
-    'help...':
-        'ヘルプ...',
-    'duplicate':
-        'ふくせい',
-    'make a copy\nand pick it up':
-        'コピーをつくって\nそれをつかみます',
-    'only duplicate this block':
-        'このブロックをコピーするだけ',
-    'delete':
-        'さくじょ',
-    'script pic...':
-        'スクリプトのがぞう...',
-    'open a new window\nwith a picture of this script':
-        'このスクリプトのがぞうをひょうじするあたらしいウィンドウをひらきます',
-    'ringify':
-        'リングか',
-    'unringify':
-        'ひリングか',
-
-    // custom blocks:
-    'delete block definition...':
-        'ブロックのていぎをさくじょ',
-    'edit...':
-        'へんしゅう...',
-
-    // sprites:
-    'edit':
-        'へんしゅう',
-    'export...':
-        'かきだし...',
-
-    // stage:
-    'show all':
-        'すべてをひょうじ',
-    'pic...':
-        'がぞう...',
-    'open a new window\nwith a picture of the stage':
-        'このステージのがぞうで\nあたらしいウィンドウをひらく',
-
-    // scripting area
-    'clean up':
-        'きれいにする',
-    'arrange scripts\nvertically':
-        'スクリプトを\nたてにせいれつします',
-    'add comment':
-        'コメントをついか',
-    'make a block...':
-        'ブロックをつくる...',
-
-    // costumes
-    'rename':
-        'なまえをへんこう',
-    'export':
-        'かきだし',
-    'rename costume':
-        'コスチュームのなまえをへんこう',
-
-    // sounds
-    'Play sound':
-        'おとをならす',
-    'Stop sound':
-        'おとをとめる',
-    'Stop':
-        'ていし',
-    'Play':
-        'さいせい',
-    'rename sound':
-        'おとのなまえをへんこう',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'キャンセル',
-    'Yes':
-        'はい',
-    'No':
-        'いいえ',
-
-    // help
-    'Help':
-        'ヘルプ',
-
-    // zoom blocks
-    'Zoom blocks':
-        'ブロックをズーム',
-    'build':
-        'つくろう',
-    'your own':
-        'あなたじしんの',
-    'blocks':
-        'ブロックを',
-    'normal (1x)':
-        'ノーマル (1x)',
-    'demo (1.2x)':
-        'デモ (1.2x)',
-    'presentation (1.4x)':
-        'プレゼンテーション (1.4x)',
-    'big (2x)':
-        'だい (2x)',
-    'huge (4x)':
-        'とくだい (4x)',
-    'giant (8x)':
-        'きょだい (8x)',
-    'monstrous (10x)':
-        'ちょうきょだい (10x)',
-
-    // Project Manager
-    'Untitled':
-        'めいしょうみせってい',
-    'Open Project':
-        'プロジェクトをひらく',
-    'Open':
-        'ひらく',
-    '(empty)':
-        '(そら)',
-    'Saved!':
-        'ほぞんしました!',
-    'Delete Project':
-        'プロジェクトをさくじょ',
-    'Are you sure you want to delete':
-        'ほんとうにさくじょしますか',
-    'rename...':
-        'なまえをへんこう...',
-
-    // costume editor
-    'Costume Editor':
-        'コスチュームエディター',
-    'click or drag crosshairs to move the rotation center':
-        'クリックかドラッグでかいてんちゅうしんをいどうする',
-
-    // project notes
-    'Project Notes':
-        'プロジェクトのメモ',
-
-    // new project
-    'New Project':
-        'あたらしいプロジェクト',
-    'Replace the current project with a new one?':
-        'げんざいのプロジェクトをあたらしいものでおきかえますか?',
-
-    // open project
-    'Open Projekt':
-        'プロジェクトをひらく',
-
-    // save project
-    'Save Project As...':
-        'なまえをつけてプロジェクトをほぞん...',
-
-    // export blocks
-    'Export blocks':
-        'ブロックをかきだし',
-    'Import blocks':
-        'ブロックをよみこみ',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'このプロジェクトはカスタムグローバルブロックをもっていません',
-    'select':
-        'せんたく',
-    'all':
-        'すべて',
-    'none':
-        'なし',
-
-    // variable dialog
-    'for all sprites':
-        'すべてのスプライトよう',
-    'for this sprite only':
-        'このスプライトよう',
-
-    // block dialog
-    'Change block':
-        'ブロックをへんこう',
-    'Command':
-        'コマンド',
-    'Reporter':
-        'モニター',
-    'Predicate':
-        'じゅつご',
-
-    // block editor
-    'Block Editor':
-        'ブロックエディター',
-    'Apply':
-        'てきよう',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'カスタムブロックをさくじょ',
-    'block deletion dialog text':
-        'このカスタムブロックとすべてのインスタンスを\nさくじょしてもよいですか?',
-
-    // input dialog
-    'Create input name':
-        'ひきすうめいをさくせい',
-    'Edit input name':
-        'ひきすうめいをへんしゅう',
-    'Edit label fragment':
-        'ラベルのだんぺんをへんしゅう',
-    'Title text':
-        'タイトルテキスト',
-    'Input name':
-        'ひきすうめい',
-    'Delete':
-        'さくじょ',
-    'Object':
-        'オブジェクト',
-    'Number':
-        'かず',
-    'Text':
-        'テキスト',
-    'List':
-        'リスト',
-    'Any type':
-        'ぜんタイプ',
-    'Boolean (T/F)':
-        'しんぎち (はい/いいえ)',
-    'Command\n(inline)':
-        'コマンド\n(インライン)',
-    'Command\n(C-shape)':
-        'コマンド \n(Cけい)',
-    'Any\n(unevaluated)':
-        'にんい\n(みひょうか)',
-    'Boolean\n(unevaluated)':
-        'しんぎち\n(みひょうか)',
-    'Single input.':
-        'たんいつひきすう.',
-    'Default Value:':
-        'デフォルトち:',
-    'Multiple inputs (value is list of inputs)':
-        'ふくすうのひきすう (あたいはひきすうのリスト)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - よびだしもとからみえるないぶてきなへんすう',
-
-   // About Snap
-    'About Snap':
-        'Snapについて',
-    'Back...':
-        'もどる...',
-    'License...':
-        'ライセンス...',
-    'Modules...':
-        'モジュール...',
-    'Credits...':
-        'クレジット...',
-    'Translators...':
-        'ほんやくしゃ',
-    'License':
-        'ライセンス',
-    'current module versions:':
-        'げんざいのモジュールのバージョン:',
-    'Contributors':
-        'こうけんしゃ:',
-    'Translations':
-        'ほんやく',
-
-    // variable watchers
-    'normal':
-        'つうじょう',
-    'large':
-        'だい',
-    'slider':
-        'スライダー',
-    'slider min...':
-        'スライダーのさいしょうち...',
-    'slider max...':
-        'スライダーのさいだいち...',
-    'import...':
-        'よみこみ...',
-    'Slider minimum value':
-        'スライダーのさいしょうち',
-    'Slider maximum value':
-        'スライダーのさいだいち',
-
-    // list watchers
-    'length: ':
-        'ながさ: ',
-
-    // coments
-    'add comment here...':
-        'ここにコメントをついか...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) みぎ',
-    '(-90) left':
-        '(-90) ひだり',
-    '(0) up':
-        '(0) じょう',
-    '(180) down':
-        '(180) か',
-
-    // collision detection
-    'mouse-pointer':
-        'マウスのポインター',
-    'edge':
-        'はし',
-    'pen trails':
-        'ペンのきせき',
-
-    // costumes
-    'Turtle':
-        'タートル',
-    'Empty':
-        'そら',
-
-    // graphical effects
-    'ghost':
-        'ゆうれい',
-
-    // keys
-    'space':
-        'スペース',
-    'up arrow':
-        'うわむきやじるし',
-    'down arrow':
-        'したむきやじるし',
-    'right arrow':
-        'みぎむきやじるし',
-    'left arrow':
-        'ひだりむきやじるし',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'しんき...',
-
-    // math functions
-    'abs':
-        'ぜったいち',
-    'sqrt':
-        'へいほうこん',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        'かず',
-    'text':
-        'テキスト',
-    'Boolean':
-        'しんぎち',
-    'list':
-        'リスト',
-    'command':
-        'コマンド',
-    'reporter':
-        'レポーター',
-    'predicate':
-        'じゅつご',
-
-    // list indices
-    'last':
-        'さいご',
-    'random':
-        'にんい',
-
-    // missing entries
-    'Reference manual':
-        'リファレンスマニュアル',
-    'Sign in':
-        'サインイン',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'stay signed in on this computer\nuntil logging out':
-        'ログアウトするまでこのコンピューターに\nサインインしたままにする',
-    'Sign up':
-        'サインアップ',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        'たんじょうづき:',
-    'Birth date:':
-        'とし:',
-    'January':
-        '１がつ',
-    'February':
-        '２がつ',
-    'March':
-        '３がつ',
-    'April':
-        '４がつ',
-    'May':
-        '５がつ',
-    'June':
-        '６がつ',
-    'July':
-        '７がつ',
-    'August':
-        '８がつ',
-    'September':
-        '９がつ',
-    'October':
-        '１０がつ',
-    'November':
-        '１１がつ',
-    'December':
-        '１２がつ',
-    '1993 or before':
-        '１９９３ねんいぜん',
-    'E-mail address:':
-        'でんしメールアドレス:',
-    'Terms of Service...':
-        'サービスりようきやく...',
-    'Privacy...':
-        'こじんじょうほう...',
-    'I have read and agree\nto the Terms of Service':
-        'サービスりようきやくをよみ\nそれにどういします',
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) ひだり",
+    "(0) up": "(0) じょう",
+    "(180) down": "(180) か",
+    "(90) right": "(90) みぎ",
+    "(empty)": "(そら)",
+    "1993 or before": "１９９３ねんいぜん",
+    "About Snap": "Snapについて",
+    "About...": "Snap!について...",
+    "Animations": "アニメーション",
+    "Any (unevaluated)": "にんい (みひょうか)",
+    "Any type": "ぜんタイプ",
+    "Apply": "てきよう",
+    "April": "４がつ",
+    "Are you sure you want to delete": "ほんとうにさくじょしますか",
+    "August": "８がつ",
+    "Back...": "もどる...",
+    "Birth date:": "とし:",
+    "Block Editor": "ブロックエディター",
+    "Blurred shadows": "はんとうめいのかげ",
+    "Boolean": "しんぎち",
+    "Boolean (T/F)": "しんぎち (はい/いいえ)",
+    "Boolean (unevaluated)": "しんぎち (みひょうか)",
+    "Cancel": "キャンセル",
+    "Change block": "ブロックをへんこう",
+    "Clicking sound": "クリックおん",
+    "Command": "コマンド",
+    "Command (C-shape)": "コマンド (Cけい)",
+    "Command (inline)": "コマンド (インライン)",
+    "Contributors": "こうけんしゃ:",
+    "Control": "せいぎょ",
+    "Costume Editor": "コスチュームエディター",
+    "Costumes": "コスチューム",
+    "Create input name": "ひきすうめいをさくせい",
+    "Credits...": "クレジット...",
+    "December": "１２がつ",
+    "Default Value:": "デフォルトち:",
+    "Delete": "さくじょ",
+    "Delete Custom Block": "カスタムブロックをさくじょ",
+    "Delete Project": "プロジェクトをさくじょ",
+    "Delete a variable": "へんすうをさくじょ",
+    "Download source": "ソースをダウンロード",
+    "Dynamic input labels": "どうてきなにゅうりょくラベル",
+    "E-mail address:": "でんしメールアドレス:",
+    "Edit input name": "ひきすうめいをへんしゅう",
+    "Edit label fragment": "ラベルのだんぺんをへんしゅう",
+    "Empty": "そら",
+    "Export blocks": "ブロックをかきだし",
+    "Export blocks...": "ブロックをかきだす...",
+    "Export project as plain text...": "テキストファイルとしてプロジェクトをかきだす...",
+    "Export project...": "プロジェクトをかきだす...",
+    "February": "２がつ",
+    "Hello!": "こんにちは!",
+    "Help": "ヘルプ",
+    "Hmm...": "うーん...",
+    "I have read and agree to the Terms of Service": "サービスりようきやくをよみ それにどういします",
+    "Import blocks": "ブロックをよみこみ",
+    "Import tools": "ツールをよみこむ",
+    "Import...": "よみこみ...",
+    "Input Names:": "ひきすうめい:",
+    "Input name": "ひきすうめい",
+    "Input sliders": "にゅうりょくスライダー",
+    "January": "１がつ",
+    "July": "７がつ",
+    "June": "６がつ",
+    "Language...": "げんご...",
+    "License": "ライセンス",
+    "License...": "ライセンス...",
+    "List": "リスト",
+    "Lists": "リスト",
+    "Login...": "ログイン...",
+    "Long form input dialog": "ひきすうダイアログをながいけいしきにする",
+    "Looks": "みため",
+    "Make a block": "ブロックをつくる",
+    "Make a variable": "あたらしいへんすうをつくる",
+    "March": "３がつ",
+    "May": "５がつ",
+    "Message name": "メッセージめい",
+    "Modules...": "モジュール...",
+    "Motion": "うごき",
+    "Multiple inputs (value is list of inputs)": "ふくすうのひきすう (あたいはひきすうのリスト)",
+    "New": "しんき",
+    "New Project": "あたらしいプロジェクト",
+    "No": "いいえ",
+    "November": "１１がつ",
+    "Number": "かず",
+    "OK": "OK",
+    "Object": "オブジェクト",
+    "October": "１０がつ",
+    "Ok": "OK",
+    "Open": "ひらく",
+    "Open Project": "プロジェクトをひらく",
+    "Open Projekt": "プロジェクトをひらく",
+    "Open...": "ひらく...",
+    "Operators": "えんざん",
+    "Other": "そのた",
+    "Password:": "パスワード:",
+    "Pen": "ペン",
+    "Play": "さいせい",
+    "Play sound": "おとをならす",
+    "Predicate": "じゅつご",
+    "Prefer empty slot drops": "そらのスロットのドロップをゆるす",
+    "Prefer smooth animations": "なめらかなアニメーションにする",
+    "Privacy...": "こじんじょうほう...",
+    "Project Notes": "プロジェクトのメモ",
+    "Project notes...": "プロジェクトのメモ...",
+    "Reference manual": "リファレンスマニュアル",
+    "Replace the current project with a new one?": "げんざいのプロジェクトをあたらしいものでおきかえますか?",
+    "Reporter": "モニター",
+    "Save": "ほぞん",
+    "Save As...": "なまえをつけてほぞん...",
+    "Save Project As...": "なまえをつけてプロジェクトをほぞん...",
+    "Saved!": "ほぞんしました!",
+    "Scripts": "スクリプト",
+    "Sensing": "しらべる",
+    "September": "９がつ",
+    "Sign in": "サインイン",
+    "Sign up": "サインアップ",
+    "Signup...": "サインアップ...",
+    "Single input.": "たんいつひきすう.",
+    "Slider maximum value": "スライダーのさいだいち",
+    "Slider minimum value": "スライダーのさいしょうち",
+    "Snap! website": "Snap!のWebサイト",
+    "Sound": "おと",
+    "Sounds": "おと",
+    "Sprite": "スプライト",
+    "Stage": "ステージ",
+    "Stage selected: no motion primitives": "せんたくされたステージ: うごきのプリミティブがありません",
+    "Stop": "ていし",
+    "Stop sound": "おとをとめる",
+    "Switch back to user mode": "ユーザーモードにきりかえ",
+    "Switch to dev mode": "かいはつしゃモードにきりかえる",
+    "Terms of Service...": "サービスりようきやく...",
+    "Text": "テキスト",
+    "Thread safe scripts": "スクリプトをスレッドセーフにする",
+    "Title text": "タイトルテキスト",
+    "Translations": "ほんやく",
+    "Translators...": "ほんやくしゃ",
+    "Turbo mode": "ターボモード",
+    "Turtle": "タートル",
+    "Untitled": "めいしょうみせってい",
+    "Upvar - make internal variable visible to caller": "Upvar - よびだしもとからみえるないぶてきなへんすう",
+    "User name:": "ユーザーめい:",
+    "Variable name": "へんすうめい",
+    "Variables": "へんすう",
+    "Virtual keyboard": "かそうキーボード",
+    "Yes": "はい",
+    "Zebra coloring": "じま々でひょうじ",
+    "Zoom blocks": "ブロックをズーム",
+    "Zoom blocks...": "ブロックをズーム...",
+    "_ contains _": "_ に _ がふくまれているか",
+    "_ in front of _": "_ を _ のせんとうにおく",
+    "_ mod _": "_ を _ でわったあまり",
+    "_ of _": "_ _",
+    "a": "a",
+    "abs": "ぜったいち",
+    "acos": "acos",
+    "add _ to _": "_ を _ についかする",
+    "add a new sprite": "あたらしいスプライトをついかする",
+    "add comment": "コメントをついか",
+    "add comment here...": "ここにコメントをついか...",
+    "alert _": "けいこく: _",
+    "all": "すべて",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "_ のせんとういがい",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "and": "かつ",
+    "answer": "こたえ",
+    "arrange scripts vertically": "スクリプトを たてにせいれつします",
+    "asin": "asin",
+    "ask _ and wait": "_ ときいてまつ",
+    "atan": "atan",
+    "b": "b",
+    "big (2x)": "だい (2x)",
+    "block deletion dialog text": "このカスタムブロックとすべてのインスタンスを さくじょしてもよいですか?",
+    "blocks": "ブロックを",
+    "broadcast _ _": "_ _ をおくる",
+    "broadcast _ _ and wait": "_ _ をおくってまつ",
+    "build": "つくろう",
+    "c": "c",
+    "call _ _": "_ を _ でよぶ",
+    "call _ w/continuation": "けいぞくつきで _ をよぶ",
+    "can rotate": "かいてんする",
+    "change _ by _": "_ を _ ずつかえる",
+    "change _ effect by _": "_ のこうかを _ ずつかえる",
+    "change pen color by _": "ペンのいろを _ ずつかえる",
+    "change pen shade by _": "ペンのこさを _ ずつかえる",
+    "change pen size by _": "ペンのふとさを _ ずつかえる",
+    "change size by _": "おおきさを _ ずつかえる",
+    "change tempo by _": "テンポを _ ずつかえる",
+    "change x by _": "xざひょうを _ ずつかえる",
+    "change y by _": "yざひょうを _ ずつかえる",
+    "check for smooth, predictable animations across computers": "チェックするとコンピューターかんで なめらかでよそくかのうなアニメーションにします",
+    "check to always show slot types in the input dialog": "チェックするとひきすうダイアログに つねにスロットのかたをひょうじします",
+    "check to disallow script reentrancy": "チェックするとスクリプトを さいにゅうふのうにします",
+    "check to enable IDE animations": "チェックするとIDEの アニメーションをいれます",
+    "check to enable alternating colors for nested blocks": "チェックするといれこになった ブロックをじま々でひょうじします",
+    "check to enable dynamic labels for variadic inputs": "チェックするとかへんこひきすうの どうてきラベルをかのうにします",
+    "check to enable input sliders for entry fields": "チェックするとにゅうりょくフィールドのスライダーをゆうこうにします",
+    "check to enable virtual keyboard support for mobile devices": "チェックするとモバイルききようの かそうキーボードをゆうこうにします",
+    "check to prioritize script execution": "チェックするとスクリプトの しょりをゆうせんします",
+    "check to turn block clicking sound on": "チェックをはずすとブロックの クリックおんをいれます",
+    "check to use blurred drop shadows and highlights": "チェックするとはんとうめいのかげと ハイライトになります",
+    "clean up": "きれいにする",
+    "clear": "けす",
+    "clear graphic effects": "がぞうこうかをなくす",
+    "click or drag crosshairs to move the rotation center": "クリックかドラッグでかいてんちゅうしんをいどうする",
+    "color _ is touching _ ?": "_ いろが _ いろにふれた",
+    "command": "コマンド",
+    "console log _": "コンソールログ _",
+    "cos": "cos",
+    "costume #": "コスチュームのばんごう",
+    "costumes tab help": "ほかのWebページやコンピューターじょうのがぞうを ここにドロップしてよみこみます",
+    "create a clone of _": "_ のクローンをつくる",
+    "current module versions:": "げんざいのモジュールのバージョン:",
+    "d": "d",
+    "delete": "さくじょ",
+    "delete _ of _": "_ を _ からさくじょする",
+    "delete block definition...": "ブロックのていぎをさくじょ",
+    "delete this clone": "このクローンをさくじょする",
+    "demo (1.2x)": "デモ (1.2x)",
+    "development mode": "かいはつしゃモード",
+    "development mode debugging primitives:": "かいはつしゃモード デバッグようプリミティブ:",
+    "direction": "むき",
+    "disable deep-Morphic context menus and show user-friendly ones": "こうどなモーフィックコンテクストメニューをむこうにして ユーザーフレンドリーなメニューをひょうじする",
+    "distance to _": "_ までのきょり",
+    "don't rotate": "かいてんしない",
+    "down arrow": "したむきやじるし",
+    "draggable": "ドラッグかのう",
+    "duplicate": "ふくせい",
+    "e": "e",
+    "e^": "e^",
+    "edge": "はし",
+    "edit": "へんしゅう",
+    "edit...": "へんしゅう...",
+    "enable Morphic context menus and inspectors, not user-friendly!": "ユーザーフレンドリーではない モーフィックコンテクストメニューと インスペクターをゆうこうにする",
+    "export": "かきだし",
+    "export...": "かきだし...",
+    "f": "f",
+    "false": "いいえ",
+    "file menu import hint": "チェックするとレポーターをドラッグ&ドロップするとき そらのレポーターにフォーカスします いくつかのブラウザーではサポートされません",
+    "fill": "ぬりつぶす",
+    "filtered for _": "_ いろをちゅうしゅつ",
+    "for all sprites": "すべてのスプライトよう",
+    "for this sprite only": "このスプライトよう",
+    "forever _": "ずっと _",
+    "frames": "フレーム",
+    "g": "g",
+    "ghost": "ゆうれい",
+    "giant (8x)": "きょだい (8x)",
+    "glide _ secs to x: _ y: _": "_ びょうでxざひょうを _ に、yざひょうを _ にかえる",
+    "go back _ layers": "_ そうさげる",
+    "go to _": "_ へいく",
+    "go to front": "まえにだす",
+    "go to x: _ y: _": "xざひょうを _ 、yざひょうを _ にする",
+    "h": "h",
+    "hello": "ハロー",
+    "help": "ヘルプ",
+    "help...": "ヘルプ...",
+    "hide": "かくす",
+    "hide variable _": "_ をかくす",
+    "http:// _": "http:// _",
+    "huge (4x)": "とくだい (4x)",
+    "i": "i",
+    "identical to": "とどういつ",
+    "if _ _": "もし _ なら _",
+    "if _ _ else _": "もし _ なら _ でなければ _",
+    "if on edge, bounce": "もしはしについたら、はねかえる",
+    "import a sound from your computer by dragging it into here": "コンピューターじょうのサウンドを ここにドラッグしてよみこみます",
+    "import...": "よみこみ...",
+    "input list:": "ひきすうリスト:",
+    "input names:": "ひきすうめい:",
+    "insert _ at _ of _": "_ を _ ばんめにそうにゅうする _",
+    "is _ ?": "は _ ?",
+    "is _ a _ ?": "_ は _ がた",
+    "is _ identical to _ ?": "_ は _ とどういつ",
+    "item _ of _": "_ ばんめ _",
+    "j": "j",
+    "join _": "_ をつなぐ",
+    "k": "k",
+    "key _ pressed?": "_ がおされた",
+    "l": "l",
+    "language_name": "にほんご",
+    "language_translator": "Kazuhiro Abe",
+    "large": "だい",
+    "last": "さいご",
+    "last_changed": "2013-04-02",
+    "launch _ _": "_ を _ できどうする",
+    "left arrow": "ひだりむきやじるし",
+    "length of _": "_ のながさ",
+    "length:": "ながさ:",
+    "letter _ of _": "_ もじめのもじ _",
+    "list": "リスト",
+    "list _": "リスト _",
+    "ln": "ln",
+    "load the official library of powerful blocks": "きょうりょくなブロックのこうしき ライブラリをよみこむ",
+    "m": "m",
+    "make a block...": "ブロックをつくる...",
+    "make a copy and pick it up": "コピーをつくって それをつかみます",
+    "monstrous (10x)": "ちょうきょだい (10x)",
+    "mouse down?": "マウスがおされた",
+    "mouse x": "マウスのxざひょう",
+    "mouse y": "マウスのyざひょう",
+    "mouse-pointer": "マウスのポインター",
+    "move _ steps": "_ ほうごかす",
+    "myself": "じぶんじしん",
+    "n": "n",
+    "neighbors ≠": "neighbors ≠",
+    "new...": "しんき...",
+    "next costume": "つぎのコスチュームにする",
+    "none": "なし",
+    "normal": "つうじょう",
+    "normal (1x)": "ノーマル (1x)",
+    "not _": "_ ではない",
+    "number": "かず",
+    "o": "o",
+    "only duplicate this block": "このブロックをコピーするだけ",
+    "only face left/right": "さゆうにはんてんするだけ",
+    "open a new window with a picture of the stage": "このステージのがぞうで あたらしいウィンドウをひらく",
+    "open a new window with a picture of this script": "このスクリプトのがぞうをひょうじするあたらしいウィンドウをひらきます",
+    "or": "または",
+    "p": "p",
+    "pen down": "ペンをおろす",
+    "pen trails": "ペンのきせき",
+    "pen up": "ペンをあげる",
+    "pic...": "がぞう...",
+    "pick random _ to _": "_ から _ までのらんすう",
+    "play note _ for _ beats": "_ のおんぷを _ はくならす",
+    "play sound _": "_ のおとをならす",
+    "play sound _ until done": "おわるまで _ のおとをならす",
+    "point in direction _": "_ どにむける",
+    "point towards _": "_ へむける",
+    "predicate": "じゅつご",
+    "presentation (1.4x)": "プレゼンテーション (1.4x)",
+    "q": "q",
+    "r": "r",
+    "random": "にんい",
+    "rename": "なまえをへんこう",
+    "rename costume": "コスチュームのなまえをへんこう",
+    "rename sound": "おとのなまえをへんこう",
+    "rename...": "なまえをへんこう...",
+    "repeat _ _": "_ かいくりかえす _",
+    "repeat until _ _": "_ までくりかえす _",
+    "replace item _ of _ with _": "_ ばんめ _ を _ でおきかえる",
+    "report _": "_ をかえす",
+    "reporter": "レポーター",
+    "reset timer": "タイマーをリセット",
+    "rest for _ beats": "_ はくやすむ",
+    "right arrow": "みぎむきやじるし",
+    "ringify": "リングか",
+    "round _": "_ をまるめる",
+    "run _ _": "_ を _ でじっこうする",
+    "run _ w/continuation": "けいぞくつきで _ をじっこうする",
+    "s": "s",
+    "say _": "_ という",
+    "say _ for _ secs": "_ と _ びょういう",
+    "script pic...": "スクリプトのがぞう...",
+    "script variables _": "スクリプトへんすう _",
+    "select": "せんたく",
+    "set _ effect to _": "_ のこうかを _ にする",
+    "set _ to _": "_ を _ にする",
+    "set pen color to _": "ペンのいろを _ にする",
+    "set pen shade to _": "ペンのこさを _ にする",
+    "set pen size to _": "ペンのふとさを _ にする",
+    "set size to _ %": "おおきさを _ にする",
+    "set tempo to _ bpm": "テンポを _ BPMにする",
+    "set turbo mode to _": "ターボーモードを _ にする",
+    "set x to _": "xざひょうを _ にする",
+    "set y to _": "yざひょうを _ にする",
+    "settings menu prefer empty slots hint": "せっていメニューがそらのスロットのヒントをゆるします",
+    "show": "ひょうじする",
+    "show all": "すべてをひょうじ",
+    "show global custom block definitions as XML in a new browser window": "グローバルカスタムブロックのていぎをXMLとして ブラウザのあたらしいウインドウにひょうじする",
+    "show project data as XML in a new browser window": "プロジェクトのデータをXMLとして ブラウザのあたらしいウインドウにひょうじする",
+    "show variable _": "_ ひょうじする",
+    "sin": "sin",
+    "size": "おおきさ",
+    "slider": "スライダー",
+    "slider max...": "スライダーのさいだいち...",
+    "slider min...": "スライダーのさいしょうち...",
+    "space": "スペース",
+    "sqrt": "へいほうこん",
+    "stack size": "スタックのおおきさ",
+    "stamp": "スタンプ",
+    "stay signed in on this computer until logging out": "ログアウトするまでこのコンピューターに サインインしたままにする",
+    "stop all _": "すべてをとめる _",
+    "stop all sounds": "すべてのおとをとめる",
+    "stop block": "ブロックをとめる",
+    "stop script": "スクリプトをとめる",
+    "switch to costume _": "コスチュームを _ にする",
+    "t": "t",
+    "tan": "tan",
+    "tempo": "テンポ",
+    "text": "テキスト",
+    "thing": "なにか",
+    "think _": "_ とかんがえる",
+    "think _ for _ secs": "_ と _ びょうかんがえる",
+    "this project doesn't have any custom global blocks yet": "このプロジェクトはカスタムグローバルブロックをもっていません",
+    "timer": "タイマー",
+    "touching _ ?": "_ にふれた",
+    "translator_e-mail": "abee@squeakland.jp",
+    "true": "はい",
+    "turbo mode?": "ターボモード?",
+    "turn _ _ degrees": "_ _ どまわす",
+    "type of _": "_ のかた",
+    "u": "u",
+    "uncheck for greater speed at variable frame rates": "チェックをはずすとフレームレート あたりのそくどをあげます",
+    "uncheck to allow dropped reporters to kick out others": "チェックをはずすとドロップしたレポーターが ほかをおしだせるようになります",
+    "uncheck to allow script reentrancy": "チェックをはずすとスクリプトを さいにゅうかのうにします",
+    "uncheck to disable IDE animations": "チェックをはずすとIDEの アニメーションをきります",
+    "uncheck to disable alternating colors for nested block": "チェックをはずすといれこになった ブロックをふつうにひょうじします",
+    "uncheck to disable dynamic labels for variadic inputs": "チェックをはずすとかへんこひきすうの どうてきラベルをふかにします",
+    "uncheck to disable input sliders for entry fields": "チェックをはずすとにゅうりょくフィールドのスライダーをむこうにします",
+    "uncheck to disable virtual keyboard support for mobile devices": "チェックをはずすとモバイルききようの かそうキーボードをむこうにします",
+    "uncheck to run scripts at normal speed": "チェックをはずすとスクリプトを つうじょうのそくどでじっこうします",
+    "uncheck to turn block clicking sound off": "チェックをはずすとブロックの クリックおんをきります",
+    "uncheck to use solid drop shadows and highlights": "チェックをはずすとたんしょくのかげと ハイライトになります",
+    "uncheck to use the input dialog in short form": "チェックをはずすとひきすうダイアログをみじかくひょうじします",
+    "unicode _ as letter": "Unicodeで _ のもじ",
+    "unicode of _": "_ のUnicode",
+    "unringify": "ひリングか",
+    "untitled": "めいしょうみせってい",
+    "up arrow": "うわむきやじるし",
+    "v": "v",
+    "w": "w",
+    "wait _ secs": "_ びょうまつ",
+    "wait until _": "_ までまつ",
+    "warp _": "ワープする _",
+    "what's your name?": "あなたのなまえはなんですか?",
+    "when I am _": "_ じぶんがクリックされたとき",
+    "when I receive _ _": "_ _ をうけとったとき",
+    "when I start as a clone": "クローンされたとき",
+    "when _ clicked": "_ がおされたとき",
+    "when _ key pressed _": "_ _ がおされたとき",
+    "with inputs": "ひきすう",
+    "world": "ワールド",
+    "x": "x",
+    "x position": "xざひょう",
+    "y": "y",
+    "y position": "yざひょう",
+    "your own": "あなたじしんの",
+    "z": "z"
+}

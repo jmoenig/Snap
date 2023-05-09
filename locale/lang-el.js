@@ -1,1998 +1,804 @@
-/*
-
-    lang-el.js
-
-    Greek translation for SNAP!
-
-    written by Ino Samaras
-
-    Copyright (C) 2013 by Ino Samaras
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.el = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Ελληνικά', // the name as it should appear in the language menu
-    'language_translator':
-        'Ino Samaras, Alexandros Prekates, HM100' ,// your name for the Translators tab
-    'translator_e-mail':
-        'ino.samaras@berkeley.edu, aprekates@sch.gr' , // optional
-    'last_changed':
-        '2023-04-15', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'χωρίς τίτλο',
-    'development mode':
-        'λειτουργία ανάπτυξης',
-
-    // categories:
-    'Motion':
-        'Κίνηση',
-    'Looks':
-        'Εμφάνιση',
-    'Sound':
-        'Ήχος',
-    'Pen':
-        'Στυλό',
-    'Control':
-        'Έλεγχος',
-    'Sensing':
-        'Αισθητήρες',
-    'Operators':
-        'Τελεστές',
-    'Variables':
-        'Μεταβλητές',
-    'Lists':
-        'Λίστες',
-    'Other':
-        'Άλλο',
-
-    // editor:
-    'draggable':
-        'συρόμενο',
-
-    // tabs:
-    'Scripts':
-        'Σενάρια',
-    'Costumes':
-        'Κοστούμια',
-    'Sounds':
-        'Ήχοι',
-    'Backgrounds':
-        'Yπόβαθρα',
-
-    // names:
-    'Sprite':
-        'Φιγούρα',
-    'Stage':
-	'Σκηνή',
-
-    // Painting
-    'Paint a new costume':
-         'Ζωγράφισε ένα νέο κουστούμι',
-
-    // rotation styles:
-    'don\'t rotate':
-        'χωρίς δυνατότητα περιστροφής',
-    'can rotate':
-        'με δυνατότητα περιστροφής',
-    'only face left/right':
-        'με κατεύθυνση μόνο αριστερά/δεξιά',
-
-    // new sprite button:
-    'add a new sprite':
-       'προσθέστε μια νέα φιγούρα',
-    'add a new Turtle sprite':
-        'πρόσθεσε μια καινούρα φιγούρα χελώνα',
-    'paint a new sprite':
-        'ζωγράφισε μια καινούργια φιγούρα',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'πάρε μια φωτογραφία με τη κάμερα\nτου υπολογιστή και εισηγαγέ τη\nσαν καινούργια φιγούρα',
-    
-
-    // tab help
-    'costumes tab help':
-        'εισαγωγή εικόνας από τον υπολογιστή σας ή μια ιστοσελίδα' 
-	+ 'σέρνοντας την εικόνα στην περιοχή των κοστουμιών',
-    'import a sound from your computer\nby dragging it into here':
-        'εισαγωγή ήχου από τον υπολογιστή σας σέρνοντας το αρχείο του ήχου εδώ',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Επιλεγμένο Σταδιο:\nχωρίς αρχέτυπο κίνησης',
-
-    'move %n steps':
-        'κάνε %n βήματα',
-    'turn %clockwise %n degrees':
-        'γύρνα δεξιόστροφα %clockwise %n μοίρες',
-    'turn %counterclockwise %n degrees':
-        'γύρνα αριστερόστροφα %counterclockwise %n μοίρες',
-    'point in direction %dir':
-        'κοίτα προς την κατεύθυνση %dir',
-    'point towards %dst':
-        'κοίτα προς %dst',
-    'go to x: %n y: %n':
-        'πήγαινε στο x: %n y: %n',
-    'go to %dst':
-        'πήγαινε στο %dst',
-    'glide %n secs to x: %n y: %n':
-        'γλίστρα %n δευτ. μέχρι το x: %n y: %n',
-    'change x by %n':
-        'άλλαξε το x κατά %n',
-    'set x to %n':
-        'θέσε το x να είναι %n',
-    'change y by %n':
-        'άλλαξε το y κατά %n',
-    'set y to %n':
-        'θέσε το y να είναι %n',
-    'if on edge, bounce':
-        'αν είσαι σε άκρο, πήδα',
-    'x position':
-        'x-θέση',
-    'y position':
-        'y-θέση',
-    'direction':
-        'κατεύθυνση',
-
-    // looks:
-    'switch to costume %cst':
-        'άλλαξε το κοστούμι σε %cst',
-    'next costume':
-        'επόμενο κοστούμι',
-    'costume #':
-        'κοστούμι #',
-    'say %s for %n secs':
-        'πες %s για %n δευτ.',
-    'say %s':
-        'πες %s',
-    'think %s for %n secs':
-        'σκέψου %s για %n δευτ.',
-    'think %s':
-        'σκέψου %s',
-    'Hello!':
-        'Γεια!',
-    'Hmm...':
-        'Μμμ...',
-    '%img of costume %cst':
-        '%img του κοστουμιού %cst',
-    'new costume %l width %dim height %dim':
-        'νέο κοστούμι %l πλάτος %dim ύψος %dim',
-    'stretch %cst x: %n y: %n %':
-        'τέντωμα %cst x: %n y: %n %',
-    'change %eff effect by %n':
-        'άλλαξε το εφέ %eff κατά %n',
-    'set %eff effect to %n':
-        'θέσε το εφέ %eff να είναι %n',
-    'clear graphic effects':
-        'καθάρισε τα γραφικά εφέ',
-    '%eff effect':
-        '%eff εφέ',
-    'change size by %n':
-        'άλλαξε το μέγεθος κατά %n',
-    'set size to %n %':
-        'θέσε το μέγεθος να είναι %n %',
-    'size':
-        'μέγεθος',
-    'show':
-        'εμφανίσου',
-    'hide':
-        'κρύψου',
-    'shown?':
-        'εμφανής;',
-    'go to front':
-        'πήγαινε μπροστά',
-    'go to %layer layer':
-        'πήγαινε %layer',
-    'front':
-        'μπροστά',
-    'back':
-        'πίσω',
-    'go back %n layers':
-        'πήγαινε πίσω %n στρώματα',
-
-    'development mode \ndebugging primitives:':
-        'λειτουργία ανάπτυξης \nαρχέτυπα debugging',
-    'console log %mult%s':
-        'γράψτε στην κονσόλα: %mult%s',
-    'alert %mult%s':
-        'ειδοποίηση: %mult%s',
-
-    'pixels':
-        'πίξελ',
-    'current':
-        'τρέχον',
-
-    // sound:
-    'play sound %snd':
-        'παίξε τον ήχο %snd',
-    'play sound %snd until done':
-        'παίξε τον ήχο %snd μέχρι να τελειώσει',
-    'stop all sounds':
-        'σταμάτα όλους τους ήχους',
-    'rest for %n beats':
-        'κάνε παύση για %n ρυθμούς',
-    'play sound %snd at %rate Hz':
-        'παίξε τον ήχο %snd στα %rate Hz',
-    '%aa of sound %snd':
-        '%aa του ήχου %snd',
-    'duration':
-        'διάρκεια',
-    'length':
-        'μήκος',
-    'number of channels':
-        'αριθμός καναλιών',
-    'new sound %l rate %rate Hz':
-        'νέος ήχος %l ταχύτητα %rate Hz',
-    'play note %note for %n beats':
-         'παίξε την νότα %note για %n ρυθμούς',
-    'set instrument to %inst':
-         'θέσε το όργανο σε %inst' ,
-    'change tempo by %n':
-        'άλλαξε την ταχύτητα του ρυθμού κατά %n',
-    'set tempo to %n bpm':
-        'θέσε την ταχύτητα του ρυθμού να είναι %n ρυθμούς το δευτ.',
-    'tempo':
-        'ταχύτητα του ρυθμού',
-    'change volume by %n':
-        'άλλαξε την ένταση κατά %n',
-    'set volume to %n %':
-        'θέσε την ένταση να είναι %n %',
-    'change balance by %n':
-        'άλλαξε την ισορροπία κατά %n',
-    'set balance to %n':
-        'θέσε την ισορροπία να είναι %n',
-    'balance':
-        'ισορροπία',
-    'play frequency %n Hz':
-        'παίξε συχνότητα %n Hz',
-    'stop frequency':
-        'σταμάτα την συχνότητα',
-    'play %n Hz for %n secs':
-        'παίξε %n Hz για %n δευτ.',
-
-    // pen:
-    'clear':
-        'καθαρισμός',
-    'pen down':
-        'στυλό κάτω',
-    'pen up':
-        'στυλό πάνω',
-    'pen down?':
-        'στυλό κάτω;',
-    'set pen color to %clr':
-        'θέσε το χρώμα του στυλού να είναι %clr',
-    'set background color to %clr':
-        'θέσε το χρώμα του υπόβαθρου να έιναι %clr',
-    'change pen %clrdim by %n':
-         'άλλαξε %clrdim του στυλού κατά %n',
-    'change background %clrdim by %n':
-        'άλλαξε υπόβαθρο %clrdim κατά %n',
-    'hue':
-        'απόχρωση',
-    'saturation':
-         'κορεσμός',
-    'brightness':
-         'φωτεινότητα' ,
-    'transparency':
-         'διαφάνεια',
-    'set pen %clrdim to %n':
-        'θέσε %clrdim του στυλού να είναι %n',
-    'change pen shade by %n':
-        'άλλαξε την σκιά του στυλού κατά %n',
-    'set pen shade to %n':
-        'θέσε την σκιά του στυλού να είναι %n',
-    'set background %clrdim to %n':
-        'θέσε υπόβαθρο %clrdim να είναι %n',
-    'pen %pen':
-        'στυλό %pen',
-    'change pen size by %n':
-        'άλλαξε το μέγεθος του στυλού κατά %n',
-    'set pen size to %n':
-        'θέσε το μέγεθος του στυλού να είναι %n',
-    'stamp':
-        'σφραγίδα',
-    'fill':
-         'γέμισμα',
-    'write %s size %n':
-        'γράψε %s μέγεθος %n',
-    'paste on %spr':
-        'επικόλληση στο %spr',
-    'cut from %spr':
-        'αποκοπή από το %spr',
-
-    // control:
-    'when %greenflag clicked':
-        'όταν το %greenflag πατηθεί',
-    'when %keyHat key pressed %keyName':
-        'όταν το %keyHat πλήκτρο πατηθεί %keyName',
-    'when I am %interaction':
-        'όταν μου συμβεί %interaction',
-    'clicked':
-         'να μου κάνουν κλικ',
-    'pressed':
-          'να με πατάνε',
-    'dropped':
-          'να με αφήνουν',
-    'mouse-entered':
-          'να εισέρχεται ο δείκτης του ποντικίου',
-    'mouse-departed':
-           'να εξέρχεται ο δείκτης του ποντικίου',
-    'scrolled-down':
-    	'κύλιση-κάτω',
-    'scrolled-up':
-        'κύλιση-πάνω',
-    'stopped':
-        'σταματημένο',
-    'when %b':
-        'όταν %b',
-    'when I receive %msgHat %message':
-        'όταν δεχτώ %msgHat %message',
-    'broadcast %msg %receive':
-        'στείλε το %msg %receive',
-    'broadcast %msg %receive and wait':
-        'στείλε το %msg %receive και περίμενε',
-    'to':
-        'στο',
-    'with data':
-        'με δεδομένα',
-    'send %msg to %spr':
-        'αποστολή του %msg στο %spr',
-    'Message name':
-        'όνομα μηνύματος',
-    'message':
-        'μήνυμα',
-    'any message':
-        'οποιοδήποτε μήνυμα',
-    'data':
-        'δεδομένα',
-    'wait %n secs':
-        'περίμενε %n δευτ.',
-    'wait until %b':
-        'περίμενε μέχρι %b',
-    'forever %loop':
-        'για πάντα %loop',
-    'repeat %n %loop':
-        'επανέλαβε %n %loop',
-    'repeat until %b %loop':
-        'επανέλαβε μέχρι %b %loop',
-    'for %upvar = %n to %n %cla':
-        'για %upvar = %n ως %n %cla',
-    'if %b %c':
-        'αν %b %c',
-    'if %b %c else %c':
-        'αν %b %c αλλιώς %c',
-    'if %b then %s else %s':
-        'αν %b τότε %s αλλιώς %s',
-    'report %s':
-        'δήλωσε %s',
-    'stop %stopChoices':
-        'σταμάτα %stopChoices',
-    'all':
-        'τα πάντα',
-    'all scenes':
-        'όλες τις σκηνές',
-    'this script':
-        'αυτό το σενάριο',
-    'this block':
-        'αυτό το μπλοκ',
-    'stop %stopOthersChoices':
-        'σταμάτα %stopOthersChoices',
-    'all but this script':
-        'τα πάντα εκτός από αυτό το σενάριο',
-    'other scripts in sprite':
-        'τα υπόλοιπα σενάρια της φιγούρας',
-    'pause all %pause':
-        'κάνε παύση σε όλα %pause',
-    'run %cmdRing %inputs':
-        'εκτέλεσε %cmdRing επάνω σε %inputs',
-    'launch %cmdRing %inputs':
-        'ξεκίνα %cmdRing επάνω σε %inputs',
-    'call %repRing %inputs':
-        'κάλεσε %repRing επάνω σε %inputs',
-    'run %cmdRing w/continuation':
-        'εκτέλεσε %cmdRing με συνέχεια',
-    'call %cmdRing w/continuation':
-        'κάλεσε %cmdRing με συνέχεια',
-    'warp %c':
-        'επιτάχυνση %c',
-    'when I start as a clone':
-        'όταν ξεκινάω ως κλώνος',
-    'create a clone of %cln':
-        'δημιούργησε έναν κλώνο του %cln',
-    'a new clone of %cln':
-        'ένας νέος κλώνος του %cln',
-    'myself':
-        'ο εαυτός μου',
-    'delete this clone':
-         'κατάργησε αυτόν τον κλόνο',
-    'switch to scene %scn %send':
-        'αλλαγή στην σκηνή %scn %send',
-    'and send':
-        'και στείλε',
-    'next':
-        'επόμενη',
-    'previous':
-        'προηγούμενη',
-    'tell %spr to %cmdRing %inputs':
-        'πες το %spr να %cmdRing  %inputs',
-    'ask %spr for %repRing %inputs':
-        'ρώτα το %spr για %repRing %inputs',
-    'when %edit is edited %message':
-        'όταν το %edit επεξεργαστεί %message',
-    'anything':
-        'οτιδηποτε',
-    // sensing:
-    'touching %col ?':
-        'ακουμπάει %col ?',
-    'touching %clr ?':
-        'ακουμπάει %clr ?',
-    'color %clr is touching %clr ?':
-        'χρώμα %clr ακουμπάει %clr ?',
-    'ask %s and wait':
-        'ρώτα %s και περίμενε',
-    'what\'s your name?':
-        'Ποιο είναι το όνομά σου;',
-    'answer':
-        'απάντηση',
-    'mouse position':
-        'θέση ποντικιού',
-    'mouse x':
-        'ποντίκι x-θέση',
-    'mouse y':
-        'ποντίκι y-θέση',
-    'mouse down?':
-        'είναι το ποντικι κάτω;',
-    'key %key pressed?':
-        'είναι το πλήκτρο %key πατημένο;',
-     '%rel to %dst':
-        '%rel από %dst',
-    'distance':
-    	'απόσταση',
-    '%asp at %loc' :
-        '%asp στο %loc',
-    'sprites' :
-        'φιγούρες',
-     'reset timer':
-        'επανέφερε το χρονόμετρο',
-    'timer':
-        'χρονόμετρο',
-    '%att of %spr':
-        '%att του %spr',
-    'my %get':
-        'το δικό μου  %get',
-    'object %self':
-        'αντικείμενο %self',
-    'http:// %s':
-        'http:// %s',
-    'is %setting on?':
-        'είναι το %setting ενεργό;',
-    'set %setting to %b':
-        'θέσε το %setting να είναι %b',
-    'current %dates':
-        'τρέχων %dates',
-    'year':
-        'έτος',
-    'month':
-        'μήνας',
-    'date':
-        'ημερομηνία',
-    'day of week':
-        'ημέρα της εβδομάδας',
-    'hour':
-        'ώρα',
-    'minute':
-        'λεπτά',
-    'second':
-        'δευτερόλεπτα',
-    'time in milliseconds':
-        'χρόνος σε χιλιοστά του δευτερολέπτου', 
-    'microphone %audio':
-        'μικρόφωνο %audio',
-    'volume':
-        'ένταση',
-    'frequency':
-        'συχνόντητα',
-    'samples':
-        'δείγματα',
-    'sample rate':
-        'ταχύτητα δείγματος',
-    'resolution':
-        'ανάλυση',
-    'filtered for %clr':
-        'φίλτραρε για %clr',
-    'stack size':
-        'μέγεθος στοίβας',
-    'frames':
-        'κάδρα',
-    'Microphone resolution...':
-        'Ανάλυση μικροφώνου...',
-    'Microphone':
-        'Μικρόφωνο',
-    'low':
-        'χαμηλό',
-    'high':
-        'υψηλό',
-    'max':
-        'μέγιστο',
-    'video %vid on %self':
-        'βίντεο %vid στον %self',
-    'motion':
-        'κίνηση',
-    'set video transparency to %n':
-        'θέσε την διαφάνια βίντεο να είναι %n',
-    'video capture':
-        'καταγραφή βίντεο',
-    'mirror video':
-        'κατοπτρισμός βίντεο',
-    'turbo mode':
-        'λειτουργεία τούρμπο',
-    '%block of block %repRing':
-        '%block του μπλοκ %repRing',
-    'label':
-        'ετικέτα',
-    'definition':
-        'ορισμός',
-    'category':
-        'κατηγορία',
-    'custom?':
-        'προσαρμοσμένο?',
-    'global?':
-        'καθολικό?',
-    'type':
-        'τύπος',
-    'scope':
-        'έκταση',
-    'slots':
-        'θέσεις',
-    'defaults':
-        'προεπιλογές',
-    'menus':
-        'μενού',
-    'editables':
-        'επεξεργάσιμα',
-    'translations':
-        'μεταφράσεις',
-    'set %byob of block %repRing to %s':
-        'θέσε %byob της εντολής %repRing σε %s',
-    'define %upvar %s %repRing':
-        'ορισμός %upvar %s %repRing',
-    'delete block %repRing':
-        'διαγραφή μπλοκ %repRing',
-    'block':
-        'μπλοκ',
-    'this %env':
-        'τρέχον %env',
-    'script':
-        'σενάριο',
-    'caller':
-        'καλούντος',
-    'continuation':
-        'συνέχια',
-    'inputs':
-        'εισόδους',
-    // operators:
-    'sum':
-        'άθροισμα',
-    'product':
-        'γινόμενο',
-    'minimum':
-        'ελάχιστο',
-    'maximum':
-        'μέγιστο',
-    '%n mod %n':
-        'το υπόλοιπο του %n διαίρεμενο από %n',
-    'round %n':
-        '%n στρογγυλοποιημένο',
-    '%fun of %n':
-        '%fun του %n',
-    'pick random %n to %n':
-        'δίαλεξε στην τύχη μεταξύ του %n και του %n',
-    'and':
-        'και',
-    'or':
-        'ή',
-    'not %b':
-        'όχι το %b',
-    'true':
-        'σωστό',
-    'false':
-        'λάθος',
-    'join %words':
-        'συνένωσε %words',
-    'split %s by %delim':
-        'χώρισε %s ως προς το %delim',
-    'hello':
-        'γεια',
-    'world':
-        'κόσμος',
-    'letter %ix of %s':
-        'γράμμα %ix του %s',
-    '%ta of text %s':
-        '%ta του %s',
-    'unicode of %s':
-        'unicode του %s',
-    'unicode %n as letter':
-        'unicode του %n ως γράμμα',
-    'is %s a %typ ?':
-        'είναι το %s καποιο %typ ;',
-    'is %s identical to %s ?':
-        'είναι το %s παρόμοιο με το %s ?',
-    'is %all== ?':
-        'είναι το %all== ?',
-    'identical to':
-        'παρόμοιο με το',
-    'all identical':
-        'όλα παρόμια',
-    'all <':
-        'όλα <',
-    'all >':
-        'όλα >',
-    'all \u2264':
-        'όλα \u2264',
-    'all \u2265':
-        'όλα \u2265',
-    'all =':
-        'όλα =',
-    'neighbors \u2260':
-        'γειτόνοι \u2260',
-    'JavaScript function ( %mult%s ) { %code }':
-        'JavaScript συνάρτηση( %mult%s ) { %code }',
-    'compile %repRing':
-    	'μεταγλώττισε %repRing',
-    
-    'type of %s':
-        'τύπος του %s',
-
-    // variables:
-    'Make a variable':
-        'Δημιούργησε μία μεταβλητή',
-    'Variable name':
-        'Όνομα μεταβλητής',
-    'Script variable name':
-        'Όνομα μεταβλητής του σεναρίου',
-    'inherit %shd':
-        'Κληρονόμησε %shd',
-    'Delete a variable':
-        'Κάτάργηση μιας μεταβλητής',
-
-    'set %var to %s':
-        'θέσε το %var να είναι %s',
-    'change %var by %n':
-        'άλλαξε το %var κατά %n',
-    'show variable %var':
-        'εμφάνισε το %var',
-    'hide variable %var':
-        'κρύψε το %var',
-    'script variables %scriptVars':
-        'μεταβλητές του σεναρίου %scriptVars',
-
-    // lists:
-    'list %exp':
-        'λίστα %exp',
-    'numbers from %n to %n':
-        'νούμερα από το %n εως το %n',
-    '%s in front of %l':
-        '%s μπροστά από το %l',
-    'item %idx of %l':
-        'στοιχείο %idx του %l',
-    'all but first of %l':
-        'όλα εκτός από το πρώτο του %l',
-    '%la of %l':
-        '%la του %l',
-    'rank':
-        'κατάταξη',
-    'dimensions':
-        'διαστάσεις',
-    'flatten':
-        'ισοπέδωση',
-    'columns':
-        'στείλες',
-    'reverse':
-        'αναστροφή',
-    'lines':
-        'γραμμές',
-    'length of %l':
-        'μήκος του %l',
-    '%l contains %s':
-        '%l περιέχει το %s',
-    'thing':
-        'πράγμα',
-    'is %l empty?':
-        'είναι το %l κενό?',
-    'index of %s in %l':
-        'εύρεση του %s σε %l',
-    'map %repRing over %l':
-        'χαρτογράφηση %repRing επάνω στο %l',
-    'keep items %predRing from %l':
-        'κρατήσε στοιχεία %predRing από το %l',
-    'find first item %predRing in %l':
-        'βρές το πρώτο στοχείo %predRing στο %l',
-    'combine %l using %repRing':
-        'συνδύασε το %l χρησιμοποιόντας %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz χαρτογράφηση %repRing επάνω στο %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz κρατήσε στοιχεία %predRing από το %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz βρές το πρώτο στοχείo %predRing στο %l',
-    '%blitz combine %l using %repRing':
-        '%blitz συνδύασε το %l χρησιμοποιόντας %repRing',
-    'for each %upvar in %l %cla':
-        'για κάθε %upvar στο %l %cla',
-    'item':
-        'στοιχείο',
-    'value':
-        'τιμή',
-    'index':
-        'εύρος',
-    'append %lists':
-        'προσάρτηση %lists',
-    'combinations %lists':
-        'συνδιασμοί %lists',
-    'reshape %s to %nums':
-        'ανασχημάτιση του %s σε %nums',
-    'add %s to %l':
-        'πρόσθεσε το %s στο %l',
-    'delete %ida of %l':
-        'κατάργησε το %ida του %l',
-    'insert %s at %idx of %l':
-        'εισήγαγε το %s στο %idx του %l',
-    'replace item %idx of %l with %s':
-        'αντικατέστησε το στοιχείο %idx του %l με %s',
-
-    // other
-    'Make a block':
-        'Δημιούργησε ένα μπλοκ',
-
-    // menus
-    // snap menu
-    'About...':
-        'Περί του Snap!…',
-    'Reference manual':
-        'Εγχειρίδιο αναφοράς',
-    'Snap! website':
-        'Snap! Ιστοσελίδα',
-    'Download source':
-        'Κατέβασε των πηγαίο κώδικα',
-    'Switch back to user mode':
-        'Επιστροφη στην λειτουργία του χρήστη',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
-    'Switch to dev mode':
-        'Εναλλαγή σε λειτουργία ανάπτυξη'  ,
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
-
-    // project menu
-    'Project notes...':
-        'Σημειώσης πάνω στην εργασία...',
-    'New':
-        'Νέο',
-    'Open...':
-        'Άνοιγμα...',
-    'Save':
-        'Αποθήκευση',
-    'Save As...':
-         'Αποθήκευση Ως...',
-     'Save to disk':
-        'Αποθήκευση στο δίσκο',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-    'αποθήκευση αυτό το έργοn\στον φάκελό λήψεων\n(στους πλοηγούς που το υποστηρίζουν',
-    'Import...':
-        'Εισαγωγή...',
-    'file menu import hint':
-        'μπορείτε να φορτώσετε ένα αρχείο από το browser σας στον\n κατάλογο του ήχου η των' +
-            'κοστουμιών που ',
-    'Export project as plain text...':
-        'Εξαγωγη της εργασίας ως σκέτο κείμενο...',
-    'Export project...':
-        'Εξαγωγή εργασίας...',
-    'show project data as XML\nin a new browser window':
-        'εμφάνιση δεδομένων εργασίας ως XML\nσε καινούριο παράθυρο του browser',
-    'Export blocks...':
-        'Εξαγωγή των μπλοκ...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'Εμφάνιση παγκοσμίων προσαρμοσμένων ορισμών των μπλοκ ως XML\nσε καινούριο' +
-            'παράθυρο του browser',
-    'Unused blocks...':
-          'Αχρησιμοποίητα μπλοκ...',
-    'find unused global custom blocks\nand remove their definitions':
-        'βρείτε αχρησιμοποίητα καθολικά μπλοκ\nκαι αφαίρεσε τους ορισμούς τους',
-    'Hide blocks...':
-        'Απόκρυψη μπλοκ...',
-    'New category...':
-        'Νέα κατηγορία...',
-    'Remove a category...':
-        'Διαγραφή κατηγορίας...',
-    'Scenes...':
-        'Σκηνές...',
-    'New scene':
-        'Νέα σκηνή',
-    'Add scene...':
-        'Προσθήκη σκηνής...',
-    'Import tools':
-        'Εισαγωγή εργαλείων',
-    'load the official library of\npowerful blocks':
-        'Φόρτωση της επίσημης βιβλιοθήκης\n των δυναμικών μπλοκ',
-    'Libraries...':
-        'Βιβλιοθήκες...',
-    'Import library':
-        'Εισαγωγή βιβλιοθήκης',
-
-    //Libraries
-    'Import library':
-        'Εισαγωγή βιβλιοθήκης',
-    'Loading':
-        'Φόρτωση',
-    'Imported':
-        'Εισάχθηκε',
-    'Variadic reporters':
-        'Ποίκιλα reporter',
-    'Words, sentences':
-        'Λέξεις, φράσεις',
-    'Text to speech':
-        'Κείμενο σε ομιλία',
-    'Create variables in program':
-        'Δημιουργία μεταβλητών σε πρόγραμμα',
-	
-    // cloud menu
-    'Login...':
-        'Σύνδεση...',
-    'Signup...':
-        'Εγγραφή...',
-    'Change Password...':
-        'Αλλαγή Συνθηματικού...',
-    'Reset Password...':
-        'Επαναφορά Συνθηματικού...',
-    'Resend Verification Email...':
-        'Επαναποστολή Email Επιβεβαίωσης...',
-    'Open in Community Site':
-        'Άνοιγμα στην Ιστοσελίδα Κοινότητας',
-
-
-    // settings menu
-    'Language...':
-        'Γλώσσα...',
-    'Zoom blocks...':
-        'Μεγέθυνση των μπλοκ…',
-    'Fade blocks...':
-        'Ξεθώριασμα μπλοκ...',
-    'Stage size...':
-        'Μέγεθος σκηνής...',
-    'Stage size':
-        'Μέγεθος σκηνής',
-    'Stage width':
-        'Πλάτος σκηνής',
-    'Stage height':
-        'Ύψος σκηνής',
-    'Default':
-        'Προεπιλογή',
-    'JavaScript extensions':
-        'Επεκτάσεις JavaScript',
-    'Blurred shadows':
-        'Θολές σκιές',
-    'uncheck to use solid drop\nshadows and highlights':
-        'απενεργοποιήστε για να εμφανίσετε\n την σκίαση και τα στερεά σήματα',
-    'check to use blurred drop\nshadows and highlights':
-        'ενεργοποιήστε για να εμφανίσετε\n την σκίαση και τα θολά σήματα',
-    'Zebra coloring':
-        'Χρωματισμός ζέβρα',
-    'check to enable alternating\ncolors for nested blocks':
-        'ενεργοποιήστε για να εμφανίσετε εναλασσόμενα\n χρώματα για τα ένθετα μπλοκ',
-    'uncheck to disable alternating\ncolors for nested block':
-        'απενεργοποιήστε για να εξαφανίσετε τα εναλασσόμενα\n χρώματα για τα ένθετα μπλοκ',
-    'Dynamic input labels':
-        'Ετικέτες για τις δυναμικές τιμές',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'απενεργοποιήστε για να εξαφανίσετε τις δυναμικες\nετικέτες για μεταβλητές τιμές',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'ενεργοποιήστε για να εμφανίσετε τις δυναμικες\nετικέτες για μεταβλητές τιμές',
-    'Prefer empty slot drops':
-        'Ευνοούν την προσκόλληση σε κενές θέσεις',
-    'settings menu prefer empty slots hint':
-        'διευκολύνουν την εισαγωγλη σε κενές υποδοχές\nόταν σύρετε και αφήσετε τον ρεπόρτερ',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'απενεργοποιήστε για να μπορούν οι ρεπορτερ που αφήνετε\nνα αντικαταστούν τους άλλους',
-    'Long form input dialog':
-        'Χρησιμοποιήστε το παράθυρο της εκτεταμένης τιμής',
-    'check to always show slot\ntypes in the input dialog':
-        'ενεργοποιήστε για να εμφανίζετε πάντα\nο τύπος τον κενών για τις τιμές',
-    'uncheck to use the input\ndialog in short form':
-        'απενεργοποιήστε για να εμφανίσετε τις τιμές\nστην συπμαγή μορφή',
-    'Virtual keyboard':
-        'Εικονικό Πληκτρολόγιο',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'απενεργοποιήστε για να μην έχετε το εικονοκό\nπληκτρολόγιο στο κινητό σας',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'ενεργοποιήστε για να έχετε το εικονοκό\nπληκτρολόγιο στο κινητό σας',
-    'Input sliders':
-        'Ρυθμιστής τιμής',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'απενεργοποιήστε για να μην έχετε\nρυθμιστές τιμών για τα πεδία εισαγωγής',
-    'check to enable\ninput sliders for\nentry fields':
-        'ενεργοποιήστε για να έχετε\nρυθμιστές τιμών για τα πεδία εισαγωγής',
-    'Clicking sound':
-        'Ήχος του κλικ',
-    'uncheck to turn\nblock clicking\nsound off':
-        'απενεργοποιήστε για να μην έχετε τον ήχο του κλικ',
-    'check to turn\nblock clicking\nsound on':
-        'ενεργοποιήστε για να έχετε τον ήχο του κλικ',
-    'Animations':
-        'Animations (διάφορες κινήσεις)',
-    'uncheck to disable\nIDE animations':
-        'απενεργοποιήστε για να μην εχετε\nIDE animations',
-    'Turbo mode':
-        'Λειτουργία Τούρμπο',
-    'check to prioritize\nscript execution':
-        'ενεργοποιήστε για να βάλετε σε\nπροτεραιότητα την εκτέλεση του κώδικα',
-    'uncheck to run scripts\nat normal speed':
-        'απενεργοποιήστε για να εκτελέσετε τον κώδικα\nμε κανονική ταχύτητα',
-    'Flat design':
-        'Επίπεδη σχεδίαση',
-    'check for alternative\nGUI design':
-        'ενεργοποιήστε για εναλακτική\nσχεδίαση GUI',
-    'uncheck for default\nGUI design':
-        'απενεργοποιήστε για προεπιλεγμένη\nσχεδίαση GUI',
-    'check to enable\nIDE animations':
-        'ενεργοποιήστε για να εχετε\nIDE animations',
-    'Thread safe scripts':
-        'Thread safe κώδικας',
-    'uncheck to allow\nscript reentrance':
-        'απενεργοποιήστε για να επιτρέψετε\nτην επανεισδοχή στον κώδικα',
-    'check to disallow\nscript reentrance':
-        'ενεργοποιήστε για να μην επιτρέπετε\nη επανεισδοχή στον κώδικα',
-    'Prefer smooth animations':
-        'Ευνοεί ομαλά animations',
-    'uncheck for greater speed\nat variable frame rates':
-        'απενεργοποιήστε για να έχετε μεγαλύτερη ταχύτητα\nστσ μεταβλητά frame-rates',
-    'check for smooth, predictable\nanimations across computers':
-        'ενεργοποιήστε για ομαλά, προβλέψημα\nanimations στους υπολογιστές',
-    'Table support':
-        'Υποστήριξη πίνακα',
-    'Table lines':
-        'Γραμμές πίνακα',
-    'Visible stepping':
-        'Ορατός βηματισμός',
-    'Single palette':
-        'Μονή παλέτα',
-    'check to show all blocks in a single palette':
-        'ενεργοποιήστε για να εμφανίσετε όλα τα μπλοκ σε μονή παλέτα',
-    'uncheck to show only the selected category\'s blocks':
-        'απενεργοποιήστε για να εμφανίσετε μόνο τα μπλοκ τις επιλεγμένης κατηγορίας',
-    'Show categories':
-        'Εμφάνιση κατηγοριών',
-    'uncheck to hide\ncategory names\nin the palette':
-        'απενεργοποιήστε για να κρύψετε\nτα ονόματα κατηγοριών\nστην παλέτα',
-    'check to show\ncategory names\nin the palette':
-        'ενεργοποιήστε για να εμφανίσετε\nτα ονόματα κατηγοριών\nστην παλέτα',
-    'Show buttons':
-        'Εμφάνιση κουμιών',
-    'uncheck to hide buttons\nin the palette':
-        'απενεργοποιήστε για να κρύψετε τα κουμιά\nστην παλέτα',
-    'check to show buttons\nin the palette':
-        'ενεργοποιήστε για να εμφανίσετε τα κουμιά\nστην παλέτα',
-    'HSL pen color model':
-        'Χρωματικό μοντέλο στυλού HSL',
-
-
-    // inputs
-    'with inputs':
-        'με τιμές',
-    'input names:':
-        'ονόματα τιμών:',
-    'Input Names:':
-        'Ονόματα τιμών:',
-    'input list:':
-        'λίστα τιμών:',
-
-    // context menus:
-    'help':
-        'Βοήθεια',
-
-    // palette:
-    'find blocks':
-        'εύρεση μπλοκ',
-    'hide blocks...':
-        'απόκρυψη μπλοκ...',
-    'Hide blocks in palette':
-        'Απόκρυψη μπλοκ στην παλέτα',
-    'unused':
-        'αχρησιμοποίητα',
-    'make a category...':
-        'δημιουργία μιας κατηγορίας...',
-    'New Category':
-        'Νέα κατηγορία',
-    'Blocks category name:':
-        'Όνομα κατηγορίας μπλοκ:',
-    'Category color':
-        'Χρώμα κατηγορίας',
-    'red':
-        'κόκκινο',
-    'green':
-        'πράσινο',
-    'blue':
-        'μπλε',
-    'delete a category...':
-        'διαγραφή μιας κατηγορίας...',
-    'hide primitives':
-        'Απόκρυψη αρχέτυπων',
-    'show primitives':
-        'Εμφάνιση αρχέτυπων',
-
-    // blocks:
-    'help...':
-        'βοήθεια...',
-    'relabel...':
-        'μετονόμαση...',
-    'compile':
-        'μεταγλώτηση',
-    'uncompile':
-        'ξε-μεταγλώτηση',
-    'duplicate':
-        'διπλασίαση',
-    'make a copy\nand pick it up':
-        'δημιουργία αντίγραφου\n και κράτηση του',
-    'only duplicate this block':
-        'διπλασίαση μόνο αυτού του μπλοκ',
-    'extract':
-        'εξαγωγή',
-    'only grab this block':
-        'αρπαγή μόνο αυτού του μπλοκ',
-    'delete':
-        'διαγραφή',
-    'script pic...':
-        'εικόνα του κώδικα...',
-    'save a picture\nof this script':
-        'αποθήκευση εικόνας\nαυτού του κώδικα',
-    'result pic...':
-        'εικόνα του αποτελεσμάτος...',
-    'open a new window\nwith a picture of this script':
-        'άνοιγμα νέου παραθύρου\nμε την εικόνα αυτού του κώδικα',
-    'ringify':
-        'εισαγωγή σε δαχτυλίδι',
-    'unringify':
-        'εξαγωγή από το δαχτυλίδι',
-    'new line':
-        'νέα γραμμή',
-
-    // custom blocks:
-    'delete block definition...':
-        'διαγραφή του προσαρμοσμένου μπλοκ',
-    'duplicate block definition...':
-        'διπλασιασμός του προσαρμοσμένου μπλοκ',
-    'export block definition...':
-        'εξαγωγή του προσαρμοσμένου μπλοκ',
-    'edit...':
-        'επεξεργασία...',
-    'translations...':
-        'μεταφράσεις...',
-    'block variables...':
-        'μεταβλητές μπλοκ...',
-    'in palette':
-        'στην παλέτα',
-
-    // sprites:
-    'edit':
-        'επεξεργασία',
-    'clone':
-        'κλωνοποίηση',
-    'detach from':
-        'αποσύνδεση από',
-    'detach all parts':
-        'αποσύνδεση όλων των κομματιών',
-    'export...':
-        'εξαγωγή...',
-    'release':
-        'απελευθέρωση',
-
-    // stage:
-    'show all':
-        'εμφάνιση όλων',
-    'pic...':
-        'εικόνα...',
-    'open a new window\nwith a picture of the stage':
-        'άνοιγμα νέου παραθύρου\nμε την εικόνα της σκηνής',
-
-    // scripting area
-    'clean up':
-        'καθαρισμός',
-    'arrange scripts\nvertically':
-        'οργάνωση ου κώδικα\nκάθετα',
-    'add comment':
-        'δημιουργία σχόλιου',
-    'undrop':
-        'επενακράτηση',
-    'undo the last\nblock drop\nin this pane':
-        'αναίρεση του τελευταίου\nμπλοκ που αφήσατε μέσα\nσε αυτό το παράθυρο',
-    'scripts pic...':
-        'εικόνα του κώδικα...',
-    'open a new window\nwith a picture of all scripts':
-        'άνοιγμα νέου παραθύρου\nμε μια εικόνα όλου του κώδικα',
-    'make a block...':
-        'δημιουργία ενός μπλοκ...',
-
-    // costumes
-    'rename':
-        'μετονόμαση',
-    'export':
-        'εξαγωγή',
-    'rename costume':
-        'μετονόμαση κοστουμιού',
-
-    // sounds
-    'Play sound':
-        'Παίξημο ήχου',
-    'Stop sound':
-        'Διακοπή ήχου',
-    'Stop':
-        'Διακοπή',
-    'Play':
-        'Παίξημο',
-    'rename sound':
-        'μετονόμαση ήχου',
-
-    // lists and tables
-    'list view...':
-        'προβολή λίστας...',
-    'table view...':
-        'προβολή πίνακα...',
-    'Table view':
-        'Προβολή πίνακα',
-    'open in dialog...':
-        'άνοιγμα σε παράθηρο διαλόγου...',
-    'blockify':
-        'ως εντολή',
-    'reset columns':
-        'επαναφορά στήλων',
-    'items':
-        'αντικείμενα',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'Oκ',
-    'Cancel':
-        'Ακύρωση',
-    'Yes':
-        'Ναι',
-    'No':
-        'Όχι',
-
-    // help
-    'Help':
-        'Βοήθεια',
-
-    // zoom blocks
-    'Zoom blocks':
-        'μεγένθυση των μπλοκ',
-    'build':
-        'κατασκευή',
-    'your own':
-        'το δικό σας',
-    'blocks':
-        'μπλοκ',
-    'normal (1x)':
-        'κανονικό (1x)',
-    'demo (1.2x)':
-        'επίδειξη (1.2x)',
-    'presentation (1.4x)':
-        'παρουσίαση (1.4x)',
-    'big (2x)':
-        'μεγάλο (2x)',
-    'huge (4x)':
-        'πολύ μεγάλο (4x)',
-    'giant (8x)':
-        'γιγαντιαίο (8x)',
-    'monstrous (10x)':
-        'τεράστιο (10x)',
-
-    // fade blocks
-    'Fade blocks':
-        'Ξεθώριασμα μπλοκ',
-    'block-solid (0)':
-        'συμπαγές-εντολή (0)',
-    'medium (50)':
-        'μέτριο (50)',
-    'light (70)':
-        'απαλό (70)',
-    'shimmering (80)':
-        'λαμπερό (80)',
-    'elegant (90)':
-        'κομψό (90)',
-    'subtle (95)':
-        'διακριτικό (95)',
-    'text-only (100)':
-        'κείμενο μόνο (100)',
-
-    // Project Manager
-    'Untitled':
-        'Χωρίς Τίτλο',
-    'Open Project':
-        'Άνοιγμα Εργασίας',
-    '(empty)':
-        '(άδειο)',
-    'Saved!':
-        'Αποθηκεύτηκε!',
-    'Delete Project':
-        'Διαγραφή Εργασίας',
-    'Are you sure you want to delete':
-        'Είστε σίγουροι ότι θέλετε να γίνει διαγραφή?',
-    'rename...':
-        'μετονόμαση...',
-    'Examples':
-        'Παραδείγματα',
-    'Share':
-        'Κοινοποίηση',
-    'Unshare':
-        'Κατάργηση κοινοποίησης',
-    'Publish':
-        'Δημοσίευση',
-    'Κατάργηση δημοσίευσης':
-        '',
-    'Updating\nproject list...':
-        'Ενημέρωση\nλίστας έργων...',
-    'Recover':
-        'Αποκατάσταση',
-    'Today':
-        'Σήμερα',
-    'Yesterday':
-        'Χτές',
-
-
-    // costume editor
-    'Costume Editor':
-         'Επεξεργαστής κουστουμιών',
-    'Paint Editor':
-        'Επεξεργαστής ζωγραφικής',
-    'click or drag crosshairs to move the rotation center':
-        'Κάντε κλικ ή ρύρετε το στόχαστρο για να μετακινήσετε το άξονα περιστροφής',
-    'undo':
-        'αναίρεση',
-    'Vector':
-        'Διανυσματική Σχεδίαση',
-    'Paintbrush tool\n(free draw)':
-        'Πινέλο\n(ελεύθερη σχεδίαση)',
-    'Stroked Rectangle\n(shift: square)':
-        'Ορθογώνιο\n(Shift: τετράγωνο)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Έλλειψη\n(Shift: κύκλος)',
-    'Eraser tool':
-        'Σβήστρα',
-    'Set the rotation center':
-        'Θέσε το κέντρο περιστροφής',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Ευθεία γραμμή\n(Shift: κάθετη/οριζόντια)',
-    'Filled Rectangle\n(shift: square)':
-        'Γεμάτο Ορθογώνιο\n(Shift: τετράγωνο)',
-    'Filled Ellipse\n(shift: circle)':
-        'Γεμάτη Έλλειψη\n(Shift: κύκλος)',
-    'Fill a region':
-        'Γέμισε μια περιοχή',
-    'Pipette tool\n(pick a color anywhere)':
-        'Επιλογή χρώματος\n(διάλεξε ένα χρώμα από όπουδήποτε)',
-    'Brush size':
-        'Μέγεθος πινέλου',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Ενεργοποίηση περιορισμού σχημάτων\n(εναλλακτικά πατώντας shift)',
-    'grow':
-        'μεγάλωσε',
-     'shrink':
-       'μίκρυνε',
-     'flip ↔':
-       'εναλλαγή ↔',
-     'flip ↕':
-       'εναλλαγή ↕',
-    
-    'Vector Paint Editor':
-        'Επεξεργαστής Διανυσματικών γραφικών',
-    'Rectangle\n(shift: square)':
-        'Ορθογώνιο\n(Shift: τετράγωνο)',
-    'Ellipse\n(shift: circle)':
-        'Έλλειψη\n(Shift: κύκλος)',
-    'Selection tool':
-        'Εργαλείο επιλογής',
-    'Line tool\n(shift: constrain to 45º)':
-        'Ευθεία γραμμή\n(Shift: περιορισμός σε 45°)',
-    'Closed brush\n(free draw)':
-        'Πινέλο\n(ελεύθερη σχεδίαση)',
-    'Paint a shape\n(shift: secondary color)':
-        'Ζωγράφισε ένα σχήμα\n(Shift: δευτερεύων χρώμα)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Εργαλείο επιλογής χρώματος\n(διάλεξε ένα χρώμα από οπουδήποτε\nshift: δευτερεύων χρώμα)',
-    'Primary color      Secondary color':
-        'Πρωτεύων χρώμα          Δευτερεύων χρώμα',
-    'Top':
-        'Πάνω',
-    'Bottom':
-       'Κάτω',
-   'Up':
-       'προς τα πάνω',
-   'Down':
-       'προς τα κάτω',
-
-
-    // project notes
-    'Project Notes':
-        'Σχόλια Εργασίας',
-
-    // new project
-    'New Project':
-        'Νέα Εργασία',
-    'Replace the current project with a new one?':
-        'Θέλετε να αντικαταστήσετε την τρέχουσα εργασία με μία καινούρια?',
-
-    // save project
-    'Save Project As...':
-        'Αποθήκευση Εργασίας Ως...',
-    'Save Project':
-        'Αποθήκευση Εργασίας',
-        
-    // export blocks
-    'Export blocks':
-        'Εξαγωγή των μπλοκ',
-    'Import blocks':
-        'Εισαγωγή των μπλοκ',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'αυτή η εργασία δεν έχει κανενα\nπροσαρμοσμένο παγκόσμιο μπλοκ ακόμα',
-    'select':
-        'επιλογή',
-    'all':
-        'όλα',
-    'none':
-        'τίποτα',
-
-    // variable dialog
-    'for all sprites':
-        'για όλα τα sprite',
-    'for this sprite only':
-        'μόνο για αυτό το sprite',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        'μετονομασία μόνο\nαυτής της ρεπόρτερ',
-    'rename all...':
-        'μετονομασία όλων...',
-    'rename all blocks that\naccess this variable':
-        'μετονομασιά όλων των μπλοκ,\nπου έχουν πρόσβαση σε αυτήν την μεταβλητή',
-
-
-    // block dialog
-    'Change block':
-        'Αλλαγή του μπλοκ',
-    'Command':
-        'Εντολή',
-    'Reporter':
-        'Αναφορέας',
-    'Predicate':
-        'Κατηγόρημα',
-
-    // block editor
-    'Block Editor':
-        'Επεξεργαστής του μπλοκ',
-    'Method Editor':
-        'Επεξεργαστής Μεθόδου',
-    'Apply':
-        'Εφαρμογή',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Διαγραφή προσαρμοσμένου μπλοκ',
-    'block deletion dialog text':
-        'Είστε σίγουροι ότι θέλετε να διαγράψετε αυτο το μπλολ\n' +
-        'Και όλων των εμφανίσεών του?',
-
-    // input dialog
-    'Create input name':
-        'Δημιουργία ονόματος τιμής',
-    'Edit input name':
-        'Επεξεργασία ονόματος τιμής',
-    'Edit label fragment':
-        'Επεξεργασία κομματιού της ετικέτας',
-    'Title text':
-        'Τίτλος κειμένου',
-    'Input name':
-        'Όνομα τιμής',
-    'Delete':
-        'Διαγραφή',
-    'Object':
-        'Αντικείμενο',
-    'Number':
-        'Νούμερο',
-    'Text':
-        'Κείμενο',
-    'List':
-        'Λίστα',
-    'Any type':
-        'Οποιουδήποτε τύπου ',
-    'Boolean (T/F)':
-        'Boolean Σωστό/Λάθος (Σ/Λ)',
-    'Command\n(inline)':
-        'Εντολή\n(στη σειρά)',
-    'Command\n(C-shape)':
-        'Εντολή\n(C-μορφή)',
-    'Any\n(unevaluated)':
-        'Οτιδήποτε\n(δεν έχει αξιολογηθεί)',
-    'Boolean\n(unevaluated)':
-        'Boolean(σωστό/λάθος)\n(δεν έχει αξιολογηθεί)',
-    'Single input.':
-        'Μία τιμή.',
-    'Default Value:':
-        'Προεπιλογή:',
-    'Multiple inputs (value is list of inputs)':
-        'Πολλές τιμές (η αξία είναι η λίστα με τις τιμές)',
-    'Upvar - make internal variable visible to caller':
-        'Κανε την παράμετρο ορατή προς τα έξω',
-
-    // About Snap
-    'About Snap':
-        'Πληροφορίες για το Snap',
-    'Back...':
-        'Πίσω...',
-    'License...':
-        'Άδιεα...',
-    'Modules...':
-        'Ενότητες...',
-    'Credits...':
-        'Συντελεστές...',
-    'Translators...':
-        'Μεταφραστές...',
-    'License':
-        'Άδεια',
-    'current module versions:':
-        'Τρέχουσα έκδοση των ενοτήτων',
-    'Contributors':
-        'Συντελεστές',
-    'Translations':
-        'Μεταφράσεις',
-
-    // variable watchers
-    'normal':
-        'κανονικό',
-    'large':
-        'μεγάλο',
-    'slider':
-        'Ρυθμιστής',
-    'slider min...':
-        'ελάχιστη αξία...',
-    'slider max...':
-        'μέγιστη αξία...',
-    'import...':
-        'εισαγωγή...',
-    'Slider minimum value':
-        'Ελάχιστη τιμή του ρυθμιστή',
-    'Slider maximum value':
-        'Μέγιστη τιμή του ρυθμιστή',
-
-    // list watchers
-    'length: ':
-        'μήκος: ',
-
-    // coments
-    'add comment here...':
-        'πρόσθεσε κάποιο σχόλιο εδώ...',
-    'comment pic...':
-        'εικόνα σχόλιου...',
-    'save a picture\nof this comment':
-        'αππθήκευση εικόνας\nαυτού του σχόλιου',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) δεξιά',
-    '(-90) left':
-        '(-90) αριστερά',
-    '(0) up':
-        '(0) πάνω',
-    '(180) down':
-        '(180) κάτω',
-    'random':
-    	'τυχαία',
-     'random position':
-     	'τυχαία θέση',
-
-    // collision detection
-    'mouse-pointer':
-        'δείκτης-ποντικιού',
-    'edge':
-        'άκρη',
-    'pen trails':
-        'ίχνοι στυλού',
-    'center':
-        'κέντρο',
-
-    // costumes
-    'Turtle':
-        'Χελώνα',
-    'Empty':
-        'Άδειο',
-    'Paint a new costume':
-        'Σχεδίαση νέου κοστουμιού',
-    'Camera':
-        'Κάμερα',
-
-    // sounds
-    'Record a new sound':
-        'Ηχογράφιση νέου ήχου',
-
-    // graphical effects
-    'ghost':
-        'φάντασμα',
-    'color':
-        'χρώμα',
-    'fisheye':
-        'μάτι ψαριού',
-    'whirl':
-        'στρέβλωση',
-    'pixelate':
-        'εικονοστοιχειοποίηση',
-    'mosaic':
-        'μωσαϊκό',
-    'negative':
-        'αρνητικό',
-
-    // keys
-    'space':
-        'κενό',
-    'up arrow':
-        'πάνω βέλος',
-    'down arrow':
-        'κάτω βέλος',
-    'right arrow':
-        'δεξί βέλος',
-    'left arrow':
-        'αριστερό βέλος',
-    'any key':
-        'οποιοδήποτε πλήκτρο',
-    'a':
-        'α',
-    'b':
-        'β',
-    'c':
-        'ψ',
-    'd':
-        'δ',
-    'e':
-        'ε',
-    'f':
-        'φ',
-    'g':
-        'γ',
-    'h':
-        'η',
-    'i':
-        'ι',
-    'j':
-        'ξ',
-    'k':
-        'κ',
-    'l':
-        'λ',
-    'm':
-        'μ',
-    'n':
-        'ν',
-    'o':
-        'ο',
-    'p':
-        'π',
-    'q':
-        'q',
-    'r':
-        'ρ',
-    's':
-        'σ',
-    't':
-        'τ',
-    'u':
-        'θ',
-    'v':
-        'ω',
-    'w':
-        'ς',
-    'x':
-        'χ',
-    'y':
-        'υ',
-    'z':
-        'ζ',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'νέο...',
-
-    // math functions
-    'abs':
-        'απόλυτη τιμή',
-    'floor':
-        'σε μορφή ακέραιου αριθμού',
-    'sqrt':
-        'ρίζα',
-    'sin':
-        'ημίτονο',
-    'cos':
-        'συνημίτονο',
-    'tan':
-        'εφαπτομένη',
-    'asin':
-        'τόξο ημιτόνου',
-    'acos':
-        'τόξο συνημιτόνου',
-    'atan':
-        'τόξο εφαπτομένης',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'όχι',
-
-    // delimiters
-    'letter':
-        'γράμμα',
-    'word':
-        'λέξη',
-    'whitespace':
-        'διάστημα',
-    'line':
-        'γραμμή',
-    'tab':
-        'tab',
-
-    // data types
-    'number':
-        'νούμερο',
-    'text':
-        'κείμενο',
-    'Boolean':
-        'Boolean',
-    'list':
-        'λίστα',
-    'command':
-        'εντολή',
-    'reporter':
-        'αναφορέας',
-    'predicate':
-        'κατηγορούμενο',
-    'sprite':
-        'φιγούρα',
-
-    // list indices
-    'last':
-        'τελευταίο',
-    'any':
-        'οποιοδήποτε',
-        
-    // attributes
-    'my':
-        'δικό μου',
-    'neighbors':
-        'κοντινοί',
-    'self':
-        'εαυτός μου',
-    'other sprites':
-        'άλλες φυγούρες',
-    'parts':
-        'μέρη',
-    'anchor':
-        'άγκυρα',
-    'parent':
-        'γονέας',
-    'temporary?':
-        'προσωρινό?',
-    'children':
-        'παιδιά',
-    'clones':
-        'κλώνοι',
-    'other clones':
-        'άλλοι κλώνοι',
-    'dangling?':
-        'κουνιέμαι?',
-    'draggable?':
-        'συρόμενο?',
-    'rotation style':
-        'στυλ περιστροφής',
-    'rotation x':
-        'περιστροφή x',
-    'rotation y':
-        'περιστροφή y',
-    'center x':
-        'κέντρο x',
-    'center y':
-        'κέντρο y',
-    'name':
-        'όνομα',
-    'costume':
-        'κοστούμι',
-    'stage':
-        'σκηνή',
-    'costumes':
-        'κοστούμια',
-    'sounds':
-        'ήχοι',
-    'scripts':
-        'σενάρια',
-    'width':
-        'πλάτος',
-    'height':
-        'ύψος',
-    'left':
-        'αριστερά',
-    'right':
-        'δεξιά',
-    'top':
-        'επάνω',
-    'bottom':
-        'κάτω',
-    'position':
-        'θέση',
-    'costume name':
-        'όνομα κοστουμιού',
-    'categories':
-        'κατηγορίες',
-        
-    // attributes in the SET block's dropdown
-    'my anchor':
-        'δικό μου άγκυρά',
-    'my parent':
-        'δικό μου γονέας',
-    'my name':
-        'δικό μου ονομά',
-    'my temporary?':
-        'δικό μου προσωρινός;',
-    'my dangling?':
-        'δικό μου κουνιέμαι;',
-    'my draggable?':
-        'δικό μου συρόμενο;',
-    'my rotation style':
-        'δικό μου στύλ περιστροφής',
-    'my rotation x':
-        'δικό μου x-περιστροφή',
-    'my rotation y':
-        'δικό μου y περιστροφή',
-
-    // inheritance
-    'inherited':
-        'κληρονομημένο',
-    'check to inherit\nfrom':
-        'επιλογή για κληρονόμηση\naπό',
-    'uncheck to\ndisinherit':
-        'αποεπιλογή για \nκατάργηση κληρονόμησης',
-
-    // editing slots inside variadic inputs
-    'insert a slot':
-        'εισαγωγή μιας θέσης',
-    'delete slot':
-        'διαγραφή θέσης',
-    'insert a variable':
-        'εισαγωγή μιας θέσης',
-    'delete variable':
-        'διαγραφή μεταβλητής',
-    'variable':
-        'μεταβλητή'
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) αριστερά",
+    "(0) up": "(0) πάνω",
+    "(180) down": "(180) κάτω",
+    "(90) right": "(90) δεξιά",
+    "(empty)": "(άδειο)",
+    "About Snap": "Πληροφορίες για το Snap",
+    "About...": "Περί του Snap!…",
+    "Add scene...": "Προσθήκη σκηνής...",
+    "Animations": "Animations (διάφορες κινήσεις)",
+    "Any (unevaluated)": "Οτιδήποτε (δεν έχει αξιολογηθεί)",
+    "Any type": "Οποιουδήποτε τύπου",
+    "Apply": "Εφαρμογή",
+    "Are you sure you want to delete": "Είστε σίγουροι ότι θέλετε να γίνει διαγραφή?",
+    "Back...": "Πίσω...",
+    "Backgrounds": "Yπόβαθρα",
+    "Block Editor": "Επεξεργαστής του μπλοκ",
+    "Blocks category name:": "Όνομα κατηγορίας μπλοκ:",
+    "Blurred shadows": "Θολές σκιές",
+    "Boolean": "Boolean",
+    "Boolean (T/F)": "Boolean Σωστό/Λάθος (Σ/Λ)",
+    "Boolean (unevaluated)": "Boolean(σωστό/λάθος) (δεν έχει αξιολογηθεί)",
+    "Bottom": "Κάτω",
+    "Brush size": "Μέγεθος πινέλου",
+    "Camera": "Κάμερα",
+    "Cancel": "Ακύρωση",
+    "Category color": "Χρώμα κατηγορίας",
+    "Change Password...": "Αλλαγή Συνθηματικού...",
+    "Change block": "Αλλαγή του μπλοκ",
+    "Clicking sound": "Ήχος του κλικ",
+    "Closed brush (free draw)": "Πινέλο (ελεύθερη σχεδίαση)",
+    "Command": "Εντολή",
+    "Command (C-shape)": "Εντολή (C-μορφή)",
+    "Command (inline)": "Εντολή (στη σειρά)",
+    "Constrain proportions of shapes? (you can also hold shift)": "Ενεργοποίηση περιορισμού σχημάτων (εναλλακτικά πατώντας shift)",
+    "Contributors": "Συντελεστές",
+    "Control": "Έλεγχος",
+    "Costume Editor": "Επεξεργαστής κουστουμιών",
+    "Costumes": "Κοστούμια",
+    "Create input name": "Δημιουργία ονόματος τιμής",
+    "Create variables in program": "Δημιουργία μεταβλητών σε πρόγραμμα",
+    "Credits...": "Συντελεστές...",
+    "Default": "Προεπιλογή",
+    "Default Value:": "Προεπιλογή:",
+    "Delete": "Διαγραφή",
+    "Delete Custom Block": "Διαγραφή προσαρμοσμένου μπλοκ",
+    "Delete Project": "Διαγραφή Εργασίας",
+    "Delete a variable": "Κάτάργηση μιας μεταβλητής",
+    "Down": "προς τα κάτω",
+    "Download source": "Κατέβασε των πηγαίο κώδικα",
+    "Dynamic input labels": "Ετικέτες για τις δυναμικές τιμές",
+    "Edit input name": "Επεξεργασία ονόματος τιμής",
+    "Edit label fragment": "Επεξεργασία κομματιού της ετικέτας",
+    "Ellipse (shift: circle)": "Έλλειψη (Shift: κύκλος)",
+    "Empty": "Άδειο",
+    "Eraser tool": "Σβήστρα",
+    "Examples": "Παραδείγματα",
+    "Export blocks": "Εξαγωγή των μπλοκ",
+    "Export blocks...": "Εξαγωγή των μπλοκ...",
+    "Export project as plain text...": "Εξαγωγη της εργασίας ως σκέτο κείμενο...",
+    "Export project...": "Εξαγωγή εργασίας...",
+    "Fade blocks": "Ξεθώριασμα μπλοκ",
+    "Fade blocks...": "Ξεθώριασμα μπλοκ...",
+    "Fill a region": "Γέμισε μια περιοχή",
+    "Filled Ellipse (shift: circle)": "Γεμάτη Έλλειψη (Shift: κύκλος)",
+    "Filled Rectangle (shift: square)": "Γεμάτο Ορθογώνιο (Shift: τετράγωνο)",
+    "Flat design": "Επίπεδη σχεδίαση",
+    "HSL pen color model": "Χρωματικό μοντέλο στυλού HSL",
+    "Hello!": "Γεια!",
+    "Help": "Βοήθεια",
+    "Hide blocks in palette": "Απόκρυψη μπλοκ στην παλέτα",
+    "Hide blocks...": "Απόκρυψη μπλοκ...",
+    "Hmm...": "Μμμ...",
+    "Import blocks": "Εισαγωγή των μπλοκ",
+    "Import library": "Εισαγωγή βιβλιοθήκης",
+    "Import tools": "Εισαγωγή εργαλείων",
+    "Import...": "Εισαγωγή...",
+    "Imported": "Εισάχθηκε",
+    "Input Names:": "Ονόματα τιμών:",
+    "Input name": "Όνομα τιμής",
+    "Input sliders": "Ρυθμιστής τιμής",
+    "JavaScript extensions": "Επεκτάσεις JavaScript",
+    "JavaScript function ( _ ) { _ }": "JavaScript συνάρτηση( _ ) { _ }",
+    "Language...": "Γλώσσα...",
+    "Libraries...": "Βιβλιοθήκες...",
+    "License": "Άδεια",
+    "License...": "Άδιεα...",
+    "Line tool (shift: constrain to 45º)": "Ευθεία γραμμή (Shift: περιορισμός σε 45°)",
+    "Line tool (shift: vertical/horizontal)": "Ευθεία γραμμή (Shift: κάθετη/οριζόντια)",
+    "List": "Λίστα",
+    "Lists": "Λίστες",
+    "Loading": "Φόρτωση",
+    "Login...": "Σύνδεση...",
+    "Long form input dialog": "Χρησιμοποιήστε το παράθυρο της εκτεταμένης τιμής",
+    "Looks": "Εμφάνιση",
+    "Make a block": "Δημιούργησε ένα μπλοκ",
+    "Make a variable": "Δημιούργησε μία μεταβλητή",
+    "Message name": "όνομα μηνύματος",
+    "Method Editor": "Επεξεργαστής Μεθόδου",
+    "Microphone": "Μικρόφωνο",
+    "Microphone resolution...": "Ανάλυση μικροφώνου...",
+    "Modules...": "Ενότητες...",
+    "Motion": "Κίνηση",
+    "Multiple inputs (value is list of inputs)": "Πολλές τιμές (η αξία είναι η λίστα με τις τιμές)",
+    "New": "Νέο",
+    "New Category": "Νέα κατηγορία",
+    "New Project": "Νέα Εργασία",
+    "New category...": "Νέα κατηγορία...",
+    "New scene": "Νέα σκηνή",
+    "No": "Όχι",
+    "Number": "Νούμερο",
+    "OK": "OK",
+    "Object": "Αντικείμενο",
+    "Ok": "Oκ",
+    "Open Project": "Άνοιγμα Εργασίας",
+    "Open in Community Site": "Άνοιγμα στην Ιστοσελίδα Κοινότητας",
+    "Open...": "Άνοιγμα...",
+    "Operators": "Τελεστές",
+    "Other": "Άλλο",
+    "Paint Editor": "Επεξεργαστής ζωγραφικής",
+    "Paint a new costume": "Σχεδίαση νέου κοστουμιού",
+    "Paint a shape (shift: secondary color)": "Ζωγράφισε ένα σχήμα (Shift: δευτερεύων χρώμα)",
+    "Paintbrush tool (free draw)": "Πινέλο (ελεύθερη σχεδίαση)",
+    "Pen": "Στυλό",
+    "Pipette tool (pick a color anywhere)": "Επιλογή χρώματος (διάλεξε ένα χρώμα από όπουδήποτε)",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "Εργαλείο επιλογής χρώματος (διάλεξε ένα χρώμα από οπουδήποτε shift: δευτερεύων χρώμα)",
+    "Play": "Παίξημο",
+    "Play sound": "Παίξημο ήχου",
+    "Predicate": "Κατηγόρημα",
+    "Prefer empty slot drops": "Ευνοούν την προσκόλληση σε κενές θέσεις",
+    "Prefer smooth animations": "Ευνοεί ομαλά animations",
+    "Primary color Secondary color": "Πρωτεύων χρώμα Δευτερεύων χρώμα",
+    "Project Notes": "Σχόλια Εργασίας",
+    "Project notes...": "Σημειώσης πάνω στην εργασία...",
+    "Publish": "Δημοσίευση",
+    "Record a new sound": "Ηχογράφιση νέου ήχου",
+    "Recover": "Αποκατάσταση",
+    "Rectangle (shift: square)": "Ορθογώνιο (Shift: τετράγωνο)",
+    "Reference manual": "Εγχειρίδιο αναφοράς",
+    "Remove a category...": "Διαγραφή κατηγορίας...",
+    "Replace the current project with a new one?": "Θέλετε να αντικαταστήσετε την τρέχουσα εργασία με μία καινούρια?",
+    "Reporter": "Αναφορέας",
+    "Resend Verification Email...": "Επαναποστολή Email Επιβεβαίωσης...",
+    "Reset Password...": "Επαναφορά Συνθηματικού...",
+    "Save": "Αποθήκευση",
+    "Save As...": "Αποθήκευση Ως...",
+    "Save Project": "Αποθήκευση Εργασίας",
+    "Save Project As...": "Αποθήκευση Εργασίας Ως...",
+    "Save to disk": "Αποθήκευση στο δίσκο",
+    "Saved!": "Αποθηκεύτηκε!",
+    "Scenes...": "Σκηνές...",
+    "Script variable name": "Όνομα μεταβλητής του σεναρίου",
+    "Scripts": "Σενάρια",
+    "Selection tool": "Εργαλείο επιλογής",
+    "Sensing": "Αισθητήρες",
+    "Set the rotation center": "Θέσε το κέντρο περιστροφής",
+    "Share": "Κοινοποίηση",
+    "Show buttons": "Εμφάνιση κουμιών",
+    "Show categories": "Εμφάνιση κατηγοριών",
+    "Signup...": "Εγγραφή...",
+    "Single input.": "Μία τιμή.",
+    "Single palette": "Μονή παλέτα",
+    "Slider maximum value": "Μέγιστη τιμή του ρυθμιστή",
+    "Slider minimum value": "Ελάχιστη τιμή του ρυθμιστή",
+    "Snap! website": "Snap! Ιστοσελίδα",
+    "Sound": "Ήχος",
+    "Sounds": "Ήχοι",
+    "Sprite": "Φιγούρα",
+    "Stage": "Σκηνή",
+    "Stage height": "Ύψος σκηνής",
+    "Stage selected: no motion primitives": "Επιλεγμένο Σταδιο: χωρίς αρχέτυπο κίνησης",
+    "Stage size": "Μέγεθος σκηνής",
+    "Stage size...": "Μέγεθος σκηνής...",
+    "Stage width": "Πλάτος σκηνής",
+    "Stop": "Διακοπή",
+    "Stop sound": "Διακοπή ήχου",
+    "Stroked Ellipse (shift: circle)": "Έλλειψη (Shift: κύκλος)",
+    "Stroked Rectangle (shift: square)": "Ορθογώνιο (Shift: τετράγωνο)",
+    "Switch back to user mode": "Επιστροφη στην λειτουργία του χρήστη",
+    "Switch to dev mode": "Εναλλαγή σε λειτουργία ανάπτυξη",
+    "Table lines": "Γραμμές πίνακα",
+    "Table support": "Υποστήριξη πίνακα",
+    "Table view": "Προβολή πίνακα",
+    "Text": "Κείμενο",
+    "Text to speech": "Κείμενο σε ομιλία",
+    "Thread safe scripts": "Thread safe κώδικας",
+    "Title text": "Τίτλος κειμένου",
+    "Today": "Σήμερα",
+    "Top": "Πάνω",
+    "Translations": "Μεταφράσεις",
+    "Translators...": "Μεταφραστές...",
+    "Turbo mode": "Λειτουργία Τούρμπο",
+    "Turtle": "Χελώνα",
+    "Unshare": "Κατάργηση κοινοποίησης",
+    "Untitled": "Χωρίς Τίτλο",
+    "Unused blocks...": "Αχρησιμοποίητα μπλοκ...",
+    "Up": "προς τα πάνω",
+    "Updating project list...": "Ενημέρωση λίστας έργων...",
+    "Upvar - make internal variable visible to caller": "Κανε την παράμετρο ορατή προς τα έξω",
+    "Variable name": "Όνομα μεταβλητής",
+    "Variables": "Μεταβλητές",
+    "Variadic reporters": "Ποίκιλα reporter",
+    "Vector": "Διανυσματική Σχεδίαση",
+    "Vector Paint Editor": "Επεξεργαστής Διανυσματικών γραφικών",
+    "Virtual keyboard": "Εικονικό Πληκτρολόγιο",
+    "Visible stepping": "Ορατός βηματισμός",
+    "Words, sentences": "Λέξεις, φράσεις",
+    "Yes": "Ναι",
+    "Yesterday": "Χτές",
+    "Zebra coloring": "Χρωματισμός ζέβρα",
+    "Zoom blocks": "μεγένθυση των μπλοκ",
+    "Zoom blocks...": "Μεγέθυνση των μπλοκ…",
+    "_ at _": "_ στο _",
+    "_ combine _ using _": "_ συνδύασε το _ χρησιμοποιόντας _",
+    "_ contains _": "_ περιέχει το _",
+    "_ effect": "_ εφέ",
+    "_ find first item _ in _": "_ βρές το πρώτο στοχείo _ στο _",
+    "_ in front of _": "_ μπροστά από το _",
+    "_ keep items _ from _": "_ κρατήσε στοιχεία _ από το _",
+    "_ map _ over _": "_ χαρτογράφηση _ επάνω στο _",
+    "_ mod _": "το υπόλοιπο του _ διαίρεμενο από _",
+    "_ of _": "_ του _",
+    "_ of block _": "_ του μπλοκ _",
+    "_ of costume _": "_ του κοστουμιού _",
+    "_ of sound _": "_ του ήχου _",
+    "_ to _": "_ από _",
+    "a": "α",
+    "a new clone of _": "ένας νέος κλώνος του _",
+    "abs": "απόλυτη τιμή",
+    "acos": "τόξο συνημιτόνου",
+    "add _ to _": "πρόσθεσε το _ στο _",
+    "add a new Turtle sprite": "πρόσθεσε μια καινούρα φιγούρα χελώνα",
+    "add a new sprite": "προσθέστε μια νέα φιγούρα",
+    "add comment": "δημιουργία σχόλιου",
+    "add comment here...": "πρόσθεσε κάποιο σχόλιο εδώ...",
+    "alert _": "ειδοποίηση: _",
+    "all": "όλα",
+    "all <": "όλα <",
+    "all =": "όλα =",
+    "all >": "όλα >",
+    "all but first of _": "όλα εκτός από το πρώτο του _",
+    "all but this script": "τα πάντα εκτός από αυτό το σενάριο",
+    "all identical": "όλα παρόμια",
+    "all scenes": "όλες τις σκηνές",
+    "all ≤": "όλα ≤",
+    "all ≥": "όλα ≥",
+    "anchor": "άγκυρα",
+    "and": "και",
+    "and send": "και στείλε",
+    "answer": "απάντηση",
+    "any": "οποιοδήποτε",
+    "any key": "οποιοδήποτε πλήκτρο",
+    "any message": "οποιοδήποτε μήνυμα",
+    "anything": "οτιδηποτε",
+    "append _": "προσάρτηση _",
+    "arrange scripts vertically": "οργάνωση ου κώδικα κάθετα",
+    "asin": "τόξο ημιτόνου",
+    "ask _ and wait": "ρώτα _ και περίμενε",
+    "ask _ for _ _": "ρώτα το _ για _ _",
+    "atan": "τόξο εφαπτομένης",
+    "b": "β",
+    "back": "πίσω",
+    "balance": "ισορροπία",
+    "big (2x)": "μεγάλο (2x)",
+    "block": "μπλοκ",
+    "block deletion dialog text": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτο το μπλολ Και όλων των εμφανίσεών του?",
+    "block variables...": "μεταβλητές μπλοκ...",
+    "block-solid (0)": "συμπαγές-εντολή (0)",
+    "blockify": "ως εντολή",
+    "blocks": "μπλοκ",
+    "blue": "μπλε",
+    "bottom": "κάτω",
+    "brightness": "φωτεινότητα",
+    "broadcast _ _": "στείλε το _ _",
+    "broadcast _ _ and wait": "στείλε το _ _ και περίμενε",
+    "build": "κατασκευή",
+    "c": "ψ",
+    "call _ _": "κάλεσε _ επάνω σε _",
+    "call _ w/continuation": "κάλεσε _ με συνέχεια",
+    "caller": "καλούντος",
+    "can rotate": "με δυνατότητα περιστροφής",
+    "categories": "κατηγορίες",
+    "category": "κατηγορία",
+    "center": "κέντρο",
+    "center x": "κέντρο x",
+    "center y": "κέντρο y",
+    "change _ by _": "άλλαξε το _ κατά _",
+    "change _ effect by _": "άλλαξε το εφέ _ κατά _",
+    "change background _ by _": "άλλαξε υπόβαθρο _ κατά _",
+    "change balance by _": "άλλαξε την ισορροπία κατά _",
+    "change pen _ by _": "άλλαξε _ του στυλού κατά _",
+    "change pen shade by _": "άλλαξε την σκιά του στυλού κατά _",
+    "change pen size by _": "άλλαξε το μέγεθος του στυλού κατά _",
+    "change size by _": "άλλαξε το μέγεθος κατά _",
+    "change tempo by _": "άλλαξε την ταχύτητα του ρυθμού κατά _",
+    "change volume by _": "άλλαξε την ένταση κατά _",
+    "change x by _": "άλλαξε το x κατά _",
+    "change y by _": "άλλαξε το y κατά _",
+    "check for alternative GUI design": "ενεργοποιήστε για εναλακτική σχεδίαση GUI",
+    "check for smooth, predictable animations across computers": "ενεργοποιήστε για ομαλά, προβλέψημα animations στους υπολογιστές",
+    "check to always show slot types in the input dialog": "ενεργοποιήστε για να εμφανίζετε πάντα ο τύπος τον κενών για τις τιμές",
+    "check to disallow script reentrance": "ενεργοποιήστε για να μην επιτρέπετε η επανεισδοχή στον κώδικα",
+    "check to enable IDE animations": "ενεργοποιήστε για να εχετε IDE animations",
+    "check to enable alternating colors for nested blocks": "ενεργοποιήστε για να εμφανίσετε εναλασσόμενα χρώματα για τα ένθετα μπλοκ",
+    "check to enable dynamic labels for variadic inputs": "ενεργοποιήστε για να εμφανίσετε τις δυναμικες ετικέτες για μεταβλητές τιμές",
+    "check to enable input sliders for entry fields": "ενεργοποιήστε για να έχετε ρυθμιστές τιμών για τα πεδία εισαγωγής",
+    "check to enable virtual keyboard support for mobile devices": "ενεργοποιήστε για να έχετε το εικονοκό πληκτρολόγιο στο κινητό σας",
+    "check to inherit from": "επιλογή για κληρονόμηση aπό",
+    "check to prioritize script execution": "ενεργοποιήστε για να βάλετε σε προτεραιότητα την εκτέλεση του κώδικα",
+    "check to show all blocks in a single palette": "ενεργοποιήστε για να εμφανίσετε όλα τα μπλοκ σε μονή παλέτα",
+    "check to show buttons in the palette": "ενεργοποιήστε για να εμφανίσετε τα κουμιά στην παλέτα",
+    "check to show category names in the palette": "ενεργοποιήστε για να εμφανίσετε τα ονόματα κατηγοριών στην παλέτα",
+    "check to turn block clicking sound on": "ενεργοποιήστε για να έχετε τον ήχο του κλικ",
+    "check to use blurred drop shadows and highlights": "ενεργοποιήστε για να εμφανίσετε την σκίαση και τα θολά σήματα",
+    "children": "παιδιά",
+    "clean up": "καθαρισμός",
+    "clear": "καθαρισμός",
+    "clear graphic effects": "καθάρισε τα γραφικά εφέ",
+    "click or drag crosshairs to move the rotation center": "Κάντε κλικ ή ρύρετε το στόχαστρο για να μετακινήσετε το άξονα περιστροφής",
+    "clicked": "να μου κάνουν κλικ",
+    "clone": "κλωνοποίηση",
+    "clones": "κλώνοι",
+    "color": "χρώμα",
+    "color _ is touching _ ?": "χρώμα _ ακουμπάει _ ?",
+    "columns": "στείλες",
+    "combinations _": "συνδιασμοί _",
+    "combine _ using _": "συνδύασε το _ χρησιμοποιόντας _",
+    "command": "εντολή",
+    "comment pic...": "εικόνα σχόλιου...",
+    "compile": "μεταγλώτηση",
+    "compile _": "μεταγλώττισε _",
+    "console log _": "γράψτε στην κονσόλα: _",
+    "continuation": "συνέχια",
+    "cos": "συνημίτονο",
+    "costume": "κοστούμι",
+    "costume #": "κοστούμι #",
+    "costume name": "όνομα κοστουμιού",
+    "costumes": "κοστούμια",
+    "costumes tab help": "εισαγωγή εικόνας από τον υπολογιστή σας ή μια ιστοσελίδασέρνοντας την εικόνα στην περιοχή των κοστουμιών",
+    "create a clone of _": "δημιούργησε έναν κλώνο του _",
+    "current": "τρέχον",
+    "current _": "τρέχων _",
+    "current module versions:": "Τρέχουσα έκδοση των ενοτήτων",
+    "custom?": "προσαρμοσμένο?",
+    "cut from _": "αποκοπή από το _",
+    "d": "δ",
+    "dangling?": "κουνιέμαι?",
+    "data": "δεδομένα",
+    "date": "ημερομηνία",
+    "day of week": "ημέρα της εβδομάδας",
+    "defaults": "προεπιλογές",
+    "define _ _ _": "ορισμός _ _ _",
+    "definition": "ορισμός",
+    "delete": "διαγραφή",
+    "delete _ of _": "κατάργησε το _ του _",
+    "delete a category...": "διαγραφή μιας κατηγορίας...",
+    "delete block _": "διαγραφή μπλοκ _",
+    "delete block definition...": "διαγραφή του προσαρμοσμένου μπλοκ",
+    "delete slot": "διαγραφή θέσης",
+    "delete this clone": "κατάργησε αυτόν τον κλόνο",
+    "delete variable": "διαγραφή μεταβλητής",
+    "demo (1.2x)": "επίδειξη (1.2x)",
+    "detach all parts": "αποσύνδεση όλων των κομματιών",
+    "detach from": "αποσύνδεση από",
+    "development mode": "λειτουργία ανάπτυξης",
+    "development mode debugging primitives:": "λειτουργία ανάπτυξης αρχέτυπα debugging",
+    "dimensions": "διαστάσεις",
+    "direction": "κατεύθυνση",
+    "disable deep-Morphic context menus and show user-friendly ones": "verlässt Morphic",
+    "distance": "απόσταση",
+    "don't rotate": "χωρίς δυνατότητα περιστροφής",
+    "down arrow": "κάτω βέλος",
+    "draggable": "συρόμενο",
+    "draggable?": "συρόμενο?",
+    "dropped": "να με αφήνουν",
+    "duplicate": "διπλασίαση",
+    "duplicate block definition...": "διπλασιασμός του προσαρμοσμένου μπλοκ",
+    "duration": "διάρκεια",
+    "e": "ε",
+    "e^": "e^",
+    "edge": "άκρη",
+    "edit": "επεξεργασία",
+    "edit...": "επεξεργασία...",
+    "editables": "επεξεργάσιμα",
+    "elegant (90)": "κομψό (90)",
+    "enable Morphic context menus and inspectors, not user-friendly!": "ermöglicht Morphic Funktionen",
+    "export": "εξαγωγή",
+    "export block definition...": "εξαγωγή του προσαρμοσμένου μπλοκ",
+    "export...": "εξαγωγή...",
+    "extract": "εξαγωγή",
+    "f": "φ",
+    "false": "λάθος",
+    "file menu import hint": "μπορείτε να φορτώσετε ένα αρχείο από το browser σας στον κατάλογο του ήχου η τωνκοστουμιών που",
+    "fill": "γέμισμα",
+    "filtered for _": "φίλτραρε για _",
+    "find blocks": "εύρεση μπλοκ",
+    "find first item _ in _": "βρές το πρώτο στοχείo _ στο _",
+    "find unused global custom blocks and remove their definitions": "βρείτε αχρησιμοποίητα καθολικά μπλοκ και αφαίρεσε τους ορισμούς τους",
+    "fisheye": "μάτι ψαριού",
+    "flatten": "ισοπέδωση",
+    "flip ↔": "εναλλαγή ↔",
+    "flip ↕": "εναλλαγή ↕",
+    "floor": "σε μορφή ακέραιου αριθμού",
+    "for _ = _ to _ _": "για _ = _ ως _ _",
+    "for all sprites": "για όλα τα sprite",
+    "for each _ in _ _": "για κάθε _ στο _ _",
+    "for this sprite only": "μόνο για αυτό το sprite",
+    "forever _": "για πάντα _",
+    "frames": "κάδρα",
+    "frequency": "συχνόντητα",
+    "front": "μπροστά",
+    "g": "γ",
+    "ghost": "φάντασμα",
+    "giant (8x)": "γιγαντιαίο (8x)",
+    "glide _ secs to x: _ y: _": "γλίστρα _ δευτ. μέχρι το x: _ y: _",
+    "global?": "καθολικό?",
+    "go back _ layers": "πήγαινε πίσω _ στρώματα",
+    "go to _": "πήγαινε στο _",
+    "go to _ layer": "πήγαινε _",
+    "go to front": "πήγαινε μπροστά",
+    "go to x: _ y: _": "πήγαινε στο x: _ y: _",
+    "green": "πράσινο",
+    "grow": "μεγάλωσε",
+    "h": "η",
+    "height": "ύψος",
+    "hello": "γεια",
+    "help": "Βοήθεια",
+    "help...": "βοήθεια...",
+    "hide": "κρύψου",
+    "hide blocks...": "απόκρυψη μπλοκ...",
+    "hide primitives": "Απόκρυψη αρχέτυπων",
+    "hide variable _": "κρύψε το _",
+    "high": "υψηλό",
+    "hour": "ώρα",
+    "http:// _": "http:// _",
+    "hue": "απόχρωση",
+    "huge (4x)": "πολύ μεγάλο (4x)",
+    "i": "ι",
+    "identical to": "παρόμοιο με το",
+    "if _ _": "αν _ _",
+    "if _ _ else _": "αν _ _ αλλιώς _",
+    "if _ then _ else _": "αν _ τότε _ αλλιώς _",
+    "if on edge, bounce": "αν είσαι σε άκρο, πήδα",
+    "import a sound from your computer by dragging it into here": "εισαγωγή ήχου από τον υπολογιστή σας σέρνοντας το αρχείο του ήχου εδώ",
+    "import...": "εισαγωγή...",
+    "in palette": "στην παλέτα",
+    "index": "εύρος",
+    "index of _ in _": "εύρεση του _ σε _",
+    "inherit _": "Κληρονόμησε _",
+    "inherited": "κληρονομημένο",
+    "input list:": "λίστα τιμών:",
+    "input names:": "ονόματα τιμών:",
+    "inputs": "εισόδους",
+    "insert _ at _ of _": "εισήγαγε το _ στο _ του _",
+    "insert a slot": "εισαγωγή μιας θέσης",
+    "insert a variable": "εισαγωγή μιας θέσης",
+    "is _ ?": "είναι το _ ?",
+    "is _ a _ ?": "είναι το _ καποιο _ ;",
+    "is _ empty?": "είναι το _ κενό?",
+    "is _ identical to _ ?": "είναι το _ παρόμοιο με το _ ?",
+    "is _ on?": "είναι το _ ενεργό;",
+    "item": "στοιχείο",
+    "item _ of _": "στοιχείο _ του _",
+    "items": "αντικείμενα",
+    "j": "ξ",
+    "join _": "συνένωσε _",
+    "k": "κ",
+    "keep items _ from _": "κρατήσε στοιχεία _ από το _",
+    "key _ pressed?": "είναι το πλήκτρο _ πατημένο;",
+    "l": "λ",
+    "label": "ετικέτα",
+    "language_name": "Ελληνικά",
+    "language_translator": "Ino Samaras, Alexandros Prekates, HM100",
+    "large": "μεγάλο",
+    "last": "τελευταίο",
+    "last_changed": "2023-04-15",
+    "launch _ _": "ξεκίνα _ επάνω σε _",
+    "left": "αριστερά",
+    "left arrow": "αριστερό βέλος",
+    "length": "μήκος",
+    "length of _": "μήκος του _",
+    "length:": "μήκος:",
+    "letter": "γράμμα",
+    "letter _ of _": "γράμμα _ του _",
+    "light (70)": "απαλό (70)",
+    "line": "γραμμή",
+    "lines": "γραμμές",
+    "list": "λίστα",
+    "list _": "λίστα _",
+    "list view...": "προβολή λίστας...",
+    "ln": "ln",
+    "load the official library of powerful blocks": "Φόρτωση της επίσημης βιβλιοθήκης των δυναμικών μπλοκ",
+    "low": "χαμηλό",
+    "m": "μ",
+    "make a block...": "δημιουργία ενός μπλοκ...",
+    "make a category...": "δημιουργία μιας κατηγορίας...",
+    "make a copy and pick it up": "δημιουργία αντίγραφου και κράτηση του",
+    "map _ over _": "χαρτογράφηση _ επάνω στο _",
+    "max": "μέγιστο",
+    "maximum": "μέγιστο",
+    "medium (50)": "μέτριο (50)",
+    "menus": "μενού",
+    "message": "μήνυμα",
+    "microphone _": "μικρόφωνο _",
+    "minimum": "ελάχιστο",
+    "minute": "λεπτά",
+    "mirror video": "κατοπτρισμός βίντεο",
+    "monstrous (10x)": "τεράστιο (10x)",
+    "month": "μήνας",
+    "mosaic": "μωσαϊκό",
+    "motion": "κίνηση",
+    "mouse down?": "είναι το ποντικι κάτω;",
+    "mouse position": "θέση ποντικιού",
+    "mouse x": "ποντίκι x-θέση",
+    "mouse y": "ποντίκι y-θέση",
+    "mouse-departed": "να εξέρχεται ο δείκτης του ποντικίου",
+    "mouse-entered": "να εισέρχεται ο δείκτης του ποντικίου",
+    "mouse-pointer": "δείκτης-ποντικιού",
+    "move _ steps": "κάνε _ βήματα",
+    "my": "δικό μου",
+    "my _": "το δικό μου _",
+    "my anchor": "δικό μου άγκυρά",
+    "my dangling?": "δικό μου κουνιέμαι;",
+    "my draggable?": "δικό μου συρόμενο;",
+    "my name": "δικό μου ονομά",
+    "my parent": "δικό μου γονέας",
+    "my rotation style": "δικό μου στύλ περιστροφής",
+    "my rotation x": "δικό μου x-περιστροφή",
+    "my rotation y": "δικό μου y περιστροφή",
+    "my temporary?": "δικό μου προσωρινός;",
+    "myself": "ο εαυτός μου",
+    "n": "ν",
+    "name": "όνομα",
+    "negative": "αρνητικό",
+    "neighbors": "κοντινοί",
+    "neighbors ≠": "γειτόνοι ≠",
+    "new costume _ width _ height _": "νέο κοστούμι _ πλάτος _ ύψος _",
+    "new line": "νέα γραμμή",
+    "new sound _ rate _ Hz": "νέος ήχος _ ταχύτητα _ Hz",
+    "new...": "νέο...",
+    "next": "επόμενη",
+    "next costume": "επόμενο κοστούμι",
+    "none": "τίποτα",
+    "normal": "κανονικό",
+    "normal (1x)": "κανονικό (1x)",
+    "not": "όχι",
+    "not _": "όχι το _",
+    "number": "νούμερο",
+    "number of channels": "αριθμός καναλιών",
+    "numbers from _ to _": "νούμερα από το _ εως το _",
+    "o": "ο",
+    "object _": "αντικείμενο _",
+    "only duplicate this block": "διπλασίαση μόνο αυτού του μπλοκ",
+    "only face left/right": "με κατεύθυνση μόνο αριστερά/δεξιά",
+    "only grab this block": "αρπαγή μόνο αυτού του μπλοκ",
+    "open a new window with a picture of all scripts": "άνοιγμα νέου παραθύρου με μια εικόνα όλου του κώδικα",
+    "open a new window with a picture of the stage": "άνοιγμα νέου παραθύρου με την εικόνα της σκηνής",
+    "open a new window with a picture of this script": "άνοιγμα νέου παραθύρου με την εικόνα αυτού του κώδικα",
+    "open in dialog...": "άνοιγμα σε παράθηρο διαλόγου...",
+    "or": "ή",
+    "other clones": "άλλοι κλώνοι",
+    "other scripts in sprite": "τα υπόλοιπα σενάρια της φιγούρας",
+    "other sprites": "άλλες φυγούρες",
+    "p": "π",
+    "paint a new sprite": "ζωγράφισε μια καινούργια φιγούρα",
+    "parent": "γονέας",
+    "parts": "μέρη",
+    "paste on _": "επικόλληση στο _",
+    "pause all _": "κάνε παύση σε όλα _",
+    "pen _": "στυλό _",
+    "pen down": "στυλό κάτω",
+    "pen down?": "στυλό κάτω;",
+    "pen trails": "ίχνοι στυλού",
+    "pen up": "στυλό πάνω",
+    "pic...": "εικόνα...",
+    "pick random _ to _": "δίαλεξε στην τύχη μεταξύ του _ και του _",
+    "pixelate": "εικονοστοιχειοποίηση",
+    "pixels": "πίξελ",
+    "play _ Hz for _ secs": "παίξε _ Hz για _ δευτ.",
+    "play frequency _ Hz": "παίξε συχνότητα _ Hz",
+    "play note _ for _ beats": "παίξε την νότα _ για _ ρυθμούς",
+    "play sound _": "παίξε τον ήχο _",
+    "play sound _ at _ Hz": "παίξε τον ήχο _ στα _ Hz",
+    "play sound _ until done": "παίξε τον ήχο _ μέχρι να τελειώσει",
+    "point in direction _": "κοίτα προς την κατεύθυνση _",
+    "point towards _": "κοίτα προς _",
+    "position": "θέση",
+    "predicate": "κατηγορούμενο",
+    "presentation (1.4x)": "παρουσίαση (1.4x)",
+    "pressed": "να με πατάνε",
+    "previous": "προηγούμενη",
+    "product": "γινόμενο",
+    "q": "q",
+    "r": "ρ",
+    "random": "τυχαία",
+    "random position": "τυχαία θέση",
+    "rank": "κατάταξη",
+    "red": "κόκκινο",
+    "relabel...": "μετονόμαση...",
+    "release": "απελευθέρωση",
+    "rename": "μετονόμαση",
+    "rename all blocks that access this variable": "μετονομασιά όλων των μπλοκ, που έχουν πρόσβαση σε αυτήν την μεταβλητή",
+    "rename all...": "μετονομασία όλων...",
+    "rename costume": "μετονόμαση κοστουμιού",
+    "rename only this reporter": "μετονομασία μόνο αυτής της ρεπόρτερ",
+    "rename sound": "μετονόμαση ήχου",
+    "rename...": "μετονόμαση...",
+    "repeat _ _": "επανέλαβε _ _",
+    "repeat until _ _": "επανέλαβε μέχρι _ _",
+    "replace item _ of _ with _": "αντικατέστησε το στοιχείο _ του _ με _",
+    "report _": "δήλωσε _",
+    "reporter": "αναφορέας",
+    "reset columns": "επαναφορά στήλων",
+    "reset timer": "επανέφερε το χρονόμετρο",
+    "reshape _ to _": "ανασχημάτιση του _ σε _",
+    "resolution": "ανάλυση",
+    "rest for _ beats": "κάνε παύση για _ ρυθμούς",
+    "result pic...": "εικόνα του αποτελεσμάτος...",
+    "reverse": "αναστροφή",
+    "right": "δεξιά",
+    "right arrow": "δεξί βέλος",
+    "ringify": "εισαγωγή σε δαχτυλίδι",
+    "rotation style": "στυλ περιστροφής",
+    "rotation x": "περιστροφή x",
+    "rotation y": "περιστροφή y",
+    "round _": "_ στρογγυλοποιημένο",
+    "run _ _": "εκτέλεσε _ επάνω σε _",
+    "run _ w/continuation": "εκτέλεσε _ με συνέχεια",
+    "s": "σ",
+    "sample rate": "ταχύτητα δείγματος",
+    "samples": "δείγματα",
+    "saturation": "κορεσμός",
+    "save a picture of this comment": "αππθήκευση εικόνας αυτού του σχόλιου",
+    "save a picture of this script": "αποθήκευση εικόνας αυτού του κώδικα",
+    "say _": "πες _",
+    "say _ for _ secs": "πες _ για _ δευτ.",
+    "scope": "έκταση",
+    "script": "σενάριο",
+    "script pic...": "εικόνα του κώδικα...",
+    "script variables _": "μεταβλητές του σεναρίου _",
+    "scripts": "σενάρια",
+    "scripts pic...": "εικόνα του κώδικα...",
+    "scrolled-down": "κύλιση-κάτω",
+    "scrolled-up": "κύλιση-πάνω",
+    "second": "δευτερόλεπτα",
+    "select": "επιλογή",
+    "self": "εαυτός μου",
+    "send _ to _": "αποστολή του _ στο _",
+    "set _ effect to _": "θέσε το εφέ _ να είναι _",
+    "set _ of block _ to _": "θέσε _ της εντολής _ σε _",
+    "set _ to _": "θέσε το _ να είναι _",
+    "set background _ to _": "θέσε υπόβαθρο _ να είναι _",
+    "set background color to _": "θέσε το χρώμα του υπόβαθρου να έιναι _",
+    "set balance to _": "θέσε την ισορροπία να είναι _",
+    "set instrument to _": "θέσε το όργανο σε _",
+    "set pen _ to _": "θέσε _ του στυλού να είναι _",
+    "set pen color to _": "θέσε το χρώμα του στυλού να είναι _",
+    "set pen shade to _": "θέσε την σκιά του στυλού να είναι _",
+    "set pen size to _": "θέσε το μέγεθος του στυλού να είναι _",
+    "set size to _ %": "θέσε το μέγεθος να είναι _ %",
+    "set tempo to _ bpm": "θέσε την ταχύτητα του ρυθμού να είναι _ ρυθμούς το δευτ.",
+    "set video transparency to _": "θέσε την διαφάνια βίντεο να είναι _",
+    "set volume to _ %": "θέσε την ένταση να είναι _ %",
+    "set x to _": "θέσε το x να είναι _",
+    "set y to _": "θέσε το y να είναι _",
+    "settings menu prefer empty slots hint": "διευκολύνουν την εισαγωγλη σε κενές υποδοχές όταν σύρετε και αφήσετε τον ρεπόρτερ",
+    "shimmering (80)": "λαμπερό (80)",
+    "show": "εμφανίσου",
+    "show all": "εμφάνιση όλων",
+    "show global custom block definitions as XML in a new browser window": "Εμφάνιση παγκοσμίων προσαρμοσμένων ορισμών των μπλοκ ως XML σε καινούριοπαράθυρο του browser",
+    "show primitives": "Εμφάνιση αρχέτυπων",
+    "show project data as XML in a new browser window": "εμφάνιση δεδομένων εργασίας ως XML σε καινούριο παράθυρο του browser",
+    "show variable _": "εμφάνισε το _",
+    "shown?": "εμφανής;",
+    "shrink": "μίκρυνε",
+    "sin": "ημίτονο",
+    "size": "μέγεθος",
+    "slider": "Ρυθμιστής",
+    "slider max...": "μέγιστη αξία...",
+    "slider min...": "ελάχιστη αξία...",
+    "slots": "θέσεις",
+    "sounds": "ήχοι",
+    "space": "κενό",
+    "split _ by _": "χώρισε _ ως προς το _",
+    "sprite": "φιγούρα",
+    "sprites": "φιγούρες",
+    "sqrt": "ρίζα",
+    "stack size": "μέγεθος στοίβας",
+    "stage": "σκηνή",
+    "stamp": "σφραγίδα",
+    "stop _": "σταμάτα _",
+    "stop all sounds": "σταμάτα όλους τους ήχους",
+    "stop frequency": "σταμάτα την συχνότητα",
+    "stopped": "σταματημένο",
+    "store this project in the downloads folder (in supporting browsers)": "αποθήκευση αυτό το έργοnστον φάκελό λήψεων (στους πλοηγούς που το υποστηρίζουν",
+    "stretch _ x: _ y: _ %": "τέντωμα _ x: _ y: _ %",
+    "subtle (95)": "διακριτικό (95)",
+    "sum": "άθροισμα",
+    "switch to costume _": "άλλαξε το κοστούμι σε _",
+    "switch to scene _ _": "αλλαγή στην σκηνή _ _",
+    "t": "τ",
+    "tab": "tab",
+    "table view...": "προβολή πίνακα...",
+    "take a camera snapshot and import it as a new sprite": "πάρε μια φωτογραφία με τη κάμερα του υπολογιστή και εισηγαγέ τη σαν καινούργια φιγούρα",
+    "tan": "εφαπτομένη",
+    "tell _ to _ _": "πες το _ να _ _",
+    "tempo": "ταχύτητα του ρυθμού",
+    "temporary?": "προσωρινό?",
+    "text": "κείμενο",
+    "text-only (100)": "κείμενο μόνο (100)",
+    "thing": "πράγμα",
+    "think _": "σκέψου _",
+    "think _ for _ secs": "σκέψου _ για _ δευτ.",
+    "this _": "τρέχον _",
+    "this block": "αυτό το μπλοκ",
+    "this project doesn't have any custom global blocks yet": "αυτή η εργασία δεν έχει κανενα προσαρμοσμένο παγκόσμιο μπλοκ ακόμα",
+    "this script": "αυτό το σενάριο",
+    "time in milliseconds": "χρόνος σε χιλιοστά του δευτερολέπτου",
+    "timer": "χρονόμετρο",
+    "to": "στο",
+    "top": "επάνω",
+    "touching _ ?": "ακουμπάει _ ?",
+    "translations": "μεταφράσεις",
+    "translations...": "μεταφράσεις...",
+    "translator_e-mail": "ino.samaras@berkeley.edu, aprekates@sch.gr",
+    "transparency": "διαφάνεια",
+    "true": "σωστό",
+    "turbo mode": "λειτουργεία τούρμπο",
+    "turn _ _ degrees": "γύρνα δεξιόστροφα _ _ μοίρες",
+    "type": "τύπος",
+    "type of _": "τύπος του _",
+    "u": "θ",
+    "uncheck for default GUI design": "απενεργοποιήστε για προεπιλεγμένη σχεδίαση GUI",
+    "uncheck for greater speed at variable frame rates": "απενεργοποιήστε για να έχετε μεγαλύτερη ταχύτητα στσ μεταβλητά frame-rates",
+    "uncheck to allow dropped reporters to kick out others": "απενεργοποιήστε για να μπορούν οι ρεπορτερ που αφήνετε να αντικαταστούν τους άλλους",
+    "uncheck to allow script reentrance": "απενεργοποιήστε για να επιτρέψετε την επανεισδοχή στον κώδικα",
+    "uncheck to disable IDE animations": "απενεργοποιήστε για να μην εχετε IDE animations",
+    "uncheck to disable alternating colors for nested block": "απενεργοποιήστε για να εξαφανίσετε τα εναλασσόμενα χρώματα για τα ένθετα μπλοκ",
+    "uncheck to disable dynamic labels for variadic inputs": "απενεργοποιήστε για να εξαφανίσετε τις δυναμικες ετικέτες για μεταβλητές τιμές",
+    "uncheck to disable input sliders for entry fields": "απενεργοποιήστε για να μην έχετε ρυθμιστές τιμών για τα πεδία εισαγωγής",
+    "uncheck to disable virtual keyboard support for mobile devices": "απενεργοποιήστε για να μην έχετε το εικονοκό πληκτρολόγιο στο κινητό σας",
+    "uncheck to disinherit": "αποεπιλογή για κατάργηση κληρονόμησης",
+    "uncheck to hide buttons in the palette": "απενεργοποιήστε για να κρύψετε τα κουμιά στην παλέτα",
+    "uncheck to hide category names in the palette": "απενεργοποιήστε για να κρύψετε τα ονόματα κατηγοριών στην παλέτα",
+    "uncheck to run scripts at normal speed": "απενεργοποιήστε για να εκτελέσετε τον κώδικα με κανονική ταχύτητα",
+    "uncheck to show only the selected category's blocks": "απενεργοποιήστε για να εμφανίσετε μόνο τα μπλοκ τις επιλεγμένης κατηγορίας",
+    "uncheck to turn block clicking sound off": "απενεργοποιήστε για να μην έχετε τον ήχο του κλικ",
+    "uncheck to use solid drop shadows and highlights": "απενεργοποιήστε για να εμφανίσετε την σκίαση και τα στερεά σήματα",
+    "uncheck to use the input dialog in short form": "απενεργοποιήστε για να εμφανίσετε τις τιμές στην συπμαγή μορφή",
+    "uncompile": "ξε-μεταγλώτηση",
+    "undo": "αναίρεση",
+    "undo the last block drop in this pane": "αναίρεση του τελευταίου μπλοκ που αφήσατε μέσα σε αυτό το παράθυρο",
+    "undrop": "επενακράτηση",
+    "unicode _ as letter": "unicode του _ ως γράμμα",
+    "unicode of _": "unicode του _",
+    "unringify": "εξαγωγή από το δαχτυλίδι",
+    "untitled": "χωρίς τίτλο",
+    "unused": "αχρησιμοποίητα",
+    "up arrow": "πάνω βέλος",
+    "v": "ω",
+    "value": "τιμή",
+    "variable": "μεταβλητή",
+    "video _ on _": "βίντεο _ στον _",
+    "video capture": "καταγραφή βίντεο",
+    "volume": "ένταση",
+    "w": "ς",
+    "wait _ secs": "περίμενε _ δευτ.",
+    "wait until _": "περίμενε μέχρι _",
+    "warp _": "επιτάχυνση _",
+    "what's your name?": "Ποιο είναι το όνομά σου;",
+    "when I am _": "όταν μου συμβεί _",
+    "when I receive _ _": "όταν δεχτώ _ _",
+    "when I start as a clone": "όταν ξεκινάω ως κλώνος",
+    "when _": "όταν _",
+    "when _ clicked": "όταν το _ πατηθεί",
+    "when _ is edited _": "όταν το _ επεξεργαστεί _",
+    "when _ key pressed _": "όταν το _ πλήκτρο πατηθεί _",
+    "whirl": "στρέβλωση",
+    "whitespace": "διάστημα",
+    "width": "πλάτος",
+    "with data": "με δεδομένα",
+    "with inputs": "με τιμές",
+    "word": "λέξη",
+    "world": "κόσμος",
+    "write _ size _": "γράψε _ μέγεθος _",
+    "x": "χ",
+    "x position": "x-θέση",
+    "y": "υ",
+    "y position": "y-θέση",
+    "year": "έτος",
+    "your own": "το δικό σας",
+    "z": "ζ",
+    "Κατάργηση δημοσίευσης": ""
+}

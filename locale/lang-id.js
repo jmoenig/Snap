@@ -1,1379 +1,507 @@
-/*
-
-    lang-id.js
-
-    German translation for SNAP!
-
-    written by Jens Mönig
-
-    Copyright (C) 2016 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.id = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Bahasa Indonesia', // the name as it should appear in the language menu
-    'language_translator':
-        'Alexander Raphael Liu, Emmanuella Rumanti', // your name for the Translators tab
-    'translator_e-mail':
-        'raphaxander@gmail.com', // optional
-    'last_changed':
-        '2019-01-21', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'tak berjudul',
-    'development mode':
-        'mode percobaan',
-
-    // categories:
-    'Motion':
-        'Gerakan',
-    'Looks':
-        'Penampilan',
-    'Sound':
-        'Suara',
-    'Pen':
-        'Pena',
-    'Control':
-        'Kontrol',
-    'Sensing':
-        'Sensor',
-    'Operators':
-        'Operator',
-    'Variables':
-        'Variabel',
-    'Lists':
-        'Daftar',
-    'Other':
-        'Lainnya',
-
-    // editor:
-    'draggable':
-        'bisa diseret',
-
-    // tabs:
-    'Scripts':
-        'Skrip',
-    'Costumes':
-        'Kostum',
-    'Sounds':
-        'Suara',
-
-    // names:
-    'Sprite':
-        'Karakter',
-    'Stage':
-        'Panggung',
-
-    // rotation styles:
-    'don\'t rotate':
-        'jangan berputar',
-    'can rotate':
-        'bisa berputar',
-    'only face left/right':
-        'hanya boleh menghadap kiri/kanan',
-
-    // new sprite button:
-    'add a new sprite':
-        'tambah sprite baru',
-
-    // tab help
-    'costumes tab help':
-        'impor gambar dari situs atau \n'
-            + 'sebuah file dengan cara menyeret berkasnya',
-    'import a sound from your computer\nby dragging it into here':
-        'impor sebuah suara dari komputermu dengan menyeret berkasnya ke sini',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Panggung terpilih: tidak ada primitif (balok)\n'
-            + 'gerak',
-
-    'move %n steps':
-        'maju %n langkah',
-    'turn %clockwise %n degrees':
-        'berputar %clockwise %n derajat',
-    'turn %counterclockwise %n degrees':
-        'berputar %counterclockwise %n derajat',
-    'point in direction %dir':
-        'tunjuk ke arah %dir',
-    'point towards %dst':
-        'tunjuk ke arah %dst',
-    'go to x: %n y: %n':
-        'pergi ke x: %n y: %n',
-    'go to %dst':
-        'pergi ke %dst',
-    'glide %n secs to x: %n y: %n':
-        'meluncur %n dtk. ke x: %n y: %n',
-    'change x by %n':
-        'ubah x sebanyak %n',
-    'set x to %n':
-        'atur x ke %n',
-    'change y by %n':
-        'ubah y sebanyak %n',
-    'set y to %n':
-        'atur y ke %n',
-    'if on edge, bounce':
-        'jika ada di pinggir, melambung',
-    'x position':
-        'posisi x',
-    'y position':
-        'posisi y',
-    'direction':
-        'arah',
-
-    // looks:
-    'switch to costume %cst':
-        'ganti ke kostum %cst',
-    'next costume':
-        'kostum selanjutnya',
-    'costume #':
-        'nomor kostum',
-    'say %s for %n secs':
-        'katakan %s selama %n dtk.',
-    'say %s':
-        'katakan %s',
-    'think %s for %n secs':
-        'pikirkan %s selama %n dtk.',
-    'think %s':
-        'pikirkan %s',
-    'Hello!':
-        'Halo!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        'ubah efek %eff sebanyak %n',
-    'set %eff effect to %n':
-        'atur efek %eff ke %n',
-    'clear graphic effects':
-        'hapus efek grafis',
-    'change size by %n':
-        'ubah ukuran sebanyak %n',
-    'set size to %n %':
-        'atur ukuran ke %n %',
-    'size':
-        'ukuran',
-    'show':
-        'tampilkan',
-    'hide':
-        'sembunyikan',
-    'go to front':
-        'ke depan',
-    'go back %n layers':
-        'ke belakang %n lapisan',
-
-    'development mode \ndebugging primitives:':
-        'primitif debugging \nmode percobaan',
-    'console log %mult%s':
-        'catat di konsol %mult%s',
-    'alert %mult%s':
-        'tampilkan pop-up: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'mainkan suara %snd',
-    'play sound %snd until done':
-        'mainkan %snd sampai selesai',
-    'stop all sounds':
-        'hentikan semua suara',
-    'rest for %n beats':
-        'istirahat selama %n ketukan',
-    'play note %n for %n beats':
-        'mainkan not %n selama %n ketukan',
-    'change tempo by %n':
-        'ubah tempo sebanyak %n',
-    'set tempo to %n bpm':
-        'atur tempo ke %n ketukan per menit',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'bersihkan layar',
-    'pen down':
-        'turunkan pena',
-    'pen up':
-        'naikkan pena',
-    'set pen color to %clr':
-        'atur warna pena ke %clr',
-    'change pen color by %n':
-        'ubah warna pena sebanyak %n',
-    'set pen color to %n':
-        'atur warna pena ke %n',
-    'change pen shade by %n':
-        'ubah kegelapan pena sebanyak %n',
-    'set pen shade to %n':
-        'atur kegelapan pena ke %n',
-    'change pen size by %n':
-        'ubah ukuran pena sebesar %n',
-    'set pen size to %n':
-        'atur ukuran pena ke %n',
-    'stamp':
-        'stempel',
-    'fill':
-        'isi dengan cat',
-
-    // control:
-    'when %greenflag clicked':
-        'ketika %greenflag diklik',
-    'when %keyHat key pressed %keyName':
-        'ketika %keyHat ditekan %keyName',
-    'when I am %interaction':
-        'ketika aku %interaction',
-    'clicked':
-        'diklik',
-    'pressed':
-        'ditekan',
-    'dropped':
-        'dijatuhkan',
-    'mouse-entered':
-        'disentuh tetikus',
-    'mouse-departed':
-        'ditinggalkan tetikus',
-    'when %b':
-        'ketika %b',
-    'when I receive %msgHat %message':
-        'ketika aku menerima %msgHat %message',
-    'broadcast %msg %receive':
-        'beritakan %msg %receive',
-    'broadcast %msg %receive and wait':
-        'beritakan %msg %receive dan tunggu',
-    'Message name':
-        'Nama pesan',
-    'message':
-        'pesan',
-    'any message':
-        'pesan apapun',
-    'wait %n secs':
-        'tungu %n dtk.',
-    'wait until %b':
-        'tunggu sampai %b',
-    'forever %loop':
-        'selamanya lakukan: %loop',
-    'repeat %n %loop':
-        'ulangi %n kali %loop',
-    'repeat until %b %loop':
-        'ulangi sampai %b %loop',
-    'if %b %c':
-        'jika %b %c',
-    'if %b %c else %c':
-        'jika %b %c jika tidak %c',
-    'report %s':
-        'laporkan %s',
-    'stop %stopChoices':
-        'hentikan %stopChoices',
-    'all':
-        'semuanya',
-    'this script':
-        'skrip ini',
-    'this block':
-        'balok ini',
-    'stop %stopOthersChoices':
-        'hentikan %stopOthersChoices',
-    'all but this script':
-        'semuanya selain skrip ini',
-    'other scripts in sprite':
-        'skrip-skrip lain di karakter ini',
-    'pause all %pause':
-        'hentikan sementara semua %pause',
-    'run %cmdRing %inputs':
-        'jalankan %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'luncurkan %cmdRing %inputs',
-    'call %repRing %inputs':
-        'panggil %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'jalankan %cmdRing dengan kontinuasi',
-    'call %cmdRing w/continuation':
-        'panggil %cmdRing dengan kontinuasi',
-    'warp %c':
-        'bungkus %c',
-    'when I start as a clone':
-        'ketika aku mulai sebagai klon',
-    'create a clone of %cln':
-        'buat klon baru dari %cln',
-    'myself':
-        'diriku',
-    'delete this clone':
-        'hapus klon ini',
-
-    // sensing:
-    'touching %col ?':
-        'menyentuh %col ?',
-    'touching %clr ?':
-        'menyentuh %clr ?',
-    'color %clr is touching %clr ?':
-        'warna %clr menyentuh %clr ?',
-    'ask %s and wait':
-        'tanya %s dan tunggu',
-    'what\'s your name?':
-        'siapa namamu?',
-    'answer':
-        'jawaban',
-    'mouse x':
-        'posisi x tetikus',
-    'mouse y':
-        'posisi y tetikus',
-    'mouse down?':
-        'tetikus diklik?',
-    'key %key pressed?':
-        'kunci %key ditekan?',
-    'distance to %dst':
-        'jarak ke %dst',
-    'reset timer':
-        'atur ulang timer',
-    'timer':
-        'timer',
-    '%att of %spr':
-        '%att dari %spr',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'mode turbo menyala?',
-    'set turbo mode to %b':
-        'atur mode turbo ke %b',
-
-    'filtered for %clr':
-        'disaring untuk %clr',
-    'stack size':
-        'ukuran tumpukan:',
-    'frames':
-        'jumlah frame:',
-
-    // operators:
-    '%n mod %n':
-        '%n modulo %n',
-    'round %n':
-        'bulatkan %n',
-    '%fun of %n':
-        '%fun dari %n',
-    'pick random %n to %n':
-        'pilih angka acak dari %n ke %n',
-    'and':
-        'dan',
-    'or':
-        'atau',
-    'not %b':
-        'tidak %b',
-    'true':
-        'benar',
-    'false':
-        'salah',
-    'join %words':
-        'gabungkan %words',
-    'split %s by %delim':
-        'potong %s di setiap %delim',
-    'hello':
-        'halo',
-    'world':
-        'dunia',
-    'letter %ix of %s':
-        'huruf %ix dari %s',
-    '%ta of text %s':
-        '%ta dari %s',
-    'unicode of %s':
-        'nilai unicode dari %s',
-    'unicode %n as letter':
-        'Unicode %n sebagai huruf',
-    'is %s a %typ ?':
-        'apakah %s sebuah %typ ?',
-    'is %all== ?':
-        'apakah %all== ?',
-    'identical to':
-        'identik dengan',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-
-    'type of %s':
-        'tipe dari %s',
-
-    // variables:
-    'Make a variable':
-        'Buat variabel',
-    'Variable name':
-        'Nama variabel',
-    'Script variable name':
-        'Skrip nama variabel',
-    'Delete a variable':
-        'Hapus variabel',
-
-    'set %var to %s':
-        'atur %var ke %s',
-    'change %var by %n':
-        'ubah %var sebanyak %n',
-    'show variable %var':
-        'tampilkan variabel %var',
-    'hide variable %var':
-        'sembunyikan variabel %var',
-    'script variables %scriptVars':
-        'skrip variabel %scriptVars',
-
-    // lists:
-    'list %exp':
-        'daftar %exp',
-    '%s in front of %l':
-        '%s di depan %l',
-    'item %idx of %l':
-        'barang %idx dari %l',
-    'all but first of %l':
-        'semua kecuali barang pertama dari %l',
-    'length of %l':
-        'panjang dari %l',
-    '%l contains %s':
-        '%l mempunyai %s',
-    'thing':
-        'barang',
-    'add %s to %l':
-        'tambahkan %s ke %l',
-    'delete %ida of %l':
-        'hapus %ida dari %l',
-    'insert %s at %idx of %l':
-        'tambahkan %s di %idx dari %l',
-    'replace item %idx of %l with %s':
-        'ganti barang %idx di %l dengan %s',
-
-    // other
-    'Make a block':
-        'Buat balok baru',
-
-    // menus
-    // snap menu
-    'About...':
-        'Tentang...',
-    'Reference manual':
-        'Panduan',
-    'Snap! website':
-        'Situsweb Snap!',
-    'Download source':
-        'Unduh sumber',
-    'Switch back to user mode':
-        'Kembali ke mode pengguna',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'matikan menu konteks \ndeep-morphic dan \ntunjukan konteks \nmenu yang ramah',
-    'Switch to dev mode':
-        'Ganti ke mode percobaan',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'Nyalakan Morphic \ncontext menu\ndan inspektor, \ntidak ramah pengguna!',
-
-    // project menu
-    'Project notes...':
-        'Catatan projek...',
-    'New':
-        'Baru',
-    'Open...':
-        'Buka',
-    'Save':
-        'Simpan',
-    'Save to disk':
-        'Simpan ke komputer',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'simpan projek ini\ndi folder downloads\n'
-            + '(hanya untuk browser yang mendukung!)',
-    'Save As...':
-        'Simpan sebagai...',
-    'Import...':
-        'Impor...',
-    'file menu import hint':
-        'impor sebuah projek yang sudah diekspor atau\n '
-            + 'pustaka balok,\n'
-            + 'kostum atau suara',
-    'Export project as plain text...':
-        'Ekspor projek sebagai file .txt',
-    'Export project...':
-        'Ekspor projek',
-    'show project data as XML\nin a new browser window':
-        'tunjukkan data projek sebagai XML\ndi jendela peramban',
-    'Export blocks...':
-        'Ekspor balok...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'tunjukkan definisi balok kostum global\nsebagai xml di jendela baru',
-    'Unused blocks...':
-          'Balok yang tidak dipakai',
-    'find unused global custom blocks\nand remove their definitions':
-        'cari balok kostum global yang tidak dipakai\ndan hapus definisi mereka',
-    'Remove unused blocks':
-        'Hapus balok yang tidak dipakai',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'sekarang tidak ada balok kostum global\nyang tidak dipakai',
-    'unused block(s) removed':
-        'balok yang tidak dipakai terhapus',
-    'Export summary...':
-        'Ekspor ringkasan...',
-    'open a new browser browser window\n with a summary of this project':
-        'buka jendela peramban baru\ndengan ringkasan dari projek ini',
-    'Contents':
-        'Konten',
-    'Kind of':
-        'Seperti',
-    'Part of':
-        'Bagian dari',
-    'Parts':
-        'Bagian',
-    'Blocks':
-        'Balok',
-    'For all Sprites':
-        'Untuk semua karakter',
-    'Import tools':
-        'Impor peralatan',
-    'load the official library of\npowerful blocks':
-        'impor modul resmi dari\nbalok hebat',
-    'Libraries...':
-        'Pustaka...',
-    'Import library':
-        'Impor pustaka',
-
-    // cloud menu
-    'Login...':
-        'Masuk...',
-    'Signup...':
-        'Daftar...',
-
-    // settings menu
-    'Language...':
-        'Bahasa...',
-    'Zoom blocks...':
-        'Perbesar balok',
-    'Stage size...':
-        'Ukuran panggung',
-    'Stage size':
-        'Ukuran panggung',
-    'Stage width':
-        'Lebar panggung',
-    'Stage height':
-        'Tinggi panggung',
-    'Default':
-        'Normal',
-    'Blurred shadows':
-        'Bayangan blur',
-    'uncheck to use solid drop\nshadows and highlights':
-        'jangan centang untuk mengunakan\nbayangan dan cahaya saat jatuh',
-    'check to use blurred drop\nshadows and highlights':
-        'centang untuk mengunakan bayangan \ndan cahaya blur saat jatuh',
-    'Zebra coloring':
-        'Warna zebra',
-    'check to enable alternating\ncolors for nested blocks':
-        'centang untuk menyalahkan warna\nberganti di balok bersarang',
-    'uncheck to disable alternating\ncolors for nested block':
-        'jangan centang untu mematikan\nwarna berganti di balok bersarang',
-    'Dynamic input labels':
-        'Label input yang dinamik',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'jangan centang untuk mematika\nlabel dinamik untuk input variadik',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'centang untuk menyalahkan label\ndinamik untu input variadik',
-    'Prefer empty slot drops':
-        'Memilih jatuh slot kosong',
-    'settings menu prefer empty slots hint':
-        'jangan centang untuk mengizinkan reporter yang jatuh menendang'
-            + 'yang lain',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'jangan centang untuk mengizinkan reporter yang jatuh menendang'
-            + 'yang lain',
-    'Long form input dialog':
-        'Form input panjang',
-    'Plain prototype labels':
-        'Label prototipe/purwarupa polos',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'jangan centang untuk selalu menunjukan (+)\ndi label balok prototype',
-    'check to hide (+) symbols\nin block prototype labels':
-        'centang untuk menyembunykan (+)\ndi label balok prototype',
-    'check to always show slot\ntypes in the input dialog':
-        'centang untuk selalu menunjukan slot\ntipe di input dialog',
-    'uncheck to use the input\ndialog in short form':
-        'jangan centang untuk menggunakan input\ndialog dalam bentuk pendek',
-    'Virtual keyboard':
-        'Kibor virtual',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'jangan centang untuk mematikan\nkibor virtual untuk\n'
-            + 'alat mobile',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'centang untuk meyalahkan\nkibor virtual untuk\n'
-            + 'alat mobile',
-    'Input sliders':
-        'Slider input',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'jangan centang untuk mematikan\nslider input untuk\nbagian entry',
-    'check to enable\ninput sliders for\nentry fields':
-        'centang untuk menyalahkan\nslider input intuk\nbagian entry',
-    'Clicking sound':
-        'Suara klik',
-    'uncheck to turn\nblock clicking\nsound off':
-        'jangan centang untuk mematiakn\nsuara klik',
-    'check to turn\nblock clicking\nsound on':
-        'centang untuk menyalahkan\nsuara klik',
-    'Animations':
-        'Animasi',
-    'uncheck to disable\nIDE animations':
-        'jangan centang untuk mematikan\nanimasi IDE',
-    'Turbo mode':
-        'Mode turbo',
-    'check to prioritize\nscript execution':
-        'centang untuk mementingkan\neksekusi skrip',
-    'uncheck to run scripts\nat normal speed':
-        'jangan centang untuk menjalankan\nskrip pada kecepatan normal',
-    'check to enable\nIDE animations':
-        'centang untuk menyalahkan \nanimasi IDE',
-    'Flat design':
-        'Desain datar',
-    'Keyboard Editing':
-        'Editing melalui kibor',
-    'Table support':
-        'Dukungan tabel',
-    'Table lines':
-        'Garis tabel',
-    'Thread safe scripts':
-        'Skrip aman untuk thread',
-    'uncheck to allow\nscript reentrance':
-        'jangan centang, untuk\nmengizinkan skrip masuk ulang',
-    'check to disallow\nscript reentrance':
-        'klik untuk menghindari\nskrip masuk ulang',
-    'Prefer smooth animations':
-        'Memilih animasi lembut',
-    'uncheck for greater speed\nat variable frame rates':
-        'jangan centang untuk kecepatan lebih\ndan frame rate dinamis',
-    'check for smooth, predictable\nanimations across computers':
-        'centang untuk animasi lembut, bisa diramalkan\ndi komputer',
-    'Flat line ends':
-        'Garis ujung rata',
-    'check for flat ends of lines':
-        'centang untuk ujung rata dari\ngaris pena',
-    'uncheck for round ends of lines':
-        'matikan untuk ujung bulat dari\ngaris pena',
-    'Inheritance support':
-        'Dukungan inheritance',
-
-    // inputs
-    'with inputs':
-        'dengan input',
-    'input names:':
-        'Nama input:',
-    'Input Names:':
-        'Nama input:',
-    'input list:':
-        'Dafta input:',
-
-    // context menus:
-    'help':
-        'Tolong',
-
-    // palette:
-    'hide primitives':
-        'sembunyikan primitif',
-    'show primitives':
-        'tampilkan primitif',
-
-    // blocks:
-    'help...':
-        'bantuan...',
-    'relabel...':
-        'label ulang...',
-    'duplicate':
-        'gandakan',
-    'make a copy\nand pick it up':
-        'buat kopi\ndat ambil',
-    'only duplicate this block':
-        'hanya gandakan balok ini',
-    'delete':
-        'hapus',
-    'script pic...':
-        'gambar skrip...',
-    'open a new window\nwith a picture of this script':
-        'buka jendela baru\ndengan gambar dari skrip ini',
-    'ringify':
-        'cincinkan',
-    'unringify':
-        'hapus cincin',
-    'transient':
-        'sementara',
-    'uncheck to save contents\nin the project':
-        'jangan centang untuk\nmenymimpan konten di dalam\nprojek',
-    'check to prevent contents\nfrom being saved':
-        'centang untuk mencegah konten\ndisimpan',
-
-    // custom blocks:
-    'delete block definition...':
-        'hapus definisi balok',
-    'edit...':
-        'sunting...',
-
-    // sprites:
-    'edit':
-        'sunting',
-    'move':
-        'bergerak',
-    'detach from':
-        'lepaskan dari',
-    'detach all parts':
-        'lepaskan semua bagian',
-    'export...':
-        'ekspor...',
-
-    // stage:
-    'show all':
-        'tunjukkan semua',
-    'pic...':
-        'expor gambar...',
-    'open a new window\nwith a picture of the stage':
-        'buka jendela baru\ndengan gambar dari panggung',
-
-    // scripting area
-    'clean up':
-        'rapikan',
-    'arrange scripts\nvertically':
-        'urutkan skripnya\nsecara vertikal',
-    'add comment':
-        'tambahkan komen',
-    'undrop':
-        'undo jatuhkan',
-    'undo the last\nblock drop\nin this pane':
-        'undo mendrag\ndan jatuhkan\nbalok terakhir\ndi panel ini',
-    'scripts pic...':
-        'Gambar skrip',
-    'open a new window\nwith a picture of all scripts':
-        'buka jendela baru\ndengan gambar semua skrip',
-    'make a block...':
-        'buat balok baru.',
-
-    // costumes
-    'rename':
-        'namakan ulang',
-    'export':
-        'ekspor',
-    'rename costume':
-        'namakan ulang kostum',
-
-    // sounds
-    'Play sound':
-        'Mainkan suara',
-    'Stop sound':
-        'Hentikan suara',
-    'Stop':
-        'Berhenti',
-    'Play':
-        'Mainkan bunyi',
-    'rename sound':
-        'namakan ulang bunyi',
-
-    // lists and tables
-    'list view...':
-        'tampilan daftar',
-    'table view...':
-        'tampilan tabel',
-    'open in dialog...':
-        'buka di dialog...',
-    'reset columns':
-        'atur ulang kolum',
-    'items':
-        'barang',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'Oke',
-    'Cancel':
-        'Batalkan',
-    'Yes':
-        'Ya',
-    'No':
-        'Tidak',
-
-    // help
-    'Help':
-        'Bantuan',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Balok zoom',
-    'build':
-        'bangun',
-    'your own':
-        'punyamu',
-    'blocks':
-        'balok',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'demo (1.2x)',
-    'presentation (1.4x)':
-        'presentasi (1.4x)',
-    'big (2x)':
-        'gro\u00df (2x)',
-    'huge (4x)':
-        'besar sekali (4x)',
-    'giant (8x)':
-        'raksasa (8x)',
-    'monstrous (10x)':
-        'sangat besar (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Tak berjudul',
-    'Open Project':
-        'Buka projek',
-    '(empty)':
-        '(kosong)',
-    'Saved!':
-        'Tersimpan!',
-    'Delete Project':
-        'Hapus projek',
-    'Are you sure you want to delete':
-        'Apakah kamu yakin mau menghapus?',
-    'rename...':
-        'namakan ulang...',
-
-    // costume editor
-    'Costume Editor':
-        'Editor kostum',
-    'click or drag crosshairs to move the rotation center':
-        'klik atau seret crosshair untuk memindahkan pusat rotasi',
-
-    // project notes
-    'Project Notes':
-        'Catatan Projek',
-
-    // new project
-    'New Project':
-        'Projek Baru',
-    'Replace the current project with a new one?':
-        'Ganti projek yang sudah ada dengan yang baru?',
-
-    // save project
-    'Save Project As...':
-        'Simpan Projek Sebagai...',
-
-    // export blocks
-    'Export blocks':
-        'Ekspor balok',
-    'Import blocks':
-        'Impor balok',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'projek ini sepertinya tidak \npunya balok global buatan sendiri',
-    'select':
-        'pilih',
-    'none':
-        'tidak ada',
-
-    // variable dialog
-    'for all sprites':
-        'untuk semua sprite',
-    'for this sprite only':
-        'hanya untuk sprite ini',
-
-    // block dialog
-    'Change block':
-        'Ganti balok',
-    'Command':
-        'Perintah',
-    'Reporter':
-        'Pelapor',
-    'Predicate':
-        'Predikat',
-
-    // block editor
-    'Block Editor':
-        'Editor Balok',
-    'Apply':
-        'Aplikasikan',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Hapus Balok',
-    'block deletion dialog text':
-        'Apakah kamu yakin kamu mau menghapus\n' +
-            'balok ini dan instansinya?',
-
-    // input dialog
-    'Create input name':
-        'Buat nama input',
-    'Edit input name':
-        'Sunting nama input',
-    'Edit label fragment':
-        'Sunting bagian label',
-    'Title text':
-        'Teks judul',
-    'Input name':
-        'Nama input',
-    'Delete':
-        'Hapus',
-    'Object':
-        'Obyek',
-    'Number':
-        'Angka',
-    'Text':
-        'Teks',
-    'List':
-        'Daftar',
-    'Any type':
-        'Tipe apapun',
-    'Boolean (T/F)':
-        'Boolean (B/S)',
-    'Command\n(inline)':
-        'Perintah',
-    'Command\n(C-shape)':
-        'Perintah\n(bentuk-C)',
-    'Any\n(unevaluated)':
-        'Apapun\n(tidak dievaluasi)',
-    'Boolean\n(unevaluated)':
-        'Boolean\n(tidak dievaluasi)',
-    'Single input.':
-        'Input tunggal.',
-    'Default Value:':
-        'Nilai Standar:',
-    'Multiple inputs (value is list of inputs)':
-        'Input majemuk (nilai adalah daftar input)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - buat var internal mirip dengan pemanggil',
-
-    // About Snap
-    'About Snap':
-        'Tentang Snap',
-    'Back...':
-        'Kembali...',
-    'License...':
-        'Lisensi...',
-    'Modules...':
-        'Modul...',
-    'Credits...':
-        'Kredit...',
-    'Translators...':
-        'Penerjemah...',
-    'License':
-        'Lisensi',
-    'current module versions:':
-        'versi modul sekarang',
-    'Contributors':
-        'Kontributor',
-    'Translations':
-        'Terjemahan',
-
-    // variable watchers
-    'normal':
-        'normal',
-    'large':
-        'besar',
-    'slider':
-        'slider',
-    'slider min...':
-        'min slider...',
-    'slider max...':
-        'max slider...',
-    'import...':
-        'impor...',
-    'Slider minimum value':
-        'Nilai minimum slider:',
-    'Slider maximum value':
-        'Nilai maksimum slider:',
-
-    // list watchers
-    'length: ':
-        'panjang: ',
-
-    'length':
-        'panjang',
-
-    // coments
-    'add comment here...':
-        'tambahkan komentar di sini...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) kanan',
-    '(-90) left':
-        '(-90) kiri',
-    '(0) up':
-        '(0) atas',
-    '(180) down':
-        '(180) bawah',
-
-    // collision detection
-    'mouse-pointer':
-        'penunjuk tetikus/mouse',
-    'edge':
-        'pinggir',
-    'pen trails':
-        'jejak pena',
-
-    // costumes
-    'Turtle':
-        'Kura-Kura',
-    'Empty':
-        'Kosong',
-
-    // graphical effects
-    'brightness':
-        'kecerahan',
-    'ghost':
-        'keburaman',
-    'negative':
-        'negatif',
-    'comic':
-        'komik',
-    'confetti':
-        'konfetti',
-
-    // keys
-    'space':
-        'spasi',
-    'up arrow':
-        'panah atas',
-    'down arrow':
-        'panah bawah',
-    'right arrow':
-        'panah kanan',
-    'left arrow':
-        'panah kiri',
-    'any key':
-        'tombol apapun',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'baru...',
-
-    // math functions
-    'abs':
-        'abs',
-    'ceiling':
-        'ceiling',
-    'floor':
-        'floor',
-    'sqrt':
-        'akar kuadrat',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'huruf',
-    'whitespace':
-        'ruang putih',
-    'line':
-        'garis',
-    'tab':
-        'indentasi',
-    'cr':
-        'cr',
-
-    // data types
-    'number':
-        'angka',
-    'text':
-        'teks',
-    'Boolean':
-        'Boolean',
-    'list':
-        'daftar',
-    'command':
-        'perintah',
-    'reporter':
-        'pelapor',
-    'predicate':
-        'predikat',
-
-    // list indices
-    'last':
-        'terakhir',
-    'random':
-        'apapun'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "(-90) left": "(-90) kiri",
+    "(0) up": "(0) atas",
+    "(180) down": "(180) bawah",
+    "(90) right": "(90) kanan",
+    "(empty)": "(kosong)",
+    "About Snap": "Tentang Snap",
+    "About...": "Tentang...",
+    "Animations": "Animasi",
+    "Any (unevaluated)": "Apapun (tidak dievaluasi)",
+    "Any type": "Tipe apapun",
+    "Apply": "Aplikasikan",
+    "Are you sure you want to delete": "Apakah kamu yakin mau menghapus?",
+    "Back...": "Kembali...",
+    "Block Editor": "Editor Balok",
+    "Blocks": "Balok",
+    "Blurred shadows": "Bayangan blur",
+    "Boolean": "Boolean",
+    "Boolean (T/F)": "Boolean (B/S)",
+    "Boolean (unevaluated)": "Boolean (tidak dievaluasi)",
+    "Cancel": "Batalkan",
+    "Change block": "Ganti balok",
+    "Clicking sound": "Suara klik",
+    "Command": "Perintah",
+    "Command (C-shape)": "Perintah (bentuk-C)",
+    "Command (inline)": "Perintah",
+    "Contents": "Konten",
+    "Contributors": "Kontributor",
+    "Control": "Kontrol",
+    "Costume Editor": "Editor kostum",
+    "Costumes": "Kostum",
+    "Create input name": "Buat nama input",
+    "Credits...": "Kredit...",
+    "Default": "Normal",
+    "Default Value:": "Nilai Standar:",
+    "Delete": "Hapus",
+    "Delete Custom Block": "Hapus Balok",
+    "Delete Project": "Hapus projek",
+    "Delete a variable": "Hapus variabel",
+    "Download source": "Unduh sumber",
+    "Dynamic input labels": "Label input yang dinamik",
+    "Edit input name": "Sunting nama input",
+    "Edit label fragment": "Sunting bagian label",
+    "Empty": "Kosong",
+    "Export blocks": "Ekspor balok",
+    "Export blocks...": "Ekspor balok...",
+    "Export project as plain text...": "Ekspor projek sebagai file .txt",
+    "Export project...": "Ekspor projek",
+    "Export summary...": "Ekspor ringkasan...",
+    "Flat design": "Desain datar",
+    "Flat line ends": "Garis ujung rata",
+    "For all Sprites": "Untuk semua karakter",
+    "Hello!": "Halo!",
+    "Help": "Bantuan",
+    "Hmm...": "Hmm...",
+    "Import blocks": "Impor balok",
+    "Import library": "Impor pustaka",
+    "Import tools": "Impor peralatan",
+    "Import...": "Impor...",
+    "Inheritance support": "Dukungan inheritance",
+    "Input Names:": "Nama input:",
+    "Input name": "Nama input",
+    "Input sliders": "Slider input",
+    "Keyboard Editing": "Editing melalui kibor",
+    "Kind of": "Seperti",
+    "Language...": "Bahasa...",
+    "Libraries...": "Pustaka...",
+    "License": "Lisensi",
+    "License...": "Lisensi...",
+    "List": "Daftar",
+    "Lists": "Daftar",
+    "Login...": "Masuk...",
+    "Long form input dialog": "Form input panjang",
+    "Looks": "Penampilan",
+    "Make a block": "Buat balok baru",
+    "Make a variable": "Buat variabel",
+    "Message name": "Nama pesan",
+    "Modules...": "Modul...",
+    "Motion": "Gerakan",
+    "Multiple inputs (value is list of inputs)": "Input majemuk (nilai adalah daftar input)",
+    "New": "Baru",
+    "New Project": "Projek Baru",
+    "No": "Tidak",
+    "Number": "Angka",
+    "OK": "OK",
+    "Object": "Obyek",
+    "Ok": "Oke",
+    "Open Project": "Buka projek",
+    "Open...": "Buka",
+    "Operators": "Operator",
+    "Other": "Lainnya",
+    "Part of": "Bagian dari",
+    "Parts": "Bagian",
+    "Pen": "Pena",
+    "Plain prototype labels": "Label prototipe/purwarupa polos",
+    "Play": "Mainkan bunyi",
+    "Play sound": "Mainkan suara",
+    "Predicate": "Predikat",
+    "Prefer empty slot drops": "Memilih jatuh slot kosong",
+    "Prefer smooth animations": "Memilih animasi lembut",
+    "Project Notes": "Catatan Projek",
+    "Project notes...": "Catatan projek...",
+    "Reference manual": "Panduan",
+    "Remove unused blocks": "Hapus balok yang tidak dipakai",
+    "Replace the current project with a new one?": "Ganti projek yang sudah ada dengan yang baru?",
+    "Reporter": "Pelapor",
+    "Save": "Simpan",
+    "Save As...": "Simpan sebagai...",
+    "Save Project As...": "Simpan Projek Sebagai...",
+    "Save to disk": "Simpan ke komputer",
+    "Saved!": "Tersimpan!",
+    "Script variable name": "Skrip nama variabel",
+    "Scripts": "Skrip",
+    "Sensing": "Sensor",
+    "Signup...": "Daftar...",
+    "Single input.": "Input tunggal.",
+    "Slider maximum value": "Nilai maksimum slider:",
+    "Slider minimum value": "Nilai minimum slider:",
+    "Snap! website": "Situsweb Snap!",
+    "Sound": "Suara",
+    "Sounds": "Suara",
+    "Sprite": "Karakter",
+    "Stage": "Panggung",
+    "Stage height": "Tinggi panggung",
+    "Stage selected: no motion primitives": "Panggung terpilih: tidak ada primitif (balok) gerak",
+    "Stage size": "Ukuran panggung",
+    "Stage size...": "Ukuran panggung",
+    "Stage width": "Lebar panggung",
+    "Stop": "Berhenti",
+    "Stop sound": "Hentikan suara",
+    "Switch back to user mode": "Kembali ke mode pengguna",
+    "Switch to dev mode": "Ganti ke mode percobaan",
+    "Table lines": "Garis tabel",
+    "Table support": "Dukungan tabel",
+    "Text": "Teks",
+    "Thread safe scripts": "Skrip aman untuk thread",
+    "Title text": "Teks judul",
+    "Translations": "Terjemahan",
+    "Translators...": "Penerjemah...",
+    "Turbo mode": "Mode turbo",
+    "Turtle": "Kura-Kura",
+    "Untitled": "Tak berjudul",
+    "Unused blocks...": "Balok yang tidak dipakai",
+    "Upvar - make internal variable visible to caller": "Upvar - buat var internal mirip dengan pemanggil",
+    "Variable name": "Nama variabel",
+    "Variables": "Variabel",
+    "Virtual keyboard": "Kibor virtual",
+    "Yes": "Ya",
+    "Zebra coloring": "Warna zebra",
+    "Zoom blocks": "Balok zoom",
+    "Zoom blocks...": "Perbesar balok",
+    "_ contains _": "_ mempunyai _",
+    "_ in front of _": "_ di depan _",
+    "_ mod _": "_ modulo _",
+    "_ of _": "_ dari _",
+    "a": "a",
+    "abs": "abs",
+    "acos": "acos",
+    "add _ to _": "tambahkan _ ke _",
+    "add a new sprite": "tambah sprite baru",
+    "add comment": "tambahkan komen",
+    "add comment here...": "tambahkan komentar di sini...",
+    "alert _": "tampilkan pop-up: _",
+    "all": "semuanya",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "semua kecuali barang pertama dari _",
+    "all but this script": "semuanya selain skrip ini",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "and": "dan",
+    "answer": "jawaban",
+    "any key": "tombol apapun",
+    "any message": "pesan apapun",
+    "arrange scripts vertically": "urutkan skripnya secara vertikal",
+    "asin": "asin",
+    "ask _ and wait": "tanya _ dan tunggu",
+    "atan": "atan",
+    "b": "b",
+    "big (2x)": "groß (2x)",
+    "block deletion dialog text": "Apakah kamu yakin kamu mau menghapus balok ini dan instansinya?",
+    "blocks": "balok",
+    "brightness": "kecerahan",
+    "broadcast _ _": "beritakan _ _",
+    "broadcast _ _ and wait": "beritakan _ _ dan tunggu",
+    "build": "bangun",
+    "c": "c",
+    "call _ _": "panggil _ _",
+    "call _ w/continuation": "panggil _ dengan kontinuasi",
+    "can rotate": "bisa berputar",
+    "ceiling": "ceiling",
+    "change _ by _": "ubah _ sebanyak _",
+    "change _ effect by _": "ubah efek _ sebanyak _",
+    "change pen color by _": "ubah warna pena sebanyak _",
+    "change pen shade by _": "ubah kegelapan pena sebanyak _",
+    "change pen size by _": "ubah ukuran pena sebesar _",
+    "change size by _": "ubah ukuran sebanyak _",
+    "change tempo by _": "ubah tempo sebanyak _",
+    "change x by _": "ubah x sebanyak _",
+    "change y by _": "ubah y sebanyak _",
+    "check for flat ends of lines": "centang untuk ujung rata dari garis pena",
+    "check for smooth, predictable animations across computers": "centang untuk animasi lembut, bisa diramalkan di komputer",
+    "check to always show slot types in the input dialog": "centang untuk selalu menunjukan slot tipe di input dialog",
+    "check to disallow script reentrance": "klik untuk menghindari skrip masuk ulang",
+    "check to enable IDE animations": "centang untuk menyalahkan animasi IDE",
+    "check to enable alternating colors for nested blocks": "centang untuk menyalahkan warna berganti di balok bersarang",
+    "check to enable dynamic labels for variadic inputs": "centang untuk menyalahkan label dinamik untu input variadik",
+    "check to enable input sliders for entry fields": "centang untuk menyalahkan slider input intuk bagian entry",
+    "check to enable virtual keyboard support for mobile devices": "centang untuk meyalahkan kibor virtual untuk alat mobile",
+    "check to hide (+) symbols in block prototype labels": "centang untuk menyembunykan (+) di label balok prototype",
+    "check to prevent contents from being saved": "centang untuk mencegah konten disimpan",
+    "check to prioritize script execution": "centang untuk mementingkan eksekusi skrip",
+    "check to turn block clicking sound on": "centang untuk menyalahkan suara klik",
+    "check to use blurred drop shadows and highlights": "centang untuk mengunakan bayangan dan cahaya blur saat jatuh",
+    "clean up": "rapikan",
+    "clear": "bersihkan layar",
+    "clear graphic effects": "hapus efek grafis",
+    "click or drag crosshairs to move the rotation center": "klik atau seret crosshair untuk memindahkan pusat rotasi",
+    "clicked": "diklik",
+    "color _ is touching _ ?": "warna _ menyentuh _ ?",
+    "comic": "komik",
+    "command": "perintah",
+    "confetti": "konfetti",
+    "console log _": "catat di konsol _",
+    "cos": "cos",
+    "costume #": "nomor kostum",
+    "costumes tab help": "impor gambar dari situs atau sebuah file dengan cara menyeret berkasnya",
+    "cr": "cr",
+    "create a clone of _": "buat klon baru dari _",
+    "current module versions:": "versi modul sekarang",
+    "d": "d",
+    "delete": "hapus",
+    "delete _ of _": "hapus _ dari _",
+    "delete block definition...": "hapus definisi balok",
+    "delete this clone": "hapus klon ini",
+    "demo (1.2x)": "demo (1.2x)",
+    "detach all parts": "lepaskan semua bagian",
+    "detach from": "lepaskan dari",
+    "development mode": "mode percobaan",
+    "development mode debugging primitives:": "primitif debugging mode percobaan",
+    "direction": "arah",
+    "disable deep-Morphic context menus and show user-friendly ones": "matikan menu konteks deep-morphic dan tunjukan konteks menu yang ramah",
+    "distance to _": "jarak ke _",
+    "don't rotate": "jangan berputar",
+    "down arrow": "panah bawah",
+    "draggable": "bisa diseret",
+    "dropped": "dijatuhkan",
+    "duplicate": "gandakan",
+    "e": "e",
+    "e^": "e^",
+    "edge": "pinggir",
+    "edit": "sunting",
+    "edit...": "sunting...",
+    "enable Morphic context menus and inspectors, not user-friendly!": "Nyalakan Morphic context menu dan inspektor, tidak ramah pengguna!",
+    "export": "ekspor",
+    "export...": "ekspor...",
+    "f": "f",
+    "false": "salah",
+    "file menu import hint": "impor sebuah projek yang sudah diekspor atau pustaka balok, kostum atau suara",
+    "fill": "isi dengan cat",
+    "filtered for _": "disaring untuk _",
+    "find unused global custom blocks and remove their definitions": "cari balok kostum global yang tidak dipakai dan hapus definisi mereka",
+    "floor": "floor",
+    "for all sprites": "untuk semua sprite",
+    "for this sprite only": "hanya untuk sprite ini",
+    "forever _": "selamanya lakukan: _",
+    "frames": "jumlah frame:",
+    "g": "g",
+    "ghost": "keburaman",
+    "giant (8x)": "raksasa (8x)",
+    "glide _ secs to x: _ y: _": "meluncur _ dtk. ke x: _ y: _",
+    "go back _ layers": "ke belakang _ lapisan",
+    "go to _": "pergi ke _",
+    "go to front": "ke depan",
+    "go to x: _ y: _": "pergi ke x: _ y: _",
+    "h": "h",
+    "hello": "halo",
+    "help": "Tolong",
+    "help...": "bantuan...",
+    "hide": "sembunyikan",
+    "hide primitives": "sembunyikan primitif",
+    "hide variable _": "sembunyikan variabel _",
+    "http:// _": "http:// _",
+    "huge (4x)": "besar sekali (4x)",
+    "i": "i",
+    "identical to": "identik dengan",
+    "if _ _": "jika _ _",
+    "if _ _ else _": "jika _ _ jika tidak _",
+    "if on edge, bounce": "jika ada di pinggir, melambung",
+    "import a sound from your computer by dragging it into here": "impor sebuah suara dari komputermu dengan menyeret berkasnya ke sini",
+    "import...": "impor...",
+    "input list:": "Dafta input:",
+    "input names:": "Nama input:",
+    "insert _ at _ of _": "tambahkan _ di _ dari _",
+    "is _ ?": "apakah _ ?",
+    "is _ a _ ?": "apakah _ sebuah _ ?",
+    "item _ of _": "barang _ dari _",
+    "items": "barang",
+    "j": "j",
+    "join _": "gabungkan _",
+    "k": "k",
+    "key _ pressed?": "kunci _ ditekan?",
+    "l": "l",
+    "language_name": "Bahasa Indonesia",
+    "language_translator": "Alexander Raphael Liu, Emmanuella Rumanti",
+    "large": "besar",
+    "last": "terakhir",
+    "last_changed": "2019-01-21",
+    "launch _ _": "luncurkan _ _",
+    "left arrow": "panah kiri",
+    "length of _": "panjang dari _",
+    "length:": "panjang:",
+    "letter": "huruf",
+    "letter _ of _": "huruf _ dari _",
+    "line": "garis",
+    "list": "daftar",
+    "list _": "daftar _",
+    "list view...": "tampilan daftar",
+    "ln": "ln",
+    "load the official library of powerful blocks": "impor modul resmi dari balok hebat",
+    "m": "m",
+    "make a block...": "buat balok baru.",
+    "make a copy and pick it up": "buat kopi dat ambil",
+    "message": "pesan",
+    "monstrous (10x)": "sangat besar (10x)",
+    "mouse down?": "tetikus diklik?",
+    "mouse x": "posisi x tetikus",
+    "mouse y": "posisi y tetikus",
+    "mouse-departed": "ditinggalkan tetikus",
+    "mouse-entered": "disentuh tetikus",
+    "mouse-pointer": "penunjuk tetikus/mouse",
+    "move": "bergerak",
+    "move _ steps": "maju _ langkah",
+    "myself": "diriku",
+    "n": "n",
+    "negative": "negatif",
+    "neighbors ≠": "neighbors ≠",
+    "new...": "baru...",
+    "next costume": "kostum selanjutnya",
+    "none": "tidak ada",
+    "normal": "normal",
+    "normal (1x)": "normal (1x)",
+    "not _": "tidak _",
+    "number": "angka",
+    "o": "o",
+    "only duplicate this block": "hanya gandakan balok ini",
+    "only face left/right": "hanya boleh menghadap kiri/kanan",
+    "open a new browser browser window with a summary of this project": "buka jendela peramban baru dengan ringkasan dari projek ini",
+    "open a new window with a picture of all scripts": "buka jendela baru dengan gambar semua skrip",
+    "open a new window with a picture of the stage": "buka jendela baru dengan gambar dari panggung",
+    "open a new window with a picture of this script": "buka jendela baru dengan gambar dari skrip ini",
+    "open in dialog...": "buka di dialog...",
+    "or": "atau",
+    "other scripts in sprite": "skrip-skrip lain di karakter ini",
+    "p": "p",
+    "pause all _": "hentikan sementara semua _",
+    "pen down": "turunkan pena",
+    "pen trails": "jejak pena",
+    "pen up": "naikkan pena",
+    "pic...": "expor gambar...",
+    "pick random _ to _": "pilih angka acak dari _ ke _",
+    "play note _ for _ beats": "mainkan not _ selama _ ketukan",
+    "play sound _": "mainkan suara _",
+    "play sound _ until done": "mainkan _ sampai selesai",
+    "point in direction _": "tunjuk ke arah _",
+    "point towards _": "tunjuk ke arah _",
+    "predicate": "predikat",
+    "presentation (1.4x)": "presentasi (1.4x)",
+    "pressed": "ditekan",
+    "q": "q",
+    "r": "r",
+    "random": "apapun",
+    "relabel...": "label ulang...",
+    "rename": "namakan ulang",
+    "rename costume": "namakan ulang kostum",
+    "rename sound": "namakan ulang bunyi",
+    "rename...": "namakan ulang...",
+    "repeat _ _": "ulangi _ kali _",
+    "repeat until _ _": "ulangi sampai _ _",
+    "replace item _ of _ with _": "ganti barang _ di _ dengan _",
+    "report _": "laporkan _",
+    "reporter": "pelapor",
+    "reset columns": "atur ulang kolum",
+    "reset timer": "atur ulang timer",
+    "rest for _ beats": "istirahat selama _ ketukan",
+    "right arrow": "panah kanan",
+    "ringify": "cincinkan",
+    "round _": "bulatkan _",
+    "run _ _": "jalankan _ _",
+    "run _ w/continuation": "jalankan _ dengan kontinuasi",
+    "s": "s",
+    "say _": "katakan _",
+    "say _ for _ secs": "katakan _ selama _ dtk.",
+    "script pic...": "gambar skrip...",
+    "script variables _": "skrip variabel _",
+    "scripts pic...": "Gambar skrip",
+    "select": "pilih",
+    "set _ effect to _": "atur efek _ ke _",
+    "set _ to _": "atur _ ke _",
+    "set pen color to _": "atur warna pena ke _",
+    "set pen shade to _": "atur kegelapan pena ke _",
+    "set pen size to _": "atur ukuran pena ke _",
+    "set size to _ %": "atur ukuran ke _ %",
+    "set tempo to _ bpm": "atur tempo ke _ ketukan per menit",
+    "set turbo mode to _": "atur mode turbo ke _",
+    "set x to _": "atur x ke _",
+    "set y to _": "atur y ke _",
+    "settings menu prefer empty slots hint": "jangan centang untuk mengizinkan reporter yang jatuh menendangyang lain",
+    "show": "tampilkan",
+    "show all": "tunjukkan semua",
+    "show global custom block definitions as XML in a new browser window": "tunjukkan definisi balok kostum global sebagai xml di jendela baru",
+    "show primitives": "tampilkan primitif",
+    "show project data as XML in a new browser window": "tunjukkan data projek sebagai XML di jendela peramban",
+    "show variable _": "tampilkan variabel _",
+    "sin": "sin",
+    "size": "ukuran",
+    "slider": "slider",
+    "slider max...": "max slider...",
+    "slider min...": "min slider...",
+    "space": "spasi",
+    "split _ by _": "potong _ di setiap _",
+    "sqrt": "akar kuadrat",
+    "stack size": "ukuran tumpukan:",
+    "stamp": "stempel",
+    "stop _": "hentikan _",
+    "stop all sounds": "hentikan semua suara",
+    "store this project in the downloads folder (in supporting browsers)": "simpan projek ini di folder downloads (hanya untuk browser yang mendukung!)",
+    "switch to costume _": "ganti ke kostum _",
+    "t": "t",
+    "tab": "indentasi",
+    "table view...": "tampilan tabel",
+    "tan": "tan",
+    "tempo": "tempo",
+    "text": "teks",
+    "there are currently no unused global custom blocks in this project": "sekarang tidak ada balok kostum global yang tidak dipakai",
+    "thing": "barang",
+    "think _": "pikirkan _",
+    "think _ for _ secs": "pikirkan _ selama _ dtk.",
+    "this block": "balok ini",
+    "this project doesn't have any custom global blocks yet": "projek ini sepertinya tidak punya balok global buatan sendiri",
+    "this script": "skrip ini",
+    "timer": "timer",
+    "touching _ ?": "menyentuh _ ?",
+    "transient": "sementara",
+    "translator_e-mail": "raphaxander@gmail.com",
+    "true": "benar",
+    "turbo mode?": "mode turbo menyala?",
+    "turn _ _ degrees": "berputar _ _ derajat",
+    "type of _": "tipe dari _",
+    "u": "u",
+    "uncheck for greater speed at variable frame rates": "jangan centang untuk kecepatan lebih dan frame rate dinamis",
+    "uncheck for round ends of lines": "matikan untuk ujung bulat dari garis pena",
+    "uncheck to allow dropped reporters to kick out others": "jangan centang untuk mengizinkan reporter yang jatuh menendangyang lain",
+    "uncheck to allow script reentrance": "jangan centang, untuk mengizinkan skrip masuk ulang",
+    "uncheck to always show (+) symbols in block prototype labels": "jangan centang untuk selalu menunjukan (+) di label balok prototype",
+    "uncheck to disable IDE animations": "jangan centang untuk mematikan animasi IDE",
+    "uncheck to disable alternating colors for nested block": "jangan centang untu mematikan warna berganti di balok bersarang",
+    "uncheck to disable dynamic labels for variadic inputs": "jangan centang untuk mematika label dinamik untuk input variadik",
+    "uncheck to disable input sliders for entry fields": "jangan centang untuk mematikan slider input untuk bagian entry",
+    "uncheck to disable virtual keyboard support for mobile devices": "jangan centang untuk mematikan kibor virtual untuk alat mobile",
+    "uncheck to run scripts at normal speed": "jangan centang untuk menjalankan skrip pada kecepatan normal",
+    "uncheck to save contents in the project": "jangan centang untuk menymimpan konten di dalam projek",
+    "uncheck to turn block clicking sound off": "jangan centang untuk mematiakn suara klik",
+    "uncheck to use solid drop shadows and highlights": "jangan centang untuk mengunakan bayangan dan cahaya saat jatuh",
+    "uncheck to use the input dialog in short form": "jangan centang untuk menggunakan input dialog dalam bentuk pendek",
+    "undo the last block drop in this pane": "undo mendrag dan jatuhkan balok terakhir di panel ini",
+    "undrop": "undo jatuhkan",
+    "unicode _ as letter": "Unicode _ sebagai huruf",
+    "unicode of _": "nilai unicode dari _",
+    "unringify": "hapus cincin",
+    "untitled": "tak berjudul",
+    "unused block(s) removed": "balok yang tidak dipakai terhapus",
+    "up arrow": "panah atas",
+    "v": "v",
+    "w": "w",
+    "wait _ secs": "tungu _ dtk.",
+    "wait until _": "tunggu sampai _",
+    "warp _": "bungkus _",
+    "what's your name?": "siapa namamu?",
+    "when I am _": "ketika aku _",
+    "when I receive _ _": "ketika aku menerima _ _",
+    "when I start as a clone": "ketika aku mulai sebagai klon",
+    "when _": "ketika _",
+    "when _ clicked": "ketika _ diklik",
+    "when _ key pressed _": "ketika _ ditekan _",
+    "whitespace": "ruang putih",
+    "with inputs": "dengan input",
+    "world": "dunia",
+    "x": "x",
+    "x position": "posisi x",
+    "y": "y",
+    "y position": "posisi y",
+    "your own": "punyamu",
+    "z": "z"
+}

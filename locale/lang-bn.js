@@ -1,1252 +1,453 @@
-/*
-
-    lang-bn.js
-
-   	বাংলা (Bangla) translation for SNAP!
-
-    written by Dr. Mokter Hossain and Radman Siddiki
-
-    Copyright (C) 2014-2020 by Dr. Mokter Hossain, 2020 by Radman Siddiki
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-		bn - Bengali(Bangla) => lang-bn.js
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.bn = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-    // translations meta information
-    'language_name':
-        'বাংলা', // the name as it should appear in the language menu
-    'language_translator':
-        'Dr. Mokter Hossain, Radman Siddiki', // your name for the Translators tab
-    'translator_e-mail':
-        'mokter@gmail.com, radman.siddiki@outlook.com', // optional
-    'last_changed':
-        '2020-07-04', // this, too, will appear in the Translators tab
-
-
-    // GUI
-    // control bar:
-    'untitled':
-        'শিরোনামহীন',
-    'development mode':
-        'উন্নয়ন মোড',
-
-    // categories:
-    'Motion':
-        'গতি',
-    'Looks':
-        'সৌন্দর্য',
-    'Sound':
-        'শব্দ',
-    'Pen':
-        'লেখনী',
-    'Control':
-        'নিয়ন্ত্রণ',
-    'Sensing':
-        'অনুভূতি',
-    'Operators':
-        'চালক',
-    'Variables':
-        'চলক',
-    'Lists':
-        'তালিকা',
-    'Other':
-        'অন্যান্য',
-
-    // editor:
-    'draggable':
-        'টেনে আনার যোগ্য',
-
-    // tabs:
-    'Scripts':
-        'স্ক্রিপ্টগুলো',
-    'Costumes':
-        'পরিচ্ছদ',
-    'Backgrounds':
-        'ব্যাকগ্রাউন্ড',
-    'Sounds':
-        'শব্দমালা',
-
-    // names:
-    'Sprite':
-        'স্প্রাইট',
-    'Stage':
-        'দৃশ্যস্থল',
-
-    // rotation styles:
-    'don\'t rotate':
-        'ঘুরতে পারে না',
-    'can rotate':
-        'ঘুরতে পারে',
-    'only face left/right':
-        'একমাত্র ডানে/বামে মুখ',
-
-    // new sprite button:
-    'add a new sprite':
-        'একটি নতুন স্প্রাইট যোগ কর',
-    'paint a new sprite':
-        'একটি স্প্রাইট আঁক',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'একটি ক্যামেরা স্ক্রিনশট নেও\n এবং এটি নতুন পোশাক হিসেবে আমদানি কর',
-
-    // tab help
-    'costumes tab help':
-        '\nনতুন/অতিরিক্ত পরিচ্ছদ ব্যবহারের জন্য প্রথমে ডান দিকের নিচের পরিচ্ছদ আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n'
-    	+'\n\n'+
-    	'নতুন/অতিরিক্ত স্পাইট ব্যবহারের জন্য প্রথমে ডান দিকের নিচের স্পাইট আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n',
-    'import a sound from your computer\nby dragging it into here':
-        '\nশব্দ ব্যবহারের জন্য কম্পিউটার থেকে প্রত্যাশিত শব্দের ফাইল নির্বাচন করে এখানে আনয়ন করতে পার',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'স্টেজ নির্বাচিত হয়েছে:\n কোন গতিশীল প্রিমিটিভ ব্লক নেই\n'
-            + 'disponibles',
-
-    'move %n steps':
-        'অগ্রসর হও %n ধাপ',
-    'turn %clockwise %n degrees':
-        'ডানদিকে %clockwise %n ডিগ্রীকোণে ঘোর',
-    'turn %counterclockwise %n degrees':
-        'বামদিকে %counterclockwise %n ডিগ্রীকোণে ঘোর',
-    'point in direction %dir':
-        'দিকে মুখ কর  %dir',
-    'point towards %dst':
-        'প্রতি নির্দেশ কর  %dst',
-    'go to x: %n y: %n':
-        'x: %n y: %n অবস্থানে যাও',
-    'go to %dst':
-        '%dst যাও',
-    'glide %n secs to x: %n y: %n':
-        'গড়িয়ে চল x: %n y: %n অবস্থানে  %n সেকেন্ড  ',
-    'change x by %n':
-        'x পরিবর্তন কর %n দ্বারা',
-    'set x to %n':
-        'x নির্ধারণ কর %n',
-    'change y by %n':
-        'y পরিবর্তন কর %n দ্বারা',
-    'set y to %n':
-        'y নির্ধারণ কর %n',
-    'if on edge, bounce':
-        'প্রান্ত স্পর্শ করলে উল্টে ফিরে আস',
-    'x position':
-        'এর x অবস্থান',
-    'y position':
-        'এর y অবস্থান',
-    'direction':
-        'এর গতিপথ',
-	
-    // looks:
-    'switch to costume %cst':
-        'পরিচ্ছদ বদল কর %cst',
-    'next costume':
-        'পরবর্তী পরিচ্ছদ',
-    'costume #':
-        'পরিচ্ছদ সংখ্যা',
-    'new costume %l width %dim height %dim':
-        'নতুন পোশাক %l প্রস্থ %dim উচ্চতা %dim',
-    'say %s for %n secs':
-        'বল %s %n সেকেন্ড পর্যন্ত',
-    'say %s':
-        'বল %s',
-    'think %s for %n secs':
-        'ভাব %s %n সেকেন্ড পর্যন্ত',
-    'think %s':
-        'ভাব %s',
-    'Hello!':
-        'হ্যালো!',
-    'Hmm...':
-        'হুম ...',
-    'change %eff effect by %n':
-        'বিশেষ প্রভাব %eff পরিবর্তন কর %n দ্বারা',
-    'set %eff effect to %n':
-        'বিশেষ প্রভাব %eff %n গুণ নির্ধারণ কর',
-    'clear graphic effects':
-        'চিত্রলেখ প্রভাব পরিষ্কার কর',
-    'change size by %n':
-        'আকার %n গুণ পরিবর্তন কর',
-    'set size to %n %':
-        'আকার %n % নির্ধারণ কর',
-    'size':
-        'এর আকার',
-    'show':
-        'প্রদর্শন কর',
-    'hide':
-        'গোপন কর',
-    'go to front':
-        'সামনে যাও',
-    'go back %n layers':
-        'পশ্চাতে যাও %n স্তর',
-
-    'development mode \ndebugging primitives:':
-        'উন্নয়ন মোড \n ডিবাগিং প্রিমিটিভ',
-    'console log %mult%s':
-        'কনসোল লগ: %mult%s',
-    'alert %mult%s':
-        'সতর্ক: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'শব্দ বাজাও  %snd',
-    'play sound %snd until done':
-        '%snd শব্দ বাজাও এটি শেষ না হওয়া পর্যন্ত',
-    'stop all sounds':
-        'সকল শব্দ বন্ধ কর',
-    'rest for %n beats':
-        'নীরব থাক %n কম্পন পর্যন্ত',
-    'play sound %snd at %rate Hz':
-        'শব্দ %snd রেট %rate -এ বাজাও',
-    'play note %n for %n beats':
-        'নোট %n বাজাও %n কম্পন পর্যন্ত',
-     '%aa of sound %snd':
-        'শব্দের %aa %snd',
-     'duration':
-        'ব্যাপ্তিকাল',
-     'length':
-        'দৈর্ঘ্য',
-    'change tempo by %n':
-        'শব্দের কম্পনমাত্রা %n দ্বারা পরিবর্তন কর',
-    'set tempo to %n bpm':
-        'শব্দের কম্পনমাত্রা %n করে ফেল',
-    'tempo':
-        'শব্দের কম্পনমাত্রা',
-	
-    // pen:
-    'clear':
-        'পরিচ্ছদ পরিষ্কার কর',
-    'pen down':
-        'লেখনী নিম্নগামী কর',
-    'pen up':
-        'লেখনী ঊর্ধ্বগামী কর',
-    'set pen color to %clr':
-        'লেখনীর রঙ %clr নির্ধারণ কর',
-    'change pen color by %n':
-        'লেখনীর রঙ %n পরিবর্তন কর',
-    'set pen color to %n':
-        'লেখনীর রঙ %n নির্ধারণ কর',
-    'change pen shade by %n':
-        'লেখনীর ছায়া %n পরিবর্তন কর',
-    'set pen shade to %n':
-        'লেখনীর ছায়া %n নির্ধারণ কর',
-    'change pen size by %n':
-        'লেখনীর আকার পরিবর্তন কর %n',
-    'set pen size to %n':
-        'লেখনীর আকার নির্ধারণ কর %n',
-    'stamp':
-        'সীলমোহর',
-     // "instruments", i.e. wave forms
-    '(1) sine':
-        '(1) জ্যা',
-    '(2) square':
-        '(2) বর্গ',
-    '(4) triangle':
-        '(4) ত্রিভুজ',
-        
-    // control:
-    'when %greenflag clicked':
-        'যখন %greenflag ক্লিক করা হবে',
-    'when %keyHat key pressed %keyName':
-        'যখন %keyHat %keyName ক্লিক করা হবে',
-    'when I am %interaction':
-        'যখন আমাকে %interaction',
-    'clicked':
-	'ক্লিক করা হবে',
-    'pressed':
-	'চাপা হবে',
-    'dropped':
-        'ফেলা হবে',
-    'mouse-entered':
-        'মাউস চাপা হবে',
-    'mouse-departed':
-        'মাউস উঠানো হবে',
-    'scrolled-down':
-    	'নিচে স্ক্রল করা হবে',
-    'scrolled-up':
-        'উপরে স্ক্রল করা হবে',
-    'stopped':
-        'থামানো হবে',
-    'when %b':
-        'যখন %b শর্তটি সত্য হবে',
-    'when I receive %msgHat %message':
-        'যখন আমি পাব বার্তা %msgHat %message',
-    'broadcast %msg %receive':
-        'বার্তা %msg %receive সম্প্রচার কর',
-    'broadcast %msg %receive and wait':
-        'বার্তা %msg %receive সম্প্রচার করে অপেক্ষা কর',
-    'send %msg to %spr':
-        'বার্তা %msg সম্প্রচার কর %spr',
-    'Message name':
-        'নতুন বার্তা তৈরি কর',
-    'message':
-        'বার্তা',
-    'any message':
-        'যে কোন বার্তা',
-    'initialize':
-        'আরম্ভ কর', 
-    'wait %n secs':
-        'অপেক্ষা কর %n সেকেন্ড',
-    'wait until %b':
-        'অপেক্ষা কর %b যতক্ষণ না পর্যন্ত',
-    'forever %loop':
-        'অনন্তকাল কর %loop',
-    'repeat %n %loop':
-        'পুনরাবৃত্তি কর  %n বার  %loop ',
-    'repeat until %b %loop':
-        'পুনরায় কর যতক্ষণ না  %b %loop',
-    'if %b %c':
-        'যদি শর্তটি সত্য হয় %b %c',
-    'if %b %c else %c':
-        'যদি শর্তটি সত্য হয় %b %c অন্যথায় %c',
-    'report %s':
-        'প্রতিবেদন কর %s',
-    'stop block':
-        'ব্লক বন্ধ কর',
-    'stop script':
-        'বর্ণনা বন্ধ কর',
-    'stop all %stop':
-        'সব বন্ধ কর  %stop',
-    'pause all %pause':
-        'সব স্থগিত কর %pause',
-    'run %cmdRing %inputs':
-        'চালনা কর %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'শুরু কর %cmdRing %inputs',
-    'call %repRing %inputs':
-        'আহ্বান কর %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'চালনা কর  %cmdRing ধারাবাহিকতার সঙ্গে',
-    'call %cmdRing w/continuation':
-        'আহ্বান কর  %cmdRing ধারাবাহিকতার সঙ্গে',
-    'warp %c':
-        'বিরতি ছাড়াই %c',
-    'when I start as a clone':
-        'যখন আমি একটি ক্লোন হিসেবে শুরু করি',
-    'create a clone of %cln':
-        '%cln একটি ক্লোন এর সৃষ্টি কর',
-    'myself':
-        'স্বীয়',
-    'delete this clone':
-        'এই ক্লোনটি মুছে ফেল',
-
-    // sensing:
-    'touching %col ?':
-        'স্পর্শ করেছে কিনা %col ?',
-    'touching %clr ?':
-        'স্পর্শ রঙ  %clr কিনা?',
-    'color %clr is touching %clr ?':
-        '%clr রঙ %clr রঙ গামী কিনা?',
-    'ask %s and wait':
-        '%s জিজ্ঞাসা করে অপেক্ষা কর',
-    'what\'s your name?':
-        'তোমার নাম কি?',
-    'answer':
-        'জবাব',
-    'mouse x':
-        'মাউস x',
-    'mouse y':
-        'মাউস y',
-    'mouse down?':
-        'মাউস নিচে গিয়েছে?',
-    'key %key pressed?':
-        'কোন কী %key চাপা কিনা?',
-    'distance to %dst':
-        'পর্যন্ত দূরত্ব %dst',
-    'reset timer':
-        'সময় নির্ণায়ক পুন:স্থাপন কর',
-    'timer':
-        'সময় নির্ণায়ক',
-    '%att of %spr':
-        '%att লক্ষণ  %spr এর',    
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'টার্বো মোড চালু কিনা?',
-     'set turbo mode to %b':
-        'টার্বো মোডকে %b নির্ধারণ কর',
-
-    'filtered for %clr':
-        'ফিল্টার করা  হয়েছে  %clr এর জন্য',
-    'stack size':
-        'স্ট্যাকের আকার',
-    'frames':
-        'ফ্রেমসমূহ',
-
-    // operators:
-    '%n mod %n':
-        '%n ভাগ %n এর অবশিষ্ট',
-    'round %n':
-        '%n এর নিকটতম পূর্ণসংখ্যা',
-    '%fun of %n':
-        '%fun নির্ণয় কর  %n',
-    'pick random %n to %n':
-        'যে কোনো একটি সংখ্যা  %n থেকে   %n পর্যন্ত',
-    'and':
-        'এবং',
-    'or':
-        'অথবা',
-    'not %b':
-        'না %b',
-    'true':
-        'সত্য',
-    'false':
-        'মিথ্যা',
-    'join %words':
-        'যুক্ত কর %words',
-    'hello':
-        'হ্যালো',
-    'world':
-        'পৃথিবী',
-    'letter %ix of %s':
-        '%ix -তম বর্ণ %s এর',
-    '%ta of text %s':
-        '%ta %s -এর বর্ণদৈর্ঘ্য ',
-    'unicode of %s':
-        '%s -এর ইউনিকোড',
-    'unicode %n as letter':
-        'ইউনিকোড %n বর্ণ হিসেবে',
-    'is %s a %typ ?':
-        '%s এই প্রকারের কিনা %typ ?',
-    'is %all== ?':
-        '%all== কিনা?',
-    'identical to':
-        'এর সমতুল্য',
-    'all identical':
-        'all identical',
-    'all <':
-        'all <',
-    'all >':
-        'all >',
-    'all \u2264':
-        'all \u2264',
-    'all \u2265':
-        'all \u2265',
-    'all =':
-        'all =',
-    'neighbors \u2260':
-        'neighbors \u2260',
-
-    'type of %s':
-        '%s -এর প্রকার',
-
-    // variables:
-    'Make a variable':
-        'একটি চলক তৈরি কর',
-    'Variable name':
-        'চলকের নাম',
-    'Delete a variable':
-        'চলকটি মুছে ফেল',
-    'set %var to %s':
-        '%var চলকটি মান %s নির্ধারণ কর',
-    'change %var by %n':
-        '%var চলকটি মান %n দ্বারা পরিবর্তন কর',
-    'show variable %var':
-        '%var চলকটি প্রদর্শন কর',
-    'hide variable %var':
-        '%var চলকটি গোপন কর',
-    'script variables %scriptVars':
-        'স্ক্রিপ্ট চলকসমূহ  %scriptVars',
-    // lists:
-    'list %exp':
-    	'তালিকা %exp',
-    'numbers from %n to %n':
-	'সংখ্যা %n থেকে %n',
-    '%s in front of %l':
-    	'%s %l তালিকাটির সামনে',
-    'item %idx of %l':
-    	'%idx উপাদানটি %l তালিকার',
-    'all but first of %l':
-    	'%l তালিকাটির সব কিন্তু প্রথমটি বাদে',
-    'length of %l':
-     	'%l তালিকাটির দৈর্ঘ্য',
-    '%l contains %s':
-    	'%l তালিকা %s উপাদানটি ধারণ করে',
-    'thing':
-    	'জিনিস',
-    'is %l empty?':
-        'তালিকা %l কি খালি?',
-    'index of %s in %l':
-        'জিনিস %s কততম %l তালিকায়',
-    'add %s to %l':
-    	'%s কে %l তে ঢুকাও',
-    'delete %ida of %l':
-    	'%ida কে %l থেকে মুছে ফেল',
-    'insert %s at %idx of %l':
-     	'%s কে  %idx স্থানে  %l তালিকায় সন্নিবেশিত কর',
-     'replace item %idx of %l with %s':
-    	'%idx স্থানের  %l তালিকার উপাদানটি  %s দ্বারা প্রতিস্থাপন কর',
-
-    // other
-    'Make a block':
-        'একটি ব্লক তৈরি কর',
-
-    // menus
-    // snap menu
-    'About...':
-        'Snap! সম্পর্কিত তথ্য...',
-     'Reference manual':
-        'Snap! রেফারেন্স ম্যানুয়াল',
-    'Snap! website':
-        'Snap! ওয়েবসাইট',
-    'Download source':
-        'Snap! সোর্সকোড',
-    'Switch back to user mode':
-        'ইউজার মোডে ফিরে যাও',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'গভীর-মরফিক প্রসঙ্গ তালিকা এবং পরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও',
-    'Switch to dev mode':
-        'ডেভেলপার মোডে ফিরে যাও',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'মরফিক প্রসঙ্গ তালিকা এবংপরিদর্শক সক্রিয় কর,তবে এটি ব্যবহারকারী বান্ধব নহে!',
-
-    // project menu
-    'Project notes...':
-        'প্রকল্প সম্পর্কিত মন্তব্য...',
-    'New':
-        'নতুন প্রকল্প তৈরি কর',
-    'Open...':
-        'সংরক্ষিত প্রকল্প খোল...',
-    'Save':
-        'প্রকল্পটি সংরক্ষণ কর',
-    'Save As...':
-        'নামসহ প্রকল্পটি সংরক্ষণ করুন...',
-    'Import...':
-        'প্রকল্প ইম্পোর্ট কর...',
-    'file menu import hint':
-        'XML ফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
-    'Export project as plain text...':
-        'প্রকল্পটি প্লেইন টেক্সট হিসাবে ডাউনলোড কর ...',
-    'Export project...':
-        'প্রকল্পটি ডাউনলোড কর...',
-    'show project data as XML\nin a new browser window':
-        'প্রকল্প উপাত্ত একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
-    'Export blocks...':
-        'ব্লকসমূহ ডাউনলোড কর...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XML ফাইল হিসেবে প্রদর্শন কর',
-    'Import tools':
-        'যন্ত্রপাতি ইম্পোর্ট কর',
-     'Libraries...':
-        'ব্লক লাইব্রেরি লোড কর...',
-     'Costumes...':
-        'পরিচ্ছদ লোড কর...',
-     'Sounds...':
-        'শব্দের ফাইল লোড কর',
-    'load the official library of\npowerful blocks':
-        'শক্তিশালী ব্লকের অফিসিয়াল \nলাইব্রেরি লোড কর',
-
-    // cloud menu
-    'Login...':
-        'লগ ইন...',
-    'Signup...':
-        'সাইন আপ...',
-    'Reset Password...':
-        'পাসওয়ার্ড পরিবর্তন কর...',
-            
-        
-    // settings menu
-    'Language...':
-        'ভাষা পরিবর্তন কর...',
-    'Zoom blocks...':
-        'ব্লকসমূহ জুম কর...',
-    'Stage size...':
-        'দৃশ্যস্থলের আকার পরিবর্তন কর...',
-    'Blurred shadows':
-        'ঝাপসা ছায়া',
-    'uncheck to use solid drop\nshadows and highlights':
-        'নিরেট ড্রপ ছায়া এবং হাইলাইট ব্যবহার আনচেক কর',
-    'check to use blurred drop\nshadows and highlights':
-        'ঝাপসা ছায়া এবং হাইলাইট ব্যবহার চেক কর',
-    'Zebra coloring':
-        'জেব্রা চেহারা',
-    'check to enable alternating\ncolors for nested blocks':
-        'নেস্টেড ব্লকের পরিবর্তিত রঙ সক্রিয় করার জন্য চেক কর',
-    'uncheck to disable alternating\ncolors for nested block':
-        'নেস্টেড ব্লকের পরিবর্তিত রঙ নিস্ক্রিয় করার জন্য আনচেক কর',
-    'Dynamic input labels':
-        'গতিশীল  ইনপুট লেবেল',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ভারিয়াদিক  ইনপুট এর গতিশীল লেবেল নিস্ক্রিয় করার জন্য আনচেক কর',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'ভারিয়াদিক  ইনপুট এর গতিশীল লেবেল সক্রিয় করার জন্য চেক কর',
-    'Prefer empty slot drops':
-        'খালি স্লট ড্রপ পছন্দ কর',
-    'settings menu prefer empty slots hint':
-        'খালি স্লট মেনু স্থাপন করার সাহায্যপূর্ণ ইঙ্গিত',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'ঝরে পরা রিপোর্টারসমূহ অন্যদের বের করে দেওয়ার জন্য আনচেক কর',
-    'Long form input dialog':
-        'দীর্ঘ আকারের ডায়লগ ইনপুট',
-    'Plain prototype labels':
-        'সাধারণ প্রোটোটাইপ লেবেল',
-            
-    'check to always show slot\ntypes in the input dialog':
-        'সর্বদা ইনপুট ডায়লগে স্লট এর ধরন দেখানোর জন্য চেক কর',
-    'uncheck to use the input\ndialog in short form':
-        'সংক্ষিপ্ত আকারের ইনপুট ডায়লগ ব্যবহারের জন্য আনচেক কর',
-    'Virtual keyboard':
-        'ভার্চুয়াল কিবোর্ড',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'মোবাইল ডিভাইসে ভার্চুয়াল কিবোর্ড সহায়তা নিস্ক্রিয় করার জন্য চেক কর',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'মোবাইল ডিভাইসে ভার্চুয়াল কিবোর্ড সহায়তা সক্রিয় করার জন্য চেক কর',
-    'Input sliders':
-        'ইনপুট স্লাইডার',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'এন্ট্রি ফিল্ডে ইনপুট স্লাইডার নিস্ক্রিয় করার জন্য আনচেক কর',
-    'check to enable\ninput sliders for\nentry fields':
-        'এন্ট্রি ফিল্ডে ইনপুট স্লাইডার সক্রিয় করার জন্য চেক কর',
-    'Clicking sound':
-        'ক্লিক শব্দ',
-    'Turbo mode':
-        'টার্বো মোড',
-    'Flat design':
-        'ফ্লাট ডিজাইন',
-    'uncheck to turn\nblock clicking\nsound off':
-        'ক্লিক শব্দ বন্ধ করার জন্য আনচেক কর',
-    'check to turn\nblock clicking\nsound on':
-        'ক্লিক শব্দ চালু করার জন্য চেক কর',
-    'Animations':
-        'প্রাণবন্ততা',
-    'uncheck to disable\nIDE animations':
-        'IDE প্রাণবন্ততা বন্ধ করার জন্য আনচেক কর',
-    'check to enable\nIDE animations':
-        'IDE প্রাণবন্ততা চালু করার জন্য চেক কর',
-    'Thread safe scripts':
-        'নির্বিঘ্ন বর্ণনা যোগসূত্র',
-    'uncheck to allow\nscript reentrancy':
-        'বর্ণনা পুনপ্রবেশ অনুমোদন করার জন্য আনচেক কর',
-    'check to disallow\nscript reentrancy':
-        'বর্ণনা পুনপ্রবেশ অনুমোদন না  করার জন্য চেক কর',
-    'Prefer smooth animations':
-       'মসৃণ অ্যানিমেশন পছন্দ কর',
-    'Flat line ends':
-        'ফ্লাট লাইনের সমাপ্তি',
-    'Codification support':
-        'অন্যান্য প্রোগ্রামিং ভাষার কোড দেখাও',   
-        
-    // inputs
-    'with inputs':
-        'ইনপুট দ্বারা',
-    'input names:':
-        'ইনপুট নাম:',
-    'Input Names:':
-        'ইনপুট নাম:',
-    'input list:':
-        'ইনপুট তালিকা:',
-
-    // context menus:
-    'help':
-        'সাহায্য কর',
-
-    // blocks:
-    'help...':
-        'সাহায্য কর...',
-    'relabel...':
-        'নামান্তর কর...',
-    'duplicate':
-        'এটির প্রতিলিপি তৈরী কর',
-    'make a copy\nand pick it up':
-        'এটি কপি কর এবং  নির্বাচন কর',
-    'only duplicate this block':
-        'শুধুমাত্র এই ব্লকের প্রতিলিপি তৈরী কর',
-    'delete':
-        'এটি মুছে ফেল',
-    'script pic...':
-        'স্ক্রিপ্ট ছবি...',
-    'open a new window\nwith a picture of this script':
-        'এই স্ক্রিপ্টর ছবি দিয়ে একটা নতুন উইন্ডো খোল',
-    'ringify':
-        'পরিবেষ্টন কর',
-    'unringify':
-        'পরিবেষ্টনমুক্ত করা',
-
-    // custom blocks:
-    'delete block definition...':
-        'ব্লক সংজ্ঞা মুছে ফেল',
-    'edit...':
-        'সম্পাদন কর...',
-
-    // sprites:
-    'edit':
-        'সম্পাদন কর',
-    'export...':
-        'প্রেরণ কর...',
-
-    // stage:
-    'show all':
-        'সব প্রদর্শন কর',
-
-    // scripting area
-    'clean up':
-        'পরিষ্কার-পরিচ্ছন্ন কর',
-    'arrange scripts\nvertically':
-        'উল্লম্বভাবে \nস্ক্রিপ্টস সুবিন্যস্ত কর',
-    'add comment':
-        'মন্তব্য যোগ কর',
-    'make a block...':
-        'একটি ব্লক তৈরী কর...',
-
-    // costumes
-    'rename':
-        'নতুন নামকরণ কর',
-    'export':
-        'প্রেরণ কর',
-    'rename costume':
-        'পরিচ্ছদ নতুন নামকরণ কর',
-
-    // sounds
-    'Play sound':
-        'শব্দ বাজাও',
-    'Stop sound':
-        'শব্দ বন্ধ কর',
-    'Stop':
-        'বন্ধ কর',
-    'Play':
-        'বাজাও',
-    'rename sound':
-        'শব্দ নতুন নামকরণ কর',
-
-    // dialogs
-    // buttons
-    'OK':
-        'ঠিক আছে',
-    'Ok':
-        'ঠিক আছে',
-    'Cancel':
-        'বাতিল কর',
-    'Yes':
-        'হ্যাঁ',
-    'No':
-        'না',
-    'Open':
-        'খোল',
-    'Cloud':
-        'ক্লাউড',
-    'Browser':
-        'ব্রাউজার',
-    'Examples':
-        'নমুনা প্রকল্প',
-
-    // help
-    'Help':
-        'সাহায্য কর',
-
-    // Project Manager
-    'Untitled':
-        'শিরোনামহীন',
-    'Open Project':
-        'সংরক্ষিত কোন প্রকল্প নির্বাচন করে খোল',
-    '(empty)':
-        '(খালি)',
-    'Saved!':
-        'সংরক্ষিত হয়েছে!',
-    'Delete Project':
-        'প্রকল্প মুছে ফেল',
-    'Are you sure you want to delete':
-        'তুমি কি মুছে দেওয়ার বিষয়ে নিশ্চিত?',
-    'rename...':
-        'নতুন নামকরণ কর...',
-
-    // costume editor
-    'Costume Editor':
-        'পরিচ্ছদ সম্পাদনকারী',
-    'click or drag crosshairs to move the rotation center':
-        'ঘূর্ণন কেন্দ্র সরাতে crosshairs ক্লিক কর অথবা টেনে আন',
-
-    // project notes
-    'Project Notes':
-        'প্রকল্প সম্পর্কিযে কোনত মন্তব্য',
-
-    // new project
-    'New Project':
-        'নতুন প্রকল্প',
-    'Replace the current project with a new one?':
-        'বর্তমান প্রকল্পটি নতুন প্রকল্প দ্বারা প্রতিস্থাপন করতে চাও?',
-
-    // save project
-    'Save Project As...':
-        'প্রকল্পটি নামান্তর কর...',
-
-    // export blocks
-    'Export blocks':
-        'ব্লক এক্সপোর্ট কর',
-    'Import blocks':
-        'ব্লক ইম্পোর্ট কর',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'এই প্রকল্পের জন্য এখনো কোনো কাস্টম গ্লোবাল ব্লক নেই',
-    'select':
-        'নির্বাচন কর',
-    'all':
-        'সকল',
-    'none':
-        'কোনোটাই না',
-
-    // variable dialog
-    'for all sprites':
-        'সব স্প্রাইট জন্য',
-    'for this sprite only':
-        'শুধুমাত্র এই স্প্রাইট জন্য',
-
-    // block dialog
-    'Change block':
-        'ব্লক পরিবর্তন ব্লক',
-    'Command':
-        'আদেশ',
-    'Reporter':
-        'প্রতিবেদক',
-    'Predicate':
-        'সূত্রের বিধেয়',
-
-    // block editor
-    'Block Editor':
-        'ব্লক সম্পাদনকারী',
-    'Apply':
-        'প্রয়োগ কর',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'কাস্টম ব্লক মুছে দাও',
-    'block deletion dialog text':
-        'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার ব্যাপারে নিশ্চিত?',
-
-    // input dialog
-    'Create input name':
-        'ইনপুট নাম তৈরি কর',
-    'Edit input name':
-        'ইনপুট নাম পরিবর্তন কর',
-    'Edit label fragment':
-        'লেবেল টুকরা পরিবর্তন কর',
-    'Title text':
-        'শিরোনামের লেখা',
-    'Input name':
-        'ইনপুট নাম',
-    'Delete':
-        'মুছে ফেল',
-    'Object':
-        'বস্তু',
-    'Number':
-        'সংখ্যা',
-    'Text':
-        'বর্ণ',
-    'List':
-        'তালিকা',
-    'Any type':
-        'যেকোন প্রকার',
-    'Boolean (T/F)':
-        'বুলিয়ান (সত্য/মিথ্যা)',
-    'Command\n(inline)':
-        'আদেশ \n(ইনলাইন)',
-    'Command\n(C-shape)':
-        'আদেশ \n(C-আকৃতি)',
-    'Any\n(unevaluated)':
-        'যেকোন \n(সংখ্যা অনির্ণয় করা)',
-    'Boolean\n(unevaluated)':
-        'বুলিয়ান \n(সংখ্যা অনির্ণয় করা)',
-    'Single input.':
-        'একক ইনপুট',
-    'Default Value:':
-        'ডিফল্ট (অনুপস্থিত)মান:',
-    'Multiple inputs (value is list of inputs)':
-        'একাধিক ইনপুট (মান ইনপুট তালিকা)',
-    'Upvar - make internal variable visible to caller':
-        'অভ্যন্তরীণ চলক আহ্বানকারীকে দৃশ্যমান কর',
-
-    // About Snap
-    'About Snap':
-        'Snap! সম্পর্কিত তথ্য',
-    'Back...':
-        'ফিরে যাও...',
-    'License...':
-        'লাইসেন্স...',
-    'Modules...':
-        'মডিউল...',
-    'Credits...':
-        'স্বীকৃতি...',
-    'Translators...':
-        'অনুবাদক...',
-    'License':
-        'লাইসেন্স',
-    'current module versions:':
-        'বর্তমান মডিউল সংস্করণ',
-    'Contributors':
-        'সাহায্যকারীবৃন্দ',
-    'Translations':
-        'ভাষান্তরসমূহ',
-
-    // variable watchers
-    'normal':
-        'স্বাভাবিক',
-    'large':
-        'বৃহৎ',
-    'slider':
-        'স্লাইডার',
-    'slider min...':
-        'স্লাইডার সর্বনিম্ন...',
-    'slider max...':
-        'স্লাইডার সর্বোচ্চ...',
-    'Slider minimum value':
-        'স্লাইডারের সর্বনিম্ন মান',
-    'Slider maximum value':
-        'স্লাইডারের সর্বোচ্চ মান',
-
-    // list watchers
-    'length: ':
-        'দৈর্ঘ্য: ',
-
-    // coments
-    'add comment here...':
-        'এখানে মন্তব্য যোগ কর...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) ডিগ্রী ডান',
-    '(-90) left':
-        '(-90) ডিগ্রী বামে',
-    '(0) up':
-        '(0) উপরে',
-    '(180) down':
-        '(180) নিচে',
-
-    // collision detection
-    'mouse-pointer':
-        'মাউস-পয়েন্টার',
-    'edge':
-        'প্রান্ত',
-    'pen trails':
-        'কলম ভ্রমণ',
-
-    // costumes
-    'Turtle':
-        'টার্টল পোশাক',
-
-    // graphical effects
-    'ghost':
-        'ভূত',
-
-    // keys
-    'space':
-        'স্পেসবার',
-    'up arrow':
-        'আপ অ্যারো',
-    'down arrow':
-        'ডাউন অ্যারো',
-    'right arrow':
-        'রাইট অ্যারো',
-    'left arrow':
-        'লেফট অ্যারো',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '১',
-    '2':
-        '২',
-    '3':
-        '৩',
-    '4':
-        '৪',
-    '5':
-        '৫',
-    '6':
-        '৬',
-    '7':
-        '৭',
-    '8':
-        '৮',
-    '9':
-        '৯',
-
-    // messages
-    'new...':
-        'নতুন বার্তা লিখ...',
-
-    // math functions
-    'abs':
-        'পরমমান',
-    'sqrt':
-        'বর্গমূল',
-    'sin':
-        'সাইন্',
-    'cos':
-        'কোসাইন্',
-    'tan':
-        'tan',
-    'asin':
-        'আসীন',
-    'acos':
-        'একোস',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        'সংখ্যা',
-    'text':
-        'বর্ণ',
-    'Boolean':
-        'বুলিয়েন',
-    'list':
-        'তালিকা',
-    'command':
-        'নির্দেশ',
-    'reporter':
-        'রিপোর্টার',
-    'predicate':
-        'প্রেডিক্যাট',
-
-    // list indices
-    'last':
-        'সর্বশেষ',
-    'random':
-        'যেকোনো'
-};
+    "0": "0",
+    "1": "১",
+    "2": "২",
+    "3": "৩",
+    "4": "৪",
+    "5": "৫",
+    "6": "৬",
+    "7": "৭",
+    "8": "৮",
+    "9": "৯",
+    "(-90) left": "(-90) ডিগ্রী বামে",
+    "(0) up": "(0) উপরে",
+    "(1) sine": "(1) জ্যা",
+    "(180) down": "(180) নিচে",
+    "(2) square": "(2) বর্গ",
+    "(4) triangle": "(4) ত্রিভুজ",
+    "(90) right": "(90) ডিগ্রী ডান",
+    "(empty)": "(খালি)",
+    "About Snap": "Snap! সম্পর্কিত তথ্য",
+    "About...": "Snap! সম্পর্কিত তথ্য...",
+    "Animations": "প্রাণবন্ততা",
+    "Any (unevaluated)": "যেকোন (সংখ্যা অনির্ণয় করা)",
+    "Any type": "যেকোন প্রকার",
+    "Apply": "প্রয়োগ কর",
+    "Are you sure you want to delete": "তুমি কি মুছে দেওয়ার বিষয়ে নিশ্চিত?",
+    "Back...": "ফিরে যাও...",
+    "Backgrounds": "ব্যাকগ্রাউন্ড",
+    "Block Editor": "ব্লক সম্পাদনকারী",
+    "Blurred shadows": "ঝাপসা ছায়া",
+    "Boolean": "বুলিয়েন",
+    "Boolean (T/F)": "বুলিয়ান (সত্য/মিথ্যা)",
+    "Boolean (unevaluated)": "বুলিয়ান (সংখ্যা অনির্ণয় করা)",
+    "Browser": "ব্রাউজার",
+    "Cancel": "বাতিল কর",
+    "Change block": "ব্লক পরিবর্তন ব্লক",
+    "Clicking sound": "ক্লিক শব্দ",
+    "Cloud": "ক্লাউড",
+    "Codification support": "অন্যান্য প্রোগ্রামিং ভাষার কোড দেখাও",
+    "Command": "আদেশ",
+    "Command (C-shape)": "আদেশ (C-আকৃতি)",
+    "Command (inline)": "আদেশ (ইনলাইন)",
+    "Contributors": "সাহায্যকারীবৃন্দ",
+    "Control": "নিয়ন্ত্রণ",
+    "Costume Editor": "পরিচ্ছদ সম্পাদনকারী",
+    "Costumes": "পরিচ্ছদ",
+    "Costumes...": "পরিচ্ছদ লোড কর...",
+    "Create input name": "ইনপুট নাম তৈরি কর",
+    "Credits...": "স্বীকৃতি...",
+    "Default Value:": "ডিফল্ট (অনুপস্থিত)মান:",
+    "Delete": "মুছে ফেল",
+    "Delete Custom Block": "কাস্টম ব্লক মুছে দাও",
+    "Delete Project": "প্রকল্প মুছে ফেল",
+    "Delete a variable": "চলকটি মুছে ফেল",
+    "Download source": "Snap! সোর্সকোড",
+    "Dynamic input labels": "গতিশীল ইনপুট লেবেল",
+    "Edit input name": "ইনপুট নাম পরিবর্তন কর",
+    "Edit label fragment": "লেবেল টুকরা পরিবর্তন কর",
+    "Examples": "নমুনা প্রকল্প",
+    "Export blocks": "ব্লক এক্সপোর্ট কর",
+    "Export blocks...": "ব্লকসমূহ ডাউনলোড কর...",
+    "Export project as plain text...": "প্রকল্পটি প্লেইন টেক্সট হিসাবে ডাউনলোড কর ...",
+    "Export project...": "প্রকল্পটি ডাউনলোড কর...",
+    "Flat design": "ফ্লাট ডিজাইন",
+    "Flat line ends": "ফ্লাট লাইনের সমাপ্তি",
+    "Hello!": "হ্যালো!",
+    "Help": "সাহায্য কর",
+    "Hmm...": "হুম ...",
+    "Import blocks": "ব্লক ইম্পোর্ট কর",
+    "Import tools": "যন্ত্রপাতি ইম্পোর্ট কর",
+    "Import...": "প্রকল্প ইম্পোর্ট কর...",
+    "Input Names:": "ইনপুট নাম:",
+    "Input name": "ইনপুট নাম",
+    "Input sliders": "ইনপুট স্লাইডার",
+    "Language...": "ভাষা পরিবর্তন কর...",
+    "Libraries...": "ব্লক লাইব্রেরি লোড কর...",
+    "License": "লাইসেন্স",
+    "License...": "লাইসেন্স...",
+    "List": "তালিকা",
+    "Lists": "তালিকা",
+    "Login...": "লগ ইন...",
+    "Long form input dialog": "দীর্ঘ আকারের ডায়লগ ইনপুট",
+    "Looks": "সৌন্দর্য",
+    "Make a block": "একটি ব্লক তৈরি কর",
+    "Make a variable": "একটি চলক তৈরি কর",
+    "Message name": "নতুন বার্তা তৈরি কর",
+    "Modules...": "মডিউল...",
+    "Motion": "গতি",
+    "Multiple inputs (value is list of inputs)": "একাধিক ইনপুট (মান ইনপুট তালিকা)",
+    "New": "নতুন প্রকল্প তৈরি কর",
+    "New Project": "নতুন প্রকল্প",
+    "No": "না",
+    "Number": "সংখ্যা",
+    "OK": "ঠিক আছে",
+    "Object": "বস্তু",
+    "Ok": "ঠিক আছে",
+    "Open": "খোল",
+    "Open Project": "সংরক্ষিত কোন প্রকল্প নির্বাচন করে খোল",
+    "Open...": "সংরক্ষিত প্রকল্প খোল...",
+    "Operators": "চালক",
+    "Other": "অন্যান্য",
+    "Pen": "লেখনী",
+    "Plain prototype labels": "সাধারণ প্রোটোটাইপ লেবেল",
+    "Play": "বাজাও",
+    "Play sound": "শব্দ বাজাও",
+    "Predicate": "সূত্রের বিধেয়",
+    "Prefer empty slot drops": "খালি স্লট ড্রপ পছন্দ কর",
+    "Prefer smooth animations": "মসৃণ অ্যানিমেশন পছন্দ কর",
+    "Project Notes": "প্রকল্প সম্পর্কিযে কোনত মন্তব্য",
+    "Project notes...": "প্রকল্প সম্পর্কিত মন্তব্য...",
+    "Reference manual": "Snap! রেফারেন্স ম্যানুয়াল",
+    "Replace the current project with a new one?": "বর্তমান প্রকল্পটি নতুন প্রকল্প দ্বারা প্রতিস্থাপন করতে চাও?",
+    "Reporter": "প্রতিবেদক",
+    "Reset Password...": "পাসওয়ার্ড পরিবর্তন কর...",
+    "Save": "প্রকল্পটি সংরক্ষণ কর",
+    "Save As...": "নামসহ প্রকল্পটি সংরক্ষণ করুন...",
+    "Save Project As...": "প্রকল্পটি নামান্তর কর...",
+    "Saved!": "সংরক্ষিত হয়েছে!",
+    "Scripts": "স্ক্রিপ্টগুলো",
+    "Sensing": "অনুভূতি",
+    "Signup...": "সাইন আপ...",
+    "Single input.": "একক ইনপুট",
+    "Slider maximum value": "স্লাইডারের সর্বোচ্চ মান",
+    "Slider minimum value": "স্লাইডারের সর্বনিম্ন মান",
+    "Snap! website": "Snap! ওয়েবসাইট",
+    "Sound": "শব্দ",
+    "Sounds": "শব্দমালা",
+    "Sounds...": "শব্দের ফাইল লোড কর",
+    "Sprite": "স্প্রাইট",
+    "Stage": "দৃশ্যস্থল",
+    "Stage selected: no motion primitives": "স্টেজ নির্বাচিত হয়েছে: কোন গতিশীল প্রিমিটিভ ব্লক নেই disponibles",
+    "Stage size...": "দৃশ্যস্থলের আকার পরিবর্তন কর...",
+    "Stop": "বন্ধ কর",
+    "Stop sound": "শব্দ বন্ধ কর",
+    "Switch back to user mode": "ইউজার মোডে ফিরে যাও",
+    "Switch to dev mode": "ডেভেলপার মোডে ফিরে যাও",
+    "Text": "বর্ণ",
+    "Thread safe scripts": "নির্বিঘ্ন বর্ণনা যোগসূত্র",
+    "Title text": "শিরোনামের লেখা",
+    "Translations": "ভাষান্তরসমূহ",
+    "Translators...": "অনুবাদক...",
+    "Turbo mode": "টার্বো মোড",
+    "Turtle": "টার্টল পোশাক",
+    "Untitled": "শিরোনামহীন",
+    "Upvar - make internal variable visible to caller": "অভ্যন্তরীণ চলক আহ্বানকারীকে দৃশ্যমান কর",
+    "Variable name": "চলকের নাম",
+    "Variables": "চলক",
+    "Virtual keyboard": "ভার্চুয়াল কিবোর্ড",
+    "Yes": "হ্যাঁ",
+    "Zebra coloring": "জেব্রা চেহারা",
+    "Zoom blocks...": "ব্লকসমূহ জুম কর...",
+    "_ contains _": "_ তালিকা _ উপাদানটি ধারণ করে",
+    "_ in front of _": "_ _ তালিকাটির সামনে",
+    "_ mod _": "_ ভাগ _ এর অবশিষ্ট",
+    "_ of _": "_ লক্ষণ _ এর",
+    "_ of sound _": "শব্দের _ _",
+    "a": "a",
+    "abs": "পরমমান",
+    "acos": "একোস",
+    "add _ to _": "_ কে _ তে ঢুকাও",
+    "add a new sprite": "একটি নতুন স্প্রাইট যোগ কর",
+    "add comment": "মন্তব্য যোগ কর",
+    "add comment here...": "এখানে মন্তব্য যোগ কর...",
+    "alert _": "সতর্ক: _",
+    "all": "সকল",
+    "all <": "all <",
+    "all =": "all =",
+    "all >": "all >",
+    "all but first of _": "_ তালিকাটির সব কিন্তু প্রথমটি বাদে",
+    "all identical": "all identical",
+    "all ≤": "all ≤",
+    "all ≥": "all ≥",
+    "and": "এবং",
+    "answer": "জবাব",
+    "any message": "যে কোন বার্তা",
+    "arrange scripts vertically": "উল্লম্বভাবে স্ক্রিপ্টস সুবিন্যস্ত কর",
+    "asin": "আসীন",
+    "ask _ and wait": "_ জিজ্ঞাসা করে অপেক্ষা কর",
+    "atan": "atan",
+    "b": "b",
+    "block deletion dialog text": "তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার ব্যাপারে নিশ্চিত?",
+    "broadcast _ _": "বার্তা _ _ সম্প্রচার কর",
+    "broadcast _ _ and wait": "বার্তা _ _ সম্প্রচার করে অপেক্ষা কর",
+    "c": "c",
+    "call _ _": "আহ্বান কর _ _",
+    "call _ w/continuation": "আহ্বান কর _ ধারাবাহিকতার সঙ্গে",
+    "can rotate": "ঘুরতে পারে",
+    "change _ by _": "_ চলকটি মান _ দ্বারা পরিবর্তন কর",
+    "change _ effect by _": "বিশেষ প্রভাব _ পরিবর্তন কর _ দ্বারা",
+    "change pen color by _": "লেখনীর রঙ _ পরিবর্তন কর",
+    "change pen shade by _": "লেখনীর ছায়া _ পরিবর্তন কর",
+    "change pen size by _": "লেখনীর আকার পরিবর্তন কর _",
+    "change size by _": "আকার _ গুণ পরিবর্তন কর",
+    "change tempo by _": "শব্দের কম্পনমাত্রা _ দ্বারা পরিবর্তন কর",
+    "change x by _": "x পরিবর্তন কর _ দ্বারা",
+    "change y by _": "y পরিবর্তন কর _ দ্বারা",
+    "check to always show slot types in the input dialog": "সর্বদা ইনপুট ডায়লগে স্লট এর ধরন দেখানোর জন্য চেক কর",
+    "check to disallow script reentrancy": "বর্ণনা পুনপ্রবেশ অনুমোদন না করার জন্য চেক কর",
+    "check to enable IDE animations": "IDE প্রাণবন্ততা চালু করার জন্য চেক কর",
+    "check to enable alternating colors for nested blocks": "নেস্টেড ব্লকের পরিবর্তিত রঙ সক্রিয় করার জন্য চেক কর",
+    "check to enable dynamic labels for variadic inputs": "ভারিয়াদিক ইনপুট এর গতিশীল লেবেল সক্রিয় করার জন্য চেক কর",
+    "check to enable input sliders for entry fields": "এন্ট্রি ফিল্ডে ইনপুট স্লাইডার সক্রিয় করার জন্য চেক কর",
+    "check to enable virtual keyboard support for mobile devices": "মোবাইল ডিভাইসে ভার্চুয়াল কিবোর্ড সহায়তা সক্রিয় করার জন্য চেক কর",
+    "check to turn block clicking sound on": "ক্লিক শব্দ চালু করার জন্য চেক কর",
+    "check to use blurred drop shadows and highlights": "ঝাপসা ছায়া এবং হাইলাইট ব্যবহার চেক কর",
+    "clean up": "পরিষ্কার-পরিচ্ছন্ন কর",
+    "clear": "পরিচ্ছদ পরিষ্কার কর",
+    "clear graphic effects": "চিত্রলেখ প্রভাব পরিষ্কার কর",
+    "click or drag crosshairs to move the rotation center": "ঘূর্ণন কেন্দ্র সরাতে crosshairs ক্লিক কর অথবা টেনে আন",
+    "clicked": "ক্লিক করা হবে",
+    "color _ is touching _ ?": "_ রঙ _ রঙ গামী কিনা?",
+    "command": "নির্দেশ",
+    "console log _": "কনসোল লগ: _",
+    "cos": "কোসাইন্",
+    "costume #": "পরিচ্ছদ সংখ্যা",
+    "costumes tab help": "নতুন/অতিরিক্ত পরিচ্ছদ ব্যবহারের জন্য প্রথমে ডান দিকের নিচের পরিচ্ছদ আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে এখানে আনয়ন কর নতুন/অতিরিক্ত স্পাইট ব্যবহারের জন্য প্রথমে ডান দিকের নিচের স্পাইট আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে এখানে আনয়ন কর",
+    "create a clone of _": "_ একটি ক্লোন এর সৃষ্টি কর",
+    "current module versions:": "বর্তমান মডিউল সংস্করণ",
+    "d": "d",
+    "delete": "এটি মুছে ফেল",
+    "delete _ of _": "_ কে _ থেকে মুছে ফেল",
+    "delete block definition...": "ব্লক সংজ্ঞা মুছে ফেল",
+    "delete this clone": "এই ক্লোনটি মুছে ফেল",
+    "development mode": "উন্নয়ন মোড",
+    "development mode debugging primitives:": "উন্নয়ন মোড ডিবাগিং প্রিমিটিভ",
+    "direction": "এর গতিপথ",
+    "disable deep-Morphic context menus and show user-friendly ones": "গভীর-মরফিক প্রসঙ্গ তালিকা এবং পরিদর্শক নিস্ক্রিয় করে একটি ব্যবহারকারী বান্ধব তালিকা দেখাও",
+    "distance to _": "পর্যন্ত দূরত্ব _",
+    "don't rotate": "ঘুরতে পারে না",
+    "down arrow": "ডাউন অ্যারো",
+    "draggable": "টেনে আনার যোগ্য",
+    "dropped": "ফেলা হবে",
+    "duplicate": "এটির প্রতিলিপি তৈরী কর",
+    "duration": "ব্যাপ্তিকাল",
+    "e": "e",
+    "e^": "e^",
+    "edge": "প্রান্ত",
+    "edit": "সম্পাদন কর",
+    "edit...": "সম্পাদন কর...",
+    "enable Morphic context menus and inspectors, not user-friendly!": "মরফিক প্রসঙ্গ তালিকা এবংপরিদর্শক সক্রিয় কর,তবে এটি ব্যবহারকারী বান্ধব নহে!",
+    "export": "প্রেরণ কর",
+    "export...": "প্রেরণ কর...",
+    "f": "f",
+    "false": "মিথ্যা",
+    "file menu import hint": "XML ফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর",
+    "filtered for _": "ফিল্টার করা হয়েছে _ এর জন্য",
+    "for all sprites": "সব স্প্রাইট জন্য",
+    "for this sprite only": "শুধুমাত্র এই স্প্রাইট জন্য",
+    "forever _": "অনন্তকাল কর _",
+    "frames": "ফ্রেমসমূহ",
+    "g": "g",
+    "ghost": "ভূত",
+    "glide _ secs to x: _ y: _": "গড়িয়ে চল x: _ y: _ অবস্থানে _ সেকেন্ড",
+    "go back _ layers": "পশ্চাতে যাও _ স্তর",
+    "go to _": "_ যাও",
+    "go to front": "সামনে যাও",
+    "go to x: _ y: _": "x: _ y: _ অবস্থানে যাও",
+    "h": "h",
+    "hello": "হ্যালো",
+    "help": "সাহায্য কর",
+    "help...": "সাহায্য কর...",
+    "hide": "গোপন কর",
+    "hide variable _": "_ চলকটি গোপন কর",
+    "http:// _": "http:// _",
+    "i": "i",
+    "identical to": "এর সমতুল্য",
+    "if _ _": "যদি শর্তটি সত্য হয় _ _",
+    "if _ _ else _": "যদি শর্তটি সত্য হয় _ _ অন্যথায় _",
+    "if on edge, bounce": "প্রান্ত স্পর্শ করলে উল্টে ফিরে আস",
+    "import a sound from your computer by dragging it into here": "শব্দ ব্যবহারের জন্য কম্পিউটার থেকে প্রত্যাশিত শব্দের ফাইল নির্বাচন করে এখানে আনয়ন করতে পার",
+    "index of _ in _": "জিনিস _ কততম _ তালিকায়",
+    "initialize": "আরম্ভ কর",
+    "input list:": "ইনপুট তালিকা:",
+    "input names:": "ইনপুট নাম:",
+    "insert _ at _ of _": "_ কে _ স্থানে _ তালিকায় সন্নিবেশিত কর",
+    "is _ ?": "_ কিনা?",
+    "is _ a _ ?": "_ এই প্রকারের কিনা _ ?",
+    "is _ empty?": "তালিকা _ কি খালি?",
+    "item _ of _": "_ উপাদানটি _ তালিকার",
+    "j": "j",
+    "join _": "যুক্ত কর _",
+    "k": "k",
+    "key _ pressed?": "কোন কী _ চাপা কিনা?",
+    "l": "l",
+    "language_name": "বাংলা",
+    "language_translator": "Dr. Mokter Hossain, Radman Siddiki",
+    "large": "বৃহৎ",
+    "last": "সর্বশেষ",
+    "last_changed": "2020-07-04",
+    "launch _ _": "শুরু কর _ _",
+    "left arrow": "লেফট অ্যারো",
+    "length": "দৈর্ঘ্য",
+    "length of _": "_ তালিকাটির দৈর্ঘ্য",
+    "length:": "দৈর্ঘ্য:",
+    "letter _ of _": "_ -তম বর্ণ _ এর",
+    "list": "তালিকা",
+    "list _": "তালিকা _",
+    "ln": "ln",
+    "load the official library of powerful blocks": "শক্তিশালী ব্লকের অফিসিয়াল লাইব্রেরি লোড কর",
+    "m": "m",
+    "make a block...": "একটি ব্লক তৈরী কর...",
+    "make a copy and pick it up": "এটি কপি কর এবং নির্বাচন কর",
+    "message": "বার্তা",
+    "mouse down?": "মাউস নিচে গিয়েছে?",
+    "mouse x": "মাউস x",
+    "mouse y": "মাউস y",
+    "mouse-departed": "মাউস উঠানো হবে",
+    "mouse-entered": "মাউস চাপা হবে",
+    "mouse-pointer": "মাউস-পয়েন্টার",
+    "move _ steps": "অগ্রসর হও _ ধাপ",
+    "myself": "স্বীয়",
+    "n": "n",
+    "neighbors ≠": "neighbors ≠",
+    "new costume _ width _ height _": "নতুন পোশাক _ প্রস্থ _ উচ্চতা _",
+    "new...": "নতুন বার্তা লিখ...",
+    "next costume": "পরবর্তী পরিচ্ছদ",
+    "none": "কোনোটাই না",
+    "normal": "স্বাভাবিক",
+    "not _": "না _",
+    "number": "সংখ্যা",
+    "numbers from _ to _": "সংখ্যা _ থেকে _",
+    "o": "o",
+    "only duplicate this block": "শুধুমাত্র এই ব্লকের প্রতিলিপি তৈরী কর",
+    "only face left/right": "একমাত্র ডানে/বামে মুখ",
+    "open a new window with a picture of this script": "এই স্ক্রিপ্টর ছবি দিয়ে একটা নতুন উইন্ডো খোল",
+    "or": "অথবা",
+    "p": "p",
+    "paint a new sprite": "একটি স্প্রাইট আঁক",
+    "pause all _": "সব স্থগিত কর _",
+    "pen down": "লেখনী নিম্নগামী কর",
+    "pen trails": "কলম ভ্রমণ",
+    "pen up": "লেখনী ঊর্ধ্বগামী কর",
+    "pick random _ to _": "যে কোনো একটি সংখ্যা _ থেকে _ পর্যন্ত",
+    "play note _ for _ beats": "নোট _ বাজাও _ কম্পন পর্যন্ত",
+    "play sound _": "শব্দ বাজাও _",
+    "play sound _ at _ Hz": "শব্দ _ রেট _ -এ বাজাও",
+    "play sound _ until done": "_ শব্দ বাজাও এটি শেষ না হওয়া পর্যন্ত",
+    "point in direction _": "দিকে মুখ কর _",
+    "point towards _": "প্রতি নির্দেশ কর _",
+    "predicate": "প্রেডিক্যাট",
+    "pressed": "চাপা হবে",
+    "q": "q",
+    "r": "r",
+    "random": "যেকোনো",
+    "relabel...": "নামান্তর কর...",
+    "rename": "নতুন নামকরণ কর",
+    "rename costume": "পরিচ্ছদ নতুন নামকরণ কর",
+    "rename sound": "শব্দ নতুন নামকরণ কর",
+    "rename...": "নতুন নামকরণ কর...",
+    "repeat _ _": "পুনরাবৃত্তি কর _ বার _",
+    "repeat until _ _": "পুনরায় কর যতক্ষণ না _ _",
+    "replace item _ of _ with _": "_ স্থানের _ তালিকার উপাদানটি _ দ্বারা প্রতিস্থাপন কর",
+    "report _": "প্রতিবেদন কর _",
+    "reporter": "রিপোর্টার",
+    "reset timer": "সময় নির্ণায়ক পুন:স্থাপন কর",
+    "rest for _ beats": "নীরব থাক _ কম্পন পর্যন্ত",
+    "right arrow": "রাইট অ্যারো",
+    "ringify": "পরিবেষ্টন কর",
+    "round _": "_ এর নিকটতম পূর্ণসংখ্যা",
+    "run _ _": "চালনা কর _ _",
+    "run _ w/continuation": "চালনা কর _ ধারাবাহিকতার সঙ্গে",
+    "s": "s",
+    "say _": "বল _",
+    "say _ for _ secs": "বল _ _ সেকেন্ড পর্যন্ত",
+    "script pic...": "স্ক্রিপ্ট ছবি...",
+    "script variables _": "স্ক্রিপ্ট চলকসমূহ _",
+    "scrolled-down": "নিচে স্ক্রল করা হবে",
+    "scrolled-up": "উপরে স্ক্রল করা হবে",
+    "select": "নির্বাচন কর",
+    "send _ to _": "বার্তা _ সম্প্রচার কর _",
+    "set _ effect to _": "বিশেষ প্রভাব _ _ গুণ নির্ধারণ কর",
+    "set _ to _": "_ চলকটি মান _ নির্ধারণ কর",
+    "set pen color to _": "লেখনীর রঙ _ নির্ধারণ কর",
+    "set pen shade to _": "লেখনীর ছায়া _ নির্ধারণ কর",
+    "set pen size to _": "লেখনীর আকার নির্ধারণ কর _",
+    "set size to _ %": "আকার _ % নির্ধারণ কর",
+    "set tempo to _ bpm": "শব্দের কম্পনমাত্রা _ করে ফেল",
+    "set turbo mode to _": "টার্বো মোডকে _ নির্ধারণ কর",
+    "set x to _": "x নির্ধারণ কর _",
+    "set y to _": "y নির্ধারণ কর _",
+    "settings menu prefer empty slots hint": "খালি স্লট মেনু স্থাপন করার সাহায্যপূর্ণ ইঙ্গিত",
+    "show": "প্রদর্শন কর",
+    "show all": "সব প্রদর্শন কর",
+    "show global custom block definitions as XML in a new browser window": "সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XML ফাইল হিসেবে প্রদর্শন কর",
+    "show project data as XML in a new browser window": "প্রকল্প উপাত্ত একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর",
+    "show variable _": "_ চলকটি প্রদর্শন কর",
+    "sin": "সাইন্",
+    "size": "এর আকার",
+    "slider": "স্লাইডার",
+    "slider max...": "স্লাইডার সর্বোচ্চ...",
+    "slider min...": "স্লাইডার সর্বনিম্ন...",
+    "space": "স্পেসবার",
+    "sqrt": "বর্গমূল",
+    "stack size": "স্ট্যাকের আকার",
+    "stamp": "সীলমোহর",
+    "stop all _": "সব বন্ধ কর _",
+    "stop all sounds": "সকল শব্দ বন্ধ কর",
+    "stop block": "ব্লক বন্ধ কর",
+    "stop script": "বর্ণনা বন্ধ কর",
+    "stopped": "থামানো হবে",
+    "switch to costume _": "পরিচ্ছদ বদল কর _",
+    "t": "t",
+    "take a camera snapshot and import it as a new sprite": "একটি ক্যামেরা স্ক্রিনশট নেও এবং এটি নতুন পোশাক হিসেবে আমদানি কর",
+    "tan": "tan",
+    "tempo": "শব্দের কম্পনমাত্রা",
+    "text": "বর্ণ",
+    "thing": "জিনিস",
+    "think _": "ভাব _",
+    "think _ for _ secs": "ভাব _ _ সেকেন্ড পর্যন্ত",
+    "this project doesn't have any custom global blocks yet": "এই প্রকল্পের জন্য এখনো কোনো কাস্টম গ্লোবাল ব্লক নেই",
+    "timer": "সময় নির্ণায়ক",
+    "touching _ ?": "স্পর্শ রঙ _ কিনা?",
+    "translator_e-mail": "mokter@gmail.com, radman.siddiki@outlook.com",
+    "true": "সত্য",
+    "turbo mode?": "টার্বো মোড চালু কিনা?",
+    "turn _ _ degrees": "বামদিকে _ _ ডিগ্রীকোণে ঘোর",
+    "type of _": "_ -এর প্রকার",
+    "u": "u",
+    "uncheck to allow dropped reporters to kick out others": "ঝরে পরা রিপোর্টারসমূহ অন্যদের বের করে দেওয়ার জন্য আনচেক কর",
+    "uncheck to allow script reentrancy": "বর্ণনা পুনপ্রবেশ অনুমোদন করার জন্য আনচেক কর",
+    "uncheck to disable IDE animations": "IDE প্রাণবন্ততা বন্ধ করার জন্য আনচেক কর",
+    "uncheck to disable alternating colors for nested block": "নেস্টেড ব্লকের পরিবর্তিত রঙ নিস্ক্রিয় করার জন্য আনচেক কর",
+    "uncheck to disable dynamic labels for variadic inputs": "ভারিয়াদিক ইনপুট এর গতিশীল লেবেল নিস্ক্রিয় করার জন্য আনচেক কর",
+    "uncheck to disable input sliders for entry fields": "এন্ট্রি ফিল্ডে ইনপুট স্লাইডার নিস্ক্রিয় করার জন্য আনচেক কর",
+    "uncheck to disable virtual keyboard support for mobile devices": "মোবাইল ডিভাইসে ভার্চুয়াল কিবোর্ড সহায়তা নিস্ক্রিয় করার জন্য চেক কর",
+    "uncheck to turn block clicking sound off": "ক্লিক শব্দ বন্ধ করার জন্য আনচেক কর",
+    "uncheck to use solid drop shadows and highlights": "নিরেট ড্রপ ছায়া এবং হাইলাইট ব্যবহার আনচেক কর",
+    "uncheck to use the input dialog in short form": "সংক্ষিপ্ত আকারের ইনপুট ডায়লগ ব্যবহারের জন্য আনচেক কর",
+    "unicode _ as letter": "ইউনিকোড _ বর্ণ হিসেবে",
+    "unicode of _": "_ -এর ইউনিকোড",
+    "unringify": "পরিবেষ্টনমুক্ত করা",
+    "untitled": "শিরোনামহীন",
+    "up arrow": "আপ অ্যারো",
+    "v": "v",
+    "w": "w",
+    "wait _ secs": "অপেক্ষা কর _ সেকেন্ড",
+    "wait until _": "অপেক্ষা কর _ যতক্ষণ না পর্যন্ত",
+    "warp _": "বিরতি ছাড়াই _",
+    "what's your name?": "তোমার নাম কি?",
+    "when I am _": "যখন আমাকে _",
+    "when I receive _ _": "যখন আমি পাব বার্তা _ _",
+    "when I start as a clone": "যখন আমি একটি ক্লোন হিসেবে শুরু করি",
+    "when _": "যখন _ শর্তটি সত্য হবে",
+    "when _ clicked": "যখন _ ক্লিক করা হবে",
+    "when _ key pressed _": "যখন _ _ ক্লিক করা হবে",
+    "with inputs": "ইনপুট দ্বারা",
+    "world": "পৃথিবী",
+    "x": "x",
+    "x position": "এর x অবস্থান",
+    "y": "y",
+    "y position": "এর y অবস্থান",
+    "z": "z"
+}
