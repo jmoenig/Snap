@@ -745,8 +745,8 @@ SnapTranslator.dict.he = {
         'עולם',
     'letter %ix of %s':
         'מיקום_אות_במילה %ix  %s',
-    'length of %s':
-        '%s האורך_של',
+    '%ta of text %s':
+        '%ta %s האורך_של',
     'unicode of %s':
         'יוניקוד_של %s',
     'unicode %n as letter':
