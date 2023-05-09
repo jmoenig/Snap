@@ -523,8 +523,8 @@ SnapTranslator.dict.bg = {
         'хора',
     'letter %ix of %s':
         'буква %ix от %s',
-    'length of %s':
-        'дължина на %s',
+    '%ta of test %s':
+        '%ta на %s',
     'unicode of %s':
         'Unicode на %s',
     'unicode %n as letter':
@@ -973,6 +973,8 @@ SnapTranslator.dict.bg = {
     // list watchers
     'length: ':
         'дължина: ',
+    'length':
+        'дължина',
 
     // coments
     'add comment here...':
