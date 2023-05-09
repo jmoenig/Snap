@@ -739,8 +739,8 @@ SnapTranslator.dict.sk = {
         'svet',
     'letter %ix of %s':
         'p\u00EDsmeno %ix z %s',
-    'length of %s':
-        'd\u013A\u017Eka %s',
+    '%ta of text %s':
+        '%ta %s',
     'unicode of %s':
         'Unicode %s',
     'unicode %n as letter':
