@@ -568,8 +568,8 @@ SnapTranslator.dict.hr = {
         'svijet',
     'letter %ix of %s':
         'znak %ix od %s',
-    'length of %s':
-        'duljina od %s',
+    '%ta of text %s':
+        '%ta od %s',
     'unicode of %s':
         'unicode vrijednost od %s',
     'unicode %n as letter':
@@ -1151,6 +1151,9 @@ SnapTranslator.dict.hr = {
     // list watchers
     'length: ':
         'duljina: ',
+
+    'length':
+        'duljina',
 
     // coments
     'add comment here...':
