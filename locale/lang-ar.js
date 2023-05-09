@@ -567,8 +567,8 @@ SnapTranslator.dict.ar = {
         'ايها العالم',
     'letter %ix of %s':
         '%ix الحرف أوجد %s العبارة من',
-    'length of %s':
-        '%s أحرف عدد',
+    '%ta of text %s':
+        '%ta %s أحرف عدد',
     'unicode of %s':
         ' %s للحرف يونيكود ترميز قيمة',
     'unicode %n as letter':
@@ -1152,6 +1152,9 @@ SnapTranslator.dict.ar = {
     // list watchers
     'length: ':
         'الطول: ',
+
+    'length':
+        'الطول',
 
     // coments
     'add comment here...':
