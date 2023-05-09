@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-February-27';
+modules.lists = '2023-May-09';
 
 var List;
 var ListWatcherMorph;
@@ -1070,7 +1070,7 @@ List.prototype.asJSON = function () {
         return array.indexOf(element) === array.lastIndexOf(element);
     }
 
-    return JSON.stringify(objectify(this));
+    return JSON.stringify(objectify(this), null, 4);
 };
 
 List.prototype.canBeTXT = function () {

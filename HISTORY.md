@@ -27,6 +27,7 @@
     * messages and identifying sprites, costumes and sounds by their names is now case-insensitive by default (e.g. in "object", "broadcast", "of" blocks)
     * translations now use abstract block specs
     * updated the strings library for and with the new case sensitivity and lower case primitives
+    * generated JSON strings are now (somewhat) pretty printed (with newlines and indentations)
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -51,6 +52,7 @@
 * extensions: added "txt_export(txt, name)" extension primitive
 * updated strings library with new case sensitivity and lower case primitives
 * updated German translation with new case sensitivity strings
+* lists: pretty print generated JSON strings
 
 ### 2023-05-08
 * gui: reformatted some code to please JSHint ;)
