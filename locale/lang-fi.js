@@ -560,8 +560,8 @@ SnapTranslator.dict.fi = {
         'maailma',
     'letter %ix of %s':
         'kirjain nro %ix tekstist\u00e4 %s',
-    'length of %s':
-        'tekstin %s pituus',
+    '%ta of text %s':
+        '%ta tekstin %s',
     'unicode of %s':
         'merkin %s Unicode-arvo',
     'unicode %n as letter':
@@ -1118,6 +1118,8 @@ SnapTranslator.dict.fi = {
     // list watchers
     'length: ':
         'pituus: ',
+    'length':
+        'pituus',
 
     // coments
     'add comment here...':
