@@ -392,8 +392,8 @@ SnapTranslator.dict.et = {
         'maailm',
     'letter %ix of %s':
         'sümbol nr %ix tekstis %s',
-    'length of %s':
-        'teksti %s pikkus',
+    '%ta of text %s':
+        '%ta teksti %s',
     'unicode of %s':
         '%s Unicode',
     'unicode %n as letter':
@@ -997,6 +997,8 @@ SnapTranslator.dict.et = {
     // list watchers
     'length: ':
         'pikkus: ',
+    'length':
+        'pikkus',
 
     // coments
     'add comment here...':
