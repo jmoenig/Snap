@@ -460,9 +460,9 @@ SnapTranslator.dict.ti = {
     'clear':
         'ደምስስ',
     'pen down':
-        'ብርዒ ታሕቲ',
+        'ብርዒ ንታሕቲ',
     'pen up':
-        'ብርዒ ላዕሊ',
+        'ብርዒ ንላዕሊ',
     'pen down?':
         'ብርዒ ታሕቲ፧',
     'set pen color to %clr':
@@ -1385,7 +1385,7 @@ SnapTranslator.dict.ti = {
     'pivot':
         'መቐልስ',
     'edit the costume\'s\nrotation center':
-        'ዙረት ማእከል ናይ ልብሲ\nኣርኢን ኣተዓራርን',
+        'ማእከል ዙረት ናይ ልብሲ\nኣርኢን ኣተዓራርን',
     'rotate':
     	'ኣዙር',
     'stick to':
@@ -1584,39 +1584,39 @@ SnapTranslator.dict.ti = {
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'ሰደቓ-ዕዮ ልብሲ',
     'Paint Editor':
-        'Kostümeditor',
+        'ሰደቓ-ዕዮ ስእሊ',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'መስቀል-ዕላማ ጠውቕ ወይ ስሓብ ማእከል ዙረት ንምቕያር',
     'undo':
-        'rückgängig',
+        'ምለስ',
     'Vector':
-        'Vektor',
+        'መኣጠን',
     'Paintbrush tool\n(free draw)':
-        'Pinsel\n(freies Zeichnen)',
+        'መስኣሊ ኣስባስላ\n(ናጻ ስኣል)',
     'Stroked Rectangle\n(shift: square)':
-        'Rechteck\n(Shift: Quadrat)',
+        'ርቡዕኩርናዕ\n(መፍትሕ-ምቅይያር፦ ትርብዒት)',
     'Stroked Ellipse\n(shift: circle)':
-        'Ellipse\n(Shift: Kreis)',
+        'ኤሊፕስ\n(መፍትሕ-ምቅይያር፦ ዓንኬል)',
     'Eraser tool':
-        'Radiergummi',
+        'መደምሰስ',
     'Set the rotation center':
-        'Drehpunkt setzen',
+        'ማእከል ዙረት ኣንብር',
     'Line tool\n(shift: vertical/horizontal)':
-        'Linie\n(Shift: vertikal/horizontal)',
+        'ሕንጻጽ\n(መፍትሕ-ምቅይያር፦ ትኹል/ጋድም)',
     'Filled Rectangle\n(shift: square)':
-        'gefülltes Rechteck\n(Shift: Quadrat)',
+        'ዝመልአ ርቡዕኩርናዕ\n(መፍትሕ-ምቅይያር፦ ትርብዒት)',
     'Filled Ellipse\n(shift: circle)':
-        'gefüllte Ellipse\n(Shift: Kreis)',
+        'ዝመልአ ኤሊፕስ\n(መፍትሕ-ምቅይያር፦ ዓንኬል)',
     'Fill a region':
-        'fülle einen Bereich mit\nder gewählten Farbe',
+        'ንዓውዲ ብዝመረጽካዮ\nሕብሪ ቅባእ',
     'Pipette tool\n(pick a color anywhere)':
-        'Pipette (klicke irgendwo auf die gewünschte\nFarbe, um sie aufzunehmen)',
+        'መምጸይ\n(ብምጥዋቕ፡ ዝደለኻዮ ሕብሪ መሪጽካ ኣልዕል)',
     'Brush size':
-        'Pinselstärke',
+        'ዓቐን ኣስባስላ',
     'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Proportionen festlegen\n(auch über Shift-Taste)',
+        'ምጣነ ቅርጽታት ሓሉ\n(መፍትሕ-ምቅይያር ብምጽቃጥ ውን ክፍጸም ይካኣል)',
     //'grow':
     //    'größer',
     //'shrink':
@@ -1627,25 +1627,25 @@ SnapTranslator.dict.ti = {
     //    'drehen ↕',
     
     'Vector Paint Editor':
-        'Vektor-Editor',
+        'ሰደቓ-ዕዮ ስእሊ መኣጠን',
     'Rectangle\n(shift: square)':
-        'Rechteck\n(Shift: Quadrat)',
+        'ርቡዕኩርናዕ\n(መፍትሕ-ምቅይያር፦ ትርብዒት)',
     'Ellipse\n(shift: circle)':
-        'Ellipse\n(Shift: Kreis)',
+        'ኤሊፕስ\n(መፍትሕ-ምቅይያር፦ ዓንኬል)',
     'Selection tool':
-        'Auswählen',
-    'Line tool\n(shift: constrain to 45º)':
-        'Linie\n(Shift: Vielfache von 45°)',
+        'ምረጽ',
+    'Line tool\n(መፍትሕ-ምቅይያር፦ constrain to 45º)':
+        'ሕንጻጽ\n(Shift: ብዙሕ ዕጽፊ ናይ 45°)',
     'Closed brush\n(free draw)':
-        'geschlossene, gefüllte Form\n(freies Zeichnen)',
+        'ዕጹው፡ ምሉእ ቅርጺ\n(ናጻ ስኣል)',
     'Paint a shape\n(shift: secondary color)':
-        'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
+        'ንቕርጺ ሕብሪ ቅባእ\n(መፍትሕ-ምቅይያር፦ ካልኣውያን ሕብርታት)',
     'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
+        'መምጸይ\nብምጥዋቕ፡ ዝደለኻዮ ሕብሪ መሪጽካ ኣልዕል\n(መፍትሕ-ምቅይያር፦ ካልኣውያን ሕብርታት)',
     'Edge color\n(left click)':
-        'Randfarbe\n(Linksklick)',
+        'ሕብሪ ደረት\n(ጸጋም ጠውቕ)',
     'Fill color\n(right click)':
-        'Füllfarbe\n(Rechtsklick)',
+        'ሕብሪ ማእከል\n(የማን ጠውቕ)',
    // 'Top':
    //     'oben',
    // 'Bottom':
