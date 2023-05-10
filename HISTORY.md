@@ -47,6 +47,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-10
+* locale: fixed returning the original string when looking up an existing key with a falsy translation in the current translations language dictionary
+
 ### 2023-05-09
 * extensions: added "ide_set_translation_dict(data)" extension primitive
 * extensions: added "txt_export(txt, name)" extension primitive

@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-May-09';
+modules.locale = '2023-May-10';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -71,7 +71,7 @@ Localizer.prototype.translate = function (string) {
     return Object.prototype.hasOwnProperty.call(
         this.dict[this.language],
         phrase
-    ) ? this.dict[this.language][phrase] : phrase;
+    ) ? this.dict[this.language][phrase] || phrase : phrase;
 };
 
 Localizer.prototype.languages = function () {
