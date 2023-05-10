@@ -259,7 +259,7 @@ SnapTranslator.dict.dk = {
     "November": "",
     "Number": "Tal",
     "OK": "",
-    "Object": "",
+    "Object": "Objekt",
     "October": "",
     "Ok": "",
     "Old password:": "",
