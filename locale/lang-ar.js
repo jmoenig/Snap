@@ -1,1398 +1,1389 @@
-/*
-
-    lang-ar.js
-
-    Arabic transelation  for SNAP!
-
-    written by Jens MÃ¶nig
-
-    Copyright (C) 2014 by Jens MÃ¶nig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ar = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ã„, Ã¤   \u00c4, \u00e4
-    Ã–, Ã¶   \u00d6, \u00f6
-    Ãœ, Ã¼   \u00dc, \u00fc
-    ÃŸ      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'العربية', // the name as it should appear in the language menu
-    'language_translator':
-        'طارق جلال', // your name for the Translators tab
-    'translator_e-mail':
-        'tarekgalal46@hotmail.com', // optional
-    'last_changed':
-        '2016-01-23', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'بدون عنوان',
-    'development mode':
-        'وضع التصميم',
-
-    // categories:
-    'Motion':
-        'الحركة',
-    'Looks':
-        'المظهر',
-    'Sound':
-        'الصوت',
-    'Pen':
-        'القلم',
-    'Control':
-        'التحكم',
-    'Sensing':
-        'الاستشعار',
-    'Operators':
-        'العمليات',
-    'Variables':
-        'المتغيرات',
-    'Lists':
-        'قوائم(مصفوفات)',
-    'Other':
-        'لبنات اضافيه',
-
-    // editor:
-    'draggable':
-        'قابل للسحب',
-
-    // tabs:
-    'Scripts':
-        'المقاطع البرمجيه',
-    'Costumes':
-        'المظاهر',
-    'Sounds':
-        'الاصوات',
-
-    // names:
-    'Sprite':
-        'كائن',
-    'Stage':
-        'المنصة',
-
-    // rotation styles:
-    'don\'t rotate':
-        'غير قابل للدوران',
-    'can rotate':
-        'قابل للدوران',
-    'only face left/right':
-        'مواجهة يمين-يسار',
-
-    // new sprite button:
-    'add a new sprite':
-        'اضافة كائن جديد',
-
-    // tab help
-    'costumes tab help':
-        'استيراد الصور من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
-    'import a sound from your computer\nby dragging it into here':
-        'استيراد الاصوات من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
-    
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
-
-    'move %n steps':
-        'خطوة %n تحرك',
-    'turn %clockwise %n degrees':
-        'درجة %n %clockwise استدر',
-    'turn %counterclockwise %n degrees':
-        'درجة %n %counterclockwise استدر',
-    'point in direction %dir':
-        ' %dir الاتجاه نحو إتجه',
-    'point towards %dst':
-        ' %dst نحو إتجه ',
-    'go to x: %n y: %n':
-        '%n =س %n =ص للنقطة أذهب',
-    'go to %dst':
-        ' %dst الي إذهب',
-    'glide %n secs to x: %n y: %n':
-        'ثوان %n خلال %n =س %n =ص النقطة إلي إنزلق',
-    'change x by %n':
-        ' %n بمقدار س غير',
-    'set x to %n':
-        '%n تساوي س إجعل',
-    'change y by %n':
-        ' %n بمقدار ص غير',
-    'set y to %n':
-        '%n تساوي ص إجعل',
-    'if on edge, bounce':
-        'الحافة عند كنت إذا أرتد',
-    'x position':
-        'س الموضع',
-    'y position':
-        'ص الموضع',
-    'direction':
-        'الاتجاه',
-
-    // looks:
-    'switch to costume %cst':
-        '%cst المظهر إلي إنتقل',
-    'next costume':
-        'التالي المظهر',
-    'costume #':
-        'المظهر ( ترتيب / رقم )',
-    'say %s for %n secs':
-        ' %s قـل ثانية %n لمدة',
-    'say %s':
-        '%s قـل',
-    'think %s for %n secs':
-        '%s فكر ثانية %n لمدة',
-    'think %s':
-        ' %s فكـر',
-    'Hello!':
-        '!مـرحبـا',
-    'Hmm...':
-        'هممم...',
-    'change %eff effect by %n':
-        ' %eff التأثير قيمـة %n بمقدار غيّر',
-    'set %eff effect to %n':
-        ' %eff التأثير لقيـمة %n المقدار حدد',
-    'clear graphic effects':
-        'الرسومية التأثيرات أحذف',
-    'change size by %n':
-        ' %n بمقدار الحجم غيّـر',
-    'set size to %n %':
-        '% %n  لـ مساوياً الحجم إجعل ',
-    'size':
-        'الحجم',
-    'show':
-        'إظهَر',
-    'hide':
-        'إختَفي',
-    'go to front':
-        'المقدمة الي إنتقل',
-    'go back %n layers':
-        'طبقات  %n بمقدار الخلف الي انتقل',
-
-    'development mode \ndebugging primitives:':
-        'نمط البرمجه \nو تصحيح الاخطاء',
-    'console log %mult%s':
-        'console log %mult%s',
-    'alert %mult%s':
-        'تنبيه: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd الصـوت شغّـل',
-    'play sound %snd until done':
-        'أنتهـاءة إنتظر ثم %snd الصـوت شغّـل',
-    'stop all sounds':
-        'الأصوات جميع أوقف',
-    'rest for %n beats':
-        'إقـاع وحدة %n لمدة إستـرح',
-    'play note %n for %n beats':
-        ' %n رقـم النوتـة أعزف ، إيـقاع وحـدة %n بمقدار',
-    'change tempo by %n':
-        '%n بمقـدار الصوت شـدّة غيّـر',
-    'set tempo to %n bpm':
-        '%n مسـاوية الصوت شدّة إجعل',
-    'tempo':
-        'الصوت شدّة مقـدار',
-
-    // pen:
-    'clear':
-        'امسح',
-    'pen down':
-        'القلـم أنـزل',
-    'pen up':
-        'القلـم إرفـع',
-    'set pen color to %clr':
-        ' %clr لـ مسـاوياً القلم لون إجعل',
-    'change pen color by %n':
-        ' %n بمقدار القلم لون غيّـر',
-    'set pen color to %n':
-        ' %n تسـاوي القلم لـون قيمة إجعـل',
-    'change pen shade by %n':
-        '%n بمقدار القلم لون (تعتيم/سطوع) درجة غيّر',
-    'set pen shade to %n':
-        '%n تساوي القلم لون (تعتيم/سطوع) درجة إجعل',
-    'change pen size by %n':
-        '%n بمقدار القلم حجـم غيّـر',
-    'set pen size to %n':
-        ' %n لـ مساوياً (حجم/سُـمك)القلـم إجعل',
-    'stamp':
-        'اطبع',
-
-    // control:
-    'when %greenflag clicked':
-        'الأخضر العـَلم %greenflag نقر عنـد',
-    'when %keyHat key pressed':
-        '%keyHat مفتـاح ضغط عند',
-    'when I am %interaction':
-        'الفـأرة مـؤشْـر %interaction لـ أتعرض عندما',
-    'clicked':
-        'نقـر',
-    'pressed':
-        'ضغـط',
-    'dropped':
-        'الإفـلات_من',
-    'mouse-entered':
-        'دخـول',
-    'mouse-departed':
-        'مغـادرة',
-    'when %b':
-        '%b عندما',
-    'when I receive %msgHat':
-        '%msgHat رسـالة أستقبال عند',
-    'broadcast %msg':
-        '  %msg بث',
-    'broadcast %msg and wait':
-        'إنتظـر ثم %msg بِـث',
-    'Message name':
-        'اسم الرسالة',
-    'message':
-        'الرسالة',
-    'any message':
-        'اي رسالة',
-    'wait %n secs':
-        ' %n لـ إنتظـر',
-    'wait until %b':
-        '%b الشرط يتحقق حتي إنتظر',
-    'forever %loop':
-        'باستمرار كرر %loop',
-    'repeat %n %loop':
-        ' %n كرر %loop',
-    'repeat until %b %loop':
-        '%b حتي كرر %loop',
-    'if %b %c':
-        ' %b اذا %c',
-    'if %b %c else %c':
-        '%b اذا %c وإلا %c',
-    'report %s':
-        '%s وَضِّـح',
-    'stop %stopChoices':
-        '%stopChoices اوقف',
-    'all':
-        'الكل',
-    'this script':
-        'هذا_المقطع_البرمجي',
-    'this block':
-        'هذا_البلوك',
-    'stop %stopOthersChoices':
-        '%stopOthersChoices أوقف',
-    'all but this script':
-        'كل_المقاطع_البرمجيه_للكائنات_عدا_هذا_المقطع',
-    'other scripts in sprite':
-        'كل_المقاطع_البرمجية_للكائن_عدا_هذا_المقطع',
-    'pause all %pause':
-        '%pause مـؤقتاً التنفيذ أوقف',
-    'run %cmdRing %inputs':
-        'نفّذ %cmdRing  %inputs',
-    'launch %cmdRing %inputs':
-        'شغّل %cmdRing %inputs',
-    'call %repRing %inputs':
-        'إستدع %repRing  %inputs',
-    'run %cmdRing w/continuation':
-        'نفّذ %cmdRing (الفاعلية استمرار بقاء مع)',
-    'call %cmdRing w/continuation':
-        'استدع %cmdRing (الفاعلية استمرار بقاء مع)',
-    'warp %c':
-        'تسريع %c',
-    'when I start as a clone':
-        'مطابقة كنسخةٌ أبدأ عندما',
-    'create a clone of %cln':
-        '%cln من أستنسـاخاً أنشئ',
-    'myself':
-        'نفسي',
-    'delete this clone':
-        'الإستنساخ هذا إحذف',
-
-    // sensing:
-    'touching %col ?':
-        '؟ %col لـ ملامس هـل ',
-    'touching %clr ?':
-        '؟ %clr لـ ملامس هـل',
-    'color %clr is touching %clr ?':
-        '؟ %clr اللون ملامس %clr اللون هل',
-    'ask %s and wait':
-        '%s اسأل و انتظر ',
-    'what\'s your name?':
-        '؟ إسمك هـو مـا',
-    'answer':
-        'الاجابة',
-    'mouse x':
-        'للفأرة س الموضع',
-    'mouse y':
-        'للفأرة ص الموضع',
-    'mouse down?':
-        '؟ مضغوط الايسر الفأرة زر هل',
-    'key %key pressed?':
-        '؟ مضغوط %key  المفتاح هل',
-    'distance to %dst':
-        ' %dst إلي المسـافة',
-    'reset timer':
-        'المؤقت تعيين إعـادة',
-    'timer':
-        'المؤقت',
-    '%att of %spr':
-        '؟ %att قيمة ما %spr للكائن',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        '؟ التوربو وضع في التشغيل هل',
-    'set turbo mode to %b':
-        '%b التوربو وضـع تفعيل ',
-    'filtered for %clr':
-        'خلال هذه الفتره %clr gefiltert',
-    'stack size':
-        'Stapelgr\u00f6\u00dfe',
-    'frames':
-        'Rahmenz\u00e4hler',
-
-    // operators:
-    '%n mod %n':
-        '%n للرقم %n علي القسمة باقي',
-    'round %n':
-        'صحيح لعدد %n قَرّب',
-    '%fun of %n':
-        '%fun قيمة إحسب %n للعدد',
-    'pick random %n to %n':
-        ' %n و %n بين عشوائي عدد إختر',
-    '%b and %b':
-        '%b و %b',
-    '%b or %b':
-        '%b أو %b',
-    'not %b':
-        'ليس %b',
-    'true':
-        ' صحيح ',
-    'false':
-        ' خـطأً ',
-    'join %words':
-        '%words يلي مـا أَوصـل ',
-    'split %s by %delim':
-        '%s جـَزَّء ،كفواصل %delim بإستخدام',
-    'hello':
-        'مرحبا',
-    'world':
-        'ايها العالم',
-    'letter %idx of %s':
-        '%idx الحرف أوجد %s العبارة من',
-    'length of %s':
-        '%s أحرف عدد',
-    'unicode of %s':
-        ' %s للحرف يونيكود ترميز قيمة',
-    'unicode %n as letter':
-        ' %n يونيكود لترميز المقابل الحرف ',
-    'is %s a %typ ?':
-        '%s يوافق %typ النوع',
-    'is %s identical to %s ?':
-        '؟ %s مع متماثل %s هل',
-    'type of %s':
-        'من نوع %s',
-
-    // variables:
-    'Make a variable':
-        'انشئ متغيرا',
-    'Variable name':
-        'اسم المتغير',
-    'Script variable name':
-        'اسم الكائن',
-    'Delete a variable':
-        'احذف متغيرا',
-    'set %var to %s':
-        '%var للمتغيّر %s القيمة خصص',
-    'change %var by %n':
-        ' %var المتغير قيمة %n بمقدار غيّـر',
-    'show variable %var':
-        ' %var المُتَغيّر أظهـِر',
-    'hide variable %var':
-        ' %var المُتَغيّر أخفِ',
-    'script variables %scriptVars':
-        '%scriptVars مَحَلْي مُتَغَيِّر',
-
-    // lists:
-    'list %exp':
-        '%exp المصفوفة',
-    '%s in front of %l':
-        '%s ادرج %l بداية في',
-    'item %idx of %l':
-        '%idx العنصر أظهـِر %l في',
-    'all but first of %l':
-        'الأول عـدا الكل أظهـِر %l في',
-    'length of %l':
-        '%l عناصر عدد',
-    '%l contains %s':
-        '%l محتويات ضمن %s القيمة',
-    'thing':
-        'شيئ',
-    'add %s to %l':
-        '%s القيمة %l في أَدْرِج',
-    'delete %ida of %l':
-        '%ida العنصر احذف %l من',
-    'insert %s at %idx of %l':
-        '%s القيمة %idx بالموضع %l في أَدْرِج',
-    'replace item %idx of %l with %s':
-        ' %idx العنصر بدل %l المصفوفة في %s القيمة ضـع',
-
-    // other
-    'Make a block':
-        'إنشاء لبنة مخصصة',
-
-     // menus
-    // snap menu
-    'About...':
-        'عن SNAP!...',
-    'Reference manual':
-        'دليل التشغيل',
-    'Snap! website':
-        'الموقع الرسمي',
-    'Download source':
-        'تنزيل البرنامج',
-    'Switch back to user mode':
-        'التبديل الى وضع المستخدم',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'user-friendlyعرض القوائم ',
-    'Switch to dev mode':
-        'التبديل الي وضع المطورين',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'user-friendlyعرض القوائم تعطيل ',
-        
-     // project menu
-    'Project notes...':
-        'ملاحظات عن المشروع...',
-    'New':
-        'جديد',
-    'Open...':
-        'فتح...',
-    'Save':
-        'حفظ',
-    'Save to disk':
-        'حفظ في المستعرض',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'حفظ المشروع فى مجلد التنزيلات الخاص بالمتصفح المحدد',
-    'Save As...':
-        'حفظ بأسم ...',
-    'Import...':
-        'استيراد...',
-    'file menu import hint':
-        'استيراد مشروع تم تصديره من قبل',
-    'Export project as plain text...':
-        'تصدير المشروع كمستند نصي ...',
-    'Export project...':
-        'تصدير المشروع...',
-    'show project data as XML\nin a new browser window':
-        'عرض المشروع في صيغة XML',
-    'Export blocks...':
-        'تصدير اللبنات...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'عرض جميع اللبنات المخصصة في صيغة XML',
-		
-	'Unused blocks...':
-          'لبنات غير مستخدمة...',
-    'find unused global custom blocks\nand remove their definitions':
-        'إيجاد اللبنات المخصصة الغير مستخدمة لحذفها من المشروع',
-    'Remove unused blocks':
-        'حذف اللبنات المخصصة الغير مستخدمة',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'لايوجد لبنات مخصصة غير مستخدمة في هذا المشروع',
-    'unused block(s) removed':
-        'تم ازالة اللبنات الغير مستخدمة',
-    'Export summary...':
-        'تصدير ملخص المشروع...',
-    'open a new browser browser window\n with a summary of this project':
-        'عرض ملخص المشروع فى نافذة مستعرض جديدة',
-    'Contents':
-        'محتويات',
-    'Kind of':
-        'نوع من أنواع',
-    'Part of':
-        'جزء من',
-    'Parts':
-        'أجزاء',
-    'Blocks':
-        'بلوكات',
-    'For all Sprites':
-        'لكل الكائنات',
-	'Import tools':
-        'استيراد أدوات',
-    'load the official library of\npowerful blocks':
-        'تحميل مكتبة اللبنات الرسمية لمزيد من التحكم',
-    'Libraries...':
-        'المكتبات...',
-    'Import library':
-        'استيراد مكتبة',
-        
-    // cloud menu
-    'Login...':
-        'تسجيل دخول...',
-    'Signup...':
-        'تسجيل خروج...',
-        
-    // settings menu
-    'Language...':
-        'تغيير اللغة...',
-    'Zoom blocks...':
-        'التحكم فى حجم اللبنات...',
-    'Stage size...':
-        'مساحة المنصة...',
-    'Stage width':
-        'عرض المنصة',
-    'Stage height':
-        'ارتفاع المنصة',
-    'Default':
-        'افتراضى',
-    'Blurred shadows':
-        'ظلال شبه شفافة',
-    'uncheck to use solid drop\nshadows and highlights':
-        'ازل لاستخدام الظلال المعتمة',
-    'check to use blurred drop\nshadows and highlights':
-        'حدد لاستخدام الظلال الضبابية',
-    'Zebra coloring':
-        'تلوين ZEBRA',
-    'check to enable alternating\ncolors for nested blocks':
-        'حدد لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة',
-    'uncheck to disable alternating\ncolors for nested block':
-        'ازل لعدم لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة ',
-    'Dynamic input labels':
-        'بطاقات الادخال الديناميكية',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ازل لالغاء تفعيل بطاقات الادخال الديناميكية للمدخلات',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'حدد لتفعيل بطاقات الادخال الديناميكية للمدخلات',
-    'Prefer empty slot drops':
-        'Prefer empty slot drops',
-    'settings menu prefer empty slots hint':
-        'settings menu prefer empty slots hint',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'uncheck to allow dropped\nreporters to kick out others',
-    'Long form input dialog':
-        'صندوق حوار تفصيلي لتعريف المدخلات',
-    'Plain prototype labels':
-        'تسميات عادية لنماذج البلوكات',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'ازل التحديد لاظهار (+) \n في تسمسة نموذج البلوك',
-    'check to hide (+) symbols\nin block prototype labels':
-        'حدد لأخفاء (+) \n من تسمسة نموذج البلوك',
-    'check to always show slot\ntypes in the input dialog':
-        'حدد حتي تظهر دائما\n تصنيف بيانات الادخال \n في صندوق حوار تعريف المدخلات',
-    'uncheck to use the input\ndialog in short form':
-        'ازل التحديد لاستخدام صندوق الحوار المبسط لتعريف المدخلات',
-    'Virtual keyboard':
-        'لوحة المفاتيح الافتراضية',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'حدد لتفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
-    'Input sliders':
-        'ألواح الأدخال',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'أزل لالغاء\nالواح الادخال للحقول',
-    'check to enable\ninput sliders for\nentry fields':
-        'حدد لتفعيل\nالواح الادخال للحقول',
-    'Clicking sound':
-        'المؤثرات الصوتية',
-    'uncheck to turn\nblock clicking\nsound off':
-        'أزل لإيقاف\n أصوات النقر على اللبنات',
-    'check to turn\nblock clicking\nsound on':
-        'حدد لتفعيل\nأصوات النقر على اللبنات',
-    'Animations':
-        'مؤثرات حركية',
-    'uncheck to disable\nIDE animations':
-        'أزل لابطال مؤثرات IDE-\nالحركة',
-    'Turbo mode':
-        'الوضع السريع',
-    'check to prioritize\nscript execution':
-        'حدد  لرفع درجة\n أولوية تنفيذ الاسكربت',
-    'uncheck to run scripts\nat normal speed':
-        'أزل, ليتم تنفيذ\n الاسكربت بالسرعة العادية',
-    'check to enable\nIDE animations':
-        'حدد لتشغيل المؤثرات IDE-\nالحركية',
-	'Flat design':
-        'تصميم مُصطَّح بسيط',
-    'Keyboard Editing':
-        'دعم لوحة المفاتيح',
-    'Thread safe scripts':
-        'تأمين الاسكربتات',
-    'uncheck to allow\nscript reentrance':
-        'أزل للسماح\n للاسكربت باعادة الدخول',
-    'check to disallow\nscript reentrance':
-        'حدد, لمنع\n الاسكربت من اعادة الدخول',
-    'Prefer smooth animations':
-        'الرسوم المتحركة على نحو سلس',
-    'uncheck for greater speed\nat variable frame rates':
-        'أزل للحصول علي سرعه اعلي\nمع معدلات تتبابع اطارات متغيره',
-    'check for smooth, predictable\nanimations across computers':
-        'حدد للحصول على\nحركة ناعمة',
-    'Flat line ends':
-        'نهايات الخطوط',
-    'check for flat ends of lines':
-        'حدد لجعل نهايات الخطوط\n قائمة الزاوية',
-    'uncheck for round ends of lines':
-        'أزل لجعل نهايات الخطوط \nدائرية',
-    'Inheritance support':
-        ' توريث الخصائص بين الكائنات',
-	'uncheck to disable\nsprite inheritance features':
-        'أزل لألغاء تفعيل توريث الخصائص بين الكائنات',
-    'check for sprite\ninheritance features':
-        'حدد لتفعيل توريث الخصائص بين الكائنات',
-
-    // inputs
-    'with inputs':
-        'مستخدماً القيم التالية',
-    'input names:':
-        'مع المدخلات',
-    'Input Names:':
-        'أسماء المدخلات',
-    'input list:':
-        'قائمة المدخلات',
-
-    // context menus:
-    'help':
-        'مساعدة',
-
-    // palette:
-    'hide primitives':
-        'أخفاء اللبنات',
-    'show primitives':
-        'إظهار اللبنات',
-
-    // blocks:
-    'help...':
-        'مساعدة...',
-    'relabel...':
-        'اعادة تسمية...',
-    'duplicate':
-        'مضاعفة',
-    'make a copy\nand pick it up':
-        'اصنع نسخة و التقطها',
-    'only duplicate this block':
-        'ضاعف هذا البلوك فقط',
-    'delete':
-        'حذف',
-    'script pic...':
-        'صورة نقطية للبلوك...',
-    'open a new window\nwith a picture of this script':
-        'افتح نافذه جديده و اعرض النص البرمجي خلالها',
-    'ringify':
-        'احاطة',
-    'unringify':
-        'عدم احاطة',
-
-    // custom blocks:
-    'delete block definition...':
-        'حذف تعريف البلوك',
-    'edit...':
-        'تحرير...',
-
-    // sprites:
-    'edit':
-        'تحرير',
-    'move':
-        'تحرك',
-    'detach from':
-        'افصل عن',
-    'detach all parts':
-        'افصل كل الاجزاء',
-    'export...':
-        'تصدير...',
-
-    // stage:
-    'show all':
-        'إظهار الكل',
-    'pic...':
-        'الصورة المصدره...',
-    'open a new window\nwith a picture of the stage':
-        'فتح نافذه جديده مع لقطه من المسرح',
-
-    // scripting area
-    'clean up':
-        'محاذاة اللبنات',
-    'arrange scripts\nvertically':
-        'محاذا اللبنات عموديا',
-    'add comment':
-        'اضافة تعليق',
-    'undrop':
-        'تراجع عن الافلات',
-    'undo the last\nblock drop\nin this pane':
-        'تراجع عن الافلات الاخير للبلوك',
-    'scripts pic...':
-        'تصوير لقطة من الاسكربت...',
-    'open a new window\nwith a picture of all scripts':
-        'فتح نافذه جديده\n مع صورة لجميع الاسكربتات',
-    'make a block...':
-        'أنشئ لَبِـنَة جديدة...',
-
-    // costumes
-    'rename':
-        'اعادة تسمية',
-    'export':
-        'تصدير',
-    'rename costume':
-        'اعاده تسمية',
-
-    // sounds
-    'Play sound':
-        'شغل الصوت',
-    'Stop sound':
-        'اوقف الصوت',
-    'Stop':
-        'قف',
-    'Play':
-        'شغل',
-    'rename sound':
-        'اعد تسمية الصوت',
-
-    // dialogs
-    // buttons
-    'OK':
-        'موافق',
-    'Ok':
-        'موافق',
-    'Cancel':
-        'الغاء الامر',
-    'Yes':
-        'نعم',
-    'No':
-        'لا',
-
-    // help
-    'Help':
-        'مساعده',
-
-    // zoom blocks
-    'Zoom blocks':
-        'حجم اللبنات',
-    'build':
-        ' لَبِناتِك إصنع',
-    'your own':
-        'الخاصة',
-    'blocks':
-        'بنفسك',
-    'normal (1x)':
-        'عادي (1x)',
-    'demo (1.2x)':
-        'تجريبي (1.2x)',
-    'presentation (1.4x)':
-        'استعراضي (1.4x)',
-    'big (2x)':
-        'كبير (2x)',
-    'huge (4x)':
-        'ضخم (4x)',
-    'giant (8x)':
-        'عملاق (8x)',
-    'monstrous (10x)':
-        'عملاق جدا (10x)',
- 
- // Project Manager
-    'Untitled':
-        'بدون عنوان',
-    'Open Project':
-        'فتح مشروع',
-    '(empty)':
-        '(فارغ)',
-    'Saved!':
-        'تم الحفظ!',
-    'Delete Project':
-        'حذف مشروع',
-    'Are you sure you want to delete':
-        'هل انت متأكد من رغبتك في الحذف?',
-    'rename...':
-        'اعاده تسميه...',
-
-    // costume editor
-    'Costume Editor':
-        'محرر المظاهر',
-    'click or drag crosshairs to move the rotation center':
-        'انقر أو اسحب علامة المركز لنقل مركز دوران الكائن',
-
-    // project notes
-    'Project Notes':
-        'ملاحظات المشروع',
-
-    // new project
-    'New Project':
-        'مشروع جديد',
-    'Replace the current project with a new one?':
-        'استبدال المشروع الحالي بأخر جديد?',
-
-    // save project
-    'Save Project As...':
-        'حفظ المشروع باسم...',
-
-    // export blocks
-    'Export blocks':
-        'تصدير البلوكات',
-    'Import blocks':
-        'استيراد البلوكات',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'هذا المشروع لا يحتوى علي بلوكات مخصصة ',
-    'select':
-        'حدد',
-    'none':
-        'لا شيء',
-
-    // variable dialog
-    'for all sprites':
-        'لجميع الكائنات',
-    'for this sprite only':
-        'لهذا الكائن فقط',
-
-    // block dialog
-    'Change block':
-        'تغيير البلوك',
-    'Command':
-        'امر',
-    'Reporter':
-        'Reporter مُقَرِرات',
-    'Predicate':
-        'Predicate اسنادات تأكيدية',
-
-    // block editor
-    'Block Editor':
-        'محرر البلوكات',
-    'Apply':
-        'طبق',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'حذف بلوك مخصص',
-    'block deletion dialog text':
-        'هل تريد حقا حذف هذه الكتلة مع جميع النسخ منها',
-
-    // input dialog
-    'Create input name':
-        'إنشاء تسمية لمُدخَل جديد',
-    'Edit input name':
-        'تعديل تسمية مُدخَل',
-    'Edit label fragment':
-        'Edit label fragment',
-    'Title text':
-        'نص العنوان',
-    'Input name':
-        'أسم المُدخَل',
-    'Delete':
-        'حذف',
-    'Object':
-        'كائن',
-    'Number':
-        'رقم',
-    'Text':
-        'نص',
-    'List':
-        'لائحة',
-    'Any type':
-        'اي نوع',
-    'Boolean (T/F)':
-        'منطقي (W/F)',
-    'Command\n(inline)':
-        'لبنة مستطيلة الشكل',
-    'Command\n(C-shape)':
-        'لبنة هلالية الشكل',
-    'Any\n(unevaluated)':
-        'أي نوع\n(خام لم يُقَيَّم)',
-    'Boolean\n(unevaluated)':
-        'منطقي\n(خام لم يُقَيَّم)',
-    'Single input.':
-        'ادخال مفرد.',
-    'Default Value:':
-        'القيمة الافتراضية:',
-    'Multiple inputs (value is list of inputs)':
-        'متعدد الادخالات (عبارة عن لائحة او مصفوفة من المدخلات)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - اجعل المتغيرات الداخلية مرئية بواسطة المُستَدعي',
-
-    // About Snap
-    'About Snap':
-        'عن Snap',
-    'Back...':
-        'للخلف...',
-    'License...':
-        'الترخيص...',
-    'Modules...':
-        'البرمجه...',
-    'Credits...':
-        'الاشارات...',
-    'Translators...':
-        'المترجمون',
-    'License':
-        'الترخيص',
-    'current module versions:':
-        'الاصدار الحالي',
-    'Contributors':
-        'المساهمون',
-    'Translations':
-        'المترجمون',
-
-    // variable watchers
-    'normal':
-        'عادي',
-    'large':
-        'كبير',
-    'slider':
-        'شريط التمرير',
-    'slider min...':
-        'ادني حد...',
-    'slider max...':
-        'اقصي حد...',
-    'import...':
-        'استيراد...',
-    'Slider minimum value':
-        'القيمة الصغري لشريط التمرير',
-    'Slider maximum value':
-        'القيمة العظمي لشريط التمرير',
-
-    // list watchers
-    'length: ':
-        'الطول: ',
-
-    // coments
-    'add comment here...':
-        'اضف تعليق هنا',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) يمين',
-    '(-90) left':
-        '(-90) يسار',
-    '(0) up':
-        '(0) اعلي',
-    '(180) down':
-        '(180) اسفل',
-
-    // collision detection
-    'mouse-pointer':
-        'مؤشر_الفأرة',
-    'edge':
-        'الحافة',
-    'pen trails':
-        'اثار_القلم',
-
-    // costumes
-    'Turtle':
-        'السلحف',
-    'Empty':
-        'فارغ',
-
-    // graphical effects
-    'brightness':
-        'التوهج',
-    'ghost':
-        'شبح',
-    'negative':
-        'معكوس',
-    'comic':
-        'كوميدي',
-    'confetti':
-        'تحول اللون',
-
-    // keys
-    'space':
-        'المسافه',
-    'up arrow':
-        'السهم العلوي',
-    'down arrow':
-        'السهم السفلي',
-    'right arrow':
-        'السهم الايمن',
-    'left arrow':
-        'السهم الايسر',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'جديد...',
-
-    // math functions
-    'abs':
-        'abs',
-    'floor':
-        'floor',
-    'sqrt':
-        'الجذر التربيعي',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'الحروف',
-    'whitespace':
-        'الفراغات_البينية',
-    'line':
-        'علامات_الأسطر',
-    'tab':
-        'المسافات_البادئة',
-    'cr':
-        'أكتب_ما_تريد',
-
-    // data types
-    'number':
-        'رقم',
-    'text':
-        'نص',
-    'Boolean':
-        'منطقي',
-    'list':
-        'مصفوفة',
-    'command':
-        'لبنات_اجرائية',
-    'reporter':
-        'لبنات_تقريرية',
-    'predicate':
-        'لبنات_تأكيدية',
-
-    // list indices
-    'last':
-        'الاخير',
-    'any':
-        'أي موضع',
-		
-		
-		// miscellaneous
-	'find blocks...':
-		'البحث عن لبنة...',
-	
-	'Reset Password...':
-		'إعادة تعيين كلمة المرور',
-	
-	'Codification support':
-		'مساعد التكويد',
-	'uncheck to disable\nblock to text mapping features':
-		'أزل التحديد لألغاء مساعد التكويد',
-	'check for block\nto text mapping features':
-		'حَدد لتفعيل مساعد التكويد',
-	'current %dates':
-		'التاريخ الحالي %dates',
-	'year':'سنة',
-	'month':'شهر',
-	'date':'يوم',
-	'hour':'ساعة',
-	'minute':'دقيقة',
-	'second':'ثانية',
-	'time in milliseconds':
-		'ملي_ثانية',
-	'day of week':
-		'ترتيب_اليوم_في_الاسبوع',
-
-	'JavaScript function ( %mult%s ) { %code }':
-		' ( %mult%s ) { %code } جافاسكربت دالة',
-
-
-	// Copy / Paste
-	'Press CTRL+C one more time to effectively copy to clipboard.':
-		'إضغط CTRL+C مرة أخري لتأكيد نسخ محتويات الحافظة.',
-	'Press CTRL+V one more time to effectively paste from clipboard.':
-		'إضغط CTRL+V مرة أخري لتأكيد لصق محتويات الحافظة.',
-	'Press CTRL+X one more time to effectively cut to clipboard.':
-		'إضغط CTRL+X مرة أخري لتأكيد لصق محتويات الحافظة.',
-
-	// Paint.js
-	'undo':'تراجع',
-	'Paintbrush tool\n(free draw)':
-		'اداة الرسم الحر',
-	'Stroked Rectangle\n(shift: square)':
-		'اداة رسم المستطيل',
-	'Stroked Ellipse\n(shift: circle)':
-		'اداة رسم الشكل البيضاوى',
-	'Eraser tool':
-		'اداة الممحاة',
-	'Set the rotation center':
-		'ضبط مركز الدوران',
-	'Line tool\n(shift: vertical/horizontal)':
-		'اداة رسم الخط المستقيم رأسيا أو أفقيا',
-	'Filled Rectangle\n(shift: square)':
-		'أداة رسم مستطيل ممتلئ بالون محدد',
-	'Filled Ellipse\n(shift: circle)':
-		'أداة رسم شكل بيضاوى ممتلئ بلون محدد',
-	'Fill a region':
-		'أداة الملئ بالون',
-	'Pipette tool\n(pick a color anywhere)':
-		'أداة إلتقاط الألوان',
-	'grow':'تكبير',
-	'shrink':'تصغير',
-	'flip \u2194':
-		'إنعكاس \u2194',
-	'flip \u2195':
-		'إنعكاس \u2195',
-	'Brush size':
-		'حجم الفرشـاة',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'تأمين نسبة الأرتفاع الي العرض?\n(يمكنك ايضا استخدام مفتاح Shift)'
-
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) يسار",
+    "(0) up": "(0) اعلي",
+    "(1) sine": "",
+    "(180) down": "(180) اسفل",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) يمين",
+    "(empty)": "(فارغ)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "عن Snap",
+    "About...": "عن SNAP!...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "مؤثرات حركية",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "أي نوع (خام لم يُقَيَّم)",
+    "Any type": "اي نوع",
+    "Apply": "طبق",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "هل انت متأكد من رغبتك في الحذف?",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "للخلف...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "محرر البلوكات",
+    "Blocks": "بلوكات",
+    "Blocks category name:": "",
+    "Blurred shadows": "ظلال شبه شفافة",
+    "Boolean": "منطقي",
+    "Boolean (T/F)": "منطقي (W/F)",
+    "Boolean (unevaluated)": "منطقي (خام لم يُقَيَّم)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "حجم الفرشـاة",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "الغاء الامر",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "تغيير البلوك",
+    "Clear backup": "",
+    "Clicking sound": "المؤثرات الصوتية",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "مساعد التكويد",
+    "Colors and Crayons": "",
+    "Command": "امر",
+    "Command (C-shape)": "لبنة هلالية الشكل",
+    "Command (inline)": "لبنة مستطيلة الشكل",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "تأمين نسبة الأرتفاع الي العرض? (يمكنك ايضا استخدام مفتاح Shift)",
+    "Contents": "محتويات",
+    "Contributors": "المساهمون",
+    "Control": "التحكم",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "محرر المظاهر",
+    "Costumes": "المظاهر",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "إنشاء تسمية لمُدخَل جديد",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "الاشارات...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "افتراضى",
+    "Default Value:": "القيمة الافتراضية:",
+    "Delete": "حذف",
+    "Delete Custom Block": "حذف بلوك مخصص",
+    "Delete Project": "حذف مشروع",
+    "Delete a variable": "احذف متغيرا",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "تنزيل البرنامج",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "بطاقات الادخال الديناميكية",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "تعديل تسمية مُدخَل",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "فارغ",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "اداة الممحاة",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "تصدير البلوكات",
+    "Export blocks...": "تصدير اللبنات...",
+    "Export project as plain text...": "تصدير المشروع كمستند نصي ...",
+    "Export project...": "تصدير المشروع...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "تصدير ملخص المشروع...",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "أداة الملئ بالون",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "أداة رسم شكل بيضاوى ممتلئ بلون محدد",
+    "Filled Rectangle (shift: square)": "أداة رسم مستطيل ممتلئ بالون محدد",
+    "First-Class Sprites": "",
+    "Flat design": "تصميم مُصطَّح بسيط",
+    "Flat line ends": "نهايات الخطوط",
+    "For all Sprites": "لكل الكائنات",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "!مـرحبـا",
+    "Hello, World!": "",
+    "Help": "مساعده",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "هممم...",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "استيراد البلوكات",
+    "Import library": "استيراد مكتبة",
+    "Import sound": "",
+    "Import tools": "استيراد أدوات",
+    "Import...": "استيراد...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "توريث الخصائص بين الكائنات",
+    "Input Names:": "أسماء المدخلات",
+    "Input Slot Options": "",
+    "Input name": "أسم المُدخَل",
+    "Input sliders": "ألواح الأدخال",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "( _ ) { _ } جافاسكربت دالة",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "دعم لوحة المفاتيح",
+    "Kind of": "نوع من أنواع",
+    "LEAP Motion controller": "",
+    "Language...": "تغيير اللغة...",
+    "Libraries...": "المكتبات...",
+    "License": "الترخيص",
+    "License...": "الترخيص...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "اداة رسم الخط المستقيم رأسيا أو أفقيا",
+    "List": "لائحة",
+    "List utilities": "",
+    "Lists": "قوائم(مصفوفات)",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "تسجيل دخول...",
+    "Logout": "",
+    "Long form input dialog": "صندوق حوار تفصيلي لتعريف المدخلات",
+    "Looks": "المظهر",
+    "Make a block": "إنشاء لبنة مخصصة",
+    "Make a variable": "انشئ متغيرا",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "اسم الرسالة",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "البرمجه...",
+    "Motion": "الحركة",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "متعدد الادخالات (عبارة عن لائحة او مصفوفة من المدخلات)",
+    "Nested auto-wrapping": "",
+    "New": "جديد",
+    "New Category": "",
+    "New Project": "مشروع جديد",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "لا",
+    "November": "",
+    "Number": "رقم",
+    "OK": "موافق",
+    "Object": "كائن",
+    "October": "",
+    "Ok": "موافق",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "فتح مشروع",
+    "Open in Community Site": "",
+    "Open...": "فتح...",
+    "Opening project...": "",
+    "Operators": "العمليات",
+    "Other": "لبنات اضافيه",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "اداة الرسم الحر",
+    "Parallelization": "",
+    "Part of": "جزء من",
+    "Parts": "أجزاء",
+    "Password:": "",
+    "Pen": "القلم",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "أداة إلتقاط الألوان",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "تسميات عادية لنماذج البلوكات",
+    "Play": "شغل",
+    "Play sound": "شغل الصوت",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Predicate اسنادات تأكيدية",
+    "Prefer empty slot drops": "",
+    "Prefer smooth animations": "الرسوم المتحركة على نحو سلس",
+    "Press CTRL+C one more time to effectively copy to clipboard.": "إضغط CTRL+C مرة أخري لتأكيد نسخ محتويات الحافظة.",
+    "Press CTRL+V one more time to effectively paste from clipboard.": "إضغط CTRL+V مرة أخري لتأكيد لصق محتويات الحافظة.",
+    "Press CTRL+X one more time to effectively cut to clipboard.": "إضغط CTRL+X مرة أخري لتأكيد لصق محتويات الحافظة.",
+    "Privacy...": "",
+    "Project Notes": "ملاحظات المشروع",
+    "Project URLs": "",
+    "Project notes...": "ملاحظات عن المشروع...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "دليل التشغيل",
+    "Remove a category...": "",
+    "Remove unused blocks": "حذف اللبنات المخصصة الغير مستخدمة",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "استبدال المشروع الحالي بأخر جديد?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "Reporter مُقَرِرات",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "إعادة تعيين كلمة المرور",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "حفظ",
+    "Save As...": "حفظ بأسم ...",
+    "Save Project": "",
+    "Save Project As...": "حفظ المشروع باسم...",
+    "Save to disk": "حفظ في المستعرض",
+    "Saved!": "تم الحفظ!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "اسم الكائن",
+    "Scripts": "المقاطع البرمجيه",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "الاستشعار",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "ضبط مركز الدوران",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "تسجيل خروج...",
+    "Single input.": "ادخال مفرد.",
+    "Single palette": "",
+    "Slider maximum value": "القيمة العظمي لشريط التمرير",
+    "Slider minimum value": "القيمة الصغري لشريط التمرير",
+    "Snap! website": "الموقع الرسمي",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "الصوت",
+    "Sound Recorder": "",
+    "Sounds": "الاصوات",
+    "Sprite": "كائن",
+    "Sprite Nesting": "",
+    "Stage": "المنصة",
+    "Stage height": "ارتفاع المنصة",
+    "Stage selected: no motion primitives": "",
+    "Stage size": "",
+    "Stage size...": "مساحة المنصة...",
+    "Stage width": "عرض المنصة",
+    "Stop": "قف",
+    "Stop sound": "اوقف الصوت",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "اداة رسم الشكل البيضاوى",
+    "Stroked Rectangle (shift: square)": "اداة رسم المستطيل",
+    "Switch back to user mode": "التبديل الى وضع المستخدم",
+    "Switch to dev mode": "التبديل الي وضع المطورين",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "نص",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "تأمين الاسكربتات",
+    "Title text": "نص العنوان",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "المترجمون",
+    "Translators...": "المترجمون",
+    "Turbo mode": "الوضع السريع",
+    "Turtle": "السلحف",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "بدون عنوان",
+    "Unused blocks...": "لبنات غير مستخدمة...",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Upvar - اجعل المتغيرات الداخلية مرئية بواسطة المُستَدعي",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "اسم المتغير",
+    "Variables": "المتغيرات",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "لوحة المفاتيح الافتراضية",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "نعم",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "تلوين ZEBRA",
+    "Zoom blocks": "حجم اللبنات",
+    "Zoom blocks...": "التحكم فى حجم اللبنات...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ محتويات ضمن _ القيمة",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ ادرج _ بداية في",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "_ للرقم _ علي القسمة باقي",
+    "_ of _": "؟ _ قيمة ما _ للكائن",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "acos",
+    "add _ to _": "_ القيمة _ في أَدْرِج",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "اضافة كائن جديد",
+    "add comment": "اضافة تعليق",
+    "add comment here...": "اضف تعليق هنا",
+    "agent": "",
+    "alert _": "تنبيه: _",
+    "all": "الكل",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "الأول عـدا الكل أظهـِر _ في",
+    "all but this script": "كل_المقاطع_البرمجيه_للكائنات_عدا_هذا_المقطع",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "و",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "الاجابة",
+    "any": "",
+    "any key": "",
+    "any message": "اي رسالة",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "محاذا اللبنات عموديا",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "_ اسأل و انتظر",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "كبير (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "هل تريد حقا حذف هذه الكتلة مع جميع النسخ منها",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "بنفسك",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "التوهج",
+    "broadcast _ _": "_ _ بث",
+    "broadcast _ _ and wait": "إنتظـر ثم _ _ بِـث",
+    "brush": "",
+    "build": "لَبِناتِك إصنع",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "إستدع _ _",
+    "call _ w/continuation": "استدع _ (الفاعلية استمرار بقاء مع)",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "قابل للدوران",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "_ المتغير قيمة _ بمقدار غيّـر",
+    "change _ effect by _": "_ التأثير قيمـة _ بمقدار غيّر",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "_ بمقدار القلم لون غيّـر",
+    "change pen shade by _": "_ بمقدار القلم لون (تعتيم/سطوع) درجة غيّر",
+    "change pen size by _": "_ بمقدار القلم حجـم غيّـر",
+    "change size by _": "_ بمقدار الحجم غيّـر",
+    "change tempo by _": "_ بمقـدار الصوت شـدّة غيّـر",
+    "change volume by _": "",
+    "change x by _": "_ بمقدار س غير",
+    "change y by _": "_ بمقدار ص غير",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "حَدد لتفعيل مساعد التكويد",
+    "check for flat ends of lines": "حدد لجعل نهايات الخطوط قائمة الزاوية",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "حدد للحصول على حركة ناعمة",
+    "check for sprite inheritance features": "حدد لتفعيل توريث الخصائص بين الكائنات",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "حدد حتي تظهر دائما تصنيف بيانات الادخال في صندوق حوار تعريف المدخلات",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "حدد, لمنع الاسكربت من اعادة الدخول",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "حدد لتشغيل المؤثرات IDE- الحركية",
+    "check to enable alternating colors for nested blocks": "حدد لتفعيل اختيار الوان متبادلة للبلوكات المتداخلة",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "حدد لتفعيل بطاقات الادخال الديناميكية للمدخلات",
+    "check to enable input sliders for entry fields": "حدد لتفعيل الواح الادخال للحقول",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "حدد لتفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية",
+    "check to hide (+) symbols in block prototype labels": "حدد لأخفاء (+) من تسمسة نموذج البلوك",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "حدد لرفع درجة أولوية تنفيذ الاسكربت",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "حدد لتفعيل أصوات النقر على اللبنات",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "حدد لاستخدام الظلال الضبابية",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "محاذاة اللبنات",
+    "clear": "امسح",
+    "clear graphic effects": "الرسومية التأثيرات أحذف",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "انقر أو اسحب علامة المركز لنقل مركز دوران الكائن",
+    "clicked": "نقـر",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "؟ _ اللون ملامس _ اللون هل",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "كوميدي",
+    "command": "لبنات_اجرائية",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "تحول اللون",
+    "console log _": "",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "المظهر ( ترتيب / رقم )",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "استيراد الصور من الحاسوب او من الانترنت بسحب و افلات الملف هنا",
+    "could not connect to:": "",
+    "cr": "أكتب_ما_تريد",
+    "create a clone of _": "_ من أستنسـاخاً أنشئ",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "التاريخ الحالي _",
+    "current module versions:": "الاصدار الحالي",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "يوم",
+    "day of week": "ترتيب_اليوم_في_الاسبوع",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "حذف",
+    "delete _": "",
+    "delete _ of _": "_ العنصر احذف _ من",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "حذف تعريف البلوك",
+    "delete slot": "",
+    "delete this clone": "الإستنساخ هذا إحذف",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "تجريبي (1.2x)",
+    "demo...": "",
+    "detach all parts": "افصل كل الاجزاء",
+    "detach and put into the hand": "",
+    "detach from": "افصل عن",
+    "development mode": "وضع التصميم",
+    "development mode debugging primitives:": "نمط البرمجه و تصحيح الاخطاء",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "الاتجاه",
+    "disable deep-Morphic context menus and show user-friendly ones": "user-friendlyعرض القوائم",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "_ إلي المسـافة",
+    "distribution": "",
+    "don't rotate": "غير قابل للدوران",
+    "down arrow": "السهم السفلي",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "قابل للسحب",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "الإفـلات_من",
+    "duplicate": "مضاعفة",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "الحافة",
+    "edit": "تحرير",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "تحرير...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "user-friendlyعرض القوائم تعطيل",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "تصدير",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "تصدير...",
+    "extract": "",
+    "f": "f",
+    "false": "خـطأً",
+    "file": "",
+    "file menu import hint": "استيراد مشروع تم تصديره من قبل",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "خلال هذه الفتره _ gefiltert",
+    "find blocks": "",
+    "find blocks...": "البحث عن لبنة...",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "إيجاد اللبنات المخصصة الغير مستخدمة لحذفها من المشروع",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "إنعكاس ↔",
+    "flip ↕": "إنعكاس ↕",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "لجميع الكائنات",
+    "for each _ in _ _": "",
+    "for this sprite only": "لهذا الكائن فقط",
+    "forever _": "باستمرار كرر _",
+    "frame": "",
+    "frames": "",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "شبح",
+    "giant (8x)": "عملاق (8x)",
+    "glide _ secs to x: _ y: _": "ثوان _ خلال _ =س _ =ص النقطة إلي إنزلق",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "طبقات _ بمقدار الخلف الي انتقل",
+    "go to _": "_ الي إذهب",
+    "go to _ layer": "",
+    "go to front": "المقدمة الي إنتقل",
+    "go to x: _ y: _": "_ =س _ =ص للنقطة أذهب",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "تكبير",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "مرحبا",
+    "help": "مساعدة",
+    "help...": "مساعدة...",
+    "hide": "إختَفي",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "أخفاء اللبنات",
+    "hide variable _": "_ المُتَغيّر أخفِ",
+    "high": "",
+    "hour": "ساعة",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "ضخم (4x)",
+    "i": "i",
+    "identical to": "مطابق ل",
+    "if _ _": "_ اذا _",
+    "if _ _ else _": "_ اذا _ وإلا _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "الحافة عند كنت إذا أرتد",
+    "import a sound from your computer by dragging it into here": "استيراد الاصوات من الحاسوب او من الانترنت بسحب و افلات الملف هنا",
+    "import without attempting to parse or format data": "",
+    "import...": "استيراد...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "قائمة المدخلات",
+    "input names:": "مع المدخلات",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "_ القيمة _ بالموضع _ في أَدْرِج",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "_ يوافق _ النوع",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "؟ _ مع متماثل _ هل",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "_ العنصر أظهـِر _ في",
+    "items": "",
+    "j": "j",
+    "join _": "_ يلي مـا أَوصـل",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "؟ مضغوط _ المفتاح هل",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "العربية",
+    "language_translator": "طارق جلال",
+    "large": "كبير",
+    "last": "الاخير",
+    "last changed": "",
+    "last_changed": "2016-01-23",
+    "launch _ _": "شغّل _ _",
+    "left": "",
+    "left arrow": "السهم الايسر",
+    "length": "",
+    "length of _": "_ عناصر عدد",
+    "length:": "الطول:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "الحروف",
+    "letter _ of _": "_ الحرف أوجد _ العبارة من",
+    "light (70)": "",
+    "lightness": "",
+    "line": "علامات_الأسطر",
+    "lines": "",
+    "list": "مصفوفة",
+    "list _": "_ المصفوفة",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "تحميل مكتبة اللبنات الرسمية لمزيد من التحكم",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "أنشئ لَبِـنَة جديدة...",
+    "make a category...": "",
+    "make a copy and pick it up": "اصنع نسخة و التقطها",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "الرسالة",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "دقيقة",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "عملاق جدا (10x)",
+    "month": "شهر",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "؟ مضغوط الايسر الفأرة زر هل",
+    "mouse position": "",
+    "mouse x": "للفأرة س الموضع",
+    "mouse y": "للفأرة ص الموضع",
+    "mouse-departed": "مغـادرة",
+    "mouse-entered": "دخـول",
+    "mouse-pointer": "مؤشر_الفأرة",
+    "move": "تحرك",
+    "move _ steps": "خطوة _ تحرك",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "نفسي",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "معكوس",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "جديد...",
+    "next": "",
+    "next costume": "التالي المظهر",
+    "none": "لا شيء",
+    "normal": "عادي",
+    "normal (1x)": "عادي (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "ليس _",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "رقم",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "ضاعف هذا البلوك فقط",
+    "only face left/right": "مواجهة يمين-يسار",
+    "only grab this block": "",
+    "open a new browser browser window with a summary of this project": "عرض ملخص المشروع فى نافذة مستعرض جديدة",
+    "open a new window with a picture of all scripts": "فتح نافذه جديده مع صورة لجميع الاسكربتات",
+    "open a new window with a picture of the stage": "فتح نافذه جديده مع لقطه من المسرح",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "افتح نافذه جديده و اعرض النص البرمجي خلالها",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "أو",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "كل_المقاطع_البرمجية_للكائن_عدا_هذا_المقطع",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "_ مـؤقتاً التنفيذ أوقف",
+    "pen": "",
+    "pen _": "",
+    "pen down": "القلـم أنـزل",
+    "pen down?": "",
+    "pen trails": "اثار_القلم",
+    "pen up": "القلـم إرفـع",
+    "pen vectors": "",
+    "pic...": "الصورة المصدره...",
+    "pick random _ to _": "_ و _ بين عشوائي عدد إختر",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "_ رقـم النوتـة أعزف ، إيـقاع وحـدة _ بمقدار",
+    "play sound _": "_ الصـوت شغّـل",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "أنتهـاءة إنتظر ثم _ الصـوت شغّـل",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "_ الاتجاه نحو إتجه",
+    "point towards _": "_ نحو إتجه",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "لبنات_تأكيدية",
+    "presentation (1.4x)": "استعراضي (1.4x)",
+    "pressed": "ضغـط",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "أي موضع",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "اعادة تسمية...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "اعادة تسمية",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "اعاده تسمية",
+    "rename only this reporter": "",
+    "rename sound": "اعد تسمية الصوت",
+    "rename...": "اعاده تسميه...",
+    "repeat _ _": "_ كرر _",
+    "repeat until _ _": "_ حتي كرر _",
+    "replace item _ of _ with _": "_ العنصر بدل _ المصفوفة في _ القيمة ضـع",
+    "report _": "_ وَضِّـح",
+    "reporter": "لبنات_تقريرية",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "المؤقت تعيين إعـادة",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "إقـاع وحدة _ لمدة إستـرح",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "السهم الايمن",
+    "ring": "",
+    "ringify": "احاطة",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "صحيح لعدد _ قَرّب",
+    "run _ _": "نفّذ _ _",
+    "run _ w/continuation": "نفّذ _ (الفاعلية استمرار بقاء مع)",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "_ قـل",
+    "say _ for _ secs": "_ قـل ثانية _ لمدة",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "صورة نقطية للبلوك...",
+    "script variables _": "_ مَحَلْي مُتَغَيِّر",
+    "scripts": "",
+    "scripts pic...": "تصوير لقطة من الاسكربت...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "ثانية",
+    "select": "حدد",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "_ التأثير لقيـمة _ المقدار حدد",
+    "set _ of block _ to _": "",
+    "set _ to _": "_ للمتغيّر _ القيمة خصص",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "_ لـ مسـاوياً القلم لون إجعل",
+    "set pen shade to _": "_ تساوي القلم لون (تعتيم/سطوع) درجة إجعل",
+    "set pen size to _": "_ لـ مساوياً (حجم/سُـمك)القلـم إجعل",
+    "set size to _ %": "% _ لـ مساوياً الحجم إجعل",
+    "set tempo to _ bpm": "_ مسـاوية الصوت شدّة إجعل",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "_ التوربو وضـع تفعيل",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "_ تساوي س إجعل",
+    "set y to _": "_ تساوي ص إجعل",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "إظهَر",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "إظهار الكل",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "عرض جميع اللبنات المخصصة في صيغة XML",
+    "show primitives": "إظهار اللبنات",
+    "show project data as XML in a new browser window": "عرض المشروع في صيغة XML",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "_ المُتَغيّر أظهـِر",
+    "shown?": "",
+    "shrink": "تصغير",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "الحجم",
+    "slider": "شريط التمرير",
+    "slider max...": "اقصي حد...",
+    "slider min...": "ادني حد...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "المسافه",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "_ جـَزَّء ،كفواصل _ بإستخدام",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "الجذر التربيعي",
+    "square": "",
+    "stack size": "",
+    "stage": "",
+    "stage image": "",
+    "stamp": "اطبع",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "_ اوقف",
+    "stop all sounds": "الأصوات جميع أوقف",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "حفظ المشروع فى مجلد التنزيلات الخاص بالمتصفح المحدد",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "_ المظهر إلي إنتقل",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "المسافات_البادئة",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "الصوت شدّة مقـدار",
+    "temporary?": "",
+    "text": "نص",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "لايوجد لبنات مخصصة غير مستخدمة في هذا المشروع",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "شيئ",
+    "think _": "_ فكـر",
+    "think _ for _ secs": "_ فكر ثانية _ لمدة",
+    "this _": "",
+    "this block": "هذا_البلوك",
+    "this project doesn't have any custom global blocks yet": "هذا المشروع لا يحتوى علي بلوكات مخصصة",
+    "this script": "هذا_المقطع_البرمجي",
+    "time in milliseconds": "ملي_ثانية",
+    "timer": "المؤقت",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "؟ _ لـ ملامس هـل",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "tarekgalal46@hotmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "صحيح",
+    "turbo mode": "",
+    "turbo mode?": "؟ التوربو وضع في التشغيل هل",
+    "turn _ _ degrees": "درجة _ _ استدر",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "من نوع _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "أزل للحصول علي سرعه اعلي مع معدلات تتبابع اطارات متغيره",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "أزل لجعل نهايات الخطوط دائرية",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "",
+    "uncheck to allow script reentrance": "أزل للسماح للاسكربت باعادة الدخول",
+    "uncheck to always show (+) symbols in block prototype labels": "ازل التحديد لاظهار (+) في تسمسة نموذج البلوك",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "أزل لابطال مؤثرات IDE- الحركة",
+    "uncheck to disable alternating colors for nested block": "ازل لعدم لتفعيل اختيار الوان متبادلة للبلوكات المتداخلة",
+    "uncheck to disable block to text mapping features": "أزل التحديد لألغاء مساعد التكويد",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "ازل لالغاء تفعيل بطاقات الادخال الديناميكية للمدخلات",
+    "uncheck to disable input sliders for entry fields": "أزل لالغاء الواح الادخال للحقول",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "أزل لألغاء تفعيل توريث الخصائص بين الكائنات",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "أزل, ليتم تنفيذ الاسكربت بالسرعة العادية",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "أزل لإيقاف أصوات النقر على اللبنات",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "ازل لاستخدام الظلال المعتمة",
+    "uncheck to use the input dialog in short form": "ازل التحديد لاستخدام صندوق الحوار المبسط لتعريف المدخلات",
+    "uncompile": "",
+    "undo": "تراجع",
+    "undo the last block drop in this pane": "تراجع عن الافلات الاخير للبلوك",
+    "undrop": "تراجع عن الافلات",
+    "unicode _ as letter": "_ يونيكود لترميز المقابل الحرف",
+    "unicode of _": "_ للحرف يونيكود ترميز قيمة",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "عدم احاطة",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "بدون عنوان",
+    "unused": "",
+    "unused block(s) removed": "تم ازالة اللبنات الغير مستخدمة",
+    "up arrow": "السهم العلوي",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "_ لـ إنتظـر",
+    "wait until _": "_ الشرط يتحقق حتي إنتظر",
+    "wardrobe": "",
+    "warp _": "تسريع _",
+    "what's your name?": "؟ إسمك هـو مـا",
+    "when I am _": "الفـأرة مـؤشْـر _ لـ أتعرض عندما",
+    "when I receive _ _": "_ _ رسـالة أستقبال عند",
+    "when I start as a clone": "مطابقة كنسخةٌ أبدأ عندما",
+    "when _": "_ عندما",
+    "when _ clicked": "الأخضر العـَلم _ نقر عنـد",
+    "when _ is edited _": "",
+    "when _ key pressed _": "_ _ مفتـاح ضغط عند",
+    "whirl": "",
+    "whitespace": "الفراغات_البينية",
+    "width": "",
+    "with data": "",
+    "with inputs": "مستخدماً القيم التالية",
+    "word": "",
+    "world": "ايها العالم",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "س الموضع",
+    "y": "y",
+    "y position": "ص الموضع",
+    "year": "سنة",
+    "year:": "",
+    "your own": "الخاصة",
+    "z": "z"
+}

@@ -1,1252 +1,1389 @@
-/*
-
-	lang-ja.js
-
-	Japanese translation for SNAP!
-
-	written by Jens Mönig
-
-	Copyright (C) 2012 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ja = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        '日本語', // the name as it should appear in the language menu
-    'language_translator':
-        'Kazuhiro Abe', // your name for the Translators tab
-    'translator_e-mail':
-        'abee@squeakland.jp', // optional
-    'last_changed':
-        '2013-04-02', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        '名称未設定',
-    'development mode':
-        '開発者モード',
-
-    // categories:
-    'Motion':
-        '動き',
-    'Looks':
-        '見た目',
-    'Sound':
-        '音',
-    'Pen':
-        'ペン',
-    'Control':
-        '制御',
-    'Sensing':
-        '調べる',
-    'Operators':
-        '演算',
-    'Variables':
-        '変数',
-    'Lists':
-        'リスト',
-    'Other':
-        'その他',
-
-    // editor:
-    'draggable':
-        'ドラッグ可能',
-
-    // tabs:
-    'Scripts':
-        'スクリプト',
-    'Costumes':
-        'コスチューム',
-    'Sounds':
-        '音',
-
-    // names:
-    'Sprite':
-        'スプライト',
-    'Stage':
-        'ステージ',
-
-    // rotation styles:
-    'don\'t rotate':
-        '回転しない',
-    'can rotate':
-        '回転する',
-    'only face left/right':
-        '左右に反転するだけ',
-
-    // new sprite button:
-    'add a new sprite':
-        '新しいスプライトを追加する',
-
-    // tab help
-    'costumes tab help':
-        '他のWebページやコンピューター上の画像を\n'
-            + 'ここにドロップして読み込みます',
-    'import a sound from your computer\nby dragging it into here':
-        'コンピューター上のサウンドを\nここにドラッグして読み込みます',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        '選択されたステージ:\n動きのプリミティブがありません',
-
-    'move %n steps':
-        '%n 歩動かす',
-    'turn %clockwise %n degrees':
-        '%clockwise %n 度回す',
-    'turn %counterclockwise %n degrees':
-        '%counterclockwise %n 度回す',
-    'point in direction %dir':
-        '%dir 度に向ける',
-    'point towards %dst':
-        '%dst へ向ける',
-    'go to x: %n y: %n':
-        'x座標を %n 、y座標を %n にする',
-    'go to %dst':
-        '%dst へ行く',
-    'glide %n secs to x: %n y: %n':
-        '%n 秒でx座標を %n に、y座標を %n に変える',
-    'change x by %n':
-        'x座標を %n ずつ変える',
-    'set x to %n':
-        'x座標を %n にする',
-    'change y by %n':
-        'y座標を %n ずつ変える',
-    'set y to %n':
-        'y座標を %n にする',
-    'if on edge, bounce':
-        'もし端に着いたら、跳ね返る',
-    'x position':
-        'x座標',
-    'y position':
-        'y座標',
-    'direction':
-        '向き',
-
-    // looks:
-    'switch to costume %cst':
-        'コスチュームを %cst にする',
-    'next costume':
-        '次のコスチュームにする',
-    'costume #':
-        'コスチュームの番号',
-    'say %s for %n secs':
-        '%s と %n 秒言う',
-    'say %s':
-        '%s という',
-    'think %s for %n secs':
-        '%s と %n 秒考える',
-    'think %s':
-        '%s と考える',
-    'Hello!':
-        'こんにちは!',
-    'Hmm...':
-        'うーん...',
-    'change %eff effect by %n':
-        '%eff の効果を %n ずつ変える',
-    'set %eff effect to %n':
-        '%eff の効果を %n にする',
-    'clear graphic effects':
-        '画像効果をなくす',
-    'change size by %n':
-        '大きさを %n ずつ変える',
-    'set size to %n %':
-        '大きさを %n にする',
-    'size':
-        '大きさ',
-    'show':
-        '表示する',
-    'hide':
-        '隠す',
-    'go to front':
-        '前に出す',
-    'go back %n layers':
-        '%n 層下げる',
-
-    'development mode \ndebugging primitives:':
-        '開発者モード\nデバッグ用プリミティブ:',
-    'console log %mult%s':
-        'コンソールログ %mult%s',
-    'alert %mult%s':
-        '警告: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd の音を鳴らす',
-    'play sound %snd until done':
-        '終わるまで %snd の音を鳴らす',
-    'stop all sounds':
-        'すべての音を止める',
-    'rest for %n beats':
-        '%n 拍休む',
-    'play note %n for %n beats':
-        '%n の音符を %n 拍鳴らす',
-    'change tempo by %n':
-        'テンポを %n ずつ変える',
-    'set tempo to %n bpm':
-        'テンポを %n BPMにする',
-    'tempo':
-        'テンポ',
-
-    // pen:
-    'clear':
-        '消す',
-    'pen down':
-        'ペンを下ろす',
-    'pen up':
-        'ペンを上げる',
-    'set pen color to %clr':
-        'ペンの色を %clr にする',
-    'change pen color by %n':
-        'ペンの色を %n ずつ変える',
-    'set pen color to %n':
-        'ペンの色を %n にする',
-    'change pen shade by %n':
-        'ペンの濃さを %n ずつ変える',
-    'set pen shade to %n':
-        'ペンの濃さを %n にする',
-    'change pen size by %n':
-        'ペンの太さを %n ずつ変える',
-    'set pen size to %n':
-        'ペンの太さを %n にする',
-    'stamp':
-        'スタンプ',
-    'fill':
-        '塗りつぶす',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag が押されたとき',
-    'when %keyHat key pressed':
-        '%keyHat が押されたとき',
-    'when I am clicked':
-        '自分がクリックされたとき',
-    'when I receive %msgHat':
-        '%msgHat を受け取ったとき',
-    'broadcast %msg':
-        '%msg を送る',
-    'broadcast %msg and wait':
-        '%msg を送って待つ',
-    'Message name':
-        'メッセージ名',
-    'wait %n secs':
-        '%n 秒待つ',
-    'wait until %b':
-        '%b まで待つ',
-    'forever %loop':
-        'ずっと %loop',
-    'repeat %n %loop':
-        '%n 回繰り返す %loop',
-    'repeat until %b %loop':
-        '%b まで繰り返す %loop',
-    'if %b %c':
-        'もし %b なら %c',
-    'if %b %c else %c':
-        'もし %b なら %c でなければ %c',
-    'report %s':
-        '%s を返す',
-    'stop block':
-        'ブロックを止める',
-    'stop script':
-        'スクリプトを止める',
-    'stop all %stop':
-        'すべてを止める %stop',
-    'run %cmdRing %inputs':
-        '%cmdRing を %inputs で実行する',
-    'launch %cmdRing %inputs':
-        '%cmdRing を %inputs で起動する',
-    'call %repRing %inputs':
-        '%repRing を %inputs で呼ぶ',
-    'run %cmdRing w/continuation':
-        '継続付きで %cmdRing を実行する',
-    'call %cmdRing w/continuation':
-        '継続付きで %cmdRing を呼ぶ',
-    'warp %c':
-        'ワープする %c',
-    'when I start as a clone':
-        'クローンされたとき',
-    'create a clone of %cln':
-        '%cln のクローンを作る',
-    'myself':
-        '自分自身',
-    'delete this clone':
-        'このクローンを削除する',
-
-    // sensing:
-    'touching %col ?':
-        '%col に触れた',
-    'touching %clr ?':
-        '%clr 色に触れた',
-    'color %clr is touching %clr ?':
-        '%clr 色が %clr 色に触れた',
-    'ask %s and wait':
-        '%s と聞いて待つ',
-    'what\'s your name?':
-        'あなたの名前は何ですか?',
-    'answer':
-        '答え',
-    'mouse x':
-        'マウスのx座標',
-    'mouse y':
-        'マウスのy座標',
-    'mouse down?':
-        'マウスが押された',
-    'key %key pressed?':
-        '%key が押された',
-    'distance to %dst':
-        '%dst までの距離',
-    'reset timer':
-        'タイマーをリセット',
-    'timer':
-        'タイマー',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'ターボモード?',
-    'set turbo mode to %b':
-        'ターボーモードを %b にする',
-
-    'filtered for %clr':
-        '%clr 色を抽出',
-    'stack size':
-        'スタックの大きさ',
-    'frames':
-        'フレーム',
-
-    // operators:
-    '%n mod %n':
-        '%n を %n で割った余り',
-    'round %n':
-        '%n を丸める',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        '%n から %n までの乱数',
-    '%b and %b':
-        '%b かつ %b',
-    '%b or %b':
-        '%b または %b',
-    'not %b':
-        '%b ではない',
-    'true':
-        'はい',
-    'false':
-        'いいえ',
-    'join %words':
-        '%words をつなぐ',
-    'hello':
-        'ハロー',
-    'world':
-        'ワールド',
-    'letter %idx of %s':
-        '%idx 文字目の文字 %s',
-    'length of %s':
-        '%s の長さ',
-    'unicode of %s':
-        '%s のUnicode',
-    'unicode %n as letter':
-        'Unicodeで %n の文字',
-    'is %s a %typ ?':
-        '%s は %typ 型',
-    'is %s identical to %s ?':
-        '%s は %s と同一',
-
-    'type of %s':
-        '%s の型',
-
-    // variables:
-    'Make a variable':
-        '新しい変数を作る',
-    'Variable name':
-        '変数名',
-    'Delete a variable':
-        '変数を削除',
-
-    'set %var to %s':
-        '%var を %s にする',
-    'change %var by %n':
-        '%var を %n ずつ変える',
-    'show variable %var':
-        '%var 表示する',
-    'hide variable %var':
-        '%var を隠す',
-    'script variables %scriptVars':
-        'スクリプト変数 %scriptVars',
-
-    // lists:
-    'list %exp':
-        'リスト %exp',
-    '%s in front of %l':
-        '%s を %l の先頭に置く',
-    'item %idx of %l':
-        '%idx 番目 %l',
-    'all but first of %l':
-        '%l の先頭以外',
-    'length of %l':
-        '%l の長さ',
-    '%l contains %s':
-        '%l に %s が含まれているか',
-    'thing':
-        'なにか',
-    'add %s to %l':
-        '%s を %l に追加する',
-    'delete %ida of %l':
-        '%ida 番目を %l から削除する',
-    'insert %s at %idx of %l':
-        '%s を %idx 番目になるように %l に挿入する ',
-    'replace item %idx of %l with %s':
-        '%idx 番目の %l の要素を %s で置き換える',
-
-    // other
-    'Make a block':
-        'ブロックを作る',
-
-    // menus
-    // snap menu
-    'About...':
-        'Snap!について...',
-    'Snap! website':
-        'Snap!のWebサイト',
-    'Download source':
-        'ソースをダウンロード',
-    'Switch back to user mode':
-        'ユーザーモードに切り替え',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        '高度なモーフィックコンテクストメニューを無効にして\nユーザーフレンドリーなメニューを表示する',
-    'Switch to dev mode':
-        '開発者モードに切り替える',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターを有効にする',
-
-    // project menu
-    'Project notes...':
-        'プロジェクトのメモ...',
-    'New':
-        '新規',
-    'Open...':
-        '開く...',
-    'Save':
-        '保存',
-    'Save As...':
-        '名前をつけて保存...',
-    'Import...':
-        '読み込み...',
-    'file menu import hint':
-        'チェックするとレポーターをドラッグ&ドロップするとき\n'
-		+ '空のレポーターにフォーカスします\n\n'
-		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text...':
-        'テキストファイルとしてプロジェクトを書き出す...',
-    'Export project...':
-        'プロジェクトを書き出す...',
-    'show project data as XML\nin a new browser window':
-        'プロジェクトのデータをXMLとして\nブラウザの新しいウインドウに表示する',
-    'Export blocks...':
-        'ブロックを書き出す...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'グローバルカスタムブロックの定義をXMLとして\nブラウザの新しいウインドウに表示する',
-    'Import tools':
-        'ツールを読み込む',
-    'load the official library of\npowerful blocks':
-        '強力なブロックの公式\nライブラリを読み込む',
-
-    // cloud menu
-    'Login...':
-        'ログイン...',
-    'Signup...':
-        'サインアップ...',
-
-    // settings menu
-    'Language...':
-        '言語...',
-    'Zoom blocks...':
-        'ブロックをズーム...',
-    'Blurred shadows':
-        '半透明の影',
-    'uncheck to use solid drop\nshadows and highlights':
-        'チェックを外すと単色の影と\nハイライトになります',
-    'check to use blurred drop\nshadows and highlights':
-        'チェックすると半透明の影と\nハイライトになります',
-    'Zebra coloring':
-        '縞々で表示',
-    'check to enable alternating\ncolors for nested blocks':
-        'チェックすると入れ子になった\nブロックを縞々で表示します',
-    'uncheck to disable alternating\ncolors for nested block':
-        'チェックを外すと入れ子になった\nブロックを普通に表示します',
-    'Dynamic input labels':
-        '動的な入力ラベル',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'チェックを外すと可変個引数の\n動的ラベルを不可にします',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'チェックすると可変個引数の\n動的ラベルを可能にします',
-    'Prefer empty slot drops':
-        '空のスロットのドロップを許す',
-    'settings menu prefer empty slots hint':
-        '設定メニューが空のスロットのヒントを許します',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'チェックを外すとドロップしたレポーターが\n他を押し出せるようになります',
-    'Long form input dialog':
-        '引数ダイアログを長い形式にする',
-    'check to always show slot\ntypes in the input dialog':
-        'チェックすると引数ダイアログに\n常にスロットの型を表示します',
-    'uncheck to use the input\ndialog in short form':
-        'チェックを外すと引数ダイアログを短く表示します',
-    'Virtual keyboard':
-        '仮想キーボード',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'チェックを外すとモバイル機器用の\n仮想キーボードを無効にします',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'チェックするとモバイル機器用の\n仮想キーボードを有効にします',
-    'Input sliders':
-        '入力スライダー',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'チェックを外すと入力フィールドのスライダーを無効にします',
-    'check to enable\ninput sliders for\nentry fields':
-        'チェックすると入力フィールドのスライダーを有効にします',
-    'Clicking sound':
-        'クリック音',
-    'uncheck to turn\nblock clicking\nsound off':
-        'チェックを外すとブロックの\nクリック音を切ります',
-    'check to turn\nblock clicking\nsound on':
-        'チェックを外すとブロックの\nクリック音を入れます',
-    'Animations':
-        'アニメーション',
-    'uncheck to disable\nIDE animations':
-        'チェックを外すとIDEの\nアニメーションを切ります',
-    'check to prioritize\nscript execution':
-        'チェックするとスクリプトの\n処理を優先します',
-    'uncheck to run scripts\nat normal speed':
-        'チェックを外すとスクリプトを\n通常の速度で実行します',
-    'check to enable\nIDE animations':
-        'チェックするとIDEの\nアニメーションを入れます',
-    'Turbo mode':
-        'ターボモード',
-    'Thread safe scripts':
-        'スクリプトをスレッドセーフにする',
-    'uncheck to allow\nscript reentrancy':
-        'チェックを外すとスクリプトを\n再入可能にします',
-    'check to disallow\nscript reentrancy':
-        'チェックするとスクリプトを\n再入不能にします',
-    'Prefer smooth animations':
-        'なめらかなアニメーションにする',
-    'uncheck for greater speed\nat variable frame rates':
-        'チェックを外すとフレームレート\n当たりの速度を上げます',
-    'check for smooth, predictable\nanimations across computers':
-        'チェックするとコンピューター間で\nなめらかで予測可能なアニメーションにします',
-
-    // inputs
-    'with inputs':
-        '引数',
-    'input names:':
-        '引数名:',
-    'Input Names:':
-        '引数名:',
-    'input list:':
-        '引数リスト:',
-
-    // context menus:
-    'help':
-        'ヘルプ',
-
-    // blocks:
-    'help...':
-        'ヘルプ...',
-    'duplicate':
-        '複製',
-    'make a copy\nand pick it up':
-        'コピーを作って\nそれを掴みます',
-    'only duplicate this block':
-        'このブロックをコピーするだけ',
-    'delete':
-        '削除',
-    'script pic...':
-        'スクリプトの画像...',
-    'open a new window\nwith a picture of this script':
-        'このスクリプトの画像を表示する新しいウィンドウを開きます',
-    'ringify':
-        'リング化',
-    'unringify':
-        '非リング化',
-
-    // custom blocks:
-    'delete block definition...':
-        'ブロックの定義を削除',
-    'edit...':
-        '編集...',
-
-    // sprites:
-    'edit':
-        '編集',
-    'export...':
-        '書き出し...',
-
-    // stage:
-    'show all':
-        'すべてを表示',
-    'pic...':
-        '画像...',
-    'open a new window\nwith a picture of the stage':
-        'このステージの画像で\n新しいウィンドウを開く',
-
-    // scripting area
-    'clean up':
-        'きれいにする',
-    'arrange scripts\nvertically':
-        'スクリプトを\n縦に整列します',
-    'add comment':
-        'コメントを追加',
-    'make a block...':
-        'ブロックを作る...',
-
-    // costumes
-    'rename':
-        '名前を変更',
-    'export':
-        '書き出し',
-    'rename costume':
-        'コスチュームの名前を変更',
-
-    // sounds
-    'Play sound':
-        '音を鳴らす',
-    'Stop sound':
-        '音を止める',
-    'Stop':
-        '停止',
-    'Play':
-        '再生',
-    'rename sound':
-        '音の名前を変更',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'キャンセル',
-    'Yes':
-        'はい',
-    'No':
-        'いいえ',
-
-    // help
-    'Help':
-        'ヘルプ',
-
-    // zoom blocks
-    'Zoom blocks':
-        'ブロックをズーム',
-    'build':
-        '作ろう',
-    'your own':
-        'あなた自身の',
-    'blocks':
-        'ブロックを',
-    'normal (1x)':
-        'ノーマル (1x)',
-    'demo (1.2x)':
-        'デモ (1.2x)',
-    'presentation (1.4x)':
-        'プレゼンテーション (1.4x)',
-    'big (2x)':
-        '大 (2x)',
-    'huge (4x)':
-        '特大 (4x)',
-    'giant (8x)':
-        '巨大 (8x)',
-    'monstrous (10x)':
-        '超巨大 (10x)',
-
-    // Project Manager
-    'Untitled':
-        '名称未設定',
-    'Open Project':
-        'プロジェクトを開く',
-    'Open':
-        '開く',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '保存しました!',
-    'Delete Project':
-        'プロジェクトを削除',
-    'Are you sure you want to delete':
-        '本当に削除しますか',
-    'rename...':
-        '名前を変更...',
-
-    // costume editor
-    'Costume Editor':
-        'コスチュームエディター',
-    'click or drag crosshairs to move the rotation center':
-        'クリックかドラッグで回転中心を移動する',
-
-    // project notes
-    'Project Notes':
-        'プロジェクトのメモ',
-
-    // new project
-    'New Project':
-        '新しいプロジェクト',
-    'Replace the current project with a new one?':
-        '現在のプロジェクトを新しいもので置き換えますか?',
-
-    // open project
-    'Open Projekt':
-        'プロジェクトを開く',
-
-    // save project
-    'Save Project As...':
-        '名前を付けてプロジェクトを保存...',
-
-    // export blocks
-    'Export blocks':
-        'ブロックを書き出し',
-    'Import blocks':
-        'ブロックを読み込み',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'このプロジェクトはカスタムグローバルブロックを持っていません',
-    'select':
-        '選択',
-    'all':
-        'すべて',
-    'none':
-        'なし',
-
-    // variable dialog
-    'for all sprites':
-        'すべてのスプライト用',
-    'for this sprite only':
-        'このスプライト用',
-
-    // block dialog
-    'Change block':
-        'ブロックを変更',
-    'Command':
-        'コマンド',
-    'Reporter':
-        'モニター',
-    'Predicate':
-        '述語',
-
-    // block editor
-    'Block Editor':
-        'ブロックエディター',
-    'Apply':
-        '適用',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'カスタムブロックを削除',
-    'block deletion dialog text':
-        'このカスタムブロックとすべてのインスタンスを\n削除してもよいですか?',
-
-    // input dialog
-    'Create input name':
-        '引数名を作成',
-    'Edit input name':
-        '引数名を編集',
-    'Edit label fragment':
-        'ラベルの断片を編集',
-    'Title text':
-        'タイトルテキスト',
-    'Input name':
-        '引数名',
-    'Delete':
-        '削除',
-    'Object':
-        'オブジェクト',
-    'Number':
-        '数',
-    'Text':
-        'テキスト',
-    'List':
-        'リスト',
-    'Any type':
-        '全タイプ',
-    'Boolean (T/F)':
-        '真偽値 (はい/いいえ)',
-    'Command\n(inline)':
-        'コマンド\n(インライン)',
-    'Command\n(C-shape)':
-        'コマンド \n(C形)',
-    'Any\n(unevaluated)':
-        '任意\n(未評価)',
-    'Boolean\n(unevaluated)':
-        '真偽値\n(未評価)',
-    'Single input.':
-        '単一引数.',
-    'Default Value:':
-        'デフォルト値:',
-    'Multiple inputs (value is list of inputs)':
-        '複数の引数 (値は引数のリスト)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - 呼び出し元から見える内部的な変数',
-
-   // About Snap
-    'About Snap':
-        'Snapについて',
-    'Back...':
-        '戻る...',
-    'License...':
-        'ライセンス...',
-    'Modules...':
-        'モジュール...',
-    'Credits...':
-        'クレジット...',
-    'Translators...':
-        '翻訳者',
-    'License':
-        'ライセンス',
-    'current module versions:':
-        '現在のモジュールのバージョン:',
-    'Contributors':
-        '貢献者:',
-    'Translations':
-        '翻訳',
-
-    // variable watchers
-    'normal':
-        '通常',
-    'large':
-        '大',
-    'slider':
-        'スライダー',
-    'slider min...':
-        'スライダーの最小値...',
-    'slider max...':
-        'スライダーの最大値...',
-    'import...':
-        '読み込み...',
-    'Slider minimum value':
-        'スライダーの最小値',
-    'Slider maximum value':
-        'スライダーの最大値',
-
-    // list watchers
-    'length: ':
-        '長さ: ',
-
-    // coments
-    'add comment here...':
-        'ここにコメントを追加...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) 右',
-    '(-90) left':
-        '(-90) 左',
-    '(0) up':
-        '(0) 上',
-    '(180) down':
-        '(180) 下',
-
-    // collision detection
-    'mouse-pointer':
-        'マウスのポインター',
-    'edge':
-        '端',
-    'pen trails':
-        'ペンの軌跡',
-
-    // costumes
-    'Turtle':
-        'タートル',
-    'Empty':
-        '空',
-
-    // graphical effects
-    'ghost':
-        '幽霊',
-
-    // keys
-    'space':
-        'スペース',
-    'up arrow':
-        '上向き矢印',
-    'down arrow':
-        '下向き矢印',
-    'right arrow':
-        '右向き矢印',
-    'left arrow':
-        '左向き矢印',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        '新規...',
-
-    // math functions
-    'abs':
-        '絶対値',
-    'sqrt':
-        '平方根',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        '数',
-    'text':
-        'テキスト',
-    'Boolean':
-        '真偽値',
-    'list':
-        'リスト',
-    'command':
-        'コマンド',
-    'reporter':
-        'レポーター',
-    'predicate':
-        '述語',
-
-    // list indices
-    'last':
-        '最後',
-    'any':
-        '任意',
-
-    // missing entries
-    'Reference manual':
-        'リファレンスマニュアル',
-    'Sign in':
-        'サインイン',
-    'User name:':
-        'ユーザー名:',
-    'Password:':
-        'パスワード:',
-    'stay signed in on this computer\nuntil logging out':
-        'ログアウトするまでこのコンピューターに\nサインインしたままにする',
-    'Sign up':
-        'サインアップ',
-    'User name:':
-        'ユーザー名:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        '誕生月:',
-    'Birth date:':
-        '年:',
-    'January':
-        '1月',
-    'February':
-        '2月',
-    'March':
-        '3月',
-    'April':
-        '4月',
-    'May':
-        '5月',
-    'June':
-        '6月',
-    'July':
-        '7月',
-    'August':
-        '8月',
-    'September':
-        '9月',
-    'October':
-        '10月',
-    'November':
-        '11月',
-    'December':
-        '12月',
-    '1993 or before':
-        '1993年以前',
-    'E-mail address:':
-        '電子メールアドレス:',
-    'Terms of Service...':
-        'サービス利用規約...',
-    'Privacy...':
-        '個人情報...',
-    'I have read and agree\nto the Terms of Service':
-        'サービス利用規約を読み\nそれに同意します',
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) 左",
+    "(0) up": "(0) 上",
+    "(1) sine": "",
+    "(180) down": "(180) 下",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) 右",
+    "(empty)": "(空)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "1993 or before": "1993年以前",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Snapについて",
+    "About...": "Snap!について...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "アニメーション",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "任意 (未評価)",
+    "Any type": "全タイプ",
+    "Apply": "適用",
+    "April": "4月",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "本当に削除しますか",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "8月",
+    "Back...": "戻る...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "年:",
+    "Bitmap": "",
+    "Block Editor": "ブロックエディター",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "半透明の影",
+    "Boolean": "真偽値",
+    "Boolean (T/F)": "真偽値 (はい/いいえ)",
+    "Boolean (unevaluated)": "真偽値 (未評価)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "キャンセル",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "ブロックを変更",
+    "Clear backup": "",
+    "Clicking sound": "クリック音",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "コマンド",
+    "Command (C-shape)": "コマンド (C形)",
+    "Command (inline)": "コマンド (インライン)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "貢献者:",
+    "Control": "制御",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "コスチュームエディター",
+    "Costumes": "コスチューム",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "引数名を作成",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "クレジット...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "12月",
+    "Default": "",
+    "Default Value:": "デフォルト値:",
+    "Delete": "削除",
+    "Delete Custom Block": "カスタムブロックを削除",
+    "Delete Project": "プロジェクトを削除",
+    "Delete a variable": "変数を削除",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "ソースをダウンロード",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "動的な入力ラベル",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "電子メールアドレス:",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "引数名を編集",
+    "Edit label fragment": "ラベルの断片を編集",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "空",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "ブロックを書き出し",
+    "Export blocks...": "ブロックを書き出す...",
+    "Export project as plain text...": "テキストファイルとしてプロジェクトを書き出す...",
+    "Export project...": "プロジェクトを書き出す...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "2月",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "こんにちは!",
+    "Hello, World!": "",
+    "Help": "ヘルプ",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "うーん...",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "サービス利用規約を読み それに同意します",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "ブロックを読み込み",
+    "Import library": "",
+    "Import sound": "",
+    "Import tools": "ツールを読み込む",
+    "Import...": "読み込み...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "引数名:",
+    "Input Slot Options": "",
+    "Input name": "引数名",
+    "Input sliders": "入力スライダー",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "1月",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "7月",
+    "June": "6月",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "言語...",
+    "Libraries...": "",
+    "License": "ライセンス",
+    "License...": "ライセンス...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "リスト",
+    "List utilities": "",
+    "Lists": "リスト",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "ログイン...",
+    "Logout": "",
+    "Long form input dialog": "引数ダイアログを長い形式にする",
+    "Looks": "見た目",
+    "Make a block": "ブロックを作る",
+    "Make a variable": "新しい変数を作る",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "3月",
+    "May": "5月",
+    "Message name": "メッセージ名",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "モジュール...",
+    "Motion": "動き",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "複数の引数 (値は引数のリスト)",
+    "Nested auto-wrapping": "",
+    "New": "新規",
+    "New Category": "",
+    "New Project": "新しいプロジェクト",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "いいえ",
+    "November": "11月",
+    "Number": "数",
+    "OK": "",
+    "Object": "オブジェクト",
+    "October": "10月",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "開く",
+    "Open Project": "プロジェクトを開く",
+    "Open Projekt": "プロジェクトを開く",
+    "Open in Community Site": "",
+    "Open...": "開く...",
+    "Opening project...": "",
+    "Operators": "演算",
+    "Other": "その他",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "パスワード:",
+    "Pen": "ペン",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "再生",
+    "Play sound": "音を鳴らす",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "述語",
+    "Prefer empty slot drops": "空のスロットのドロップを許す",
+    "Prefer smooth animations": "なめらかなアニメーションにする",
+    "Privacy...": "個人情報...",
+    "Project Notes": "プロジェクトのメモ",
+    "Project URLs": "",
+    "Project notes...": "プロジェクトのメモ...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "リファレンスマニュアル",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "現在のプロジェクトを新しいもので置き換えますか?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "モニター",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "保存",
+    "Save As...": "名前をつけて保存...",
+    "Save Project": "",
+    "Save Project As...": "名前を付けてプロジェクトを保存...",
+    "Save to disk": "",
+    "Saved!": "保存しました!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "",
+    "Scripts": "スクリプト",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "調べる",
+    "September": "9月",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "サインイン",
+    "Sign up": "サインアップ",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "サインアップ...",
+    "Single input.": "単一引数.",
+    "Single palette": "",
+    "Slider maximum value": "スライダーの最大値",
+    "Slider minimum value": "スライダーの最小値",
+    "Snap! website": "Snap!のWebサイト",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "音",
+    "Sound Recorder": "",
+    "Sounds": "音",
+    "Sprite": "スプライト",
+    "Sprite Nesting": "",
+    "Stage": "ステージ",
+    "Stage height": "",
+    "Stage selected: no motion primitives": "選択されたステージ: 動きのプリミティブがありません",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "",
+    "Stop": "停止",
+    "Stop sound": "音を止める",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "ユーザーモードに切り替え",
+    "Switch to dev mode": "開発者モードに切り替える",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "サービス利用規約...",
+    "Ternary Boolean slots": "",
+    "Text": "テキスト",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "スクリプトをスレッドセーフにする",
+    "Title text": "タイトルテキスト",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "翻訳",
+    "Translators...": "翻訳者",
+    "Turbo mode": "ターボモード",
+    "Turtle": "タートル",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "名称未設定",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Upvar - 呼び出し元から見える内部的な変数",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "ユーザー名:",
+    "Variable name": "変数名",
+    "Variables": "変数",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "仮想キーボード",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "はい",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "縞々で表示",
+    "Zoom blocks": "ブロックをズーム",
+    "Zoom blocks...": "ブロックをズーム...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ に _ が含まれているか",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ を _ の先頭に置く",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "_ を _ で割った余り",
+    "_ of _": "_ _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "絶対値",
+    "acos": "acos",
+    "add _ to _": "_ を _ に追加する",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "新しいスプライトを追加する",
+    "add comment": "コメントを追加",
+    "add comment here...": "ここにコメントを追加...",
+    "agent": "",
+    "alert _": "警告: _",
+    "all": "すべて",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "_ の先頭以外",
+    "all but this script": "",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "かつ",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "答え",
+    "any": "",
+    "any key": "",
+    "any message": "",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "スクリプトを 縦に整列します",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "_ と聞いて待つ",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "大 (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "このカスタムブロックとすべてのインスタンスを 削除してもよいですか?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "ブロックを",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "_ _ を送る",
+    "broadcast _ _ and wait": "_ _ を送って待つ",
+    "brush": "",
+    "build": "作ろう",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "_ を _ で呼ぶ",
+    "call _ w/continuation": "継続付きで _ を呼ぶ",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "回転する",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "_ を _ ずつ変える",
+    "change _ effect by _": "_ の効果を _ ずつ変える",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "ペンの色を _ ずつ変える",
+    "change pen shade by _": "ペンの濃さを _ ずつ変える",
+    "change pen size by _": "ペンの太さを _ ずつ変える",
+    "change size by _": "大きさを _ ずつ変える",
+    "change tempo by _": "テンポを _ ずつ変える",
+    "change volume by _": "",
+    "change x by _": "x座標を _ ずつ変える",
+    "change y by _": "y座標を _ ずつ変える",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "チェックするとコンピューター間で なめらかで予測可能なアニメーションにします",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "チェックすると引数ダイアログに 常にスロットの型を表示します",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "",
+    "check to disallow script reentrancy": "チェックするとスクリプトを 再入不能にします",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "チェックするとIDEの アニメーションを入れます",
+    "check to enable alternating colors for nested blocks": "チェックすると入れ子になった ブロックを縞々で表示します",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "チェックすると可変個引数の 動的ラベルを可能にします",
+    "check to enable input sliders for entry fields": "チェックすると入力フィールドのスライダーを有効にします",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "チェックするとモバイル機器用の 仮想キーボードを有効にします",
+    "check to hide (+) symbols in block prototype labels": "",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "チェックするとスクリプトの 処理を優先します",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "チェックを外すとブロックの クリック音を入れます",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "チェックすると半透明の影と ハイライトになります",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "きれいにする",
+    "clear": "消す",
+    "clear graphic effects": "画像効果をなくす",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "クリックかドラッグで回転中心を移動する",
+    "clicked": "",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "_ 色が _ 色に触れた",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "コマンド",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "コンソールログ _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "コスチュームの番号",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "他のWebページやコンピューター上の画像を ここにドロップして読み込みます",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "_ のクローンを作る",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "現在のモジュールのバージョン:",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "削除",
+    "delete _": "",
+    "delete _ of _": "_ 番目を _ から削除する",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "ブロックの定義を削除",
+    "delete slot": "",
+    "delete this clone": "このクローンを削除する",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "デモ (1.2x)",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "開発者モード",
+    "development mode debugging primitives:": "開発者モード デバッグ用プリミティブ:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "向き",
+    "disable deep-Morphic context menus and show user-friendly ones": "高度なモーフィックコンテクストメニューを無効にして ユーザーフレンドリーなメニューを表示する",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "_ までの距離",
+    "distribution": "",
+    "don't rotate": "回転しない",
+    "down arrow": "下向き矢印",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "ドラッグ可能",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "複製",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "端",
+    "edit": "編集",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "編集...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "ユーザーフレンドリーではない モーフィックコンテクストメニューと インスペクターを有効にする",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "書き出し",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "書き出し...",
+    "extract": "",
+    "f": "f",
+    "false": "いいえ",
+    "file": "",
+    "file menu import hint": "チェックするとレポーターをドラッグ&ドロップするとき 空のレポーターにフォーカスします いくつかのブラウザーではサポートされません",
+    "fill": "塗りつぶす",
+    "fill page...": "",
+    "filtered for _": "_ 色を抽出",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "すべてのスプライト用",
+    "for each _ in _ _": "",
+    "for this sprite only": "このスプライト用",
+    "forever _": "ずっと _",
+    "frame": "",
+    "frames": "フレーム",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "幽霊",
+    "giant (8x)": "巨大 (8x)",
+    "glide _ secs to x: _ y: _": "_ 秒でx座標を _ に、y座標を _ に変える",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "_ 層下げる",
+    "go to _": "_ へ行く",
+    "go to _ layer": "",
+    "go to front": "前に出す",
+    "go to x: _ y: _": "x座標を _ 、y座標を _ にする",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "ハロー",
+    "help": "ヘルプ",
+    "help...": "ヘルプ...",
+    "hide": "隠す",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide variable _": "_ を隠す",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "特大 (4x)",
+    "i": "i",
+    "identical to": "と同一",
+    "if _ _": "もし _ なら _",
+    "if _ _ else _": "もし _ なら _ でなければ _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "もし端に着いたら、跳ね返る",
+    "import a sound from your computer by dragging it into here": "コンピューター上のサウンドを ここにドラッグして読み込みます",
+    "import without attempting to parse or format data": "",
+    "import...": "読み込み...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "引数リスト:",
+    "input names:": "引数名:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "_ を _ 番目になるように _ に挿入する",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "は _ ?",
+    "is _ a _ ?": "_ は _ 型",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "_ は _ と同一",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "_ 番目 _",
+    "items": "",
+    "j": "j",
+    "join _": "_ をつなぐ",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "_ が押された",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "日本語",
+    "language_translator": "Kazuhiro Abe",
+    "large": "大",
+    "last": "最後",
+    "last changed": "",
+    "last_changed": "2013-04-02",
+    "launch _ _": "_ を _ で起動する",
+    "left": "",
+    "left arrow": "左向き矢印",
+    "length": "",
+    "length of _": "_ の長さ",
+    "length:": "長さ:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "_ 文字目の文字 _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "",
+    "lines": "",
+    "list": "リスト",
+    "list _": "リスト _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "強力なブロックの公式 ライブラリを読み込む",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "ブロックを作る...",
+    "make a category...": "",
+    "make a copy and pick it up": "コピーを作って それを掴みます",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "超巨大 (10x)",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "マウスが押された",
+    "mouse position": "",
+    "mouse x": "マウスのx座標",
+    "mouse y": "マウスのy座標",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "マウスのポインター",
+    "move": "",
+    "move _ steps": "_ 歩動かす",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "自分自身",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "新規...",
+    "next": "",
+    "next costume": "次のコスチュームにする",
+    "none": "なし",
+    "normal": "通常",
+    "normal (1x)": "ノーマル (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "_ ではない",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "数",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "このブロックをコピーするだけ",
+    "only face left/right": "左右に反転するだけ",
+    "only grab this block": "",
+    "open a new window with a picture of the stage": "このステージの画像で 新しいウィンドウを開く",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "このスクリプトの画像を表示する新しいウィンドウを開きます",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "または",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "",
+    "pen": "",
+    "pen _": "",
+    "pen down": "ペンを下ろす",
+    "pen down?": "",
+    "pen trails": "ペンの軌跡",
+    "pen up": "ペンを上げる",
+    "pen vectors": "",
+    "pic...": "画像...",
+    "pick random _ to _": "_ から _ までの乱数",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "_ の音符を _ 拍鳴らす",
+    "play sound _": "_ の音を鳴らす",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "終わるまで _ の音を鳴らす",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "_ 度に向ける",
+    "point towards _": "_ へ向ける",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "述語",
+    "presentation (1.4x)": "プレゼンテーション (1.4x)",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "任意",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "名前を変更",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "コスチュームの名前を変更",
+    "rename only this reporter": "",
+    "rename sound": "音の名前を変更",
+    "rename...": "名前を変更...",
+    "repeat _ _": "_ 回繰り返す _",
+    "repeat until _ _": "_ まで繰り返す _",
+    "replace item _ of _ with _": "_ 番目の _ の要素を _ で置き換える",
+    "report _": "_ を返す",
+    "reporter": "レポーター",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "タイマーをリセット",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "_ 拍休む",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "右向き矢印",
+    "ring": "",
+    "ringify": "リング化",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "_ を丸める",
+    "run _ _": "_ を _ で実行する",
+    "run _ w/continuation": "継続付きで _ を実行する",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "_ という",
+    "say _ for _ secs": "_ と _ 秒言う",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "スクリプトの画像...",
+    "script variables _": "スクリプト変数 _",
+    "scripts": "",
+    "scripts pic...": "",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "選択",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "_ の効果を _ にする",
+    "set _ of block _ to _": "",
+    "set _ to _": "_ を _ にする",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "ペンの色を _ にする",
+    "set pen shade to _": "ペンの濃さを _ にする",
+    "set pen size to _": "ペンの太さを _ にする",
+    "set size to _ %": "大きさを _ にする",
+    "set tempo to _ bpm": "テンポを _ BPMにする",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "ターボーモードを _ にする",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "x座標を _ にする",
+    "set y to _": "y座標を _ にする",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "設定メニューが空のスロットのヒントを許します",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "表示する",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "すべてを表示",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "グローバルカスタムブロックの定義をXMLとして ブラウザの新しいウインドウに表示する",
+    "show project data as XML in a new browser window": "プロジェクトのデータをXMLとして ブラウザの新しいウインドウに表示する",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "_ 表示する",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "大きさ",
+    "slider": "スライダー",
+    "slider max...": "スライダーの最大値...",
+    "slider min...": "スライダーの最小値...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "スペース",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "平方根",
+    "square": "",
+    "stack size": "スタックの大きさ",
+    "stage": "",
+    "stage image": "",
+    "stamp": "スタンプ",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "ログアウトするまでこのコンピューターに サインインしたままにする",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "",
+    "stop all _": "すべてを止める _",
+    "stop all sounds": "すべての音を止める",
+    "stop block": "ブロックを止める",
+    "stop frequency": "",
+    "stop script": "スクリプトを止める",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "コスチュームを _ にする",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "テンポ",
+    "temporary?": "",
+    "text": "テキスト",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "なにか",
+    "think _": "_ と考える",
+    "think _ for _ secs": "_ と _ 秒考える",
+    "this _": "",
+    "this block": "",
+    "this project doesn't have any custom global blocks yet": "このプロジェクトはカスタムグローバルブロックを持っていません",
+    "this script": "",
+    "time in milliseconds": "",
+    "timer": "タイマー",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "_ 色に触れた",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "abee@squeakland.jp",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "はい",
+    "turbo mode": "",
+    "turbo mode?": "ターボモード?",
+    "turn _ _ degrees": "_ _ 度回す",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "_ の型",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "チェックを外すとフレームレート 当たりの速度を上げます",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "チェックを外すとドロップしたレポーターが 他を押し出せるようになります",
+    "uncheck to allow script reentrance": "",
+    "uncheck to allow script reentrancy": "チェックを外すとスクリプトを 再入可能にします",
+    "uncheck to always show (+) symbols in block prototype labels": "",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "チェックを外すとIDEの アニメーションを切ります",
+    "uncheck to disable alternating colors for nested block": "チェックを外すと入れ子になった ブロックを普通に表示します",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "チェックを外すと可変個引数の 動的ラベルを不可にします",
+    "uncheck to disable input sliders for entry fields": "チェックを外すと入力フィールドのスライダーを無効にします",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "チェックを外すとモバイル機器用の 仮想キーボードを無効にします",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "チェックを外すとスクリプトを 通常の速度で実行します",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "チェックを外すとブロックの クリック音を切ります",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "チェックを外すと単色の影と ハイライトになります",
+    "uncheck to use the input dialog in short form": "チェックを外すと引数ダイアログを短く表示します",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "",
+    "undrop": "",
+    "unicode _ as letter": "Unicodeで _ の文字",
+    "unicode of _": "_ のUnicode",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "非リング化",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "名称未設定",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "上向き矢印",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "_ 秒待つ",
+    "wait until _": "_ まで待つ",
+    "wardrobe": "",
+    "warp _": "ワープする _",
+    "what's your name?": "あなたの名前は何ですか?",
+    "when I am _": "_ 自分がクリックされたとき",
+    "when I receive _ _": "_ _ を受け取ったとき",
+    "when I start as a clone": "クローンされたとき",
+    "when _": "",
+    "when _ clicked": "_ が押されたとき",
+    "when _ is edited _": "",
+    "when _ key pressed _": "_ _ が押されたとき",
+    "whirl": "",
+    "whitespace": "",
+    "width": "",
+    "with data": "",
+    "with inputs": "引数",
+    "word": "",
+    "world": "ワールド",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x座標",
+    "y": "y",
+    "y position": "y座標",
+    "year": "",
+    "year:": "",
+    "your own": "あなた自身の",
+    "z": "z"
+}

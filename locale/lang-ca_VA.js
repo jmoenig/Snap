@@ -1,1394 +1,1386 @@
-/*
-
-    lang-ca-valencia.js
-
-    Valencian translation for SNAP!
-
-    written by Jens Mönig
-
-    Copyright (C) 2016 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ca_VA = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Català - Valencià', // the name as it should appear in the language menu
-    'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid', // your name for the Translators tab
-    'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es', // optional
-    'last_changed':
-        '2018-02-08', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'Sense títol',
-    'development mode':
-        'mode de desenvolupament',
-
-    // categories:
-    'Motion':
-        'Moviment',
-    'Looks':
-        'Aparença',
-    'Sound':
-        'So',
-    'Pen':
-        'Llapis',
-    'Control':
-        'Control',
-    'Sensing':
-        'Sensors',
-    'Operators':
-        'Operadors',
-    'Variables':
-        'Variables',
-    'Lists':
-        'Llistes',
-    'Other':
-        'Altres',
-
-    // editor:
-    'draggable':
-        'arrossegable',
-
-    // tabs:
-    'Scripts':
-        'Programes',
-    'Costumes':
-        'Vestits',
-    'Sounds':
-        'Sons',
-
-    // names:
-    'Sprite':
-        'Objecte',
-    'Stage':
-        'Escenari',
-
-    // rotation styles:
-    'don\'t rotate':
-        'no gira',
-    'can rotate':
-        'pot girar',
-    'only face left/right':
-        'només mira a esquerra/dreta',
-
-    // new sprite button:
-    'add a new sprite':
-        'afig un nou objecte',
-
-    // tab help
-    'costumes tab help':
-        'podeu importar una imatge des d\'un altre lloc web o des del\n'
-            + 'vostre ordinador arrossegant-la fins ací',
-    'import a sound from your computer\nby dragging it into here':
-        'podeu importar un so des del vostre ordinador\narrossegant-lo fins ací',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Escenari seleccionat:\nno hi ha primitives de moviment\n'
-            + 'disponibles',
-
-    'move %n steps':
-        'mou-te %n passos',
-    'turn %clockwise %n degrees':
-        'gira %clockwise %n graus',
-    'turn %counterclockwise %n degrees':
-        'gira %counterclockwise %n graus',
-    'point in direction %dir':
-        'apunta en direcció %dir',
-    'point towards %dst':
-        'apunta cap a %dst',
-    'go to x: %n y: %n':
-        'vés a x: %n y: %n',
-    'go to %dst':
-        'vés a %dst',
-    'glide %n secs to x: %n y: %n':
-        'llisca en %n segons fins a x: %n y: %n',
-    'change x by %n':
-        'suma %n a x',
-    'set x to %n':
-        'assigna el valor %n a x',
-    'change y by %n':
-        'suma %n a y',
-    'set y to %n':
-        'assigna el valor %n a y',
-    'if on edge, bounce':
-        'rebota en tocar una vora',
-    'x position':
-        'posició x',
-    'y position':
-        'posició y',
-    'direction':
-        'direcció',
-
-    // looks:
-    'switch to costume %cst':
-        'canvia el vestit a %cst',
-    'next costume':
-        'següent vestit',
-    'costume #':
-        'número de vestit',
-    'say %s for %n secs':
-        'digues %s durant %n segons',
-    'say %s':
-        'digues %s',
-    'think %s for %n secs':
-        'pensa %s durant %n segons',
-    'think %s':
-        'pensa %s',
-    'Hello!':
-        'Hola!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        'augmenta l\'efecte %eff en %n',
-    'set %eff effect to %n':
-        'fixa l\'efecte %eff a %n',
-    'clear graphic effects':
-        'suprimeix els efectes gràfics',
-    'change size by %n':
-        'augmenta %n la mida',
-    'set size to %n %':
-        'fixa la mida a %n %',
-    'size':
-        'mida',
-    'show':
-        'mostra',
-    'hide':
-        'amaga',
-    'go to front':
-        'vés al front',
-    'go back %n layers':
-        'vés %n capes darrere',
-
-    'development mode \ndebugging primitives:':
-        'mode de desenvolupament \nprimitives de depuració',
-    'console log %mult%s':
-        'registre per consola: %mult%s',
-    'alert %mult%s':
-        'avís: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'toca el so %snd',
-    'play sound %snd until done':
-        'toca el so %snd fins que acabe',
-    'stop all sounds':
-        'para tots els sons',
-    'rest for %n beats':
-        'fes silenci durant %n temps',
-    'play note %n for %n beats':
-        'toca la nota %n durant %n temps',
-    'change tempo by %n':
-        'augmenta el tempo en %n',
-    'set tempo to %n bpm':
-        'fixa el tempo a %n',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'neteja',
-    'pen down':
-        'baixa el llapis',
-    'pen up':
-        'puja el llapis',
-    'set pen color to %clr':
-        'fixa el color del llapis a %clr',
-    'change pen color by %n':
-        'augmenta en %n el color del llapis',
-    'set pen color to %n':
-        'fixa el color del llapis a %n',
-    'change pen shade by %n':
-        'augmenta en %n la intensitat del llapis',
-    'set pen shade to %n':
-        'fixa la intensitat del llapis a %n',
-    'change pen size by %n':
-        'augmenta en %n la mida del llapis',
-    'set pen size to %n':
-        'fixa la mida del llapis en %n',
-    'stamp':
-        'estampa',
-    'fill':
-        'ompli',
-
-    // control:
-    'when %greenflag clicked':
-        'Quan la %greenflag es prema',
-    'when %keyHat key pressed':
-        'Quan la tecla %keyHat es prema',
-    'when I am %interaction':
-        'Quan %interaction aquest personatge',
-    'clicked':
-        'es clique',
-    'pressed':
-        'es prema',
-    'dropped':
-        'es deixe anar',
-    'mouse-entered':
-        'el ratolí toque',
-    'mouse-departed':
-        'el ratolí isca d\'',
-    'when %b':
-        'quan %b',
-    'when I receive %msgHat':
-        'Quan reba %msgHat',
-    'broadcast %msg':
-        'Envia a tots %msg',
-    'broadcast %msg and wait':
-        'Envia a tots %msg i espera',
-    'Message name':
-        'Nom del missatge',
-    'message':
-        'missatge',
-    'any message':
-        'qualsevol missatge',
-    'wait %n secs':
-        'espera %n segons',
-    'wait until %b':
-        'espera fins %b',
-    'forever %loop':
-        'per sempre %loop',
-    'repeat %n %loop':
-        'repeteix %n vegades %loop',
-    'repeat until %b %loop':
-        'repeteix fins %b %loop',
-    'if %b %c':
-        'si %b llavors %c',
-    'if %b %c else %c':
-        'si %b llavors %c si no %c',
-    'report %s':
-        'retorna %s',
-    'stop %stopChoices':
-        'para %stopChoices',
-    'all':
-        'tot',
-    'this script':
-        'aquest programa',
-    'this block':
-        'aquest bloc',
-    'stop %stopOthersChoices':
-        'para %stopOthersChoices',
-    'all but this script':
-        'tot excepte aquest programa',
-    'other scripts in sprite':
-        'els altres programes d\'aquest objecte',
-    'pause all %pause':
-        'posa-ho tot en pausa %pause',
-    'run %cmdRing %inputs':
-        'executa %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'llança %cmdRing %inputs',
-    'call %repRing %inputs':
-        'crida %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'executa %cmdRing amb continuació',
-    'call %cmdRing w/continuation':
-        'crida %cmdRing amb continuació',
-    'warp %c':
-        'executa tot d\'una %c',
-    'when I start as a clone':
-        'quan una còpia meua comence',
-    'create a clone of %cln':
-        'crea un clon de %cln',
-    'myself':
-        'mi mateix',
-    'delete this clone':
-        'esborra aquest clon',
-
-    // sensing:
-    'touching %col ?':
-        'tocant %col ?',
-    'touching %clr ?':
-        'tocant el color %clr ?',
-    'color %clr is touching %clr ?':
-        'color %clr sobre %clr ?',
-    'ask %s and wait':
-        'pregunta %s i espera',
-    'what\'s your name?':
-        'Com et dius?',
-    'answer':
-        'resposta',
-    'mouse x':
-        'ratolí x',
-    'mouse y':
-        'ratolí y',
-    'mouse down?':
-        'ratolí clicat?',
-    'key %key pressed?':
-        'tecla %key premuda?',
-    'distance to %dst':
-        'distància a %dst',
-    'reset timer':
-        'reinicia el cronòmetre',
-    'timer':
-        'cronòmetre',
-    '%att of %spr':
-        '%att de %spr',
-    'my %get':
-        'atribut %get',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'mode turbo?',
-    'set turbo mode to %b':
-        'posa el mode turbo a %b',
-
-    'filtered for %clr':
-        'filtrat per a %clr',
-    'stack size':
-        'mida de la pila',
-    'frames':
-        'frames',
-
-    // operators:
-    '%n mod %n':
-        'residu de dividir %n entre %n',
-    'round %n':
-        'arredoneix %n',
-    '%fun of %n':
-        '%fun de %n',
-    'pick random %n to %n':
-        'nombre a l\'atzar entre %n i %n',
-    '%b and %b':
-        '%b i %b',
-    '%b or %b':
-        '%b o %b',
-    'not %b':
-        'no %b',
-    'true':
-        'cert',
-    'false':
-        'fals',
-    'join %words':
-        'unir %words',
-    'split %s by %delim':
-        'divideix %s per %delim',
-    'hello':
-        'hola',
-    'world':
-        'món',
-    'letter %idx of %s':
-        'lletra %idx de %s',
-    'length of %s':
-        'longitud de %s',
-    'unicode of %s':
-        'valor Unicode de %s',
-    'unicode %n as letter':
-        'lletra amb valor Unicode %n',
-    'is %s a %typ ?':
-        'és %s un %typ ?',
-    'is %s identical to %s ?':
-        'és %s idèntic a %s ?',
-
-    'type of %s':
-        'tipus de %s',
-
-    // variables:
-    'Make a variable':
-        'Crea una variable',
-    'Variable name':
-        'Nom de variable',
-    'Script variable name':
-        'Nom de la variable de programa',
-    'Delete a variable':
-        'Esborra una variable',
-
-    'set %var to %s':
-        'assigna a %var el valor %s',
-    'change %var by %n':
-        'augmenta %var en %n',
-    'show variable %var':
-        'mostra la variable %var',
-    'hide variable %var':
-        'amaga la variable %var',
-    'script variables %scriptVars':
-        'variables de programa %scriptVars',
-
-    // lists:
-    'list %exp':
-        'llista %exp',
-    '%s in front of %l':
-        'afig %s davant de %l',
-    'item %idx of %l':
-        'element %idx de %l',
-    'all but first of %l':
-        '%l sense el primer element',
-    'length of %l':
-        'longitud de %l',
-    '%l contains %s':
-        '%l conté %s',
-    'thing':
-        'cosa',
-    'add %s to %l':
-        'afig %s a %l',
-    'delete %ida of %l':
-        'esborra %ida de %l',
-    'insert %s at %idx of %l':
-        'insereix %s a la posició %idx de %l',
-    'replace item %idx of %l with %s':
-        'substitueix l\'element %idx de %l per %s',
-
-    // other
-    'Make a block':
-        'Crea un bloc',
-
-    // menus
-    // snap menu
-    'About...':
-        'Sobre l\'Snap!',
-    'Reference manual':
-        'Manual de referència',
-    'Snap! website':
-        'Web de l\'Snap!',
-    'Download source':
-        'Descarrega el codi font',
-    'Switch back to user mode':
-        'Torna a mode d\'usuari',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'canvia els menús contextuals\nprimitius de Morphic\nper menús més amigables',
-    'Switch to dev mode':
-        'Canvia a mode desenvolupador',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'habilita els menús\ncontextuals de\nMorphic i inspectors,\nmode expert!',
-
-    // project menu
-    'Project notes...':
-        'Notes del projecte...',
-    'New':
-        'Nou',
-    'Open...':
-        'Obri...',
-    'Save':
-        'Guarda',
-    'Save to disk':
-        'Guarda al disc',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'guarda aquest projecte\na la carpeta de descàrregues\n'
-            + '(en navegadors que ho admeten)',
-    'Save As...':
-        'Anomena i guarda...',
-    'Import...':
-        'Importa...',
-    'file menu import hint':
-        'carrega una biblioteca de projecte\no de blocs exportada, un vestit\no un so',
-
-
-    'Export project as plain text...':
-        'Exporta el projecte en text pla...',
-    'Export project...':
-        'Exporta el projecte...',
-    'show project data as XML\nin a new browser window':
-        'mostra tot el projecte en format XML\nen una altra finestra del navegador',
-    'Export blocks...':
-        'Exporta els blocs...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'mostra les definicions de blocs personalitzats\nen format XML en una altra finestra del\nnavegador',
-    'Unused blocks...':
-        'Blocs no utilitzats...',
-    'find unused global custom blocks\nand remove their definitions':
-        'busca blocs personalitzats globals\nno utilitzats i esborra\'ls',
-    'Remove unused blocks':
-        'Esborra blocs no utilitzats',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'no hi ha cap bloc\npersonalitzat no utilitzat\nen aquest projecte',
-    'unused block(s) removed':
-        'bloc(s) personalitzats no utilitzats esborrats',
-    'Export summary...':
-        'Exporta el resum...',
-    'open a new browser browser window\n with a summary of this project':
-        'obri una finestra nova del navegador\namb un resum d\'aquest projecte',
-
-    'Contents':
-        'Continguts',
-    'Kind of':
-        'Espècie de',
-    'Part of':
-        'Part de',
-    'Parts':
-        'Parts',
-    'Blocks':
-        'Blocs',
-    'For all Sprites':
-        'Per a tots els objectes', 
-    'Import tools':
-        'Importa eines',
-    'load the official library of\npowerful blocks':
-        'carrega la biblioteca\noficial de blocs avançats',
-    'Libraries...':
-        'Biblioteques...',
-    'Import library':
-        'Importa una biblioteca',
-
-    // cloud menu
-    'Login...':
-        'Inicia la sessió...',
-    'Signup...':
-        'Registra\'t...',
-
-    // settings menu
-    'Language...':
-        'Llengua...',
-    'Zoom blocks...':
-        'Mida dels blocs...',
-    'Stage size...':
-        'Mida de l\'escenari...',
-    'Stage size':
-        'Mida de l\'escenari',
-    'Stage width':
-        'Amplària de l\'escenari',
-    'Stage height':
-        'Alçària de l\'escenari',
-    'Default':
-        'Per defecte',
-    'Blurred shadows':
-        'Ombres suavitzades',
-    'uncheck to use solid drop\nshadows and highlights':
-        'desmarca\'m per a utilitzar\nombres i realçats sòlids',
-    'check to use blurred drop\nshadows and highlights':
-        'marca\'m per a utilitzar\nombres i realçats suavitzats',
-    'Zebra coloring':
-        'Coloració en zebra',
-    'check to enable alternating\ncolors for nested blocks':
-        'marca\'m per a habilitar la coloració\nalternada per a blocs imbricats',
-    'uncheck to disable alternating\ncolors for nested block':
-        'desmarca\'m per a inhabilitar la coloració\nalternada per a blocs imbricats',
-    'Dynamic input labels':
-        'Etiquetes dinàmiques de camps d\'entrada',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'marca\'m per a desactivar les\netiquetes dinàmiques en camps\namb aritat variable',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'marca\'m per a habilitar les\netiquetes dinàmiques en camps\namb aritat variable',
-    'Prefer empty slot drops':
-        'Dóna preferència a les ranures buides',
-    'settings menu prefer empty slots hint':
-        'marca\'m per a fer que les ranures\nbuides tinguen preferència sobre les plenes\na l\'hora de deixar-hi caure peces',
-
-    'uncheck to allow dropped\nreporters to kick out others':
-        'marca\'m per a fer que les ranures\nbuides tinguen la mateixa preferència que les\nplenes a l\'hora de deixar-hi caure peces',
-
-    'Long form input dialog':
-        'Força el diàleg de selecció de tipus',
-    'Plain prototype labels':
-        'Etiquetes de prototip simples',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'desmarca\'m per a mostrar sempre el\nsímbol (+) en les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
-    'check to hide (+) symbols\nin block prototype labels':
-        'desmarca\'m per a amagar el símbol (+)\nen les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
-    'check to always show slot\ntypes in the input dialog':
-        'marca\'m per a mostrar sempre\nel diàleg de selecció de tipus\nen afegir paràmetres als blocs\npersonalitzats',
-    'uncheck to use the input\ndialog in short form':
-        'desmarca\'m per a no mostrar\nautomàticament el diàleg de selecció\nde tipus en afegir paràmetres\nals blocs personalitzats',
-    'Virtual keyboard':
-        'Teclat virtual',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'desmarca\'m per a inhabilitar\nel suport per al teclat virtual\nen dispositius mòbils',
-
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marca\'m per a habilitar\nel suport per al teclat virtual\nen dispositius mòbils',
-
-    'Input sliders':
-        'Botons lliscants d\'entrada',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'desmarca\'m per a inhabilitar\nels botons lliscants per als camps\nd\'entrada',
-    'check to enable\ninput sliders for\nentry fields':
-        'marca\'m per a habilitar\nels botons lliscants per als camps\nd\'entrada',
-    'Clicking sound':
-        'So de clic',
-    'uncheck to turn\nblock clicking\nsound off':
-        'desmarca\'m per a inhabilitar\nel so de clic en clicar sobre\nels blocs',
-    'check to turn\nblock clicking\nsound on':
-        'marca\'m per a habilitar\nel so de clic en clicar sobre\nels blocs',
-    'Animations':
-        'Animacions',
-    'uncheck to disable\nIDE animations':
-        'desmarca\'m per a inhabilitar\nles animacions de la interfície',
-    'Turbo mode':
-        'Mode turbo',
-    'check to prioritize\nscript execution':
-        'marca\'m per a activar el mode de\nprioritat en l\'execució de programes',
-    'uncheck to run scripts\nat normal speed':
-        'desmarca\'m per a executar\nels programes a la velocitat\nnormal',
-    'check to enable\nIDE animations':
-        'marca\'m per a habilitar\nles animacions de la interfície',
-    'Flat design':
-        'Disseny pla',
-    'Keyboard Editing':
-        'Edició per teclat',
-    'Table support':
-        'Edició de taules',
-    'Table lines':
-        'Línies de taules',
-    'Thread safe scripts':
-        'Fil d\'execució segur',
-    'uncheck to allow\nscript reentrance':
-        'desmarca\'m per a permetre\nla reentrada als programes',
-    'check to disallow\nscript reentrance':
-        'marca\'m per a no permetre\nla reentrada als programes',
-    'Prefer smooth animations':
-        'Suavitza les animacions',
-    'uncheck for greater speed\nat variable frame rates':
-        'desmarca\'m per a augmentar la velocitat de\nles animacions fins a la màxima capacitat d\'aquesta màquina',
-    'check for smooth, predictable\nanimations across computers':
-        'marca\'m per a aconseguir unes animacions\nmés suaus i a velocitat predictible en màquines diferents',
-    'Flat line ends':
-        'Línies del llapis rectes',
-    'check for flat ends of lines':
-        'marca\'m per a fer que els\nextrems de les línies del\nllapis siguen rectes',
-    'uncheck for round ends of lines':
-        'desmarca\'m per a fer que\nels extrems de les línies\ndel llapis siguen arredonits',
-    'Inheritance support':
-        'Suport per a herència',
-
-    // inputs
-    'with inputs':
-        'amb entrades',
-    'input names:':
-        'noms d\'entrades:',
-    'Input Names:':
-        'Noms d\'entrades:',
-    'input list:':
-        'llista d\'entrades:',
-
-    // context menus:
-    'help':
-        'ajuda',
-
-    // palette:
-    'hide primitives':
-        'amaga els blocs primitius',
-    'show primitives':
-        'mostra els blocs primitius',
-
-    // blocks:
-    'help...':
-        'ajuda...',
-    'relabel...':
-        'blocs similars...',
-    'duplicate':
-        'duplica\'m',
-    'make a copy\nand pick it up':
-        'crea una còpia\ni agafa-la',
-    'only duplicate this block':
-        'duplica només aquest bloc',
-    'delete':
-        'esborra\'m',
-    'script pic...':
-        'mostra la meua imatge...',
-    'open a new window\nwith a picture of this script':
-        'obri una nova finestra\namb una imatge d\'aquest programa',
-    'ringify':
-        'encapsula\'m',
-    'unringify':
-        'desencapsula\'m',
-    'transient':
-        'no persistent',
-    'uncheck to save contents\nin the project':
-        'desactiveu l\'opció per a guardar els continguts\nen el projecte',
-    'check to prevent contents\nfrom being saved':
-        'activeu l\'opció per a evitar que els continguts\nes guarden',
-
-    // custom blocks:
-    'delete block definition...':
-        'esborra la definició d\'aquest bloc',
-    'edit...':
-        'edita...',
-
-    // sprites:
-    'edit':
-        'edita',
-    'move':
-        'mou',
-    'detach from':
-        'desenganxa de',
-    'detach all parts':
-        'desenganxa totes les parts',
-    'export...':
-        'exporta...',
-
-    // stage:
-    'show all':
-        'mostra\'ls tots',
-    'pic...':
-        'exporta com a imatge...',
-    'open a new window\nwith a picture of the stage':
-        'obri una nova finestra\namb una foto de l\'escenari',
-
-    // scripting area
-    'clean up':
-        'neteja',
-    'arrange scripts\nvertically':
-        'alinea els programes\nverticalment',
-    'add comment':
-        'afig un comentari',
-    'undrop':
-        'recupera el bloc',
-    'undo the last\nblock drop\nin this pane':
-        'recupera l\'últim bloc\nque s\'haja llançat',
-    'scripts pic...':
-        'exporta com a imatge...',
-    'open a new window\nwith a picture of all scripts':
-        'obri una nova finestra\namb una foto d\'aquests programes',
-    'make a block...':
-        'crea un bloc...',
-
-    // costumes
-    'rename':
-        'canvia de nom',
-    'export':
-        'exporta',
-    'rename costume':
-        'canvia el nom del vestit',
-
-    // sounds
-    'Play sound':
-        'Toca el so',
-    'Stop sound':
-        'Para el so',
-    'Stop':
-        'Para',
-    'Play':
-        'Toca',
-    'rename sound':
-        'canvia el nom del so',
-
-    // lists and tables
-    'list view...':
-        'vista en format de llista...',
-    'table view...':
-        'vista en format de taula...',
-    'open in dialog...':
-        'obri en una finestra...',
-    'reset columns':
-        'reinicialitza les columnes',
-    'items':
-        'elements',
-
-    // dialogs
-    // buttons
-    'OK':
-        'D\'acord',
-    'Ok':
-        'D\'acord',
-    'Cancel':
-        'Cancel·la',
-    'Yes':
-        'Sí',
-    'No':
-        'No',
-
-    // help
-    'Help':
-        'Ajuda',
-
-    // zoom blocks
-    'Zoom blocks':
-         'Canvia la mida dels blocs',
-    'build':
-        'construeix',
-    'your own':
-        'els teus propis',
-    'blocks':
-        'blocs',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'demostració (1.2x)',
-    'presentation (1.4x)':
-        'presentació (1.4x)',
-    'big (2x)':
-        'gran (2x)',
-    'huge (4x)':
-        'immens (4x)',
-    'giant (8x)':
-        'gegant (8x)',
-    'monstrous (10x)':
-        'monstruós (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Sense títol',
-    'Open un Project':
-        'Obri un projecte',
-    '(empty)':
-        '(buit)',
-    'Saved!':
-        'Guardat!',
-    'Delete Project':
-        'Esborra un projecte',
-    'Are you sure you want to delete':
-        'Segur que vols esborrar',
-    'rename...':
-        'canvia el nom...',
-
-    // costume editor
-    'Costume Editor':
-        'Editor de vestits',
-    'click or drag crosshairs to move the rotation center':
-        'clica o arrossega la creueta per a moure el centre de rotació',
-
-    // project notes
-    'Project Notes':
-        'Notes del projecte',
-
-    // new project
-    'New Project':
-        'Projecte nou',
-    'Replace the current project with a new one?':
-        'Vols substituir el projecte actual per un de nou?',
-
-    // save project
-    'Save Project As...':
-        'Anomena i guarda el projecte...',
-
-    // export blocks
-    'Export blocks':
-        'Exporta blocs',
-    'Import blocks':
-        'Importa blocs',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'aquest projecte encara no\nté cap bloc personalitzat',
-    'select':
-        'selecciona',
-    'none':
-        'cap bloc',
-
-    // variable dialog
-    'for all sprites':
-        'per a tots els objectes',
-    'for this sprite only':
-        'només per a aquest objecte',
-
-    // block dialog
-    'Change block':
-        'Canvia el bloc',
-    'Command':
-        'Ordre',
-    'Reporter':
-        'Reportador',
-    'Predicate':
-        'Predicat',
-
-    // block editor
-    'Block Editor':
-        'Editor de blocs',
-    'Apply':
-        'Aplica',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Esborra el bloc personalitzat',
-    'block deletion dialog text':
-        'Segur que vols esborrar la definició\nd\'aquest bloc?',
-
-
-    // input dialog
-    'Create input name':
-        'Crea una ranura',
-    'Edit input name':
-        'Edita la ranura',
-    'Edit label fragment':
-        'Edita el fragment d\'etiqueta',
-    'Title text':
-        'Text del títol',
-    'Input name':
-        'Nom de la ranura',
-    'Delete':
-        'Esborra',
-    'Object':
-        'Objecte',
-    'Number':
-        'Nombre',
-    'Text':
-        'Text',
-    'List':
-        'Llista',
-    'Any type':
-        'Qualsevol tipus',
-    'Boolean (T/F)':
-        'Booleà (C/F)',
-    'Command\n(inline)':
-        'Ordre\n(inserida)',
-    'Command\n(C-shape)':
-        'Ordre\n(en forma de C)',
-    'Any\n(unevaluated)':
-        'Qualsevol\n(sense avaluar)',
-    'Boolean\n(unevaluated)':
-        'Booleà\n(sense avaluar)',
-    'Single input.':
-        'Entrada única.',
-    'Default Value:':
-        'Valor predeterminat:',
-    'Multiple inputs (value is list of inputs)':
-        'Entrades múltiples (el valor és una llista d\'entrades)',
-    'Upvar - make internal variable visible to caller':
-        'Variable interna visible des de l\'exterior',
-
-    // About Snap
-    'About Snap':
-        'Sobre l\'Snap',
-    'Back...':
-        'Arrere...',
-    'License...':
-        'Llicència...',
-    'Modules...':
-        'Mòduls...',
-    'Credits...':
-        'Crèdits...',
-    'Translators...':
-        'Traductors',
-    'License':
-        'Llicència',
-    'current module versions:':
-        'versions actuals dels mòduls',
-    'Contributors':
-        'Contribuïdors',
-    'Translations':
-        'Traduccions',
-
-    // variable watchers
-    'normal':
-        'normal',
-    'large':
-        'gran',
-    'slider':
-        'botó lliscant',
-    'slider min...':
-        'valor mínim del botó lliscant...',
-    'slider max...':
-        'valor màxim del botó lliscant...',
-    'import...':
-        'importa...',
-    'Slider minimum value':
-        'Valor mínim del botó lliscant...',
-    'Slider maximum value':
-        'Valor màxim del botó lliscant...',
-
-    // list watchers
-    'length: ':
-        'longitud: ',
-
-    // coments
-    'add comment here...':
-        'afig un comentari ací...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) dreta',
-    '(-90) left':
-        '(-90) esquerra',
-    '(0) up':
-        '(0) amunt',
-    '(180) down':
-        '(180) avall',
-
-    // collision detection
-    'mouse-pointer':
-        'punter del ratolí',
-    'edge':
-        'vora',
-    'pen trails':
-        'rastre del llapis',
-
-    // costumes
-    'Turtle':
-        'Tortuga',
-    'Empty':
-        'Buit',
-
-    // graphical effects
-    'brightness':
-        'brillantor',
-    'ghost':
-        'fantasma',
-    'negative':
-        'negatiu',
-    'comic':
-        'còmic',
-    'confetti':
-        'confeti',
-
-    // keys
-    'space':
-        'espai',
-    'any key':
-        'qualsevol tecla',
-    'up arrow':
-        'fletxa amunt',
-    'down arrow':
-        'fletxa avall',
-    'right arrow':
-        'fletxa dreta',
-    'left arrow':
-        'fletxa esquerra',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'nou...',
-
-    // math functions
-    'abs':
-        'valor absolut',
-    'ceiling':
-        'sostre',
-    'floor':
-        'part entera',
-    'sqrt':
-        'arrel quadrada',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'lletra',
-    'whitespace':
-        'espai en blanc',
-    'line':
-        'línia',
-    'tab':
-        'tabulador',
-    'cr':
-        'retorn de carro',
-
-    // data types
-    'number':
-        'nombre',
-    'text':
-        'text',
-    'Boolean':
-        'Booleà',
-    'list':
-        'llista',
-    'command':
-        'ordre',
-    'reporter':
-        'reportador',
-    'predicate':
-        'predicat',
-
-    // list indices
-    'last':
-        'últim',
-    'any':
-        'qualsevol',
-
-    // attributes
-    'neighbors':
-        'veïns',
-    'self':
-        'un mateix',
-    'other sprites':
-        'els altres objectes',
-    'parts':
-        'parts',
-    'anchor':
-        'àncora',
-    'parent':
-        'pare',
-    'children':
-        'fill',
-    'clones':
-        'clons',
-    'other clones':
-        'altres clons',
-    'dangling?':
-        'penjant?',
-    'rotation x':
-        'rotació x',
-    'rotation y':
-        'rotació y',
-    'center x':
-        'centre x',
-    'center y':
-        'centre y'
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "",
+    "(0) up": "",
+    "(1) sine": "",
+    "(180) down": "",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "",
+    "(empty)": "",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Sobre l'Snap",
+    "About...": "Sobre l'Snap!",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "",
+    "Any type": "",
+    "Apply": "",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Segur que vols esborrar",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "Arrere...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "",
+    "Boolean": "",
+    "Boolean (T/F)": "",
+    "Boolean (unevaluated)": "",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "",
+    "Clear backup": "",
+    "Clicking sound": "",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "Ordre",
+    "Command (C-shape)": "Ordre (en forma de C)",
+    "Command (inline)": "Ordre (inserida)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "Contribuïdors",
+    "Control": "",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "",
+    "Costumes": "",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "",
+    "Default Value:": "",
+    "Delete": "",
+    "Delete Custom Block": "",
+    "Delete Project": "",
+    "Delete a variable": "",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Etiquetes dinàmiques de camps d'entrada",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "",
+    "Export blocks...": "",
+    "Export project as plain text...": "Exporta el projecte en text pla...",
+    "Export project...": "",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "Línies del llapis rectes",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "",
+    "Hello, World!": "",
+    "Help": "",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "",
+    "Import library": "Importa una biblioteca",
+    "Import sound": "",
+    "Import tools": "Importa eines",
+    "Import...": "",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "Suport per a herència",
+    "Input Names:": "",
+    "Input Slot Options": "",
+    "Input name": "",
+    "Input sliders": "Botons lliscants d'entrada",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "",
+    "Libraries...": "Biblioteques...",
+    "License": "",
+    "License...": "",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "",
+    "List utilities": "",
+    "Lists": "",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "",
+    "Logout": "",
+    "Long form input dialog": "",
+    "Looks": "",
+    "Make a block": "",
+    "Make a variable": "",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "",
+    "Motion": "",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "",
+    "Nested auto-wrapping": "",
+    "New": "",
+    "New Category": "",
+    "New Project": "Projecte nou",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "",
+    "November": "",
+    "Number": "",
+    "OK": "",
+    "Object": "",
+    "October": "",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "",
+    "Open in Community Site": "",
+    "Open un Project": "Obri un projecte",
+    "Open...": "Obri...",
+    "Opening project...": "",
+    "Operators": "",
+    "Other": "",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "",
+    "Play sound": "",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "",
+    "Prefer empty slot drops": "",
+    "Prefer smooth animations": "Suavitza les animacions",
+    "Privacy...": "",
+    "Project Notes": "",
+    "Project URLs": "",
+    "Project notes...": "",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "Guarda",
+    "Save As...": "Anomena i guarda...",
+    "Save Project": "",
+    "Save Project As...": "Anomena i guarda el projecte...",
+    "Save to disk": "Guarda al disc",
+    "Saved!": "Guardat!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "",
+    "Scripts": "",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "",
+    "Single input.": "",
+    "Single palette": "",
+    "Slider maximum value": "Valor màxim del botó lliscant...",
+    "Slider minimum value": "Valor mínim del botó lliscant...",
+    "Snap! website": "Web de l'Snap!",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "",
+    "Sound Recorder": "",
+    "Sounds": "",
+    "Sprite": "",
+    "Sprite Nesting": "",
+    "Stage": "",
+    "Stage height": "Alçària de l'escenari",
+    "Stage selected: no motion primitives": "Escenari seleccionat: no hi ha primitives de moviment disponibles",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "Amplària de l'escenari",
+    "Stop": "Para",
+    "Stop sound": "Para el so",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "",
+    "Switch to dev mode": "",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "",
+    "Title text": "",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "",
+    "Translators...": "",
+    "Turbo mode": "",
+    "Turtle": "",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "",
+    "Variables": "",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Teclat virtual",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "",
+    "Zoom blocks": "",
+    "Zoom blocks...": "",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "afig _ davant de _",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "",
+    "_ of _": "",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "acos",
+    "add _ to _": "afig _ a _",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "afig un nou objecte",
+    "add comment": "afig un comentari",
+    "add comment here...": "afig un comentari ací...",
+    "agent": "",
+    "alert _": "avís: _",
+    "all": "tot",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "",
+    "all but this script": "",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "",
+    "any": "",
+    "any key": "",
+    "any message": "",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "Segur que vols esborrar la definició d'aquest bloc?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "",
+    "broadcast _ _ and wait": "",
+    "brush": "",
+    "build": "",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "",
+    "call _ w/continuation": "",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "",
+    "change _ effect by _": "",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "",
+    "change pen shade by _": "",
+    "change pen size by _": "",
+    "change size by _": "",
+    "change tempo by _": "",
+    "change volume by _": "",
+    "change x by _": "",
+    "change y by _": "",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "marca'm per a fer que els extrems de les línies del llapis siguen rectes",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "marca'm per a aconseguir unes animacions més suaus i a velocitat predictible en màquines diferents",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "marca'm per a mostrar sempre el diàleg de selecció de tipus en afegir paràmetres als blocs personalitzats",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "marca'm per a no permetre la reentrada als programes",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "marca'm per a habilitar les animacions de la interfície",
+    "check to enable alternating colors for nested blocks": "marca'm per a habilitar la coloració alternada per a blocs imbricats",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "marca'm per a habilitar les etiquetes dinàmiques en camps amb aritat variable",
+    "check to enable input sliders for entry fields": "marca'm per a habilitar els botons lliscants per als camps d'entrada",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "marca'm per a habilitar el suport per al teclat virtual en dispositius mòbils",
+    "check to hide (+) symbols in block prototype labels": "desmarca'm per a amagar el símbol (+) en les etiquetes de prototip de bloc (a l'editor de blocs)",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "activeu l'opció per a evitar que els continguts es guarden",
+    "check to prioritize script execution": "marca'm per a activar el mode de prioritat en l'execució de programes",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "marca'm per a habilitar el so de clic en clicar sobre els blocs",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "marca'm per a utilitzar ombres i realçats suavitzats",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "",
+    "clear": "",
+    "clear graphic effects": "suprimeix els efectes gràfics",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "clica o arrossega la creueta per a moure el centre de rotació",
+    "clicked": "es clique",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "ordre",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "registre per consola: _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "podeu importar una imatge des d'un altre lloc web o des del vostre ordinador arrossegant-la fins ací",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "penjant?",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "",
+    "delete _": "",
+    "delete _ of _": "",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "",
+    "delete slot": "",
+    "delete this clone": "",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "",
+    "development mode debugging primitives:": "",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "",
+    "disable deep-Morphic context menus and show user-friendly ones": "",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "",
+    "distribution": "",
+    "don't rotate": "",
+    "down arrow": "",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "arrossegable",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "es deixe anar",
+    "duplicate": "duplica'm",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "",
+    "edit": "",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "",
+    "extract": "",
+    "f": "f",
+    "false": "",
+    "file": "",
+    "file menu import hint": "carrega una biblioteca de projecte o de blocs exportada, un vestit o un so",
+    "fill": "ompli",
+    "fill page...": "",
+    "filtered for _": "",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "busca blocs personalitzats globals no utilitzats i esborra'ls",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "",
+    "for each _ in _ _": "",
+    "for this sprite only": "",
+    "forever _": "",
+    "frame": "",
+    "frames": "",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "",
+    "giant (8x)": "",
+    "glide _ secs to x: _ y: _": "",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "vés _ capes darrere",
+    "go to _": "",
+    "go to _ layer": "",
+    "go to front": "vés al front",
+    "go to x: _ y: _": "",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "",
+    "help": "",
+    "help...": "",
+    "hide": "",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "amaga els blocs primitius",
+    "hide variable _": "",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "",
+    "i": "i",
+    "identical to": "",
+    "if _ _": "",
+    "if _ _ else _": "",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "",
+    "import a sound from your computer by dragging it into here": "podeu importar un so des del vostre ordinador arrossegant-lo fins ací",
+    "import without attempting to parse or format data": "",
+    "import...": "",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "",
+    "input names:": "",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "",
+    "is _ a _ ?": "",
+    "is _ empty?": "",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "",
+    "items": "",
+    "j": "j",
+    "join _": "unir _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "Català - Valencià",
+    "language_translator": "Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid",
+    "large": "",
+    "last": "",
+    "last changed": "",
+    "last_changed": "2018-02-08",
+    "launch _ _": "",
+    "left": "",
+    "left arrow": "",
+    "length": "",
+    "length of _": "longitud de _",
+    "length:": "",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "",
+    "light (70)": "",
+    "lightness": "",
+    "line": "",
+    "lines": "",
+    "list": "",
+    "list _": "",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "carrega la biblioteca oficial de blocs avançats",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "",
+    "make a category...": "",
+    "make a copy and pick it up": "crea una còpia i agafa-la",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "",
+    "mouse position": "",
+    "mouse x": "",
+    "mouse y": "",
+    "mouse-departed": "el ratolí isca d'",
+    "mouse-entered": "el ratolí toque",
+    "mouse-pointer": "",
+    "move": "",
+    "move _ steps": "",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "",
+    "next": "",
+    "next costume": "",
+    "none": "",
+    "normal": "",
+    "normal (1x)": "",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "",
+    "only face left/right": "",
+    "only grab this block": "",
+    "open a new browser browser window with a summary of this project": "obri una finestra nova del navegador amb un resum d'aquest projecte",
+    "open a new window with a picture of all scripts": "obri una nova finestra amb una foto d'aquests programes",
+    "open a new window with a picture of the stage": "obri una nova finestra amb una foto de l'escenari",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "obri una nova finestra amb una imatge d'aquest programa",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "obri en una finestra...",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "posa-ho tot en pausa _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "",
+    "pen down?": "",
+    "pen trails": "rastre del llapis",
+    "pen up": "",
+    "pen vectors": "",
+    "pic...": "exporta com a imatge...",
+    "pick random _ to _": "",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "",
+    "play sound _": "",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "toca el so _ fins que acabe",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "",
+    "point towards _": "",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "",
+    "presentation (1.4x)": "",
+    "pressed": "es prema",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "",
+    "rename only this reporter": "",
+    "rename sound": "",
+    "rename...": "",
+    "repeat _ _": "",
+    "repeat until _ _": "",
+    "replace item _ of _ with _": "",
+    "report _": "",
+    "reporter": "",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "",
+    "ring": "",
+    "ringify": "",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "arredoneix _",
+    "run _ _": "",
+    "run _ w/continuation": "",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "",
+    "say _ for _ secs": "",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "mostra la meua imatge...",
+    "script variables _": "",
+    "scripts": "",
+    "scripts pic...": "",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "",
+    "set _ of block _ to _": "",
+    "set _ to _": "assigna a _ el valor _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "",
+    "set pen shade to _": "",
+    "set pen size to _": "",
+    "set size to _ %": "",
+    "set tempo to _ bpm": "",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "",
+    "set y to _": "",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "marca'm per a fer que les ranures buides tinguen preferència sobre les plenes a l'hora de deixar-hi caure peces",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "mostra les definicions de blocs personalitzats en format XML en una altra finestra del navegador",
+    "show primitives": "mostra els blocs primitius",
+    "show project data as XML in a new browser window": "",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "",
+    "slider": "botó lliscant",
+    "slider max...": "valor màxim del botó lliscant...",
+    "slider min...": "valor mínim del botó lliscant...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "",
+    "square": "",
+    "stack size": "",
+    "stage": "",
+    "stage image": "",
+    "stamp": "",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "para _",
+    "stop all sounds": "para tots els sons",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "guarda aquest projecte a la carpeta de descàrregues (en navegadors que ho admeten)",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "",
+    "temporary?": "",
+    "text": "",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "",
+    "think _": "",
+    "think _ for _ secs": "",
+    "this _": "",
+    "this block": "aquest bloc",
+    "this project doesn't have any custom global blocks yet": "",
+    "this script": "",
+    "time in milliseconds": "",
+    "timer": "",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "",
+    "turbo mode": "",
+    "turbo mode?": "",
+    "turn _ _ degrees": "",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "desmarca'm per a augmentar la velocitat de les animacions fins a la màxima capacitat d'aquesta màquina",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "desmarca'm per a fer que els extrems de les línies del llapis siguen arredonits",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "marca'm per a fer que les ranures buides tinguen la mateixa preferència que les plenes a l'hora de deixar-hi caure peces",
+    "uncheck to allow script reentrance": "desmarca'm per a permetre la reentrada als programes",
+    "uncheck to always show (+) symbols in block prototype labels": "desmarca'm per a mostrar sempre el símbol (+) en les etiquetes de prototip de bloc (a l'editor de blocs)",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "desmarca'm per a inhabilitar les animacions de la interfície",
+    "uncheck to disable alternating colors for nested block": "desmarca'm per a inhabilitar la coloració alternada per a blocs imbricats",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "marca'm per a desactivar les etiquetes dinàmiques en camps amb aritat variable",
+    "uncheck to disable input sliders for entry fields": "desmarca'm per a inhabilitar els botons lliscants per als camps d'entrada",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "desmarca'm per a inhabilitar el suport per al teclat virtual en dispositius mòbils",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "desmarca'm per a executar els programes a la velocitat normal",
+    "uncheck to save contents in the project": "desactiveu l'opció per a guardar els continguts en el projecte",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "desmarca'm per a inhabilitar el so de clic en clicar sobre els blocs",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "desmarca'm per a utilitzar ombres i realçats sòlids",
+    "uncheck to use the input dialog in short form": "desmarca'm per a no mostrar automàticament el diàleg de selecció de tipus en afegir paràmetres als blocs personalitzats",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "recupera l'últim bloc que s'haja llançat",
+    "undrop": "recupera el bloc",
+    "unicode _ as letter": "",
+    "unicode of _": "",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "desencapsula'm",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "",
+    "wait until _": "",
+    "wardrobe": "",
+    "warp _": "executa tot d'una _",
+    "what's your name?": "",
+    "when I am _": "",
+    "when I receive _ _": "Quan reba _ _",
+    "when I start as a clone": "quan una còpia meua comence",
+    "when _": "",
+    "when _ clicked": "Quan la _ es prema",
+    "when _ is edited _": "",
+    "when _ key pressed _": "Quan la tecla _ es prema _",
+    "whirl": "",
+    "whitespace": "",
+    "width": "",
+    "with data": "",
+    "with inputs": "",
+    "word": "",
+    "world": "",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "",
+    "y": "y",
+    "y position": "",
+    "year": "",
+    "year:": "",
+    "your own": "",
+    "z": "z"
+}
