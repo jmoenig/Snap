@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -27,189 +27,89 @@
 
     prerequisites:
     --------------
-    needs gui.js, lists.js and morphic.js
+    needs gui.js, lists.js, objects.js, threads.js and morphic.js
 
 
     documentation
     -------------
-    the experimental Snap! API is a set of methods for an IDE_Morph containing
-    a Snap! project. These methods are maintained to work with future versions
-    of Snap! They can be used to trigger scripts, get feedback from running
-    scripts, and access the project's global variables. Currently the API
-    consists of the following methods:
-
-        Broadcast Messages (and optionally wait)
-        
-            - IDE_Morph.prototype.broadcast()
-
-        Listen to Messages
-
-            - IDE_Morph.prototype.addMessageListenerForAll()
-            - IDE_Morph.prototype.addMessageListener()
-            - IDE_Morph.prototype.getMessages()
-
-        Access Global Variables
-
-            - IDE_Morph.prototype.getVarNames()
-            - IDE_Morph.prototype.getVar()
-            - IDE_Morph.prototype.setVar()
-
-        Create and Modify Lists
-
-            - IDE_Morph.prototype.newList()
-
-    Getting hold of an ide can usually be achieved by
-    evaluating:
-
-        var ide = world.children[0];
-
-
-    IDE_Morph.prototype.broadcast()
-    ===============================
-    The broadcast() method triggers all scripts whose hat block listens to
-    the specified message. An optional callback can be added to be run
-    after all triggered scripts have terminated.
-
-        syntax:
-        -------
-            ide.broadcast(message [, callback]);
-
-        parameters:
-        -----------
-            message
-                string, the message to be sent to all listeners
-            callback | optional
-                function to execute after all scripts terminate, no arguments
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.addMessageListenerForAll()
-    ==============================================
-    The addMessageListenerForAll() method sets up a function that will be
-    called whenever a message is broadcast. The function takes one argument,
-    the message being broadcast, and can be used to react to any message.
-    Multiple message listeners can be set up, they all the executed in the
-    order in which they were added.
-
-        syntax:
-        -------
-            ide.addMessageListenerForAll(callback);
-
-        parameters:
-        -----------
-            callback
-                function to execute whenever a message is sent,
-                takes one argument: The message string
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.addMessageListener()
-    ========================================
-    The addMessageListener() method sets up a function that will be called
-    whenever the specified message is broadcast. Multiple message listeners
-    can be set up per message, they all get executed in the order in which
-    they were added.
-
-        syntax:
-        -------
-            ide.addMessageListener(message, callback);
-
-        parameters:
-        -----------
-            message
-                string, the message to which the listener will react.
-                If the message is an empty string the callback will
-                be executed at any broadcast, passing the message as
-                argument
-            callback
-                function to execute whenever the specified message is sent,
-                takes no argument, except when the message to listen to is
-                the empty string, then it takes the message as argument
-
-        return value:
-        -------------
-            undefined
-
-
-    IDE_Morph.prototype.getMessages()
-    =================================
-    The getMessage() method returns a new Array that contains all the message
-    strings that occur in the project, both in hat blocks and in broadcast
-    blocks.
-
-        syntax:
-        -------
-            ide.getMessages();
-
-        return value:
-        -------------
-            an Array of strings, or an empty Array
-
-
-    IDE_Morph.prototype.getVarNames()
-    =================================
-    The getVarNames() method returns a new Array that contains all the global
-    variable names in the project.
-
-        syntax:
-        -------
-            ide.getVarNames();
-
-        return value:
-        -------------
-            an Array of strings, or an empty Array
-
-
-    IDE_Morph.prototype.getVar()
-    =============================
-    The getVar() method returns the value of the global variable indicated by
-    the specified name.
-
-        syntax:
-        -------
-            ide.getVar(name);
-
-        return value:
-        -------------
-            whatever value the variable holds.
-
-
-    IDE_Morph.prototype.setVar()
-    ============================
-    The setVar() methods assigns a value to the a global variable specified
-    by name.
-
-        syntax:
-        =======
-            ide.setVar(name, value);
-
-        return value:
-        =============
-            undefined
-        
+    along with this file you should have received a copy of the Snap! API
+    documentation. If not, see
+    https://github.com/jmoenig/Snap/blob/master/API.md
+    or https://snap.berkeley.edu/snap/API.md
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List*/
+/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
+detect, isSnapObject, VariableFrame*/
+
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2020-July-06';
+modules.api = '2023-January-30';
 
-// IDE_Morph external communication API - experimental
+// IDE_Morph external communication API
 /*
     programmatically trigger scripts from outside of Snap!
     add message listeners to Snap! broadcasts and access
     global variables
 */
 
-IDE_Morph.prototype.broadcast = function(message, callback) {
+window.onmessage = function (event) {
+    // make the API accessible from outside an iframe
+    var ide = world.children[0];
+    if (!isNil(event.data.selector)) {
+        window.top.postMessage(
+            {
+                selector: event.data.selector,
+                response: ide[event.data.selector].apply(ide, event.data.params)
+            },
+            '*'
+        );
+    }
+};
+
+IDE_Morph.prototype.getScenes = function () {
+    // return an array of all scenenames
+    return this.scenes.itemsArray().map(each => each.name);
+};
+
+IDE_Morph.prototype.getCurrentScene = function () {
+    // return the name of the currently active scene
+    return this.scene.name;
+};
+
+IDE_Morph.prototype.switchTo = function (sceneName) {
+    var scene = detect(this.scenes.itemsArray(), scn => scn.name === sceneName);
+    if (scene === null) {
+         throw new Error('cannot find scene ' + sceneName);
+    }
+    this.switchToScene(scene);
+};
+
+IDE_Morph.prototype.isRunning = function () {
+    // return true if the active scene is currently running a script
+    return this.stage.threads.processes.length > 0;
+};
+
+IDE_Morph.prototype.stop = function () {
+    // stop all currently running processes in the active scene
+    // no matter what, without firing a stop event
+    var stage = this.stage;
+    stage.keysPressed = {};
+    stage.threads.stopAll();
+    stage.stopAllActiveSounds();
+    stage.children.forEach(morph => {
+        if (morph.stopTalking) {
+            morph.stopTalking();
+        }
+    });
+    stage.removeAllClones();
+    stage.stopProjection();
+    this.controlBar.pauseButton.refresh();
+};
+
+IDE_Morph.prototype.broadcast = function(message, callback, payload) {
     // same as using the broadcast block - launch all scripts
     // in the current project reacting to the specified message,
     // if a callback is supplied wait for all processes to terminate
@@ -218,6 +118,8 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
     var rcvrs = this.sprites.contents.concat(this.stage),
         myself = this,
         procs = [];
+
+    payload = payload ?? '';
 
     function wait() {
         if (procs.some(any => any.isRunning())) {
@@ -235,16 +137,50 @@ IDE_Morph.prototype.broadcast = function(message, callback) {
         throw new Error('message must be a String');
     }
     this.stage.lastMessage = message;
-    rcvrs.forEach(sprite => {
-        sprite.allHatBlocksFor(message).forEach(block => {
-            procs.push(this.stage.threads.startProcess(
-                block,
-                sprite,
-                this.stage.isThreadSafe,
-                false,
-                callback instanceof Function ? wait : null
-            ));
-        });
+    rcvrs.forEach(morph => {
+        if (isSnapObject(morph)) {
+            morph.allHatBlocksFor(message).forEach(block => {
+                var varName, varFrame, choice;
+                if (block.selector === 'receiveMessage') {
+                    varName = block.inputs()[1].evaluate()[0];
+                    if (varName) {
+                        varFrame = new VariableFrame();
+                        choice = block.inputs()[0].evaluate();
+                        if (choice instanceof Array &&
+                            choice[0].indexOf('any') === 0) {
+                            varFrame.addVar(
+                                varName,
+                                payload !== '' ?
+                                    new List([message, payload])
+                                    : message
+                            );
+                        } else {
+                            varFrame.addVar(varName, payload);
+                        }
+                    }
+                    procs.push(this.stage.threads.startProcess(
+                        block,
+                        morph,
+                        this.stage.isThreadSafe,
+                        // commented out for now to enable tail recursion:
+                        // || // make "any msg" threadsafe
+                        // block.inputs()[0].evaluate() instanceof Array,
+                        null, // exportResult (bool)
+                        callback instanceof Function ? wait : null,
+                        null, // isClicked
+                        null, // rightAway
+                        null, // atomic
+                        varFrame
+                    ));
+                } else {
+                    procs.push(this.stage.threads.startProcess(
+                        block,
+                        morph,
+                        this.stage.isThreadSafe
+                    ));
+                }
+            });
+        }
     });
     (this.stage.messageCallbacks[''] || []).forEach(
         callback => callback(message)
@@ -312,4 +248,62 @@ IDE_Morph.prototype.newList = function (array) {
     // return a new Snap list the shape of the given array, if any
     // nested array will not be automatically converted to nested lists
     return new List(array);
+};
+
+IDE_Morph.prototype.getProjectXML = function () {
+    return this.serializer.serialize(new Project(this.scenes, this.scene));
+};
+
+IDE_Morph.prototype.loadProjectXML = function (projectXML) {
+    // load the project encoded as xml-String, no questions asked
+    // terminate animations and scheduled ops
+    this.onNextStep = null;
+    this.world().animations = [];
+    this.openProjectString(projectXML);
+};
+
+IDE_Morph.prototype.getSpriteScriptsXML = function (name) {
+    // return the scripts of the sprite identified by name or the currently
+    // edited sprite as xml-String stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).scriptsOnlyXML();
+};
+
+IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
+    // load the scripts encoded as xml-String and replace the scripts of the
+    // specified sprite or stage with them, no questions asked.
+    // Note: No dependency handling is expected, i.e. the xml-String is
+    // meant to be stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
+};
+
+IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name) {
+    // highlight the blocks of the scripts of the sprite indicated by name or
+    // the current sprite or stage if none that correspond to the portion of the
+    // text between the start- and end lines when using the current codification
+    // mapping
+    var scripts = this.spriteNamed(name).scripts;
+    scripts.unflash();
+    scripts.flashLOC(fromLOC, toLOC);
+};
+
+IDE_Morph.prototype.unflashSpriteScripts = function (name) {
+    // un-highlight the scripts of the sprite indicated by name or the current
+    // sprite or stage if none
+    this.spriteNamed(name).scripts.unflash();
+};
+
+IDE_Morph.prototype.unsavedChanges = function () {
+    return this.hasUnsavedEdits();
+};
+
+IDE_Morph.prototype.setTranslation = function (countryCode, callback) {
+    // switch to the specified language (format ISO 639-1 code) and
+    // optionally run a callback afterwards, e.g. to broadcast an event
+    // note the language setting does not overwrite the user's own setting
+    // that's stored in the browser this way, so that the next time the user
+    // opens Snap their own language setting again takes effect.
+    this.loadNewProject = false;
+    this.setLanguage(countryCode, callback, true); // don't save
 };

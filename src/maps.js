@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2020-March-25';
+modules.maps = '2021-June-15';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -147,7 +147,7 @@ function WorldMap(host) {
                 'CC-BY-SA, Imagery \u00A9 Mapbox'
         }
     };
-    this.api = this.tileServers[host || 'Wikimedia'];
+    this.api = this.tileServers[host || 'OpenStreetMap'];
     this.lon = -122.257852;
     this.lat = 37.872099;
     this.zoom = 13;

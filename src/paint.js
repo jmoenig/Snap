@@ -1,4 +1,4 @@
- /*
+/*
     paint.js
 
     a paint editor for Snap!
@@ -71,18 +71,21 @@
 
     2020 Apr 14 - Morphic2 migration (Jens)
     2020 May 17 - Pipette alpha fix (Joan)
-    2020 July 13 - modified scale buttons (Jadga)
+    2020 Jul 13 - modified scale buttons (Jadga)
+
+    2021 Mar 17 - moved stage dimension handling to scenes (Jens)
 */
 
-/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
-Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph, nop,
-localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
-BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
-StageMorph, isNil, SVG_Costume*/
+/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph, nop,
+Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph,  isNil,
+localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph, modules,
+BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume*/
+
+/*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2020-July-13';
+modules.paint = '2021-July-05';
 
 // Declarations
 
@@ -106,6 +109,7 @@ function PaintEditorMorph() {
 
 PaintEditorMorph.prototype.init = function () {
     // additional properties:
+    this.ide = null;
     this.paper = null; // paint canvas
     this.oncancel = null;
 
@@ -116,15 +120,16 @@ PaintEditorMorph.prototype.init = function () {
     this.labelString = "Paint Editor";
     this.createLabel();
 
-    // build contents:
-    this.buildContents();
+    // building the contents happens when I am opened with an IDE
+    // so my extent can be adjusted accordingly (jens)
+    // this.buildContents();
 };
 
 PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
     this.paper = new PaintCanvasMorph(function () {return myself.shift; });
-    this.paper.setExtent(StageMorph.prototype.dimensions);
+    this.paper.setExtent(this.ide.stage.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
     this.controls = new AlignmentMorph('column', this.padding / 2);
@@ -242,10 +247,9 @@ PaintEditorMorph.prototype.buildEdits = function () {
                     'This will erase your current drawing.\n' +
                     'Are you sure you want to continue?',
                     'Switch to vector editor?',
-                    function () {
-                        myself.switchToVector();
-                    },
-                    nop
+                    () => {
+                        setTimeout(() => {myself.switchToVector(); });
+                    }
                 );
             } else {
                 myself.switchToVector();
@@ -288,21 +292,23 @@ PaintEditorMorph.prototype.openIn = function (
     callback,
     anIDE
 ) {
+    var myself = this;
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
     this.callback = callback || nop;
     this.ide = anIDE;
 
+    this.buildContents();
+
     this.processKeyUp = function () {
-        this.shift = false;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = false;
+        myself.propertiesControls.constrain.refresh();
     };
 
     this.processKeyDown = function () {
-        this.shift = this.world().currentKey === 16;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = myself.world().currentKey === 16;
+        myself.propertiesControls.constrain.refresh();
     };
-
     //merge oldim:
     if (this.oldim) {
         this.paper.automaticCrosshairs = isNil(oldrc);
@@ -354,16 +360,12 @@ PaintEditorMorph.prototype.cancel = function () {
 };
 
 PaintEditorMorph.prototype.switchToVector = function () {
-    var myself = this;
+
     this.object = new SVG_Costume(new Image(), '', new Point(0,0));
     this.object.edit(
         this.world(),
         this.ide,
-        true,
-        this.oncancel,
-        function() {
-            myself.ide.currentSprite.changed();
-        }
+        true
     );
 };
 
@@ -372,7 +374,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         myself = this,
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
-        brushControl = new AlignmentMorph("column");
+        brushControl = new AlignmentMorph("column", 3);
         
     brushControl.alignment = "left";
 
@@ -467,9 +469,9 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         new StringMorph(localize("Brush size") + ":", 10, null, true)
     );
     brushControl.add(alpen);
+    brushControl.add(pc.constrain);
     brushControl.fixLayout();
     c.add(brushControl);
-    c.add(pc.constrain);
 };
 
 PaintEditorMorph.prototype.toolButton = function (icon, hint) {
@@ -732,6 +734,7 @@ PaintCanvasMorph.prototype.centermerge = function (a, b) {
 
 PaintCanvasMorph.prototype.clearCanvas = function () {
     this.buildContents();
+    this.drawNew();
     this.changed();
 };
 

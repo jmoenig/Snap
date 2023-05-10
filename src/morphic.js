@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2020 by Jens Mönig
+    Copyright (C) 2010-2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -302,7 +302,7 @@
     -------------------
     If you wish to create a web page with more than one world, make
     sure to prevent each world from auto-filling the whole page and
-    include    it in the main loop. It's also a good idea to give each
+    include it in the main loop. It's also a good idea to give each
     world its own tabindex:
 
     example html file:
@@ -317,7 +317,6 @@
                 var	world1, world2;
 
                 window.onload = function () {
-                    disableRetinaSupport();
                     world1 = new WorldMorph(
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
@@ -326,7 +325,7 @@
                 };
 
                 function loop() {
-            requestAnimationFrame(loop);
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -471,6 +470,8 @@
         mouseLeave
         mouseEnterDragging
         mouseLeaveDragging
+        mouseEnterBounds
+        mouseLeaveBounds
         mouseMove
         mouseScroll
 
@@ -479,7 +480,7 @@
 
         MyMorph.prototype.mouseMove = function(pos) {};
 
-    All of these methods have as optional parameter a Point object
+    Most of these methods have as optional parameter a Point object
     indicating the current position of the Hand inside the World's
     coordinate system. The
 
@@ -488,6 +489,16 @@
     event method has an additional optional parameter indicating the
     currently pressed mouse button, which is either 'left' or 'right'.
     You can use this to let users interact with 3D environments.
+
+    The
+
+        mouseEnterDragging(morph)
+        mouseLeaveDragging(morph)
+        mouseEnterBounds(morph)
+        mouseLeaveBounds(morph)
+
+    event methods have as optional parameter the morph currently dragged by
+    the Hand, if any.
 
     Events may be "bubbled" up a morph's owner chain by calling
 
@@ -630,7 +641,7 @@
 
     Drops of image elements from outside the world canvas are dispatched as
 
-        droppedImage(aCanvas, name)
+        droppedImage(aCanvas, name, embeddedData)
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want your Morph
@@ -651,8 +662,22 @@
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
 
-    The same applies to drops of audio or text files from outside the world
-    canvas.
+    Note that PNG images provide for embedded text comments, which can be used
+    to include code or arbitrary data such as a CSV, JSON or XML file inside
+    the image. Such a payload has to be identified by an agreed-upon marker.
+    The default tag is stored in MorphicPreferences and can be overriden by
+    apps wishing to make use of this feature. If such an embedded text-payload
+    is found inside a PNG it is passed as the optional third "embeddedData"
+    parameter to the "droppedImage()" event. embedded text only applies to PNGs.
+    You can embed a string into the PNG metadata of a PNG by  calling
+
+        embedMetadataPNG(aCanvas, aString)
+
+    with a raster image represented by a canvas and a string that is to be
+    embedded into the PNG's metadata.
+
+    The same event mechanism applies to drops of audio or text files from
+    outside the world canvas.
 
     Those are dispatched as
 
@@ -665,6 +690,15 @@
     is dispatched as an ArrayBuffer to interested Morphs:
 
         droppedBinary(anArrayBuffer, name)
+
+    In case multiple files are dropped simulateneously the events
+
+        beginBulkDrop()
+        endBulkDrop()
+
+    are dispatched to to Morphs interested in bracketing the bulk operation,
+    and the endBulkDrop() event is only signalled after the contents last file
+    has been asynchronously made available.
 
 
     (e) keyboard events
@@ -1255,11 +1289,13 @@
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
     Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Dariusz Dorożalski and Jesus Villalobos contributed embedding blocks
+    into image metadata.
     Bernat Romagosa contributed to text editing and to the core design.
     Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
     Ken Kahn contributed to Chinese keboard entry and Android support.
-    Brian Broll contributed clickable URLs in text elements.
+    Brian Broll contributed clickable URLs in text elements and many bugfixes.
 
     - Jens Mönig
 */
@@ -1268,17 +1304,21 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-var morphicVersion = '2020-July-10';
+/*jshint esversion: 11, bitwise: false*/
+
+var morphicVersion = '2023-March-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
 const ZERO = new Point();
 const BLACK = new Color();
 const WHITE = new Color(255, 255, 255);
+const CLEAR = new Color(0, 0, 0, 0);
 
 Object.freeze(ZERO);
 Object.freeze(BLACK);
 Object.freeze(WHITE);
+Object.freeze(CLEAR);
 
 var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
@@ -1290,10 +1330,11 @@ var standardSettings = {
     prompterFontSize: 12,
     prompterSliderSize: 10,
     handleSize: 15,
-    scrollBarSize: 12,
+    scrollBarSize: 9, // was 12,
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: false, // turned on by touch events, don't set
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1314,6 +1355,7 @@ var touchScreenSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: true,
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1545,6 +1587,45 @@ function copy(target) {
     return c;
 }
 
+function embedMetadataPNG(aCanvas, aString) {
+    var embedTag = MorphicPreferences.pngPayloadMarker,
+        crc32 = (str, crc) => {
+            let table = [...Array(256).keys()].map(it =>
+                [...Array(8)].reduce((cc) =>
+                (cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
+                );
+            crc = [...str].reduce(
+                (crc, ch) => (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff],
+                (crc ? crc = 0 : crc) ^ (-1) // (crc ||= 0) ^ (-1)
+            );
+            return ( crc ^ (-1) ) >>> 0;
+        },
+        arr2Str = (arr) =>
+            arr.reduce((res, byte) => res + String.fromCharCode(byte), ''),
+        int2BStr = (val) =>
+            arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse()),
+        buildChunk = (data) => {
+            let res = "iTXt" + data;
+            return int2BStr(data.length) + res + int2BStr(crc32(res));
+        },
+        parts = aCanvas.toDataURL("image/png").split(","),
+        bPart = atob(parts[1]).split(""),
+        newChunk = buildChunk(
+            "Snap!_SRC\0\0\0\0\0" +
+            embedTag +
+            encodeURIComponent(aString) +
+            embedTag
+        );
+    try {
+        bPart.splice(-12, 0, ...newChunk);
+        parts[1] = btoa(bPart.join(""));
+    } catch (err) {
+        console.log(err);
+    }
+    return parts.join(',');
+}
+
+
 // Retina Display Support //////////////////////////////////////////////
 
 /*
@@ -1697,7 +1778,7 @@ function enableRetinaSupport() {
                 this.height = prevHeight;
             }
         },
-        configurable: true // [Jens]: allow to be deleted an reconfigured
+        configurable: true // [Jens]: allow to be deleted and reconfigured
     });
 
     Object.defineProperty(canvasProto, 'width', {
@@ -1715,7 +1796,7 @@ function enableRetinaSupport() {
                 context.restore();
                 context.save();
                 */
-                context.scale(pixelRatio, pixelRatio);
+                context?.scale(pixelRatio, pixelRatio);
             } catch (err) {
                 console.log('Retina Display Support Problem', err);
                 uber.width.set.call(this, width);
@@ -1736,7 +1817,7 @@ function enableRetinaSupport() {
             context.restore();
             context.save();
             */
-            context.scale(pixelRatio, pixelRatio);
+            context?.scale(pixelRatio, pixelRatio);
         }
     });
 
@@ -2293,6 +2374,14 @@ Color.prototype.inverted = function () {
         255 - this.r,
         255 - this.g,
         255 - this.b
+    );
+};
+
+Color.prototype.solid = function () {
+    return new Color(
+        this.r,
+        this.g,
+        this.b
     );
 };
 
@@ -3066,6 +3155,27 @@ Node.prototype.parentThatIsAnyOf = function (constructors) {
     return this.parentThatIsA.apply(this, constructors);
 };
 
+Node.prototype.childThatIsA = function () {
+    // including myself
+    // Note: you can pass in multiple constructors to test for
+    var i, hit;
+    for (i = 0; i < arguments.length; i += 1) {
+        if (this instanceof arguments[i]) {
+            return this;
+        }
+    }
+    if (!this.children.length) {
+        return null;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        hit = this.childThatIsA.apply(this.children[i], arguments);
+        if (hit) {
+            return hit;
+        }
+    }
+    return null;
+};
+
 // Morphs //////////////////////////////////////////////////////////////
 
 // Morph: referenced constructors
@@ -3459,13 +3569,18 @@ Morph.prototype.getImage = function () {
 };
 
 Morph.prototype.render = function (aContext) {
-    aContext.fillStyle = this.color.toString();
+    aContext.fillStyle = this.getRenderColor().toString();
     aContext.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
         this.renderCachedTexture(aContext);
     } else if (this.texture) {
         this.renderTexture(this.texture, aContext);
     }
+};
+
+Morph.prototype.getRenderColor = function () {
+    // can be overriden by my heirs or instances
+    return this.color;
 };
 
 Morph.prototype.fixLayout = function () {
@@ -4036,7 +4151,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
             x => this.setLeft(x),
             () => this.left(),
             -(this.left() - endPoint.x),
-            msecs || 100,
+            msecs === 0 ? 0 : msecs || 100,
             easing
         );
     world.animations.push(horizontal);
@@ -4044,7 +4159,7 @@ Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
         y => this.setTop(y),
         () => this.top(),
         -(this.top() - endPoint.y),
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         easing,
         () => {
             horizontal.setter(horizontal.destination);
@@ -4068,7 +4183,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
         },
         () => this.alpha,
         endAlpha - this.alpha,
-        msecs || 200,
+        msecs === 0 ? 0 : msecs || 200,
         easing,
         () => {
             this.alpha = oldAlpha;
@@ -4080,7 +4195,7 @@ Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
 Morph.prototype.perish = function (msecs, onComplete) {
     this.fadeTo(
         0,
-        msecs || 100,
+        msecs === 0 ? 0 : msecs || 100,
         null,
         () => {
             this.destroy();
@@ -4158,7 +4273,8 @@ Morph.prototype.prompt = function (
     width,
     floorNum,
     ceilingNum,
-    isRounded
+    isRounded,
+    action = nop
 ) {
     var menu, entryField, slider, isNumeric;
     if (ceilingNum) {
@@ -4202,6 +4318,7 @@ Morph.prototype.prompt = function (
                 entryField.text.fixLayout();
                 entryField.text.changed();
                 entryField.text.edit();
+                action(Math.round(num));
             };
         } else {
             slider.action = (num) => {
@@ -4209,6 +4326,7 @@ Morph.prototype.prompt = function (
                 entryField.text.text = num.toString();
                 entryField.text.fixLayout();
                 entryField.text.changed();
+                action(num);
             };
         }
         menu.items.push(slider);
@@ -4216,7 +4334,13 @@ Morph.prototype.prompt = function (
 
     menu.addLine(2);
     menu.addItem('Ok', () => entryField.string());
-    menu.addItem('Cancel', () => null);
+    menu.addItem(
+        'Cancel',
+        () => {
+            action(defaultContents);
+            return null;
+        }
+    );
     menu.isDraggable = true;
     menu.popUpAtHand(this.world());
     entryField.text.edit();
@@ -4389,7 +4513,28 @@ Morph.prototype.developersMenu = function () {
     );
     menu.addItem(
         "pic...",
-        () => window.open(this.fullImage().toDataURL()),
+        () => {
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
+            try {
+                doc = window.open('', '_blank', 'popup').document;
+                body = doc.getElementsByTagName('body')[0];
+                str = '' + this;
+                doc.title = str;
+                tag = doc.createElement('h1');
+                tag.textContent = str;
+                body.appendChild(tag);
+                tag = doc.createElement('img');
+                tag.alt = str;
+                tag.src = imgURL;
+                body.appendChild(tag);
+            } catch (error) {
+                console.warn(
+                    'failed to popup pic, morph:%O, error:%O, image URL:%O',
+                    this, error, [imgURL]
+                );
+            }
+        },
         'open a new window\nwith a picture of this morph'
     );
     menu.addLine();
@@ -4436,12 +4581,12 @@ Morph.prototype.setAlphaScaled = function (alpha) {
     var newAlpha, unscaled;
     if (typeof alpha === 'number') {
         unscaled = alpha / 100;
-        this.alpha = Math.min(Math.max(unscaled, 0.1), 1);
+        this.alpha = Math.min(Math.max(unscaled, 0), 1);
     } else {
         newAlpha = parseFloat(alpha);
         if (!isNaN(newAlpha)) {
             unscaled = newAlpha / 100;
-            this.alpha = Math.min(Math.max(unscaled, 0.1), 1);
+            this.alpha = Math.min(Math.max(unscaled, 0), 1);
         }
     }
     this.changed();
@@ -5602,19 +5747,24 @@ CursorMorph.prototype.processInput = function (event) {
     // filter invalid chars for numeric fields
     function filterText (content) {
         var points = 0,
+            hasE = false,
             result = '',
             i, ch, valid;
         for (i = 0; i < content.length; i += 1) {
             ch = content.charAt(i);
             valid = (
                 ('0' <= ch && ch <= '9') || // digits
-                (i === 0 && ch === '-')  || // leading '-'
+                (ch.toLowerCase() === 'e') || // scientific notation
+                ((i === 0 || hasE) && ch === '-')  || // leading '-' or sc. not.
                 (ch === '.' && points === 0) // at most '.'
             );
             if (valid) {
                 result += ch;
                 if (ch === '.') {
                     points += 1;
+                }
+                if (ch.toLowerCase() === 'e') {
+                    hasE = true;
                 }
             }
         }
@@ -6963,9 +7113,9 @@ SliderMorph.uber = CircleBoxMorph.prototype;
 
 function SliderMorph(start, stop, value, size, orientation, color) {
     this.init(
-        start || 1,
+        start || 0,
         stop || 100,
-        value || 50,
+        value || 0,
         size || 10,
         orientation || 'vertical',
         color
@@ -6989,12 +7139,13 @@ SliderMorph.prototype.init = function (
     this.offset = null;
     this.button = new SliderButtonMorph();
     this.button.isDraggable = false;
+    this.button.alpha = MorphicPreferences.isFlat ? 0.7 : 1;
     this.button.color = new Color(200, 200, 200);
     this.button.highlightColor = new Color(210, 210, 255);
     this.button.pressColor = new Color(180, 180, 255);
     SliderMorph.uber.init.call(this, orientation);
     this.add(this.button);
-    this.alpha = 0.3;
+    this.alpha = MorphicPreferences.isFlat ? 0 : 0.3;
     this.color = color || new Color(0, 0, 0);
     this.setExtent(new Point(20, 100));
     this.fixLayout();
@@ -7926,7 +8077,7 @@ MenuMorph.prototype.addItem = function (
     */
     this.items.push([
         verbatim ? labelString || 'close' : localize(labelString || 'close'),
-        action || nop,
+        action === 0 ? 0 : action || nop,
         hint,
         color,
         bold || false,
@@ -8189,6 +8340,7 @@ MenuMorph.prototype.popUpAtHand = function (world) {
 MenuMorph.prototype.popUpCenteredAtHand = function (world) {
     var wrrld = world || this.world;
     this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.hand.position().subtract(
@@ -8200,6 +8352,7 @@ MenuMorph.prototype.popUpCenteredAtHand = function (world) {
 MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     var wrrld = world || this.world;
     this.fixLayout();
+    this.createItems();
     this.popup(
         wrrld,
         wrrld.center().subtract(
@@ -8365,7 +8518,7 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardFocus = null;
     }
-    if (!this.isListContents) {
+    if (!this.isListContents && (this.world.activeMenu === this)) {
         this.world.activeMenu = null;
     }
     MenuMorph.uber.destroy.call(this);
@@ -8490,6 +8643,11 @@ StringMorph.prototype.font = function () {
         this.fontStyle;
 };
 
+StringMorph.prototype.getShadowRenderColor = function () {
+    // answer the shadow rendering color, can be overridden for my children
+    return this.shadowColor;
+};
+
 StringMorph.prototype.fixLayout = function (justMe) {
     // determine my extent depending on my current settings
     var width,
@@ -8520,6 +8678,7 @@ StringMorph.prototype.fixLayout = function (justMe) {
 StringMorph.prototype.render = function (ctx) {
     var start, stop, i, p, c, x, y,
         shadowOffset = this.shadowOffset || ZERO,
+        shadowColor = this.getShadowRenderColor(),
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
@@ -8529,17 +8688,17 @@ StringMorph.prototype.render = function (ctx) {
     ctx.textBaseline = 'bottom';
 
     // first draw the shadow, if any
-    if (this.shadowColor) {
+    if (shadowColor) {
         x = Math.max(shadowOffset.x, 0);
         y = Math.max(shadowOffset.y, 0);
-        ctx.fillStyle = this.shadowColor.toString();
+        ctx.fillStyle = shadowColor.toString();
         ctx.fillText(txt, x, fontHeight(this.fontSize) + y);
     }
 
     // now draw the actual text
     x = Math.abs(Math.min(shadowOffset.x, 0));
     y = Math.abs(Math.min(shadowOffset.y, 0));
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
 
     if (this.isShowingBlanks) {
         this.renderWithBlanks(
@@ -8598,7 +8757,7 @@ StringMorph.prototype.renderWithBlanks = function (ctx, startX, y) {
         }
         isFirst = false;
         if (word !== '') {
-            ctx.fillStyle = this.color.toString();
+            ctx.fillStyle = this.getRenderColor().toString();
             ctx.fillText(word, x, y);
             x += ctx.measureText(word).width;
         }
@@ -9208,7 +9367,25 @@ TextMorph.prototype.parse = function () {
                         this.maxLineWidth,
                         context.measureText(oldline).width
                     );
-                    oldline = word + ' ';
+                    w = context.measureText(word).width;
+                    if (w > this.maxWidth) {
+                        oldline = '';
+                        word.split('').forEach((letter, idx) => {
+                            w = context.measureText(oldline + letter).width;
+                            if (w > this.maxWidth && oldline.length) {
+                                this.lines.push(oldline);
+                                this.lineSlots.push(slot + idx);
+                                this.maxLineWidth = Math.max(
+                                    this.maxLineWidth,
+                                    context.measureText(oldline).width
+                                );
+                                oldline = '';
+                            }
+                            oldline += letter;
+                        });
+                    } else {
+                        oldline = word + ' ';
+                    }
                 } else {
                     oldline = newline;
                 }
@@ -9251,6 +9428,7 @@ TextMorph.prototype.fixLayout = function () {
 TextMorph.prototype.render = function (ctx) {
     var shadowWidth = Math.abs(this.shadowOffset.x),
         shadowHeight = Math.abs(this.shadowOffset.y),
+        shadowColor = this.getShadowRenderColor(),
         i, line, width, offx, offy, x, y, start, stop, p, c;
 
     // prepare context for drawing text
@@ -9265,10 +9443,10 @@ TextMorph.prototype.render = function (ctx) {
     }
 
     // draw the shadow, if any
-    if (this.shadowColor) {
+    if (shadowColor) {
         offx = Math.max(this.shadowOffset.x, 0);
         offy = Math.max(this.shadowOffset.y, 0);
-        ctx.fillStyle = this.shadowColor.toString();
+        ctx.fillStyle = shadowColor.toString();
 
         for (i = 0; i < this.lines.length; i = i + 1) {
             line = this.lines[i];
@@ -9289,7 +9467,7 @@ TextMorph.prototype.render = function (ctx) {
     // now draw the actual text
     offx = Math.abs(Math.min(this.shadowOffset.x, 0));
     offy = Math.abs(Math.min(this.shadowOffset.y, 0));
-    ctx.fillStyle = this.color.toString();
+    ctx.fillStyle = this.getRenderColor().toString();
 
     for (i = 0; i < this.lines.length; i = i + 1) {
         line = this.lines[i];
@@ -9318,6 +9496,9 @@ TextMorph.prototype.render = function (ctx) {
         ctx.fillText(c, p.x, p.y + fontHeight(this.fontSize));
     }
 };
+
+TextMorph.prototype.getShadowRenderColor =
+    StringMorph.prototype.getShadowRenderColor;
 
 TextMorph.prototype.setExtent = function (aPoint) {
     this.maxWidth = Math.max(aPoint.x, 0);
@@ -9393,7 +9574,7 @@ TextMorph.prototype.slotAt = function (aPoint) {
         charX = 0;
     }
     columnLength = this.lines[row - 1].length;
-    while (col < columnLength - 2 && aPoint.x - this.left() > charX) {
+    while (col < columnLength - 1 && aPoint.x - this.left() > charX) {
         charX += ctx.measureText(this.lines[row - 1][col]).width;
         col += 1;
     }
@@ -9679,7 +9860,7 @@ TriggerMorph.prototype.init = function (
 ) {
     // additional properties:
     this.target = target || null;
-    this.action = action || null;
+    this.action = action === 0 ? 0 : action|| null;
     this.doubleClickAction = doubleClickAction || null;
     this.environment = environment || null;
     this.labelString = labelString || ' ';
@@ -10700,7 +10881,14 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format, doubleClickAction) {
+function ListMorph(
+    elements,
+    labelGetter,
+    format,
+    onDoubleClick,
+    separator,
+    verbatim
+) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -10733,7 +10921,9 @@ function ListMorph(elements, labelGetter, format, doubleClickAction) {
             return element.toString();
         },
         format || [],
-        doubleClickAction // optional callback
+        onDoubleClick, // optional callback
+        separator, // string indicating a horizontal line between items
+        verbatim
     );
 }
 
@@ -10741,7 +10931,9 @@ ListMorph.prototype.init = function (
     elements,
     labelGetter,
     format,
-    doubleClickAction
+    onDoubleClick,
+    separator,
+    verbatim
 ) {
     ListMorph.uber.init.call(this);
 
@@ -10756,7 +10948,9 @@ ListMorph.prototype.init = function (
     this.selected = null; // actual element currently selected
     this.active = null; // menu item representing the selected element
     this.action = null;
-    this.doubleClickAction = doubleClickAction || null;
+    this.doubleClickAction = onDoubleClick || null;
+    this.separator = separator || '';
+    this.verbatim = isNil(verbatim) ? true : verbatim;
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -10776,7 +10970,8 @@ ListMorph.prototype.buildListContents = function () {
     this.elements.forEach(element => {
         var color = null,
             bold = false,
-            italic = false;
+            italic = false,
+            label;
 
         this.format.forEach(pair => {
             if (pair[1].call(null, element)) {
@@ -10789,15 +10984,23 @@ ListMorph.prototype.buildListContents = function () {
                 }
             }
         });
-        this.listContents.addItem(
-            this.labelGetter(element), // label string
-            element, // action
-            null, // hint
-            color,
-            bold,
-            italic,
-            this.doubleClickAction
-        );
+
+        label = this.labelGetter(element);
+        if (label === this.separator) {
+            this.listContents.addLine();
+        } else {
+            this.listContents.addItem(
+                label, // label string
+                element, // action
+                null, // hint
+                color,
+                bold,
+                italic,
+                this.doubleClickAction,
+                null, // shortcut
+                this.verbatim // don't translate
+            );
+        }
     });
     this.listContents.isListContents = true;
     this.listContents.createItems();
@@ -11049,12 +11252,14 @@ HandMorph.prototype.init = function (aWorld) {
     this.world = aWorld;
     this.mouseButton = null;
     this.mouseOverList = [];
+    this.mouseOverBounds = [];
     this.morphToGrab = null;
     this.grabPosition = null;
     this.grabOrigin = null;
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
+    this.touchStartPosition = null;
 
     // properties for caching dragged objects:
     this.cachedFullImage = null;
@@ -11103,7 +11308,7 @@ HandMorph.prototype.fullDrawOn = function (ctx, rect) {
 
     if (!clipped.extent().gt(ZERO)) {return; }
     ctx.save();
-    ctx.globalAlpha = this.children[0].alpha;
+    ctx.globalAlpha = this.alpha;
     pic = this.cachedFullImage;
     src = clipped.translateBy(pos.neg());
     sl = src.left();
@@ -11133,7 +11338,10 @@ HandMorph.prototype.morphAtPointer = function () {
 
 HandMorph.prototype.allMorphsAtPointer = function () {
     return this.world.allChildren().filter(m => m.isVisible &&
-        m.visibleBounds().containsPoint(this.bounds.origin));
+        m.visibleBounds().containsPoint(this.bounds.origin) &&
+        !m.holes.some(any =>
+            any.translateBy(m.position()).containsPoint(this.bounds.origin))
+        );
 };
 
 // HandMorph dragging and dropping:
@@ -11156,25 +11364,29 @@ HandMorph.prototype.dropTargetFor = function (aMorph) {
 };
 
 HandMorph.prototype.grab = function (aMorph) {
-    var oldParent = aMorph.parent;
+    var oldParent;
+    if (!aMorph) {
+        return null;
+    }
+    oldParent = aMorph.parent;
     if (aMorph instanceof WorldMorph) {
         return null;
     }
     if (this.children.length === 0) {
         this.world.stopEditing();
         this.grabOrigin = aMorph.situation();
-        if (!aMorph.noDropShadow) {
-            aMorph.addShadow();
-        }
         if (aMorph.prepareToBeGrabbed) {
             aMorph.prepareToBeGrabbed(this);
         }
-        this.add(aMorph);
+        if (!aMorph.noDropShadow) {
+            aMorph.addShadow();
+        }
 
         // cache the dragged object's display resources
         this.cachedFullImage = aMorph.fullImage();
         this.cachedFullBounds = aMorph.fullBounds();
 
+        this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
             oldParent.reactToGrabOf(aMorph);
@@ -11184,6 +11396,7 @@ HandMorph.prototype.grab = function (aMorph) {
 
 HandMorph.prototype.drop = function () {
     var target, morphToDrop;
+    this.alpha = 1;
     if (this.children.length !== 0) {
         morphToDrop = this.children[0];
         target = this.dropTargetFor(morphToDrop);
@@ -11223,13 +11436,25 @@ HandMorph.prototype.drop = function () {
         mouseLeave
         mouseEnterDragging
         mouseLeaveDragging
+        mouseEnterBounds
+        mouseLeaveBounds
         mouseMove
         mouseScroll
 */
 
 HandMorph.prototype.processMouseDown = function (event) {
-    var morph, actualClick;
+    var morph, actualClick,
+        posInDocument = getDocumentPositionOf(this.world.worldCanvas);
 
+    // update my position, in case I've just been initialized
+    if (event.pageX) {
+        this.setPosition(new Point(
+            event.pageX - posInDocument.x,
+            event.pageY - posInDocument.y
+        ));
+    }
+
+    // process the actual event
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
@@ -11281,6 +11506,10 @@ HandMorph.prototype.processTouchStart = function (event) {
     MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
+        this.touchStartPosition = new Point(
+            event.touches[0].pageX,
+            event.touches[0].pageY
+        );
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             () => {
                 this.processMouseDown({button: 2});
@@ -11297,7 +11526,12 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    var pos = new Point(event.touches[0].pageX, event.touches[0].pageY);
     MorphicPreferences.isTouchDevice = true;
+    if (this.touchStartPosition.distanceTo(pos) <
+            MorphicPreferences.grabThreshold) {
+        return;
+    }
     if (event.touches.length === 1) {
         var touch = event.touches[0];
         this.processMouseMove(touch);
@@ -11368,6 +11602,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     var pos,
         posInDocument = getDocumentPositionOf(this.world.worldCanvas),
         mouseOverNew,
+        mouseOverBoundsNew,
         morph,
         topMorph;
 
@@ -11379,8 +11614,12 @@ HandMorph.prototype.processMouseMove = function (event) {
     this.setPosition(pos);
 
     // determine the new mouse-over-list:
-    // mouseOverNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
+    mouseOverBoundsNew = mouseOverNew.filter(m => m.isVisible &&
+        m.visibleBounds().containsPoint(this.bounds.origin) &&
+            !m.holes.some(any =>
+                any.translateBy(m.position()).containsPoint(this.bounds.origin))
+    );
 
     if (!this.children.length && this.mouseButton) {
         topMorph = this.morphAtPointer();
@@ -11417,13 +11656,28 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     }
 
+    this.mouseOverBounds.forEach(old => {
+        if (!contains(mouseOverBoundsNew, old)) {
+            if (old.mouseLeaveBounds) {
+                old.mouseLeaveBounds(this.children[0]);
+            }
+        }
+    });
+    mouseOverBoundsNew.forEach(newMorph => {
+        if (!contains(this.mouseOverBounds, newMorph)) {
+            if (newMorph.mouseEnterBounds) {
+                newMorph.mouseEnterBounds(this.children[0]);
+            }
+        }
+    });
+
     this.mouseOverList.forEach(old => {
         if (!contains(mouseOverNew, old)) {
             if (old.mouseLeave) {
                 old.mouseLeave();
             }
             if (old.mouseLeaveDragging && this.mouseButton) {
-                old.mouseLeaveDragging();
+                old.mouseLeaveDragging(this.children[0]);
             }
         }
     });
@@ -11433,7 +11687,7 @@ HandMorph.prototype.processMouseMove = function (event) {
                 newMorph.mouseEnter();
             }
             if (newMorph.mouseEnterDragging && this.mouseButton) {
-                newMorph.mouseEnterDragging();
+                newMorph.mouseEnterDragging(this.children[0]);
             }
         }
 
@@ -11454,6 +11708,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
     });
     this.mouseOverList = mouseOverNew;
+    this.mouseOverBounds = mouseOverBoundsNew;
 };
 
 HandMorph.prototype.processMouseScroll = function (event) {
@@ -11483,6 +11738,9 @@ HandMorph.prototype.processMouseScroll = function (event) {
         droppedSVG
         droppedAudio
         droppedText
+
+        beginBulkDrop
+        endBulkDrop
 */
 
 HandMorph.prototype.processDrop = function (event) {
@@ -11491,16 +11749,25 @@ HandMorph.prototype.processDrop = function (event) {
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
 
-        droppedImage(canvas, name)
+        droppedImage(canvas, name, embeddedData)
         droppedSVG(image, name)
         droppedAudio(audio, name)
         droppedText(text, name, type)
 
-    events to interested Morphs at the mouse pointer
+    events to interested Morphs at the mouse pointer.
+
+    In case multiple files are dropped simulateneously also displatch
+    the events
+
+        beginBulkDrop()
+        endBulkDrop()
+
+    to Morphs interested in bracketing the bulk operation
 */
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        fileCount,
         url = event.dataTransfer ?
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
@@ -11514,11 +11781,15 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readSVG(aFile) {
         var pic = new Image(),
-            frd = new FileReader();
-        while (!target.droppedSVG) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedSVG) {
+            trg = trg.parent;
         }
-        pic.onload = () => target.droppedSVG(pic, aFile.name);
+        pic.onload = () => {
+            trg.droppedSVG(pic, aFile.name);
+            bulkDrop();
+        };
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
@@ -11526,15 +11797,39 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readImage(aFile) {
         var pic = new Image(),
-            frd = new FileReader();
-        while (!target.droppedImage) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target,
+            embedTag = MorphicPreferences.pngPayloadMarker;
+
+        while (!trg.droppedImage) {
+            trg = trg.parent;
         }
+                
         pic.onload = () => {
-            canvas = newCanvas(new Point(pic.width, pic.height), true);
-            canvas.getContext('2d').drawImage(pic, 0, 0);
-            target.droppedImage(canvas, aFile.name);
+            (async () => {
+                // extract embedded data (e.g. blocks)
+                // from the image's metadata if present
+                var buff = new Uint8Array(await aFile?.arrayBuffer()),
+                    strBuff = buff.reduce((acc, b) =>
+                        acc + String.fromCharCode(b), ""),
+                    embedded;
+
+                if (strBuff.includes(embedTag)) {
+                    try {
+                        embedded = decodeURIComponent(
+                            (strBuff)?.split(embedTag)[1]
+                        );
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+                canvas = newCanvas(new Point(pic.width, pic.height), true);
+                canvas.getContext('2d').drawImage(pic, 0, 0);
+                trg.droppedImage(canvas, aFile.name, embedded);
+                bulkDrop();
+            })();
         };
+
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
@@ -11542,37 +11837,62 @@ HandMorph.prototype.processDrop = function (event) {
 
     function readAudio(aFile) {
         var snd = new Audio(),
-            frd = new FileReader();
-        while (!target.droppedAudio) {
-            target = target.parent;
+            frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedAudio) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
             snd.src = e.target.result;
-            target.droppedAudio(snd, aFile.name);
+            trg.droppedAudio(snd, aFile.name);
+            bulkDrop();
         };
         frd.readAsDataURL(aFile);
     }
 
     function readText(aFile) {
-        var frd = new FileReader();
-        while (!target.droppedText) {
-            target = target.parent;
+        var frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedText) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
-            target.droppedText(e.target.result, aFile.name, aFile.type);
+            trg.droppedText(e.target.result, aFile.name, aFile.type);
+            bulkDrop();
         };
         frd.readAsText(aFile);
     }
 
     function readBinary(aFile) {
-        var frd = new FileReader();
-        while (!target.droppedBinary) {
-            target = target.parent;
+        var frd = new FileReader(),
+            trg = target;
+        while (!trg.droppedBinary) {
+            trg = trg.parent;
         }
         frd.onloadend = (e) => {
-            target.droppedBinary(e.target.result, aFile.name);
+            trg.droppedBinary(e.target.result, aFile.name);
+            bulkDrop();
         };
         frd.readAsArrayBuffer(aFile);
+    }
+
+    function beginBulkDrop() {
+        var trg = target;
+        while (!trg.beginBulkDrop) {
+            trg = trg.parent;
+        }
+        trg.beginBulkDrop();
+    }
+
+    function bulkDrop() {
+        var trg = target;
+            fileCount -= 1;
+        if (files.length > 1 && fileCount === 0) {
+            while (!trg.endBulkDrop) {
+                trg = trg.parent;
+            }
+            trg.endBulkDrop();
+        }
     }
 
     function readURL(url, callback) {
@@ -11608,6 +11928,10 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     if (files.length > 0) {
+        fileCount = files.length;
+        if (fileCount > 1) {
+            beginBulkDrop();
+        }
         for (i = 0; i < files.length; i += 1) {
             file = files[i];
             suffix = file.name.slice(
@@ -11757,6 +12081,10 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.activeMenu = null;
     this.activeHandle = null;
 
+    if (!fillPage && aCanvas.isRetinaEnabled) {
+        this.initRetina();
+    }
+
     this.initKeyboardHandler();
     this.resetKeyboardHandler();
     this.initEventListeners();
@@ -11885,6 +12213,17 @@ WorldMorph.prototype.fillPage = function () {
     });
 };
 
+WorldMorph.prototype.initRetina = function () {
+    var canvasHeight = this.worldCanvas.getBoundingClientRect().height,
+        canvasWidth = this.worldCanvas.getBoundingClientRect().width;
+    this.worldCanvas.style.width = canvasWidth + 'px';
+    this.worldCanvas.width = canvasWidth;
+    this.setWidth(canvasWidth);
+    this.worldCanvas.style.height = canvasHeight + 'px';
+    this.worldCanvas.height = canvasHeight;
+    this.setHeight(canvasHeight);
+};
+
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
@@ -11909,12 +12248,16 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd = document.createElement('textarea');
     kbd.setAttribute('id', 'morphic_keyboard');
     kbd.setAttribute('style', 'caret-color:transparent;');
+    kbd.style.position = 'absolute';
+    kbd.style.overflow = "hidden";
+    kbd.style.border = 'none';
+    kbd.style.resize = 'none';
+    kbd.wrap = "off";
     kbd.world = this;
     kbd.style.zIndex = -1;
-    kbd.style.position = 'absolute';
-    kbd.wrap = "off";
-    kbd.style.overflow = "hidden";
     kbd.autofocus = true;
+    kbd.style.width = '0px';
+    kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;
 
@@ -11942,7 +12285,7 @@ WorldMorph.prototype.initKeyboardHandler = function () {
             }
             // suppress cmd-d/f/i/p/s override
             if ((event.ctrlKey || event.metaKey) &&
-                    'dfips'.includes(event.key)) {
+                    'dfiops'.includes(event.key)) {
                 event.preventDefault();
             }
         },
@@ -12107,6 +12450,7 @@ WorldMorph.prototype.initEventListeners = function () {
     window.addEventListener(
         "drop",
         event => {
+            this.hand.processMouseMove(event);
             this.hand.processDrop(event);
             event.preventDefault();
         },
@@ -12148,13 +12492,17 @@ WorldMorph.prototype.wantsDropOf = function () {
     return this.acceptsDrops;
 };
 
-WorldMorph.prototype.droppedImage = function () {
-    return null;
-};
+WorldMorph.prototype.droppedImage = nop;
 
-WorldMorph.prototype.droppedSVG = function () {
-    return null;
-};
+WorldMorph.prototype.droppedSVG = nop;
+
+WorldMorph.prototype.droppedAudio = nop;
+
+WorldMorph.prototype.droppedText = nop;
+
+WorldMorph.prototype.beginBulkDrop = nop;
+
+WorldMorph.prototype.endBulkDrop = nop;
 
 // WorldMorph text field tabbing:
 
@@ -12492,6 +12840,7 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     this.cursor = new CursorMorph(aStringOrTextMorph, this.keyboardHandler);
     this.keyboardFocus = this.cursor;
     aStringOrTextMorph.parent.add(this.cursor);
+    this.cursor.rerender();
     if (MorphicPreferences.useSliderForInput) {
         if (!aStringOrTextMorph.parentThatIsA(MenuMorph)) {
             this.slide(aStringOrTextMorph);
@@ -12534,6 +12883,7 @@ WorldMorph.prototype.slide = function (aStringOrTextMorph) {
     slider.action = (num) => {
         aStringOrTextMorph.changed();
         aStringOrTextMorph.text = Math.round(num).toString();
+        aStringOrTextMorph.fixLayout();
         aStringOrTextMorph.rerender();
         aStringOrTextMorph.escalateEvent(
             'reactToSliderEdit',

@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2020-July-13';
+modules.symbols = '2021-March-03';
 
 var SymbolMorph;
 
@@ -70,6 +70,7 @@ SymbolMorph.prototype.names = [
     'pointRight',
     'stepForward',
     'gears',
+    'gearPartial',
     'gearBig',
     'file',
     'fullScreen',
@@ -142,7 +143,9 @@ SymbolMorph.prototype.names = [
     'globeBig',
     'list',
     'flipVertical',
-    'flipHorizontal'
+    'flipHorizontal',
+    'trash',
+    'trashFull'
 ];
 
 // SymbolMorph instance creation:
@@ -194,6 +197,13 @@ SymbolMorph.prototype.setLabelColor = function (
     this.setColor(textColor);
 };
 
+// SymbolMorph dynamic coloring:
+
+SymbolMorph.prototype.getShadowRenderColor = function () {
+    // answer the shadow rendering color, can be overridden for my children
+    return this.shadowColor;
+};
+
 // SymbolMorph layout:
 
 SymbolMorph.prototype.setExtent = function (aPoint) {
@@ -221,12 +231,12 @@ SymbolMorph.prototype.render = function (ctx) {
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);
-        this.renderShape(ctx, this.shadowColor);
+        this.renderShape(ctx, this.getShadowRenderColor());
         ctx.restore();
     }
     ctx.save();
     ctx.translate(x, y);
-    this.renderShape(ctx, this.color);
+    this.renderShape(ctx, this.getRenderColor());
     ctx.restore();
 };
 
@@ -247,6 +257,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'gearBig':
         this.renderSymbolGearBig(ctx, aColor);
+        break;
+    case 'gearPartial':
+        this.renderSymbolGearPartial(ctx, aColor);
         break;
     case 'file':
         this.renderSymbolFile(ctx, aColor);
@@ -464,6 +477,12 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'flipHorizontal':
         this.renderSymbolFlipHorizontal(ctx, aColor);
         break;
+    case 'trash':
+        this.renderSymbolTrash(ctx, aColor);
+        break;
+    case 'trashFull':
+        this.renderSymbolTrashFull(ctx, aColor);
+        break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
@@ -639,6 +658,55 @@ SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
     // draw the holes in the middle
     ctx.arc(r, r, r * 0.6, radians(0), radians(360));
     ctx.arc(r, r, r * 0.2, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
+    // draw gears
+    var w = this.symbolWidth(),
+        r = w * 0.75,
+        spikes = 8,
+        off = 8,
+        shift = 10,
+        angle, turn, i;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    turn = angle * 0.5;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle + turn),
+            radians(i * angle + off + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.7,
+            radians(i * angle - shift + angle * 0.5 + turn),
+            radians(i * angle + shift + angle * 0.5 + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off + turn),
+            radians((i + 1) * angle + turn)
+        );
+    }
+    ctx.lineTo(w, r);
+
+    // draw the hole in the middle
+    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
 
     // fill
     ctx.clip('evenodd');
@@ -2198,7 +2266,7 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
-    };
+};
     
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
     ctx.translate(0, this.size);
@@ -2206,6 +2274,114 @@ SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
     this.renderSymbolFlipHorizontal(ctx, color);
 };
 
+SymbolMorph.prototype.renderSymbolTrash = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 4);
+        ctx.arc(x, step * 4, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 4);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 2.5);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 2.5);
+    ctx.lineTo(step, step * 2.5);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // the lid
+    ctx.lineWidth = step;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = step;
+    ctx.beginPath();
+    ctx.moveTo(step / 2, step * 1.5);
+    ctx.lineTo(step * 9.5, step * 1.5);
+    ctx.stroke();
+
+    // the handle on the lid
+    ctx.lineWidth = step / 2;
+    ctx.beginPath();
+    ctx.moveTo(step * 3, step * 1.5);
+    ctx.lineTo(step * 4, step * 0.25);
+    ctx.lineTo(step * 6, step * 0.25);
+    ctx.lineTo(step * 7, step * 1.5);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolTrashFull = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 5.5);
+        ctx.arc(x, step * 5.5, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 5.5);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 4);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 4);
+    ctx.lineTo(step, step * 4);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // document
+    ctx.beginPath();
+    ctx.moveTo(step * 2, 0);
+    ctx.lineTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 8, step * 3.5);
+    ctx.lineTo(step * 2, step * 3.5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = color.darker(25).toString();
+    ctx.beginPath();
+    ctx.moveTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 6, step * 2);
+    ctx.closePath();
+    ctx.fill();
+};
 
 /*
 // register examples with the World demo menu

@@ -7,9 +7,9 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2020 by Jens Mönig
+    Copyright (C) 2010-2022 by Jens Mönig
 
-    This documentation last changed: June 9, 2020
+    This documentation last changed: August 03, 2022
 
     This file is part of Snap!.
 
@@ -303,7 +303,7 @@
     -------------------
     If you wish to create a web page with more than one world, make
     sure to prevent each world from auto-filling the whole page and
-    include    it in the main loop. It's also a good idea to give each
+    include it in the main loop. It's also a good idea to give each
     world its own tabindex:
 
     example html file:
@@ -472,6 +472,8 @@
         mouseLeave
         mouseEnterDragging
         mouseLeaveDragging
+        mouseEnterBounds
+        mouseLeaveBounds
         mouseMove
         mouseScroll
 
@@ -480,7 +482,7 @@
 
         MyMorph.prototype.mouseMove = function(pos) {};
 
-    All of these methods have as optional parameter a Point object
+    Most of these methods have as optional parameter a Point object
     indicating the current position of the Hand inside the World's
     coordinate system. The
 
@@ -489,6 +491,16 @@
     event method has an additional optional parameter indicating the
     currently pressed mouse button, which is either 'left' or 'right'.
     You can use this to let users interact with 3D environments.
+
+    The
+
+        mouseEnterDragging(morph)
+        mouseLeaveDragging(morph)
+        mouseEnterBounds(morph)
+        mouseLeaveBounds(morph)
+
+    event methods have as optional parameter the morph currently dragged by
+    the Hand, if any.
 
     Events may be "bubbled" up a morph's owner chain by calling
 
@@ -631,7 +643,7 @@
 
     Drops of image elements from outside the world canvas are dispatched as
 
-        droppedImage(aCanvas, name)
+        droppedImage(aCanvas, name, embeddedData)
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want your Morph
@@ -652,8 +664,22 @@
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
 
-    The same applies to drops of audio or text files from outside the world
-    canvas.
+    Note that PNG images provide for embedded text comments, which can be used
+    to include code or arbitrary data such as a CSV, JSON or XML file inside
+    the image. Such a payload has to be identified by an agreed-upon marker.
+    The default tag is stored in MorphicPreferences and can be overriden by
+    apps wishing to make use of this feature. If such an embedded text-payload
+    is found inside a PNG it is passed as the optional third "embeddedData"
+    parameter to the "droppedImage()" event. embedded text only applies to PNGs.
+    You can embed a string into the PNG metadata of a PNG by  calling
+
+        embedMetadataPNG(aCanvas, aString)
+
+    with a raster image represented by a canvas and a string that is to be
+    embedded into the PNG's metadata.
+
+    The same event mechanism applies to drops of audio or text files from
+    outside the world canvas.
 
     Those are dispatched as
 
@@ -666,6 +692,15 @@
     is dispatched as an ArrayBuffer to interested Morphs:
 
         droppedBinary(anArrayBuffer, name)
+
+    In case multiple files are dropped simulateneously the events
+
+        beginBulkDrop()
+        endBulkDrop()
+
+    are dispatched to to Morphs interested in bracketing the bulk operation,
+    and the endBulkDrop() event is only signalled after the contents last file
+    has been asynchronously made available.
 
 
     (e) keyboard events
@@ -1256,10 +1291,12 @@
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
     Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Dariusz Dorożalski and Jesus Villalobos contributed embedding blocks
+    into image metadata.
     Bernat Romagosa contributed to text editing and to the core design.
     Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
     Ken Kahn contributed to Chinese keboard entry and Android support.
-    Brian Broll contributed clickable URLs in text elements.
+    Brian Broll contributed clickable URLs in text elements and many bugfixes.
 
     - Jens Mönig

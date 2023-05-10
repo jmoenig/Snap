@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2020-May-17';
+modules.cloud = '2023-April-12';
 
 // Global stuff
 
@@ -49,6 +49,12 @@ function Cloud() {
 Cloud.prototype.init = function () {
     this.apiBasePath = '/api/v1';
     this.url = this.determineCloudDomain() + this.apiBasePath;
+    this.username = null;
+    this.disabled = false;
+};
+
+Cloud.prototype.disable = function () {
+    this.disabled = true;
     this.username = null;
 };
 
@@ -163,6 +169,8 @@ Cloud.prototype.request = function (
     wantsRawResponse,
     body) {
 
+    if (this.disabled) { return; }
+
     var request = new XMLHttpRequest(),
         myself = this,
         fullPath = this.url +
@@ -214,7 +222,7 @@ Cloud.prototype.request = function (
                 }
             }
         };
-        request.send(body);
+        request.send(typeof body === 'object' ? JSON.stringify(body) : body);
     } catch (err) {
         onError.call(this, err.toString(), 'Cloud Error');
     }
@@ -344,7 +352,7 @@ Cloud.prototype.login = function (
 };
 
 Cloud.prototype.signup = function (
-	username,
+    username,
     password,
     passwordRepeat,
     email,
@@ -353,7 +361,7 @@ Cloud.prototype.signup = function (
 ) {
     this.request(
         'POST',
-        '/users/' + encodeURIComponent(username) + '?' + this.encodeDict({
+        '/users/' + encodeURIComponent(username.trim()) + '?' + this.encodeDict({
             email: email,
             password: hex_sha512(password),
             password_repeat: hex_sha512(passwordRepeat)
@@ -423,7 +431,7 @@ Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
                     onError,
                     'Project could not be saved',
                     false,
-                    JSON.stringify(body) // POST body
+                    body // POST body
                 );
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
@@ -711,7 +719,7 @@ Cloud.prototype.updateNotes = function (
         onError,
         'Could not update project notes',
         false, // wants raw response
-        JSON.stringify({ notes: notes })
+        { notes: notes }
     );
 };
 
@@ -730,7 +738,7 @@ Cloud.prototype.updateProjectName = function (
         onError,
         'Could not update project name',
         false, // wants raw response
-        JSON.stringify({ projectname: newName })
+        { projectname: newName }
     );
 };
 
@@ -837,7 +845,7 @@ Cloud.prototype.updateCollectionDescription = function (
         onError,
         'Could not update collection description',
         false, // wants raw response
-        JSON.stringify({ description: description })
+        { description: description }
     );
 };
 
@@ -857,7 +865,7 @@ Cloud.prototype.updateCollectionName = function (
         onError,
         'Could not update collection name',
         false, // wants raw response
-        JSON.stringify({ name: newName })
+        { name: newName }
     );
 };
 
@@ -946,10 +954,10 @@ Cloud.prototype.addProjectToCollection = function (
         onError,
         'Could not add project to collection',
         false, // wants raw response
-        JSON.stringify({
+        {
             username: projectUsername,
             projectname: projectName
-        })
+        }
     );
 };
 
@@ -1083,9 +1091,7 @@ Cloud.prototype.addEditorToCollection = function (
         onError,
         'Could not add editor to collection',
         false, // wants raw response
-        JSON.stringify({
-            editor_username: editorUsername,
-        })
+        { editor_username: editorUsername }
     );
 };
 
@@ -1116,7 +1122,7 @@ Cloud.prototype.removeEditorFromCollection = function (
 
 Cloud.prototype.showProjectPath = function (username, projectname) {
     return '/project?' + this.encodeDict({
-        user: username,
-        project: projectname
+        username: username,
+        projectname: projectname
     });
 };

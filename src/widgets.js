@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2020 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -79,13 +79,15 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO,
-StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, BLACK, WHITE,
-HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
-ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph, MenuItemMorph, Note*/
+/*global TriggerMorph, modules, Color, Point, BoxMorph, radians, ZERO, Note,
+StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, ColorPaletteMorph,
+HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph, isNil,
+ArrowMorph, MenuMorph, isString, SliderMorph, MorphicPreferences, BLACK, WHITE,
+ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
-modules.widgets = '2020-July-01';
+/*jshint esversion: 6*/
+
+modules.widgets = '2023-March-05';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -164,6 +166,7 @@ PushButtonMorph.prototype.init = function (
     this.labelMinExtent = ZERO;
     this.hint = hint || null;
     this.isDisabled = false;
+    this.hideable = true; // used for custom extensions
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -728,7 +731,7 @@ ToggleButtonMorph.prototype.render = function (ctx) {
         // note: don't invert the 3D-ish edges for 'pressed' state, because
         // it will stay that way, and should not look inverted (or should it?)
         this.drawOutline(ctx);
-        this.drawBackground(ctx, this.pressColor);
+        this.drawBackground(ctx, this.getPressRenderColor());
         this.drawEdges(
             ctx,
             this.pressColor,
@@ -746,6 +749,11 @@ ToggleButtonMorph.prototype.render = function (ctx) {
             this.color.darker(this.contrast)
         );
     }
+};
+
+ToggleButtonMorph.prototype.getPressRenderColor = function () {
+    // can be overridden by my children
+    return this.pressColor;
 };
 
 ToggleButtonMorph.prototype.drawEdges = function (
@@ -1189,15 +1197,22 @@ ToggleMorph.prototype.createLabel = function () {
     if (this.toggleElement === null) {
         if (this.element) {
             if (this.element instanceof Morph) {
-                this.toggleElement = new ToggleElementMorph(
-                    this.target,
-                    this.action,
-                    this.element,
-                    this.query,
-                    this.environment,
-                    this.hint,
-                    this.builder
-                );
+                if (this.element.isTemplate) {
+                    this.toggleElement = this.element;
+                    if (!this.element.mouseDownLeft) {
+                        this.element.mouseDownLeft = nop;
+                    }
+                } else {
+                    this.toggleElement = new ToggleElementMorph(
+                        this.target,
+                        this.action,
+                        this.element,
+                        this.query,
+                        this.environment,
+                        this.hint,
+                        this.builder
+                    );
+                }
             } else if (this.element instanceof HTMLCanvasElement) {
                 this.toggleElement = new Morph();
                 this.toggleElement.isCachingImage = true;
@@ -1239,7 +1254,8 @@ ToggleMorph.prototype.refresh = function () {
     } else {
         this.tick.hide();
     }
-    if (this.toggleElement && this.toggleElement.refresh) {
+    if (this.toggleElement && this.toggleElement.refresh &&
+            !this.toggleElement.isToggleLabel) {
         this.toggleElement.refresh();
     }
 };
@@ -1346,7 +1362,15 @@ ToggleElementMorph.prototype.init = function (
 // ToggleElementMorph drawing:
 
 ToggleElementMorph.prototype.render = function (ctx) {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+    var shading = !MorphicPreferences.isFlat || this.is3D,
+        shadow = () => {
+            if (shading) {
+                this.element.addShadow(
+                    this.shadowOffset,
+                    this.userState === 'normal' ? 0 : this.shadowAlpha
+                );
+            }
+        };
 
     this.color = this.element.color;
     this.element.removeShadow();
@@ -1361,13 +1385,22 @@ ToggleElementMorph.prototype.render = function (ctx) {
             this.element[this.builder](this.contrast);
         }
     }
-    if (shading) {
-        this.element.addShadow(
-            this.shadowOffset,
-            this.userState === 'normal' ? 0 : this.shadowAlpha
+    if (this.element.doWithAlpha) {
+        ctx.drawImage(
+            this.element.doWithAlpha(
+                1,
+                () => {
+                    shadow();
+                    return this.element.fullImage();
+                }
+            ),
+            0,
+            0
         );
+    } else {
+        shadow();
+        ctx.drawImage(this.element.fullImage(), 0, 0);
     }
-    ctx.drawImage(this.element.fullImage(), 0, 0);
 
     // reset element
     this.element.removeShadow();
@@ -1498,6 +1531,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     this.action = action || null;
     this.environment = environment || null;
     this.key = null; // keep track of my purpose to prevent mulitple instances
+    this.nag = false; // enable nag boxes that cannot be closed by the user
 
     this.labelString = null;
     this.label = null;
@@ -1552,6 +1586,7 @@ DialogBoxMorph.prototype.inform = function (
     this.addButton('ok', 'OK');
     this.fixLayout();
     this.popUp(world);
+    return this;
 };
 
 DialogBoxMorph.prototype.askYesNo = function (
@@ -1584,7 +1619,6 @@ DialogBoxMorph.prototype.askYesNo = function (
     this.addButton('ok', 'Yes');
     this.addButton('cancel', 'No');
     this.fixLayout();
-    this.fixLayout();
     this.popUp(world);
 };
 
@@ -1598,10 +1632,12 @@ DialogBoxMorph.prototype.prompt = function (
     isNumeric, // optional
     sliderMin, // optional for numeric sliders
     sliderMax, // optional for numeric sliders
-    sliderAction // optional single-arg function for numeric slider
+    sliderAction, // optional single-arg function for numeric slider
+    decimals = 2 // optional number of decimal digits
 ) {
     var sld,
         head,
+        precision = Math.pow(10, decimals),
         txt = new InputFieldMorph(
             defaultString,
             isNumeric || false, // numeric?
@@ -1617,10 +1653,10 @@ DialogBoxMorph.prototype.prompt = function (
         }
         if (!isNil(sliderMin) && !isNil(sliderMax)) {
             sld = new SliderMorph(
-                sliderMin * 100,
-                sliderMax * 100,
-                parseFloat(defaultString) * 100,
-                (sliderMax - sliderMin) / 10 * 100,
+                sliderMin * precision,
+                sliderMax * precision,
+                parseFloat(defaultString) * precision,
+                (sliderMax - sliderMin) / 10 * precision, // knob size
                 'horizontal'
             );
             sld.alpha = 1;
@@ -1629,9 +1665,9 @@ DialogBoxMorph.prototype.prompt = function (
             sld.setWidth(txt.width());
             sld.action = num => {
                 if (sliderAction) {
-                    sliderAction(num / 100);
+                    sliderAction(num / precision);
                 }
-                txt.setContents(num / 100);
+                txt.setContents(num / precision);
                 txt.edit();
             };
             if (!head) {
@@ -1650,7 +1686,7 @@ DialogBoxMorph.prototype.prompt = function (
 
     this.reactToChoice = function (inp) {
         if (sld) {
-            sld.value = inp * 100;
+            sld.value = inp * precision;
             sld.fixLayout();
             sld.rerender();
         }
@@ -1659,11 +1695,11 @@ DialogBoxMorph.prototype.prompt = function (
         }
     };
 
-    txt.reactToKeystroke = function () {
+    txt.reactToInput = function () {
         var inp = txt.getValue();
         if (sld) {
             inp = Math.max(inp, sliderMin);
-            sld.value = inp * 100;
+            sld.value = inp * precision;
             sld.fixLayout();
             sld.rerender();
         }
@@ -1859,6 +1895,248 @@ DialogBoxMorph.prototype.promptVector = function (
 
     if (!this.key) {
         this.key = 'vector' + title;
+    }
+
+    this.popUp(world);
+};
+
+DialogBoxMorph.prototype.promptRGB = function (
+    title,
+    color,
+    world,
+    pic,
+    msg
+) {
+    var clr = new AlignmentMorph('row', 4),
+        iw = this.fontSize * 4,
+        rInp = new InputFieldMorph(color.r.toString(), true),
+        gInp = new InputFieldMorph(color.g.toString(), true),
+        bInp = new InputFieldMorph(color.b.toString(), true),
+        rCol = new AlignmentMorph('column', 2),
+        gCol = new AlignmentMorph('column', 2),
+        bCol = new AlignmentMorph('column', 2),
+        inp = new AlignmentMorph('column', 2),
+        bdy = new AlignmentMorph('column', this.padding);
+
+    function labelText(string) {
+        return new TextMorph(
+            localize(string),
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE // shadowColor
+        );
+    }
+
+    function constrain(num) {
+        return Math.max(0, Math.min(num, 255));
+    }
+
+    rInp.contents().minWidth = iw;
+    rInp.setWidth(iw);
+    gInp.contents().minWidth = iw;
+    gInp.setWidth(iw);
+    bInp.contents().minWidth = iw;
+    bInp.setWidth(iw);
+
+    inp.alignment = 'left';
+    inp.setColor(this.color);
+    bdy.setColor(this.color);
+    rCol.alignment = 'left';
+    rCol.setColor(this.color);
+    gCol.alignment = 'left';
+    gCol.setColor(this.color);
+    bCol.alignment = 'left';
+    bCol.setColor(this.color);
+
+    rCol.add(labelText('red'));
+    rCol.add(rInp);
+    gCol.add(labelText('green'));
+    gCol.add(gInp);
+    bCol.add(labelText('blue'));
+    bCol.add(bInp);
+    clr.add(rCol);
+    clr.add(gCol);
+    clr.add(bCol);
+    inp.add(clr);
+
+    if (msg) {
+        bdy.add(labelText(msg));
+    }
+
+    bdy.add(inp);
+
+    clr.fixLayout();
+    rCol.fixLayout();
+    gCol.fixLayout();
+    bCol.fixLayout();
+    inp.fixLayout();
+    bdy.fixLayout();
+
+    this.labelString = title;
+    this.createLabel();
+    if (pic) {this.setPicture(pic); }
+
+    this.addBody(bdy);
+
+    this.addButton('ok', 'OK');
+
+    this.addButton('cancel', 'Cancel');
+    this.fixLayout();
+
+    this.edit = function () {
+        rInp.edit();
+    };
+
+    this.getInput = function () {
+        return new Color(
+            constrain(rInp.getValue()),
+            constrain(gInp.getValue()),
+            constrain(bInp.getValue())
+        );
+    };
+
+    if (!this.key) {
+        this.key = 'RGB' + title;
+    }
+
+    this.popUp(world);
+};
+
+DialogBoxMorph.prototype.promptCategory = function (
+    title,
+    name,
+    color,
+    world,
+    pic,
+    msg
+) {
+    var row = new AlignmentMorph('row', 4),
+        field = new InputFieldMorph(name),
+        picker = new BoxMorph(2, 1),
+        inp = new AlignmentMorph('column', 2),
+        bdy = new AlignmentMorph('column', this.padding),
+        side;
+
+    function labelText(string) {
+        return new TextMorph(
+            localize(string),
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE // shadowColor
+        );
+    }
+
+    field.setWidth(160);
+    side = field.height() * 0.8;
+    picker.setExtent(new Point(side, side));
+    picker.setColor(color);
+
+    picker.mouseClickLeft = () => {
+        var hand = world.hand,
+            posInDocument = getDocumentPositionOf(world.worldCanvas),
+            mouseMoveBak = hand.processMouseMove,
+            mouseDownBak = hand.processMouseDown,
+            mouseUpBak = hand.processMouseUp,
+            pal = new ColorPaletteMorph(null, new Point(160, 100));
+
+        world.add(pal);
+        pal.setPosition(picker.topRight().add(new Point(this.edge,0)));
+
+        hand.processMouseMove = (event) => {
+            var clr = world.getGlobalPixelColor(hand.position());
+            hand.setPosition(new Point(
+                event.pageX - posInDocument.x,
+                event.pageY - posInDocument.y
+            ));
+            if (!clr.a) {
+                // ignore transparent,
+                // needed for retina-display support
+                return;
+            }
+            picker.setColor(clr);
+        };
+
+        hand.processMouseDown = nop;
+
+        hand.processMouseUp = () => {
+            pal.destroy();
+            hand.processMouseMove = mouseMoveBak;
+            hand.processMouseDown = mouseDownBak;
+            hand.processMouseUp = mouseUpBak;
+        };
+    };
+
+    picker.mouseClickRight = () => {
+        new DialogBoxMorph(
+            this,
+            (clr) => picker.setColor(clr),
+            this
+        ).promptRGB(
+            "Category color",
+            picker.color,
+            this.world(),
+            null, // pic
+            null // msg
+        );
+    };
+
+    inp.alignment = 'left';
+    inp.setColor(this.color);
+    bdy.setColor(this.color);
+    row.setColor(this.color);
+
+    row.add(field);
+    row.add(picker);
+    inp.add(row);
+
+    if (msg) {
+        bdy.add(labelText(msg));
+    }
+
+    bdy.add(inp);
+
+    row.fixLayout();
+    field.fixLayout();
+    picker.fixLayout();
+    inp.fixLayout();
+    bdy.fixLayout();
+
+    this.labelString = title;
+    this.createLabel();
+    if (pic) {this.setPicture(pic); }
+
+    this.addBody(bdy);
+
+    this.addButton('ok', 'OK');
+
+    this.addButton('cancel', 'Cancel');
+    this.fixLayout();
+
+    this.edit = function () {
+        field.edit();
+    };
+
+    this.getInput = function () {
+        return {
+            name: field.getValue(),
+            color: picker.color.copy()
+        };
+    };
+
+    if (!this.key) {
+        this.key = 'category' + title;
     }
 
     this.popUp(world);
@@ -2877,7 +3155,11 @@ InputFieldMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
-    var contents = new StringFieldMorph(text || ''),
+    var contents = new StringFieldMorph(
+            text || '',
+            null, null, null, null, null,
+            isNumeric || false
+        ),
         arrow = new ArrowMorph(
             'down',
             0,
@@ -2893,7 +3175,6 @@ InputFieldMorph.prototype.init = function (
     contents.fixLayout();
 
     this.oldContentsExtent = contents.extent();
-    this.isNumeric = isNumeric || false;
 
     InputFieldMorph.uber.init.call(this);
     this.color = WHITE;
@@ -3074,7 +3355,7 @@ InputFieldMorph.prototype.getValue = function () {
     var num,
         contents = this.contents();
     if (this.isNumeric) {
-        num = parseFloat(contents.text);
+        num = parseFloat(contents.text.text);
         if (!isNaN(num)) {
             return num;
         }
@@ -3128,9 +3409,11 @@ InputFieldMorph.prototype.drawRectBorder = function (ctx) {
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
 
-    ctx.shadowOffsetY = shift;
-    ctx.shadowBlur = this.edge * 4;
-    ctx.shadowColor = this.cachedClrDark;
+    if (useBlurredShadows) {
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge * 4;
+        ctx.shadowColor = this.cachedClrDark;
+    }
 
     gradient = ctx.createLinearGradient(
         0,
