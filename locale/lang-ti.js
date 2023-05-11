@@ -945,7 +945,7 @@ SnapTranslator.dict.ti = {
 
     // project menu
     'Project notes...':
-        'ምልክታታት ፕሮጀክት...',
+        'መግለጺታት ፕሮጀክት...',
     'New':
         'ሓድሽ',
     'Open...':
@@ -1658,49 +1658,49 @@ SnapTranslator.dict.ti = {
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'መግለጺታት ፕሮጀክት',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'ሓድሽ ፕሮጀክት',
     'Unsaved Changes!':
-        'Ungespeicherte Änderungen!',
+        'ዘይተዓቀበ ለውጥታት!',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'ነዛ ፕሮጀክት ብሓዳሽ ፕሮጀክት ተክኣያ?',
     'Backup failed.\nThis cannot be undone, proceed anyway?':
-        'Backup nicht möglich.\nTrotzdem fortfahren?',
+        'መሐለውታ ምድላው ኣይሰርሐን።\n ብዘየገድስ ቀጽል፧ ',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'ፕሮጀክት ዓቅብ፡ ብስም...',
     'Save Project':
-        'Projekt sichern',
+        'ፕሮጀክት ዓቅብ',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'ሕጡባት ናብ ደገ ልኣኽ',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'ሕጡባት ካብ ደገ ጸዓን',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'ኣብ\'ዚ ፕሮጀክት ገና\nሓፈሻውያን ሕጡባት የለውን',
     'select':
-        'ausw\u00e4hlen',
+        'ምረጽ',
     'none':
-        'nichts',
+        'ዋላ ሓደ',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'ንኹለን ትንኩሊባት',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'ነዛ ትንኩሊብ ጥራይ',
 
     // variables refactoring
     'rename only\nthis reporter':
-        'nur diesen Block\numbenennen',
+        'ነዚ ሕጡብ ጥራይ\nዳግም ሰይም',
     'rename all...':
-        'alle umbenennen...',
+        'ንኹሎም ዳግም ሰይም...',
     'rename all blocks that\naccess this variable':
-        'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
+        'ኩሎም ነዚ ተቓያያሪ ዝውከሱ\nሕጡባት ዳግም ሰይም',
 
 
     // block dialog
