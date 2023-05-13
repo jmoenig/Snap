@@ -1705,28 +1705,27 @@ SnapTranslator.dict.ti = {
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'ሕጡብ ቀይር',
     'Command':
-        'Befehl',
+        'ትእዛዝ',
     'Reporter':
-        'Funktion',
+        'ተግባር',
     'Predicate':
-        'Pr\u00e4dikat',
+        'ኣረጋጋጺ',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'ሰደቓ-ዕዮ ሕጡብ',
     'Method Editor':
-        'Methodeneditor',
+        'ሰደቓ-ዕዮ ሜላ',
     'Apply':
-        'Anwenden',
+        'ተጠቀም',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'ሕጡብ ደምስስ',
     'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
+        'እዚ ሕጡብ ምስኩሎም ኣብነታቱ\n ብርግጽ ዶ ክድምሰስ፧',
 
     // input dialog
     'Create input name':
