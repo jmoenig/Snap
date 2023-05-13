@@ -1729,45 +1729,45 @@ SnapTranslator.dict.ti = {
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'ኣታዊ ሰይም',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'ስም ኣታዊ ኣርም',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'ዕላመት ኣርም',
     'Title text':
-        'Beschriftung',
+        'ኣርእስቲ',
     'Input name':
-        'Eingabe',
+        'ስም ኣታዊ',
     'Delete':
-        'L\u00f6schen',
+        'ደምስስ',
     'Object':
-        'Objekt',
+        'ውዱዕ',
     'Number':
-        'Zahl',
+        'ኣሃዝ',
     'Text':
-        'Text',
+        'ፊደል',
     'List':
-        'Liste',
+        'ዝርዝር',
     'Any type':
-        'Beliebig',
+        'ኩሉ ዓይነት',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'መንጠቕያ (ሓ/ጌ)',
     'Command\n(inline)':
-        'Befehl',
+        'ትእዛዝ',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'ትእዛዝ\n(ር-ቅርጹ)',
     'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
+        'ኩሉ ዓይነት\n(ዘይተቐመረ)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'መንጠቕያ\n(ዘይተቐመረ)',
     'Single input.':
-        'Einzeleingabe.',
+        'ንጽል ኣታዊ.',
     'Default Value:':
-        'Standardwert:',
+        'ውሁብ ዋጋ:',
     'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
+        'ብዙሓት ኣተውቲ (ከም ዝርዝር)',
     'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
+        'ውሽጣውያን ተቐያየርቲ ኣብ ደገ (ንጸዋዒ) ከም ዝራኣዩ ግበር',
 
     // About Snap
     'About Snap':
