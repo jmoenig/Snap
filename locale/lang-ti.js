@@ -1771,25 +1771,25 @@ SnapTranslator.dict.ti = {
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'ብዛዕባ ስናፕ',
     'Back...':
-        'Zur\u00fcck...',
+        'ተመለስ...',
     'License...':
-        'Lizenz...',
+        'ፍቓድ...',
     'Modules...':
-        'Komponenten...',
+        'ክፍለ-ኣካላት...',
     'Credits...':
-        'Mitwirkende...',
+        'ኣበርከቲ...',
     'Translators...':
-        '\u00dcbersetzer',
+        'ተርጐምቲ',
     'License':
-        'Lizenz',
+        'ፍቓድ',
     'current module versions:':
-        'Komponenten-Versionen',
+        'ህሉው ሕታማት ክፍለ-ኣካላት',
     'Contributors':
-        'Mitwirkende',
+        'ኣበርከቲ',
     'Translations':
-        '\u00dcbersetzungen',
+        'ትርጉማት',
 
     // variable watchers
     'normal':
