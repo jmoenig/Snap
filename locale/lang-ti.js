@@ -532,7 +532,7 @@ SnapTranslator.dict.ti = {
     'to':
         'ናብ',
     'with data':
-        'ምስ ሰነድ',
+        'ምስ ሓበሬታ',
     'Message name':
         'ስም መልእኽቲ',
     'message':
@@ -540,7 +540,7 @@ SnapTranslator.dict.ti = {
     'any message':
         'ዝኾነ መልእኽቲ',
     'data':
-        'ሰነድ',
+        'ሓበሬታ',
     'wait %n secs':
         '%n ካልኢት ተጸበ',
     'wait until %b':
@@ -1793,37 +1793,37 @@ SnapTranslator.dict.ti = {
 
     // variable watchers
     'normal':
-        'normal',
+        'ልሙድ',
     'large':
-        'gro\u00df',
+        'ዓቢ',
     'slider':
-        'Regler',
+        'ኣንሻታቲ',
     'slider min...':
-        'Minimalwert...',
+        'ታሕተዋይ ዋጋ...',
     'slider max...':
-        'Maximalwert...',
+        'ላዕልዋይ ዋጋ...',
     'import...':
-        'Importieren...',
+        'ካብ ደገ ኣእቱ...',
     'raw data...':
-        'Rohdaten...',
+        'ጥረ ሓበሬታ...',
     'import without attempting to\nparse or format data':
-        'Daten unformatiert\nimportieren',
+        'ሓበሬታ ወይ ሰነድ\nብዘይ ምቅይያር ካብ ደገ ኣእቱ',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'ታሕተዋይ ዋጋ ኣንሻታቲ',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'ላዕልዋይ ዋጋ ኣንሻታቲ',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'ንውሓት: ',
 
     // comments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'ኣብዚ መብርሂ ወስኽ',
     'comment pic...':
-        'Kommentarbild',
+        'ስእሊ መብርሂ...',
     'save a picture\nof this comment':
-        'ein Bild dieser\nAnmerkung speichern',
+        'ናይዚ መብርሂ\nስእሊ ዓቅብ',
 
     // drow downs
     // directions
