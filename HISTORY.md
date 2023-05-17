@@ -47,6 +47,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-17
+* blocks, objects, threads: variadic IF, experimental, first pass, under construction
+
 ### 2023-05-10
 * locale: fixed returning the original string when looking up an existing key with a falsy translation in the current translations language dictionary
 

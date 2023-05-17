@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-08';
+modules.blocks = '2023-May-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1254,6 +1254,14 @@ SyntaxElementMorph.prototype.labelParts = {
         min: 2,
         infix: 'identical to',
         collapse: 'all identical'
+    },
+    '%cond': {
+        type: 'multi',
+        slots: ['%b', '%cs'],
+        dflt: [true, null],
+        label: ['else if', ''],
+        tags: 'static widget',
+        group: 2
     }
 };
 
@@ -1847,7 +1855,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 spec,
                 null, null, null, null, null,
                 info.infix,
-                info.collapse
+                info.collapse,
+                info.dflt,
+                info.group
             );
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
@@ -2040,8 +2050,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
 
     // determine lines
     parts.forEach(part => {
-        if ((part instanceof CSlotMorph)
-                || (part.slotSpec === '%cs')) {
+        if ((part instanceof CSlotMorph) ||
+            (part instanceof MultiArgMorph && part.slotSpec.includes('%cs'))
+        ) {
             if (l.length > 0) {
                 lines.push(l);
                 lines.push([part]);
@@ -2124,12 +2135,19 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 part.setPosition(new Point(x, y));
                 lineHeight = part.height();
             } else if (part instanceof MultiArgMorph &&
-                    (part.slotSpec === '%cs')) {
+                    (part.slotSpec.includes('%cs'))
+            ) {
                 if (this.isPredicate) {
                     x += this.corner;
                 }
                 part.setPosition(new Point(x, y));
                 lineHeight = part.height();
+                if (part.slotSpec instanceof Array) {
+                    maxX = Math.max(
+                        maxX,
+                        Math.max(...part.children.map(each => each.right()))
+                    );
+                }
             } else {
                 part.setPosition(new Point(x, y));
                 if (!part.isBlockLabelBreak) {
@@ -2168,6 +2186,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     y += lineHeight;
     if (this.children.some(any => any instanceof CSlotMorph)) {
         bottomCorrection = this.bottomPadding;
+        if (this.inputs()[this.inputs().length - 1] instanceof MultiArgMorph) {
+            bottomCorrection = -this.bottomPadding;
+        }
         if (this instanceof ReporterBlockMorph && !this.isPredicate) {
             bottomCorrection = Math.max(
                 this.bottomPadding,
@@ -2226,7 +2247,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     this.holes = [];
     parts.forEach(part => {
         var adjustMultiWidth = 0;
-        if (part instanceof CSlotMorph || (part.slotSpec === '%cs')) {
+        if (part instanceof CSlotMorph ||
+            (part.slotSpec && part.slotSpec.includes('%cs'))
+        ) {
             if (this.isPredicate) {
                 part.bounds.setWidth(
                     blockWidth -
@@ -2244,8 +2267,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 part.fixLoopLayout();
             }
         }
-        if (part.slotSpec === '%cs') { // a multi-arg
-            part.inputs().forEach(slot =>
+        if (part instanceof MultiArgMorph && part.slotSpec.includes('%cs')) {
+            part.inputs().filter(each =>
+                each instanceof CSlotMorph
+            ).forEach(slot =>
                 slot.bounds.setWidth(
                     part.right() - slot.left() - adjustMultiWidth
                 )
@@ -13270,7 +13295,9 @@ function MultiArgMorph(
     shadowOffset,
     isTransparent,
     infix,
-    collapse
+    collapse,
+    defaults,
+    group
 ) {
     this.init(
         slotSpec,
@@ -13283,7 +13310,9 @@ function MultiArgMorph(
         shadowOffset,
         isTransparent,
         infix,
-        collapse
+        collapse,
+        defaults,
+        group
     );
 }
 
@@ -13298,7 +13327,9 @@ MultiArgMorph.prototype.init = function (
     shadowOffset,
     isTransparent,
     infix,
-    collapse
+    collapse,
+    defaults,
+    group
 ) {
     var label,
         arrows = new FrameMorph(),
@@ -13312,6 +13343,8 @@ MultiArgMorph.prototype.init = function (
         : localize(labelTxt || '');
     this.infix = infix || '';
     this.collapse = collapse || '';
+    this.defaultValue = defaults || null;
+    this.groupInputs = group || 1;
     this.minInputs = min || 0;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
@@ -13516,7 +13549,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
 MultiArgMorph.prototype.fixHolesLayout = function () {
     var pos;
     this.holes = [];
-    if (this.slotSpec === '%cs') {
+    if (this.slotSpec.includes('%cs')) {
         pos = this.position();
         this.inputs().forEach(slot => {
             if (slot instanceof CSlotMorph) {
@@ -13589,13 +13622,15 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
 // MultiArgMorph arity control:
 
 MultiArgMorph.prototype.addInput = function (contents) {
-    var newPart = this.labelPart(this.slotSpecFor(this.inputs().length)),
+    var len = this.inputs().length,
+        newPart = this.labelPart(this.slotSpecFor(len)),
+        value = isNil(contents) ? this.defaultValueFor(len) : contents,
         i, name, idx;
 
     this.addInfix();
     idx = this.children.length - 1;
-    if (!isNil(contents)) {
-        newPart.setContents(contents);
+    if (!isNil(value)) {
+        newPart.setContents(value);
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {
         name = '';
@@ -13636,12 +13671,13 @@ MultiArgMorph.prototype.addInput = function (contents) {
 
 MultiArgMorph.prototype.addInfix = function () {
     var infix,
+        len = this.inputs().length,
         label = this.infix ? localize(this.infix)
         : (this.labelText instanceof Array ?
-            this.labelText[this.inputs().length]
+            this.labelText[len % this.labelText.length]
             : '');
 
-    if (label === '' || !this.inputs().length) {return; }
+    if (label === '' || !len) {return; }
     infix = this.labelPart(label);
     infix.parent = this;
     this.children.splice(this.children.length - 1, 0, infix);
@@ -13664,7 +13700,11 @@ MultiArgMorph.prototype.removeInput = function () {
     if (this.infix !== '' ||
         (this.labelText instanceof Array && this.inputs().length)
     ) {
-        if (this.children.length > 1) {
+        if (this.children.length > 1 &&
+                !(this.labelText instanceof Array &&
+                    this.labelText[this.inputs().length % this.labelText.length]
+                        === '')
+        ) {
             this.removeChild(this.children[this.children.length - 2]);
         }
     }
@@ -13712,8 +13752,14 @@ MultiArgMorph.prototype.is3ArgRingInHOF = function () {
 
 MultiArgMorph.prototype.slotSpecFor = function (index) {
     return this.slotSpec instanceof Array ?
-        this.slotSpec[index]
+        this.slotSpec[index % this.slotSpec.length]
         : this.slotSpec;
+};
+
+MultiArgMorph.prototype.defaultValueFor = function (index) {
+    return this.defaultValue instanceof Array ?
+        this.defaultValue[index % this.defaultValue.length]
+        : this.defaultValue;
 };
 
 // MultiArgMorph events:
@@ -13732,7 +13778,8 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         arrows = target.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
-        repetition = target.world().currentKey === 16 ? 3 : 1,
+        repetition = this.groupInputs *
+            (target.world().currentKey === 16 ? 3 : 1),
         i;
 
     if (rightArrow.bounds.containsPoint(pos)) {

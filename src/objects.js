@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-08';
+modules.objects = '2023-May-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -820,6 +820,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
+        },
+        doVariadicIf: {
+            type: 'command',
+            category: 'control',
+            spec: 'if %b %c %cond'
         },
         doIf: {
             type: 'command',
@@ -2758,6 +2763,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
+        blocks.push(block('doVariadicIf'));
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
@@ -9625,6 +9631,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
+        blocks.push(block('doVariadicIf'));
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
