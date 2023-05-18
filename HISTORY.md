@@ -48,6 +48,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-19
+* objects, threads: replaced IF with variadic version, took out block migration
+
 ### 2023-05-18
 * objects: enhanced migration spec for variadic expansion
 * objects, blocks: renamed new variadic #cond spec into #elseif

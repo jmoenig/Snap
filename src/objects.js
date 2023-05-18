@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-18';
+modules.objects = '2023-May-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -821,15 +821,17 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
         },
+        /*
         doVariadicIf: {
             type: 'command',
             category: 'control',
             spec: 'if %b %c %elseif'
         },
+        */
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c'
+            spec: 'if %b %c %elseif'
         },
         doIfElse: {
             type: 'command',
@@ -1823,11 +1825,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportTextAttribute',
             inputs: [['length']],
             offset: 1
-        },
-        doIf: {
-            selector: 'doVariadicIf'
         }
     /*
+        doIf: {
+            selector: 'doVariadicIf'
+        },
         doIfElse: {
             selector: 'doVariadicIf',
             // variadic: true,
@@ -2780,8 +2782,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
-        blocks.push(block('doVariadicIf'));
-        // blocks.push(block('doIf'));
+        // blocks.push(block('doVariadicIf'));
+        blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
         blocks.push('-');
@@ -9648,8 +9650,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
-        blocks.push(block('doVariadicIf'));
-        // blocks.push(block('doIf'));
+        // blocks.push(block('doVariadicIf'));
+        blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
         blocks.push('-');

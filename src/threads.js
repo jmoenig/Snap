@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-17';
+modules.threads = '2023-May-18';
 
 var ThreadManager;
 var Process;
@@ -813,7 +813,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     // check for special forms
     if (selector === 'reportVariadicOr' ||
             selector ===  'reportVariadicAnd' ||
-            selector === 'doVariadicIf' ||
+            selector === 'doIf' ||
             selector === 'reportIfElse' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
@@ -2544,6 +2544,8 @@ Process.prototype.reportLinkedNumbers = function (start, end) {
 
 // Process conditionals primitives
 
+/*  // original non-variadic non-special form version
+    // retained for documentation
 Process.prototype.doIf = function () {
     var args = this.context.inputs,
         outer = this.context.outerContext, // for tail call elimination
@@ -2559,6 +2561,7 @@ Process.prototype.doIf = function () {
     }
     this.pushContext();
 };
+*/
 
 Process.prototype.doIfElse = function () {
     var args = this.context.inputs,
@@ -2585,7 +2588,7 @@ Process.prototype.doIfElse = function () {
     this.pushContext();
 };
 
-Process.prototype.doVariadicIf = function (block) {
+Process.prototype.doIf = function (block) {
     // special form - experimental
     var args = this.context.inputs,
         inps = block.inputs(),
