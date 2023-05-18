@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-17';
+modules.objects = '2023-May-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -1824,6 +1824,17 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             inputs: [['length']],
             offset: 1
         }
+    /*
+        doIf: {
+            selector: 'doVariadicIf'
+        },
+        doIfElse: {
+            selector: 'doVariadicIf',
+            // variadic: true,
+            expand: [2, 2]
+        }
+    */
+
     };
 };
 
@@ -2494,7 +2505,13 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     }
     block.setSpec(block.localizeBlockSpec(info.spec));
     if (migration && migration.expand) {
-        block.inputs()[migration.expand].addInput();
+        if (migration.expand instanceof Array) {
+            for (i = 0; i < migration.expand[1]; i += 1) {
+                block.inputs()[migration.expand[0]].addInput();
+            }
+        } else {
+            block.inputs()[migration.expand].addInput();
+        }
     }
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;

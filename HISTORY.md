@@ -47,6 +47,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-18
+* objects: enhanced migration spec for variadic expansion
+
 ### 2023-05-17
 * blocks, objects, threads: variadic IF, experimental, first pass, under construction
 
