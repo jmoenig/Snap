@@ -15,6 +15,7 @@
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
+    * IF is now variadic and expandable with "else if" cases
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
@@ -52,6 +53,7 @@
 * objects, blocks: renamed new variadic #cond spec into #elseif
 * threads: fixed scope for new variadic conditionals
 * threads: fixed script evaluation sequence for variadic conditionals
+* objects: made IF variadic, experimental, destructive (!) and under construction
 
 ### 2023-05-17
 * blocks, objects, threads: variadic IF, experimental, first pass, under construction

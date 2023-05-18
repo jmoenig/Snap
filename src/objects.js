@@ -1823,11 +1823,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportTextAttribute',
             inputs: [['length']],
             offset: 1
-        }
-    /*
+        },
         doIf: {
             selector: 'doVariadicIf'
-        },
+        }
+    /*
         doIfElse: {
             selector: 'doVariadicIf',
             // variadic: true,
@@ -2781,7 +2781,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
+        // blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
         blocks.push('-');
@@ -9649,7 +9649,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doFor'));
         blocks.push('-');
         blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
+        // blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
         blocks.push('-');
