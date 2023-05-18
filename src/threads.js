@@ -2608,7 +2608,7 @@ Process.prototype.doVariadicIf = function (block) {
     }
     if (args.pop()) {
         this.popContext();
-        this.pushContext(acc.args.shift().evaluate());
+        this.pushContext(acc.args.shift().evaluate(), outer);
     } else {
         acc.args.shift();
     }

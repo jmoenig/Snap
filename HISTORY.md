@@ -50,6 +50,7 @@
 ### 2023-05-18
 * objects: enhanced migration spec for variadic expansion
 * objects, blocks: renamed new variadic #cond spec into #elseif
+* threads: fixed scope for new variadic conditionals
 
 ### 2023-05-17
 * blocks, objects, threads: variadic IF, experimental, first pass, under construction
