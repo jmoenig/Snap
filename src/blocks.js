@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-17';
+modules.blocks = '2023-May-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1255,7 +1255,7 @@ SyntaxElementMorph.prototype.labelParts = {
         infix: 'identical to',
         collapse: 'all identical'
     },
-    '%cond': {
+    '%elseif': {
         type: 'multi',
         slots: ['%b', '%cs'],
         dflt: [true, null],

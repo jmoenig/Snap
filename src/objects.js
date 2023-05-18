@@ -824,7 +824,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doVariadicIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c %cond'
+            spec: 'if %b %c %elseif'
         },
         doIf: {
             type: 'command',
