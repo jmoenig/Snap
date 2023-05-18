@@ -2601,17 +2601,16 @@ Process.prototype.doVariadicIf = function (block) {
         if (acc.args.length) {
             this.pushContext(acc.args.shift(), outer);
             return;
-        } else {
-            this.popContext();
-            return;
         }
+        this.popContext();
+        return;
     }
     if (args.pop()) {
         this.popContext();
-        this.pushContext(acc.args.shift().evaluate(), outer);
-    } else {
-        acc.args.shift();
+        this.pushContext(acc.args.shift().evaluate().blockSequence(), outer);
+        return;
     }
+    acc.args.shift();
 };
 
 Process.prototype.reportIfElse = function (block) {
