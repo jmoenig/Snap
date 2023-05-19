@@ -4057,17 +4057,31 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
         inputs = this.inputs(),
         leftOver = [];
 
-    // gather leading surplus blocks
-    for (i = 0; i < offset; i += 1) {
-        old = oldInputs[i];
-        if (old instanceof ReporterBlockMorph) {
-            leftOver.push(old);
-        } else if (old instanceof CommandSlotMorph) {
-            nb = old.nestedBlock();
+    function preserveBlocksIn(slot) {
+        if (slot instanceof ReporterBlockMorph) {
+            leftOver.push(slot);
+        } else if (slot instanceof CommandSlotMorph) {
+            nb = slot.nestedBlock();
             if (nb) {
                 leftOver.push(nb);
             }
+        } else if (slot instanceof MultiArgMorph) {
+            slot.inputs().forEach(inp => {
+                if (inp instanceof ReporterBlockMorph) {
+                    leftOver.push(inp);
+                } else if (inp instanceof CommandSlotMorph) {
+                    nb = inp.nestedBlock();
+                    if (nb) {
+                        leftOver.push(nb);
+                    }
+                }
+            });
         }
+    }
+
+    // gather leading surplus blocks
+    for (i = 0; i < offset; i += 1) {
+        preserveBlocksIn(oldInputs[i]);
     }
 
     // special cases for relabelling to / from single variadic infix reporters
@@ -4154,21 +4168,15 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
                 (old.slotSpec === inp.slotSpec) &&
                 old.infix === inp.infix) {
             element.replaceInput(inp, old.fullCopy());
+        } else {
+            preserveBlocksIn(old);
         }
         offset += 1;
     });
 
     // gather trailing surplus blocks
     for (offset; offset < oldInputs.length; offset += 1) {
-        old = oldInputs[offset];
-        if (old instanceof ReporterBlockMorph) {
-            leftOver.push(old);
-        } else if (old instanceof CommandSlotMorph) {
-            nb = old.nestedBlock();
-            if (nb) {
-                leftOver.push(nb);
-            }
-        }
+        preserveBlocksIn(oldInputs[offset]);
     }
     element.cachedInputs = null;
     this.cachedInputs = null;

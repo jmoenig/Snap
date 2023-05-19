@@ -42,6 +42,7 @@
     * fixed assigning same costume names to recurrent video snaps
     * fixed sound naming rules for same-named imports
     * fixed preserving embedded scripts when collapsing variadic c-slots
+    * fixed preserving embedded scripts when relabelling blocks with variadic c-slots
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
@@ -54,6 +55,7 @@
 * threads: fixed evaluating empty c-slots in variadic if block
 * blocks: updated slot spec documentation for multi-slots
 * blocks: preserve embedded scripts when collapsing variadic c-slots
+* blocks: preserve embedded scripts when relabelling blocks with non-matching variadic c-slots
 
 ### 2023-05-18
 * objects: enhanced migration spec for variadic expansion
