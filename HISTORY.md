@@ -50,6 +50,7 @@
 
 ### 2023-05-19
 * objects, threads: replaced IF with variadic version, took out block migration
+* threads: fixed evaluating empty c-slots in variadic if block
 
 ### 2023-05-18
 * objects: enhanced migration spec for variadic expansion

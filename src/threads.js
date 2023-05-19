@@ -2610,7 +2610,7 @@ Process.prototype.doIf = function (block) {
     }
     if (args.pop()) {
         this.popContext();
-        this.pushContext(acc.args.shift().evaluate().blockSequence(), outer);
+        this.pushContext(acc.args.shift().evaluate()?.blockSequence(), outer);
         return;
     }
     acc.args.shift();
