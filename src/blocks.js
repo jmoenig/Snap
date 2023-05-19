@@ -13691,10 +13691,14 @@ MultiArgMorph.prototype.removeInput = function () {
     if (len > 0) {
         oldPart = this.inputs()[len - 1];
         this.removeChild(oldPart);
+        if (oldPart instanceof CSlotMorph) {
+            oldPart = oldPart.nestedBlock();
+        }
         if (oldPart instanceof BlockMorph &&
                 !(oldPart instanceof RingMorph && !oldPart.contents())) {
             scripts = this.parentThatIsA(ScriptsMorph);
             if (scripts) {
+                oldPart.moveBy(10);
                 scripts.add(oldPart);
             }
         }
