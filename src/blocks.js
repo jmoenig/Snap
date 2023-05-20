@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-19';
+modules.blocks = '2023-May-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13792,36 +13792,44 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         arrows = target.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
+        arrowsBounds = target.arrows().bounds.expandBy(this.fontSize / 3),
+        arrowsCenter = arrows.center().x,
+        isExpansionClick,
         repetition = this.groupInputs *
             (target.world().currentKey === 16 ? 3 : 1),
         i;
 
-    if (rightArrow.bounds.containsPoint(pos)) {
-        for (i = 0; i < repetition; i += 1) {
-            if (rightArrow.isVisible) {
-                target.addInput();
-            }
+    if (arrowsBounds.containsPoint(pos)) {
+        if (leftArrow.isVisible && rightArrow.isVisible) {
+            isExpansionClick = pos.x >= arrowsCenter;
+        } else {
+            isExpansionClick = rightArrow.isVisible;
         }
-        sprite.recordUserEdit(
-            'scripts',
-            'poly slot',
-            'expand',
-            block.abstractBlockSpec()
-        );
-    } else if (
-        leftArrow.bounds.expandBy(this.fontSize / 3).containsPoint(pos)
-    ) {
-        for (i = 0; i < repetition; i += 1) {
-            if (leftArrow.isVisible) {
-                target.removeInput();
+        if (isExpansionClick) { // right arrow
+            for (i = 0; i < repetition; i += 1) {
+                if (rightArrow.isVisible) {
+                    target.addInput();
+                }
             }
+            sprite.recordUserEdit(
+                'scripts',
+                'poly slot',
+                'expand',
+                block.abstractBlockSpec()
+            );
+        } else { // left arrow
+            for (i = 0; i < repetition; i += 1) {
+                if (leftArrow.isVisible) {
+                    target.removeInput();
+                }
+            }
+            sprite.recordUserEdit(
+                'scripts',
+                'poly slot',
+                'collapse',
+                block.abstractBlockSpec()
+            );
         }
-        sprite.recordUserEdit(
-            'scripts',
-            'poly slot',
-            'collapse',
-            block.abstractBlockSpec()
-        );
     } else {
         target.escalateEvent('mouseClickLeft', pos);
     }
