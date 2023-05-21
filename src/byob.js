@@ -1683,6 +1683,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
                 this.definition = def;
                 this.isGlobal = def.isGlobal;
                 this.refresh();
+                this.fixLayout();
                 this.scriptTarget().recordUserEdit(
                     'scripts',
                     'block',
