@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-20';
+modules.blocks = '2023-May-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4036,6 +4036,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     // restore previous inputs
     surplus = this.restoreInputs(oldInputs, -inputOffset);
     this.fixLabelColor();
+    this.fixLayout();
 
     // place surplus blocks on scipts
     if (scripts && surplus.length) {

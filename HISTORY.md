@@ -53,6 +53,7 @@
 
 ### 2023-05-21
 byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
+blocks: make sure to fix layout when labelling primitive blocks
 
 ### 2023-05-20
 * blocks: improved sensing precision when clicking on variadic slot arrows
