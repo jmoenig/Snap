@@ -1828,41 +1828,41 @@ SnapTranslator.dict.ti = {
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) የማን',
     '(-90) left':
-        '(-90) links',
+        '(-90) ጸጋም',
     '(0) up':
-        '(0) oben',
+        '(0) ላዕሊ',
     '(180) down':
-        '(180) unten',
+        '(180) ታሕቲ',
     'random':
-    	'zufällig',
+    	'ሃውሪ',
      'random position':
-     	'zufällige Position',
+     	'ናይ ሃውሪ ነቑጣ',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'ኣመልካቲ-ኣንጭዋ',
     'edge':
-        'Kante',
+        'ደረት',
     'pen trails':
-        'Malspuren',
+        'ኣሰራት ብርዒ',
     'center':
-        'Mitte',
+        'ማእከል',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'ሓባሪ መኣዝን',
     'Empty':
-        'Leer',
+        'ባዶ',
     'Paint a new costume':
-        'neues Kostüm zeichnen',
+        'ሓድሽ ልብሲ ሰኣል',
     'Import a new costume from your webcam':
-        'neues Kostüm mit der Webcam aufnehmen',
+        'ሓድሽ ልብሲ ካብ ሰኣሊት ኣእቱ',
     'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Überprüfe, ob der Browser auf dem aktuellsten Stand \nund die Webcam korrekt konfiguriert ist.\n\nFür einige Browser muss Snap! mit HTTPS geöffnet\nwerden, um auf die Kamera zuzugreifen.\n\nErsetze dafür den "http://"-Teil in der Adresszeile mit"https://"',
+        'ባብ መርበብ ሓበሬታ እዋናዊ ሙኻኑን\nሰኣሊት ክምዝተስታኻኸልትን ኣረጋግጽ።\n\nኣብ ግሊኡ ባባት መርበብ ሓበሬታ ሰኣሊት ንምጥቃም፡\nስናፕ! ብ HTTPS ክኽፍት ኣለዎ።\n\nአዚ ንምግባር ን "http://" ክፋል ኣድራሻ መርበብ ሓበሬታ\nብ "https://" ተክእ።',
     'Camera':
-        'Kamera',
+        'ሰኣሊት',
     
     // sounds
     'Record a new sound':
