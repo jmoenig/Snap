@@ -51,6 +51,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-21
+byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
+
 ### 2023-05-20
 * blocks: improved sensing precision when clicking on variadic slot arrows
 

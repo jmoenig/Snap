@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-April-20';
+modules.byob = '2023-May-21';
 
 // Declarations
 
@@ -976,6 +976,8 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         // keep unused blocks around in the scripting area
         if (item instanceof MultiArgMorph) {
             return item.inputs().forEach(slot => preserve(slot));
+        } else if (item instanceof CSlotMorph ) {
+            item = item.evaluate();
         }
         if (item instanceof BlockMorph && scripts) {
             scripts.add(item);
