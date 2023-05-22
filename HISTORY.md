@@ -51,6 +51,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-22
+* gui: show a login message for student accounts, thanks, Michael!
+
 ### 2023-05-21
 byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
 blocks: make sure to fix layout when labelling primitive blocks
