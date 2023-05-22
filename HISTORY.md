@@ -56,6 +56,7 @@
 * gui: show a login message for student accounts, thanks, Michael!
 * threads: added variadic conditional case to the experimental JIT compiler
 * threads: fixed JIT-compiling variadic Boolean infix ops
+* adjusted Pyret POC (transpile.xml) to new variadic operators / conditionals
 
 ### 2023-05-21
 byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
