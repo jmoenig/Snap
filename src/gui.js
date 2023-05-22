@@ -7541,6 +7541,13 @@ IDE_Morph.prototype.initializeCloud = function () {
                         world,
                         this.cloudIcon(null, new Color(0, 180, 0))
                     );
+                } else if (response.title) {
+                    new DialogBoxMorph().inform(
+                        response.title,
+                        response.message,
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
                 } else {
                     this.showMessage(response.message, 2);
                 }
