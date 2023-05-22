@@ -1866,38 +1866,38 @@ SnapTranslator.dict.ti = {
     
     // sounds
     'Record a new sound':
-        'neuen Klang aufnehmen',
+        'ሓድሽ ድምጺ ቅረጽ',
     
 
     // graphical effects, pen color
     'color':
-        'Farbe',
+        'ሕብሪ',
     'hue':
-        'Farbton',
+        'ድምቀት ሕብሪ',
     'fisheye':
-        'Fischauge',
+        'ዓይኒ ዓሳ',
     'whirl':
-        'Wirbel',
+        'ሕምብሊል',
     'pixelate':
-        'Pixel',
+        'ዋህዮ ስእሊ',
     'mosaic':
-        'Mosaik',
+        'ሞዛይክ',
     'saturation':
-        'Sättigung',
+        'ቅጸት',
     'brightness':
-        'Helligkeit',
+        'ድምቀት',
     'lightness':
-        'Helligkeit',
+        'ብርሃንነት',
     'transparency':
-        'Transparenz',
+        'ሽፋፍነት',
     'ghost':
-        'Durchsichtigkeit',
+        'ምትሃት',
     'negative':
-        'Farbumkehr',
+        'ኣሉታ ስእሊ',
     'comic':
-        'Moire',
+        'ውቁጥ',
     'confetti':
-        'Farbverschiebung',
+        'ኮንፈቲ',
 
     // keys
     'space':
