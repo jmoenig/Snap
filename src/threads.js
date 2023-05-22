@@ -9020,9 +9020,9 @@ JSCompiler.prototype.compileExpression = function (block) {
     // first check for special forms and infix operators
     switch (selector) {
     case 'reportVariadicOr':
-        return this.compileInfix('||', inputs);
+        return this.compileInfix('||', inputs[0].inputs());
     case 'reportVariadicAnd':
-        return this.compileInfix('&&', inputs);
+        return this.compileInfix('&&', inputs[0].inputs());
     case 'reportIfElse':
         return '(' +
             this.compileInput(inputs[0]) +
@@ -9137,8 +9137,8 @@ JSCompiler.prototype.compileSequence = function (commandBlock) {
 };
 
 JSCompiler.prototype.compileInfix = function (operator, inputs) {
-    return '(' + this.compileInput(inputs[0]) + ' ' + operator + ' ' +
-        this.compileInput(inputs[1]) + ')';
+    return inputs.map(each =>
+        this.compileInput(each)).join(' ' + operator + ' ');
 };
 
 JSCompiler.prototype.compileInputs = function (array) {

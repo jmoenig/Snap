@@ -44,6 +44,7 @@
     * fixed preserving embedded scripts when collapsing variadic c-slots
     * fixed preserving embedded scripts when relabelling blocks with variadic c-slots
     * improved sensing precision when clicking on variadic slot arrows
+    * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
@@ -54,6 +55,7 @@
 ### 2023-05-22
 * gui: show a login message for student accounts, thanks, Michael!
 * threads: added variadic conditional case to the experimental JIT compiler
+* threads: fixed JIT-compiling variadic Boolean infix ops
 
 ### 2023-05-21
 byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
