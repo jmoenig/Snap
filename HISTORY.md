@@ -53,6 +53,7 @@
 
 ### 2023-05-22
 * gui: show a login message for student accounts, thanks, Michael!
+* threads: added variadic conditional case to the experimental JIT compiler
 
 ### 2023-05-21
 byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots

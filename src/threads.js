@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-19';
+modules.threads = '2023-May-22';
 
 var ThreadManager;
 var Process;
@@ -9089,7 +9089,8 @@ JSCompiler.prototype.compileExpression = function (block) {
             this.compileInput(inputs[0]) +
             ') {\n' +
             this.compileSequence(inputs[1].evaluate()) +
-            '}';
+            '}' +
+            this.compileElseIf(inputs[2]);
     case 'doIfElse':
         return 'if (' +
             this.compileInput(inputs[0]) +
@@ -9116,6 +9117,13 @@ JSCompiler.prototype.compileExpression = function (block) {
             return 'proc.' + selector + '(' + args + ')';
         }
     }
+};
+
+JSCompiler.prototype.compileElseIf = function (multiArg) {
+    return (multiArg.inputs().map((slot, i) => i % 2 === 0 ?
+        ' else if (' + this.compileInput(slot) + ') '
+        : '{\n' + this.compileSequence(slot.evaluate()) + '}'
+    ).join(''));
 };
 
 JSCompiler.prototype.compileSequence = function (commandBlock) {
