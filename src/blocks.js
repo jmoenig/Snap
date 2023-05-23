@@ -1259,11 +1259,9 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%elseif': {
         type: 'multi',
-        slots: ['%b', '%cs'],
+        group: 'else if %b then %cs and wait',
         dflt: [true, null],
-        label: ['else if', ''],
-        tags: 'static widget',
-        group: 2
+        tags: 'static widget'
     }
 };
 
@@ -3118,7 +3116,6 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
     // answer the translated block spec where the translation itself
     // is in the form of an abstract spec, i.e. with padded underscores
     // in place for percent-sign prefixed slot specs.
-    // Under construction, currently not (yet) in use.
     var slotSpecs = [],
         slotCount = -1,
         abstractSpec,
@@ -13355,13 +13352,16 @@ MultiArgMorph.prototype.init = function (
     this.infix = infix || '';
     this.collapse = collapse || '';
     this.defaultValue = defaults || null;
-    this.groupInputs = group || 1;
+    this.groupInputs = 1;
     this.minInputs = min || 0;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
     this.shadowColor = shadowColor || null;
     this.shadowOffset = shadowOffset || null;
+
+    // in case an input group spec is specified, initialize it
+    this.initGroup(group);
 
     this.canBeEmpty = true;
     MultiArgMorph.uber.init.call(this);
@@ -13410,6 +13410,34 @@ MultiArgMorph.prototype.init = function (
     // create the minimum number of inputs
     for (i = 0; i < this.minInputs; i += 1) {
         this.addInput();
+    }
+};
+
+MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
+    var groupSpec,
+        words,
+        isSlot = word => word.startsWith('%') && word.length > 1,
+        labels = [],
+        part = [];
+    if (aBlockSpec) {
+        // translate block spec
+        groupSpec = BlockMorph.prototype.localizeBlockSpec(aBlockSpec);
+        // determine input slot specs
+        words =  groupSpec.split(' ');
+        this.slotSpec = words.filter(word => isSlot(word));
+        // determine group size
+        this.groupInputs = this.slotSpec.length;
+        // determine label texts
+        words.forEach(word => {
+            if (isSlot(word)) {
+                labels.push(part);
+                part = [];
+            } else {
+                part.push(word);
+            }
+        });
+        labels.push(part);
+        this.labelText = labels.map(arr => arr.join(' '));
     }
 };
 
