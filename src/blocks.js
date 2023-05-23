@@ -13436,7 +13436,10 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
                 part.push(word);
             }
         });
-        labels.push(part);
+        // only add a postfix if it's non-empty
+        if (part.some(any => any.length)) {
+            labels.push(part);
+        }
         this.labelText = labels.map(arr => arr.join(' '));
     }
 };
