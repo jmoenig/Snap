@@ -1901,71 +1901,71 @@ SnapTranslator.dict.ti = {
 
     // keys
     'space':
-        'Leertaste',
+        'ባዶ ቦታ',
     'enter':
-        'Eingabetaste',
+        'ኣእቱ',
     'up arrow':
-        'Pfeil nach oben',
+        'ኲናት ንላዕሊ',
     'down arrow':
-        'Pfeil nach unten',
+        'ኲናት ንታሕቲ',
     'right arrow':
-        'Pfeil nach rechts',
+        'ኲናት ንየማን',
     'left arrow':
-        'Pfeil nach links',
+        'ኲናት ንጸጋም',
     'any key':
-        'beliebige Taste',
+        'ዝኾነ መፍትሕ',
     'a':
-        'a',
+        'አ',
     'b':
-        'b',
+        'ብ',
     'c':
-        'c',
+        'ች',
     'd':
-        'd',
+        'ድ',
     'e':
-        'e',
+        'እ',
     'f':
-        'f',
+        'ፍ',
     'g':
-        'g',
+        'ግ',
     'h':
-        'h',
+        'ህ',
     'i':
-        'i',
+        'ኢ',
     'j':
-        'j',
+        'ጅ',
     'k':
-        'k',
+        'ክ',
     'l':
-        'l',
+        'ል',
     'm':
-        'm',
+        'ም',
     'n':
-        'n',
+        'ን',
     'o':
-        'o',
+        'ኦ',
     'p':
-        'p',
+        'ፕ',
     'q':
-        'q',
+        'ቅ',
     'r':
-        'r',
+        'ር',
     's':
-        's',
+        'ስ',
     't':
-        't',
+        'ት',
     'u':
-        'u',
+        'ኡ',
     'v':
-        'v',
+        'ቭ',
     'w':
-        'w',
+        'ው',
     'x':
-        'x',
+        'ሽ',
     'y':
-        'y',
+        'ይ',
     'z':
-        'z',
+        'ዝ',
     '0':
         '0',
     '1':
@@ -1989,31 +1989,31 @@ SnapTranslator.dict.ti = {
 
     // messages
     'new...':
-        'Neu...',
+        'ሓድሽ...',
     '__shout__go__':
-        'grüne Flagge angeklickt',
+        'ቀጠልያ ባንዴራ ተጠዊቓ',
 
     // math functions
     'abs':
-        'Betrag',
+        'ፍጹም ብዝሒ',
     'ceiling':
-        'Aufgerundet',
+        'ንላዕሊ ኣጸጋግዕ',
     'floor':
-        'Abgerundet',
+        'ንታሕቲ ኣጸጋግዕ',
     'sqrt':
-        'Wurzel',
+        'ሱር ትርብዒት',
     'sin':
-        'sin',
+        'ሳይን',
     'cos':
-        'cos',
+        'ኮስይን',
     'tan':
-        'tan',
+        'ታንጀንት',
     'asin':
-        'asin',
+        'ኣርክስይን',
     'acos':
-        'acos',
+        'ኣርክኮስይን',
     'atan':
-        'atan',
+        'ኣርክታንጀንት',
     'ln':
         'ln',
     'e^':
@@ -2021,21 +2021,21 @@ SnapTranslator.dict.ti = {
 
     // Boolean expressions keyboard entry
     'not':
-        'nicht',
+        'ዘይኮነ',
 
     // delimiters
     'letter':
-        'Buchstabe',
+        'ፊደል',
     'word':
-        'Wort',
+        'ቃል',
     'whitespace':
-        'Leerraum',
+        'ባዶ ቦታ',
     'line':
-        'Zeilenvorschub',
+        'መስመር',
     'tab':
-        'Tabulator',
+        'መፈላልጦ',
     'cr':
-        'Wagenr\u00fccklauf',
+        'ሓድሽ መስመር',
 
     // data types
     'number':
