@@ -55,6 +55,7 @@
 ### 2023-05-23
 * blocks: implemented postfix functionality for variadic slot labels
 * blocks: implemented label groups for variadic slots
+* German translation update for variadic "else if" case
 
 ### 2023-05-22
 * gui: show a login message for student accounts, thanks, Michael!
