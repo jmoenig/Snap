@@ -810,7 +810,7 @@ SnapTranslator.dict.de = {
     "huge (4x)": "riesig (4x)",
     "i": "i",
     "identical to": "identisch mit",
-    "if _ _": "falls _ _",
+    "if _ _ _": "falls _ _ _",
     "if _ _ else _": "falls _ _ sonst _",
     "if _ then _ else _": "falls _ dann _ sonst _",
     "if on edge, bounce": "pralle vom Rand ab",
