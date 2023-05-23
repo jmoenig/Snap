@@ -724,6 +724,7 @@ SnapTranslator.dict.de = {
     "edit...": "Bearbeiten...",
     "editables": "Eingaben",
     "elegant (90)": "elegant (90)",
+    "else if _ _": "sonst falls _ _",
     "enable Morphic context menus and inspectors, not user-friendly!": "ermöglicht Morphic Funktionen",
     "enter": "Eingabetaste",
     "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
