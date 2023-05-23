@@ -52,6 +52,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-23
+* blocks: implemented postfix functionality for variadic slot labels
+
 ### 2023-05-22
 * gui: show a login message for student accounts, thanks, Michael!
 * threads: added variadic conditional case to the experimental JIT compiler

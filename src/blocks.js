@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-21';
+modules.blocks = '2023-May-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13672,6 +13672,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     }
     newPart.parent = this;
     this.children.splice(idx, 0, newPart);
+    this.addPostfix();
     newPart.fixLayout();
     if (this.parent instanceof BlockMorph) {
         this.parent.fixLabelColor();
@@ -13685,7 +13686,7 @@ MultiArgMorph.prototype.addInfix = function () {
         len = this.inputs().length,
         label = this.infix ? localize(this.infix)
         : (this.labelText instanceof Array ?
-            this.labelText[len % this.labelText.length]
+            this.labelText[len % this.slotSpec.length]
             : '');
 
     if (label === '' || !len) {return; }
@@ -13694,10 +13695,32 @@ MultiArgMorph.prototype.addInfix = function () {
     this.children.splice(this.children.length - 1, 0, infix);
 };
 
+MultiArgMorph.prototype.addPostfix = function () {
+    var postfix;
+    if (this.labelText instanceof Array &&
+        this.inputs().length % this.slotSpec.length === 0 &&
+        this.labelText.length === (this.slotSpec.length + 1)
+    ) {
+        postfix = this.labelPart(this.labelText[this.slotSpec.length]);
+        postfix.parent = this;
+        this.children.splice(this.children.length - 1, 0, postfix);
+    }
+};
+
+MultiArgMorph.prototype.removePostfix = function (idx) {
+    if (this.labelText instanceof Array &&
+        idx % this.slotSpec.length === 0 &&
+        this.labelText.length === (this.slotSpec.length + 1)
+    ) {
+        this.removeChild(this.children[this.children.length - 2]);
+    }
+};
+
 MultiArgMorph.prototype.removeInput = function () {
     var len = this.inputs().length,
         oldPart, scripts;
     if (len > 0) {
+        this.removePostfix(len);
         oldPart = this.inputs()[len - 1];
         this.removeChild(oldPart);
         if (oldPart instanceof CSlotMorph) {
@@ -13717,7 +13740,7 @@ MultiArgMorph.prototype.removeInput = function () {
     ) {
         if (this.children.length > 1 &&
                 !(this.labelText instanceof Array &&
-                    this.labelText[this.inputs().length % this.labelText.length]
+                    this.labelText[this.inputs().length % this.slotSpec.length]
                         === '')
         ) {
             this.removeChild(this.children[this.children.length - 2]);
