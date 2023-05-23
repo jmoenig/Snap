@@ -1259,7 +1259,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%elseif': {
         type: 'multi',
-        group: 'else if %b then %cs and wait',
+        group: 'else if %b %cs',
         dflt: [true, null],
         tags: 'static widget'
     }
