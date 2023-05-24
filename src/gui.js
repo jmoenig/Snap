@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-22';
+modules.gui = '2023-May-24';
 
 // Declarations
 
@@ -3501,7 +3501,7 @@ IDE_Morph.prototype.backupAndDo = function (callback) {
     } catch (err) {
         nop(err);
         this.confirm(
-            'Backup failed.\nThis cannot be undone, proceed anyway?',
+            'Backup failed. This cannot be undone, proceed anyway?',
             'Unsaved Changes!',
             callback
         );

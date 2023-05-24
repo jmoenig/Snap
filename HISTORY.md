@@ -57,6 +57,7 @@
 * widgets: made confirmation dialog text auto-wrapping
 * paint: removed newlines in switch-to-vector-editor confirmation for translation
 * sketch: removed newlines in switch-to-bitmap-editor confirmation for translation
+* gui: removed newlines in confirmation dialogs for translation
 
 ### 2023-05-23
 * blocks: implemented postfix functionality for variadic slot labels
