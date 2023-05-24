@@ -2039,101 +2039,101 @@ SnapTranslator.dict.ti = {
 
     // data types
     'number':
-        'Zahl',
+        'ኣሃዝ',
     'text':
-        'Text',
+        'ጽሑፍ',
     'Boolean':
-        'Boole',
+        'መንጠቕያ',
     'list':
-        'Liste',
+        'ዝርዝር',
     'command':
-        'Befehlsblock',
+        'ትእዛዝ',
     'reporter':
-        'Funktionsblock',
+        'ተግባር',
     'predicate':
-        'Pr\u00e4dikat',
+        'ኣረጋጋጺ',
     'sprite':
-        'Objekt',
+        'ትንኩሊብ',
     'ring':
-        'Ring',
+        'ቀለቤት',
     'nothing':
-        'nichts',
+        'ዋላ ሓደ',
 
     // list indices
     'last':
-        'letztes',
+        'መወዳእታ',
     'any':
-        'beliebig',
+        'ዝኾነ',
 
     // attributes
     'my':
-        'Attribut',
+        'ናተይ',
     'neighbors':
-        'Nachbarn',
+        'ጎረባብቲ',
     'self':
-        'selbst',
+        'ገዛእ-ርእሲ',
     'other sprites':
-        'andere Objekte',
+        'ካልእ ትንኩሊባት',
     'parts':
-        'Teile',
+        'ክፋላት',
     'anchor':
-        'Verankerung',
+        'መልህቕ',
     'parent':
-        'Vorfahr',
+        'ወላዲ',
     'temporary?':
-        'temporär?',
+        'ግዜያዊ?',
     'children':
-        'Abkömmlinge',
+        'ውሉዳት',
     'clones':
-        'Klone',
+        'ቅዳሓት',
     'other clones':
-        'andere Klone',
+        'ካልኦት ቅዳሓት',
     'dangling?':
-        'baumelnd?',
+        'ዝተንጠልጠለ?',
     'draggable?':
-        'greifbar?',
+        'ዝሰሓብ?',
     'rotation style':
-        'Drehtyp',
+        'ዓይነት ዙረት',
     'rotation x':
-        'Drehpunkt x',
+        'ማእከል ዙረት ሀ',
     'rotation y':
-        'Drehpunkt y',
+        'ማእከል ዙረት ሰ',
     'center x':
-        'Mittelpunkt x',
+        ' ማእከላይ ነጥቢ ሀ',
     'center y':
-        'Mittelpunkt y',
+        ' ማእከላይ ነጥቢ ሰ',
     'name':
-        'Name',
+        'ስም',
     'costume':
-        'Kostüm',
+        'ልብሲ',
     'stage':
-        'B\u00fchne',
+        'መድረኽ',
     'costumes':
-        'Kostüme',
+        'ኣልባሳት',
     'sounds':
         'ድምጺ',
     'scripts':
-        'Skripte',
+        'መርሓታት',
     'width':
-        'Breite',
+        'ጎድኒ',
     'height':
-        'Höhe',
+        'ቁመት',
     'left':
-        'Rand links',
+        'ጸጋማይ ደረት',
     'right':
-        'Rand rechts',
+        'የማናይ ደረት',
     'top':
-        'Rand oben',
+        'ላዕለዋይ ደረት',
     'bottom':
-        'Rand unten',
+        'ታሕተዋይ ደረት',
     'position':
-        'Position',
+        'ነቑጣ',
     'variables':
-        'Variablen',
+        'ተቐያየርቲ',
     'costume name':
-        'Kostümname',
+        'ስም ልብሲ',
     'categories':
-        'Kategorien',
+        'ምድባት',
 
     // attributes in the SET block's dropdown
     'my anchor':
