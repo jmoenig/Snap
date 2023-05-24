@@ -65,7 +65,7 @@ StringMorph, detect, modules*/
 
 /*jshint esversion: 6*/
 
-modules.sketch = '2021-November-03';
+modules.sketch = '2023-May-24';
 
 // Declarations
 
@@ -983,9 +983,9 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
             function () {
                 if (myself.shapes.length > 0) {
                     myself.ide.confirm(
-                        'This will convert your vector objects into\n' +
-                        'bitmaps, and you will not be able to convert\n' +
-                        'them back into vector drawings.\n' +
+                        'This will convert your vector objects into ' +
+                        'bitmaps, and you will not be able to convert ' +
+                        'them back into vector drawings. ' +
                         'Are you sure you want to continue?',
                         'Convert to bitmap?',
                         () => {
