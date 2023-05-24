@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-08';
+modules.objects = '2023-May-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -821,10 +821,17 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
         },
+        /*
+        doVariadicIf: {
+            type: 'command',
+            category: 'control',
+            spec: 'if %b %c %elseif'
+        },
+        */
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c'
+            spec: 'if %b %c %elseif'
         },
         doIfElse: {
             type: 'command',
@@ -1819,6 +1826,17 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             inputs: [['length']],
             offset: 1
         }
+    /*
+        doIf: {
+            selector: 'doVariadicIf'
+        },
+        doIfElse: {
+            selector: 'doVariadicIf',
+            // variadic: true,
+            expand: [2, 2]
+        }
+    */
+
     };
 };
 
@@ -2489,7 +2507,13 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     }
     block.setSpec(block.localizeBlockSpec(info.spec));
     if (migration && migration.expand) {
-        block.inputs()[migration.expand].addInput();
+        if (migration.expand instanceof Array) {
+            for (i = 0; i < migration.expand[1]; i += 1) {
+                block.inputs()[migration.expand[0]].addInput();
+            }
+        } else {
+            block.inputs()[migration.expand].addInput();
+        }
     }
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
@@ -2758,6 +2782,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
+        // blocks.push(block('doVariadicIf'));
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));
@@ -9625,6 +9650,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doUntil'));
         blocks.push(block('doFor'));
         blocks.push('-');
+        // blocks.push(block('doVariadicIf'));
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push(block('reportIfElse'));

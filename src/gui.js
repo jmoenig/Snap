@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-08';
+modules.gui = '2023-May-22';
 
 // Declarations
 
@@ -7538,6 +7538,13 @@ IDE_Morph.prototype.initializeCloud = function () {
                         'Verification Email..." option in the cloud\n' +
                         'menu.\n\n' +
                         'You have ' + duration + ' left.',
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                } else if (response.title) {
+                    new DialogBoxMorph().inform(
+                        response.title,
+                        response.message,
                         world,
                         this.cloudIcon(null, new Color(0, 180, 0))
                     );

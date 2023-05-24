@@ -15,6 +15,7 @@
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
+    * IF is now variadic and expandable with "else if" cases
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
@@ -40,12 +41,52 @@
     * fixed MAP, KEEP, FIND and COMBINE primitives to work with JS-funargs
     * fixed assigning same costume names to recurrent video snaps
     * fixed sound naming rules for same-named imports
+    * fixed preserving embedded scripts when collapsing variadic c-slots
+    * fixed preserving embedded scripts when relabelling blocks with variadic c-slots
+    * improved sensing precision when clicking on variadic slot arrows
+    * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-05-23
+* blocks: implemented postfix functionality for variadic slot labels
+* blocks: implemented label groups for variadic slots
+* German translation update for variadic "else if" case
+
+### 2023-05-22
+* gui: show a login message for student accounts, thanks, Michael!
+* threads: added variadic conditional case to the experimental JIT compiler
+* threads: fixed JIT-compiling variadic Boolean infix ops
+* adjusted Pyret POC (transpile.xml) to new variadic operators / conditionals
+
+### 2023-05-21
+byob: preserve embedded scripts when relabelling custon blocks with non-matching variadic c-slots
+blocks: make sure to fix layout when labelling primitive blocks
+byob: make sure to fix layout when labelling custom blocks
+
+### 2023-05-20
+* blocks: improved sensing precision when clicking on variadic slot arrows
+
+### 2023-05-19
+* objects, threads: replaced IF with variadic version, took out block migration
+* threads: fixed evaluating empty c-slots in variadic if block
+* blocks: updated slot spec documentation for multi-slots
+* blocks: preserve embedded scripts when collapsing variadic c-slots
+* blocks: preserve embedded scripts when relabelling blocks with non-matching variadic c-slots
+
+### 2023-05-18
+* objects: enhanced migration spec for variadic expansion
+* objects, blocks: renamed new variadic #cond spec into #elseif
+* threads: fixed scope for new variadic conditionals
+* threads: fixed script evaluation sequence for variadic conditionals
+* objects: made IF variadic, experimental, destructive (!) and under construction
+
+### 2023-05-17
+* blocks, objects, threads: variadic IF, experimental, first pass, under construction
 
 ### 2023-05-10
 * locale: fixed returning the original string when looking up an existing key with a falsy translation in the current translations language dictionary
