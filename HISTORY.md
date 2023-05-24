@@ -55,6 +55,7 @@
 ### 2023-05-24
 * threads: refactored variable error handling for new translation mechanism
 * widgets: made confirmation dialog text auto-wrapping
+* paint: removed newlines in switch-to-vector-editor confirmation for translation
 
 ### 2023-05-23
 * blocks: implemented postfix functionality for variadic slot labels
