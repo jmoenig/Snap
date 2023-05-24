@@ -52,6 +52,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-24
+* threads: refactored variable error handling for new translation mechanism
+
 ### 2023-05-23
 * blocks: implemented postfix functionality for variadic slot labels
 * blocks: implemented label groups for variadic slots
