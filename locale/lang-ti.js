@@ -2067,7 +2067,7 @@ SnapTranslator.dict.ti = {
 
     // attributes
     'my':
-        'ናተይ',
+        'መለለዪ',
     'neighbors':
         'ጎረባብቲ',
     'self':
@@ -2137,31 +2137,31 @@ SnapTranslator.dict.ti = {
 
     // attributes in the SET block's dropdown
     'my anchor':
-        'Attribut Verankerung',
+        'መለለዪ መልህቕ',
     'my parent':
-        'Attribut Vorfahr',
+        'መለለዪ ወላዲ',
     'my name':
-        'Attribut Name',
+        'መለለዪ ስም',
     'my temporary?':
-        'Attribut temporär?',
+        'መለለዪ ግዜያዊ?',
     'my dangling?':
-        'Attribut baumelnd?',
+        'መለለዪ ዝተንጠልጠለ?',
     'my draggable?':
-        'Attribut greifbar?',
+        'መለለዪ ዝሰሓብ?',
     'my rotation style':
-        'Attribut Drehtyp',
+        'መለለዪ ዓይነት ዙረት',
     'my rotation x':
-        'Attribut Drehpunkt x',
+        'መለለዪ ማእከል ዙረት ሀ',
     'my rotation y':
-        'Attribut Drehpunkt y',
+        'መለለዪ ማእከል ዙረት ሰ',
 
     // inheritance
     'inherited':
-        'geerbt',
+        'ዝተወርሰ',
     'check to inherit\nfrom':
-        'einschalten, um zu erben\nvon',
+        'ወልዕ፡ ንኽትወርስ\nካብ',
     'uncheck to\ndisinherit':
-        'ausschalten, um \nnicht mehr zu erben',
+        'ኣጥፍእ፡ ምውራስ\nድው ንምባል',
 
     // editing slots inside variadic inputs
     'insert a slot':
