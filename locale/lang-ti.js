@@ -2165,63 +2165,63 @@ SnapTranslator.dict.ti = {
 
     // editing slots inside variadic inputs
     'insert a slot':
-        'Ein Feld einfügen',
+        'ሳጹን ኣእቱ',
     'delete slot':
-        'Feld löschen',
+        'ሳጹን ደምስስ',
     'insert a variable':
-        'Eine Variable einfügen',
+        'ተቐያያሪ ኣእቱ',
     'delete variable':
-        'Variable löschen',
+        'ተቐያያሪ ድምስስ',
     'variable':
-        'Variable',
+        'ተቐያያሪ',
 
     // error messages
     'Error':
-        'Fehler',
+        'ጌጋ',
     'a variable of name \'':
-        'Eine Variable mit dem Namen \'',
+        'ተቐያያሪ ብስም \'',
     '\'\ndoes not exist in this context':
-        '\'\ngibt es an dieser Stelle nicht',
+        '\'\nኣብዚ መዳይ የለን',
     'expecting a':
-        'Erwarte',
+        'ትጽቢት',
     'but getting a':
-        'bekomme aber',
+        'ትረኽቦ ግን',
     'expecting':
-        'Erwarte',
+        'ትጽቢት',
     'Inside a custom block':
-        'In einem benutzerdefinierten Block',
+        'ኣብ ሓደ ዓሚላዊ ሕጡብ',
     'The question came up at':
-        'Die Frage stellte sich bei',
+        'እቲ ሕቶ ተላዒሉ ኣብ',
     'continuations cannot be forked':
-        'Continuations können nicht separat gestartet werden',
+        'መቐጸልታታት በይኖም ክጅምሩ ኣይክእሉን እዮም',
     'unable to convert to':
-        'Kann die Liste nicht umwandeln in',
+        'ኣይክኣልን ምቕያር ናብ',
     'Request blocked':
-        'Die Anfrage wurde blockiert',
+        'ጻዊዒት ተዓጊቱ',
     'cannot operate on a deleted sprite':
-        'kann nicht mit einem gelöschten Objekt arbeiten',
+        'ኣብ ዝተደምሰሰት ትንኩሊብ ዝኾነ ተግባራት ክፍጸም ኣይካኣልን እዩ',
     'cannot send media,\nsprites or procedures\nto another scene':
-        'Kann keine Medien, Objekte oder Programme\nan eine andere Szene senden',
+        'ዝኾን ሓበሬታ፡ ውዱዕ ወይ መርሓ\nናብ ካልእ ዓውደ ፍጻመ ምስዳድ ኣይተኻእለን ',
     'unsupported attribute':
-        'Attribut wird nicht unterstützt',
+        'መለለዪ ደገፍ የብሉን',
     'unable to nest\n(disabled or circular?)':
-        'Kann nicht verschachteln\n(ausgeschaltet oder zirkulär?)',
+        'ክሳዃዕ ኣይከኣለን\n(ዝጠፍአ ወይ ዓንኬላዊ?)',
     'unable to inherit\n(disabled or circular?)':
-        'Kann nicht erben\n(ausgeschaltet oder zirkulär?)',
+        'ክወርስ ኣይከኣለን\n(ዝጠፍአ ወይ ዓንኬላዊ?)',
     'is read-only':
-        'kann nur gelesen werden',
+        'ክንበብ ጥራይ ዝኽእል',
     'is not a valid option':
-        'ist keine erlaubte Auswahl',
+        'ብቑዕ ኣማራጺ ኣይኮነን',
     'unsupported data type':
-        'Nicht unterstützter Datentyp',
+        'ዘይተደገፈ ዓይነት ሓብሪታ',
     'cannot handle zero width or height':
-        'Breite oder Höhe dürfen nicht Null sein',
+        'ጎድኒ ወይ ቁመት ባዶ ክኾኑ የብሎምን',
     'expecting a finite number\nbut getting Infinity or NaN':
-        'Erwarte eine endliche Zahl\nbekomme aber Unendlich oder eine Nicht-Zahl',
+        'ትጽቢት ታእላው ኣሃዝ\nዝተረኽበ ግን ኢታእላው ኣሃዝ ወይ ኣሃዝ ዝይኮነ',
     'the predicate takes\ntoo long for a\ncustom hat block':
-        'Das Prädikat dauert zu lang für einen\nbenutzerdefinierten Ereignisblock',
+        'እዛ ኣረጋጋጺት ተግባር\nንዓሚላዊ ናይ ፍጻመ ሕጡብ\nብዙሕ ግዜ ትወስድ ኣላ',
     'missing / unspecified extension':
-        'Fehlende / undefinierte Erweiterung',
+        'ዝጎደለ / ዘይተወሰነ ተወሳኺ',
     'reporter didn\'t report':
         'Der Rückgabewert fehlt bei einer Funktion',
     'a custom block definition is missing':
