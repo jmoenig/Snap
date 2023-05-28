@@ -1123,7 +1123,7 @@ SnapTranslator.dict.ti = {
     'settings menu prefer empty slots hint':
         'ወልዕ፡ ኣብ ምንባር ሕጡባት\nባዶ ትሓዝቲ-ቦታ ንምሕራይ',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ዝተነብሩ ሕጡባት ምልጋስ ንምኻል ኣጥፍእ',
+        'ኣጥፍእ፡ ዝተነብሩ ሕጡባት ምልጋስ ንምኻል ',
     'check to turn on\n visible stepping (slow)':
         'ወልዕ፡ መስርሕ መርሓ\nንምክትታል (ዘገምታዊ መስርሕ) ',
     'uncheck to turn off\nvisible stepping':
@@ -1251,9 +1251,9 @@ SnapTranslator.dict.ti = {
     'HSL pen color model':
         'HSL ዓይነት ሕብሪ',
      'uncheck to switch pen colors\nand graphic effects to HSV':
-        'ኣጥፍእ፡ ሕብሪ ብርዒን\nስእላዊ ጽልዋታትን ናብ HSV ንምቕያር',
+        'ኣጥፍእ፡ ሕብሪ ብርዒን\nስእላዊ ተጽዕኖታት ናብ HSV ንምቕያር',
     'check to switch pen colors\nand graphic effects to HSL':
-        'ወልዕ፡ ሕብሪ ብርዒን\nስእላዊ ጽልዋታትን ናብ HSL ንምቕያር',
+        'ወልዕ፡ ሕብሪ ብርዒን\nስእላዊ ተጽዕኖታት ናብ HSL ንምቕያር',
     'Disable click-to-run':
         'ሕጡባት ምጥዋቕ ግታእ',
     'uncheck to enable\ndirectly running blocks\nby clicking on them':
@@ -2223,20 +2223,20 @@ SnapTranslator.dict.ti = {
     'missing / unspecified extension':
         'ዝጎደለ / ዘይተወሰነ ተወሳኺ',
     'reporter didn\'t report':
-        'Der Rückgabewert fehlt bei einer Funktion',
+        'ጸብጻቢ ተግባር መልሲ ኣይሃበን',
     'a custom block definition is missing':
-        'Ein Block ist undefiniert',
+        'ዓሚላዊ ሕጡብ ኣይተዋደደን ',
     'exceeding maximum number of clones':
-        'Die maximale Anzahl von Klonen wird überschritten',
+        'ዝለዓለ ፍቑድ ብዝሒ ቅዳሓት ተጣሒሱ',
     'can only write text or numbers, not a':
-        'Kann nur Text oder Zahlen schreiben, kein',
+        'ፊደላት ወይ ኣሃዛት ጥራይ እዩ ክጸሓፍ ዝፍቀድ፡ ሓደ ካብ ዘይፍቑዳት',
     'unsupported graphic effect':
-        'Nicht unterstützter Grafikeffekt',
+        'ዘይተደገፈ ስእላዊ ተጽዕኖ',
     'setting the rotation center requires a costume':
-        'Der Drehpunkt kann nur zusammen\nmit einem Kostüm gesetzt werden',
+        'ማእከል ዙረት ምስ ልብሲ ጥራይ እዩ ክንበር ዝከኣል',
     'Web Audio API is not supported\nin this browser':
-        'Das Web Audio API wird von\ndiesem Browser nicht unterstützt',
+        'እዚ ድምጺ መርበብ API\nበዚ ባብ መርበብ ሓበሬታ ኣይድገፈን እዩ',
     'several block definitions\nalready match this label':
-        'Mehrere Blöcke passen\nzu dieser Aufschrift'
+        'ከም እዚ ዕላመት ዘለወን\nድሮ ብዙሓት ሕጡባት ተዋዲደን ኣለዋ'
         
 };
