@@ -1367,7 +1367,7 @@ SnapTranslator.dict.ti = {
     'including dependencies':
         'ምስ ኩሎም ኣብ ጥቕሚ ዘለው ሕጥባት',
     'edit...':
-        'ኣሳናድእ...',
+        'ኣተዓራሪ...',
     'translations...':
         'ትርጉማት...',
     'block variables...':
@@ -1377,7 +1377,7 @@ SnapTranslator.dict.ti = {
 
     // sprites:
     'edit':
-        'ኣሳናድእ',
+        'ኣተዓራሪ',
     'clone':
         'ቅዳሕ',
     'move':
