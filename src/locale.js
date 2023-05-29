@@ -665,19 +665,9 @@ SnapTranslator.dict.ti = {
 	'language_name':
         'ትግርኛ',
     'language_translator':
-        'Tesfaldet Negash Eyassu, Heran Tewolde Sium',
+        'Tesfaldet Negash, Heran Sium',
     'translator_e-mail':
-        'tesfaldet.negash@gmail.com',
+        'winna.programming@gmail.com',
     'last_changed':
-        '2022-12-24'
-};
-SnapTranslator.dict.am = {
-	'language_name':
-        'አማርኛ',
-    'language_translator':
-        'Heran Tewolde Sium',
-    'translator_e-mail':
-        ' ',
-    'last_changed':
-        '2022-12-24'
-};
+        '2023-05-29'
+}

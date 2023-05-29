@@ -183,9 +183,9 @@ SnapTranslator.dict.ti = {
     'language_translator':
         'ተስፋልደት ነጋሽ እያሱ, ሄራን ተወልደ ስዩም', // your name for the Translators tab
     'translator_e-mail':
-        'tesfaldet.negash@gmail.com, heran.sium@web.de', // optional
+        'winna.programming@gmail.com', // optional
     'last_changed':
-        '2022-12-25', // this, too, will appear in the Translators tab
+        '2023-05-29', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
