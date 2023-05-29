@@ -1039,7 +1039,7 @@ SnapTranslator.dict.ti = {
     'Iteration, composition':
         'ምድግጋም, ምቛም',
     'List utilities':
-        'ናውቲ ዝርዝር',
+        'ኣገልግሎታት ዝርዝር',
     'Variadic reporters':
         'ቫርያዳውያን (Variadic) ተግባራት',
     'Web services access (https)':
