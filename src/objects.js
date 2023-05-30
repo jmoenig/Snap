@@ -171,7 +171,8 @@ SpriteMorph.prototype.blockColor = {
     '56➡(fifty-six)' : new Color(243, 118, 29),
     '▪▪◻▫◼' : new Color(217, 77, 17),
     '...': new Color(150, 150, 150),
-    'variables': new Color(243,118,29)
+    'variables': new Color(243,118,29),
+    'control': new Color(0,0,0,0)
 };
 
 SpriteMorph.prototype.customCategories = new Map(); // key: name, value: color
