@@ -1355,7 +1355,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         reportJSFunction: {
             type: 'reporter',
-            category: '+-/*&|',
+            category: 'control',
             spec: '$<>-1.5 %mult%s %br %code'
         },
         reportTypeOf: { // only in dev mode for debugging
@@ -2918,13 +2918,13 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportIsA'));
         blocks.push(block('reportVariadicIsIdentical'));
 
-        if (Process.prototype.enableJS) {
+        //if (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
             if (Process.prototype.enableCompiling) {
                 blocks.push(block('reportCompiled'));
             }
-        }
+        //}
         // for debugging: ///////////////
         if (devMode) {
             blocks.push('-');
