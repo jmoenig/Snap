@@ -2618,7 +2618,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(this.customPaletteButton(buttonDescriptor));
         }
     });
-
+    try{
     if (category === '🏃') {
 
         blocks.push(block('forward'));
@@ -3022,6 +3022,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doShowTable'));
         }
     }
+    catch(err){this.inform(JSON.stringify(err))}
 
     return blocks;
 };
