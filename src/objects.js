@@ -160,16 +160,16 @@ SpriteMorph.prototype.categories =
     ];
 
 SpriteMorph.prototype.blockColor = {
-    🏃 : new Color(74, 108, 212),
-    looks : new Color(143, 86, 227),
-    sound : new Color(207, 74, 217),
-    pen : new Color(0, 161, 120),
-    control : new Color(230, 168, 34),
-    sensing : new Color(4, 148, 220),
-    operators : new Color(98, 194, 19),
-    variables : new Color(243, 118, 29),
-    lists : new Color(217, 77, 17),
-    other: new Color(150, 150, 150)
+    '🏃' : new Color(74, 108, 212),
+    '👚' : new Color(143, 86, 227),
+    '🔉' : new Color(207, 74, 217),
+    '🖍' : new Color(0, 161, 120),
+    '🔄' : new Color(230, 168, 34),
+    'sensing' : new Color(4, 148, 220),
+    'operators' : new Color(98, 194, 19),
+    'variables' : new Color(243, 118, 29),
+    'lists' : new Color(217, 77, 17),
+    '...': new Color(150, 150, 150)
 };
 
 SpriteMorph.prototype.customCategories = new Map(); // key: name, value: color
@@ -272,193 +272,193 @@ SpriteMorph.prototype.initBlocks = function () {
         changeXPosition: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'change x by %n',
+            category: '🏃',
+            spec: '$arrowRight-1.5 %n',
             defaults: [10]
         },
         setXPosition: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'set x to %n',
+            category: '🏃',
+            spec: '$arrowLeftRightThin $arrowLeft %n',
             defaults: [0]
         },
         changeYPosition: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'change y by %n',
+            category: '🏃',
+            spec: '$arrowDown-1.5 %n',
             defaults: [10]
         },
         setYPosition: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'set y to %n',
+            category: '🏃',
+            spec: '$arrowUpDownThin $arrowLeft %n',
             defaults: [0]
         },
         bounceOffEdge: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
+            category: '🏃',
             spec: 'if on edge, bounce'
         },
         getPosition: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'motion',
-            spec: 'position'
+            category: '🏃',
+            spec: '$crosshairs-1.5'
         },
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'motion',
-            spec: 'x position'
+            category: '🏃',
+            spec: '$arrowLeftRightThin-1.5'
         },
         yPosition: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'motion',
-            spec: 'y position'
+            category: '🏃',
+            spec: '$arrowUpDownThin-1.5'
         },
         direction: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'motion',
-            spec: 'direction'
+            category: '🏃',
+            spec: '$turnAround-1.5'
         },
 
         // Looks
         doSwitchToCostume: {
             type: 'command',
-            category: 'looks',
-            spec: 'switch to costume %cst'
+            category: '👚',
+            spec: '$👚-1.5 $arrowLeft %cst'
         },
         doWearNextCostume: {
             type: 'command',
-            category: 'looks',
-            spec: 'next costume'
+            category: '👚',
+            spec: '$👚🆔-1.5 $arrowLeft 1 + $👚🆔-1.5'
         },
         getCostumeIdx: {
             type: 'reporter',
-            category: 'looks',
-            spec: 'costume #'
+            category: '👚',
+            spec: '$👚🆔-1.5'
         },
         reportGetImageAttribute: {
             type: 'reporter',
-            category: 'looks',
-            spec: '%img of costume %cst',
+            category: '👚',
+            spec: '%img $arrowLeftThin 👚 %cst',
             defaults: [['width'], ['current']]
         },
         reportNewCostume: {
             type: 'reporter',
-            category: 'looks',
-            spec: 'new costume %l width %dim height %dim'
+            category: '👚',
+            spec: '🆕 👚 %l $arrowLeftRightThin %dim $arrowUpDownThin %dim'
         },
         reportNewCostumeStretched: {
             type: 'reporter',
-            category: 'looks',
-            spec: 'stretch %cst x: %n y: %n %',
+            category: '👚',
+            spec: '$expand %cst $arrowLeftRightThin %n $arrowUpDownThin %n %',
             defaults: [['current'], 100, 50]
         },
         doSayFor: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'say %s for %n secs',
+            category: '👚',
+            spec: '$speechBubble-1.5 %s ⏳ %n secs',
             defaults: [localize('Hello!'), 2]
         },
         bubble: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'say %s',
+            category: '👚',
+            spec: '$speechBubble-1.5 %s',
             defaults: [localize('Hello!')]
         },
         doThinkFor: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'think %s for %n secs',
+            category: '👚',
+            spec: '$💭-1.5 %s ⏳ %n secs',
             defaults: [localize('Hmm...'), 2]
         },
         doThink: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'think %s',
+            category: '👚',
+            spec: '$💭-1.5 %s',
             defaults: [localize('Hmm...')]
         },
         changeEffect: {
             type: 'command',
-            category: 'looks',
-            spec: 'change %eff effect by %n',
-            defaults: [['ghost'], 25]
+            category: '👚',
+            spec: '%eff effect $arrowLeft + %n',
+            defaults: [['👻'], 25]
         },
         setEffect: {
             type: 'command',
-            category: 'looks',
-            spec: 'set %eff effect to %n',
-            defaults: [['ghost'], 0]
+            category: '👚',
+            spec: '%eff effect $arrowLeft %n',
+            defaults: [['👻'], 0]
         },
         getEffect: {
             type: 'reporter',
-            category: 'looks',
+            category: '👚',
             spec: '%eff effect',
-            defaults: [['ghost']]
+            defaults: [['👻']]
         },
         clearEffects: {
             type: 'command',
-            category: 'looks',
-            spec: 'clear graphic effects'
+            category: '👚',
+            spec: '🚫✨'
         },
         changeScale: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'change size by %n',
+            category: '👚',
+            spec: '$grow-1.5 %n',
             defaults: [10]
         },
         setScale: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'set size to %n %',
+            category: '👚',
+            spec: '$turtle-1.5 $turtle-0.5 $arrowLeft %n %',
             defaults: [100]
         },
         getScale: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'looks',
-            spec: 'size'
+            category: '👚',
+            spec: '$turtle-1.5 $turtle-0.5'
         },
         show: {
             type: 'command',
-            category: 'looks',
-            spec: 'show'
+            category: '👚',
+            spec: '$turtle-1.5'
         },
         hide: {
             type: 'command',
-            category: 'looks',
-            spec: 'hide'
+            category: '👚',
+            spec: '$turtleOutline-1.5'
         },
         reportShown: {
             type: 'predicate',
-            category: 'looks',
-            spec: 'shown?'
+            category: '👚',
+            spec: '$turtle $turtleOutline ?'
         },
         goToLayer: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'go to %layer layer',
+            category: '👚',
+            spec: '$turtle $turtleOutline-0.25 %layer layer',
             defaults: [['front']]
         },
         goBack: {
             only: SpriteMorph,
             type: 'command',
-            category: 'looks',
-            spec: 'go back %n layers',
+            category: '👚',
+            spec: '$arrowDown $turtle %n layers',
             defaults: [1]
         },
 
@@ -466,371 +466,371 @@ SpriteMorph.prototype.initBlocks = function () {
         doScreenshot: {
             dev: true,
             type: 'command',
-            category: 'looks',
+            category: '👚',
             spec: 'save %imgsource as costume named %s',
             defaults: [['pen trails'], localize('screenshot')]
         },
         reportCostumes: {
             dev: true,
             type: 'reporter',
-            category: 'looks',
+            category: '👚',
             spec: 'wardrobe'
         },
         alert: {
             dev: true,
             type: 'command',
-            category: 'looks',
+            category: '👚',
             spec: 'alert %mult%s'
         },
         log: {
             dev: true,
             type: 'command',
-            category: 'looks',
+            category: '👚',
             spec: 'console log %mult%s'
         },
 
         // Sound
         playSound: {
             type: 'command',
-            category: 'sound',
-            spec: 'play sound %snd'
+            category: '🔉',
+            spec: '▶ %snd'
         },
         doPlaySoundUntilDone: {
             type: 'command',
-            category: 'sound',
-            spec: 'play sound %snd until done'
+            category: '🔉',
+            spec: '▶ %snd ⌛'
         },
         doPlaySoundAtRate: {
             type: 'command',
-            category: 'sound',
-            spec: 'play sound %snd at %rate Hz',
+            category: '🔉',
+            spec: '▶ %snd at %rate Hz',
             defaults: ['', 44100]
         },
         doStopAllSounds: {
             type: 'command',
-            category: 'sound',
-            spec: 'stop all sounds'
+            category: '🔉',
+            spec: '$🔇-1.5'
         },
         reportGetSoundAttribute: {
             type: 'reporter',
-            category: 'sound',
-            spec: '%aa of sound %snd',
+            category: '🔉',
+            spec: '%aa of 🔉 %snd',
             defaults: [['duration']]
         },
         reportNewSoundFromSamples: {
             type: 'reporter',
-            category: 'sound',
-            spec: 'new sound %l rate %rate Hz',
+            category: '🔉',
+            spec: '🆕 🔉 %l rate %rate Hz',
             defaults: [null, 44100]
         },
         doRest: {
             type: 'command',
-            category: 'sound',
-            spec: 'rest for %n beats',
+            category: '🔉',
+            spec: '⏳🎵 %n beats',
             defaults: [0.2]
         },
         doPlayNote: {
             type: 'command',
-            category: 'sound',
-            spec: 'play note %note for %n beats',
+            category: '🔉',
+            spec: '🎵 %note for %n beats',
             defaults: [60, 0.5]
         },
         doPlayFrequency: { // only in dev mode - experimental
             dev: true,
             type: 'command',
-            category: 'sound',
+            category: '🔉',
             spec: 'play %n Hz for %n secs',
             defaults: [440, 2]
         },
         doSetInstrument: {
             type: 'command',
-            category: 'sound',
-            spec: 'set instrument to %inst',
+            category: '🔉',
+            spec: '$🎹-1.5 $arrowLeft %inst',
             defaults: [1]
         },
         doChangeTempo: {
             type: 'command',
-            category: 'sound',
-            spec: 'change tempo by %n',
+            category: '🔉',
+            spec: '$🎶-1.5 $arrowLeft + %n',
             defaults: [20]
         },
         doSetTempo: {
             type: 'command',
-            category: 'sound',
-            spec: 'set tempo to %n bpm',
+            category: '🔉',
+            spec: '$🎶-1.5 $arrowLeft %n bpm',
             defaults: [60]
         },
         getTempo: {
             type: 'reporter',
-            category: 'sound',
-            spec: 'tempo'
+            category: '🔉',
+            spec: '$🎶-1.5'
         },
         changeVolume: {
             type: 'command',
-            category: 'sound',
-            spec: 'change volume by %n',
+            category: '🔉',
+            spec: '$🔊-1.5 %n',
             defaults: [10]
         },
         setVolume: {
             type: 'command',
-            category: 'sound',
-            spec: 'set volume to %n %',
+            category: '🔉',
+            spec: '$🔉-1.5 $arrowLeft %n %',
             defaults: [100]
         },
         getVolume: {
             type: 'reporter',
-            category: 'sound',
-            spec: 'volume'
+            category: '🔉',
+            spec: '🔉'
         },
         changePan: {
             type: 'command',
-            category: 'sound',
-            spec: 'change balance by %n',
+            category: '🔉',
+            spec: '🔉 🔊 %n',
             defaults: [10]
         },
         setPan: {
             type: 'command',
-            category: 'sound',
-            spec: 'set balance to %n',
+            category: '🔉',
+            spec: '🔉 🔉 $arrowLeft %n',
             defaults: [0]
         },
         getPan: {
             type: 'reporter',
-            category: 'sound',
-            spec: 'balance'
+            category: '🔉',
+            spec: '🔉 🔉'
         },
         playFreq: {
             type: 'command',
-            category: 'sound',
-            spec: 'play frequency %n Hz',
+            category: '🔉',
+            spec: '〰 %n Hz',
             defaults: [440]
         },
         stopFreq: {
             type: 'command',
-            category: 'sound',
-            spec: 'stop frequency'
+            category: '🔉',
+            spec: '〰 $square-1-255-0-0'
         },
 
         // Sound - Debugging primitives for development mode
         reportSounds: {
             dev: true,
             type: 'reporter',
-            category: 'sound',
+            category: '🔉',
             spec: 'jukebox'
         },
 
         // Pen
         clear: {
             type: 'command',
-            category: 'pen',
-            spec: 'clear'
+            category: '🖍',
+            spec: '$eraser-1.5'
         },
         down: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'pen down'
+            category: '🖍',
+            spec: '__🖍 '
         },
         up: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'pen up'
+            category: '🖍',
+            spec: '__ 🖍'
         },
         getPenDown: {
             only: SpriteMorph,
             type: 'predicate',
-            category: 'pen',
-            spec: 'pen down?'
+            category: '🖍',
+            spec: '__🖍?'
         },
         setColor: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'set pen color to %clr'
+            category: '🖍',
+            spec: '🖍 🎨 $arrowLeft %clr'
         },
         setPenColorDimension: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'set pen %clrdim to %n',
+            category: '🖍',
+            spec: ' 🖍 %clrdim $arrowLeft %n',
             defaults: [['hue'], 50]
         },
         changePenColorDimension: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'change pen %clrdim by %n',
+            category: '🖍',
+            spec: ' 🖍 %clrdim $arrowLeft + %n',
             defaults: [['hue'], 10]
         },
         getPenAttribute: {
             type: 'reporter',
-            category: 'pen',
-            spec: 'pen %pen',
+            category: '🖍',
+            spec: '🖍 %pen',
             defaults: [['hue']]
         },
         setBackgroundColor: {
             only: StageMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'set background color to %clr'
+            category: '🖍',
+            spec: '$stage-1.5 🎨 $arrowLeft %clr'
         },
         setBackgroundColorDimension: {
             only: StageMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'set background %clrdim to %n',
+            category: '🖍',
+            spec: '$stage-1.5 %clrdim $arrowLeft %n',
             defaults: [['hue'], 50]
         },
         changeBackgroundColorDimension: {
             only: StageMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'change background %clrdim by %n',
+            category: '🖍',
+            spec: '$stage-1.5 %clrdim $arrowLeft + %n',
             defaults: [['hue'], 10]
         },
         changeSize: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'change pen size by %n',
+            category: '🖍',
+            spec: '$🖍-1.5 $🖍-0.5 $arrowLeft + %n',
             defaults: [1]
         },
         setSize: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'set pen size to %n',
+            category: '🖍',
+            spec: '$🖍-1.5 $🖍-0.5 $arrowLeft %n',
             defaults: [1]
         },
         doStamp: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'stamp'
+            category: '🖍',
+            spec: '$turtle-1-255-46-34 $turtle'
         },
         floodFill: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'fill'
+            category: '🖍',
+            spec: '$fillBucket'
         },
         write: {
             only: SpriteMorph,
             type: 'command',
-            category: 'pen',
-            spec: 'write %s size %n',
+            category: '🖍',
+            spec: '📝 %s 📏 %n A🅰 %fnt A $A %style',
             defaults: [localize('Hello!'), 12]
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
-            category: 'pen',
-            spec: 'pen trails'
+            category: '🖍',
+            spec: '_____ 🖍👚'
         },
         reportPentrailsAsSVG: {
             type: 'reporter',
-            category: 'pen',
+            category: '🖍',
             spec: 'pen vectors'
         },
         doPasteOn: {
             type: 'command',
-            category: 'pen',
-            spec: 'paste on %spr'
+            category: '🖍',
+            spec: '📋 $arrowRight %spr'
         },
         doCutFrom: {
             type: 'command',
-            category: 'pen',
-            spec: 'cut from %spr'
+            category: '🖍',
+            spec: '✂ %spr'
         },
 
         // Control
         receiveGo: {
             type: 'hat',
-            category: 'control',
-            spec: 'when %greenflag clicked'
+            category: '🔄',
+            spec: '%greenflag $👈-1.5'
         },
         receiveKey: {
             type: 'hat',
-            category: 'control',
-            spec: 'when %keyHat key pressed %keyName',
+            category: '🔄',
+            spec: '%keyHat ⌨ 👇 %keyName',
             defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
-            category: 'control',
-            spec: 'when I am %interaction',
-            defaults: [['clicked']]
+            category: '🔄',
+            spec: '$turtle %interaction',
+            defaults: [['👈']]
         },
         receiveMessage: {
             type: 'hat',
-            category: 'control',
-            spec: 'when I receive %msgHat %message',
+            category: '🔄',
+            spec: '📨 %msgHat %message',
             defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
             type: 'hat',
-            category: 'control',
+            category: '...',
             spec: 'when %b'
         },
         getLastMessage: {  // retained for legacy compatibility
             dev: true,
             type: 'reporter',
-            category: 'control',
-            spec: 'message'
+            category: '🔄',
+            spec: '📨'
         },
         doBroadcast: {
             type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg %receive'
+            category: '🔄',
+            spec: '📩 %msg %receive'
         },
         doBroadcastAndWait: {
             type: 'command',
-            category: 'control',
-            spec: 'broadcast %msg %receive and wait'
+            category: '🔄',
+            spec: '📩 %msg %receive ⏳'
         },
         doWait: {
             type: 'command',
-            category: 'control',
-            spec: 'wait %n secs',
+            category: '🔄',
+            spec: '⌛ %n secs',
             defaults: [1]
         },
         doWaitUntil: {
             type: 'command',
-            category: 'control',
-            spec: 'wait until %b'
+            category: '🔄',
+            spec: '⌛ until %b'
         },
         doForever: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'forever %loop'
         },
         doRepeat: {
             type: 'command',
-            category: 'control',
-            spec: 'repeat %n %loop',
+            category: '🔄',
+            spec: '🔄 %n %loop',
             defaults: [10]
         },
         doUntil: {
             type: 'command',
-            category: 'control',
-            spec: 'repeat until %b %loop'
+            category: '🔄',
+            spec: '🔄 $x-1-255-0-0 = %b %loop'
         },
         doFor: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
         },
         /*
         doVariadicIf: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'if %b %c %elseif'
         },
         */
         doIf: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'if %b %c %elseif'
         },
         doIfElse: {
