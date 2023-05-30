@@ -1308,7 +1308,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         reportLetter: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'letter %ix of %s',
             defaults: [1, localize('world')]
         },
