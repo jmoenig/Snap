@@ -318,6 +318,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%s': {
         type: 'input'
     },
+    '%font':{type:'input'},'%style':{type:'input',menu:{italic:'italic',bold:'bold',both:'italic bold'}},
     '%n': {
         type: 'input',
         tags: 'numeric'
@@ -7845,7 +7846,7 @@ function RingMorph() {
 
 RingMorph.prototype.init = function () {
     RingMorph.uber.init.call(this);
-    this.category = 'other';
+    this.category = '🔄';
     this.contrast = RingMorph.prototype.contrast;
     this.setExtent(new Point(200, 80));
 };
