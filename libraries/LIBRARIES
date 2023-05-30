@@ -36,6 +36,7 @@ bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit man
 ~	~
 SciSnap!2Blocks.xml	SciSnap! v2	Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)
 TuneScope.xml	TuneScope	Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)
+googleDrive.xml	Google Drive Loader	Load projects from Google Drive. Instructions in help menu of the block. Made by pajamaclaws21, with XML loader script by dardoro.
 ~	~
 ~	~
 ~	~
