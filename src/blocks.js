@@ -1809,7 +1809,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case 'ring':
             part = new RingMorph();
-            part.color = SpriteMorph.prototype.blockColor.other;
+            part.color = SpriteMorph.prototype.blockColor['🔄'];
             part.selector = info.selector;
             part.setSpec(info.spec);
             part.isDraggable = true;
