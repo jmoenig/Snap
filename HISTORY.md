@@ -54,6 +54,7 @@
 
 ### 2023-05-30
 * blocks: enable explicit input lists in variadic slots, experimental, under construction
+* gui: added hidden experimental "explicit input lists" session setting
 
 ### 2023-05-24
 * threads: refactored variable error handling for new translation mechanism
