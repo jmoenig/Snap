@@ -165,10 +165,10 @@ SpriteMorph.prototype.blockColor = {
     '🔉' : new Color(207, 74, 217),
     '🖍' : new Color(0, 161, 120),
     '🔄' : new Color(230, 168, 34),
-    'sensing' : new Color(4, 148, 220),
-    'operators' : new Color(98, 194, 19),
-    'variables' : new Color(243, 118, 29),
-    'lists' : new Color(217, 77, 17),
+    '👁👂' : new Color(4, 148, 220),
+    '+-/*&|' : new Color(98, 194, 19),
+    '56➡(fifty-six)' : new Color(243, 118, 29),
+    '▪▪◻▫◼' : new Color(217, 77, 17),
     '...': new Color(150, 150, 150)
 };
 
@@ -751,13 +751,13 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         receiveKey: {
             type: 'hat',
-            category: '🔄',
+            category: '👁👂',
             spec: '%keyHat ⌨ 👇 %keyName',
             defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
-            category: '🔄',
+            category: '👁👂',
             spec: '$turtle %interaction',
             defaults: [['👈']]
         },
@@ -831,105 +831,103 @@ SpriteMorph.prototype.initBlocks = function () {
         doIf: {
             type: 'command',
             category: '🔄',
-            spec: 'if %b %c %elseif'
+            spec: '%b $tick-1-0-255-0 %c %elseif'
         },
         doIfElse: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'if %b %c else %c'
         },
         reportIfElse: {
             type: 'reporter',
-            category: 'control',
-            spec: 'if %b then %s else %s'
+            category: '🔄',
+            spec: '%b $? $tick-1-0-255-0 %s $x-1-255-0-0 %s'
         },
         doStopThis: {
             type: 'command',
-            category: 'control',
-            spec: 'stop %stopChoices',
+            category: '🔄',
+            spec: '$octagon-1.5-200-0-0 %stopChoices',
             defaults: [['all']]
         },
         doRun: {
             type: 'command',
-            category: 'control',
-            spec: 'run %cmdRing %inputs'
+            category: '🔄',
+            spec: '$pointRight %cmdRing %inputs'
         },
         fork: {
             type: 'command',
-            category: 'control',
-            spec: 'launch %cmdRing %inputs'
+            category: '🔄',
+            spec: '%greenflag %cmdRing %inputs'
         },
         evaluate: {
             type: 'reporter',
-            category: 'control',
-            spec: 'call %repRing %inputs'
+            category: '🔄',
+            spec: '$pointRight %repRing %inputs'
         },
         doReport: {
             type: 'command',
-            category: 'control',
-            spec: 'report %s'
+            category: '🔄',
+            spec: '%s $↩-2'
         },
         doCallCC: {
             // deprecated - superseded by reportEnviornment - kept for legacy
-            dev: true,
             type: 'command',
-            category: 'control',
-            spec: 'run %cmdRing w/continuation'
+            category: '🔄',
+            spec: '$pointRight %cmdRing w/continuation'
         },
         reportCallCC: {
             // deprecated - superseded by reportEnviornment - kept for legacy
-            dev: true,
             type: 'reporter',
-            category: 'control',
-            spec: 'call %cmdRing w/continuation'
+            category: '🔄',
+            spec: '$pointRight %cmdRing w/continuation'
         },
         doWarp: {
             type: 'command',
-            category: 'other',
-            spec: 'warp %c'
+            category: '🔄',
+            spec: '$thunder %c'
         },
 
         // Message passing
         doTellTo: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             // spec: 'tell %spr to %cl' // I liked this version better, -Jens
-            spec: 'tell %spr to %cmdRing %inputs'
+            spec: '$turtle %spr $pointRight %cmdRing %inputs'
         },
         reportAskFor: {
             type: 'reporter',
-            category: 'control',
-            spec: 'ask %spr for %repRing %inputs'
+            category: '🔄',
+            spec: '$turtle %spr $pointRight %repRing %inputs'
         },
 
         // Cloning
         receiveOnClone: {
             type: 'hat',
-            category: 'control',
-            spec: 'when I start as a clone'
+            category: '🔄',
+            spec: '$turtle $turtle'
         },
         createClone: {
             type: 'command',
-            category: 'control',
-            spec: 'create a clone of %cln',
+            category: '🔄',
+            spec: '$turtle %turtle %cln',
             defaults: [['myself']]
         },
         newClone: {
             type: 'reporter',
-            category: 'control',
-            spec: 'a new clone of %cln',
+            category: '🔄',
+            spec: '$turtle $turtle %cln',
             defaults: [['myself']]
         },
         removeClone: {
             type: 'command',
-            category: 'control',
-            spec: 'delete this clone'
+            category: '🔄',
+            spec: '$turtle %br $🗑-1.5'
         },
 
         // recording user edits
         receiveUserEdit: {
             type: 'hat',
-            category: 'control',
+            category: '🔄',
             spec: 'when %edit is edited %message',
             defaults: [['anything']]
         },
@@ -937,30 +935,30 @@ SpriteMorph.prototype.initBlocks = function () {
         // Custom Blocks & introspection
         doDefineBlock: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'define %upvar %s %repRing',
             defaults: [['block']]
         },
         doSetBlockAttribute: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'set %byob of block %repRing to %s',
             defaults: [['label']]
         },
         doDeleteBlock: {
             type: 'command',
-            category: 'control',
+            category: '🔄',
             spec: 'delete block %repRing'
         },
         reportBlockAttribute: {
             type: 'reporter',
-            category: 'control',
+            category: '🔄',
             spec: '%block of block %repRing',
             defaults: [['definition']]
         },
         reportEnvironment: {
             type: 'reporter',
-            category: 'control',
+            category: '🔄',
             spec: 'this %env',
             defaults: [['script']]
         },
@@ -968,22 +966,22 @@ SpriteMorph.prototype.initBlocks = function () {
         // Debugging - pausing
         doPauseAll: {
             type: 'command',
-            category: 'control',
-            spec: 'pause all %pause'
+            category: '🔄',
+            spec: '%pause'
         },
 
         // Scenes
         doSwitchToScene: {
             type: 'command',
-            category: 'control',
-            spec: 'switch to scene %scn %send',
+            category: '🔄',
+            spec: '$stage-1.5 scene %scn %send',
             defaults: [['next']]
         },
 
         // Pipe
         reportPipe: {
             type: 'reporter',
-            category: 'control',
+            category: '🔄',
             spec: 'pipe %s $arrowRight %mult%repRing'
         },
 
@@ -991,317 +989,317 @@ SpriteMorph.prototype.initBlocks = function () {
         reportTouchingObject: {
             only: SpriteMorph,
             type: 'predicate',
-            category: 'sensing',
-            spec: 'touching %col ?',
+            category: '👁👂',
+            spec: '$turtle %col ?',
             defaults: [['mouse-pointer']]
         },
         reportTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
-            category: 'sensing',
-            spec: 'touching %clr ?'
+            category: '👁👂',
+            spec: '%turtle %clr ?'
         },
         reportColorIsTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
-            category: 'sensing',
-            spec: 'color %clr is touching %clr ?'
+            category: '👁👂',
+            spec: '%clr $turtle %clr ?'
         },
         reportAspect: {
             type: 'reporter',
-            category: 'sensing',
-            spec: '%asp at %loc',
+            category: '👁👂',
+            spec: '%asp 🎨 %loc',
             defaults: [['hue'], ['mouse-pointer']]
         },
         reportStackSize: {
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'stack size'
         },
         reportFrameCount: {
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'frames'
         },
         reportYieldCount: {
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'yields'
         },
         reportThreadCount: {
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'processes'
         },
         doAsk: {
             type: 'command',
-            category: 'sensing',
-            spec: 'ask %s and wait',
+            category: '👁👂',
+            spec: '$speechBubble-1.5 ? %s',
             defaults: [localize('what\'s your name?')]
         },
         reportLastAnswer: { // retained for legacy compatibility
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'answer'
         },
         getLastAnswer: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'answer'
+            category: '👁👂',
+            spec: '$-0 $-0 $speechBubble %br 👤'
         },
         reportMousePosition: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'mouse position'
+            category: '👁👂',
+            spec: '👇 $crosshairs'
         },
         reportMouseX: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'mouse x'
+            category: '👁👂',
+            spec: '👇 $arrowLeftRightThin'
         },
         reportMouseY: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'mouse y'
+            category: '👁👂',
+            spec: '👇 $arrowUpDownThin'
         },
         reportMouseDown: {
             type: 'predicate',
-            category: 'sensing',
-            spec: 'mouse down?'
+            category: '👁👂',
+            spec: '👇 %br $💻-2'
         },
         reportKeyPressed: {
             type: 'predicate',
-            category: 'sensing',
-            spec: 'key %key pressed?',
+            category: '👁👂',
+            spec: '⌨👈 %key ?',
             defaults: [['space']]
         },
         reportRelationTo: {
             only: SpriteMorph,
             type: 'reporter',
-            category: 'sensing',
-            spec: '%rel to %dst',
+            category: '👁👂',
+            spec: '%rel $arrowLeftRight %dst',
             defaults: [['distance'], ['mouse-pointer']]
         },
         doResetTimer: {
             type: 'command',
-            category: 'sensing',
-            spec: 'reset timer'
+            category: '👁👂',
+            spec: '$turnAround ⏰'
         },
         reportTimer: { // retained for legacy compatibility
             dev: true,
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'timer'
         },
         getTimer: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'timer'
+            category: '👁👂',
+            spec: '⏰'
         },
         reportAttributeOf: {
             type: 'reporter',
-            category: 'sensing',
-            spec: '%att of %spr',
+            category: '👁👂',
+            spec: '%att $arrowLeftThin %spr',
             defaults: [['costume #']]
         },
         reportObject: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'object %self',
+            category: '👁👂',
+            spec: '$turtle %self',
             defaults: [['myself']]
         },
         reportURL: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'url %s',
+            category: '👁👂',
+            spec: '$globeBig %s',
             defaults: ['snap.berkeley.edu']
         },
         doSetGlobalFlag: {
             type: 'command',
-            category: 'sensing',
-            spec: 'set %setting to %b',
+            category: '👁👂',
+            spec: '%setting $arrowLeft %b',
             defaults: [['video capture']]
         },
         reportGlobalFlag: {
             type: 'predicate',
-            category: 'sensing',
-            spec: 'is %setting on?',
+            category: '👁👂',
+            spec: '%setting ?',
             defaults: [['turbo mode']]
         },
         reportDate: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'current %dates',
+            category: '👁👂',
+            spec: '🕑📆 %dates',
             defaults: [['date']]
         },
         reportGet: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'my %get',
+            category: '👁👂',
+            spec: '$turtle %get',
             defaults: [['neighbors']]
         },
         reportAudio: {
             type: 'reporter',
-            category: 'sensing',
-            spec: 'microphone %audio',
+            category: '👁👂',
+            spec: '🎤 %audio',
             defaults: [['volume']]
         },
 
         // Operators
         reifyScript: {
             type: 'ring',
-            category: 'other',
+            category: '🔄',
             spec: '%rc %ringparms',
             alias: 'command ring lambda'
         },
         reifyReporter: {
             type: 'ring',
-            category: 'other',
+            category: '🔄',
             spec: '%rr %ringparms',
             alias: 'reporter ring lambda'
         },
         reifyPredicate: {
             type: 'ring',
-            category: 'other',
+            category: '🔄',
             spec: '%rp %ringparms',
             alias: 'predicate ring lambda'
         },
         reportVariadicSum: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%sum',
             alias: '+'
         },
         reportDifference: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%n \u2212 %n',
             alias: '-'
         },
         reportVariadicProduct: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%product',
             alias: '*'
         },
         reportQuotient: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%n / %n' // '%n \u00F7 %n'
         },
         reportRound: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'round %n'
         },
         reportMonadic: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%fun of %n',
             defaults: [['sqrt'], 10]
         },
         reportPower: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%n ^ %n'
         },
         reportModulus: {
             type: 'reporter',
-            category: 'operators',
-            spec: '%n mod %n'
+            category: '+-/*&|',
+            spec: 'R %n / %n'
         },
         reportAtan2: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'atan2 %n ÷ %n'
         },
         reportVariadicMin: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%min',
             alias: 'min'
         },
         reportVariadicMax: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%max',
             alias: 'max'
         },
         reportRandom: {
             type: 'reporter',
-            category: 'operators',
-            spec: 'pick random %n to %n',
+            category: '+-/*&|',
+            spec: '%n 🎲 %n',
             defaults: [1, 10]
         },
         reportVariadicEquals: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all='
         },
         reportVariadicNotEquals: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all!='
         },
         reportVariadicLessThan: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all<'
         },
         reportVariadicLessThanOrEquals: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all<='
         },
         reportVariadicGreaterThan: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all>'
         },
         reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all>='
         },
         reportVariadicAnd: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%all',
             alias: '&'
         },
         reportVariadicOr: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%any',
             alias: '|'
         },
         reportNot: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'not %b'
         },
         reportBoolean: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%bool',
             defaults: [true],
             alias: 'true boolean'
         },
         reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%bool',
             defaults: [false],
             alias: 'false boolean'
         },
         reportJoinWords: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'join %words',
             defaults: [localize('hello') + ' ', localize('world')]
         },
@@ -1313,68 +1311,68 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         reportStringSize: { // deprecated as of v9
             type: 'reporter',
-            category: 'operators',
-            spec: 'length of %s',
+            category: '+-/*&|',
+            spec: '$arrowLeftRightThin %s',
             defaults: [localize('world')]
         },
         reportTextAttribute: {
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%ta of text %s',
             defaults: [['length'], localize('world')]
         },
         reportUnicode: {
             type: 'reporter',
-            category: 'operators',
-            spec: 'unicode of %s',
+            category: '+-/*&|',
+            spec: '🆔 %s',
             defaults: ['a']
         },
         reportUnicodeAsLetter: {
             type: 'reporter',
-            category: 'operators',
-            spec: 'unicode %n as letter',
+            category: '+-/*&|',
+            spec: '%n 🆔 $arrowRightThin T',
             defaults: [65]
         },
         reportIsA: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'is %s a %typ ?',
             defaults: [5, ['number']]
         },
         reportVariadicIsIdentical: {
             type: 'predicate',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'is %all== ?'
         },
         reportTextSplit: {
             type: 'reporter',
-            category: 'operators',
-            spec: 'split %s by %delim',
+            category: '+-/*&|',
+            spec: '✂TEXT %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "]
         },
         reportJSFunction: {
             type: 'reporter',
-            category: 'operators',
-            spec: 'JavaScript function ( %mult%s ) { %code }'
+            category: '+-/*&|',
+            spec: '$<>-1.5 %mult%s %br %code'
         },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'type of %s',
             defaults: [5]
         },
         reportTextFunction: { // only in dev mode - experimental
             dev: true,
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: '%txtfun of %s',
             defaults: [['encode URI'], "Abelson & Sussman"]
         },
         reportCompiled: { // experimental
             dev: true,
             type: 'reporter',
-            category: 'operators',
+            category: '+-/*&|',
             spec: 'compile %repRing for %n args',
             defaults: [null, 0]
         },
@@ -1382,120 +1380,119 @@ SpriteMorph.prototype.initBlocks = function () {
         // Variables
         doSetVar: {
             type: 'command',
-            category: 'variables',
-            spec: 'set %var to %s',
+            category: '56➡(fifty-six)',
+            spec: '%var $arrowLeft %s',
             defaults: [null, 0]
         },
         doChangeVar: {
             type: 'command',
-            category: 'variables',
-            spec: 'change %var by %n',
+            category: '56➡(fifty-six)',
+            spec: '%var $arrowLeft + %n',
             defaults: [null, 1]
         },
         doShowVar: {
             type: 'command',
-            category: 'variables',
-            spec: 'show variable %var'
+            category: '56➡(fifty-six)',
+            spec: '$rectangle %var'
         },
         doHideVar: {
             type: 'command',
-            category: 'variables',
-            spec: 'hide variable %var'
+            category: '56➡(fifty-six)',
+            spec: '$rectangleOutline %var'
         },
         doDeclareVariables: {
             type: 'command',
-            category: 'other',
+            category: '56➡(fifty-six)',
             spec: 'script variables %scriptVars'
         },
 
         // inheritance
         doDeleteAttr: {
             type: 'command',
-            category: 'variables',
+            category: '56➡(fifty-six)',
             spec: 'inherit %shd'
         },
 
         // Lists
         reportNewList: {
             type: 'reporter',
-            category: 'lists',
-            spec: 'list %exp'
+            category: '▪▪◻▫◼',
+            spec: '$list-1.5 %exp'
         },
         reportCONS: {
             type: 'reporter',
-            category: 'lists',
-            spec: '%s in front of %l'
+            category: '▪▪◻▫◼',
+            spec: '%s %list %l'
         },
         reportListItem: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'item %idx of %l',
             defaults: [1]
         },
         reportCDR: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'all but first of %l'
         },
         reportListLength: { // deprecated as of v6.6
-            dev: true,
             type: 'reporter',
-            category: 'lists',
-            spec: 'length of %l'
+            category: '▪▪◻▫◼',
+            spec: '[ %l'
         },
         reportListAttribute: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: '%la of %l',
             defaults: [['length']]
         },
         reportListContainsItem: {
             type: 'predicate',
-            category: 'lists',
-            spec: '%l contains %s',
+            category: '▪▪◻▫◼',
+            spec: '%l { %s ?',
             defaults: [null, localize('thing')]
         },
         reportListIsEmpty: {
             type: 'predicate',
-            category: 'lists',
-            spec: 'is %l empty?'
+            category: '▪▪◻▫◼',
+            spec: '%l ]0 ?'
         },
         reportListIndex: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'index of %s in %l',
             defaults: [localize('thing')]
         },
         doAddToList: {
             type: 'command',
-            category: 'lists',
-            spec: 'add %s to %l',
+            category: '▪▪◻▫◼',
+            spec: '%s $arrowRight %l',
             defaults: [localize('thing')]
         },
         doDeleteFromList: {
             type: 'command',
-            category: 'lists',
-            spec: 'delete %ida of %l',
+            category: '▪▪◻▫◼',
+            spec: '🗑 $arrowLeft %ida of %l',
             defaults: [1]
         },
         doInsertInList: {
             type: 'command',
-            category: 'lists',
-            spec: 'insert %s at %idx of %l',
+            category: '▪▪◻▫◼',
+            spec: '%s $arrowRight %idx of %l',
             defaults: [localize('thing'), 1]
         },
         doReplaceInList: {
             type: 'command',
-            category: 'lists',
-            spec: 'replace item %idx of %l with %s',
+            category: '▪▪◻▫◼',
+            spec: 'item %idx of %l $arrowLeft %s',
             defaults: [1, null, localize('thing')]
         },
 
         // numbers - (arrayed when hyper-blocks is on, otherwise linked)
         reportNumbers: {
             type: 'reporter',
-            category: 'lists',
-            spec: 'numbers from %n to %n',
+            category: '▪▪◻▫◼',
+            spec: '%n to %n',
             defaults: [1, 10]
         },
     /*
@@ -1508,22 +1505,22 @@ SpriteMorph.prototype.initBlocks = function () {
     */
         reportConcatenatedLists: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'append %lists'
         },
         reportCrossproduct: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'combinations %lists'
         },
         reportTranspose: { // deprecated
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'transpose %l'
         },
         reportReshape: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'reshape %s to %nums',
             defaults: [null, [4, 3]]
         },
@@ -1539,51 +1536,51 @@ SpriteMorph.prototype.initBlocks = function () {
         // HOFs
         reportMap: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'map %repRing over %l'
         },
         reportAtomicMap: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: '%blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'keep items %predRing from %l'
         },
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: '%blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'find first item %predRing in %l'
         },
         reportAtomicFindFirst: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: '%blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'combine %l using %repRing'
         },
         reportAtomicCombine: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: '%blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
-            category: 'lists',
+            category: '🔄',
             spec: 'for each %upvar in %l %cla',
             defaults: [localize('item')]
         },
@@ -1592,56 +1589,56 @@ SpriteMorph.prototype.initBlocks = function () {
         doShowTable: {
             dev: true,
             type: 'command',
-            category: 'lists',
+            category: '▪▪◻▫◼',
             spec: 'show table %l'
         },
 
         // Code mapping
         doMapCodeOrHeader: {
             type: 'command',
-            category: 'other',
+            category: '...',
             spec: 'map %cmdRing to %codeKind %code',
             defaults: [null, ['code']]
         },
         doMapValueCode: {
             type: 'command',
-            category: 'other',
+            category: '...',
             spec: 'map %mapValue to code %code',
             defaults: [['String'], '<#1>']
         },
         doMapListCode: {
             type: 'command',
-            category: 'other',
+            category: '...',
             spec: 'map %codeListPart of %codeListKind to code %code'
         },
         reportMappedCode: {
             type: 'reporter',
-            category: 'other',
+            category: '...',
             spec: 'code of %cmdRing'
         },
 
         // Extensions
         doApplyExtension: {
             type: 'command',
-            category: 'other',
-            spec: 'primitive %prim %mult%s'
+            category: '...',
+            spec: '🔧 %prim %mult%s'
         },
         reportApplyExtension: {
             type: 'reporter',
-            category: 'other',
-            spec: 'primitive %prim %mult%s'
+            category: '...',
+            spec: '🔧 %prim %mult%s'
         },
 
         // Video motion
         doSetVideoTransparency: {
             type: 'command',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'set video transparency to %n',
             defaults: [50]
         },
         reportVideo: {
             type: 'reporter',
-            category: 'sensing',
+            category: '👁👂',
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']]
         }
@@ -2622,7 +2619,7 @@ SpriteMorph.prototype.blockTemplates = function (
         }
     });
 
-    if (category === 'motion') {
+    if (category === '🏃') {
 
         blocks.push(block('forward'));
         blocks.push(block('turn'));
@@ -2650,7 +2647,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('direction'));
         blocks.push(block('direction', this.inheritsAttribute('direction')));
 
-    } else if (category === 'looks') {
+    } else if (category === '👚') {
 
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
@@ -2695,7 +2692,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doScreenshot'));
         }
 
-    } else if (category === 'sound') {
+    } else if (category === '🔉') {
 
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
@@ -2735,7 +2732,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doPlayFrequency'));
         }
 
-    } else if (category === 'pen') {
+    } else if (category === '🖍') {
 
         blocks.push(block('clear'));
         blocks.push('-');
@@ -2761,11 +2758,9 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
 
-    } else if (category === 'control') {
+    } else if (category === '🔄') {
 
         blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveCondition'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
@@ -2826,7 +2821,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('reportCallCC'));
         }
 
-    } else if (category === 'sensing') {
+    } else if (category === '👁👂') {
 
         blocks.push(block('reportTouchingObject'));
         blocks.push(block('reportTouchingColor'));
@@ -2843,6 +2838,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportMouseY'));
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
+        blocks.push(block('receiveKey'));
+        blocks.push(block('receiveInteraction'));
         blocks.push(block('reportKeyPressed'));
         blocks.push('-');
         blocks.push(block('reportRelationTo'));
@@ -2880,7 +2877,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('reportFrameCount'));
             blocks.push(block('reportYieldCount'));
         }
-    } else if (category === 'operators') {
+    } else if (category === '+-/*&|') {
 
         blocks.push(block('reifyScript'));
         blocks.push(block('reifyReporter'));
@@ -2934,7 +2931,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('reportTextFunction'));
         }
 
-    } else if (category === 'variables') {
+    } else if (category === '56➡(fifty-six)') {
 
         blocks.push(this.makeVariableButton());
         if (this.deletableVariableNames().length > 0) {
