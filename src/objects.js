@@ -238,7 +238,7 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: '🏃',
-            spec: '$arrowUp-1.5 %dir °',
+            spec: 'point %dir °',
             defaults: [90]
         },
         doFaceTowards: {
@@ -259,14 +259,14 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: '🏃',
-            spec: 'go to %dst',
+            spec: '$turtle-2 %dst',
             defaults: [['random position']]
         },
         doGlide: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'glide %n secs to x: %n y: %n',
+            category: '🏃',
+            spec: '✈ %n ⏳ $turtle $crosshair $arrowLeftRightThin %n $arrowUpDownThin %n',
             defaults: [1, 0, 0]
         },
         changeXPosition: {
