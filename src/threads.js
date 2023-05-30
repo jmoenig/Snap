@@ -8419,7 +8419,7 @@ Context.prototype.toBlock = function () {
     }
 
     // otherwise show an empty ring
-    ring.color = SpriteMorph.prototype.blockColor.other;
+    ring.color = SpriteMorph.prototype.blockColor['🔄'];
     ring.setSpec('%rr %ringparms');
 
     // also show my inputs, unless I'm a continuation
