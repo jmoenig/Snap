@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-23';
+modules.blocks = '2023-May-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13290,6 +13290,10 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
+// MultiArgMorph preferences settings:
+
+MultiArgMorph.prototype.enableExplicitInputLists = false;
+
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -13341,6 +13345,7 @@ MultiArgMorph.prototype.init = function (
 ) {
     var label,
         arrows = new FrameMorph(),
+        listSymbol,
         leftArrow,
         rightArrow,
         i;
@@ -13368,7 +13373,8 @@ MultiArgMorph.prototype.init = function (
 
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
-    arrows.alpha = isTransparent === false ? 1 : 0;
+    arrows.alpha = (isTransparent === false || this.enableExplicitInputLists) ?
+        1 : 0;
 
     // label text:
     if (this.labelText || (this.slotSpec === '%cs')) {
@@ -13390,6 +13396,9 @@ MultiArgMorph.prototype.init = function (
         true
     );
 
+    // list symbol:
+    listSymbol = this.labelPart('$list-.97');
+
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
@@ -13402,6 +13411,7 @@ MultiArgMorph.prototype.init = function (
     // control panel:
     arrows.add(leftArrow);
     arrows.add(rightArrow);
+    arrows.add(listSymbol);
     arrows.rerender();
     arrows.acceptsDrops = false;
 
@@ -13528,9 +13538,10 @@ MultiArgMorph.prototype.fixLayout = function () {
         labels = this.allLabels();
         this.color = this.parent.color;
         this.arrows().color = this.color;
+        shadowColor = this.shadowColor ||
+            this.parent.color.darker(this.labelContrast);
+        this.arrows().children[2].shadowColor = shadowColor; // list symbol
         if (labels.length) {
-            shadowColor = this.shadowColor ||
-                this.parent.color.darker(this.labelContrast);
             labels.forEach(label => {
                 shadowOffset = this.shadowOffset ||
                     (label ? label.shadowOffset : null);
@@ -13555,19 +13566,35 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
+        listSymbol = arrows.children[2],
         inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
     leftArrow.show();
+    listSymbol.hide();
     rightArrow.show();
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
         }
         leftArrow.hide();
-        rightArrow.setPosition(
-            arrows.position().subtract(new Point(dim.x, 0))
-        );
-        arrows.setExtent(dim);
+        if (this.isStatic || inpCount || !this.enableExplicitInputLists) {
+            rightArrow.setPosition(
+                arrows.position().subtract(new Point(dim.x, 0))
+            );
+            arrows.setExtent(dim);
+        } else {
+            listSymbol.show();
+            listSymbol.setPosition(
+                arrows.position().add(new Point(
+                    0,
+                    (arrows.height() - listSymbol.height()) / 2)
+                )
+            );
+            arrows.setWidth(dim.x + listSymbol.width() * 1.4);
+            arrows.setHeight(dim.y);
+            rightArrow.setCenter(arrows.center());
+            rightArrow.setRight(arrows.right());
+        }
     } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
         rightArrow.hide();
         arrows.setExtent(dim);

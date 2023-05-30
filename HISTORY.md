@@ -52,6 +52,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-30
+* blocks: enable explicit input lists in variadic slots, experimental, under construction
+
 ### 2023-05-24
 * threads: refactored variable error handling for new translation mechanism
 * widgets: made confirmation dialog text auto-wrapping
