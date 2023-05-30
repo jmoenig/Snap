@@ -12169,7 +12169,7 @@ TemplateSlotMorph.prototype.init = function (name) {
     template.isTemplate = true;
     if (modules.objects !== undefined) {
         template.color = SpriteMorph.prototype.blockColor.variables;
-        template.category = 'variables';
+        template.category = '56➡(fifty-six)';
     } else {
         template.color = new Color(243, 118, 29);
         template.category = null;
