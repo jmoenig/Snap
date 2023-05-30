@@ -13292,7 +13292,7 @@ MultiArgMorph.uber = ArgMorph.prototype;
 
 // MultiArgMorph preferences settings:
 
-MultiArgMorph.prototype.enableExplicitInputLists = true;
+MultiArgMorph.prototype.enableExplicitInputLists = false;
 
 // MultiArgMorph instance creation:
 
