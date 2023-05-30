@@ -170,7 +170,7 @@ SpriteMorph.prototype.blockColor = {
     '+-/*&|' : new Color(98, 194, 19),
     '56➡(fifty-six)' : new Color(243, 118, 29),
     '▪▪◻▫◼' : new Color(217, 77, 17),
-    '...': new Color(150, 150, 150)
+    '...': new Color(150, 150, 150),
     'variables': new Color(243,118,29,0)
 };
 
