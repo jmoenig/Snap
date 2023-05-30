@@ -147,20 +147,20 @@ SpriteMorph.prototype.attributes =
 
 SpriteMorph.prototype.categories =
     [
-        'motion',
-        'looks',
-        'sound',
-        'pen',
-        'control',
-        'sensing',
-        'operators',
-        'variables',
-        'lists',
-        'other'
+        '🏃',
+        '👚',
+        '🔉',
+        '🖍',
+        '🔄',
+        '👁👂',
+        '+-/*&|',
+        '56➡(fifty-six)',
+        '▪▪◻▫◼',
+        '...'
     ];
 
 SpriteMorph.prototype.blockColor = {
-    motion : new Color(74, 108, 212),
+    🏃 : new Color(74, 108, 212),
     looks : new Color(143, 86, 227),
     sound : new Color(207, 74, 217),
     pen : new Color(0, 161, 120),
@@ -216,49 +216,49 @@ SpriteMorph.prototype.initBlocks = function () {
         forward: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'move %n steps',
+            category: '🏃',
+            spec: '$👣-2 %n',
             defaults: [10]
         },
         turn: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'turn %clockwise %n degrees',
+            category: '🏃',
+            spec: '%clockwise %n °',
             defaults: [15]
         },
         turnLeft: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'turn %counterclockwise %n degrees',
+            category: '🏃',
+            spec: '%counterclockwise %n °',
             defaults: [15]
         },
         setHeading: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'point in direction %dir',
+            category: '🏃',
+            spec: '$arrowUp-1.5 %dir °',
             defaults: [90]
         },
         doFaceTowards: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'point towards %dst',
+            category: '🏃',
+            spec: '👉 %dst',
             defaults: [['mouse-pointer']]
         },
         gotoXY: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
-            spec: 'go to x: %n y: %n',
+            category: '🏃',
+            spec: '$turtle $crosshairs $arrowLeftRightThin %n $arrowUpDownThin %n',
             defaults: [0, 0]
         },
         doGotoObject: {
             only: SpriteMorph,
             type: 'command',
-            category: 'motion',
+            category: '🏃',
             spec: 'go to %dst',
             defaults: [['random position']]
         },
