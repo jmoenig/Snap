@@ -258,7 +258,7 @@ SyntaxElementMorph.uber = Morph.prototype;
         rfColor         - <Color> for reified outlines and slot backgrounds
 */
 
-SyntaxElementMorph.prototype.contrast = 65;
+SyntaxElementMorph.prototype.contrast = 0; //65;
 
 SyntaxElementMorph.prototype.setScale = function (num) {
     var scale = Math.min(Math.max(num, 1), 25);
