@@ -3022,7 +3022,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doShowTable'));
         }
     }
-    catch(err){this.inform(JSON.stringify(err))}
+    }catch(err){this.inform(JSON.stringify(err))}
 
     return blocks;
 };
