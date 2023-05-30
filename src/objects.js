@@ -2537,7 +2537,7 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
     var block = new ReporterBlockMorph(false);
     block.selector = 'reportGetVar';
     block.color = this.blockColor.variables;
-    block.category = 'variables';
+    block.category = '56➡(fifty-six)';
     block.isLocalVarTemplate = isLocalTemplate;
     block.setSpec(varName);
     block.isDraggable = true;
@@ -2547,7 +2547,7 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 // SpriteMorph block templates
 
 SpriteMorph.prototype.blockTemplates = function (
-    category = 'motion',
+    category = '...',
     all = false // include hidden blocks
 ) {
     var blocks = [], myself = this, varNames,
@@ -3037,7 +3037,7 @@ SpriteMorph.prototype.makeVariableButton = function () {
             ide = myself.parentThatIsA(IDE_Morph);
             myself.addVariable(pair[0], pair[1]);
             myself.toggleVariableWatcher(pair[0], pair[1]);
-            ide.flushBlocksCache('variables'); // b/c of inheritance
+            ide.flushBlocksCache('56➡(fifty-six)'); // b/c of inheritance
             ide.refreshPalette();
             myself.recordUserEdit(
                 'palette',
@@ -3232,7 +3232,7 @@ SpriteMorph.prototype.makeBlock = function () {
         },
         this
     );
-    if (category !== 'variables' || category !== 'unified') {
+    if (category !== '56➡(fifty-six)' || category !== 'unified') {
         dlg.category = category;
         dlg.categories.refresh();
         dlg.types.children.forEach(each => {
@@ -3372,12 +3372,12 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
-                        !['lists', 'other'].includes(category) &&
+                        !['lists', '...'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
                 // hide category names
-                if (!showCategories && category !== 'variables') {
+                if (!showCategories && category !== '56➡(fifty-six)') {
                     primitives = primitives.filter(each =>
                         each !== '-' &&
                         each !== '=' &&
@@ -3385,7 +3385,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 }
 
                 // hide "make / delete a variable" buttons
-                if (!showButtons && category === 'variables') {
+                if (!showButtons && category === '56➡(fifty-six)') {
                     primitives = primitives.filter(each =>
                         !((each instanceof PushButtonMorph && each.hideable) &&
                             !(each instanceof ToggleMorph)));
@@ -3418,9 +3418,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
         blocks.push('=');
         blocks.push(...this.customBlockTemplatesForCategory(category));
     }
-    if (category === 'variables') {
+    if (category === '56➡(fifty-six)') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
-        blocks.push(...this.customBlockTemplatesForCategory('other'));
+        blocks.push(...this.customBlockTemplatesForCategory('...'));
     }
 
     blocks.forEach(block => {
@@ -3549,14 +3549,14 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
         return;
     }
     dict = {
-        doWarp: 'control',
-        reifyScript: 'operators',
-        reifyReporter: 'operators',
-        reifyPredicate: 'operators',
-        doDeclareVariables: 'variables'
+        doWarp: '🔄',
+        reifyScript: '+-/*&|',
+        reifyReporter: '+-/*&|',
+        reifyPredicate: '+-/*&|',
+        doDeclareVariables: '56➡(fifty-six)'
     };
     cat = dict[aBlock.selector] || aBlock.category;
-    if (cat === 'lists') {cat = 'variables'; }
+    if (cat === 'lists') {cat = '56➡(fifty-six)'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
     this.recordUserEdit(
