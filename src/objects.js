@@ -157,6 +157,7 @@ SpriteMorph.prototype.categories =
         '56➡(fifty-six)',
         '▪▪◻▫◼',
         '...'
+        'variables'
     ];
 
 SpriteMorph.prototype.blockColor = {
@@ -170,6 +171,7 @@ SpriteMorph.prototype.blockColor = {
     '56➡(fifty-six)' : new Color(243, 118, 29),
     '▪▪◻▫◼' : new Color(217, 77, 17),
     '...': new Color(150, 150, 150)
+    'variables': new Color(243,118,29,0)
 };
 
 SpriteMorph.prototype.customCategories = new Map(); // key: name, value: color
