@@ -156,7 +156,7 @@ SpriteMorph.prototype.categories =
         '+-/*&|',
         '56➡(fifty-six)',
         '▪▪◻▫◼',
-        '...'
+        '...',
         'variables'
     ];
 
