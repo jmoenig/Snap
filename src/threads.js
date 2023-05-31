@@ -1063,7 +1063,7 @@ Process.prototype.evaluateInput = function (input) {
         if (ans) {
             if (input.constructor === CommandSlotMorph ||
                     input.constructor === ReporterSlotMorph ||
-                    (input instanceof CSlotMorph &&
+                    (input instanceof CSlotMorph || (input instanceof RingSlotMorph) &&
                         (!input.isStatic || input.isLambda))) {
                 // I know, this still needs yet to be done right....
                 ans = this.reify(ans, new List());
