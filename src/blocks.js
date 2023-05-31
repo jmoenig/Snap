@@ -2694,6 +2694,7 @@ function BlockLabelMorph(
         fontName
     );
 }
+
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
@@ -2764,9 +2765,8 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
     return this.color;
 };
 
-BlockSymbolMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.5 ? this.shadowColor : CLEAR;
-};
+BlockSymbolMorph.prototype.getShadowRenderColor =
+    BlockLabelMorph.prototype.getShadowRenderColor;
 
 // BlockMorph //////////////////////////////////////////////////////////
 
@@ -13378,8 +13378,7 @@ MultiArgMorph.prototype.init = function (
 
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
-    arrows.alpha = (isTransparent === false || this.enableExplicitInputLists) ?
-        1 : 0;
+    arrows.alpha = isTransparent === false ? 1 : 0;
 
     // collapse label text:
     if (this.collapse) {
