@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-24';
+modules.threads = '2023-May-31';
 
 var ThreadManager;
 var Process;
@@ -919,7 +919,11 @@ Process.prototype.reportAssociativeBool = function (block, baseOp, short) {
                 len: tests.inputs().length,
                 pc: 1
             };
-            this.pushContext(acc.slots[0], outer);
+            if (acc.slots.length) {
+                this.pushContext(acc.slots[0], outer);
+            } else {
+                this.context.addInput(!short);
+            }
         } else { // tests is an ArgLabelMorph
             this.pushContext(tests.argMorph(), outer);
         }
