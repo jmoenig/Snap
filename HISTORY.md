@@ -56,6 +56,7 @@
 * blocks: added collapse labels for explicit input lists
 * blocks: made variadic infix inputs collapsible for explicit input lists
 * blocks: added ability to specify empty variadic collapse labels
+* blocks: tweaked variadic slot arrows layout
 
 ### 2023-05-30
 * blocks: enable explicit input lists in variadic slots, experimental, under construction
