@@ -723,7 +723,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: '🖍',
             spec: '📝 %s 📏 %n A🅰 %fnt A $A %style',
-            defaults: [localize('Hello!'), 12]
+            defaults: [localize('Hello!'), 12, 'monospace', '']
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
