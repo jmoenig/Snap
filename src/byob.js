@@ -1886,10 +1886,11 @@ function JaggedBlockMorph(spec) {
 JaggedBlockMorph.prototype.init = function (spec) {
     JaggedBlockMorph.uber.init.call(this);
     if (spec) {this.setSpec(spec); }
+    try{
     if (spec === '%cs' || (spec === '%ca')|| (this.labelParts[spec].type=='c')) {
         this.minWidth = 25;
         this.fixLayout();
-    }
+    }}catch(err){;}
 };
 
 // JaggedBlockMorph drawing:
