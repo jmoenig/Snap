@@ -5500,7 +5500,7 @@ SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
 
-SpriteMorph.prototype.write = function (text, size) {
+SpriteMorph.prototype.write = function (text, size,font,style) {
     // thanks to Michael Ball for contributing this code!
     if (typeof text !== 'string' && typeof text !== 'number') {
         throw new Error(
@@ -5520,7 +5520,7 @@ SpriteMorph.prototype.write = function (text, size) {
         pos;
 
     context.save();
-    context.font = size + 'px monospace';
+    context.font = size + 'px '+font+' '+style;
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
