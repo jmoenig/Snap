@@ -5520,7 +5520,7 @@ SpriteMorph.prototype.write = function (text, size,font,style) {
         pos;
 
     context.save();
-    context.font = style+' '+size + 'px '+font;
+    context.font = style+size + 'px '+font;
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
