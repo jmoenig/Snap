@@ -1886,7 +1886,7 @@ function JaggedBlockMorph(spec) {
 JaggedBlockMorph.prototype.init = function (spec) {
     JaggedBlockMorph.uber.init.call(this);
     if (spec) {this.setSpec(spec); }
-    if (spec === '%cs' || (spec === '%ca')) {
+    if (spec === '%cs' || (spec === '%ca')|| (this.labelParts[spec].type=='c')) {
         this.minWidth = 25;
         this.fixLayout();
     }
@@ -3161,7 +3161,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \u2191';
     } else if (this.isMultipleInput()) {
         suff = '...';
-    } else if (this.type === '%cs' || this.type === '%ca') {
+    } else if (this.type === '%cs' || this.type === '%ca' || (SyntaxElementMorph.prototype.labelParts[this.type].type=='c')) {
         suff = ' \u03BB'; // ' [\u03BB'
     } else if (this.type === '%b') {
         suff = ' ?';
@@ -3874,7 +3874,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(inline)', '%cmdRing'); //'%cmd');
     this.addSlotTypeButton('Reporter', '%repRing'); //'%r');
     this.addSlotTypeButton('Predicate', '%predRing'); //'%p');
-    this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
+    this.addSlotTypeButton('Command\n(C-shape)', ['%cl', '%cla']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
 
@@ -3903,7 +3903,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
-                    '%mlt', '%code'
+                    '%mlt', '%code', '%cs', '%ca', '%rrl', '%rcl', '%rpl'
                 ],
                 this.fragment.type
             )) {
@@ -3958,12 +3958,16 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         () => { // action
             if (this.fragment.type === '%ca') {
                 this.setType('%cs');
-            } else {
+            } else if (this.fragment.type==='%cs') {
                 this.setType('%ca');
+            } else if (this.fragment.type === '%cla') {
+                this.setType('%cl');
+            } else {
+                this.setType('%cla');
             }
         },
         null, // label string
-        () => this.fragment.type === '%ca',
+        () => (this.fragment.type === '%cla' || this.fragment.type==='%ca'),
         null, // environment
         null, // hint
         new SymbolMorph(
@@ -3976,7 +3980,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     loopArrow.refresh = () => {
         ToggleMorph.prototype.refresh.call(loopArrow);
         if (this.isExpanded && contains(
-                ['%cs', '%ca'],
+                ['%cs', '%ca','%cl','%cla'],
                 this.fragment.type
             )) {
             loopArrow.show();
@@ -4269,6 +4273,12 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('reporter ring slot', '%rrl');
+    addSpecialSlotType('predicate ring slot', '%rpl');
+    addSpecialSlotType('command ring slot', '%rcl');
+    addSpecialSlotType('ring parameters', '%ringparms');
+    addSpecialSlotType('loop c slot', '%ca');
+    addSpecialSlotType('c slot', '%cs');
     return menu;
 };
 
