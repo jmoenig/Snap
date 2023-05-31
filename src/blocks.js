@@ -1279,6 +1279,13 @@ SyntaxElementMorph.prototype.labelParts = {
         group: '$x-1.5-255-0-0 %b $tick-1-0-255-0 %cs',
         dflt: [true, null],
         tags: 'static widget'
+    },
+    '%kvpairs': {
+        type: 'multi',
+        group: '%s : %s',
+        dflt: ['key','value'],
+        infix: ',',
+        tags: 'static widget'
     }
 };
 
