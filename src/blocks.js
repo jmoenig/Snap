@@ -1051,6 +1051,22 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'static',
         kind: 'predicate'
     },
+    
+    '%rcl': {
+        type: 'ring slot',
+        tags: 'static lambda',
+        kind: 'command'
+    },
+    '%rrl': {
+        type: 'ring slot',
+        tags: 'static lambda',
+        kind: 'reporter'
+    },
+    '%rpl': {
+        type: 'ring slot',
+        tags: 'static lambda',
+        kind: 'predicate'
+    },
 
     /*
         type: 'template'
@@ -1260,7 +1276,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%elseif': {
         type: 'multi',
-        group: 'else if %b %cs',
+        group: '$x-1.5-255-0-0 %b $tick-1-0-255-0 %cs',
         dflt: [true, null],
         tags: 'static widget'
     }
