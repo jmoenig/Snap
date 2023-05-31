@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-30';
+modules.blocks = '2023-May-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2067,8 +2067,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             if (l.length > 0) {
                 lines.push(l);
             }
-            l = [part];
-            x = part.fullBounds().width() + space;
+            if (part.isVisible) { // ignore hidden collapse labels
+                l = [part];
+                x = part.fullBounds().width() + space;
+            }
         } else {
             if (part.isVisible) {
                 x += part.fullBounds().width() + space;
@@ -13344,6 +13346,7 @@ MultiArgMorph.prototype.init = function (
     group
 ) {
     var label,
+        collapseLabel,
         arrows = new FrameMorph(),
         listSymbol,
         leftArrow,
@@ -13355,7 +13358,7 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-    this.collapse = collapse || '';
+    this.collapse = collapse || 'input list:';
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
     this.minInputs = min || 0;
@@ -13375,6 +13378,13 @@ MultiArgMorph.prototype.init = function (
     this.alpha = isTransparent === false ? 1 : 0;
     arrows.alpha = (isTransparent === false || this.enableExplicitInputLists) ?
         1 : 0;
+
+    // collapse label text:
+    if (this.collapse) {
+        collapseLabel = this.labelPart(this.collapse);
+        this.add(collapseLabel);
+        collapseLabel.hide();
+    }
 
     // label text:
     if (this.labelText || (this.slotSpec === '%cs')) {
@@ -13454,8 +13464,14 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
     }
 };
 
+MultiArgMorph.prototype.collapseLabel = function () {
+    return this.collapse ? this.children[0] : null;
+};
+
 MultiArgMorph.prototype.label = function () {
-    return this.labelText ? this.children[0] : null;
+    return this.labelText ?
+        this.children[this.collapse ? 1 : 0]
+        : null;
 };
 
 MultiArgMorph.prototype.allLabels = function () {
@@ -13563,6 +13579,7 @@ MultiArgMorph.prototype.fixLayout = function () {
 
 MultiArgMorph.prototype.fixArrowsLayout = function () {
     var label = this.label(),
+        collapseLabel = this.collapseLabel(),
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
@@ -13572,6 +13589,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
     leftArrow.show();
     listSymbol.hide();
     rightArrow.show();
+    if (collapseLabel) {
+        collapseLabel.hide();
+    }
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
@@ -13583,6 +13603,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             );
             arrows.setExtent(dim);
         } else {
+            if (collapseLabel) {
+                collapseLabel.show();
+            }
             listSymbol.show();
             listSymbol.setPosition(
                 arrows.position().add(new Point(

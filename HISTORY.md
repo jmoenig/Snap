@@ -52,6 +52,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-05-31
+* blocks: added collapse labels for explicit input lists
+
 ### 2023-05-30
 * blocks: enable explicit input lists in variadic slots, experimental, under construction
 * gui: added hidden experimental "explicit input lists" session setting
