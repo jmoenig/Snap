@@ -13348,6 +13348,7 @@ MultiArgMorph.prototype.init = function (
     var label,
         collapseLabel,
         arrows = new FrameMorph(),
+        initial = min || 0,
         listSymbol,
         leftArrow,
         rightArrow,
@@ -13361,7 +13362,7 @@ MultiArgMorph.prototype.init = function (
     this.collapse = collapse || 'input list:';
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
-    this.minInputs = min || 0;
+    this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
@@ -13427,8 +13428,8 @@ MultiArgMorph.prototype.init = function (
 
     this.add(arrows);
 
-    // create the minimum number of inputs
-    for (i = 0; i < this.minInputs; i += 1) {
+    // create the initial number of inputs
+    for (i = 0; i < initial; i += 1) {
         this.addInput();
     }
 };
@@ -13770,7 +13771,7 @@ MultiArgMorph.prototype.addInfix = function () {
             this.labelText[len % this.slotSpec.length]
             : '');
 
-    if (label === '' || !len) {return; }
+    if (label === '' || !len || this.children.length < 3) {return; }
     infix = this.labelPart(label);
     infix.parent = this;
     this.children.splice(this.children.length - 1, 0, infix);
@@ -13819,7 +13820,7 @@ MultiArgMorph.prototype.removeInput = function () {
     if (this.infix !== '' ||
         (this.labelText instanceof Array && this.inputs().length)
     ) {
-        if (this.children.length > 1 &&
+        if (this.children.length > (this.collapse ? 2 : 1) &&
                 !(this.labelText instanceof Array &&
                     this.labelText[this.inputs().length % this.slotSpec.length]
                         === '')
@@ -13911,6 +13912,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             isExpansionClick = rightArrow.isVisible;
         }
         if (isExpansionClick) { // right arrow
+            if (this.infix && !this.inputs().length) {
+                repetition = Math.max(repetition, 2);
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (rightArrow.isVisible) {
                     target.addInput();
@@ -13923,6 +13927,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 block.abstractBlockSpec()
             );
         } else { // left arrow
+            if (this.infix && this.inputs().length < 3) {
+                repetition = 2;
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (leftArrow.isVisible) {
                     target.removeInput();
