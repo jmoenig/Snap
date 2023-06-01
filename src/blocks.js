@@ -1094,7 +1094,6 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: '%s',
         label: 'with inputs',
-        collapse: '',
         tags: 'widget'
     },
     '%send': {
@@ -1149,7 +1148,6 @@ SyntaxElementMorph.prototype.labelParts = {
     '%words': {
         type: 'multi',
         slots: '%s',
-        collapse: '',
         defaults: 2
     },
     '%lists': {
@@ -1160,7 +1158,6 @@ SyntaxElementMorph.prototype.labelParts = {
     '%nums': {
         type: 'multi',
         slots: '%n',
-        collapse: '',
         defaults: 2
     },
     '%exp': {
@@ -13362,7 +13359,8 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-    this.collapse = collapse === '' ? '' : collapse || 'input list:';
+    this.collapse = collapse ||
+        (this.slotSpec === '%l' ? localize('input list:') : '');
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
     this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
