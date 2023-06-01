@@ -55,6 +55,7 @@
 
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots
+* blocks: tweaked variadic collapse labels for JOIN and RESHAPE
 
 ### 2023-05-31
 * blocks: added collapse labels for explicit input lists

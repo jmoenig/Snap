@@ -1149,6 +1149,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%words': {
         type: 'multi',
         slots: '%s',
+        collapse: '',
         defaults: 2
     },
     '%lists': {
@@ -1159,6 +1160,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%nums': {
         type: 'multi',
         slots: '%n',
+        collapse: '',
         defaults: 2
     },
     '%exp': {
