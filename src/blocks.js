@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-23';
+modules.blocks = '2023-June-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1111,6 +1111,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: '%s',
         label: 'with inputs',
+        collapse: '',
         tags: 'widget'
     },
     '%send': {
@@ -1165,6 +1166,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%words': {
         type: 'multi',
         slots: '%s',
+        collapse: '',
         defaults: 2
     },
     '%lists': {
@@ -1175,6 +1177,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%nums': {
         type: 'multi',
         slots: '%n',
+        collapse: '',
         defaults: 2
     },
     '%exp': {
@@ -2091,8 +2094,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             if (l.length > 0) {
                 lines.push(l);
             }
-            l = [part];
-            x = part.fullBounds().width() + space;
+            if (part.isVisible) { // ignore hidden collapse labels
+                l = [part];
+                x = part.fullBounds().width() + space;
+            }
         } else {
             if (part.isVisible) {
                 x += part.fullBounds().width() + space;
@@ -2715,6 +2720,7 @@ function BlockLabelMorph(
         fontName
     );
 }
+
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
@@ -2785,9 +2791,8 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
     return this.color;
 };
 
-BlockSymbolMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.5 ? this.shadowColor : CLEAR;
-};
+BlockSymbolMorph.prototype.getShadowRenderColor =
+    BlockLabelMorph.prototype.getShadowRenderColor;
 
 // BlockMorph //////////////////////////////////////////////////////////
 
@@ -13314,6 +13319,10 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
+// MultiArgMorph preferences settings:
+
+MultiArgMorph.prototype.enableExplicitInputLists = true;
+
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -13364,7 +13373,10 @@ MultiArgMorph.prototype.init = function (
     group
 ) {
     var label,
+        collapseLabel,
         arrows = new FrameMorph(),
+        initial = min || 0,
+        listSymbol,
         leftArrow,
         rightArrow,
         i;
@@ -13374,10 +13386,10 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-    this.collapse = collapse || '';
+    this.collapse = collapse === '' ? '' : collapse || 'input list:';
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
-    this.minInputs = min || 0;
+    this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
@@ -13393,6 +13405,13 @@ MultiArgMorph.prototype.init = function (
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
     arrows.alpha = isTransparent === false ? 1 : 0;
+
+    // collapse label text:
+    if (this.collapse) {
+        collapseLabel = this.labelPart(this.collapse);
+        this.add(collapseLabel);
+        collapseLabel.hide();
+    }
 
     // label text:
     if (this.labelText || (this.slotSpec === '%cs')) {
@@ -13414,6 +13433,9 @@ MultiArgMorph.prototype.init = function (
         true
     );
 
+    // list symbol:
+    listSymbol = this.labelPart('$list-.97');
+
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
@@ -13426,13 +13448,14 @@ MultiArgMorph.prototype.init = function (
     // control panel:
     arrows.add(leftArrow);
     arrows.add(rightArrow);
+    arrows.add(listSymbol);
     arrows.rerender();
     arrows.acceptsDrops = false;
 
     this.add(arrows);
 
-    // create the minimum number of inputs
-    for (i = 0; i < this.minInputs; i += 1) {
+    // create the initial number of inputs
+    for (i = 0; i < initial; i += 1) {
         this.addInput();
     }
 };
@@ -13468,8 +13491,14 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
     }
 };
 
+MultiArgMorph.prototype.collapseLabel = function () {
+    return this.collapse ? this.children[0] : null;
+};
+
 MultiArgMorph.prototype.label = function () {
-    return this.labelText ? this.children[0] : null;
+    return this.labelText ?
+        this.children[this.collapse ? 1 : 0]
+        : null;
 };
 
 MultiArgMorph.prototype.allLabels = function () {
@@ -13552,9 +13581,10 @@ MultiArgMorph.prototype.fixLayout = function () {
         labels = this.allLabels();
         this.color = this.parent.color;
         this.arrows().color = this.color;
+        shadowColor = this.shadowColor ||
+            this.parent.color.darker(this.labelContrast);
+        this.arrows().children[2].shadowColor = shadowColor; // list symbol
         if (labels.length) {
-            shadowColor = this.shadowColor ||
-                this.parent.color.darker(this.labelContrast);
             labels.forEach(label => {
                 shadowOffset = this.shadowOffset ||
                     (label ? label.shadowOffset : null);
@@ -13576,22 +13606,45 @@ MultiArgMorph.prototype.fixLayout = function () {
 
 MultiArgMorph.prototype.fixArrowsLayout = function () {
     var label = this.label(),
+        collapseLabel = this.collapseLabel(),
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
+        listSymbol = arrows.children[2],
         inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
     leftArrow.show();
+    listSymbol.hide();
     rightArrow.show();
+    if (collapseLabel) {
+        collapseLabel.hide();
+    }
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
         }
         leftArrow.hide();
-        rightArrow.setPosition(
-            arrows.position().subtract(new Point(dim.x, 0))
-        );
-        arrows.setExtent(dim);
+        if (this.isStatic || inpCount || !this.enableExplicitInputLists) {
+            rightArrow.setPosition(
+                arrows.position().subtract(new Point(dim.x, 0))
+            );
+            arrows.setExtent(dim);
+        } else {
+            if (collapseLabel) {
+                collapseLabel.show();
+            }
+            listSymbol.show();
+            listSymbol.setPosition(
+                arrows.position().add(new Point(
+                    0,
+                    (arrows.height() - listSymbol.height()) / 2)
+                )
+            );
+            arrows.setWidth(dim.x + listSymbol.width() * 1.4);
+            arrows.setHeight(dim.y);
+            rightArrow.setCenter(arrows.center());
+            rightArrow.setRight(arrows.right());
+        }
     } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
         rightArrow.hide();
         arrows.setExtent(dim);
@@ -13601,7 +13654,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         }
         leftArrow.show();
         rightArrow.show();
-        rightArrow.setPosition(leftArrow.topCenter());
+        rightArrow.setPosition(leftArrow.topCenter().subtract(
+            new Point(dim.x * 0.3, 0)
+        ));
         arrows.bounds.corner = rightArrow.bottomRight().copy();
         if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
             // hide right arrow
@@ -13744,7 +13799,7 @@ MultiArgMorph.prototype.addInfix = function () {
             this.labelText[len % this.slotSpec.length]
             : '');
 
-    if (label === '' || !len) {return; }
+    if (label === '' || !len || this.children.length < 3) {return; }
     infix = this.labelPart(label);
     infix.parent = this;
     this.children.splice(this.children.length - 1, 0, infix);
@@ -13793,7 +13848,7 @@ MultiArgMorph.prototype.removeInput = function () {
     if (this.infix !== '' ||
         (this.labelText instanceof Array && this.inputs().length)
     ) {
-        if (this.children.length > 1 &&
+        if (this.children.length > (this.collapse ? 2 : 1) &&
                 !(this.labelText instanceof Array &&
                     this.labelText[this.inputs().length % this.slotSpec.length]
                         === '')
@@ -13885,6 +13940,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             isExpansionClick = rightArrow.isVisible;
         }
         if (isExpansionClick) { // right arrow
+            if (this.infix && !this.inputs().length) {
+                repetition = Math.max(repetition, 2);
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (rightArrow.isVisible) {
                     target.addInput();
@@ -13897,6 +13955,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 block.abstractBlockSpec()
             );
         } else { // left arrow
+            if (this.infix && this.inputs().length < 3) {
+                repetition = 2;
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (leftArrow.isVisible) {
                     target.removeInput();

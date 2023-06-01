@@ -72,7 +72,7 @@ StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, BlockEditorMorph,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences,BlockMorph, ToggleMorph,
-InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,  localize,
+InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight, localize,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, List, ArgMorph,
 Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, CommentMorph, saveAs,
 CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
@@ -80,14 +80,15 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+MultiArgMorph
 */
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-24';
+modules.gui = '2023-May-30';
 
 // Declarations
 
@@ -4374,6 +4375,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         BooleanSlotMorph.prototype.isTernary,
         'uncheck to limit\nBoolean slots to true / false',
         'check to allow\nempty Boolean slots',
+        true
+    );
+    addPreference(
+        'Explicit input lists',
+        () => {
+            MultiArgMorph.prototype.enableExplicitInputLists =
+                !MultiArgMorph.prototype.enableExplicitInputLists;
+            this.refreshIDE();
+        },
+        MultiArgMorph.prototype.enableExplicitInputLists,
+        'uncheck to hide the list symbol\nin empty variadic input slots',
+        'check to show a list symbol\nin empty variadic input slots',
         true
     );
     addPreference(
