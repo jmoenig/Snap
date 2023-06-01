@@ -56,6 +56,7 @@
 ### 2023-06-02
 * blocks, symbols: made collapse list icon red
 * blocks: tweaked collapse labels
+* blocks: fixed translation of collapse labels
 
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots

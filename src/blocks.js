@@ -13359,8 +13359,8 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-    this.collapse = collapse ||
-        (this.slotSpec === '%l' ? localize('input list:') : '');
+    this.collapse = localize(collapse ||
+        (this.slotSpec === '%l' ? 'input list:' : ''));
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
     this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
