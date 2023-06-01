@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-31';
+modules.blocks = '2023-June-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13295,7 +13295,7 @@ MultiArgMorph.uber = ArgMorph.prototype;
 
 // MultiArgMorph preferences settings:
 
-MultiArgMorph.prototype.enableExplicitInputLists = false;
+MultiArgMorph.prototype.enableExplicitInputLists = true;
 
 // MultiArgMorph instance creation:
 
