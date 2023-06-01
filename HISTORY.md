@@ -53,6 +53,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-02
+* blocks, symbols: made collapse list icon red
+
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots
 * blocks: tweaked variadic collapse labels for JOIN and RESHAPE

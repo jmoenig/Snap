@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-01';
+modules.blocks = '2023-June-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13411,6 +13411,7 @@ MultiArgMorph.prototype.init = function (
 
     // list symbol:
     listSymbol = this.labelPart('$list-.97');
+    listSymbol.backgroundColor = new Color(255, 140, 0); // list color
 
     // right arrow:
     rightArrow = new ArrowMorph(
