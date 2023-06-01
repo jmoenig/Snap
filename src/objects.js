@@ -772,7 +772,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         receiveCondition: {
             type: 'hat',
-            category: '...',
+            category: 'control',
             spec: 'when %b'
         },
         getLastMessage: {  // retained for legacy compatibility
@@ -887,8 +887,16 @@ SpriteMorph.prototype.initBlocks = function () {
         doWarp: {
             type: 'command',
             category: '🔄',
-            spec: '$thunder %c'
+            spec: '$flash-1.1 %c'
         },
+        
+        //JS
+        doYield: {
+            type: 'command',
+            category: 'control',
+            spec: 'this.doYield();'
+        },
+        
 
         // Message passing
         doTellTo: {
@@ -2791,6 +2799,10 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push('-');
+        blocks.push(block('doCallCC'));
+        blocks.push(block('reportCallCC'));
+        blocks.push('-');
         blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
@@ -2820,8 +2832,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('getLastMessage'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
-            blocks.push(block('doCallCC'));
-            blocks.push(block('reportCallCC'));
+            blocks.push(block('doYield'));
         }
 
     } else if (category === '👁👂') {
