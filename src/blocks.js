@@ -13401,20 +13401,20 @@ MultiArgMorph.prototype.init = function (
     // left arrow:
     leftArrow = new ArrowMorph(
         'left',
-        this.fontSize,
+        this.fontSize * 1.2,
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$list-.97');
+    listSymbol = this.labelPart('$list-.98');
     listSymbol.backgroundColor = new Color(255, 140, 0); // list color
 
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
-        this.fontSize,
+        this.fontSize * 1.2,
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
