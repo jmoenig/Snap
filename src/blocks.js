@@ -13401,7 +13401,7 @@ MultiArgMorph.prototype.init = function (
     // left arrow:
     leftArrow = new ArrowMorph(
         'left',
-        this.fontSize * 1.2,
+        fontHeight(this.fontSize),
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
@@ -13414,7 +13414,7 @@ MultiArgMorph.prototype.init = function (
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
-        this.fontSize * 1.2,
+        fontHeight(this.fontSize),
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
