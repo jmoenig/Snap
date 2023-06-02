@@ -59,6 +59,7 @@
 * blocks: tweaked collapse labels
 * blocks: fixed translation of collapse labels
 * blocks: increased variadic arrow heads size
+* blocks: fixed render color for collapse list icons in flat design mode
 
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots

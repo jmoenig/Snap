@@ -2738,11 +2738,11 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             return this.color.mixed(block.alpha, WHITE);
         }
         if (this.color.eq(WHITE)) {
-            return this.parent.alpha > 0.5 ? this.color
+            return block.alpha > 0.5 ? this.color
                 : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
         }
         if (this.color.eq(BLACK)) {
-            return this.parent.alpha > 0.5 ? this.color
+            return block.alpha > 0.5 ? this.color
                 : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
         }
         return this.color;
@@ -2758,7 +2758,7 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     if (this.color.eq(WHITE)) {
-        return this.parent.alpha > 0.5 ? this.color
+        return block.alpha > 0.5 ? this.color
             : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     return this.color;
