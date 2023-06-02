@@ -11555,7 +11555,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     if (arrow.isVisible) {
         arrow.setPosition(new Point(
             this.right() - arrowWidth - this.edge,
-            contents.top()
+            contents.top() - arrowWidth / 8
         ));
     }
 

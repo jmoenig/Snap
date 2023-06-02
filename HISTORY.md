@@ -61,6 +61,7 @@
 * blocks: increased variadic arrow heads size
 * blocks: fixed render color for collapse list icons in flat design mode
 * blocks: increased arrow heads size for dropdown menus
+* blocks: tweaked input slot dropdown menu arrow layout
 
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots
