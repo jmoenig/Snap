@@ -30,7 +30,7 @@
     * translations now use abstract block specs
     * updated the strings library for and with the new case sensitivity and lower case primitives
     * generated JSON strings are now (somewhat) pretty printed (with newlines and indentations)
-    * increased variadic arrow heads size
+    * increased arrows heads size for variadic inputs and dropdown menus
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -60,6 +60,7 @@
 * blocks: fixed translation of collapse labels
 * blocks: increased variadic arrow heads size
 * blocks: fixed render color for collapse list icons in flat design mode
+* blocks: increased arrow heads size for dropdown menus
 
 ### 2023-06-01
 * blocks: turned on "explicit input lists" for variadic slots

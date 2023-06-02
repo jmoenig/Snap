@@ -11495,7 +11495,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     }
 
     if (this.choices) {
-        arrow.setSize(this.fontSize);
+        arrow.setSize(fontHeight(this.fontSize));
         arrow.show();
     } else {
         arrow.hide();
