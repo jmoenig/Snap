@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-02';
+modules.blocks = '2023-June-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13548,7 +13548,7 @@ MultiArgMorph.prototype.setLabelColor = function (
 // MultiArgMorph layout:
 
 MultiArgMorph.prototype.fixLayout = function () {
-    var labels, shadowColor, shadowOffset;
+    var labels, shadowColor, shadowOffset, block;
     if (this.slotSpec === '%t') {
         this.isStatic = true; // in this case I cannot be exchanged
     }
@@ -13558,7 +13558,10 @@ MultiArgMorph.prototype.fixLayout = function () {
         this.arrows().color = this.color;
         shadowColor = this.shadowColor ||
             this.parent.color.darker(this.labelContrast);
-        this.arrows().children[2].shadowColor = shadowColor; // list symbol
+        block = this.parentThatIsA(BlockMorph);
+        this.arrows().children[2].shadowColor = block ?
+            block.color.darker(this.labelContrast)
+            : shadowColor;
         if (labels.length) {
             labels.forEach(label => {
                 shadowOffset = this.shadowOffset ||

@@ -54,6 +54,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-03
+* blocks: fixed zebra coloring for variadic input slots' list icons
+
 ### 2023-06-02
 * blocks, symbols: made collapse list icon red
 * blocks: tweaked collapse labels
