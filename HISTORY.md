@@ -56,6 +56,7 @@
 
 ### 2023-06-04
 * blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
+* blocks: show "input list:" label for empty variadic slots, except when overriden by a "collapse" label
 
 ### 2023-06-03
 * blocks: fixed zebra coloring for variadic input slots' list icons
