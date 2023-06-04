@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-03';
+modules.blocks = '2023-June-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8353,6 +8353,9 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
 
     function touchingVariadicArrowsIfAny(inp, point) {
         if (inp instanceof MultiArgMorph) {
+            if (MultiArgMorph.prototype.enableExplicitInputLists) {
+                return !inp.isStatic && inp.inputs().length === 0;
+            }
             if (point) {
                 return inp.arrows().bounds.containsPoint(point);
             }

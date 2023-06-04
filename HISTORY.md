@@ -54,6 +54,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-04
+* blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
+
 ### 2023-06-03
 * blocks: fixed zebra coloring for variadic input slots' list icons
 
