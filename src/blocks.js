@@ -8239,7 +8239,8 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
         3
     );
     this.add(this.feedbackMorph);
-    if (target instanceof MultiArgMorph && !target.enableExplicitInputLists) {
+    if (target instanceof MultiArgMorph) {
+        // && !target.enableExplicitInputLists) {
         this.feedbackMorph.color =
             SpriteMorph.prototype.blockColor.lists.copy();
         this.feedbackMorph.borderColor =
@@ -8352,9 +8353,11 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
 
     function touchingVariadicArrowsIfAny(inp, point) {
         if (inp instanceof MultiArgMorph) {
+            /* // only enable reporter drops on empty variadic input slots
             if (MultiArgMorph.prototype.enableExplicitInputLists) {
                 return !inp.isStatic && inp.inputs().length === 0;
             }
+            */
             if (point) {
                 return inp.arrows().bounds.containsPoint(point);
             }
