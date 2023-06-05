@@ -1059,7 +1059,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                             (child.contents ? child.contents === 'true' : null)
                                 : child.contents,
                         options ? options.contents : undefined,
-                        child.attributes.readonly === 'true'
+                        child.attributes.readonly === 'true',
+                        child.attributes.irreplaceable === 'true'
                     ]
                 );
             });
@@ -2320,10 +2321,12 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$>$%</input>',
+                    '<input type="@"$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
+                    this.declarations.get(decl)[4] ?
+                            ' irreplaceable="true"' : '',
                     this.declarations.get(decl)[1],
                     this.declarations.get(decl)[2] ?
                             serializer.format(

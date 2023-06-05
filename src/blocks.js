@@ -3046,11 +3046,19 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
         if (this.isPrototype) {
             this.add(this.placeHolder());
         }
-        if (part instanceof InputSlotMorph && this.isCustomBlock) {
-            part.setChoices.apply(
-                part,
-                (definition || this.definition).inputOptionsOfIdx(inputIdx)
-            );
+        if (this.isCustomBlock) {
+            if (part instanceof InputSlotMorph) {
+                part.setChoices.apply(
+                    part,
+                    (definition || this.definition).inputOptionsOfIdx(inputIdx)
+                );
+            }
+            if (part instanceof ArgMorph &&
+                    !(part instanceof TemplateSlotMorph)) {
+                part.isStatic = (definition
+                    || this.definition).isIrreplaceableInputIdx(inputIdx);
+                part.canBeEmpty = !part.isStatic;
+            }
         }
     });
     this.blockSpec = spec;

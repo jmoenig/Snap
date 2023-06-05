@@ -10,6 +10,7 @@
     * new "case sensitivity" preference setting
     * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
+    * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * Expanded the `#open:` URL scheme to accept image URLs.
@@ -58,7 +59,8 @@
 * blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode
 * blocks: tweaked variadic c-slot layout
 * blocks: tweaked keyboard entry for new variadic conditionals
-* store: make sure to expand restored variadic inputs to their minimum number of slots 
+* store: make sure to expand restored variadic inputs to their minimum number of slots
+* byob, blocks, store: new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
 
 ### 2023-06-04
 * blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
