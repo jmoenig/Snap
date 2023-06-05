@@ -13625,7 +13625,12 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         leftArrow.hide();
         if (this.isStatic || inpCount || !this.enableExplicitInputLists) {
             rightArrow.setPosition(
-                arrows.position().subtract(new Point(dim.x, this.edge))
+                arrows.position().subtract(
+                    new Point(
+                        dim.x,
+                        this.slotSpec.includes('%cs') ? this.edge : 0
+                    )
+                )
             );
             arrows.setExtent(dim);
         } else {
