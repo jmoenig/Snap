@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-04';
+modules.blocks = '2023-June-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8241,7 +8241,7 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
         3
     );
     this.add(this.feedbackMorph);
-    if (target instanceof MultiArgMorph) {
+    if (target instanceof MultiArgMorph && !target.enableExplicitInputLists) {
         this.feedbackMorph.color =
             SpriteMorph.prototype.blockColor.lists.copy();
         this.feedbackMorph.borderColor =
