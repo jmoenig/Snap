@@ -2147,7 +2147,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 lineHeight = part.height();
                 maxX = Math.max(
                     maxX,
-                    Math.max(...part.children.map(each => each.right()))
+                    Math.max(...part.children.filter(each =>
+                        each.isVisible).map(each => each.right()))
                 );
             } else {
                 part.setPosition(new Point(x, y));
