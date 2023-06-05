@@ -2145,12 +2145,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 }
                 part.setPosition(new Point(x, y));
                 lineHeight = part.height();
-                if (part.slotSpec instanceof Array) {
-                    maxX = Math.max(
-                        maxX,
-                        Math.max(...part.children.map(each => each.right()))
-                    );
-                }
+                maxX = Math.max(
+                    maxX,
+                    Math.max(...part.children.map(each => each.right()))
+                );
             } else {
                 part.setPosition(new Point(x, y));
                 if (!part.isBlockLabelBreak) {
