@@ -58,6 +58,7 @@
 * blocks: tweaked variadic c-slot layout
 * blocks: reverted explicit input label preference, cannot reach agreement on "niladic" vs "variadic" cases. Sigh.
 * blocks: tweaked keyboard entry for new variadic conditionals
+* store: make sure to expand restored variadic inputs to their minimum number of slots 
 
 ### 2023-06-04
 * blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
