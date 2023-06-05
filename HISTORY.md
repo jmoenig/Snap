@@ -16,7 +16,6 @@
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
     * IF is now variadic and expandable with "else if" cases
-    * explicit variadic input list visuals
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
@@ -57,6 +56,7 @@
 ### 2023-06-05
 * blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode
 * blocks: tweaked variadic c-slot layout
+* blocks: reverted explicit input label preference, cannot reach agreement on "niladic" vs "variadic" cases. Sigh.
 
 ### 2023-06-04
 * blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
