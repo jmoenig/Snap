@@ -2148,7 +2148,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 maxX = Math.max(
                     maxX,
                     Math.max(...part.children.filter(each =>
-                        each.isVisible).map(each => each.right()))
+                        each.isVisible &&
+                        !(each instanceof CSlotMorph)
+                    ).map(each => each.right()))
                 );
             } else {
                 part.setPosition(new Point(x, y));
