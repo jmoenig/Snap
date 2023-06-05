@@ -57,6 +57,7 @@
 * blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode
 * blocks: tweaked variadic c-slot layout
 * blocks: reverted explicit input label preference, cannot reach agreement on "niladic" vs "variadic" cases. Sigh.
+* blocks: tweaked keyboard entry for new variadic conditionals
 
 ### 2023-06-04
 * blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode

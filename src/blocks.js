@@ -15746,11 +15746,14 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 // ScriptFocusMorph editing
 
 ScriptFocusMorph.prototype.trigger = function () {
-    var current = this.element;
+    var current = this.element,
+        i;
     if (current instanceof MultiArgMorph) {
-        if (current.arrows().children[1].isVisible) {
-            current.addInput();
-            this.fixLayout();
+        for (i = 0; i < current.groupInputs; i += 1) {
+            if (current.arrows().children[1].isVisible) {
+                current.addInput();
+                this.fixLayout();
+            }
         }
         return;
     }
@@ -15793,7 +15796,8 @@ ScriptFocusMorph.prototype.menu = function () {
 };
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
-    var current = this.element;
+    var current = this.element,
+        i;
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
             current.destroy();
@@ -15801,8 +15805,10 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
             this.atEnd = false;
         }
     } else if (current instanceof MultiArgMorph) {
-        if (current.arrows().children[0].isVisible) {
-            current.removeInput();
+        for (i = 0; i < current.groupInputs; i += 1) {
+            if (current.arrows().children[0].isVisible) {
+                current.removeInput();
+            }
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {
