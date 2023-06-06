@@ -13511,6 +13511,15 @@ MultiArgMorph.prototype.getSpec = function () {
     return '%mult' + this.slotSpec;
 };
 
+MultiArgMorph.prototype.setIrreplaceable = function (irreplaceable = false) {
+    inps = this.inputs();
+    this.isStatic === irreplaceable;
+    this.canBeEmpty === !irreplaceable;
+    if (!inps.length) {
+        this.fixLayout();
+    }
+};
+
 MultiArgMorph.prototype.setInfix = function (separator = '') {
     var inps;
     if (this.infix === separator) {

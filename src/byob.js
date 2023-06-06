@@ -987,6 +987,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
         } else if (inp instanceof MultiArgMorph) {
+            inp.setIrreplaceable(def.isIrreplaceableInputIdx(idx));
             inp.setInfix(def.separatorOfInputIdx(idx));
         }
     });
