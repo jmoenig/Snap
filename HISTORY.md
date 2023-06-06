@@ -11,6 +11,7 @@
     * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
     * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
+    * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks 
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * Expanded the `#open:` URL scheme to accept image URLs.
@@ -59,6 +60,7 @@
 ### 2023-06-06
 * blocks: added "with" infix to JOIN, made it collapse from 2 inputs to input list, omitting the single input case
 * German translation update for "with" (as JOIN infix label)
+* byob, blocks: new option to specify a "separator" (infix) label for variadic input slots inside custom blocks 
 
 ### 2023-06-05
 * blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode

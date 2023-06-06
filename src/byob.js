@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-June-05';
+modules.byob = '2023-June-06';
 
 // Declarations
 
@@ -146,7 +146,8 @@ function CustomBlockDefinition(spec, receiver) {
     this.spec = spec || '';
     this.declarations = new Map();
         // key: inputName
-        // value: [type, default, options, isReadOnly, isIrreplaceable]
+        // value:
+        //      [type, default, options, isReadOnly, isIrreplaceable, separator]
     this.variableNames = [];
     this.comment = null;
     this.isHelper = false;
@@ -216,6 +217,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.options = slot[2];
                 part.fragment.isReadOnly = slot[3] || false;
                 part.fragment.isIrreplaceable = slot[4] || false;
+                part.fragment.separator = slot[5] || null;
             }
         }
     });
@@ -324,6 +326,11 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 CustomBlockDefinition.prototype.isIrreplaceableInputIdx = function (idx) {
     var inputName = this.inputNames()[idx];
     return this.isIrreplaceableInput(inputName);
+};
+
+CustomBlockDefinition.prototype.separatorOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.separatorOfInput(inputName);
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
@@ -467,6 +474,13 @@ CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
 CustomBlockDefinition.prototype.isIrreplaceableInput = function (inputName) {
     return this.declarations.has(inputName) &&
         this.declarations.get(inputName)[4] === true;
+};
+
+CustomBlockDefinition.prototype.separatorOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[5] || null;
+    }
+    return null;
 };
 
 CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
@@ -955,6 +969,8 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
             }
             if (inp instanceof InputSlotMorph) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
+            } else if (inp instanceof MultiArgMorph) {
+                inp.setInfix(def.separatorOfInputIdx(i));
             }
         });
     }
@@ -1220,7 +1236,8 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
                     part.fragment.defaultValue,
                     part.fragment.options,
                     part.fragment.isReadOnly,
-                    part.fragment.isIrreplaceable
+                    part.fragment.isIrreplaceable,
+                    part.fragment.separator
                 ]
             );
         }
@@ -3158,6 +3175,7 @@ function BlockLabelFragment(labelString) {
     this.options = '';
     this.isReadOnly = false; // for input slots
     this.isIrreplaceable = false; // for input slots
+    this.separator = null; // for variadic slots
     this.isDeleted = false;
 }
 
@@ -3220,6 +3238,7 @@ BlockLabelFragment.prototype.copy = function () {
     ans.options = this.options;
     ans.isReadOnly = this.isReadOnly;
     ans.isIrreplaceable = this.isIrreplaceable;
+    ans.separator = this.separator;
     return ans;
 };
 
@@ -4250,6 +4269,14 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 this.specialOptionsMenu()
             );
         }
+        if (this.fragment.type.includes('%mult')) {
+            menu.addItem(
+                (this.fragment.separator ? on : off) +
+                    localize('separator') +
+                    '...',
+                'editSeparator'
+            );
+        }
         menu.addMenu(
             (contains(['%mlt', '%code'], this.fragment.type) ?
                 on : off) +
@@ -4347,6 +4374,18 @@ InputSlotDialogMorph.prototype.extensionOptionsMenu = function () {
         addSpecialOptions(sel.slice(4), '§_ext_' + sel);
     });
     return menu;
+};
+
+InputSlotDialogMorph.prototype.editSeparator = function () {
+        new DialogBoxMorph(
+            this,
+            str => this.fragment.separator = str,
+            this
+        ).prompt(
+            "Separator",
+            this.fragment.separator || '',
+            this.world()
+        );
 };
 
 // InputSlotDialogMorph hiding and showing:

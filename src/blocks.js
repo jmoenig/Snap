@@ -13511,6 +13511,17 @@ MultiArgMorph.prototype.getSpec = function () {
     return '%mult' + this.slotSpec;
 };
 
+MultiArgMorph.prototype.setInfix = function (text = '') {
+    var inps;
+    if (this.infix === text) {
+        return;
+    }
+    inps = this.inputs();
+    this.infix = text;
+    this.collapseAll();
+    inps.forEach(slot => this.replaceInput(this.addInput(), slot));
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
