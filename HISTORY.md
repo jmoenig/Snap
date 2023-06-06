@@ -62,6 +62,7 @@
 * German translation update for "with" (as JOIN infix label)
 * byob, blocks: new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
 * blocks, byob, store: serialize variadic input slot separators
+* blocks, byob: minor code tweaks
 
 ### 2023-06-05
 * blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode

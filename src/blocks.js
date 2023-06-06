@@ -13511,14 +13511,14 @@ MultiArgMorph.prototype.getSpec = function () {
     return '%mult' + this.slotSpec;
 };
 
-MultiArgMorph.prototype.setInfix = function (text = '') {
+MultiArgMorph.prototype.setInfix = function (separator = '') {
     var inps;
-    if (this.infix === text) {
+    if (this.infix === separator) {
         return;
     }
     inps = this.inputs();
-    this.infix = text;
     this.collapseAll();
+    this.infix = separator;
     inps.forEach(slot => this.replaceInput(this.addInput(), slot));
     if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
         this.addInput();

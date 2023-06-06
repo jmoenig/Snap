@@ -145,9 +145,15 @@ function CustomBlockDefinition(spec, receiver) {
     this.type = 'command';
     this.spec = spec || '';
     this.declarations = new Map();
-        // key: inputName
-        // value:
-        //      [type, default, options, isReadOnly, isIrreplaceable, separator]
+        //  key: inputName
+        //  value: [
+        //      type,
+        //      default,
+        //      options,
+        //      isReadOnly,
+        //      isIrreplaceable,
+        //      separator
+        //  ]
     this.variableNames = [];
     this.comment = null;
     this.isHelper = false;
@@ -975,7 +981,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
 
     // find unnamed upvars (indicated by non-breaking space) and label them
     // to their internal definition (default).
-    // also make sure variadic input slots set their separator labels
+    // make sure to set the separator labels for variadic input slots
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
@@ -3175,7 +3181,7 @@ function BlockLabelFragment(labelString) {
     this.defaultValue = '';
     this.options = '';
     this.isReadOnly = false; // for input slots
-    this.isIrreplaceable = false; // for input slots
+    this.isIrreplaceable = false;
     this.separator = null; // for variadic slots
     this.isDeleted = false;
 }
