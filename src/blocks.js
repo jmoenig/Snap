@@ -13520,6 +13520,9 @@ MultiArgMorph.prototype.setInfix = function (text = '') {
     this.infix = text;
     this.collapseAll();
     inps.forEach(slot => this.replaceInput(this.addInput(), slot));
+    if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
+        this.addInput();
+    }
 };
 
 // MultiArgMorph defaults:

@@ -969,18 +969,19 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
             }
             if (inp instanceof InputSlotMorph) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
-            } else if (inp instanceof MultiArgMorph) {
-                inp.setInfix(def.separatorOfInputIdx(i));
             }
         });
     }
 
     // find unnamed upvars (indicated by non-breaking space) and label them
-    // to their internal definition (default)
+    // to their internal definition (default).
+    // also make sure variadic input slots set their separator labels
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
+        } else if (inp instanceof MultiArgMorph) {
+            inp.setInfix(def.separatorOfInputIdx(idx));
         }
     });
 
