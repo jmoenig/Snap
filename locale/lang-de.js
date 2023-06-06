@@ -857,7 +857,7 @@ SnapTranslator.dict.de = {
     "language_translator": "Jens Mönig, Jadga Hügle",
     "large": "groß",
     "last": "letztes",
-    "last_changed": "2023-05-23",
+    "last_changed": "2023-06-06",
     "launch _ _": "starte _ _",
     "left": "Rand links",
     "left arrow": "Pfeil nach links",
@@ -1354,6 +1354,7 @@ SnapTranslator.dict.de = {
     "whirl": "Wirbel",
     "whitespace": "Leerraum",
     "width": "Breite",
+    "with": "mit",
     "with data": "mit Daten",
     "with inputs": "mit Eingaben",
     "word": "Wort",
@@ -1367,4 +1368,4 @@ SnapTranslator.dict.de = {
     "year:": "",
     "your own": "eigene",
     "z": "z"
-}
+};
