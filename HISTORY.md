@@ -59,6 +59,7 @@
 
 ### 2023-06-07
 * blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)
+* blocks: fixed a variadic input slot collapsing glitch
 
 ### 2023-06-06
 * blocks: added "with" infix to JOIN, made it collapse from 2 inputs to input list, omitting the single input case

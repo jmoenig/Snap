@@ -13873,7 +13873,7 @@ MultiArgMorph.prototype.removeInput = function () {
             }
         }
     }
-    if (this.infix !== '' ||
+    if (this.infix ||
         (this.labelText instanceof Array && this.inputs().length)
     ) {
         if (this.children.length > (this.collapse ? 2 : 1) &&
