@@ -22,7 +22,7 @@
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
-    * changed JOIN to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change) 
+    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change) 
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
@@ -56,6 +56,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-06-07
+* blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)
 
 ### 2023-06-06
 * blocks: added "with" infix to JOIN, made it collapse from 2 inputs to input list, omitting the single input case
