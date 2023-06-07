@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-07';
+modules.blocks = '2023-June-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13783,7 +13783,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {
         name = '';
-        i = idx;
+        i = idx - 1;
         if (this.elementSpec === '%scriptVars') {
             // compensate for missing label element
             i += 1;
@@ -13794,14 +13794,14 @@ MultiArgMorph.prototype.addInput = function (contents) {
         }
         newPart.setContents(name);
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
-        if (this.is3ArgRingInHOF() && idx < 4) {
+        if (this.is3ArgRingInHOF() && idx < 5) {
             newPart.setContents([
                 localize('value'),
                 localize('index'),
                 localize('list')
-            ][idx - 1]);
+            ][idx - 2]);
         } else {
-            newPart.setContents('#' + idx);
+            newPart.setContents('#' + (idx - 1));
         }
     } else if (this.elementSpec === '%message') {
         newPart.setContents(localize('data'));
