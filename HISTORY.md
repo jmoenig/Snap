@@ -50,6 +50,7 @@
     * fixed preserving embedded scripts when relabelling blocks with variadic c-slots
     * improved sensing precision when clicking on variadic slot arrows
     * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
+    * fixed identity case for COMBINATIONS
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
 * **Translation Updates:**
@@ -59,6 +60,7 @@
 
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
+* threads: fixed identity case for COMBINATIONS
 
 ### 2023-06-07
 * blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)

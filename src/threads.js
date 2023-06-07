@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-31';
+modules.threads = '2023-June-08';
 
 var ThreadManager;
 var Process;
@@ -2230,7 +2230,7 @@ Process.prototype.reportTranspose = function (list) {
 Process.prototype.reportCrossproduct = function (lists) {
     this.assertType(lists, 'list');
     if (lists.isEmpty()) {
-        return lists;
+        return lists.cons(new List(), lists);
     }
     this.assertType(lists.at(1), 'list');
     return lists.crossproduct();
