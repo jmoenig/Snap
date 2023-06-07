@@ -6,7 +6,6 @@
     * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data)
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
-    * new embedding configuration options: noSpriteEdits
     * new "case sensitivity" preference setting
     * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
@@ -14,6 +13,7 @@
     * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks 
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
+    * new embedding configuration options: noSpriteEdits
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
