@@ -5741,15 +5741,23 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 
 IDE_Morph.prototype.generatePuzzle = function () {
     var current = this.currentSprite,
-        puzzle;
-
-    // hide all unused blocks
-    var used = current.scripts.allChildren().filter(
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
             m => m instanceof BlockMorph),
         uPrim = [],
         uCust = [],
-        uVars = [];
+        uVars = [],
+        unused,
+        puzzle;
 
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused blocks
     used.forEach(b => {
         if (b.isCustomBlock) {
             uCust.push(b.isGlobal ? b.definition
@@ -5760,17 +5768,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
             uPrim.push(b.selector);
         }
     });
-
-    // determine all blocks
-    var allBlocks = current.allPaletteBlocks();
-    // add the stage's blocks that aren't already on record
-    this.stage.allPaletteBlocks().forEach(b => {
-        if (!allBlocks.includes(b)) {
-            allBlocks.push(b);
-        }
-    });
-
-    var unused = allBlocks.filter(b => {
+    unused = allBlocks.filter(b => {
         if (b.isCustomBlock) {
             return !contains(
                 uCust,
@@ -5784,6 +5782,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
         }
     });
 
+    // hide all unused blocks and show all used ones in the palette
     allBlocks.forEach(block => current.changeBlockVisibility(
         block,
         contains(unused, block),
@@ -5793,6 +5792,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
         StageMorph.prototype.hiddenPrimitives = [];
     }
 
+    // fire user edit event
     current.recordUserEdit(
         'palette',
         'hide block'
@@ -5806,9 +5806,8 @@ IDE_Morph.prototype.generatePuzzle = function () {
     this.refreshPalette();
     this.categories.refreshEmpty();
 
-    // duplicate the current sprite
+    // generate a new puzzle sprite by duplicating the current one
     this.duplicateSprite(current);
-
     puzzle = this.currentSprite; // this is now the duplicate
     puzzle.setPosition(current.position());
     current.hide();
