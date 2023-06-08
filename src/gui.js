@@ -5740,7 +5740,8 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.generatePuzzle = function () {
-    var current = this.currentSprite;
+    var current = this.currentSprite,
+        puzzle;
 
     // hide all unused blocks
     var used = current.scripts.allChildren().filter(
@@ -5808,14 +5809,16 @@ IDE_Morph.prototype.generatePuzzle = function () {
     // duplicate the current sprite
     this.duplicateSprite(current);
 
-    current = this.currentSprite; // this is now the duplicate
-    current.setName(this.newSpriteName(localize('Puzzle')));
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    current.hide();
+    puzzle.setName(this.newSpriteName(localize('Puzzle')));
 
     // delete all scripts
-    current.scripts = new ScriptsMorph();
+    puzzle.scripts = new ScriptsMorph();
 
     // refresh
-    this.selectSprite(current);
+    this.selectSprite(puzzle);
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
