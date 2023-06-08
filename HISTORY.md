@@ -26,6 +26,7 @@
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
+    * removed multibranched conditional library (cases.xml), because IF is now variadic
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
@@ -61,6 +62,7 @@
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
 * threads: fixed identity case for COMBINATIONS
+* removed multibranched conditional library (cases.xml), because IF is now variadic
 
 ### 2023-06-07
 * blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)
