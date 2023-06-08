@@ -4861,7 +4861,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Generate puzzle',
         'generatePuzzle',
-        'VERY experimental! - generate a Parson\'s Puzzle\n' +
+        'generate a Parson\'s Puzzle\n' +
             'from the current sprite'
     );
     menu.addLine();
