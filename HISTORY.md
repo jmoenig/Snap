@@ -10,7 +10,8 @@
     * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
     * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
-    * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks 
+    * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
+    * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * new embedding configuration options: noSpriteEdits
@@ -63,6 +64,7 @@
 * blocks: fixed default names / count for variadic ring parameters and script variables
 * threads: fixed identity case for COMBINATIONS
 * removed multibranched conditional library (cases.xml), because IF is now variadic
+* gui: new experimental "generate puzzle" feature - single click Parson's Puzzle generator for educators
 
 ### 2023-06-07
 * blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)
