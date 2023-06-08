@@ -8076,7 +8076,12 @@ CloudProjectsSource.prototype.open = async function(metadata) {
 };
 
 CloudProjectsSource.prototype.list = async function() {
-    return await this.ide.cloud.getProjectList();
+    const projects = await this.ide.cloud.getProjectList();
+    projects.forEach(metadata => {
+      const isPublic = metadata.state === 'Public' || metadata.state === 'PendingApproval';
+      metadata.public = isPublic;
+    });
+  return projects;
 };
 
 CloudProjectsSource.prototype.getPreview = function(project) {
