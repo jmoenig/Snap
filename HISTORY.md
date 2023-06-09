@@ -55,6 +55,7 @@
     * fixed identity case for COMBINATIONS
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
+    * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
@@ -64,6 +65,7 @@
 * gui: keep the unattached comments when generating a puzzle
 * gui: hide palette buttons by default when generating a puzzle
 * German translation update for "Generate puzzle" menu item
+* updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
 
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
