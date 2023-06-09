@@ -60,6 +60,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-09
+* gui: keep the unattached comments when generating a puzzle
+
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
 * threads: fixed identity case for COMBINATIONS

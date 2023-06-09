@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-June-08';
+modules.gui = '2023-June-09';
 
 // Declarations
 
@@ -5813,8 +5813,10 @@ IDE_Morph.prototype.generatePuzzle = function () {
     current.hide();
     puzzle.setName(this.newSpriteName(localize('Puzzle')));
 
-    // delete all scripts
-    puzzle.scripts = new ScriptsMorph();
+    // remove all scripts but keep the unattached comments
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
 
     // refresh
     this.selectSprite(puzzle);
