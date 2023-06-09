@@ -5798,8 +5798,9 @@ IDE_Morph.prototype.generatePuzzle = function () {
         'hide block'
     );
 
-    // turn on single palette
+    // turn on single palette and hide buttons
     this.setUnifiedPalette(true);
+    this.scene.showPaletteButtons = false;
 
     // refresh
     this.flushBlocksCache();
