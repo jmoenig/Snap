@@ -63,6 +63,7 @@
 ### 2023-06-09
 * gui: keep the unattached comments when generating a puzzle
 * gui: hide palette buttons by default when generating a puzzle
+* German translation update for "Generate puzzle" menu item
 
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
