@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-June-06';
+modules.store = '2023-June-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1400,7 +1400,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             );
         });
         input.fixLayout();
-        for (i = 0; i < input.minInputs; i += 1) {
+        for (i = input.inputs().length; i < input.minInputs; i += 1) {
             input.addInput();
         }
     } else if (model.tag === 'block' || model.tag === 'custom-block') {

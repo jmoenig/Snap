@@ -66,6 +66,7 @@
 * gui: hide palette buttons by default when generating a puzzle
 * German translation update for "Generate puzzle" menu item
 * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
+* store: fixed a deserialization glitch that kept expanding SCRIPT VARS, thanks, Eckart, for the report!
 
 ### 2023-06-08
 * blocks: fixed default names / count for variadic ring parameters and script variables
