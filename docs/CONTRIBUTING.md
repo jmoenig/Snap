@@ -191,7 +191,7 @@ correctly, if the order of formal parameters and their types
 are unchanged. Placeholders for inputs (formal parameters) are
 indicated by a single underscore character that is not part of another world,
 i.e. there should be a blank spade between the underscore slot placeholder and
-any preceding or following text..
+any preceding or following text.
 
 For example:
 
