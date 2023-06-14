@@ -1873,7 +1873,7 @@ SnapTranslator.dict.ti = {
     'color':
         'ሕብሪ',
     'hue':
-        'ድምቀት ሕብሪ',
+        'ሕብሪ',
     'fisheye':
         'ዓይኒ ዓሳ',
     'whirl':
