@@ -1317,11 +1317,11 @@ SnapTranslator.dict.ti = {
     'uncompile':
         'ዝተኣርነበ ፍታሕ',
     'duplicate':
-        'ቅዳሕ',
+        'ኣባዝሕ',
     'make a copy\nand pick it up':
         'ቅዳሕ\nንቕዳሕ ካኣ ሓዝ',
     'only duplicate this block':
-        'ነዛ ሕጡብ ጥራይ ቅዳሕ',
+        'ነዛ ሕጡብ ጥራይ ኣባዝሕ',
     'extract':
         'ኣውጽእ',
     'only grab this block':
@@ -1361,7 +1361,7 @@ SnapTranslator.dict.ti = {
     'delete block definition...':
         'መምርሒ ሕጡብ ደምስስ...',
     'duplicate block definition...':
-        'መምርሒ ሕጡብ ቅዳሕ...',
+        'መምርሒ ሕጡብ ኣባዝሕ...',
     'export block definition...':
         'መምርሒ ሕጡብ ናብ ደገ ልኣኽ...',
     'including dependencies':
