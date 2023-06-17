@@ -554,11 +554,11 @@ SnapTranslator.dict.ti = {
     'for %upvar = %n to %n %cla':
         'ን %upvar = %n ክሳብ %n %cla',
     'if %b %c':
-        '%b እንተ %c',
+        'እንተ %b %c',
     'if %b %c else %c':
-        '%b እንተ %c እንተዘየሎ %c',
+        'እንተ %b %c እንተዘይኮነ %c',
     'if %b then %s else %s':
-        '%b እንተ ሽዑ %s እንተዘየሎ %s',
+        'እንተ %b ሽዑ %s እንተዘይኮነ %s',
     'report %s':
         'ጸብጻብ ሃብ %s',
     'stop %stopChoices':
@@ -620,11 +620,11 @@ SnapTranslator.dict.ti = {
 
     // sensing:
     'touching %col ?':
-        '%col እንተ ተተንኪፉ፧',
+        '%col ተተንኪፉ፧',
     'touching %clr ?':
-        '%clr እንተ ተተንኪፉ፧',
+        '%clr ተተንኪፉ፧',
     'color %clr is touching %clr ?':
-        'ሕብሪ %clr ን %clr እንተ ተተንኪፉ፧',
+        'ሕብሪ %clr ን %clr ተተንኪፉ፧',
     'ask %s and wait':
         'ሕተት %s እሞ ተጸበ',
     'what\'s your name?':
