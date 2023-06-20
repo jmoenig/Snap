@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2021-March-03';
+modules.symbols = '2023-June-02';
 
 var SymbolMorph;
 
@@ -150,8 +150,8 @@ SymbolMorph.prototype.names = [
 
 // SymbolMorph instance creation:
 
-function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
-    this.init(name, size, color, shadowOffset, shadowColor);
+function SymbolMorph(name, size, color, shadowOffset, shadowColor, bg) {
+    this.init(name, size, color, shadowOffset, shadowColor, bg);
 }
 
 SymbolMorph.prototype.init = function (
@@ -159,7 +159,8 @@ SymbolMorph.prototype.init = function (
     size,
     color,
     shadowOffset,
-    shadowColor
+    shadowColor,
+    bg
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
@@ -169,6 +170,7 @@ SymbolMorph.prototype.init = function (
     this.shadowColor = shadowColor || null;
     SymbolMorph.uber.init.call(this);
     this.color = color || BLACK;
+    this.backgroundColor = bg || null;
     this.fixLayout();
     this.rerender();
 };
@@ -228,6 +230,12 @@ SymbolMorph.prototype.render = function (ctx) {
         x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0,
         y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
 
+    if (this.backgroundColor) {
+        ctx.save();
+        ctx.fillStyle = this.backgroundColor.toString();
+        ctx.fillRect(0, 0, this.symbolWidth(), this.size);
+        ctx.restore();
+    }
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);

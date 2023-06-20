@@ -3,7 +3,6 @@ list-utilities.xml	List utilities	Some standard functions on lists (reverse, sor
 colors.xml	Colors and Crayons	Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.
 crayons.xml	Crayons	Just the crayons, without the rest of the colors library.  Fast and simple.
 bignumbers.xml	Bignums, rationals, complex #s	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
-cases.xml	Multi-branched conditional	Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!
 try-catch.xml	Catch errors	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
 parallel_module.xml	Parallelization	Run several scripts in parallel and wait until all are done.
 Eisenbergification.xml	Getters and setters	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.

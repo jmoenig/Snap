@@ -85,7 +85,7 @@ BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2021-July-05';
+modules.paint = '2023-May-24';
 
 // Declarations
 
@@ -244,7 +244,7 @@ PaintEditorMorph.prototype.buildEdits = function () {
         function () {
             if (myself.paper.undoBuffer.length > 0) {
                 myself.ide.confirm(
-                    'This will erase your current drawing.\n' +
+                    'This will erase your current drawing. ' +
                     'Are you sure you want to continue?',
                     'Switch to vector editor?',
                     () => {

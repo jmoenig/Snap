@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-19';
+modules.objects = '2023-May-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -13357,7 +13357,7 @@ WatcherMorph.prototype.importData = function (raw) {
         function txtOnlyMsg(ftype, anyway) {
             ide.confirm(
                 localize(
-                    'Snap! can only import "text" files.\n' +
+                    'Snap! can only import "text" files. ' +
                         'You selected a file of type "' +
                         ftype +
                         '".'

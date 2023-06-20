@@ -105,13 +105,13 @@ ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
-ArgLabelMorph, embedMetadataPNG*/
+ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-May-21';
+modules.byob = '2023-June-06';
 
 // Declarations
 
@@ -145,8 +145,15 @@ function CustomBlockDefinition(spec, receiver) {
     this.type = 'command';
     this.spec = spec || '';
     this.declarations = new Map();
-        // key: inputName
-        // value: [type, default, options, isReadOnly]
+        //  key: inputName
+        //  value: [
+        //      type,
+        //      default,
+        //      options,
+        //      isReadOnly,
+        //      isIrreplaceable,
+        //      separator
+        //  ]
     this.variableNames = [];
     this.comment = null;
     this.isHelper = false;
@@ -215,6 +222,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.defaultValue = slot[1];
                 part.fragment.options = slot[2];
                 part.fragment.isReadOnly = slot[3] || false;
+                part.fragment.isIrreplaceable = slot[4] || false;
+                part.fragment.separator = slot[5] || null;
             }
         }
     });
@@ -318,6 +327,16 @@ CustomBlockDefinition.prototype.isReadOnlyInputIdx = function (idx) {
 CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
     var inputName = this.inputNames()[idx];
     return this.inputOptionsOf(inputName);
+};
+
+CustomBlockDefinition.prototype.isIrreplaceableInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.isIrreplaceableInput(inputName);
+};
+
+CustomBlockDefinition.prototype.separatorOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.separatorOfInput(inputName);
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
@@ -456,6 +475,18 @@ CustomBlockDefinition.prototype.menuSearchWords = function () {
 CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
     return this.declarations.has(inputName) &&
         this.declarations.get(inputName)[3] === true;
+};
+
+CustomBlockDefinition.prototype.isIrreplaceableInput = function (inputName) {
+    return this.declarations.has(inputName) &&
+        this.declarations.get(inputName)[4] === true;
+};
+
+CustomBlockDefinition.prototype.separatorOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[5] || null;
+    }
+    return null;
 };
 
 CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
@@ -937,6 +968,11 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
         this.inputs().forEach((inp, i) => {
+            if (inp instanceof ArgMorph &&
+                    !(inp instanceof TemplateSlotMorph)) {
+                inp.isStatic = def.isIrreplaceableInputIdx(i);
+                inp.canBeEmpty = !inp.isStatic;
+            }
             if (inp instanceof InputSlotMorph) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
             }
@@ -944,11 +980,15 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
     }
 
     // find unnamed upvars (indicated by non-breaking space) and label them
-    // to their internal definition (default)
+    // to their internal definition (default).
+    // make sure to set the separator labels for variadic input slots
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
             inp.setContents(def.inputNames()[idx]);
+        } else if (inp instanceof MultiArgMorph) {
+            inp.setIrreplaceable(def.isIrreplaceableInputIdx(idx));
+            inp.setInfix(def.separatorOfInputIdx(idx));
         }
     });
 
@@ -1203,7 +1243,9 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
                     part.fragment.type,
                     part.fragment.defaultValue,
                     part.fragment.options,
-                    part.fragment.isReadOnly
+                    part.fragment.isReadOnly,
+                    part.fragment.isIrreplaceable,
+                    part.fragment.separator
                 ]
             );
         }
@@ -3140,6 +3182,8 @@ function BlockLabelFragment(labelString) {
     this.defaultValue = '';
     this.options = '';
     this.isReadOnly = false; // for input slots
+    this.isIrreplaceable = false;
+    this.separator = null; // for variadic slots
     this.isDeleted = false;
 }
 
@@ -3201,6 +3245,8 @@ BlockLabelFragment.prototype.copy = function () {
     ans.defaultValue = this.defaultValue;
     ans.options = this.options;
     ans.isReadOnly = this.isReadOnly;
+    ans.isIrreplaceable = this.isIrreplaceable;
+    ans.separator = this.separator;
     return ans;
 };
 
@@ -4194,13 +4240,17 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
 
 InputSlotDialogMorph.prototype.addSlotsMenu = function () {
     this.slots.userMenu = () => {
-        if (contains(
-            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
-            this.fragment.type)
-        ) {
-            var menu = new MenuMorph(this),
-                on = '\u2611 ',
-                off = '\u2610 ';
+        var menu = new MenuMorph(this),
+            on = '\u2611 ',
+            off = '\u2610 ',
+            isEditable = contains(
+                ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
+                this.fragment.type
+            );
+        if(this.fragment.type === '%upvar') {
+            return this.specialSlotsMenu();
+        }
+        if (isEditable) {
             menu.addItem(
                 (this.fragment.hasOptions() ? on : off) +
                     localize('options') +
@@ -4212,28 +4262,43 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     localize('read-only'),
                 () => this.fragment.isReadOnly = !this.fragment.isReadOnly
             );
-            menu.addLine();
+        }
+        menu.addItem(
+            (this.fragment.isIrreplaceable ? on : off) +
+                localize('static'),
+            () => this.fragment.isIrreplaceable =
+                !this.fragment.isIrreplaceable
+        );
+        menu.addLine();
+        if (isEditable) {
             menu.addMenu(
                 (this.fragment.hasSpecialMenu() ? on : off) +
                     localize('menu'),
                 this.specialOptionsMenu()
             );
-            menu.addMenu(
-                (contains(['%mlt', '%code'], this.fragment.type) ?
-                    on : off) +
-                localize('special'),
-                this.specialSlotsMenu()
-            );
-            if (this.world().currentKey === 16) { // shift-key down
-                menu.addMenu(
-                    (this.fragment.hasExtensionMenu() ? on : off) +
-                    localize('extension'),
-                    this.extensionOptionsMenu()
-                );
-            }
-            return menu;
         }
-        return this.specialSlotsMenu();
+        if (this.fragment.type.includes('%mult')) {
+            menu.addItem(
+                (this.fragment.separator ? on : off) +
+                    localize('separator') +
+                    '...',
+                'editSeparator'
+            );
+        }
+        menu.addMenu(
+            (contains(['%mlt', '%code'], this.fragment.type) ?
+                on : off) +
+            localize('special'),
+            this.specialSlotsMenu()
+        );
+        if (this.world().currentKey === 16) { // shift-key down
+            menu.addMenu(
+                (this.fragment.hasExtensionMenu() ? on : off) +
+                localize('extension'),
+                this.extensionOptionsMenu()
+            );
+        }
+        return menu;
     };
 };
 
@@ -4317,6 +4382,18 @@ InputSlotDialogMorph.prototype.extensionOptionsMenu = function () {
         addSpecialOptions(sel.slice(4), '§_ext_' + sel);
     });
     return menu;
+};
+
+InputSlotDialogMorph.prototype.editSeparator = function () {
+        new DialogBoxMorph(
+            this,
+            str => this.fragment.separator = str,
+            this
+        ).prompt(
+            "Separator",
+            this.fragment.separator || '',
+            this.world()
+        );
 };
 
 // InputSlotDialogMorph hiding and showing:

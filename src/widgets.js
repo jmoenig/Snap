@@ -87,7 +87,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2023-March-05';
+modules.widgets = '2023-May-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1602,7 +1602,7 @@ DialogBoxMorph.prototype.askYesNo = function (
         true,
         false,
         'center',
-        null,
+        300, // fixed width word wrap
         null,
         MorphicPreferences.isFlat ? null : new Point(1, 1),
         WHITE

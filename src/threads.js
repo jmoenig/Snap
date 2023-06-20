@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-May-22';
+modules.threads = '2023-June-08';
 
 var ThreadManager;
 var Process;
@@ -919,7 +919,11 @@ Process.prototype.reportAssociativeBool = function (block, baseOp, short) {
                 len: tests.inputs().length,
                 pc: 1
             };
-            this.pushContext(acc.slots[0], outer);
+            if (acc.slots.length) {
+                this.pushContext(acc.slots[0], outer);
+            } else {
+                this.context.addInput(!short);
+            }
         } else { // tests is an ArgLabelMorph
             this.pushContext(tests.argMorph(), outer);
         }
@@ -1291,6 +1295,16 @@ Process.prototype.errorBubble = function (error, element) {
 
     errorMorph.fixLayout();
     return errorMorph;
+};
+
+Process.prototype.variableError = function (varName) {
+    throw new Error(
+        localize('a variable of name')
+            + ' \''
+            + varName
+            + '\'\n'
+            + localize('does not exist in this context')
+    );
 };
 
 // Process Lambda primitives
@@ -2216,7 +2230,7 @@ Process.prototype.reportTranspose = function (list) {
 Process.prototype.reportCrossproduct = function (lists) {
     this.assertType(lists, 'list');
     if (lists.isEmpty()) {
-        return lists;
+        return lists.cons(new List(), lists);
     }
     this.assertType(lists.at(1), 'list');
     return lists.crossproduct();
@@ -7975,11 +7989,7 @@ Process.prototype.getVarNamed = function (name) {
                         : value === '' ? ''
                             : value || 0); // don't return null
     }
-    throw new Error(
-        localize('a variable of name \'')
-            + name
-            + localize('\'\ndoes not exist in this context')
-    );
+    this.variableError(name);
 };
 
 Process.prototype.setVarNamed = function (name, value) {
@@ -7990,11 +8000,7 @@ Process.prototype.setVarNamed = function (name, value) {
     var frame = this.homeContext.variables.silentFind(name) ||
             this.context.variables.silentFind(name);
     if (isNil(frame)) {
-        throw new Error(
-            localize('a variable of name \'')
-                + name
-                + localize('\'\ndoes not exist in this context')
-        );
+        this.variableError(name);
     }
     frame.vars[name].value = value;
 };
@@ -8714,11 +8720,7 @@ VariableFrame.prototype.find = function (name) {
     // the specified variable. otherwise throw an exception.
     var frame = this.silentFind(name);
     if (frame) {return frame; }
-    throw new Error(
-        localize('a variable of name \'')
-            + name
-            + localize('\'\ndoes not exist in this context')
-    );
+    this.variableError(name);
 };
 
 VariableFrame.prototype.silentFind = function (name) {
@@ -8794,11 +8796,7 @@ VariableFrame.prototype.getVar = function (name) {
         // empty input with a Binding-ID called without an argument
         return '';
     }
-    throw new Error(
-        localize('a variable of name \'')
-            + name
-            + localize('\'\ndoes not exist in this context')
-    );
+    this.variableError(name);
 };
 
 VariableFrame.prototype.addVar = function (name, value) {
@@ -8813,6 +8811,8 @@ VariableFrame.prototype.deleteVar = function (name) {
         delete frame.vars[name];
     }
 };
+
+VariableFrame.prototype.variableError = Process.prototype.variableError;
 
 // VariableFrame tools
 
