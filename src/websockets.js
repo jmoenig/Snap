@@ -481,16 +481,72 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
 };
 
 WebSocketManager.prototype.onConnect = async function(isReconnect) {
-    var myself = this;
     this.sendMessage({type: 'ping'});
     if (isReconnect) {
-        this.updateRoomInfo();
-        if (this.ide.cloud.projectId) {
-            SnapActions.requestMissingActions(true);
+        // Disable error handler when reconnecting in case it is recoverable
+        // TODO: make this more ergonomic in the client library...
+        const silent = () => {};
+        const handler = this.ide.cloud.onerror;
+        this.ide.cloud.onerror = silent;
+
+        try {
+            await this.updateRoomInfo();
+            this.ide.cloud.onerror = handler;
+
+            if (this.ide.cloud.projectId) {
+                SnapActions.requestMissingActions(true);
+            }
+        } catch (err) {
+            this.ide.cloud.onerror = handler;
+
+            // Try to recover from missing project. It's possible that the computer is
+            // recovering from a broken connection after an arbitrarily long time while
+            // working on an unsaved project. In this case, the server has likely garbage
+            // collected the project so it will need to be re-imported.
+            //
+            // Additional roles will not be stored on the client but they can only be
+            // made by logged in users or as part of the example/public project that
+            // was opened. In these cases, we can just reload the page.
+            if (err.message.includes('Project not found')) {
+                const ide = this.ide;
+                const roleCount = ide.room.getRoleCount();
+                const currentUrl = window.location.href;
+
+                const xml = ide.exportProjectXml(ide.room.name, [ide.getSerializedRole()]);
+                await ide.droppedText(xml);
+                this.messages = [];
+
+                if (roleCount > 1) {
+                    const isLoggedIn = ide.cloud.username !== null;
+                    if (!isLoggedIn) {
+                        // reload the example/public project (refresh the page) to recover missing roles
+                        const message = localize(
+                            'Other roles in the project not found after reconnect.' +
+                            '\nWould you like to refresh the page to reload the project with ' +
+                            'the missing roles?'
+                        );
+                        const title = localize('Reload Project?');
+                        const confirmed = await ide.confirm(message, title);
+                        if (confirmed) {
+                            window.location.href = currentUrl;
+                        }
+                    } else {
+                        const message = localize(
+                            'Other roles in the project not found after reconnect.\n' +
+                            '\nIn the future, please save multi-role projects' +
+                            '\nto prevent losing progress.'
+                        );
+                        ide.cloudError()(message);
+                    }
+                }
+
+            } else {
+                handler(err);
+            }
         }
     }
-    while (myself.messages.length) {
-        myself.websocket.send(myself.messages.shift());
+    while (this.messages.length) {
+        this.websocket.send(this.messages.shift());
     }
 };
 
