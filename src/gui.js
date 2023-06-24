@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-May-30';
+modules.gui = '2023-June-09';
 
 // Declarations
 
@@ -4858,6 +4858,12 @@ IDE_Morph.prototype.projectMenu = function () {
             () => this.deleteUserCategory(pos)
         );
     }
+    menu.addItem(
+        'Generate puzzle',
+        'generatePuzzle',
+        'generate a Parson\'s Puzzle\n' +
+            'from the current sprite'
+    );
     menu.addLine();
     if (this.scenes.length() > 1) {
         menu.addItem('Scenes...', 'scenesMenu');
@@ -5731,6 +5737,90 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
                 + 'global custom blocks in this project'
         );
     }
+};
+
+IDE_Morph.prototype.generatePuzzle = function () {
+    var current = this.currentSprite,
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uPrim = [],
+        uCust = [],
+        uVars = [],
+        unused,
+        puzzle;
+
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused blocks
+    used.forEach(b => {
+        if (b.isCustomBlock) {
+            uCust.push(b.isGlobal ? b.definition
+                : current.getMethod(b.semanticSpec));
+        } else if (b.selector === 'reportGetVar') {
+            uVars.push(b.blockSpec);
+        } else {
+            uPrim.push(b.selector);
+        }
+    });
+    unused = allBlocks.filter(b => {
+        if (b.isCustomBlock) {
+            return !contains(
+                uCust,
+                b.isGlobal ? b.definition
+                    : current.getMethod(b.semanticSpec)
+                );
+        } else if (b.selector === 'reportGetVar') {
+            return !contains(uVars, b.blockSpec);
+        } else {
+            return !contains(uPrim, b.selector);
+        }
+    });
+
+    // hide all unused blocks and show all used ones in the palette
+    allBlocks.forEach(block => current.changeBlockVisibility(
+        block,
+        contains(unused, block),
+        true // quick - without palette update
+    ));
+    if (unused.length === 0) {
+        StageMorph.prototype.hiddenPrimitives = [];
+    }
+
+    // fire user edit event
+    current.recordUserEdit(
+        'palette',
+        'hide block'
+    );
+
+    // turn on single palette and hide buttons
+    this.setUnifiedPalette(true);
+    this.scene.showPaletteButtons = false;
+
+    // refresh
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.categories.refreshEmpty();
+
+    // generate a new puzzle sprite by duplicating the current one
+    this.duplicateSprite(current);
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    current.hide();
+    puzzle.setName(this.newSpriteName(localize('Puzzle')));
+
+    // remove all scripts but keep the unattached comments
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
+
+    // refresh
+    this.selectSprite(puzzle);
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {

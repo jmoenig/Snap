@@ -6,22 +6,28 @@
     * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data)
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
-    * new embedding configuration options: noSpriteEdits
     * new "case sensitivity" preference setting
     * new "case sensitivity" selector to the setting blocks' dropdowns 
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
+    * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
+    * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
+    * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
+    * new embedding configuration options: noSpriteEdits
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
 * **Notable Changes:**
     * IF is now variadic and expandable with "else if" cases
+    * explicit variadic input list visuals
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
+    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change) 
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
+    * removed multibranched conditional library (cases.xml), because IF is now variadic
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
@@ -29,6 +35,7 @@
     * translations now use abstract block specs
     * updated the strings library for and with the new case sensitivity and lower case primitives
     * generated JSON strings are now (somewhat) pretty printed (with newlines and indentations)
+    * increased arrows heads size for variadic inputs and dropdown menus
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -45,12 +52,73 @@
     * fixed preserving embedded scripts when relabelling blocks with variadic c-slots
     * improved sensing precision when clicking on variadic slot arrows
     * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
+    * fixed identity case for COMBINATIONS
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
+    * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-06-09
+* gui: keep the unattached comments when generating a puzzle
+* gui: hide palette buttons by default when generating a puzzle
+* German translation update for "Generate puzzle" menu item
+* updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
+* store: fixed a deserialization glitch that kept expanding SCRIPT VARS, thanks, Eckart, for the report!
+
+### 2023-06-08
+* blocks: fixed default names / count for variadic ring parameters and script variables
+* threads: fixed identity case for COMBINATIONS
+* removed multibranched conditional library (cases.xml), because IF is now variadic
+* gui: new experimental "generate puzzle" feature - single click Parson's Puzzle generator for educators
+
+### 2023-06-07
+* blocks: added "with" infix to APPEND and COMBINATIONS primitives, making the blocks collapse from 2 inputs to input list, omitting the single input case, same a JOIN (and MIN, MAX)
+* blocks: fixed a variadic input slot collapsing glitch
+
+### 2023-06-06
+* blocks: added "with" infix to JOIN, made it collapse from 2 inputs to input list, omitting the single input case
+* German translation update for "with" (as JOIN infix label)
+* byob, blocks: new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
+* blocks, byob, store: serialize variadic input slot separators
+* blocks, byob: minor code tweaks
+* blocks, byob: update collapsed variadic slots when changing the "static" setting
+
+### 2023-06-05
+* blocks: made drop-halo for variadic slots white (instead of red) in "explicit input list" mode
+* blocks: tweaked variadic c-slot layout
+* blocks: tweaked keyboard entry for new variadic conditionals
+* store: make sure to expand restored variadic inputs to their minimum number of slots
+* byob, blocks, store: new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
+
+### 2023-06-04
+* blocks: limited dropping reporters on variadic arrow heads to empty variadic slots in "explicit input lists" mode
+* blocks: show "input list:" label for empty variadic slots, except when overriden by a "collapse" label
+
+### 2023-06-03
+* blocks: fixed zebra coloring for variadic input slots' list icons
+
+### 2023-06-02
+* blocks, symbols: made collapse list icon red
+* blocks: tweaked collapse labels
+* blocks: fixed translation of collapse labels
+* blocks: increased variadic arrow heads size
+* blocks: fixed render color for collapse list icons in flat design mode
+* blocks: increased arrow heads size for dropdown menus
+* blocks: tweaked input slot dropdown menu arrow layout
+
+### 2023-06-01
+* blocks: turned on "explicit input lists" for variadic slots
+* blocks: tweaked variadic collapse labels for JOIN and RESHAPE
+
+### 2023-05-31
+* blocks: added collapse labels for explicit input lists
+* blocks: made variadic infix inputs collapsible for explicit input lists
+* blocks: added ability to specify empty variadic collapse labels
+* blocks: tweaked variadic slot arrows layout
+* threads: fixed reportAssociativeBool() for empty variadic inputs
 
 ### 2023-05-30
 * blocks: enable explicit input lists in variadic slots, experimental, under construction

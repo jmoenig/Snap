@@ -1,5 +1,7 @@
 # How to contribute
 
+last updated on Jun. 09, 2023
+
 Attached is the current development code base for Snap! (formerly known as BYOB4).
 It consists of several JavaScript, HTML and text files, and while some of it may
 be functional most parts will be in flux and subject to frequent, even fundamental
@@ -154,15 +156,14 @@ object, for review purposes it should be formatted as follows:
 
 ```
 {
-    'English string':
-        'Translation string',
-    'last key':
-}       'last value'
+    "English string": "Translation string",
+    "last key": "last value"
+}
 ```
 
-and you only edit the indented value strings. Note that each key-value
-pair needs to be delimited by a comma, but that there shouldn't be a comma
-after the last pair (again, just overwrite the template file and you'll be
+and you only edit the value strings following the colon. Note that each
+key-value pair needs to be delimited by a comma, but that there shouldn't be a
+comma after the last pair (again, just overwrite the template file and you'll be
 fine).
 
 If something doesn't work, or if you're unsure about the formalities you
@@ -188,28 +189,29 @@ See this collection of JavaScript utilities: http://0xcc.net/jsescape/
 At this time your translation of block specs will only work
 correctly, if the order of formal parameters and their types
 are unchanged. Placeholders for inputs (formal parameters) are
-indicated by a preceding % prefix and followed by a type
-abbreviation.
+indicated by a single underscore character that is not part of another world,
+i.e. there should be a blank spade between the underscore slot placeholder and
+any preceding or following text.
 
 For example:
 
-    'say %s for %n secs'
+    'say _ for _ secs'
 
-can currently not be changed into
+notice blank spaces between the underscores and their surrounding text.
 
-    'say %n secs long %s'
+In this example:
 
-and still work as intended.
+    'point towards _'
 
-Similarly
+the underscore already stands alone as the last word and therefore doesn't
+require to be followed by another space.
 
-    'point towards %dst'
+Likewise:
 
-cannot be changed into
+    '_ effect'
 
-    'point towards %cst'
-
-without breaking its functionality.
+doesn't require the underscore placeholder to be preceded by a space since
+it already is the first word.
 
 
 ### 6. Submit

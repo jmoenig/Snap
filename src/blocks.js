@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-May-30';
+modules.blocks = '2023-June-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1094,6 +1094,7 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: '%s',
         label: 'with inputs',
+        collapse: '',
         tags: 'widget'
     },
     '%send': {
@@ -1148,12 +1149,14 @@ SyntaxElementMorph.prototype.labelParts = {
     '%words': {
         type: 'multi',
         slots: '%s',
-        defaults: 2
+        defaults: 2,
+        infix: 'with'
     },
     '%lists': {
         type: 'multi',
         slots: '%l',
-        defaults: 2
+        defaults: 2,
+        infix: 'with'
     },
     '%nums': {
         type: 'multi',
@@ -2067,8 +2070,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
             if (l.length > 0) {
                 lines.push(l);
             }
-            l = [part];
-            x = part.fullBounds().width() + space;
+            if (part.isVisible) { // ignore hidden collapse labels
+                l = [part];
+                x = part.fullBounds().width() + space;
+            }
         } else {
             if (part.isVisible) {
                 x += part.fullBounds().width() + space;
@@ -2142,12 +2147,13 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 }
                 part.setPosition(new Point(x, y));
                 lineHeight = part.height();
-                if (part.slotSpec instanceof Array) {
-                    maxX = Math.max(
-                        maxX,
-                        Math.max(...part.children.map(each => each.right()))
-                    );
-                }
+                maxX = Math.max(
+                    maxX,
+                    Math.max(...part.children.filter(each =>
+                        each.isVisible &&
+                        !(each instanceof CSlotMorph)
+                    ).map(each => each.right()))
+                );
             } else {
                 part.setPosition(new Point(x, y));
                 if (!part.isBlockLabelBreak) {
@@ -2691,6 +2697,7 @@ function BlockLabelMorph(
         fontName
     );
 }
+
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
@@ -2735,11 +2742,11 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             return this.color.mixed(block.alpha, WHITE);
         }
         if (this.color.eq(WHITE)) {
-            return this.parent.alpha > 0.5 ? this.color
+            return block.alpha > 0.5 ? this.color
                 : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
         }
         if (this.color.eq(BLACK)) {
-            return this.parent.alpha > 0.5 ? this.color
+            return block.alpha > 0.5 ? this.color
                 : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
         }
         return this.color;
@@ -2755,15 +2762,14 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     if (this.color.eq(WHITE)) {
-        return this.parent.alpha > 0.5 ? this.color
+        return block.alpha > 0.5 ? this.color
             : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     return this.color;
 };
 
-BlockSymbolMorph.prototype.getShadowRenderColor = function () {
-    return this.parent.alpha > 0.5 ? this.shadowColor : CLEAR;
-};
+BlockSymbolMorph.prototype.getShadowRenderColor =
+    BlockLabelMorph.prototype.getShadowRenderColor;
 
 // BlockMorph //////////////////////////////////////////////////////////
 
@@ -3045,11 +3051,19 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
         if (this.isPrototype) {
             this.add(this.placeHolder());
         }
-        if (part instanceof InputSlotMorph && this.isCustomBlock) {
-            part.setChoices.apply(
-                part,
-                (definition || this.definition).inputOptionsOfIdx(inputIdx)
-            );
+        if (this.isCustomBlock) {
+            if (part instanceof InputSlotMorph) {
+                part.setChoices.apply(
+                    part,
+                    (definition || this.definition).inputOptionsOfIdx(inputIdx)
+                );
+            }
+            if (part instanceof ArgMorph &&
+                    !(part instanceof TemplateSlotMorph)) {
+                part.isStatic = (definition
+                    || this.definition).isIrreplaceableInputIdx(inputIdx);
+                part.canBeEmpty = !part.isStatic;
+            }
         }
     });
     this.blockSpec = spec;
@@ -8239,6 +8253,7 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
     );
     this.add(this.feedbackMorph);
     if (target instanceof MultiArgMorph) {
+        // && !target.enableExplicitInputLists) {
         this.feedbackMorph.color =
             SpriteMorph.prototype.blockColor.lists.copy();
         this.feedbackMorph.borderColor =
@@ -8351,6 +8366,11 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
 
     function touchingVariadicArrowsIfAny(inp, point) {
         if (inp instanceof MultiArgMorph) {
+            /* // only enable reporter drops on empty variadic input slots
+            if (MultiArgMorph.prototype.enableExplicitInputLists) {
+                return !inp.isStatic && inp.inputs().length === 0;
+            }
+            */
             if (point) {
                 return inp.arrows().bounds.containsPoint(point);
             }
@@ -11493,7 +11513,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     }
 
     if (this.choices) {
-        arrow.setSize(this.fontSize);
+        arrow.setSize(fontHeight(this.fontSize));
         arrow.show();
     } else {
         arrow.hide();
@@ -11553,7 +11573,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     if (arrow.isVisible) {
         arrow.setPosition(new Point(
             this.right() - arrowWidth - this.edge,
-            contents.top()
+            contents.top() - arrowWidth / 8
         ));
     }
 
@@ -13292,7 +13312,7 @@ MultiArgMorph.uber = ArgMorph.prototype;
 
 // MultiArgMorph preferences settings:
 
-MultiArgMorph.prototype.enableExplicitInputLists = false;
+MultiArgMorph.prototype.enableExplicitInputLists = true;
 
 // MultiArgMorph instance creation:
 
@@ -13344,7 +13364,9 @@ MultiArgMorph.prototype.init = function (
     group
 ) {
     var label,
+        collapseLabel,
         arrows = new FrameMorph(),
+        initial = min || 0,
         listSymbol,
         leftArrow,
         rightArrow,
@@ -13355,10 +13377,16 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-    this.collapse = collapse || '';
+
+    /*
+    this.collapse = localize(collapse ||
+        (this.slotSpec === '%l' ? 'input list:' : ''));
+    */
+    this.collapse = collapse === '' ? '' : localize(collapse || 'input list:');
+
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
-    this.minInputs = min || 0;
+    this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
@@ -13373,8 +13401,14 @@ MultiArgMorph.prototype.init = function (
 
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;
-    arrows.alpha = (isTransparent === false || this.enableExplicitInputLists) ?
-        1 : 0;
+    arrows.alpha = isTransparent === false ? 1 : 0;
+
+    // collapse label text:
+    if (this.collapse) {
+        collapseLabel = this.labelPart(this.collapse);
+        this.add(collapseLabel);
+        collapseLabel.hide();
+    }
 
     // label text:
     if (this.labelText || (this.slotSpec === '%cs')) {
@@ -13390,19 +13424,20 @@ MultiArgMorph.prototype.init = function (
     // left arrow:
     leftArrow = new ArrowMorph(
         'left',
-        this.fontSize,
+        fontHeight(this.fontSize),
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$list-.97');
+    listSymbol = this.labelPart('$list-.98');
+    listSymbol.backgroundColor = new Color(255, 140, 0); // list color
 
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
-        this.fontSize,
+        fontHeight(this.fontSize),
         Math.max(Math.floor(this.fontSize / 6), 1),
         arrowColor,
         true
@@ -13417,8 +13452,8 @@ MultiArgMorph.prototype.init = function (
 
     this.add(arrows);
 
-    // create the minimum number of inputs
-    for (i = 0; i < this.minInputs; i += 1) {
+    // create the initial number of inputs
+    for (i = 0; i < initial; i += 1) {
         this.addInput();
     }
 };
@@ -13454,8 +13489,14 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
     }
 };
 
+MultiArgMorph.prototype.collapseLabel = function () {
+    return this.collapse ? this.children[0] : null;
+};
+
 MultiArgMorph.prototype.label = function () {
-    return this.labelText ? this.children[0] : null;
+    return this.labelText ?
+        this.children[this.collapse ? 1 : 0]
+        : null;
 };
 
 MultiArgMorph.prototype.allLabels = function () {
@@ -13469,6 +13510,28 @@ MultiArgMorph.prototype.arrows = function () {
 
 MultiArgMorph.prototype.getSpec = function () {
     return '%mult' + this.slotSpec;
+};
+
+MultiArgMorph.prototype.setIrreplaceable = function (irreplaceable = false) {
+    this.isStatic = irreplaceable;
+    this.canBeEmpty = !irreplaceable;
+    if (!this.inputs().length) {
+        this.fixLayout();
+    }
+};
+
+MultiArgMorph.prototype.setInfix = function (separator = '') {
+    var inps;
+    if (this.infix === separator) {
+        return;
+    }
+    inps = this.inputs();
+    this.collapseAll();
+    this.infix = separator;
+    inps.forEach(slot => this.replaceInput(this.addInput(), slot));
+    if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
+        this.addInput();
+    }
 };
 
 // MultiArgMorph defaults:
@@ -13530,7 +13593,7 @@ MultiArgMorph.prototype.setLabelColor = function (
 // MultiArgMorph layout:
 
 MultiArgMorph.prototype.fixLayout = function () {
-    var labels, shadowColor, shadowOffset;
+    var labels, shadowColor, shadowOffset, block;
     if (this.slotSpec === '%t') {
         this.isStatic = true; // in this case I cannot be exchanged
     }
@@ -13540,7 +13603,10 @@ MultiArgMorph.prototype.fixLayout = function () {
         this.arrows().color = this.color;
         shadowColor = this.shadowColor ||
             this.parent.color.darker(this.labelContrast);
-        this.arrows().children[2].shadowColor = shadowColor; // list symbol
+        block = this.parentThatIsA(BlockMorph);
+        this.arrows().children[2].shadowColor = block ?
+            block.color.darker(this.labelContrast)
+            : shadowColor;
         if (labels.length) {
             labels.forEach(label => {
                 shadowOffset = this.shadowOffset ||
@@ -13563,6 +13629,7 @@ MultiArgMorph.prototype.fixLayout = function () {
 
 MultiArgMorph.prototype.fixArrowsLayout = function () {
     var label = this.label(),
+        collapseLabel = this.collapseLabel(),
         arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
@@ -13572,6 +13639,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
     leftArrow.show();
     listSymbol.hide();
     rightArrow.show();
+    if (collapseLabel) {
+        collapseLabel.hide();
+    }
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
@@ -13579,10 +13649,18 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         leftArrow.hide();
         if (this.isStatic || inpCount || !this.enableExplicitInputLists) {
             rightArrow.setPosition(
-                arrows.position().subtract(new Point(dim.x, 0))
+                arrows.position().subtract(
+                    new Point(
+                        dim.x,
+                        this.slotSpec.includes('%cs') ? this.edge : 0
+                    )
+                )
             );
             arrows.setExtent(dim);
         } else {
+            if (collapseLabel) {
+                collapseLabel.show();
+            }
             listSymbol.show();
             listSymbol.setPosition(
                 arrows.position().add(new Point(
@@ -13604,7 +13682,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         }
         leftArrow.show();
         rightArrow.show();
-        rightArrow.setPosition(leftArrow.topCenter());
+        rightArrow.setPosition(leftArrow.topCenter().subtract(
+            new Point(dim.x * 0.3, 0)
+        ));
         arrows.bounds.corner = rightArrow.bottomRight().copy();
         if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
             // hide right arrow
@@ -13703,7 +13783,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {
         name = '';
-        i = idx;
+        i = idx - 1;
         if (this.elementSpec === '%scriptVars') {
             // compensate for missing label element
             i += 1;
@@ -13714,14 +13794,14 @@ MultiArgMorph.prototype.addInput = function (contents) {
         }
         newPart.setContents(name);
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
-        if (this.is3ArgRingInHOF() && idx < 4) {
+        if (this.is3ArgRingInHOF() && idx < 5) {
             newPart.setContents([
                 localize('value'),
                 localize('index'),
                 localize('list')
-            ][idx - 1]);
+            ][idx - 2]);
         } else {
-            newPart.setContents('#' + idx);
+            newPart.setContents('#' + (idx - 1));
         }
     } else if (this.elementSpec === '%message') {
         newPart.setContents(localize('data'));
@@ -13747,7 +13827,7 @@ MultiArgMorph.prototype.addInfix = function () {
             this.labelText[len % this.slotSpec.length]
             : '');
 
-    if (label === '' || !len) {return; }
+    if (label === '' || !len || this.children.length < 3) {return; }
     infix = this.labelPart(label);
     infix.parent = this;
     this.children.splice(this.children.length - 1, 0, infix);
@@ -13793,10 +13873,10 @@ MultiArgMorph.prototype.removeInput = function () {
             }
         }
     }
-    if (this.infix !== '' ||
+    if (this.infix ||
         (this.labelText instanceof Array && this.inputs().length)
     ) {
-        if (this.children.length > 1 &&
+        if (this.children.length > (this.collapse ? 2 : 1) &&
                 !(this.labelText instanceof Array &&
                     this.labelText[this.inputs().length % this.slotSpec.length]
                         === '')
@@ -13888,6 +13968,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             isExpansionClick = rightArrow.isVisible;
         }
         if (isExpansionClick) { // right arrow
+            if (this.infix && !this.inputs().length) {
+                repetition = Math.max(repetition, 2);
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (rightArrow.isVisible) {
                     target.addInput();
@@ -13900,6 +13983,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 block.abstractBlockSpec()
             );
         } else { // left arrow
+            if (this.infix && this.inputs().length < 3) {
+                repetition = 2;
+            }
             for (i = 0; i < repetition; i += 1) {
                 if (leftArrow.isVisible) {
                     target.removeInput();
@@ -15700,11 +15786,14 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 // ScriptFocusMorph editing
 
 ScriptFocusMorph.prototype.trigger = function () {
-    var current = this.element;
+    var current = this.element,
+        i;
     if (current instanceof MultiArgMorph) {
-        if (current.arrows().children[1].isVisible) {
-            current.addInput();
-            this.fixLayout();
+        for (i = 0; i < current.groupInputs; i += 1) {
+            if (current.arrows().children[1].isVisible) {
+                current.addInput();
+                this.fixLayout();
+            }
         }
         return;
     }
@@ -15747,7 +15836,8 @@ ScriptFocusMorph.prototype.menu = function () {
 };
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
-    var current = this.element;
+    var current = this.element,
+        i;
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
             current.destroy();
@@ -15755,8 +15845,10 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
             this.atEnd = false;
         }
     } else if (current instanceof MultiArgMorph) {
-        if (current.arrows().children[0].isVisible) {
-            current.removeInput();
+        for (i = 0; i < current.groupInputs; i += 1) {
+            if (current.arrows().children[0].isVisible) {
+                current.removeInput();
+            }
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {

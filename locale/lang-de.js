@@ -170,6 +170,7 @@ SnapTranslator.dict.de = {
     "For all Sprites": "Allen gemeinsam",
     "Frequency Distribution Analysis": "",
     "Generate costumes from letters or words of text.": "",
+    "Generate puzzle": "Puzzle generieren",
     "Getters and setters": "",
     "Glide, grow and rotate using easing functions.": "",
     "HSL pen color model": "HSL Farbmodell",
@@ -857,7 +858,7 @@ SnapTranslator.dict.de = {
     "language_translator": "Jens Mönig, Jadga Hügle",
     "large": "groß",
     "last": "letztes",
-    "last_changed": "2023-05-23",
+    "last_changed": "2023-06-09",
     "launch _ _": "starte _ _",
     "left": "Rand links",
     "left arrow": "Pfeil nach links",
@@ -1354,6 +1355,7 @@ SnapTranslator.dict.de = {
     "whirl": "Wirbel",
     "whitespace": "Leerraum",
     "width": "Breite",
+    "with": "mit",
     "with data": "mit Daten",
     "with inputs": "mit Eingaben",
     "word": "Wort",
@@ -1367,4 +1369,4 @@ SnapTranslator.dict.de = {
     "year:": "",
     "your own": "eigene",
     "z": "z"
-}
+};

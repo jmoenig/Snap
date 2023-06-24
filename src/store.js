@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-March-31';
+modules.store = '2023-June-09';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1059,7 +1059,9 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                             (child.contents ? child.contents === 'true' : null)
                                 : child.contents,
                         options ? options.contents : undefined,
-                        child.attributes.readonly === 'true'
+                        child.attributes.readonly === 'true',
+                        child.attributes.irreplaceable === 'true',
+                        child.attributes.separator
                     ]
                 );
             });
@@ -1362,7 +1364,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
 
 SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     // private
-    var inp, val;
+    var inp, val, i;
     if (isNil(input)) {
         return;
     }
@@ -1398,6 +1400,9 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
             );
         });
         input.fixLayout();
+        for (i = input.inputs().length; i < input.minInputs; i += 1) {
+            input.addInput();
+        }
     } else if (model.tag === 'block' || model.tag === 'custom-block') {
         if (input.slotSpec === '%rcv') {
             // special case for migrating former SEND block inputs to
@@ -2317,10 +2322,17 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$>$%</input>',
+                    '<input type="@"$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
+                    this.declarations.get(decl)[4] ?
+                            ' irreplaceable="true"' : '',
+                    this.declarations.get(decl)[5] ?
+                            ' separator="' +
+                                this.declarations.get(decl)[5] +
+                                '"'
+                            : '',
                     this.declarations.get(decl)[1],
                     this.declarations.get(decl)[2] ?
                             serializer.format(
