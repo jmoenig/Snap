@@ -589,6 +589,8 @@ SnapTranslator.dict.ti = {
         '%cmdRing ፈጽም ምስ መቐጸልታ',
     'call %cmdRing w/continuation':
         '%cmdRing ጸውዕ ምስ መቐጸልታ',
+    'pipe %s $arrowRight %mult%repRing':
+        'ኣሕልፍ %s $arrowRight %mult%repRing',
     'warp %c':
         'ፍጡን %c',
     'when I start as a clone':
@@ -1640,7 +1642,7 @@ SnapTranslator.dict.ti = {
         'ዕጹው፡ ምሉእ ቅርጺ\n(ናጻ ስኣል)',
     'Paint a shape\n(shift: secondary color)':
         'ንቕርጺ ሕብሪ ቅባእ\n(መፍትሕ-ምቅይያር፦ ካልኣውያን ሕብርታት)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
+    'ftte tool\n(pick a color from anywhere\nshift: secondary color)':
         'መምጸይ\nብምጥዋቕ፡ ዝደለኻዮ ሕብሪ መሪጽካ ኣልዕል\n(መፍትሕ-ምቅይያር፦ ካልኣውያን ሕብርታት)',
     'Edge color\n(left click)':
         'ሕብሪ ደረት\n(ጸጋም ጠውቕ)',
