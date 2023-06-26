@@ -63,6 +63,7 @@
 
 ### 2023-06-26
 * objects, gui, store: embed solutions in Parson's Puzzles
+* gui: limit generating puzzles to sprites that are not already puzzles themselves
 
 ### 2023-06-09
 * gui: keep the unattached comments when generating a puzzle

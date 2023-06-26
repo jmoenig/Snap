@@ -4860,12 +4860,15 @@ IDE_Morph.prototype.projectMenu = function () {
             () => this.deleteUserCategory(pos)
         );
     }
-    menu.addItem(
-        'Generate puzzle',
-        'generatePuzzle',
-        'generate a Parson\'s Puzzle\n' +
-            'from the current sprite'
-    );
+    if (this.currentSprite instanceof SpriteMorph &&
+        !this.currentSprite.solution) {
+        menu.addItem(
+            'Generate puzzle',
+            'generatePuzzle',
+            'generate a Parson\'s Puzzle\n' +
+                'from the current sprite'
+        );
+    }
     menu.addLine();
     if (this.scenes.length() > 1) {
         menu.addItem('Scenes...', 'scenesMenu');
