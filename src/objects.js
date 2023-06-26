@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-24';
+modules.objects = '2023-June-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -2077,6 +2077,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.nestingScale = 1;
     this.rotatesWithAnchor = true;
     this.layers = null; // cache for dragging nested sprites, don't serialize
+
+    // Parsons Problems properties
+    this.solution = null;
 
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
@@ -6550,7 +6553,7 @@ SpriteMorph.prototype.xPosition = function () {
 
     var stage = this.parentThatIsA(StageMorph);
 
-    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+    if (!stage && this.parent?.grabOrigin) { // I'm currently being dragged
         stage = this.parent.grabOrigin.origin;
     }
     if (stage) {
@@ -6566,7 +6569,7 @@ SpriteMorph.prototype.yPosition = function () {
 
     var stage = this.parentThatIsA(StageMorph);
 
-    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+    if (!stage && this.parent?.grabOrigin) { // I'm currently being dragged
         stage = this.parent.grabOrigin.origin;
     }
     if (stage) {

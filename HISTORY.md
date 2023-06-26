@@ -61,6 +61,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-26
+* objects, gui, store: embed solutions in Parson's Puzzles
+
 ### 2023-06-09
 * gui: keep the unattached comments when generating a puzzle
 * gui: hide palette buttons by default when generating a puzzle

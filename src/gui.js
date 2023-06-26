@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-June-09';
+modules.gui = '2023-June-26';
 
 // Declarations
 
@@ -3845,7 +3845,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
     );
 };
 
-IDE_Morph.prototype.removeSprite = function (sprite) {
+IDE_Morph.prototype.removeSprite = function (sprite, enableUndelete = true) {
     var idx;
     sprite.parts.slice().forEach(part =>
     	this.removeSprite(part)
@@ -3877,7 +3877,9 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.selectSprite(this.currentSprite);
 
     // remember the deleted sprite so it can be recovered again later
-    this.scene.trash.push(sprite);
+    if (enableUndelete) {
+        this.scene.trash.push(sprite);
+    }
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
@@ -5811,13 +5813,17 @@ IDE_Morph.prototype.generatePuzzle = function () {
     this.duplicateSprite(current);
     puzzle = this.currentSprite; // this is now the duplicate
     puzzle.setPosition(current.position());
-    current.hide();
     puzzle.setName(this.newSpriteName(localize('Puzzle')));
 
     // remove all scripts but keep the unattached comments
     puzzle.scripts.children.filter(m =>
         m instanceof BlockMorph
     ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
 
     // refresh
     this.selectSprite(puzzle);
@@ -10321,6 +10327,32 @@ SpriteIconMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.solution) {
+        menu.addItem(
+            'extract solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).undelete(
+                    this.object.solution.fullCopy(),
+                    this.center()
+                );
+            }
+        );
+        menu.addItem(
+            'delete solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).removeSprite(
+                    this.object.solution
+                );
+                this.object.solution = null;
+                this.object.recordUserEdit(
+                    'sprite',
+                    'solution',
+                    'delete'
+                );
+            }
+        );
+        menu.addLine();
+    }
     if (StageMorph.prototype.enableInheritance) {
         /* version that hides refactoring capability unless shift-clicked
         if (this.world().currentKey === 16) { // shift-clicked

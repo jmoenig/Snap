@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-June-09';
+modules.store = '2023-June-26';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -909,6 +909,16 @@ SnapSerializer.prototype.loadObject = function (object, model) {
 
     // note: the dispatches cache isn't cleared until after
     // *all* objects are loaded
+
+    // load the "solution" sprite if it exists
+    node = model.childNamed('solution');
+    if (node) {
+        node = node.childNamed('sprite');
+        if (node) {
+            object.solution = this.loadValue(node, object, true); // silently
+        }
+    }
+
 };
 
 SnapSerializer.prototype.loadInheritanceInfo = function (object, model) {
@@ -1429,7 +1439,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
     }
 };
 
-SnapSerializer.prototype.loadValue = function (model, object) {
+SnapSerializer.prototype.loadValue = function (model, object, silently) {
     // private
     var v, i, lst, items, el, center, image, name, audio, option, bool, origin,
     	wish, def,
@@ -1552,7 +1562,9 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         if (model.attributes.pan) {
             v.pan = +model.attributes.pan;
         }
-        this.scene.stage.add(v);
+        if (!silently) {
+            this.scene.stage.add(v);
+        }
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
             model.attributes.rotation || '1'
@@ -1560,7 +1572,9 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
-        v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        if (!silently) {
+            v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        }
         this.loadObject(v, model);
         v.fixLayout();
 
@@ -1990,6 +2004,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' draggable="@"' +
             '%' +
             ' costume="@" color="@,@,@,@" pen="@" ~>' +
+            '%' + // solution info
             '%' + // inheritance info
             '%' + // nesting info
             '%' + // current costume
@@ -2019,6 +2034,11 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.color.b,
         this.color.a,
         this.penPoint,
+
+        // solution info
+        this.solution
+            ? '<solution>' + serializer.store(this.solution) + '</solution>'
+            : '',
 
         // inheritance info
         this.exemplar
