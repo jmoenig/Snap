@@ -67,6 +67,7 @@
 * blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
 * blocks, threads: new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
 * blocks: apply declared separator to replaced default variadic inputs in custom blocks
+* German translation update for "replaceables" and "separators" block attributes
 
 ### 2023-06-26
 * objects, gui, store: embed solutions in Parson's Puzzles
