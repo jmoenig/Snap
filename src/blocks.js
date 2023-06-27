@@ -1507,11 +1507,15 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                         def = rcvr.getMethod(this.blockSpec);
                     }
                 }
-                if (def && deflt instanceof InputSlotMorph) {
-                    deflt.setChoices.apply(
-                        deflt,
-                        def.inputOptionsOfIdx(inp)
-                    );
+                if (def) {
+                    if (deflt instanceof InputSlotMorph) {
+                        deflt.setChoices.apply(
+                            deflt,
+                            def.inputOptionsOfIdx(inp)
+                        );
+                    } else if (deflt instanceof MultiArgMorph) {
+                        deflt.setInfix(def.separatorOfInputIdx(inp));
+                    }
                 }
             }
         } else if (this instanceof MultiArgMorph) {
