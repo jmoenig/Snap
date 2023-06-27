@@ -7781,10 +7781,8 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
                 options = val.at(idx + 1);
-            if (![0, '0', ''].includes(options)) {
-                info[5] = options.toString();
-                def.declarations.set(name, info);
-            }
+            info[5] = options.toString();
+            def.declarations.set(name, info);
         });
         break;
     case 'translations':
