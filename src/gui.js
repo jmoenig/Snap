@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-June-26';
+modules.gui = '2023-June-27';
 
 // Declarations
 
@@ -5816,7 +5816,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
     this.duplicateSprite(current);
     puzzle = this.currentSprite; // this is now the duplicate
     puzzle.setPosition(current.position());
-    puzzle.setName(this.newSpriteName(localize('Puzzle')));
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
 
     // remove all scripts but keep the unattached comments
     puzzle.scripts.children.filter(m =>
