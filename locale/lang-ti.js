@@ -316,11 +316,11 @@ SnapTranslator.dict.ti = {
     'glide %n secs to x: %n y: %n':
         'ን %n ካልኢት ናብ ነቑጣ ሀ: %n ሰ: %n ኣንሳፍፍ',
     'change x by %n':
-        'ሀ ብዓቐን %n ቀይር',
+        'ሀ ብ %n ቀይር',
     'set x to %n':
         'ሀ ናብ %n ቀይር',
     'change y by %n':
-        'ሰ ብዓቐን %n ቀይር',
+        'ሰ ብ %n ቀይር',
     'set y to %n':
         'ሰ ናብ %n ቀይር',
     'if on edge, bounce':
@@ -356,15 +356,15 @@ SnapTranslator.dict.ti = {
     'new costume %l width %dim height %dim':
         'ሓድሽ ልብሲ %l ጎድኒ %dim ቁመት %dim',
     'stretch %cst x: %n y: %n %':
-        'ምጠጥ %cst ሀ: %n ሰ: %n %',
+        '%cst ሀ: %n ሰ: %n % ምጠጥ',
     'change %eff effect by %n':
-        'ናይ %eff ተጽዕኖ ብ %n ቀይር',
+        'ተጽዕኖ ናይ %eff ብ %n ቀይር',
     'set %eff effect to %n':
-        '%eff ተጽዕኖ ናብ %n ቀይር',
+        'ተጽዕኖ %eff ናብ %n ቀይር',
     'clear graphic effects':
         'ስእላዊ ተጽዕኖ እለይ',
     '%eff effect':
-        '%eff ተጽዕኖ',
+        'ተጽዕኖ %eff',
     'change size by %n':
         'ዓቐን ብ %n ቀይር',
     'set size to %n %':
@@ -598,7 +598,7 @@ SnapTranslator.dict.ti = {
     'create a clone of %cln':
         ' ናይ %cln ቅዳሕ ኣዳሉ',
     'a new clone of %cln':
-        'ሓድሽ ናይ ቅዳሕ %cln',
+        'ሓድሽ ቅዳሕ ናይ %cln',
     'myself':
         'ባዕለይ',
     'delete this clone':
@@ -726,7 +726,7 @@ SnapTranslator.dict.ti = {
     'snap':
         'ስናፕ',
     'set video transparency to %n':
-        'ናይ ቪዲዮ ሽፋፍ ናብ %n ቀይር',
+        'ናይ ቪዲዮ ርእየት-ሓላፍ ናብ %n ቀይር',
     'video capture':
         'ቪድዮ ምቕራጽ',
     'mirror video':
@@ -794,7 +794,7 @@ SnapTranslator.dict.ti = {
     '%b or %b':
         '%b ወይ %b',
     'not %b':
-        'ዘይ %b',
+        'ኣሉታ ናይ %b',
     'true':
         'ቅኑዕ',
     'false':
@@ -1891,9 +1891,9 @@ SnapTranslator.dict.ti = {
     'lightness':
         'ብርሃንነት',
     'transparency':
-        'ሽፋፍነት',
+        'ርእየት-ሓላፍ',
     'ghost':
-        'ምትሃት',
+        'ርእየት-ሓላፍ',
     'negative':
         'ኣሉታ ስእሊ',
     'comic':
