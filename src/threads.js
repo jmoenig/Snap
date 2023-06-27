@@ -7401,6 +7401,26 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             });
         }
         return slots;
+    case 'separators':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(value[5]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof MultiArgMorph ?
+                    slot.infix : ''
+                );
+            });
+        }
+        return slots;
     case 'translations':
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?
@@ -7749,6 +7769,20 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             if ([true, false, 0, 1, '0', '1'].includes(options)) {
                 options = +options;
                 info[4] = !options;
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'separators':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if (![0, '0', ''].includes(options)) {
+                info[5] = options.toString();
                 def.declarations.set(name, info);
             }
         });

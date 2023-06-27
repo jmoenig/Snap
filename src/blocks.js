@@ -853,6 +853,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'menus' : ['menus'],
             'editables' : ['editables'],
             'replaceables' : ['replaceables'],
+            'separators' : ['separators'],
             'translations' : ['translations']
         }
     },
@@ -871,6 +872,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'menus' : ['menus'],
             'editables' : ['editables'],
             'replaceables' : ['replaceables'],
+            'separators' : ['separators'],
             'translations' : ['translations']
         }
     },

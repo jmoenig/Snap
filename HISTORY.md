@@ -12,6 +12,7 @@
     * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
     * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
     * new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
+    * new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
@@ -64,6 +65,7 @@
 
 ### 2023-06-27
 * blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
+* blocks, threads: new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
 
 ### 2023-06-26
 * objects, gui, store: embed solutions in Parson's Puzzles
