@@ -841,6 +841,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'label': ['label'],
+            'comment': ['comment'],
             'definition': ['definition'],
             'category': ['category'],
             'custom?': ['custom?'],
@@ -862,6 +863,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             'label': ['label'],
+            'comment': ['comment'],
             'definition': ['definition'],
             'category': ['category'],
             'type': ['type'],

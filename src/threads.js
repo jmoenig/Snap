@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition*/
+StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
@@ -7277,6 +7277,14 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     switch (choice) {
     case 'label':
         return expr ? expr.abstractBlockSpec() : '';
+    case 'comment': // +++
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            return def.comment?.text();
+        }
+        return expr ? expr.comment?.text() : '';
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
@@ -7626,6 +7634,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     switch (choice) {
     case 'label':
         def.setBlockLabel(val);
+        break;
+    case 'comment':
+        def.comment = new CommentMorph(val);
         break;
     case 'definition':
         this.assertType(val, types);

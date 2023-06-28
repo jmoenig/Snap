@@ -13,6 +13,7 @@
     * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
     * new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
     * new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
+    * new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
@@ -65,6 +66,7 @@
 
 ### 2023-06-28
 * blocks, threads: tweaked "slots" result for variadic input groups, currently read-only
+* blocks, threads: new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
 
 ### 2023-06-27
 * blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
