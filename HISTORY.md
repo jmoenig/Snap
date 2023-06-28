@@ -63,6 +63,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-06-28
+* blocks, threads: tweaked "slots" result for variadic input groups, currently read-only
+
 ### 2023-06-27
 * blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
 * blocks, threads: new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots

@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-27';
+modules.blocks = '2023-June-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1092,7 +1092,7 @@ SyntaxElementMorph.prototype.labelParts = {
         max: (optional) number of maximum inputs) or zero
         defaults: (optional) number of visible slots to begin with or zero
         dflt: (optional) array with default value(s)
-        group: (optional) number of slots including labels to expand or collapse
+        group: (optional) a block spec describing a group of inputs with labels
     */
     '%inputs': {
         type: 'multi',

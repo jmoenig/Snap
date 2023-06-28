@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-June-27';
+modules.threads = '2023-June-28';
 
 var ThreadManager;
 var Process;
@@ -7319,7 +7319,11 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return new List(
             expr.inputs().map(each =>
                 each instanceof ReporterBlockMorph ?
-                    each.getSlotSpec() : each.getSpec()
+                    each.getSlotSpec()
+                    : (each instanceof MultiArgMorph &&
+                            each.slotSpec instanceof Array ?
+                        each.slotSpec
+                        : each.getSpec())
             )
         ).map(spec => this.slotType(spec));
     case 'defaults':
@@ -7440,6 +7444,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
 Process.prototype.slotType = function (spec) {
     // answer a number indicating the shape of a slot represented by its spec.
     // Note: you can also use it to translate mnemonics into slot type numbers
+    if (spec instanceof Array) {
+        return new List(spec.map(each => this.slotType(each)));
+    }
+
     var shift = 0,
         key = spec.toLowerCase(),
         num;
