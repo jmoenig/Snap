@@ -67,6 +67,7 @@
 ### 2023-06-28
 * blocks, threads: tweaked "slots" result for variadic input groups, currently read-only
 * blocks, threads: new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
+* German translation update for the "comment" block attribute
 
 ### 2023-06-27
 * blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
