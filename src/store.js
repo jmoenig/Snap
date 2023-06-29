@@ -59,11 +59,11 @@ localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
 SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene,
 Project*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-June-26';
+modules.store = '2023-June-29';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1128,6 +1128,7 @@ SnapSerializer.prototype.populateCustomBlocks = function (
                 object
             );
             definition.body.inputs = definition.names.slice(0);
+            definition.body.comment = definition.comment?.text();
         }
         scripts = child.childNamed('scripts');
         if (scripts) {
@@ -1582,6 +1583,7 @@ SnapSerializer.prototype.loadValue = function (model, object, silently) {
     case 'context':
         v = new Context(null);
         record();
+        v.comment = model.childNamed('remark')?.contents;
         el = model.childNamed('origin');
         if (el) {
             el = el.childNamed('ref') || el.childNamed('sprite');
@@ -2522,7 +2524,7 @@ Context.prototype.toXML = function (serializer) {
         return '';
     }
     return serializer.format(
-        '<context ~><inputs>%</inputs><variables>%</variables>' +
+        '<context ~><inputs>%</inputs><variables>%</variables>%' +
             '%<receiver>%</receiver><origin>%</origin>%</context>',
         this.inputs.reduce(
                 (xml, input) => xml + input.toXML ?
@@ -2533,6 +2535,9 @@ Context.prototype.toXML = function (serializer) {
                 ''
             ),
         this.variables ? serializer.store(this.variables) : '',
+        this.comment ?
+            '<remark>' + serializer.escape(this.comment) + '</remark>'
+            : '',
         this.expression ? serializer.store(this.expression) : '',
         this.receiver ? serializer.store(this.receiver) : '',
         this.receiver ? serializer.store(this.origin) : '',
