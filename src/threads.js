@@ -7281,6 +7281,9 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'label':
         return expr ? expr.abstractBlockSpec() : '';
     case 'comment':
+        if (block.comment) {
+            return block.comment.text();
+        }
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?
                 expr.definition
@@ -7640,6 +7643,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         break;
     case 'comment':
         def.comment = new CommentMorph(val);
+        if (def.body) {
+            def.body.comment = val;
+        }
         break;
     case 'definition':
         this.assertType(val, types);
