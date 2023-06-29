@@ -1317,7 +1317,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         ),
         i = 0;
 
-    if (this.context.expression instanceof RingMorph) {
+    if (this.context?.expression instanceof RingMorph) {
         context.comment = this.context.expression?.comment?.text();
     }
     if (topBlock) {

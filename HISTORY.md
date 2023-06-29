@@ -68,6 +68,7 @@
 ### 2023-06-29
 * threads: new context comments preserve ring comments in the evaluator for later introspection
 * blocks: when reifying hat blocks ("my scripts") use comments attached to them as context comments
+* byob: when querying custom block definitions use comments attached to the prototype hat as context comment
 
 ### 2023-06-28
 * blocks, threads: tweaked "slots" result for variadic input groups, currently read-only
