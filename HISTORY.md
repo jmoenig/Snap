@@ -14,7 +14,7 @@
     * new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
     * new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
     * new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
-    * new context comments preserve ring comments in the evaluator for later introspection
+    * new context comments preserve ring comments and hat block comments in the evaluator for later introspection
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "Sarron" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
@@ -67,6 +67,7 @@
 
 ### 2023-06-29
 * threads: new context comments preserve ring comments in the evaluator for later introspection
+* blocks: when reifying hat blocks ("my scripts") use comments attached to them as context comments
 
 ### 2023-06-28
 * blocks, threads: tweaked "slots" result for variadic input groups, currently read-only

@@ -4635,12 +4635,13 @@ BlockMorph.prototype.copyWithNext = function (next, parameterNames) {
     return expr.reify(parameterNames);
 };
 
-BlockMorph.prototype.reify = function (inputNames) {
+BlockMorph.prototype.reify = function (inputNames, comment) {
     // private - assumes that I've already been deep copied
     var context = new Context();
     context.expression = this;
     context.inputs = inputNames || [];
     context.emptySlots = this.markEmptySlots();
+    context.comment = comment || null;
     return context;
 };
 
@@ -7021,11 +7022,15 @@ HatBlockMorph.prototype.blockSequence = function () {
 
 HatBlockMorph.prototype.reify = function () {
     // private - assumes that I've already been deep copied
-    var nb = this.nextBlock();
+    var nb = this.nextBlock(),
+        cmt = this.comment?.text(),
+        ctx;
     if (!nb) {
-        return new Context();
+        ctx = new Context();
+        ctx.comment = cmt;
+        return ctx;
     }
-    return nb.reify();
+    return nb.reify(null, cmt);
 };
 
 // HatBlockMorph drawing:
