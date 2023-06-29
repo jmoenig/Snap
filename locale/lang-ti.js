@@ -794,7 +794,7 @@ SnapTranslator.dict.ti = {
     '%b or %b':
         '%b ወይ %b',
     'not %b':
-        'ኣሉታ ናይ %b',
+        'ኣሉታ %b',
     'true':
         'ቅኑዕ',
     'false':
