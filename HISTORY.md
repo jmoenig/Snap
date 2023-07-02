@@ -16,7 +16,7 @@
     * new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
     * new context comments preserve ring comments and hat block comments in the evaluator for later introspection
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
-    * new "Sarron" costume series, thanks, Meghan and Brian!
+    * new "Sarron" and "Aleassa" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * new embedding configuration options: noSpriteEdits
     * Expanded the `#open:` URL scheme to accept image URLs.
@@ -64,6 +64,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-02
+* new "Aleassa" costumes series, thanks, Meghan and Brian!
 
 ### 2023-06-29
 * threads: new context comments preserve ring comments in the evaluator for later introspection
