@@ -65,6 +65,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-03
+* blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives
+
 ### 2023-07-02
 * new "Aleassa" costumes series, thanks, Meghan and Brian!
 

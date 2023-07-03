@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-June-28';
+modules.blocks = '2023-July-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1089,6 +1089,7 @@ SyntaxElementMorph.prototype.labelParts = {
         label: (optional)
         infix: (optional)
         collapse: (optional) alternative label to "Input list"
+        ghosted: (optional) bool indicating a half-toned list symbol
         tags: 'widget' // doesn't count as "empty" slot implicit parameter
         min: (optional) number of minimum inputs) or zero
         max: (optional) number of maximum inputs) or zero
@@ -1101,6 +1102,7 @@ SyntaxElementMorph.prototype.labelParts = {
         slots: '%s',
         label: 'with inputs',
         collapse: '',
+        ghosted: true,
         tags: 'widget'
     },
     '%send': {
@@ -1872,6 +1874,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.dflt,
                 info.group
             );
+            if (info.ghosted) {
+                part.listSymbol().alpha = 0.4;
+            }
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
                 part.addInput();
@@ -13521,6 +13526,10 @@ MultiArgMorph.prototype.allLabels = function () {
 
 MultiArgMorph.prototype.arrows = function () {
     return this.children[this.children.length - 1];
+};
+
+MultiArgMorph.prototype.listSymbol = function () {
+    return this.arrows().children[2];
 };
 
 MultiArgMorph.prototype.getSpec = function () {
