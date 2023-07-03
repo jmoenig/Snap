@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-July-02';
+modules.gui = '2023-July-03';
 
 // Declarations
 
@@ -5746,6 +5746,10 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.generatePuzzle = function () {
+    if (this.sprites.asArray().some(any => any.solution)) {
+        return this.addToPuzzle();
+    }
+
     var current = this.currentSprite,
         allBlocks = current.allPaletteBlocks(),
         used = current.scripts.allChildren().filter(
@@ -5833,6 +5837,68 @@ IDE_Morph.prototype.generatePuzzle = function () {
     this.selectSprite(puzzle);
 };
 
+IDE_Morph.prototype.addToPuzzle = function () {
+    var current = this.currentSprite,
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uCust = [],
+        unused,
+        puzzle;
+
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused local blocks only
+    used.forEach(b => {
+        if (b.isCustomBlock && !b.isGlobal) {
+            uCust.push(current.getMethod(b.semanticSpec));
+        }
+    });
+    unused = allBlocks.filter(b => b.isCustomBlock && !b.isGlobal &&
+        !contains(uCust, current.getMethod(b.semanticSpec))
+    );
+
+    // hide unused local custom bocks
+    unused.forEach(block => current.changeBlockVisibility(block, true, true));
+
+    // show used blocks
+    used.forEach(block => current.changeBlockVisibility(block, false, true));
+
+    // fire user edit event
+    current.recordUserEdit(
+        'palette',
+        'hide block'
+    );
+
+    // refresh
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.categories.refreshEmpty();
+
+    // generate a new puzzle sprite by duplicating the current one
+    this.duplicateSprite(current);
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
+
+    // remove all scripts but keep the unattached comments
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
+
+    // refresh
+    this.selectSprite(puzzle);
+};
 IDE_Morph.prototype.exportSprite = function (sprite) {
     this.saveXMLAs(sprite.toXMLString(), sprite.name);
 };
