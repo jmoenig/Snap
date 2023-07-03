@@ -350,7 +350,7 @@ SnapTranslator.dict.ti = {
     'Hello!':
         'ከመዓልኪ!',
     'Hmm...':
-        'እህህ...',
+        'ኣሃ...',
     '%img of costume %cst':
         '%img ናይ ልብሲ %cst',
     'new costume %l width %dim height %dim':
@@ -2187,7 +2187,7 @@ SnapTranslator.dict.ti = {
     'expecting a':
         'ትጽቢት',
     'but getting a':
-        'ትረኽቦ ግን',
+        'ዝተዋህበ ግን',
     'expecting':
         'ትጽቢት',
     'Inside a custom block':
@@ -2219,7 +2219,7 @@ SnapTranslator.dict.ti = {
     'cannot handle zero width or height':
         'ጎድኒ ወይ ቁመት ባዶ ክኾኑ የብሎምን',
     'expecting a finite number\nbut getting Infinity or NaN':
-        'ትጽቢት ታእላው ኣሃዝ\nዝተረኽበ ግን ኢታእላው ኣሃዝ ወይ ኣሃዝ ዝይኮነ',
+        'ትጽቢት ታእላው ኣሃዝ\nዝተዋህበ ግን ኢታእላው ኣሃዝ ወይ ኣሃዝ ዝይኮነ',
     'the predicate takes\ntoo long for a\ncustom hat block':
         'እዛ ኣረጋጋጺት ተግባር\nንዓሚላዊ ናይ ፍጻመ ሕጡብ\nብዙሕ ግዜ ትወስድ ኣላ',
     'missing / unspecified extension':
