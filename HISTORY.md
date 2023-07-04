@@ -16,6 +16,7 @@
     * new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
     * new context comments preserve ring comments and hat block comments in the evaluator for later introspection
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
+    * new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
     * new "Sarron" and "Aleassa" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * new embedding configuration options: noSpriteEdits
@@ -69,6 +70,7 @@
 * gui: keep script comments (attached to top blocks) when generating or adding to a puzzle
 * threads: fixed a glitch when querying context comments
 * threads, blocks: extended "comment" selector for introspection
+* threads, blocks: new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
 
 ### 2023-07-03
 * blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives

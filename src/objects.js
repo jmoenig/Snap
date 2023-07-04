@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-June-26';
+modules.objects = '2023-July-04';
 
 var SpriteMorph;
 var StageMorph;
