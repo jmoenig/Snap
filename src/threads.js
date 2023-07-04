@@ -7290,7 +7290,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             return def.comment?.text();
         }
-        return expr ? expr.comment?.text() : '';
+        return expr?.comment?.text() || '';
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
