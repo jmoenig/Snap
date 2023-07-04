@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-03';
+modules.blocks = '2023-July-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4646,7 +4646,7 @@ BlockMorph.prototype.reify = function (inputNames, comment) {
     context.expression = this;
     context.inputs = inputNames || [];
     context.emptySlots = this.markEmptySlots();
-    context.comment = comment || null;
+    context.comment = comment || this.comment?.text();
     return context;
 };
 

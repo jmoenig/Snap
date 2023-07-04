@@ -7288,7 +7288,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
-            return def.comment?.text();
+            return def.comment?.text() || expr?.comment?.text() || '';
         }
         return expr?.comment?.text() || '';
     case 'definition':
