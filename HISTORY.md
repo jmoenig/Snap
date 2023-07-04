@@ -65,6 +65,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-04
+* gui: keep script comments (attached to top blocks) when generating or adding to a puzzle
+
 ### 2023-07-03
 * blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives
 * gui: added multi-sprite Parson's Puzzle capability

@@ -88,7 +88,7 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-July-03';
+modules.gui = '2023-July-04';
 
 // Declarations
 
@@ -5823,7 +5823,13 @@ IDE_Morph.prototype.generatePuzzle = function () {
     puzzle.setPosition(current.position());
     puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
 
-    // remove all scripts but keep the unattached comments
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
     puzzle.scripts.children.filter(m =>
         m instanceof BlockMorph
     ).forEach(b => b.destroy());
@@ -5886,7 +5892,13 @@ IDE_Morph.prototype.addToPuzzle = function () {
     puzzle.setPosition(current.position());
     puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
 
-    // remove all scripts but keep the unattached comments
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
     puzzle.scripts.children.filter(m =>
         m instanceof BlockMorph
     ).forEach(b => b.destroy());
