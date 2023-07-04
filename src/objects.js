@@ -2181,6 +2181,9 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
                 block.definition = cb
             );
         });
+        if (c.costume instanceof Costume && !c.getCostumeIdx()) {
+            c.costume = c.costume.copy();
+        }
         arr = [];
         this.costumes.asArray().forEach(costume => {
             var cst = forClone ? costume : costume.copy();
