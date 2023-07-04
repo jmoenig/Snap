@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-June-29';
+modules.threads = '2023-July-04';
 
 var ThreadManager;
 var Process;
@@ -7282,7 +7282,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? expr.abstractBlockSpec() : '';
     case 'comment':
         if (block.comment) {
-            return block.comment.text();
+            return block.comment;
         }
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?

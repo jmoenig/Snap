@@ -67,6 +67,7 @@
 
 ### 2023-07-04
 * gui: keep script comments (attached to top blocks) when generating or adding to a puzzle
+* threads: fixed a glitch when querying context comments
 
 ### 2023-07-03
 * blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives
