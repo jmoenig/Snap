@@ -71,7 +71,8 @@
 * threads: fixed a glitch when querying context comments
 * threads, blocks: extended "comment" selector for introspection
 * threads, blocks: new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
-* objects: fixed a possible costume reference glitch when duplicating a sprite with a non-wardrobe costume 
+* objects: fixed a possible costume reference glitch when duplicating a sprite with a non-wardrobe costume
+* German translation update for "solutions" selector
 
 ### 2023-07-03
 * blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives
