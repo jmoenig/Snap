@@ -59,6 +59,7 @@
     * improved sensing precision when clicking on variadic slot arrows
     * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
     * fixed identity case for COMBINATIONS
+    * fixed occasional costume reference error for computed, non-wardrobe costumes in sprite-duplicates
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
     * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
