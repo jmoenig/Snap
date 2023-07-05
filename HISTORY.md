@@ -48,6 +48,7 @@
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
     * fixed a bug that led to the default input of "When I am clicked" not being translated
     * fixed serializing complex inputs to contexts (procedure objects)
+    * fixed dragging blocks, costumes and sounds out of table views
     * fixed #3207 (initial arrow head orientation for long form input slot dialog)
     * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
     * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
@@ -73,6 +74,7 @@
 * lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set) 
 * German translation update for "values" selector
 * blocks, objects, tables, threads: when dragging scripts and blocks out of balloons and watchers only include the surrounding ring if it has formal parameters
+* tables: fixed dragging blocks, costumes and sounds out of table views
 
 ### 2023-07-04
 * gui: keep script comments (attached to top blocks) when generating or adding to a puzzle
