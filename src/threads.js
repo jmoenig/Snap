@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-July-04';
+modules.threads = '2023-July-05';
 
 var ThreadManager;
 var Process;
@@ -2275,6 +2275,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'transpose':
         this.assertType(list, 'list');
         return list.transpose();
+    case 'values':
+        this.assertType(list, 'list');
+        return this.reportUniqueValues(list);
     case 'distribution':
         this.assertType(list, 'list');
         return list.distribution();
@@ -2342,7 +2345,34 @@ Process.prototype.doShowTable = function (list) {
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
-// process - sorting and shuffling a list (general utility)
+// process - analyzing sorting and shuffling a list (general utility)
+
+Process.prototype.reportUniqueValues = function (list) {
+    // Filter - answer a new list representing the set of unique values
+    // in the list based on equality,
+    // interpolated so it can be interrupted by the user
+    // because snapEquals() can be a lot slower than identity comparison
+    var next;
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            idx : 0,
+            target : []
+        };
+    }
+    if (this.context.accumulator.idx === list.length()) {
+        this.returnValueToParentContext(
+            new List(this.context.accumulator.target)
+        );
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = list.at(this.context.accumulator.idx);
+    if (!this.context.accumulator.target.some(any => snapEquals(any, next))) {
+        this.context.accumulator.target.push(next);
+    }
+    this.pushContext();
+};
 
 Process.prototype.reportSorted = function (data) {
     return new List(data.itemsArray().slice().sort((a, b) =>

@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-May-09';
+modules.lists = '2023-July-05';
 
 var List;
 var ListWatcherMorph;
@@ -887,7 +887,7 @@ List.prototype.reversed = function () {
 List.prototype.distribution = function () {
     // return a table representing a dictionary indicating the occurrence count
     // of each unique elements
-    // note: for compound data this method uses identity rather than equqlity
+    // note: for compound data this method uses identity rather than equality
     var dict = new Map(),
         data = this.itemsArray(),
         len = data.length,
