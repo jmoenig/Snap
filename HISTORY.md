@@ -29,7 +29,8 @@
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
-    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change) 
+    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change)
+    * dragging blocks and scripts out of balloons and watchers now only includes the surrounding ring if it has formal parameters 
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
@@ -71,6 +72,7 @@
 ### 2023-07-05
 * lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set) 
 * German translation update for "values" selector
+* blocks, objects, tables, threads: when dragging scripts and blocks out of balloons and watchers only include the surrounding ring if it has formal parameters
 
 ### 2023-07-04
 * gui: keep script comments (attached to top blocks) when generating or adding to a puzzle

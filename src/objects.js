@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-July-04';
+modules.objects = '2023-July-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -11093,7 +11093,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.isDraggable = !sprite.disableDraggingData;
 
         contents.selectForEdit = function () {
-            var script = data.toBlock(),
+            var script = data.toUserBlock(),
                 prepare = script.prepareToBeGrabbed,
                 ide = this.parentThatIsA(IDE_Morph)||
                     this.world().childThatIsA(IDE_Morph);
@@ -12525,7 +12525,7 @@ CellMorph.prototype.createContents = function () {
                 !SpriteMorph.prototype.disableDraggingData;
 
             this.contentsMorph.selectForEdit = function () {
-                var script = myself.contents.toBlock(),
+                var script = myself.contents.toUserBlock(),
                     prepare = script.prepareToBeGrabbed,
                     ide = this.parentThatIsA(IDE_Morph) ||
                         this.world().childThatIsA(IDE_Morph);

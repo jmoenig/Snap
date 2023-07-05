@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2022-October-25';
+modules.tables = '2023-July-05';
 
 var Table;
 var TableCellMorph;
@@ -494,7 +494,7 @@ TableCellMorph.prototype.selectForEdit = function () {
 };
 
 TableCellMorph.prototype.selectContextForEdit = function () {
-    var script = this.data.toBlock(),
+    var script = this.data.toUserBlock(),
         prepare = script.prepareToBeGrabbed,
         ide = this.parentThatIsA(IDE_Morph) ||
             this.world().childThatIsA(IDE_Morph);

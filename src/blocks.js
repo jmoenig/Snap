@@ -2526,7 +2526,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.isDraggable = !SpriteMorph.prototype.disableDraggingData;
 
         morphToShow.selectForEdit = function () {
-            var script = value.toBlock(),
+            var script = value.toUserBlock(),
                 prepare = script.prepareToBeGrabbed;
 
             script.prepareToBeGrabbed = function (hand) {

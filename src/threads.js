@@ -8580,6 +8580,15 @@ Context.prototype.toBlock = function () {
     return ring;
 };
 
+Context.prototype.toUserBlock = function () {
+    var ring = this.toBlock(),
+        block = ring.contents();
+    if (!block || ring.inputNames().length) {
+        return ring;
+    }
+    return block;
+};
+
 // Context continuations:
 
 Context.prototype.rawContinuation = function (isReporter) {
