@@ -217,6 +217,40 @@ SnapExtensions.primitives.set(
     }
 )
 
+// Exposes some of the getters/setters library so we can do this without enabling JS
+// Only exposes settings currently used in microworlds
+SnapExtensions.primitives.set(
+    prefix+'snap_ide_set(param,value)',
+    function(which, value) {
+        var   stage = this.parentThatIsA(StageMorph),
+        ide = stage.parentThatIsA(IDE_Morph),
+        world = stage.parentThatIsA(WorldMorph);
+
+        try {
+ide.savingPreferences = false;
+            switch (which) {
+                case 'Zoom blocks':
+                    if (!isNaN(value)) ide.setBlocksScale(Math.min(value, 12));
+                    break;
+                case 'Stage size':
+                    if ((value instanceof List) && value.length()==2
+                        && !isNaN(value.at(1)) && !isNaN(value.at(2)))
+                        ide.setStageExtent(new Point(value.at(1), value.at(2)));
+                    break;
+                case 'Stage scale':
+                    ide.toggleStageSize(value != 1, Math.max(0.1, value));
+                    break;
+                case 'Presentation mode':
+                    if (value != ide.isAppMode) ide.toggleAppMode();
+                    break;
+
+            };
+        }
+        finally {ide.savingPreferences = true;
+        };
+    }
+)
+
 
 function MicroWorld (ide) {
     this.init(ide);
