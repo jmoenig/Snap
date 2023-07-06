@@ -42,7 +42,21 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'remove_formatting_characters(text)',
     function (text) {
-        return text.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1))
+
+        function remove(t) {
+            return t.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1))
+        }
+
+        function removeCharacters(t) {
+            if(t === remove(t)) {
+                return t;
+            }
+
+            return removeCharacters(remove(t));
+        }
+
+        return removeCharacters(text);
+
     }
 )
 
