@@ -12,7 +12,6 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'say(data, size, maxWidth, color, anchor)',
     function (data, size, maxWidth, color, anchor, proc) {
-        console.log(anchor);
         makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor);
     }
 )

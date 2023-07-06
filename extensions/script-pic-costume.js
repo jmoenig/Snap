@@ -21,9 +21,6 @@ SnapExtensions.primitives.set(prefix + 'script_to_costume(script)', function(scr
     if(!script?.expression) {
         throw new Error("Please give me a ringified script.")
     }
-
-    console.log(script.expression);
-
     const canvas = script.expression.scriptPic();
     resizeTo(canvas, 4);
 
