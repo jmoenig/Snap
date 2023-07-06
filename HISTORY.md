@@ -70,6 +70,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-06
+* v9-rc1
+
 ### 2023-07-05
 * lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set) 
 * German translation update for "values" selector
