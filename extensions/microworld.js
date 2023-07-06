@@ -394,7 +394,7 @@ MicroWorld.prototype.enter = function () {
 
     this.updateGetInputFunction();
     this.updateKeyFireFunction();
-    // this.updateSerializeFunction();
+    this.updateSerializeFunction();
     this.updateLoadFunctions();
     this.updateFreshPaletteFunction();
 
