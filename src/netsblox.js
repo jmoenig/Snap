@@ -181,7 +181,7 @@ NetsBloxMorph.prototype.newProject = async function (projectName) {
     this.room.silentSetRoomName(metadata.name);
     const updateUrl = !projectName;
     if (updateUrl) {
-        this.updateUrlQueryString();
+        this.updateUrlQueryString(metadata);
     }
     await SnapActions.openProject();
     const [roleData] = Object.values(metadata.roles);
@@ -727,8 +727,8 @@ NetsBloxMorph.prototype.saveProjectToCloud = async function (name) {
     const hasConflicting = projects
         .find(project => project.name === name && project.id !== this.cloud.projectId);
     if (!hasConflicting) {
-        myself.updateUrlQueryString();
-        return IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
+        const project = await IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
+        myself.updateUrlQueryString(project);
     } else {  // doesn't match the stored version!
         var dialog = new DialogBoxMorph(null, function() {
             overwriteExisting(true);
@@ -829,7 +829,7 @@ NetsBloxMorph.prototype.rawLoadCloudRole = async function (project, roleData) {
 
     this.source = 'cloud';
     project.owner = project.owner || this.cloud.username;
-    this.updateUrlQueryString(project.name, project.state === 'Public');
+    this.updateUrlQueryString(project);
 
     const msg = this.showMessage('Opening project...');
     this.cloud.setLocalState(project.id, roleId);
@@ -845,26 +845,36 @@ NetsBloxMorph.prototype.rawLoadCloudRole = async function (project, roleData) {
     msg.destroy();
 };
 
-NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExample) {
+/**
+ * Update the URL to reflect opened public projects, etc.
+ */
+NetsBloxMorph.prototype.updateUrlQueryString = function (
+    project,
+    isExample,
+) {
+    let url = location.pathname + "?";
+
+    const isPublic = project.state !== "Private" && project.saveState === 'SAVED';
+    if (isExample) {
+        url += "action=example&ProjectName=" + encodeURIComponent(project.name) +
+          "&";
+    } else if (isPublic) {
+        url += "action=present&Username=" +
+          encodeURIComponent(project.owner) +
+          "&ProjectName=" + encodeURIComponent(project.name) + "&";
+    }
+
+    // Add other query string content (ie, extensions)
     const querystring = location.href
-        .replace(/^.*\?/, '')
-        .replace('#' + location.hash, '');
+        .replace(/^.*\?/, "")
+        .replace("#" + location.hash, "");
     const dict = this.cloud.parseDict(querystring);
 
-    let url = location.pathname + '?';
-
-    room = room || this.room.name;
-    if (isExample) {
-        url += 'action=example&ProjectName=' + encodeURIComponent(room) + '&';
-    } else if (isPublic) {
-        url += 'action=present&Username=' + encodeURIComponent(this.cloud.username) +
-            '&ProjectName=' + encodeURIComponent(room) + '&';
-    }
     if (dict.extensions) {
-        url += 'extensions=' + dict.extensions;
+        url += "extensions=" + dict.extensions;
     }
 
-    window.history.pushState(room, room, url);
+    window.history.pushState(project.name, project.name, url);
 };
 
 // Bug reporting assistance

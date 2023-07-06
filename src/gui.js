@@ -6702,13 +6702,12 @@ IDE_Morph.prototype.saveProjectToCloud = async function (name) {
     const contentName = this.room.hasMultipleRoles() ?
         this.room.getCurrentRoleName() : this.room.name;
 
-    if (name) {
-        this.showMessage('Saving ' + contentName + '\nto the cloud...');
-        this.room.name = name;
-        const roleData = this.sockets.getSerializedProject();
-        await this.cloud.saveRole(roleData);
-        this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
-    }
+    this.showMessage('Saving ' + contentName + '\nto the cloud...');
+    this.room.name = name;
+    const roleData = this.sockets.getSerializedProject();
+    const project = await this.cloud.saveRole(roleData);
+    this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
+    return project;
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
@@ -8051,9 +8050,9 @@ function CloudProjectsSource(ide) {
 CloudProjectsSource.prototype.publish = async function(proj, unpublish = false) {
     const cloud = this.ide.cloud;
     if (unpublish) {
-        await cloud.unpublishProject(proj.id);
+        proj.state = await cloud.unpublishProject(proj.id);
     } else {
-        await cloud.publishProject(proj.id);
+        proj.state = await cloud.publishProject(proj.id);
     }
 
     // Set the Shared URL if the project is currently open
@@ -8108,8 +8107,8 @@ CloudProjectsSource.prototype.save = async function(newProject) {
         const keys = ['owner', 'name', 'roles', 'saveState'];
         const projectCopy = utils.pick(projectData, keys);
         projectCopy.roles = Object.values(projectCopy.roles);
-        await this.ide.cloud.importProject(projectCopy);
-        this.ide.updateUrlQueryString();
+        const metadata = await this.ide.cloud.importProject(projectCopy);
+        this.ide.updateUrlQueryString(metadata);
     }
     const roleData = this.ide.sockets.getSerializedProject();
     await this.ide.cloud.saveRole(roleData);
@@ -8214,7 +8213,7 @@ CloudProjectExamples.prototype.getContent = function(project) {
 CloudProjectExamples.prototype.open = async function(project) {
     const xml = await this.getContent(project);
     await this.ide.droppedText(xml);
-    this.ide.updateUrlQueryString(project.name, false, true);
+    this.ide.updateUrlQueryString(project, true);
 };
 
 CloudProjectExamples.prototype.list = function() {
@@ -8360,7 +8359,7 @@ ProjectDialogMorph.prototype.shareItem = async function () {
     const project = await ProjectDialogMorph.uber.shareItem.call(this);
     if (project) {
         if (this.isCurrentProject(project)) {
-            this.ide.updateUrlQueryString(project.name, true);
+            this.ide.updateUrlQueryString(project);
         }
     }
 };
@@ -8373,7 +8372,7 @@ ProjectDialogMorph.prototype.unshareItem = async function () {
     const project = await ProjectDialogMorph.uber.unshareItem.call(this);
     if (project) {
         if (this.isCurrentProject(project)) {
-            this.ide.updateUrlQueryString();
+            this.ide.updateUrlQueryString(project);
         }
     }
 };
