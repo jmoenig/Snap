@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-July-05';
+modules.threads = '2023-July-07';
 
 var ThreadManager;
 var Process;
@@ -7318,7 +7318,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, def, info, loc;
+        expr, body, slots, def, info, loc, cmt;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -7328,13 +7328,17 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         if (block.comment) {
             return block.comment;
         }
+        cmt = expr?.comment?.text();
+        if (cmt) {
+            return cmt;
+        }
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             return def.comment?.text() || expr?.comment?.text() || '';
         }
-        return expr?.comment?.text() || '';
+        return '';
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {

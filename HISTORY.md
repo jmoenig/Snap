@@ -70,6 +70,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-07
+* threads: changed order or priority for reporting comments
+
 ### 2023-07-06
 * v9-rc1
 
