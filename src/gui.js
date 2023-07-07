@@ -88,11 +88,11 @@ MultiArgMorph
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-July-06';
+modules.gui = '2023-July-07';
 
 // Declarations
 
-var SnapVersion = '9.0.0-rc1';
+var SnapVersion = '9.0.0-rc2';
 
 var IDE_Morph;
 var ProjectDialogMorph;

@@ -77,6 +77,7 @@
 * blocks, threads: new "extent" selector in the "(attribute) OF (object)" reporter's dropdown menu
 * German translation update for the new "extent" menu option string
 * byob: fixed a newly introduced non-long-form input slot bug when clicking the loop-arrow check mark 
+* v9-rc2
 
 ### 2023-07-06
 * v9-rc1
