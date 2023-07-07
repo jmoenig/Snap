@@ -148,7 +148,6 @@ WebSocketManager.IDEMessageHandlers = {
             }
         );
     },
-
 };
 
 WebSocketManager.MessageHandlers = {
@@ -238,8 +237,30 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
-    'collab-invitation': function(msg) {
-        this.ide.promptCollabInvite(msg);
+    'collaborate-invitation': function(msg) {
+        if (msg.change === 'Add') {
+            this.ide.respondToCollaborateRequest(msg.content);
+        } else {
+            const world = this.ide.root();
+            const dialogs = DialogBoxMorph.prototype.instances[world.stamp] || {};
+            const dialog = dialogs[msg.content.id];
+            if (dialog) {
+              dialog.destroy();
+            }
+        }
+    },
+
+    'friend-request': function(msg) {
+        if (msg.change === 'Add') {
+            this.ide.respondToFriendRequest(msg.content);
+        } else {
+            const world = this.ide.root();
+            const dialogs = DialogBoxMorph.prototype.instances[world.stamp] || {};
+            const dialog = dialogs[msg.content.id];
+            if (dialog) {
+              dialog.destroy();
+            }
+        }
     },
 
     'project-closed': function() {
