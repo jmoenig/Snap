@@ -11309,6 +11309,7 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
             'costume name' : ['costume name'],
             'volume' : ['volume'],
             'balance' : ['balance'],
+            'extent' : ['extent'],
             'width': ['width'],
             'height': ['height'],
             'left' : ['left'],
