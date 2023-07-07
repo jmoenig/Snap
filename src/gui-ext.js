@@ -633,20 +633,28 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
 };
 
 IDE_Morph.prototype.respondToCollaborateRequest = async function (request) {
+    const metadata = await this.cloud.getProjectMetadata(request.projectId);
     const dialog = new DialogBoxMorph(
         this,
         async () => {
             await this.cloud.respondToCollaborateRequest(request.id, true);
-            // TODO: ask if you want to open it now
+            const dialog = new DialogBoxMorph();
+            dialog.askYesNo(
+              localize('Open Shared Project?'),
+              localize('Would you like to open the shared project now?'),
+              this.root(),
+            );
+            dialog.ok = async () => {
+              const source = new SharedCloudProjectsSource(this);
+              await source.open(metadata);
+            };
         },
     );
     dialog.labelString = 'Respond to Collaborate Request';
+    dialog.key = request.id;
 
-    // TODO: get the name of the project
-    //const metadata = await this.cloud.getProjectMetadata(request.projectId);
     const textString = request.sender + localize(' has invited you to collaborate on') +
-        //'\n\n' + metadata.name + '.\n\n' + localize('What would you like to do?');
-        '\n\n' + request.projectId + '\n\n' + localize('What would you like to do?');
+        '\n\n' + metadata.name + '\n\n' + localize('What would you like to do?');
     const txt = new TextMorph(
         textString,
         dialog.fontSize,
