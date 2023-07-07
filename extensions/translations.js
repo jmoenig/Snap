@@ -1,5 +1,8 @@
 var prefix = 't_';
 
+var BLOCK_TRANSLATION_NAME = 'SNAP_BLOCK_DROPDOWN_TRANSLATIONS',
+BLOCK_TRANSLATION_FALLBACK = 'SNAP_BLOCK_TRANSLATION_FALLBACK';
+
 SnapExtensions.primitives.set(
     prefix+'add_placeholders(string, placeholders)',
     (string, placeholders) => {
@@ -26,5 +29,60 @@ SnapExtensions.primitives.set(
 
             return match;
         });
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'translate_input_options(translations, fallback)',
+    function(translationsList, fallback) {
+        const translations = JSON.parse(translationsList.asJSON());
+        window[BLOCK_TRANSLATION_NAME] = translations;
+        window[BLOCK_TRANSLATION_FALLBACK] = fallback;
+
+    }
+)
+
+SnapExtensions.primitives.set(
+    prefix+'slot_names(block)',
+    function(block) {
+    return new List(Array.from(block.expression.definition.declarations).map(item => item[0]));
+    }
+)
+
+
+SnapExtensions.menus.set(
+    prefix+'input_options',
+    function() {
+        const block = this.parentThatIsA(BlockMorph),
+            label = block.definition.abstractBlockSpec();
+
+        // index of the current input within the block
+        const inputIndex = block.inputs().findIndex(item => item === this),
+            currentInputName = Array.from(block.definition.declarations)[inputIndex][0],
+            currentInputTranslations = window[BLOCK_TRANSLATION_NAME][label];
+
+        const currentLanguageTranslations = currentInputTranslations
+                ?.[SnapTranslator.language]
+                ?.[currentInputName]
+                ?.options,
+            fallbackLanguageTranslations = currentInputTranslations
+                ?.[window[BLOCK_TRANSLATION_FALLBACK] || 'en']
+                ?.[currentInputName]
+                ?.options;
+
+        const currentOptionTranslations = currentLanguageTranslations || fallbackLanguageTranslations;
+
+
+        if(!currentOptionTranslations) {
+            return {"no translations found": "no translations found"}
+        }
+
+        const options = {};
+
+        for(let option of currentOptionTranslations) {
+            options[option] = option;
+        }
+
+        return options;
     }
 )
