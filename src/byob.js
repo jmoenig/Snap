@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-June-29';
+modules.byob = '2023-July-07';
 
 // Declarations
 
@@ -3766,7 +3766,8 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(c => c.refresh());
     this.slots.children.forEach(c => c.refresh());
-    this.isExpanded = !isNil(fragmentType) && this.isLaunchingExpanded;
+    this.isExpanded = this.isExpanded ||
+        (!isNil(fragmentType) && this.isLaunchingExpanded);
     this.types.children.forEach(c => c.refresh());
     this.changed();
     this.fixLayout();
