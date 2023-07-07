@@ -72,6 +72,7 @@
 
 ### 2023-07-07
 * threads: changed order or priority for reporting comments
+* blocks: moved "comment" down one item in the dropdown menu
 
 ### 2023-07-06
 * v9-rc1
