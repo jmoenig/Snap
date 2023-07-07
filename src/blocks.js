@@ -11270,6 +11270,7 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
             'size' : ['size'],
+            'extent' : ['extent'],
             'width': ['width'],
             'height': ['height'],
             'left' : ['left'],
