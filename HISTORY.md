@@ -75,6 +75,7 @@
 * threads: changed order or priority for reporting comments
 * blocks: moved "comment" down one item in the dropdown menu
 * blocks, threads: new "extent" selector in the "(attribute) OF (object)" reporter's dropdown menu
+* German translation update for the new "extent" menu option string
 
 ### 2023-07-06
 * v9-rc1
