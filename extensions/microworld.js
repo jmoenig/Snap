@@ -339,7 +339,8 @@ MicroWorld.prototype.init = function (ide) {
         paletteContextMenu: ['find blocks...', 'hide primitives', 'show primitives', 'make a category...', 'delete a category...'],
         scriptsContextMenu: ['undrop', 'redrop', '0', 'clean up', 'add comment', 'scripts pic...', '0',  'inherited', 'make a block...'],
         stageContextMenu: ['edit', 'show all', 'pic...', '0', 'pen trails', 'svg...'],
-        spriteContextMenu: ['duplicate', 'clone', '0', 'delete', 'move', 'rotate', 'pivot', 'edit', 'detatch all parts', 'export...']
+        spriteContextMenu: ['duplicate', 'clone', '0', 'delete', 'move', 'rotate', 'pivot', 'edit', 'detatch all parts', 'export...'],
+        settingsMenu: ['Language...', 'Zoom blocks...', 'Fade blocks', 'Stage size...', 'Dragging threshold...', 'Microphone resolution...', 'JavaScript extensions', 'Extension blocks', 'Retina display support', 'Input sliders', 'Turbo mode', 'Visible stepping', 'Log pen vectors', 'Ternary Boolean slots', 'Camera support', 'Blurred shadows', 'Zebra coloring', 'Dynamic input labels', 'Prefer empty slot drops', 'Long form input dialog', 'Plain prototype labels', 'Clicking sound', 'Animations', 'Rasterize SVGs', 'Flat design', 'Nested auto-wrapping', 'Sprite Nesting', 'First-Class Sprites', 'Keyboard Editing', 'Table support', 'Table lines', 'Live coding support', 'JIT compiler support', 'Thread safe scripts', 'Flat line ends', 'Codification support', 'Inheritance support', 'Hyper blocks support', 'Single palette', 'Show categories', 'Show buttons', 'Persist linked sublist IDs', 'Enable command drops in all rings', 'HSL pen color model', 'Disable click-to-run', 'Disable dragging data']
     }
 
     this.buttonBlocks = [];
@@ -414,6 +415,7 @@ MicroWorld.prototype.enter = function () {
 
     // intercept menus
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
+    this.changeMenu(IDE_Morph.prototype, 'settingsMenu', 'settingsMenu', true);
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
     this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
     this.changeMenu(StageMorph.prototype, 'userMenu','stageContextMenu', false);
