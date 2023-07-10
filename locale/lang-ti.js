@@ -1869,7 +1869,10 @@ SnapTranslator.dict.ti = {
     // sounds
     'Record a new sound':
         'ሓድሽ ድምጺ ቅረጽ',
-    
+    'Sound Recorder':
+        'መቕረጺ ድምጺ',
+    'recording':
+        'ምዝጉብ-ድምጺ',
 
     // graphical effects, pen color
     'color':
