@@ -578,7 +578,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
         () => this.cloud.respondToFriendRequest(request.sender, 'APPROVED'),
     );
     dialog.labelString = 'Respond to Friend Request';
-    dialog.key = request.id;
+    dialog.key = `FriendRequestFrom${request.sender}`;
 
     const textString = localize('Received friend request from ') + request.sender +
         '.\n\n' + localize('What would you like to do?');

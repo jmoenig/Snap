@@ -237,7 +237,7 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
-    'collaborate-invitation': function(msg) {
+    'collaboration-invitation': function(msg) {
         if (msg.change === 'Add') {
             this.ide.respondToCollaborateRequest(msg.content);
         } else {
@@ -253,10 +253,12 @@ WebSocketManager.MessageHandlers = {
     'friend-request': function(msg) {
         if (msg.change === 'Add') {
             this.ide.respondToFriendRequest(msg.content);
+            // TODO: set a timeout for the request?
         } else {
+            const id = `FriendRequestFrom${msg.content.sender}`;
             const world = this.ide.root();
             const dialogs = DialogBoxMorph.prototype.instances[world.stamp] || {};
-            const dialog = dialogs[msg.content.id];
+            const dialog = dialogs[id];
             if (dialog) {
               dialog.destroy();
             }
