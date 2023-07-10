@@ -19,6 +19,7 @@ pixel_module.xml	Pixels	Manipulate costumes pixel-wise.
 audioComp_module.xml	Audio Comp	Analyze, manipulate and generate sound samples.
 frequency_distribution_module.xml	Frequency Distribution Analysis	Analyze data for frequency distribution
 localstorage_module.xml	Database	Persistent key-value storage across Snap! sessions in the same browser
+tiles.xml	Tiles	Divide the stage into sub-regions in each of which to perform an action.
 ~	~
 ~	~
 ~	~

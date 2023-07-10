@@ -19,6 +19,7 @@
     * new context comments preserve ring comments and hat block comments in the evaluator for later introspection
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
     * new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
+    * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action
     * new "Sarron" and "Aleassa" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * new embedding configuration options: noSpriteEdits
@@ -70,6 +71,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-10
+* new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 
 
 ### 2023-07-07
 * threads: changed order or priority for reporting comments
