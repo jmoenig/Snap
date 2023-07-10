@@ -76,6 +76,7 @@
 ### 2023-07-10
 * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 
 * new "Arcs" library, turns sprites by a delta of degrees moving them at a given radius
+* v9-rc4
 
 ### 2023-07-07
 * threads: changed order or priority for reporting comments
