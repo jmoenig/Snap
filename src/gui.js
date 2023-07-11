@@ -80,15 +80,14 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
-MultiArgMorph
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 */
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-July-10';
+modules.gui = '2023-July-11';
 
 // Declarations
 
@@ -4377,18 +4376,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         BooleanSlotMorph.prototype.isTernary,
         'uncheck to limit\nBoolean slots to true / false',
         'check to allow\nempty Boolean slots',
-        true
-    );
-    addPreference(
-        'Explicit input lists',
-        () => {
-            MultiArgMorph.prototype.enableExplicitInputLists =
-                !MultiArgMorph.prototype.enableExplicitInputLists;
-            this.refreshIDE();
-        },
-        MultiArgMorph.prototype.enableExplicitInputLists,
-        'uncheck to hide the list symbol\nin empty variadic input slots',
-        'check to show a list symbol\nin empty variadic input slots',
         true
     );
     addPreference(

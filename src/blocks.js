@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-07';
+modules.blocks = '2023-July-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1090,7 +1090,6 @@ SyntaxElementMorph.prototype.labelParts = {
         label: (optional)
         infix: (optional)
         collapse: (optional) alternative label to "Input list"
-        ghosted: (optional) bool indicating a half-toned list symbol
         tags: 'widget' // doesn't count as "empty" slot implicit parameter
         min: (optional) number of minimum inputs) or zero
         max: (optional) number of maximum inputs) or zero
@@ -1102,8 +1101,6 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: '%s',
         label: 'with inputs',
-        collapse: '',
-        ghosted: true,
         tags: 'widget'
     },
     '%send': {
@@ -1158,14 +1155,12 @@ SyntaxElementMorph.prototype.labelParts = {
     '%words': {
         type: 'multi',
         slots: '%s',
-        defaults: 2,
-        infix: 'with'
+        defaults: 2
     },
     '%lists': {
         type: 'multi',
         slots: '%l',
-        defaults: 2,
-        infix: 'with'
+        defaults: 2
     },
     '%nums': {
         type: 'multi',
@@ -1875,9 +1870,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.dflt,
                 info.group
             );
-            if (info.ghosted) {
-                part.listSymbol().alpha = 0.4;
-            }
             part.maxInputs = info.max;
             for (i = 0; i < info.defaults || 0; i += 1) {
                 part.addInput();
@@ -8274,7 +8266,6 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
     );
     this.add(this.feedbackMorph);
     if (target instanceof MultiArgMorph) {
-        // && !target.enableExplicitInputLists) {
         this.feedbackMorph.color =
             SpriteMorph.prototype.blockColor.lists.copy();
         this.feedbackMorph.borderColor =
@@ -8387,11 +8378,6 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
 
     function touchingVariadicArrowsIfAny(inp, point) {
         if (inp instanceof MultiArgMorph) {
-            /* // only enable reporter drops on empty variadic input slots
-            if (MultiArgMorph.prototype.enableExplicitInputLists) {
-                return !inp.isStatic && inp.inputs().length === 0;
-            }
-            */
             if (point) {
                 return inp.arrows().bounds.containsPoint(point);
             }
@@ -13334,10 +13320,6 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
-// MultiArgMorph preferences settings:
-
-MultiArgMorph.prototype.enableExplicitInputLists = true;
-
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -13401,16 +13383,10 @@ MultiArgMorph.prototype.init = function (
         labelTxt.map(each => localize(each || ''))
         : localize(labelTxt || '');
     this.infix = infix || '';
-
-    /*
-    this.collapse = localize(collapse ||
-        (this.slotSpec === '%l' ? 'input list:' : ''));
-    */
-    this.collapse = collapse === '' ? '' : localize(collapse || 'input list:');
-
+    this.collapse = localize(collapse || '');
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
-    this.minInputs = this.infix && this.enableExplicitInputLists ? 0 : initial;
+    this.minInputs = this.infix ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
@@ -13455,8 +13431,15 @@ MultiArgMorph.prototype.init = function (
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$list-.98');
-    listSymbol.backgroundColor = new Color(255, 140, 0); // list color
+    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.85);
+    listSymbol.alpha = 0.5;
+    listSymbol.getRenderColor = function () {
+        // behave the same as arrows when fading the blocks
+        if (MorphicPreferences.isFlat) {
+            return this.color;
+        }
+        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
+    };
 
     // right arrow:
     rightArrow = new ArrowMorph(
@@ -13665,17 +13648,20 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         inpCount = this.inputs().length,
         dim = new Point(rightArrow.width() / 2, rightArrow.height());
     leftArrow.show();
-    listSymbol.hide();
+    listSymbol.show();
     rightArrow.show();
     if (collapseLabel) {
         collapseLabel.hide();
+    }
+    if (this.isStatic) {
+        listSymbol.hide();
     }
     if (inpCount < (this.minInputs + 1)) { // hide left arrow
         if (label) {
             label.hide();
         }
         leftArrow.hide();
-        if (this.isStatic || inpCount || !this.enableExplicitInputLists) {
+        if (this.isStatic) {
             rightArrow.setPosition(
                 arrows.position().subtract(
                     new Point(
@@ -13689,14 +13675,13 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             if (collapseLabel) {
                 collapseLabel.show();
             }
-            listSymbol.show();
             listSymbol.setPosition(
                 arrows.position().add(new Point(
                     0,
                     (arrows.height() - listSymbol.height()) / 2)
                 )
             );
-            arrows.setWidth(dim.x + listSymbol.width() * 1.4);
+            arrows.setWidth(dim.x + listSymbol.width() * 1.3);
             arrows.setHeight(dim.y);
             rightArrow.setCenter(arrows.center());
             rightArrow.setRight(arrows.right());
@@ -13710,10 +13695,19 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         }
         leftArrow.show();
         rightArrow.show();
-        rightArrow.setPosition(leftArrow.topCenter().subtract(
-            new Point(dim.x * 0.3, 0)
-        ));
+
+        if (this.isStatic) {
+            rightArrow.setPosition(leftArrow.topCenter().subtract(
+                new Point(dim.x * 0.3, 0)
+            ));
+        } else {
+            rightArrow.setPosition(leftArrow.topCenter().add(
+                new Point(dim.x * 0.5, 0)
+            ));
+        }
         arrows.bounds.corner = rightArrow.bottomRight().copy();
+        listSymbol.setCenter(arrows.bounds.center());
+
         if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
             // hide right arrow
             rightArrow.hide();
@@ -13811,7 +13805,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {
         name = '';
-        i = idx - 1;
+        i = idx;
         if (this.elementSpec === '%scriptVars') {
             // compensate for missing label element
             i += 1;
@@ -13827,9 +13821,9 @@ MultiArgMorph.prototype.addInput = function (contents) {
                 localize('value'),
                 localize('index'),
                 localize('list')
-            ][idx - 2]);
+            ][idx - 1]);
         } else {
-            newPart.setContents('#' + (idx - 1));
+            newPart.setContents('#' + idx);
         }
     } else if (this.elementSpec === '%message') {
         newPart.setContents(localize('data'));

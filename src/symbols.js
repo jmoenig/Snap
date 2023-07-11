@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2023-June-02';
+modules.symbols = '2023-July-11';
 
 var SymbolMorph;
 
@@ -142,6 +142,7 @@ SymbolMorph.prototype.names = [
     'globe',
     'globeBig',
     'list',
+    'listNarrow',
     'flipVertical',
     'flipHorizontal',
     'trash',
@@ -477,6 +478,7 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolGlobeBig(ctx, aColor);
         break;
     case 'list':
+    case 'listNarrow':
         this.renderSymbolList(ctx, aColor);
         break;
     case 'flipVertical':
@@ -504,6 +506,7 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
     case 'location':
+    case 'listNarrow':
         return size * 0.6;
     case 'flash':
     case 'file':
