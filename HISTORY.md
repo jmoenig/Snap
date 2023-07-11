@@ -77,6 +77,7 @@
 * blocks, symbols, gui: design overhaul of variadic input slots
 * v9-rc5
 * blocks: fixed displaying multi-slot separators for the first 2 sub-slots
+* blocks: fixed refreshing custom block instances whose multi-slots properties changed
 
 ### 2023-07-10
 * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 

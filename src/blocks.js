@@ -13526,9 +13526,7 @@ MultiArgMorph.prototype.getSpec = function () {
 MultiArgMorph.prototype.setIrreplaceable = function (irreplaceable = false) {
     this.isStatic = irreplaceable;
     this.canBeEmpty = !irreplaceable;
-    if (!this.inputs().length) {
-        this.fixLayout();
-    }
+    this.fixLayout();
 };
 
 MultiArgMorph.prototype.setInfix = function (separator = '') {
