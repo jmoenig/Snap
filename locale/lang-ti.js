@@ -724,7 +724,7 @@ SnapTranslator.dict.ti = {
     'motion':
         'ምንቅስቓስ',
     'snap':
-        'ስናፕ',
+        'ስእሊ',
     'set video transparency to %n':
         'ናይ ቪዲዮ ርእየት-ሓላፍ ናብ %n ቀይር',
     'video capture':
