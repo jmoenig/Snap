@@ -13849,7 +13849,7 @@ MultiArgMorph.prototype.addInfix = function () {
             this.labelText[len % this.slotSpec.length]
             : '');
 
-    if (label === '' || !len || this.children.length < 3) {return; }
+    if (label === '' || !len || this.children.length < 2) {return; }
     infix = this.labelPart(label);
     infix.parent = this;
     this.children.splice(this.children.length - 1, 0, infix);
