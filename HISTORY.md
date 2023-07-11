@@ -78,6 +78,7 @@
 * v9-rc5
 * blocks: fixed displaying multi-slot separators for the first 2 sub-slots
 * blocks: fixed refreshing custom block instances whose multi-slots properties changed
+* blocks, symbols: tweaked multi-slot layout
 
 ### 2023-07-10
 * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 

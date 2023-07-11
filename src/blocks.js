@@ -13679,7 +13679,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
                     (arrows.height() - listSymbol.height()) / 2)
                 )
             );
-            arrows.setWidth(dim.x + listSymbol.width() * 1.3);
+            arrows.setWidth(dim.x + listSymbol.width() * 1.5);
             arrows.setHeight(dim.y);
             rightArrow.setCenter(arrows.center());
             rightArrow.setRight(arrows.right());
@@ -13700,7 +13700,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             ));
         } else {
             rightArrow.setPosition(leftArrow.topCenter().add(
-                new Point(dim.x * 0.5, 0)
+                new Point(listSymbol.width() * 0.5, 0)
             ));
         }
         arrows.bounds.corner = rightArrow.bottomRight().copy();

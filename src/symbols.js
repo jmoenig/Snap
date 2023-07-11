@@ -505,8 +505,9 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
-    case 'location':
     case 'listNarrow':
+        return size * 0.5;
+    case 'location':
         return size * 0.6;
     case 'flash':
     case 'file':
