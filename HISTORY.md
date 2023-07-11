@@ -75,6 +75,7 @@
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots
+* v9-rc5
 
 ### 2023-07-10
 * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 
