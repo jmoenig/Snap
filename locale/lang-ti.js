@@ -168,14 +168,14 @@
 
 SnapTranslator.dict.ti = {
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
+    /*
+        Special characters: (see <http://0xcc.net/jsescape/>)
+    
+        Ä, ä   \u00c4, \u00e4
+        Ö, ö   \u00d6, \u00f6
+        Ü, ü   \u00dc, \u00fc
+        ß      \u00df
+    */
 
     // translations meta information
     'language_name':
@@ -253,12 +253,12 @@ SnapTranslator.dict.ti = {
         'ሓድሽ ትንኩሊብ ስኣል',
     'take a camera snapshot and\nimport it as a new sprite':
         'ብመስኣሊት ዝተላዕለ ዉዱዕ ወስኽ',
-    
+
 
     // tab help
     'costumes tab help':
         'ስእሊ ንምእታው፡ \nመዝገብ ስእሊ ካብ ኮምፒዩተር\n'
-            + 'ወይ ካብ ገጻት መርበብ ሓበሬታ ናብዚ ሰሓብ',
+        + 'ወይ ካብ ገጻት መርበብ ሓበሬታ ናብዚ ሰሓብ',
     'import a sound from your computer\nby dragging it into here':
         'ድምጺ ንምእታው፡ \nመዝገብ ድምጺ ካብ ኮምፒዩተር ናብዚ ስሓብ',
 
@@ -297,7 +297,7 @@ SnapTranslator.dict.ti = {
     // motion:
     'Stage selected:\nno motion primitives':
         'መድረኽ ተመሪጹ፥\nመባእታውይን\n'
-            + 'ናይ ምንቅስቓስ ሕጡባት ኣይተረኽቡን',
+        + 'ናይ ምንቅስቓስ ሕጡባት ኣይተረኽቡን',
 
     'move %n steps':
         '%n ስጉምቲ ኪድ',
@@ -516,7 +516,7 @@ SnapTranslator.dict.ti = {
     'mouse-departed':
         'ኣንጭዋ ምስ ዝፍንተተኒ',
     'scrolled-down':
-    	'ንታሕቲ ምስ ዝጥቕለል',
+        'ንታሕቲ ምስ ዝጥቕለል',
     'scrolled-up':
         'ንላዕሊ ምስ ዝጥቕለል',
     'stopped':
@@ -646,14 +646,14 @@ SnapTranslator.dict.ti = {
     '%rel to %dst':
         '%rel ናብ %dst',
     'distance':
-    	'ርሕቀት',
+        'ርሕቀት',
     'ray length':
         'ቁመት ጩራ',
-    '%asp at %loc' :
+    '%asp at %loc':
         '%asp ኣብ %loc',
     'r-g-b-a':
         'ቀ-ቀ-ሰ-ጋ (R-G-B-A) መጠናት ሕብሪ',
-    'sprites' :
+    'sprites':
         'ትንኩሊባት',
     'reset timer':
         'ሰዓት ዓቐን ከም ብሓድሽ ጀምር',
@@ -822,7 +822,7 @@ SnapTranslator.dict.ti = {
     'JavaScript function ( %mult%s ) { %code }':
         'ተግባር ጃቫስክሪፕት ( %mult%s ) { %code }',
     'compile %repRing':
-    	'%repRing ኣርንብ',
+        '%repRing ኣርንብ',
 
     'type of %s':
         'ዓይነት ናይ %s',
@@ -873,6 +873,8 @@ SnapTranslator.dict.ti = {
         'ዓምድታት',
     'reverse':
         'ግልባጥ',
+    'transpose':
+        'ለዋውጥ',
     'lines':
         'መስመራት ጽሑፍ',
     '%l contains %s':
@@ -958,14 +960,14 @@ SnapTranslator.dict.ti = {
         'ዓቅብ ኣብ መኽዘን ጭብጥታት',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'ነዛ ፕሮጀክት ኣራግፍ\nኣብ ውሽጣዊ መኽዘን ዓቅብ\n'
-            + '(ብኩለን ባባት መርበብ ሓበሬታ ክይድገፍ ይኽእል)',
+        + '(ብኩለን ባባት መርበብ ሓበሬታ ክይድገፍ ይኽእል)',
     'Save As...':
         'ዓቅብ ኣብ...',
     'Import...':
         'ኣእቱ...',
     'file menu import hint':
         'ፕሮጀክት ካብ ደገ ጸዓን,\nእኩብ ሕጡባት,\n'
-            + 'ልብሲ ወይ ድምጺ',
+        + 'ልብሲ ወይ ድምጺ',
     'Export project as plain text...':
         'ፕሮጀክት ከም ተራ ጽሑፍ ናብ ደገ ልኣኽ...',
     'Export project...':
@@ -979,7 +981,7 @@ SnapTranslator.dict.ti = {
     'save global custom block\ndefinitions as XML':
         'ኩሎም ዓሚላውያን ሕጡባት\nከም ሰነድ XML ዓቅብ',
     'Unused blocks...':
-          'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት...',
+        'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት...',
     'find unused global custom blocks\nand remove their definitions':
         'ኣብ ጥቕሚ ዘይወዓሉ ሕጡባት\nረኺብካ እለይ',
     'Remove unused blocks':
@@ -1223,9 +1225,9 @@ SnapTranslator.dict.ti = {
     'Hyper blocks support':
         'ንጡፋት ሕጡባት',
     'uncheck to disable\nusing operators on lists and tables':
-         'ኣጥፍእ፡ ምጥቃም ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምግታእ',
+        'ኣጥፍእ፡ ምጥቃም ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምግታእ',
     'check to enable\nusing operators on lists and tables':
-         'ወልዕ፡ ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምጥቃም',
+        'ወልዕ፡ ተግባራት\nናይ ዝርዝራተን ሰንጠረጃትን ንምጥቃም',
     'Log pen vectors':
         'ሕንጻጻት ብርዒ መዝገብ',
     'uncheck to turn off\nlogging pen vectors':
@@ -1252,7 +1254,7 @@ SnapTranslator.dict.ti = {
         'ወልዕ፡ መላጉም\nኣብ ጽላት ንምርኣይ',
     'HSL pen color model':
         'HSL ዓይነት ሕብሪ',
-     'uncheck to switch pen colors\nand graphic effects to HSV':
+    'uncheck to switch pen colors\nand graphic effects to HSV':
         'ኣጥፍእ፡ ሕብሪ ብርዒን\nስእላዊ ተጽዕኖታት ናብ HSV ንምቕያር',
     'check to switch pen colors\nand graphic effects to HSL':
         'ወልዕ፡ ሕብሪ ብርዒን\nስእላዊ ተጽዕኖታት ናብ HSL ንምቕያር',
@@ -1389,7 +1391,7 @@ SnapTranslator.dict.ti = {
     'edit the costume\'s\nrotation center':
         'ማእከል ዙረት ናይ ልብሲ\nኣርኢን ኣተዓራርን',
     'rotate':
-    	'ኣዙር',
+        'ኣዙር',
     'stick to':
         'ኣጥብቕ ኣብ',
     'detach from':
@@ -1439,7 +1441,7 @@ SnapTranslator.dict.ti = {
     'redrop':
         'ዳግም ኣንብር',
     'use the keyboard\nto enter blocks':
-    	'ሕጡባት ንምምባር\nሰሌዳ መፋትሕ ተጠቀም',
+        'ሕጡባት ንምምባር\nሰሌዳ መፋትሕ ተጠቀም',
     'scripts pic...':
         'ስእሊ ናይ መርሓ...',
     'save a picture\nof all scripts':
@@ -1627,7 +1629,7 @@ SnapTranslator.dict.ti = {
     //    'drehen ↔',
     //'flip ↕':
     //    'drehen ↕',
-    
+
     'Vector Paint Editor':
         'ሰደቓ-ዕዮ ስእሊ መኣጠን',
     'Rectangle\n(shift: square)':
@@ -1648,14 +1650,14 @@ SnapTranslator.dict.ti = {
         'ሕብሪ ደረት\n(ጸጋም ጠውቕ)',
     'Fill color\n(right click)':
         'ሕብሪ ማእከል\n(የማን ጠውቕ)',
-   // 'Top':
-   //     'oben',
-   // 'Bottom':
-   //     'unten',
-   // 'Up':
-   //     'nach oben',
-   // 'Down':
-   //     'nach unten',
+    // 'Top':
+    //     'oben',
+    // 'Bottom':
+    //     'unten',
+    // 'Up':
+    //     'nach oben',
+    // 'Down':
+    //     'nach unten',
 
 
     // project notes
@@ -1838,9 +1840,9 @@ SnapTranslator.dict.ti = {
     '(180) down':
         '(180) ታሕቲ',
     'random':
-    	'ሃውሪ',
-     'random position':
-     	'ናይ ሃውሪ ነቑጣ',
+        'ሃውሪ',
+    'random position':
+        'ናይ ሃውሪ ነቑጣ',
 
     // collision detection
     'mouse-pointer':
@@ -1860,12 +1862,12 @@ SnapTranslator.dict.ti = {
     'Paint a new costume':
         'ሓድሽ ልብሲ ሰኣል',
     'Import a new costume from your webcam':
-        'ሓድሽ ልብሲ ካብ ሰኣሊት ኣእቱ',
+        'ሓድሽ ልብሲ ካብ መስኣሊት ኣእቱ',
     'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'ባብ መርበብ ሓበሬታ እዋናዊ ሙኻኑን\nሰኣሊት ክምዝተስታኻኸልትን ኣረጋግጽ።\n\nኣብ ግሊኡ ባባት መርበብ ሓበሬታ ሰኣሊት ንምጥቃም፡\nስናፕ! ብ HTTPS ክኽፍት ኣለዎ።\n\nአዚ ንምግባር ን "http://" ክፋል ኣድራሻ መርበብ ሓበሬታ\nብ "https://" ተክእ።',
+        'ባብ መርበብ ሓበሬታ እዋናዊ ሙኻኑን\nመስኣሊት ክምዝተስታኻኸልትን ኣረጋግጽ።\n\nኣብ ግሊኡ ባባት መርበብ ሓበሬታ መስኣሊት ንምጥቃም፡\nስናፕ! ብ HTTPS ክኽፍት ኣለዎ።\n\nአዚ ንምግባር ን "http://" ክፋል ኣድራሻ መርበብ ሓበሬታ\nብ "https://" ተክእ።',
     'Camera':
-        'ሰኣሊት',
-    
+        'መስኣሊት',
+
     // sounds
     'Record a new sound':
         'ሓድሽ ድምጺ ቅረጽ',
@@ -2243,5 +2245,5 @@ SnapTranslator.dict.ti = {
         'እዚ ድምጺ መርበብ API\nበዚ ባብ መርበብ ሓበሬታ ኣይድገፈን እዩ',
     'several block definitions\nalready match this label':
         'ከም እዚ ዕላመት ዘለወን\nድሮ ብዙሓት ሕጡባት ተዋዲደን ኣለዋ'
-        
+
 };
