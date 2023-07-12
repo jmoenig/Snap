@@ -78,6 +78,7 @@
 * blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
 * blocks, threads: renamed "values" list selector to "uniques"
 * German translation update for "uniques" selector
+* v9-rc7
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots
