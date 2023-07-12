@@ -2281,9 +2281,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
             if (Process.prototype.isCaseInsensitive) {
                 return list.map(row => row instanceof List ?
                     row.map(cell =>
-                        cell.toLowerCase()
+                        cell.toString().toLowerCase()
                     )
-                    : row.toLowerCase()
+                    : row.toString().toLowerCase()
                 ).distribution().columns().at(1);
             }
             return list.distribution().columns().at(1);
@@ -2295,9 +2295,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
             if (Process.prototype.isCaseInsensitive) {
                 return list.map(row => row instanceof List ?
                     row.map(cell =>
-                        cell.toLowerCase()
+                        cell.toString().toLowerCase()
                     )
-                    : row.toLowerCase()
+                    : row.toString().toLowerCase()
                 ).distribution();
             }
             return list.distribution();

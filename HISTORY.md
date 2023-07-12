@@ -86,6 +86,8 @@
 * threads: made "distribution" list selector case-sensitivity setting aware
 * threads: optimized "uniques" list selector for atomic data sets (e.g. CSVs)
 * v9-rc8
+* threads: fixed a "uniques/distribution" optimization glitch
+* v9-rc9
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots
