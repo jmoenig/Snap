@@ -493,7 +493,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'flatten' : ['flatten'],
             'columns' : ['columns'],
             // 'transpose' : ['transpose'],
-            'values' : ['values'],
+            'uniques' : ['uniques'],
             'distribution' : ['distribution'],
             'sorted' : ['sorted'],
             'shuffled' : ['shuffled'],

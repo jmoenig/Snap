@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-July-07';
+modules.threads = '2023-July-12';
 
 var ThreadManager;
 var Process;
@@ -2275,7 +2275,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'transpose':
         this.assertType(list, 'list');
         return list.transpose();
-    case 'values':
+    case 'uniques':
         this.assertType(list, 'list');
         return this.reportUniqueValues(list);
     case 'distribution':
