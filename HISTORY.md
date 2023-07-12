@@ -33,7 +33,8 @@
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
     * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change)
-    * dragging blocks and scripts out of balloons and watchers now only includes the surrounding ring if it has formal parameters 
+    * dragging blocks and scripts out of balloons and watchers now only includes the surrounding ring if it has formal parameters
+    * changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
     * slightly optimized pen drawing performance when WARPed
@@ -80,6 +81,7 @@
 * German translation update for "uniques" selector
 * v9-rc7
 * blocks: replaced the variadic black "ladder" symbol with a white vertical ellipsis label
+* blocks: changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots

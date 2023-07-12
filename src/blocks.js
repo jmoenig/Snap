@@ -9394,6 +9394,10 @@ ArgMorph.prototype.render = function (ctx) {
 
 // ArgMorph evaluation
 
+ArgMorph.prototype.evaluate = function () {
+    return this.type === 'list' ? new List() : null;
+};
+
 ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
 };
