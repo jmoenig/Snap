@@ -46,6 +46,7 @@
     * updated the strings library for and with the new case sensitivity and lower case primitives
     * generated JSON strings are now (somewhat) pretty printed (with newlines and indentations)
     * increased arrows heads size for variadic inputs and dropdown menus
+    * confined the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
@@ -72,6 +73,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-12
+* blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots

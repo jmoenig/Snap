@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-11';
+modules.blocks = '2023-July-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8254,28 +8254,29 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
     if (target === null) {
         return null;
     }
-    this.feedbackMorph.bounds = target.fullBounds()
-        .expandBy(Math.max(
-            block.edge * 2,
-            block.reporterDropFeedbackPadding
-        ));
     this.feedbackMorph.edge = SyntaxElementMorph.prototype.rounding;
     this.feedbackMorph.border = Math.max(
         SyntaxElementMorph.prototype.edge,
         3
     );
-    this.add(this.feedbackMorph);
     if (target instanceof MultiArgMorph) {
         this.feedbackMorph.color =
             SpriteMorph.prototype.blockColor.lists.copy();
         this.feedbackMorph.borderColor =
             SpriteMorph.prototype.blockColor.lists;
+        target = target.arrows();
     } else {
         this.feedbackMorph.color = this.feedbackColor.copy();
         this.feedbackMorph.borderColor = this.feedbackColor;
     }
+    this.feedbackMorph.bounds = target.fullBounds()
+        .expandBy(Math.max(
+            block.edge * 2,
+            block.reporterDropFeedbackPadding
+        ));
     this.feedbackMorph.color.a = 0.5;
     this.feedbackMorph.rerender();
+    this.add(this.feedbackMorph);
 };
 
 ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
