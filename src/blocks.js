@@ -13432,15 +13432,7 @@ MultiArgMorph.prototype.init = function (
     );
 
     // list symbol:
-    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.85);
-    listSymbol.alpha = 0.5;
-    listSymbol.getRenderColor = function () {
-        // behave the same as arrows when fading the blocks
-        if (MorphicPreferences.isFlat) {
-            return this.color;
-        }
-        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
-    };
+    listSymbol = this.labelPart('\uFE19');
 
     // right arrow:
     rightArrow = new ArrowMorph(
@@ -13674,14 +13666,10 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             if (collapseLabel) {
                 collapseLabel.show();
             }
-            listSymbol.setPosition(
-                arrows.position().add(new Point(
-                    0,
-                    (arrows.height() - listSymbol.height()) / 2)
-                )
-            );
-            arrows.setWidth(dim.x + listSymbol.width() * 1.5);
+            arrows.setWidth(dim.x + listSymbol.width() * 0.5);
             arrows.setHeight(dim.y);
+            listSymbol.setCenter(arrows.center());
+            listSymbol.setLeft(arrows.left() - listSymbol.width() * 0.25);
             rightArrow.setCenter(arrows.center());
             rightArrow.setRight(arrows.right());
         }
@@ -13700,12 +13688,10 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
                 new Point(dim.x * 0.3, 0)
             ));
         } else {
-            rightArrow.setPosition(leftArrow.topCenter().add(
-                new Point(listSymbol.width() * 0.5, 0)
-            ));
+            rightArrow.setPosition(leftArrow.topCenter());
         }
         arrows.bounds.corner = rightArrow.bottomRight().copy();
-        listSymbol.setCenter(arrows.bounds.center());
+        listSymbol.setCenter(arrows.center());
 
         if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
             // hide right arrow
@@ -13713,6 +13699,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             arrows.setExtent(dim);
         }
     }
+    listSymbol.moveBy(listSymbol.shadowOffset);
     arrows.rerender();
 };
 

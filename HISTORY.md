@@ -79,6 +79,7 @@
 * blocks, threads: renamed "values" list selector to "uniques"
 * German translation update for "uniques" selector
 * v9-rc7
+* blocks: replaced the variadic black "ladder" symbol with a white vertical ellipsis label
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots
