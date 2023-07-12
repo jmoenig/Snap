@@ -2280,7 +2280,18 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return this.reportUniqueValues(list);
     case 'distribution':
         this.assertType(list, 'list');
-        return list.distribution();
+        if (list.canBeCSV()) {
+            if (Process.prototype.isCaseInsensitive) {
+                return list.map(row => row instanceof List ?
+                    row.map(cell =>
+                        cell.toLowerCase()
+                    )
+                    : row.toLowerCase()
+                ).distribution();
+            }
+            return list.distribution();
+        }
+        return this.reportDistribution(list);
     case 'sorted':
         this.assertType(list, 'list');
         return this.reportSorted(list);
@@ -2370,6 +2381,39 @@ Process.prototype.reportUniqueValues = function (list) {
     next = list.at(this.context.accumulator.idx);
     if (!this.context.accumulator.target.some(any => snapEquals(any, next))) {
         this.context.accumulator.target.push(next);
+    }
+    this.pushContext();
+};
+
+Process.prototype.reportDistribution = function (list) {
+    // answer a new list with an entry for each unique value and the
+    // number of its occurrences in the source list,
+    // interpolated so it can be interrupted by the user
+    // because snapEquals() can be a lot slower than identity comparison
+    var next, record;
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            idx : 0,
+            target : []
+        };
+    }
+    if (this.context.accumulator.idx === list.length()) {
+        this.returnValueToParentContext(
+            new List(this.context.accumulator.target.map(row => new List(row)))
+        );
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = list.at(this.context.accumulator.idx);
+
+    record = this.context.accumulator.target.find(row =>
+        snapEquals(row[0], next)
+    );
+    if (record !== undefined) {
+        record[1] += 1;
+    } else {
+        this.context.accumulator.target.push([next, 1]);
     }
     this.pushContext();
 };

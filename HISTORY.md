@@ -37,6 +37,7 @@
     * changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
+    * made "distribution" list selector case-sensitivity setting aware and optimized for atomic data
     * slightly optimized pen drawing performance when WARPed
     * removed multibranched conditional library (cases.xml), because IF is now variadic
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
@@ -82,6 +83,7 @@
 * v9-rc7
 * blocks: replaced the variadic black "ladder" symbol with a white vertical ellipsis label
 * blocks: changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
+* threads: made "distribution" list selector case-sensitivity setting aware
 
 ### 2023-07-11
 * blocks, symbols, gui: design overhaul of variadic input slots
