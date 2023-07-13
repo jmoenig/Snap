@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-July-07';
+modules.byob = '2023-July-14';
 
 // Declarations
 
@@ -1651,6 +1651,16 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
         rcvr = this.scriptTarget();
     if (this.isPrototype) {
         return null; // under construction...
+    }
+    if (rcvr.parentThatIsA(IDE_Morph).sprites.asArray().some(
+        any => any.solution
+    )) {
+        new DialogBoxMorph().inform(
+            'Delete Custom Block',
+            'Cannot delete custom blocks\nfrom a scene with a puzzle solution.',
+            this.world()
+        );
+        return null; // +++
     }
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);

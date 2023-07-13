@@ -76,6 +76,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-14
+* byob: prevent custom blocks from being deleted from scenes that have a puzzle solution
+
 ### 2023-07-13
 * blocks: trying out alternative visuals for the variadic arrows list symbol
 * symbols: added new "verticalEllipsis" symbol
