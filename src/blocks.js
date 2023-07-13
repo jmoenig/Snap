@@ -13428,21 +13428,30 @@ MultiArgMorph.prototype.init = function (
 
     // left arrow:
     leftArrow = new ArrowMorph(
-        'left',
-        fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1),
+        'left', // direction
+        fontHeight(this.fontSize), // size
+        0, // padding
         arrowColor,
-        true
+        true // isLbl
+    );
+
+    // right arrow:
+    rightArrow = new ArrowMorph(
+        'right', // direction
+        fontHeight(this.fontSize), // size
+        0, // padding
+        arrowColor,
+        true // isLbl
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$verticalEllipsis-0.9');
+    listSymbol = this.labelPart('$verticalEllipsis');
 
-    // +++ listSymbol = this.labelPart('$listNarrow-0.9');
-
+    // alternative list symbol designs to contemplate in the future:
+    // listSymbol = this.labelPart('$listNarrow-0.9');
     /*
-    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.85);
-    // +++ listSymbol = new SymbolMorph('verticalEllipsis', this.fontSize * 0.85);
+    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.8);
+    listSymbol = new SymbolMorph('verticalEllipsis', this.fontSize);
     listSymbol.alpha = 0.5;
     listSymbol.getRenderColor = function () {
         // behave the same as arrows when fading the blocks
@@ -13452,15 +13461,6 @@ MultiArgMorph.prototype.init = function (
         return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
     };
     */
-
-    // right arrow:
-    rightArrow = new ArrowMorph(
-        'right',
-        fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1),
-        arrowColor,
-        true
-    );
 
     // control panel:
     arrows.add(leftArrow);
@@ -13656,10 +13656,12 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         rightArrow = arrows.children[1],
         listSymbol = arrows.children[2],
         inpCount = this.inputs().length,
-        dim = new Point(rightArrow.width() / 2, rightArrow.height());
+        dim = new Point(rightArrow.width() / 2, rightArrow.height()),
+        centerList = true;
     leftArrow.show();
     listSymbol.show();
     rightArrow.show();
+    arrows.setHeight(dim.y);
     if (collapseLabel) {
         collapseLabel.hide();
     }
@@ -13672,55 +13674,38 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         }
         leftArrow.hide();
         if (this.isStatic) {
-            rightArrow.setPosition(
-                arrows.position().subtract(
-                    new Point(
-                        dim.x,
-                        this.slotSpec.includes('%cs') ? this.edge : 0
-                    )
-                )
-            );
-            arrows.setExtent(dim);
+            arrows.setWidth(dim.x);
         } else {
             if (collapseLabel) {
                 collapseLabel.show();
             }
-            // +++ arrows.setWidth(dim.x + listSymbol.width() * 0.5);
-            arrows.setWidth(dim.x + listSymbol.width() * 1.2);
-            arrows.setHeight(dim.y);
+            arrows.setWidth(dim.x * 1.3 + listSymbol.width());
             listSymbol.setCenter(arrows.center());
-            // +++ listSymbol.setLeft(arrows.left() - listSymbol.width() * 0.25);
             listSymbol.setLeft(arrows.left());
-            rightArrow.setCenter(arrows.center());
-            rightArrow.setRight(arrows.right());
+            centerList = false;
+            // !!! in this case the list symbol must be left aligned, not centered !!!
         }
     } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
         rightArrow.hide();
-        arrows.setExtent(dim);
-    } else {
+        arrows.width(dim.x);
+    } else { // show both arrows
         if (label) {
             label.show();
         }
-        leftArrow.show();
-        rightArrow.show();
-
-        if (this.isStatic) {
-            rightArrow.setPosition(leftArrow.topCenter().subtract(
-                new Point(dim.x * 0.3, 0)
-            ));
-        } else {
-            rightArrow.setPosition(leftArrow.topCenter());
-        }
-        arrows.bounds.corner = rightArrow.bottomRight().copy();
-        listSymbol.setCenter(arrows.center());
-
+        arrows.setWidth(dim.x * 2.4 + (this.isStatic ? 0 : listSymbol.width()));
         if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
             // hide right arrow
             rightArrow.hide();
-            arrows.setExtent(dim);
+            arrows.setWidth(dim.x);
         }
     }
-    listSymbol.moveBy(listSymbol.shadowOffset);
+    leftArrow.setCenter(arrows.center());
+    leftArrow.setLeft(arrows.left());
+    rightArrow.setCenter(arrows.center());
+    rightArrow.setRight(arrows.right());
+    if (centerList) {
+        listSymbol.setCenter(arrows.center());
+    }
     arrows.rerender();
 };
 
