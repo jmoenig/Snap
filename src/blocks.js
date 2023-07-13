@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-12';
+modules.blocks = '2023-July-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13438,6 +13438,20 @@ MultiArgMorph.prototype.init = function (
     // list symbol:
     listSymbol = this.labelPart('\uFE19');
 
+    // +++ listSymbol = this.labelPart('$listNarrow-0.9');
+
+    /*
+    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.85);
+    listSymbol.alpha = 0.5;
+    listSymbol.getRenderColor = function () {
+        // behave the same as arrows when fading the blocks
+        if (MorphicPreferences.isFlat) {
+            return this.color;
+        }
+        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
+    };
+    */
+
     // right arrow:
     rightArrow = new ArrowMorph(
         'right',
@@ -13670,10 +13684,12 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             if (collapseLabel) {
                 collapseLabel.show();
             }
-            arrows.setWidth(dim.x + listSymbol.width() * 0.5);
+            // +++ arrows.setWidth(dim.x + listSymbol.width() * 0.5);
+            arrows.setWidth(dim.x + listSymbol.width() * 1.2);
             arrows.setHeight(dim.y);
             listSymbol.setCenter(arrows.center());
-            listSymbol.setLeft(arrows.left() - listSymbol.width() * 0.25);
+            // +++ listSymbol.setLeft(arrows.left() - listSymbol.width() * 0.25);
+            listSymbol.setLeft(arrows.left());
             rightArrow.setCenter(arrows.center());
             rightArrow.setRight(arrows.right());
         }

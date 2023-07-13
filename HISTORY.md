@@ -76,6 +76,9 @@
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
 
+### 2023-07-13
+* blocks: trying out alternative visuals for the variadic arrows list symbol 
+
 ### 2023-07-12
 * blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
 * blocks, threads: renamed "values" list selector to "uniques"
