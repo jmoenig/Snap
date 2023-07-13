@@ -13457,6 +13457,12 @@ MultiArgMorph.prototype.init = function (
 
     // alternative list symbol designs to contemplate in the future:
     // listSymbol = this.labelPart('$listNarrow-0.9');
+
+    /*
+    listSymbol = this.labelPart('$listNarrow-.98');
+    listSymbol.backgroundColor = new Color(255, 140, 0); // list color
+    */
+
     /*
     listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.8);
     listSymbol = new SymbolMorph('verticalEllipsis', this.fontSize);
