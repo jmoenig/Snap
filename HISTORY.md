@@ -79,6 +79,7 @@
 ### 2023-07-13
 * blocks: trying out alternative visuals for the variadic arrows list symbol
 * symbols: added new "verticalEllipsis" symbol
+* blocks: tweaked ArrowMorph rendering
 
 ### 2023-07-12
 * blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls

@@ -12998,9 +12998,9 @@ ArrowMorph.prototype.render = function (ctx) {
     // initialize my surface property
     var pad = this.padding,
         h = this.height(),
-        h2 = Math.floor(h / 2),
+        h2 = h / 2,
         w = this.width(),
-        w2 = Math.floor(w / 2);
+        w2 = w / 2;
 
     ctx.fillStyle = this.getRenderColor().toString();
     ctx.beginPath();
