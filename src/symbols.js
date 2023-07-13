@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2023-July-11';
+modules.symbols = '2023-July-13';
 
 var SymbolMorph;
 
@@ -143,6 +143,7 @@ SymbolMorph.prototype.names = [
     'globeBig',
     'list',
     'listNarrow',
+    'verticalEllipsis',
     'flipVertical',
     'flipHorizontal',
     'trash',
@@ -481,6 +482,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'listNarrow':
         this.renderSymbolList(ctx, aColor);
         break;
+    case 'verticalEllipsis':
+        this.renderSymbolVerticalEllipsis(ctx, aColor);
+        break;
     case 'flipVertical':
         this.renderSymbolFlipVertical(ctx, aColor);
         break;
@@ -505,6 +509,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'verticalEllipsis':
+        return size * 0.2;
     case 'listNarrow':
         return size * 0.5;
     case 'location':
@@ -2252,6 +2258,18 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
     }
     ctx.clip('evenodd');
     ctx.fillRect(0, 0, w, h);
+};
+
+SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
+    // draw 3 solid circles
+    var r = this.symbolWidth() / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 5, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 9, r, radians(0), radians(360), false);
+    ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
