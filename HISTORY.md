@@ -82,6 +82,7 @@
 * blocks: tweaked ArrowMorph rendering
 * morphic: increased subpixel rendering precision
 * blocks: tweaked variadic input slot arrows (made them bigger yet)
+* blocks: tweaked variadic C-Slot layout
 
 ### 2023-07-12
 * blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls

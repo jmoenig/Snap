@@ -2200,8 +2200,16 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     y += lineHeight;
     if (this.children.some(any => any instanceof CSlotMorph)) {
         bottomCorrection = this.bottomPadding;
-        if (this.inputs()[this.inputs().length - 1] instanceof MultiArgMorph) {
+        rightMost = this.inputs()[this.inputs().length - 1];
+        if (rightMost instanceof MultiArgMorph) {
             bottomCorrection = -this.bottomPadding;
+            if (rightMost.slotSpec.includes('%cs')) {
+                if (rightMost.inputs().length) {
+                    bottomCorrection -= this.bottomPadding;
+                } else {
+                    bottomCorrection += this.bottomPadding  / 4;
+                }
+            }
         }
         if (this instanceof ReporterBlockMorph && !this.isPredicate) {
             bottomCorrection = Math.max(
