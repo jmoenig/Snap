@@ -13436,12 +13436,13 @@ MultiArgMorph.prototype.init = function (
     );
 
     // list symbol:
-    listSymbol = this.labelPart('\uFE19');
+    listSymbol = this.labelPart('$verticalEllipsis-0.9');
 
     // +++ listSymbol = this.labelPart('$listNarrow-0.9');
 
     /*
     listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.85);
+    // +++ listSymbol = new SymbolMorph('verticalEllipsis', this.fontSize * 0.85);
     listSymbol.alpha = 0.5;
     listSymbol.getRenderColor = function () {
         // behave the same as arrows when fading the blocks
