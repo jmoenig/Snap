@@ -13453,7 +13453,7 @@ MultiArgMorph.prototype.init = function (
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$verticalEllipsis');
+    listSymbol = this.labelPart('$verticalEllipsis-0.98');
 
     // alternative list symbol designs to contemplate in the future:
     // listSymbol = this.labelPart('$listNarrow-0.9');

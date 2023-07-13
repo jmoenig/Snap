@@ -84,6 +84,8 @@
 * blocks: tweaked variadic input slot arrows (made them bigger yet)
 * blocks: tweaked variadic C-Slot layout
 * v9-rc10
+* blocks: slight layout correction for list symbols
+* v9-rc11
 
 ### 2023-07-12
 * blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
