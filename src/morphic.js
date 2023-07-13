@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2023-March-16';
+var morphicVersion = '2023-July-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -2765,7 +2765,7 @@ Rectangle.prototype.boundingBox = function () {
 
 Rectangle.prototype.center = function () {
     return this.origin.add(
-        this.corner.subtract(this.origin).floorDivideBy(2)
+        this.corner.subtract(this.origin).divideBy(2)
     );
 };
 
@@ -3464,7 +3464,7 @@ Morph.prototype.setBottom = function (y) {
 Morph.prototype.setCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.extent().floorDivideBy(2)
+            this.extent().divideBy(2)
         )
     );
 };
@@ -3472,7 +3472,7 @@ Morph.prototype.setCenter = function (aPoint) {
 Morph.prototype.setFullCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.fullBounds().extent().floorDivideBy(2)
+            this.fullBounds().extent().divideBy(2)
         )
     );
 };
@@ -8261,7 +8261,7 @@ MenuMorph.prototype.adjustWidths = function () {
         if (item === this.label) {
             item.text.setPosition(
                 item.center().subtract(
-                    item.text.extent().floorDivideBy(2)
+                    item.text.extent().divideBy(2)
                 )
             );
         }
@@ -9919,7 +9919,7 @@ TriggerMorph.prototype.createLabel = function () {
 TriggerMorph.prototype.fixLayout = function () {
     this.label.setPosition(
         this.center().subtract(
-            this.label.extent().floorDivideBy(2)
+            this.label.extent().divideBy(2)
         )
     );
 };
