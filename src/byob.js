@@ -1660,7 +1660,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
             'Cannot delete custom blocks\nfrom a scene with a puzzle solution.',
             this.world()
         );
-        return null; // +++
+        return null;
     }
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);
