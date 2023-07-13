@@ -78,6 +78,7 @@
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
+* v9-rc12
 
 ### 2023-07-13
 * blocks: trying out alternative visuals for the variadic arrows list symbol
