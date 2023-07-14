@@ -639,16 +639,20 @@ IDE_Morph.prototype.respondToCollaborateRequest = async function (request) {
         this,
         async () => {
             await this.cloud.respondToCollaborateRequest(request.id, true);
-            const dialog = new DialogBoxMorph();
-            dialog.askYesNo(
-              localize('Open Shared Project?'),
-              localize('Would you like to open the shared project now?'),
-              this.root(),
-            );
-            dialog.ok = async () => {
-              const source = new SharedCloudProjectsSource(this);
-              await source.open(metadata);
-            };
+            const isOccupied = request.projectId === this.cloud.projectId;
+
+            if (!isOccupied) {
+                const dialog = new DialogBoxMorph();
+                dialog.askYesNo(
+                  localize('Open Shared Project?'),
+                  localize('Would you like to open the shared project now?'),
+                  this.root(),
+                );
+                dialog.ok = async () => {
+                  const source = new SharedCloudProjectsSource(this);
+                  await source.open(metadata);
+                };
+            }
         },
     );
     dialog.labelString = 'Respond to Collaborate Request';
