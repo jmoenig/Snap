@@ -13697,7 +13697,6 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             listSymbol.setCenter(arrows.center());
             listSymbol.setLeft(arrows.left());
             centerList = false;
-            // !!! in this case the list symbol must be left aligned, not centered !!!
         }
     } else if (this.is3ArgRingInHOF() && inpCount > 2) { // hide right arrow
         rightArrow.hide();
