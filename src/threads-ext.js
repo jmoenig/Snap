@@ -47,11 +47,10 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         }
 
         let targets;
-        if (addr instanceof Array) {
+        if (addr === 'everyone in room') {
             targets = ide.room.getRoleNames();
-            if (addr[0] === 'others in room') {
-                targets = targets.filter(name => name !== ide.projectName);
-            }
+        } else if (addr === 'others in room') {
+            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
         } else {
             targets = [ide.projectName];
         }
