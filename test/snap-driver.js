@@ -23,6 +23,10 @@ SnapDriver.prototype.ide = function() {
     return this.world().children[0];
 };
 
+SnapDriver.prototype.cloud = function() {
+    return this.ide().cloud;
+};
+
 SnapDriver.prototype.palette = function() {
     return this.world().children[0].palette;
 };
@@ -359,7 +363,7 @@ SnapDriver.prototype.invite = async function(username, roleName) {
     if (!role) {
         throw new Error(`Role not found: ${roleName}`);
     }
-    room.inviteGuest(username, role.id);
+    room.inviteOccupant(username, role.id);
 };
 
 SnapDriver.prototype.inviteCollaborator = async function(username) {
@@ -428,7 +432,7 @@ SnapDriver.prototype.saveProjectAs = async function(name, waitForSave=true) {
     await this.waitUntilProjectsLoaded()
     // Enter the new project name
     const dialog = this.dialog();
-    driver.click(dialog.nameField.contents());
+    this.click(dialog.nameField.contents());
     this.keys(name);
     const saveBtn = dialog.buttons.children[0];
     this.click(saveBtn);
