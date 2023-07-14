@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-July-05';
+modules.objects = '2023-July-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -7265,6 +7265,11 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
         objects = stage.children.filter(morph =>
             morph instanceof SpriteMorph
         );
+        objects.slice().forEach(sprite => {
+            if (sprite.solution) {
+                objects.push(sprite.solution);
+            }
+        });
         objects.push(stage);
         objects.forEach(sprite =>
             blocks = blocks.concat(

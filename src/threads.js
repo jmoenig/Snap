@@ -8116,11 +8116,6 @@ Process.prototype.doDeleteBlock = function (context) {
     if (!expr.isCustomBlock) {
         throw new Error('expecting a custom block\nbut getting a primitive');
     }
-    if (ide.sprites.asArray().some(any => any.solution)) {
-        throw new Error(
-            'cannot delete custom blocks\nfrom a scene with a puzzle solution'
-        );
-    }
     def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
     rcvr.deleteAllBlockInstances(def);
     if (def.isGlobal) {

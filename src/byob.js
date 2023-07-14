@@ -1652,16 +1652,6 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     if (this.isPrototype) {
         return null; // under construction...
     }
-    if (rcvr.parentThatIsA(IDE_Morph).sprites.asArray().some(
-        any => any.solution
-    )) {
-        new DialogBoxMorph().inform(
-            'Delete Custom Block',
-            'Cannot delete custom blocks\nfrom a scene with a puzzle solution.',
-            this.world()
-        );
-        return null;
-    }
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);
     block = method.blockInstance();

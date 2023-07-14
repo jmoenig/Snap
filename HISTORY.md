@@ -79,6 +79,7 @@
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
 * v9-rc12
+* byob, objects, threads: reverted disabling block deletion for puzzle-solution projects, made sure to propagate changes to solutions instead
 
 ### 2023-07-13
 * blocks: trying out alternative visuals for the variadic arrows list symbol
