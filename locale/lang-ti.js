@@ -702,7 +702,7 @@ SnapTranslator.dict.ti = {
     'frequency':
         'ድግግም',
     'samples':
-        'Signale',
+        'ናሙና',
     'sample rate':
         'መጠን ናሙና',
     'spectrum':
