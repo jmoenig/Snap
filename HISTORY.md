@@ -72,7 +72,7 @@
     * fixed occasional costume reference error for computed, non-wardrobe costumes in sprite-duplicates
     * fixed the "stage size" reporter in the "Getters and setters" library
 * **Documentation Updates:**
-    * extended API documentation for "noSpriteEdits" configuration
+    * extended API documentation for "noSpriteEdits" and "hideDefaultCat" configurations
     * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
 * **Translation Updates:**
     * German
@@ -83,7 +83,8 @@
 * Getters and setter library: fixed "stage size" reporter
 * List utilities library: removed "remove duplicates" reporter (because it is now a primitive)
 * v9-rc14
-* gui: 
+* gui: new "hideDefaultCat" configuration setting
+* updated API documentation for "hideDefaultCat" configuration
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
