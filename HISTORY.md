@@ -68,6 +68,7 @@
     * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
     * fixed identity case for COMBINATIONS
     * fixed occasional costume reference error for computed, non-wardrobe costumes in sprite-duplicates
+    * fixed the "stage size" reporter in the "Getters and setters" library
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" configuration
     * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
@@ -75,6 +76,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-17
+* Getters and setter library: fixed "stage size" reporter
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
