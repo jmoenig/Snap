@@ -88,6 +88,7 @@
 * v9-rc15
 * updated Pyret transpilation example
 * changed list symbol representation for variadic slots
+* v9-rc16
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
