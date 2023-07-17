@@ -40,6 +40,7 @@
     * made "distribution" list selector case-sensitivity setting aware and optimized for atomic data
     * slightly optimized pen drawing performance when WARPed
     * removed multibranched conditional library (cases.xml), because IF is now variadic
+    * removed the "remove duplicates" reporter from the "list utilities" libraries because it is now a primitive
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
@@ -79,6 +80,7 @@
 
 ### 2023-07-17
 * Getters and setter library: fixed "stage size" reporter
+* List utilities library: removed "remove duplicates" reporter (because it is now a primitive)
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
