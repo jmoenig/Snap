@@ -282,9 +282,9 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
                   .reduce((data, byte) => data + String.fromCharCode(byte), '')
               );
             base64 = `data:audio/mpeg;base64,${audioTo64}`;
-            const sound = new Sound(soundArrayBuffer, "name");
-            var snapString = `<sound name=\"sound\" sound=\"${base64}\" id=\"1\"/>`;
-            return snapString;
+            const audio = new Audio(base64);
+            const sound = new Sound(audio, "name");
+            return sound;
         }
         else {  // assume text
             var text = new TextDecoder('utf-8').decode(new Uint8Array(this.rpcRequest.response));
