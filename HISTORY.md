@@ -81,6 +81,7 @@
 ### 2023-07-17
 * Getters and setter library: fixed "stage size" reporter
 * List utilities library: removed "remove duplicates" reporter (because it is now a primitive)
+* v9-rc14
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
