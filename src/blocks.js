@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-13';
+modules.blocks = '2023-July-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13453,7 +13453,7 @@ MultiArgMorph.prototype.init = function (
     );
 
     // list symbol:
-    listSymbol = this.labelPart('$verticalEllipsis-0.98');
+    // listSymbol = this.labelPart('$verticalEllipsis-0.98');
 
     // alternative list symbol designs to contemplate in the future:
     // listSymbol = this.labelPart('$listNarrow-0.9');
@@ -13463,8 +13463,8 @@ MultiArgMorph.prototype.init = function (
     listSymbol.backgroundColor = new Color(255, 140, 0); // list color
     */
 
-    /*
-    listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.8);
+    // /*
+    // listSymbol = new SymbolMorph('listNarrow', this.fontSize * 0.8);
     listSymbol = new SymbolMorph('verticalEllipsis', this.fontSize);
     listSymbol.alpha = 0.5;
     listSymbol.getRenderColor = function () {
@@ -13474,7 +13474,7 @@ MultiArgMorph.prototype.init = function (
         }
         return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
     };
-    */
+    // */
 
     // control panel:
     arrows.add(leftArrow);
