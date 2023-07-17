@@ -245,6 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
+        hideDefaultCat: bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
@@ -1536,6 +1537,7 @@ IDE_Morph.prototype.createCategories = function () {
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
+        shift = this.config.hideDefaultCat ? 4 : 0,
         flag = true;
 
     if (this.categories) {
@@ -1690,10 +1692,16 @@ IDE_Morph.prototype.createCategories = function () {
             col = (i < 4 || i > 7) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
-                t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
+                t + (((row - shift) + 1) * yPadding + ((row - shift) * buttonHeight) + border) +
                     (i > 7 ? border + 2 : 0)
             ));
         });
+
+        if (shift) { // hide the built-in category buttons
+            for (i = 0; i < 8; i += 1) {
+                myself.categories.children[i].hide();
+            }
+        }
 
         if (more > 6) {
             scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
@@ -1712,15 +1720,15 @@ IDE_Morph.prototype.createCategories = function () {
             myself.categories.add(scroller);
             myself.categories.scroller = scroller;
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (4 + 1 - shift) * yPadding
+                    + (4 - shift) * buttonHeight
                     + 6 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (4 + 1 - shift) * yPadding
+                    + (4 - shift) * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
                             : 0)

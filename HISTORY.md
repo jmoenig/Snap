@@ -26,6 +26,7 @@
     * new embedding configuration options: noSpriteEdits
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
+    * new "hideDefaultCat" configuration setting, lets you hide the default built-in category buttons
 * **Notable Changes:**
     * IF is now variadic and expandable with "else if" cases
     * explicit variadic input list visuals
@@ -82,6 +83,7 @@
 * Getters and setter library: fixed "stage size" reporter
 * List utilities library: removed "remove duplicates" reporter (because it is now a primitive)
 * v9-rc14
+* gui: 
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
