@@ -86,6 +86,7 @@
 * gui: new "hideDefaultCat" configuration setting
 * updated API documentation for "hideDefaultCat" configuration
 * v9-rc15
+* updated Pyret transpilation example
 
 ### 2023-07-14
 * byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
