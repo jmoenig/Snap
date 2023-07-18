@@ -460,8 +460,11 @@ MicroWorld.prototype.enter = function () {
 
 
             callback = () => {
-                restoreMode();
+                // for some reason this works better with a time delay
+                setTimeout(() => {
+                    restoreMode();
                 ide.broadcast(this.broadcastAfterTranslate);
+                }, 100)
             };
 
         ide.setLanguage(languageCode, callback, true); // don't save language setting
