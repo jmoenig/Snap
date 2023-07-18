@@ -12,7 +12,7 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents;
 
     // check if collaborating. If so, show a message but don't send
-    const isCollaborating = SnapActions.isCollaborating() && !SnapActions.isLeader;
+    const isCollaborating = SnapActions.isCollaborating();
     if (isCollaborating && !ide.allowMsgsWhileCollaborating) {
         const isUsingDefaultMsgSendingOption = ide.allowMsgsWhileCollaborating === null;
         if (isUsingDefaultMsgSendingOption) {
