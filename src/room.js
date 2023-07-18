@@ -749,7 +749,7 @@ RoomMorph.prototype.inviteOccupant = function (friend, roleId) {
     if (friend === 'myself') {
         friend = this.ide.cloud.username;
     }
-    this.ide.cloud.inviteOccupant(friend, roleId);
+    this.ide.cloud.sendOccupantInvite(friend, roleId);
 };
 
 RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inviter) {
@@ -761,7 +761,7 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
             const roleData = await this.ide.cloud.getRole(projectId, roleId);
             await this.ide.rawLoadCloudRole(metadata, roleData);
         }
-    ).withKey(projectId + '/' + roleId);
+    ).withKey('invite/' + projectId + '/' + roleId);
 
     const msg = inviter === this.ide.cloud.username ?
         'Would you like to move to "' + projectName + '"?' :
@@ -773,9 +773,10 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
         this.ide.world()
     );
 
+    // TODO: what if we accept? Will others be removed?
     setTimeout(
         () => dialog.destroy(),
-        30000
+        15000
     );
 };
 
