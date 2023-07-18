@@ -132,11 +132,17 @@ SnapActions.submitIfAllowed = function(event) {
             'you like to request to be made a collaborator?',
             'Request Collaborator Privileges?',
             function () {
-                ide.sockets.sendMessage({
+                const ownerIds = room.getOccupants()
+                    .filter(occupant => room.isOwner(occupant.name))
+                    .map(occupant => occupant.id);
+
+                ide.sockets.sendIDEMessage({
                     type: 'permission-elevation-request',
+                    id: `elevate-${Date.now()}`,
                     projectId: ide.cloud.projectId,
-                    guest: ide.cloud.username
-                });
+                    clients: ownerIds,
+                    username: ide.cloud.username
+                }, ...ownerIds);
             }
         );
     } else {

@@ -134,20 +134,45 @@ WebSocketManager.IDEMessageHandlers = {
             }
         }
     },
-    'permission-elevation-request': function(msg) {
-        var myself = this,
-            username = msg.guest;
+    'permission-elevation-request': async function(msg) {
+        const {projectId, username, id, clients} = msg;
 
-        this.ide.confirm(
-            username + localize(' would like to be made a collaborator on ') +
-            myself.ide.room.name + '\n\n' + localize('Would you like to make ') + username +
-            localize(' a collaborator?'),
-            'Collaboration Request',
-            function() {
-                this.ide.cloud.addCollaborator(msg.projectId, username);
+        const closeDialogs = () => {
+            const otherClients = clients.filter(id => id !== this.uuid);
+            this.sendIDEMessage({
+                type: 'close-dialog',
+                id: id,
+            }, ...otherClients);
+        };
+
+        const metadata = await this.ide.cloud.getProjectMetadata(projectId);
+        const dialog = new DialogBoxMorph(
+            null, 
+            () => {
+                closeDialogs();
+                this.ide.cloud.sendCollaborateRequest(projectId, username);
+                dialog.destroy();
             }
+        ).withKey(id);
+        dialog.askYesNo(
+            'Collaboration Request',
+            username + localize(' would like to be made a collaborator on ') +
+            metadata.name + '\n\n' + localize('Would you like to make ') + username +
+            localize(' a collaborator?'),
+            this.ide.world(),
         );
+        dialog.cancel = () => {
+            closeDialogs();
+            dialog.destroy();
+        };
     },
+    'close-dialog': function(msg) {
+        console.log('close dialog:', msg.id);
+        const dialog = DialogBoxMorph.prototype.instances[msg.id];
+        if (dialog) {
+            dialog.destroy();
+        }
+    }
 };
 
 WebSocketManager.MessageHandlers = {
