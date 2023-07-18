@@ -13438,7 +13438,7 @@ MultiArgMorph.prototype.init = function (
     leftArrow = new ArrowMorph(
         'left', // direction
         fontHeight(this.fontSize), // size
-        0, // padding
+        Math.max(Math.floor(this.fontSize / 6), 1), // padding
         arrowColor,
         true // isLbl
     );
@@ -13447,7 +13447,7 @@ MultiArgMorph.prototype.init = function (
     rightArrow = new ArrowMorph(
         'right', // direction
         fontHeight(this.fontSize), // size
-        0, // padding
+        Math.max(Math.floor(this.fontSize / 6), 1), // padding
         arrowColor,
         true // isLbl
     );
