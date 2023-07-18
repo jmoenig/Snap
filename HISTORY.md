@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.0.0:
 * **New Features:**
     * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data)
@@ -87,6 +89,7 @@
 * v9-rc18
 * blocks: tweaked rendering of variadic arrows
 * v9-rc19
+* prepared v9 release
 
 ### 2023-07-17
 * Getters and setter library: fixed "stage size" reporter
