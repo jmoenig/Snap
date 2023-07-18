@@ -71,6 +71,7 @@
     * fixed identity case for COMBINATIONS
     * fixed occasional costume reference error for computed, non-wardrobe costumes in sprite-duplicates
     * fixed the "stage size" reporter in the "Getters and setters" library
+    * fixed accessing negative indices in linked lists
 * **Documentation Updates:**
     * extended API documentation for "noSpriteEdits" and "hideDefaultCat" configurations
     * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
@@ -78,6 +79,9 @@
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-18
+* lists: fixed accessing negative indices in linked lists 
 
 ### 2023-07-17
 * Getters and setter library: fixed "stage size" reporter

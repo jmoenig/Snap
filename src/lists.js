@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-July-05';
+modules.lists = '2023-July-18';
 
 var List;
 var ListWatcherMorph;
@@ -275,7 +275,7 @@ List.prototype.at = function (index) {
             pair = pair.rest;
             idx -= 1;
         } else {
-            return pair.first;
+            return idx < 1 ? '' : pair.first;
         }
     }
     value = pair.contents[idx - 1];
