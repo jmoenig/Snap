@@ -86,6 +86,7 @@
 * blocks: fixed a multi-arg slot insertion / deletion glitch
 * v9-rc18
 * blocks: tweaked rendering of variadic arrows
+* v9-rc19
 
 ### 2023-07-17
 * Getters and setter library: fixed "stage size" reporter
