@@ -2,6 +2,15 @@
 
 ## in development:
 
+## 9.0.1:
+* **Notable Fixes:**
+    * fixed "play sound until done" blocking glitch
+
+### 2023-07-19
+* objects: fixed "play sound until done" blocking glitch
+* prepared v9.0.1 patch
+
+
 ## 9.0.0:
 * **New Features:**
     * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack

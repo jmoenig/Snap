@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-July-14';
+modules.objects = '2023-July-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -4434,6 +4434,7 @@ SpriteMorph.prototype.doPlaySound = function (name) {
             this.currentSrc = null;
             this.src = "";
             this.srcObject = null;
+            this.terminated = true;
             this.remove();
         };
 
