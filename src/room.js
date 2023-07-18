@@ -2359,7 +2359,9 @@ InviteOccupantDialogMorph.prototype.buildContents = function() {
     this.createLabel();
 
     this.inviteButton = this.addButton(() => {
-        this.target.cloud.sendOccupantInvite(this.listField.selected, this.roleId);
+        const username = this.listField.selected === 'myself' ?
+            this.target.cloud.username : this.listField.selected;
+        this.target.cloud.sendOccupantInvite(username, this.roleId);
         this.destroy();
     }, 'Invite');
     this.inviteButton.hide();
