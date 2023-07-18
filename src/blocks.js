@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-17';
+modules.blocks = '2023-July-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13757,7 +13757,7 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
     if (len <= this.minInputs) {
         return;
     }
-    if (this.infix !== '') {
+    if (this.infix) {
         if (idx === (this.children.length - 2)) { // b/c arrows
             this.removeChild(this.children[idx - 1]);
         } else {
@@ -13780,7 +13780,7 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         newPart.setContents(contents);
     }
     newPart.parent = this;
-    if (this.infix !== '') {
+    if (this.infix) {
         infix = this.labelPart(localize(this.infix));
         infix.parent = this;
         this.children.splice(idx, 0, newPart, infix);
