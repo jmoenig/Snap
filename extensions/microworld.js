@@ -143,6 +143,22 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'set_broadcast_after_translate(message)',
+    (message) => {
+        if(!message){
+            message = '';
+        } else if (Array.isArray(message)) {
+            message = message[0];
+        }
+
+        doIfMicroworld(microworld => {
+            microworld.setBroadcastAfterTranslate(message);
+        })
+    }
+)
+
+
+SnapExtensions.primitives.set(
     prefix+'set_button_blocks(specs)',
     (specs) => {
         if(!specs){
@@ -268,6 +284,10 @@ MicroWorld.prototype.setEditableBlocks = function(specs){
     this.editableBlocks = specs;
 }
 
+MicroWorld.prototype.setBroadcastAfterTranslate = function(message) {
+    this.broadcastAfterTranslate = message;
+}
+
 MicroWorld.prototype.setButtonBlocks = function(specs){
     this.buttonBlocks = specs;
     if(this.isActive){
@@ -340,7 +360,8 @@ MicroWorld.prototype.init = function (ide) {
         scriptsContextMenu: ['undrop', 'redrop', '0', 'clean up', 'add comment', 'scripts pic...', '0',  'inherited', 'make a block...'],
         stageContextMenu: ['edit', 'show all', 'pic...', '0', 'pen trails', 'svg...'],
         spriteContextMenu: ['duplicate', 'clone', '0', 'delete', 'move', 'rotate', 'pivot', 'edit', 'detatch all parts', 'export...'],
-        settingsMenu: ['Language...', 'Zoom blocks...', 'Fade blocks', 'Stage size...', 'Dragging threshold...', 'Microphone resolution...', 'JavaScript extensions', 'Extension blocks', 'Retina display support', 'Input sliders', 'Turbo mode', 'Visible stepping', 'Log pen vectors', 'Ternary Boolean slots', 'Camera support', 'Blurred shadows', 'Zebra coloring', 'Dynamic input labels', 'Prefer empty slot drops', 'Long form input dialog', 'Plain prototype labels', 'Clicking sound', 'Animations', 'Rasterize SVGs', 'Flat design', 'Nested auto-wrapping', 'Sprite Nesting', 'First-Class Sprites', 'Keyboard Editing', 'Table support', 'Table lines', 'Live coding support', 'JIT compiler support', 'Thread safe scripts', 'Flat line ends', 'Codification support', 'Inheritance support', 'Hyper blocks support', 'Single palette', 'Show categories', 'Show buttons', 'Persist linked sublist IDs', 'Enable command drops in all rings', 'HSL pen color model', 'Disable click-to-run', 'Disable dragging data']
+        settingsMenu: ['Language...', 'Zoom blocks...', 'Fade blocks', 'Stage size...', 'Dragging threshold...', 'Microphone resolution...', 'JavaScript extensions', 'Extension blocks', 'Retina display support', 'Input sliders', 'Turbo mode', 'Visible stepping', 'Log pen vectors', 'Ternary Boolean slots', 'Camera support', 'Blurred shadows', 'Zebra coloring', 'Dynamic input labels', 'Prefer empty slot drops', 'Long form input dialog', 'Plain prototype labels', 'Clicking sound', 'Animations', 'Rasterize SVGs', 'Flat design', 'Nested auto-wrapping', 'Sprite Nesting', 'First-Class Sprites', 'Keyboard Editing', 'Table support', 'Table lines', 'Live coding support', 'JIT compiler support', 'Thread safe scripts', 'Flat line ends', 'Codification support', 'Inheritance support', 'Hyper blocks support', 'Single palette', 'Show categories', 'Show buttons', 'Persist linked sublist IDs', 'Enable command drops in all rings', 'HSL pen color model', 'Disable click-to-run', 'Disable dragging data'],
+        languageMenu: Object.keys(MicroWorld.getLanguageList())
     }
 
     this.buttonBlocks = [];
@@ -356,6 +377,7 @@ MicroWorld.prototype.init = function (ide) {
     this.isLoading = false;
     this.isActive = false;
     this.suppressedKeyEvents = [];
+    this.broadcastAfterTranslate = '';
 
     // backup settings for exiting microworld
     this.oldCategory = null;
@@ -413,9 +435,50 @@ MicroWorld.prototype.enter = function () {
         return items;
     }
 
+    const updateTranslateMenu = (items, oldItems) => {
+        items.forEach(item => {
+            const languageList = MicroWorld.getLanguageList();
+
+            const languageLabel = item[0][1],
+                languageCode = languageList[languageLabel];
+
+            item[1] = () => {
+                var ide = this.ide,
+            flag = ide.isAppMode,
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', languageCode],
+                        ide.version
+                    );
+                },
+                    callback;
+
+        ide.loadNewProject = false;
+
+
+
+            callback = () => {
+                restoreMode();
+                ide.broadcast(this.broadcastAfterTranslate);
+            };
+
+        ide.setLanguage(languageCode, callback, true); // don't save language setting
+
+
+            }
+
+
+        })
+
+        return items;
+    }
+
     // intercept menus
     this.changeMenu(IDE_Morph.prototype, 'projectMenu', 'projectMenu', true);
     this.changeMenu(IDE_Morph.prototype, 'settingsMenu', 'settingsMenu', true);
+    this.changeMenu(IDE_Morph.prototype, 'languageMenu', 'languageMenu', true, updateTranslateMenu);
     this.changeMenu(BlockMorph.prototype, 'userMenu', 'blockContextMenu', false);
     this.changeMenu(ScriptsMorph.prototype, 'userMenu','scriptsContextMenu', false);
     this.changeMenu(StageMorph.prototype, 'userMenu','stageContextMenu', false);
@@ -1203,4 +1266,15 @@ MicroWorld.prototype.hidePaletteButton = function(action) {
 
 MicroWorld.prototype.showPaletteButton = function(action) {
     this.hiddenPaletteActions = this.hiddenPaletteActions.filter(item => item !== action);
+}
+
+MicroWorld.getLanguageList = function() {
+    const codes = SnapTranslator.languages();
+    const languages = {};
+
+    codes.forEach(code => {
+        languages[SnapTranslator.languageName(code)] = code;
+    })
+
+    return languages;
 }
