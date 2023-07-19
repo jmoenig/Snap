@@ -4,8 +4,8 @@ describe('collaboration', function() {
 
     it('should close prompt if rejected', async () => {
         await driver.user1.reset();
-        const {SnapCloud} = driver.user2.globals();
-        driver.user1.invite(SnapCloud.username);
+        const {username} = driver.user2.cloud();
+        driver.user1.invite(username);
         await driver.user2.expect(
             () => driver.user2.dialogs()
                 .find(d => d.key && d.key.includes('invite')),
@@ -29,8 +29,8 @@ describe('collaboration', function() {
     describe('NO existing edits', function() {
         before(async () => {
             await driver.user1.reset();
-            const {SnapCloud} = driver.user2.globals();
-            driver.user1.invite(SnapCloud.username);
+            const {username} = driver.user2.cloud();
+            driver.user1.invite(username);
             await driver.user2.expect(
                 () => driver.user2.dialogs()
                     .find(d => d.key && d.key.includes('invite')),
@@ -90,8 +90,8 @@ describe('collaboration', function() {
                 });
 
                 it('should use other clientId in last action', function() {
-                    const clientId = driver.user1.globals().SnapCloud.clientId;
-                    const clientId2 = driver.user2.globals().SnapCloud.clientId;
+                    const clientId = driver.user1.cloud().clientId;
+                    const clientId2 = driver.user2.cloud().clientId;
                     const action = driver.user2.globals().SnapUndo.allEvents.slice().pop();
                     expect(action.user).toNotBe(clientId2);
                     expect(action.user).toBe(clientId);
@@ -117,7 +117,9 @@ describe('collaboration', function() {
             });
         });
 
-        describe('shared project', function() {
+        // FIXME: This has been disabled since cookies and auth is stricter now and doesn't
+        // support different users in different iframes (cookie is shared)
+        describe.skip('shared project', function() {
             const user2 = 'test2';
             let oldProjectId;
             let oldRoleId;
@@ -132,8 +134,8 @@ describe('collaboration', function() {
                     `Prospective collaborator never received invite`
                 );
 
-                oldProjectId = driver.user2.globals().SnapCloud.projectId;
-                oldRoleId = driver.user2.globals().SnapCloud.roleId;
+                oldProjectId = driver.user2.cloud().projectId;
+                oldRoleId = driver.user2.cloud().roleId;
                 const dialog = driver.user2.dialogs()
                     .filter(dialog => dialog.key)
                     .find(dialog => dialog.key.includes('invit'));
@@ -161,8 +163,8 @@ describe('collaboration', function() {
                     ));
             });
 
-            it('should open shared project', function() {
-                return driver.user2.expect(
+            it('should open shared project', async function() {
+                await driver.user2.expect(
                     () => driver.user2.ide().room.name === projectName,
                     `Project did not change to ${projectName}`
                 );
@@ -172,7 +174,7 @@ describe('collaboration', function() {
                 let projectId = null;
                 return driver.user2.expect(
                     () => {
-                        projectId = driver.user2.globals().SnapCloud.projectId;
+                        projectId = driver.user2.cloud().projectId;
                         return projectId !== oldProjectId;
                     },
                     `Project ID not updated (${projectId} vs ${oldProjectId})`
@@ -183,8 +185,8 @@ describe('collaboration', function() {
                 let projectId, sharedProjectId;
                 return driver.user2.expect(
                     () => {
-                        projectId = driver.user2.globals().SnapCloud.projectId;
-                        sharedProjectId = driver.user1.globals().SnapCloud.projectId;
+                        projectId = driver.user2.cloud().projectId;
+                        sharedProjectId = driver.user1.cloud().projectId;
                         return projectId === sharedProjectId;
                     },
                     `Project IDs do not match (${projectId} vs ${sharedProjectId})`
@@ -194,7 +196,7 @@ describe('collaboration', function() {
             it('should update role ID', function() {
                 return driver.user2.expect(
                     () => {
-                        let roleId = driver.user2.globals().SnapCloud.roleId;
+                        let roleId = driver.user2.cloud().roleId;
                         return roleId !== oldRoleId;
                     },
                     'Role ID not updated'
@@ -204,8 +206,8 @@ describe('collaboration', function() {
             it('should have matching role IDs', function() {
                 return driver.user2.expect(
                     () => {
-                        let roleId = driver.user2.globals().SnapCloud.roleId;
-                        let sharedRoleId = driver.user1.globals().SnapCloud.roleId;
+                        let roleId = driver.user2.cloud().roleId;
+                        let sharedRoleId = driver.user1.cloud().roleId;
                         return roleId === sharedRoleId;
                     },
                     'Role ID not updated'
@@ -218,11 +220,17 @@ describe('collaboration', function() {
         let block;
         before(async () => {
             await driver.user1.reset();
-            const {SnapCloud} = driver.user2.globals();
-            driver.user1.invite(SnapCloud.username);
+            const {username} = driver.user2.cloud();
+            driver.user1.invite(username);
+            console.log('inviting', username, 'from', driver.user1.cloud().username);
             await driver.user2.expect(
-                () => driver.user2.dialogs()
-                    .find(d => d.key && d.key.includes('invite')),
+                // () => driver.user2.dialogs()
+                //     .find(d => d.key && d.key.includes('invite')),
+                () => {
+                    console.log('user2 dialogs:', driver.user2.dialogs());
+                    return driver.user2.dialogs()
+                        .find(d => d.key && d.key.includes('invite'));
+                },
                 `Invited user never received invite`
             );
 
@@ -240,6 +248,8 @@ describe('collaboration', function() {
             );
             driver.user1.click(msgDialog.children[2]);
             await driver.user1.actionsSettled();
+
+            await driver.user1.expect(() => driver.user1.globals().SnapActions.isCollaborating());
         });
 
         afterEach(() => driver.user1.dialogs().forEach(d => d.destroy()));
@@ -247,7 +257,14 @@ describe('collaboration', function() {
         it('should not allow message sending', async function() {
             const {threads} = driver.user1.ide().stage;
             let called = false;
-            driver.user1.ide().sockets.sendMessage = () => called = true;
+            const sendMessage = driver.user1.ide().sockets.sendMessage;
+            driver.user1.ide().sockets.sendMessage = function(msg) {
+                if (msg.type === 'message') {
+                    called = true;
+                } else {
+                    return sendMessage.call(this, msg);
+                }
+            };
             driver.user1.click(block);
 
             await driver.user1.expect(
