@@ -773,7 +773,6 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
         this.ide.world()
     );
 
-    // TODO: what if we accept? Will others be removed?
     setTimeout(
         () => dialog.destroy(),
         15000
@@ -2360,9 +2359,7 @@ InviteOccupantDialogMorph.prototype.buildContents = function() {
     this.createLabel();
 
     this.inviteButton = this.addButton(() => {
-        const username = this.listField.selected === 'myself' ?
-            this.target.cloud.username : this.listField.selected;
-        this.target.cloud.sendOccupantInvite(username, this.roleId);
+        this.target.room.inviteOccupant(this.listField.selected, this.roleId);
         this.destroy();
     }, 'Invite');
     this.inviteButton.hide();
