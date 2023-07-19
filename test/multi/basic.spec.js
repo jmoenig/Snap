@@ -14,14 +14,14 @@ describe('basic tests', function() {
     });
 
     it('should have different clientIds', function() {
-        const id1 = driver.user1.globals().SnapCloud.clientId;
-        const id2 = driver.user2.globals().SnapCloud.clientId;
+        const id1 = driver.user1.ide().cloud.clientId;
+        const id2 = driver.user2.ide().cloud.clientId;
         expect(id1).toNotBe(id2);
     });
 
     it('should have different projectIds', function() {
-        const id1 = driver.user1.globals().SnapCloud.projectId;
-        const id2 = driver.user2.globals().SnapCloud.projectId;
+        const id1 = driver.user1.ide().cloud.projectId;
+        const id2 = driver.user2.ide().cloud.projectId;
         expect(id1).toNotBe(id2);
     });
 });

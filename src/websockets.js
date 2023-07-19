@@ -290,6 +290,11 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
+    'project-deleted': function() {
+        this.ide.showMessage(this.ide.room.name + localize(' has been deleted.'), 3);
+        this.ide.newProject();
+    },
+
     'project-closed': function() {
         var owner = this.ide.room.ownerId;
         this.ide.showMessage(owner + ' closed the room. ' +
