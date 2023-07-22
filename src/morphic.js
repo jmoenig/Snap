@@ -2103,7 +2103,14 @@ Animation.prototype.step = function () {
 
 // Color instance creation:
 
-function Color(r, g, b, a) {
+function Color(r, g, b, a, $) {
+    if(!(this instanceof Color)){
+        return new Color(r,g,b,a);
+    }
+
+    if((!$) && (r == g) && (g == b)){
+        return new Grey(r,a)
+    }
     // all values are optional, just (r, g, b) is fine
     this.r = r || 0;
     this.g = g || 0;
@@ -2384,6 +2391,39 @@ Color.prototype.solid = function () {
         this.b
     );
 };
+
+var Grey;
+
+Grey.prototype = new Color();
+Grey.prototype.constructor = Grey;
+Grey.uber = Color.prototype;
+function Grey(v,a){
+    Color.call(this,v,v,v,a,true)
+    this.v = v||0
+}
+Object.defineProperties(Grey.prototype,Object.getOwnPropertyDescriptors({get r(){
+        return this.v
+    },get g(){
+        return this.v
+    },get b(){
+        return this.v
+    },set r(val){
+        this.__proto__ = Grey.uber
+        this.r = val
+        this.g = this.v
+        this.b = this.v
+    },set g(val){
+        this.__proto__ = Grey.uber
+        this.r = this.v
+        this.g = val
+        this.b = this.v
+    },set b(val){
+        this.__proto__ = Grey.uber
+        this.r = this.v
+        this.g = this.v
+        this.b = val
+    }
+    }))
 
 // Points //////////////////////////////////////////////////////////////
 
