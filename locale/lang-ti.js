@@ -2028,7 +2028,7 @@ SnapTranslator.dict.ti = {
 
     // Boolean expressions keyboard entry
     'not':
-        'ዘይኮነ',
+        'ኣሉታ',
 
     // delimiters
     'letter':
