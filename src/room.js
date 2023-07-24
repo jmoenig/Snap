@@ -279,7 +279,7 @@ RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     // Update the roles, etc
     if (ownerId) {
         changed = changed || ownerId !== this.ownerId;
-        this.ownerId = ownerId;
+        this.setOwner(ownerId);
     }
 
     // Check if current role name changed...
@@ -466,8 +466,10 @@ RoomMorph.prototype.render = function(ctx) {
 
 RoomMorph.prototype.setOwner = function(owner) {
     this.ownerId = owner;
-    this.ownerLabel.text = RoomMorph.isSocketUuid(this.ownerId) ?
+    const displayName = RoomMorph.isSocketUuid(this.ownerId) ?
         localize('myself') : this.ownerId;
+
+    this.ownerLabel.text = localize('Owner: ') + displayName;
     this.ownerLabel.rerender();
 };
 
