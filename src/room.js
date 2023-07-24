@@ -308,6 +308,10 @@ RoomMorph.prototype.getRoles = function() {
     });
 };
 
+RoomMorph.prototype.getOccupants = function() {
+    return this.getRoles().flatMap(role => role.users);
+};
+
 RoomMorph.prototype.getRole = function(name) {
     //name = name || this.getCurrentRoleName();
     return this.getRoles().find(function(role) {
