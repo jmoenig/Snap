@@ -167,8 +167,8 @@ WebSocketManager.IDEMessageHandlers = {
         };
     },
     'close-dialog': function(msg) {
-        console.log('close dialog:', msg.id);
-        const dialog = DialogBoxMorph.prototype.instances[msg.id];
+        const worldStamp = this.ide.world().stamp;
+        const dialog = DialogBoxMorph.prototype.instances[worldStamp][msg.id];
         if (dialog) {
             dialog.destroy();
         }
