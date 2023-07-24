@@ -369,7 +369,11 @@ MicroWorld.prototype.init = function (ide) {
     this.buttons = {
         'scripts': [],
         'palette': [],
-        'corral': []
+        'corral': [],
+        'stage': [{
+            definition: {"label":["Stage button"],"message":"Test","payload":""},
+            appearance: {x: 240, y: 180, anchorX: 'middle', anchorY: 'middle', fontSize: 15}
+        }]
     };
     this.enableKeyboard = true;
     // this.simpleBlockDialog = false;
@@ -882,12 +886,14 @@ MicroWorld.prototype.refreshLayouts = function() {
 MicroWorld.prototype.makeButtons = function () {
     var ide = this.ide,
         sprite = ide.currentSprite,
+        stage = ide.stage,
         sf = sprite.scripts.parentThatIsA(ScrollFrameMorph),
         myself = this;
 
     if (!sprite.buttons) {
         sprite.buttons = [];
     }
+
 
     this.buttons['scripts'].forEach(
         function (definition) {
@@ -921,12 +927,76 @@ MicroWorld.prototype.makeButtons = function () {
         );
     }
 
+    if(this.buttons['stage'].length > 0 ) {
+        this.buttons['stage'].forEach(
+            function({definition, appearance}) {
+                var button = myself.makeButton(definition);
+
+                var oldFix = PushButtonMorph.prototype.fixLayout;
+
+                const oldButton = stage.children.find(item => item.labelString === definition.label);
+
+                if(oldButton) {
+                    oldButton.destroy();
+                }
+
+                stage.add(button);
+
+                button.fontSize = appearance.fontSize || button.fontSize;
+
+                const originalFontSize = button.fontSize;
+                const originalPadding = button.padding;
+
+                button.fixLayout = function() {
+
+                    const x = stage.center().x + (appearance.x * stage.scale),
+                        y = stage.center().y - (appearance.y * stage.scale);
+
+                    let offsetTop = 0, offsetLeft = 0;
+
+                    switch(appearance.anchorX) {
+                        case 'right':
+                            offsetLeft = button.width() * -1 * stage.scale;
+                            break;
+                        case 'middle':
+                            offsetLeft = button.width() / -2 * stage.scale;
+                            break;
+                    }
+
+                    switch(appearance.anchorY) {
+                        case 'bottom':
+                            offsetTop = button.height() * -1 * stage.scale;
+                            break;
+                        case 'middle':
+                            offsetTop = button.height() / -2 * stage.scale;
+                            break;
+                    }
+
+
+                    button.padding = originalPadding * stage.scale;
+                    button.setTop(y + offsetTop);
+                    button.setLeft(x + offsetLeft);
+                    button.fontSize = originalFontSize * stage.scale;
+                    oldFix.apply(button);
+                }
+
+
+                button.fixLayout();
+                button.rerender()
+            }
+        )
+
+        stage.fixLayout();
+
+    }
+
 }
 
 MicroWorld.prototype.destroyButtons = function(){
 
     var ide = this.ide,
         sprite = ide.currentSprite,
+        stage = ide.stage,
         sf = sprite.scripts.parentThatIsA(ScrollFrameMorph);
 
     if(this.isActive){
@@ -947,6 +1017,14 @@ MicroWorld.prototype.destroyButtons = function(){
                     delete sprite.buttons[definition.label];
                 }
             });
+
+        this.buttons['stage'].forEach(({definition})=> {
+            const button = stage.children.find(child => child.labelString === definition.label);
+            if(button) {
+                stage.removeChild(button);
+            }
+        })
+
     }
 
 }
