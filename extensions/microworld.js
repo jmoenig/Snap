@@ -370,10 +370,7 @@ MicroWorld.prototype.init = function (ide) {
         'scripts': [],
         'palette': [],
         'corral': [],
-        'stage': [{
-            definition: {"label":["Stage button"],"message":"Test","payload":""},
-            appearance: {x: 240, y: 180, anchorX: 'middle', anchorY: 'middle', fontSize: 15}
-        }]
+        'stage': []
     };
     this.enableKeyboard = true;
     // this.simpleBlockDialog = false;
