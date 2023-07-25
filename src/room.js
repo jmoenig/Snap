@@ -2262,7 +2262,8 @@ CollaboratorDialogMorph.prototype.buildContents = function() {
         this.destroy();
     }, 'Remove');
     this.collaborateButton = this.addButton(() => {
-        this.target.cloud.sendCollaborateRequest(this.listField.selected);
+        const cloud = this.target.cloud;
+        cloud.sendCollaborateRequest(cloud.projectId, this.listField.selected);
         this.destroy();
     }, 'Invite');
     this.uncollaborateButton.hide();
