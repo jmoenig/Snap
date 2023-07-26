@@ -383,6 +383,8 @@ MicroWorld.prototype.init = function (ide) {
     // backup settings for exiting microworld
     this.oldCategory = null;
     this.oldHiddenPrimitives = {};
+
+    this.ignoreSerializeOverride = false;
 };
 
 
@@ -588,12 +590,45 @@ MicroWorld.prototype.updateLoadFunctions = function() {
 
 
 MicroWorld.prototype.updateSerializeFunction = function() {
+
+
+     // disable this when refreshing the IDE to avoid lags on UI interactions
+    function ignoreSerializeFor(owner, functionName) {
+        var oldFunctionName = 'serializerOld' + functionName[0].toUpperCase() + functionName.slice(1);
+
+        if(!owner || !owner.prototype[functionName]) {
+            return;
+        }
+
+        if(!owner.prototype.hasOwnProperty(oldFunctionName)){
+            owner.prototype[oldFunctionName] = owner.prototype[functionName];
+            owner.prototype[functionName] = function (...args){
+                if(currentMicroworld()) {
+                    currentMicroworld().ignoreSerializeOverride = true;
+                }
+                owner.prototype[oldFunctionName].apply(this, args)
+                if(currentMicroworld()) {
+                    currentMicroworld().ignoreSerializeOverride = false;
+                }
+
+            }
+        }
+    }
+
+    ignoreSerializeFor(SpriteMorph, "recordUserEdit");
+
+
+
+
+
+
     var ide = this.ide;
     if(!XML_Serializer.prototype.oldSerialize){
         XML_Serializer.prototype.oldSerialize = XML_Serializer.prototype.serialize;
         XML_Serializer.prototype.serialize = function(object, forBlocksLibrary){
             var reenter = false;
-            if(currentMicroworld() && currentMicroworld().isActive){
+            
+            if(currentMicroworld() && currentMicroworld().isActive && !currentMicroworld().ignoreSerializeOverride){
                 currentMicroworld().escape();
                 reenter = true;
                 ide.scene.captureGlobalSettings();
