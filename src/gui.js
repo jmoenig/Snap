@@ -8207,9 +8207,13 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                 }
             };
         }
-        // cache-control, commented out for now
-        // added for Snap4Arduino but has issues with local robot servers
-        // request.setRequestHeader('Cache-Control', 'max-age=0');
+        // do not cache remote requests.
+        // selectively exclude http requests, which likely mean a localhost/robot server.
+        if (url.match(/^https/)) {
+            request.setRequestHeader('Cache-Control', 'no-cache, no-store, max-age=0');
+            request.setRequestHeader('Expires', 'Thu, 1 Jan 1970 00:00:00 GMT');
+            request.setRequestHeader('Pragma', 'no-cache');
+        }
         request.send();
         if (!async) {
             if (request.status === 200) {
