@@ -145,12 +145,6 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_broadcast_after_translate(message)',
     (message) => {
-        if(!message){
-            message = '';
-        } else if (Array.isArray(message)) {
-            message = message[0];
-        }
-
         doIfMicroworld(microworld => {
             microworld.setBroadcastAfterTranslate(message);
         })
@@ -267,6 +261,14 @@ ide.savingPreferences = false;
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_ide_lang(langCode,message,payload)',
+    function(langCode, message, payload) {
+        if(currentMicroworld()) {
+            currentMicroworld().changeLanguage(langCode,message,payload);
+        }
+    }
+)
 
 function MicroWorld (ide) {
     this.init(ide);
@@ -446,32 +448,8 @@ MicroWorld.prototype.enter = function () {
                 languageCode = languageList[languageLabel];
 
             item[1] = () => {
-                var ide = this.ide,
-            flag = ide.isAppMode,
-            restoreMode = () => {
-                ide.toggleAppMode(flag);
-                ide.stage.fireUserEditEvent(
-                    ide.currentSprite.name,
-                        ['project', 'language', languageCode],
-                        ide.version
-                    );
-                },
-                    callback;
 
-        ide.loadNewProject = false;
-
-
-
-            callback = () => {
-                // for some reason this works better with a time delay
-                setTimeout(() => {
-                    restoreMode();
-                ide.broadcast(this.broadcastAfterTranslate);
-                }, 100)
-            };
-
-        ide.setLanguage(languageCode, callback, true); // don't save language setting
-
+                this.changeLanguage(languageCode, this.broadcastAfterTranslate);
 
             }
 
@@ -500,6 +478,55 @@ MicroWorld.prototype.enter = function () {
     this.refreshLayouts();
 
 };
+
+MicroWorld.prototype.changeLanguage = function(languageCode, message, payload) {
+     var ide = this.ide,
+            flag = ide.isAppMode;
+
+     if(!message){
+            message = '';
+        } else if (Array.isArray(message)) {
+            message = message[0];
+        }
+
+     const languages = MicroWorld.getLanguageList();
+
+     let match = false;
+
+     for(let language in languages) {
+         if(languages[language] === languageCode) {
+             match = true;
+         }
+     }
+
+     if(!match) {
+         throw new Error("Cannot find language "+languageCode+".")
+     }
+
+     var restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', languageCode],
+                        ide.version
+                    );
+                },
+                    callback;
+
+        ide.loadNewProject = false;
+
+
+
+            callback = () => {
+                // for some reason this works better with a time delay
+                setTimeout(() => {
+                    restoreMode();
+                ide.broadcast(message, null, payload);
+                }, 100)
+            };
+
+        ide.setLanguage(languageCode, callback, true); // don't save language setting
+}
 
 MicroWorld.prototype.escape = function () {
     if(!this.isActive){
