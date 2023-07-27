@@ -20,17 +20,17 @@ function doIfMicroworld(cb){
 SnapExtensions.primitives.set(
     prefix+'get_spec_from_block(block)',
     (block) => {
-            if(!block.expression){
-                return "";
-            }
-            if(block.expression.selector && block.expression.selector !== 'evaluateCustomBlock'){
-                return block.expression.selector;
-            }
-            else if(block.expression.blockSpec) {
-                return block.expression.blockSpec;
-            }
-
+        if(!block.expression){
             return "";
+        }
+        if(block.expression.selector && block.expression.selector !== 'evaluateCustomBlock'){
+            return block.expression.selector;
+        }
+        else if(block.expression.blockSpec) {
+            return block.expression.blockSpec;
+        }
+
+        return "";
 
     }
 )
@@ -233,11 +233,11 @@ SnapExtensions.primitives.set(
     prefix+'snap_ide_set(param,value)',
     function(which, value) {
         var   stage = this.parentThatIsA(StageMorph),
-        ide = stage.parentThatIsA(IDE_Morph),
-        world = stage.parentThatIsA(WorldMorph);
+            ide = stage.parentThatIsA(IDE_Morph),
+            world = stage.parentThatIsA(WorldMorph);
 
         try {
-ide.savingPreferences = false;
+            ide.savingPreferences = false;
             switch (which) {
                 case 'Zoom blocks':
                     if (!isNaN(value)) ide.setBlocksScale(Math.min(value, 12));
@@ -480,52 +480,52 @@ MicroWorld.prototype.enter = function () {
 };
 
 MicroWorld.prototype.changeLanguage = function(languageCode, message, payload) {
-     var ide = this.ide,
-            flag = ide.isAppMode;
+    var ide = this.ide,
+        flag = ide.isAppMode;
 
-     if(!message){
-            message = '';
-        } else if (Array.isArray(message)) {
-            message = message[0];
+    if(!message){
+        message = '';
+    } else if (Array.isArray(message)) {
+        message = message[0];
+    }
+
+    const languages = MicroWorld.getLanguageList();
+
+    let match = false;
+
+    for(let language in languages) {
+        if(languages[language] === languageCode) {
+            match = true;
         }
+    }
 
-     const languages = MicroWorld.getLanguageList();
+    if(!match) {
+        throw new Error("Cannot find language "+languageCode+".")
+    }
 
-     let match = false;
+    var restoreMode = () => {
+            ide.toggleAppMode(flag);
+            ide.stage.fireUserEditEvent(
+                ide.currentSprite.name,
+                ['project', 'language', languageCode],
+                ide.version
+            );
+        },
+        callback;
 
-     for(let language in languages) {
-         if(languages[language] === languageCode) {
-             match = true;
-         }
-     }
-
-     if(!match) {
-         throw new Error("Cannot find language "+languageCode+".")
-     }
-
-     var restoreMode = () => {
-                ide.toggleAppMode(flag);
-                ide.stage.fireUserEditEvent(
-                    ide.currentSprite.name,
-                        ['project', 'language', languageCode],
-                        ide.version
-                    );
-                },
-                    callback;
-
-        ide.loadNewProject = false;
+    ide.loadNewProject = false;
 
 
 
-            callback = () => {
-                // for some reason this works better with a time delay
-                setTimeout(() => {
-                    restoreMode();
-                ide.broadcast(message, null, payload);
-                }, 100)
-            };
+    callback = () => {
+        // for some reason this works better with a time delay
+        setTimeout(() => {
+            restoreMode();
+            ide.broadcast(message, null, payload);
+        }, 100)
+    };
 
-        ide.setLanguage(languageCode, callback, true); // don't save language setting
+    ide.setLanguage(languageCode, callback, true); // don't save language setting
 }
 
 MicroWorld.prototype.escape = function () {
@@ -619,7 +619,7 @@ MicroWorld.prototype.updateLoadFunctions = function() {
 MicroWorld.prototype.updateSerializeFunction = function() {
 
 
-     // disable this when refreshing the IDE to avoid lags on UI interactions
+    // disable this when refreshing the IDE to avoid lags on UI interactions
     function ignoreSerializeFor(owner, functionName) {
         var oldFunctionName = 'serializerOld' + functionName[0].toUpperCase() + functionName.slice(1);
 
@@ -654,7 +654,7 @@ MicroWorld.prototype.updateSerializeFunction = function() {
         XML_Serializer.prototype.oldSerialize = XML_Serializer.prototype.serialize;
         XML_Serializer.prototype.serialize = function(object, forBlocksLibrary){
             var reenter = false;
-            
+
             if(currentMicroworld() && currentMicroworld().isActive && !currentMicroworld().ignoreSerializeOverride){
                 currentMicroworld().escape();
                 reenter = true;
@@ -861,10 +861,10 @@ MicroWorld.prototype.updateBlockTemplatesFunction = function() {
 
         if(currentMicroworld() && currentMicroworld().isActive && category === 'variables' && !currentMicroworld().enableVariables){
             blocks = blocks.filter(block => {
-               if(block instanceof PushButtonMorph || (block && block.selector && block.selector === 'reportGetVar')){
-                   return false;
-               }
-               return true;
+                if(block instanceof PushButtonMorph || (block && block.selector && block.selector === 'reportGetVar')){
+                    return false;
+                }
+                return true;
             });
         }
 
@@ -1150,7 +1150,7 @@ MicroWorld.prototype.setupMenu = function (menuSelector, menu) {
     var items = [];
 
     this.menus[menuSelector].forEach(
-         (itemLabel) => {
+        (itemLabel) => {
             var item = this.findMenuItem(menu.items, itemLabel);
             if (item) {
                 items.push(item);
@@ -1174,18 +1174,18 @@ MicroWorld.prototype.transformMenu = function (menu, originalItems, extraFunctio
 MicroWorld.prototype.cleanMenu = function(menu){
     // remove multiple dividers in a row
     var lastWasDivider = false,
-    items = menu.items.filter(item => {
-        if(item[0] === 0){
-            if(lastWasDivider){
-                return false;
+        items = menu.items.filter(item => {
+            if(item[0] === 0){
+                if(lastWasDivider){
+                    return false;
+                }
+                lastWasDivider = true;
             }
-            lastWasDivider = true;
-        }
-        else{
-            lastWasDivider = false;
-        }
-        return true;
-    });
+            else{
+                lastWasDivider = false;
+            }
+            return true;
+        });
 
     if(items.length > 0){
         if(items[items.length - 1][0] === 0){

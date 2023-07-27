@@ -323,8 +323,8 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
 FancyTextMorph.prototype.lineWidth = function(ctx, line) {
     let width = 0;
     this.processLine(line, ctx,
-            char => width += ctx.measureText(char).width,
-            frac => width += this.measureFraction(frac).width
+        char => width += ctx.measureText(char).width,
+        frac => width += this.measureFraction(frac).width
     );
     return width;
 }
@@ -344,9 +344,9 @@ FancyTextMorph.prototype.lineHeight = function(line) {
 FancyTextMorph.prototype.totalTextHeight = function() {
     let height = 0;
     this.lines.forEach(line =>
-    {
-        height += this.lineHeight(line)
-    }
+        {
+            height += this.lineHeight(line)
+        }
 
     );
 
@@ -371,7 +371,7 @@ FancyTextMorph.prototype.fillLine = function(ctx, line, x, y) {
 FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth) {
 
     const width = this.fractionWidth(fraction),
-    height = this.fractionHeight(fraction);
+        height = this.fractionHeight(fraction);
 
     x = x || 0;
     y = y || 0;
@@ -422,7 +422,7 @@ FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth
         ),
         y,
         totalWidth
-        )
+    )
 
     const oldLineWidth = ctx.lineWidth;
     ctx.lineWidth = FancyFraction.lineWidth(this.fontSize);
@@ -497,9 +497,9 @@ FancyTextMorph.prototype.fractionWidth = function(fraction) {
         den = fraction.denominator,
         fontSize = this.fontSize;
     let width = Math.max(
-            this.fractionWidth(num),
-            this.fractionWidth(den)
-        );
+        this.fractionWidth(num),
+        this.fractionWidth(den)
+    );
 
     if(num.isFraction || den.isFraction){
         width += fontSize;
@@ -593,7 +593,7 @@ FancyTextMorph.prototype.render = function (ctx) {
 };
 
 function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor) {
-        this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor);
+    this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor);
 }
 
 FancySpriteBubbleMorph.prototype = new SpriteBubbleMorph('');

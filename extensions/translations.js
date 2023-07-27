@@ -1,7 +1,7 @@
 var prefix = 't_';
 
 var BLOCK_TRANSLATION_NAME = 'SNAP_BLOCK_DROPDOWN_TRANSLATIONS',
-BLOCK_TRANSLATION_FALLBACK = 'SNAP_BLOCK_TRANSLATION_FALLBACK';
+    BLOCK_TRANSLATION_FALLBACK = 'SNAP_BLOCK_TRANSLATION_FALLBACK';
 
 SnapExtensions.primitives.set(
     prefix+'add_placeholders(string, placeholders)',
@@ -45,7 +45,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'slot_names(block)',
     function(block) {
-    return new List(Array.from(block.expression.definition.declarations).map(item => item[0]));
+        return new List(Array.from(block.expression.definition.declarations).map(item => item[0]));
     }
 )
 

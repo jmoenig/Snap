@@ -1,6 +1,6 @@
 var ide = world.children.find(child => {
-    return child instanceof IDE_Morph;
-}),
+        return child instanceof IDE_Morph;
+    }),
     prefix = 'dlg_';
 
 
