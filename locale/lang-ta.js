@@ -1,1283 +1,1379 @@
-/*
-
-    lang-ta.js
-
-    Tamil translation for SNAP!
-
-    written by Barthdry and One More
-
-    Copyright (C) 2014 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ta = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Tamil', // the name as it should appear in the language menu
-    'language_translator':
-        'vinayakumar R, Barthdry', // your name for the Translators tab
-    'translator_e-mail':
-        'vnkmr7620@gmail.com', // optional
-    'last_changed':
-        '2021-01-25', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'பெயர் இல்லாதது',
-    'development mode':
-        'டெவோலோப்மென்ட் பயன்முறை',
-
-    // categories:
-    'Motion':
-        'நகர்ச்ச',
-    'Looks':
-        'தோற்றம்',
-    'Sound':
-        'ஒல',
-    'Pen':
-        'பேனா',
-    'Control':
-        'கன்ட்ரொல்',
-    'Sensing':
-        'உணருதல்',
-    'Operators':
-        'ஆபரேட்டர்கள்',
-    'Variables':
-        'வேரியபில்கள்',
-    'Lists':
-        'பட்டியல்',
-    'Other':
-        'மற்றொன்று',
-
-    // editor:
-    'draggable':
-        'இழுக்கக்கூடியது',
-
-    // tabs:
-    'Scripts':
-        'லிபி',
-    'Costumes':
-        'உடைகள்',
-    'Sounds':
-        'ஒலஒல',
-
-    // names:
-    'Sprite':
-        'ஸ்ப்ரைட்',
-    'Stage':
-        'மேட',
-
-    // rotation styles:
-    'don\'t rotate':
-        'சுழற்றாத',
-    'can rotate':
-        'சுழற்ற முடியும்',
-    'only face left/right':
-        'வலது மற்றும் இடது முகம் மட்டுமே',
-
-    // new sprite button:
-    'add a new sprite':
-        'புதிய மனிதனைச் சேர்க்கவும்',
-
-    // tab help
-    'costumes tab help':
-        'மற்றொரு வலைப்பக்கத்திலிருந்து படத்தை எடுக்கவும்\n'
-            + 'அல்லது கணினியிலிருந்து இங்கே கைவிடுவதன் மூலம்',
-    'import a sound from your computer\nby dragging it into here':
-        'இங்கே இழுப்பதன் மூலம் கணினியிலிருந்து ஒரு ஒலியை இறக்குமதி செய்க',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'நிலை தேர்ந்தெடுக்கப்பட்டது. மோஷன் பிளாக்ஸ் இல்லை',
-
-    'move %n steps':
-        '%n அடிகள் நகரவும்',
-    'turn %clockwise %n degrees':
-        'திரும்பவும் %clockwise %n அளவு',
-    'turn %counterclockwise %n degrees':
-        'திரும்பவும் %counterclockwise %n அளவு',
-    'point in direction %dir':
-        '%dir திசையை சுட்டிக்கட்டவும்',
-    'point towards %dst':
-        '%dst நோக்கி சுட்டிக்கட்டவும்',
-    'go to x: %n y: %n':
-        'x: %n y: %n க்கு செல்லவும்',
-    'go to %dst':
-        '%dst க்கு செல்லவும்',
-    'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
-    'change x by %n':
-        'x %n அளவு மாற்றவும்',
-    'set x to %n':
-        'x %n ஆக்கவும்',
-    'change y by %n':
-        'y %n அளவு மாற்றவும்',
-    'set y to %n':
-        'y %n ஆக்கவும்',
-    'if on edge, bounce':
-        'விளிம்பில் பவுன்ஸ்',
-    'x position':
-        'x இடம்',
-    'y position':
-        'y இடம்',
-    'direction':
-        'திச',
-
-    // looks:
-    'switch to costume %cst':
-        '%cst உடைக்கு மாற்ற',
-    'next costume':
-        'அடுத்த உட',
-    'costume #':
-        'உட #',
-    'say %s for %n secs':
-        '%n விநாடிகள் %s சொல்',
-    'say %s':
-        '%s சொல்',
-    'think %s for %n secs':
-        '%n விநாடிகள் %s யோச',
-    'think %s':
-        '%s யோச',
-    'Hello!':
-        'வணக்கம்!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
-    'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
-    'clear graphic effects':
-        'க்ராபிக்ஸ் எபெக்ட்டை அழித்து விடு',
-    'change size by %n':
-        'கன அளவை %n அளவு மாற்றவும்',
-    'set size to %n %':
-        'கனம் %n % ஆக்கவும்',
-    'size':
-        'பரிமாணம்',
-    'show':
-        'காண்ப',
-    'hide':
-        'மறைக்கவும்',
-    'go to front':
-        'முன் செல்லவும்',
-    'go back %n layers':
-        '%n அடுக்குகள் பின்னால் செல்லவும்',
-
-    'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
-    'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
-    'alert %mult%s':
-        'Pop-up: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd ஒலிக்கவும்',
-    'play sound %snd until done':
-        'நிற்க்கும் வரை %snd ஒலிக்கவும்',
-    'stop all sounds':
-        'எல்லா ஒலிகளையும் நிருத்த',
-    'rest for %n beats':
-        '%n தாள தட்டு காத்திருக்கவும்',
-    'play note %n for %n beats':
-        '%n ஸ்வரம் %n தாள தட்டு வாசிக்கவும்',
-    'change tempo by %n':
-        '%n அளவு தாளத்தை மாற்றவும்',
-    'set tempo to %n bpm':
-        'தாளம் %n bpm ஆக்கவும்',
-    'tempo':
-        'தாளம்',
-
-    // pen:
-    'clear':
-        'அழ',
-    'pen down':
-        'பேனா கீழே',
-    'pen up':
-        'பேனா மேல',
-    'set pen color to %clr':
-        'பேனா நிரம் %clr ஆக்கவும்',
-    'change pen color by %n':
-        'பேனா நிறத்தை %n அளவு மாற்றவும்',
-    'set pen color to %n':
-        'பேனா நிரம் %n ஆக்கவும்',
-    'change pen shade by %n':
-        'பேனா ஷெடை %n அளவு மாற்றவும்',
-    'set pen shade to %n':
-        'பேனா ஷேட் %n ஆக்கவும்',
-    'change pen size by %n':
-        'பேனா கன அளவை %n அளவு மாற்றவும்',
-    'set pen size to %n':
-        'பேனா கனம் %n ஆக்கவும்',
-    'stamp':
-        'அச்சு',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag அழுத்தும்பொழுது',
-    'when %keyHat key pressed %keyName':
-        '%keyHat %keyName கீ அழுத்தும்பொழுது',
-    'when I am %interaction':
-        '%interaction நான் சொடுக்கும் போது',
-    'when I receive %msgHat %message':
-        '%msgHat %message பெறுகையில்',
-    'broadcast %msg %receive':
-        '%msg %receive செலித்தி',
-    'broadcast %msg %receive and wait':
-        '%msg %receive செலித்தி காத்திருக்கவும்',
-    'Message name':
-        'செய்தி பெயர்',
-    'message':
-        'செய்தி',
-    'any message':
-        'எந்த செய்தியும்',
-    'wait %n secs':
-        '%n விநாடிகள் காத்திருக்கவும்',
-    'wait until %b':
-        '%b வரை காத்திருக்கவும்',
-    'forever %loop':
-        'எப்போதும் %loop',
-    'repeat %n %loop':
-        'திரும்பச்செய் %n %loop',
-    'repeat until %b %loop':
-        '%b %loop வரை திரும்பச்செய்',
-    'if %b %c':
-        '%b %c என்றால்',
-    'if %b %c else %c':
-        '%b என்றால் அல்லது %c',
-    'report %s':
-        'அறிக்கை %s',
-    'stop %stopChoices':
-        'நிருத்து %stopChoices',
-    'all':
-        'அனைத்தும்',
-    'this script':
-        'இந்த ச்கிரிப்ட்ட',
-    'this block':
-        'இது Block',
-    'stop %stopOthersChoices':
-        'நிறுத்து %stopOthersChoices',
-    'all but this script':
-        'அனைத்தும் ஆனால் இந்த ஸ்கிரிப்ட்',
-    'other scripts in sprite':
-        'ஸ்பிரிட்டில் பிற ஸ்கிரிப்ட்கள்',
-    'pause all %pause':
-        'அனைத்தையும் இடைநிறுத்துங்கள் %pause',
-    'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
-    'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
-    'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
-    'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
-    'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
-    'warp %c':
-        'போரிடு %c',
-    'when I start as a clone':
-        'நான் குளோனைத் தொடங்கும்போது',
-    'create a clone of %cln':
-        'குளோன் %cln',
-    'myself':
-        'நானே',
-    'delete this clone':
-        'குளோனை நீக்கு',
-
-    // sensing:
-    'touching %col ?':
-        'தொடுகிரதா %col ?',
-    'touching %clr ?':
-        'தொடுகிரதா %clr ?',
-    'color %clr is touching %clr ?':
-        '%clr கலர் %clr யை தொடுகிரதா?',
-    'ask %s and wait':
-        '%s காத்திருக்க சொல்',
-    'what\'s your name?':
-        'உங்கள் பெயர் என்ன ?',
-    'answer':
-        'பதில்',
-    'mouse x':
-        'மவுஸ் x',
-    'mouse y':
-        'மவுஸ் y',
-    'mouse down?':
-        'சுட்டி கீழே?',
-    'key %key pressed?':
-        '%key கீ அழுத்தி இருக்கிரதா',
-    'distance to %dst':
-        '%dst வரை தூரம்',
-    'reset timer':
-        'டைமெர் ரீசெட்',
-    'timer':
-        'டைமெர்',
-    '%att of %spr':
-        '%att von %spr',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'turbo mode?',
-    'set turbo mode to %b':
-        'setze Turbomodus auf %b',
-
-    'filtered for %clr':
-        'nach %clr gefiltert',
-    'stack size':
-        'Stapelgr\u00f6\u00dfe',
-    'frames':
-        'Rahmenz\u00e4hler',
-
-    // operators:
-    '%n mod %n':
-        '%n மாட் %n',
-    'round %n':
-        '%n gerundet',
-    '%fun of %n':
-        '%fun ன் %n',
-    'pick random %n to %n':
-        'இளஞ்சிவப்பு சீரற்ற %n to %n',
-    '%b and %b':
-        '%b மற்றும் %b',
-    '%b or %b':
-        '%b அல்லத %b',
-    'not %b':
-        'இல்ல %b',
-    'true':
-        'சர',
-    'false':
-        'தவறு',
-    'join %words':
-        'சேர்க்கவும் %words',
-    'split %s by %delim':
-        'trenne %s nach %delim',
-    'hello':
-        'வணக்கம்',
-    'world':
-        'உலகம்',
-    'letter %idx of %s':
-        '%idx வது எழுத்து , %s ன்',
-    'length of %s':
-        '%s ன் நீளம்',
-    'unicode of %s':
-        'யூனிகோட் %s',
-    'unicode %n as letter':
-        'யூனிகோட் %n கடிதமாக',
-    'is %s a %typ ?':
-        'இது %s ஒரு %typ ?',
-    'is %s identical to %s ?':
-        'இது %s ஒத்த %s ?',
-
-    'type of %s':
-        'வகை %s',
-
-    // variables:
-    'Make a variable':
-        'வேரியபில் செய்',
-    'Variable name':
-        'மாறிழியின் பெயர்',
-    'Script variable name':
-        'ச்கிரிப்ட்ட மாறிழியின் பெயர்',
-    'Delete a variable':
-        'வேரியபில் அழி',
-
-    'set %var to %s':
-        '%var %n ஆக்கவும்',
-    'change %var by %n':
-        '%var %n அளவு மாற்றவும்',
-    'show variable %var':
-        '%var மாறி காண்பி',
-    'hide variable %var':
-        '%var மாறி மறைக்கவும்',
-    'script variables %scriptVars':
-        'ஸ்கிரிப்ட் மாறி %scriptVars',
-
-    // lists:
-    'list %exp':
-        'பட்டியல் %exp',
-    '%s in front of %l':
-        '%s am Anfang von %l',
-    'item %idx of %l':
-        'Element %idx von %l',
-    'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
-    'length of %l':
-        'L\u00e4nge von %l',
-    '%l contains %s':
-        '%l enth\u00e4lt %s',
-    'thing':
-        'etwas',
-    'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
-    'delete %ida of %l':
-        'entferne %ida aus %l',
-    'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
-    'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
-
-    // other
-    'Make a block':
-        'ஒரு தொகுதி செய்யுங்கள்',
-
-    // menus
-    // snap menu
-    'About...':
-        'பற்றி . . . ',
-    'Reference manual':
-        'Handbuch lesen',
-    'Snap! website':
-        'Snap! website',
-    'Download source':
-        'மூலத்தைப் பதிவிறக்குங்கள்',
-    'Switch back to user mode':
-        'பயனர் பயன்முறைக்கு மாறவும்',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
-    'Switch to dev mode':
-        'தேவ் பயன்முறைக்கு மாறவும்',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
-
-    // project menu
-    'Project notes...':
-        'திட்ட குறிப்பு ...',
-    'New':
-        'புதிய புதிய பின்னணி',
-    'Open...':
-        'திறக்க...',
-    'Save':
-        'சேம',
-    'Save As...':
-        'எனச் சேம...',
-    'Import...':
-        'இறக்குமதி...',
-    'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
-            + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text...':
-        'திட்டத்தை எளிய உரையாக ஏற்றுமதி செய்க',
-    'Export project...':
-        'ஏற்றுமதி திட்டம்...',
-    'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
-    'Export blocks...':
-        'Export Blocks...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
-    'Import tools':
-        'Tools laden',
-    'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
-    'Libraries...':
-        'நூலகங்கள்...',
-    'Import library':
-        'நூலகங்கள் நூலகங்கள்',
-
-    // cloud menu
-    'Login...':
-        'உள்நுழைய...',
-    'Signup...':
-        'பதிவுபெறுதல்...',
-
-    // settings menu
-    'Language...':
-        'மொழ...',
-    'Zoom blocks...':
-        'Zoom blocks...',
-    'Stage size...':
-        'Stage size...',
-    'Stage size':
-        'Stage size',
-    'Stage width':
-        'Stage width',
-    'Stage height':
-        'Stage height',
-    'Default':
-        'Default',
-    'Blurred shadows':
-        'Weiche Schatten',
-    'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
-    'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
-    'Zebra coloring':
-        'Zebrafarben',
-    'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
-    'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
-    'Dynamic input labels':
-        'Eingabenbeschriftung',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
-    'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
-    'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
-    'Long form input dialog':
-        'Long form input dialog',
-    'Plain prototype labels':
-        'Plain prototype labels',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'uncheck to always show (+) symbols\nin block prototype labels',
-    'check to hide (+) symbols\nin block prototype labels':
-        'check to hide (+) symbols\nin block prototype labels',
-    'check to always show slot\ntypes in the input dialog':
-        'check to always show slot\ntypes in the input dialog',
-    'uncheck to use the input\ndialog in short form':
-        'uncheck to use the input\ndialog in short form',
-    'Virtual keyboard':
-        'Virtual keyboard',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'uncheck to disable\nvirtual keyboard support\nfor mobile devices',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'check to enable\nvirtual keyboard support\nfor mobile devices',
-    'Input sliders':
-        'Input Slider',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'uncheck to disable\ninput sliders for\nentry fields',
-    'check to enable\ninput sliders for\nentry fields':
-        'check to enable\ninput sliders for\nentry fields',
-    'Clicking sound':
-        'Clicking sound',
-    'uncheck to turn\nblock clicking\nsound off':
-        'uncheck to turn\nblock clicking\nsound off',
-    'check to turn\nblock clicking\nsound on':
-        'check to turn\nblock clicking\nsound on',
-    'Animations':
-        'Animations',
-    'uncheck to disable\nIDE animations':
-        'uncheck to disable\nIDE animations',
-    'Turbo mode':
-        'Turbo mode',
-    'check to prioritize\nscript execution':
-        'check to prioritize\nscript execution',
-    'uncheck to run scripts\nat normal speed':
-        'uncheck to run scripts\nat normal speed',
-    'check to enable\nIDE animations':
-        'check to enable\nIDE animations',
-    'Thread safe scripts':
-        'Thread safe scripts',
-    'uncheck to allow\nscript reentrance':
-        'uncheck to allow\nscript reentrance',
-    'check to disallow\nscript reentrance':
-        'check to disallow\nscript reentrance',
-    'Prefer smooth animations':
-        'Prefer smooth animations',
-    'uncheck for greater speed\nat variable frame rates':
-        'uncheck for greater speed\nat variable frame rates',
-    'check for smooth, predictable\nanimations across computers':
-        'check for smooth, predictable\nanimations across computers',
-    'Flat line ends':
-        'Flat line ends',
-    'check for flat ends of lines':
-        'check for flat ends of lines',
-    'uncheck for round ends of lines':
-        'uncheck for round ends of lines',
-
-    // inputs
-    'with inputs':
-        'உள்ளீட்டுடன்',
-    'input names:':
-        'உள்ளீட்டு பெயர்கள்:',
-    'Input Names:':
-        'உள்ளீட்டு பெயர்கள்:',
-    'input list:':
-        'உள்ளீட்டு பட்டியல்:',
-
-    // context menus:
-    'help':
-        'உதவி',
-
-    // palette:
-    'hide primitives':
-        'hide primitive',
-    'show primitives':
-        'show primitive',
-
-    // blocks:
-    'help...':
-        'உதவ...',
-    'relabel...':
-        'Umbenennen...',
-    'duplicate':
-        'நகல் செய்',
-    'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
-    'only duplicate this block':
-        'nur diesen Block duplizieren',
-    'delete':
-        'அழ',
-    'script pic...':
-        'Skriptbild...',
-    'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
-    'ringify':
-        'வளையமாக ஆக்குங்கள்',
-    'unringify':
-        'வளையத்திலிருந்து உடைக்க',
-
-    // custom blocks:
-    'delete block definition...':
-        'Blockdefinition l\u00f6schen',
-    'edit...':
-        'தொகு...',
-
-    // sprites:
-    'edit':
-        'திருத்த',
-    'move':
-        'நகர்த்து',
-    'detach from':
-        'இருந்து பிரிக்கவும்',
-    'detach all parts':
-        'எல்லாம் பிரிக்கவும்',
-    'export...':
-        'ஏற்றுமதி...',
-
-    // stage:
-    'show all':
-        'அனைத்தையும் காட்டு',
-    'pic...':
-        'ஏற்றுமதி மேடை...',
-    'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
-
-    // scripting area
-    'clean up':
-        'சுத்தம் செய்',
-    'arrange scripts\nvertically':
-        'arrange scripts\nvertically',
-    'add comment':
-        'add comment',
-    'undrop':
-        'R\u00fcckg\u00e4ngig',
-    'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
-    'scripts pic...':
-        'Bild aller Scripte...',
-    'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
-    'make a block...':
-        'Neuen Block bauen...',
-
-    // costumes
-    'rename':
-        'மறுபெயரிடு',
-    'export':
-        'ஏற்றுமதி',
-    'rename costume':
-        'ஆடை மறுபெயரிடு',
-
-    // sounds
-    'Play sound':
-        'ஒலியைத் தொடங்குங்கள்',
-    'Stop sound':
-        'ஒலியை நிறுத்துங்கள்',
-    'Stop':
-        'நிறுத்து',
-    'Play':
-        'தொடங்கு',
-    'rename sound':
-        'ஒலி மறுபெயரிடு',
-
-    // dialogs
-    // buttons
-    'OK':
-        'சரி',
-    'Ok':
-        'சரி',
-    'Cancel':
-        'கென்செல்',
-    'Yes':
-        'ஆம்',
-    'No':
-        'இல்ல',
-
-    // help
-    'Help':
-        'உதவ',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
-    'build':
-        'கட்ட',
-    'your own':
-        'உங்கள் சொந்தமானது',
-    'blocks':
-        'தொகுதி',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'Demo (1.2x)',
-    'presentation (1.4x)':
-        'presentation (1.4x)',
-    'big (2x)':
-        'big (2x)',
-    'huge (4x)':
-        'huge (4x)',
-    'giant (8x)':
-        'giant (8x)',
-    'monstrous (10x)':
-        'Ultra Giant (10x)',
-
-    // Project Manager
-    'Untitled':
-        'பெயரிடப்படாதது',
-    'Open Project':
-        'திறந்த வேலை',
-    '(empty)':
-        'காலியாக',
-    'Saved!':
-        'Saved!',
-    'Delete Project':
-        'Delete Project',
-    'Are you sure you want to delete':
-        'Are you sure you want to delete',
-    'rename...':
-        'மறுபெயரிடு...',
-
-    // costume editor
-    'Costume Editor':
-        'ஆடை ஆசிரியர்',
-    'click or drag crosshairs to move the rotation center':
-        'சுழற்சி மையத்தை நகர்த்த குறுக்கு நாற்காலிகள் கிளிக் செய்யவும் அல்லது இழுக்கவும்',
-
-    // project notes
-    'Project Notes':
-        'வேலை குறிப்புகள்',
-
-    // new project
-    'New Project':
-        'புதிய திட்டம்',
-    'Replace the current project with a new one?':
-        'தற்போதைய திட்டத்தை புதியதாக மாற்றவா?',
-
-    // save project
-    'Save Project As...':
-        'திட்டத்தை சேமிக்கவும்...',
-
-    // export blocks
-    'Export blocks':
-        'Export blocks',
-    'Import blocks':
-        'Import blocks',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'this project doesn\'t have any\ncustom global blocks yet',
-    'select':
-        'தேர்ந்தெடுக்கவும்',
-    'none':
-        'எதுவும் இல்லை',
-
-    // variable dialog
-    'for all sprites':
-        'எல்லா உருவங்களுக்கும்',
-    'for this sprite only':
-        'இந்த உருவங்களுக்கு',
-
-    // block dialog
-    'Change block':
-        'தொகுதி மாற்ற',
-    'Command':
-        'Command:',
-    'Reporter':
-        'Reporter',
-    'Predicate':
-        'Predicate',
-
-    // block editor
-    'Block Editor':
-        'Block Editor',
-    'Apply':
-        'விண்ணப்பிக்கவும்',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Delete Custom Block',
-    'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
-
-    // input dialog
-    'Create input name':
-        'Create input name',
-    'Edit input name':
-        'Edit input name',
-    'Edit label fragment':
-        'Edit label fragment',
-    'Title text':
-        'Beschriftung',
-    'Input name':
-        'Eingabe',
-    'Delete':
-        'L\u00f6schen',
-    'Object':
-        'Objekt',
-    'Number':
-        'Zahl',
-    'Text':
-        'Text',
-    'List':
-        'Liste',
-    'Any type':
-        'Beliebig',
-    'Boolean (T/F)':
-        'Boolsch (W/F)',
-    'Command\n(inline)':
-        'Befehl',
-    'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
-    'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
-    'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
-    'Single input.':
-        'Einzeleingabe.',
-    'Default Value:':
-        'Standardwert:',
-    'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
-    'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
-
-    // About Snap and contributors 
-    'About Snap':
-        'ஸ்னாப் பற்றி',
-    'Back...':
-        'பின்புறம்..',
-    'License...':
-        'License...',
-    'Modules...':
-        'Modules...',
-    'Credits...':
-        'Credits...',
-    'Translators...':
-        'Translators',
-    'License':
-        'License',
-    'current module versions:':
-        'current module versions',
-    'Contributors':
-        'Contributors',
-    'Translations':
-        'Translations',
-
-    // variable watchers
-    'normal':
-        'இயல்பான',
-    'large':
-        'பெரியது',
-    'slider':
-        'ஸ்லைடர்',
-    'slider min...':
-        'குறைந்தபட்ச ஸ்லைடு...',
-    'slider max...':
-        'அதிகபட்ச ஸ்லைடு...',
-    'import...':
-        'இறக்குமதி...',
-    'Slider minimum value':
-        'குறைந்தபட்ச ஸ்லைடு',
-    'Slider maximum value':
-        'அதிகபட்ச ஸ்லைடு',
-
-    // list watchers
-    'length: ':
-        'நீளம்: ',
-
-    // comments
-    'add comment here...':
-        'add comment here',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) right',
-    '(-90) left':
-        '(-90) left',
-    '(0) up':
-        '(0) up',
-    '(180) down':
-        '(180) down',
-
-    // collision detection
-    'mouse-pointer':
-        'mouse-pointer',
-    'edge':
-        'edge',
-    'pen trails':
-        'pen trails',
-
-    // costumes
-    'Turtle':
-        'Turtle',
-    'Empty':
-        'Empty',
-
-    // graphical effects
-    'brightness':
-        'brightness',
-    'ghost':
-        'ghost',
-    'negative':
-        'negative',
-    'comic':
-        'comic',
-    'confetti':
-        'confetti',
-
-    // keys
-    'space':
-        'space',
-    'up arrow':
-        'up arrow',
-    'down arrow':
-        'down arrow',
-    'right arrow':
-        'right  arrow',
-    'left arrow':
-        'left arrow',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'புதியது...',
-
-    // math functions
-    'abs':
-        'abs',
-    'floor':
-        'floor',
-    'sqrt':
-        'sqrt',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'letter',
-    'whitespace':
-        'whitespace',
-    'line':
-        'line',
-    'tab':
-        'tab',
-    'cr':
-        'cr',
-
-    // data types
-    'number':
-        'number',
-    'text':
-        'text',
-    'Boolean':
-        'Boolean',
-    'list':
-        'list',
-    'command':
-        'command',
-    'reporter':
-        'reporter',
-    'predicate':
-        'predicate',
-
-    // list indices
-    'last':
-        'last',
-    'any':
-        'any'
-};
-/* Tamil Language locale is completed upto 85% by 
-Revision 1 and 2:- vinayakumar 40
- Revision 3 to 5 :- barthdry   45 */
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "",
+    "(0) up": "",
+    "(1) sine": "",
+    "(180) down": "",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "",
+    "(empty)": "காலியாக",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "ஸ்னாப் பற்றி",
+    "About...": "பற்றி . . .",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "",
+    "Any type": "",
+    "Apply": "விண்ணப்பிக்கவும்",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "பின்புறம்..",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "",
+    "Boolean": "",
+    "Boolean (T/F)": "",
+    "Boolean (unevaluated)": "",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "கென்செல்",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "தொகுதி மாற்ற",
+    "Clear backup": "",
+    "Clicking sound": "",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "Command:",
+    "Command (C-shape)": "",
+    "Command (inline)": "",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "",
+    "Control": "கன்ட்ரொல்",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "ஆடை ஆசிரியர்",
+    "Costumes": "உடைகள்",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "",
+    "Default Value:": "",
+    "Delete": "",
+    "Delete Custom Block": "",
+    "Delete Project": "",
+    "Delete a variable": "வேரியபில் அழி",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "மூலத்தைப் பதிவிறக்குங்கள்",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "",
+    "Export blocks...": "Export Blocks...",
+    "Export project as plain text...": "திட்டத்தை எளிய உரையாக ஏற்றுமதி செய்க",
+    "Export project...": "ஏற்றுமதி திட்டம்...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "வணக்கம்!",
+    "Hello, World!": "",
+    "Help": "உதவ",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "",
+    "Import library": "நூலகங்கள் நூலகங்கள்",
+    "Import sound": "",
+    "Import tools": "Tools laden",
+    "Import...": "இறக்குமதி...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "உள்ளீட்டு பெயர்கள்:",
+    "Input Slot Options": "",
+    "Input name": "",
+    "Input sliders": "Input Slider",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "மொழ...",
+    "Libraries...": "நூலகங்கள்...",
+    "License": "",
+    "License...": "",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "",
+    "List utilities": "",
+    "Lists": "பட்டியல்",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "உள்நுழைய...",
+    "Logout": "",
+    "Long form input dialog": "",
+    "Looks": "தோற்றம்",
+    "Make a block": "ஒரு தொகுதி செய்யுங்கள்",
+    "Make a variable": "வேரியபில் செய்",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "செய்தி பெயர்",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "",
+    "Motion": "நகர்ச்ச",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "",
+    "Nested auto-wrapping": "",
+    "New": "புதிய புதிய பின்னணி",
+    "New Category": "",
+    "New Project": "புதிய திட்டம்",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "இல்ல",
+    "November": "",
+    "Number": "",
+    "OK": "சரி",
+    "Object": "",
+    "October": "",
+    "Ok": "சரி",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "திறந்த வேலை",
+    "Open in Community Site": "",
+    "Open...": "திறக்க...",
+    "Opening project...": "",
+    "Operators": "ஆபரேட்டர்கள்",
+    "Other": "மற்றொன்று",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "பேனா",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "தொடங்கு",
+    "Play sound": "ஒலியைத் தொடங்குங்கள்",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "",
+    "Prefer empty slot drops": "",
+    "Privacy...": "",
+    "Project Notes": "வேலை குறிப்புகள்",
+    "Project URLs": "",
+    "Project notes...": "திட்ட குறிப்பு ...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "தற்போதைய திட்டத்தை புதியதாக மாற்றவா?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "சேம",
+    "Save As...": "எனச் சேம...",
+    "Save Project": "",
+    "Save Project As...": "திட்டத்தை சேமிக்கவும்...",
+    "Save to disk": "",
+    "Saved!": "",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "ச்கிரிப்ட்ட மாறிழியின் பெயர்",
+    "Scripts": "லிபி",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "உணருதல்",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "பதிவுபெறுதல்...",
+    "Single input.": "",
+    "Single palette": "",
+    "Slider maximum value": "அதிகபட்ச ஸ்லைடு",
+    "Slider minimum value": "குறைந்தபட்ச ஸ்லைடு",
+    "Snap! website": "",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "ஒல",
+    "Sound Recorder": "",
+    "Sounds": "ஒலஒல",
+    "Sprite": "ஸ்ப்ரைட்",
+    "Sprite Nesting": "",
+    "Stage": "மேட",
+    "Stage height": "",
+    "Stage selected: no motion primitives": "நிலை தேர்ந்தெடுக்கப்பட்டது. மோஷன் பிளாக்ஸ் இல்லை",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "",
+    "Stop": "நிறுத்து",
+    "Stop sound": "ஒலியை நிறுத்துங்கள்",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "பயனர் பயன்முறைக்கு மாறவும்",
+    "Switch to dev mode": "தேவ் பயன்முறைக்கு மாறவும்",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "",
+    "Title text": "",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "",
+    "Translators...": "Translators",
+    "Turbo mode": "",
+    "Turtle": "",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "பெயரிடப்படாதது",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "மாறிழியின் பெயர்",
+    "Variables": "வேரியபில்கள்",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "ஆம்",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "",
+    "Zoom blocks": "",
+    "Zoom blocks...": "",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "_ மாட் _",
+    "_ of _": "_ ன் _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "acos",
+    "add _ to _": "",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "புதிய மனிதனைச் சேர்க்கவும்",
+    "add comment": "",
+    "add comment here...": "add comment here",
+    "agent": "",
+    "alert _": "",
+    "all": "அனைத்தும்",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "",
+    "all but this script": "அனைத்தும் ஆனால் இந்த ஸ்கிரிப்ட்",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "மற்றும்",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "பதில்",
+    "any": "",
+    "any key": "",
+    "any message": "எந்த செய்தியும்",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "_ காத்திருக்க சொல்",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "தொகுதி",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "_ _ செலித்தி",
+    "broadcast _ _ and wait": "_ _ செலித்தி காத்திருக்கவும்",
+    "brush": "",
+    "build": "கட்ட",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "",
+    "call _ w/continuation": "",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "சுழற்ற முடியும்",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "_ _ அளவு மாற்றவும்",
+    "change _ effect by _": "",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "பேனா நிறத்தை _ அளவு மாற்றவும்",
+    "change pen shade by _": "பேனா ஷெடை _ அளவு மாற்றவும்",
+    "change pen size by _": "பேனா கன அளவை _ அளவு மாற்றவும்",
+    "change size by _": "கன அளவை _ அளவு மாற்றவும்",
+    "change tempo by _": "_ அளவு தாளத்தை மாற்றவும்",
+    "change volume by _": "",
+    "change x by _": "x _ அளவு மாற்றவும்",
+    "change y by _": "y _ அளவு மாற்றவும்",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "",
+    "check to enable alternating colors for nested blocks": "",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "",
+    "check to enable input sliders for entry fields": "",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to hide (+) symbols in block prototype labels": "",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "சுத்தம் செய்",
+    "clear": "அழ",
+    "clear graphic effects": "க்ராபிக்ஸ் எபெக்ட்டை அழித்து விடு",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "சுழற்சி மையத்தை நகர்த்த குறுக்கு நாற்காலிகள் கிளிக் செய்யவும் அல்லது இழுக்கவும்",
+    "clicked": "",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "_ கலர் _ யை தொடுகிரதா?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "உட #",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "மற்றொரு வலைப்பக்கத்திலிருந்து படத்தை எடுக்கவும் அல்லது கணினியிலிருந்து இங்கே கைவிடுவதன் மூலம்",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "குளோன் _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "current module versions",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "அழ",
+    "delete _": "",
+    "delete _ of _": "",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "Blockdefinition löschen",
+    "delete slot": "",
+    "delete this clone": "குளோனை நீக்கு",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "எல்லாம் பிரிக்கவும்",
+    "detach and put into the hand": "",
+    "detach from": "இருந்து பிரிக்கவும்",
+    "development mode": "டெவோலோப்மென்ட் பயன்முறை",
+    "development mode debugging primitives:": "",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "திச",
+    "disable deep-Morphic context menus and show user-friendly ones": "",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "_ வரை தூரம்",
+    "distribution": "",
+    "don't rotate": "சுழற்றாத",
+    "down arrow": "",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "இழுக்கக்கூடியது",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "நகல் செய்",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "",
+    "edit": "திருத்த",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "தொகு...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "ஏற்றுமதி",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "ஏற்றுமதி...",
+    "extract": "",
+    "f": "f",
+    "false": "தவறு",
+    "file": "",
+    "file menu import hint": "lädt ein exportiertes Projekt, eine Bibliothek mit Blöcken ein Kostüm oder einen Klang",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "எல்லா உருவங்களுக்கும்",
+    "for each _ in _ _": "",
+    "for this sprite only": "இந்த உருவங்களுக்கு",
+    "forever _": "எப்போதும் _",
+    "frame": "",
+    "frames": "",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "",
+    "giant (8x)": "",
+    "glide _ secs to x: _ y: _": "",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "_ அடுக்குகள் பின்னால் செல்லவும்",
+    "go to _": "_ க்கு செல்லவும்",
+    "go to _ layer": "",
+    "go to front": "முன் செல்லவும்",
+    "go to x: _ y: _": "x: _ y: _ க்கு செல்லவும்",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "வணக்கம்",
+    "help": "உதவி",
+    "help...": "உதவ...",
+    "hide": "மறைக்கவும்",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "hide primitive",
+    "hide variable _": "_ மாறி மறைக்கவும்",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "",
+    "i": "i",
+    "identical to": "ஒத்த",
+    "if _ _": "_ _ என்றால்",
+    "if _ _ else _": "_ என்றால் அல்லது _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "விளிம்பில் பவுன்ஸ்",
+    "import a sound from your computer by dragging it into here": "இங்கே இழுப்பதன் மூலம் கணினியிலிருந்து ஒரு ஒலியை இறக்குமதி செய்க",
+    "import without attempting to parse or format data": "",
+    "import...": "இறக்குமதி...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "உள்ளீட்டு பட்டியல்:",
+    "input names:": "உள்ளீட்டு பெயர்கள்:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "இது _ ?",
+    "is _ a _ ?": "இது _ ஒரு _ ?",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "இது _ ஒத்த _ ?",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "",
+    "items": "",
+    "j": "j",
+    "join _": "சேர்க்கவும் _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "_ கீ அழுத்தி இருக்கிரதா",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "Tamil",
+    "language_translator": "vinayakumar R, Barthdry",
+    "large": "பெரியது",
+    "last": "",
+    "last changed": "",
+    "last_changed": "2021-01-25",
+    "launch _ _": "",
+    "left": "",
+    "left arrow": "",
+    "length": "",
+    "length of _": "_ ன் நீளம்",
+    "length:": "நீளம்:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "_ வது எழுத்து , _ ன்",
+    "light (70)": "",
+    "lightness": "",
+    "line": "",
+    "lines": "",
+    "list": "",
+    "list _": "பட்டியல் _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "das offizielle Modul mit mächtigen Blöcken laden",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "",
+    "make a category...": "",
+    "make a copy and pick it up": "",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "செய்தி",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "Ultra Giant (10x)",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "சுட்டி கீழே?",
+    "mouse position": "",
+    "mouse x": "மவுஸ் x",
+    "mouse y": "மவுஸ் y",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "",
+    "move": "நகர்த்து",
+    "move _ steps": "_ அடிகள் நகரவும்",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "நானே",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "புதியது...",
+    "next": "",
+    "next costume": "அடுத்த உட",
+    "none": "எதுவும் இல்லை",
+    "normal": "இயல்பான",
+    "normal (1x)": "",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "இல்ல _",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "",
+    "only face left/right": "வலது மற்றும் இடது முகம் மட்டுமே",
+    "only grab this block": "",
+    "open a new window with a picture of all scripts": "ein neues Browserfenster mit einem Bild aller Skripte öffnen",
+    "open a new window with a picture of the stage": "ein neues Browserfenster mit einem Bild der Bühne öffnen",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "ein neues Browserfenster mit einem Bild dieses Skripts öffnen",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "அல்லத",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "ஸ்பிரிட்டில் பிற ஸ்கிரிப்ட்கள்",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "அனைத்தையும் இடைநிறுத்துங்கள் _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "பேனா கீழே",
+    "pen down?": "",
+    "pen trails": "",
+    "pen up": "பேனா மேல",
+    "pen vectors": "",
+    "pic...": "ஏற்றுமதி மேடை...",
+    "pick random _ to _": "இளஞ்சிவப்பு சீரற்ற _ to _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "_ ஸ்வரம் _ தாள தட்டு வாசிக்கவும்",
+    "play sound _": "_ ஒலிக்கவும்",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "நிற்க்கும் வரை _ ஒலிக்கவும்",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "_ திசையை சுட்டிக்கட்டவும்",
+    "point towards _": "_ நோக்கி சுட்டிக்கட்டவும்",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "",
+    "presentation (1.4x)": "",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "மறுபெயரிடு",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "ஆடை மறுபெயரிடு",
+    "rename only this reporter": "",
+    "rename sound": "ஒலி மறுபெயரிடு",
+    "rename...": "மறுபெயரிடு...",
+    "repeat _ _": "திரும்பச்செய் _ _",
+    "repeat until _ _": "_ _ வரை திரும்பச்செய்",
+    "replace item _ of _ with _": "",
+    "report _": "அறிக்கை _",
+    "reporter": "",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "டைமெர் ரீசெட்",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "_ தாள தட்டு காத்திருக்கவும்",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "",
+    "ring": "",
+    "ringify": "வளையமாக ஆக்குங்கள்",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "",
+    "run _ _": "",
+    "run _ w/continuation": "",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "_ சொல்",
+    "say _ for _ secs": "_ விநாடிகள் _ சொல்",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "",
+    "script variables _": "ஸ்கிரிப்ட் மாறி _",
+    "scripts": "",
+    "scripts pic...": "Bild aller Scripte...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "தேர்ந்தெடுக்கவும்",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "",
+    "set _ of block _ to _": "",
+    "set _ to _": "_ _ ஆக்கவும்",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "பேனா நிரம் _ ஆக்கவும்",
+    "set pen shade to _": "பேனா ஷேட் _ ஆக்கவும்",
+    "set pen size to _": "பேனா கனம் _ ஆக்கவும்",
+    "set size to _ %": "கனம் _ % ஆக்கவும்",
+    "set tempo to _ bpm": "தாளம் _ bpm ஆக்கவும்",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "setze Turbomodus auf _",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "x _ ஆக்கவும்",
+    "set y to _": "y _ ஆக்கவும்",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "காண்ப",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "அனைத்தையும் காட்டு",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "zeigt globale Benutzerblockdefinitionen als XML im Browser an",
+    "show primitives": "show primitive",
+    "show project data as XML in a new browser window": "",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "_ மாறி காண்பி",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "பரிமாணம்",
+    "slider": "ஸ்லைடர்",
+    "slider max...": "அதிகபட்ச ஸ்லைடு...",
+    "slider min...": "குறைந்தபட்ச ஸ்லைடு...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "",
+    "square": "",
+    "stack size": "",
+    "stage": "",
+    "stage image": "",
+    "stamp": "அச்சு",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "நிறுத்து _",
+    "stop all sounds": "எல்லா ஒலிகளையும் நிருத்த",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "_ உடைக்கு மாற்ற",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "தாளம்",
+    "temporary?": "",
+    "text": "",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "",
+    "think _": "_ யோச",
+    "think _ for _ secs": "_ விநாடிகள் _ யோச",
+    "this _": "",
+    "this block": "இது Block",
+    "this project doesn't have any custom global blocks yet": "",
+    "this script": "இந்த ச்கிரிப்ட்ட",
+    "time in milliseconds": "",
+    "timer": "டைமெர்",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "தொடுகிரதா _ ?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "vnkmr7620@gmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "சர",
+    "turbo mode": "",
+    "turbo mode?": "",
+    "turn _ _ degrees": "திரும்பவும் _ _ அளவு",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "வகை _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "",
+    "uncheck to allow script reentrance": "",
+    "uncheck to always show (+) symbols in block prototype labels": "",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "",
+    "uncheck to disable alternating colors for nested block": "",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "",
+    "uncheck to disable input sliders for entry fields": "",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "",
+    "uncheck to use the input dialog in short form": "",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "",
+    "undrop": "",
+    "unicode _ as letter": "யூனிகோட் _ கடிதமாக",
+    "unicode of _": "யூனிகோட் _",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "வளையத்திலிருந்து உடைக்க",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "பெயர் இல்லாதது",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "_ விநாடிகள் காத்திருக்கவும்",
+    "wait until _": "_ வரை காத்திருக்கவும்",
+    "wardrobe": "",
+    "warp _": "போரிடு _",
+    "what's your name?": "உங்கள் பெயர் என்ன ?",
+    "when I am _": "_ நான் சொடுக்கும் போது",
+    "when I receive _ _": "_ _ பெறுகையில்",
+    "when I start as a clone": "நான் குளோனைத் தொடங்கும்போது",
+    "when _": "",
+    "when _ clicked": "_ அழுத்தும்பொழுது",
+    "when _ is edited _": "",
+    "when _ key pressed _": "_ _ கீ அழுத்தும்பொழுது",
+    "whirl": "",
+    "whitespace": "",
+    "width": "",
+    "with data": "",
+    "with inputs": "உள்ளீட்டுடன்",
+    "word": "",
+    "world": "உலகம்",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x இடம்",
+    "y": "y",
+    "y position": "y இடம்",
+    "year": "",
+    "year:": "",
+    "your own": "உங்கள் சொந்தமானது",
+    "z": "z"
+}

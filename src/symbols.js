@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2021-March-03';
+modules.symbols = '2023-July-13';
 
 var SymbolMorph;
 
@@ -142,6 +142,8 @@ SymbolMorph.prototype.names = [
     'globe',
     'globeBig',
     'list',
+    'listNarrow',
+    'verticalEllipsis',
     'flipVertical',
     'flipHorizontal',
     'trash',
@@ -150,8 +152,8 @@ SymbolMorph.prototype.names = [
 
 // SymbolMorph instance creation:
 
-function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
-    this.init(name, size, color, shadowOffset, shadowColor);
+function SymbolMorph(name, size, color, shadowOffset, shadowColor, bg) {
+    this.init(name, size, color, shadowOffset, shadowColor, bg);
 }
 
 SymbolMorph.prototype.init = function (
@@ -159,7 +161,8 @@ SymbolMorph.prototype.init = function (
     size,
     color,
     shadowOffset,
-    shadowColor
+    shadowColor,
+    bg
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
@@ -169,6 +172,7 @@ SymbolMorph.prototype.init = function (
     this.shadowColor = shadowColor || null;
     SymbolMorph.uber.init.call(this);
     this.color = color || BLACK;
+    this.backgroundColor = bg || null;
     this.fixLayout();
     this.rerender();
 };
@@ -228,6 +232,12 @@ SymbolMorph.prototype.render = function (ctx) {
         x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0,
         y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
 
+    if (this.backgroundColor) {
+        ctx.save();
+        ctx.fillStyle = this.backgroundColor.toString();
+        ctx.fillRect(0, 0, this.symbolWidth(), this.size);
+        ctx.restore();
+    }
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);
@@ -469,7 +479,11 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolGlobeBig(ctx, aColor);
         break;
     case 'list':
+    case 'listNarrow':
         this.renderSymbolList(ctx, aColor);
+        break;
+    case 'verticalEllipsis':
+        this.renderSymbolVerticalEllipsis(ctx, aColor);
         break;
     case 'flipVertical':
         this.renderSymbolFlipVertical(ctx, aColor);
@@ -495,6 +509,10 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'verticalEllipsis':
+        return size * 0.2;
+    case 'listNarrow':
+        return size * 0.5;
     case 'location':
         return size * 0.6;
     case 'flash':
@@ -2240,6 +2258,18 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
     }
     ctx.clip('evenodd');
     ctx.fillRect(0, 0, w, h);
+};
+
+SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
+    // draw 3 solid circles
+    var r = this.symbolWidth() / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 5, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 9, r, radians(0), radians(360), false);
+    ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {

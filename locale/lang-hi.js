@@ -1,2007 +1,1378 @@
-/*
-
-    lang-hi.js
-
-    Hindi translation for SNAP!
-
-    written by Barthdry (Barath Kumar)
-
-    Copyright (C) 2021 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.hi = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-	अ, आ      \u0905, \u0906
-	According to the \uXXXX
-	\u09 Assigned for Hindi
-*/
-
-    // translations meta information
-    'language_name':
-        'हिंदी', // the name as it should appear in the language menu
-    'language_translator':
-        'Barthdry', // your name for the Translators tab
-    'translator_e-mail':
-        'barathkumarbasker2007@gmail.com', // optional
-    'last_changed':
-        '2021-05-08', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'शीर्षकहीन',
-    'development mode':
-        'विकास मोड',
-
-    // categories:
-    'Motion':
-        'प्रस्ताव',
-    'Looks':
-        'नज़र',
-    'Sound':
-        'आवाज़',
-    'Pen':
-        'कलम',
-    'Control':
-        'नियंत्रण',
-    'Sensing':
-        'संवेदन',
-    'Operators':
-        'ऑपरेटर',
-    'Variables':
-        'चर',
-    'Lists':
-        'सूची',
-    'Other':
-        'अन्य',
-
-    // editor:
-    'draggable':
-        'खींचने योग्य',
-
-    // tabs:
-    'Scripts':
-        'स्क्रिप्ट',
-    'Costumes':
-        'पोशाक',
-    'Backgrounds':
-        'पृष्ठभूमि',
-    'Sounds':
-        'आवाज़',
-
-    // names:
-    'Sprite':
-        'स्प्राइट',
-    'Stage':
-        'मंच',
-
-    // rotation styles:
-    'don\'t rotate':
-        'घुमाएँ नहीं',
-    'can rotate':
-        'घुमा सकते हैं',
-    'only face left/right':
-        'केवल बाएं / दाएं चेहरा',
-
-    // new sprite button:
-    'add a new sprite':
-        'एक नया स्प्राइट जोड़ें',
-    'add a new Turtle sprite':
-        'एक नया दिशा सूचक स्प्राइट जोड़ें',
-    'paint a new sprite':
-        'एक नया स्प्राइट पेंट करें',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'एक कैमरा स्नैपशॉट लें और इसे एक नए स्प्राइट के रूप में आयात करें',
-    
-
-    // tab help
-    'costumes tab help': //Import a picture from another web page or from your computer by dropping it here.
-        'किसी अन्य वेब पेज से या अपने कंप्यूटर\n'
-            + 'से चित्र को यहां ड्रॉप करके आयात करें',
-    'import a sound from your computer\nby dragging it into here':
-        'इसे यहां खींचकर अपने\n कंप्यूटर से ध्वनि आयात करें',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'चरण चयनित: \nकोई गति आदिम नहीं',
-
-    'move %n steps':
-        '%n कदम चलें',
-    'turn %clockwise %n degrees':
-        '%clockwise %n डिग्री बारी',
-    'turn %counterclockwise %n degrees':
-        '%counterclockwise %n डिग्री बारी',
-    'point in direction %dir':
-        '%dir दिशा में इंगित करें',
-    'point towards %dst':
-        '%dst की ओर इशारा',
-    'go to x: %n y: %n':
-        'जाओ x: %n y: %n',
-    'go to %dst':
-        '%dst जाओ',
-    'glide %n secs to x: %n y: %n':
-        'फिसलन %n सेकंड. to x: %n y: %n',
-    'change x by %n':
-        'परिवर्तन x बदल दो %n',
-    'set x to %n':
-        'सेट x से %n',
-    'change y by %n':
-        'परिवर्तन y बदल दो %n',
-    'set y to %n':
-        'सेट y से %n',
-    'if on edge, bounce':
-        'अगर किनारे पर है तो उछाल',
-    'x position':
-        'x स्थिति',
-    'y position':
-        'y स्थिति',
-    'direction':
-        'दिशा',
-
-    // looks:
-    'switch to costume %cst':
-        '%cst कॉस्ट्यूम पर स्विच करें',
-    'next costume':
-        'अगली पोशाक',
-    'costume #':
-        'पोशाक #',
-    'say %s for %n secs':
-        'कहो %s तक %n सेकंड',
-    'say %s':
-        'कहो %s',
-    'think %s for %n secs':
-        'सोचो %s तक %n सेकंड',
-    'think %s':
-        'सोचो %s',
-    'Hello!':
-        'नमस्ते!',
-    'Hmm...':
-        'हम्म....',
-    '%img of costume %cst':
-        '%img की पोशाक %cst',
-    'new costume %l width %dim height %dim':
-        'नई पोशाक %l चौड़ाई %dim ऊंचाई %dim',
-    'stretch %cst x: %n y: %n %':
-        'खिंचाव %cst x: %n y: %n %',
-    'change %eff effect by %n':
-        'परिवर्तन %eff द्वारा प्रभाव %n',
-    'set %eff effect to %n':
-        'सेट %eff -Effekt auf %n',
-    'clear graphic effects':
-        'स्पष्ट ग्राफिक प्रभाव',
-    '%eff effect':
-        '%eff प्रभाव',
-    'change size by %n':
-        'द्वारा आकार बदलें %n',
-    'set size to %n %':
-        'आकार निर्धारित करें %n %',
-    'size':
-        'आकार',
-    'show':
-        'प्रदर्शन',
-    'hide':
-        'छिपाना',
-    'shown?':
-        'दिखाया?',
-    'go to %layer layer':
-        'जाओ %layer परत',
-    'front':
-        'सामने',
-    'back':
-        'पीछे',
-    'go back %n layers':
-        'पीछे जाओ %n परतों',
-
-    'development mode \ndebugging primitives:':
-        'development mode \ndebugging primitives:',
-    'console log %mult%s':
-        'console.log %mult%s',
-    'alert %mult%s':
-        'window.alert %mult%s',
-
-    'pixels':
-        'पिक्सल',
-    'current':
-        'वर्तमान',
-
-    // sound:
-    'play sound %snd':
-        'आवाज़ बजाना %snd',
-    'play sound %snd until done':
-        'आवाज़ बजाना %snd जब तक किया गया',
-    'stop all sounds':
-        'सभी आवाज़ बंद करो',
-    'rest for %n beats':
-        'विश्राम करना %n बीट्स',
-    'play sound %snd at %rate Hz':
-        'आवाज़ बजाना %snd पर %rate हेटर्स',
-    '%aa of sound %snd':
-        '%aa की आवाज़ %snd',
-    'duration':
-        'समयांतराल',
-    'length':
-        'लंबाई',
-    'number of channels':
-        'चैनलों की संख्या',
-    'new sound %l rate %rate Hz':
-        'नया आवाज़ %l मूल्यांकन %rate हेटर्स',
-    'play note %note for %n beats':
-        'संगीत नोट चलाएं %note तक %n बीट्स',
-    'set instrument to %inst':
-        'करने के लिए उपकरण सेट करें %inst',
-    'change tempo by %n':
-        'द्वारा गति बदलें %n बी पी एम',
-    'set tempo to %n bpm':
-        'के लिए टेम्पो सेट करें %n बी पी एम',
-    'tempo':
-        'टेम्पो',
-    'change volume by %n':
-        'द्वारा मात्रा बदलें %n',
-    'set volume to %n %':
-        'की मात्रा निर्धारित करें %n %',
-    'change balance by %n':
-        'द्वारा संतुलन में बदलाव %n',
-    'set balance to %n':
-        'के लिए संतुलन सेट करें %n',
-    'balance':
-        'संतुलन',
-    'play frequency %n Hz':
-        'संगीत प्ले आवृत्ति %n हेटर्स',
-    'stop frequency':
-        'रुकें आवृत्ति',
-    'play %n Hz for %n secs':
-        'सचलाएं %n हेटर्स for %n सेकंड',
-
-    // "instruments", i.e. wave forms
-    '(1) sine':
-        '(1) सिने',
-    '(2) square':
-        '(2) स्क्वायर',
-    '(3) sawtooth':
-        '(3) आराघर का गिटार',
-    '(4) triangle':
-        '(4) त्रिकोण साधन',
-
-    // pen:
-    'clear':
-        'सब कुछ मिटा दें',
-    'pen down':
-        'नीचे कलम',
-    'pen up':
-        'कलम ऊपर',
-    'pen down?':
-        'नीचे कलम?',
-    'set pen color to %clr':
-        'पेन रंग सेट करें %clr',
-    'set background color to %clr':
-        'पकरने के लिए पृष्ठभूमि रंग सेट %clr',
-    'change pen %clrdim by %n':
-        'कलम बदल दो %clrdim से %n',
-    'change background %clrdim by %n':
-        'पृष्ठभूमि का रंग बदलें %clrdim से %n',
-    'set pen %clrdim to %n':
-        ' पेन सेट %clrdim सेवा मेरे %n',
-    'set background %clrdim to %n':
-        'पृष्ठभूमि सेट %clrdim सेवा मेरे %n',
-    'pen %pen':
-        'कलम %pen',
-    'change pen size by %n':
-        'द्वारा लिंग का आकार बदलें %n',
-    'set pen size to %n':
-        'पेन का आकार निर्धारित करें %n',
-    'stamp':
-        'स्टाम्प',
-    'fill':
-        'भरण',
-    'write %s size %n':
-        'लिखना %s आकार %n',
-    'paste on %spr':
-        'पर पेस्ट करें %spr',
-    'cut from %spr':
-        'से काटो %spr',
-    'pen vectors':
-        'पेन वेक्टर',
-
-    // control:
-    'when %greenflag clicked':
-        'जब %greenflag क्लिक किया',
-    'when %keyHat key pressed %keyName':
-        'जब %keyHat दबाई जाती है %keyName',
-    'when I am %interaction':
-        'जब मैं %interaction werde',
-    'clicked':
-        'क्लिक किया',
-    'pressed':
-        'दब गया',
-    'dropped':
-        'गिरा',
-    'mouse-entered':
-        'माउस ने प्रवेश किया',
-    'mouse-departed':
-        'माउस चला गया',
-    'scrolled-down':
-    	'नीचे स्क्रॉल किया गया',
-    'scrolled-up':
-        'ऊपर स्क्रॉल किया गया',
-    'stopped':
-        'रोका हुआ',
-    'when %b':
-        'जब %b',
-    'when I receive %msgHat %message':
-        'जब मैं प्राप्त करता हूँ %msgHat %message',
-    'broadcast %msg %receive':
-        'प्रसारण %msg %receive',
-    'broadcast %msg %receive and wait':
-        'प्रसारण %msg %receive और रुको',
-    'send %msg to %spr':
-        'भेजने %msg को %spr',
-    'Message name':
-        'संदेश का नाम',
-    'message':
-        'संदेश',
-    'any message':
-        'कोई संदेश',
-    'wait %n secs':
-        'रुको %n सेकंड.',
-    'wait until %b':
-        'जब तक इंतजार %b',
-    'forever %loop':
-        'उम्र भर %loop',
-    'repeat %n %loop':
-        'दोहराना %n %loop',
-    'repeat until %b %loop':
-        'दोहराओ जब तक %b %loop',
-    'for %upvar = %n to %n %cla':
-        'जब %upvar = %n to %n %cla',
-    'if %b %c':
-        'अगर %b %c',
-    'if %b %c else %c':
-        'अगर %b %c अन्य %c',
-    'if %b then %s else %s':
-        'अगर %b तब फिर %s अन्य %s',
-    'report %s':
-        'रिपोर्ट %s',
-    'stop %stopChoices':
-        'रुकें %stopChoices',
-    'all':
-        'सब',
-    'this script':
-        'यह स्क्रिप्ट',
-    'this block':
-        'यह ब्लॉक',
-    'stop %stopOthersChoices':
-        'यह %stopOthersChoices',
-    'all but this script':
-        'सभी लेकिन यह स्क्रिप्ट all',
-    'other scripts in sprite':
-        'इस स्प्राइट में अन्य लिपि',
-    'pause all %pause':
-        'सभी को रोकें %pause',
-    'run %cmdRing %inputs':
-        'चलाना %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'प्रक्षेपण %cmdRing %inputs',
-    'call %repRing %inputs':
-        'कॉल %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'चलाना %cmdRing w/continuation',
-    'call %cmdRing w/continuation':
-        'कॉल %cmdRing w/continuation',
-    'warp %c':
-        'ताना %c', //Reference Needed
-    'when I start as a clone':
-        'जब मैं क्लोन के रूप में शुरू करता हूं',
-    'create a clone of %cln':
-        'क्लोन बनाएं %cln',
-    'a new clone of %cln':
-        'एक नया क्लोन %cln',
-    'myself':
-        'खुद',
-    'delete this clone':
-        'इस क्लोन को हटाएं',
-    'tell %spr to %cmdRing %inputs':
-        'बताओ %spr %cmdRing को  %inputs',
-    'ask %spr for %repRing %inputs':
-        'पूछना %spr को %repRing %inputs',
-
-    // sensing:
-    'touching %col ?':
-        'मार्मिक %col ?',
-    'touching %clr ?':
-        'मार्मिक %clr ?',
-    'color %clr is touching %clr ?':
-        'रंग %clr मार्मिक %clr ?',
-    'ask %s and wait':
-        'पूछना %s और प्रतीक्ष करो',
-    'what\'s your name?':
-        'तुम्हारा नाम क्या हे?',
-    'answer':
-        'उत्तर',
-    'mouse x':
-        'माउस x',
-    'mouse y':
-        'माउस y',
-    'mouse down?':
-        'नीचे नीचे?',
-    'key %key pressed?':
-        'कुंजी %key दबाई गई?',
-    '%rel to %dst':
-        '%rel से %dst',
-    'distance':
-    	'दूरी',
-    'ray length':
-        'किरण की लंबाई',
-    '%asp at %loc' :
-        '%asp पर %loc',
-    'r-g-b-a':
-        'r-g-b-a',
-    'sprites' :
-        'स्प्राइट',
-    'reset timer':
-        'टाइमर रीसेट करें',
-    'timer':
-        'टाइमर',
-    '%att of %spr':
-        '%att का %spr',
-    'my %get':
-        'मेरे %get',
-    'object %self':
-        'वस्तु %self',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode':
-        'टर्बो मोड',
-    'flat line ends':
-        'समतल रेखा समाप्त होती है',
-    'is %setting on?':
-        'है %setting चालू चालू?',
-    'set %setting to %b':
-        'सेट %setting से %b',
-    'current %dates':
-        'वर्तमान %dates',
-    'year':
-        'साल',
-    'month':
-        'महीना',
-    'date':
-        'तारीख',
-    'day of week':
-        'सप्ताह का दिन',
-    'hour':
-        'घंटे',
-    'minute':
-        'मिनट',
-    'second':
-        'सेकंड',
-    'time in milliseconds':
-        'मिलीसेकेंड',
-    'microphone %audio':
-        'माइक्रोफ़ोन %audio',
-    'volume':
-        'वॉल्यूम',
-    'note':
-        'राग',
-    'frequency':
-        'आवृत्ति',
-    'samples':
-        'नमूने',
-    'sample rate':
-        'sample rate',
-    'spectrum':
-        'स्पेक्ट्रम',
-    'resolution':
-        'संकल्प के',
-    'Microphone resolution...':
-        'माइक्रोफोन संकल्प....',
-    'Microphone':
-        'माइक्रोफ़ोन',
-    'low':
-        'कम',
-    'high':
-        'उच्च',
-    'max':
-        'मैक्स',
-    'video %vid on %self':
-        'वीडियो %vid पर %self',
-    'motion':
-        'प्रस्ताव',
-    'snap':
-        'स्नैप',
-    'set video transparency to %n':
-        'वीडियो पारदर्शिता सेट करें %n',
-    'video capture':
-        'विडियो रिकॉर्ड',
-    'mirror video':
-        'मिरर वीडियो',
-    'filtered for %clr':
-        'फ़िल्टर करें %clr',
-    'stack size':
-        'ढेर का आकार',
-    'frames':
-        'फ्रेम्स',
-    'log pen vectors':
-        'लॉग पेन वेक्टर',
-
-    // operators:
-    '%n mod %n':
-        '%n mod %n',
-    'round %n':
-        'round %n',
-    '%fun of %n':
-        '%fun का %n',
-    'pick random %n to %n':
-        'यादृच्छिक चुनें %n से %n',
-    '%b and %b':
-        '%b और %b',
-    '%b or %b':
-        '%b या %b',
-    'not %b':
-        'नहीं %b',
-    'true':
-        'सच',
-    'false':
-        'असत्य',
-    'join %words':
-        'शामिल %words',
-    'split %s by %delim':
-        'विभाजित करें %s द्वारा %delim',
-    'hello':
-        'नमस्ते',
-    'world':
-        'विश्व',
-    'letter %idx of %s':
-        'वर्ण %idx का %s',
-    'length of %s':
-        'लंबाई का  %s',
-    'unicode of %s':
-        'Unicode Of %s',
-    'unicode %n as letter':
-        'Unicode %n as letter',
-    'is %s a %typ ?':
-        'यह %s प्रकार %typ ?',
-    'is %s identical to %s ?':
-        ' %s के समान है %s ?',
-    'JavaScript function ( %mult%s ) { %code }':
-        'Javascript function ( %mult%s ) { %code }',
-    'compile %repRing':
-    	'संकलन %repRing',
-
-    'type of %s':
-        'के प्रकार %s',
-
-    // variables:
-    'Make a variable':
-        'एक चर बनाओ',
-    'Variable name':
-        'चर का नाम',
-    'Script variable name':
-        'स्क्रिप्ट चर नाम',
-    'inherit %shd':
-        'इनहेरिट %shd',
-    'Delete a variable':
-        'एक चर हटाएं',
-
-    'set %var to %s':
-        'सेट %var को %s',
-    'change %var by %n':
-        'परिवर्तन %var से %n',
-    'show variable %var':
-        'चर दिखाओ %var',
-    'hide variable %var':
-        'चर छुपाएं %var',
-    'script variables %scriptVars':
-        'स्क्रिप्ट चर %scriptVars',
-
-    // lists:
-    'list %exp':
-        'सूची %exp',
-    'numbers from %n to %n':   //#Untranslated Because Of complication
-        'numbers %n to %n',
-    '%s in front of %l':
-        '%s in front of %l',
-    'item %idx of %l':
-        'item %idx of %l',
-    'all but first of %l':
-        'all but first of %l',
-    '%la of %l':
-        '%la of %l',
-    'rank':
-        'rank',
-    'dimensions':
-        'dimensions',
-    'flatten':
-        'flatten',
-    'columns':
-        'columns',
-    'reverse':
-        'reverse',
-    'lines':
-        'lines',
-    '%l contains %s':
-        '%l contains %s',
-    'thing':
-        'thing',
-    'is %l empty?':
-        'is %l empty?',
-    'index of %s in %l':
-        'index of %s in %l',
-    'map %repRing over %l':
-        'map %repRing over %l',
-    'keep items %predRing from %l':
-        'keep items %predRing from %l',
-    'find first item %predRing in %l':
-        'find first item %predRing in %l',
-    'combine %l using %repRing':
-        'combine %l using %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz map %repRing over %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz keep items %predRing from %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz find first item %predRing in %l',
-    '%blitz combine %l using %repRing':
-        '%blitz combine %l using %repRing',
-    'for each %upvar in %l %cla':
-        'for each %upvar in %l %cla',
-    'item':
-        'मद',
-    'value':
-        'मूल्य',
-    'index':
-        'Index',
-    'append %lists':
-        'सूची %lists',
-    'reshape %l to %nums':
-        'reshape %l to %nums',
-    'add %s to %l':
-        'add %s to %l',
-    'delete %ida of %l':
-        'delete %ida of %l',
-    'insert %s at %idx of %l':
-        'insert %s at %idx of %l',
-    'replace item %idx of %l with %s':
-        'replace item %idx of %l with %s',
-
-    // other
-    'Make a block':
-        'ब्लॉक बनाना',
-
-    // menus
-    // snap menu
-    'About...':
-        'के बारे में...',
-    'Reference manual':
-        'संदर्भ पुस्तिका',
-    'Snap! website':
-        'Snap! वेबसाइट',
-    'Download source':
-        'Download Source',
-    'Switch back to user mode':
-        'Switch back to user mode',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'disable deep-Morphic\ncontext menus\nand show user-friendly ones',
-    'Switch to dev mode':
-        'Switch to dev mode',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!',
-
-    // project menu
-    'Project notes...':
-        'प्रोजेक्ट नोट्स...',
-    'New':
-        'नया',
-    'Open...':
-        'खुला हुआ...',
-    'Save':
-        'बचाएं',
-    'Save to disk':
-        'डिस्क में सहेजो',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'dieses Projekt herunterladen\nund lokal speichern\n'
-            + '(nicht von allen Browsern unters\u00fctzt)',
-    'Save As...':
-        'के रूप रक्षित करें...',
-    'Import...':
-        'आयात...',
-    'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken,\n'
-            + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text...':
-        'सादा पाठ के रूप में निर्यात परियोजना...',
-    'Export project...':
-        'निर्यात परियोजना...',
-    'save project data as XML\nto your downloads folder':
-        'प्रोजेक्ट डेटा को इस रूप में सहेजें XML\nto your downloads folder',
-    'show project data as XML\nin a new browser window':
-        'show project data as XML\nin a new browser window',
-    'Export blocks...':
-        'निर्यात ब्लॉक...',
-    'save global custom block\ndefinitions as XML':
-        'save global custom block\ndefinitions as XML',
-    'Unused blocks...':
-          'अप्रयुक्त ब्लॉक...',
-    'find unused global custom blocks\nand remove their definitions':
-        'अप्रयुक्त वैश्विक कस्टम ब्लॉक खोजें\n and remove their usage',
-    'Remove unused blocks':
-        'अप्रयुक्त ब्लॉक हटाएं',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
-    'unused block(s) removed':
-        'nicht verwendete Bl\u00f6cke entfernt',
-    'Export summary...':
-        'Zusammenfassung exportieren...',
-    'save a summary\nof this project':
-        'eine Zusammenfassung\ndieses Projekts speichern',
-    'Contents':
-        'Inhalt',
-    'Kind of':
-        'Eine Art',
-    'Part of':
-        'Ein Teil von',
-    'Parts':
-        'Teile',
-    'Blocks':
-        'Bausteine',
-    'For all Sprites':
-        'Allen gemeinsam',
-    'Libraries...':
-        'Module...',
-    'Select categories of additional blocks to add to this project.':
-        'Zusätzliche Auswahl thematisch gruppierter\nBlöcke zu diesem Projekt hinzufügen',
-    'Select a costume from the media library':
-        'Kostüm aus der Medienbibliothek auswählen',
-    'Select a sound from the media library':
-        'Klang aus der Medienbibliothek auswählen',
-    'Undelete sprites...':
-        'Objekte wiederherstellen...',
-    'Bring back deleted sprites':
-        'Gelöschte Objekte zurückholen',
-    'trash is empty':
-        'der Mülleimer ist leer',
-
-    //Libraries
-    'Import library':
-        'Modul laden',
-    'Loading':
-        'Lädt',
-    'Imported':
-        'Importiert',
-    'Iteration, composition':
-        'Iteration, Komposition',
-    'List utilities':
-        'Listen bearbeiten',
-    'Variadic reporters':
-        'Variadische Funktionen',
-    'Web services access (https)':
-        'Zugriff auf Webservices',
-    'Multi-branched conditional (switch)':
-        'Mehrfach verzweigte Conditionals (Switch)',
-    'LEAP Motion controller':
-        'LEAP Motion Controller',
-    'Words, sentences':
-        'Wörter, Sätze',
-    'Catch errors in a script':
-        'Fehlerhandhabung im Skript',
-    'Set RGB or HSV pen color':
-        'Stiftfarbe auf RGB oder HSV Werte setzen',
-    'Text to speech':
-        'Sprachausgabe',
-    'Provide 100 selected colors':
-        '100 ausgewählte Farben',
-    'Infinite precision integers, exact rationals, complex':
-        'Beliebig präzise Ganzzahlen, exakte rationale Zahlen, komplexe Zahlen',
-    'Provide getters and setters for all GUI-controlled global settings':
-        'GUI Elemente programmatisch bearbeiten',
-    'Allow multi-line text input to a block':
-        'Mehrzeiliger Text als Eingabe für Blöcke',
-    'Create variables in program':
-        'Variablen im Skript erstellen',
-
-    // cloud menu
-    'Login...':
-        'Anmelden...',
-    'Signup...':
-        'Benutzerkonto einrichten...',
-    'Logout':
-        'Abmelden',
-    'Change Password...':
-        'Passwort ändern...',
-    'Reset Password...':
-        'Passwort zurücksetzen...',
-    'Resend Verification Email...':
-        'Bestätigungsmail nochmal senden...',
-    'Open in Community Site':
-        'Projektseite anzeigen',
-
-    // settings menu
-    'Language...':
-        'Sprache...',
-    'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
-    'Fade blocks...':
-        'Bl\u00f6cke ausblenden...',
-    'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
-    'Stage size':
-        'B\u00fchnengr\u00f6\u00dfe',
-    'Stage width':
-        'B\u00fchnenbreite',
-    'Stage height':
-        'B\u00fchnenh\u00f6he',
-    'Default':
-        'Normal',
-    'Blurred shadows':
-        'Weiche Schatten',
-    'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
-    'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
-    'Zebra coloring':
-        'Zebrafarben',
-    'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
-    'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
-    'Dynamic input labels':
-        'Eingabenbeschriftung',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
-    'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
-    'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
-    'check to turn on\n visible stepping (slow)':
-        'einschalten um Programmausführung\nzu verfolgen (schrittweise)',
-    'uncheck to turn off\nvisible stepping':
-        'ausschalten um Programmausführung\nnicht mehr zu verfolgen',
-    'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
-    'Plain prototype labels':
-        'Einfache Prototyp-Beschriftung',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
-    'check to hide (+) symbols\nin block prototype labels':
-        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
-    'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
-    'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
-    'Virtual keyboard':
-        'Virtuelle Tastatur',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
-    'Input sliders':
-        'Eingabeschieber',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
-    'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
-    'Retina display support':
-        'Retina Bildschirmauflösung',
-    'uncheck for lower resolution,\nsaves computing resources':
-        'ausschalten um eine niedrigere Auflösung zu erhalten\nund weniger Rechenleistung zu benötigen',
-    'check for higher resolution,\nuses more computing resources':
-        'einschalten um eine höhere Auflösung zu erhalten,\nbenötigt mehr Rechenleistung',
-    'Codification support':
-        'Kodifikation',
-    'Clicking sound':
-        'Akustisches Klicken',
-    'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
-    'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
-    'Animations':
-        'Animationen',
-    'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
-    'Turbo mode':
-        'Turbomodus',
-    'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
-    'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
-    'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
-    'Flat design':
-        'Helles Design',
-    'check for alternative\nGUI design':
-        'einschalten für alternative Nutzeroberfläche',
-    'uncheck for default\nGUI design':
-        'ausschalten für Standard-Nutzeroberfläche',
-    'Nested auto-wrapping':
-        'Automatisches Umklammern',
-    'Keyboard Editing':
-        'Tastaturunterstützung',
-    'Table support':
-        'Tabellenunterstützung',
-    'Table lines':
-        'Tabellen mit Linien',
-    'Visible stepping':
-        'Programmausführung verfolgen',
-    'Thread safe scripts':
-        'Threadsicherheit',
-    'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
-    'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
-    'Prefer smooth animations':
-        'Fixe Framerate',
-    'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
-    'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
-    'Flat line ends':
-        'Flache Pinselstriche',
-    'check for flat ends of lines':
-        'einschalten f\u00fcr flache\nPinselstrichenden',
-    'uncheck for round ends of lines':
-        'auschalten f\u00fcr runde\nPinselstrichenden',
-    'Ternary Boolean slots':
-        'Ternäre Bool\'sche Inputs',
-    'Inheritance support':
-        'Prototypische Vererbung',
-    'Hyper blocks support':
-        'Hyper-Blöcke',
-    'uncheck to disable\nusing operators on lists and tables':
-         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
-    'check to enable\nusing operators on lists and tables':
-         'erweiterte Anwendung von Operatoren\nauf Listen und Tabellen',
-    'Log pen vectors':
-        'Malstiftvektoren aufzeichnen',
-    'uncheck to turn off\nlogging pen vectors':
-        'ausschalten, um Malstiftbewegungen\nnicht mehr aufzuzeichnen',
-    'check to turn on\nlogging pen vectors':
-        'einschalten, um Malstiftbewegungen\nals Vektor aufzuzeichnen',
-
-
-    // inputs
-    'with inputs':
-        'mit Eingaben',
-    'input names:':
-        'Eingaben:',
-    'Input Names:':
-        'Eingaben:',
-    'input list:':
-        'Eingabeliste:',
-
-    // context menus:
-    'help':
-        'Hilfe',
-
-    // palette:
-    'find blocks':
-        'Blöcke finden',
-    'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
-    'show primitives':
-        'Basisbl\u00f6cke anzeigen',
-
-    // blocks:
-    'help...':
-        'Hilfe...',
-    'relabel...':
-        'Umbenennen...',
-    'compile':
-        'Kompilieren',
-    'uncompile':
-        'Entkompilieren',
-    'duplicate':
-        'Duplizieren',
-    'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
-    'only duplicate this block':
-        'nur diesen Block duplizieren',
-    'extract':
-        'herausziehen',
-    'only grab this block':
-        'nur diesen Block bewegen',
-    'delete':
-        'L\u00f6schen',
-    'senders...':
-        'Sender...',
-    'receivers...':
-        'Empfänger...',
-    'script pic...':
-        'Skriptbild...',
-    'save a picture\nof this script':
-        'ein Bild dieses\nSkripts speichern',
-    'result pic...':
-        'Ergebnisbild...',
-    'save a picture of both\nthis script and its result':
-        'ein Bild dieses Skripts mit\nseinem Ergebnis speichern',
-    'ringify':
-        'Umringen',
-    'unringify':
-        'Entringen',
-    'transient':
-        'nicht persistent',
-    'uncheck to save contents\nin the project':
-        'ausschalten, um den Inhalt\nim Projekt zu speichern',
-    'check to prevent contents\nfrom being saved':
-        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
-    'new line':
-        'neue Zeile',
-
-    // custom blocks:
-    'delete block definition...':
-        'Blockdefinition l\u00f6schen...',
-    'duplicate block definition...':
-        'Blockdefinition duplizieren...',
-    'export block definition...':
-        'Blockdefinition exportieren...',
-    'including dependencies':
-        'mit allen verwendeten Blöcken',
-    'edit...':
-        'Bearbeiten...',
-
-    // sprites:
-    'edit':
-        'Bearbeiten',
-    'clone':
-        'Klonen',
-    'move':
-        'Verschieben',
-    'pivot':
-        'Angelpunkt',
-    'edit the costume\'s\nrotation center':
-        'Drehpunkt des Kostüms\nanzeigen und verschieben',
-    'rotate':
-    	'Drehen',
-    'stick to':
-        'Befestigen an',
-    'detach from':
-        'Abtrennen von',
-    'detach all parts':
-        'Alle Teile abtrennen',
-    'export...':
-        'Exportieren...',
-    'parent...':
-        'Vorfahr...',
-    'current parent':
-        'aktueller Vorfahr',
-    'release':
-        'Entlassen',
-    'make temporary and\nhide in the sprite corral':
-        'temporär machen\nund Icon verstecken',
-
-    // stage:
-    'show all':
-        'Alles zeigen',
-    'pic...':
-        'Bild exportieren...',
-    'save a picture\nof the stage':
-        'ein Bild der\nBühne speichern',
-    'svg...':
-        'SVG exportieren...',
-    'export pen trails\nline segments as SVG':
-        'Striche in Malspuren als\nVektorgraphik exportieren',
-    'there are currently no\nvectorizable pen trail segments':
-        'momentan gibt es keine\nvektorisierbaren Malspuren',
-    'turn all pen trails and stamps\ninto a new background for the stage':
-        'Hintergrund aus allen Malspuren und\nStempelabdrücken auf der Bühne erstellen',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'aus allen Malspuren und Stempelabdrücken ein\nKostüm für die momentan ausgewählte Figur erstellen',
-
-    // scripting area
-    'clean up':
-        'Aufr\u00e4umen',
-    'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
-    'add comment':
-        'Anmerkung hinzuf\u00fcgen',
-    'undrop':
-        'R\u00fcckg\u00e4ngig',
-    'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
-    'redrop':
-        'Wiederherstellen',
-    'use the keyboard\nto enter blocks':
-    	'Blöcke per Tastatur\neingeben',
-    'scripts pic...':
-        'Bild aller Skripte...',
-    'save a picture\nof all scripts':
-        'ein Bild aller\nSkripte speichern',
-    'make a block...':
-        'Neuen Block bauen...',
-
-    // costumes
-    'rename':
-        'Umbenennen',
-    'export':
-        'Exportieren',
-    'rename costume':
-        'Kost\u00fcm umbenennen',
-    'rename background':
-        'Hintergrund umbenennen',
-
-    // sounds
-    'Play sound':
-        'Klang\nabspielen',
-    'Stop sound':
-        'Klang\nanhalten',
-    'Stop':
-        'Halt',
-    'Play':
-        'Los',
-    'rename sound':
-        'Klang umbenennen',
-
-    // lists and tables
-    'list view...':
-        'Listenansicht...',
-    'table view...':
-        'tabellarische Ansicht...',
-    'Table view':
-        'Tabelle',
-    'open in dialog...':
-        'in neuem Fenster \u00f6ffnen',
-    'blockify':
-        'als Block',
-    'reset columns':
-        'Spaltenbreiten zur\u00fccksetzen',
-    'items':
-        'Elemente',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'Abbrechen',
-    'Yes':
-        'Ja',
-    'No':
-        'Nein',
-
-    // help
-    'Help':
-        'Hilfe',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
-    'build':
-        'baue',
-    'your own':
-        'eigene',
-    'blocks':
-        'Bl\u00f6cke',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'Demo (1.2x)',
-    'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
-    'big (2x)':
-        'gro\u00df (2x)',
-    'huge (4x)':
-        'riesig (4x)',
-    'giant (8x)':
-        'gigantisch (8x)',
-    'monstrous (10x)':
-        'ungeheuerlich (10x)',
-
-    // fade blocks
-    'Fade blocks':
-        'Bl\u00f6cke ausblenden',
-    'block-solid (0)':
-        'normal (0)',
-    'medium (50)':
-        'mittel (50)',
-    'light (70)':
-        'leicht (70)',
-    'shimmering (80)':
-        'schimmernd (80)',
-    'elegant (90)':
-        'elegant (90)',
-    'subtle (95)':
-        'angedeutet (95)',
-    'text-only (100)':
-        'nur Text (100)',
-
-    // Project Manager
-    'Untitled':
-        'Unbenannt',
-    'Open Project':
-        'Projekt \u00f6ffnen',
-    'Open':
-        '\u00d6ffnen',
-    '(empty)':
-        '(leer)',
-    'Saved!':
-        'Gesichert!',
-    'Delete Project':
-        'Projekt l\u00f6schen',
-    'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
-    'rename...':
-        'Umbenennen...',
-    'Examples':
-        'Beispiele',
-    'Share':
-        'Teilen',
-    'Unshare':
-        'Nicht mehr teilen',
-    'Publish':
-        'Veröffentlichen',
-    'Unpublish':
-        'Nicht mehr veröffentlichen',
-    'Updating\nproject list...':
-        'Projektliste laden',
-    'Recover':
-        'Wiederherstellen',
-    'Today':
-        'Heute',
-    'Yesterday':
-        'Gestern',
-
-    // costume editor
-    'Costume Editor':
-        'Kost\u00fcmeditor',
-    'Paint Editor':
-        'Kostümeditor',
-    'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
-    'undo':
-        'rückgängig',
-    'Vector':
-        'Vektor',
-    'Paintbrush tool\n(free draw)':
-        'Pinsel\n(freies Zeichnen)',
-    'Stroked Rectangle\n(shift: square)':
-        'Rechteck\n(Shift: Quadrat)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Ellipse\n(Shift: Kreis)',
-    'Eraser tool':
-        'Radiergummi',
-    'Set the rotation center':
-        'Drehpunkt setzen',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Linie\n(Shift: vertikal/horizontal)',
-    'Filled Rectangle\n(shift: square)':
-        'gefülltes Rechteck\n(Shift: Quadrat)',
-    'Filled Ellipse\n(shift: circle)':
-        'gefüllte Ellipse\n(Shift: Kreis)',
-    'Fill a region':
-        'fülle einen Bereich mit\nder gewählten Farbe',
-    'Pipette tool\n(pick a color anywhere)':
-        'Pipette (klicke irgendwo auf die gewünschte\nFarbe, um sie aufzunehmen)',
-    'Brush size':
-        'Pinselstärke',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Proportionen festlegen\n(auch über Shift-Taste)',
-    //'grow':
-    //    'größer',
-    //'shrink':
-    //    'kleiner',
-    //'flip ↔':
-    //    'drehen ↔',
-    //'flip ↕':
-    //    'drehen ↕',
-    
-    'Vector Paint Editor':
-        'Vektor-Editor',
-    'Rectangle\n(shift: square)':
-        'Rechteck\n(Shift: Quadrat)',
-    'Ellipse\n(shift: circle)':
-        'Ellipse\n(Shift: Kreis)',
-    'Selection tool':
-        'Auswählen',
-    'Line tool\n(shift: constrain to 45º)':
-        'Linie\n(Shift: Vielfache von 45°)',
-    'Closed brush\n(free draw)':
-        'geschlossene, gefüllte Form\n(freies Zeichnen)',
-    'Paint a shape\n(shift: secondary color)':
-        'fülle einen Bereich mit der gewählten Farbe\n(Shift: Sekundärfarbe)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Pipette\nklicke irgendwo auf die gewünschte Farbe\n um sie aufzunehmen (Shift: Sekundärfarbe)',
-    'Edge color\n(left click)':
-        'Randfarbe\n(Linksklick)',
-    'Fill color\n(right click)':
-        'Füllfarbe\n(Rechtsklick)',
-   // 'Top':
-   //     'oben',
-   // 'Bottom':
-   //     'unten',
-   // 'Up':
-   //     'nach oben',
-   // 'Down':
-   //     'nach unten',
-
-
-    // project notes
-    'Project Notes':
-        'Projektanmerkungen',
-
-    // new project
-    'New Project':
-        'Neues Projekt',
-    'Unsaved Changes!':
-        'Ungespeicherte Änderungen!',
-    'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
-    'Backup failed.\nThis cannot be undone, proceed anyway?':
-        'Backup nicht möglich.\nTrotzdem fortfahren?',
-
-    // save project
-    'Save Project As...':
-        'Projekt Sichern Als...',
-    'Save Project':
-        'Projekt sichern',
-
-    // export blocks
-    'Export blocks':
-        'Bl\u00f6cke exportieren',
-    'Import blocks':
-        'Bl\u00f6cke importieren',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
-    'select':
-        'ausw\u00e4hlen',
-    'none':
-        'nichts',
-
-    // variable dialog
-    'for all sprites':
-        'f\u00fcr alle',
-    'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        'nur diesen Block\numbenennen',
-    'rename all...':
-        'alle umbenennen...',
-    'rename all blocks that\naccess this variable':
-        'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
-
-
-    // block dialog
-    'Change block':
-        'Block ver\u00e4ndern',
-    'Command':
-        'Befehl',
-    'Reporter':
-        'Funktion',
-    'Predicate':
-        'Pr\u00e4dikat',
-
-    // block editor
-    'Block Editor':
-        'Blockeditor',
-    'Method Editor':
-        'Methodeneditor',
-    'Apply':
-        'Anwenden',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Block L\u00f6schen',
-    'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
-
-    // input dialog
-    'Create input name':
-        'Eingabe erstellen',
-    'Edit input name':
-        'Eingabe bearbeiten',
-    'Edit label fragment':
-        'Beschriftung bearbeiten',
-    'Title text':
-        'Beschriftung',
-    'Input name':
-        'Eingabe',
-    'Delete':
-        'L\u00f6schen',
-    'Object':
-        'Objekt',
-    'Number':
-        'Zahl',
-    'Text':
-        'Text',
-    'List':
-        'Liste',
-    'Any type':
-        'Beliebig',
-    'Boolean (T/F)':
-        'Boolsch (W/F)',
-    'Command\n(inline)':
-        'Befehl',
-    'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
-    'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
-    'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
-    'Single input.':
-        'Einzeleingabe.',
-    'Default Value:':
-        'Standardwert:',
-    'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
-    'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
-
-    // About Snap
-    'About Snap':
-        'स्नैप के बारे में',
-    'Back...':
-        'वापस....',
-    'License...':
-        'लाइसेंस....',
-    'Modules...':
-        'मॉड्यूल....',
-    'Credits...':
-        'क्रेडिट....',
-    'Translators...':
-        'अनुवादकों',
-    'License':
-        'लाइसेंस',
-    'current module versions:':
-        'Komponenten-Versionen',
-    'Contributors':
-        'योगदानवाला',
-    'Translations':
-        'अनुवाद',
-
-    // variable watchers
-    'normal':
-        'साधारण',
-    'large':
-        'big',
-    'slider':
-        'स्लाइडर',
-    'slider min...':
-        'स्लाइडर न्यूनतम',
-    'slider max...':
-        'स्लाइडर अधिकतम',
-    'import...':
-        'आयात....',
-    'raw data...':
-        'कच्चा डेटा....',
-    'import without attempting to\nparse or format data':
-        'डेटा स्वरूपित करने के\n प्रयास के बिना आयात',
-    'Slider minimum value':
-        'स्लाइडर न्यूनतम मूल्य',
-    'Slider maximum value':
-        'स्लाइडर अधिकतम मूल्य',
-
-    // list watchers
-    'length: ':
-        'लंबाई: ',
-
-    // comments
-    'add comment here...':
-        'टिप्पणी यहाँ जोड़ें....',
-    'comment pic...':
-        'टिप्पणी की तस्वीर....',
-    'save a picture\nof this comment':
-        'इस टिप्पणी की\n एक तस्वीर को बचाओ',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) दाईं',
-    '(-90) left':
-        '(-90) बाएं',
-    '(0) up':
-        '(0) ऊपर',
-    '(180) down':
-        '(180) नीचे',
-    'random':
-    	'यादृच्छिक',
-     'random position':
-     	'यादृच्छिक स्थान',
-
-    // collision detection
-    'mouse-pointer':
-        'माऊस पाइंटर',
-    'edge':
-        'एज',
-    'pen trails':
-        'कलम का निशान',
-    'center':
-        'मध्य',
-
-    // costumes
-    'Turtle':
-        'दिशा सूचक',
-    'Empty':
-        'खाली',
-    'Paint a new costume':
-        'एक नई पोशाक पेंट करें',
-    'Import a new costume from your webcam':
-        'अपने वेबकैम से एक नई पोशाक आयात करें',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.',
-    'Camera':
-        'कैमरा',
-    
-    // sounds
-    'Record a new sound':
-        'एक नई ध्वनि रिकॉर्ड करें',
-    
-
-    // graphical effects, pen color
-    'color':
-        'रंग',
-    'hue':
-        ' विविध रंग',
-    'fisheye':
-        'मछली की आँख',
-    'whirl':
-        'चक्कर',
-    'pixelate':
-        'पिक्सेलेट',
-    'mosaic':
-        'मौज़ेक',
-    'saturation':
-        'परिपूर्णता',
-    'brightness':
-        'चमक',
-    'transparency':
-        'पारदर्शिता',
-    'ghost':
-        'भूत',
-    'negative':
-        'नकारात्मक',
-    'comic':
-        'हास्य',
-    'confetti':
-        'कंफ़ेद्दी',
-
-    // keys
-    'space':
-        'स्पेस बार',
-    'up arrow':
-        'ऊपर ऐरो कुंजी',
-    'down arrow':
-        'नीचे ऐरो कुंजी',
-    'right arrow':
-        'दाईं ऐरो कुंजी',
-    'left arrow':
-        'बाईं ऐरो कुंजी',
-    'any key':
-        'कोई भी कुंजी',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'नया....',
-    '__shout__go__':
-        '__shout__go__',
-
-    // math functions (I made to Full Form for Understanding)
-    'abs':
-        'absolute',
-    'ceiling':
-        'ceiling',
-    'floor':
-        'floor',
-    'sqrt':
-        'वर्गमूल',
-    'sin':
-        'sine',
-    'cos':
-        'cosine',
-    'tan':
-        'tangent',
-    'asin':
-        'asine',
-    'acos':
-        'acosine',
-    'atan':
-        'atangent',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'नहीं',
-
-    // delimiters
-    'letter':
-        'वर्ण',
-    'word':
-        'शब्द',
-    'whitespace':
-        'खाली स्थान के',
-    'line':
-        'लाइन',
-    'tab':
-        'टैबुलाटर',
-    'cr':
-        'cr',
-
-    // data types
-    'number':
-        'संख्या',
-    'text':
-        'टेक्स्ट',
-    'Boolean':
-        'बूलियन',
-    'list':
-        'सूची',
-    'command':
-        'आदेश',
-    'reporter':
-        'रिपोर्टर',
-    'predicate':
-        'विधेय',
-    'sprite':
-        'स्प्राइट',
-
-    // list indices
-    'last':
-        'पिछले',
-    'any':
-        'कोई भी',
-
-    // attributes
-    'my':
-        'मेरे',
-    'neighbors':
-        'पड़ोसी',
-    'self':
-        'स्वयं',
-    'other sprites':
-        'अन्य स्प्राइट्स',
-    'parts':
-        'पार्ट्स',
-    'anchor':
-        'ऐंकर',
-    'parent':
-        'माता-पिता',
-    'temporary?':
-        'अस्थायी?',
-    'children':
-        'बच्चे',
-    'clones':
-        'क्लोन',
-    'other clones':
-        'अन्य क्लोन',
-    'dangling?':
-        'झूलने?',
-    'draggable?':
-        'खींचने योग्य?',
-    'rotation style':
-        'रोटेशन अंदाज',
-    'rotation x':
-        'रोटेशन x',
-    'rotation y':
-        'रोटेशन y',
-    'center x':
-        'केन्द्र x',
-    'center y':
-        'केन्द्र y',
-    'name':
-        'नाम',
-    'costume':
-        'पोशाक',
-    'stage':
-        'मंच',
-    'costumes':
-        'पोशाक',
-    'sounds':
-        'आवाज़',
-    'scripts':
-        'स्क्रिप्ट',
-    'width':
-        'चौड़ाई',
-    'height':
-        'ऊंचाई',
-    'left':
-        'बाएं',
-    'right':
-        'दाईं',
-    'top':
-        'ऊपर',
-    'bottom':
-        'तल',
-
-    // attributes in the SET block's dropdown
-    'my anchor':
-        'मेरे लंगर',
-    'my parent':
-        'मेरे माता पिता',
-    'my name':
-        'मेरा नाम',
-    'my temporary?':
-        'मेरा अस्थायी?',
-    'my dangling?':
-        'मेरी झूलने?',
-    'my draggable?':
-        'मेरी खींचने योग्य?',
-    'my rotation style':
-        'मेरी रोटेशन शैली',
-    'my rotation x':
-        'मेरा रोटेशन x',
-    'my rotation y':
-        'मेरा रोटेशन y',
-
-    // inheritance
-    'inherited':
-        'विरासत में मिला',
-    'check to inherit\nfrom':
-        'विरासत की जाँच करें\nसे',
-    'uncheck to\ndisinherit':
-        'डिस्चार्ज करने से\nअनचेक करें'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) बाएं",
+    "(0) up": "(0) ऊपर",
+    "(1) sine": "(1) सिने",
+    "(180) down": "(180) नीचे",
+    "(2) square": "(2) स्क्वायर",
+    "(3) sawtooth": "(3) आराघर का गिटार",
+    "(4) triangle": "(4) त्रिकोण साधन",
+    "(90) right": "(90) दाईं",
+    "(empty)": "",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "स्नैप के बारे में",
+    "About...": "के बारे में...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "",
+    "Any type": "",
+    "Apply": "",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "वापस....",
+    "Backgrounds": "पृष्ठभूमि",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "",
+    "Boolean": "बूलियन",
+    "Boolean (T/F)": "",
+    "Boolean (unevaluated)": "",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "कैमरा",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "",
+    "Clear backup": "",
+    "Clicking sound": "",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "",
+    "Command (C-shape)": "",
+    "Command (inline)": "",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "योगदानवाला",
+    "Control": "नियंत्रण",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "",
+    "Costumes": "पोशाक",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "क्रेडिट....",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "",
+    "Default Value:": "",
+    "Delete": "",
+    "Delete Custom Block": "",
+    "Delete Project": "",
+    "Delete a variable": "एक चर हटाएं",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "Download Source",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "खाली",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "",
+    "Export blocks...": "निर्यात ब्लॉक...",
+    "Export project as plain text...": "सादा पाठ के रूप में निर्यात परियोजना...",
+    "Export project...": "निर्यात परियोजना...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "नमस्ते!",
+    "Hello, World!": "",
+    "Help": "",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "हम्म....",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "अपने वेबकैम से एक नई पोशाक आयात करें",
+    "Import blocks": "",
+    "Import library": "",
+    "Import sound": "",
+    "Import...": "आयात...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "",
+    "Input Slot Options": "",
+    "Input name": "",
+    "Input sliders": "",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "Javascript function ( _ ) { _ }",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "",
+    "Libraries...": "",
+    "License": "लाइसेंस",
+    "License...": "लाइसेंस....",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "",
+    "List utilities": "",
+    "Lists": "सूची",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "",
+    "Logout": "",
+    "Long form input dialog": "",
+    "Looks": "नज़र",
+    "Make a block": "ब्लॉक बनाना",
+    "Make a variable": "एक चर बनाओ",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "संदेश का नाम",
+    "Method Editor": "",
+    "Microphone": "माइक्रोफ़ोन",
+    "Microphone resolution...": "माइक्रोफोन संकल्प....",
+    "Modules...": "मॉड्यूल....",
+    "Motion": "प्रस्ताव",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "",
+    "Nested auto-wrapping": "",
+    "New": "नया",
+    "New Category": "",
+    "New Project": "",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "",
+    "November": "",
+    "Number": "",
+    "OK": "",
+    "Object": "",
+    "October": "",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "",
+    "Open in Community Site": "",
+    "Open...": "खुला हुआ...",
+    "Opening project...": "",
+    "Operators": "ऑपरेटर",
+    "Other": "अन्य",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "एक नई पोशाक पेंट करें",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "कलम",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "",
+    "Play sound": "",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "",
+    "Prefer empty slot drops": "",
+    "Prefer smooth animations": "Fixe Framerate",
+    "Privacy...": "",
+    "Project Notes": "",
+    "Project URLs": "",
+    "Project notes...": "प्रोजेक्ट नोट्स...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "एक नई ध्वनि रिकॉर्ड करें",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "संदर्भ पुस्तिका",
+    "Remove a category...": "",
+    "Remove unused blocks": "अप्रयुक्त ब्लॉक हटाएं",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "बचाएं",
+    "Save As...": "के रूप रक्षित करें...",
+    "Save Project": "",
+    "Save Project As...": "",
+    "Save to disk": "डिस्क में सहेजो",
+    "Saved!": "",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "स्क्रिप्ट चर नाम",
+    "Scripts": "स्क्रिप्ट",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "संवेदन",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "",
+    "Single input.": "",
+    "Single palette": "",
+    "Slider maximum value": "स्लाइडर अधिकतम मूल्य",
+    "Slider minimum value": "स्लाइडर न्यूनतम मूल्य",
+    "Snap! website": "Snap! वेबसाइट",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "आवाज़",
+    "Sound Recorder": "",
+    "Sounds": "आवाज़",
+    "Sprite": "स्प्राइट",
+    "Sprite Nesting": "",
+    "Stage": "मंच",
+    "Stage height": "",
+    "Stage selected: no motion primitives": "चरण चयनित: कोई गति आदिम नहीं",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "",
+    "Stop": "",
+    "Stop sound": "",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "",
+    "Switch to dev mode": "",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "",
+    "Title text": "",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "अनुवाद",
+    "Translators...": "अनुवादकों",
+    "Turbo mode": "",
+    "Turtle": "दिशा सूचक",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "",
+    "Unused blocks...": "अप्रयुक्त ब्लॉक...",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "चर का नाम",
+    "Variables": "चर",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Virtuelle Tastatur",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "",
+    "Zoom blocks": "",
+    "Zoom blocks...": "",
+    "_ at _": "_ पर _",
+    "_ combine _ using _": "",
+    "_ contains _": "",
+    "_ effect": "_ प्रभाव",
+    "_ find first item _ in _": "",
+    "_ in front of _": "",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "",
+    "_ of _": "_ का _",
+    "_ of block _": "",
+    "_ of costume _": "_ की पोशाक _",
+    "_ of sound _": "_ की आवाज़ _",
+    "_ of text _": "",
+    "_ to _": "_ से _",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "एक नया क्लोन _",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "absolute",
+    "acos": "acosine",
+    "add _ to _": "",
+    "add a new Turtle sprite": "एक नया दिशा सूचक स्प्राइट जोड़ें",
+    "add a new sprite": "एक नया स्प्राइट जोड़ें",
+    "add comment": "",
+    "add comment here...": "टिप्पणी यहाँ जोड़ें....",
+    "agent": "",
+    "alert _": "window.alert _",
+    "all": "सब",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "",
+    "all but this script": "सभी लेकिन यह स्क्रिप्ट all",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "ऐंकर",
+    "and": "और",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "उत्तर",
+    "any": "कोई भी",
+    "any key": "कोई भी कुंजी",
+    "any message": "कोई संदेश",
+    "anything": "",
+    "append _": "सूची _",
+    "arrange scripts vertically": "",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asine",
+    "ask _ and wait": "पूछना _ और प्रतीक्ष करो",
+    "ask _ for _ _": "पूछना _ को _ _",
+    "atan": "atangent",
+    "attach...": "",
+    "b": "b",
+    "back": "पीछे",
+    "balance": "संतुलन",
+    "big (2x)": "",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "तल",
+    "box": "",
+    "brightness": "चमक",
+    "broadcast _ _": "प्रसारण _ _",
+    "broadcast _ _ and wait": "प्रसारण _ _ और रुको",
+    "brush": "",
+    "build": "",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "कॉल _ _",
+    "call _ w/continuation": "कॉल _ w/continuation",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "घुमा सकते हैं",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "मध्य",
+    "center x": "केन्द्र x",
+    "center y": "केन्द्र y",
+    "change _ by _": "परिवर्तन _ से _",
+    "change _ effect by _": "परिवर्तन _ द्वारा प्रभाव _",
+    "change background _ by _": "पृष्ठभूमि का रंग बदलें _ से _",
+    "change balance by _": "द्वारा संतुलन में बदलाव _",
+    "change pen _ by _": "कलम बदल दो _ से _",
+    "change pen color by _": "",
+    "change pen shade by _": "",
+    "change pen size by _": "द्वारा लिंग का आकार बदलें _",
+    "change size by _": "द्वारा आकार बदलें _",
+    "change tempo by _": "द्वारा गति बदलें _ बी पी एम",
+    "change volume by _": "द्वारा मात्रा बदलें _",
+    "change x by _": "परिवर्तन x बदल दो _",
+    "change y by _": "परिवर्तन y बदल दो _",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "einschalten, damit Animationen überall gleich laufen",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "",
+    "check to enable alternating colors for nested blocks": "",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "",
+    "check to enable input sliders for entry fields": "",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "einschalten um die virtuelle Tastatur auf mobilen Geräten zu ermöglichen",
+    "check to hide (+) symbols in block prototype labels": "",
+    "check to inherit from": "विरासत की जाँच करें से",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "",
+    "children": "बच्चे",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "",
+    "clear": "सब कुछ मिटा दें",
+    "clear graphic effects": "स्पष्ट ग्राफिक प्रभाव",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "",
+    "clicked": "क्लिक किया",
+    "clone": "",
+    "clones": "क्लोन",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "रंग",
+    "color _ is touching _ ?": "रंग _ मार्मिक _ ?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "हास्य",
+    "command": "आदेश",
+    "comment pic...": "टिप्पणी की तस्वीर....",
+    "compile": "",
+    "compile _": "संकलन _",
+    "compile _ for _ args": "",
+    "confetti": "कंफ़ेद्दी",
+    "console log _": "console.log _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cosine",
+    "costume": "पोशाक",
+    "costume #": "पोशाक #",
+    "costume name": "",
+    "costumes": "पोशाक",
+    "costumes tab help": "किसी अन्य वेब पेज से या अपने कंप्यूटर से चित्र को यहां ड्रॉप करके आयात करें",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "क्लोन बनाएं _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "वर्तमान",
+    "current _": "वर्तमान _",
+    "current module versions:": "",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "से काटो _",
+    "d": "d",
+    "dangling?": "झूलने?",
+    "data": "",
+    "date": "तारीख",
+    "day of week": "सप्ताह का दिन",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "",
+    "delete _": "",
+    "delete _ of _": "",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "",
+    "delete slot": "",
+    "delete this clone": "इस क्लोन को हटाएं",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "विकास मोड",
+    "development mode debugging primitives:": "",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "दिशा",
+    "disable deep-Morphic context menus and show user-friendly ones": "",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "दूरी",
+    "distance to _": "",
+    "distribution": "",
+    "don't rotate": "घुमाएँ नहीं",
+    "down arrow": "नीचे ऐरो कुंजी",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "खींचने योग्य",
+    "draggable?": "खींचने योग्य?",
+    "dragging threshold": "",
+    "dropped": "गिरा",
+    "duplicate": "",
+    "duplicate block definition...": "",
+    "duration": "समयांतराल",
+    "e": "e",
+    "e^": "e^",
+    "edge": "एज",
+    "edit": "",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "",
+    "extract": "",
+    "f": "f",
+    "false": "असत्य",
+    "file": "",
+    "file menu import hint": "",
+    "fill": "भरण",
+    "fill page...": "",
+    "filtered for _": "फ़िल्टर करें _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "अप्रयुक्त वैश्विक कस्टम ब्लॉक खोजें and remove their usage",
+    "fisheye": "मछली की आँख",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "समतल रेखा समाप्त होती है",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "जब _ = _ to _ _",
+    "for all sprites": "",
+    "for each _ in _ _": "",
+    "for this sprite only": "",
+    "forever _": "उम्र भर _",
+    "frame": "",
+    "frames": "फ्रेम्स",
+    "frequencies": "",
+    "frequency": "आवृत्ति",
+    "front": "सामने",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "भूत",
+    "giant (8x)": "",
+    "glide _ secs to x: _ y: _": "फिसलन _ सेकंड. to x: _ y: _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "पीछे जाओ _ परतों",
+    "go to _": "_ जाओ",
+    "go to _ layer": "जाओ _ परत",
+    "go to x: _ y: _": "जाओ x: _ y: _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "ऊंचाई",
+    "hello": "नमस्ते",
+    "help": "",
+    "help...": "",
+    "hide": "छिपाना",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "Basisblöcke ausblenden",
+    "hide variable _": "चर छुपाएं _",
+    "high": "उच्च",
+    "hour": "घंटे",
+    "http:// _": "",
+    "hue": "विविध रंग",
+    "huge (4x)": "",
+    "i": "i",
+    "identical to": "के समान है",
+    "if _ _": "अगर _ _",
+    "if _ _ else _": "अगर _ _ अन्य _",
+    "if _ then _ else _": "अगर _ तब फिर _ अन्य _",
+    "if on edge, bounce": "अगर किनारे पर है तो उछाल",
+    "import a sound from your computer by dragging it into here": "इसे यहां खींचकर अपने कंप्यूटर से ध्वनि आयात करें",
+    "import without attempting to parse or format data": "डेटा स्वरूपित करने के प्रयास के बिना आयात",
+    "import...": "आयात....",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "इनहेरिट _",
+    "inherited": "विरासत में मिला",
+    "input list:": "",
+    "input names:": "",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "यह _ प्रकार _ ?",
+    "is _ empty?": "",
+    "is _ on?": "है _ चालू चालू?",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "मद",
+    "item _ of _": "मद _ of _",
+    "items": "",
+    "j": "j",
+    "join _": "शामिल _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "कुंजी _ दबाई गई?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "हिंदी",
+    "language_translator": "Barthdry",
+    "large": "big",
+    "last": "पिछले",
+    "last changed": "",
+    "last_changed": "2021-05-08",
+    "launch _ _": "प्रक्षेपण _ _",
+    "left": "बाएं",
+    "left arrow": "बाईं ऐरो कुंजी",
+    "length": "लंबाई",
+    "length of _": "लंबाई का _",
+    "length:": "लंबाई:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "वर्ण",
+    "letter _ of _": "वर्ण _ का _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "लाइन",
+    "lines": "",
+    "list": "सूची",
+    "list _": "सूची _",
+    "list view...": "",
+    "ln": "ln",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "लॉग पेन वेक्टर",
+    "login": "",
+    "loop": "",
+    "low": "कम",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "",
+    "make a category...": "",
+    "make a copy and pick it up": "",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "मैक्स",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "संदेश",
+    "microphone _": "माइक्रोफ़ोन _",
+    "middle": "",
+    "minimum": "",
+    "minute": "मिनट",
+    "mirror video": "मिरर वीडियो",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "",
+    "month": "महीना",
+    "mosaic": "मौज़ेक",
+    "motion": "प्रस्ताव",
+    "mouse down?": "नीचे नीचे?",
+    "mouse position": "",
+    "mouse x": "माउस x",
+    "mouse y": "माउस y",
+    "mouse-departed": "माउस चला गया",
+    "mouse-entered": "माउस ने प्रवेश किया",
+    "mouse-pointer": "माऊस पाइंटर",
+    "move": "",
+    "move _ steps": "_ कदम चलें",
+    "move all inside...": "",
+    "move...": "",
+    "my": "मेरे",
+    "my _": "मेरे _",
+    "my anchor": "मेरे लंगर",
+    "my dangling?": "मेरी झूलने?",
+    "my draggable?": "मेरी खींचने योग्य?",
+    "my name": "मेरा नाम",
+    "my parent": "मेरे माता पिता",
+    "my rotation style": "मेरी रोटेशन शैली",
+    "my rotation x": "मेरा रोटेशन x",
+    "my rotation y": "मेरा रोटेशन y",
+    "my temporary?": "मेरा अस्थायी?",
+    "myself": "खुद",
+    "n": "n",
+    "name": "नाम",
+    "neg": "",
+    "negative": "नकारात्मक",
+    "neighbors": "पड़ोसी",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "नई पोशाक _ चौड़ाई _ ऊंचाई _",
+    "new line": "",
+    "new sound _ rate _ Hz": "नया आवाज़ _ मूल्यांकन _ हेटर्स",
+    "new...": "नया....",
+    "next": "",
+    "next costume": "अगली पोशाक",
+    "none": "",
+    "normal": "साधारण",
+    "normal (1x)": "",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "नहीं",
+    "not _": "नहीं _",
+    "note": "राग",
+    "nothing": "",
+    "now connected.": "",
+    "number": "संख्या",
+    "number of channels": "चैनलों की संख्या",
+    "numbers from _ to _": "numbers _ to _",
+    "o": "o",
+    "object _": "वस्तु _",
+    "octagon": "",
+    "only duplicate this block": "",
+    "only face left/right": "केवल बाएं / दाएं चेहरा",
+    "only grab this block": "",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "या",
+    "or before": "",
+    "other clones": "अन्य क्लोन",
+    "other scripts in sprite": "इस स्प्राइट में अन्य लिपि",
+    "other sprites": "अन्य स्प्राइट्स",
+    "p": "p",
+    "paint a new sprite": "एक नया स्प्राइट पेंट करें",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "माता-पिता",
+    "parent...": "",
+    "parts": "पार्ट्स",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "पर पेस्ट करें _",
+    "pause": "",
+    "pause all _": "सभी को रोकें _",
+    "pen": "",
+    "pen _": "कलम _",
+    "pen down": "नीचे कलम",
+    "pen down?": "नीचे कलम?",
+    "pen trails": "कलम का निशान",
+    "pen up": "कलम ऊपर",
+    "pen vectors": "पेन वेक्टर",
+    "pic...": "",
+    "pick random _ to _": "यादृच्छिक चुनें _ से _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "पिक्सेलेट",
+    "pixels": "पिक्सल",
+    "play _ Hz for _ secs": "सचलाएं _ हेटर्स for _ सेकंड",
+    "play frequency _ Hz": "संगीत प्ले आवृत्ति _ हेटर्स",
+    "play note _ for _ beats": "संगीत नोट चलाएं _ तक _ बीट्स",
+    "play sound _": "आवाज़ बजाना _",
+    "play sound _ at _ Hz": "आवाज़ बजाना _ पर _ हेटर्स",
+    "play sound _ until done": "आवाज़ बजाना _ जब तक किया गया",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "_ दिशा में इंगित करें",
+    "point towards _": "_ की ओर इशारा",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "विधेय",
+    "presentation (1.4x)": "",
+    "pressed": "दब गया",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "यादृच्छिक",
+    "random position": "यादृच्छिक स्थान",
+    "rank": "",
+    "raw data...": "कच्चा डेटा....",
+    "ray length": "किरण की लंबाई",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "",
+    "rename only this reporter": "",
+    "rename sound": "",
+    "rename...": "",
+    "repeat _ _": "दोहराना _ _",
+    "repeat until _ _": "दोहराओ जब तक _ _",
+    "replace item _ of _ with _": "",
+    "report _": "रिपोर्ट _",
+    "reporter": "रिपोर्टर",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "टाइमर रीसेट करें",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "संकल्प के",
+    "rest for _ beats": "विश्राम करना _ बीट्स",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "दाईं",
+    "right arrow": "दाईं ऐरो कुंजी",
+    "ring": "",
+    "ringify": "",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "रोटेशन अंदाज",
+    "rotation x": "रोटेशन x",
+    "rotation y": "रोटेशन y",
+    "round _": "",
+    "run _ _": "चलाना _ _",
+    "run _ w/continuation": "चलाना _ w/continuation",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "नमूने",
+    "saturation": "परिपूर्णता",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "इस टिप्पणी की एक तस्वीर को बचाओ",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "प्रोजेक्ट डेटा को इस रूप में सहेजें XML to your downloads folder",
+    "saved.": "",
+    "say _": "कहो _",
+    "say _ for _ secs": "कहो _ तक _ सेकंड",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "",
+    "script variables _": "स्क्रिप्ट चर _",
+    "scripts": "स्क्रिप्ट",
+    "scripts pic...": "",
+    "scroll frame": "",
+    "scrolled-down": "नीचे स्क्रॉल किया गया",
+    "scrolled-up": "ऊपर स्क्रॉल किया गया",
+    "second": "सेकंड",
+    "select": "",
+    "selection": "",
+    "self": "स्वयं",
+    "send _ to _": "भेजने _ को _",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "सेट _ -Effekt auf _",
+    "set _ of block _ to _": "",
+    "set _ to _": "सेट _ से _",
+    "set background _ to _": "पृष्ठभूमि सेट _ सेवा मेरे _",
+    "set background color to _": "पकरने के लिए पृष्ठभूमि रंग सेट _",
+    "set balance to _": "के लिए संतुलन सेट करें _",
+    "set instrument to _": "करने के लिए उपकरण सेट करें _",
+    "set pen _ to _": "पेन सेट _ सेवा मेरे _",
+    "set pen color to _": "पेन रंग सेट करें _",
+    "set pen shade to _": "",
+    "set pen size to _": "पेन का आकार निर्धारित करें _",
+    "set size to _ %": "आकार निर्धारित करें _ %",
+    "set tempo to _ bpm": "के लिए टेम्पो सेट करें _ बी पी एम",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "",
+    "set video transparency to _": "वीडियो पारदर्शिता सेट करें _",
+    "set volume to _ %": "की मात्रा निर्धारित करें _ %",
+    "set x to _": "सेट x से _",
+    "set y to _": "सेट y से _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "प्रदर्शन",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "",
+    "show all...": "",
+    "show primitives": "Basisblöcke anzeigen",
+    "show project data as XML in a new browser window": "",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "चर दिखाओ _",
+    "shown?": "दिखाया?",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sine",
+    "size": "आकार",
+    "slider": "स्लाइडर",
+    "slider max...": "स्लाइडर अधिकतम",
+    "slider min...": "स्लाइडर न्यूनतम",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "स्नैप",
+    "sorted": "",
+    "sound": "",
+    "sounds": "आवाज़",
+    "space": "स्पेस बार",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "स्पेक्ट्रम",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "विभाजित करें _ द्वारा _",
+    "sprite": "स्प्राइट",
+    "sprites": "स्प्राइट",
+    "sqrt": "वर्गमूल",
+    "square": "",
+    "stack size": "ढेर का आकार",
+    "stage": "मंच",
+    "stage image": "",
+    "stamp": "स्टाम्प",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "रुकें _",
+    "stop all sounds": "सभी आवाज़ बंद करो",
+    "stop frequency": "रुकें आवृत्ति",
+    "stopped": "रोका हुआ",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "खिंचाव _ x: _ y: _ %",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "_ कॉस्ट्यूम पर स्विच करें",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "टैबुलाटर",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "एक कैमरा स्नैपशॉट लें और इसे एक नए स्प्राइट के रूप में आयात करें",
+    "tan": "tangent",
+    "tell _ to _ _": "बताओ _ _ को _",
+    "tempo": "टेम्पो",
+    "temporary?": "अस्थायी?",
+    "text": "टेक्स्ट",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "",
+    "think _": "सोचो _",
+    "think _ for _ secs": "सोचो _ तक _ सेकंड",
+    "this _": "",
+    "this block": "यह ब्लॉक",
+    "this project doesn't have any custom global blocks yet": "",
+    "this script": "यह स्क्रिप्ट",
+    "time in milliseconds": "मिलीसेकेंड",
+    "timer": "टाइमर",
+    "tip": "",
+    "to": "",
+    "top": "ऊपर",
+    "touch screen settings": "",
+    "touching _ ?": "मार्मिक _ ?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "barathkumarbasker2007@gmail.com",
+    "transparency": "पारदर्शिता",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "सच",
+    "turbo mode": "टर्बो मोड",
+    "turbo mode?": "",
+    "turn _ _ degrees": "_ _ डिग्री बारी",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "के प्रकार _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "ausschalten, um Animationen dynamischer auszuführen",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "",
+    "uncheck to allow script reentrance": "",
+    "uncheck to always show (+) symbols in block prototype labels": "",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "",
+    "uncheck to disable alternating colors for nested block": "",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "",
+    "uncheck to disable input sliders for entry fields": "",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "ausschalten um die virtuelle Tastatur auf mobilen Geräten zu sperren",
+    "uncheck to disinherit": "डिस्चार्ज करने से अनचेक करें",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "",
+    "uncheck to use the input dialog in short form": "",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "",
+    "undrop": "",
+    "unicode _ as letter": "Unicode _ as letter",
+    "unicode of _": "Unicode Of _",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "शीर्षकहीन",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "ऊपर ऐरो कुंजी",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "मूल्य",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "वीडियो _ पर _",
+    "video capture": "विडियो रिकॉर्ड",
+    "volume": "वॉल्यूम",
+    "w": "w",
+    "wait _ secs": "रुको _ सेकंड.",
+    "wait until _": "जब तक इंतजार _",
+    "wardrobe": "",
+    "warp _": "ताना _",
+    "what's your name?": "तुम्हारा नाम क्या हे?",
+    "when I am _": "जब मैं _ werde",
+    "when I receive _ _": "जब मैं प्राप्त करता हूँ _ _",
+    "when I start as a clone": "जब मैं क्लोन के रूप में शुरू करता हूं",
+    "when _": "जब _",
+    "when _ clicked": "जब _ क्लिक किया",
+    "when _ is edited _": "",
+    "when _ key pressed _": "जब _ दबाई जाती है _",
+    "whirl": "चक्कर",
+    "whitespace": "खाली स्थान के",
+    "width": "चौड़ाई",
+    "with data": "",
+    "with inputs": "",
+    "word": "शब्द",
+    "world": "विश्व",
+    "write _ size _": "लिखना _ आकार _",
+    "x": "x",
+    "x position": "x स्थिति",
+    "y": "y",
+    "y position": "y स्थिति",
+    "year": "साल",
+    "year:": "",
+    "your own": "",
+    "z": "z"
+}

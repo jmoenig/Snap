@@ -1,1469 +1,1398 @@
-/*
-
-    lang-sv.js
-
-    Swedish translation for SNAP!
-
-    written by Erik A Olsson
-
-    Copyright (C) 2014 by Jens Mönig
-
-    This file is part of Snap!. 
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-        <http://JSLint.com>
-
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.sv = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    å , \u00E5
-    ä , \u00E4
-    ö , \u00F6
-    Å , \u00C5
-    Ä ; \u00C4
-    Ö , \u00D6
-*/
-
-    // translations meta information
-    'language_name':
-        'svenska', // the name as it should appear in the language menu
-    'language_translator':
-        'Erik A Olsson', // your name for the Translators tab
-    'translator_e-mail':
-        'eolsson@gmail.com', // optional
-    'last_changed':
-        '2016-06-09', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'namnl\u00F6s',
-    'development mode':
-        'utvecklarel\u00E4ge',
-
-    // categories:
-    'Motion':
-        'R\u00F6relse',
-    'Looks':
-        'Utseende',
-    'Sound':
-        'Ljud',
-    'Pen':
-        'Penna',
-    'Control':
-        'Kontroll',
-    'Sensing':
-        'K\u00E4nna av',
-    'Operators':
-        'Operatorer',
-    'Variables':
-        'Variabler',
-    'Lists':
-        'Listor',
-    'Other':
-        'Annat',
-
-    // editor:
-    'draggable':
-        'flyttbar',
-
-    // tabs:
-    'Scripts':
-        'Skript',
-    'Costumes':
-        'Kostymer',
-    'Sounds':
-        'Ljud',
-
-    // names:
-    'Sprite':
-        'Sprite',
-    'Stage':
-        'Scen',
-
-    // rotation styles:
-    'don\'t rotate':
-        'rotera inte',
-    'can rotate':
-        'rotera',
-    'only face left/right':
-        'peka bara h\u00F6ger/v\u00E4nster',
-
-    // new sprite button:
-    'add a new Sprite':
-        'l\u00E4gg till ny Sprite',
-
-    // tab help
-    'costumes tab help':
-        'importera en bild fr\u00E5n en annan webbsida eller fr\u00E5n\nen fil p\u00E5 din dator genom att dra den hit',
-
-    'import a sound from your computer\nby dragging it into here':
-        'importera en ljudfil fr\u00E5n din dator\ngenom att dra den hit',
-
-// primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-        
-            'say %s for %n secs'
-
-        can currently not be changed into
-        
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-        
-            'point towards %dst'
-
-        cannot be changed into
-        
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Scen vald:\ninga standard r\u00F6relser'
-            + 'finns',
-    'move %n steps':
-        'g\u00E5 %n steg',
-    'turn %clockwise %n degrees':
-        'v\u00E4nd %clockwise %n grader',
-    'turn %counterclockwise %n degrees':
-        'v\u00E4nd %counterclockwise %n grader',
-    'point in direction %dir':
-        'peka mot riktning %dir',
-    'point towards %dst':
-        'peka mot %dst',
-    'go to x: %n y: %n':
-        'g\u00E5 till x: %n y: %n',
-    'go to %dst':
-        'g\u00E5 till %dst',
-    'glide %n secs to x: %n y: %n':
-        'glid %n sek till x: %n y: %n',
-    'change x by %n':
-        '\u00E4ndra x med %n',
-    'set x to %n':
-        's\u00E4tt x till %n',
-    'change y by %n':
-        '\u00E4ndra y med %n',
-    'set y to %n':
-        's\u00E4tt y till %n',
-    'if on edge, bounce':
-        'studsa om vid kanten',
-    'x position':
-        'x-position',
-    'y position':
-        'y-position',
-    'direction':
-        'riktning',
-
-    // looks:
-    'switch to costume %cst':
-        'byt till kostym %cst',
-    'next costume':
-        'n\u00E4sta kostym',
-    'costume #':
-        'kostym nr.',
-    'costume name':
-        'kostymnamn',
-    'say %s for %n secs':
-        's\u00E4g %s i %n sek',
-    'say %s':
-        's\u00E4g %s',
-    'think %s for %n secs':
-        't\u00E4nk %s i %n sek',
-    'think %s':
-        't\u00E4nk %s',
-    'Hello!':
-        'Hej!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        '\u00E4ndra %eff -effekt med %n',
-    'set %eff effect to %n':
-        's\u00E4tt %eff -effekt til %n',
-    'clear graphic effects':
-        'nollst\u00E4ll grafiska effekter',
-    'change size by %n':
-        '\u00E4ndra storlek med %n',
-    'set size to %n %':
-        's\u00E4tt storlek till %n %',
-    'size':
-        'storlek',
-    'show':
-        'visa',
-    'hide':
-        'g\u00F6m',
-    'go to front':
-        'l\u00E4gg \u00F6verst',
-    'go back %n layers':
-        'flytta %n lager bak\u00E5t',
-
-    'development mode \ndebugging primitives:':
-        'utvecklarl\u00E4ge \nDebugging av block',
-    'console log %mult%s':
-        'skriv till konsoll: %mult%s',
-    'alert %mult%s':
-        'Pop-up: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'spela ljud %snd',
-    'play sound %snd until done':
-        'spela ljud %snd tills f\u00E4rdig',
-    'stop all sounds':
-        'stoppa alla ljud',
-    'rest for %n beats':
-        'pausa %n slag',
-    'play note %n for %n beats':
-        'spela ton %n i %n slag',
-    'change tempo by %n':
-        '\u00E4ndra tempo med %n',
-    'set tempo to %n bpm':
-        's\u00E4tt tempo till %n bpm',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'rensa',
-    'pen down':
-        'penna ned',
-    'pen up':
-        'penna upp',
-    'set pen color to %clr':
-        's\u00E4tt pennf\u00E4rg till %clr',
-    'change pen color by %n':
-        '\u00E4ndra pennf\u00E4rg till %n',
-    'set pen color to %n':
-        's\u00E4tt penf\u00E4rg till %n',
-    'change pen shade by %n':
-        '\u00E4ndra pennstyrka med %n',
-    'set pen shade to %n':
-        's\u00E4tt pennstyrka till %n',
-    'change pen size by %n':
-        '\u00E4ndra penntjocklek med %n',
-    'set pen size to %n':
-        's\u00E4tt penntjocklek til %n',
-    'stamp':
-        'st\u00E4mpla',
-    'fill':
-        'fyll',
-
-    // control:
-    'when %greenflag clicked':
-        'n\u00E4r %greenflag klickas p\u00E5',
-    'when %key key pressed':
-        'n\u00E4r tangent %key trycks ned',
-    'when I am clicked':
-        'n\u00E4r jag klickas p\u00E5',
-    'when I receive %msg':
-        'n\u00E4r jag tar emot meddelande %msg',
-    'broadcast %msg %receive':
-        'skicka meddelande %msg %receive',
-    'broadcast %msg %receive and wait':
-        'skicka meddelande %msg %receive och v\u00E4nta',
-    'Message name':
-        'Meddelandets namn',
-    'wait %n secs':
-        'v\u00E4nta %n sek',
-    'wait until %b':
-        'v\u00E4nta tills %b',
-    'forever %loop':
-        'f\u00F6r alltid %loop',
-    'repeat %n %loop':
-        'upprepa %n g\u00E5nger %loop',
-    'repeat until %b %loop':
-        'upprepa tills %b %loop',
-    'if %b %c':
-        'om %b %c',
-    'if %b %c else %c':
-        'om %b %c d\u00E5 %c',
-    'report %s':
-        'rapportera %s',
-    'stop block':
-        'stoppa block',
-    'stop script':
-        'stoppa skript',
-    'stop all %stop':
-        'stoppa alla %stop',
-    'pause all %pause':
-        'pausa alla %pause',
-
-    'run %cmdRing %inputs':
-        'k\u00F6r %cmdRing med %inputs',
-    'launch %cmdRing %inputs':
-        'starta %cmdRing med %inputs',
-    'call %repRing %inputs':
-        'anropa %repRing med %inputs',
-    'run %cmdRing w/continuation':
-        'k\u00F6r %cmdRing och forts\u00E4tt',
-    'call %cmdRing w/continuation':
-        'anropa %cmdRing och forts\u00E4tt',
-    'when I start as a clone':
-        'n\u00E4r jag startar som klon',
-    'create a clone of %cln':
-        'skapa klon av %cln',
-    'myself':
-        'mig sj\u00E4lv',
-    'delete this clone':
-        'radera klon',
-    'when I am %interaction':
-        'n\u00E4r jag %interaction',
-    'when %b':
-        'n\u00E4r %b',
-    'clicked':
-        'klickas p\u00E5',
-    'pressed':
-        'trycks ned',
-    'dropped':
-        'sl\u00E4pps ned',
-    'mouse-entered':
-        'f\u00E5r muspekaren \u00F6ver mig',
-    'mouse-departed':
-        'inte l\u00E4ngre har muspekaren \u00F6ver mig',
-    'when I am clicked':
-        'n\u00E4r jag klickas p\u00E5',
-    'when I receive %msgHat':
-        'n\u00E4r jag tar emot %msgHat',
-        
-
-
-    'warp %c':
-        'warp %c',
-
-    // sensing:
-    'touching %col ?':
-        'r\u00F6r %col ?',
-    'touching %clr ?':
-        'r\u00F6r f\u00E4rgen %clr ?',
-    'color %clr is touching %clr ?':
-        'f\u00E4rgen %clr r\u00F6r %clr ?',
-    'ask %s and wait':
-        'fr\u00E5ga %s och v\u00E4nta',
-    'what\'s your name?':
-        'vad heter du?',
-    'answer':
-        'svar',
-    'mouse x':
-        'mus x-pos',
-    'mouse y':
-        'mus y-pos',
-    'mouse down?':
-        'musknapp nedtryckt?',
-    'key %key pressed?':
-        'tangent %key nedtryckt?',
-    'distance to %dst':
-        'avst\u00E5nd till %dst',
-    'reset timer':
-        'nollst\u00E4ll stoppur',
-    'timer':
-        'stoppur',
-    'http:// %s':
-        'http:// %s',
-
-    'turbo mode?':
-        'turbol\u00E4ge?',
-    'set turbo mode to %b':
-        's\u00E4tt turbol\u00E4ge till %b',
-
-
-    'filtered for %clr':
-        'filtrera p\u00E5 %clr',
-    'stack size':
-        'stack-storlek',
-    'frames':
-        'ramar',
-        
-    
-    '%att of %spr':
-        '%att av %spr',
-    'my %get':
-        'attribut %get',
-
-        
-    'current %dates':
-        '%dates just nu',
-        
-    'year':
-          '\u00E5ret',
-    'month':
-          'm\u00E5naden',
-    'date':
-          'datum',
-    'hour':
-          'timmen',
-    'minute':
-          'minuten',
-    'second':
-          'sekunden',
-    'time in milliseconds':
-        'tiden i millisekunder',
-    'day of week':
-        'veckodagen',
-        
-
-    // operators:
-    '%n mod %n':
-        '%n mod %n',
-    'round %n':
-        'avrunda %n',
-    '%fun of %n':
-        '%fun av %n',
-    'pick random %n to %n':
-        'slumptal fr\u00E5n %n till %n',
-    '%b and %b':
-        '%b och %b',
-    '%b or %b':
-        '%b eller %b',
-    'not %b':
-        'inte %b',
-    'true':
-        'sant',
-    'false':
-        'falskt',
-    'join %words':
-        'sl\u00E5 ihop %words',
-    'hello':
-        'hej',
-    'world':
-        'v\u00E4rlden',
-    'letter %idx of %s':
-        'bokstav %idx av %s',
-    'length of %s':
-        'l\u00E4ngden av %s',
-    'unicode of %s':
-        'unicode av %s',
-    'unicode %n as letter':
-        'unicode %n som bokstav',
-    'is %s a %typ ?':
-        '%s \u00E4r %typ ?',
-    'is %s identical to %s ?':
-        '%s identisk med %s ?',
-
-    'type of %s':
-        'typ %s',
-
-    // variables:
-    'Make a variable':
-        'Ny variabel',
-    'Variable name':
-        'Variabelnamn',
-    'Delete a variable':
-        'Radera variabel',
-
-    'set %var to %s':
-        's\u00E4tt %var till %s',
-    'change %var by %n':
-        '\u00E4ndra %var med %n',
-    'show variable %var':
-        'visa variabel %var',
-    'hide variable %var':
-        'g\u00F6m variabel %var',
-    'script variables %scriptVars':
-        'skriptvariabel %scriptVars',
-
-    // lists:
-    'list %exp':
-        'lista %exp',
-    '%s in front of %l':
-        '%s fr\u00E4mst i %l',
-    'item %idx of %l':
-        'element %idx i %l',
-    'all but first of %l':
-        'allt utom f\u00F6rsta i %l',
-    'length of %l':
-        'l\u00E4ngd av %l',
-    '%l contains %s':
-        '%l inneh\u00E5ller %s',
-    'thing':
-        'sak',
-    'add %s to %l':
-        'l\u00E4gg %s till %l',
-    'delete %ida of %l':
-        'radera %ida fr\u00E5n %l',
-    'insert %s at %idx of %l':
-        'l\u00E4gg in %s p\u00E5 plats %idx i lista %l',
-    'replace item %idx of %l with %s':
-        'ers\u00E4tt element %idx i %l med %s',
-
-    // other
-    'Make a block':
-        'Skapa nytt block',
-
-    // menus
-    // snap menu
-    'About...':
-        'Om Snap!...',
-    'Snap! website':
-        'Snap! webbsida',
-    'Download source':
-        'Ladda ner k\u00E4llkoden',
-    'Switch back to user mode':
-        'Tillbaka till anv\u00E4ndarl\u00E4ge',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'st\u00E4ng av Morphic\nmenyeroch visa \nanv\u00E4ndarv\u00E4nliga ist\u00E4llet',
-    'Switch to dev mode':
-        'Byt till utvecklarl\u00E4ge',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'aktivera Morphic menyer\noch inspektorer,\ninte anv\u00E4ndarv\u00E4nligt!',
-
-    // project menu
-    'Project notes...':
-        'Annoteringar...',
-    'New':
-        'Ny',
-    'Open...':
-        '\u00D6ppna...',
-    'Save':
-        'Spara',
-    'Save As...':
-        'Spara som...',
-    'Import...':
-        'Importera...',
-    'file menu import hint':
-        'l\u00E4ser in ett exporterat projekt,\nett bibliotek med block,\nen kostym, eller ett ljud',
-    'Export project as plain text ...':
-        'Exportera projektet som vanlig text...',
-    'Export project...':
-        'Exportera projekt...',
-    'show project data as XML\nin a new browser window':
-        'visa projektdata som XML\ni ett ny f\u00F6nster',
-    'Export blocks...':
-        'Exportera block...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'visa globala anpassade blockdefinitioner som XML\ni ett nytt f\u00F6nster',
-    'Import tools...':
-        'Importverktyg...',
-    'load the official library of\npowerful blocks':
-        'ladda ner det officiella\nsuperblock biblioteket ',
-    'Libraries...':
-        'Bibliotek...',
-    'Import library':
-        'Importera bibliotek',
-
- // cloud menu
-    'Login...':
-        'Logga in...',
-    'Registrer deg...':
-        'Registrera dig...',
-
-    // settings menu
-    'Language...':
-        'Spr\u00E5k...',
-    'Zoom blocks...':
-        'F\u00F6rstora blocken...',
-    'Blurred shadows':
-        'Suddade skuggor',
-    'uncheck to use solid drop\nshadows and highlights':
-        'avmarkera f\u00F6r att anv\u00E4nda\nifyllda skuggor och belysningar',
-    'check to use blurred drop\nshadows and highlights':
-        'kryssa f\u00F6r att anv\u00E4nda\nsuddiga skuggor och belysningar',
-    'Zebra coloring':
-        'Zebraf\u00E4rg',
-    'check to enable alternating\ncolors for nested blocks':
-        'kryssa f\u00F6r att v\u00E4xla blockf\u00E4rger\ni nestlade block',
-    'uncheck to disable alternating\ncolors for nested block':
-        'avmarkera f\u00F6r att inaktivera v\u00E4xlade\nf\u00E4rger i nestlade block',
-    'Dynamic input labels':
-        'Dynamiska namn f\u00F6r indata',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'avmarkera f\u00F6r att inaktivera \ndynamiska namn f\u00F6r indata \nmed flera variabelf\u00E4lt',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'kryssa f\u00F6r att aktivera \ndynamiska namn f\u00F6r indata \nmed flera variabelf\u00E4lt',
-    'Prefer empty slot drops':
-        'F\u00F6redra sl\u00E4pp p\u00E5 tomma utrymmen',
-    'settings menu prefer empty slots hint':
-        'Inst\u00E4llningar\nf\u00F6redra sl\u00E4pp p\u00E5 tomma utrymmen',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'avmarkera f\u00F6r att till\u00E5ta placerade\n rappporterare att flytta ut andra',
-    'Long form input dialog':
-        'Komplett inmatningsf\u00F6nster',
-    'check to always show slot\ntypes in the input dialog':
-        'kryssa f\u00F6r att alltid visa\n alla typer i inmatningsf\u00F6nstret',
-    'uncheck to use the input\ndialog in short form':
-        'avmarkera f\u00F6r att visa lilla inmatningsf\u00F6nstret',
-    'Virtual keyboard':
-        'Virtuellt tangentbord',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r virtuellt \ntangentbord p\u00E5 mobila enheter',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r virtuellt \ntangentbord p\u00E5 mobila enheter',
-    'Input sliders':
-        'Volymkontroller',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'avmarkera f\u00F6r att inaktivera \nvolymkontroller f\u00F6r inmatningsf\u00E4lt',
-    'check to enable\ninput sliders for\nentry fields':
-        'kryssa f\u00F6r att aktivera \nvolymkontroller f\u00F6r inmatningsf\u00E4lt',
-    'Clicking sound':
-        'Klickljud',
-    'uncheck to turn\nblock clicking\nsound off':
-        'avmarkera f\u00F6r att\n inaktivera klickljud',
-    'check to turn\nblock clicking\nsound on':
-        'kryssa f\u00F6r att aktivera klickljud',
-    'Animations':
-        'Animationer',
-    'uncheck to disable\nIDE animations':
-        'avmarkera f\u00F6r att st\u00E4nga\n av IDE-animationer',
-    'Turbo mode':
-        'Turbol\u00E4ge',
-    'check to enable\nIDE animations':
-        'kryssa f\u00F6r att aktivera\n IDE-animationer',
-    'Thread safe scripts':
-        'Tr\u00E5ds\u00E4kra skript',
-    'uncheck to allow\nscript reentrancy':
-        'avmarkera f\u00F6r att till\u00E5ta \nskript att \u00E5terintr\u00E4da',
-    'check to disallow\nscript reentrancy':
-        'kryssa f\u00F6r att f\u00F6rbjuda \nskript att \u00E5terintr\u00E4da',
-    'Prefer smooth animations':
-        'J\u00E4mna animeringar',
-    'uncheck for greater speed\nat variable frame rates':
-        'avmarkera f\u00F6r h\u00F6gre fart \nvid variabel frame rate',
-    'check for smooth, predictable\nanimations across computers':
-        'kryssa f\u00F6r j\u00E4mna animeringar\n p\u00E5 alla plattformar',
-// inputs
-    'with inputs':
-        'med indata',
-    'input names:':
-        'indatanamn:',
-    'Input Names:':
-        'Indatanamn:',
-    'input list:':
-        'indata lista:',
-
-    // context menus:
-    'help':
-        'hj\u00E4lp',
-
-    // blocks:
-    'hjelp...':
-        'hj\u00E4lp...',
-    'relabel...':
-        'd\u00F6p om...',
-    'duplicate':
-        'duplicera',
-    'make a copy\nand pick it up':
-        'g\u00F6r en kopia\noch plocka upp den',
-    'only duplicate this block':
-        'duplicera endast detta block',
-    'delete':
-        'radera',
-    'script pic...':
-        'skript bild...',
-    'open a new window\nwith a picture of this script':
-        '\u00F6ppna ett nytt f\u00F6nster\nmed en bild av detta skript',
-    'ringify':
-        'ring runt',
-    'unringify':
-        'radera ringen runt',
-
-    // custom blocks:
-    'delete block definition...':
-        'radera blockdefinition...',
-    'edit...':
-        'redigera...',
-
-    // sprites:
-    'edit':
-        'redigera',
-    'export...':
-        'exportera...',
-    'parent...':
-        'f\u00F6r\u00E4lder...',
-    'current parent':
-        'nuvarande f\u00F6r\u00E4lder',
-
-    // stage:
-    'show all':
-        'visa allt',
-
-    // scripting area
-    'clean up':
-        'st\u00E4da',
-    'arrange scripts\nvertically':
-        'organisera skript\nvertikalt',
-    'add comment':
-        'l\u00E4gg till kommentar',
-    'make a block...':
-        'skapa nytt block...',
-
-    // costumes
-    'rename':
-        'd\u00F6p om',
-    'export':
-        'exportera',
-    'rename costume':
-        'd\u00F6p om kostymen',
-
-    // sounds
-    'Play sound':
-        'Spela ljud',
-    'Stop sound':
-        'Stoppa ljud',
-    'Stop':
-        'Stoppa',
-    'Play':
-        'Starta',
-    'rename sound':
-        'd\u00F6p om ljud',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'Avbryt',
-    'Yes':
-        'Ja',
-    'No':
-        'Nej',
-
-    // help
-    'Help':
-        'Hj\u00E4lp',
-
-    // Project Manager
-    'Untitled':
-        'Namnl\u00F6s',
-    'Open Project':
-        '\u00D6ppna projekt',
-    '(empty)':
-        '(tomt)',
-    'Saved!':
-        'Sparat!',
-    'Delete Project':
-        'Radera projekt',
-    'Are you sure you want to delete':
-        '\u00C4r du s\u00E4ker p\u00E5 att du vill radera',
-    'rename...':
-        'd\u00F6p om...',
-
-    // costume editor
-    'Costume Editor':
-        'Kostymredigerare',
-    'click or drag crosshairs to move the rotation center':
-        'Klicka eller dra krysset f\u00F6r att markera mitten',
-
-    // project notes
-    'Project Notes':
-        'Annoteringar',
-
-    // new project
-    'New Project':
-        'Nytt projekt',
-    'Replace the current project with a new one?':
-        'Ers\u00E4tt aktuella projektet med ett nytt?',
-
-    // save project
-    'Save Project As...':
-        'Spara projekt som...',
-
-    // export blocks
-    'Export blocks':
-        'Exportera block',
-    'Import blocks':
-        'Importera block',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'Detta projekt saknar\negna globala block',
-    'select':
-        'v\u00E4lj',
-    'all':
-        'allt',
-    'none':
-        'ingenting',
-
-    // variable dialog
-    'for all sprites':
-        'f\u00F6r alla sprites',
-    'for this sprite only':
-        'bara f\u00F6r denna sprite',
-
-    // block dialog
-    'Change block':
-        '\u00C4ndra block',
-    'Command':
-        'Kommando',
-    'Reporter':
-        'Funktion',
-    'Predicate':
-        'Predikat',
-
-    // block editor
-    'Block Editor':
-        'Blockredigerare',
-    'Apply':
-        'Verkst\u00E4ll',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Radera block',
-    'block deletion dialog text':
-        'Ska detta block med alla dess instanser\n' +
-            'tas bort?',
-
-    // input dialog
-    'Create input name':
-        'Skapa indata-namn',
-    'Edit input name':
-        'Redigera indata-namn',
-    'Edit label fragment':
-        'Redigera etikettdel',
-    'Title text':
-        'Titel',
-    'Input name':
-        'Indata-namn',
-    'Delete':
-        'Radera',
-    'Object':
-        'Objekt',
-    'Number':
-        'Nummer',
-    'Text':
-        'Text',
-    'List':
-        'Lista',
-    'Any type':
-        'Valfri typ',
-    'Boolean (T/F)':
-        'Boolean (S/F)',
-    'Command\n(inline)':
-        'Kommando\n(inline)',
-    'Command\n(C-shape)':
-        'Kommando\n(C-Form)',
-    'Any\n(unevaluated)':
-        'Vilken som helst\n(oevaluerad)',
-    'Boolean\n(unevaluated)':
-        'Boolean\n(oevaluerad)',
-    'Single input.':
-        'Enkel indata.',
-    'Default Value:':
-        'Standardv\u00E4rde:',
-    'Multiple inputs (value is list of inputs)':
-        'Flera indata (v\u00E4rdet \u00E4r en lista av indata)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - g\u00F6r internal variabel synlig f\u00F6r anroparen',
-
-    // About Snap
-    'About Snap':
-        'Om Snap',
-    'Back...':
-        'Tillbaka...',
-    'License...':
-        'Licens...',
-    'Modules...':
-        'Moduler...',
-    'Credits...':
-        'Tack till...',
-    'Translators...':
-        '\u00D6vers\u00E4ttare',
-    'License':
-        'Licens',
-    'current module versions:':
-        'Modulversioner',
-    'Contributors':
-        'Bidragsgivare',
-    'Translations':
-        '\u00D6vers\u00E4ttningar',
-
-    // variable watchers
-    'normal':
-        'normal',
-    'large':
-        'stor',
-    'slider':
-        'volymkontroll',
-    'slider min...':
-        'volymkontroll min...',
-    'slider max...':
-        'volymkontroll max...',
-    'import...':
-        'importera...',
-    'Slider minimum value':
-        'Volymkontroll - minsta v\u00E4rde',
-    'Slider maximum value':
-        'volymkontroll - h\u00F6gsta v\u00E4rde',
-
-    // list watchers
-    'length: ':
-        'l\u00E4ngd: ',
-
-    // coments
-    'add comment here...':
-        'l\u00E4gg till kommentar h\u00E4r...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) h\u00F6ger',
-    '(-90) left':
-        '(-90) v\u00E4nster',
-    '(0) up':
-        '(0) upp',
-    '(180) down':
-        '(180) ned',
-
-    // collision detection
-    'mouse-pointer':
-        'muspekare',
-    'edge':
-        'kant',
-    'pen trails':
-        'pennsp\u00E5r',
-
-    // costumes
-    'Turtle':
-        'Sk\u00F6ldpadda',
-
-    // graphical effects
-    'ghost':
-        'sp\u00F6k',
-
-    // keys
-    'space':
-        'mellanslag',
-    'up arrow':
-        'pil upp',
-    'down arrow':
-        'pil ned',
-    'right arrow':
-        'pil h\u00F6ger',
-    'left arrow':
-        'pil v\u00E4nster',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'ny...',
-
-    // math functions
-    'abs':
-        'abs',
-    'sqrt':
-        'kvadratrot',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'arc-1',
-    'acos':
-        'cos-1',
-    'atan':
-        'tan-1',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-    'floor':
-        'golv',
-    'ceiling':  
-        'tak',
-
-    // data types
-    'number':
-        'nummer',
-    'text':
-        'text',
-    'Boolean':
-        'boolean',
-    'list':
-        'lista',
-    'command':
-        'kommando',
-    'reporter':
-        'funktionsblock',
-    'predicate':
-        'predikat',
-
-    // list indices
-    'last':
-        'sista',
-    'any':
-        'vilken som helst',
-    
-
-    // attributes
-    'neighbors':
-        'grannar',
-    'self':
-        'mig sj\u00E4lv',
-    'other sprites':
-        'andra sprites',
-    'parts':
-        'delar',
-    'anchor':
-        'ankare',
-    'parent':
-        'f\u00F6r\u00E4ldrar',
-    'children':
-        'barn',
-    'clones':
-        'kloner',
-    'other clones':
-        'andra kloner',
-    'dangling?':
-        'h\u00E4ngande?',
-    'rotation x':
-        'rotation x',
-    'rotation y':
-        'rotation y',
-    'center x':
-        'mittpunkt x',
-    'center y':
-        'mittpunkt y',
-    'name':
-        'namn',
-    'stage':
-        'scen',    
-        
-    // missing labels from initial translation added below
-    'add a new sprite':
-        'ny sprite',
-    'when %keyHat key pressed %keyName':
-        'n\u00E4r tangent %keyHat trycks ned %keyName',
-    'when I receive %msgHat %message':
-        'n\u00E4r jag tar emot %msgHat %message',
-    'message':
-        'meddelande',
-    'any message':
-        'n\u00E5got meddelande',
-    'stop %stopChoices':
-        'stoppa %stopChoices',
-    'this script':
-        'detta skript',
-    'this block':
-        'detta block',
-    'stop %stopOthersChoices':
-        'stoppa %stopOthersChoices',
-    'all but this script':
-        'alla f\u00F6rutom detta skript',
-    'other scripts in sprite':
-        'andra skript i denna sprite',
-    '%att of %spr':
-        '%att av %spr',
-    '%fun of %n':
-        '%fun av %n',
-    'split %s by %delim':
-        'dela %s med tecken %delim',
-    'Script variable name':
-        'Skriptvariabelnamn',
-    'Reference manual':
-        'Referensbok',
-    'Export project as plain text...':
-        'Exportera projektet som vanlig text...',
-    'Import tools':
-        'Importverktyg',
-    'Signup...':
-        'Registrera...',
-    'Stage size...':
-        'Scenstorlek...',
-    'Stage size':
-        'Scenstorlek',
-    'Stage width':
-        'Scenbredd',
-    'Stage height':
-        'Scenh\u00F6jd',
-    'Default':
-        'Standard',
-    'Plain prototype labels':
-        'Vanliga prototypetiketter',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'avmarkera f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-    'check to hide (+) symbols\nin block prototype labels':
-        'kryssa f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-    'check to prioritize\nscript execution':
-        'kryssa f\u00F6r att prioritera \nskriptexekvering',
-    'uncheck to run scripts\nat normal speed':
-        'avmarkera f\u00F6r att k\u00F6ra \nskript vid normal hastighet',
-    'uncheck to allow\nscript reentrance':
-        'avmarkera f\u00F6r att till\u00E5ta \nskript att \u00E5tertilltr\u00E4da',
-    'check to disallow\nscript reentrance':
-        'kryssa f\u00F6r att f\u00F6rbjuda \nskript att \u00E5tertilltr\u00E4da',
-    'Flat line ends':
-        'Platta streckslut',
-    'check for flat ends of lines':
-        'kryssa f\u00F6r platta streckslut',
-    'uncheck for round ends of lines':
-        'avmarkera f\u00F6r avrundade streckslut',
-    'hide primitives':
-        'g\u00F6m primitiva',
-    'show primitives':
-        'visa primitiva',
-    'help...':
-        'hj\u00E4lp...',
-    'move':
-        'flytta',
-    'detach from':
-        'koppla bort',
-    'detach all parts':
-        'koppla bort alla delar',
-    'pic...':
-        'bild...',
-    'open a new window\nwith a picture of the stage':
-        '\u00F6ppna ett nytt f\u00F6nster\nmed en bild av scenen',
-    'undrop':
-        '\u00E5ngra sl\u00E4pp',
-    'undo the last\nblock drop\nin this pane':
-        '\u00E5ngra sista \nblocksl\u00E4ppet i\ndetta omr\u00E5de',
-    'scripts pic...':
-        'skriptbild...',
-    'open a new window\nwith a picture of all scripts':
-        '\u00F6ppna ett nytt f\u00F6nster\nmed en bild p\u00E5 alla skript',
-    'Zoom blocks':
-        'F\u00F6rstora blocken',
-    'build':
-        'bygg',
-    'your own':
-        'dina egna',
-    'blocks':
-        'block',
-    'normal (1x)':
-        'normal (1x)',
-    'demo (1.2x)':
-        'demo (1.2x)',
-    'presentation (1.4x)':
-        'presentation (1.4x)',
-    'big (2x)':
-        'stor (2x)',
-    'huge (4x)':
-        'j\u00E4ttestor (4x)',
-    'giant (8x)':
-        'enorm (8x)',
-    'monstrous (10x)':
-        'gigantisk (10x)',
-    'Empty':
-        'Tom',
-    'brightness':
-        'ljusstyrka',
-    'negative':
-        'negativ',
-    'comic':
-        'komisk',
-    'confetti':
-        'konfetti',
-    'letter':
-        'bokstav',
-    'whitespace':
-        'mellanslag',
-    'line':
-        'rad',
-    'tab':
-        'tab',
-    'cr':
-        'retur',
-    'warp %c':
-        'snabbspola %c',
-    'Reset Password...':
-        'Nollst\u00E4ll l\u00F6senord...',
-    'Codification support':
-        'St\u00F6d f\u00F6r textprogrammering',
-    'Flat design':
-        'Platt utseende',
-    'Keyboard Editing':
-        'Tangentbordsredigering',
-    'Table support':
-        'Tabellstöd',
-    'Inheritance support':
-        'Arv',
-    'uncheck to disable\nsprite inheritance features':
-        'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r arv mellan sprites',
-    'check for sprite\ninheritance features':
-        'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r arv mellan sprites',
-    'uncheck to disable\nmulti-column list views':
-        'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
-    'check for multi-column\nlist view support':
-        'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
-    'check to enable\nkeyboard editing support':    
-        'kryssa f\u00F6r att aktivera\ntangentbordsredigering',
-    'uncheck to disable\nkeyboard editing support':
-        'avmarkera f\u00F6r att inaktivera\ntangentbordsredigering',
-    'check for block\nto text mapping features':
-        'kryssa f\u00F6r att aktivera\nblock-till-text funktioner',
-    'uncheck to disable\nblock to text mapping features':
-        'avmarkera f\u00F6r att inaktivera\nblock-till-text funktioner',
-    'check for alternative\nGUI design':
-        'kryssa f\u00F6r att aktivera ett\nalternativt utseende',
-    'uncheck for default\nGUI design':
-        'avmarkera f\u00F6r att byta\ntill standardutseendet',
-    'Select categories of additional blocks to add to this project.':
-        'v\u00E4lj grupper av extrablock att l\u00E4gga till i projektet',
-    'Select a costume from the media library':
-        'v\u00E4lj en kostym fr\u00E5n mediabiblioteket',
-    'Select a sound from the media library':
-        'v\u00E4lj ett ljud fr\u00E5n mediabiblioteket',
-    'Iteration, composition':
-        'Upprepning, komposition',
-    'List utilities':
-        'Listverktyg',
-    'Streams (lazy lists)':
-        'Str\u00F6mmar (lata listor)',
-    'Variadic reporters':
-        'Variabla rapporterare',
-    'Words, sentences':
-        'Ord, meningar',
-    'Paint a new costume':
-        'Rita en ny kostym',
-    'add a new Turtle sprite':
-        'l\u00E4gg till en ny Sk\u00F6ldpadda-sprite',
-    'paint a new sprite':
-        'rita en ny sprite',
-    'Paint Editor':
-        'Rita',
-    'undo':
-        '\u00E5ngra',
-    'grow':
-        'st\u00F6rre',
-    'shrink':
-        'mindre',
-    'flip ↔':
-        'v\u00E4nd ↔',
-    'flip ↕':
-        'v\u00E4nd ↕',
-    'Brush size':
-        'Pennstorlek',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Beh\u00E5ll figurernas proportioner?\n(du kan ocks\u00E5 h\u00E5lla skift nedtryckt)'
-        
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) vänster",
+    "(0) up": "(0) upp",
+    "(1) sine": "",
+    "(180) down": "(180) ned",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) höger",
+    "(empty)": "(tomt)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Om Snap",
+    "About...": "Om Snap!...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "Animationer",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "Vilken som helst (oevaluerad)",
+    "Any type": "Valfri typ",
+    "Apply": "Verkställ",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Är du säker på att du vill radera",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "Tillbaka...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "Blockredigerare",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "Suddade skuggor",
+    "Boolean": "boolean",
+    "Boolean (T/F)": "Boolean (S/F)",
+    "Boolean (unevaluated)": "Boolean (oevaluerad)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "Pennstorlek",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "Avbryt",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "Ändra block",
+    "Clear backup": "",
+    "Clicking sound": "Klickljud",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "Stöd för textprogrammering",
+    "Colors and Crayons": "",
+    "Command": "Kommando",
+    "Command (C-shape)": "Kommando (C-Form)",
+    "Command (inline)": "Kommando (inline)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "Behåll figurernas proportioner? (du kan också hålla skift nedtryckt)",
+    "Contents": "",
+    "Contributors": "Bidragsgivare",
+    "Control": "Kontroll",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "Kostymredigerare",
+    "Costumes": "Kostymer",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "Skapa indata-namn",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "Tack till...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "Standard",
+    "Default Value:": "Standardvärde:",
+    "Delete": "Radera",
+    "Delete Custom Block": "Radera block",
+    "Delete Project": "Radera projekt",
+    "Delete a variable": "Radera variabel",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "Ladda ner källkoden",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Dynamiska namn för indata",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "Redigera indata-namn",
+    "Edit label fragment": "Redigera etikettdel",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "Tom",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "Exportera block",
+    "Export blocks...": "Exportera block...",
+    "Export project as plain text ...": "Exportera projektet som vanlig text...",
+    "Export project as plain text...": "Exportera projektet som vanlig text...",
+    "Export project...": "Exportera projekt...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "Platt utseende",
+    "Flat line ends": "Platta streckslut",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "Hej!",
+    "Hello, World!": "",
+    "Help": "Hjälp",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "Importera block",
+    "Import library": "Importera bibliotek",
+    "Import sound": "",
+    "Import tools": "Importverktyg",
+    "Import tools...": "Importverktyg...",
+    "Import...": "Importera...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "Arv",
+    "Input Names:": "Indatanamn:",
+    "Input Slot Options": "",
+    "Input name": "Indata-namn",
+    "Input sliders": "Volymkontroller",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "Upprepning, komposition",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "Tangentbordsredigering",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "Språk...",
+    "Libraries...": "Bibliotek...",
+    "License": "Licens",
+    "License...": "Licens...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "Lista",
+    "List utilities": "Listverktyg",
+    "Lists": "Listor",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "Logga in...",
+    "Logout": "",
+    "Long form input dialog": "Komplett inmatningsfönster",
+    "Looks": "Utseende",
+    "Make a block": "Skapa nytt block",
+    "Make a variable": "Ny variabel",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "Meddelandets namn",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "Moduler...",
+    "Motion": "Rörelse",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "Flera indata (värdet är en lista av indata)",
+    "Nested auto-wrapping": "",
+    "New": "Ny",
+    "New Category": "",
+    "New Project": "Nytt projekt",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "Nej",
+    "November": "",
+    "Number": "Nummer",
+    "OK": "",
+    "Object": "",
+    "October": "",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "Öppna projekt",
+    "Open in Community Site": "",
+    "Open...": "Öppna...",
+    "Opening project...": "",
+    "Operators": "Operatorer",
+    "Other": "Annat",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "Rita",
+    "Paint a new costume": "Rita en ny kostym",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "Penna",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "Vanliga prototypetiketter",
+    "Play": "Starta",
+    "Play sound": "Spela ljud",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Predikat",
+    "Prefer empty slot drops": "Föredra släpp på tomma utrymmen",
+    "Prefer smooth animations": "Jämna animeringar",
+    "Privacy...": "",
+    "Project Notes": "Annoteringar",
+    "Project URLs": "",
+    "Project notes...": "Annoteringar...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "Referensbok",
+    "Registrer deg...": "Registrera dig...",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "Ersätt aktuella projektet med ett nytt?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "Nollställ lösenord...",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "Spara",
+    "Save As...": "Spara som...",
+    "Save Project": "",
+    "Save Project As...": "Spara projekt som...",
+    "Save to disk": "",
+    "Saved!": "Sparat!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "Skriptvariabelnamn",
+    "Scripts": "Skript",
+    "Select a costume from the media library": "välj en kostym från mediabiblioteket",
+    "Select a sound from the media library": "välj ett ljud från mediabiblioteket",
+    "Select categories of additional blocks to add to this project.": "välj grupper av extrablock att lägga till i projektet",
+    "Selection tool": "",
+    "Sensing": "Känna av",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "Registrera...",
+    "Single input.": "Enkel indata.",
+    "Single palette": "",
+    "Slider maximum value": "volymkontroll - högsta värde",
+    "Slider minimum value": "Volymkontroll - minsta värde",
+    "Snap! website": "Snap! webbsida",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "Ljud",
+    "Sound Recorder": "",
+    "Sounds": "Ljud",
+    "Sprite": "",
+    "Sprite Nesting": "",
+    "Stage": "Scen",
+    "Stage height": "Scenhöjd",
+    "Stage selected: no motion primitives": "Scen vald: inga standard rörelserfinns",
+    "Stage size": "Scenstorlek",
+    "Stage size...": "Scenstorlek...",
+    "Stage width": "Scenbredd",
+    "Stop": "Stoppa",
+    "Stop sound": "Stoppa ljud",
+    "Streams (lazy lists)": "Strömmar (lata listor)",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "Tillbaka till användarläge",
+    "Switch to dev mode": "Byt till utvecklarläge",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "Tabellstöd",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "Trådsäkra skript",
+    "Title text": "Titel",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "Översättningar",
+    "Translators...": "Översättare",
+    "Turbo mode": "Turboläge",
+    "Turtle": "Sköldpadda",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "Namnlös",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Upvar - gör internal variabel synlig för anroparen",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "Variabelnamn",
+    "Variables": "Variabler",
+    "Variadic reporters": "Variabla rapporterare",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Virtuellt tangentbord",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "Ord, meningar",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "Zebrafärg",
+    "Zoom blocks": "Förstora blocken",
+    "Zoom blocks...": "Förstora blocken...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ innehåller _",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ främst i _",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "",
+    "_ of _": "_ av _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "cos-1",
+    "add _ to _": "lägg _ till _",
+    "add a new Sprite": "lägg till ny Sprite",
+    "add a new Turtle sprite": "lägg till en ny Sköldpadda-sprite",
+    "add a new sprite": "ny sprite",
+    "add comment": "lägg till kommentar",
+    "add comment here...": "lägg till kommentar här...",
+    "agent": "",
+    "alert _": "",
+    "all": "allt",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "allt utom första i _",
+    "all but this script": "alla förutom detta skript",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "ankare",
+    "and": "och",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "svar",
+    "any": "",
+    "any key": "",
+    "any message": "något meddelande",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "organisera skript vertikalt",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "arc-1",
+    "ask _ and wait": "fråga _ och vänta",
+    "ask _ for _ _": "",
+    "atan": "tan-1",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "stor (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "Ska detta block med alla dess instanser tas bort?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "block",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "ljusstyrka",
+    "broadcast _ _": "skicka meddelande _ _",
+    "broadcast _ _ and wait": "skicka meddelande _ _ och vänta",
+    "brush": "",
+    "build": "bygg",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "anropa _ med _",
+    "call _ w/continuation": "anropa _ och fortsätt",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "rotera",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "tak",
+    "center": "",
+    "center x": "mittpunkt x",
+    "center y": "mittpunkt y",
+    "change _ by _": "ändra _ med _",
+    "change _ effect by _": "ändra _ -effekt med _",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "ändra pennfärg till _",
+    "change pen shade by _": "ändra pennstyrka med _",
+    "change pen size by _": "ändra penntjocklek med _",
+    "change size by _": "ändra storlek med _",
+    "change tempo by _": "ändra tempo med _",
+    "change volume by _": "",
+    "change x by _": "ändra x med _",
+    "change y by _": "ändra y med _",
+    "check for alternative GUI design": "kryssa för att aktivera ett alternativt utseende",
+    "check for block to text mapping features": "kryssa för att aktivera block-till-text funktioner",
+    "check for flat ends of lines": "kryssa för platta streckslut",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "kryssa för att aktivera stöd för redigering av listor i flera kolumner",
+    "check for smooth, predictable animations across computers": "kryssa för jämna animeringar på alla plattformar",
+    "check for sprite inheritance features": "kryssa för att aktivera stöd för arv mellan sprites",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "kryssa för att alltid visa alla typer i inmatningsfönstret",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "kryssa för att förbjuda skript att återtillträda",
+    "check to disallow script reentrancy": "kryssa för att förbjuda skript att återinträda",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "kryssa för att aktivera IDE-animationer",
+    "check to enable alternating colors for nested blocks": "kryssa för att växla blockfärger i nestlade block",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "kryssa för att aktivera dynamiska namn för indata med flera variabelfält",
+    "check to enable input sliders for entry fields": "kryssa för att aktivera volymkontroller för inmatningsfält",
+    "check to enable keyboard editing support": "kryssa för att aktivera tangentbordsredigering",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "kryssa för att aktivera stöd för virtuellt tangentbord på mobila enheter",
+    "check to hide (+) symbols in block prototype labels": "kryssa för att visa (+) symboler i blockprototypetiketter",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "kryssa för att prioritera skriptexekvering",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "kryssa för att aktivera klickljud",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "kryssa för att använda suddiga skuggor och belysningar",
+    "children": "barn",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "städa",
+    "clear": "rensa",
+    "clear graphic effects": "nollställ grafiska effekter",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "Klicka eller dra krysset för att markera mitten",
+    "clicked": "klickas på",
+    "clone": "",
+    "clones": "kloner",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "färgen _ rör _ ?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "komisk",
+    "command": "kommando",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "konfetti",
+    "console log _": "skriv till konsoll: _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "kostym nr.",
+    "costume name": "kostymnamn",
+    "costumes": "",
+    "costumes tab help": "importera en bild från en annan webbsida eller från en fil på din dator genom att dra den hit",
+    "could not connect to:": "",
+    "cr": "retur",
+    "create a clone of _": "skapa klon av _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "_ just nu",
+    "current module versions:": "Modulversioner",
+    "current parent": "nuvarande förälder",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "hängande?",
+    "data": "",
+    "date": "datum",
+    "day of week": "veckodagen",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "radera",
+    "delete _": "",
+    "delete _ of _": "radera _ från _",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "radera blockdefinition...",
+    "delete slot": "",
+    "delete this clone": "radera klon",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "koppla bort alla delar",
+    "detach and put into the hand": "",
+    "detach from": "koppla bort",
+    "development mode": "utvecklareläge",
+    "development mode debugging primitives:": "utvecklarläge Debugging av block",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "riktning",
+    "disable deep-Morphic context menus and show user-friendly ones": "stäng av Morphic menyeroch visa användarvänliga istället",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "avstånd till _",
+    "distribution": "",
+    "don't rotate": "rotera inte",
+    "down arrow": "pil ned",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "flyttbar",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "släpps ned",
+    "duplicate": "duplicera",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "kant",
+    "edit": "redigera",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "redigera...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "aktivera Morphic menyer och inspektorer, inte användarvänligt!",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "exportera",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "exportera...",
+    "extract": "",
+    "f": "f",
+    "false": "falskt",
+    "file": "",
+    "file menu import hint": "läser in ett exporterat projekt, ett bibliotek med block, en kostym, eller ett ljud",
+    "fill": "fyll",
+    "fill page...": "",
+    "filtered for _": "filtrera på _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "vänd ↔",
+    "flip ↕": "vänd ↕",
+    "floor": "golv",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "för alla sprites",
+    "for each _ in _ _": "",
+    "for this sprite only": "bara för denna sprite",
+    "forever _": "för alltid _",
+    "frame": "",
+    "frames": "ramar",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "spök",
+    "giant (8x)": "enorm (8x)",
+    "glide _ secs to x: _ y: _": "glid _ sek till x: _ y: _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "flytta _ lager bakåt",
+    "go to _": "gå till _",
+    "go to _ layer": "",
+    "go to front": "lägg överst",
+    "go to x: _ y: _": "gå till x: _ y: _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "större",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "hej",
+    "help": "hjälp",
+    "help...": "hjälp...",
+    "hide": "göm",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "göm primitiva",
+    "hide variable _": "göm variabel _",
+    "high": "",
+    "hjelp...": "hjälp...",
+    "hour": "timmen",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "jättestor (4x)",
+    "i": "i",
+    "identical to": "identisk med",
+    "if _ _": "om _ _",
+    "if _ _ else _": "om _ _ då _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "studsa om vid kanten",
+    "import a sound from your computer by dragging it into here": "importera en ljudfil från din dator genom att dra den hit",
+    "import without attempting to parse or format data": "",
+    "import...": "importera...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "indata lista:",
+    "input names:": "indatanamn:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "lägg in _ på plats _ i lista _",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "_ är _ ?",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "_ identisk med _ ?",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "element _ i _",
+    "items": "",
+    "j": "j",
+    "join _": "slå ihop _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "tangent _ nedtryckt?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "svenska",
+    "language_translator": "Erik A Olsson",
+    "large": "stor",
+    "last": "sista",
+    "last changed": "",
+    "last_changed": "2016-06-09",
+    "launch _ _": "starta _ med _",
+    "left": "",
+    "left arrow": "pil vänster",
+    "length": "",
+    "length of _": "längden av _",
+    "length:": "längd:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "bokstav",
+    "letter _ of _": "bokstav _ av _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "rad",
+    "lines": "",
+    "list": "lista",
+    "list _": "lista _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "ladda ner det officiella superblock biblioteket",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "skapa nytt block...",
+    "make a category...": "",
+    "make a copy and pick it up": "gör en kopia och plocka upp den",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "meddelande",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "minuten",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "gigantisk (10x)",
+    "month": "månaden",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "musknapp nedtryckt?",
+    "mouse position": "",
+    "mouse x": "mus x-pos",
+    "mouse y": "mus y-pos",
+    "mouse-departed": "inte längre har muspekaren över mig",
+    "mouse-entered": "får muspekaren över mig",
+    "mouse-pointer": "muspekare",
+    "move": "flytta",
+    "move _ steps": "gå _ steg",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "attribut _",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "mig själv",
+    "n": "n",
+    "name": "namn",
+    "neg": "",
+    "negative": "negativ",
+    "neighbors": "grannar",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "ny...",
+    "next": "",
+    "next costume": "nästa kostym",
+    "none": "ingenting",
+    "normal": "",
+    "normal (1x)": "",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "inte _",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "nummer",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "duplicera endast detta block",
+    "only face left/right": "peka bara höger/vänster",
+    "only grab this block": "",
+    "open a new window with a picture of all scripts": "öppna ett nytt fönster med en bild på alla skript",
+    "open a new window with a picture of the stage": "öppna ett nytt fönster med en bild av scenen",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "öppna ett nytt fönster med en bild av detta skript",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "eller",
+    "or before": "",
+    "other clones": "andra kloner",
+    "other scripts in sprite": "andra skript i denna sprite",
+    "other sprites": "andra sprites",
+    "p": "p",
+    "paint a new sprite": "rita en ny sprite",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "föräldrar",
+    "parent...": "förälder...",
+    "parts": "delar",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "pausa alla _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "penna ned",
+    "pen down?": "",
+    "pen trails": "pennspår",
+    "pen up": "penna upp",
+    "pen vectors": "",
+    "pic...": "bild...",
+    "pick random _ to _": "slumptal från _ till _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "spela ton _ i _ slag",
+    "play sound _": "spela ljud _",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "spela ljud _ tills färdig",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "peka mot riktning _",
+    "point towards _": "peka mot _",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "predikat",
+    "presentation (1.4x)": "",
+    "pressed": "trycks ned",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "vilken som helst",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "döp om...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "döp om",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "döp om kostymen",
+    "rename only this reporter": "",
+    "rename sound": "döp om ljud",
+    "rename...": "döp om...",
+    "repeat _ _": "upprepa _ gånger _",
+    "repeat until _ _": "upprepa tills _ _",
+    "replace item _ of _ with _": "ersätt element _ i _ med _",
+    "report _": "rapportera _",
+    "reporter": "funktionsblock",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "nollställ stoppur",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "pausa _ slag",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "pil höger",
+    "ring": "",
+    "ringify": "ring runt",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "avrunda _",
+    "run _ _": "kör _ med _",
+    "run _ w/continuation": "kör _ och fortsätt",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "säg _",
+    "say _ for _ secs": "säg _ i _ sek",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "skript bild...",
+    "script variables _": "skriptvariabel _",
+    "scripts": "",
+    "scripts pic...": "skriptbild...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "sekunden",
+    "select": "välj",
+    "selection": "",
+    "self": "mig själv",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "sätt _ -effekt til _",
+    "set _ of block _ to _": "",
+    "set _ to _": "sätt _ till _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "sätt pennfärg till _",
+    "set pen shade to _": "sätt pennstyrka till _",
+    "set pen size to _": "sätt penntjocklek til _",
+    "set size to _ %": "sätt storlek till _ %",
+    "set tempo to _ bpm": "sätt tempo till _ bpm",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "sätt turboläge till _",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "sätt x till _",
+    "set y to _": "sätt y till _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "Inställningar föredra släpp på tomma utrymmen",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "visa",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "visa allt",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "visa globala anpassade blockdefinitioner som XML i ett nytt fönster",
+    "show primitives": "visa primitiva",
+    "show project data as XML in a new browser window": "visa projektdata som XML i ett ny fönster",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "visa variabel _",
+    "shown?": "",
+    "shrink": "mindre",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "storlek",
+    "slider": "volymkontroll",
+    "slider max...": "volymkontroll max...",
+    "slider min...": "volymkontroll min...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "mellanslag",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "dela _ med tecken _",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "kvadratrot",
+    "square": "",
+    "stack size": "stack-storlek",
+    "stage": "scen",
+    "stage image": "",
+    "stamp": "stämpla",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "stoppa _",
+    "stop all _": "stoppa alla _",
+    "stop all sounds": "stoppa alla ljud",
+    "stop block": "stoppa block",
+    "stop frequency": "",
+    "stop script": "stoppa skript",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "byt till kostym _",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "",
+    "temporary?": "",
+    "text": "",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "sak",
+    "think _": "tänk _",
+    "think _ for _ secs": "tänk _ i _ sek",
+    "this _": "",
+    "this block": "detta block",
+    "this project doesn't have any custom global blocks yet": "Detta projekt saknar egna globala block",
+    "this script": "detta skript",
+    "time in milliseconds": "tiden i millisekunder",
+    "timer": "stoppur",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "rör färgen _ ?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "eolsson@gmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "sant",
+    "turbo mode": "",
+    "turbo mode?": "turboläge?",
+    "turn _ _ degrees": "vänd _ _ grader",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "typ _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "avmarkera för att byta till standardutseendet",
+    "uncheck for greater speed at variable frame rates": "avmarkera för högre fart vid variabel frame rate",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "avmarkera för avrundade streckslut",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "avmarkera för att tillåta placerade rappporterare att flytta ut andra",
+    "uncheck to allow script reentrance": "avmarkera för att tillåta skript att återtillträda",
+    "uncheck to allow script reentrancy": "avmarkera för att tillåta skript att återinträda",
+    "uncheck to always show (+) symbols in block prototype labels": "avmarkera för att visa (+) symboler i blockprototypetiketter",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "avmarkera för att stänga av IDE-animationer",
+    "uncheck to disable alternating colors for nested block": "avmarkera för att inaktivera växlade färger i nestlade block",
+    "uncheck to disable block to text mapping features": "avmarkera för att inaktivera block-till-text funktioner",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "avmarkera för att inaktivera dynamiska namn för indata med flera variabelfält",
+    "uncheck to disable input sliders for entry fields": "avmarkera för att inaktivera volymkontroller för inmatningsfält",
+    "uncheck to disable keyboard editing support": "avmarkera för att inaktivera tangentbordsredigering",
+    "uncheck to disable multi-column list views": "avmarkera för att inaktivera stöd för redigering av listor i flera kolumner",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "avmarkera för att inaktivera stöd för arv mellan sprites",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "avmarkera för att inaktivera stöd för virtuellt tangentbord på mobila enheter",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "avmarkera för att köra skript vid normal hastighet",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "avmarkera för att inaktivera klickljud",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "avmarkera för att använda ifyllda skuggor och belysningar",
+    "uncheck to use the input dialog in short form": "avmarkera för att visa lilla inmatningsfönstret",
+    "uncompile": "",
+    "undo": "ångra",
+    "undo the last block drop in this pane": "ångra sista blocksläppet i detta område",
+    "undrop": "ångra släpp",
+    "unicode _ as letter": "unicode _ som bokstav",
+    "unicode of _": "unicode av _",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "radera ringen runt",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "namnlös",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "pil upp",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "vänta _ sek",
+    "wait until _": "vänta tills _",
+    "wardrobe": "",
+    "warp _": "snabbspola _",
+    "what's your name?": "vad heter du?",
+    "when I am _": "när jag _",
+    "when I am clicked": "när jag klickas på",
+    "when I receive _": "när jag tar emot meddelande _",
+    "when I receive _ _": "när jag tar emot _ _",
+    "when I start as a clone": "när jag startar som klon",
+    "when _": "när _",
+    "when _ clicked": "när _ klickas på",
+    "when _ is edited _": "",
+    "when _ key pressed": "när tangent _ trycks ned",
+    "when _ key pressed _": "när tangent _ trycks ned _",
+    "whirl": "",
+    "whitespace": "mellanslag",
+    "width": "",
+    "with data": "",
+    "with inputs": "med indata",
+    "word": "",
+    "world": "världen",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x-position",
+    "y": "y",
+    "y position": "y-position",
+    "year": "året",
+    "year:": "",
+    "your own": "dina egna",
+    "z": "z"
+}

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-November-28';
+modules.extensions = '2023-May-09';
 
 // Global stuff
 
@@ -48,6 +48,8 @@ var SnapExtensions = {
     urls: [ // allow-list of trusted servers
         'libraries/',
         'https://snap.berkeley.edu/',
+        'https://bjc.berkeley.edu/',
+        'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
         'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
     ]
@@ -326,6 +328,18 @@ SnapExtensions.primitives.set(
     */
     function (name, txt) {
         return Process.prototype.reportTextFunction(name, txt);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_export(txt, name)',
+    function (txt, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(txt, ['text', 'number']);
+        name = name || localize('data');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        ide.saveFileAs(txt.toString(), 'text/txt', name);
     }
 );
 
@@ -1025,7 +1039,14 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph),
             disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
             flag = ide.isAppMode,
-            restoreMode = () => ide.toggleAppMode(flag),
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', lang],
+                        ide.version
+                    );
+                },
             callback = restoreMode;
         proc.assertType(lang, 'text');
         ide.loadNewProject = false;
@@ -1048,6 +1069,42 @@ SnapExtensions.primitives.set(
                 new List([SnapTranslator.languageName(lang), lang])
             )
         );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translation_dict',
+    function () {
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        return new List(
+            Object.keys(dict).slice().sort().map(key =>
+                new List([key, dict[key]]))
+        );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_set_translation_dict(data)',
+    function (data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            dict = {};
+        proc.assertType(data, 'list');
+        data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
+        SnapTranslator.dict[SnapTranslator.language] = dict;
+        ide.reflectLanguage(SnapTranslator.language);
+    }
+);
+
+// Synchronization
+
+SnapExtensions.primitives.set(
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
+        proc.assertType(xml, 'text');
+        this.synchScriptsFrom(xml);
     }
 );
 

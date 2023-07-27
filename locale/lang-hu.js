@@ -1,2485 +1,1377 @@
-/*
-
-    lang-hu.js
-
-    A SNAP! magyar fordítása
-
-    written by Makány György, Faragó Attila
-
-    Copyright (C) 2015-2022 by Makány György, Faragó Attila
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.hu = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Magyar', // the name as it should appear in the language menu
-    'language_translator':
-        'Makány György, Faragó Attila', // your name for the Translators tab
-    'translator_e-mail':
-        'makany.gyorgy@gmail.com, attila.farago@sap.com', // optional
-    'last_changed':
-        '2022-01-25', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'névtelen',
-    'development mode':
-        'fejlesztői mód',
-
-    // categories:
-    'Motion':
-        'Mozgás',
-    'Looks':
-        'Kinézet',
-    'Sound':
-        'Hang',
-    'Pen':
-        'Toll',
-    'Control':
-        'Vezérlés',
-    'Sensing':
-        'Érzékelés',
-    'Operators':
-        'Műveletek',
-    'Variables':
-        'Változók',
-    'Lists':
-        'Listák',
-    'Other':
-        'Egyebek',
-
-    // editor:
-    'draggable':
-        'húzható',
-
-    // tabs:
-    'Scripts':
-        'Feladatok',
-    'Costumes':
-        'Jelmezek',
-    'Backgrounds':
-        'Hátterek',
-    'Sounds':
-        'Hangok',
-
-    // names:
-    'Sprite':
-        'Szereplő',
-    'Stage':
-        'Játéktér',
-
-    // rotation styles:
-    'don\'t rotate':
-        'nem foroghat',
-    'can rotate':
-        'foroghat',
-    'only face left/right':
-        'jobbra-balra fordulhat',
-
-    // new sprite button:
-    'add a new sprite':
-        'Új szereplő',
-
-    'add a new Turtle sprite':
-        'új teknőc rajzának hozzáadása',
-    'paint a new sprite':
-        'új alakzat rajzolása',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'készíts fotót a webkamerával és\nimportáld új szereplőként',
-    
-
-    // tab help
-    'costumes tab help':
-        'Kép importálása egy webhelyről vagy a számítógépről',
-    'import a sound from your computer\nby dragging it into here':
-        'Hang importálása egy webhelyről vagy a számítógépről',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Választott játéktér:\nnincs mozgó elem',
-
-    'move %n steps':
-        'menj %n lépést',
-    'turn %clockwise %n degrees':
-        'fordulj %clockwise %n fokot',
-    'turn %counterclockwise %n degrees':
-        'fordulj %counterclockwise %n fokot',
-    'point in direction %dir':
-        'nézz %dir fokos irányba',
-    'point towards %dst':
-        'nézz %dst irányába',
-    'go to x: %n y: %n':
-        'ugorj x: %n y: %n',
-    'go to %dst':
-        'ugorj %dst helyére',
-    'glide %n secs to x: %n y: %n':
-        'csússz %n mp-ig x: %n y: %n',
-    'change x by %n':
-        'x változzon: %n',
-    'set x to %n':
-        'x legyen %n',
-    'change y by %n':
-        'y változzon: %n',
-    'set y to %n':
-        'y legyen %n',
-    'if on edge, bounce':
-        'ha szélén vagy, pattanj vissza',
-    'x position':
-        'x hely',
-    'y position':
-        'y hely',
-    'direction':
-        'irány',
-
-    // looks:
-    'switch to costume %cst':
-        'a jelmez legyen %cst',
-    'next costume':
-        'a következő jelmez',
-    'costume #':
-        'a jelmez sorszáma',
-    'say %s for %n secs':
-        'mondd %s %n mp-ig',
-    'say %s':
-        'mondd %s',
-    'think %s for %n secs':
-        'gondold %s %n mp-ig',
-    'think %s':
-        'gondold %s',
-    'Hello!':
-        'Szia!',
-    'Hmm...':
-        'Hmm...',
-    '%img of costume %cst':
-        '%img jelmez %cst',
-    'new costume %l width %dim height %dim':
-        'új jelmez %l szélesség %dim magasság %dim',
-    'stretch %cst x: %n y: %n %':
-        'nyújtsd %cst x: %n y: %n %',
-    'change %eff effect by %n':
-        '%eff hatás változzon %n',
-    'set %eff effect to %n':
-        '%eff hatás legyen %n',
-    'clear graphic effects':
-        'töröld a grafikus hatásokat',
-    '%eff effect':
-        '%eff hatás',
-    'change size by %n':
-        'a méret változzon %n',
-    'set size to %n %':
-        'a méret legyen %n %',
-    'size':
-        'méret',
-    'show':
-        'jelenj meg',
-    'hide':
-        'tűnj el',
-    'shown?': 
-        'látható?',
-    'go to %layer layer': 
-        'kerülj %layer',
-    'front': 
-        'előre',
-    'back': 
-        'hátulra',
-    'go back %n layers':
-        'kerülj %n szinttel hátrébb',
-
-    'development mode \ndebugging primitives:':
-        'fejlesztő mód \nblokkok hibakeresése',
-    'console log %mult%s':
-        'konzolra írás: %mult%',
-    'alert %mult%s':
-        'felbukkanó: %mult%',
-
-    'pixels': 
-        'pixelek',
-    'current':
-        'jelenlegi',
-
-    // sound:
-    'play sound %snd':
-        'játszd le: %snd',
-    'play sound %snd until done':
-        'játszd le: %snd és várd meg',
-    'stop all sounds':
-        'minden hangot állíts le',
-    'rest for %n beats':
-        'szünetelj %n ütemet',
-    'play sound %snd at %rate Hz':
-        'játszd le %snd hangot %rate Hz mintavételezéssel',
-    '%aa of sound %snd':
-        'hangminta %aa %snd',
-    'duration':
-        'hossz',
-    'length':
-        'elemek száma',
-    'number of channels':
-        'csatornák száma',
-    'new sound %l rate %rate Hz':
-        'új hang %l mintavételezéssel %rate Hz',
-    'play note %note for %n beats':
-        'játszd le a %note hangot %n ütemig',
-    'set instrument to %inst':
-        'hangeszközt állítsd: %inst',
-    'change tempo by %n':
-        'a tempó változzon: %n',
-    'set tempo to %n bpm':
-        'a tempó legyen %n ütem/perc',
-    'tempo':
-        'tempó',
-
-    'change volume by %n':
-        'hangerő változzon: %n',
-    'set volume to %n %':
-        'hangerő legyen %n %',
-    'change balance by %n':
-        'hangmérleg változzon: %n',
-    'set balance to %n':
-        'hangmérleg legyen %n',
-    'balance':
-        'hangmérleg',
-    'play frequency %n Hz':
-        'játszt le frekvenciát %n Hz',
-    'stop frequency':
-        'állítsd le a frekvenciát',
-    'play %n Hz for %n secs':
-        'játssz %n Hz %n mp hosszan',
-
-    // "instruments", i.e. wave forms
-    '(1) sine':
-        '(1) szinusz',
-    '(2) square':
-        '(2) négyzetes',
-    '(3) sawtooth':
-        '(3) fűrészfog',
-    '(4) triangle':
-        '(4) háromszög',
-
-    // pen:
-    'clear':
-        'töröld a rajzokat',
-    'pen down':
-        'tollat le',
-    'pen up':
-        'tollat fel',
-    'pen down?':
-        'toll lent?',
-    'set pen color to %clr':
-        'tollszín legyen %clr',
-    'set background color to %clr':
-        'hátteret állítsd %clr',
-    'change pen %clrdim by %n':
-        'toll %clrdim változzon %n',
-    'change background %clrdim by %n':
-        'háttér %clrdim változzon %n',
-    'set pen %clrdim to %n':
-        'toll %clrdim legyen a %n',
-    'set background %clrdim to %n':
-        'háttér %clrdim legyen a %n',
-    'pen %pen':
-        'toll %pen',
-    'change pen size by %n':
-        'tollméret változzon %n',
-    'set pen size to %n':
-        'tollméret legyen %n',
-    'stamp':
-        'készíts lenyomatot',
-
-    'fill':
-        'kitöltés',
-    'write %s size %n':
-        'írd %s mérettel %n',
-    'paste on %spr':
-        'nyomtasd erre %spr',
-    'cut from %spr':
-        'vágd ki innen %spr',
-    'pen vectors':
-        'toll vektor',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag -ra kattintáskor',
-    'when %keyHat key pressed %keyName':
-        '%keyHat lenyomásakor %keyName',
-    'when I am %interaction':
-        'amikor %interaction ',
-    'clicked':
-        'rám kattintanak',
-    'pressed':
-        'gombnyomásra',
-    'dropped':
-        'leejtenek',
-    'mouse-entered':
-        'az egér fölém kerül',
-    'mouse-departed':
-        'az egér lemegy rólam',
-    'scrolled-down':
-    	'lefelé görgetnek',
-    'scrolled-up':
-        'felfelé görgetnek',
-    'stopped':
-        'megállítottak',
-    'when %b':
-        'amikor %b',
-    'when I receive %msgHat %message':
-        '%msgHat üzenet érkezésekor %message',
-    'broadcast %msg %receive':
-        'küldj mindenkinek %msg %receive üzenetet',
-    'broadcast %msg %receive and wait':
-        'küldj mindenkinek %msg %receive üzenetet és várj',
-    'send %msg to %spr':
-        'küldd %msg a szereplőnek %spr',
-    'Message name':
-        'Az üzenet neve',
-    'message':
-        'üzenet',
-    'any message':
-        'bármilyen üzenet',
-    'wait %n secs':
-        'várj %n mp-et',
-    'wait until %b':
-        'várj amíg %b',
-    'forever %loop':
-        'mindig %loop',
-    'repeat %n %loop':
-        'ismételd %n -szer %loop',
-    'repeat until %b %loop':
-        'ismételd amíg %b %loop',
-    'for %upvar = %n to %n %cla':
-        'ciklus %upvar = %n tól %n ig %cla',
-    'if %b %c':
-        'ha %b %c',
-    'if %b %c else %c':
-        'ha %b %c különben %c',
-    'if %b then %s else %s':
-        'ha %b %s különben %s',
-    'report %s':
-        'jelents %s',
-    'stop %stopChoices':
-        '%stopChoices álljon le',
-    'all':
-        'minden feladat',
-    'this script':
-        'ez a feladat',
-    'this block':
-        'ez a blokk',
-    'stop %stopOthersChoices':
-        '%stopOthersChoices álljon le',
-    'all but this script':
-        'minden más feladat',
-    'other scripts in sprite':
-        'ennek a szereplőnek minden más feladata',
-    'pause all %pause':
-        'várakozz %pause',
-    'run %cmdRing %inputs':
-        'futtasd %cmdRing %inputs értékkel',
-    'launch %cmdRing %inputs':
-        'induljon %cmdRing %inputs',
-    'call %repRing %inputs':
-        'hívd %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'futtasd %cmdRing folytatással',
-    'call %cmdRing w/continuation':
-        'hívd meg %cmdRing folytatással',
-    'warp %c':
-        'gyorsítva %c',
-    'when I start as a clone':
-        'másolatként indítva',
-    'create a clone of %cln':
-        'készíts másolatot %cln',
-    'a new clone of %cln':
-        'új másolat %cln',
-    'myself':
-        'magam',
-    'delete this clone':
-        'töröld ezt a másolatot',
-    'switch to scene %scn %send':
-        'válts jelenetet %scn %send',
-    'and send':
-        'és küldd',
-    'next':
-        'következő',
-    'previous':
-        'előző',
-
-    'tell %spr to %cmdRing %inputs':
-        'hajtsd végre %spr %cmdRing %inputs',
-    'ask %spr for %repRing %inputs':
-        'kérdezd le %spr %repRing %inputs',
-
-    // sensing:
-    'touching %col ?':
-        'érint %col ?',
-    'touching %clr ?':
-        'érint %clr színt?',
-    'color %clr is touching %clr ?':
-        '%clr szín érint %clr színt?',
-    'ask %s and wait':
-        'kérdezd meg %s és várj',
-    'what\'s your name?':
-        'Mi a neved?',
-    'answer':
-        'válasz',
-    'mouse x':
-        'egér x',
-    'mouse y':
-        'egér y',
-    'mouse down?':
-        'egér lenyomva?',
-    'key %key pressed?':
-        '%key gomb lenyomva?',
-    '%rel to %dst': 
-        '%rel ehhez %dst',
-    'distance':
-    	'távolság',
-    'ray length':
-        'távolság a széléig',
-    '%asp at %loc' :
-        '%asp itt %loc',
-    'r-g-b-a':
-        'r-g-b-a szín',
-    'sprites' :
-        'Objekte',
-    'reset timer':
-        'nullázd az órát',
-    'timer':
-        'stopper',
-    '%att of %spr':
-        '%att itt %spr',
-    'my %get':
-        'saját %get',
-    'object %self':
-        'objektum %self',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode':
-        'turbo mód',
-    'flat line ends':
-        'egyszerű vonalvégződés',
-    'is %setting on?':
-        '%setting bállítás bekapcsolva?',
-    'set %setting to %b':
-        'legyen %setting beállítás %b',
-    'current %dates':
-        'aktuális %dates',
-    'year':
-        'év',
-    'month':
-        'hónap',
-    'date':
-        'nap',
-    'day of week':
-        'a hét napja',
-    'hour':
-        'óra',
-    'minute':
-        'perc',
-    'second':
-        'másodperc',
-    'time in milliseconds':
-        'idő (ezredmásodpercben)',
-    'microphone %audio':
-        'mikrofon %audio',
-    'volume':
-        'hangerő',
-    'note':
-        'hangjegy',
-    'frequency':
-        'frekvencia',
-    'samples':
-        'hangminta',
-    'sample rate':
-        'mintavétel',
-    'spectrum':
-        'frekvenciaspektrum',
-    'resolution':
-        'felbontás',
-    'Microphone resolution...':
-        'Mikrofon felbontás...',
-    'Microphone':
-        'Mikrofon',
-    'low':
-        'alacsony',
-    'high':
-        'magas',
-    'max':
-        'max',
-    'video %vid on %self':
-        'video %vid ezen %self',
-    'motion':
-        'mozgás',
-    'snap':
-        'pillanatfelvétel',
-    'set video transparency to %n':
-        'legyen video átlátszósága %n',
-    'video capture':
-        'video felvétel',
-    'mirror video':
-        'video tükrözése',
-    'filtered for %clr':
-        '%clr szín szűrése',
-    'stack size':
-        'veremméret',
-    'frames':
-        'keretek',
-    'log pen vectors':
-        'toll vektorok mentése',
-    '%block of block %repRing':
-        'blokk %block %repRing',
-    'definition':
-        'definíció',
-    'custom?':
-        'egyedi?',
-    'global?':
-        'globális?',
-
-    // operators:
-    '%n mod %n':
-        '%n osztva %n maradéka',
-    'round %n':
-        '%n kerekítve',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        'véletlen %n és %n között',
-    '%b and %b':
-        '%b és %b',
-    '%b or %b':
-        '%b vagy %b',
-    'not %b':
-        'nem %b',
-    'true':
-        'igaz',
-    'false':
-        'hamis',
-    'join %words':
-        'összefűz %words',
-    'split %s by %delim':
-        '%s szétvágása %delim jeleknél',
-    'hello':
-        'hello',
-    'world':
-        'világ',
-    'letter %idx of %s':
-        '%idx karaktere ennek: %s',
-    'length of %s':
-        '%s hossza',
-    'unicode of %s':
-        '%s Unicode-ra alakítva',
-    'unicode %n as letter':
-        'unicode %n betűként',
-    'is %s a %typ ?':
-        '%s egy %typ ?',
-    'is %s identical to %s ?':
-        '%s ugyanaz, mint %s ?',
-
-    'JavaScript function ( %mult%s ) { %code }':
-        'JavaScript függvény ( %mult%s ) { %code }',
-    'compile %repRing':
-    	'fordítsd %repRing',
-
-    'type of %s':
-        'típus: %s',
-
-    // variables:
-    'Make a variable':
-        'Új változó',
-    'Variable name':
-        'Változónév',
-    'Script variable name':
-        'Feladatváltozó név',
-    'inherit %shd':
-        'örököld %shd',
-    'Delete a variable':
-        'Változó törlése',
-
-    'set %var to %s':
-        '%var legyen %s',
-    'change %var by %n':
-        '%var változzon ennyivel: %n',
-    'show variable %var':
-        'írd ki: %var',
-    'hide variable %var':
-        'rejtsd el: %var',
-    'script variables %scriptVars':
-        'feladatváltozó: %scriptVars',
-
-    // lists:
-    'list %exp':
-        'lista %exp',
-    'numbers from %n to %n':
-        'számok ettől %n eddig %n',
-    '%s in front of %l':
-        '%s megelőzi %l',
-    'item %idx of %l':
-        '%idx eleme a %l listának',
-    'all but first of %l':
-        '%l elsőnkívüli elemei',
-    '%la of %l':
-        '%la itt %l',
-    'rank':
-        'rang',
-    'dimensions':
-        'dimenziók',
-    'flatten':
-        'laposít',
-    'columns':
-        'oszlopok',
-    'reverse':
-        'visszafelé',
-    'lines':
-        'sorok',
-    '%l contains %s':
-        '%l tartalmazza %s',
-    'thing':
-        'dolog',
-    'is %l empty?':
-        'üres %l ?',
-    'index of %s in %l':
-        'index %s itt %l',
-    'map %repRing over %l':
-        'képezd le %repRing erre %l',
-    'keep items %predRing from %l':
-        'válogasd ki az ilyen %predRing elemeket ebből %l',
-    'find first item %predRing in %l':
-        'keresd ki az első %predRing elemet ebből %l',
-    'combine %l using %repRing':
-        'kombináld %l így %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz képezd le %repRing erre %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz válogasd ki az ilyen %predRing elemeket ebből %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz keresd ki az első %predRing elemet ebből %l',
-    '%blitz combine %l using %repRing':
-        '%blitz kombináld %l így %repRing',
-    'for each %upvar in %l %cla':
-        'minden elemre %upvar ebből %l %cla',
-    'item':
-        'elem',
-    'value':
-        'érték',
-    'index':
-        'index',
-    'append %lists':
-        'fűzd hozzá %lists',
-    'reshape %l to %nums':
-        'formáld át %l így %nums',
-    'add %s to %l':
-        '%s hozzáadása %l listához',
-    'delete %ida of %l':
-        '%ida elem törlése %l listából',
-    'insert %s at %idx of %l':
-        '%s beszúrása %idx . pozícióba ebbe: %l',
-    'replace item %idx of %l with %s':
-        '%idx helyettesítése %l listában erre: %s',
-
-    // other
-    'Make a block':
-        'Blokk készítése',
-
-    // menus
-    // snap menu
-    'About...':
-        'A Snap! névjegye...',
-    'Reference manual':
-        'Kézikönyv',
-    'Snap! website':
-        'A Snap! webhelye',
-    'Download source':
-        'A forráskód letöltése',
-    'Switch back to user mode':
-        'Vissza a felhasználói üzemmódra',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'A deep-Morphic\nhelyzetérzékeny menük\nés a felhasználóbarát menük kikapcsolása',
-    'Switch to dev mode':
-        'Átkapcsolás fejlesztői módba',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'A Morphic helyzetérzékeny menük, nyomkövetők\nés a nem felhasználóbarát mód bekapcsolása',
-
-    // project menu
-    'Project notes...':
-        'Projektadatok...',
-    'New':
-        'Új',
-    'Open...':
-        'Megnyitás...',
-    'Save':
-        'Mentés',
-    'Save to disk':
-        'Lemezre írás',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'a projekt tárolása\na letöltési mappába\n(ha a böngésző engedi)',
-    'Save As...':
-        'Mentés másként...',
-    'Import...':
-        'Importálás...',
-    'file menu import hint':
-        'egy exportált projekt, feladatkönyvtár,\njelmez vagy hang betöltése',
-    'Export project as plain text...':
-        'Projekt exportálása egyszerű szövegként...',
-    'Export project...':
-        'Projekt exportálása...',
-    'save project data as XML\nto your downloads folder':
-        'mentsd le a projektet XML formátumban\na letöltés mappába',
-    'show project data as XML\nin a new browser window':
-        'a projekt adatainak megtekintése\negy új böngészőablakban',
-    'Export blocks...':
-        'Blokk exportálása...',
-    'save global custom block\ndefinitions as XML':
-        'mentsd el a saját blokkokat\nXML formátumban',
-    'Unused blocks...':
-          'Nem használt blokkok...',
-    'find unused global custom blocks\nand remove their definitions':
-        'keresd meg a nem használt blokkokat\nés töröld a definícióikat',
-    'Remove unused blocks':
-        'Töröld a nem használt blokkokat',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'nem találtam nem használt saját blokkot a projektben',
-    'unused block(s) removed':
-        'nem használt blokkok törölve',
-    'Hide blocks...':
-        'Blokkok elrejtése...',
-    'New category...':
-        'Új kategória...',
-    'Remove a category...':
-        'Kategória törlése...',
-    'Scenes...':
-        'Jelenetek...',
-    'New scene':
-        'Új jelenet',
-    'Add scene...':
-        'Jelenet hozzáadása...',
-    'Export summary...':
-        'Összefoglaló exportálása...',
-    'save a summary\nof this project':
-        'mentsd el a projekt összefoglalóját',
-    'Contents':
-        'Tartalom',
-    'Kind of':
-        'Típus',
-    'Part of':
-        'Része',
-    'Parts':
-        'Részei',
-    'Blocks':
-        'Blokkok',
-    'For all Sprites':
-        'Minden szereplőre',
-    'Libraries...':
-        'Modulkönyvtárak...',
-    'Select categories of additional blocks to add to this project.':
-        'Válassza ki a projekthez adandó blokkok kategóriáit.',
-    'Select a costume from the media library':
-        'Válasszon ki egy jelmezt a médiakönyvtárból.',
-    'Select a sound from the media library':
-        'Válasszon ki egy hangot a médiakönyvtárból.',
-    'Undelete sprites...':
-        'Szereplők visszaállítása...',
-    'Bring back deleted sprites':
-        'Állítsd vissza a törölt szereplőket',
-    'trash is empty':
-        'üres a kuka',
-
-    'Import library':
-        'Modulkönyvtár importálása',
-
-    'Loading':
-        'Betöltés',
-    'Imported':
-        'Importálva',
-    'Iteration, composition':
-        'Ismétlés, Kompozíció',
-    'List utilities':
-        'Lista eszközök',
-    'Variadic reporters':
-        'Változó függvények',
-    'Web services access (https)':
-        'Web service hozzáférés (https)',
-    'Multi-branched conditional (switch)':
-        'Több-ágú feltételes blokk (elágazás)',
-    'LEAP Motion controller':
-        'LEAP mozgásvezérlő',
-    'Words, sentences':
-        'Szavak, mondatok',
-    'Catch errors in a script':
-        'Programban hibák elkapása',
-    'Set RGB or HSV pen color':
-        'Toll RGB vagy HSV szín szerint',
-    'Text to speech':
-        'Szöveg beszéddé',
-    'Provide 100 selected colors':
-        '100 kiválasztott szín',
-    'Infinite precision integers, exact rationals, complex':
-        'Végtelen pontosság a számokban',
-    'Provide getters and setters for all GUI-controlled global settings':
-        'Érték-olvasó és -író minden felületen megjelenő beállításhoz',
-    'Allow multi-line text input to a block':
-        'Többsoros szövegbevitel megengedése',
-    'Create variables in program':
-        'Programban változók létrehozása',
-
-    // cloud menu
-    'Login...':
-        'Belépés...',
-    'Signup...':
-        'Feliratkozás...',
-
-    'Logout':
-        'Kijelentkezés',
-    'Change Password...':
-        'Jelszó megváltoztatása...',
-    'Reset Password...':
-        'A jelszó alaphelyzetre állítása...',
-    'Resend Verification Email...':
-        'Ellenörző e-mail újraküldése...',
-    'Open in Community Site':
-        'Projektoldalon megnyítás',
-
-    // settings menu
-    'Language...':
-        'Nyelv...',
-    'Zoom blocks...':
-        'Blokkok nagyítása...',
-    'Fade blocks...':
-        'Blokkok átlátszósága...',
-    'Stage size...':
-        'Játéktér mérete...',
-    'Stage size':
-        'Játéktér mérete',
-    'Stage width':
-        'Játéktér szélessége',
-    'Stage height':
-        'Játéktér magassága',
-    'Default':
-        'Alapérték',
-    'Blurred shadows':
-        'Elmosódó árnyékok',
-    'uncheck to use solid drop\nshadows and highlights':
-        'vedd ki a jelölést, ha éles árnyékokat\nés kiemeléseket kíván használni',
-    'check to use blurred drop\nshadows and highlights':
-        'jelölje be, ha elmosódó árnyékokat\nés kiemeléseket kíván használni',
-    'Zebra coloring':
-        'Zebra színezés',
-    'check to enable alternating\ncolors for nested blocks':
-        'engedélyezi a beágyazott blokkok\neltérő színezését',
-    'uncheck to disable alternating\ncolors for nested block':
-        'tiltja a beágyazott blokkok\neltérő színezését',
-    'Dynamic input labels':
-        'Dinamikus beviteli feliratok',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'üresen hagyva tiltja a többszörös\nbeviteli mezők dinamikus feliratait',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'bejelölve engedélyezi a többszörös\nbeviteli mezők dinamikus feliratait',
-    'Prefer empty slot drops':
-        'Üres helyre ejt először',
-    'settings menu prefer empty slots hint':
-        'bekapcsolva az üres helyre ejti\nelőször a behúzott blokkot',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'kikapcsolva engedélyezed,\nhogy a behúzott blokk kirúgjon más blokkokat',
-    'check to turn on\n visible stepping (slow)':
-        'bekapcsolva lassítva láthatod a program lépéseit',
-    'uncheck to turn off\nvisible stepping':
-        'kikapcsolva nem látod már\nlassítva láthatod a program lépéseit',
-    'Long form input dialog':
-        'Hosszú formátumú beviteli párbeszéd',
-    'Plain prototype labels':
-        'Egyszerű blokk prototípus címkék',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'üresen hagyva mindig látszik a (+) jel\na blokk prototípus cimkéjében',
-    'check to hide (+) symbols\nin block prototype labels':
-        'bejelölve látszik a (+) jel\na blokk prototípus cimkéjében',
-    'check to always show slot\ntypes in the input dialog':
-        'bejelölve mindig látszik a csatlakozás típusa a beviteli párbeszédablakban',
-    'uncheck to use the input\ndialog in short form':
-        'kapcsolja ki, ha rövidített\npárbeszédablakot akar használni',
-    'JavaScript extensions':
-        'JavaScript kiegészítők',
-    'check to support\nnative JavaScript functions':
-        'bekapcsolva a natív\nJavaScript függvények elérhetőek',
-    'uncheck to disable support for\nnative JavaScript functions':
-        'kikapcsolva a natív\nJavaScript függvények nem elérhetőek',
-    'JavaScript extensions for Snap!\nare turned off':
-        'JavaScript natív függvények\nkikapcsolva',
-    'Extension blocks':
-        'Kiegészítő blokkok',
-    'uncheck to hide extension\nprimitives in the palette':
-        'kikapcsolva a kiegészítő blokkokat\nelrejti a palettáról',
-    'check to show extension\nprimitives in the palette':
-        'bekapcsolva a kiegészítő blokkokat\nmegjeleníti a palettán',
-    'Input sliders':
-        'Beviteli csúszkák',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'kikapcsolva letiltja a csúszkákat\na beviteli mezőknél',
-    'check to enable\ninput sliders for\nentry fields':
-        'bekapcsolva engedélyezi a csúszkákat\na beviteli mezőknél',
-    'Retina display support':
-        'Retina felbontás támogatása',
-    'uncheck for lower resolution,\nsaves computing resources':
-        'kikapcsolva alacsonyabb felbontást mutat\nés kíméli az erőforrásokat',
-    'check for higher resolution,\nuses more computing resources':
-        'bekapcsolva magasabb felbontást mutat\nés több erőforrást használ',
-    'Codification support':
-        'A kodifikáció támogatása',
-    'Clicking sound':
-        'A kattintás hangja',
-    'uncheck to turn\nblock clicking\nsound off':
-        'kikapcsolva letiltja a blokkra kattintás hangját',
-    'check to turn\nblock clicking\nsound on':
-        'bekapcsolva engedélyezi a blokkra kattintás hangját',
-    'Animations':
-        'Animációk',
-    'uncheck to disable\nIDE animations':
-        'kikapcsolva letiltja\naz IDE animációit',
-    'Turbo mode':
-        'Turbó mód',
-    'check to prioritize\nscript execution':
-        'bekapcsolva a programozott\nvégrehajtás lesz az elsődleges',
-    'uncheck to run scripts\nat normal speed':
-        'kikapcsolva normál sebességen\nfutnak a programok',
-    'check to enable\nIDE animations':
-        'bekapcsolva engedélyezi\naz IDE animációit',
-    'Flat design':
-        'Flat design',
-    'check for alternative\nGUI design':
-        'bekapcsolva más kinézetű grafikus felületet látsz',
-    'uncheck for default\nGUI design':
-        'kikapcsolva a normál grafikus felületet látod',
-    'Nested auto-wrapping':
-        'Automatikus beágyazás',
-    'Keyboard Editing':
-        'Billentyűzet Szerkesztés',
-    'Table support':
-        'Táblázat támogatás',
-    'Table lines':
-        'Táblázat sorok',
-    'Visible stepping':
-        'Léptetés látható',
-    'Thread safe scripts':
-        'Biztonságos programszálak',
-    'uncheck to allow\nscript reentrance':
-        'kikapcsolva engedélyezi a programok\n többszörös végrehajtását',
-    'check to disallow\nscript reentrance':
-        'bekapcsolva engedélyezi a programok\n többszörös végrehajtását',
-    'Flat line ends':
-        'Egyszerű vonalvégződés',
-    'check for flat ends of lines':
-        'kapcsolja be az\negyszerű vonalvégződéshez',
-    'uncheck for round ends of lines':
-        'kapcsolja ki a\nlekerekített vonalvégződésekhez',
-
-    'Ternary Boolean slots':
-        'Ternary boolean támogatás',
-    'Inheritance support':
-        'Öröklődés támogatás',
-    'Hyper blocks support':
-        'Hyper blokk támogatás',
-    'uncheck to disable\nusing operators on lists and tables':
-         'kapcsold ki, hogy letiltsd\na műveleteket listákon és táblázatokon',
-    'check to enable\nusing operators on lists and tables':
-         'jelöld be, hogy engedélyezd\na műveleteket listákon és táblázatokon',
-    'Log pen vectors':
-        'Toll vektorok mentése',
-    'uncheck to turn off\nlogging pen vectors':
-        'kapcsold ki, hogy a\ntoll vektorok mentését leáálítsd',
-    'check to turn on\nlogging pen vectors':
-        'kapcsold be, hogy a\ntoll vektorok mentését elindítsd',
-    'Single palette':
-        'Egyesített paletta',
-    'check to show all blocks in a single palette':
-        'bekapcsolva minden blokkot egy palettán mutat',
-    'uncheck to show only the selected category\'s blocks':
-        'kikapcsolva csak a kiválasztott kategóriához tartozó blokkokat mutatja',
-    'Show categories':
-        'Kategóriák kijelzése',
-    'uncheck to hide\ncategory names\nin the palette':
-        'kikacsolva elrejti\na kategóriák neveit a palettáról',
-    'check to show\ncategory names\nin the palette':
-        'bekapcsolva megjeleníti\na kategóriák neveit a palettán',
-    'Show buttons':
-        'Gombok megjelenítése',
-    'uncheck to hide buttons\nin the palette':
-        'kikapcsolva elrejti\na gombokat a palettáról',
-    'check to show buttons\nin the palette':
-        'bekapcsolva megjeleníti\na gombokat a palettán',
-    'HSL pen color model':
-        'HSL színmodell',
-    'uncheck to switch pen colors\nand graphic effects to HSV':
-        'kikapcsolva a toll színekhez\nés a grafikai hatásokhoz a HSV színmodellt használja',
-    'check to switch pen colors\nand graphic effects to HSL':
-        'bekapcsolva a toll színekhez\nés a grafikai hatásokhoz a HSL színmodellt használja',
-    'Disable click-to-run':
-        'Blokkon-kattintáskor-futtatás tiltása',
-    'uncheck to enable\ndirectly running blocks\nby clicking on them':
-        'kikapcsolva a blokkon kattintva\na hozzá tartozó kód futtatása',
-    'check to disable\ndirectly running blocks\nby clicking on them':
-        'bekapcsolva a blokkon kattintva\na hozzá tartozó kód futtatása nem indul el',
-
-    // inputs
-    'with inputs':
-        'bevitelekkel',
-    'input names:':
-        'beviteli név:',
-    'Input Names:':
-        'Beviteli név:',
-    'input list:':
-        'Beviteli lista:',
-
-    // context menus:
-    'help':
-        'Súgó',
-
-    // palette:
-    'find blocks':
-        'blokk keresése',
-    'hide blocks...':
-        'blokkok elrejtése...',
-    'Hide blocks in palette':
-        'Blokkok elrejtése a palettáról',
-    'unused':
-        'nem használt',
-    'make a category...':
-        'új kategória...',
-    'New Category':
-        'Új kategória',
-    'Blocks category name:':
-        'Új kategória neve:',
-    'Category color':
-        'Kategória színe',
-    'red':
-        'piros',
-    'green':
-        'zöld',
-    'blue':
-        'kék',
-    'delete a category...':
-        'kategória törlése...',
-
-    // blocks:
-    'help...':
-        'Súgó...',
-    'relabel...':
-        'átcimkézés...',
-    'compile':
-        'fordítás',
-    'uncompile':
-        'fordítás visszavonása',
-    'duplicate':
-        'megkettőzés',
-    'make a copy\nand pick it up':
-        'másolat felvétele',
-    'only duplicate this block':
-        'csak készítsen egy másolatot\nerről a blokkról',
-    'extract':
-        'emeld ki',
-    'only grab this block':
-        'csak ezt a blokkot fogd meg',
-    'delete':
-        'törlés',
-    'senders...':
-        'küldők...',
-    'receivers...':
-        'fogadók...',
-    'script pic...':
-        'program képe...',
-    'save a picture\nof this script':
-        'mentsd le a képét\nennek a programnak',
-    'result pic...':
-        'kép...',
-    'save a picture of both\nthis script and its result':
-        'mentsd le a képét ennek a programnak\naz eredményével együtt',
-    'ringify':
-        'körülfog',
-    'unringify':
-        'körülfogás megszüntetése',
-
-    'transient':
-        'átmeneti',
-    'uncheck to save contents\nin the project':
-        'kikapcsolva elmenti\na változó értékét a projekttel',
-    'check to prevent contents\nfrom being saved':
-        'bekapcsolva nem menti el\na változó értékét a projekttel',
-    'new line':
-        'új sor',
-
-    // custom blocks:
-    'delete block definition...':
-        'blokkdefiníció törlése',
-    'duplicate block definition...':
-        'blokk definíció másolása...',
-    'export block definition...':
-        'blokk definíció exportálása...',
-    'including dependencies':
-        'függőségekkel együtt',
-    'edit...':
-        'szerkesztés...',
-    'translations...':
-        'fordítások...',
-    'block variables...':
-        'blokk változók...',
-    'in palette':
-        'a palettán',
-
-    /* additional, missing from lang-de */
-    'block variables':
-        'blokk változók',
-    'Block variable name':
-        'Blokk változó neve',
-    'remove block variables...':
-        'blokk változók törlése...',
-
-    // sprites:
-    'edit':
-        'szerkesztés',
-    'clone':
-        'másolás',
-    'move':
-        'mozgatás',
-    'pivot':
-        'forgatás',
-    'edit the costume\'s\nrotation center':
-        'szerkezd a jelmez\nforgatási középpontját',
-    'rotate':
-    	'forgatás',
-    'stick to':
-        'tapadjon',
-    'detach from':
-        'leválasztás erről',
-    'detach all parts':
-        'minden rész szétválasztása',
-    'export...':
-        'exportálás...',
-
-    'parent...':
-        'szülő...',
-    'current parent':
-        'aktuális szülő',
-    'release':
-        'engedd el',
-    'make temporary and\nhide in the sprite corral':
-        'tedd ideiglenessé\nés rejtsd el a szereplők közül',
-
-    // stage:
-    'show all':
-        'mindent mutat',
-    'pic...':
-        'kép exportálása...',
-    'save a picture\nof the stage':
-        'mentsd el a játéktér képét',
-    'svg...':
-        'svg...',
-    'export pen trails\nline segments as SVG':
-        'toll vonalak exportálása\nSVG forámumba',
-    'there are currently no\nvectorizable pen trail segments':
-        'jelenleg nincs vektoros toll vonal',
-    'turn all pen trails and stamps\ninto a new background for the stage':
-        'játéktér háttérképévé változtasd\naz összes tollvonás és békyegzőt',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'minden tollbeállítás átállítása\nés átvitele az aktuális\nalak egy új jelmezébe',
-    // scripting area
-    'clean up':
-        'törlés',
-    'arrange scripts\nvertically':
-        'a program függőleges átméretezése',
-    'add comment':
-        'megjegyzés hozzáadása',
-    'undrop':
-        'visszavétel',
-    'undo the last\nblock drop\nin this pane':
-        'az utolsó blokk visszavétele erről a lapról',
-    'redrop':
-        'újra',
-    'use the keyboard\nto enter blocks':
-    	'a billenytűzet segítségével\nhozz létre blokkokat',
-    'scripts pic...':
-        'minden feladat képpé...',
-    'save a picture\nof all scripts':
-        'mentsd el minden program képét',
-    'make a block...':
-        'blokk létrehozása...',
-
-    // costumes
-    'rename':
-        'átnevezés',
-    'export':
-        'exportálás',
-    'rename costume':
-        'jelmez átnevezése',
-    'rename background':
-        'háttér átnevezése',
-
-    // sounds
-    'Play sound':
-        'Hang lejátszása',
-    'Stop sound':
-        'A hang leállítása',
-    'Stop':
-        'Állj',
-    'Play':
-        'Lejátszás',
-    'rename sound':
-        'A hang átnevezése',
-
-    // lists and tables
-    'list view...':
-        'lista nézet...',
-    'table view...':
-        'tábla nézet...',
-    'Table view':
-        'Tábla nézet',
-    'open in dialog...':
-        'nyisd meg párbeszédablakban...',
-    'blockify':
-        'blokkosdítsd',
-    'reset columns':
-        'oszlopok visszaállítása',
-    'items':
-        'elemek',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'Ok',
-    'Cancel':
-        'Mégsem',
-    'Yes':
-        'Igen',
-    'No':
-        'Nem',
-
-    // help
-    'Help':
-        'Súgó',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Blokkokra közelítés',
-    'build':
-        'építés',
-    'your own':
-        'saját',
-    'blocks':
-        'blokkok',
-    'normal (1x)':
-        'normál (1x)',
-    'demo (1.2x)':
-        'Demó (1.2x)',
-    'presentation (1.4x)':
-        'Prezentáció (1.4x)',
-    'big (2x)':
-        'nagy (2x)',
-    'huge (4x)':
-        'óriási (4x)',
-    'giant (8x)':
-        'gigantikus (8x)',
-    'monstrous (10x)':
-        'szörnyeteg (10x)',
-
-    // fade blocks
-    'Fade blocks':
-        'Blokkok átlátszósága',
-    'block-solid (0)':
-        'normál (0)',
-    'medium (50)':
-        'közepes (50)',
-    'light (70)':
-        'halvány (70)',
-    'shimmering (80)':
-        'csillámló (80)',
-    'elegant (90)':
-        'elegáns (90)',
-    'subtle (95)':
-        'kifinomult (95)',
-    'text-only (100)':
-        'csak szöveg (100)',
-
-    // Project Manager
-    'Untitled':
-        'Névtelen',
-    'Open Project':
-        'Projekt megnyitása',
-    'Open':
-        'Megnyitás',
-    '(empty)':
-        '(üres)',
-    'Saved!':
-        'Mentve!',
-    'Delete Project':
-        'Projekt törlése',
-    'Are you sure you want to delete':
-        'Biztos, hogy törlöd?',
-    'rename...':
-        'átnevezés...',
-
-    'Examples':
-        'Példák',
-    'Share':
-        'Megosztás',
-    'Unshare':
-        'Nincs megosztás',
-    'Publish':
-        'Publikálás',
-    'Unpublish':
-        'Publikálás visszavonása',
-    'Updating\nproject list...':
-        'A projeklista frissítése...',
-    'Recover':
-        'Visszaállítás',
-    'Today':
-        'Ma',
-    'Yesterday':
-        'Tegnap',
-
-    // costume editor
-    'Costume Editor':
-        'Jelmezszerkesztő',
-    'Paint Editor':
-        'Képszerkesztő',
-    'click or drag crosshairs to move the rotation center':
-        'kattints oda vagy vidd a szálkeresztet a forgás középpontjába',
-
-    'undo':
-        'visszavon',
-    'Vector':
-        'Vektor',
-    'Paintbrush tool\n(free draw)':
-        'Festőecset eszköz\n(szabadkézi rajz)',
-    'Stroked Rectangle\n(shift: square)':
-        'Téglalap\n(shift: négyzet)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Ellipszis\n(shift: kör)',
-    'Eraser tool':
-        'Törlő eszköz',
-    'Set the rotation center':
-        'A forgatás középpontjának beállítása',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Vonalrajzoló eszköz\n(shift: függőleges/vízszintes)',
-    'Filled Rectangle\n(shift: square)':
-        'Kitöltött téglalap\n(shift: négyzet)',
-    'Filled Ellipse\n(shift: circle)':
-        'Kitöltött ellipszis\n(shift: kör)',
-    'Fill a region':
-        'Terület kitöltése',
-    'Pipette tool\n(pick a color anywhere)':
-        'Pipetta\n(szín felvétele bárhonnan)',
-    'Brush size':
-        'Ecsetméret',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Megmaradjanak az alakzat arányai?\n(ehhez használhatja a SHIFT billentyűt is)',
-    'Vector Paint Editor':
-        'Vektor Szerkesztő',
-    'Rectangle\n(shift: square)':
-        'Négyszög\n(Shift: négyzet)',
-    'Ellipse\n(shift: circle)':
-        'Ellipszis\n(Shift: kör)',
-    'Selection tool':
-        'Kijelölő',
-    'Line tool\n(shift: constrain to 45º)':
-        'Vonal\n(Shift: korlátozza 45°)',
-    'Closed brush\n(free draw)':
-        'Kitöltött ecset\n(szabad rajz)',
-    'Paint a shape\n(shift: secondary color)':
-        'Minta kitöltése\n(Shift: másodlagos színnel)',
-    'Pipette tool\n(pick a color from anywhere\nshift: secondary color)':
-        'Pipetta eszköz\n(Tetszőleges hlyről szín felszedése\nshift: másodlagos színnel)',
-    'Edge color\n(left click)':
-        'Vonal színe\n(bal gomb)',
-    'Fill color\n(right click)':
-        'Kitöltő szín\n(jobb klikk)',
-   // 'Top':
-   //     'oben',
-   // 'Bottom':
-   //     'unten',
-   // 'Up':
-   //     'nach oben',
-   // 'Down':
-   //     'nach unten',
-
-
-    // project notes
-    'Project Notes':
-        'A projekt jegyzetei',
-    /* additional, missing from lang-de */
-    'Notes...':
-        'A projekt jegyzetei',
-
-    // new project
-    'New Project':
-        'Új projekt',
-    'Unsaved Changes!':
-        'Nem mentett változások!',
-    'Replace the current project with a new one?':
-        'Felülírja az aktuális projektet egy újjal?',
-
-    'Backup failed.\nThis cannot be undone, proceed anyway?':
-        'Sikertelen biztonsági mentés.\nNem visszavonható, folytatod?',
-
-    // save project
-    'Save Project As...':
-        'Projekt mentése másként...',
-
-    'Save Project':
-        'A projekt mentése',
-    // export blocks
-    'Export blocks':
-        'Blokkok exportja',
-    'Import blocks':
-        'Blokkok importja',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'ennek a projektnek még nincs globális felhasználói blokkjai',
-    'select':
-        'választás',
-    'none':
-        'egyik sem',
-
-    // variable dialog
-    'for all sprites':
-        'minden alakzatra',
-    'for this sprite only':
-        'csak erre az alakzatra',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        'nevezd át \ncsak ezt a függvényt',
-    'rename all...':
-        'mindegyik átnevezése...',
-    'rename all blocks that\naccess this variable':
-        'minden blokk átnevezése\namely ezt a változót használja',
-
-
-    // block dialog
-    'Change block':
-        'Blokk változtatása',
-    'Command':
-        'Parancs',
-    'Reporter':
-        'Függvény',
-    'Predicate':
-        'Kijelentés',
-
-    // block editor
-    'Block Editor':
-        'Blokk Szerkesztő',
-    'Method Editor':
-        'Függvény Szekesztő',
-    'Apply':
-        'Alkalmaz',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Felhasználói blokk törlése',
-    'block deletion dialog text':
-        'Biztos, hogy eltávolítja ezt\na blokkot és minden példányát?',
-
-    // input dialog
-    'Create input name':
-        'A bevitel nevének létrehozása',
-    'Edit input name':
-        'A bevitel nevének szerkesztése',
-    'Edit label fragment':
-        'A címke rész szerkesztése',
-    'Title text':
-        'A cím szövege',
-    'Input name':
-        'A bevitel neve',
-    'Delete':
-        'Törlés',
-    'Object':
-        'Objektum',
-    'Number':
-        'Szám',
-    'Text':
-        'Szöveg',
-    'String':
-        'Szöveg',
-    'List':
-        'Lista',
-    'Any type':
-        'Bármilyen típus',
-    'Boolean (T/F)':
-        'Logikai (I/H)',
-    'Command\n(inline)':
-        'Parancs\n(egysoros)',
-    'Command\n(C-shape)':
-        'Parancs\n(C-forma)',
-    'Any\n(unevaluated)':
-        'Bármilyen\n(nem kiértékelt)',
-    'Boolean\n(unevaluated)':
-        'Logikai\n(nem kiértékelt)',
-    'Single input.':
-        'Egyszerű bevitel.',
-    'Default Value:':
-        'Alapérték:',
-    'Multiple inputs (value is list of inputs)':
-        'Több érték bevitele (az érték a bevitelek listája)',
-    'Upvar - make internal variable visible to caller':
-        'A belső változók láthatóvá tétele a hívó számára',
-
-    // About Snap
-    'About Snap':
-        'A Snap névjegye',
-    'Back...':
-        'Vissza...',
-    'License...':
-        'Licenc...',
-    'Modules...':
-        'Modulok...',
-    'Credits...':
-        'Közreműködők...',
-    'Translators...':
-        'Fordítók',
-    'License':
-        'Licenc',
-    'current module versions:':
-        'a jelenlegi modulverziók',
-    'Contributors':
-        'Közreműködők',
-    'Translations':
-        'Fordítások',
-
-    // variable watchers
-    'normal':
-        'normál',
-    'large':
-        'nagy',
-    'slider':
-        'csúszka',
-    'slider min...':
-        'a csúszka minimuma...',
-    'slider max...':
-        'a csúszka maximuma...',
-    'import...':
-        'importálás...',
-    'raw data...':
-        'nyers adat...',
-    'import without attempting to\nparse or format data':
-        'importálj anélkül, hogy megpróbálnád\értelmezni vagy formázni az adatot',
-    'Slider minimum value':
-        'Csúszka minimális értéke',
-    'Slider maximum value':
-        'Csúszka maximális értéke',
-
-    // list watchers
-    'length: ':
-        'hossz: ',
-
-    // coments
-    'add comment here...':
-        'tegye ide a megjegyzést',
-
-    'comment pic...':
-        'megjegyzés képe...',
-    'save a picture\nof this comment':
-        'kép erről a megjegyzésről',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) jobbra',
-    '(-90) left':
-        '(-90) balra',
-    '(0) up':
-        '(0) fel',
-    '(180) down':
-        '(180) le',
-
-    'random':
-    	'véletlen',
-    'random position':
-     	'véletlenszerű hely',
-
-    // collision detection
-    'mouse-pointer':
-        'egérmutató',
-    'edge':
-        'játéktér széle',
-    'pen trails':
-        'ceruza nyomvonala',
-
-    'center':
-        'közép',
-
-    // costumes
-    'Turtle':
-        'Teknős',
-    'Empty':
-        'Üres',
-
-    'Paint a new costume':
-        'Új jelmez rajzolása',
-    'Import a new costume from your webcam':
-        'Új jelmez importálása a webkamerával',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Győződj meg arról, hogy a böngésződ naprakész\nés a kamerát is megfelelően beállítottad. \n\nPár böngésző megköveteli, hogy HTTPS kapcsolaton\nkeresztül nyisd meg a Snap oldalát\n\nPróbáld meg kicserélni a cím "http://" részét\n"https://" előtagra és próbáld meg újra!',
-    'Camera':
-        'Kamera',
-    
-    // sounds
-    'Record a new sound':
-        'Új hang felvétele',
-    
-
-    // graphical effects, pen color
-    'color':
-        'szín',
-    'hue':
-        'árnyalat',
-    'fisheye':
-        'halszem',
-    'whirl':
-        'örvény',
-    'pixelate':
-        'pixeles',
-    'mosaic':
-        'mozaik',
-    'saturation':
-        'színtelítettség',
-    // graphical effects
-    'brightness':
-        'világosság',
-    'transparency':
-        'áttetszőség',
-    'ghost':
-        'átlátszóság',
-    'negative':
-        'negatív',
-    'comic':
-        'moáré',
-    'confetti':
-        'konfetti',
-
-    // keys
-    'space':
-        'szóköz',
-    'up arrow':
-        'felfelé nyíl',
-    'down arrow':
-        'lefelé nyíl',
-    'right arrow':
-        'jobbra nyíl',
-    'left arrow':
-        'balra nyíl',
-    'any key':
-        'bármelyik gomb',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'új...',
-
-    '__shout__go__':
-        '__zöld__zászló__',
-
-    // math functions
-    'abs':
-        'abszolútérték',
-    'ceiling':
-        'felső egészrész',
-    'floor':
-        'alsó egészrész',
-    'sqrt':
-        'négyzetgyök',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'nem',
-
-    // delimiters
-    'letter':
-        'betű',
-    'word':
-        'szó',
-    'whitespace':
-        'szóköz',
-    'line':
-        'újsor',
-    'tab':
-        'tabulátor',
-    'cr':
-        'kocsivissza',
-
-    // data types
-    'number':
-        'szám',
-    'text':
-        'szöveg',
-    'Boolean':
-        'logikai',
-    'list':
-        'lista',
-    'command':
-        'parancsblokk',
-    'reporter':
-        'függvényblokk',
-    'predicate':
-        'kijelentés',
-
-    'sprite':
-        'szereplő',
-    'ring':
-        'gyűrű',
-    'nothing':
-        'semmi',
-
-    // list indices
-    'last':
-        'utolsó',
-    'any':
-        'valamelyik',
-    // attributes
-    'my':
-        'saját',
-    'neighbors':
-        'szomszéd',
-    'self':
-        'saját',
-    'other sprites':
-        'más szereplők',
-    'parts':
-        'részek',
-    'anchor':
-        'horgony',
-    'parent':
-        'szülő',
-    'temporary?':
-        'ideiglenes?',
-    'children':
-        'gyermek',
-    'clones':
-        'másolat',
-    'other clones':
-        'többi másolat',
-    'dangling?':
-        'külön forgó?',
-    'draggable?':
-        'húzható?',
-    'rotation style':
-        'forgási stílus',
-    'rotation x':
-        'forgatás x',
-    'rotation y':
-        'forgatás y',
-    'center x':
-        'középpont x',
-    'center y':
-        'középpont y',
-    'name':
-        'név',
-    'costume':
-        'jelmez',
-    'stage':
-        'játéktér',
-    'costumes':
-        'jelmezek',
-    'sounds':
-        'hangok',
-    'scripts':
-        'programok',
-    'width':
-        'szélesség',
-    'height':
-        'magasság',
-    'left':
-        'bal',
-    'right':
-        'jobb',
-    'top':
-        'teteje',
-    'bottom':
-        'alja',
-
-    // attributes in the SET block's dropdown
-    'my anchor':
-        'horgonyom',
-    'my parent':
-        'szülőm',
-    'my name':
-        'nevem',
-    'my temporary?':
-        'ideiglenes vagyok?',
-    'my dangling?':
-        'külön forgok?',
-    'my draggable?':
-        'húzható vagyok?',
-    'my rotation style':
-        'forgatási stílusom',
-    'my rotation x':
-        'forgatás x attribútumom',
-    'my rotation y':
-        'forgatás y attribútumom',
-
-    // inheritance
-    'inherited':
-        'örökölt',
-    'check to inherit\nfrom':
-        'bekapcsolva öröklődik\ninnen',
-    'uncheck to\ndisinherit':
-        'kikapcsolva nem öröklődik tovább',
-
-    // error messages
-    'Error':
-        'Hiba',
-    'a variable of name \'':
-        'a változó \'',
-    '\'\ndoes not exist in this context':
-        '\'\nnem található ebben környzetben',
-    'expecting a':
-        'Számítunk egy',
-    'but getting a':
-        'helyette találtunk egy',
-    'expecting':
-        'számítunk',
-    'input(s), but getting':
-        'bevitel(ek)re, de helyette',
-    'Inside a custom block':
-        'Egy egyedi blokkban',
-    'The error occured at':
-        'Hiba történt ezen a',
-    'continuations cannot be forked':
-        'Folytatásokat nem tudom indítani',
-    'unable to convert to':
-        'nem tudom konvertálni',
-    'Request blocked':
-        'Kérés blokkolva',
-    'cannot operate on a deleted sprite':
-        'nem tudok törölt szereplővel dolgozni',
-    'cannot send media,\nsprites or procedures\nto another scene':
-        'nem lehetséges média,\n szerepl[ vagy eljárás küldése\nmásik jelenetbe',
-    'unsupported attribute':
-        'nem támogatott tulajdonság',
-    'unable to nest\n(disabled or circular?)':
-        'nem lehet beágyazni\n(inaktív vagy körkörös hivatkozás?)',
-    'unable to inherit\n(disabled or circular?)':
-        'nem örökölhető\n(inaktív vagy körkörös hivatkozás?)',
-    'is read-only':
-        'csak olvasható',
-    'is not a valid option':
-        'nem választható',
-    'unsupported data type':
-        'nem támogatott adattípus',
-    'expecting a finite number\nbut getting Infinity or NaN':
-        'véges számot várunk\nhelyette végtelen vagy NaN érkezett',
-    'the predicate takes\ntoo long for a\ncustom hat block':
-        'az előzmény túl hosszú ideig fut\negy egyedi kalap blokkhoz',
-    'missing / unspecified extension':
-        'Hiányzó vagy nem specifikált kiegészítő',
-    'reporter didn\'t report':
-        'a függvény érték nélkül tért vissza',
-    'a custom block definition is missing':
-        'hiányzó egyedi blokk definíció',
-    'exceeding maximum number of clones':
-        'meghaladta a maximális másolatok számát',
-    'can only write text or numbers, not a':
-        'csak szöveget vagy számot adhatsz meg, ezt nem érvényes',
-    'unsupported graphic effect':
-        'nem támogatott grafikai hatás',
-    'setting the rotation center requires a costume':
-        'a forgáspont beállításához szükség van egy jelmezre',
-    'Web Audio API is not supported\nin this browser':
-        'a Web Audio API nem\ntámogatott ezen a böngészőn',
-
-
-	/* ::DELETED, BUT TO BE KEPT */
-    'costume name':
-        'a jelmez neve',
-    'read-only':
-        'csak olvasható',
-    'variables':
-        'változók',
-
-    /* additional, missing from lang-de */
-    'grow':
-        'növekedés',
-    'shrink':
-        'kicsinyítés',
-    'flip ↔':
-        'tükrözés ↔',
-    'flip ↕':
-        'tükrözés ↕',
-    'Export all scripts as pic...':
-        'Minden feladat exportálása képként...',
-    'show a picture of all scripts\nand block definitions':
-        'minden feladat és blokk\ndefinícióról készült kép mutatása',
-    'find blocks...':
-        'blokkok keresése...',
-    'Snap!Cloud':
-        'Snap!Felhő',
-    'Cloud':
-        'Felhő',
-    'could not connect to:':
-        'nem tud csatlakozni ide:',
-    'Service:':
-        'Szolgáltatás:',
-    'login':
-        'bejelentkezés',
-    'ERROR: INVALID PASSWORD':
-        'HIBA: ÉRVÉNYTELEN JELSZÓ',
-    'Browser':
-        'Böngésző',
-    'Sign up':
-        'Újként regisztrálni',
-    'Signup':
-        'Új regisztráció',
-    'Sign in':
-        'Regisztráció',
-    'Change Password':
-        'Jelszó megváltoztatása',
-    'Account created.':
-        'Az azonosító létrejött.',
-    'An e-mail with your password\nhas been sent to the address provided':
-        'A megadott címre e-mailben elküldtük a jelszavát.',
-    'now connected.':
-        'csatlakozva.',
-    'disconnected.':
-        'leválasztva.',
-    'Reset password':
-        'A jelszó alaphelyzetre állítása',
-    'User name:':
-        'Felhasználói név:',
-    'Password:':
-        'Jelszó:',
-    'Old password:':
-        'A jelenlegi jelszó:',
-    'New password:':
-        'Új jelszó:',
-    'Repeat new password:':
-        'Az új jelszó ismét:',
-    'Birth date:':
-        'Születési idő:',
-    'January':
-        'január',
-    'February':
-        'február',
-    'March':
-        'március',
-    'April':
-        'április',
-    'May':
-        'május',
-    'June':
-        'június',
-    'July':
-        'július',
-    'August':
-        'augusztus',
-    'September':
-        'szeptember',
-    'October':
-        'október',
-    'November':
-        'november',
-    'December':
-        'december',
-    'year:':
-        'év:',
-    ' or before':
-        ' vagy előtte',
-    'E-mail address:':
-        'E-mail cím:',
-    'E-mail address of parent or guardian:':
-        'A szülő vagy gondozó email címe:',
-    'Terms of Service...':
-        'Felhasználási feltételek...',
-    'Privacy...':
-        'Jogvédelem...',
-    'I have read and agree\nto the Terms of Service':
-        'Elolvastam és egyetértek\na felhasználási feltételekkel',
-    'stay signed in on this computer\nuntil logging out':
-        'maradjon bejelentkezve, amíg ki nem jelentkezem a számítógépről',
-    'please fill out\nthis field':
-        'kérem, töltse ki\nezt a mezőt.',
-    'User name must be four\ncharacters or longer':
-        'A felhasználói név legalább\nnégy karakteres legyen.',
-    'please provide a valid\nemail address':
-        'kérem, adjon meg egy\nérvényes email címet.',
-    'password must be six\ncharacters or longer':
-        'a jelszó legyen legalább\nhat karakter hosszú.',
-    'passwords do\nnot match':
-        'A jelszavak nem egyeznek.',
-    'please agree to\nthe TOS':
-        'fogadja el a felhasználási feltételeket.',
-    'You are not logged in':
-        'Még nem lépett be',
-    'Opening project...':
-        'Projekt megnyitása...',
-    'Fetching project\nfrom the cloud...':
-        'Projekt letöltése\na felhőből...',
-    'Saving project\nto the cloud...':
-        'Projekt mentése\na felhőbe...',
-    'Sprite Nesting':
-        'Szereplők összefűzése',
-    'uncheck to disable\nsprite composition':
-        'kapcsolja ki a szereplők összefűzésének megakadályozásához.',
-    'check for block\nto text mapping features':
-        'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
-    'saved.':
-        'mentve.',
-    'Input Slot Options':
-        'Bemenő adat csatlakozási lehetőségek',
-    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
-        'Soronként egy lehetőséget írjon be.\nSzükség esetén használhatja az "=" jelet\nkulcs/érték pár elválasztására, pl.\na válasz=42',
-    'Rasterize SVGs':
-        'SVG átalakítása bittérképbe',
-    'check to rasterize\nSVGs on import':
-        'SVG bittérképpé alakíthatóságának\nellenőrzése az importálás során',
-    'open a new window\nwith a picture of this comment':
-        'új ablak megnyitása\nennek a megjegyzésnek a képével',
-    'square':
-        'négyzet',
-    'pointRight':
-        'háromszög jobbra',
-    'gears':
-        'fogaskerék',
-    'file':
-        'állomány',
-    'fullScreen':
-        'teljes képernyő',
-    'normalScreen':
-        'normál képernyő',
-    'smallStage':
-        'kis játéktér',
-    'normalStage':
-        'normál játéktér',
-    'turtle':
-        'teknős',
-    'turtleOutline':
-        'a teknős körvonala',
-    'pause':
-        'szünet',
-    'flag':
-        'zászló',
-    'octagon':
-        'nyolcszög',
-    'cloud':
-        'felhő',
-    'cloudOutline':
-        'a felhő körvonala',
-    'cloudGradient':
-        'a felhő áttetszősége',
-    'turnRight':
-        'fordulj jobbra',
-    'turnLeft':
-        'fordulj balra',
-    'storage':
-        'tárolás',
-    'poster':
-        'háttérkép',
-    'flash':
-        'villám',
-    'brush':
-        'ecset',
-    'rectangle':
-        'téglalap',
-    'rectangleSolid':
-        'kitöltött téglalap',
-    'circle':
-        'kör',
-    'circleSolid':
-        'kitöltött kör',
-    'crosshairs':
-        'szálkereszt',
-    'paintbucket':
-        'festékesvödör',
-    'eraser':
-        'radír',
-    'pipette':
-        'pipetta',
-    'speechBubble':
-        'buborék',
-    'speechBubbleOutline':
-        'a buborék körvonala',
-    'arrowUp':
-        'felfelé nyíl',
-    'arrowUpOutline':
-        'a felfelényíl körvonala',
-    'arrowLeft':
-        'balra nyíl',
-    'arrowLeftOutline':
-        'a balra nyíl körvonala',
-    'arrowDown':
-        'lefelé nyíl',
-    'arrowDownOutline':
-        'a lefelényíl körvonala',
-    'arrowRight':
-        'jobbra nyíl',
-    'arrowRightOutline':
-        'a jobbranyíl körvonala',
-    'robot':
-        'robot',
-    'turn pen trails into new costume...':
-        'a toll beállításainak alkalmazása egy új jelmezre...',
-    'pen':
-        'toll',
-    'tip':
-        'tipp',
-    'middle':
-        'közép',
-    'last changed':
-        'utoljára változtatva',
-    'Are you sure you want to publish':
-        'Biztosan nyilvánossá teszi',
-    'Are you sure you want to unpublish':
-        'Biztos, hogy nemnyilvánossá teszi',
-    'Share Project':
-        'A projekt megosztása',
-    'Unshare Project':
-        'A projekt megosztásának megszüntetése',
-    'sharing\nproject...':
-        'a projekt\nmegosztása...',
-    'unsharing\nproject...':
-        'a projekt megosztásának\nmegszüntetése...',
-    'shared.':
-        'megosztva.',
-    'unshared.':
-        'nincs megosztva.',
-    'password has been changed.':
-        'a jelszó megváltozott.',
-    'SVG costumes are\nnot yet fully supported\nin every browser':
-        'Az SVG ábrákat nem minden böngésző támogatja',
-    'script pic with result...':
-        'a program képe az eredménnyel...',
-    'open a new window\nwith a picture of both\nthis script and its result':
-        'Új böngészőablak megnyitása a programnak és eredményének képével.',
-    'Import sound':
-        'Hang importálása',
-    'Import':
-        'Import',
-    'edit rotation point only...':
-        'csak a forgáspont szerkesztése...',
-    'Export Project As...':
-        'Projekt exportálása mint...',
-    'a variable of name \'':
-        'ilyen nevű változó «',
-    '\'\ndoes not exist in this context':
-        '»\nnincs ebben a környezetben',
-    '(temporary)':
-        '(ideiglenes)',
-    'expecting':
-        'kötelező',
-    'input(s), but getting':
-        'adatbevitel, de ez érkezett',
-
-    // kódolás - "Codification”
-    'map %cmdRing to %codeKind %code':
-        'képezd le %cmdRing erre %codeKind %code',
-    'map %mapValue to code %code':
-        'képezd le %mapValue kódra %code',
-    'map %codeListPart of %codeListKind to code %code':
-        'képezd le %codeListPart ebben %codeListKind erre a kódre %code',
-    'code of %cmdRing':
-        '%cmdRing kódja',
-    'delimiter':
-        'határoló',
-    'collection':
-        'gyűjtemény',
-    'parameters':
-        'paraméterek',
-    'code':
-        'kód',
-    'header':
-        'fejléc',
-    'header mapping...':
-        'fejléc leképezés...',
-    'code mapping...':
-        'kód leképezés...',
-    'Code mapping':
-        'Kód leképezés',
-    'Header mapping':
-        'A fejléc leképezése',
-    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
-        'Gépeld be a blokk definíciójának megfelelő programkódot. Használd a látható formális paramétereket\nés a <body> referenciát a törzs generált szövegkódodhoz.',
-    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
-        'Gépeld be a blokk definíciójának megfelelő programkódot. Használd a saját\nformális paramétereit (hagyd figyelmen kívül a példákat).',
-    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
-        'Gépeld be a blokk működésének megfelelő programkódot (általában egy függvény\nbevezetésével). Használd a <#n> hivatkozási helyen látható aktuális argumentumokat.'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "» nincs ebben a környezetben",
+    "(-90) left": "(-90) balra",
+    "(0) up": "(0) fel",
+    "(1) sine": "(1) szinusz",
+    "(180) down": "(180) le",
+    "(2) square": "(2) négyzetes",
+    "(3) sawtooth": "(3) fűrészfog",
+    "(4) triangle": "(4) háromszög",
+    "(90) right": "(90) jobbra",
+    "(empty)": "(üres)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "(ideiglenes)",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "A Snap névjegye",
+    "About...": "A Snap! névjegye...",
+    "Account created.": "Az azonosító létrejött.",
+    "Add interactive maps to projects": "",
+    "Add scene...": "Jelenet hozzáadása...",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "Többsoros szövegbevitel megengedése",
+    "An e-mail with your password has been sent to the address provided": "A megadott címre e-mailben elküldtük a jelszavát.",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "Animációk",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "Bármilyen (nem kiértékelt)",
+    "Any type": "Bármilyen típus",
+    "Apply": "Alkalmaz",
+    "April": "április",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Biztos, hogy törlöd?",
+    "Are you sure you want to publish": "Biztosan nyilvánossá teszi",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "Biztos, hogy nemnyilvánossá teszi",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "augusztus",
+    "Back...": "Vissza...",
+    "Backgrounds": "Hátterek",
+    "Backup failed. This cannot be undone, proceed anyway?": "Sikertelen biztonsági mentés. Nem visszavonható, folytatod?",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "Születési idő:",
+    "Bitmap": "",
+    "Block Editor": "Blokk Szerkesztő",
+    "Block variable name": "Blokk változó neve",
+    "Blocks": "Blokkok",
+    "Blocks category name:": "Új kategória neve:",
+    "Blurred shadows": "Elmosódó árnyékok",
+    "Boolean": "logikai",
+    "Boolean (T/F)": "Logikai (I/H)",
+    "Boolean (unevaluated)": "Logikai (nem kiértékelt)",
+    "Bottom": "",
+    "Bring back deleted sprites": "Állítsd vissza a törölt szereplőket",
+    "Browser": "Böngésző",
+    "Brush size": "Ecsetméret",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "Mégsem",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "Programban hibák elkapása",
+    "Category color": "Kategória színe",
+    "Change Password": "Jelszó megváltoztatása",
+    "Change Password...": "Jelszó megváltoztatása...",
+    "Change block": "Blokk változtatása",
+    "Clear backup": "",
+    "Clicking sound": "A kattintás hangja",
+    "Closed brush (free draw)": "Kitöltött ecset (szabad rajz)",
+    "Cloud": "Felhő",
+    "Code mapping": "Kód leképezés",
+    "Codification support": "A kodifikáció támogatása",
+    "Colors and Crayons": "",
+    "Command": "Parancs",
+    "Command (C-shape)": "Parancs (C-forma)",
+    "Command (inline)": "Parancs (egysoros)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "Megmaradjanak az alakzat arányai? (ehhez használhatja a SHIFT billentyűt is)",
+    "Contents": "Tartalom",
+    "Contributors": "Közreműködők",
+    "Control": "Vezérlés",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "Jelmezszerkesztő",
+    "Costumes": "Jelmezek",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "A bevitel nevének létrehozása",
+    "Create variables": "",
+    "Create variables in program": "Programban változók létrehozása",
+    "Credits...": "Közreműködők...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "december",
+    "Default": "Alapérték",
+    "Default Value:": "Alapérték:",
+    "Delete": "Törlés",
+    "Delete Custom Block": "Felhasználói blokk törlése",
+    "Delete Project": "Projekt törlése",
+    "Delete a variable": "Változó törlése",
+    "Disable click-to-run": "Blokkon-kattintáskor-futtatás tiltása",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "A forráskód letöltése",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Dinamikus beviteli feliratok",
+    "E-mail address of parent or guardian:": "A szülő vagy gondozó email címe:",
+    "E-mail address:": "E-mail cím:",
+    "ERROR: INVALID PASSWORD": "HIBA: ÉRVÉNYTELEN JELSZÓ",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "Vonal színe (bal gomb)",
+    "Edit input name": "A bevitel nevének szerkesztése",
+    "Edit label fragment": "A címke rész szerkesztése",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "Ellipszis (Shift: kör)",
+    "Empty": "Üres",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "Gépeld be a blokk definíciójának megfelelő programkódot. Használd a saját formális paramétereit (hagyd figyelmen kívül a példákat).",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "Gépeld be a blokk definíciójának megfelelő programkódot. Használd a látható formális paramétereket és a <body> referenciát a törzs generált szövegkódodhoz.",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "Gépeld be a blokk működésének megfelelő programkódot (általában egy függvény bevezetésével). Használd a <#n> hivatkozási helyen látható aktuális argumentumokat.",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "Soronként egy lehetőséget írjon be. Szükség esetén használhatja az \"=\" jelet kulcs/érték pár elválasztására, pl. a válasz=42",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "Törlő eszköz",
+    "Error": "Hiba",
+    "Examples": "Példák",
+    "Execute on slider change": "",
+    "Export Project As...": "Projekt exportálása mint...",
+    "Export all scripts as pic...": "Minden feladat exportálása képként...",
+    "Export blocks": "Blokkok exportja",
+    "Export blocks...": "Blokk exportálása...",
+    "Export project as plain text...": "Projekt exportálása egyszerű szövegként...",
+    "Export project...": "Projekt exportálása...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "Összefoglaló exportálása...",
+    "Extension blocks": "Kiegészítő blokkok",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "Blokkok átlátszósága",
+    "Fade blocks...": "Blokkok átlátszósága...",
+    "February": "február",
+    "Fetching project from the cloud...": "Projekt letöltése a felhőből...",
+    "Fill a region": "Terület kitöltése",
+    "Fill color (right click)": "Kitöltő szín (jobb klikk)",
+    "Filled Ellipse (shift: circle)": "Kitöltött ellipszis (shift: kör)",
+    "Filled Rectangle (shift: square)": "Kitöltött téglalap (shift: négyzet)",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "Egyszerű vonalvégződés",
+    "For all Sprites": "Minden szereplőre",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "HSL színmodell",
+    "Header mapping": "A fejléc leképezése",
+    "Hello!": "Szia!",
+    "Hello, World!": "",
+    "Help": "Súgó",
+    "Hide blocks in palette": "Blokkok elrejtése a palettáról",
+    "Hide blocks...": "Blokkok elrejtése...",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "Hyper blokk támogatás",
+    "I have read and agree to the Terms of Service": "Elolvastam és egyetértek a felhasználási feltételekkel",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "Új jelmez importálása a webkamerával",
+    "Import blocks": "Blokkok importja",
+    "Import library": "Modulkönyvtár importálása",
+    "Import sound": "Hang importálása",
+    "Import...": "Importálás...",
+    "Imported": "Importálva",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "Végtelen pontosság a számokban",
+    "Inheritance support": "Öröklődés támogatás",
+    "Input Names:": "Beviteli név:",
+    "Input Slot Options": "Bemenő adat csatlakozási lehetőségek",
+    "Input name": "A bevitel neve",
+    "Input sliders": "Beviteli csúszkák",
+    "Inside a custom block": "Egy egyedi blokkban",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "Ismétlés, Kompozíció",
+    "JIT compiler support": "",
+    "January": "január",
+    "JavaScript extensions": "JavaScript kiegészítők",
+    "JavaScript extensions for Snap! are turned off": "JavaScript natív függvények kikapcsolva",
+    "JavaScript function ( _ ) { _ }": "JavaScript függvény ( _ ) { _ }",
+    "July": "július",
+    "June": "június",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "Billentyűzet Szerkesztés",
+    "Kind of": "Típus",
+    "LEAP Motion controller": "LEAP mozgásvezérlő",
+    "Language...": "Nyelv...",
+    "Libraries...": "Modulkönyvtárak...",
+    "License": "Licenc",
+    "License...": "Licenc...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "Vonal (Shift: korlátozza 45°)",
+    "Line tool (shift: vertical/horizontal)": "Vonalrajzoló eszköz (shift: függőleges/vízszintes)",
+    "List": "Lista",
+    "List utilities": "Lista eszközök",
+    "Lists": "Listák",
+    "Live coding support": "",
+    "Loading": "Betöltés",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "Toll vektorok mentése",
+    "Login...": "Belépés...",
+    "Logout": "Kijelentkezés",
+    "Long form input dialog": "Hosszú formátumú beviteli párbeszéd",
+    "Looks": "Kinézet",
+    "Make a block": "Blokk készítése",
+    "Make a variable": "Új változó",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "március",
+    "May": "május",
+    "Message name": "Az üzenet neve",
+    "Method Editor": "Függvény Szekesztő",
+    "Microphone": "",
+    "Microphone resolution...": "Mikrofon felbontás...",
+    "Modules...": "Modulok...",
+    "Motion": "Mozgás",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "Több-ágú feltételes blokk (elágazás)",
+    "Multiple inputs (value is list of inputs)": "Több érték bevitele (az érték a bevitelek listája)",
+    "Nested auto-wrapping": "Automatikus beágyazás",
+    "New": "Új",
+    "New Category": "Új kategória",
+    "New Project": "Új projekt",
+    "New category...": "Új kategória...",
+    "New password:": "Új jelszó:",
+    "New scene": "Új jelenet",
+    "No": "Nem",
+    "Notes...": "A projekt jegyzetei",
+    "November": "november",
+    "Number": "Szám",
+    "OK": "",
+    "Object": "Objektum",
+    "October": "október",
+    "Ok": "",
+    "Old password:": "A jelenlegi jelszó:",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "Megnyitás",
+    "Open Project": "Projekt megnyitása",
+    "Open in Community Site": "Projektoldalon megnyítás",
+    "Open...": "Megnyitás...",
+    "Opening project...": "Projekt megnyitása...",
+    "Operators": "Műveletek",
+    "Other": "Egyebek",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "Képszerkesztő",
+    "Paint a new costume": "Új jelmez rajzolása",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "Minta kitöltése (Shift: másodlagos színnel)",
+    "Paintbrush tool (free draw)": "Festőecset eszköz (szabadkézi rajz)",
+    "Parallelization": "",
+    "Part of": "Része",
+    "Parts": "Részei",
+    "Password:": "Jelszó:",
+    "Pen": "Toll",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "Pipetta (szín felvétele bárhonnan)",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "Pipetta eszköz (Tetszőleges hlyről szín felszedése shift: másodlagos színnel)",
+    "Pixels": "",
+    "Plain prototype labels": "Egyszerű blokk prototípus címkék",
+    "Play": "Lejátszás",
+    "Play sound": "Hang lejátszása",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Győződj meg arról, hogy a böngésződ naprakész és a kamerát is megfelelően beállítottad. Pár böngésző megköveteli, hogy HTTPS kapcsolaton keresztül nyisd meg a Snap oldalát Próbáld meg kicserélni a cím \"http://\" részét \"https://\" előtagra és próbáld meg újra!",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Kijelentés",
+    "Prefer empty slot drops": "Üres helyre ejt először",
+    "Privacy...": "Jogvédelem...",
+    "Project Notes": "A projekt jegyzetei",
+    "Project URLs": "",
+    "Project notes...": "Projektadatok...",
+    "Provide 100 selected colors": "100 kiválasztott szín",
+    "Provide getters and setters for all GUI-controlled global settings": "Érték-olvasó és -író minden felületen megjelenő beállításhoz",
+    "Publish": "Publikálás",
+    "Publish Project": "",
+    "Rasterize SVGs": "SVG átalakítása bittérképbe",
+    "Record a new sound": "Új hang felvétele",
+    "Recover": "Visszaállítás",
+    "Rectangle (shift: square)": "Négyszög (Shift: négyzet)",
+    "Reference manual": "Kézikönyv",
+    "Remove a category...": "Kategória törlése...",
+    "Remove unused blocks": "Töröld a nem használt blokkokat",
+    "Repeat Password:": "",
+    "Repeat new password:": "Az új jelszó ismét:",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "Felülírja az aktuális projektet egy újjal?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "Függvény",
+    "Request blocked": "Kérés blokkolva",
+    "Resend Verification Email...": "Ellenörző e-mail újraküldése...",
+    "Resend verification email": "",
+    "Reset Password...": "A jelszó alaphelyzetre állítása...",
+    "Reset password": "A jelszó alaphelyzetre állítása",
+    "Restore unsaved project": "",
+    "Retina display support": "Retina felbontás támogatása",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "Az SVG ábrákat nem minden böngésző támogatja",
+    "Same Named Blocks": "",
+    "Save": "Mentés",
+    "Save As...": "Mentés másként...",
+    "Save Project": "A projekt mentése",
+    "Save Project As...": "Projekt mentése másként...",
+    "Save to disk": "Lemezre írás",
+    "Saved!": "Mentve!",
+    "Saving project to the cloud...": "Projekt mentése a felhőbe...",
+    "Scenes...": "Jelenetek...",
+    "Script variable name": "Feladatváltozó név",
+    "Scripts": "Feladatok",
+    "Select a costume from the media library": "Válasszon ki egy jelmezt a médiakönyvtárból.",
+    "Select a sound from the media library": "Válasszon ki egy hangot a médiakönyvtárból.",
+    "Select categories of additional blocks to add to this project.": "Válassza ki a projekthez adandó blokkok kategóriáit.",
+    "Selection tool": "Kijelölő",
+    "Sensing": "Érzékelés",
+    "September": "szeptember",
+    "Serial Ports": "",
+    "Service:": "Szolgáltatás:",
+    "Set RGB or HSV pen color": "Toll RGB vagy HSV szín szerint",
+    "Set the rotation center": "A forgatás középpontjának beállítása",
+    "Share": "Megosztás",
+    "Share Project": "A projekt megosztása",
+    "Show buttons": "Gombok megjelenítése",
+    "Show categories": "Kategóriák kijelzése",
+    "Sign in": "Regisztráció",
+    "Sign up": "Újként regisztrálni",
+    "Signada (Network remote control)": "",
+    "Signup": "Új regisztráció",
+    "Signup...": "Feliratkozás...",
+    "Single input.": "Egyszerű bevitel.",
+    "Single palette": "Egyesített paletta",
+    "Slider maximum value": "Csúszka maximális értéke",
+    "Slider minimum value": "Csúszka minimális értéke",
+    "Snap! website": "A Snap! webhelye",
+    "Snap!Cloud": "Snap!Felhő",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "Hang",
+    "Sound Recorder": "",
+    "Sounds": "Hangok",
+    "Sprite": "Szereplő",
+    "Sprite Nesting": "Szereplők összefűzése",
+    "Stage": "Játéktér",
+    "Stage height": "Játéktér magassága",
+    "Stage selected: no motion primitives": "Választott játéktér: nincs mozgó elem",
+    "Stage size": "Játéktér mérete",
+    "Stage size...": "Játéktér mérete...",
+    "Stage width": "Játéktér szélessége",
+    "Stop": "Állj",
+    "Stop sound": "A hang leállítása",
+    "Streams (lazy lists)": "",
+    "String": "Szöveg",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "Ellipszis (shift: kör)",
+    "Stroked Rectangle (shift: square)": "Téglalap (shift: négyzet)",
+    "Switch back to user mode": "Vissza a felhasználói üzemmódra",
+    "Switch to dev mode": "Átkapcsolás fejlesztői módba",
+    "Switch to vector editor?": "",
+    "Table lines": "Táblázat sorok",
+    "Table support": "Táblázat támogatás",
+    "Table view": "Tábla nézet",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "Felhasználási feltételek...",
+    "Ternary Boolean slots": "Ternary boolean támogatás",
+    "Text": "Szöveg",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "Szöveg beszéddé",
+    "The error occured at": "Hiba történt ezen a",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "Biztonságos programszálak",
+    "Title text": "A cím szövege",
+    "Today": "Ma",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "Fordítások",
+    "Translators...": "Fordítók",
+    "Turbo mode": "Turbó mód",
+    "Turtle": "Teknős",
+    "Undelete sprites...": "Szereplők visszaállítása...",
+    "Unpublish": "Publikálás visszavonása",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "Nem mentett változások!",
+    "Unshare": "Nincs megosztás",
+    "Unshare Project": "A projekt megosztásának megszüntetése",
+    "Untitled": "Névtelen",
+    "Unused blocks...": "Nem használt blokkok...",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "A projeklista frissítése...",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "A belső változók láthatóvá tétele a hívó számára",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "A felhasználói név legalább négy karakteres legyen.",
+    "User name:": "Felhasználói név:",
+    "Variable name": "Változónév",
+    "Variables": "Változók",
+    "Variadic reporters": "Változó függvények",
+    "Vector": "",
+    "Vector Paint Editor": "Vektor Szerkesztő",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Visible stepping": "Léptetés látható",
+    "Web Audio API is not supported in this browser": "a Web Audio API nem támogatott ezen a böngészőn",
+    "Web services access (https)": "Web service hozzáférés (https)",
+    "Words, sentences": "Szavak, mondatok",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "Igen",
+    "Yesterday": "Tegnap",
+    "Yesterday,": "",
+    "You are not logged in": "Még nem lépett be",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "Zebra színezés",
+    "Zoom blocks": "Blokkokra közelítés",
+    "Zoom blocks...": "Blokkok nagyítása...",
+    "_ at _": "_ itt _",
+    "_ combine _ using _": "_ kombináld _ így _",
+    "_ contains _": "_ tartalmazza _",
+    "_ effect": "_ hatás",
+    "_ find first item _ in _": "_ keresd ki az első _ elemet ebből _",
+    "_ in front of _": "_ megelőzi _",
+    "_ keep items _ from _": "_ válogasd ki az ilyen _ elemeket ebből _",
+    "_ map _ over _": "_ képezd le _ erre _",
+    "_ mod _": "_ osztva _ maradéka",
+    "_ of _": "_ itt _",
+    "_ of block _": "blokk _ _",
+    "_ of costume _": "_ jelmez _",
+    "_ of sound _": "hangminta _ _",
+    "_ of text _": "",
+    "_ to _": "_ ehhez _",
+    "__shout__go__": "__zöld__zászló__",
+    "a": "a",
+    "a custom block definition is missing": "hiányzó egyedi blokk definíció",
+    "a new clone of _": "új másolat _",
+    "a variable of name '": "ilyen nevű változó «",
+    "about morphic.js...": "",
+    "abs": "abszolútérték",
+    "acos": "acos",
+    "add _ to _": "_ hozzáadása _ listához",
+    "add a new Turtle sprite": "új teknőc rajzának hozzáadása",
+    "add a new sprite": "Új szereplő",
+    "add comment": "megjegyzés hozzáadása",
+    "add comment here...": "tegye ide a megjegyzést",
+    "agent": "",
+    "alert _": "felbukkanó: _",
+    "all": "minden feladat",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "_ elsőnkívüli elemei",
+    "all but this script": "minden más feladat",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "horgony",
+    "and": "és",
+    "and send": "és küldd",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "válasz",
+    "any": "valamelyik",
+    "any key": "bármelyik gomb",
+    "any message": "bármilyen üzenet",
+    "anything": "",
+    "append _": "fűzd hozzá _",
+    "arrange scripts vertically": "a program függőleges átméretezése",
+    "arrowDown": "lefelé nyíl",
+    "arrowDownOutline": "a lefelényíl körvonala",
+    "arrowLeft": "balra nyíl",
+    "arrowLeftOutline": "a balra nyíl körvonala",
+    "arrowRight": "jobbra nyíl",
+    "arrowRightOutline": "a jobbranyíl körvonala",
+    "arrowUp": "felfelé nyíl",
+    "arrowUpOutline": "a felfelényíl körvonala",
+    "asin": "asin",
+    "ask _ and wait": "kérdezd meg _ és várj",
+    "ask _ for _ _": "kérdezd le _ _ _",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "hátulra",
+    "balance": "hangmérleg",
+    "big (2x)": "nagy (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "Biztos, hogy eltávolítja ezt a blokkot és minden példányát?",
+    "block variables": "blokk változók",
+    "block variables...": "blokk változók...",
+    "block-solid (0)": "normál (0)",
+    "blockify": "blokkosdítsd",
+    "blocks": "blokkok",
+    "blue": "kék",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "alja",
+    "box": "",
+    "brightness": "világosság",
+    "broadcast _ _": "küldj mindenkinek _ _ üzenetet",
+    "broadcast _ _ and wait": "küldj mindenkinek _ _ üzenetet és várj",
+    "brush": "ecset",
+    "build": "építés",
+    "but getting a": "helyette találtunk egy",
+    "c": "c",
+    "call _ _": "hívd _ _",
+    "call _ w/continuation": "hívd meg _ folytatással",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "csak szöveget vagy számot adhatsz meg, ezt nem érvényes",
+    "can rotate": "foroghat",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "nem tudok törölt szereplővel dolgozni",
+    "cannot send media, sprites or procedures to another scene": "nem lehetséges média, szerepl[ vagy eljárás küldése másik jelenetbe",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "felső egészrész",
+    "center": "közép",
+    "center x": "középpont x",
+    "center y": "középpont y",
+    "change _ by _": "_ változzon ennyivel: _",
+    "change _ effect by _": "_ hatás változzon _",
+    "change background _ by _": "háttér _ változzon _",
+    "change balance by _": "hangmérleg változzon: _",
+    "change pen _ by _": "toll _ változzon _",
+    "change pen color by _": "",
+    "change pen shade by _": "",
+    "change pen size by _": "tollméret változzon _",
+    "change size by _": "a méret változzon _",
+    "change tempo by _": "a tempó változzon: _",
+    "change volume by _": "hangerő változzon: _",
+    "change x by _": "x változzon: _",
+    "change y by _": "y változzon: _",
+    "check for alternative GUI design": "bekapcsolva más kinézetű grafikus felületet látsz",
+    "check for block to text mapping features": "Assinalar para funcionalidades de mapeamento entre blocos e texto.",
+    "check for flat ends of lines": "kapcsolja be az egyszerű vonalvégződéshez",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "bekapcsolva magasabb felbontást mutat és több erőforrást használ",
+    "check for multi-column list view support": "",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "bejelölve mindig látszik a csatlakozás típusa a beviteli párbeszédablakban",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "bekapcsolva a blokkon kattintva a hozzá tartozó kód futtatása nem indul el",
+    "check to disallow script reentrance": "bekapcsolva engedélyezi a programok többszörös végrehajtását",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "bekapcsolva engedélyezi az IDE animációit",
+    "check to enable alternating colors for nested blocks": "engedélyezi a beágyazott blokkok eltérő színezését",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "bejelölve engedélyezi a többszörös beviteli mezők dinamikus feliratait",
+    "check to enable input sliders for entry fields": "bekapcsolva engedélyezi a csúszkákat a beviteli mezőknél",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "jelöld be, hogy engedélyezd a műveleteket listákon és táblázatokon",
+    "check to hide (+) symbols in block prototype labels": "bejelölve látszik a (+) jel a blokk prototípus cimkéjében",
+    "check to inherit from": "bekapcsolva öröklődik innen",
+    "check to prevent contents from being saved": "bekapcsolva nem menti el a változó értékét a projekttel",
+    "check to prioritize script execution": "bekapcsolva a programozott végrehajtás lesz az elsődleges",
+    "check to rasterize SVGs on import": "SVG bittérképpé alakíthatóságának ellenőrzése az importálás során",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "bekapcsolva minden blokkot egy palettán mutat",
+    "check to show buttons in the palette": "bekapcsolva megjeleníti a gombokat a palettán",
+    "check to show category names in the palette": "bekapcsolva megjeleníti a kategóriák neveit a palettán",
+    "check to show extension primitives in the palette": "bekapcsolva a kiegészítő blokkokat megjeleníti a palettán",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "bekapcsolva a natív JavaScript függvények elérhetőek",
+    "check to switch pen colors and graphic effects to HSL": "bekapcsolva a toll színekhez és a grafikai hatásokhoz a HSL színmodellt használja",
+    "check to turn block clicking sound on": "bekapcsolva engedélyezi a blokkra kattintás hangját",
+    "check to turn on logging pen vectors": "kapcsold be, hogy a toll vektorok mentését elindítsd",
+    "check to turn on visible stepping (slow)": "bekapcsolva lassítva láthatod a program lépéseit",
+    "check to use blurred drop shadows and highlights": "jelölje be, ha elmosódó árnyékokat és kiemeléseket kíván használni",
+    "children": "gyermek",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "kör",
+    "circle box": "",
+    "circleSolid": "kitöltött kör",
+    "clean up": "törlés",
+    "clear": "töröld a rajzokat",
+    "clear graphic effects": "töröld a grafikus hatásokat",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "kattints oda vagy vidd a szálkeresztet a forgás középpontjába",
+    "clicked": "rám kattintanak",
+    "clone": "másolás",
+    "clones": "másolat",
+    "closedBrush": "",
+    "cloud": "felhő",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "a felhő áttetszősége",
+    "cloudOutline": "a felhő körvonala",
+    "code": "kód",
+    "code mapping...": "kód leképezés...",
+    "code of _": "_ kódja",
+    "collection": "gyűjtemény",
+    "color": "szín",
+    "color _ is touching _ ?": "_ szín érint _ színt?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "oszlopok",
+    "combinations _": "",
+    "combine _ using _": "kombináld _ így _",
+    "comic": "moáré",
+    "command": "parancsblokk",
+    "comment pic...": "megjegyzés képe...",
+    "compile": "fordítás",
+    "compile _": "fordítsd _",
+    "compile _ for _ args": "",
+    "confetti": "konfetti",
+    "console log _": "konzolra írás: _",
+    "continuation": "",
+    "continuations cannot be forked": "Folytatásokat nem tudom indítani",
+    "cos": "cos",
+    "costume": "jelmez",
+    "costume #": "a jelmez sorszáma",
+    "costume name": "a jelmez neve",
+    "costumes": "jelmezek",
+    "costumes tab help": "Kép importálása egy webhelyről vagy a számítógépről",
+    "could not connect to:": "nem tud csatlakozni ide:",
+    "cr": "kocsivissza",
+    "create a clone of _": "készíts másolatot _",
+    "cross": "",
+    "crosshairs": "szálkereszt",
+    "current": "jelenlegi",
+    "current _": "aktuális _",
+    "current module versions:": "a jelenlegi modulverziók",
+    "current parent": "aktuális szülő",
+    "custom?": "egyedi?",
+    "cut from _": "vágd ki innen _",
+    "d": "d",
+    "dangling?": "külön forgó?",
+    "data": "",
+    "date": "nap",
+    "day of week": "a hét napja",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "definíció",
+    "delete": "törlés",
+    "delete _": "",
+    "delete _ of _": "_ elem törlése _ listából",
+    "delete a category...": "kategória törlése...",
+    "delete block _": "",
+    "delete block definition...": "blokkdefiníció törlése",
+    "delete slot": "",
+    "delete this clone": "töröld ezt a másolatot",
+    "delete variable": "",
+    "delimiter": "határoló",
+    "demo (1.2x)": "Demó (1.2x)",
+    "demo...": "",
+    "detach all parts": "minden rész szétválasztása",
+    "detach and put into the hand": "",
+    "detach from": "leválasztás erről",
+    "development mode": "fejlesztői mód",
+    "development mode debugging primitives:": "fejlesztő mód blokkok hibakeresése",
+    "development mode...": "",
+    "dimensions": "dimenziók",
+    "direction": "irány",
+    "disable deep-Morphic context menus and show user-friendly ones": "A deep-Morphic helyzetérzékeny menük és a felhasználóbarát menük kikapcsolása",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "leválasztva.",
+    "distance": "távolság",
+    "distance to _": "",
+    "distribution": "",
+    "don't rotate": "nem foroghat",
+    "down arrow": "lefelé nyíl",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "húzható",
+    "draggable?": "húzható?",
+    "dragging threshold": "",
+    "dropped": "leejtenek",
+    "duplicate": "megkettőzés",
+    "duplicate block definition...": "blokk definíció másolása...",
+    "duration": "hossz",
+    "e": "e",
+    "e^": "e^",
+    "edge": "játéktér széle",
+    "edit": "szerkesztés",
+    "edit rotation point only...": "csak a forgáspont szerkesztése...",
+    "edit the costume's rotation center": "szerkezd a jelmez forgatási középpontját",
+    "edit...": "szerkesztés...",
+    "editables": "",
+    "elegant (90)": "elegáns (90)",
+    "enable Morphic context menus and inspectors, not user-friendly!": "A Morphic helyzetérzékeny menük, nyomkövetők és a nem felhasználóbarát mód bekapcsolása",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "radír",
+    "exceeding maximum number of clones": "meghaladta a maximális másolatok számát",
+    "expecting": "kötelező",
+    "expecting a": "Számítunk egy",
+    "expecting a finite number but getting Infinity or NaN": "véges számot várunk helyette végtelen vagy NaN érkezett",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "exportálás",
+    "export block definition...": "blokk definíció exportálása...",
+    "export pen trails line segments as SVG": "toll vonalak exportálása SVG forámumba",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "exportálás...",
+    "extract": "emeld ki",
+    "f": "f",
+    "false": "hamis",
+    "file": "állomány",
+    "file menu import hint": "egy exportált projekt, feladatkönyvtár, jelmez vagy hang betöltése",
+    "fill": "kitöltés",
+    "fill page...": "",
+    "filtered for _": "_ szín szűrése",
+    "find blocks": "blokk keresése",
+    "find blocks...": "blokkok keresése...",
+    "find first item _ in _": "keresd ki az első _ elemet ebből _",
+    "find unused global custom blocks and remove their definitions": "keresd meg a nem használt blokkokat és töröld a definícióikat",
+    "fisheye": "halszem",
+    "flag": "zászló",
+    "flash": "villám",
+    "flat line ends": "egyszerű vonalvégződés",
+    "flatten": "laposít",
+    "flip ↔": "tükrözés ↔",
+    "flip ↕": "tükrözés ↕",
+    "floor": "alsó egészrész",
+    "footprints": "",
+    "for _ = _ to _ _": "ciklus _ = _ tól _ ig _",
+    "for all sprites": "minden alakzatra",
+    "for each _ in _ _": "minden elemre _ ebből _ _",
+    "for this sprite only": "csak erre az alakzatra",
+    "forever _": "mindig _",
+    "frame": "",
+    "frames": "keretek",
+    "frequencies": "",
+    "frequency": "frekvencia",
+    "front": "előre",
+    "fullScreen": "teljes képernyő",
+    "g": "g",
+    "gears": "fogaskerék",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "átlátszóság",
+    "giant (8x)": "gigantikus (8x)",
+    "glide _ secs to x: _ y: _": "csússz _ mp-ig x: _ y: _",
+    "global?": "globális?",
+    "globe": "",
+    "go back _ layers": "kerülj _ szinttel hátrébb",
+    "go to _": "ugorj _ helyére",
+    "go to _ layer": "kerülj _",
+    "go to x: _ y: _": "ugorj x: _ y: _",
+    "gray scale palette": "",
+    "green": "zöld",
+    "grow": "növekedés",
+    "h": "h",
+    "handle": "",
+    "header": "fejléc",
+    "header mapping...": "fejléc leképezés...",
+    "height": "magasság",
+    "hello": "",
+    "help": "Súgó",
+    "help...": "Súgó...",
+    "hide": "tűnj el",
+    "hide all...": "",
+    "hide blocks...": "blokkok elrejtése...",
+    "hide variable _": "rejtsd el: _",
+    "high": "magas",
+    "hour": "óra",
+    "http:// _": "",
+    "hue": "árnyalat",
+    "huge (4x)": "óriási (4x)",
+    "i": "i",
+    "identical to": "ugyanaz, mint",
+    "if _ _": "ha _ _",
+    "if _ _ else _": "ha _ _ különben _",
+    "if _ then _ else _": "ha _ _ különben _",
+    "if on edge, bounce": "ha szélén vagy, pattanj vissza",
+    "import a sound from your computer by dragging it into here": "Hang importálása egy webhelyről vagy a számítógépről",
+    "import without attempting to parse or format data": "importálj anélkül, hogy megpróbálnádértelmezni vagy formázni az adatot",
+    "import...": "importálás...",
+    "in palette": "a palettán",
+    "including dependencies": "függőségekkel együtt",
+    "index": "",
+    "index of _ in _": "index _ itt _",
+    "inherit _": "örököld _",
+    "inherited": "örökölt",
+    "input list:": "Beviteli lista:",
+    "input names:": "beviteli név:",
+    "input(s), but getting": "adatbevitel, de ez érkezett",
+    "inputs": "",
+    "insert _ at _ of _": "_ beszúrása _ . pozícióba ebbe: _",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "_ egy _ ?",
+    "is _ empty?": "üres _ ?",
+    "is _ on?": "_ bállítás bekapcsolva?",
+    "is not a valid option": "nem választható",
+    "is read-only": "csak olvasható",
+    "item": "elem",
+    "item _ of _": "_ eleme a _ listának",
+    "items": "elemek",
+    "j": "j",
+    "join _": "összefűz _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "válogasd ki az ilyen _ elemeket ebből _",
+    "key": "",
+    "key _ pressed?": "_ gomb lenyomva?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "Magyar",
+    "language_translator": "Makány György, Faragó Attila",
+    "large": "nagy",
+    "last": "utolsó",
+    "last changed": "utoljára változtatva",
+    "last_changed": "2022-01-25",
+    "launch _ _": "induljon _ _",
+    "left": "bal",
+    "left arrow": "balra nyíl",
+    "length": "elemek száma",
+    "length of _": "_ hossza",
+    "length:": "hossz:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "betű",
+    "letter _ of _": "_ karaktere ennek: _",
+    "light (70)": "halvány (70)",
+    "lightness": "",
+    "line": "újsor",
+    "lines": "sorok",
+    "list": "lista",
+    "list _": "lista _",
+    "list view...": "lista nézet...",
+    "ln": "ln",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "toll vektorok mentése",
+    "login": "bejelentkezés",
+    "loop": "",
+    "low": "alacsony",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "blokk létrehozása...",
+    "make a category...": "új kategória...",
+    "make a copy and pick it up": "másolat felvétele",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "tedd ideiglenessé és rejtsd el a szereplők közül",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "képezd le _ ebben _ erre a kódre _",
+    "map _ over _": "képezd le _ erre _",
+    "map _ to _ _": "képezd le _ erre _ _",
+    "map _ to code _": "képezd le _ kódra _",
+    "max": "max",
+    "maximum": "",
+    "medium (50)": "közepes (50)",
+    "menus": "",
+    "message": "üzenet",
+    "microphone _": "mikrofon _",
+    "middle": "közép",
+    "minimum": "",
+    "minute": "perc",
+    "mirror video": "video tükrözése",
+    "missing / unspecified extension": "Hiányzó vagy nem specifikált kiegészítő",
+    "monstrous (10x)": "szörnyeteg (10x)",
+    "month": "hónap",
+    "mosaic": "mozaik",
+    "motion": "mozgás",
+    "mouse down?": "egér lenyomva?",
+    "mouse position": "",
+    "mouse x": "egér x",
+    "mouse y": "egér y",
+    "mouse-departed": "az egér lemegy rólam",
+    "mouse-entered": "az egér fölém kerül",
+    "mouse-pointer": "egérmutató",
+    "move": "mozgatás",
+    "move _ steps": "menj _ lépést",
+    "move all inside...": "",
+    "move...": "",
+    "my": "saját",
+    "my _": "saját _",
+    "my anchor": "horgonyom",
+    "my dangling?": "külön forgok?",
+    "my draggable?": "húzható vagyok?",
+    "my name": "nevem",
+    "my parent": "szülőm",
+    "my rotation style": "forgatási stílusom",
+    "my rotation x": "forgatás x attribútumom",
+    "my rotation y": "forgatás y attribútumom",
+    "my temporary?": "ideiglenes vagyok?",
+    "myself": "magam",
+    "n": "n",
+    "name": "név",
+    "neg": "",
+    "negative": "negatív",
+    "neighbors": "szomszéd",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "új jelmez _ szélesség _ magasság _",
+    "new line": "új sor",
+    "new sound _ rate _ Hz": "új hang _ mintavételezéssel _ Hz",
+    "new...": "új...",
+    "next": "következő",
+    "next costume": "a következő jelmez",
+    "none": "egyik sem",
+    "normal": "normál",
+    "normal (1x)": "normál (1x)",
+    "normalScreen": "normál képernyő",
+    "normalStage": "normál játéktér",
+    "not": "nem",
+    "not _": "nem _",
+    "note": "hangjegy",
+    "nothing": "semmi",
+    "now connected.": "csatlakozva.",
+    "number": "szám",
+    "number of channels": "csatornák száma",
+    "numbers from _ to _": "számok ettől _ eddig _",
+    "o": "o",
+    "object _": "objektum _",
+    "octagon": "nyolcszög",
+    "only duplicate this block": "csak készítsen egy másolatot erről a blokkról",
+    "only face left/right": "jobbra-balra fordulhat",
+    "only grab this block": "csak ezt a blokkot fogd meg",
+    "open a new window with a picture of both this script and its result": "Új böngészőablak megnyitása a programnak és eredményének képével.",
+    "open a new window with a picture of this comment": "új ablak megnyitása ennek a megjegyzésnek a képével",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "nyisd meg párbeszédablakban...",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "vagy",
+    "or before": "vagy előtte",
+    "other clones": "többi másolat",
+    "other scripts in sprite": "ennek a szereplőnek minden más feladata",
+    "other sprites": "más szereplők",
+    "p": "p",
+    "paint a new sprite": "új alakzat rajzolása",
+    "paintbucket": "festékesvödör",
+    "parameters": "paraméterek",
+    "parent": "szülő",
+    "parent...": "szülő...",
+    "parts": "részek",
+    "password has been changed.": "a jelszó megváltozott.",
+    "password must be six characters or longer": "a jelszó legyen legalább hat karakter hosszú.",
+    "passwords do not match": "A jelszavak nem egyeznek.",
+    "paste on _": "nyomtasd erre _",
+    "pause": "szünet",
+    "pause all _": "várakozz _",
+    "pen": "toll",
+    "pen _": "toll _",
+    "pen down": "tollat le",
+    "pen down?": "toll lent?",
+    "pen trails": "ceruza nyomvonala",
+    "pen up": "tollat fel",
+    "pen vectors": "toll vektor",
+    "pic...": "kép exportálása...",
+    "pick random _ to _": "véletlen _ és _ között",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "pipetta",
+    "pitch": "",
+    "pivot": "forgatás",
+    "pixel": "",
+    "pixelate": "pixeles",
+    "pixels": "pixelek",
+    "play _ Hz for _ secs": "játssz _ Hz _ mp hosszan",
+    "play frequency _ Hz": "játszt le frekvenciát _ Hz",
+    "play note _ for _ beats": "játszd le a _ hangot _ ütemig",
+    "play sound _": "játszd le: _",
+    "play sound _ at _ Hz": "játszd le _ hangot _ Hz mintavételezéssel",
+    "play sound _ until done": "játszd le: _ és várd meg",
+    "please agree to the TOS": "fogadja el a felhasználási feltételeket.",
+    "please fill out this field": "kérem, töltse ki ezt a mezőt.",
+    "please provide a valid email address": "kérem, adjon meg egy érvényes email címet.",
+    "point in direction _": "nézz _ fokos irányba",
+    "point towards _": "nézz _ irányába",
+    "pointRight": "háromszög jobbra",
+    "polygon": "",
+    "position": "",
+    "poster": "háttérkép",
+    "predicate": "kijelentés",
+    "presentation (1.4x)": "Prezentáció (1.4x)",
+    "pressed": "gombnyomásra",
+    "previous": "előző",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "r-g-b-a szín",
+    "random": "véletlen",
+    "random position": "véletlenszerű hely",
+    "rank": "",
+    "raw data...": "nyers adat...",
+    "ray length": "távolság a széléig",
+    "read-only": "csak olvasható",
+    "receivers...": "fogadók...",
+    "recording": "",
+    "rectangle": "téglalap",
+    "rectangleSolid": "kitöltött téglalap",
+    "red": "piros",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "újra",
+    "relabel...": "átcimkézés...",
+    "release": "engedd el",
+    "remove block variables...": "blokk változók törlése...",
+    "rename": "átnevezés",
+    "rename all blocks that access this variable": "minden blokk átnevezése amely ezt a változót használja",
+    "rename all...": "mindegyik átnevezése...",
+    "rename background": "háttér átnevezése",
+    "rename costume": "jelmez átnevezése",
+    "rename only this reporter": "nevezd át csak ezt a függvényt",
+    "rename sound": "A hang átnevezése",
+    "rename...": "átnevezés...",
+    "repeat _ _": "ismételd _ -szer _",
+    "repeat until _ _": "ismételd amíg _ _",
+    "replace item _ of _ with _": "_ helyettesítése _ listában erre: _",
+    "report _": "jelents _",
+    "reporter": "függvényblokk",
+    "reporter didn't report": "a függvény érték nélkül tért vissza",
+    "reset columns": "oszlopok visszaállítása",
+    "reset timer": "nullázd az órát",
+    "reshape _ to _": "formáld át _ így _",
+    "resize...": "",
+    "resolution": "felbontás",
+    "rest for _ beats": "szünetelj _ ütemet",
+    "restore display": "",
+    "result pic...": "kép...",
+    "reverse": "visszafelé",
+    "right": "jobb",
+    "right arrow": "jobbra nyíl",
+    "ring": "gyűrű",
+    "ringify": "körülfog",
+    "robot": "",
+    "rotate": "forgatás",
+    "rotation style": "forgási stílus",
+    "rotation x": "forgatás x",
+    "rotation y": "forgatás y",
+    "round _": "_ kerekítve",
+    "run _ _": "futtasd _ _ értékkel",
+    "run _ w/continuation": "futtasd _ folytatással",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "mintavétel",
+    "samples": "hangminta",
+    "saturation": "színtelítettség",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "mentsd el minden program képét",
+    "save a picture of both this script and its result": "mentsd le a képét ennek a programnak az eredményével együtt",
+    "save a picture of the stage": "mentsd el a játéktér képét",
+    "save a picture of this comment": "kép erről a megjegyzésről",
+    "save a picture of this script": "mentsd le a képét ennek a programnak",
+    "save a summary of this project": "mentsd el a projekt összefoglalóját",
+    "save global custom block definitions as XML": "mentsd el a saját blokkokat XML formátumban",
+    "save project data as XML to your downloads folder": "mentsd le a projektet XML formátumban a letöltés mappába",
+    "saved.": "mentve.",
+    "say _": "mondd _",
+    "say _ for _ secs": "mondd _ _ mp-ig",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "a program képe az eredménnyel...",
+    "script pic...": "program képe...",
+    "script variables _": "feladatváltozó: _",
+    "scripts": "programok",
+    "scripts pic...": "minden feladat képpé...",
+    "scroll frame": "",
+    "scrolled-down": "lefelé görgetnek",
+    "scrolled-up": "felfelé görgetnek",
+    "second": "másodperc",
+    "select": "választás",
+    "selection": "",
+    "self": "saját",
+    "send _ to _": "küldd _ a szereplőnek _",
+    "senders...": "küldők...",
+    "sensor demo": "",
+    "set _ effect to _": "_ hatás legyen _",
+    "set _ of block _ to _": "",
+    "set _ to _": "legyen _ beállítás _",
+    "set background _ to _": "háttér _ legyen a _",
+    "set background color to _": "hátteret állítsd _",
+    "set balance to _": "hangmérleg legyen _",
+    "set instrument to _": "hangeszközt állítsd: _",
+    "set pen _ to _": "toll _ legyen a _",
+    "set pen color to _": "tollszín legyen _",
+    "set pen shade to _": "",
+    "set pen size to _": "tollméret legyen _",
+    "set size to _ %": "a méret legyen _ %",
+    "set tempo to _ bpm": "a tempó legyen _ ütem/perc",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "",
+    "set video transparency to _": "legyen video átlátszósága _",
+    "set volume to _ %": "hangerő legyen _ %",
+    "set x to _": "x legyen _",
+    "set y to _": "y legyen _",
+    "setting the rotation center requires a costume": "a forgáspont beállításához szükség van egy jelmezre",
+    "settings menu prefer empty slots hint": "bekapcsolva az üres helyre ejti először a behúzott blokkot",
+    "several block definitions already match this label": "",
+    "shared.": "megosztva.",
+    "sharing project...": "a projekt megosztása...",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "csillámló (80)",
+    "show": "jelenj meg",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "minden feladat és blokk definícióról készült kép mutatása",
+    "show all": "mindent mutat",
+    "show all...": "",
+    "show project data as XML in a new browser window": "a projekt adatainak megtekintése egy új böngészőablakban",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "írd ki: _",
+    "shown?": "látható?",
+    "shrink": "kicsinyítés",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "méret",
+    "slider": "csúszka",
+    "slider max...": "a csúszka maximuma...",
+    "slider min...": "a csúszka minimuma...",
+    "slots": "",
+    "smallStage": "kis játéktér",
+    "smaller menu fonts and sliders": "",
+    "snap": "pillanatfelvétel",
+    "sorted": "",
+    "sound": "",
+    "sounds": "hangok",
+    "space": "szóköz",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "frekvenciaspektrum",
+    "speech bubble": "",
+    "speechBubble": "buborék",
+    "speechBubbleOutline": "a buborék körvonala",
+    "split _ by _": "_ szétvágása _ jeleknél",
+    "sprite": "szereplő",
+    "sprites": "",
+    "sqrt": "négyzetgyök",
+    "square": "négyzet",
+    "stack size": "veremméret",
+    "stage": "játéktér",
+    "stage image": "",
+    "stamp": "készíts lenyomatot",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "maradjon bejelentkezve, amíg ki nem jelentkezem a számítógépről",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "tapadjon",
+    "stop _": "_ álljon le",
+    "stop all sounds": "minden hangot állíts le",
+    "stop frequency": "állítsd le a frekvenciát",
+    "stopped": "megállítottak",
+    "storage": "tárolás",
+    "store this project in the downloads folder (in supporting browsers)": "a projekt tárolása a letöltési mappába (ha a böngésző engedi)",
+    "stretch _ x: _ y: _ %": "nyújtsd _ x: _ y: _ %",
+    "string": "",
+    "subtle (95)": "kifinomult (95)",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "a jelmez legyen _",
+    "switch to scene _ _": "válts jelenetet _ _",
+    "t": "t",
+    "tab": "tabulátor",
+    "table view...": "tábla nézet...",
+    "take a camera snapshot and import it as a new sprite": "készíts fotót a webkamerával és importáld új szereplőként",
+    "tan": "tan",
+    "tell _ to _ _": "hajtsd végre _ _ _",
+    "tempo": "tempó",
+    "temporary?": "ideiglenes?",
+    "text": "szöveg",
+    "text-only (100)": "csak szöveg (100)",
+    "the predicate takes too long for a custom hat block": "az előzmény túl hosszú ideig fut egy egyedi kalap blokkhoz",
+    "there are currently no unused global custom blocks in this project": "nem találtam nem használt saját blokkot a projektben",
+    "there are currently no vectorizable pen trail segments": "jelenleg nincs vektoros toll vonal",
+    "thing": "dolog",
+    "think _": "gondold _",
+    "think _ for _ secs": "gondold _ _ mp-ig",
+    "this _": "",
+    "this block": "ez a blokk",
+    "this project doesn't have any custom global blocks yet": "ennek a projektnek még nincs globális felhasználói blokkjai",
+    "this script": "ez a feladat",
+    "time in milliseconds": "idő (ezredmásodpercben)",
+    "timer": "stopper",
+    "tip": "tipp",
+    "to": "",
+    "top": "teteje",
+    "touch screen settings": "",
+    "touching _ ?": "érint _ színt?",
+    "transient": "átmeneti",
+    "translations": "",
+    "translations...": "fordítások...",
+    "translator_e-mail": "makany.gyorgy@gmail.com, attila.farago@sap.com",
+    "transparency": "áttetszőség",
+    "transparency...": "",
+    "trash is empty": "üres a kuka",
+    "true": "igaz",
+    "turbo mode": "turbo mód",
+    "turbo mode?": "",
+    "turn _ _ degrees": "fordulj _ _ fokot",
+    "turn all pen trails and stamps into a new background for the stage": "játéktér háttérképévé változtasd az összes tollvonás és békyegzőt",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "minden tollbeállítás átállítása és átvitele az aktuális alak egy új jelmezébe",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "a toll beállításainak alkalmazása egy új jelmezre...",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "fordulj balra",
+    "turnRight": "fordulj jobbra",
+    "turtle": "teknős",
+    "turtleOutline": "a teknős körvonala",
+    "type": "",
+    "type of _": "típus: _",
+    "u": "u",
+    "unable to convert to": "nem tudom konvertálni",
+    "unable to inherit (disabled or circular?)": "nem örökölhető (inaktív vagy körkörös hivatkozás?)",
+    "unable to nest (disabled or circular?)": "nem lehet beágyazni (inaktív vagy körkörös hivatkozás?)",
+    "uncheck for default GUI design": "kikapcsolva a normál grafikus felületet látod",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "kikapcsolva alacsonyabb felbontást mutat és kíméli az erőforrásokat",
+    "uncheck for round ends of lines": "kapcsolja ki a lekerekített vonalvégződésekhez",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "kikapcsolva engedélyezed, hogy a behúzott blokk kirúgjon más blokkokat",
+    "uncheck to allow script reentrance": "kikapcsolva engedélyezi a programok többszörös végrehajtását",
+    "uncheck to always show (+) symbols in block prototype labels": "üresen hagyva mindig látszik a (+) jel a blokk prototípus cimkéjében",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "kikapcsolva letiltja az IDE animációit",
+    "uncheck to disable alternating colors for nested block": "tiltja a beágyazott blokkok eltérő színezését",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "üresen hagyva tiltja a többszörös beviteli mezők dinamikus feliratait",
+    "uncheck to disable input sliders for entry fields": "kikapcsolva letiltja a csúszkákat a beviteli mezőknél",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "kapcsolja ki a szereplők összefűzésének megakadályozásához.",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "kikapcsolva a natív JavaScript függvények nem elérhetőek",
+    "uncheck to disable using operators on lists and tables": "kapcsold ki, hogy letiltsd a műveleteket listákon és táblázatokon",
+    "uncheck to disinherit": "kikapcsolva nem öröklődik tovább",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "kikapcsolva a blokkon kattintva a hozzá tartozó kód futtatása",
+    "uncheck to hide buttons in the palette": "kikapcsolva elrejti a gombokat a palettáról",
+    "uncheck to hide category names in the palette": "kikacsolva elrejti a kategóriák neveit a palettáról",
+    "uncheck to hide extension primitives in the palette": "kikapcsolva a kiegészítő blokkokat elrejti a palettáról",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "kikapcsolva normál sebességen futnak a programok",
+    "uncheck to save contents in the project": "kikapcsolva elmenti a változó értékét a projekttel",
+    "uncheck to show only the selected category's blocks": "kikapcsolva csak a kiválasztott kategóriához tartozó blokkokat mutatja",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "kikapcsolva a toll színekhez és a grafikai hatásokhoz a HSV színmodellt használja",
+    "uncheck to turn block clicking sound off": "kikapcsolva letiltja a blokkra kattintás hangját",
+    "uncheck to turn off logging pen vectors": "kapcsold ki, hogy a toll vektorok mentését leáálítsd",
+    "uncheck to turn off visible stepping": "kikapcsolva nem látod már lassítva láthatod a program lépéseit",
+    "uncheck to use solid drop shadows and highlights": "vedd ki a jelölést, ha éles árnyékokat és kiemeléseket kíván használni",
+    "uncheck to use the input dialog in short form": "kapcsolja ki, ha rövidített párbeszédablakot akar használni",
+    "uncompile": "fordítás visszavonása",
+    "undo": "visszavon",
+    "undo the last block drop in this pane": "az utolsó blokk visszavétele erről a lapról",
+    "undrop": "visszavétel",
+    "unicode _ as letter": "unicode _ betűként",
+    "unicode of _": "_ Unicode-ra alakítva",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "körülfogás megszüntetése",
+    "unshared.": "nincs megosztva.",
+    "unsharing project...": "a projekt megosztásának megszüntetése...",
+    "unsupported attribute": "nem támogatott tulajdonság",
+    "unsupported data type": "nem támogatott adattípus",
+    "unsupported graphic effect": "nem támogatott grafikai hatás",
+    "untitled": "névtelen",
+    "unused": "nem használt",
+    "unused block(s) removed": "nem használt blokkok törölve",
+    "up arrow": "felfelé nyíl",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "a billenytűzet segítségével hozz létre blokkokat",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "érték",
+    "variable": "",
+    "variables": "változók",
+    "video _ on _": "video _ ezen _",
+    "video capture": "video felvétel",
+    "volume": "hangerő",
+    "w": "w",
+    "wait _ secs": "várj _ mp-et",
+    "wait until _": "várj amíg _",
+    "wardrobe": "",
+    "warp _": "gyorsítva _",
+    "what's your name?": "Mi a neved?",
+    "when I am _": "amikor _",
+    "when I receive _ _": "_ üzenet érkezésekor _",
+    "when I start as a clone": "másolatként indítva",
+    "when _": "amikor _",
+    "when _ clicked": "_ -ra kattintáskor",
+    "when _ is edited _": "",
+    "when _ key pressed _": "_ lenyomásakor _",
+    "whirl": "örvény",
+    "whitespace": "szóköz",
+    "width": "szélesség",
+    "with data": "",
+    "with inputs": "bevitelekkel",
+    "word": "szó",
+    "world": "világ",
+    "write _ size _": "írd _ mérettel _",
+    "x": "x",
+    "x position": "x hely",
+    "y": "y",
+    "y position": "y hely",
+    "year": "év",
+    "year:": "év:",
+    "your own": "saját",
+    "z": "z"
+}

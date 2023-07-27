@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2023 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2022-November-28';
+modules.api = '2023-January-30';
 
 // IDE_Morph external communication API
 /*
@@ -260,6 +260,38 @@ IDE_Morph.prototype.loadProjectXML = function (projectXML) {
     this.onNextStep = null;
     this.world().animations = [];
     this.openProjectString(projectXML);
+};
+
+IDE_Morph.prototype.getSpriteScriptsXML = function (name) {
+    // return the scripts of the sprite identified by name or the currently
+    // edited sprite as xml-String stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).scriptsOnlyXML();
+};
+
+IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
+    // load the scripts encoded as xml-String and replace the scripts of the
+    // specified sprite or stage with them, no questions asked.
+    // Note: No dependency handling is expected, i.e. the xml-String is
+    // meant to be stripped of all dependenies, i.e. without
+    // custom block definitions or data (variables)
+    return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
+};
+
+IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name) {
+    // highlight the blocks of the scripts of the sprite indicated by name or
+    // the current sprite or stage if none that correspond to the portion of the
+    // text between the start- and end lines when using the current codification
+    // mapping
+    var scripts = this.spriteNamed(name).scripts;
+    scripts.unflash();
+    scripts.flashLOC(fromLOC, toLOC);
+};
+
+IDE_Morph.prototype.unflashSpriteScripts = function (name) {
+    // un-highlight the scripts of the sprite indicated by name or the current
+    // sprite or stage if none
+    this.spriteNamed(name).scripts.unflash();
 };
 
 IDE_Morph.prototype.unsavedChanges = function () {

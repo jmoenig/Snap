@@ -1,1214 +1,1389 @@
-/*
-
-	lang-zh_TW.js
-
-	Traditional Chinese translation for SNAP!
-	SNAP 繁體中文翻譯版
-
-	written by chu-chung Huang
-
-	Copyright (C) 2012 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.zh_TW = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        '繁體中文', // the name as it should appear in the language menu
-    'language_translator':
-        'cch', // your name for the Translators tab
-    'translator_e-mail':
-        'cchuang2009@gmail.com', // optional
-    'last_changed':
-        '2013-8-14', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        '無標題',
-    'development mode':
-        '開發模式',
-
-    // categories:
-    'Motion':
-        '動作',
-    'Looks':
-        '外觀',
-    'Sound':
-        '聲音',
-    'Pen':
-        '畫筆',
-    'Control':
-        '控制',
-    'Sensing':
-        '偵測',
-    'Operators':
-        '運算',
-    'Variables':
-        '變數',
-    'Lists':
-        '鏈表',
-    'Other':
-        '其他',
-
-    // editor:
-    'draggable':
-        '可拖動',
-
-    // tabs:
-    'Scripts':
-        '腳本',
-    'Costumes':
-        '造型',
-    'Sounds':
-        '聲音',
-
-    // names:
-    'Sprite':
-        '角色',
-    'Stage':
-        '舞臺',
-
-    // rotation styles:
-    'don\'t rotate':
-        '不能旋轉',
-    'can rotate':
-        '可以旋轉',
-    'only face left/right':
-        '只能左右翻轉',
-
-    // new sprite button:
-    'add a new sprite':
-        '新增角色',
-
-    // tab help
-    'costumes tab help':
-        '造型選卡幫助\n要使用另外網站上的圖片或電腦中的圖像'
-            + '只需拖到圖像到這裏即可',
-    'import a sound from your computer\nby dragging it into here':
-        '從電腦中導入音效檔案\n只需拖動音效檔案到這裏即可',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        '舞臺選擇:\n沒有動作程式語言',
-
-    'move %n steps':
-        '移動 %n 歩',
-    'turn %clockwise %n degrees':
-        '順時鐘旋轉 %clockwise %n 度',
-    'turn %counterclockwise %n degrees':
-        '逆時鐘旋轉 %counterclockwise %n 度',
-    'point in direction %dir':
-        '面向 %dir 度',
-    'point towards %dst':
-        '面向 %dst ',
-    'go to x: %n y: %n':
-        '移到 x: %n  y: %n ',
-    'go to %dst':
-        '移到 %dst ',
-    'glide %n secs to x: %n y: %n':
-        ' %n 秒內，移到 x: %n y: %n ',
-    'change x by %n':
-        '增加 x 座標 %n ',
-    'set x to %n':
-        '設定 x 座標為 %n ',
-    'change y by %n':
-        '增加 y 座標 %n ',
-    'set y to %n':
-        '設定 y 座標為 %n ',
-    'if on edge, bounce':
-        '碰到邊緣就反彈',
-    'x position':
-        'x 座標',
-    'y position':
-        'y 座標',
-    'direction':
-        '方向',
-
-    // looks:
-    'switch to costume %cst':
-        '切換到造型 %cst ',
-    'next costume':
-        '下一個造型',
-    'costume #':
-        '造型編號',
-    'say %s for %n secs':
-        '說 %s  %n 秒',
-    'say %s':
-        '說 %s ',
-    'think %s for %n secs':
-        '思考 %s  %n 秒',
-    'think %s':
-        '思考 %s ',
-    'Hello!':
-        '你好！',
-    'Hmm...':
-        '嗯...',
-    'change %eff effect by %n':
-        '將 %eff 特效增加 %n ',
-    'set %eff effect to %n':
-        '將 %eff 特效設定為 %n ',
-    'clear graphic effects':
-        '清除所有圖形特效',
-    'change size by %n':
-        '增加角色的大小 %n ',
-    'set size to %n %':
-        '設定角色的大小為 %n ',
-    'size':
-        '大小',
-    'show':
-        '顯示',
-    'hide':
-        '隱藏',
-    'go to front':
-        '移至最上層',
-    'go back %n layers':
-        '下移 %n 層',
-
-    'development mode \ndebugging primitives:':
-        '開發模式\n調式程式語言:',
-    'console log %mult%s':
-        '控制臺日誌 %mult%s',
-    'alert %mult%s':
-        '警告: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '播放聲音 %snd ',
-    'play sound %snd until done':
-        '播放聲音 %snd 直到播放完畢',
-    'stop all sounds':
-        '停止所有聲音',
-    'rest for %n beats':
-        '停止 %n 秒',
-    'play note %n for %n beats':
-        '彈奏 %n  %n 拍',
-    'change tempo by %n':
-        '加快節奏 %n',
-    'set tempo to %n bpm':
-        '設定節奏為 %n',
-    'tempo':
-        '節奏',
-
-    // pen:
-    'clear':
-        '清除所有畫筆',
-    'pen down':
-        '落筆',
-    'pen up':
-        '抬筆',
-    'set pen color to %clr':
-        '設定畫筆顏色為 %clr ',
-    'change pen color by %n':
-        '增加畫筆顏色值 %n ',
-    'set pen color to %n':
-        '設定畫筆顏色值為 %n ',
-    'change pen shade by %n':
-        '增加畫筆色度 %n ',
-    'set pen shade to %n':
-        '設定畫筆色度為 %n ',
-    'change pen size by %n':
-        '增加畫筆粗細 %n ',
-    'set pen size to %n':
-        '設定畫筆的粗細為 %n ',
-    'stamp':
-        '圖章',
-
-    // control:
-    'when %greenflag clicked':
-        '當 %greenflag 被點擊',
-    'when %keyHat key pressed %keyName':
-        '當按下 %keyHat %keyName',
-    'when I am %interaction':
-        '當角色被點擊 %interaction',
-    'when I receive %msgHat %message':
-        '當接收到 %msgHat %message',
-    'broadcast %msg %receive':
-        '廣播 %msg %receive',
-    'broadcast %msg %receive and wait':
-        '廣播 %msg %receive 並等待',
-    'Message name':
-        '資訊名稱',
-    'wait %n secs':
-        '等待 %n 秒',
-    'wait until %b':
-        '直到 %b 前都等待闐',
-    'forever %loop':
-        '重複執行 %loop',
-    'repeat %n %loop':
-        '重複執行 %n  %loop',
-    'repeat until %b %loop':
-        '重複執行直到 %b  %loop',
-    'if %b %c':
-        '如果 %b  %c',
-    'if %b %c else %c':
-        '如果 %b  %c 否則 %c',
-    'report %s':
-        '報告 %s ',
-    'stop block':
-        '停止程式塊',
-    'stop script':
-        '停止腳本',
-    'stop all %stop':
-        '全部停止 %stop',
-    'run %cmdRing %inputs':
-        ' 行 %cmdRing %inputs ',
-    'launch %cmdRing %inputs':
-        '啟動 %cmdRing  %inputs ',
-    'call %repRing %inputs':
-        '調用 %repRing  %inputs ',
-    'run %cmdRing/continuation':
-        '持續執行 %cmdRing ',
-    'call %cmdRing w/continuation':
-        '持續調用 %cmdRing ',
-    'warp %c':
-        '直接運行 %c',
-    'when I start as a clone':
-        '以複製身份開始',
-    'create a clone of %cln':
-        '複製 %cln',
-    'myself':
-        '自身',
-    'delete this clone':
-        '刪除這個複製',
-
-    // sensing:
-    'touching %col ?':
-        '碰到 %col ',
-    'touching %clr ?':
-        '碰到顏色 %clr ',
-    'color %clr is touching %clr ?':
-        '顏色 %clr 碰到了顏色 %clr ？',
-    'ask %s and wait':
-        '詢問 %s 並等待',
-    'what\'s your name?':
-        '你的名字?',
-    'answer':
-        '回答',
-    'mouse x':
-        '滑鼠的 x 座標',
-    'mouse y':
-        '滑鼠的 y 座標',
-    'mouse down?':
-        '按下滑鼠？',
-    'key %key pressed?':
-        '按鍵 %key 是否按下？',
-    'distance to %dst':
-        '到 %dst 的距離',
-    'reset timer':
-        '計時器歸零',
-    'timer':
-        '計時器',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'Turbo模式',
-    'set turbo mode to %b':
-        '設置 Turbo 模式 %b',
-
-    'filtered for %clr':
-        '選擇顏色  %clr ',
-    'stack size':
-        '堆疊大小',
-    'frames':
-        '框架',
-
-    // operators:
-    '%n mod %n':
-        '%n 除以 %n 的餘數',
-    'round %n':
-        '將 %n 四捨五入',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        '隨機在 %n 到 %n 間選一個數',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
-    'not %b':
-        '%b 不成立',
-    'true':
-        '成立',
-    'false':
-        '不成立',
-    'join %words':
-        '將 %words 加入到',
-    'hello':
-        '歡迎',
-    'world':
-        '光臨',
-    'letter %idx of %s':
-        '第 %idx 位元在文字 %s 中',
-    'length of %s':
-        '%s 的長度',
-    'unicode of %s':
-        '字元 %s 的Unicode編碼值',
-    'unicode %n as letter':
-        'Unicode編碼值為 %n 的字元',
-    'is %s a %typ ?':
-        '%s 是 %typ 類型？',
-    'is %s identical to %s ?':
-        '%s 與 %s 相同嗎？',
-
-    'type of %s':
-        '%s 類型',
-
-    // variables:
-    'Make a variable':
-        '新建變數',
-    'Variable name':
-        '變數名',
-    'Delete a variable':
-        '刪除變數',
-
-    'set %var to %s':
-        '設定變數 %var 的值為 %s ',
-    'change %var by %n':
-        '增加變數 %var 的值 %n ',
-    'show variable %var':
-        '顯示變數 %var ',
-    'hide variable %var':
-        '隱藏變數 %var ',
-    'script variables %scriptVars':
-        '腳本變數 %scriptVars',
-
-    // lists:
-    'list %exp':
-        '表列 %exp',
-    '%s in front of %l':
-        '設定 %s 為 %l 第一項',
-    'item %idx of %l':
-        '第 %idx 項在 %l 中',
-    'all but first of %l':
-        ' %l 中除第一項之外內容',
-    'length of %l':
-        ' %l 的大小',
-    '%l contains %s':
-        ' %l 包含 %s ',
-    'thing':
-        '事項',
-    'add %s to %l':
-        '將 %s 加入 %l ',
-    'delete %ida of %l':
-        '刪除 %ida 第 %l 項',
-    'insert %s at %idx of %l':
-        '插入 %s 到第 %idx 項在 %l 中',
-    'replace item %idx of %l with %s':
-        '替換第 %idx 項在 %l 中為 %s ',
-
-    // other
-    'Make a block':
-        '新建程式塊',
-
-    // menus
-    // snap menu
-    'About...':
-        '關於Snap!...',
-    'Reference manual':
-        '參考手冊',
-    'Snap! website':
-        '官方網站',
-    'Download source':
-        '下載源碼',
-    'Switch back to user mode':
-        '切換到使用者模式',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        '停用 變形語式\n快顯功能表\n\n與非\n友好使用者介面',
-    'Switch to dev mode':
-        '切換到開發人員模式',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '啟用 正常語式\n快顯功能表\n與非檢查\n友好使用者介面',
-
-
-    // project menu
-    'Project notes...':
-        '專案說明...',
-    'New':
-        '新建',
-    'Open...':
-        '打開...',
-    'Save':
-        '存',
-    'Save As...':
-        '另存為...',
-    'Import...':
-        '導入...',
-    'file menu import hint':
-        '當你拖動到系統，注意查看檢查報告\n'
-		+ '要注意檢查報告為空\n\n'
-		+ '有一些流覽器不支持這一功能',
-    'Export project as plain text...':
-        '純文本格式導出專案...',
-    'Export project...':
-        '導出項目...',
-    'show project data as XML\nin a new browser window':
-        '新瀏覽視窗以XML格式顯示專案',
-    'Export blocks...':
-        '輸出程式塊...',
-    'show global custom block definitions as XML\nin a new browser window':
-        '新瀏覽視窗以XML格式顯示全局自定義程式塊',
-    'Import tools':
-        '導入工具包',
-    'load the official library of\npowerful blocks':
-        '載入官方庫和強大的程式塊',
-
-    // cloud menu
-    'Login...':
-        '登錄...',
-    'Signup...':
-        '註冊...',
-    // settings menu
-    'Language...':
-        '語言選擇...',
-    'Zoom blocks...':
-        '放大程式塊...',
-    'Blurred shadows':
-        '半透明陰影',
-    'uncheck to use solid drop\nshadows and highlights':
-        '取消選中 降低陰影和高亮的清晰度',
-    'check to use blurred drop\nshadows and highlights':
-        '檢測 降低陰影和高亮的模糊度',
-    'Zebra coloring':
-        '斑馬著色',
-    'check to enable alternating\ncolors for nested blocks':
-        '檢測 使嵌套塊的顏色交換',
-    'uncheck to disable alternating\ncolors for nested block':
-        '取消選中 使嵌套塊的顏色交換',
-    'Dynamic input labels':
-        '動態輸入標籤',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        '取消選中要禁用動態可變參數輸入標籤',
-    '檢查啟用動態可變參數輸入標籤':
-        'marcar para habilitar etiquetas\ndin\u00E1micas para entradas varidic',
-    'Prefer empty slot drops':
-        '喜歡減少空槽',
-    'settings menu prefer empty slots hint':
-        '喜歡空槽設置菜單',
-    'uncheck to allow dropped\nreporters to kick out others':
-        '取消選中 允許下降報告並取消其他報告',
-    'Long form input dialog':
-        '長形式輸入對話方塊',
-    'check to always show slot\ntypes in the input dialog':
-        '檢查顯示插槽在輸入對話方塊中的類型',
-    'uncheck to use the input\ndialog in short form':
-        '取消選擇 輸入窗並顯示簡潔對話方塊',
-    'Virtual keyboard':
-        '虛擬鍵盤',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        '取消選中 禁用虛擬鍵盤、可移動設備',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        '檢查 使用虛擬鍵、可移動設備',
-    'Input sliders':
-        '輸入滑塊',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        '取消選中 禁用輸入滑塊、輸入欄位',
-    'check to enable\ninput sliders for\nentry fields':
-        '檢查 使用輸入滑塊、輸入欄位',
-    'Clicking sound':
-        '點擊聲音',
-    'uncheck to turn\nblock clicking\nsound off':
-        '取消選中 關閉點擊程式塊的聲音',
-    'check to turn\nblock clicking\nsound on':
-        '檢查 關閉點擊程式塊的聲音',
-    'Animations':
-        '動畫',
-    'uncheck to disable\nIDE animations':
-        '取消選中禁用IDE動畫',
-    'Turbo mode':
-        'Turbo模式',
-    'check to prioritize\nscript execution':
-        '檢查的優先執行腳本順序',
-    'uncheck to run scripts\nat normal speed':
-        '取消選中正常速度運行腳本',
-    'check to enable\nIDE animations':
-        '檢查啟用IDE動畫',
-    'Thread safe scripts':
-        '線程安全的腳本',
-    'uncheck to allow\nscript reentrance':
-        '取消選中 允許腳本重新載入',
-    'check to disallow\nscript reentrance':
-        '檢查 不允許腳本重新載入',
-    'Prefer smooth animations':
-        '不流暢的動畫',
-    'uncheck for greater speed\nat variable frame rates':
-        '取消選中在可變幀頻更快的速度',
-    'check for smooth, predictable\nanimations across computers':
-        '檢查是否平滑，可預見的多台電腦動畫',
-
-    // inputs
-    'with inputs':
-        '參數',
-    'input names:':
-        '參數名:',
-    'Input Names:':
-        '參數名:',
-    'input list:':
-        '輸入列表:',
-
-    // context menus:
-    'help':
-        '説明',
-
-    // blocks:
-    'help...':
-        '説明...',
-    'relabel...':
-        '重新標記...',
-    'duplicate':
-        '複製',
-    'make a copy\nand pick it up':
-        '創建一個副本並抓起',
-    'only duplicate this block':
-        '只複製此塊',
-    'delete':
-        '刪除',
-    'script pic...':
-        '將腳本存為圖像...',
-    'open a new window\nwith a picture of this script':
-        '新流覽視窗中打開腳本的圖片',
-    'ringify':
-        '環',
-    'unringify':
-        '刪除環',
-
-    // custom blocks:
-    'delete block definition...':
-        '刪除自定義程式塊',
-    'edit...':
-        '編輯...',
-
-    // sprites:
-    'edit':
-        '編輯',
-    'export...':
-        '導出...',
-
-    'show all':
-        '顯示所有',
-    'pic...':
-        '導出圖像...',
-    'open a new window\nwith a picture of the stage':
-        '打開一張圖片舞臺的新視窗，',
-    // scripting area
-    'clean up':
-        '清除',
-    'arrange scripts\nvertically':
-        '整理腳本，垂直排列',
-    'add comment':
-        '添加注釋',
-    'make a block...':
-        '創建程式塊...',
-
-    // costumes
-    'rename':
-        '重命名',
-    'export':
-        '導出',
-    'rename costume':
-        '重命名造型',
-
-    // sounds
-    'Play sound':
-        '播放聲音',
-    'Stop sound':
-        '停止聲音',
-    'Stop':
-        '停止',
-    'Play':
-        '播放',
-    'rename sound':
-        '重命名聲音',
-
-    // dialogs
-    // buttons
-    'OK':
-        '確定',
-    'Cancel':
-        '取消',
-    'Yes':
-        '是',
-    'No':
-        '否',
-
-    // help
-    'Help':
-        '説明',
-    // zoom blocks
-    'Zoom blocks':
-        '放大程式塊',
-    'build':
-        '建立',
-    'your own':
-        '你自己',
-    'blocks':
-        '程式塊',
-    'normal (1x)':
-        '標準 (1x)',
-    'demo (1.2x)':
-        '演示 (1.2x)',
-    'presentation (1.4x)':
-        '演示文稿 (1.4x)',
-    'big (2x)':
-        '大(2x)',
-    'huge (4x)':
-        '超大型 (4x)',
-    'giant (8x)':
-        '巨人型 (8x)',
-    'monstrous (10x)':
-        '無敵型 (10x)',
-
- 'Untitled':
-        '無標題',
-    'Open Project':
-        '打開項目',
-    'Open':
-        '打開',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '已保存！',
-    'Delete Project':
-        '刪除項目',
-    'Are you sure you want to delete':
-        '你確定要刪除嗎？',
-    'rename...':
-        '重命名...',
-    // costume editor
-    'Costume Editor':
-        '造型編輯器',
-    'click or drag crosshairs to move the rotation center':
-        '點擊或拖動十字准線，設置旋轉中心',
-
-    // project notes
-    'Project Notes':
-        '項目注釋',
-
-    // new project
-    'New Project':
-        '新建項目',
-    'Replace the current project with a new one?':
-        '你要取消當前編輯的專案，重新建立專案嗎？',
-
-    // open project
-    'Open Projekt':
-        '打開項目',
-
-    // save project
-    'Save Project As...':
-        '項目另存為...',
-
-    // export blocks
-    'Export blocks':
-        '導出程式塊',
-    'Import blocks':
-        '導入程式塊',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        '這個項目沒有包含全局性的自定義程式塊',
-    'select':
-        '選擇',
-    'all':
-        '全部',
-    'none':
-        '無',
-
-    // variable dialog
-    'for all sprites':
-        '對所有的角色',
-    'for this sprite only':
-        '只對這個角色',
-
-    // block dialog
-    'Change block':
-        '修改程式塊',
-    'Command':
-        '命令',
-    'Reporter':
-        '記錄',
-    'Predicate':
-        '謂語',
-
-    // block editor
-    'Block Editor':
-        '程式塊編輯器',
-    'Apply':
-        '應用',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        '刪除自定義程式塊',
-    'block deletion dialog text':
-        '你確定要刪除自定義程式塊及所有實例嗎？',
-
-    // input dialog
-    'Create input name':
-        '創建參數名',
-    'Edit input name':
-        '編輯參數名',
-    'Edit label fragment':
-        '編輯標籤片段',
-    'Title text':
-        '標題文本',
-    'Input name':
-        '參數名',
-    'Delete':
-        '刪除',
-    'Object':
-        '對象',
-    'Number':
-        '數字',
-    'Text':
-        '文本',
-    'List':
-        '鏈表',
-    'Any type':
-        '所有類型',
-    'Boolean (T/F)':
-        '布林值（是/否）',
-    'Command\n(inline)':
-        '命令（內置）',
-    'Command\n(C-shape)':
-        '命令(C型)',
-    'Any\n(unevaluated)':
-        '任意(未評價)',
-    'Boolean\n(unevaluated)':
-        '布林（評價）',
-    'Single input.':
-        '單一參數.',
-    'Default Value:':
-        '預設值:',
-    'Multiple inputs (value is list of inputs)':
-        '多行輸入（值為參數列表）',
-    'Upvar - make internal variable visible to caller':
-        '上傳變數 - 使內部變數對調用者可見',
-
-    // About Snap
-    'About Snap':
-        '關於 Snap',
-    'Back...':
-        '返回...',
-    'License...':
-        '許可...',
-    'Modules...':
-        '模組...',
-    'Credits...':
-        '光榮榜...',
-    'Translators...':
-        '翻譯者',
-    'License':
-        '版權',
-    'current module versions:':
-        '目前模組版本:',
-    'Contributors':
-        '貢獻者:',
-    'Translations':
-        '翻譯者',
-
-    // variable watchers
-    'normal':
-        '標準',
-    'large':
-        '大型',
-    'slider':
-        '滑塊',
-    'slider min...':
-        '滑塊的最小值...',
-    'slider max...':
-        '滑塊的最大值...',
-    'import...':
-        '導入...',
-    'Slider minimum value':
-        '滑塊的最小值',
-    'Slider maximum value':
-        '滑塊的最大值',
-
-    // list watchers
-    'length: ':
-        '長度: ',
-
-    // coments
-    'add comment here...':
-        '在這裏添加注釋...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) 右',
-    '(-90) left':
-        '(-90) 左',
-    '(0) up':
-        '(0) 上',
-    '(180) right':
-        '(180) 右',
-
-    // collision detection
-    'mouse-pointer':
-        '滑鼠指標',
-    'edge':
-        '邊緣',
-    'pen trails':
-        '畫筆軌跡',
-
-    // costumes
-    'Turtle':
-        '海龜',
-
-    // graphical effects
-    'ghost':
-        '鬼影',
-
-    // keys
-    'space':
-        '空白鍵',
-    'up arrow':
-        '上移鍵',
-    'down arrow':
-        '下移鍵',
-    'right arrow':
-        '右移鍵',
-    'left arrow':
-        '左移鍵',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        '新增...',
-
-    // math functions
-    'abs':
-        'abs',
-    'sqrt':
-        'sqrt',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        '數字',
-    'text':
-        '文字',
-    'Boolean':
-        '布林值',
-    'list':
-        '表列',
-    'command':
-        '命令',
-    'reporter':
-        '記錄',
-    'predicate':
-        '謂語',
-
-    // list indices
-    'last':
-        '最後',
-    'any':
-        '任意',
-
-    // missing entries
-    'Untitled':
-        '無標題',
-    'Open Project':
-        '打開專案',
-    'Open':
-        '打開',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '已保存！',
-    'Delete Project':
-        '刪除項目',
-    'Are you sure you want to delete':
-        '確定要刪除嗎？',
-    'unringify':
-        '刪除環',
-    'rename...':
-        '重命名為...',
-    '(180) down':
-        '(180) 下',
-    'Ok':
-        '確定'
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) 左",
+    "(0) up": "(0) 上",
+    "(1) sine": "",
+    "(180) down": "(180) 下",
+    "(180) right": "(180) 右",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) 右",
+    "(empty)": "(空)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "關於 Snap",
+    "About...": "關於Snap!...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "動畫",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "任意(未評價)",
+    "Any type": "所有類型",
+    "Apply": "應用",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "確定要刪除嗎？",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "返回...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "程式塊編輯器",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "半透明陰影",
+    "Boolean": "布林值",
+    "Boolean (T/F)": "布林值（是/否）",
+    "Boolean (unevaluated)": "布林（評價）",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "取消",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "修改程式塊",
+    "Clear backup": "",
+    "Clicking sound": "點擊聲音",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "命令",
+    "Command (C-shape)": "命令(C型)",
+    "Command (inline)": "命令（內置）",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "貢獻者:",
+    "Control": "控制",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "造型編輯器",
+    "Costumes": "造型",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "創建參數名",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "光榮榜...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "",
+    "Default Value:": "預設值:",
+    "Delete": "刪除",
+    "Delete Custom Block": "刪除自定義程式塊",
+    "Delete Project": "刪除項目",
+    "Delete a variable": "刪除變數",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "下載源碼",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "動態輸入標籤",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "編輯參數名",
+    "Edit label fragment": "編輯標籤片段",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "導出程式塊",
+    "Export blocks...": "輸出程式塊...",
+    "Export project as plain text...": "純文本格式導出專案...",
+    "Export project...": "導出項目...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "你好！",
+    "Hello, World!": "",
+    "Help": "説明",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "嗯...",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "導入程式塊",
+    "Import library": "",
+    "Import sound": "",
+    "Import tools": "導入工具包",
+    "Import...": "導入...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "參數名:",
+    "Input Slot Options": "",
+    "Input name": "參數名",
+    "Input sliders": "輸入滑塊",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "語言選擇...",
+    "Libraries...": "",
+    "License": "版權",
+    "License...": "許可...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "鏈表",
+    "List utilities": "",
+    "Lists": "鏈表",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "登錄...",
+    "Logout": "",
+    "Long form input dialog": "長形式輸入對話方塊",
+    "Looks": "外觀",
+    "Make a block": "新建程式塊",
+    "Make a variable": "新建變數",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "資訊名稱",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "模組...",
+    "Motion": "動作",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "多行輸入（值為參數列表）",
+    "Nested auto-wrapping": "",
+    "New": "新建",
+    "New Category": "",
+    "New Project": "新建項目",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "否",
+    "November": "",
+    "Number": "數字",
+    "OK": "確定",
+    "Object": "對象",
+    "October": "",
+    "Ok": "確定",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "打開",
+    "Open Project": "打開專案",
+    "Open Projekt": "打開項目",
+    "Open in Community Site": "",
+    "Open...": "打開...",
+    "Opening project...": "",
+    "Operators": "運算",
+    "Other": "其他",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "畫筆",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "播放",
+    "Play sound": "播放聲音",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "謂語",
+    "Prefer empty slot drops": "喜歡減少空槽",
+    "Prefer smooth animations": "不流暢的動畫",
+    "Privacy...": "",
+    "Project Notes": "項目注釋",
+    "Project URLs": "",
+    "Project notes...": "專案說明...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "參考手冊",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "你要取消當前編輯的專案，重新建立專案嗎？",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "記錄",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "存",
+    "Save As...": "另存為...",
+    "Save Project": "",
+    "Save Project As...": "項目另存為...",
+    "Save to disk": "",
+    "Saved!": "已保存！",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "",
+    "Scripts": "腳本",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "偵測",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "註冊...",
+    "Single input.": "單一參數.",
+    "Single palette": "",
+    "Slider maximum value": "滑塊的最大值",
+    "Slider minimum value": "滑塊的最小值",
+    "Snap! website": "官方網站",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "聲音",
+    "Sound Recorder": "",
+    "Sounds": "聲音",
+    "Sprite": "角色",
+    "Sprite Nesting": "",
+    "Stage": "舞臺",
+    "Stage height": "",
+    "Stage selected: no motion primitives": "舞臺選擇: 沒有動作程式語言",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "",
+    "Stop": "停止",
+    "Stop sound": "停止聲音",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "切換到使用者模式",
+    "Switch to dev mode": "切換到開發人員模式",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "文本",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "線程安全的腳本",
+    "Title text": "標題文本",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "翻譯者",
+    "Translators...": "翻譯者",
+    "Turbo mode": "Turbo模式",
+    "Turtle": "海龜",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "無標題",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "上傳變數 - 使內部變數對調用者可見",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "變數名",
+    "Variables": "變數",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "虛擬鍵盤",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "是",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "斑馬著色",
+    "Zoom blocks": "放大程式塊",
+    "Zoom blocks...": "放大程式塊...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ 包含 _",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "設定 _ 為 _ 第一項",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "_ 除以 _ 的餘數",
+    "_ of _": "_ _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "acos",
+    "add _ to _": "將 _ 加入 _",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "新增角色",
+    "add comment": "添加注釋",
+    "add comment here...": "在這裏添加注釋...",
+    "agent": "",
+    "alert _": "警告: _",
+    "all": "全部",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "_ 中除第一項之外內容",
+    "all but this script": "",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "且",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "回答",
+    "any": "",
+    "any key": "",
+    "any message": "",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "整理腳本，垂直排列",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "詢問 _ 並等待",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "大(2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "你確定要刪除自定義程式塊及所有實例嗎？",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "程式塊",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "廣播 _ _",
+    "broadcast _ _ and wait": "廣播 _ _ 並等待",
+    "brush": "",
+    "build": "建立",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "調用 _ _",
+    "call _ w/continuation": "持續調用 _",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "可以旋轉",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "增加變數 _ 的值 _",
+    "change _ effect by _": "將 _ 特效增加 _",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "增加畫筆顏色值 _",
+    "change pen shade by _": "增加畫筆色度 _",
+    "change pen size by _": "增加畫筆粗細 _",
+    "change size by _": "增加角色的大小 _",
+    "change tempo by _": "加快節奏 _",
+    "change volume by _": "",
+    "change x by _": "增加 x 座標 _",
+    "change y by _": "增加 y 座標 _",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "檢查是否平滑，可預見的多台電腦動畫",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "檢查顯示插槽在輸入對話方塊中的類型",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "檢查 不允許腳本重新載入",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "檢查啟用IDE動畫",
+    "check to enable alternating colors for nested blocks": "檢測 使嵌套塊的顏色交換",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "",
+    "check to enable input sliders for entry fields": "檢查 使用輸入滑塊、輸入欄位",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "檢查 使用虛擬鍵、可移動設備",
+    "check to hide (+) symbols in block prototype labels": "",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "檢查的優先執行腳本順序",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "檢查 關閉點擊程式塊的聲音",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "檢測 降低陰影和高亮的模糊度",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "清除",
+    "clear": "清除所有畫筆",
+    "clear graphic effects": "清除所有圖形特效",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "點擊或拖動十字准線，設置旋轉中心",
+    "clicked": "",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "顏色 _ 碰到了顏色 _ ？",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "命令",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "控制臺日誌 _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "造型編號",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "造型選卡幫助 要使用另外網站上的圖片或電腦中的圖像只需拖到圖像到這裏即可",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "複製 _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "目前模組版本:",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "刪除",
+    "delete _": "",
+    "delete _ of _": "刪除 _ 第 _ 項",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "刪除自定義程式塊",
+    "delete slot": "",
+    "delete this clone": "刪除這個複製",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "演示 (1.2x)",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "開發模式",
+    "development mode debugging primitives:": "開發模式 調式程式語言:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "方向",
+    "disable deep-Morphic context menus and show user-friendly ones": "停用 變形語式 快顯功能表 與非 友好使用者介面",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "到 _ 的距離",
+    "distribution": "",
+    "don't rotate": "不能旋轉",
+    "down arrow": "下移鍵",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "可拖動",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "複製",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "邊緣",
+    "edit": "編輯",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "編輯...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "啟用 正常語式 快顯功能表 與非檢查 友好使用者介面",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "導出",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "導出...",
+    "extract": "",
+    "f": "f",
+    "false": "不成立",
+    "file": "",
+    "file menu import hint": "當你拖動到系統，注意查看檢查報告 要注意檢查報告為空 有一些流覽器不支持這一功能",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "選擇顏色 _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "對所有的角色",
+    "for each _ in _ _": "",
+    "for this sprite only": "只對這個角色",
+    "forever _": "重複執行 _",
+    "frame": "",
+    "frames": "框架",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "鬼影",
+    "giant (8x)": "巨人型 (8x)",
+    "glide _ secs to x: _ y: _": "_ 秒內，移到 x: _ y: _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "下移 _ 層",
+    "go to _": "移到 _",
+    "go to _ layer": "",
+    "go to front": "移至最上層",
+    "go to x: _ y: _": "移到 x: _ y: _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "歡迎",
+    "help": "説明",
+    "help...": "説明...",
+    "hide": "隱藏",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide variable _": "隱藏變數 _",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "超大型 (4x)",
+    "i": "i",
+    "identical to": "與",
+    "if _ _": "如果 _ _",
+    "if _ _ else _": "如果 _ _ 否則 _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "碰到邊緣就反彈",
+    "import a sound from your computer by dragging it into here": "從電腦中導入音效檔案 只需拖動音效檔案到這裏即可",
+    "import without attempting to parse or format data": "",
+    "import...": "導入...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "輸入列表:",
+    "input names:": "參數名:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "插入 _ 到第 _ 項在 _ 中",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "_ 相同嗎?",
+    "is _ a _ ?": "_ 是 _ 類型？",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "_ 與 _ 相同嗎？",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "第 _ 項在 _ 中",
+    "items": "",
+    "j": "j",
+    "join _": "將 _ 加入到",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "按鍵 _ 是否按下？",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "繁體中文",
+    "language_translator": "cch",
+    "large": "大型",
+    "last": "最後",
+    "last changed": "",
+    "last_changed": "2013-8-14",
+    "launch _ _": "啟動 _ _",
+    "left": "",
+    "left arrow": "左移鍵",
+    "length": "",
+    "length of _": "_ 的長度",
+    "length:": "長度:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "第 _ 位元在文字 _ 中",
+    "light (70)": "",
+    "lightness": "",
+    "line": "",
+    "lines": "",
+    "list": "表列",
+    "list _": "表列 _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "載入官方庫和強大的程式塊",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "創建程式塊...",
+    "make a category...": "",
+    "make a copy and pick it up": "創建一個副本並抓起",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "無敵型 (10x)",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "按下滑鼠？",
+    "mouse position": "",
+    "mouse x": "滑鼠的 x 座標",
+    "mouse y": "滑鼠的 y 座標",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "滑鼠指標",
+    "move": "",
+    "move _ steps": "移動 _ 歩",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "自身",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "新增...",
+    "next": "",
+    "next costume": "下一個造型",
+    "none": "無",
+    "normal": "標準",
+    "normal (1x)": "標準 (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "_ 不成立",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "數字",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "只複製此塊",
+    "only face left/right": "只能左右翻轉",
+    "only grab this block": "",
+    "open a new window with a picture of the stage": "打開一張圖片舞臺的新視窗，",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "新流覽視窗中打開腳本的圖片",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "或",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "",
+    "pen": "",
+    "pen _": "",
+    "pen down": "落筆",
+    "pen down?": "",
+    "pen trails": "畫筆軌跡",
+    "pen up": "抬筆",
+    "pen vectors": "",
+    "pic...": "導出圖像...",
+    "pick random _ to _": "隨機在 _ 到 _ 間選一個數",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "彈奏 _ _ 拍",
+    "play sound _": "播放聲音 _",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "播放聲音 _ 直到播放完畢",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "面向 _ 度",
+    "point towards _": "面向 _",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "謂語",
+    "presentation (1.4x)": "演示文稿 (1.4x)",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "任意",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "重新標記...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "重命名",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "重命名造型",
+    "rename only this reporter": "",
+    "rename sound": "重命名聲音",
+    "rename...": "重命名為...",
+    "repeat _ _": "重複執行 _ _",
+    "repeat until _ _": "重複執行直到 _ _",
+    "replace item _ of _ with _": "替換第 _ 項在 _ 中為 _",
+    "report _": "報告 _",
+    "reporter": "記錄",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "計時器歸零",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "停止 _ 秒",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "右移鍵",
+    "ring": "",
+    "ringify": "環",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "將 _ 四捨五入",
+    "run _": "持續執行 _",
+    "run _ _": "行 _ _",
+    "run _ w/continuation": "",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "說 _",
+    "say _ for _ secs": "說 _ _ 秒",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "將腳本存為圖像...",
+    "script variables _": "腳本變數 _",
+    "scripts": "",
+    "scripts pic...": "",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "選擇",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "將 _ 特效設定為 _",
+    "set _ of block _ to _": "",
+    "set _ to _": "設定變數 _ 的值為 _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "設定畫筆顏色為 _",
+    "set pen shade to _": "設定畫筆色度為 _",
+    "set pen size to _": "設定畫筆的粗細為 _",
+    "set size to _ %": "設定角色的大小為 _",
+    "set tempo to _ bpm": "設定節奏為 _",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "設置 Turbo 模式 _",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "設定 x 座標為 _",
+    "set y to _": "設定 y 座標為 _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "喜歡空槽設置菜單",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "顯示",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "顯示所有",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "新瀏覽視窗以XML格式顯示全局自定義程式塊",
+    "show project data as XML in a new browser window": "新瀏覽視窗以XML格式顯示專案",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "顯示變數 _",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "大小",
+    "slider": "滑塊",
+    "slider max...": "滑塊的最大值...",
+    "slider min...": "滑塊的最小值...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "空白鍵",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "",
+    "square": "",
+    "stack size": "堆疊大小",
+    "stage": "",
+    "stage image": "",
+    "stamp": "圖章",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "",
+    "stop all _": "全部停止 _",
+    "stop all sounds": "停止所有聲音",
+    "stop block": "停止程式塊",
+    "stop frequency": "",
+    "stop script": "停止腳本",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "切換到造型 _",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "節奏",
+    "temporary?": "",
+    "text": "文字",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "事項",
+    "think _": "思考 _",
+    "think _ for _ secs": "思考 _ _ 秒",
+    "this _": "",
+    "this block": "",
+    "this project doesn't have any custom global blocks yet": "這個項目沒有包含全局性的自定義程式塊",
+    "this script": "",
+    "time in milliseconds": "",
+    "timer": "計時器",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "碰到顏色 _",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "cchuang2009@gmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "成立",
+    "turbo mode": "",
+    "turbo mode?": "Turbo模式",
+    "turn _ _ degrees": "順時鐘旋轉 _ _ 度",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "_ 類型",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "取消選中在可變幀頻更快的速度",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "取消選中 允許下降報告並取消其他報告",
+    "uncheck to allow script reentrance": "取消選中 允許腳本重新載入",
+    "uncheck to always show (+) symbols in block prototype labels": "",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "取消選中禁用IDE動畫",
+    "uncheck to disable alternating colors for nested block": "取消選中 使嵌套塊的顏色交換",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "取消選中要禁用動態可變參數輸入標籤",
+    "uncheck to disable input sliders for entry fields": "取消選中 禁用輸入滑塊、輸入欄位",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "取消選中 禁用虛擬鍵盤、可移動設備",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "取消選中正常速度運行腳本",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "取消選中 關閉點擊程式塊的聲音",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "取消選中 降低陰影和高亮的清晰度",
+    "uncheck to use the input dialog in short form": "取消選擇 輸入窗並顯示簡潔對話方塊",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "",
+    "undrop": "",
+    "unicode _ as letter": "Unicode編碼值為 _ 的字元",
+    "unicode of _": "字元 _ 的Unicode編碼值",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "刪除環",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "無標題",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "上移鍵",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "等待 _ 秒",
+    "wait until _": "直到 _ 前都等待闐",
+    "wardrobe": "",
+    "warp _": "直接運行 _",
+    "what's your name?": "你的名字?",
+    "when I am _": "當角色被點擊 _",
+    "when I receive _ _": "當接收到 _ _",
+    "when I start as a clone": "以複製身份開始",
+    "when _": "",
+    "when _ clicked": "當 _ 被點擊",
+    "when _ is edited _": "",
+    "when _ key pressed _": "當按下 _ _",
+    "whirl": "",
+    "whitespace": "",
+    "width": "",
+    "with data": "",
+    "with inputs": "參數",
+    "word": "",
+    "world": "光臨",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x 座標",
+    "y": "y",
+    "y position": "y 座標",
+    "year": "",
+    "year:": "",
+    "your own": "你自己",
+    "z": "z",
+    "檢查啟用動態可變參數輸入標籤": "marcar para habilitar etiquetas dinámicas para entradas varidic"
+}

@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2022 by Jens Mönig and Brian Harvey
+    Copyright (C) 2023 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2022-July-19';
+modules.lists = '2023-July-18';
 
 var List;
 var ListWatcherMorph;
@@ -129,6 +129,11 @@ var ListWatcherMorph;
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
     slice()                 - same as query() turning negative indices into slices
+
+    analysis:
+    ---------
+    distribution()          - answer the occurrence count for each element
+
 */
 
 // List instance creation:
@@ -270,7 +275,7 @@ List.prototype.at = function (index) {
             pair = pair.rest;
             idx -= 1;
         } else {
-            return pair.first;
+            return idx < 1 ? '' : pair.first;
         }
     }
     value = pair.contents[idx - 1];
@@ -315,6 +320,52 @@ List.prototype.indexOf = function (element) {
         }
     }
     return 0;
+};
+
+// List key-value accessing (experimental in v8.1):
+
+List.prototype.lookup = function (key) {
+    var rec;
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return this.at(key);
+    }
+    rec = this.itemsArray().find(elem => elem instanceof List &&
+        elem.length() > 0 &&
+        snapEquals(elem.at(1), key));
+    return rec ?
+        (rec.length() > 2 ? rec.cdr() : rec.at(2))
+        : '';
+};
+
+List.prototype.bind = function (key, value) {
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return this.put(value, key);
+    }
+    if (key instanceof List) {
+        return; // cannot use lists as key because of hyperization
+    }
+    this.forget(key); // ensure unique entry
+    this.add(new List([key, value]));
+};
+
+List.prototype.forget = function (key) {
+    var idx = 0,
+        query = rec =>
+            snapEquals(rec, key) || (
+                rec instanceof List &&
+                rec.length() === 2 &&
+                snapEquals(rec.at(1), key)
+            );
+
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return this.remove(key);
+    }
+    while (idx > -1) {
+        idx = this.itemsArray().findIndex(query);
+        if (idx > -1) {
+            this.remove(idx + 1);
+        }
+    }
 };
 
 // List table (2D) accessing (for table morph widget):
@@ -417,7 +468,7 @@ List.prototype.query = function (indices) {
         return this.map(e => e);
     }
     if (indices.rank() === 1) {
-        return indices.map(i => this.at(i));
+        return indices.map(i => this.lookup(i));
     }
     first = indices.at(1);
     if (first instanceof List) {
@@ -427,7 +478,7 @@ List.prototype.query = function (indices) {
     } else {
         select = new List([first]);
     }
-    return select.map(i => this.at(i)).map(
+    return select.map(i => this.lookup(i)).map(
             e => e instanceof List? e.query(indices.cdr()) : e
     );
 };
@@ -831,6 +882,30 @@ List.prototype.reversed = function () {
     return new List(this.itemsArray().slice().reverse());
 };
 
+// List analysis
+
+List.prototype.distribution = function () {
+    // return a table representing a dictionary indicating the occurrence count
+    // of each unique elements
+    // note: for compound data this method uses identity rather than equality
+    var dict = new Map(),
+        data = this.itemsArray(),
+        len = data.length,
+        isNum = thing => parseFloat(thing) === +thing,
+        item, i;
+    for (i = 0; i < len; i += 1) {
+        item = isNum(data[i]) ? data[i].toString() : data[i];
+        if (dict.has(item)) {
+            dict.set(item, dict.get(item) + 1);
+        } else {
+            dict.set(item, 1);
+        }
+    }
+    return new List([...dict].sort((a, b) => b[1] - a[1])
+        .map(pair => new List(pair))
+    );
+};
+
 // List conversion:
 
 List.prototype.asArray = function () {
@@ -995,7 +1070,7 @@ List.prototype.asJSON = function () {
         return array.indexOf(element) === array.lastIndexOf(element);
     }
 
-    return JSON.stringify(objectify(this));
+    return JSON.stringify(objectify(this), null, 4);
 };
 
 List.prototype.canBeTXT = function () {
@@ -1059,28 +1134,26 @@ List.prototype.equalTo = function (other) {
 };
 
 List.prototype.canBeCSV = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
-            (value instanceof List && value.hasOnlyAtomicData());
-    });
+            (value instanceof List && value.hasOnlyAtomicData())
+    );
 };
 
 List.prototype.canBeJSON = function () {
-    return this.itemsArray().every(value => {
-        return !isNaN(+value) ||
-            isString(value) ||
-            value === true ||
-            value === false ||
-            (value instanceof List && value.canBeJSON());
-    });
+    return this.itemsArray().every(value => !isNaN(+value) ||
+        isString(value) ||
+        value === true ||
+        value === false ||
+        (value instanceof List && value.canBeJSON())
+    );
 };
 
 List.prototype.hasOnlyAtomicData = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
-            isString(value);
-    });
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') || isString(value)
+    );
 };
 
 // List-to-block
