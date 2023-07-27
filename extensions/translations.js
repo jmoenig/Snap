@@ -46,7 +46,7 @@ SnapExtensions.primitives.set(
     prefix+'slot_names(block)',
     function(block) {
         const declarations = block.expression.definition?.declarations;
-        if(declarations) {
+        if(!declarations) {
             return new List();
         }
         return new List(Array.from(declarations).map(item => item[0]));
