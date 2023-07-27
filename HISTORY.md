@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 9.0.2:
+* **Notable Fixes:**
+    * fixed #3239 (a context serialization glitch)
+
+### 2023-07-27
+* store: fixed #3239 (a context serialization glitch)
+* prepared v9.0.2 patch
+
 ## 9.0.1:
 * **Notable Fixes:**
     * fixed "play sound until done" blocking glitch
