@@ -1166,11 +1166,9 @@ MicroWorld.prototype.makeButton = function (definition, area) {
     );
 
     if(this.buttonAreas[area].active.includes(definition.label)) {
-        button.color = new Color(64,98,107);
-        button.labelShadowOffset = new Point(0,0);
-        button.labelColor = WHITE;
+        button.color = button.pressColor;
+        button.labelShadowColor = new Color(200,200,200);
         button.highlightColor = button.color.lighter(25);
-        button.padding++;
         button.fixLayout();
     }
 
