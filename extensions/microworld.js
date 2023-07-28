@@ -1,4 +1,4 @@
-// Update 2023-07-26
+// Update 2023-07-28
 var ide = world.children.find(child => {
         return child instanceof IDE_Morph;
     }),
@@ -190,6 +190,25 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
+    prefix+'set_active_buttons(location, labels)',
+    (location, labels) => {
+        if(!labels){
+            labels = [];
+        }
+        else if(labels.constructor === List){
+            labels = labels.contents;
+        }
+        else{
+            throw new Error("Expecting List of button labels");
+        }
+
+        doIfMicroworld(microworld => {
+            microworld.setActiveButtons(location, labels)
+        })
+    }
+)
+
+SnapExtensions.primitives.set(
     prefix+'set_hidden_morphs(morphs)',
     morphs => {
         doIfMicroworld(microworld => {
@@ -332,7 +351,18 @@ MicroWorld.prototype.setButtons = function(location, buttons){
     if(this.isActive){
         this.destroyButtons();
     }
-    this.buttons[location] = buttons;
+    this.buttonAreas[location].buttons = buttons;
+    if(this.isActive){
+        this.makeButtons();
+        this.refreshLayouts();
+    }
+}
+
+MicroWorld.prototype.setActiveButtons = function(location, labels) {
+    if(this.isActive) {
+        this.destroyButtons();
+    }
+    this.buttonAreas[location].active = labels;
     if(this.isActive){
         this.makeButtons();
         this.refreshLayouts();
@@ -368,11 +398,23 @@ MicroWorld.prototype.init = function (ide) {
 
     this.buttonBlocks = [];
 
-    this.buttons = {
-        'scripts': [],
-        'palette': [],
-        'corral': [],
-        'stage': []
+    this.buttonAreas = {
+        'scripts': {
+            buttons: [],
+            active: []
+        },
+        'palette': {
+            buttons: [],
+            active: []
+        },
+        'corral': {
+            buttons: [],
+            active: []
+        },
+        'stage': {
+            buttons: [],
+            active: []
+        }
     };
     this.enableKeyboard = true;
     // this.simpleBlockDialog = false;
@@ -692,8 +734,8 @@ MicroWorld.prototype.updateFreshPaletteFunction = function(){
                 x = 5,
                 y = palette.contents.height();
 
-            myself.buttons.palette.forEach(def => {
-                var button = myself.makeButton(def);
+            myself.buttonAreas.palette.buttons.forEach(def => {
+                var button = myself.makeButton(def, 'palette');
                 y += unit * 0.3;
                 button.setPosition(new Point(x, y));
                 palette.addContents(button);
@@ -954,14 +996,14 @@ MicroWorld.prototype.makeButtons = function () {
     }
 
 
-    this.buttons['scripts'].forEach(
+    this.buttonAreas['scripts'].buttons.forEach(
         function (definition) {
             if (!sf.toolBar.children.find(
                 function (child) {
                     return child.labelString == definition.label;
                 }
             )) {
-                var button = myself.makeButton(definition);
+                var button = myself.makeButton(definition, 'scripts');
                 sf.toolBar.add(button);
                 sprite.buttons[definition.label] = button;
             }
@@ -973,10 +1015,10 @@ MicroWorld.prototype.makeButtons = function () {
 
     if (!ide.corralButtonsFrame) { this.createCorralButtonsFrame(); }
 
-    if (this.buttons['corral'].length > 0) {
-        this.buttons['corral'].forEach(
+    if (this.buttonAreas['corral'].buttons.length > 0) {
+        this.buttonAreas['corral'].buttons.forEach(
             function (definition) {
-                var button = myself.makeButton(definition);
+                var button = myself.makeButton(definition, 'corral');
                 if (!contains(ide.corralButtonsFrame.contents.children, button))
                 {
                     ide.corralButtonsFrame.addContents(button);
@@ -986,10 +1028,10 @@ MicroWorld.prototype.makeButtons = function () {
         );
     }
 
-    if(this.buttons['stage'].length > 0 ) {
-        this.buttons['stage'].forEach(
+    if(this.buttonAreas['stage'].buttons.length > 0 ) {
+        this.buttonAreas['stage'].buttons.forEach(
             function({definition, appearance}) {
-                var button = myself.makeButton(definition);
+                var button = myself.makeButton(definition, 'stage');
 
                 var oldFix = PushButtonMorph.prototype.fixLayout;
 
@@ -1064,7 +1106,7 @@ MicroWorld.prototype.destroyButtons = function(){
             ide.corralButtonsFrame = null;
         }
 
-        this.buttons['scripts'].forEach(
+        this.buttonAreas['scripts'].buttons.forEach(
             function (definition) {
                 var button = sf.toolBar.children.find(
                     function (child) {
@@ -1077,7 +1119,7 @@ MicroWorld.prototype.destroyButtons = function(){
                 }
             });
 
-        this.buttons['stage'].forEach(({definition})=> {
+        this.buttonAreas['stage'].buttons.forEach(({definition})=> {
             const button = stage.children.find(child => child.labelString === definition.label);
             if(button) {
                 stage.removeChild(button);
@@ -1112,16 +1154,27 @@ MicroWorld.prototype.createCorralButtonsFrame = function () {
     };
 };
 
-MicroWorld.prototype.makeButton = function (definition) {
+MicroWorld.prototype.makeButton = function (definition, area) {
     var sprite = this.ide.currentSprite,
         label = definition.label;
-    return new PushButtonMorph(
+    const button = new PushButtonMorph(
         sprite,
         () => {
             this.ide.broadcast(definition.message, null, definition.payload || null)
         },
         label
     );
+
+    if(this.buttonAreas[area].active.includes(definition.label)) {
+        button.color = new Color(64,98,107);
+        button.labelShadowOffset = new Point(0,0);
+        button.labelColor = WHITE;
+        button.highlightColor = button.color.lighter(25);
+        button.padding++;
+        button.fixLayout();
+    }
+
+    return button;
 };
 
 MicroWorld.prototype.findMenuItem = function(items, itemLabel){
