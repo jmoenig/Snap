@@ -88,8 +88,6 @@ SnapExtensions.primitives.set(
             };
 
         }
-
-
     }
 )
 
@@ -281,10 +279,10 @@ SnapExtensions.primitives.set(
 )
 
 SnapExtensions.primitives.set(
-    prefix+'set_ide_lang(langCode,message,payload)',
-    function(langCode, message, payload) {
+    prefix+'set_ide_lang(langCode,message,payload,loadingScreen)',
+    function(langCode, message, payload,loadingScreen) {
         if(currentMicroworld()) {
-            currentMicroworld().changeLanguage(langCode,message,payload);
+            currentMicroworld().changeLanguage(langCode,message,payload,loadingScreen);
         }
     }
 )
@@ -516,12 +514,36 @@ MicroWorld.prototype.enter = function () {
     this.blocksToButtons();
 
     this.isLoading = false;
-
     this.refreshLayouts();
+
+    this.hideLoadingScreen();
 
 };
 
-MicroWorld.prototype.changeLanguage = function(languageCode, message, payload) {
+MicroWorld.prototype.showLoadingScreen = function() {
+    let rect = new BoxMorph(),
+    world = this.ide.world();
+    rect.setWidth(world.width());
+    rect.setHeight(world.height());
+    rect.setColor(new Color(0,0,0));
+    rect.microworldLoadingScreen = true;
+    world.add(rect);
+    this.ide.showMessage('Loading')
+}
+
+MicroWorld.prototype.getLoadingScreen = function() {
+    return this.ide.world().children.find(child => child.microworldLoadingScreen);
+}
+
+MicroWorld.prototype.hideLoadingScreen = function() {
+    const screen = this.getLoadingScreen();
+    if(screen) {
+        screen.destroy();
+        this.ide.showMessage()
+    }
+}
+
+MicroWorld.prototype.changeLanguage = function(languageCode, message, payload, loadingScreen) {
     var ide = this.ide,
         flag = ide.isAppMode;
 
@@ -560,6 +582,9 @@ MicroWorld.prototype.changeLanguage = function(languageCode, message, payload) {
 
 
     callback = () => {
+        if(loadingScreen) {
+            this.showLoadingScreen();
+        }
         // for some reason this works better with a time delay
         setTimeout(() => {
             restoreMode();
