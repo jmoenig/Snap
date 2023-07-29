@@ -281,6 +281,9 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     prefix+'set_ide_lang(langCode,message,payload,loadingScreen)',
     function(langCode, message, payload,loadingScreen) {
+        // for backwards compatability, explicitly check that this is a boolean
+        // otherwise, the final param is proc which coerces to true
+        loadingScreen = typeof loadingScreen == "boolean" && loadingScreen;
         if(currentMicroworld()) {
             currentMicroworld().changeLanguage(langCode,message,payload,loadingScreen);
         }
