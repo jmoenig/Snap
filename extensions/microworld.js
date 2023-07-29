@@ -158,7 +158,23 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'show_loading_screen',
+    function() {
+        doIfMicroworld(microworld => {
+            microworld.showLoadingScreen();
+        })
+    }
+)
 
+SnapExtensions.primitives.set(
+    prefix+'hide_loading_screen',
+    function() {
+        doIfMicroworld(microworld => {
+            microworld.hideLoadingScreen();
+        })
+    }
+)
 SnapExtensions.primitives.set(
     prefix+'set_button_blocks(specs)',
     (specs) => {
@@ -553,6 +569,7 @@ MicroWorld.prototype.showLoadingScreen = function() {
     rect.setColor(new Color(0,0,0));
     rect.microworldLoadingScreen = true;
     world.add(rect);
+    this.ide.fixLayout();
     this.ide.showMessage('Loading')
 }
 
