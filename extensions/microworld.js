@@ -149,6 +149,15 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'set_loading_screen_after_translate(showLoading)',
+    (showLoading) => {
+        doIfMicroworld(microworld => {
+            microworld.setLoadingScreenAfterTranslate(showLoading)
+        })
+    }
+)
+
 
 SnapExtensions.primitives.set(
     prefix+'set_button_blocks(specs)',
@@ -318,6 +327,10 @@ MicroWorld.prototype.setBroadcastAfterTranslate = function(message) {
     this.broadcastAfterTranslate = message;
 }
 
+MicroWorld.prototype.setLoadingScreenAfterTranslate = function(showLoading) {
+    this.loadingScreenAfterTranslate = true;
+}
+
 MicroWorld.prototype.setButtonBlocks = function(specs){
     this.buttonBlocks = specs;
     if(this.isActive){
@@ -432,6 +445,7 @@ MicroWorld.prototype.init = function (ide) {
     this.isActive = false;
     this.suppressedKeyEvents = [];
     this.broadcastAfterTranslate = '';
+    this.loadingScreenAfterTranslate = false;
 
     // backup settings for exiting microworld
     this.oldCategory = null;
@@ -500,7 +514,7 @@ MicroWorld.prototype.enter = function () {
 
             item[1] = () => {
 
-                this.changeLanguage(languageCode, this.broadcastAfterTranslate);
+                this.changeLanguage(languageCode, this.broadcastAfterTranslate, null, this.loadingScreenAfterTranslate);
 
             }
 
