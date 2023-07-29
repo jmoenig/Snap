@@ -562,15 +562,18 @@ MicroWorld.prototype.enter = function () {
 };
 
 MicroWorld.prototype.showLoadingScreen = function() {
-    let rect = new BoxMorph(),
-    world = this.ide.world();
-    rect.setWidth(world.width());
-    rect.setHeight(world.height());
-    rect.setColor(new Color(0,0,0));
-    rect.microworldLoadingScreen = true;
-    world.add(rect);
-    this.ide.fixLayout();
-    this.ide.showMessage('Loading')
+    // make sure there's only one loading screen
+    if(!this.getLoadingScreen()) {
+        let rect = new BoxMorph(),
+        world = this.ide.world();
+        rect.setWidth(world.width());
+        rect.setHeight(world.height());
+        rect.setColor(new Color(0,0,0));
+        rect.microworldLoadingScreen = true;
+        world.add(rect);
+        this.ide.fixLayout();
+        this.ide.showMessage('Loading')
+    }
 }
 
 MicroWorld.prototype.getLoadingScreen = function() {
