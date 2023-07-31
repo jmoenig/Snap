@@ -2,12 +2,20 @@
 
 ## in development:
 
+## 9.0.3:
+* **Notable Changes:**
+    * do not cache remote requests, thanks, Michael!
+* **Translation Updates:**
+    * new Tigrinya translation, yay! Thanks, Tesfaldet Negash and Heran Sium!
+    * Catalan, thanks, Joan!
+
 ### 2023-07-31
 * new dev version
 * gui: do not cache remote requests, thanks, Michael!
 * Catalan translation update, thanks, Joan!
 * new Tigrinya translation, yay! Thanks, Tesfaldet Negash and Heran Sium!
 * migrated block specs of new Tigrinya translation to the new format (underscores as placeholders for input slots)
+* prepared v9.0.3 patch
 
 ## 9.0.2:
 * **Notable Fixes:**
@@ -24,7 +32,6 @@
 ### 2023-07-19
 * objects: fixed "play sound until done" blocking glitch
 * prepared v9.0.1 patch
-
 
 ## 9.0.0:
 * **New Features:**
