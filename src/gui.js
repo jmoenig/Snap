@@ -91,7 +91,7 @@ modules.gui = '2023-July-31';
 
 // Declarations
 
-var SnapVersion = '9.0.3';
+var SnapVersion = '9.0.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -8182,6 +8182,8 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
+    // Note: Do Not attemp to prevent caching of requests.
+    //   This has caused issues for BJC and the finch.
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
         rsp;
@@ -8206,13 +8208,6 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                     }
                 }
             };
-        }
-        // do not cache remote requests.
-        // selectively exclude http requests, which likely mean a localhost/robot server.
-        if (url.match(/^https/)) {
-            request.setRequestHeader('Cache-Control', 'no-cache, no-store, max-age=0');
-            request.setRequestHeader('Expires', 'Thu, 1 Jan 1970 00:00:00 GMT');
-            request.setRequestHeader('Pragma', 'no-cache');
         }
         request.send();
         if (!async) {
