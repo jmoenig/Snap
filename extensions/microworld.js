@@ -234,7 +234,6 @@ SnapExtensions.primitives.set(
         if(microworld) {
             definition = JSON.parse(definition)
             const canvas = microworld.makeButton(definition).fullImage();
-            console.log(canvas);
             resizeTo(canvas, 10)
             return new Costume(canvas);
         }
