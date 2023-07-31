@@ -2,6 +2,11 @@
 
 ## in development:
 
+## 9.0.4:
+* **Notable Changes:**
+    * Emergency Patch for BJC Projects.
+    * The recent cache busting in #3238 is incompatible with BJC servers.
+
 ## 9.0.3:
 * **Notable Changes:**
     * do not cache remote requests, thanks, Michael!
@@ -42,7 +47,7 @@
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new "case sensitivity" preference setting
-    * new "case sensitivity" selector to the setting blocks' dropdowns 
+    * new "case sensitivity" selector to the setting blocks' dropdowns
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
     * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
     * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
@@ -114,7 +119,7 @@
     * Armenian, thanks to the contributors!
 
 ### 2023-07-18
-* lists: fixed accessing negative indices in linked lists 
+* lists: fixed accessing negative indices in linked lists
 * v9-rc17
 * blocks: fixed a multi-arg slot insertion / deletion glitch
 * v9-rc18
@@ -172,7 +177,7 @@
 * v9-rc6
 
 ### 2023-07-10
-* new "Tiles" library, divides the stage into sub-regions in each of which to perform an action 
+* new "Tiles" library, divides the stage into sub-regions in each of which to perform an action
 * new "Arcs" library, turns sprites by a delta of degrees moving them at a given radius
 * v9-rc4
 
@@ -181,7 +186,7 @@
 * blocks: moved "comment" down one item in the dropdown menu
 * blocks, threads: new "extent" selector in the "(attribute) OF (object)" reporter's dropdown menu
 * German translation update for the new "extent" menu option string
-* byob: fixed a newly introduced non-long-form input slot bug when clicking the loop-arrow check mark 
+* byob: fixed a newly introduced non-long-form input slot bug when clicking the loop-arrow check mark
 * v9-rc2
 * fixed a dropdown menu glitch in the OF reporter
 * v9-rc3
@@ -190,7 +195,7 @@
 * v9-rc1
 
 ### 2023-07-05
-* lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set) 
+* lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set)
 * German translation update for "values" selector
 * blocks, objects, tables, threads: when dragging scripts and blocks out of balloons and watchers only include the surrounding ring if it has formal parameters
 * tables: fixed dragging blocks, costumes and sounds out of table views
