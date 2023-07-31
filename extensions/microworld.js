@@ -212,23 +212,24 @@ SnapExtensions.primitives.set(
     }
 )
 
-function resizeTo(canvas, pct) {
-    const cw=canvas.width;
-    const ch=canvas.height;
-    const tempCanvas = newCanvas();
-    const tctx = tempCanvas.getContext("2d");
-    tempCanvas.width=cw;
-    tempCanvas.height=ch;
-    tctx.drawImage(canvas,0,0);
-    canvas.width*=pct;
-    canvas.height*=pct;
-    const ctx=canvas.getContext('2d');
-    ctx.drawImage(tempCanvas,0,0,cw,ch,0,0,cw*pct,ch*pct);
-}
-
 SnapExtensions.primitives.set(
     prefix+'button_pic(definition)',
     function(definition) {
+
+        function resizeTo(canvas, pct) {
+            const cw=canvas.width;
+            const ch=canvas.height;
+            const tempCanvas = newCanvas();
+            const tctx = tempCanvas.getContext("2d");
+            tempCanvas.width=cw;
+            tempCanvas.height=ch;
+            tctx.drawImage(canvas,0,0);
+            canvas.width*=pct;
+            canvas.height*=pct;
+            const ctx=canvas.getContext('2d');
+            ctx.drawImage(tempCanvas,0,0,cw,ch,0,0,cw*pct,ch*pct);
+        }
+
         const microworld = currentMicroworld();
         if(microworld) {
             definition = JSON.parse(definition)
