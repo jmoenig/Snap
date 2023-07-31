@@ -6,6 +6,8 @@
 * new dev version
 * gui: do not cache remote requests, thanks, Michael!
 * Catalan translation update, thanks, Joan!
+* new Tigrinya translation, yay! Thanks, Tesfaldet Negash and Heran Sium!
+* migrated block specs of new Tigrinya translation to the new format (underscores as placeholders for input slots)
 
 ## 9.0.2:
 * **Notable Fixes:**
