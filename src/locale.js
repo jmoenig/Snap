@@ -659,6 +659,16 @@ SnapTranslator.dict.hi = {
     'last_changed':
         '2021-05-08'
 };
+SnapTranslator.dict.ti = {
+	'language_name':
+        'ትግርኛ',
+    'language_translator':
+        'Tesfaldet Negash, Heran Sium',
+    'translator_e-mail':
+        'winna.programming@gmail.com',
+    'last_changed':
+        '2023-05-29'
+}
 
 SnapTranslator.dict.hy = {
     'language_name':
