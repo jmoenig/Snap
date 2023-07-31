@@ -5,6 +5,7 @@
 ### 2023-07-31
 * new dev version
 * gui: do not cache remote requests, thanks, Michael!
+* Catalan translation update, thanks, Joan!
 
 ## 9.0.2:
 * **Notable Fixes:**
