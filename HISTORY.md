@@ -4,6 +4,7 @@
 
 ### 2023-07-31
 * new dev version
+* gui: do not cache remote requests, thanks, Michael!
 
 ## 9.0.2:
 * **Notable Fixes:**
