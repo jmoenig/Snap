@@ -212,6 +212,34 @@ SnapExtensions.primitives.set(
     }
 )
 
+function resizeTo(canvas, pct) {
+    const cw=canvas.width;
+    const ch=canvas.height;
+    const tempCanvas = newCanvas();
+    const tctx = tempCanvas.getContext("2d");
+    tempCanvas.width=cw;
+    tempCanvas.height=ch;
+    tctx.drawImage(canvas,0,0);
+    canvas.width*=pct;
+    canvas.height*=pct;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(tempCanvas,0,0,cw,ch,0,0,cw*pct,ch*pct);
+}
+
+SnapExtensions.primitives.set(
+    prefix+'button_pic(definition)',
+    function(definition) {
+        const microworld = currentMicroworld();
+        if(microworld) {
+            definition = JSON.parse(definition)
+            const canvas = microworld.makeButton(definition).fullImage();
+            console.log(canvas);
+            resizeTo(canvas, 10)
+            return new Costume(canvas);
+        }
+    }
+)
+
 SnapExtensions.primitives.set(
     prefix+'set_active_buttons(location, labels)',
     (location, labels) => {
@@ -1235,7 +1263,7 @@ MicroWorld.prototype.makeButton = function (definition, area) {
         label
     );
 
-    if(this.buttonAreas[area].active.includes(definition.label)) {
+    if(this.buttonAreas[area]?.active.includes(definition.label)) {
         button.color = button.pressColor;
         button.labelShadowColor = new Color(200,200,200);
         button.highlightColor = button.color.lighter(25);
