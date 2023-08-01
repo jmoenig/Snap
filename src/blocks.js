@@ -408,6 +408,16 @@ SyntaxElementMorph.prototype.labelParts = {
             '96 kHz' : 96000
         }
     },
+    '%httprt': {
+        type: 'input',
+        tags: 'read-only',
+        menu: {
+            'GET': ['GET'],
+            'POST': ['POST'],
+            'PUT': ['PUT'],
+            'DELETE': ['DELETE'],
+        }
+    },
     '%interaction': {
         type: 'input',
         tags: 'read-only static',
