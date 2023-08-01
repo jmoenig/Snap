@@ -2,6 +2,9 @@
 
 ## in development:
 
+2023-08-01
+* MQTT extension update, thanks, Xavier and Simon!
+
 ## 9.0.4:
 * **Notable Changes:**
     * Emergency Patch for BJC Projects.
