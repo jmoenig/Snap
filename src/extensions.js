@@ -48,6 +48,34 @@
             this.registry.forEach(ext => ext.onOpenRole());
         }
 
+        onRunScripts() {
+            this.registry.forEach(ext => ext.onRunScripts());
+        }
+
+        onStopAllScripts() {
+            this.registry.forEach(ext => ext.onStopAllScripts());
+        }
+
+        onPauseAll() {
+            this.registry.forEach(ext => ext.onPauseAll());
+        }
+
+        onResumeAll() {
+            this.registry.forEach(ext => ext.onResumeAll());
+        }
+
+        onNewSprite(sprite) {
+            this.registry.forEach(ext => ext.onNewSprite(sprite));
+        }
+
+        onRenameSprite(spriteId, name) {
+            this.registry.forEach(ext => ext.onRenameSprite(spriteId, name));
+        }
+
+        onSetStageSize(width, height) {
+            this.registry.forEach(ext => ext.onSetStageSize(width, height));
+        }
+
         register(Extension) {
             if (this.isReady()) {
                 this.load(Extension);
@@ -183,9 +211,31 @@
         return [];
     };
 
+    Extension.prototype.onRunScripts =
+    Extension.prototype.onStopAllScripts =
+    Extension.prototype.onPauseAll =
+    Extension.prototype.onResumeAll =
+    Extension.prototype.onNewSprite =
+    Extension.prototype.onRenameSprite =
+    Extension.prototype.onSetStageSize = 
     Extension.prototype.onNewProject =
     Extension.prototype.onOpenRole = function() {
     };
+
+    Extension.prototype.triggerHatBlock = function(selector) {
+        let stage = NetsBloxExtensions.ide.stage;
+        stage.children.concat(stage).forEach(morph => {
+            if (isSnapObject(morph)) {
+                morph.allHatBlocksFor(selector, true).forEach(block =>
+                    stage.threads.startProcess(
+                        block,
+                        morph,
+                        stage.isThreadSafe
+                    )
+                );
+            }
+        });
+    }
 
     class ExtensionSetting {
         constructor(label, toggle, test, onHint = '', offHint = '', hide = false) {

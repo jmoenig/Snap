@@ -6050,7 +6050,7 @@ SpriteMorph.prototype.allSendersOf = function (message, receiverName) {
     });
 };
 
-SpriteMorph.prototype.allHatBlocksFor = function (message) {
+SpriteMorph.prototype.allHatBlocksFor = function (message, allowCustom = false) {
     if (typeof message === 'number') { message = message.toString(); }
     return this.scripts.children.filter(morph => {
         var event;
@@ -6067,6 +6067,11 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             }
             if (morph.selector === 'receiveOnClone') {
                 return message === '__clone__init__';
+            }
+
+            // Allows for custom hat blocks
+            if(allowCustom && morph.selector === message) {
+                return true;
             }
         }
         return false;
@@ -8579,6 +8584,11 @@ StageMorph.prototype.runStopScripts = function () {
             morph.receiveUserInteraction('stopped', true, true);
         }
     });
+
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.extensions.onStopAllScripts();
+    }
 };
 
 StageMorph.prototype.removeAllClones = function () {

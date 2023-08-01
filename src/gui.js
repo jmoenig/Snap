@@ -2559,14 +2559,17 @@ IDE_Morph.prototype.stopFastTracking = function () {
 
 IDE_Morph.prototype.runScripts = function () {
     this.stage.fireGreenFlagEvent();
+    this.extensions.onRunScripts();
 };
 
 IDE_Morph.prototype.togglePauseResume = function () {
     SnapActions.togglePause(this.stage.threads.isPaused());
     if (this.stage.threads.isPaused()) {
         this.stage.threads.resumeAll(this.stage);
+        this.extensions.onResumeAll();
     } else {
         this.stage.threads.pauseAll(this.stage);
+        this.extensions.onPauseAll();
     }
     this.controlBar.pauseButton.refresh();
 };
