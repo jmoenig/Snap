@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-July-14';
+modules.byob = '2023-August-02';
 
 // Declarations
 
@@ -3214,6 +3214,8 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \uFE19';
     } else if (this.type === '%obj') {
         suff = ' %turtleOutline';
+    } else if (this.type === '%clr') {
+        suff = ' %pipette';
     } else if (contains(
             ['%cmdRing', '%repRing', '%predRing', '%anyUE', '%boolUE'],
             this.type
@@ -4336,6 +4338,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('color', '%clr');
     return menu;
 };
 
