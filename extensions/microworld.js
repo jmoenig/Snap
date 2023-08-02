@@ -351,6 +351,15 @@ SnapExtensions.primitives.set(
     }
 )
 
+SnapExtensions.primitives.set(
+    prefix+'do_define_block(upvar, label, context)',
+    function(upvar, label, context, proc) {
+        doIfMicroworld(microworld => {
+            microworld.doDefineBlock(upvar, label, context, proc)
+        })
+    }
+)
+
 function MicroWorld (ide) {
     this.init(ide);
 }
@@ -864,6 +873,94 @@ MicroWorld.prototype.updateGetInputFunction = function() {
         }
     }
 }
+
+MicroWorld.prototype.doDefineBlock = function (upvar, label, context, proc) {
+    var rcvr = proc.blockReceiver(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        vars = proc.context.outerContext.variables,
+        type = proc.reportTypeOf(context),
+        count = 1,
+        matches, spec, def;
+
+    proc.assertType(label, 'text');
+    label = label.trim();
+    if (label === '') {return ''; }
+    proc.assertType(context, ['command', 'reporter', 'predicate']);
+
+    // replace upvar self references inside the definition body
+    // with "reportThisContext" reporters
+    if (context.expression instanceof BlockMorph) {
+        proc.compileBlockReferences(context, upvar);
+    }
+
+    // identify global custom block matching the specified label
+    matches = ide.stage.globalBlocks.filter(def =>{
+        return def.blockSpec() === label
+    }
+
+    );
+    if (matches.length > 1) {
+        throw new Error(
+            'several block definitions\nalready match this label'
+        );
+    } else if (matches.length === 1) {
+        // update the existing global definition with the context body
+        
+        def = matches[0];
+
+        if(this.editableBlocks !== 'all' && !this.editableBlocks.includes(label) && def.codeHeader !== 'microworld') {
+            throw new Error('You are not allowed to edit this block.\nTry changing the name.')
+        }
+
+
+        proc.doSetBlockAttribute(
+            'definition',
+            def.blockInstance().reify(),
+            context
+        );
+
+        // create the reference to the new block
+        vars.addVar(upvar);
+        vars.setVar(upvar, def.blockInstance().reify());
+        return;
+    }
+
+    // make a new custom block definition
+    def = new CustomBlockDefinition('BYOB'); // haha!
+    def.type = type;
+    def.category = 'other';
+    def.isGlobal = true;
+    def.codeHeader = 'microworld';
+    def.setBlockDefinition(context);
+    def.setBlockLabel(label);
+    ide.stage.globalBlocks.push(def);
+
+    // make sure the spec is unique
+    spec = def.spec;
+    while (rcvr.doubleDefinitionsFor(def).length > 0) {
+        count += 1;
+        def.spec = spec + ' (' + count + ')';
+    }
+
+    // update the IDE
+    ide.flushPaletteCache();
+    ide.categories.refreshEmpty();
+    ide.refreshPalette();
+    rcvr.recordUserEdit(
+        'palette',
+        'custom block',
+        def.isGlobal ? 'global' : 'local',
+        'new',
+        def.abstractBlockSpec()
+    );
+
+    // create the reference to the new block
+    // vars.addVar(upvar);
+    // vars.setVar(upvar, def.blockInstance().reify());
+
+
+    proc.setVarNamed(upvar, def.blockInstance().reify())
+};
 
 MicroWorld.prototype.updateKeyFireFunction = function(){
     if(!StageMorph.prototype.oldFireKeyEvent) {
