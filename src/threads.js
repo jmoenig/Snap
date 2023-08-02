@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-July-14';
+modules.threads = '2023-August-02';
 
 var ThreadManager;
 var Process;
@@ -7678,7 +7678,12 @@ Process.prototype.slotType = function (spec) {
         'upvar':    12, // spec
         // mnemonics:
         'v':        12,
-        'var':      12
+        'var':      12,
+
+        '13':       13,
+        'clr':      13, // spec
+        // mnemonics:
+        'color':    13
     }[key];
     if (num === undefined) {
         return spec;
@@ -7699,7 +7704,7 @@ Process.prototype.slotSpec = function (num) {
     }
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
-    'anyUE', 'boolUE', 'obj', 'upvar'][id];
+    'anyUE', 'boolUE', 'obj', 'upvar', 'clr'][id];
 
     if (spec === undefined) {
         return null;
