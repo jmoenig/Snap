@@ -578,6 +578,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
         () => this.cloud.respondToFriendRequest(request.sender, 'APPROVED'),
     );
     dialog.labelString = 'Respond to Friend Request';
+    dialog.key = `FriendRequestFrom${request.sender}`;
 
     const textString = localize('Received friend request from ') + request.sender +
         '.\n\n' + localize('What would you like to do?');
@@ -633,20 +634,32 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
 };
 
 IDE_Morph.prototype.respondToCollaborateRequest = async function (request) {
+    const metadata = await this.cloud.getProjectMetadata(request.projectId);
     const dialog = new DialogBoxMorph(
         this,
         async () => {
             await this.cloud.respondToCollaborateRequest(request.id, true);
-            // TODO: ask if you want to open it now
+            const isOccupied = request.projectId === this.cloud.projectId;
+
+            if (!isOccupied) {
+                const dialog = new DialogBoxMorph();
+                dialog.askYesNo(
+                  localize('Open Shared Project?'),
+                  localize('Would you like to open the shared project now?'),
+                  this.root(),
+                );
+                dialog.ok = async () => {
+                  const source = new SharedCloudProjectsSource(this);
+                  await source.open(metadata);
+                };
+            }
         },
     );
     dialog.labelString = 'Respond to Collaborate Request';
+    dialog.key = request.id;
 
-    // TODO: get the name of the project
-    //const metadata = await this.cloud.getProjectMetadata(request.projectId);
     const textString = request.sender + localize(' has invited you to collaborate on') +
-        //'\n\n' + metadata.name + '.\n\n' + localize('What would you like to do?');
-        '\n\n' + request.projectId + '\n\n' + localize('What would you like to do?');
+        '\n\n' + metadata.name + '\n\n' + localize('What would you like to do?');
     const txt = new TextMorph(
         textString,
         dialog.fontSize,
@@ -693,71 +706,6 @@ IDE_Morph.prototype.manageCollaborators = async function () {
     );
     dialog.popUp();
 };
-
-IDE_Morph.prototype.promptCollabInvite = function (params) {  // id, room, roomName, role
-    // Create a confirm dialog about joining the group
-    var myself = this,
-        // unpack the params
-        roomName = params.roomName,
-        dialog,
-        msg;
-
-    if (params.inviter === this.cloud.username) {
-        msg = 'Would you like to collaborate at "' + roomName + '"?';
-    } else {
-        msg = params.inviter + ' has invited you to collaborate with\nhim/her at "' + roomName +
-            '"\nAccept?';
-    }
-
-    dialog = new DialogBoxMorph(null, function() {
-        myself.collabResponse(params, true);
-        dialog.destroy();
-    });
-
-    dialog.cancel = function() {
-        myself.collabResponse(params, false);
-        dialog.destroy();
-    };
-
-    dialog.askYesNo(
-        'Collaboration Invitation',
-        localize(msg),
-        this.world()
-    );
-};
-
-IDE_Morph.prototype.collabResponse = async function (invite, response) {
-    var myself = this;
-
-    try {
-        await this.cloud.respondToCollaborationInvite(invite.id, response);
-        var dialog,
-            msg;
-
-        if (response) {
-            dialog = new DialogBoxMorph(null, () => {
-                // Open the given project
-                this.cloud.joinActiveProject(
-                    invite.projectId,
-                    function (xml) {
-                        myself.rawLoadCloudProject(xml);
-                    },
-                    myself.cloudError()
-                );
-                dialog.destroy();
-            });
-            msg = 'Would you like to open the shared project now?';
-            dialog.askYesNo(
-                localize('Open Shared Project?'),
-                localize(msg),
-                this.world()
-            );
-        }
-    } catch (err) {
-        this.showMessage(err.message, 2);
-    }
-};
-
 
 // Events ///////////////////////////////////////////
 

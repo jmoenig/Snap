@@ -134,21 +134,45 @@ WebSocketManager.IDEMessageHandlers = {
             }
         }
     },
-    'permission-elevation-request': function(msg) {
-        var myself = this,
-            username = msg.guest;
+    'permission-elevation-request': async function(msg) {
+        const {projectId, username, id, clients} = msg;
 
-        this.ide.confirm(
-            username + localize(' would like to be made a collaborator on ') +
-            myself.ide.room.name + '\n\n' + localize('Would you like to make ') + username +
-            localize(' a collaborator?'),
-            'Collaboration Request',
-            function() {
-                this.ide.cloud.addCollaborator(msg.projectId, username);
+        const closeDialogs = () => {
+            const otherClients = clients.filter(id => id !== this.uuid);
+            this.sendIDEMessage({
+                type: 'close-dialog',
+                id: id,
+            }, ...otherClients);
+        };
+
+        const metadata = await this.ide.cloud.getProjectMetadata(projectId);
+        const dialog = new DialogBoxMorph(
+            null, 
+            () => {
+                closeDialogs();
+                this.ide.cloud.sendCollaborateRequest(projectId, username);
+                dialog.destroy();
             }
+        ).withKey(id);
+        dialog.askYesNo(
+            'Collaboration Request',
+            username + localize(' would like to be made a collaborator on ') +
+            metadata.name + '\n\n' + localize('Would you like to make ') + username +
+            localize(' a collaborator?'),
+            this.ide.world(),
         );
+        dialog.cancel = () => {
+            closeDialogs();
+            dialog.destroy();
+        };
     },
-
+    'close-dialog': function(msg) {
+        const worldStamp = this.ide.world().stamp;
+        const dialog = DialogBoxMorph.prototype.instances[worldStamp][msg.id];
+        if (dialog) {
+            dialog.destroy();
+        }
+    }
 };
 
 WebSocketManager.MessageHandlers = {
@@ -238,8 +262,37 @@ WebSocketManager.MessageHandlers = {
         }
     },
 
-    'collab-invitation': function(msg) {
-        this.ide.promptCollabInvite(msg);
+    'collaboration-invitation': function(msg) {
+        if (msg.change === 'Add') {
+            this.ide.respondToCollaborateRequest(msg.content);
+        } else {
+            const world = this.ide.root();
+            const dialogs = DialogBoxMorph.prototype.instances[world.stamp] || {};
+            const dialog = dialogs[msg.content.id];
+            if (dialog) {
+              dialog.destroy();
+            }
+        }
+    },
+
+    'friend-request': function(msg) {
+        if (msg.change === 'Add') {
+            this.ide.respondToFriendRequest(msg.content);
+            // TODO: set a timeout for the request?
+        } else {
+            const id = `FriendRequestFrom${msg.content.sender}`;
+            const world = this.ide.root();
+            const dialogs = DialogBoxMorph.prototype.instances[world.stamp] || {};
+            const dialog = dialogs[id];
+            if (dialog) {
+              dialog.destroy();
+            }
+        }
+    },
+
+    'project-deleted': function() {
+        this.ide.showMessage(this.ide.room.name + localize(' has been deleted.'), 3);
+        this.ide.newProject();
     },
 
     'project-closed': function() {
@@ -481,16 +534,72 @@ WebSocketManager.prototype.deserializeData = function(dataList) {
 };
 
 WebSocketManager.prototype.onConnect = async function(isReconnect) {
-    var myself = this;
     this.sendMessage({type: 'ping'});
     if (isReconnect) {
-        this.updateRoomInfo();
-        if (this.ide.cloud.projectId) {
-            SnapActions.requestMissingActions(true);
+        // Disable error handler when reconnecting in case it is recoverable
+        // TODO: make this more ergonomic in the client library...
+        const silent = () => {};
+        const handler = this.ide.cloud.onerror;
+        this.ide.cloud.onerror = silent;
+
+        try {
+            await this.updateRoomInfo();
+            this.ide.cloud.onerror = handler;
+
+            if (this.ide.cloud.projectId) {
+                SnapActions.requestMissingActions(true);
+            }
+        } catch (err) {
+            this.ide.cloud.onerror = handler;
+
+            // Try to recover from missing project. It's possible that the computer is
+            // recovering from a broken connection after an arbitrarily long time while
+            // working on an unsaved project. In this case, the server has likely garbage
+            // collected the project so it will need to be re-imported.
+            //
+            // Additional roles will not be stored on the client but they can only be
+            // made by logged in users or as part of the example/public project that
+            // was opened. In these cases, we can just reload the page.
+            if (err.message.includes('Project not found')) {
+                const ide = this.ide;
+                const roleCount = ide.room.getRoleCount();
+                const currentUrl = window.location.href;
+
+                const xml = ide.exportProjectXml(ide.room.name, [ide.getSerializedRole()]);
+                await ide.droppedText(xml);
+                this.messages = [];
+
+                if (roleCount > 1) {
+                    const isLoggedIn = ide.cloud.username !== null;
+                    if (!isLoggedIn) {
+                        // reload the example/public project (refresh the page) to recover missing roles
+                        const message = localize(
+                            'Other roles in the project not found after reconnect.' +
+                            '\nWould you like to refresh the page to reload the project with ' +
+                            'the missing roles?'
+                        );
+                        const title = localize('Reload Project?');
+                        const confirmed = await ide.confirm(message, title);
+                        if (confirmed) {
+                            window.location.href = currentUrl;
+                        }
+                    } else {
+                        const message = localize(
+                            'Other roles in the project not found after reconnect.\n' +
+                            '\nIn the future, please save multi-role projects' +
+                            '\nto prevent losing progress.'
+                        );
+                        ide.cloudError()(message);
+                    }
+                }
+
+            } else {
+                handler(err);
+            }
         }
     }
-    while (myself.messages.length) {
-        myself.websocket.send(myself.messages.shift());
+    while (this.messages.length) {
+        this.websocket.send(this.messages.shift());
     }
 };
 

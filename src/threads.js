@@ -2426,7 +2426,10 @@ Process.prototype.doPauseAll = function () {
             stage.threads.pauseAll(stage);
         }
         ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {ide.controlBar.pauseButton.refresh(); }
+        if (ide) {
+            ide.extensions.onPauseAll();
+            ide.controlBar.pauseButton.refresh();
+        }
     }
 };
 
