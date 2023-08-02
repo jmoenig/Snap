@@ -16,3 +16,5 @@
 * blocks, byob: made %clr input slots available for custom blocks
 * threads: metaprogramming support for color type input slots
 * byob: made %scriptVars input slots available for custom blocks
+* threads: metaprogramming support for %scriptVars input slots
+* threads: moved script var declaration to multi-arg evaluation, eliminates necessity for doDeclareVariables()
