@@ -5,6 +5,7 @@
     * color type input slots for custom blocks
     * metaprogramming support for clor type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
+    * metaprogramming support for clor type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**

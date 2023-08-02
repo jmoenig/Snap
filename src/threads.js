@@ -7593,97 +7593,105 @@ Process.prototype.slotType = function (spec) {
     }
 
     num =  {
-        '0':        0,
-        's':        0, // spec
+        '0':            0,
+        's':            0, // spec
         // mnemonics:
-        ' ':        0,
-        '_':        0,
-        'a':        0,
-        'any':      0,
+        ' ':            0,
+        '_':            0,
+        'a':            0,
+        'any':          0,
 
-        '1':        1,
-        'n':        1, // spec
+        '1':            1,
+        'n':            1, // spec
         // mnemonics:
-        '#':        1,
-        'num':      1,
-        'number':   1,
+        '#':            1,
+        'num':          1,
+        'number':       1,
 
-        '2':        2,
-        'b':        2, // spec
+        '2':            2,
+        'b':            2, // spec
         // mnemonics:
-        '?':        2,
-        'tf':       2,
-        'bool':     2,
-        'boolean':  2,
+        '?':            2,
+        'tf':           2,
+        'bool':         2,
+        'boolean':      2,
 
-        '3':        3,
-        'l':        3, // spec
+        '3':            3,
+        'l':            3, // spec
         // mnemonics:
-        ':':        3,
-        'lst':      3,
-        'list':     3,
+        ':':            3,
+        'lst':          3,
+        'list':         3,
 
-        '4':        4,
-        'txt':      4, // spec
-        'mlt':      4, // spec
-        'code':     4, // spec
+        '4':            4,
+        'txt':          4, // spec
+        'mlt':          4, // spec
+        'code':         4, // spec
         // mnemonics:
-        'x':        4,
-        'text':     4,
-        'abc':      4,
+        'x':            4,
+        'text':         4,
+        'abc':          4,
 
-        '5':        5,
-        'c':        5, // spec
-        'cs':       5, // spec
-        'loop':     5, // spec
-        'ca':       5, // spec
+        '5':            5,
+        'c':            5, // spec
+        'cs':           5, // spec
+        'loop':         5, // spec
+        'ca':           5, // spec
         // mnemonics:
-        'script':   5,
+        'script':       5,
         
-        '6':        6,
-        'cmdring':  6, // spec
+        '6':            6,
+        'cmdring':      6, // spec
         // mnemonics:
-        'cmd':      6,
-        'command':  6,
+        'cmd':          6,
+        'command':      6,
 
-        '7':        7,
-        'repring':  7, // spec
+        '7':            7,
+        'repring':      7, // spec
         // mnemonics:
-        'rep':      7,
-        'reporter': 7,
+        'rep':          7,
+        'reporter':     7,
 
-        '8':        8,
-        'predring': 8, // spec
+        '8':            8,
+        'predring':     8, // spec
         // mnemonics:
-        'pred':     8,
-        'predicate': 8,
+        'pred':         8,
+        'predicate':    8,
 
-        '9':        9,
-        'anyue':    9, // spec
+        '9':            9,
+        'anyue':        9, // spec
         // mnemonics:
-        'unevaluated': 9,
+        'unevaluated':  9,
 
-        '10':       10,
-        'boolue':   10, // spec
+        '10':           10,
+        'boolue':       10, // spec
         // mnemonics: none
 
-        '11':       11,
-        'obj':      11, // spec
+        '11':           11,
+        'obj':          11, // spec
         // mnemonics:
-        'o':        11,
-        'object':   11,
+        'o':            11,
+        'object':       11,
 
-        '12':       12,
-        't':        12, // spec
-        'upvar':    12, // spec
+        '12':           12,
+        't':            12, // spec
+        'upvar':        12, // spec
         // mnemonics:
-        'v':        12,
-        'var':      12,
+        'v':            12,
+        'var':          12,
+        'variable':     12,
 
-        '13':       13,
-        'clr':      13, // spec
+        '13':           13,
+        'clr':          13, // spec
         // mnemonics:
-        'color':    13
+        'color':        13,
+
+        '14':           14,
+        'scriptvars':   14, // spec
+        // mnemonics:
+        'vars':         14,
+        'variables':    14
+
     }[key];
     if (num === undefined) {
         return spec;
@@ -7704,7 +7712,7 @@ Process.prototype.slotSpec = function (num) {
     }
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
-    'anyUE', 'boolUE', 'obj', 'upvar', 'clr'][id];
+    'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars'][id];
 
     if (spec === undefined) {
         return null;
