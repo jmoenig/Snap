@@ -3204,6 +3204,8 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     if (!this.type) {return this.defSpecFragment(); }
     if (this.isUpvar()) {
         suff = ' \u2191';
+    } else if (this.type === '%scriptVars') {
+        suff = ' \u2191...';
     } else if (this.isMultipleInput()) {
         suff = '...';
     } else if (this.type === '%cs' || this.type === '%ca') {
@@ -4290,8 +4292,10 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             );
         }
         menu.addMenu(
-            (contains(['%mlt', '%code'], this.fragment.type) ?
-                on : off) +
+            (contains(
+                ['%mlt', '%code', '%clr', '%scriptVars'],
+                this.fragment.type
+            ) ? on : off) +
             localize('special'),
             this.specialSlotsMenu()
         );
@@ -4338,7 +4342,9 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    menu.addLine();
     addSpecialSlotType('color', '%clr');
+    addSpecialSlotType('variables', '%scriptVars'); // +++
     return menu;
 };
 

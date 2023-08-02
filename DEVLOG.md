@@ -4,6 +4,7 @@
 * **New Features:**
     * color type input slots for custom blocks
     * metaprogramming support for clor type input slots (number: 13, spec: "clr", mnemonic: "color")
+    * variadic variables type input slots for custom blocks
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
@@ -13,3 +14,4 @@
 * new dev branch and version
 * blocks, byob: made %clr input slots available for custom blocks
 * threads: metaprogramming support for color type input slots
+* byob: made %scriptVars input slots available for custom blocks
