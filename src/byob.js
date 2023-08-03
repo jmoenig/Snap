@@ -675,7 +675,7 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     }
 
     // replace the definition body with the given context
-    if (body.expression instanceof Array) {
+    if (!body.expression || body.expression instanceof Array) {
         this.body = null;
         return;
     } else if (body.expression instanceof ReporterBlockMorph) {
@@ -2658,7 +2658,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         proto.comment = comment;
         comment.block = proto;
     }
-    if (definition.body !== null) {
+    if (definition?.body?.expression) {
         proto.nextBlock(isLive ? definition.body.expression
                 : definition.body.expression.fullCopy()
         );
@@ -4346,7 +4346,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('code', '%code');
     menu.addLine();
     addSpecialSlotType('color', '%clr');
-    addSpecialSlotType('variables', '%scriptVars'); // +++
+    addSpecialSlotType('variables', '%scriptVars');
     return menu;
 };
 

@@ -7435,7 +7435,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         } else {
             body = new Context();
         }
-        if (body instanceof Context && !body.inputs.length) {
+        if (body instanceof Context &&
+            !body.expression &&
+            !body.inputs.length
+        ) {
             // make sure the definition has the same number of inputs as the
             // block prototype (i.e. the header)
             expr.inputs().forEach((inp, i) => body.addInput('#' + (i + 1)));
@@ -7488,7 +7491,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         } else {
             info = SpriteMorph.prototype.blocks[expr.selector];
             if (!info) {return slots; }
-            slots = new List(info.defaults.map(v => this.inputOption(v)));
+            slots = new List((info.defaults || []).map(v =>
+                this.inputOption(v)));
         }
         return slots;
     case 'menus':

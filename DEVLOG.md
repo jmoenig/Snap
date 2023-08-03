@@ -19,6 +19,7 @@
 * blocks, byob: renamed distancesMenu() into destinationsMenu()
 * threads: fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
 * threads: when querying the defintion of a block via metaprogramming make sure the number of inputs of the resulting ring matches that of the header expression 
+* byob, threads: tweaked some metaprogramming edge cases
 
 ### 2023-08-02
 * new dev branch and version
