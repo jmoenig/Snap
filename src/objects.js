@@ -8792,6 +8792,15 @@ StageMorph.prototype.clearPenTrails = function () {
     this.changed();
 };
 
+StageMorph.prototype.resizePenTrails = function () {
+    var oldCanvas = this.trailsCanvas;
+    this.cachedPenTrailsMorph = null;
+    this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
+    this.trailsCanvas.getContext('2d').drawImage(oldCanvas, 0, 0);
+    this.trailsLog = [];
+    this.changed();
+};
+
 StageMorph.prototype.penTrails = function () {
     if (!this.trailsCanvas) {
         this.trailsCanvas = newCanvas(this.dimensions);
