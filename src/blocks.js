@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-02';
+modules.blocks = '2023-August-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -572,7 +572,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%dst': { // distance measuring
         type: 'input',
         tags: 'read-only',
-        menu: 'distancesMenu'
+        menu: 'destinationsMenu'
     },
     '%cln': { // clones
         type: 'input',
@@ -2854,7 +2854,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor =
     %rel    - chameleon colored rectangular drop-down for relation options
     %spr    - chameleon colored rectangular drop-down for object-names
     %col    - chameleon colored rectangular drop-down for collidables
-    %dst    - chameleon colored rectangular drop-down for distances
+    %dst    - chameleon colored rectangular drop-down for destinations
     %cst    - chameleon colored rectangular drop-down for costume-names
     %eff    - chameleon colored rectangular drop-down for graphic effects
     %snd    - chameleon colored rectangular drop-down for sound names
@@ -11062,7 +11062,7 @@ InputSlotMorph.prototype.locationMenu = function (searching) {
     return dict;
 };
 
-InputSlotMorph.prototype.distancesMenu = function (searching) {
+InputSlotMorph.prototype.destinationsMenu = function (searching) {
     if (searching) {
         return {
             'mouse-pointer': ['mouse-pointer'],

@@ -13,7 +13,8 @@
 * **Translation Updates:**
 
 ### 2023-08-03
-* byob: made distancesMenu() available for custom blocks 
+* byob: made distancesMenu() available for custom blocks
+* blocks, byob: renamed distancesMenu() into destinationsMenu()
 
 ### 2023-08-02
 * new dev branch and version

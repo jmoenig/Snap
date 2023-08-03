@@ -355,7 +355,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'getVarNamesDict',
                     'pianoKeyboardMenu',
                     'directionDialMenu',
-                    'distancesMenu'
+                    'destinationsMenu'
                 ],
                 fname
             ) || fname.indexOf('ext_') === 0) {
@@ -3273,7 +3273,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_getVarNamesDict',
             '§_pianoKeyboardMenu',
             '§_directionDialMenu',
-            '§_distancesMenu'
+            '§_destinationsMenu'
         ],
         this.options
     );
@@ -4374,7 +4374,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
     addSpecialOptions('360° dial', '§_directionDialMenu');
     menu.addLine();
-    addSpecialOptions('destinations', '§_distancesMenu');
+    addSpecialOptions('destinations', '§_destinationsMenu');
     return menu;
 };
 
