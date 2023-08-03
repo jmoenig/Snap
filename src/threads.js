@@ -7514,7 +7514,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     );
                 }
                 slots.add(slot instanceof InputSlotMorph ?
-                    (isString(slot.choices) ? slot.choices
+                    (isString(slot.choices) ? '§_' + slot.choices
                         : CustomBlockDefinition.prototype.decodeChoices(
                             slot.choices
                         ))
