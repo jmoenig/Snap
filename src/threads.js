@@ -7435,6 +7435,11 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         } else {
             body = new Context();
         }
+        if (body instanceof Context && !body.inputs.length) {
+            // make sure the definition has the same number of inputs as the
+            // block prototype (i.e. the header)
+            expr.inputs().forEach((inp, i) => body.addInput('#' + (i + 1)));
+        }
         if (body.expression && body.expression.selector === 'doReport' &&
                 body.expression.inputs()[0] instanceof BlockMorph) {
             return body.expression.inputs()[0].reify(body.inputs);

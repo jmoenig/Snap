@@ -8,6 +8,7 @@
     * metaprogramming support for clor type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
     * destinations dropdown menu for custom blocks
 * **Notable Changes:**
+    * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
 * **Documentation Updates:**
@@ -17,6 +18,7 @@
 * byob: made distancesMenu() available for custom blocks
 * blocks, byob: renamed distancesMenu() into destinationsMenu()
 * threads: fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
+* threads: when querying the defintion of a block via metaprogramming make sure the number of inputs of the resulting ring matches that of the header expression 
 
 ### 2023-08-02
 * new dev branch and version
