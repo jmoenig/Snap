@@ -6,10 +6,14 @@
     * metaprogramming support for clor type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
     * metaprogramming support for clor type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
+    * destinations dropdown menu for custom blocks
 * **Notable Changes:**
 * **Notable Fixes:**
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-08-03
+* byob: made distancesMenu() available for custom blocks 
 
 ### 2023-08-02
 * new dev branch and version

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-02';
+modules.byob = '2023-August-03';
 
 // Declarations
 
@@ -354,7 +354,8 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'soundsMenu',
                     'getVarNamesDict',
                     'pianoKeyboardMenu',
-                    'directionDialMenu'
+                    'directionDialMenu',
+                    'distancesMenu'
                 ],
                 fname
             ) || fname.indexOf('ext_') === 0) {
@@ -3271,7 +3272,8 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_soundsMenu',
             '§_getVarNamesDict',
             '§_pianoKeyboardMenu',
-            '§_directionDialMenu'
+            '§_directionDialMenu',
+            '§_distancesMenu'
         ],
         this.options
     );
@@ -4371,6 +4373,8 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('variables', '§_getVarNamesDict');
     addSpecialOptions('piano keyboard', '§_pianoKeyboardMenu');
     addSpecialOptions('360° dial', '§_directionDialMenu');
+    menu.addLine();
+    addSpecialOptions('destinations', '§_distancesMenu');
     return menu;
 };
 
