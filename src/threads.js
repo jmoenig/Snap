@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-02';
+modules.threads = '2023-August-03';
 
 var ThreadManager;
 var Process;
@@ -7483,7 +7483,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         } else {
             info = SpriteMorph.prototype.blocks[expr.selector];
             if (!info) {return slots; }
-            slots = new List(info.defaults);
+            slots = new List(info.defaults.map(v => this.inputOption(v)));
         }
         return slots;
     case 'menus':
