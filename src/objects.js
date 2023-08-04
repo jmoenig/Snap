@@ -9974,6 +9974,40 @@ StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
 StageMorph.prototype.fullImage = Morph.prototype.fullImage;
 
+// Performer mode button
+
+StageMorph.prototype.addSwitchToScriptsButton = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        scrollFrame = ide.currentSprite.scripts.parentThatIsA(ScrollFrameMorph),
+        padding = 4,
+        switchToScriptsButton = new PushButtonMorph(
+            this, // target
+            "switchToScripts",
+            new SymbolMorph('turtle', 12)
+        );
+
+    this.switchToScriptsButton = switchToScriptsButton;
+
+    switchToScriptsButton.alpha = 0.2;
+    switchToScriptsButton.padding = padding;
+    switchToScriptsButton.edge = 0;
+    switchToScriptsButton.hint =
+        'toggle focus between stage\nand scripting area';
+    switchToScriptsButton.labelShadowColor =
+        scrollFrame.toolBar.keyboardButton.labelShadowColor;
+    switchToScriptsButton.fixLayout();
+    this.add(switchToScriptsButton);
+    switchToScriptsButton.setRight(this.right() - padding);
+    switchToScriptsButton.setTop(this.top() + padding);
+};
+
+StageMorph.prototype.switchToScripts = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        scrollFrame = ide.currentSprite.scripts.parentThatIsA(ScrollFrameMorph);
+    this.switchToScriptsButton.destroy();
+    scrollFrame.show();
+};
+
 // StageMorph thumbnail
 
 StageMorph.prototype.thumbnail = function (extentPoint, recycleMe, noWatchers) {
