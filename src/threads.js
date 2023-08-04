@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-04';
+modules.threads = '2023-August-05';
 
 var ThreadManager;
 var Process;
@@ -7592,7 +7592,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             );
             return loc;
         }
-        return '';
+        return new List();
     }
     return '';
 };
