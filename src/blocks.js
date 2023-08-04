@@ -3154,13 +3154,14 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
     // answer the translated block spec where the translation itself
     // is in the form of an abstract spec, i.e. with padded underscores
     // in place for percent-sign prefixed slot specs.
-    var slotSpecs = [],
+    var prefixes = ['%', '$'],
+        slotSpecs = [],
         slotCount = -1,
         abstractSpec,
         translation;
 
     abstractSpec = this.parseSpec(spec).map(str => {
-        if (str.length > 1 && (str[0]) === '%') {
+        if (str.length > 1 && prefixes.includes(str[0])) {
             slotSpecs.push(str);
             return '_';
         }
@@ -3169,7 +3170,7 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
 
     // make sure to also remove any explicit slot specs from the translation
     translation = this.parseSpec(localize(abstractSpec)).map(str =>
-        (str.length > 1 && (str[0]) === '%') ? '_' : str
+        (str.length > 1 && prefixes.includes(str[0])) ? '_' : str
     ).join(' ');
 
     // replace abstract slot placeholders in the translation with their
