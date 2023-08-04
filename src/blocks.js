@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-03';
+modules.blocks = '2023-August-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -928,53 +928,53 @@ SyntaxElementMorph.prototype.labelParts = {
         scale: float (factor of fontSize) default is 1
         tags: 'static fading protected' (protected = no zebra coloring)
     */
-    '%turtle': {
+    '$turtle': {
         type: 'symbol',
         name: 'turtle',
         scale: 1.2
     },
-    '%turtleOutline': {
+    '$turtleOutline': {
         type: 'symbol',
         name: 'turtleOutline',
         tags: 'protected'
     },
-    '%pipette': {
+    '$pipette': {
         type: 'symbol',
         name: 'pipette',
         tags: 'protected'
     },
-    '%clockwise': {
+    '$clockwise': {
         type: 'symbol',
         name: 'turnRight',
         scale: 1.5
     },
-    '%counterclockwise': {
+    '$counterclockwise': {
         type: 'symbol',
         name: 'turnLeft',
         scale: 1.5
     },
-    '%greenflag': {
+    '$greenflag': {
         type: 'symbol',
         name: 'flag',
         color: new Color(0, 200, 0),
         scale: 1.5,
         tags: 'protected'
     },
-    '%blitz': {
+    '$blitz': {
         type: 'symbol',
         name: 'flash'
     },
-    '%list': {
+    '$list': {
         type: 'symbol',
         name: 'list'
     },
-    '%pause': {
+    '$pause': {
         type: 'symbol',
         name: 'pause',
         color: new Color(255, 220, 0),
         tags: 'protected'
     },
-    '%loopArrow': {
+    '$loopArrow': {
         type: 'symbol',
         name: 'loop',
         scale: 0.7,
@@ -1772,10 +1772,9 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 
 SyntaxElementMorph.prototype.labelPart = function (spec) {
     var part, info, tokens, cnts, i;
-    if (spec[0] === '%' &&
-            spec.length > 1 &&
+    if ((this.labelParts[spec] || (spec[0] === '%' && spec.length > 1)) &&
             (this.selector !== 'reportGetVar' ||
-                (['%turtleOutline', '%pipette'].includes(spec) &&
+                (['$turtleOutline', '$pipette'].includes(spec) &&
                     this.isObjInputFragment()
                 )
             )
@@ -1945,7 +1944,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                         break;
                     case 'loop':
                         part.isLoop = true;
-                        part.add(this.labelPart('%loopArrow'));
+                        part.add(this.labelPart('$loopArrow'));
                         break;
                     case 'lambda':
                         part.isLambda = true;
@@ -9369,11 +9368,11 @@ ArgMorph.prototype.slotMenu = function () {
 ArgMorph.prototype.createIcon = function () {
     switch (this.type) {
     case 'list':
-        this.icon = this.labelPart('%list');
+        this.icon = this.labelPart('$list');
         this.add(this.icon);
         break;
     case 'object':
-        this.icon = this.labelPart('%turtle');
+        this.icon = this.labelPart('$turtle');
         this.add(this.icon);
         break;
     default:
@@ -10624,7 +10623,7 @@ InputSlotMorph.prototype.setContents = function (data) {
             dta[0] = 'random';
         }
         if (dta[0] === '__shout__go__') {
-            this.symbol = this.labelPart('%greenflag');
+            this.symbol = this.labelPart('$greenflag');
             this.add(this.symbol);
             dta = '';
         } else {
@@ -16463,7 +16462,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     // SyntaxElementMorph.prototype.setScale(2.5);
 
     h = new HatBlockMorph();
-    h.setSpec('When %greenflag pressed');
+    h.setSpec('When $greenflag pressed');
 
     b = new ReporterBlockMorph(true);
     b.setSpec('%bool');

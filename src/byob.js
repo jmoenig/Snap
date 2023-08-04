@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-03';
+modules.byob = '2023-August-04';
 
 // Declarations
 
@@ -3216,9 +3216,9 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     } else if (this.type === '%l') {
         suff = ' \uFE19';
     } else if (this.type === '%obj') {
-        suff = ' %turtleOutline';
+        suff = ' $turtleOutline';
     } else if (this.type === '%clr') {
-        suff = ' %pipette';
+        suff = ' $pipette';
     } else if (contains(
             ['%cmdRing', '%repRing', '%predRing', '%anyUE', '%boolUE'],
             this.type

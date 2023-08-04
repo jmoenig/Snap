@@ -9,11 +9,15 @@
     * destinations dropdown menu for custom blocks
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
+    * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming or translating
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-08-04
+* blocks, byob, objects: changed prefix for predefined block label symbols from "%" (%greenflag, %pause etc.) to "$" ($greenflag, $pause etc.)
 
 ### 2023-08-03
 * byob: made distancesMenu() available for custom blocks

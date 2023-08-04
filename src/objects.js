@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-July-19';
+modules.objects = '2023-August-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -224,14 +224,14 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %clockwise %n degrees',
+            spec: 'turn $clockwise %n degrees',
             defaults: [15]
         },
         turnLeft: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %counterclockwise %n degrees',
+            spec: 'turn $counterclockwise %n degrees',
             defaults: [15]
         },
         setHeading: {
@@ -747,7 +747,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveGo: {
             type: 'hat',
             category: 'control',
-            spec: 'when %greenflag clicked'
+            spec: 'when $greenflag clicked'
         },
         receiveKey: {
             type: 'hat',
@@ -969,7 +969,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doPauseAll: {
             type: 'command',
             category: 'control',
-            spec: 'pause all %pause'
+            spec: 'pause all $pause'
         },
 
         // Scenes
@@ -1546,7 +1546,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz map %repRing over %l'
+            spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
@@ -1557,7 +1557,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz keep items %predRing from %l'
+            spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
@@ -1568,7 +1568,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz find first item %predRing in %l'
+            spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
@@ -1579,7 +1579,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz combine %l using %repRing'
+            spec: '$blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
