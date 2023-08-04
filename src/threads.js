@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-03';
+modules.threads = '2023-August-04';
 
 var ThreadManager;
 var Process;
@@ -7613,6 +7613,10 @@ Process.prototype.slotType = function (spec) {
         if (key.startsWith('mult')) {
             shift = 100;
             key = key.slice(5);
+            if (key === 't') {
+                shift = 0;
+                key = 'variables';
+            }
         }
     } else if (spec.endsWith('...')) {
         shift = 100;

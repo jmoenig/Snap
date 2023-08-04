@@ -19,6 +19,7 @@
 ### 2023-08-04
 * blocks, byob, objects: changed prefix for predefined block label symbols from "%" (%greenflag, %pause etc.) to "$" ($greenflag, $pause etc.)
 * blocks: adjusted translation mechanism to new block label symbol prefix format
+* threads: tweaked metaprogramming support for %scriptVars input slots
 
 ### 2023-08-03
 * byob: made distancesMenu() available for custom blocks
