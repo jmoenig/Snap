@@ -361,7 +361,8 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'objectsMenuWithSelf',
                     'clonablesMenu',
                     'keysMenu',
-                    'gettablesMenu'
+                    'gettablesMenu',
+                    'audioMenu'
                 ],
                 fname
             ) || fname.indexOf('ext_') === 0) {
@@ -3290,7 +3291,8 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_objectsMenuWithSelf',
             '§_clonablesMenu',
             '§_keysMenu',
-            '§_gettablesMenu'
+            '§_gettablesMenu',
+            '§_audioMenu'
         ],
         this.options
     );
@@ -4397,6 +4399,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('objects + self', '§_objectsMenuWithSelf');
     addSpecialOptions('sprites + self', '§_clonablesMenu');
     addSpecialOptions('object attributes', '§_gettablesMenu');
+    addSpecialOptions('microphone', '§_audioMenu');
     return menu;
 };
 
