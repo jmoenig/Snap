@@ -7,6 +7,7 @@
     * variadic variables type input slots for custom blocks
     * metaprogramming support for clor type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
     * destinations dropdown menu for custom blocks
+    * upvars in custom blocks can now have different default names than their formal parameter names
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -16,6 +17,9 @@
     * fixed referencing system drop-down menus in metaprogramming
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-08-06
+* byob: added support giving upvars in custom blocks different default names than their formal parameter names
 
 ### 2023-08-05
 * threads: tweaked metaprogramming getter for "translations" block attribute selector to always return a list

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-04';
+modules.byob = '2023-August-06';
 
 // Declarations
 
@@ -1071,7 +1071,10 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
         idx = 0;
 
     inputs.forEach(inp => {
-        if (inp instanceof InputSlotMorph || inp instanceof BooleanSlotMorph) {
+        if (inp instanceof InputSlotMorph ||
+            inp instanceof BooleanSlotMorph ||
+            inp instanceof TemplateSlotMorph
+        ) {
             inp.setContents(
                 (definition || this.definition).defaultValueOfInputIdx(idx)
             );
@@ -3204,7 +3207,9 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     var suff = '';
     if (!this.type) {return this.defSpecFragment(); }
     if (this.isUpvar()) {
-        suff = ' \u2191';
+        suff = ' \u2191' + (
+            this.defaultValue ? ' = ' + this.defaultValue.toString() : ''
+        );
     } else if (this.type === '%scriptVars') {
         suff = ' \u2191...';
     } else if (this.isMultipleInput()) {
@@ -3975,7 +3980,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar'],
             this.fragment.type
         )) {
             defInput.show();
