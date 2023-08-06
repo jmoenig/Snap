@@ -356,6 +356,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'pianoKeyboardMenu',
                     'directionDialMenu',
                     'destinationsMenu',
+                    'locationMenu',
                     'typesMenu',
                     'objectsMenuWithSelf',
                     'clonablesMenu',
@@ -3283,6 +3284,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_pianoKeyboardMenu',
             '§_directionDialMenu',
             '§_destinationsMenu',
+            '§_locationMenu',
             '§_typesMenu',
             '§_objectsMenuWithSelf',
             '§_clonablesMenu',
@@ -4388,6 +4390,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('360° dial', '§_directionDialMenu');
     menu.addLine();
     addSpecialOptions('destinations', '§_destinationsMenu');
+    addSpecialOptions('locations', '§_locationMenu');
     addSpecialOptions('keys', '§_keysMenu');
     addSpecialOptions('objects + self', '§_objectsMenuWithSelf');
     addSpecialOptions('sprites + self', '§_clonablesMenu');
