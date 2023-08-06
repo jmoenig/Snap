@@ -6,7 +6,7 @@
     * metaprogramming support for clor type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
     * metaprogramming support for clor type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
-    * destinations and types dropdown menus for custom blocks
+    * destinations, data types and objects + self dropdown menus for custom blocks
     * upvars in custom blocks can now have different default names than their formal parameter names
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
@@ -21,6 +21,7 @@
 ### 2023-08-06
 * byob: added support giving upvars in custom blocks different default names than their formal parameter names
 * byob: made typessMenu() available for custom blocks
+* byob: made objectsMenuWithSelf() available for custom blocks
 
 ### 2023-08-05
 * threads: tweaked metaprogramming getter for "translations" block attribute selector to always return a list

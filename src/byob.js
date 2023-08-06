@@ -356,7 +356,8 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'pianoKeyboardMenu',
                     'directionDialMenu',
                     'destinationsMenu',
-                    'typesMenu'
+                    'typesMenu',
+                    'objectsMenuWithSelf'
                 ],
                 fname
             ) || fname.indexOf('ext_') === 0) {
@@ -3280,7 +3281,8 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_pianoKeyboardMenu',
             '§_directionDialMenu',
             '§_destinationsMenu',
-            '§_typesMenu'
+            '§_typesMenu',
+            '§_objectsMenuWithSelf'
         ],
         this.options
     );
@@ -4374,7 +4376,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('(none)', '');
     addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
-    // addSpecialOptions('data types', '§_typesMenu');
+    addSpecialOptions('data types', '§_typesMenu');
     addSpecialOptions('costumes', '§_costumesMenu');
     addSpecialOptions('sounds', '§_soundsMenu');
     addSpecialOptions('variables', '§_getVarNamesDict');
@@ -4382,7 +4384,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('360° dial', '§_directionDialMenu');
     menu.addLine();
     addSpecialOptions('destinations', '§_destinationsMenu');
-    addSpecialOptions('types', '§_typesMenu');
+    addSpecialOptions('objects + self', '§_objectsMenuWithSelf');
     return menu;
 };
 
