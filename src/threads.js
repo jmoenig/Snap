@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-05';
+modules.threads = '2023-August-06';
 
 var ThreadManager;
 var Process;
@@ -7801,9 +7801,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.setBlockLabel(val);
         break;
     case 'comment':
-        def.comment = new CommentMorph(val);
+        def.comment = val ? new CommentMorph(val) : null;
         if (def.body) {
-            def.body.comment = val;
+            def.body.comment = val || null;
         }
         break;
     case 'definition':
