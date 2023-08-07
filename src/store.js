@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-July-27';
+modules.store = '2023-August-07';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 9.0, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! X-dev, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -1071,7 +1071,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                         options ? options.contents : undefined,
                         child.attributes.readonly === 'true',
                         child.attributes.irreplaceable === 'true',
-                        child.attributes.separator
+                        child.attributes.separator,
+                        child.attributes.collapse
                     ]
                 );
             });
@@ -2344,7 +2345,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$$$>$%</input>',
+                    '<input type="@"$$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
@@ -2353,6 +2354,11 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     this.declarations.get(decl)[5] ?
                             ' separator="' +
                                 this.declarations.get(decl)[5] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[6] ?
+                            ' collapse="' +
+                                this.declarations.get(decl)[6] +
                                 '"'
                             : '',
                     this.declarations.get(decl)[1],

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-06';
+modules.byob = '2023-August-07';
 
 // Declarations
 
@@ -152,7 +152,8 @@ function CustomBlockDefinition(spec, receiver) {
         //      options,
         //      isReadOnly,
         //      isIrreplaceable,
-        //      separator
+        //      separator,
+        //      collapse
         //  ]
     this.variableNames = [];
     this.comment = null;
@@ -224,6 +225,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.isReadOnly = slot[3] || false;
                 part.fragment.isIrreplaceable = slot[4] || false;
                 part.fragment.separator = slot[5] || null;
+                part.fragment.collapse = slot[6] || null;
             }
         }
     });
@@ -337,6 +339,11 @@ CustomBlockDefinition.prototype.isIrreplaceableInputIdx = function (idx) {
 CustomBlockDefinition.prototype.separatorOfInputIdx = function (idx) {
     var inputName = this.inputNames()[idx];
     return this.separatorOfInput(inputName);
+};
+
+CustomBlockDefinition.prototype.collapseOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.collapseOfInput(inputName);
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
@@ -494,6 +501,13 @@ CustomBlockDefinition.prototype.isIrreplaceableInput = function (inputName) {
 CustomBlockDefinition.prototype.separatorOfInput = function (inputName) {
     if (this.declarations.has(inputName)) {
         return this.declarations.get(inputName)[5] || null;
+    }
+    return null;
+};
+
+CustomBlockDefinition.prototype.collapseOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[6] || null;
     }
     return null;
 };
@@ -990,7 +1004,8 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
 
     // find unnamed upvars (indicated by non-breaking space) and label them
     // to their internal definition (default).
-    // make sure to set the separator labels for variadic input slots
+    // make sure to set the separator and collapse labels
+    // for variadic input slots
     this.cachedInputs = null;
     this.inputs().forEach((inp, idx) => {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\xa0') {
@@ -998,6 +1013,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         } else if (inp instanceof MultiArgMorph) {
             inp.setIrreplaceable(def.isIrreplaceableInputIdx(idx));
             inp.setInfix(def.separatorOfInputIdx(idx));
+            inp.setCollapse(def.collapseOfInputIdx(idx));
         }
     });
 
@@ -1257,7 +1273,8 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
                     part.fragment.options,
                     part.fragment.isReadOnly,
                     part.fragment.isIrreplaceable,
-                    part.fragment.separator
+                    part.fragment.separator,
+                    part.fragment.collapse
                 ]
             );
         }
@@ -3197,6 +3214,7 @@ function BlockLabelFragment(labelString) {
     this.isReadOnly = false; // for input slots
     this.isIrreplaceable = false;
     this.separator = null; // for variadic slots
+    this.collapse = null; // for variadic slots
     this.isDeleted = false;
 }
 
@@ -3266,6 +3284,7 @@ BlockLabelFragment.prototype.copy = function () {
     ans.isReadOnly = this.isReadOnly;
     ans.isIrreplaceable = this.isIrreplaceable;
     ans.separator = this.separator;
+    ans.collapse = this.collapse;
     return ans;
 };
 
@@ -4313,6 +4332,13 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     '...',
                 'editSeparator'
             );
+            menu.addItem(
+                (this.fragment.collapse ? on : off) +
+                    localize('collapse') +
+                    '...',
+                'editCollapse'
+            );
+            menu.addLine();
         }
         menu.addMenu(
             (contains(
@@ -4435,6 +4461,18 @@ InputSlotDialogMorph.prototype.editSeparator = function () {
         ).prompt(
             "Separator",
             this.fragment.separator || '',
+            this.world()
+        );
+};
+
+InputSlotDialogMorph.prototype.editCollapse = function () {
+        new DialogBoxMorph(
+            this,
+            str => this.fragment.collapse = str,
+            this
+        ).prompt(
+            "Collapse",
+            this.fragment.collapse || '',
             this.world()
         );
 };

@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-04';
+modules.blocks = '2023-August-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13576,6 +13576,28 @@ MultiArgMorph.prototype.setInfix = function (separator = '') {
     if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
         this.addInput();
     }
+};
+
+MultiArgMorph.prototype.setCollapse = function (collapse = '') {
+    var inps, coll, collapseLabel;
+    if (this.collapse === collapse) {
+        return;
+    }
+    coll = this.collapseLabel();
+    inps = this.inputs();
+    this.collapseAll();
+    this.collapse = collapse;
+    this.removeChild(coll); // shouldn't matter if coll is null
+    if (this.collapse) {
+        collapseLabel = this.labelPart(this.collapse);
+        this.addChildFirst(collapseLabel);
+        collapseLabel.hide();
+    }
+    inps.forEach(slot => this.replaceInput(this.addInput(), slot));
+    if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
+        this.addInput();
+    }
+    this.fixLayout();
 };
 
 // MultiArgMorph defaults:
