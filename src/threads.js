@@ -7694,8 +7694,6 @@ Process.prototype.slotType = function (spec) {
         '5':            5,
         'c':            5, // spec
         'cs':           5, // spec
-        'loop':         5, // spec
-        'ca':           5, // spec
         // mnemonics:
         'script':       5,
         
@@ -7749,7 +7747,11 @@ Process.prototype.slotType = function (spec) {
         'scriptvars':   14, // spec
         // mnemonics:
         'vars':         14,
-        'variables':    14
+        'variables':    14,
+
+        '15':           15,
+        'ca':           15, // spec
+        'loop':         15 // spec
 
     }[key];
     if (num === undefined) {
@@ -7771,7 +7773,7 @@ Process.prototype.slotSpec = function (num) {
     }
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
-    'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars'][id];
+    'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars', 'loop'][id];
 
     if (spec === undefined) {
         return null;

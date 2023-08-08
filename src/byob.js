@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-07';
+modules.byob = '2023-August-08';
 
 // Declarations
 
@@ -3240,7 +3240,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \u2191...';
     } else if (this.isMultipleInput()) {
         suff = '...';
-    } else if (this.type === '%cs' || this.type === '%ca') {
+    } else if (['%cs', '%ca', '%loop'].includes(this.type)) {
         suff = ' \u03BB'; // ' [\u03BB'
     } else if (this.type === '%b') {
         suff = ' ?';
@@ -3361,7 +3361,7 @@ BlockLabelFragment.prototype.setToMultipleInput = function () {
     if (!this.type) {return null; } // not an input at all
     if (this.type === '%upvar') {
         this.type = '%s';
-    } else if (this.type === '%ca') {
+    } else if (['%ca', '%loop'].includes(this.type)) {
         this.type = '%cs';
     }
     this.type = '%mult'.concat(this.singleInputType());
@@ -3968,7 +3968,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.addSlotTypeButton('Command\n(inline)', '%cmdRing'); //'%cmd');
     this.addSlotTypeButton('Reporter', '%repRing'); //'%r');
     this.addSlotTypeButton('Predicate', '%predRing'); //'%p');
-    this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca']);
+    this.addSlotTypeButton('Command\n(C-shape)', ['%cs', '%ca', '%loop']);
     this.addSlotTypeButton('Any\n(unevaluated)', '%anyUE');
     this.addSlotTypeButton('Boolean\n(unevaluated)', '%boolUE');
 
@@ -4050,14 +4050,14 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         'checkbox',
         this, // target
         () => { // action
-            if (this.fragment.type === '%ca') {
+            if (['%ca', '%loop'].includes(this.fragment.type)) {
                 this.setType('%cs');
             } else {
                 this.setType('%ca');
             }
         },
         null, // label string
-        () => this.fragment.type === '%ca',
+        () => ['%ca', '%loop'].includes(this.fragment.type),
         null, // environment
         null, // hint
         new SymbolMorph(
@@ -4070,7 +4070,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     loopArrow.refresh = () => {
         ToggleMorph.prototype.refresh.call(loopArrow);
         if (this.isExpanded && contains(
-                ['%cs', '%ca'],
+                ['%cs', '%ca', '%loop'],
                 this.fragment.type
             )) {
             loopArrow.show();

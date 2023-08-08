@@ -3,13 +3,14 @@
 ## in development:
 * **New Features:**
     * color type input slots for custom blocks
-    * metaprogramming support for clor type input slots (number: 13, spec: "clr", mnemonic: "color")
+    * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
     * metaprogramming support for color type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
     * destinations, locations, keys, data types, objects + self, sprites + self, object attributes, microphone and scenes dropdown menus for custom blocks
     * upvars in custom blocks can now have different default names than their formal parameter names
     * "collapse" label support for variadic inputs in custom blocks
     * metaprogramming support for "collapse" labels in variadic inputs
+    * metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -26,6 +27,7 @@
 ### 2023-08-08
 * threads: changed "define" block to always create a new custom block definition rather than modify the definition body of an existing one with matching label
 * threads: fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
+* byob, threads: metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
 
 ### 2023-08-07
 * byob: added "collapse" label support for variadic inputs in custom blocks
