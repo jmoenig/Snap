@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-07';
+modules.threads = '2023-August-08';
 
 var ThreadManager;
 var Process;
@@ -8058,7 +8058,19 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
         vars = this.context.outerContext.variables,
         type = this.reportTypeOf(context),
         count = 1,
-        matches, spec, def;
+        spec, def;
+
+    function newName(name, elements) {
+        var count = 1,
+            newName = name,
+            exist = e => snapEquals(e, newName);
+
+        while (elements.some(exist)) {
+            count += 1;
+            newName = name + ' (' + count + ')';
+        }
+        return newName;
+    }
 
     this.assertType(label, 'text');
     label = label.trim();
@@ -8071,28 +8083,12 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
         this.compileBlockReferences(context, upvar);
     }
 
-    // identify global custom block matching the specified label
-    matches = ide.stage.globalBlocks.filter(def =>
-        def.abstractBlockSpec() === label
+    // avoid using a label that matches an existing global custom block def
+    // even if technically it's not (yet) a collision case
+    label = newName(
+        label,
+        ide.stage.globalBlocks.map(def => def.abstractBlockSpec())
     );
-    if (matches.length > 1) {
-        throw new Error(
-            'several block definitions\nalready match this label'
-        );
-    } else if (matches.length === 1) {
-        // update the existing global definition with the context body
-        def = matches[0];
-        this.doSetBlockAttribute(
-            'definition',
-            def.blockInstance().reify(),
-            context
-        );
-
-        // create the reference to the new block
-        vars.addVar(upvar);
-        vars.setVar(upvar, def.blockInstance().reify());
-        return;
-    }
 
     // make a new custom block definition
     def = new CustomBlockDefinition('BYOB'); // haha!

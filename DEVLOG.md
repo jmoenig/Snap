@@ -14,12 +14,16 @@
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
     * the metaprogramming getter for "translations" block attribute selector now always returns a list
-    * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false) 
+    * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
+    * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-08-08
+* changed "define" block to always create a new custom block definition rather than modify the definition body of an existing one with matching label
 
 ### 2023-08-07
 * byob: added "collapse" label support for variadic inputs in custom blocks
