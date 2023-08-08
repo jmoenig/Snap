@@ -1073,9 +1073,13 @@ Process.prototype.evaluateInput = function (input) {
         ans = input.evaluate();
         if (ans) {
             if (input.constructor === CommandSlotMorph ||
-                    input.constructor === ReporterSlotMorph ||
-                    (input instanceof CSlotMorph &&
-                        (!input.isStatic || input.isLambda))) {
+                input.constructor === ReporterSlotMorph ||
+                (input instanceof CSlotMorph && (
+                    !input.isStatic ||
+                    input.isLambda ||
+                    input.parentThatIsA(BlockMorph)?.isCustomBlock
+                ))
+            ) {
                 // I know, this still needs yet to be done right....
                 ans = this.reify(ans, new List());
             }
@@ -1203,9 +1207,13 @@ Process.prototype.evaluateNextInputSet = function (element) {
                     ans = exp.evaluate();
                     if (ans) {
                         if (exp.constructor === CommandSlotMorph ||
-                                exp.constructor === ReporterSlotMorph ||
-                                (exp instanceof CSlotMorph &&
-                                    (!exp.isStatic || exp.isLambda))) {
+                            exp.constructor === ReporterSlotMorph ||
+                            (exp instanceof CSlotMorph && (
+                                !exp.isStatic ||
+                                exp.isLambda ||
+                                exp.parentThatIsA(BlockMorph)?.isCustomBlock
+                            ))
+                        ) {
                             ans = this.reify(ans, new List());
                         }
                     }

@@ -19,11 +19,13 @@
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
+    * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
 * **Documentation Updates:**
 * **Translation Updates:**
 
 ### 2023-08-08
-* changed "define" block to always create a new custom block definition rather than modify the definition body of an existing one with matching label
+* threads: changed "define" block to always create a new custom block definition rather than modify the definition body of an existing one with matching label
+* threads: fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
 
 ### 2023-08-07
 * byob: added "collapse" label support for variadic inputs in custom blocks
