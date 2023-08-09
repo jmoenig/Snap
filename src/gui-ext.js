@@ -575,7 +575,7 @@ IDE_Morph.prototype.sendFriendRequest = async function () {
 IDE_Morph.prototype.respondToFriendRequest = async function (request) {
     const dialog = new DialogBoxMorph(
         this,
-        () => this.cloud.respondToFriendRequest(request.sender, 'APPROVED'),
+        () => this.cloud.respondToFriendRequest(request.sender, 'Approved'),
     );
     dialog.labelString = 'Respond to Friend Request';
     dialog.key = `FriendRequestFrom${request.sender}`;
@@ -598,7 +598,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
     dialog.addButton('ok', localize('Accept'));
     dialog.addButton(
         () => {
-            this.cloud.respondToFriendRequest(request.sender, 'REJECTED');
+            this.cloud.respondToFriendRequest(request.sender, 'Rejected');
             dialog.destroy();
         }, 
         localize('Reject')
@@ -610,7 +610,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
                 localize('Block User?')
             );
             if (confirmed) {
-                this.cloud.respondToFriendRequest(request.sender, 'BLOCKED');
+                this.cloud.respondToFriendRequest(request.sender, 'Blocked');
             }
             dialog.destroy();
         }, 
