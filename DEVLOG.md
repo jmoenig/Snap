@@ -11,6 +11,7 @@
     * "collapse" label support for variadic inputs in custom blocks
     * metaprogramming support for "collapse" labels in variadic inputs
     * metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
+    * variadic "collapse" (prefix label) support for custom blocks
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -23,6 +24,9 @@
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
 * **Documentation Updates:**
 * **Translation Updates:**
+
+### 2023-08-09
+* blocks, byob, store: badded variadic "collapse" (prefix label) support for custom blocks
 
 ### 2023-08-08
 * threads: changed "define" block to always create a new custom block definition rather than modify the definition body of an existing one with matching label

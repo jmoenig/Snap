@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-07';
+modules.blocks = '2023-August-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13602,6 +13602,40 @@ MultiArgMorph.prototype.setCollapse = function (collapse = '') {
     this.fixLayout();
 };
 
+MultiArgMorph.prototype.setExpand = function (expand) {
+    var inps, label;
+
+    // parse expansion labels to determine its cardiinality
+    function massage(str) {
+        var prefixes = (str || '').split('\n').map(line =>
+                line.trim()).filter(each => each.length);
+        return prefixes.length > 1 ? prefixes : prefixes[0] || null;
+    }
+
+    if (this.labelText === expand) {
+        return;
+    }
+    label = this.label();
+    inps = this.inputs();
+    this.collapseAll();
+    this.labelText = massage(expand);
+    this.removeChild(label); // shouldn't matter if coll is null
+    if (this.labelText) {
+        label = this.labelPart(
+            this.labelText instanceof Array ?
+                this.labelText[0]
+                : this.labelText
+        );
+        this.children.splice(this.collapse ? 1 : 0, null, label);
+        label.parent = this;
+        label.hide();
+    }
+    inps.forEach(slot => this.replaceInput(this.addInput(), slot));
+    if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
+        this.addInput();
+    }
+    this.fixLayout();
+};
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
