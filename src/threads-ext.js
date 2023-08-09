@@ -40,7 +40,7 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var dstId = targetRole instanceof List ? targetRole.asArray() : [targetRole];
+    var dstId = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
     function resolveAddress(addr) {
         if (addr.includes('@')) {
             return [addr];
