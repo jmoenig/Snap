@@ -13,6 +13,7 @@
     * metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
     * variadic "collapse" (prefix label) support for custom blocks
     * metaprogramming support for "expand" (slot prefix) labels in variadic inputs
+    * default values for variadic slots inside custom blocks
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -31,6 +32,7 @@
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs
 * blocks: added support for multiple separator lines in input slot dropdown menus
 * blocks: added separator line in dropdown menu for variadic input selectors
+* blocks, byob: added support for default values for variadic slots inside custom blocks
 
 ### 2023-08-09
 * blocks, byob, store: badded variadic "collapse" (prefix label) support for custom blocks

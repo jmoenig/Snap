@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-09';
+modules.byob = '2023-August-10';
 
 // Declarations
 
@@ -1029,6 +1029,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
             inp.setInfix(def.separatorOfInputIdx(idx));
             inp.setCollapse(def.collapseOfInputIdx(idx));
             inp.setExpand(def.expandOfInputIdx(idx));
+            inp.setDefaultValue(def.defaultValueOfInputIdx(idx));
         }
     });
 
@@ -1117,6 +1118,12 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
             inp.setContents(
                 (definition || this.definition).defaultValueOfInputIdx(idx)
             );
+        } else if (inp instanceof MultiArgMorph) {
+            inp.inputs().forEach((slot, i) => {
+                if (slot instanceof InputSlotMorph) {
+                    slot.setContents(inp.defaultValueFor(i));
+                }
+            });
         }
         idx += 1;
     });
@@ -3850,7 +3857,7 @@ InputSlotDialogMorph.prototype.getInput = function () {
         if (contains(['%b', '%boolUE'], this.fragment.type)) {
             this.fragment.defaultValue =
                 this.slots.defaultSwitch.evaluate();
-        } else {
+        } else if (this.slots.defaultInputField.isVisible) {
             this.fragment.defaultValue =
                 this.slots.defaultInputField.getValue();
         }
@@ -4362,6 +4369,12 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     '...',
                 'editExpand'
             );
+            menu.addItem(
+                (this.fragment.defaultValue ? on : off) +
+                    localize('defaults') +
+                    '...',
+                'editVariadicDefaults'
+            );
             menu.addLine();
         }
         menu.addMenu(
@@ -4511,7 +4524,21 @@ InputSlotDialogMorph.prototype.editExpand = function () {
         this.fragment.expand || '',
         this.world(),
         null,
-        localize('Enter one slot prefix per line.')
+        localize('Enter one item per line.')
+    );
+};
+
+InputSlotDialogMorph.prototype.editVariadicDefaults = function () {
+    new DialogBoxMorph(
+        this,
+        str => this.fragment.defaultValue = str,
+        this
+    ).promptCode(
+        "Defaults",
+        this.fragment.defaultValue || '',
+        this.world(),
+        null,
+        localize('Enter one item per line.')
     );
 };
 

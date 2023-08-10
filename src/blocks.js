@@ -13611,9 +13611,9 @@ MultiArgMorph.prototype.setExpand = function (expand) {
 
     // parse expansion labels to determine its cardiinality
     function massage(str) {
-        var prefixes = (str || '').split('\n').map(line =>
+        var items = (str || '').split('\n').map(line =>
                 line.trim()).filter(each => each.length);
-        return prefixes.length > 1 ? prefixes : prefixes[0] || null;
+        return items.length > 1 ? items : items[0] || null;
     }
 
     if (this.labelText === expand) {
@@ -13640,6 +13640,22 @@ MultiArgMorph.prototype.setExpand = function (expand) {
     }
     this.fixLayout();
 };
+
+MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
+
+    // parse default values to determine their arity
+    function massage(str) {
+        var items = (str || '').split('\n').map(line =>
+                line.trim()).filter(each => each.length);
+        return items.length > 1 ? items : items[0] || null;
+    }
+
+    if (this.defaultValue === defaultValue) {
+        return;
+    }
+    this.defaultValue = massage(defaultValue);
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
