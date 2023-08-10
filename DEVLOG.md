@@ -19,6 +19,7 @@
     * the metaprogramming getter for "translations" block attribute selector now always returns a list
     * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
     * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
+    * support for multiple separator lines in input slot dropdown menus
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -28,6 +29,7 @@
 
 ### 2023-08-10
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs
+* blocks: added support for multiple separator lines in input slot dropdown menus
 
 ### 2023-08-09
 * blocks, byob, store: badded variadic "collapse" (prefix label) support for custom blocks

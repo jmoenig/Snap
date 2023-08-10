@@ -10771,7 +10771,7 @@ InputSlotMorph.prototype.menuFromDict = function (
     }
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            if (key[0] === '~') {
+            if (key[0].split('').every(c => c === '~')) {
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
                 menu.addItem(
