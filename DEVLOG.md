@@ -30,6 +30,7 @@
 ### 2023-08-10
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs
 * blocks: added support for multiple separator lines in input slot dropdown menus
+* blocks: added separator line in dropdown menu for variadic input selectors
 
 ### 2023-08-09
 * blocks, byob, store: badded variadic "collapse" (prefix label) support for custom blocks
