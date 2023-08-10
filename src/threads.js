@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-08';
+modules.threads = '2023-August-10';
 
 var ThreadManager;
 var Process;
@@ -7411,7 +7411,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, def, info, loc, cmt;
+        expr, body, slots, data, def, info, loc, cmt;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -7606,6 +7606,37 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 slots.add(slot instanceof MultiArgMorph ?
                     slot.collapse : ''
                 );
+            });
+        }
+        return slots;
+    case 'expands':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => {
+                data = (value[7] || '').split('\n').map(each =>
+                    each.trim()).filter(each =>
+                        each.length);
+                slots.add(data.length > 1 ? new List(data) : data[0]);
+            });
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                if (slot instanceof MultiArgMorph) {
+                    data = slot.labelText instanceof Array ?
+                        new List(slot.labelText.map(item =>
+                            item.replaceAll('\n', ' ')))
+                        : (slot.labelText || '').replaceAll('\n', ' ');
+                    slots.add(data);
+                } else {
+                    slots.add('');
+                }
             });
         }
         return slots;
@@ -8011,6 +8042,27 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             var info = def.declarations.get(name),
                 options = val.at(idx + 1);
             info[6] = options.toString();
+            def.declarations.set(name, info);
+        });
+        break;
+    case 'expands':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1),
+                data;
+            if (options instanceof List) {
+                data = options.itemsArray().map(each =>
+                    each.replaceAll('\n', ' ').trim()).filter(each =>
+                        each.length).join('\n');
+            } else {
+                data = options.toString();
+            }
+
+            info[7] = data;
             def.declarations.set(name, info);
         });
         break;

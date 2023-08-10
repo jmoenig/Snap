@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-09';
+modules.blocks = '2023-August-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -857,6 +857,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'replaceables' : ['replaceables'],
             'separators' : ['separators'],
             'collapses' : ['collapses'],
+            'expands' : ['expands'],
             'translations' : ['translations']
         }
     },
@@ -878,6 +879,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'replaceables' : ['replaceables'],
             'separators' : ['separators'],
             'collapses' : ['collapses'],
+            'expands' : ['expands'],
             'translations' : ['translations']
         }
     },
