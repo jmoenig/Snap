@@ -859,6 +859,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'separators' : ['separators'],
             'collapses' : ['collapses'],
             'expands' : ['expands'],
+            'initial slots' : ['initial slots'],
             'translations' : ['translations']
         }
     },
@@ -882,6 +883,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'separators' : ['separators'],
             'collapses' : ['collapses'],
             'expands' : ['expands'],
+            'initial slots' : ['initial slots'],
             'translations' : ['translations']
         }
     },
@@ -1885,6 +1887,11 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.group
             );
             part.maxInputs = info.max;
+            part.initialSlots = Math.max( // this needs some fixing
+                part.initialSlots,
+                isNil(info.min) ? 0 : +info.min,
+                isNil(info.defaults) ? 0 : +info.defaults
+            );
             for (i = 0; i < info.defaults || 0; i += 1) {
                 part.addInput();
             }
@@ -13414,7 +13421,7 @@ MultiArgMorph.prototype.init = function (
     this.collapse = localize(collapse || '');
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
-    this.initialSlots = initial;
+    this.initialSlots = isNil(initial) ? 1 : initial ;
     this.minInputs = this.infix ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
@@ -13897,7 +13904,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
 
     this.addInfix();
     idx = this.children.length - 1;
-    if (!isNil(value)) {
+    if (value !== '' && !isNil(value)) {
         newPart.setContents(value);
     } else if (this.elementSpec === '%scriptVars' ||
             this.elementSpec === '%blockVars') {
