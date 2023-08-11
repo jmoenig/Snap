@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-10';
+modules.byob = '2023-August-11';
 
 // Declarations
 
@@ -1126,6 +1126,7 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
         idx = 0;
 
     inputs.forEach(inp => {
+        var i;
         if (inp instanceof InputSlotMorph ||
             inp instanceof BooleanSlotMorph ||
             inp instanceof TemplateSlotMorph
@@ -1134,6 +1135,12 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
                 (definition || this.definition).defaultValueOfInputIdx(idx)
             );
         } else if (inp instanceof MultiArgMorph) {
+            // collapse and expand to the initial number of slots
+            inp.collapseAll();
+            for (i = 0; i < inp.initialSlots; i += 1) {
+                inp.addInput();
+            }
+            // populate each subslot with its default preset value, if any
             inp.inputs().forEach((slot, i) => {
                 if (slot instanceof InputSlotMorph) {
                     slot.setContents(inp.defaultValueFor(i));

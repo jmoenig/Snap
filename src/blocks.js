@@ -13414,6 +13414,7 @@ MultiArgMorph.prototype.init = function (
     this.collapse = localize(collapse || '');
     this.defaultValue = defaults || null;
     this.groupInputs = 1;
+    this.initialSlots = initial;
     this.minInputs = this.infix ? 0 : initial;
     this.maxInputs = null;
     this.elementSpec = eSpec || null;
