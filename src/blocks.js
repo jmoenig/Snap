@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-10';
+modules.blocks = '2023-August-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13611,7 +13611,7 @@ MultiArgMorph.prototype.setExpand = function (expand) {
 
     // parse expansion labels to determine its cardiinality
     function massage(str) {
-        var items = (str || '').split('\n').map(line =>
+        var items = (str || '').toString().split('\n').map(line =>
                 line.trim()).filter(each => each.length);
         return items.length > 1 ? items : items[0] || null;
     }
@@ -13645,7 +13645,7 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
 
     // parse default values to determine their arity
     function massage(str) {
-        var items = (str || '').split('\n').map(line =>
+        var items = (str || '').toString().split('\n').map(line =>
                 line.trim()).filter(each => each.length);
         return items.length > 1 ? items : items[0] || null;
     }
@@ -14047,9 +14047,18 @@ MultiArgMorph.prototype.slotSpecFor = function (index) {
 };
 
 MultiArgMorph.prototype.defaultValueFor = function (index) {
-    return this.defaultValue instanceof Array ?
-        this.defaultValue[index % this.defaultValue.length]
-        : this.defaultValue;
+    // repeat & wrap default values inside label groups
+    if (!this.parent || this.groupInputs > 1) {
+        return this.defaultValue instanceof Array ?
+            this.defaultValue[index % this.defaultValue.length]
+            : this.defaultValue;
+    }
+
+    // otherwise use them just once each
+    if (this.defaultValue instanceof Array) {
+        return this.defaultValue[index] || '';
+    }
+    return index ? '' : this.defaultValue;
 };
 
 // MultiArgMorph events:

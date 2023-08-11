@@ -28,6 +28,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-08-11
+* blocks: only repeat-wrap default values in variadic slots with input groups
+
 ### 2023-08-10
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs
 * blocks: added support for multiple separator lines in input slot dropdown menus
