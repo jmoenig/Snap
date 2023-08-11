@@ -34,6 +34,7 @@
 * blocks: only repeat-wrap default values in variadic slots with input groups
 * threads: added metaprogramming support for default values of variadic inputs
 * byob, blocks: initial subslot number support for variadic inputs 
+* store: serialization support for initial variadic subslots in custom block definitions 
 
 ### 2023-08-10
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs

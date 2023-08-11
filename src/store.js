@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-August-09';
+modules.store = '2023-August-11';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1073,7 +1073,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                         child.attributes.irreplaceable === 'true',
                         child.attributes.separator,
                         child.attributes.collapse,
-                        child.attributes.expand
+                        child.attributes.expand,
+                        +child.attributes.initial
                     ]
                 );
             });
@@ -2346,7 +2347,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$$$$$>$%</input>',
+                    '<input type="@"$$$$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
@@ -2365,6 +2366,11 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     this.declarations.get(decl)[7] ?
                             ' expand="' +
                                 this.declarations.get(decl)[7] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[8] ?
+                            ' initial="' +
+                                this.declarations.get(decl)[8] +
                                 '"'
                             : '',
                     this.declarations.get(decl)[1],
