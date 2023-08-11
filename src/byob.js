@@ -154,7 +154,8 @@ function CustomBlockDefinition(spec, receiver) {
         //      isIrreplaceable,
         //      separator,
         //      collapse,
-        //      expand
+        //      expand,
+        //      initialSlots
         //  ]
     this.variableNames = [];
     this.comment = null;
@@ -228,6 +229,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.separator = slot[5] || null;
                 part.fragment.collapse = slot[6] || null;
                 part.fragment.expand = slot[7] || null;
+                part.fragment.initialSlots = slot[8] || 0;
             }
         }
     });
@@ -351,6 +353,11 @@ CustomBlockDefinition.prototype.collapseOfInputIdx = function (idx) {
 CustomBlockDefinition.prototype.expandOfInputIdx = function (idx) {
     var inputName = this.inputNames()[idx];
     return this.expandOfInput(inputName);
+};
+
+CustomBlockDefinition.prototype.initialSlotsOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.initialSlotsOfInput(inputName);
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
@@ -522,6 +529,13 @@ CustomBlockDefinition.prototype.collapseOfInput = function (inputName) {
 CustomBlockDefinition.prototype.expandOfInput = function (inputName) {
     if (this.declarations.has(inputName)) {
         return this.declarations.get(inputName)[7] || null;
+    }
+    return null;
+};
+
+CustomBlockDefinition.prototype.initialSlotsOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[8] || null;
     }
     return null;
 };
@@ -1030,6 +1044,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
             inp.setCollapse(def.collapseOfInputIdx(idx));
             inp.setExpand(def.expandOfInputIdx(idx));
             inp.setDefaultValue(def.defaultValueOfInputIdx(idx));
+            inp.setInitialSlots(def.initialSlotsOfInputIdx(idx));
         }
     });
 
@@ -1297,7 +1312,8 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
                     part.fragment.isIrreplaceable,
                     part.fragment.separator,
                     part.fragment.collapse,
-                    part.fragment.expand
+                    part.fragment.expand,
+                    part.fragment.initialSlots
                 ]
             );
         }
@@ -3239,6 +3255,7 @@ function BlockLabelFragment(labelString) {
     this.separator = null; // for variadic slots
     this.collapse = null; // for variadic slots
     this.expand = null; // for variadic slots
+    this.initialSlots = 1; // for variadic slots
     this.isDeleted = false;
 }
 
@@ -3310,6 +3327,7 @@ BlockLabelFragment.prototype.copy = function () {
     ans.separator = this.separator;
     ans.collapse = this.collapse;
     ans.expand = this.expand;
+    ans.initialSlots = this.initialSlots;
     return ans;
 };
 
@@ -4375,6 +4393,12 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     '...',
                 'editVariadicDefaults'
             );
+            menu.addItem(
+                (this.fragment.initialSlots ? on : off) +
+                    localize('initial slots') +
+                    '...',
+                'editVariadicInitialSlots'
+            );
             menu.addLine();
         }
         menu.addMenu(
@@ -4539,6 +4563,31 @@ InputSlotDialogMorph.prototype.editVariadicDefaults = function () {
         this.world(),
         null,
         localize('Enter one item per line.')
+    );
+};
+
+InputSlotDialogMorph.prototype.editVariadicInitialSlots = function () {
+    new DialogBoxMorph(
+        this,
+        num => this.fragment.initialSlots = Math.min(num, 12),
+        this
+    ).prompt(
+        "Initial slots",
+        (this.fragment.initialSlots || 0).toString(),
+        this.world(),
+        null, // pic
+        { // choices
+            '0': 0,
+            '1': 1,
+            '2': 2,
+            '3': 3
+        },
+        false, // read-only?
+        true, // numeric
+        0, // slider-min
+        3, // slider-max
+        null, // slider-action
+        0 // decimals
     );
 };
 

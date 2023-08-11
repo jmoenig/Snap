@@ -14,6 +14,7 @@
     * variadic "collapse" (prefix label) support for custom blocks
     * metaprogramming support for "expand" (slot prefix) labels in variadic inputs
     * default values for variadic slots inside custom blocks
+    * metaprogramming support for default values of variadic inputs
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -30,6 +31,7 @@
 
 ### 2023-08-11
 * blocks: only repeat-wrap default values in variadic slots with input groups
+* threads: added metaprogramming support for default values of variadic inputs
 
 ### 2023-08-10
 * blocks, threads: metaprogramming support for "expand" (slot prefix) labels in variadic inputs

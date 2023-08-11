@@ -13656,6 +13656,10 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
     this.defaultValue = massage(defaultValue);
 };
 
+MultiArgMorph.prototype.setInitialSlots = function (initialSlots) {
+    this.initialSlots = Math.min(initialSlots, 12);
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {

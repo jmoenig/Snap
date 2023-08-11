@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-10';
+modules.threads = '2023-August-11';
 
 var ThreadManager;
 var Process;
@@ -7495,12 +7495,31 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
-            def.declarations.forEach(value => slots.add(value[1]));
+            // def.declarations.forEach(value => slots.add(value[1]));
+            def.declarations.forEach(value => {
+                if((value[0] || '').toString().startsWith('%mult')) {
+                    data = (value[1] || '').split('\n').map(each =>
+                        each.trim()).filter(each =>
+                            each.length);
+                    slots.add(data.length > 1 ? new List(data) : data[0]);
+                } else {
+                    slots.add(value[1]);
+                }
+            });
         } else {
             info = SpriteMorph.prototype.blocks[expr.selector];
             if (!info) {return slots; }
-            slots = new List((info.defaults || []).map(v =>
-                this.inputOption(v)));
+            slots = (info.defaults || []).map(v => this.inputOption(v));
+            // adjust structure if the last input is variadic
+            // and the default values overshoot the number of input slots
+            if (expr.inputs().slice(-1)[0] instanceof MultiArgMorph &&
+                slots.length > expr.inputs().length
+            ) {
+                data = slots.slice(expr.inputs().length - 1);
+                slots = slots.slice(0, expr.inputs().length - 1);
+                slots.push(new List(data));
+            }
+            slots = new List(slots);
         }
         return slots;
     case 'menus':
@@ -7969,7 +7988,11 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
                 options = val.at(idx + 1);
-            this.assertType(options, ['Boolean', 'number', 'text']);
+            this.assertType(options, ['list', 'Boolean', 'number', 'text']);
+            if (options instanceof List) {
+                options = options.itemsArray().map(v =>
+                    v.toString().trim()).join('\n');
+            }
             info[1] = options;
             def.declarations.set(name, info);
         });
