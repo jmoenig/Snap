@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-04';
+modules.objects = '2023-August-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -360,6 +360,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
             defaults: [['current'], 100, 50]
+        },
+        reportNewCostumeSkewed: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'skew %cst to %dir degrees %n %',
+            defaults: [['current'], 0, 50]
         },
         doSayFor: {
             only: SpriteMorph,
@@ -1842,6 +1848,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
     var selectors = ['reportJSFunction'];
+    if (version < 9.1) {
+        selectors.push(
+            'reportNewCostumeSkewed'
+        );
+    }
     // 9: no new primitives
     // 8.2: no new primitives
     if (version < 8.1) {
@@ -2670,6 +2681,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
+        blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -9565,6 +9577,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
+        blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -11373,7 +11386,7 @@ Costume.prototype.copy = function () {
     return cpy;
 };
 
-// Costume flipping & stretching
+// Costume flipping, stretching & skewing
 
 Costume.prototype.flipped = function () {
 /*
@@ -11430,6 +11443,49 @@ Costume.prototype.stretched = function (w, h) {
         true
     );
     return stretched;
+};
+
+Costume.prototype.skewed = function (angle, factor) {
+    var degrees = ((+angle % 360) + 360) % 360,
+        isDown = degrees > 90 && degrees < 270,
+        w = this.width(),
+        h = this.height(),
+        trg = w * factor / 100,
+        delta = w - trg,
+        src = this.rasterized().contents,
+        shift = Math.min(
+                this.rotationCenter.y * Math.tan(radians(degrees)),
+                Math.min(w * 100, 5000, (16777216 - w) / h)
+            ) * (isDown ? -1 : 1),
+        left = (w - trg) / 2 + shift,
+        l = Math.min(left, 0),
+        right = left + trg,
+        r = Math.max(right, w),
+        pad = Math.abs(l),
+        dst = newCanvas(new Point(r - l, h), true),
+        ctx = dst.getContext('2d'),
+        step = shift / h,
+        y;
+
+    for (y = 0; y < h; y += 1) {
+        ctx.drawImage(
+            src, //image,
+            0, // sx,
+            isDown ? y : h - y, // sy,
+            w, // sWidth,
+            1, // sHeight,
+            y / h * delta * 0.5 + (step * y) + pad, // dx,
+            isDown ? y : h - y, // dy,
+            w - (y / h * delta), // dWidth,
+            1 // dHeight
+        );
+    }
+    return new Costume(
+        dst,
+        this.name,
+        this.rotationCenter.translateBy(new Point(pad, 0)),
+        true
+    );
 };
 
 // Costume actions

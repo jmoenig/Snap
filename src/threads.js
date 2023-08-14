@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-11';
+modules.threads = '2023-August-14';
 
 var ThreadManager;
 var Process;
@@ -7150,6 +7150,19 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
         Math.round(cst.width() * +xP / 100),
         Math.round(cst.height() * +yP / 100)
     );
+};
+
+Process.prototype.reportNewCostumeSkewed = function (name, angle, factor) {
+    var cst = this.costumeNamed(name);
+    if (!cst) {
+        return new Costume();
+    }
+    if (!isFinite(+angle * +factor) || isNaN(+angle * +factor)) {
+        throw new Error(
+            'expecting a finite number\nbut getting Infinity or NaN'
+        );
+    }
+    return cst.skewed(+angle, +factor);
 };
 
 Process.prototype.costumeNamed = function (name) {
