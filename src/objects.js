@@ -1905,6 +1905,8 @@ SpriteMorph.prototype.blockAlternatives = {
     doThinkFor: ['doSayFor', 'doThink', 'bubble', 'doAsk'],
     bubble: ['doThink', 'doAsk', 'doSayFor', 'doThinkFor'],
     doThink: ['bubble', 'doAsk', 'doSayFor', 'doThinkFor'],
+    reportNewCostumeStretched: ['reportNewCostumeSkewed'],
+    reportNewCostumeSkewed: ['reportNewCostumeStretched'],
     show: ['hide'],
     hide: ['show'],
     changeEffect: ['setEffect'],
