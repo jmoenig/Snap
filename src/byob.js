@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-11';
+modules.byob = '2023-August-14';
 
 // Declarations
 
@@ -4047,10 +4047,16 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
-                    '%mlt', '%code'
+                    '%mlt', '%code', '%upvar'
                 ],
                 this.fragment.type
             )) {
+            defLabel.changed();
+            defLabel.text = this.fragment.type === '%upvar' ?
+                localize('Default Name:')
+                : localize('Default Value:');
+            defLabel.fixLayout();
+            defLabel.rerender();
             defLabel.show();
         } else {
             defLabel.hide();

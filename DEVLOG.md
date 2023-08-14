@@ -31,6 +31,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
 
+### 2023-08-14
+* byob: made default value/name label in slot type dialog dynamic for upvar / slot 
+
 ### 2023-08-11
 * blocks: only repeat-wrap default values in variadic slots with input groups
 * threads: added metaprogramming support for default values of variadic inputs
