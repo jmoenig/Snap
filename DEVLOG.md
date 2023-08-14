@@ -31,11 +31,13 @@
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
 * **Documentation Updates:**
 * **Translation Updates:**
+    * German
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot
 * objects, threads: new "skew" primitive block for costumes
 * objects: relabel options for "stretch" and "skew"
+* German translation update for new "skew" primitive
 
 ### 2023-08-11
 * blocks: only repeat-wrap default values in variadic slots with input groups
