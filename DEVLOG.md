@@ -18,6 +18,7 @@
     * initial subslot number support for variadic inputs
     * metaprogramming support for initial variadic subslots
     * new "skew" primitive block for costumes
+    * special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -32,6 +33,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-08-16
+* special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot
