@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-14';
+modules.objects = '2023-August-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -827,13 +827,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
         },
-        /*
-        doVariadicIf: {
-            type: 'command',
-            category: 'control',
-            spec: 'if %b %c %elseif'
-        },
-        */
         doIf: {
             type: 'command',
             category: 'control',
