@@ -238,6 +238,8 @@ SnapExtensions.primitives.set(
     'snap_block_selectors',
     function () {
         return new List([
+            ['label'],
+            ['definition'],
             ['comment'],
             ['category'],
             ['type'],
