@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 /*jshint esversion: 11*/
 
@@ -2591,20 +2591,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             );
             return menu;
         };
-
-    } else if (value === null) {
-        morphToShow = new TextMorph(
-            '',
-            this.fontSize
-        );
-    } else if (value === 0) {
-        morphToShow = new TextMorph(
-            '0',
-            this.fontSize
-        );
-    } else if (value.toString) {
+    } else {
         return this.showBubble(
-            value.toString(),
+            display(value),
             exportPic,
             target
         );
