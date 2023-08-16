@@ -50,6 +50,7 @@
 * blocks, byob, threads, store: max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
 * extensions: new "snap" category with new "snap_block_selectors" extension primitive
 * locale: lazy translation support
+* objects: lazy translation support for variable + list watchers and speech balloons
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot

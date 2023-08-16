@@ -90,7 +90,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
+embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display*/
 
 /*jshint esversion: 11*/
 
@@ -11127,7 +11127,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
     } else {
         contents = new TextMorph(
-            data.toString(),
+            display(data),
             this.bubbleFontSize * this.scale,
             null, // fontStyle
             this.bubbleFontIsBold,
@@ -12693,7 +12693,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.isDraggable = false;
         } else {
             this.contentsMorph = new TextMorph(
-                !isNil(this.contents) ? this.contents.toString() : '',
+                display(this.contents),
                 fontSize,
                 null,
                 true,
