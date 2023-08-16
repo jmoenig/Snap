@@ -68,7 +68,10 @@ function display(data) {
     if (data instanceof Array) {
         return '«' + localize(data[0].toString()) + '»';
     }
-    return data.toString();
+    if (data.toString) {
+        return data.toString();
+    }
+    return '';
 }
 
 function option(data) {
