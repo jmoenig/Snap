@@ -42,6 +42,8 @@
 * metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
 * special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
 * metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
+* special "conditionals" type input slots for custom blocks (as in the "if ... else if ..." primitive)
+* metaprogramming support for conditionals type multi-slots (number: 18, spec: "elseif", mnemonic: "conditionals")
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot

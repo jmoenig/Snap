@@ -7717,6 +7717,8 @@ Process.prototype.slotType = function (spec) {
             return 16;
         } else if (spec[0] === '%msgSend') {
             return 17;
+        } else if (spec[0] === '%b') {
+            return 18;
         }
         return new List(spec.map(each => this.slotType(each)));
     }
@@ -7848,7 +7850,12 @@ Process.prototype.slotType = function (spec) {
         'receivers':    16,
 
         '17':           17,
-        'send':         17 // spec
+        'send':         17, // spec
+
+        '18':           18,
+        'elseif':       18, // spec
+        // mnemonics:
+        'conditionals': 18
 
     }[key];
     if (num === undefined) {
@@ -7871,7 +7878,7 @@ Process.prototype.slotSpec = function (num) {
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
     'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars', 'loop', 'receive',
-    'send'][id];
+    'send', 'elseif'][id];
 
     if (spec === undefined) {
         return null;

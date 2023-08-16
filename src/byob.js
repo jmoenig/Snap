@@ -1040,7 +1040,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
             inp.setContents(def.inputNames()[idx]);
         } else if (inp instanceof MultiArgMorph) {
             inp.setIrreplaceable(def.isIrreplaceableInputIdx(idx));
-            if (!['%scriptVars', '%receive', '%send'].includes(
+            if (!['%scriptVars', '%receive', '%send', '%elseif'].includes(
                 inp.elementSpec
             )) {
                 inp.setInfix(def.separatorOfInputIdx(idx));
@@ -3291,7 +3291,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
     } else if (this.type === '%scriptVars') {
         suff = ' \u2191...';
     } else if (this.isMultipleInput() ||
-        ['%receive', '%send'].includes(this.type)
+        ['%receive', '%send', '%elseif'].includes(this.type)
     ) {
         suff = '...';
     } else if (['%cs', '%ca', '%loop'].includes(this.type)) {
@@ -4422,7 +4422,8 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
         }
         menu.addMenu(
             (contains(
-                ['%mlt', '%code', '%clr', '%scriptVars', '%receive', '%send'],
+                ['%mlt', '%code', '%clr', '%scriptVars', '%receive', '%send',
+                    '%elseif'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -4476,6 +4477,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');
     addSpecialSlotType('send data', '%send');
+    addSpecialSlotType('conditionals', '%elseif');
     return menu;
 };
 
