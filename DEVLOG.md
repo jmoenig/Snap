@@ -23,6 +23,7 @@
     * special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
     * metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
     * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
+    * new "snap" category with new "snap_block_selectors" extension primitive
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -46,6 +47,7 @@
 * byob, threads: special "conditionals" type input slots for custom blocks (as in the "if ... else if ..." primitive)
 * byob, threads: metaprogramming support for conditionals type multi-slots (number: 18, spec: "elseif", mnemonic: "conditionals")
 * blocks, byob, threads, store: max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
+* extensions: new "snap" category with new "snap_block_selectors" extension primitive
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot

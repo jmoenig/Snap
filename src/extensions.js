@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-May-09';
+modules.extensions = '2023-August-16';
 
 // Global stuff
 
@@ -231,6 +231,32 @@ var SnapExtensions = {
 */
 
 // Primitives
+
+// meta utils (snap_):
+
+SnapExtensions.primitives.set(
+    'snap_block_selectors',
+    function () {
+        return new List([
+            ['comment'],
+            ['category'],
+            ['type'],
+            ['scope'],
+            ['slots'],
+            ['defaults'],
+            ['menus'],
+            ['editables'],
+            ['replaceables'],
+            ['separators'],
+            ['collapses'],
+            ['expands'],
+            ['initial slots'],
+            ['min slots'],
+            ['max slots'],
+            ['translations']
+        ]);
+    }
+);
 
 // errors & exceptions (err_):
 
