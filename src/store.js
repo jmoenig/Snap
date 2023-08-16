@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-August-11';
+modules.store = '2023-August-16';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1074,7 +1074,9 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                         child.attributes.separator,
                         child.attributes.collapse,
                         child.attributes.expand,
-                        +child.attributes.initial
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
                     ]
                 );
             });
@@ -2347,7 +2349,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$$$$$$>$%</input>',
+                    '<input type="@"$$$$$$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
@@ -2371,6 +2373,16 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     this.declarations.get(decl)[8] ?
                             ' initial="' +
                                 this.declarations.get(decl)[8] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[9] ?
+                            ' min="' +
+                                this.declarations.get(decl)[9] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[10] ?
+                            ' max="' +
+                                this.declarations.get(decl)[10] +
                                 '"'
                             : '',
                     this.declarations.get(decl)[1],

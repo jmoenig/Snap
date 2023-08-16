@@ -22,6 +22,7 @@
     * metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
     * special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
     * metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
+    * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -38,12 +39,13 @@
     * German
 
 ### 2023-08-16
-* special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
-* metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
-* special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
-* metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
-* special "conditionals" type input slots for custom blocks (as in the "if ... else if ..." primitive)
-* metaprogramming support for conditionals type multi-slots (number: 18, spec: "elseif", mnemonic: "conditionals")
+* byob, threads: special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
+* byob, threads: metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
+* byob, threads: special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
+* byob, threads: metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
+* byob, threads: special "conditionals" type input slots for custom blocks (as in the "if ... else if ..." primitive)
+* byob, threads: metaprogramming support for conditionals type multi-slots (number: 18, spec: "elseif", mnemonic: "conditionals")
+* blocks, byob, threads, store: max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
 
 ### 2023-08-14
 * byob: made default value/name label in slot type dialog dynamic for upvar / slot

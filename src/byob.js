@@ -155,6 +155,8 @@ function CustomBlockDefinition(spec, receiver) {
         //      separator,
         //      collapse,
         //      expand,
+        //      initialSlots,
+        //      minSlots,
         //      initialSlots
         //  ]
     this.variableNames = [];
@@ -230,6 +232,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.collapse = slot[6] || null;
                 part.fragment.expand = slot[7] || null;
                 part.fragment.initialSlots = slot[8] || 0;
+                part.fragment.minSlots = slot[9] || 0;
+                part.fragment.maxSlots = slot[10] || 0;
             }
         }
     });
@@ -358,6 +362,16 @@ CustomBlockDefinition.prototype.expandOfInputIdx = function (idx) {
 CustomBlockDefinition.prototype.initialSlotsOfInputIdx = function (idx) {
     var inputName = this.inputNames()[idx];
     return this.initialSlotsOfInput(inputName);
+};
+
+CustomBlockDefinition.prototype.minSlotsOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.minSlotsOfInput(inputName);
+};
+
+CustomBlockDefinition.prototype.maxSlotsOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.maxSlotsOfInput(inputName);
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
@@ -536,6 +550,20 @@ CustomBlockDefinition.prototype.expandOfInput = function (inputName) {
 CustomBlockDefinition.prototype.initialSlotsOfInput = function (inputName) {
     if (this.declarations.has(inputName)) {
         return this.declarations.get(inputName)[8] || null;
+    }
+    return null;
+};
+
+CustomBlockDefinition.prototype.minSlotsOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[9] || null;
+    }
+    return null;
+};
+
+CustomBlockDefinition.prototype.maxSlotsOfInput = function (inputName) {
+    if (this.declarations.has(inputName)) {
+        return this.declarations.get(inputName)[10] || null;
     }
     return null;
 };
@@ -1048,6 +1076,8 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
                 inp.setExpand(def.expandOfInputIdx(idx));
                 inp.setDefaultValue(def.defaultValueOfInputIdx(idx));
                 inp.setInitialSlots(def.initialSlotsOfInputIdx(idx));
+                inp.setMinSlots(def.minSlotsOfInputIdx(idx));
+                inp.setMaxSlots(def.maxSlotsOfInputIdx(idx));
             }
         }
     });
@@ -1324,7 +1354,9 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
                     part.fragment.separator,
                     part.fragment.collapse,
                     part.fragment.expand,
-                    part.fragment.initialSlots
+                    part.fragment.initialSlots,
+                    part.fragment.minSlots,
+                    part.fragment.maxSlots
                 ]
             );
         }
@@ -3267,6 +3299,8 @@ function BlockLabelFragment(labelString) {
     this.collapse = null; // for variadic slots
     this.expand = null; // for variadic slots
     this.initialSlots = 1; // for variadic slots
+    this.minSlots = 0; // for variadic slots, 0 means none
+    this.maxSlots = 0; // for variadic slots, 0 means none
     this.isDeleted = false;
 }
 
@@ -3341,6 +3375,8 @@ BlockLabelFragment.prototype.copy = function () {
     ans.collapse = this.collapse;
     ans.expand = this.expand;
     ans.initialSlots = this.initialSlots;
+    ans.minSlots = this.minSlots;
+    ans.maxSlots = this.maxSlots;
     return ans;
 };
 
@@ -4418,6 +4454,18 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     '...',
                 'editVariadicInitialSlots'
             );
+            menu.addItem(
+                (this.fragment.minSlots ? on : off) +
+                    localize('min slots') +
+                    '...',
+                'editVariadicMinSlots'
+            );
+            menu.addItem(
+                (this.fragment.maxSlots ? on : off) +
+                    localize('max slots') +
+                    '...',
+                'editVariadicMaxSlots'
+            );
             menu.addLine();
         }
         menu.addMenu(
@@ -4609,6 +4657,62 @@ InputSlotDialogMorph.prototype.editVariadicInitialSlots = function () {
         true, // numeric
         0, // slider-min
         3, // slider-max
+        null, // slider-action
+        0 // decimals
+    );
+};
+
+InputSlotDialogMorph.prototype.editVariadicMinSlots = function () {
+    new DialogBoxMorph(
+        this,
+        num => this.fragment.minSlots = Math.min(num, 12),
+        this
+    ).prompt(
+        "Min slots",
+        (this.fragment.minSlots || 0).toString(),
+        this.world(),
+        null, // pic
+        { // choices
+            '0': 0,
+            '1': 1,
+            '2': 2,
+            '3': 3
+        },
+        false, // read-only?
+        true, // numeric
+        0, // slider-min
+        3, // slider-max
+        null, // slider-action
+        0 // decimals
+    );
+};
+
+InputSlotDialogMorph.prototype.editVariadicMaxSlots = function () {
+    new DialogBoxMorph(
+        this,
+        num => this.fragment.maxSlots = num,
+        this
+    ).prompt(
+        "Min slots",
+        (this.fragment.maxSlots || 0).toString(),
+        this.world(),
+        null, // pic
+        { // choices
+            '0': 0,
+            '1': 1,
+            '2': 2,
+            '3': 3,
+            '4': 4,
+            '5': 5,
+            '6': 6,
+            '7': 7,
+            '8': 8,
+            '9': 9,
+        },
+        false, // read-only?
+        true, // numeric
+        0, // slider-min
+        20, // slider-max
         null, // slider-action
         0 // decimals
     );

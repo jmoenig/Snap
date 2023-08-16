@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-11';
+modules.blocks = '2023-August-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -860,6 +860,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'collapses' : ['collapses'],
             'expands' : ['expands'],
             'initial slots' : ['initial slots'],
+            'min slots' : ['min slots'],
+            'max slots' : ['max slots'],
             'translations' : ['translations']
         }
     },
@@ -884,6 +886,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'collapses' : ['collapses'],
             'expands' : ['expands'],
             'initial slots' : ['initial slots'],
+            'min slots' : ['min slots'],
+            'max slots' : ['max slots'],
             'translations' : ['translations']
         }
     },
@@ -13423,7 +13427,7 @@ MultiArgMorph.prototype.init = function (
     this.groupInputs = 1;
     this.initialSlots = isNil(initial) ? 1 : initial ;
     this.minInputs = this.infix ? 0 : initial;
-    this.maxInputs = null;
+    this.maxInputs = 0;
     this.elementSpec = eSpec || null;
     this.labelColor = labelColor || null;
     this.shadowColor = shadowColor || null;
@@ -13668,6 +13672,14 @@ MultiArgMorph.prototype.setInitialSlots = function (initialSlots) {
     this.initialSlots = Math.min(initialSlots, 12);
 };
 
+MultiArgMorph.prototype.setMinSlots = function (minSlots) {
+    this.minInputs = Math.min(minSlots, 12);
+};
+
+MultiArgMorph.prototype.setMaxSlots = function (maxSlots) {
+    this.maxInputs = +maxSlots;
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
@@ -13805,7 +13817,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             label.show();
         }
         arrows.setWidth(dim.x * 2.4 + (this.isStatic ? 0 : listSymbol.width()));
-        if (!isNil(this.maxInputs) && inpCount > this.maxInputs - 1) {
+        if (this.maxInputs && inpCount > this.maxInputs - 1) {
             // hide right arrow
             rightArrow.hide();
             arrows.setWidth(dim.x);

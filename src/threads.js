@@ -7692,6 +7692,46 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             });
         }
         return slots;
+    case 'min slots':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(!value[9]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof MultiArgMorph ?
+                    +slot.minInputs : ''
+                );
+            });
+        }
+        return slots;
+    case 'max slots':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(!value[10]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof MultiArgMorph ?
+                    +slot.maxInputs || 0 : ''
+                );
+            });
+        }
+        return slots;
     case 'translations':
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?
@@ -8153,6 +8193,30 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             var info = def.declarations.get(name),
                 options = val.at(idx + 1);
             info[8] = +options;
+            def.declarations.set(name, info);
+        });
+        break;
+    case 'min slots':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            info[9] = +options;
+            def.declarations.set(name, info);
+        });
+        break;
+    case 'max slots':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            info[10] = +options;
             def.declarations.set(name, info);
         });
         break;
