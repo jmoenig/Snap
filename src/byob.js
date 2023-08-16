@@ -3288,7 +3288,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         );
     } else if (this.type === '%scriptVars') {
         suff = ' \u2191...';
-    } else if (this.isMultipleInput()) {
+    } else if (this.isMultipleInput() || this.type === '%receive') {
         suff = '...';
     } else if (['%cs', '%ca', '%loop'].includes(this.type)) {
         suff = ' \u03BB'; // ' [\u03BB'

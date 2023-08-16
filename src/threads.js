@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-14';
+modules.threads = '2023-August-16';
 
 var ThreadManager;
 var Process;
@@ -7712,6 +7712,10 @@ Process.prototype.slotType = function (spec) {
     // answer a number indicating the shape of a slot represented by its spec.
     // Note: you can also use it to translate mnemonics into slot type numbers
     if (spec instanceof Array) {
+        // first check for a bunch of special cases
+        if (spec[0] === '%rcv') {
+            return 16;
+        }
         return new List(spec.map(each => this.slotType(each)));
     }
 
@@ -7834,7 +7838,12 @@ Process.prototype.slotType = function (spec) {
 
         '15':           15,
         'ca':           15, // spec
-        'loop':         15 // spec
+        'loop':         15, // spec
+
+        '16':           16,
+        'receive':      16, // spec
+        // mnemonics:
+        'receivers':    16
 
     }[key];
     if (num === undefined) {
@@ -7856,7 +7865,8 @@ Process.prototype.slotSpec = function (num) {
     }
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
-    'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars', 'loop'][id];
+    'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars', 'loop', 'receive']
+    [id];
 
     if (spec === undefined) {
         return null;
