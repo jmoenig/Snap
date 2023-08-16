@@ -44,19 +44,35 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains, SpriteMorph*/
+/*global modules, contains, SpriteMorph, isNil*/
 
 /*jshint esversion: 6*/
 
 // Global stuff
 
-modules.locale = '2023-August-14';
+modules.locale = '2023-August-16';
 
 var Localizer;
 var SnapTranslator = new Localizer();
 
 function localize(string) {
     return SnapTranslator.translate(string);
+}
+
+// wrapping a string inside an Array supports lazy translation
+
+function display(data) {
+    if (isNil(data)) {
+        return '';
+    }
+    if (data instanceof Array) {
+        return '«' + localize(data[0].toString()) + '»';
+    }
+    return data.toString();
+}
+
+function option(data) {
+    return data instanceof Array ? data[0] : data;
 }
 
 // Localizer /////////////////////////////////////////////////////////////
