@@ -523,6 +523,47 @@ Process.prototype.reportHTTPRequest = function (method, url, data, headers) {
     this.pushContext();
 };
 
+Process.prototype.doTryCatch = function (code, upvar, handler) {
+    const resetOnce = () => {
+        const f = this.context.doTryCatchState.reset;
+        this.context.doTryCatchState.reset = null;
+        if (f) f();
+    };
+
+    if (!this.context.doTryCatchState) { // first pass through this function
+        const oldIsCatchingErrors = this.isCatchingErrors;
+        const oldHandleError = this.handleError;
+        const thisContext = this.context;
+
+        this.context.doTryCatchState = {
+            reset: () => {
+                this.isCatchingErrors = oldIsCatchingErrors;
+                this.handleError = oldHandleError;
+            },
+        };
+
+        this.isCatchingErrors = true;
+        this.handleError = (error, element) => {
+            while (this.context !== thisContext) this.popContext(); // unwind the stack back to the try/catch context
+            resetOnce();
+
+            this.context.outerContext.variables.addVar(upvar);
+            this.context.outerContext.variables.setVar(upvar, (error.message || error).toString());
+
+            this.pushContext(); // push a sacrificial context so we don't kill the current context
+            this.evaluate(handler, new List([]), true); // this returns right away
+        };
+
+        this.pushContext(); // push a sacrificial context so we don't kill the current context
+        this.evaluate(code, new List([]), true); // this returns right away
+    } else { // second pass through this function
+        resetOnce();
+    }
+};
+Process.prototype.doThrow = function (err) {
+    throw Error(err.toString());
+};
+
 // helps executing async functions in custom js blocks
 // WARN it could be slower than non-promise based approach
 // when calling this function, return only if the return value is not undefined.
