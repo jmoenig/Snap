@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-August-16';
+modules.extensions = '2023-August-17';
 
 // Global stuff
 
@@ -244,6 +244,7 @@ SnapExtensions.primitives.set(
             ['category'],
             ['type'],
             ['scope'],
+            ['selector'],
             ['slots'],
             ['defaults'],
             ['menus'],

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-16';
+modules.byob = '2023-August-17';
 
 // Declarations
 
@@ -165,6 +165,9 @@ function CustomBlockDefinition(spec, receiver) {
     this.codeMapping = null; // generate text code
     this.codeHeader = null; // generate text code
     this.translations = {}; // format: {lang : spec}
+
+    // allow libraries to overload primitives with global custom blocks
+    this.selector = null;
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)

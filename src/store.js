@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-August-16';
+modules.store = '2023-August-17';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1035,6 +1035,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             definition.category = 'other';
         }
         definition.type = child.attributes.type || 'command';
+        definition.selector = child.attributes.selector || null;
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
@@ -2328,7 +2329,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%>' +
+        '<block-definition s="@" type="@" category="@"%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2339,6 +2340,9 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.spec,
         this.type,
         this.category || 'other',
+        this.selector && this.isGlobal ?
+            ' selector="' + this.selector + '"'
+            : '',
         this.isHelper ? ' helper="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-16';
+modules.threads = '2023-August-17';
 
 var ThreadManager;
 var Process;
@@ -7483,6 +7483,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         ) + 1;
     case 'scope':
         return expr.isCustomBlock ? (expr.isGlobal ? 1 : 2) : 0;
+    case 'selector':
+        return expr.isCustomBlock ?
+            (expr.isGlobal ? expr.definition.selector || '' : '')
+            : expr.selector;
     case 'slots':
         if (expr.isCustomBlock) {
             slots = [];
@@ -8060,6 +8064,10 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             context.expression = def.blockInstance();
             context.changed();
         });
+        break;
+    case 'selector':
+        this.assertType(val, 'text');
+        def.selector = val || null;
         break;
     case 'slots':
         this.assertType(val, ['list', 'number', 'text']);

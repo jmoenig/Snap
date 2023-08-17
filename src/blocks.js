@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-16';
+modules.blocks = '2023-August-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -849,6 +849,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'global?': ['global?'],
             'type': ['type'],
             'scope': ['scope'],
+            'selector': ['selector'],
             'slots': ['slots'],
             '~' : null,
             'defaults': ['defaults'],
@@ -875,6 +876,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'type': ['type'],
             'scope': ['scope'],
+            'selector': ['selector'],
             'slots': ['slots'],
             '~' : null,
             'defaults': ['defaults'],

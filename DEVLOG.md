@@ -41,6 +41,9 @@
     * German
 
 ### 2023-08-16
+* blocks, byob, extensions, threades, store: added "selector" attribute to (global) custom block definitions to support overloading primitives
+
+### 2023-08-16
 * byob, threads: special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
 * byob, threads: metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
 * byob, threads: special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
