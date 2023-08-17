@@ -42,6 +42,7 @@
 
 ### 2023-08-16
 * blocks, byob, extensions, threades, store: added "selector" attribute to (global) custom block definitions to support overloading primitives
+* tables: fixed a lazy translation bug for table cells
 
 ### 2023-08-16
 * byob, threads: special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)

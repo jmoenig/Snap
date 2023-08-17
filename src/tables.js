@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2023-August-16';
+modules.tables = '2023-August-17';
 
 var Table;
 var TableCellMorph;
@@ -404,8 +404,8 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             dta
         ).fullImage();
     } else if (dta instanceof Array) {
-        if (isString(dta[0])) {
-            return display(dta);
+        if (dta[0] instanceof Array && isString(dta[0][0])) {
+            return display(dta[0]);
         }
         return this.dataRepresentation(dta[0]);
     } else if (dta instanceof Variable) {
