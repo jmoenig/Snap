@@ -279,7 +279,7 @@ RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     // Update the roles, etc
     if (ownerId) {
         changed = changed || ownerId !== this.ownerId;
-        this.ownerId = ownerId;
+        this.setOwner(ownerId);
     }
 
     // Check if current role name changed...
@@ -306,6 +306,10 @@ RoomMorph.prototype.getRoles = function() {
     return this.children.filter(function(child) {
         return child instanceof RoleMorph;
     });
+};
+
+RoomMorph.prototype.getOccupants = function() {
+    return this.getRoles().flatMap(role => role.users);
 };
 
 RoomMorph.prototype.getRole = function(name) {
@@ -466,8 +470,10 @@ RoomMorph.prototype.render = function(ctx) {
 
 RoomMorph.prototype.setOwner = function(owner) {
     this.ownerId = owner;
-    this.ownerLabel.text = RoomMorph.isSocketUuid(this.ownerId) ?
+    const displayName = RoomMorph.isSocketUuid(this.ownerId) ?
         localize('myself') : this.ownerId;
+
+    this.ownerLabel.text = localize('Owner: ') + displayName;
     this.ownerLabel.rerender();
 };
 
@@ -749,7 +755,7 @@ RoomMorph.prototype.inviteOccupant = function (friend, roleId) {
     if (friend === 'myself') {
         friend = this.ide.cloud.username;
     }
-    this.ide.cloud.inviteOccupant(friend, roleId);
+    this.ide.cloud.sendOccupantInvite(friend, roleId);
 };
 
 RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inviter) {
@@ -761,7 +767,7 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
             const roleData = await this.ide.cloud.getRole(projectId, roleId);
             await this.ide.rawLoadCloudRole(metadata, roleData);
         }
-    ).withKey(projectId + '/' + roleId);
+    ).withKey('invite/' + projectId + '/' + roleId);
 
     const msg = inviter === this.ide.cloud.username ?
         'Would you like to move to "' + projectName + '"?' :
@@ -775,7 +781,7 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
 
     setTimeout(
         () => dialog.destroy(),
-        30000
+        15000
     );
 };
 
@@ -2256,7 +2262,8 @@ CollaboratorDialogMorph.prototype.buildContents = function() {
         this.destroy();
     }, 'Remove');
     this.collaborateButton = this.addButton(() => {
-        this.target.cloud.sendCollaborateRequest(this.listField.selected);
+        const cloud = this.target.cloud;
+        cloud.sendCollaborateRequest(cloud.projectId, this.listField.selected);
         this.destroy();
     }, 'Invite');
     this.uncollaborateButton.hide();
@@ -2359,7 +2366,7 @@ InviteOccupantDialogMorph.prototype.buildContents = function() {
     this.createLabel();
 
     this.inviteButton = this.addButton(() => {
-        this.target.cloud.sendOccupantInvite(this.listField.selected, this.roleId);
+        this.target.room.inviteOccupant(this.listField.selected, this.roleId);
         this.destroy();
     }, 'Invite');
     this.inviteButton.hide();

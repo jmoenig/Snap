@@ -2348,6 +2348,9 @@ ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     if (creatorId === this.id) {
         ide.selectSprite(sprite);
     }
+
+    ide.extensions.onNewSprite(sprite);
+
     this.completeAction(null, sprite);
 };
 
@@ -2393,6 +2396,9 @@ ActionManager.prototype.onRenameSprite = function(spriteId, name) {
     if (ide.currentSprite === sprite) {
         ide.spriteBar.nameField.setContents(name);
     }
+
+    ide.extensions.onRenameSprite(spriteId, name);
+    
     this.completeAction(null, name);
 };
 
@@ -2463,17 +2469,22 @@ ActionManager.prototype.onRemoveCostume = function(id) {
         sprite = this._costumeToOwner[id],
         editor = this.ide().spriteEditor,
         idx = sprite.costumes.asArray().indexOf(costume);
+    const isDragging = () => this.world().hand.children.find(c => c.id === id);
 
 
-    // Check for the wardrobe
-    if (editor instanceof WardrobeMorph) {
-        editor.removeCostumeAt(idx + 1);
-    } else {
-        sprite.costumes.remove(idx + 1);
-    }
+    if (idx > -1) {
+        // Check for the wardrobe
+        if (editor instanceof WardrobeMorph) {
+            editor.removeCostumeAt(idx + 1);
+        } else {
+            sprite.costumes.remove(idx + 1);
+        }
 
-    if (sprite.costume === costume) {
-        sprite.wearCostume(null);
+        if (sprite.costume === costume) {
+            sprite.wearCostume(null);
+        }
+    } else if (isDragging()) {  // Check if it is being dragged by the cursor
+        this.world().hand.children = [];
     }
 
     this.__updateActiveEditor(id);
@@ -2554,6 +2565,7 @@ ActionManager.prototype.onRemoveSound = function(id) {
 
 ActionManager.prototype.onSetStageSize = function(width, height) {
     this.ide().setStageExtent(new Point(width, height));
+    this.ide().extensions.onSetStageSize(width, height);
     this.completeAction();
 };
 

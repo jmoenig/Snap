@@ -540,9 +540,10 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         }
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
             const msg = myself.showMessage('Opening project...');
-            await myself.droppedText(projectData);  // TODO: TEST THIS
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            await myself.droppedText(xml);
             myself.hasChangedMedia = true;
             myself.shield.destroy();
             myself.shield = null;
@@ -558,14 +559,13 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         this.parent.add(this.shield);
         myself.showMessage('Fetching project\nfrom the cloud...');
 
-        // make sure to lowercase the username
         dict = this.cloud.parseDict(loc.hash.substr(7));
-        dict.Username = dict.Username.toLowerCase();
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
             const msg = this.showMessage(localize('Opening project...'));
-            await SnapActions.openProject(projectData);
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            await SnapActions.openProject(xml);
             this.hasChangedMedia = true;
             this.shield.destroy();
             this.shield = null;
@@ -582,8 +582,9 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         dict.Username = dict.Username.toLowerCase();
 
         try {
-            const projectData = await this.cloud.getPublicProject(this.cloud.encodeDict(dict));
-            const blob = new Blob([projectData], {type: 'text/xml'});
+            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
+            const xml = this.getXMLFromProjectData(projectData);
+            const blob = new Blob([xml], {type: 'text/xml'});
             const url = URL.createObjectURL(blob);
 
             // Create temporary link for download
@@ -647,8 +648,9 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
 
         const msg = myself.showMessage('Opening ' + name + ' example...');
         try {
-            const xml = await this.cloud.getProjectByName(this.cloud.username, dict.ProjectName);
-            await myself.rawLoadCloudProject(xml);
+            const metadata = await this.cloud.getProjectMetadataByName(this.cloud.username, dict.ProjectName);
+            const source = new CloudProjectsSource(this);
+            await source.open(metadata);
             applyFlags(dict);
         } catch (err) {
             this.cloudError()(err.message);
@@ -1454,26 +1456,39 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
+    const restoreDroppedMorph = morph => {
+        const situation = world.hand.grabOrigin;
+        if (morph.justDropped) {
+            morph.justDropped();
+        }
+        if (situation.origin.reactToDropOf) {
+            situation.origin.reactToDropOf(morph);
+        }
+    };
     this.palette.reactToDropOf = (droppedMorph, hand) => {
         if (droppedMorph instanceof DialogBoxMorph) {
             this.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
-            droppedMorph.destroy();
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            SnapActions.removeCostume(droppedMorph.object);
-            droppedMorph.perish();
+            SnapActions.removeCostume(droppedMorph.object)
+                .catch(_err => restoreDroppedMorph(droppedMorph))
+                .then(() => droppedMorph.perish());
         } else if (droppedMorph instanceof SoundIconMorph) {
+            restoreDroppedMorph(droppedMorph);
             SnapActions.removeSound(droppedMorph.object);
-            droppedMorph.destroy();
         } else if (droppedMorph instanceof BlockMorph) {
             this.stage.threads.stopAllForBlock(droppedMorph);
             if (droppedMorph.id) {
+                restoreDroppedMorph(droppedMorph);
                 SnapActions.removeBlock(droppedMorph);
+            } else {
+                droppedMorph.perish();
             }
-            droppedMorph.perish();
         }
     };
 
@@ -2544,14 +2559,17 @@ IDE_Morph.prototype.stopFastTracking = function () {
 
 IDE_Morph.prototype.runScripts = function () {
     this.stage.fireGreenFlagEvent();
+    this.extensions.onRunScripts();
 };
 
 IDE_Morph.prototype.togglePauseResume = function () {
     SnapActions.togglePause(this.stage.threads.isPaused());
     if (this.stage.threads.isPaused()) {
         this.stage.threads.resumeAll(this.stage);
+        this.extensions.onResumeAll();
     } else {
         this.stage.threads.pauseAll(this.stage);
+        this.extensions.onPauseAll();
     }
     this.controlBar.pauseButton.refresh();
 };
@@ -3273,22 +3291,19 @@ IDE_Morph.prototype.cloudMenu = function () {
             () => {
                 this.prompt('Author name…', usr => {
                     this.prompt('Project name...', async prj => {
-                        var id = 'Username=' +
-                            encodeURIComponent(usr.toLowerCase()) +
-                            '&ProjectName=' +
-                            encodeURIComponent(prj);
                         this.showMessage(
                             'Fetching project\nfrom the cloud...'
                         );
                         try {
-                            const projectData = await this.cloud.getPublicProject(id);
+                            const msg = this.showMessage('Opening project...');
+                            const projectData = await this.cloud.getProjectByName(usr, prj);
+                            const xml = this.getXMLFromProjectData(projectData);
                             if (!Process.prototype.isCatchingErrors) {
                                 window.open(
-                                    'data:text/xml,' + projectData
+                                    'data:text/xml,' + xml
                                 );
                             }
-                            const msg = this.showMessage('Opening project...');
-                            await SnapActions.openProject(projectData);
+                            await this.droppedText(xml);
                             msg.destroy();
                         } catch (err) {
                             this.cloudError()(err.message);
@@ -6690,13 +6705,12 @@ IDE_Morph.prototype.saveProjectToCloud = async function (name) {
     const contentName = this.room.hasMultipleRoles() ?
         this.room.getCurrentRoleName() : this.room.name;
 
-    if (name) {
-        this.showMessage('Saving ' + contentName + '\nto the cloud...');
-        this.room.name = name;
-        const roleData = this.sockets.getSerializedProject();
-        await this.cloud.saveRole(roleData);
-        this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
-    }
+    this.showMessage('Saving ' + contentName + '\nto the cloud...');
+    this.room.name = name;
+    const roleData = this.sockets.getSerializedProject();
+    const project = await this.cloud.saveRole(roleData);
+    this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
+    return project;
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
@@ -8039,9 +8053,9 @@ function CloudProjectsSource(ide) {
 CloudProjectsSource.prototype.publish = async function(proj, unpublish = false) {
     const cloud = this.ide.cloud;
     if (unpublish) {
-        await cloud.unpublishProject(proj.id);
+        proj.state = await cloud.unpublishProject(proj.id);
     } else {
-        await cloud.publishProject(proj.id);
+        proj.state = await cloud.publishProject(proj.id);
     }
 
     // Set the Shared URL if the project is currently open
@@ -8064,7 +8078,12 @@ CloudProjectsSource.prototype.open = async function(metadata) {
 };
 
 CloudProjectsSource.prototype.list = async function() {
-    return await this.ide.cloud.getProjectList();
+    const projects = await this.ide.cloud.getProjectList();
+    projects.forEach(metadata => {
+      const isPublic = metadata.state === 'Public' || metadata.state === 'PendingApproval';
+      metadata.public = isPublic;
+    });
+  return projects;
 };
 
 CloudProjectsSource.prototype.getPreview = function(project) {
@@ -8091,8 +8110,8 @@ CloudProjectsSource.prototype.save = async function(newProject) {
         const keys = ['owner', 'name', 'roles', 'saveState'];
         const projectCopy = utils.pick(projectData, keys);
         projectCopy.roles = Object.values(projectCopy.roles);
-        await this.ide.cloud.importProject(projectCopy);
-        this.ide.updateUrlQueryString();
+        const metadata = await this.ide.cloud.importProject(projectCopy);
+        this.ide.updateUrlQueryString(metadata);
     }
     const roleData = this.ide.sockets.getSerializedProject();
     await this.ide.cloud.saveRole(roleData);
@@ -8197,7 +8216,7 @@ CloudProjectExamples.prototype.getContent = function(project) {
 CloudProjectExamples.prototype.open = async function(project) {
     const xml = await this.getContent(project);
     await this.ide.droppedText(xml);
-    this.ide.updateUrlQueryString(project.name, false, true);
+    this.ide.updateUrlQueryString(project, true);
 };
 
 CloudProjectExamples.prototype.list = function() {
@@ -8343,7 +8362,7 @@ ProjectDialogMorph.prototype.shareItem = async function () {
     const project = await ProjectDialogMorph.uber.shareItem.call(this);
     if (project) {
         if (this.isCurrentProject(project)) {
-            this.ide.updateUrlQueryString(project.name, true);
+            this.ide.updateUrlQueryString(project);
         }
     }
 };
@@ -8356,7 +8375,7 @@ ProjectDialogMorph.prototype.unshareItem = async function () {
     const project = await ProjectDialogMorph.uber.unshareItem.call(this);
     if (project) {
         if (this.isCurrentProject(project)) {
-            this.ide.updateUrlQueryString();
+            this.ide.updateUrlQueryString(project);
         }
     }
 };
@@ -9094,10 +9113,10 @@ CostumeIconMorph.prototype.prepareToBeGrabbed = function () {
 CostumeIconMorph.prototype.localRemoveCostume = function () {
     // Only remove the costume locally for the drag
     var wardrobe = this.parentThatIsA(WardrobeMorph),
-        idx = this.parent.children.indexOf(this),
-        ide = this.parentThatIsA(IDE_Morph);
+        ide = this.parentThatIsA(IDE_Morph),
+        idx = ide.currentSprite.costumes.indexOf(this.object);
 
-    wardrobe.removeCostumeAt(idx - 2);
+    wardrobe.removeCostumeAt(idx);
     if (ide.currentSprite.costume === this.object) {
         ide.currentSprite.wearCostume(null);
     }

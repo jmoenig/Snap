@@ -1,5 +1,5 @@
 // start a static file server w/ an extra route for index.html
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from "url";
 import fs from "fs";
 import http from "http";
 import nodeStatic from "node-static";
@@ -7,39 +7,40 @@ import fetch from "node-fetch";
 import dot from "dot";
 import path from "path";
 const port = process.env.PORT ? +process.env.PORT : 8000;
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const indexTpl = dot.template(
-  fs.readFileSync(path.join(__dirname, "..", "index.dot"))
+  fs.readFileSync(path.join(__dirname, "..", "index.dot")),
 );
 
 const { CLOUD_URL = "https://cloud.netsblox.org", ENV = "dev" } = process.env;
 const isDevMode = ENV !== "production";
+writeCloudFile(CLOUD_URL);
 
 const file = new nodeStatic.Server(path.join(__dirname, ".."));
 const server = http.createServer(async (req, res) => {
-  const [url, queryString=''] = req.url
+  const [url, queryString = ""] = req.url
     .split("?")
-    .map(url => url.replace(/#.*$/, ""));
+    .map((url) => url.replace(/#.*$/, ""));
   const isIndexHtml = url === "/" || url === "/index.html";
   console.log(req.url);
   if (isIndexHtml) {
     // dynamically generate the index.html file
     const query = Object.fromEntries(
-      queryString.split("&").map(chunk => {
+      queryString.split("&").map((chunk) => {
         const [key, value] = chunk.split("=");
         return [key.toLowerCase(), decodeURIComponent(value)];
-      })
+      }),
     );
     const metaInfo = {
       title: "NetsBlox",
       description: "Add project notes here...",
       cloud: CLOUD_URL,
-      isDevMode
+      isDevMode,
     };
 
     if (query.action === "present") {
-      const url =
-        CLOUD_URL + `/projects/user/${query.owner}/${query.name}/metadata`;
+      const url = CLOUD_URL +
+        `/projects/user/${query.owner}/${query.name}/metadata`;
       const response = await fetch(url);
       if (response.status < 399) {
         const metadata = await response.json();
@@ -48,7 +49,7 @@ const server = http.createServer(async (req, res) => {
         metaInfo.image = {
           url: CLOUD_URL + `/projects/id/${metadata.id}/thumbnail`,
           width: 640,
-          height: 480
+          height: 480,
         };
       }
     } else if (query.action === "example") {
@@ -73,4 +74,9 @@ function addScraperSettings(userAgent, metaInfo) {
   if (userAgent.includes("facebookexternalhit") || userAgent === "Facebot") {
     metaInfo.image.url += "?aspectRatio=1.91";
   }
+}
+
+async function writeCloudFile(cloud) {
+  const configPath = path.join(__dirname, "..", "cloud.txt");
+  await fs.promises.writeFile(configPath, cloud);
 }

@@ -2,6 +2,7 @@
 describe('extensions', function() {
     let TestExtension;
     before(() => {
+        driver.reset();
         const {NetsBloxExtensions,Extension,Color,SpriteMorph,StageMorph} = driver.globals();
 
         TestExtension = function() {};
@@ -244,6 +245,132 @@ describe('extensions', function() {
             };
             await driver.moveToRole('testRole');
             await deferred.promise;
+        });
+    });
+
+    describe('onRunScripts', function() {
+        it('should call function on green flag', async function() {
+            const {utils} = driver.globals();
+            const deferred = utils.defer();
+            TestExtension.prototype.onRunScripts = () => {
+                delete TestExtension.prototype.onRunScripts;
+                deferred.resolve();
+            };
+            driver.click(driver.ide().controlBar.startButton);
+            await deferred.promise;
+        });
+    });
+
+    describe('onStopAllScripts', function() {
+        it('should call function on stop button', async function() {
+            const {utils} = driver.globals();
+            const deferred = utils.defer();
+            TestExtension.prototype.onStopAllScripts = () => {
+                delete TestExtension.prototype.onStopAllScripts;
+                deferred.resolve();
+            };
+            driver.click(driver.ide().controlBar.stopButton);
+            await deferred.promise;
+        });
+    });
+
+    describe('onPauseAll', function() {
+        it('should call function on pause button', async function() {
+            const {utils} = driver.globals();
+            let deferred = utils.defer();
+            TestExtension.prototype.onPauseAll = () => {
+                delete TestExtension.prototype.onPauseAll;
+                deferred.resolve();
+            };
+            driver.click(driver.ide().controlBar.pauseButton);
+            await deferred.promise;
+        });
+
+        it('should call function on pause block', async function() {
+            driver.reset();
+            driver.selectTab('scripts');
+
+            const {utils, Point} = driver.globals();
+            deferred = utils.defer();
+            TestExtension.prototype.onPauseAll = () => {
+                delete TestExtension.prototype.onPauseAll;
+                deferred.resolve();
+            };
+            let block = await driver.addBlock("doPauseAll", new Point(300, 300));
+            await driver.sleep(100);
+            driver.click(block);
+
+            await deferred.promise;
+        });
+    });
+
+    describe('onResumeAll', function() {
+        it('should call function on resume button', async function() {
+            driver.reset();
+            driver.selectTab('scripts');
+            
+            const {utils, Point} = driver.globals();
+            const deferred = utils.defer();
+
+            let block = await driver.addBlock("doPauseAll", new Point(300, 300));
+            await driver.sleep(100);
+            driver.click(block);
+            await driver.sleep(100);
+
+            TestExtension.prototype.onResumeAll = () => {
+                delete TestExtension.prototype.onResumeAll;
+                deferred.resolve();
+            };
+            driver.click(driver.ide().controlBar.pauseButton);
+            await deferred.promise;
+        });
+    });
+
+    describe('onNewSprite', function() {
+        it('should call function on new sprite button', async function() {
+            const {utils} = driver.globals();
+            const deferred = utils.defer();
+            TestExtension.prototype.onNewSprite = () => {
+                delete TestExtension.prototype.onNewSprite;
+                deferred.resolve();
+            };
+            driver.click(driver.ide().corralBar.children[0]);
+            await deferred.promise;
+        });
+    });
+
+    describe('onRenameSprite', function() {
+        it('should call function on rename sprite', async function() {
+            const {utils, SnapActions} = driver.globals();
+            const deferred = utils.defer();
+            TestExtension.prototype.onRenameSprite = (spriteId, name) => {
+                delete TestExtension.prototype.onRenameSprite;
+                deferred.resolve(name);
+            };
+            SnapActions.renameSprite(driver.ide().currentSprite, "newName");
+            let name = await deferred.promise;
+            assert(name == "newName");
+        });
+    });
+
+    describe('onSetStageSize', function() {
+        it('should call function on pause button', async function() {
+            const {utils} = driver.globals();
+            const deferred = utils.defer();
+            TestExtension.prototype.onSetStageSize = (w, h) => {
+                delete TestExtension.prototype.onSetStageSize;
+                deferred.resolve([w, h]);
+            };
+            driver.click(driver.ide().controlBar.settingsButton);
+            driver.click(driver.dialog().children[4]);
+            driver.click(driver.dialog().allEntryFields()[0]);
+            driver.keys("123");
+            driver.click(driver.dialog().allEntryFields()[1]);
+            driver.keys("456");
+            driver.dialog().ok();
+            
+            let [w, h] = await deferred.promise;
+            assert(w == 123 && h == 456);
         });
     });
 });

@@ -59,7 +59,8 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.reportRPCError = {
         type: 'reporter',
         category: 'network',
-        spec: 'error'
+        spec: 'error',
+        help: 'Get the most recent error from an RPC.\nIf the most recent RPC was successful, an empty result is returned instead.\nThis can be used after an RPC to detect failures and correct them if needed.'
     };
 
     // Network Messages
@@ -73,7 +74,8 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.doSocketResponse = {
         type: 'command',
         category: 'network',
-        spec: 'send response %s'
+        spec: 'send response %s',
+        help: 'This block can be used from within a red When I Receive block from the Network tab.\nThis allows you to send a response back to a "send msg and wait" block that sent you the current message.'
     };
 
     SpriteMorph.prototype.blocks.doSocketMessage = {
@@ -85,7 +87,8 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.receiveSocketMessage = {
         type: 'hat',
         category: 'network',
-        spec: 'when I receive %msgOutput'
+        spec: 'when I receive %msgOutput',
+        help: 'This hat block allows you to run code when you receive a NetsBlox message over the internet.\nIn the dropdown, you can set what message type you want to receive.\nTo make a new message type, use the "Make a message type" button at the bottom of the Network tab of blocks.'
     };
 
     // Role Reporters
@@ -105,32 +108,37 @@ SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks.reportLatitude = {
         type: 'reporter',
         category: 'sensing',
-        spec: 'my latitude'
+        spec: 'my latitude',
+        help: 'Reports an approximation of the latitude of your physical device/computer.'
     };
 
     SpriteMorph.prototype.blocks.reportLongitude = {
         type: 'reporter',
         category: 'sensing',
-        spec: 'my longitude'
+        spec: 'my longitude',
+        help: 'Reports an approximation of the longitude of your physical device/computer.'
     };
 
     // Stage info
     SpriteMorph.prototype.blocks.reportStageWidth = {
         type: 'reporter',
         category: 'sensing',
-        spec: 'stage width'
+        spec: 'stage width',
+        help: 'Reports the full width of the stage.'
     };
 
     SpriteMorph.prototype.blocks.reportStageHeight = {
         type: 'reporter',
         category: 'sensing',
-        spec: 'stage height'
+        spec: 'stage height',
+        help: 'Reports the full height of the stage.'
     };
 
     SpriteMorph.prototype.blocks.reportImageOfObject = {
         type: 'reporter',
         category: 'sensing',
         spec: 'image of %self',
+        help: 'Gets an image of the specified object.\nIf the Stage is selected, this gets an image of the entire stage, including sprites and pen drawings.'
     };
 
     SpriteMorph.prototype.blocks.reportUsername = {

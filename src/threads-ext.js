@@ -12,7 +12,7 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents;
 
     // check if collaborating. If so, show a message but don't send
-    const isCollaborating = SnapActions.isCollaborating() && !SnapActions.isLeader;
+    const isCollaborating = SnapActions.isCollaborating();
     if (isCollaborating && !ide.allowMsgsWhileCollaborating) {
         const isUsingDefaultMsgSendingOption = ide.allowMsgsWhileCollaborating === null;
         if (isUsingDefaultMsgSendingOption) {
@@ -40,18 +40,17 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var dstId = targetRole instanceof List ? targetRole.asArray() : [targetRole];
+    var dstId = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
     function resolveAddress(addr) {
         if (addr.includes('@')) {
             return [addr];
         }
 
         let targets;
-        if (addr instanceof Array) {
+        if (addr === 'everyone in room') {
             targets = ide.room.getRoleNames();
-            if (addr[0] === 'others in room') {
-                targets = targets.filter(name => name !== ide.projectName);
-            }
+        } else if (addr === 'others in room') {
+            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
         } else {
             targets = [ide.projectName];
         }
