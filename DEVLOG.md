@@ -25,6 +25,7 @@
     * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
     * new "snap" category with new "snap_block_selectors" extension primitive
     * lazy translation support for data
+    * bootstrap global custom blocks as primitives
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -42,6 +43,7 @@
 
 ### 2023-08-18
 * byob: added GUI method for editing the "selector" attribute of global custom block definitions
+* byob, objects: bootstrap global custom blocks as primitives
 
 ### 2023-08-17
 * blocks, byob, extensions, threades, store: added "selector" attribute to (global) custom block definitions to support overloading primitives

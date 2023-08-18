@@ -90,11 +90,12 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display*/
+embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
+CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-16';
+modules.objects = '2023-August-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -2507,6 +2508,14 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     migration = this.blockMigrations[selector];
     info = this.blocks[migration ? migration.selector : selector];
     if (!info) {return null; }
+    if (info instanceof CustomBlockDefinition) {
+        // overload primitive with global custom block
+        block = info.blockInstance();
+        if (setDefaults) {
+            block.refreshDefaults(info);
+        }
+        return block;
+    }
     block = info.type === 'command' ? new CommandBlockMorph()
         : info.type === 'hat' ? new HatBlockMorph()
             : info.type === 'ring' ? new RingMorph()

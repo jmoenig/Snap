@@ -958,6 +958,69 @@ CustomBlockDefinition.prototype.dataDependencies = function () {
     return names.sort();
 };
 
+// CustomBlockDefinition bootstrapping - overload primitives
+
+CustomBlockDefinition.prototype.bootstrap = function (actor) {
+    var rcvr = actor || this.receiver,
+        stage, ide, idx;
+    if (this.isGlobal && this.selector) {
+        SpriteMorph.prototype.blocks[this.selector] = this;
+        if (rcvr) {
+            stage = rcvr.parentThatIsA(StageMorph);
+            idx = stage.globalBlocks.indexOf(this);
+            if (idx !== -1) {
+                stage.globalBlocks.splice(idx, 1);
+            }
+            ide = rcvr.parentThatIsA(IDE_Morph);
+            if (ide) {
+                // ide.flushPaletteCache();
+                ide.flushBlocksCache();
+                ide.categories.refreshEmpty();
+                ide.refreshPalette(true);
+            }
+            rcvr.recordUserEdit(
+                'palette',
+                'custom block',
+                'bootstrap',
+                this.selector
+            );
+        }
+    }
+};
+
+CustomBlockDefinition.prototype.unBootstrap = function (actor) {
+    var rcvr = actor || this.receiver,
+        stage, ide, dict;
+    if (this.isBootstrapped()) {
+        dict = SpriteMorph.prototype.blocks;
+        SpriteMorph.prototype.initBlocks();
+        dict[this.selector] = SpriteMorph.prototype.blocks[this.selector];
+        SpriteMorph.prototype.blocks = dict;
+        if (rcvr) {
+            stage = rcvr.parentThatIsA(StageMorph);
+            stage.globalBlocks.push(this);
+            ide = rcvr.parentThatIsA(IDE_Morph);
+            if (ide) {
+                // ide.flushPaletteCache();
+                ide.flushBlocksCache();
+                ide.categories.refreshEmpty();
+                ide.refreshPalette(true);
+            }
+            rcvr.recordUserEdit(
+                'palette',
+                'custom block',
+                'un-bootstrap',
+                this.selector
+            );
+        }
+    }
+};
+
+CustomBlockDefinition.prototype.isBootstrapped = function () {
+    return this.isGlobal && this.selector &&
+        SpriteMorph.prototype.blocks[this.selector] === this;
+};
+
 // CustomCommandBlockMorph /////////////////////////////////////////////
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:
@@ -1483,7 +1546,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
         rcvr = this.scriptTarget(),
         myself = this,
-        // shiftClicked = this.world().currentKey === 16,
+        shiftClicked = this.world().currentKey === 16,
         dlg, menu;
 
     function addOption(label, toggle, test, onHint, offHint) {
@@ -1623,6 +1686,21 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         }
         if (this.isTemplate) { // inside the palette
             if (this.isGlobal) {
+                if (shiftClicked) {
+                    if (this.definition.isBootstrapped()) {
+                        menu.addItem(
+                            "un-bootstrap",
+                            () => this.definition.unBootstrap(rcvr)
+                        );
+                    } else if (this.definition.selector) {
+                        menu.addItem(
+                            "bootstrap",
+                            () => this.definition.bootstrap(rcvr),
+                            'replace this corresponding primitive',
+                            new Color(100, 0, 0)
+                        );
+                    }
+                }
                 menu.addItem(
                     "delete block definition...",
                     'deleteBlockDefinition'
@@ -3014,7 +3092,9 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
         this.definition.isHelper = head.isHelper;
-        this.definition.selector = head.blockSelector;
+        if (head.blockSelector && this.definition.isGlobal) {
+            this.definition.selector = head.blockSelector;
+        }
         if (head.comment) {
             this.definition.comment = head.comment.fullCopy();
             this.definition.comment.block = true; // serialize in short form
