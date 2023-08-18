@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-17';
+modules.byob = '2023-August-18';
 
 // Declarations
 
@@ -1589,6 +1589,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     }
                 );
             }
+            menu.addItem(
+                "selector...",
+                () => hat.editSelector(),
+                "overload a primitive"
+            );
         }
         addOption(
             'in palette',
@@ -3009,6 +3014,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
         this.definition.isHelper = head.isHelper;
+        this.definition.selector = head.blockSelector;
         if (head.comment) {
             this.definition.comment = head.comment.fullCopy();
             this.definition.comment.block = true; // serialize in short form
@@ -3201,6 +3207,8 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     this.blockCategory = definition ? definition.category : null;
     this.type = definition ? definition.type : null;
     this.isHelper = definition ? definition.isHelper : false;
+    this.blockSelector = definition && definition.isGlobal ?
+        definition.selector : null;
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
@@ -3285,6 +3293,24 @@ PrototypeHatBlockMorph.prototype.enableBlockVars = function (choice) {
     }
     this.replaceInput(this.parts()[0], prot);
     this.spec = null;
+};
+
+// PrototypeHatBlockMorph overloading a primitive with a custom block
+
+PrototypeHatBlockMorph.prototype.editSelector = function () {
+    var block = this.definition.blockInstance();
+    block.addShadow(new Point(3, 3));
+
+    new DialogBoxMorph(
+        this,
+        str => this.blockSelector = str,
+        this
+    ).prompt(
+        "Selector",
+        this.blockSelector || '',
+        this.world(),
+        block.doWithAlpha(1, () => block.fullImage()),
+    );
 };
 
 // BlockLabelFragment //////////////////////////////////////////////////

@@ -40,7 +40,10 @@
 * **Translation Updates:**
     * German
 
-### 2023-08-16
+### 2023-08-18
+* byob: added GUI method for editing the "selector" attribute of global custom block definitions
+
+### 2023-08-17
 * blocks, byob, extensions, threades, store: added "selector" attribute to (global) custom block definitions to support overloading primitives
 * tables: fixed a lazy translation bug for table cells
 
