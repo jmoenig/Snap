@@ -3180,6 +3180,7 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
 BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
+        ide = this.parentThatIsA(IDE_Morph),
         myself = this,
         hasLine = false,
         proc = this.activeProcess(),
@@ -3471,7 +3472,6 @@ BlockMorph.prototype.userMenu = function () {
         "duplicate",
         () => {
             var dup = this.fullCopy(),
-                ide = this.parentThatIsA(IDE_Morph),
                 blockEditor = this.parentThatIsA(BlockEditorMorph);
             dup.pickUp(world);
             // register the drop-origin, so the block can
@@ -3557,6 +3557,36 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    menu.addLine();
+    if ((this instanceof CommandBlockMorph)) {
+        menu.addItem(
+            'copy all',
+            () => {
+                ide.scene.clipboard = this.fullCopy()
+            },
+            'Send this block and all\nblocks underneath to the clipboard.'
+        );
+    }
+    menu.addItem(
+        'copy block',
+        () => {
+            ide.scene.clipboard = this.fullCopy()
+            var nb = ide.scene.clipboard.nextBlock()
+            if (nb) {
+                nb.destroy();
+            }
+        },
+        'Send this block to the clipboard.'
+    );
+    menu.addItem(
+        'cut block',
+        () => {
+            ide.scene.clipboard = this.fullCopy()
+
+            this.userDestroy()
+        },
+        'Send this block to the\nclipboard and delete this block.'
+    );
     menu.addLine();
     menu.addItem(
         "script pic...",
@@ -8625,6 +8655,30 @@ ScriptsMorph.prototype.userMenu = function () {
                 )
             );
         }
+    }
+    if (ide.scene.clipboard) {
+        menu.addLine();
+        menu.addItem(
+            "paste",
+            () => {
+                var cpy = ide.scene.clipboard.fullCopy(),
+                    blockEditor = this.parentThatIsA(BlockEditorMorph);
+                cpy.pickUp(world);
+                // register the drop-origin, so the block can
+                // slide back to its former situation if dropped
+                // somewhere where it gets rejected
+                if (!ide && blockEditor) {
+                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
+                }
+                if (ide) {
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+            },
+            'Retrieve script\nfrom clipboard'
+        );
     }
     return menu;
 };
@@ -15460,6 +15514,23 @@ CommentMorph.prototype.userMenu = function () {
             );
         },
         'save a picture\nof this comment'
+    );
+    menu.addLine();
+    menu.addItem(
+        'copy comment',
+        () => {
+            ide.scene.clipboard = this.fullCopy()
+        },
+        'Send this comment\nto the clipboard'
+    );
+    menu.addItem(
+        'cut comment',
+        () => {
+            ide.scene.clipboard = this.fullCopy()
+
+            this.userDestroy()
+        },
+        'Send this comment to the\nclipboard and delete this comment'
     );
     return menu;
 };

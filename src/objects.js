@@ -9231,6 +9231,18 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
          return;
     }
+    if (evt === 'ctrl shift c' || (evt === 'ctrl c')) {
+        ide.userCopy(evt);
+        return;
+    }
+    if (evt === 'ctrl x') {
+        ide.userCut(evt);
+        return;
+    }
+    if (evt === 'ctrl v' || (evt === 'ctrl shift v')) {
+        ide.userPaste();
+        return;
+    }
     if (evt === 'ctrl n') {
         if (!ide.isAppMode) {ide.createNewProject(); }
         return;
