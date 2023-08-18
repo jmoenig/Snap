@@ -44,6 +44,7 @@
 ### 2023-08-18
 * byob: added GUI method for editing the "selector" attribute of global custom block definitions
 * byob, objects: bootstrap global custom blocks as primitives
+* byob: added graphical drop-down menu for "selector" setting in the prototype-hat-block
 
 ### 2023-08-17
 * blocks, byob, extensions, threades, store: added "selector" attribute to (global) custom block definitions to support overloading primitives

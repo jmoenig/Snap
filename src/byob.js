@@ -105,7 +105,7 @@ ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
-ArgLabelMorph, embedMetadataPNG, ArgMorph*/
+ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 /*jshint esversion: 11*/
 
@@ -3390,7 +3390,24 @@ PrototypeHatBlockMorph.prototype.editSelector = function () {
         this.blockSelector || '',
         this.world(),
         block.doWithAlpha(1, () => block.fullImage()),
+        this.selectorMenu
     );
+};
+
+PrototypeHatBlockMorph.prototype.selectorMenu = function () {
+    var lst = [];
+    Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
+        var block = SpriteMorph.prototype.blockForSelector(sel);
+        if (!(block instanceof HatBlockMorph) &&
+                !(block instanceof RingMorph)) {
+            block.addShadow(new Point(3, 3));
+            lst.push([
+                [block.doWithAlpha(1, () => block.fullImage()), sel],
+                sel
+            ]);
+        }
+    });
+    return lst;
 };
 
 // BlockLabelFragment //////////////////////////////////////////////////
