@@ -3562,7 +3562,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             'copy all',
             () => {
-                ide.scene.clipboard = this.fullCopy()
+                ide.scene.clipboard = this.fullCopy();
             },
             'Send this block and all\nblocks underneath to the clipboard.'
         );
@@ -3570,8 +3570,8 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         'copy block',
         () => {
-            ide.scene.clipboard = this.fullCopy()
-            var nb = ide.scene.clipboard.nextBlock()
+            ide.scene.clipboard = this.fullCopy();
+            var nb = ide.scene.clipboard.nextBlock();
             if (nb) {
                 nb.destroy();
             }
@@ -3581,9 +3581,13 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         'cut block',
         () => {
-            ide.scene.clipboard = this.fullCopy()
-
-            this.userDestroy()
+            ide.scene.clipboard = this.fullCopy();
+            var nb = ide.scene.clipboard.nextBlock();
+            if (nb) {
+                nb.destroy();
+            }
+            
+            this.userDestroy();
         },
         'Send this block to the\nclipboard and delete this block.'
     );

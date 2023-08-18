@@ -3999,6 +3999,10 @@ IDE_Morph.prototype.userCut = function (event) {
     
     if (underHand && !underHand.isTemplate) {
         this.scene.clipboard = underHand.fullCopy();
+        var nb = this.scene.clipboard.nextBlock();
+        if (nb) {
+            nb.destroy();
+        }
         underHand.userDestroy();
     }
 }
