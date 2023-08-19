@@ -41,6 +41,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-08-19
+* store: treat a bootstrapped custom block as if it were a built-in primitive
+
 ### 2023-08-18
 * byob: added GUI method for editing the "selector" attribute of global custom block definitions
 * byob, objects: bootstrap global custom blocks as primitives

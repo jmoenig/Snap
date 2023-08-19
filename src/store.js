@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-August-17';
+modules.store = '2023-August-19';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2294,6 +2294,16 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
+    if (this.isGlobal && this.definition.isBootstrapped()) {
+        // treat a bootstrapped custom block as if it were a primitive
+        return serializer.format(
+            '<block s="@">%%</block>',
+            this.definition.selector,
+            serializer.store(this.inputs()),
+            this.comment ? this.comment.toXML(serializer) : ''
+        );
+    }
+
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
