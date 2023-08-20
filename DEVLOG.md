@@ -41,6 +41,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-08-20
+* objects: tweaked bootstrapped custom block palette templates to be undraggable
+
 ### 2023-08-19
 * store: treat a bootstrapped custom block as if it were a built-in primitive
 

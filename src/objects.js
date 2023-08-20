@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-18';
+modules.objects = '2023-August-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -2584,6 +2584,7 @@ SpriteMorph.prototype.blockTemplates = function (
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
+        newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         if (isGhosted) {newBlock.ghost(); }
         return newBlock;
@@ -9507,6 +9508,7 @@ StageMorph.prototype.blockTemplates = function (
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
+        newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         return newBlock;
     }
