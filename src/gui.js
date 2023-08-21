@@ -5333,31 +5333,43 @@ IDE_Morph.prototype.rawOpenCloudDataString = async function (model, parsed) {
     if (Process.prototype.isCatchingErrors) {
         try {
             model = parsed ? model : this.serializer.parse(model);
-            this.serializer.loadMediaModel(model.childNamed('media'));
-            const projectModel = await this.serializer.loadProjectModel(
-                model.childNamed('project'),
-                this,
-                model.attributes.remixID
-            );
-            project = this.serializer.openProject(
-                projectModel,
-                this
-            );
+            const mediaModel = model.childNamed('media');
+            if (mediaModel) {
+              this.serializer.loadMediaModel(mediaModel);
+            }
+            const projectData = model.childNamed('project');
+            if (projectData) {
+              const projectModel = await this.serializer.loadProjectModel(
+                  projectData,
+                  this,
+                  model.attributes.remixID
+              );
+              project = this.serializer.openProject(
+                  projectModel,
+                  this
+              );
+            }
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
         model = parsed ? model : this.serializer.parse(model);
-        this.serializer.loadMediaModel(model.childNamed('media'));
-        const projectModel = await this.serializer.loadProjectModel(
-            model.childNamed('project'),
-            this,
-            model.attributes.remixID
-        );
-        project = this.serializer.openProject(
-            projectModel,
-            this
-        );
+        const mediaModel = model.childNamed('media');
+        if (mediaModel) {
+          this.serializer.loadMediaModel(mediaModel);
+        }
+        const projectData = model.childNamed('project');
+        if (projectData) {
+          const projectModel = await this.serializer.loadProjectModel(
+              projectData,
+              this,
+              model.attributes.remixID
+          );
+          project = this.serializer.openProject(
+              projectModel,
+              this
+          );
+        }
     }
     this.stopFastTracking();
     return project;
@@ -8096,7 +8108,6 @@ CloudProjectsSource.prototype.getPreview = function(project) {
 };
 
 CloudProjectsSource.prototype.save = async function(newProject) {
-    const deferred = utils.defer();
     const isSaveAs = newProject.name !== this.ide.room.name;
 
     // If it is overwriting an existing
