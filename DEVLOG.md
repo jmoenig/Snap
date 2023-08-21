@@ -26,6 +26,7 @@
     * new "snap" category with new "snap_block_selectors" extension primitive
     * lazy translation support for data
     * bootstrap global custom blocks as primitives
+    * new "bootstrap" extension primitive
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -40,6 +41,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-08-20
+* extensions: new "bootstrap" extension primitive
 
 ### 2023-08-20
 * objects: tweaked bootstrapped custom block palette templates to be undraggable
