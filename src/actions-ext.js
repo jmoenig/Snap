@@ -127,24 +127,7 @@ SnapActions.submitIfAllowed = function(event) {
             myself.submitIfAllowed(event);
         });
     } else if (!room.isEditable()) {
-        ide.confirm(
-            'Edits cannot be made on projects by guests.\n\nWould ' +
-            'you like to request to be made a collaborator?',
-            'Request Collaborator Privileges?',
-            function () {
-                const ownerIds = room.getOccupants()
-                    .filter(occupant => room.isOwner(occupant.name))
-                    .map(occupant => occupant.id);
-
-                ide.sockets.sendIDEMessage({
-                    type: 'permission-elevation-request',
-                    id: `elevate-${Date.now()}`,
-                    projectId: ide.cloud.projectId,
-                    clients: ownerIds,
-                    username: ide.cloud.username
-                }, ...ownerIds);
-            }
-        );
+        ide.tryElevatePermissions(ide.cloud.projectId, room);
     } else {
         ActionManager.prototype.submitIfAllowed.call(this, event);
     }
