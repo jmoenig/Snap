@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-20';
+modules.objects = '2023-August-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1826,17 +1826,6 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             inputs: [['length']],
             offset: 1
         }
-    /*
-        doIf: {
-            selector: 'doVariadicIf'
-        },
-        doIfElse: {
-            selector: 'doVariadicIf',
-            // variadic: true,
-            expand: [2, 2]
-        }
-    */
-
     };
 };
 
