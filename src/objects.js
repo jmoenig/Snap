@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-21';
+modules.objects = '2023-August-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -1649,6 +1649,16 @@ SpriteMorph.prototype.initBlocks = function () {
 };
 
 SpriteMorph.prototype.initBlocks();
+
+SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzler) {
+    var serializer = srzler || new SnapSerializer();
+    Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
+        var dta = SpriteMorph.prototype.blocks[selector];
+        if (dta instanceof CustomBlockDefinition) {
+            dta.refresh(serializer);
+        }
+    });
+};
 
 SpriteMorph.prototype.initBlockMigrations = function () {
     // change blocks in existing projects to their updated version

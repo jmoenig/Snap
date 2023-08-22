@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-21';
+modules.byob = '2023-August-22';
 
 // Declarations
 
@@ -972,6 +972,7 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
                 stage.globalBlocks.splice(idx, 1);
             }
             ide = rcvr.parentThatIsA(IDE_Morph);
+            SpriteMorph.prototype.refreshBoostrappedBlocks(ide?.serializer);
             if (ide) {
                 ide.flushBlocksCache();
                 ide.categories.refreshEmpty();

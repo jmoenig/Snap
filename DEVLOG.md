@@ -42,7 +42,10 @@
 * **Translation Updates:**
     * German
 
-### 2023-08-20
+### 2023-08-22
+* objects, byob, store: refresh standard library custom block definitions 
+
+### 2023-08-21
 * extensions: new "bootstrap" extension primitive
 * extensions: new "un-bootstrap" extension primitive
 

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-August-19';
+modules.store = '2023-August-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2412,6 +2412,14 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     '<scripts>' + encodeScripts(this.scripts) + '</scripts>'
                         : ''
     );
+};
+
+CustomBlockDefinition.prototype.refresh = function (serializer) {
+    if (this.body) {
+        this.body.expression = serializer.loadScript(
+            serializer.parse(serializer.store(this.body.expression))
+        );
+    }
 };
 
 // Scripts - Inputs
