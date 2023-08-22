@@ -1650,8 +1650,8 @@ SpriteMorph.prototype.initBlocks = function () {
 
 SpriteMorph.prototype.initBlocks();
 
-SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzler) {
-    var serializer = srzler || new SnapSerializer();
+SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
+    var serializer = srzlr || new SnapSerializer();
     Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
         var dta = SpriteMorph.prototype.blocks[selector];
         if (dta instanceof CustomBlockDefinition) {
