@@ -3974,9 +3974,9 @@ IDE_Morph.prototype.userCopy = function (event) {
     underHand = mouseOverList[0].parentThatIsA(BlockMorph) || 
                 mouseOverList[0].parentThatIsA(CommentMorph);
     
-    if (underHand && !underHand.isTemplate) {
+    if (underHand && !underHand.isTemplate && !(underHand instanceof PrototypeHatBlockMorph)) {
         this.scene.clipboard = underHand.fullCopy();
-        if ((this.scene.clipboard instanceof BlockMorph) && event === 'ctrl shift c') {
+        if ((this.scene.clipboard instanceof CommandBlockMorph || this.scene.clipboard instanceof HatBlockMorph) && event === 'ctrl shift c') {
             var nb = this.scene.clipboard.nextBlock()
             if (nb) {
                 nb.destroy();
@@ -3997,11 +3997,14 @@ IDE_Morph.prototype.userCut = function (event) {
     underHand = mouseOverList[0].parentThatIsA(BlockMorph) || 
                 mouseOverList[0].parentThatIsA(CommentMorph);
     
-    if (underHand && !underHand.isTemplate) {
+    if (underHand && !underHand.isTemplate && !(underHand instanceof PrototypeHatBlockMorph)) {
         this.scene.clipboard = underHand.fullCopy();
-        var nb = this.scene.clipboard.nextBlock();
-        if (nb) {
-            nb.destroy();
+        if (underHand instanceof CommandBlockMorph ||
+            underHand instanceof HatBlockMorph) {
+            var nb = this.scene.clipboard.nextBlock();
+            if (nb) {
+                nb.destroy();
+            }
         }
         underHand.userDestroy();
     }

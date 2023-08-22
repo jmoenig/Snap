@@ -9204,10 +9204,10 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
                     (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
-    action.call(this, keyName);
+    action.call(this, keyName, event);
 };
 
-StageMorph.prototype.fireKeyEvent = function (key) {
+StageMorph.prototype.fireKeyEvent = function (key, event) {
     var evt = key.toLowerCase(),
         procs = [],
         ide = this.parentThatIsA(IDE_Morph);
@@ -9233,6 +9233,9 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     if (evt === 'ctrl shift c' || (evt === 'ctrl c')) {
         ide.userCopy(evt);
+        if (event != null) {
+            event.preventDefault()
+        }
         return;
     }
     if (evt === 'ctrl x') {

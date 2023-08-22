@@ -3582,9 +3582,12 @@ BlockMorph.prototype.userMenu = function () {
         'cut block',
         () => {
             ide.scene.clipboard = this.fullCopy();
-            var nb = ide.scene.clipboard.nextBlock();
-            if (nb) {
-                nb.destroy();
+            if (this instanceof CommandBlockMorph ||
+                this instanceof HatBlockMorph) {
+                var nb = ide.scene.clipboard.nextBlock();
+                if (nb) {
+                    nb.destroy();
+                }
             }
             
             this.userDestroy();
