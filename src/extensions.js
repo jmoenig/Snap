@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-August-21';
+modules.extensions = '2023-August-23';
 
 // Global stuff
 
@@ -289,6 +289,15 @@ SnapExtensions.primitives.set(
             ['max slots'],
             ['translations']
         ]);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_yield',
+    function (proc) {
+        if (!proc.isAtomic) {
+            proc.readyToYield = true;
+        }
     }
 );
 
