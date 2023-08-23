@@ -283,6 +283,7 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
             base64 = `data:audio/mpeg;base64,${audioTo64}`;
             const audio = new Audio(base64);
             const sound = new Sound(audio, "name");
+            this.rpcRequest = null;
             return sound;
         }
         else {  // assume text
