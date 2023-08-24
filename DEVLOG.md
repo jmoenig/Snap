@@ -35,6 +35,7 @@
     * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
     * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
     * support for multiple separator lines in input slot dropdown menus
+    * support for smooth animations in recursive control structures defined using metaprogramming
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -42,6 +43,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-08-24
+* threads: support smooth animations in recursive control structures defined using metaprogramming
 
 ### 2023-08-23
 * extensions: added new "snap_yield" extension primitive

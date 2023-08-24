@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-17';
+modules.threads = '2023-August-24';
 
 var ThreadManager;
 var Process;
@@ -1662,6 +1662,13 @@ Process.prototype.reportSelf = function (trgt) {
     ctx.outerContext = trgt.outerContext;
     if (ctx.outerContext) {
         ctx.variables.parentFrame = ctx.outerContext.variables;
+    }
+    if (!this.isAtomic &&
+        this.context.expression.parent?.selector === 'doRun'
+    ) {
+        // assume direct recursion of a command block,
+        // yield to ensure smooth animations
+        this.readyToYield = true;
     }
     return ctx;
 };
