@@ -6358,6 +6358,12 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 : thatObj).variables.allNames()
             );
         }
+        if (this.inputOption(attribute) === 'input names') {
+            return new List(thatObj instanceof Context ?
+                thatObj.inputs.slice()
+                : []
+            );
+        }
     }
     return '';
 };

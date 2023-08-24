@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-17';
+modules.blocks = '2023-August-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11336,6 +11336,9 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
     }
     dict['~'] = null;
     dict.variables = ['variables'];
+    if (!isSnapObject(obj)) {
+        dict['input names'] = ['input names'];
+    }
     if (obj) {
         varNames = obj.variables.names();
         if (varNames.length > 0) {

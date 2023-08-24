@@ -28,6 +28,7 @@
     * bootstrap global custom blocks as primitives
     * new "bootstrap" and "un-bootstrap" extension primitives
     * new "snap_yield" extension primitive
+    * new "input names" selector in the (attribute OF target) primitive reporter
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -46,6 +47,7 @@
 
 ### 2023-08-24
 * threads: support smooth animations in recursive control structures defined using metaprogramming
+* threads, blocks: new "input names" selector in the (attribute OF target) primitive reporter 
 
 ### 2023-08-23
 * extensions: added new "snap_yield" extension primitive
