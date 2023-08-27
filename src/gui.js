@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-August-16';
+modules.gui = '2023-August-27';
 
 // Declarations
 
@@ -822,7 +822,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
         } else if (cnf.design === 'classic') {
             this.setDefaultDesign();
         }
-        SpriteMorph.prototype.initBlocks();
     }
 
     // interaction mode
@@ -838,7 +837,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
             Math.max(1, Math.min(cnf.blocksZoom, 12))
         );
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -3296,7 +3294,6 @@ IDE_Morph.prototype.refreshIDE = function () {
             new Project(this.scenes, this.scene)
         );
     }
-    SpriteMorph.prototype.initBlocks();
     this.buildPanes();
     this.fixLayout();
     if (this.loadNewProject) {
@@ -3335,7 +3332,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (zoom) {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -7434,7 +7430,6 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
             );
         }
     }
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
@@ -7549,7 +7544,6 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
