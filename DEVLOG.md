@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-08-27
+* objects: added "reportHyperZip" entry in the blocks dictionary to support bootstrapping
+
 ### 2023-08-24
 * threads: support smooth animations in recursive control structures defined using metaprogramming
 * threads, blocks: new "input names" selector in the (attribute OF target) primitive reporter 

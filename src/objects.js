@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-22';
+modules.objects = '2023-August-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -212,6 +212,8 @@ SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = {
+        // Bootstrapping helpers
+        reportHyperZip: null,
 
         // Motion
         forward: {
