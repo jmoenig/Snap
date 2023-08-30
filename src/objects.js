@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-27';
+modules.objects = '2023-August-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1651,6 +1651,50 @@ SpriteMorph.prototype.initBlocks = function () {
 };
 
 SpriteMorph.prototype.initBlocks();
+
+SpriteMorph.prototype.customizeBlocks = function () {
+    // generate custom block definition headers for all block descriptions
+    // in the blocks dictionary - experimental for v10
+    var prims = ['hat', 'ring'];
+    Object.keys(this.blocks).forEach(key => {
+        var record = this.blocks[key],
+            parts,
+            count,
+            slotName,
+            spec,
+            decl,
+            entry,
+            def;
+        if (record && !prims.includes(record.type)) {
+            parts = CustomBlockDefinition.prototype.parseSpec(record.spec);
+            count = 0;
+
+            // transform the spec into a definition spec with %names
+            // and populates the slot declarations
+            decl = new Map();
+            spec = parts.map(word => {
+                if (word[0] === '%' && (word.length > 1) && (word !== '%br')) {
+                    entry = CustomBlockDefinition.prototype.declarationFor(
+                        word
+                    );
+                    // the default values needs to be set externally (here)
+                    entry[1] = record.defaults ? record.defaults[count] : null;
+                    count += 1;
+                    slotName = '%#' + count;
+                    decl.set('#' + count, entry);
+                    return slotName;
+                }
+                return word;
+            }).join(' ');
+            def = new CustomBlockDefinition(spec);
+            def.declarations = decl;
+            def.isGlobal = true;
+            def.type = record.type;
+            def.category = record.category;
+            SpriteMorph.prototype.blocks[key] = def;
+        }
+    });
+};
 
 SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
     var serializer = srzlr || new SnapSerializer();

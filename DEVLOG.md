@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-08-30
+* objects, byob, gui: generate custom block definition headers for all standard library block descriptions
+
 ### 2023-08-27
 * objects: added "reportHyperZip" entry in the blocks dictionary to support bootstrapping
 * gui: removed redundant blocks dictionary initializations

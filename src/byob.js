@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-22';
+modules.byob = '2023-August-30';
 
 // Declarations
 
@@ -157,7 +157,7 @@ function CustomBlockDefinition(spec, receiver) {
         //      expand,
         //      initialSlots,
         //      minSlots,
-        //      initialSlots
+        //      maxSlots
         //  ]
     this.variableNames = [];
     this.comment = null;
@@ -956,6 +956,92 @@ CustomBlockDefinition.prototype.dataDependencies = function () {
         });
     }
     return names.sort();
+};
+
+// CustomBlockDefinition - migrating primitive inputs to custom declared ones
+
+CustomBlockDefinition.prototype.declarationFor = function (spec) {
+    // Private - answer a new Array representing the settings of the input
+    // label part specified by the given inputSpec, so former primitive
+    // blocks in the block dictionary can be turned into custom blocks with
+    // the same look & feel.
+    // The Array slots represent the following fields:
+    //
+    //      0:  type
+    //      1:  default
+    //      2:  options
+    //      3:  isReadOnly
+    //      4:  isIrreplaceable
+    //      5:  separator (multi)
+    //      6:  collapse (multi)
+    //      7:  expand (multi)
+    //      8:  initial slots (multi)
+    //      9:  minSlots (multi)
+    //      10: maxSlots (multi)
+    //
+
+    var part = SyntaxElementMorph.prototype.labelPart(spec),
+        decl = new Array(11),
+        options;
+
+    // type
+    decl[0] = Process.prototype.slotSpec(
+        Process.prototype.slotType(
+            part instanceof RingMorph ?
+                // cannot access the slot spec because we don't have a block
+                // so we use this hack for rings instead
+                ('crp'.indexOf(part.blockSpec[2]) + 6).toString()
+                : (part instanceof MultiArgMorph &&
+                        part.slotSpec instanceof Array ?
+                    part.slotSpec
+                    : part.getSpec())
+        )
+    );
+
+    // default - must be queried from the blocks dictionary of primitives
+    // decl[1]
+
+    // options
+    options = part instanceof InputSlotMorph ?
+        (isString(part.choices) ?
+            '§_' + part.choices
+            : this.decodeChoices(part.choices))
+        : '';
+    if (!(options instanceof List)) {
+        options = new List([options]);
+    }
+    decl[2] = this.encodeChoices(options);
+
+    // isReadOnly
+    decl[3] = part instanceof InputSlotMorph ? part.isReadOnly : true;
+
+    // isIrreplaceable
+    decl[4] = part.isStatic;
+
+    // separator
+    decl[5] = part instanceof MultiArgMorph ? part.infix : '' ;
+
+    // collapse
+    decl[6] = part instanceof MultiArgMorph ? part.collapse : '';
+
+    // expands
+    decl[7] = part instanceof MultiArgMorph ?
+        (part.labelText instanceof Array ?
+            new List(part.labelText.map(item =>
+                item.replaceAll('\n', ' ')))
+            : (part.labelText || '').replaceAll('\n', ' '))
+        : '';
+
+    // initial slots
+    decl[8] = part instanceof MultiArgMorph ? part.initialSlots : '';
+
+    // min slots
+    decl[9] = part instanceof MultiArgMorph ? part.minInputs : '';
+
+    // max slots
+    decl[10] = part instanceof MultiArgMorph ? part.maxInputs : '';
+
+    return decl;
 };
 
 // CustomBlockDefinition bootstrapping - overload primitives

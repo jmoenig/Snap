@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-August-27';
+modules.gui = '2023-August-30';
 
 // Declarations
 
@@ -341,6 +341,10 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // turn all primitives into custom blocks
+    // under construction, commented out for now
+    // SpriteMorph.prototype.customizeBlocks();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
