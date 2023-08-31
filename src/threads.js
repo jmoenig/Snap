@@ -2698,20 +2698,19 @@ Process.prototype.doIf = function () {
 };
 */
 
-Process.prototype.doIfElse = function () {
-    var args = this.context.inputs,
-        outer = this.context.outerContext, // for tail call elimination
+Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
+    var outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
     // this.assertType(args[0], ['Boolean']);
     this.popContext();
-    if (args[0]) {
-        if (args[1]) {
-            this.pushContext(args[1].blockSequence(), outer);
+    if (condition) {
+        if (trueCase?.expression) {
+            this.pushContext(trueCase.expression.blockSequence(), outer);
         }
     } else {
-        if (args[2]) {
-            this.pushContext(args[2].blockSequence(), outer);
+        if (falseCase?.expression) {
+            this.pushContext(falseCase.expression.blockSequence(), outer);
         } else {
             this.pushContext('doYield');
         }
@@ -2724,7 +2723,7 @@ Process.prototype.doIfElse = function () {
 };
 
 Process.prototype.doIf = function (block) {
-    // special form - experimental
+    // variadic
     var args = this.context.inputs,
         inps = block.inputs(),
         outer = this.context.outerContext,
