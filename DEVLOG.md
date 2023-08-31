@@ -51,6 +51,7 @@
 * objects, threads: turned C-slot of REPEAT primitive into a full lambda with its own scope
 * objects, threads: turned C-slot of REPEAT UNTIL primitive into a full lambda with its own scope
 * objects, threads: refactored doIfElse()
+* blocks, objects: refactored unwinding / rewinding blocks for renaming variables in scope
 
 ### 2023-08-30
 * objects, byob, gui: generate custom block definition headers for all standard library block descriptions

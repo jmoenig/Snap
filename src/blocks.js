@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-24';
+modules.blocks = '2023-August-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5985,7 +5985,7 @@ BlockMorph.prototype.unwind = function () {
         }
         // find the nearest enclosing C-slot or Ring
         current = this.parentThatIsA(CommandSlotMorph, RingMorph);
-        if (!current || !current.isStatic || current instanceof RingMorph) {
+        if (!current || current.isLambda || current instanceof RingMorph) {
             return [this];
         }
     }
@@ -6019,7 +6019,7 @@ BlockMorph.prototype.unwindAfter = function (element) {
             }
             // find the nearest enclosing C-slot or Ring
             current = this.parentThatIsA(CommandSlotMorph, RingMorph);
-            if (!current || !current.isStatic || current instanceof RingMorph) {
+            if (!current || current.isLambda || current instanceof RingMorph) {
                 return [this];
             }
         }
@@ -6071,7 +6071,7 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
                             log(inp);
                         }
                     } else if (inp instanceof CommandSlotMorph) {
-                        if (inp.isStatic) {
+                        if (!inp.isLambda) {
                             nested = inp.nestedBlock();
                             if (nested) {
                                 nested.blockSequence().forEach(cmd => log(cmd));
@@ -6088,7 +6088,7 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
                     log(elem);
                 }
             } else if (elem instanceof CommandSlotMorph) {
-                if (elem.isStatic) {
+                if (!elem.isLambda) {
                     nested = elem.nestedBlock();
                     if (nested) {
                         nested.blockSequence().forEach(cmd => log(cmd));
@@ -9610,10 +9610,10 @@ CommandSlotMorph.prototype.unwind = function () {
         nxt = this.parent instanceof MultiArgMorph ? this.parent
                 : this.parentThatIsA(BlockMorph);
     if (nested) {
-        if (this.isStatic) {
-            return nested.unwind().concat(nxt.unwindAfter(this));
+        if (this.isLambda) {
+            return [nested.unwind()].concat(nxt.unwindAfter(this));
         }
-        return [nested.unwind()].concat(nxt.unwindAfter(this));
+        return nested.unwind().concat(nxt.unwindAfter(this));
     }
     return nxt.unwindAfter(this);
 };

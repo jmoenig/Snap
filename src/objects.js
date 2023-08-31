@@ -833,7 +833,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c %elseif'
+            spec: 'if %b %cl %elseif'
         },
         doIfElse: {
             type: 'command',
