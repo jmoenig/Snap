@@ -3055,7 +3055,7 @@ Process.prototype.doForever = function (action) {
     this.pushContext();
 };
 
-Process.prototype.doRepeat = function (counter, body) {
+Process.prototype.doRepeat = function (counter, action) {
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
@@ -3069,8 +3069,8 @@ Process.prototype.doRepeat = function (counter, body) {
     this.context.isCustomBlock = isCustomBlock;
     this.context.addInput(counter - 1);
     this.pushContext('doYield');
-    if (body) {
-        this.pushContext(body.blockSequence());
+    if (action) {
+        this.doRun(action);
     }
     this.pushContext();
 };
