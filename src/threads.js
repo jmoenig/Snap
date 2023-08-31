@@ -3075,7 +3075,7 @@ Process.prototype.doRepeat = function (counter, action) {
     this.pushContext();
 };
 
-Process.prototype.doUntil = function (goalCondition, body) {
+Process.prototype.doUntil = function (goalCondition, action) {
     // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
@@ -3084,8 +3084,8 @@ Process.prototype.doUntil = function (goalCondition, body) {
     }
     this.context.inputs = [];
     this.pushContext('doYield');
-    if (body) {
-        this.pushContext(body.blockSequence());
+    if (action) {
+        this.doRun(action);
     }
     this.pushContext();
 };

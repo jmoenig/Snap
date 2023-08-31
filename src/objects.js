@@ -822,7 +822,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %b %loop'
+            spec: 'repeat until %b %cla'
         },
         doFor: {
             type: 'command',
