@@ -2698,11 +2698,21 @@ Process.prototype.doIf = function () {
 };
 */
 
+/*
 Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
+    // full lambda version in which each case has its own scope
+    // commented out for now
+    this.doRun(condition ? trueCase : falseCase);
+};
+*/
+
+Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
+    // version with trancending variable scope, i.e. the C-slots are
+    // not full lambdas, letting you e.g. declare script variables inside
+    // them that can be accesses later outside of the C-slot
     var outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
-    // this.assertType(args[0], ['Boolean']);
     this.popContext();
     if (condition) {
         if (trueCase?.expression) {
@@ -2723,7 +2733,9 @@ Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
 };
 
 Process.prototype.doIf = function (block) {
-    // variadic
+    // variadic ersion with trancending variable scope, i.e. the C-slots are
+    // not full lambdas, letting you e.g. declare script variables inside
+    // them that can be accesses later outside of the C-slot
     var args = this.context.inputs,
         inps = block.inputs(),
         outer = this.context.outerContext,
