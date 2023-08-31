@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-24';
+modules.threads = '2023-August-31';
 
 var ThreadManager;
 var Process;
@@ -3046,11 +3046,11 @@ Process.prototype.doPauseAll = function () {
 
 // Process loop primitives
 
-Process.prototype.doForever = function (body) {
+Process.prototype.doForever = function (action) {
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
-    if (body) {
-        this.pushContext(body.blockSequence());
+    if (action) {
+        this.doRun(action);
     }
     this.pushContext();
 };

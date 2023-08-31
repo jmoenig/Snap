@@ -37,6 +37,7 @@
     * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
     * support for multiple separator lines in input slot dropdown menus
     * support for smooth animations in recursive control structures defined using metaprogramming
+    * C-slot of FOREVER primitive is now a full lambda with its own scope
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -44,6 +45,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-08-31
+* objects, threads: turned C-slot of FOREVER primitive into a full lambda with its own scope
 
 ### 2023-08-30
 * objects, byob, gui: generate custom block definition headers for all standard library block descriptions
