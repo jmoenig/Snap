@@ -1135,7 +1135,8 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
         this.isTemplate = true;
     }
     this.category = definition.category;
-    this.selector = /* definition.selector || */ 'evaluateCustomBlock';
+    this.selector = 'evaluateCustomBlock';
+    // this.selector = definition.selector || 'evaluateCustomBlock';
     this.variables = null;
 	this.storedTranslations = null; // transient - only for "wishes"
     this.initializeVariables();
@@ -2071,7 +2072,8 @@ CustomReporterBlockMorph.prototype.init = function (
     this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
     this.initializeVariables();
-    this.selector = /* definition.selector || */ 'evaluateCustomBlock';
+    this.selector = 'evaluateCustomBlock';
+    // this.selector = definition.selector || 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
         this.refresh();
     }
