@@ -1005,8 +1005,7 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'static'
     },
     '%cs': {
-        type: 'c',
-        tags: 'lambda'
+        type: 'c'
     },
     '%ca': {
         type: 'c',

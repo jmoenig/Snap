@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-August-31';
+modules.threads = '2023-September-01';
 
 var ThreadManager;
 var Process;
@@ -2698,29 +2698,22 @@ Process.prototype.doIf = function () {
 };
 */
 
-/*
-Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
-    // full lambda version in which each case has its own scope
-    // commented out for now
-    this.doRun(condition ? trueCase : falseCase);
-};
-*/
-
-Process.prototype.doIfElse = function (condition, trueCase, falseCase) {
+Process.prototype.doIfElse = function () {
     // version with trancending variable scope, i.e. the C-slots are
     // not full lambdas, letting you e.g. declare script variables inside
     // them that can be accesses later outside of the C-slot
-    var outer = this.context.outerContext, // for tail call elimination
+    var args = this.context.inputs,
+        outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
 
     this.popContext();
-    if (condition) {
-        if (trueCase?.expression) {
-            this.pushContext(trueCase.expression.blockSequence(), outer);
+    if (args[0]) {
+        if (args[1]) {
+            this.pushContext(args[1].blockSequence(), outer);
         }
     } else {
-        if (falseCase?.expression) {
-            this.pushContext(falseCase.expression.blockSequence(), outer);
+        if (args[2]) {
+            this.pushContext(args[2].blockSequence(), outer);
         } else {
             this.pushContext('doYield');
         }
@@ -3057,16 +3050,16 @@ Process.prototype.doPauseAll = function () {
 
 // Process loop primitives
 
-Process.prototype.doForever = function (action) {
+Process.prototype.doForever = function (body) {
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
-    if (action) {
-        this.doRun(action);
+    if (body) {
+        this.pushContext(body.blockSequence());
     }
     this.pushContext();
 };
 
-Process.prototype.doRepeat = function (counter, action) {
+Process.prototype.doRepeat = function (counter, body) {
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
@@ -3080,13 +3073,13 @@ Process.prototype.doRepeat = function (counter, action) {
     this.context.isCustomBlock = isCustomBlock;
     this.context.addInput(counter - 1);
     this.pushContext('doYield');
-    if (action) {
-        this.doRun(action);
+    if (body) {
+        this.pushContext(body.blockSequence());
     }
     this.pushContext();
 };
 
-Process.prototype.doUntil = function (goalCondition, action) {
+Process.prototype.doUntil = function (goalCondition, body) {
     // this.assertType(goalCondition, ['Boolean']);
     if (goalCondition) {
         this.popContext();
@@ -3095,8 +3088,8 @@ Process.prototype.doUntil = function (goalCondition, action) {
     }
     this.context.inputs = [];
     this.pushContext('doYield');
-    if (action) {
-        this.doRun(action);
+    if (body) {
+        this.pushContext(body.blockSequence());
     }
     this.pushContext();
 };

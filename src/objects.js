@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-August-31';
+modules.objects = '2023-September-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -811,18 +811,18 @@ SpriteMorph.prototype.initBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %cla'
+            spec: 'forever %loop'
         },
         doRepeat: {
             type: 'command',
             category: 'control',
-            spec: 'repeat %n %cla',
+            spec: 'repeat %n %loop',
             defaults: [10]
         },
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %b %cla'
+            spec: 'repeat until %b %loop'
         },
         doFor: {
             type: 'command',
@@ -833,12 +833,12 @@ SpriteMorph.prototype.initBlocks = function () {
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %cl %elseif'
+            spec: 'if %b %c %elseif'
         },
         doIfElse: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %cl else %cl'
+            spec: 'if %b %c else %c'
         },
         reportIfElse: {
             type: 'reporter',

@@ -37,7 +37,6 @@
     * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
     * support for multiple separator lines in input slot dropdown menus
     * support for smooth animations in recursive control structures defined using metaprogramming
-    * C-slot of FOREVER, REPEAT and REPEAT UNTIL primitives are now full lambdas with their own scope
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -48,6 +47,7 @@
 
 ### 2023-09-01
 * blocks: tweaked c-slots to mostly always evaluate to lambdas
+* blocks, objects, threads: reversed lambdafication of low-level primitive control structures for performance
 
 ### 2023-08-31
 * objects, threads: turned C-slot of FOREVER primitive into a full lambda with its own scope
