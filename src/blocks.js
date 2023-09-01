@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-August-31';
+modules.blocks = '2023-September-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1006,6 +1006,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%cs': {
         type: 'c',
+        tags: 'lambda'
     },
     '%ca': {
         type: 'c',

@@ -46,6 +46,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-09-01
+* blocks: tweaked c-slots to mostly always evaluate to lambdas
+
 ### 2023-08-31
 * objects, threads: turned C-slot of FOREVER primitive into a full lambda with its own scope
 * objects, threads: turned C-slot of REPEAT primitive into a full lambda with its own scope
