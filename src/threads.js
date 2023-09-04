@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-01';
+modules.threads = '2023-September-04';
 
 var ThreadManager;
 var Process;
@@ -815,6 +815,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector ===  'reportVariadicAnd' ||
             selector === 'doIf' ||
             selector === 'reportIfElse' ||
+            selector === 'doUntil' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
             try {
@@ -972,6 +973,35 @@ Process.prototype.reportBasicOr = function (a, b) {
 
 Process.prototype.reportBasicAnd = function (a, b) {
     return a && b;
+};
+
+Process.prototype.doUntil = function (block) {
+    // special form version for speed optimization, avoids reifying both
+    // inputs, which saves a lot of time, albeit at the cost of scope
+    // consistency
+    var args = this.context.inputs,
+        inps = block.inputs(),
+        outer = this.context.outerContext,
+        body;
+
+    if (!args.length) {
+        this.pushContext(inps[0], outer);
+        return;
+    }
+    if (args[0]) {
+        // note: even though it is designated as unevaluated it already
+        // is a Boolean value at this point, because we just pushed it
+        // directly on the stack without calling evaluateInput()
+        this.popContext();
+        return;
+    }
+    this.context.inputs = []; // force re-evaluate both inputs
+    this.pushContext('doYield');
+    body = inps[1].nestedBlock();
+    if (body) {
+        this.pushContext(body.blockSequence(), outer);
+    }
+    this.pushContext();
 };
 
 Process.prototype.doReport = function (block) {
@@ -3079,8 +3109,14 @@ Process.prototype.doRepeat = function (counter, body) {
     this.pushContext();
 };
 
+// +++
+
+/*
 Process.prototype.doUntil = function (goalCondition, body) {
-    // this.assertType(goalCondition, ['Boolean']);
+    // deprecated non-special-form version, requires the C-slot input to
+    // be marked as non-unevaluated (applicative order), which makes it
+    // return its plain nested block without reifying it into a Context
+    // (lambda)
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -3093,6 +3129,7 @@ Process.prototype.doUntil = function (goalCondition, body) {
     }
     this.pushContext();
 };
+*/
 
 Process.prototype.doWaitUntil = function (goalCondition) {
     // this.assertType(goalCondition, ['Boolean']);

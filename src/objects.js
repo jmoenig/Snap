@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-September-01';
+modules.objects = '2023-September-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -822,7 +822,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %b %loop'
+            spec: 'repeat until %boolUE %cla'
         },
         doFor: {
             type: 'command',
