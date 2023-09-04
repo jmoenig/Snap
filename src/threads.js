@@ -814,6 +814,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     if (selector === 'reportVariadicOr' ||
             selector ===  'reportVariadicAnd' ||
             selector === 'doIf' ||
+            // selector === 'doIfElse' ||
             selector === 'reportIfElse' ||
             selector === 'doWaitUntil' ||
             selector === 'doUntil' ||
@@ -2788,7 +2789,7 @@ Process.prototype.doIf = function () {
 Process.prototype.doIfElse = function () {
     // version with trancending variable scope, i.e. the C-slots are
     // not full lambdas, letting you e.g. declare script variables inside
-    // them that can be accesses later outside of the C-slot
+    // them that can be accessed later outside of the C-slot
     var args = this.context.inputs,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
@@ -2811,6 +2812,31 @@ Process.prototype.doIfElse = function () {
 
     this.pushContext();
 };
+
+/* special-form version, under construction - commented out for now
+Process.prototype.doIfElse = function (block) {
+    // version with trancending variable scope, i.e. the C-slots are
+    // not full lambdas, letting you e.g. declare script variables inside
+    // them that can be accessed later outside of the C-slot
+    var // outer = this.context.outerContext,
+        // isCustomBlock = this.context.isCustomBlock,
+        test,
+        branch;
+
+    if (!this.context.inputs.length) {
+        this.pushContext(block.inputs()[0], this.context.outerContext);
+        return;
+    }
+    test = this.context.inputs[0];
+    this.popContext();
+    branch = block.inputs()[test ? 1 : 2].nestedBlock();
+    if (branch) {
+        this.pushContext(branch.blockSequence()); // outer
+        // this.context.isCustomBlock = isCustomBlock;
+    }
+    this.pushContext();
+};
+*/
 
 Process.prototype.doIf = function (block) {
     // variadic ersion with trancending variable scope, i.e. the C-slots are
