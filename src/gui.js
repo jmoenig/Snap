@@ -3294,7 +3294,10 @@ IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
     this.createSpriteEditor();
     this.corral.refresh();
     this.fixLayout('selectSprite');
-    if (this.performerMode) { this.fixLayout(); }
+    if (this.performerMode) {
+        this.fixLayout();
+        this.currentSprite.scripts.updateToolbar();
+    }
     this.currentSprite.scripts.fixMultiArgs();
 };
 
