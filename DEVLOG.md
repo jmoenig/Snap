@@ -47,6 +47,7 @@
 
 ### 2023-09-04
 * objects, threats: reformulated REPEAT UNTIL as special form primitive
+* objects, threats: reformulated WAIT UNTIL as special form primitive
 
 ### 2023-09-01
 * blocks: tweaked c-slots to mostly always evaluate to lambdas

@@ -815,6 +815,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector ===  'reportVariadicAnd' ||
             selector === 'doIf' ||
             selector === 'reportIfElse' ||
+            selector === 'doWaitUntil' ||
             selector === 'doUntil' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
@@ -973,6 +974,25 @@ Process.prototype.reportBasicOr = function (a, b) {
 
 Process.prototype.reportBasicAnd = function (a, b) {
     return a && b;
+};
+
+Process.prototype.doWaitUntil = function (block) {
+    // special form version for speed optimization, avoids reifying the
+    // condition, which saves a lot of time
+    if (!this.context.inputs.length) {
+        this.pushContext(block.inputs()[0], this.context.outerContext);
+        return;
+    }
+    if (this.context.inputs[0]) {
+        // note: even though it is designated as unevaluated it already
+        // is a Boolean value at this point, because we just pushed it
+        // directly on the stack without calling evaluateInput()
+        this.popContext();
+        return;
+    }
+    this.context.inputs = []; // force re-evaluate next time
+    this.pushContext('doYield');
+    this.pushContext();
 };
 
 Process.prototype.doUntil = function (block) {
@@ -3109,8 +3129,6 @@ Process.prototype.doRepeat = function (counter, body) {
     this.pushContext();
 };
 
-// +++
-
 /*
 Process.prototype.doUntil = function (goalCondition, body) {
     // deprecated non-special-form version, requires the C-slot input to
@@ -3131,8 +3149,11 @@ Process.prototype.doUntil = function (goalCondition, body) {
 };
 */
 
+/*
 Process.prototype.doWaitUntil = function (goalCondition) {
-    // this.assertType(goalCondition, ['Boolean']);
+    // deprecated non-special-form version, directly evaluates the
+    // condition slot each time without requiring it to be marked as
+    // "unevaluated"
     if (goalCondition) {
         this.popContext();
         this.pushContext('doYield');
@@ -3142,6 +3163,7 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext('doYield');
     this.pushContext();
 };
+*/
 
 // Process interpolated iteration primitives
 
