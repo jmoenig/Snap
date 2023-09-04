@@ -816,7 +816,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doRepeat: {
             type: 'command',
             category: 'control',
-            spec: 'repeat %n %loop',
+            spec: 'repeat %n %cla',
             defaults: [10]
         },
         doUntil: {

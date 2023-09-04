@@ -818,6 +818,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector === 'doWaitUntil' ||
             selector === 'doUntil' ||
             selector === 'doForever' ||
+            selector === 'doRepeat' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
             try {
@@ -982,6 +983,30 @@ Process.prototype.doForever = function (block) {
     // body script, which saves a lot of time
     var body = block.inputs()[0].nestedBlock();
     this.pushContext('doYield');
+    if (body) {
+        this.pushContext(body.blockSequence());
+    }
+    this.pushContext();
+};
+
+Process.prototype.doRepeat = function (block) {
+    // special form version for speed optimization, avoids reifying the
+    // body script, which saves a lot of time
+    var counter,
+        body;
+
+    if (!this.context.inputs.length) {
+        this.pushContext(block.inputs()[0], this.context.outerContext);
+        return;
+    }
+    counter = this.context.inputs[0];
+    if (isNaN(counter) || counter < 1) {
+        this.popContext();
+        return;
+    }
+    this.context.inputs[0] -= 1;
+    this.pushContext('doYield');
+    body = block.inputs()[1].nestedBlock();
     if (body) {
         this.pushContext(body.blockSequence());
     }
@@ -3127,7 +3152,12 @@ Process.prototype.doForever = function (body) {
 };
 */
 
+/*
 Process.prototype.doRepeat = function (counter, body) {
+    // deprecated non-special-form version, requires the C-slot input to
+    // be marked as non-unevaluated (applicative order), which makes it
+    // return its plain nested block without reifying it into a Context
+    // (lambda)
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
@@ -3146,6 +3176,7 @@ Process.prototype.doRepeat = function (counter, body) {
     }
     this.pushContext();
 };
+*/
 
 /*
 Process.prototype.doUntil = function (goalCondition, body) {
