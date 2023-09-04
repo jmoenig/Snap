@@ -817,6 +817,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector === 'reportIfElse' ||
             selector === 'doWaitUntil' ||
             selector === 'doUntil' ||
+            selector === 'doForever' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
             try {
@@ -974,6 +975,17 @@ Process.prototype.reportBasicOr = function (a, b) {
 
 Process.prototype.reportBasicAnd = function (a, b) {
     return a && b;
+};
+
+Process.prototype.doForever = function (block) {
+    // special form version for speed optimization, avoids reifying the
+    // body script, which saves a lot of time
+    var body = block.inputs()[0].nestedBlock();
+    this.pushContext('doYield');
+    if (body) {
+        this.pushContext(body.blockSequence());
+    }
+    this.pushContext();
 };
 
 Process.prototype.doWaitUntil = function (block) {
@@ -3100,7 +3112,12 @@ Process.prototype.doPauseAll = function () {
 
 // Process loop primitives
 
+/*
 Process.prototype.doForever = function (body) {
+    // deprecated non-special-form version, requires the C-slot input to
+    // be marked as non-unevaluated (applicative order), which makes it
+    // return its plain nested block without reifying it into a Context
+    // (lambda)
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
     if (body) {
@@ -3108,6 +3125,7 @@ Process.prototype.doForever = function (body) {
     }
     this.pushContext();
 };
+*/
 
 Process.prototype.doRepeat = function (counter, body) {
     var block = this.context.expression,
