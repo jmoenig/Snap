@@ -1161,7 +1161,7 @@ Process.prototype.evaluateNextInput = function (element) {
             */
             if (sel === 'reify' || sel === 'reportScript') {
                 this.context.addInput(exp);
-            } else if (sel === 'doUntil') {
+            } else if (sel === 'doUntil' || sel === 'doWaitUntil') {
                 this.pushContext(exp, outer);
             } else {
                 this.context.addInput(this.reify(exp, new List()));
@@ -1190,7 +1190,7 @@ Process.prototype.evaluateNextInputSet = function (element) {
             if (exp.isUnevaluated === true || exp.isUnevaluated()) {
                 if (sel === 'reify' || sel === 'reportScript') {
                     this.context.addInput(exp);
-                } else if (sel === 'doUntil') {
+                } else if (sel === 'doUntil' || sel === 'doWaitUntil') {
                     this.pushContext(exp, outer);
                     break;
                 } else {

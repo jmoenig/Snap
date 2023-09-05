@@ -806,7 +806,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doWaitUntil: {
             type: 'command',
             category: 'control',
-            spec: 'wait until %b'
+            spec: 'wait until %boolUE'
         },
         doForever: {
             type: 'command',
