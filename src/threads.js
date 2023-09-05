@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-04';
+modules.threads = '2023-September-05';
 
 var ThreadManager;
 var Process;
@@ -814,12 +814,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     if (selector === 'reportVariadicOr' ||
             selector ===  'reportVariadicAnd' ||
             selector === 'doIf' ||
-            // selector === 'doIfElse' ||
             selector === 'reportIfElse' ||
-            selector === 'doWaitUntil' ||
-            selector === 'doUntil' ||
-            selector === 'doForever' ||
-            selector === 'doRepeat' ||
             selector === 'doReport') {
         if (this.isCatchingErrors) {
             try {
@@ -977,89 +972,6 @@ Process.prototype.reportBasicOr = function (a, b) {
 
 Process.prototype.reportBasicAnd = function (a, b) {
     return a && b;
-};
-
-Process.prototype.doForever = function (block) {
-    // special form version for speed optimization, avoids reifying the
-    // body script, which saves a lot of time
-    var body = block.inputs()[0].nestedBlock();
-    this.pushContext('doYield');
-    if (body) {
-        this.pushContext(body.blockSequence());
-    }
-    this.pushContext();
-};
-
-Process.prototype.doRepeat = function (block) {
-    // special form version for speed optimization, avoids reifying the
-    // body script, which saves a lot of time
-    var counter,
-        body;
-
-    if (!this.context.inputs.length) {
-        this.pushContext(block.inputs()[0], this.context.outerContext);
-        return;
-    }
-    counter = this.context.inputs[0];
-    if (isNaN(counter) || counter < 1) {
-        this.popContext();
-        return;
-    }
-    this.context.inputs[0] -= 1;
-    this.pushContext('doYield');
-    body = block.inputs()[1].nestedBlock();
-    if (body) {
-        this.pushContext(body.blockSequence());
-    }
-    this.pushContext();
-};
-
-Process.prototype.doWaitUntil = function (block) {
-    // special form version for speed optimization, avoids reifying the
-    // condition, which saves a lot of time
-    if (!this.context.inputs.length) {
-        this.pushContext(block.inputs()[0], this.context.outerContext);
-        return;
-    }
-    if (this.context.inputs[0]) {
-        // note: even though it is designated as unevaluated it already
-        // is a Boolean value at this point, because we just pushed it
-        // directly on the stack without calling evaluateInput()
-        this.popContext();
-        return;
-    }
-    this.context.inputs = []; // force re-evaluate next time
-    this.pushContext('doYield');
-    this.pushContext();
-};
-
-Process.prototype.doUntil = function (block) {
-    // special form version for speed optimization, avoids reifying both
-    // inputs, which saves a lot of time, albeit at the cost of scope
-    // consistency
-    var args = this.context.inputs,
-        inps = block.inputs(),
-        outer = this.context.outerContext,
-        body;
-
-    if (!args.length) {
-        this.pushContext(inps[0], outer);
-        return;
-    }
-    if (args[0]) {
-        // note: even though it is designated as unevaluated it already
-        // is a Boolean value at this point, because we just pushed it
-        // directly on the stack without calling evaluateInput()
-        this.popContext();
-        return;
-    }
-    this.context.inputs = []; // force re-evaluate both inputs
-    this.pushContext('doYield');
-    body = inps[1].nestedBlock();
-    if (body) {
-        this.pushContext(body.blockSequence(), outer);
-    }
-    this.pushContext();
 };
 
 Process.prototype.doReport = function (block) {
@@ -2813,31 +2725,6 @@ Process.prototype.doIfElse = function () {
     this.pushContext();
 };
 
-/* special-form version, under construction - commented out for now
-Process.prototype.doIfElse = function (block) {
-    // version with trancending variable scope, i.e. the C-slots are
-    // not full lambdas, letting you e.g. declare script variables inside
-    // them that can be accessed later outside of the C-slot
-    var // outer = this.context.outerContext,
-        // isCustomBlock = this.context.isCustomBlock,
-        test,
-        branch;
-
-    if (!this.context.inputs.length) {
-        this.pushContext(block.inputs()[0], this.context.outerContext);
-        return;
-    }
-    test = this.context.inputs[0];
-    this.popContext();
-    branch = block.inputs()[test ? 1 : 2].nestedBlock();
-    if (branch) {
-        this.pushContext(branch.blockSequence()); // outer
-        // this.context.isCustomBlock = isCustomBlock;
-    }
-    this.pushContext();
-};
-*/
-
 Process.prototype.doIf = function (block) {
     // variadic ersion with trancending variable scope, i.e. the C-slots are
     // not full lambdas, letting you e.g. declare script variables inside
@@ -3163,9 +3050,8 @@ Process.prototype.doPauseAll = function () {
 
 // Process loop primitives
 
-/*
 Process.prototype.doForever = function (body) {
-    // deprecated non-special-form version, requires the C-slot input to
+    // non-special-form version, requires the C-slot input to
     // be marked as non-unevaluated (applicative order), which makes it
     // return its plain nested block without reifying it into a Context
     // (lambda)
@@ -3176,11 +3062,9 @@ Process.prototype.doForever = function (body) {
     }
     this.pushContext();
 };
-*/
 
-/*
 Process.prototype.doRepeat = function (counter, body) {
-    // deprecated non-special-form version, requires the C-slot input to
+    // non-special-form version, requires the C-slot input to
     // be marked as non-unevaluated (applicative order), which makes it
     // return its plain nested block without reifying it into a Context
     // (lambda)
@@ -3202,11 +3086,9 @@ Process.prototype.doRepeat = function (counter, body) {
     }
     this.pushContext();
 };
-*/
 
-/*
 Process.prototype.doUntil = function (goalCondition, body) {
-    // deprecated non-special-form version, requires the C-slot input to
+    // non-special-form version, requires the C-slot input to
     // be marked as non-unevaluated (applicative order), which makes it
     // return its plain nested block without reifying it into a Context
     // (lambda)
@@ -3222,11 +3104,9 @@ Process.prototype.doUntil = function (goalCondition, body) {
     }
     this.pushContext();
 };
-*/
 
-/*
 Process.prototype.doWaitUntil = function (goalCondition) {
-    // deprecated non-special-form version, directly evaluates the
+    // non-special-form version, directly evaluates the
     // condition slot each time without requiring it to be marked as
     // "unevaluated"
     if (goalCondition) {
@@ -3238,7 +3118,6 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext('doYield');
     this.pushContext();
 };
-*/
 
 // Process interpolated iteration primitives
 

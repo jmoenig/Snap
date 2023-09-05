@@ -46,11 +46,14 @@
     * German
 
 ### 2023-09-04
-* objects, threats: reformulated REPEAT UNTIL as special form primitive
-* objects, threats: reformulated WAIT UNTIL as special form primitive
-* objects, threats: reformulated FOREVER as special form primitive
-* objects, threats: reformulated REPEAT as special form primitive
-* threats: prepared reformulation of doIfElse as special form primitive
+* objects, threads: reverted reformulation of special form primitives (for a better plan)
+
+### 2023-09-04
+* objects, threads: reformulated REPEAT UNTIL as special form primitive
+* objects, threads: reformulated WAIT UNTIL as special form primitive
+* objects, threads: reformulated FOREVER as special form primitive
+* objects, threads: reformulated REPEAT as special form primitive
+* threads: prepared reformulation of doIfElse as special form primitive
 
 ### 2023-09-01
 * blocks: tweaked c-slots to mostly always evaluate to lambdas
