@@ -1071,22 +1071,24 @@ Process.prototype.evaluateInput = function (input) {
         }
     } else {
         ans = input.evaluate();
-        if (ans) {
-            if (input.constructor === CommandSlotMorph ||
-                input.constructor === ReporterSlotMorph ||
-                (input instanceof CSlotMorph && (
-                    !input.isStatic ||
-                    input.isLambda ||
-                    input.parentThatIsA(BlockMorph)?.isCustomBlock
-                ))
-            ) {
-                // I know, this still needs yet to be done right....
-                ans = this.reify(ans, new List());
-            }
+        if (ans && this.isAutoLambda(input)) {
+            ans = this.reify(ans, new List());
         }
+
     }
     this.returnValueToParentContext(ans);
     this.popContext();
+};
+
+Process.prototype.isAutoLambda = function (inputSlot) {
+    return inputSlot.constructor === CommandSlotMorph ||
+        inputSlot.constructor === ReporterSlotMorph ||
+        (inputSlot instanceof CSlotMorph && (
+            !inputSlot.isStatic ||
+            inputSlot.isLambda ||
+            inputSlot.parentThatIsA(BlockMorph)?.isCustomBlock
+        )
+    );
 };
 
 Process.prototype.evaluateSequence = function (arr) {
@@ -1205,17 +1207,8 @@ Process.prototype.evaluateNextInputSet = function (element) {
                     }
                 } else {
                     ans = exp.evaluate();
-                    if (ans) {
-                        if (exp.constructor === CommandSlotMorph ||
-                            exp.constructor === ReporterSlotMorph ||
-                            (exp instanceof CSlotMorph && (
-                                !exp.isStatic ||
-                                exp.isLambda ||
-                                exp.parentThatIsA(BlockMorph)?.isCustomBlock
-                            ))
-                        ) {
-                            ans = this.reify(ans, new List());
-                        }
+                    if (ans && this.isAutoLambda(exp)) {
+                        ans = this.reify(ans, new List());
                     }
                 }
                 this.context.addInput(ans);
