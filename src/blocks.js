@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-September-01';
+modules.blocks = '2023-September-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10591,6 +10591,9 @@ InputSlotMorph.prototype.init = function (
 // InputSlotMorph accessing:
 
 InputSlotMorph.prototype.getSpec = function () {
+    if (this.isUnevaluated) {
+        return '%anyUE';
+    }
     if (this.isNumeric) {
         return '%n';
     }

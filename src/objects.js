@@ -843,7 +843,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportIfElse: {
             type: 'reporter',
             category: 'control',
-            spec: 'if %b then %s else %s'
+            spec: 'if %b then %anyUE else %anyUE'
         },
         doStopThis: {
             type: 'command',
