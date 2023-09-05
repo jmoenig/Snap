@@ -1081,9 +1081,14 @@ Process.prototype.evaluateInput = function (input) {
 };
 
 Process.prototype.isAutoLambda = function (inputSlot) {
-    if (['doForever', 'doRepeat', 'doUntil', 'doIfElse', 'doWarp'].includes(
-        inputSlot.parent?.selector)
-    ) {
+    if ([
+        'doForever',
+        'doRepeat',
+        'doUntil',
+        'doIfElse',
+        'doWarp',
+        'doFor'
+    ].includes(inputSlot.parent?.selector)) {
         // special cases when overloading those primitives
         // with custom block definitions
         return false;
@@ -3186,8 +3191,20 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     }
     if (dta.test()) {return; }
     this.pushContext('doYield');
+
+    // optimize running the body script for speed:
+    // don't reify the C-slot contents, see: isAutoLambda()
+    // and put the script directly on the stack.
+    // below is the alternative - more correct (scope) code,
+    // retained in case of issues with the optimized version
+    // -------------------
+    // this.pushContext();
+    // this.evaluate(script, dta.parms, true);
+
+    if (script) {
+        this.pushContext(script.blockSequence());
+    }
     this.pushContext();
-    this.evaluate(script, dta.parms, true);
 };
 
 // Process interpolated HOF primitives

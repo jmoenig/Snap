@@ -37,6 +37,7 @@
     * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
     * support for multiple separator lines in input slot dropdown menus
     * support for smooth animations in recursive control structures defined using metaprogramming
+    * optimized FOR-loop for speed
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -54,6 +55,7 @@
 * threads: adjusted isAutoLambda() for doIfElse()
 * threads: adjusted isAutoLambda() for doWarp()
 * objects, blocks: adjusted block spec for reportIfElse() to reflect the unevaluated branch cases
+* threads: optimized FOR-loop for speed
 
 ### 2023-09-04
 * objects, threads: reformulated REPEAT UNTIL as special form primitive
