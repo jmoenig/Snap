@@ -49,6 +49,7 @@
 * objects, threads: reverted reformulation of special form primitives (for a better plan)
 * threads: refactored isAutoLambda(inputSlot)
 * threads: added custom exceptions to isAutoLambda()
+* objects, threads: adjusted block spec for doUntil() to reflect the unevaluated condition
 
 ### 2023-09-04
 * objects, threads: reformulated REPEAT UNTIL as special form primitive
