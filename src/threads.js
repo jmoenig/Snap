@@ -1081,7 +1081,7 @@ Process.prototype.evaluateInput = function (input) {
 };
 
 Process.prototype.isAutoLambda = function (inputSlot) {
-    if (['doForever', 'doRepeat', 'doUntil'].includes(
+    if (['doForever', 'doRepeat', 'doUntil', 'doIfElse'].includes(
         inputSlot.parent?.selector)
     ) {
         // special cases when overloading those primitives
