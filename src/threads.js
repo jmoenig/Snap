@@ -1081,6 +1081,13 @@ Process.prototype.evaluateInput = function (input) {
 };
 
 Process.prototype.isAutoLambda = function (inputSlot) {
+    if (['doForever', 'doRepeat', 'doUntil'].includes(
+        inputSlot.parent?.selector)
+    ) {
+        // special cases when overloading those primitives
+        // with custom block definitions
+        return false;
+    }
     return inputSlot.constructor === CommandSlotMorph ||
         inputSlot.constructor === ReporterSlotMorph ||
         (inputSlot instanceof CSlotMorph && (
