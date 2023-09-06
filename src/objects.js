@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-September-05';
+modules.objects = '2023-September-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -1626,12 +1626,12 @@ SpriteMorph.prototype.initBlocks = function () {
         doApplyExtension: {
             type: 'command',
             category: 'other',
-            spec: 'primitive %prim %mult%s'
+            spec: 'extension %ext %mult%s'
         },
         reportApplyExtension: {
             type: 'reporter',
             category: 'other',
-            spec: 'primitive %prim %mult%s'
+            spec: 'extension %ext %mult%s'
         },
 
         // Video motion

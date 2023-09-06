@@ -38,6 +38,7 @@
     * support for multiple separator lines in input slot dropdown menus
     * support for smooth animations in recursive control structures defined using metaprogramming
     * optimized FOR-loop and FOR-EACH-loop for speed
+    * renamed "primitive" blocks into "extension"
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -48,6 +49,7 @@
 
 ### 2023-09-06
 * byob: fixed selectorsMenu
+* objects, blocks: renamed "primitive" blocks into "extension"
 
 ### 2023-09-05
 * objects, threads: reverted reformulation of special form primitives (for a better plan)

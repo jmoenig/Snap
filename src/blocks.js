@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-September-05';
+modules.blocks = '2023-September-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -357,10 +357,10 @@ SyntaxElementMorph.prototype.labelParts = {
             '(4) triangle' : 4
         }
     },
-    '%prim': {
+    '%ext': {
         type: 'input',
         tags: 'read-only static',
-        menu: 'primitivesMenu'
+        menu: 'extensionsMenu'
     },
     '%audio': {
         type: 'input',
@@ -10996,7 +10996,7 @@ InputSlotMorph.prototype.eventsMenu = function (searching) {
     return {__shout__go__: ['__shout__go__']};
 };
 
-InputSlotMorph.prototype.primitivesMenu = function () {
+InputSlotMorph.prototype.extensionsMenu = function () {
     var dict = {},
         allNames = Array.from(SnapExtensions.primitives.keys());
 
