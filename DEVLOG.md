@@ -46,6 +46,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-09-06
+* byob: fixed selectorsMenu
+
 ### 2023-09-05
 * objects, threads: reverted reformulation of special form primitives (for a better plan)
 * threads: refactored isAutoLambda(inputSlot)

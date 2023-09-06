@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-August-30';
+modules.byob = '2023-September-06';
 
 // Declarations
 
@@ -3486,7 +3486,8 @@ PrototypeHatBlockMorph.prototype.selectorMenu = function () {
     var lst = [];
     Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
         var block = SpriteMorph.prototype.blockForSelector(sel);
-        if (!(block instanceof HatBlockMorph) &&
+        if (!isNil(block) &&
+                !(block instanceof HatBlockMorph) &&
                 !(block instanceof RingMorph)) {
             block.addShadow(new Point(3, 3));
             lst.push([
