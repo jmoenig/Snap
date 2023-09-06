@@ -50,6 +50,7 @@
 ### 2023-09-06
 * byob: fixed selectorsMenu
 * objects, blocks: renamed "primitive" blocks into "extension"
+* byob, objects: added "primitive" property to custom block definitions
 
 ### 2023-09-05
 * objects, threads: reverted reformulation of special form primitives (for a better plan)

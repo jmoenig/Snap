@@ -168,6 +168,7 @@ function CustomBlockDefinition(spec, receiver) {
 
     // allow libraries to overload primitives with global custom blocks
     this.selector = null;
+    this.primitive = null;
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
@@ -1136,7 +1137,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     }
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
-    // this.selector = definition.selector || 'evaluateCustomBlock';
+    this.selector = definition.primitive || 'evaluateCustomBlock';
     this.variables = null;
 	this.storedTranslations = null; // transient - only for "wishes"
     this.initializeVariables();
@@ -2073,7 +2074,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.variables = new VariableFrame();
     this.initializeVariables();
     this.selector = 'evaluateCustomBlock';
-    // this.selector = definition.selector || 'evaluateCustomBlock';
+    this.selector = definition.primitive || 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
         this.refresh();
     }

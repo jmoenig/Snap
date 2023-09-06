@@ -1688,6 +1688,7 @@ SpriteMorph.prototype.customizeBlocks = function () {
             }).join(' ');
             def = new CustomBlockDefinition(spec);
             def.selector = key;
+            def.primitive = key;
             def.declarations = decl;
             def.isGlobal = true;
             def.type = record.type;
