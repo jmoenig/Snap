@@ -3,7 +3,7 @@ name: Push Docker Hub
 on:
   push:
     branches:
-      - main
+      - master
   release:
     types:
       - published
