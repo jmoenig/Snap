@@ -29,6 +29,7 @@
     * new "bootstrap" and "un-bootstrap" extension primitives
     * new "snap_yield" extension primitive
     * new "input names" selector in the (attribute OF target) primitive reporter
+    * new "primitive" (pragma) block for custom block definitions
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -46,6 +47,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-09-07
+* blocks, objects, threads: new "primitive" (pragma) block
 
 ### 2023-09-06
 * byob: fixed selectorsMenu

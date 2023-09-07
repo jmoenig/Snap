@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-September-06';
+modules.blocks = '2023-September-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -356,6 +356,11 @@ SyntaxElementMorph.prototype.labelParts = {
             '(3) sawtooth' : 3,
             '(4) triangle' : 4
         }
+    },
+    '%prim': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'primitivesMenu'
     },
     '%ext': {
         type: 'input',
@@ -6502,7 +6507,8 @@ CommandBlockMorph.prototype.isStop = function () {
         'doForever',
         'doReport',
         'removeClone',
-        'doSwitchToScene'
+        'doSwitchToScene',
+        'doPrimitive'
     ].indexOf(this.selector) > -1);
 };
 
@@ -10994,6 +11000,14 @@ InputSlotMorph.prototype.messagesReceivedMenu = function (searching) {
 InputSlotMorph.prototype.eventsMenu = function (searching) {
     if (searching) {return {}; }
     return {__shout__go__: ['__shout__go__']};
+};
+
+InputSlotMorph.prototype.primitivesMenu = function () {
+    var dict = {};
+    Object.keys(SpriteMorph.prototype.blocks).toSorted().forEach(key =>
+        dict[key] = key
+    );
+    return dict;
 };
 
 InputSlotMorph.prototype.extensionsMenu = function () {

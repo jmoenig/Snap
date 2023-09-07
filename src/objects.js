@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-September-06';
+modules.objects = '2023-September-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -1623,6 +1623,11 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Extensions
+        doPrimitive: {
+            type: 'command',
+            category: 'other',
+            spec: 'primitive %prim'
+        },
         doApplyExtension: {
             type: 'command',
             category: 'other',
@@ -3074,6 +3079,7 @@ SpriteMorph.prototype.blockTemplates = function (
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
+            blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }
@@ -3578,6 +3584,7 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
         return !Process.prototype.enableJS;
     }
     if (
+        sel === 'doPrimitive' ||
         sel === 'doApplyExtension' ||
         sel === 'reportApplyExtension'
     ) {
@@ -9938,6 +9945,7 @@ StageMorph.prototype.blockTemplates = function (
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
+            blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }

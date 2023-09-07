@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-05';
+modules.threads = '2023-September-07';
 
 var ThreadManager;
 var Process;
@@ -858,6 +858,12 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 };
 
 // Process: Primitive Extensions (for libraries etc.)
+Process.prototype.doPrimitive = function () {
+    throw new Error(
+        localize('primitives can only be directly attached to\n' +
+            'a custom block definition prototype hat.')
+    );
+};
 
 Process.prototype.doApplyExtension = function (prim, args) {
     this.reportApplyExtension(prim, args);
