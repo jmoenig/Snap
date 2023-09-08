@@ -50,7 +50,8 @@
 
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
-* byob: support for running primitives inside custom block definitions 
+* byob: support for running primitives inside custom block definitions
+* store: serialization of custom block definition primitives 
 
 ### 2023-09-07
 * blocks, objects, threads: new "primitive" (pragma) block
