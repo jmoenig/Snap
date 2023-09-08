@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-September-06';
+modules.byob = '2023-September-08';
 
 // Declarations
 
@@ -402,7 +402,9 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                     'keysMenu',
                     'gettablesMenu',
                     'audioMenu',
-                    'scenesMenu'
+                    'scenesMenu',
+                    'primitivesMenu',
+                    'extensionsMenu'
                 ],
                 fname
             ) || fname.indexOf('ext_') === 0) {
@@ -3621,7 +3623,9 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_keysMenu',
             '§_gettablesMenu',
             '§_audioMenu',
-            '§_scenesMenu'
+            '§_scenesMenu',
+            '§_primitivesMenu',
+            '§_extensionsMenu'
         ],
         this.options
     );
@@ -4777,6 +4781,8 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('object attributes', '§_gettablesMenu');
     addSpecialOptions('scenes', '§_scenesMenu');
     addSpecialOptions('microphone', '§_audioMenu');
+    addSpecialOptions('primitives', '§_primitivesMenu');
+    addSpecialOptions('extensions', '§_extensionsMenu');
     return menu;
 };
 
