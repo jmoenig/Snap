@@ -1191,6 +1191,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
     }
 
     this.setCategory(def.category);
+    this.selector = def.primitive || 'evaluateCustomBlock';
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
         if (!this.zebraContrast) {
@@ -2907,7 +2908,7 @@ function BlockEditorMorph(definition, target) {
 }
 
 BlockEditorMorph.prototype.init = function (definition, target) {
-    var scripts, proto, scriptsFrame, block, comment,
+    var scripts, proto, scriptsFrame, block, comment, prim,
         isLive = Process.prototype.enableLiveCoding ||
             Process.prototype.enableSingleStepping;
 
@@ -2945,7 +2946,12 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         proto.comment = comment;
         comment.block = proto;
     }
-    if (definition?.body?.expression) {
+
+    if (definition.primitive) {
+        prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
+        prim.inputs()[0].setContents(definition.primitive);
+        proto.nextBlock(prim);
+    } else if (definition?.body?.expression) {
         proto.nextBlock(isLive ? definition.body.expression
                 : definition.body.expression.fullCopy()
         );
@@ -3195,6 +3201,13 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     }
 
     this.definition.body = this.context(head);
+    if (this.definition.body?.expression?.selector === 'doPrimitive') {
+        this.definition.primitive =
+            this.definition.body.expression.inputs()[0].contents().text || null;
+        this.definition.body = null;
+    } else {
+        this.definition.primitive = null;
+    }
 
     // make sure the spec is unique
     spec = this.definition.spec;
