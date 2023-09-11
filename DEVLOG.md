@@ -57,6 +57,7 @@
 * byob: fixed a primitive-customization glitch
 * extensions: new "bootstrapped(block)?" extension primitive
 * threads: added "doPrimitive" block support to queried definitions of primitives and custom blocks associated with a primitive
+* gui, store, sw: pushed version to 10-230911-dev
 
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
