@@ -30,6 +30,7 @@
     * new "snap_yield" extension primitive
     * new "input names" selector in the (attribute OF target) primitive reporter
     * new "primitive" (pragma) block for custom block definitions
+    * support for associating custom block definitions with primitives
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -50,6 +51,7 @@
 
 ### 2023-09-11
 * objects: fixed block migrations for bootstrapped custom blocks
+* byob: metaprogramming support for associating custom block definitions with primitives
 
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks

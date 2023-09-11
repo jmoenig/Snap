@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-September-08';
+modules.byob = '2023-September-11';
 
 // Declarations
 
@@ -756,6 +756,15 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     this.declarations = new Map();
     for (var [key, val] of declarations) {
         this.declarations.set(newInputs[oldInputs.indexOf(key)], val);
+    }
+
+    // associate / disassociate the definition with a primitive
+    if (body.expression?.selector === 'doPrimitive') {
+        this.primitive = body.expression.inputs()[0].contents().text || null;
+        this.body = null;
+        return;
+    } else {
+        this.primitive = null;
     }
 
     // replace the definition body with the given context
