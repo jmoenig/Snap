@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-07';
+modules.threads = '2023-September-11';
 
 var ThreadManager;
 var Process;
@@ -4554,6 +4554,9 @@ Process.prototype.reportTypeOf = function (thing) {
         }
         return 'reporter'; // 'ring';
     }
+    if (thing instanceof Array && isString(thing[0])) {
+        return 'selector';
+    }
     return 'undefined';
 };
 
@@ -8164,7 +8167,10 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
                 options = val.at(idx + 1);
-            this.assertType(options, ['list', 'Boolean', 'number', 'text']);
+            this.assertType(
+                options,
+                ['list', 'Boolean', 'number', 'text', 'selector']
+            );
             if (options instanceof List) {
                 options = options.itemsArray().map(v =>
                     v.toString().trim()).join('\n');
