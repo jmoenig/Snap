@@ -7500,7 +7500,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, data, def, info, loc, cmt;
+        expr, body, slots, data, def, info, loc, cmt, prim;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
@@ -7524,16 +7524,24 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
-                body = expr.definition.body || new Context();
+                if (expr.definition.primitive) {
+                    prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
+                    prim.inputs()[0].setContents(expr.definition.primitive);
+                    body = prim.reify();
+                } else {
+                    body = expr.definition.body || new Context();
+                }
             } else {
                 body = this.blockReceiver().getMethod(expr.semanticSpec).body ||
                     new Context();
             }
         } else {
-            body = new Context();
+            prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
+            prim.inputs()[0].setContents(expr.selector);
+            body = prim.reify();
         }
         if (body instanceof Context &&
-            !body.expression &&
+            (!body.expression || prim) &&
             !body.inputs.length
         ) {
             // make sure the definition has the same number of inputs as the

@@ -56,6 +56,7 @@
 * threads: added internal data type support for new "selector" type
 * byob: fixed a primitive-customization glitch
 * extensions: new "bootstrapped(block)?" extension primitive
+* threads: added "doPrimitive" block support to queried definitions of primitives and custom blocks associated with a primitive
 
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
