@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-September-07';
+modules.objects = '2023-September-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -2566,19 +2566,19 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         if (setDefaults) {
             block.refreshDefaults(info);
         }
-        return block;
+    } else {
+        block = info.type === 'command' ? new CommandBlockMorph()
+            : info.type === 'hat' ? new HatBlockMorph()
+                : info.type === 'ring' ? new RingMorph()
+                    : new ReporterBlockMorph(info.type === 'predicate');
+        block.color = this.blockColorFor(info.category);
+        block.category = info.category;
+        block.selector = migration ? migration.selector : selector;
+        if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
+            block.isStatic = true;
+        }
+        block.setSpec(block.localizeBlockSpec(info.spec));
     }
-    block = info.type === 'command' ? new CommandBlockMorph()
-        : info.type === 'hat' ? new HatBlockMorph()
-            : info.type === 'ring' ? new RingMorph()
-                : new ReporterBlockMorph(info.type === 'predicate');
-    block.color = this.blockColorFor(info.category);
-    block.category = info.category;
-    block.selector = migration ? migration.selector : selector;
-    if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
-        block.isStatic = true;
-    }
-    block.setSpec(block.localizeBlockSpec(info.spec));
     if (migration && migration.expand) {
         if (migration.expand instanceof Array) {
             for (i = 0; i < migration.expand[1]; i += 1) {

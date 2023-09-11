@@ -48,6 +48,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-09-11
+* objects: fixed block migrations for bootstrapped custom blocks
+
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
 * byob: support for running primitives inside custom block definitions
