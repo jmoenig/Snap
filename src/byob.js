@@ -1039,8 +1039,7 @@ CustomBlockDefinition.prototype.declarationFor = function (spec) {
     // expands
     decl[7] = part instanceof MultiArgMorph ?
         (part.labelText instanceof Array ?
-            new List(part.labelText.map(item =>
-                item.replaceAll('\n', ' ')))
+            part.labelText.map(item => item.replaceAll('\n', ' ')).join('\n')
             : (part.labelText || '').replaceAll('\n', ' '))
         : '';
 

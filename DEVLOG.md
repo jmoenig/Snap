@@ -53,6 +53,7 @@
 * objects: fixed block migrations for bootstrapped custom blocks
 * byob: metaprogramming support for associating custom block definitions with primitives
 * threads: added internal data type support for new "selector" type
+* byob: fixed a primitive-customization glitch
 
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
