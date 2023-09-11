@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-August-23';
+modules.extensions = '2023-September-11';
 
 // Global stuff
 
@@ -262,6 +262,17 @@ SnapExtensions.primitives.set(
         ) {
             block.definition.unBootstrap(proc.blockReceiver());
         }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrapped(block)?',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        return block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped();
     }
 );
 
