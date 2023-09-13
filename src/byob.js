@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-September-11';
+modules.byob = '2023-September-13';
 
 // Declarations
 
@@ -1182,7 +1182,7 @@ CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
     });
 };
 
-CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
+CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition,
         newSpec = this.isPrototype ?
                 def.spec : def.localizedSpec(),
@@ -1209,7 +1209,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
         }
         this.setSpec(newSpec, def);
         this.fixLabelColor();
-        this.restoreInputs(oldInputs);
+        this.restoreInputs(oldInputs, offset);
     } else { // update all input slots' drop-downs
         this.inputs().forEach((inp, i) => {
             if (inp instanceof ArgMorph &&
@@ -1258,8 +1258,16 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition) {
     this.fixBlockColor(null, true);
 };
 
-CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
+CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs, offset) {
     // try to restore my previous inputs when my spec has been changed
+
+    if (offset) {
+        // assuming a "relabel" action that needs to shift inputs
+        this.refreshDefaults();
+        BlockMorph.prototype.restoreInputs.call(this, oldInputs, offset);
+        return;
+    }
+
     var newInputs = this.inputs(),
         len = Math.max(oldInputs.length, newInputs.length),
         scripts = this.parentThatIsA(ScriptsMorph),
@@ -2010,9 +2018,27 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
     var menu = new MenuMorph(this),
         oldSpec = this.abstractBlockSpec(),
         oldInputs = this.inputs().map(each => each.fullCopy());
-    alternatives.forEach(def => {
-        var block = def.blockInstance();
-        block.restoreInputs(oldInputs);
+    alternatives.forEach(alt => {
+        var def, block, sel, off;
+        if (alt instanceof CustomBlockDefinition) {
+            def = alt;
+            block = def.blockInstance();
+            block.restoreInputs(oldInputs);
+        } else { // assume a selector or tuple: selector, offset
+            if (alt instanceof Array) {
+                sel = alt[0];
+                off = -alt[1];
+            } else {
+                sel = alt;
+                off = 0;
+            }
+            block = SpriteMorph.prototype.blockForSelector(sel, true);
+            if (!block.isCustomBlock || !block.isGlobal) {
+                return;
+            }
+            def = block.definition;
+            block.restoreInputs(oldInputs, off);
+        }
         block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
@@ -2020,7 +2046,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
             () => {
                 this.definition = def;
                 this.isGlobal = def.isGlobal;
-                this.refresh();
+                this.refresh(def, off);
                 this.fixLayout();
                 this.scriptTarget().recordUserEdit(
                     'scripts',
@@ -2044,6 +2070,12 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         type = this instanceof CommandBlockMorph ? 'command'
             : (this.isPredicate ? 'predicate' : 'reporter');
+
+    if (this.isGlobal && this.definition.primitive) {
+        return (SpriteMorph.prototype.blockAlternatives[
+            this.definition.primitive] || []).filter(sel =>
+                StageMorph.prototype.hiddenPrimitives[sel] !== true);
+    }
     return allDefs.filter(each =>
         each !== this.definition && each.type === type && !each.isHelper
     );
@@ -2097,9 +2129,9 @@ CustomReporterBlockMorph.prototype.initializeVariables =
 CustomReporterBlockMorph.prototype.reactToTemplateCopy =
     CustomCommandBlockMorph.prototype.reactToTemplateCopy;
 
-CustomReporterBlockMorph.prototype.refresh = function (aDefinition) {
+CustomReporterBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition;
-    CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, true);
+    CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
     if (!this.isPrototype) {
         this.isPredicate = (def.type === 'predicate');
     }

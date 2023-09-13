@@ -50,6 +50,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-09-13
+* byob: relabelling support for bootstrapped custom blocks shadowing primitives
+
 ### 2023-09-11
 * objects: fixed block migrations for bootstrapped custom blocks
 * byob: metaprogramming support for associating custom block definitions with primitives
