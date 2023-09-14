@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-11';
+modules.threads = '2023-September-14';
 
 var ThreadManager;
 var Process;
@@ -2743,7 +2743,7 @@ Process.prototype.doIfElse = function () {
 };
 
 Process.prototype.doIf = function (block) {
-    // variadic ersion with trancending variable scope, i.e. the C-slots are
+    // variadic version with trancending variable scope, i.e. the C-slots are
     // not full lambdas, letting you e.g. declare script variables inside
     // them that can be accesses later outside of the C-slot
     var args = this.context.inputs,
