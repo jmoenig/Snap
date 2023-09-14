@@ -50,6 +50,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-09-14
+* byob: support for translating bootstrapped custom block definitions using already existing language packs
+
 ### 2023-09-13
 * byob: relabelling support for bootstrapped custom blocks shadowing primitives
 
