@@ -2,6 +2,16 @@
 
 ## in development:
 
+## 9.0.6:
+* **Notable Fixes:**
+    * fixed #3252 - local return glitch
+    * fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+
+2023-09-14
+* threads: fixed #3252 - local return glitch
+* animation library: fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+* prepared v9.0.6 patch
+
 ## 9.0.5:
 * **Notable Changes:**
     * MQTT extension update, thanks, Xavier and Simon!

@@ -2749,7 +2749,8 @@ Process.prototype.doIf = function (block) {
     var args = this.context.inputs,
         inps = block.inputs(),
         outer = this.context.outerContext,
-        acc = this.context.accumulator;
+        acc = this.context.accumulator,
+        isCustomBlock = this.context.isCustomBlock;
 
     if (!acc) {
         acc = this.context.accumulator = {
@@ -2759,6 +2760,7 @@ Process.prototype.doIf = function (block) {
     if (!args.length) {
         if (acc.args.length) {
             this.pushContext(acc.args.shift(), outer);
+            this.context.isCustomBlock = isCustomBlock;
             return;
         }
         this.popContext();
@@ -2767,6 +2769,7 @@ Process.prototype.doIf = function (block) {
     if (args.pop()) {
         this.popContext();
         this.pushContext(acc.args.shift().evaluate()?.blockSequence(), outer);
+        this.context.isCustomBlock = isCustomBlock;
         return;
     }
     acc.args.shift();
