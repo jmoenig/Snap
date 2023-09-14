@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 9.0.6:
+* **Notable Fixes:**
+    * fixed #3252 - local return glitch
+
+2023-09-14
+    * fixed #3252 - local return glitch
+    * prepared v9.0.6 patch
+
 ## 9.0.5:
 * **Notable Changes:**
     * MQTT extension update, thanks, Xavier and Simon!
