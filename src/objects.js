@@ -12362,6 +12362,18 @@ WatcherMorph.prototype.userMenu = function () {
                 menu.addLine();
                 vNames.forEach(vName => monitor(vName));
             }
+        } else if (this.currentValue instanceof Sound) {
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.toDataURL(),
+                        'audio/wav',
+                        myself.getter
+                    )
+                }
+            )
         }
 
         if (this.currentValue.blockify) {
