@@ -147,6 +147,18 @@ SpriteMorph.prototype.initBlocks = function () {
         spec: 'username'
     };
 
+    SpriteMorph.prototype.blocks.doTryCatch = {
+        type: 'command',
+        category: 'control',
+        spec: 'try %cla if error %upvar %cla',
+        defaults: [null, 'err', null],
+    };
+    SpriteMorph.prototype.blocks.doThrow = {
+        type: 'command',
+        category: 'control',
+        spec: 'error %s',
+    };
+
     if (NetsBloxExtensions) {
         NetsBloxExtensions.initBlocks();
     }

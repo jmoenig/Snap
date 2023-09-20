@@ -854,7 +854,7 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
 ) {
     let url = location.pathname + "?";
 
-    const isPublic = project.state !== "Private" && project.saveState === 'SAVED';
+    const isPublic = project.state !== "Private" && project.saveState === 'Saved';
     if (isExample) {
         url += "action=example&ProjectName=" + encodeURIComponent(project.name) +
           "&";

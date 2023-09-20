@@ -5388,7 +5388,8 @@ CommandBlockMorph.prototype.isStop = function () {
     return ([
         'doForever',
         'doReport',
-        'removeClone'
+        'removeClone',
+        'doThrow',
     ].indexOf(this.selector) > -1);
 };
 

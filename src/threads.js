@@ -720,7 +720,7 @@ Process.prototype.evaluateContext = function () {
     if (exp instanceof ArgLabelMorph) {
         return this.evaluateArgLabel(exp);
     }
-    if (exp instanceof ArgMorph || exp.bindingID) {
+    if (exp instanceof ArgMorph || exp?.bindingID) {
         return this.evaluateInput(exp);
     }
     if (exp instanceof BlockMorph) {

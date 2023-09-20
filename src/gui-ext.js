@@ -575,7 +575,7 @@ IDE_Morph.prototype.sendFriendRequest = async function () {
 IDE_Morph.prototype.respondToFriendRequest = async function (request) {
     const dialog = new DialogBoxMorph(
         this,
-        () => this.cloud.respondToFriendRequest(request.sender, 'APPROVED'),
+        () => this.cloud.respondToFriendRequest(request.sender, 'Approved'),
     );
     dialog.labelString = 'Respond to Friend Request';
     dialog.key = `FriendRequestFrom${request.sender}`;
@@ -598,7 +598,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
     dialog.addButton('ok', localize('Accept'));
     dialog.addButton(
         () => {
-            this.cloud.respondToFriendRequest(request.sender, 'REJECTED');
+            this.cloud.respondToFriendRequest(request.sender, 'Rejected');
             dialog.destroy();
         }, 
         localize('Reject')
@@ -610,7 +610,7 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
                 localize('Block User?')
             );
             if (confirmed) {
-                this.cloud.respondToFriendRequest(request.sender, 'BLOCKED');
+                this.cloud.respondToFriendRequest(request.sender, 'Blocked');
             }
             dialog.destroy();
         }, 
@@ -631,6 +631,43 @@ IDE_Morph.prototype.respondToFriendRequest = async function (request) {
 
     dialog.popUp(this.world());
     dialog.fixLayout();
+};
+
+IDE_Morph.prototype.tryElevatePermissions = async function (projectId, room) {
+    const username = this.cloud.username;
+    const existingInvite = (await this.cloud.getCollaboratorRequestList()).find(
+        invite => invite.projectId === projectId
+    );
+
+    if (existingInvite) {
+        this.confirm(
+            localize('Edits cannot be made on projects by guests.\n\nWould ' +
+            'you like to accept the existing invitation to collaborate?'),
+            localize('Accept Collaboration Invitation?'),
+            async () => {
+              await this.cloud.respondToCollaborateRequest(existingInvite.id, true);
+            }
+        );
+    } else {
+        this.confirm(
+            localize('Edits cannot be made on projects by guests.\n\nWould ' +
+            'you like to request to be made a collaborator?'),
+            localize('Request Collaborator Privileges?'),
+            () => {
+                const ownerIds = room.getOccupants()
+                    .filter(occupant => room.isOwner(occupant.name))
+                    .map(occupant => occupant.id);
+
+                this.sockets.sendIDEMessage({
+                    type: 'permission-elevation-request',
+                    id: `elevate-${Date.now()}`,
+                    projectId: projectId,
+                    clients: ownerIds,
+                    username,
+                }, ...ownerIds);
+            }
+        );
+    }
 };
 
 IDE_Morph.prototype.respondToCollaborateRequest = async function (request) {

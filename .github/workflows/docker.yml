@@ -1,0 +1,40 @@
+name: Push Docker Hub
+
+on:
+  push:
+    branches:
+      - master
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+        
+      - name: Get Release Tags
+        id: get_release_tags
+        run: |
+          echo "RELEASE_TAG=$(echo ${GITHUB_REF} | sed -E 's/.*v?([0-9]+)\.([0-9]+)\.([0-9]+)?/\1.\2.\3,\1.\2,\1/')" >> $GITHUB_ENV
+          echo "TAG=latest" >> $GITHUB_ENV
+        if: github.event_name == 'release'
+
+      - name: Get Push Tags
+        id: get_push_tags
+        run: |
+          echo "RELEASE_TAG=$(echo ${GITHUB_REF:11})" >> $GITHUB_ENV
+          echo "TAG=nightly" >> $GITHUB_ENV
+        if: github.event_name == 'push'
+        
+      - name: Publish to Docker Hub
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: netsblox/browser
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          tags: "${{ env.TAG }},${{ env.RELEASE_TAG }}"
