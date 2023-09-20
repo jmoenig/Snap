@@ -12366,12 +12366,22 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
+                    console.log(this.currentValue);
+                    console.log(this.currentValue.audio.src);
+                    const audioSrc = this.currentValue.audio.src;
                     var ide = myself.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        myself.currentValue.toDataURL(),
-                        'audio/wav',
-                        myself.getter
-                    )
+                    if (audioSrc.includes('data:'))
+                        ide.saveFileAs(
+                            myself.currentValue.audio.src,
+                            'audio/wav',
+                            myself.getter
+                        )
+                    else 
+                        ide.saveFileAs(
+                            myself.currentValue.audioBuffer,
+                            'audio/wav',
+                            myself.getter
+                        )
                 }
             )
         }
