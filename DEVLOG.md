@@ -52,6 +52,7 @@
 
 ### 2023-09-22
 * gui: new experimental hidden "customize primitives" mode setting
+* gui: new experimental hidden "export customized primitives" feature
 
 ### 2023-09-14
 * byob: support for translating bootstrapped custom block definitions using already existing language packs

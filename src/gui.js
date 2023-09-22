@@ -80,8 +80,8 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
-*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+CustomBlockDefinition*/
 
 /*jshint esversion: 8*/
 
@@ -4848,6 +4848,14 @@ IDE_Morph.prototype.projectMenu = function () {
                 '\nand remove their definitions'
         );
     }
+    if (shiftClicked) {
+        menu.addItem(
+            'Export customized primitives...',
+            () => this.exportCustomizedPrimitives(),
+            'EXPERIMENTAL!',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem(
         'Hide blocks...',
         () => new BlockVisibilityDialogMorph(this.currentSprite).popUp(world)
@@ -5705,6 +5713,29 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
             'Export blocks',
             'this project doesn\'t have any\n'
                 + 'custom global blocks yet'
+        );
+    }
+};
+
+IDE_Morph.prototype.exportCustomizedPrimitives = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        new BlockExportDialogMorph(
+            this.serializer,
+            blocks,
+            this
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Export customized primitives',
+            'this session doesn\'t have any\n'
+                + 'customized primitives yet'
         );
     }
 };
