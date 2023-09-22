@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-September-11';
+modules.gui = '2023-September-22';
 
 // Declarations
 
@@ -4265,6 +4265,13 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
+        menu.addItem(
+            'Customize primitives',
+            'userCustomizePrimitives',
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
     }
     menu.addItem(
         'Microphone resolution...',
@@ -7690,6 +7697,35 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
         null, // read only
         true // numeric
     );
+};
+
+// IDE_Morph customize primitives
+
+IDE_Morph.prototype.userCustomizePrimitives = function () {
+    // highly experimental for v10 - replace all primitives
+    // with custom block definitions
+    var projectData;
+    this.scene.captureGlobalSettings();
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
+    }
+    SpriteMorph.prototype.customizeBlocks();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.createCategories();
+    this.categories.refreshEmpty();
+    this.createCorralBar();
+    this.fixLayout();
+    this.openProjectString(projectData);
 };
 
 // IDE_Morph cloud interface
