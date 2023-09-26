@@ -6125,6 +6125,10 @@ ReporterBlockMorph.prototype.init = function (isPredicate) {
 // ReporterBlockMorph drag & drop:
 
 ReporterBlockMorph.prototype.snapTarget = function (hand) {
+    if (!(this.parent instanceof ScriptsMorph)) {
+        return null;
+    }
+
     return this.parent.closestInput(this, hand);
 };
 
