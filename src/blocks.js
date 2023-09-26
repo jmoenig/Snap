@@ -623,6 +623,7 @@ SyntaxElementMorph.prototype.labelParts = {
     '%serviceNames': {
         type: 'input',
         menu: 'serviceNames',
+        tags: 'static',
         readonly: true
     },
     '%rpcActions': {
