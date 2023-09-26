@@ -308,7 +308,8 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
 StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={}) {
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
-        const hostUrl = this.parentThatIsA(IDE_Morph)?.services.defaultHost?.url;
+        const ide = this.parentThatIsA(IDE_Morph) || world?.children[0];  // This fallback isn't an ideal way to get the IDE morph...
+        const hostUrl = ide?.services.defaultHost?.url;
         if (!hostUrl) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
 
         // FIXME: support type definitions from other hosts, too
