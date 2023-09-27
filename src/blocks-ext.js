@@ -308,7 +308,8 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
 StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={}) {
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
-        const hostUrl = this.parentThatIsA(IDE_Morph)?.services.defaultHost?.url;
+        const ide = this.parentThatIsA(IDE_Morph) || world?.children[0];  // This fallback isn't an ideal way to get the IDE morph...
+        const hostUrl = ide?.services.defaultHost?.url;
         if (!hostUrl) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
 
         // FIXME: support type definitions from other hosts, too
@@ -592,7 +593,8 @@ HintInputSlotMorph.prototype.updateFieldValue = function (newValue) {
     var block = this.parentThatIsA(BlockMorph);
 
     newValue = newValue !== undefined ? newValue : this.contents().text;
-    if (block.id) {  // not in the palette
+    const changed = newValue !== this.lastValue;
+    if (block.id && changed) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
         return SnapActions.setField(this, newValue);
     } else {
