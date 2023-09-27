@@ -1784,8 +1784,9 @@ ActionManager.prototype.ensureNotDragging = function(block) {
         var situation = hand.grabOrigin;
 
         block = hand.children[0];  // get the top block
-        block.cachedFullImage = null;
-        block.cachedFullBounds = null;
+        hand.cachedFullImage = null;
+        hand.cachedFullBounds = null;
+
         block.changed();
         block.removeShadow();
         hand.children = [];
