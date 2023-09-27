@@ -593,7 +593,8 @@ HintInputSlotMorph.prototype.updateFieldValue = function (newValue) {
     var block = this.parentThatIsA(BlockMorph);
 
     newValue = newValue !== undefined ? newValue : this.contents().text;
-    if (block.id) {  // not in the palette
+    const changed = newValue !== this.lastValue;
+    if (block.id && changed) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
         return SnapActions.setField(this, newValue);
     } else {
