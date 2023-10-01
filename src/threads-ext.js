@@ -273,8 +273,7 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
                 this.rpcRequest = null;
             }
             return image;
-        } 
-        else if(contentType && contentType.startsWith('audio')){
+        } else if (contentType && contentType.startsWith('audio')){
             const soundArrayBuffer = this.rpcRequest.response;
             var audioTo64 = btoa(
                 new Uint8Array(soundArrayBuffer)
@@ -285,8 +284,7 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
             const sound = new Sound(audio, "name");
             this.rpcRequest = null;
             return sound;
-        }
-        else {  // assume text
+        } else {  // assume text
             var text = new TextDecoder('utf-8').decode(new Uint8Array(this.rpcRequest.response));
             response = decodeURIComponent(encodeURIComponent(text));
             stage = this.homeContext.receiver.parentThatIsA(StageMorph);
@@ -334,31 +332,6 @@ Process.prototype.getCostumeFromRPC = function (url, params) {
     this.pushContext('doYield');
     this.pushContext();
 };
-
-Process.prototype.getAudioFromRPC = function(url, params) {
-    var audio;
-
-    //Create Snap XML from input
-    
-        var resultado =  this.callRPC(url, params, true);
-
-        var bufferToBase64 = function (buffer) {
-            var bytes = new Uint8Array(buffer);
-            var len = buffer.byteLength;
-            var binary = "";
-            for (var i = 0; i < len; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            return window.btoa(binary);
-        };
-        
-        // Clear request
-        audio = this.requestedAudio;
-        this.requestedAudio = null;
-        base64Audio = window.btoa(audio);
-        const result = `<sound collabId=\"item_-1_2\" name=\"audio\"sound=\"${base64Audio}\" id=\"1\"/>`;
-        return result;
-}
 
 Process.prototype.getJSFromRPC = function (url, params) {
     if (typeof params === 'string') {
