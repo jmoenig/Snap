@@ -5,12 +5,17 @@
             this.ide = null;
             this.registry = [];
             this.pendingExtensions = [];
+            // We will track the current non-trivial events so extensions that
+            // have been loaded async and missed the init event can still be
+            // "brought up to speed"
+            this.eventQueue = [];
         }
 
         initialize(ide) {
             this.ide = ide;
             this.pendingExtensions.forEach(ext => this.load(ext));
             this.pendingExtensions = [];
+            this.eventQueue = [];
         }
 
         load(Extension) {
@@ -38,16 +43,42 @@
             this.ide.createCorralBar();
             this.ide.fixLayout();
             SpriteMorph.prototype.initBlocks();
+
+            this.eventQueue.forEach(eventHandler => extension[eventHandler]());
         }
 
         onNewProject() {
             this.registry.forEach(ext => ext.onNewProject());
+            // Since this is called after onOpenRole, it is problematic
+            // to track this event in the queue.
+            // TODO: detect project opening
+            // this.eventQueue = ['onNewProject'];
         }
 
         onOpenRole() {
             this.registry.forEach(ext => ext.onOpenRole());
+
+            if (!this.eventQueue.includes('onOpenRole')) {
+                this.eventQueue = ['onOpenRole'];
+            }
         }
 
+        // The following events shouldn't need to be queue since
+        // the state of the project is available during one of
+        // the other initialization events (ie, onOpenRole)
+        onNewSprite(sprite) {
+            this.registry.forEach(ext => ext.onNewSprite(sprite));
+        }
+
+        onRenameSprite(spriteId, name) {
+            this.registry.forEach(ext => ext.onRenameSprite(spriteId, name));
+        }
+
+        onSetStageSize(width, height) {
+            this.registry.forEach(ext => ext.onSetStageSize(width, height));
+        }
+
+        // Transient events
         onRunScripts() {
             this.registry.forEach(ext => ext.onRunScripts());
         }
@@ -62,18 +93,6 @@
 
         onResumeAll() {
             this.registry.forEach(ext => ext.onResumeAll());
-        }
-
-        onNewSprite(sprite) {
-            this.registry.forEach(ext => ext.onNewSprite(sprite));
-        }
-
-        onRenameSprite(spriteId, name) {
-            this.registry.forEach(ext => ext.onRenameSprite(spriteId, name));
-        }
-
-        onSetStageSize(width, height) {
-            this.registry.forEach(ext => ext.onSetStageSize(width, height));
         }
 
         register(Extension) {
