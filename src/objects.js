@@ -12368,6 +12368,27 @@ WatcherMorph.prototype.userMenu = function () {
                 menu.addLine();
                 vNames.forEach(vName => monitor(vName));
             }
+        } else if (this.currentValue instanceof Sound) {
+            menu.addItem(
+                'export...',
+                function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    const audioSrc = this.currentValue.audio.src;
+                    if (audioSrc.includes('data:')) {
+                        ide.saveFileAs(
+                            myself.currentValue.audio.src,
+                            'audio/wav',
+                            myself.getter
+                        )
+                    } else {
+                        ide.saveFileAs(
+                            myself.currentValue.audioBuffer,
+                            'audio/wav',
+                            myself.getter
+                        )
+                    }
+                }
+            )
         }
 
         if (this.currentValue.blockify) {

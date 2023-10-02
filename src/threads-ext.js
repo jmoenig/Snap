@@ -273,6 +273,17 @@ Process.prototype.callRPC = function (baseUrl, params, noCache) {
                 this.rpcRequest = null;
             }
             return image;
+        } else if (contentType && contentType.startsWith('audio')){
+            const soundArrayBuffer = this.rpcRequest.response;
+            var audioTo64 = btoa(
+                new Uint8Array(soundArrayBuffer)
+                  .reduce((data, byte) => data + String.fromCharCode(byte), '')
+              );
+            base64 = `data:audio/mpeg;base64,${audioTo64}`;
+            const audio = new Audio(base64);
+            const sound = new Sound(audio, "name");
+            this.rpcRequest = null;
+            return sound;
         } else {  // assume text
             var text = new TextDecoder('utf-8').decode(new Uint8Array(this.rpcRequest.response));
             response = decodeURIComponent(encodeURIComponent(text));
