@@ -875,7 +875,6 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
 };
 
 NetsBloxMorph.prototype.setQueryString = function (dict, stateName) {
-  console.log('setQueryString', dict);
     const qs = Object.entries(dict)
       .map(pair => pair.map(encodeURIComponent).join('='))
       .join('&');
