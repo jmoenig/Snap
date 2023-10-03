@@ -852,29 +852,34 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
     project,
     isExample,
 ) {
-    let url = location.pathname + "?";
-
-    const isPublic = project.state !== "Private" && project.saveState === 'Saved';
-    if (isExample) {
-        url += "action=example&ProjectName=" + encodeURIComponent(project.name) +
-          "&";
-    } else if (isPublic) {
-        url += "action=present&Username=" +
-          encodeURIComponent(project.owner) +
-          "&ProjectName=" + encodeURIComponent(project.name) + "&";
-    }
-
-    // Add other query string content (ie, extensions)
-    const querystring = location.href
-        .replace(/^.*\?/, "")
-        .replace("#" + location.hash, "");
+    const querystring = (location.href
+        .split(/^.*\?/)[1] || '')
+        .replace(location.hash, "");
     const dict = this.cloud.parseDict(querystring);
+    const isPublic = project.state !== "Private" && project.saveState === 'Saved';
 
-    if (dict.extensions) {
-        url += "extensions=" + dict.extensions;
+    if (isExample) {
+        dict.action = 'example';
+        dict.ProjectName = project.name;
+    } else if (isPublic) {
+        dict.action = 'present';
+        dict.Username = project.owner;
+        dict.ProjectName = project.name;
+    } else {  // private project - clear the relevant qs params
+        delete dict.action;
+        delete dict.Username;
+        delete dict.ProjectName;
     }
 
-    window.history.pushState(project.name, project.name, url);
+    this.setQueryString(dict, project.name);
+};
+
+NetsBloxMorph.prototype.setQueryString = function (dict, stateName) {
+    const qs = Object.entries(dict)
+      .map(pair => pair.map(encodeURIComponent).join('='))
+      .join('&');
+    const url = location.pathname + "?" + qs + location.hash;
+    window.history.pushState(stateName, stateName, url);
 };
 
 // Bug reporting assistance
