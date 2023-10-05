@@ -470,11 +470,11 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         }
     }
 
-    dict = {};
+    dict = this.parseUrlAnchors(window.location.search, window.location.hash);
     if (loc.href.indexOf('?') > -1) {
         var querystring = loc.href
             .replace(/^.*\?/, '')
-            .replace('#' + loc.hash, '');
+            .replace(loc.hash, '');
 
         dict = this.cloud.parseDict(querystring);
     }
@@ -657,8 +657,6 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         }
         msg.destroy();
 
-    } else if (loc.hash.substr(0, 7) === '#signup' || dict.action === 'signup') {
-        this.createCloudAccount();
     } else {
         await myself.newProject();
     }

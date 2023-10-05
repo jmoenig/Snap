@@ -7,6 +7,33 @@
 ////////////////////////////////////////////////////
 // Override submodule for exporting of message types
 ////////////////////////////////////////////////////
+IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
+    const validActions = new Set([
+        'open',  // import content (xml or url) on open
+        'run',  // open project and run
+        'present',  // main sharing public projects (username, project name)
+        'cloud',   // fetch project from the cloud (no running or app mode)
+        'dl',  // download a cloud project as an xml
+        'lang',  // set the language
+        'signup',  // open signup dialog
+        'example',  // open an example
+        'private',  // open a private (unshared) project via url
+    ]);
+    hash = hash.replace(/^#/, '');
+    const hashAction = hash.split(':')[0];
+    let hashDictStr = '';
+    if (validActions.has(hashAction)) {
+        hashDictStr = hash.substring(hashAction.length + 1) + `&action=${hashAction}`;
+    }
+
+    const anchorsDict = new URLSearchParams(hashDictStr);
+
+    // parse querystring params
+    const queryDict = new URLSearchParams(querystring);
+    queryDict.forEach((key, value) => anchorsDict.set(key, value));
+
+    return anchorsDict;
+};
 
 IDE_Morph.prototype._getURL = IDE_Morph.prototype.getURL;
 IDE_Morph.prototype.getURL = function (url, callback, responseType) {
