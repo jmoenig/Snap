@@ -7,22 +7,12 @@
 ////////////////////////////////////////////////////
 // Override submodule for exporting of message types
 ////////////////////////////////////////////////////
+IDE_Morph.prototype.UrlActionRegistry = {};
 IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
-    const validActions = new Set([
-        'open',  // import content (xml or url) on open
-        'run',  // open project and run
-        'present',  // main sharing public projects (username, project name)
-        'cloud',   // fetch project from the cloud (no running or app mode)
-        'dl',  // download a cloud project as an xml
-        'lang',  // set the language
-        'signup',  // open signup dialog
-        'example',  // open an example
-        'private',  // open a private (unshared) project via url
-    ]);
     hash = hash.replace(/^#/, '');
     const hashAction = hash.split(':')[0];
     let hashDictStr = '';
-    if (validActions.has(hashAction)) {
+    if (this.UrlActionRegistry.hasOwnProperty(hashAction)) {
         hashDictStr = hash.substring(hashAction.length + 1) + `&action=${hashAction}`;
     }
 
@@ -30,10 +20,143 @@ IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
 
     // parse querystring params
     const queryDict = new URLSearchParams(querystring);
-    queryDict.forEach((key, value) => anchorsDict.set(key, value));
+    queryDict.forEach((value, key) => anchorsDict.set(key, value));
+
+    // TODO: custom parsing for different options
+
+    // TODO: refactor so the params implement their effect
 
     return anchorsDict;
 };
+
+class UrlParams {
+    constructor(params, hash='') {
+        this.params = params;
+        this.hash = hash;
+    }
+
+    trimmedHash() {
+        return this.hash.replace(/#?[a-zA-Z]+:/, '');
+    }
+
+    tryDecode(hash) {
+        if (hash.charAt(0) === '%'
+                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
+            hash = decodeURIComponent(hash);
+        }
+        return hash;
+    }
+
+    getRequiredParam(name, ide) {
+        const value = this.params.get(name);
+        if (value === undefined || value === null) {
+            ide.showMessage("U")
+            
+        }
+    }
+
+    async apply(ide) {
+        const extensions = this.params.get('extensions');
+        if (extensions) {
+            try {
+                const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
+                await Promise.all(extensionUrls.map(url => ide.loadExtension(url)));
+            } catch (err) {
+                ide.inform(
+                    'Unable to load extensions',
+                    'The following error occurred while trying to load extensions:\n\n' +
+                    err.message + '\n\n' +
+                    'Perhaps the URL is malformed?'
+                );
+            }
+        }
+    }
+}
+
+/**
+ * Import content (xml or URL) on open
+ */
+class OpenTextFromUrl extends UrlParams {
+    async apply(ide) {
+        super.apply(ide);
+        let hash = this.tryDecode(this.trimmedHash());
+
+        // TODO: support data param, too
+        // Determine if it is a URL or text
+        const text = hash.startsWith('<') ? text : getURL(hash);
+        await ide.droppedText(text);
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.open = OpenTextFromUrl;
+
+/**
+ * Open project from xml/URL and run.
+ */
+class RunProjectFromUrl extends UrlParams {
+    async apply(ide) {
+        super.apply(ide);  // FIXME?
+        let hash = this.trimmedHash();
+        const idx = hash.indexOf("&");
+        if (idx > 0) {
+            hash = hash.slice(0, idx);
+        }
+        hash = this.tryDecode(hash);
+
+        // Determine if it is a URL or text
+        const text = hash.startsWith('<') ? text : getURL(hash);
+        await SnapActions.openProject(hash);
+
+        this.toggleAppMode(true);
+        this.runScripts();
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.run = RunProjectFromUrl;
+
+/**
+ * Open a public project (username, project name)
+ */
+class OpenPublicProject extends UrlParams {
+    async apply(ide) {
+        super.apply(ide);  // FIXME?
+
+        ide.showMessage('Fetching project\nfrom the cloud...');
+        const owner = this.getRequiredParam('Username');
+
+        try {
+            const msg = ide.showMessage('Opening project...');
+            const projectData = await ide.cloud.getProjectByName(
+                this.getRequiredParam('Username'),
+                this.getRequiredParam('ProjectName')  // FIXME: throw an error
+            );
+            const xml = ide.getXMLFromProjectData(projectData);
+            await ide.droppedText(xml);
+            ide.hasChangedMedia = true;
+
+            msg.destroy();
+            applyFlags(dict);  // FIXME
+        } catch (err) {
+            ide.cloudError()(err.message);
+        }
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.present = OpenPublicProject;
+
+/**
+ * fetch project from the cloud (no running or app mode)
+ */
+class OpenCloudProject extends UrlParams {
+    async apply(ide) {
+        super.apply(ide);  // FIXME?
+        ide.showMessage('Fetching project\nfrom the cloud...');
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.cloud = OpenPublicProject;
+// dl: ,  // download a cloud project as an xml
+// lang: ,  // set the language
+// signup: ,  // open signup dialog
+// example: ,  // open an example
+// private: ,  // open a private (unshared) project via url
+
 
 IDE_Morph.prototype._getURL = IDE_Morph.prototype.getURL;
 IDE_Morph.prototype.getURL = function (url, callback, responseType) {

@@ -427,7 +427,6 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
     var myself = this,
         urlLanguage,
         hash,
-        dict,
         idx;
 
     loc = loc || location;
@@ -470,110 +469,21 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
         }
     }
 
-    dict = this.parseUrlAnchors(window.location.search, window.location.hash);
-    if (loc.href.indexOf('?') > -1) {
-        var querystring = loc.href
-            .replace(/^.*\?/, '')
-            .replace(loc.hash, '');
+    const urlParams = this.parseUrlAnchors(location.search, location.hash);
 
-        dict = this.cloud.parseDict(querystring);
-    }
-    
-    if (dict.extensions) {
-        try {
-            const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
-            await Promise.all(extensionUrls.map(url => this.loadExtension(url)));
-        } catch (err) {
-            this.inform(
-                'Unable to load extensions',
-                'The following error occurred while trying to load extensions:\n\n' +
-                err.message + '\n\n' +
-                'Perhaps the URL is malformed?'
-            );
-        }
-    }
-
-    if (loc.hash.substr(0, 6) === '#open:') {
-        hash = loc.hash.substr(6);
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (contains(
-                ['project', 'blocks', 'sprites', 'snapdata'].map(
-                    function (each) {
-                        return hash.substr(0, 8).indexOf(each);
-                    }
-                ),
-                1
-            )) {
-            await this.droppedText(hash);
-        } else {
-            await this.droppedText(getURL(hash));
-        }
-    } else if (loc.hash.substr(0, 5) === '#run:') {
-        hash = loc.hash.substr(5);
-        idx = hash.indexOf("&");
-        if (idx > 0) {
-            hash = hash.slice(0, idx);
-        }
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (hash.substr(0, 8) === '<project>') {
-            await SnapActions.openProject(hash);
-        } else {
-            await SnapActions.openProject(getURL(hash));
-        }
-        this.toggleAppMode(true);
-        this.runScripts();
-    } else if (loc.hash.substr(0, 9) === '#present:' || dict.action === 'present') {
+    // TODO: always make the shield?
+    if (urlParams) {
         this.shield = new Morph();
         this.shield.color = this.color;
         this.shield.setExtent(this.parent.extent());
         this.parent.add(this.shield);
-        myself.showMessage('Fetching project\nfrom the cloud...');
+        await urlParams.apply(this);
+        this.shield.destroy();
+        this.shield = null;
+    } else {
+        await this.newProject();
+    }
 
-        if (loc.hash.substr(0, 9) === '#present:') {
-            dict = this.cloud.parseDict(loc.hash.substr(9));
-        }
-
-        try {
-            const msg = myself.showMessage('Opening project...');
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            await myself.droppedText(xml);
-            myself.hasChangedMedia = true;
-            myself.shield.destroy();
-            myself.shield = null;
-            msg.destroy();
-            applyFlags(dict);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-    } else if (loc.hash.substr(0, 7) === '#cloud:') {
-        this.shield = new Morph();
-        this.shield.alpha = 0;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-        myself.showMessage('Fetching project\nfrom the cloud...');
-
-        dict = this.cloud.parseDict(loc.hash.substr(7));
-
-        try {
-            const msg = this.showMessage(localize('Opening project...'));
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            await SnapActions.openProject(xml);
-            this.hasChangedMedia = true;
-            this.shield.destroy();
-            this.shield = null;
-            msg.destroy();
-            this.toggleAppMode(false);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
     } else if (loc.hash.substr(0, 4) === '#dl:') {
         let m = myself.showMessage('Fetching project\nfrom the cloud...');
 
@@ -656,14 +566,12 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
             this.cloudError()(err.message);
         }
         msg.destroy();
-
-    } else {
-        await myself.newProject();
     }
 
     this.world().keyboardFocus = this.stage;
     this.warnAboutIE();
 
+    // TODO: add support for this, too
     if (dict.setVariable) {
         const [varName, value] = dict.setVariable.split('=');
         const exists = this.globalVariables.allNames().includes(varName);

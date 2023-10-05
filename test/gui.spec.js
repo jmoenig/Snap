@@ -3,11 +3,16 @@
 describe("gui", function () {
   describe("parseUrlAnchors", function () {
     it('should override hash params with query params', function() {
-      // TODO
+      const qs = '?action=open&Username=qs';
+      const hash = '#open:Username=hash';
+      const dict = driver.ide().parseUrlAnchors(qs, hash);
+      assert.equal(dict.get('Username'), 'qs');
     });
 
-    it('should parse present action from hash', function() {
-      // TODO
+    it.only('should parse present action from hash', function() {
+      const hash = '#present:Username=hash';
+      const dict = driver.ide().parseUrlAnchors(qs, hash);
+      assert.equal(dict.get('Username'), 'hash');
     });
   });
 
