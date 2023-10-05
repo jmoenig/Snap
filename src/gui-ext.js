@@ -9,11 +9,22 @@
 ////////////////////////////////////////////////////
 IDE_Morph.prototype.UrlActionRegistry = {};
 IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
+    // Parse the hash options
     hash = hash.replace(/^#/, '');
-    const hashAction = hash.split(':')[0];
-    let hashDictStr = '';
-    if (this.UrlActionRegistry.hasOwnProperty(hashAction)) {
-        hashDictStr = hash.substring(hashAction.length + 1) + `&action=${hashAction}`;
+    const [hashAction, hashData=''] = hash.split(':');
+    let hashDictStr = hashData;
+
+    if (hashData.length > 0) {
+      const withoutTrailingParams = hashData.split('&').shift();
+      let hasImplicitParam = !withoutTrailingParams.includes('=');
+
+      if (hasImplicitParam) {
+          hashDictStr = 'data=' + hashData;
+      }
+
+      if (this.UrlActionRegistry.hasOwnProperty(hashAction)) {
+          hashDictStr = hashDictStr + `&action=${hashAction}`;
+      }
     }
 
     const anchorsDict = new URLSearchParams(hashDictStr);
@@ -22,40 +33,44 @@ IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
     const queryDict = new URLSearchParams(querystring);
     queryDict.forEach((value, key) => anchorsDict.set(key, value));
 
-    // TODO: custom parsing for different options
-
-    // TODO: refactor so the params implement their effect
-
     return anchorsDict;
 };
 
+IDE_Morph.prototype.getUrlSettings = function (querystring, hash) {
+    const anchorsDict = this.parseUrlAnchors(querystring, hash);
+    const UrlAction = this.UrlActionRegistry[anchorsDict.get('action')] || NoMainParam;
+    return new UrlAction(anchorsDict, hash);
+};
+
+class UrlParamError extends Error {}
+class MissingParameterError extends UrlParamError {
+  constructor(params, parameter) {
+    const action = params.get('action');
+    super(`"${parameter}" required for "${action}"`);
+  }
+}
+
 class UrlParams {
-    constructor(params, hash='') {
+    constructor(params) {
         this.params = params;
-        this.hash = hash;
     }
 
-    trimmedHash() {
-        return this.hash.replace(/#?[a-zA-Z]+:/, '');
-    }
-
-    tryDecode(hash) {
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
+    getRequiredParam(name) {
+        if (!this.params.has(name)) {
+          throw new MissingParameterError(this.params, name);
         }
-        return hash;
+        return this.params.get(name);
     }
 
-    getRequiredParam(name, ide) {
-        const value = this.params.get(name);
-        if (value === undefined || value === null) {
-            ide.showMessage("U")
-            
-        }
+    async applySettings(ide) {
+        await this.applyInitialFlags(ide);
+        await this.apply(ide);
+        await this.applyFlags(ide);
     }
 
-    async apply(ide) {
+    async apply(_ide) {}
+
+    async applyInitialFlags(ide) {
         const extensions = this.params.get('extensions');
         if (extensions) {
             try {
@@ -71,6 +86,52 @@ class UrlParams {
             }
         }
     }
+
+    async applyFlags(ide) {
+        if (this.params.get('embedMode')) {
+            ide.setEmbedMode();
+        }
+        if (this.params.get('appMode')) {
+            ide.toggleAppMode(true);
+        }
+        if (this.params.get('run')) {
+            ide.runScripts();
+        }
+        if (this.params.get('hideControls')) {
+            ide.controlBar.hide();
+            window.onbeforeunload = nop;
+        }
+        if (this.params.get('noExitWarning')) {
+            window.onbeforeunload = nop;
+        }
+        if (this.params.get('lang')) {
+            ide.setLanguage(this.params.get('lang'), null, true); // don't persist
+        }
+        if (this.params.get('setVariable')) {
+            const [varName, value] = this.params.get('setVariable').split('=');
+            const exists = ide.globalVariables.allNames().includes(varName);
+            if (exists) {
+                ide.globalVariables.setVar(varName, value);
+            } else {
+                await ide.droppedText(value, varName, 'text');
+            }
+        }
+
+        // only force my world to get focus if I'm not in embed mode
+        // to prevent the iFrame from involuntarily scrolling into view
+        if (!ide.isEmbedMode) {
+            ide.world().worldCanvas.focus();
+        }
+    }
+}
+
+/**
+ * Default params. Don't really do anything but apply the before & after flags.
+ */
+class NoMainParam extends UrlParams {
+    async apply(ide) {
+        await ide.newProject();
+    }
 }
 
 /**
@@ -78,12 +139,11 @@ class UrlParams {
  */
 class OpenTextFromUrl extends UrlParams {
     async apply(ide) {
-        super.apply(ide);
-        let hash = this.tryDecode(this.trimmedHash());
+        let hash = this.params.get('data');
 
         // TODO: support data param, too
         // Determine if it is a URL or text
-        const text = hash.startsWith('<') ? text : getURL(hash);
+        const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
         await ide.droppedText(text);
     }
 }
@@ -94,20 +154,13 @@ IDE_Morph.prototype.UrlActionRegistry.open = OpenTextFromUrl;
  */
 class RunProjectFromUrl extends UrlParams {
     async apply(ide) {
-        super.apply(ide);  // FIXME?
-        let hash = this.trimmedHash();
-        const idx = hash.indexOf("&");
-        if (idx > 0) {
-            hash = hash.slice(0, idx);
-        }
-        hash = this.tryDecode(hash);
-
+        let hash = this.getRequiredParam('data');
         // Determine if it is a URL or text
-        const text = hash.startsWith('<') ? text : getURL(hash);
-        await SnapActions.openProject(hash);
+        const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
+        await ide.droppedText(text);
 
-        this.toggleAppMode(true);
-        this.runScripts();
+        this.params.set('appMode', true);
+        this.params.set('run', true);
     }
 }
 IDE_Morph.prototype.UrlActionRegistry.run = RunProjectFromUrl;
@@ -117,26 +170,20 @@ IDE_Morph.prototype.UrlActionRegistry.run = RunProjectFromUrl;
  */
 class OpenPublicProject extends UrlParams {
     async apply(ide) {
-        super.apply(ide);  // FIXME?
-
         ide.showMessage('Fetching project\nfrom the cloud...');
-        const owner = this.getRequiredParam('Username');
 
-        try {
-            const msg = ide.showMessage('Opening project...');
-            const projectData = await ide.cloud.getProjectByName(
-                this.getRequiredParam('Username'),
-                this.getRequiredParam('ProjectName')  // FIXME: throw an error
-            );
-            const xml = ide.getXMLFromProjectData(projectData);
-            await ide.droppedText(xml);
-            ide.hasChangedMedia = true;
+        const msg = ide.showMessage('Opening project...');
+        const projectData = await ide.cloud.getProjectByName(
+            this.getRequiredParam('Username'),
+            this.getRequiredParam('ProjectName')
+        );
+        const xml = ide.getXMLFromProjectData(projectData);
+        await ide.droppedText(xml);
+        ide.hasChangedMedia = true;
 
-            msg.destroy();
-            applyFlags(dict);  // FIXME
-        } catch (err) {
-            ide.cloudError()(err.message);
-        }
+        this.params.set('appMode', !this.params.get('editMode'));
+        this.params.set('run', !this.params.get('noRun'));
+        msg.destroy();
     }
 }
 IDE_Morph.prototype.UrlActionRegistry.present = OpenPublicProject;
@@ -146,17 +193,112 @@ IDE_Morph.prototype.UrlActionRegistry.present = OpenPublicProject;
  */
 class OpenCloudProject extends UrlParams {
     async apply(ide) {
-        super.apply(ide);  // FIXME?
         ide.showMessage('Fetching project\nfrom the cloud...');
+      // TODO
     }
 }
-IDE_Morph.prototype.UrlActionRegistry.cloud = OpenPublicProject;
-// dl: ,  // download a cloud project as an xml
-// lang: ,  // set the language
-// signup: ,  // open signup dialog
-// example: ,  // open an example
-// private: ,  // open a private (unshared) project via url
+IDE_Morph.prototype.UrlActionRegistry.cloud = OpenCloudProject;
 
+/**
+ * Download a cloud project as an xml
+ */
+class DownloadCloudProject extends UrlParams {
+    async apply(ide) {
+        let m = ide.showMessage('Fetching project\nfrom the cloud...');
+        try {
+            const projectData = await ide.cloud.getProjectByName(
+                this.getRequiredParam('Username'),
+                this.getRequiredParam('ProjectName')  // FIXME: throw an error
+            );
+            const xml = ide.getXMLFromProjectData(projectData);
+            const blob = new Blob([xml], {type: 'text/xml'});
+            const url = URL.createObjectURL(blob);
+
+            // Create temporary link for download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = this.getRequiredParam('ProjectName') + ".xml";
+
+            document.body.appendChild(link);
+            link.dispatchEvent(
+                new MouseEvent('click', { 
+                bubbles: true, 
+                cancelable: true, 
+                view: window 
+                })
+            );
+
+            // Cleanup
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            this.cloudError()(err.message);
+        }
+        m.destroy();
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.dl = DownloadCloudProject;
+
+/**
+ * Open cloud signup dialog.
+ */
+class CreateCloudAccount extends UrlParams {
+    async apply(ide) {
+        ide.createCloudAccount();
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.signup = CreateCloudAccount;
+
+/**
+ * Open example project.
+ */
+class OpenExampleProject extends UrlParams {
+    async apply(ide) {
+        const exampleName = this.getRequiredParam('ProjectName');
+        const source = new CloudProjectExamples(ide);
+        const example = source.list().find(example => example.name === exampleName);
+        if (example) {
+            const msg = ide.showMessage('Opening ' + example + ' example...');
+            await source.open(example);
+            this.params.set('appMode', !this.params.get('editMode'));
+            this.params.set('run', !this.params.get('noRun'));
+            ide.hasChangedMedia = true;
+            msg.destroy();
+        } else {
+            ide.showMessage('Example not found: ' + exampleName);
+        }
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.example = OpenExampleProject;
+
+/**
+ * open a private (unshared) project via url
+ */
+class OpenPrivateProject extends UrlParams {
+    async apply(ide) {
+        // TODO: support "default data" version
+        var name = dict ? dict.ProjectName : loc.hash.substr(9),
+            isLoggedIn = ide.cloud.username !== null;
+
+        if (!isLoggedIn) {
+            ide.showMessage('You are not logged in. Cannot open ' + name);
+            return;
+        }
+
+        const msg = ide.showMessage('Opening ' + name + ' example...');
+        try {
+            const metadata = await ide.cloud.getProjectMetadataByName(ide.cloud.username, name);
+            const source = new CloudProjectsSource(this);
+            await source.open(metadata);
+            this.params.set('appMode', !this.params.get('editMode'));
+            this.params.set('run', !this.params.get('noRun'));
+        } catch (err) {
+            ide.cloudError()(err.message);
+        }
+        msg.destroy();
+    }
+}
+IDE_Morph.prototype.UrlActionRegistry.private = OpenPrivateProject;
 
 IDE_Morph.prototype._getURL = IDE_Morph.prototype.getURL;
 IDE_Morph.prototype.getURL = function (url, callback, responseType) {

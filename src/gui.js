@@ -424,163 +424,38 @@ IDE_Morph.prototype.onOpen = function () {
 };
 
 IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
-    var myself = this,
-        urlLanguage,
-        hash,
-        idx;
+    let urlLanguage;
 
     loc = loc || location;
-    function getURL(url) {
-        try {
-            return utils.getUrlSync(url);
-        } catch (err) {
-            myself.showMessage('unable to retrieve project');
-            return '';
-        }
-    }
+    const urlParams = this.getUrlSettings(loc.search, loc.hash);
 
-    function applyFlags(dict) {
-        if (dict.embedMode) {
-            myself.setEmbedMode();
-        }
-        if (dict.editMode) {
-            myself.toggleAppMode(false);
+    const shield = new Morph();
+    shield.color = this.color;
+    shield.setExtent(this.parent.extent());
+    this.parent.add(shield);
+    try {
+        await urlParams.applySettings(this);
+    } catch(err) {
+        if (err instanceof UrlParamError) {
+            this.inform('Error in URL', err.message);
         } else {
-            myself.toggleAppMode(true);
+            this.inform(
+                'Error',
+                `The following error occurred while setting up the project\naccording to the URL parameters:\n\n${err.message}`
+            );
         }
-        if (!dict.noRun) {
-            myself.runScripts();
-        }
-        if (dict.hideControls) {
-            myself.controlBar.hide();
-            window.onbeforeunload = nop;
-        }
-        if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
-        }
-        if (dict.lang) {
-            myself.setLanguage(dict.lang, null, true); // don't persist
-        }
-
-        // only force my world to get focus if I'm not in embed mode
-        // to prevent the iFrame from involuntarily scrolling into view
-        if (!myself.isEmbedMode) {
-            myself.world().worldCanvas.focus();
-        }
-    }
-
-    const urlParams = this.parseUrlAnchors(location.search, location.hash);
-
-    // TODO: always make the shield?
-    if (urlParams) {
-        this.shield = new Morph();
-        this.shield.color = this.color;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-        await urlParams.apply(this);
-        this.shield.destroy();
-        this.shield = null;
-    } else {
         await this.newProject();
     }
+    shield.destroy();
 
-    } else if (loc.hash.substr(0, 4) === '#dl:') {
-        let m = myself.showMessage('Fetching project\nfrom the cloud...');
-
-        // make sure to lowercase the username
-        dict = this.cloud.parseDict(loc.hash.substr(4));
-        dict.Username = dict.Username.toLowerCase();
-
-        try {
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            const blob = new Blob([xml], {type: 'text/xml'});
-            const url = URL.createObjectURL(blob);
-
-            // Create temporary link for download
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = dict.ProjectName + ".xml";
-
-            document.body.appendChild(link);
-            link.dispatchEvent(
-                new MouseEvent('click', { 
-                bubbles: true, 
-                cancelable: true, 
-                view: window 
-                })
-            );
-
-            // Cleanup
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            m.destroy();
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-    } else if (loc.hash.substr(0, 6) === '#lang:') {
+    if (loc.hash.substr(0, 6) === '#lang:') {
         urlLanguage = loc.hash.substr(6);
         this.setLanguage(urlLanguage);
         this.loadNewProject = true;
-    } else if (loc.hash.substr(0, 7) === '#signup') {
-        this.createCloudAccount();
-    } else if (loc.hash.substr(0, 9) === '#example:' || dict.action === 'example') {
-        const exampleName = dict ? dict.ProjectName : loc.hash.substr(9);
-
-        this.shield = new Morph();
-        this.shield.alpha = 0;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-
-        const source = new CloudProjectExamples(this);
-        const example = source.list().find(example => example.name === exampleName);
-        if (example) {
-            const msg = myself.showMessage('Opening ' + example + ' example...');
-            await source.open(example);
-            myself.hasChangedMedia = true;
-            msg.destroy();
-        } else {
-            myself.showMessage('Example not found: ' + exampleName);
-        }
-
-        this.shield.destroy();
-        this.shield = null;
-        applyFlags(dict);
-
-    } else if (loc.hash.substr(0, 9) === '#private:' || dict.action === 'private') {
-        var name = dict ? dict.ProjectName : loc.hash.substr(9),
-            isLoggedIn = this.cloud.username !== null;
-
-        if (!isLoggedIn) {
-            myself.showMessage('You are not logged in. Cannot open ' + name);
-            return;
-        }
-
-        const msg = myself.showMessage('Opening ' + name + ' example...');
-        try {
-            const metadata = await this.cloud.getProjectMetadataByName(this.cloud.username, dict.ProjectName);
-            const source = new CloudProjectsSource(this);
-            await source.open(metadata);
-            applyFlags(dict);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-        msg.destroy();
     }
 
     this.world().keyboardFocus = this.stage;
     this.warnAboutIE();
-
-    // TODO: add support for this, too
-    if (dict.setVariable) {
-        const [varName, value] = dict.setVariable.split('=');
-        const exists = this.globalVariables.allNames().includes(varName);
-        if (exists) {
-            this.globalVariables.setVar(varName, value);
-        } else {
-            await this.droppedText(value, varName, 'text');
-        }
-    }
 };
 
 // IDE_Morph construction
@@ -5041,7 +4916,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         add(localize('by ') + this.cloud.username);
     }
     */
-    if (location.hash.indexOf('#present:') === 0) {
+    if (location.search.includes('action=present')) {
         add(location.toString(), 'a', body).attributes.href =
             location.toString();
         addImage(

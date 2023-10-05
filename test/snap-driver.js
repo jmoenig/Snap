@@ -284,7 +284,12 @@ SnapDriver.prototype.login = async function(name, password='password', opts) {
     this.click(btn);
 
     let dropdown = await this.expect(
-        () => this.dialog(),
+        () => {
+            const dialog = this.dialog();
+            if (dialog instanceof this.globals().MenuMorph) {
+                return dialog;
+            }
+        },
         new Error('Cloud menu never appeared'),
         opts
     );
