@@ -206,7 +206,7 @@ class DownloadCloudProject extends UrlParams {
         try {
             const projectData = await ide.cloud.getProjectByName(
                 this.getRequiredParam('Username'),
-                this.getRequiredParam('ProjectName')  // FIXME: throw an error
+                this.getRequiredParam('ProjectName')
             );
             const xml = ide.getXMLFromProjectData(projectData);
             const blob = new Blob([xml], {type: 'text/xml'});
