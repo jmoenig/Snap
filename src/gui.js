@@ -251,7 +251,28 @@ IDE_Morph.prototype.init = function (isAutoFill, config) {
 
     // additional properties:
     this.cloud = new Cloud(config.cloudUrl, config.clientId, config.username, localize);
-    this.cloud.onerror = error => this.cloudError()(error.message);
+    this.cloud.onerror = async error => {
+        if (error.status === 413) {
+            // Ask if they would like to disable history.
+            if (SnapSerializer.prototype.isSavingHistory) {
+                const confirmed = await this.confirm(
+                    'Project is too large to save to the cloud.\n\n' +
+                    'Would you like to disable persisting undo history to decrease your project size?',
+                    'Disable undo history?',
+                );
+
+                if (confirmed) {
+                    SnapSerializer.prototype.isSavingHistory = false;
+                    this.inform('Undo History Disabled', 'Undo history is no longer saved in the project.\n\nPlease try again.');
+                }
+            } else {
+                const message = 'Project too large to save to the cloud.\n\nPlease export and save locally or remove media and try again.';
+                this.cloudError()(message);
+            }
+        } else {
+            this.cloudError()(error.message);
+        }
+    };
     this.cloudMsg = null;
     this.source = 'local';
     this.serializer = new SnapSerializer();
