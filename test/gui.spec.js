@@ -27,6 +27,13 @@ describe("gui", function () {
       assert.equal(dict.get('data'), hash.split(':').pop());
     });
 
+    it('should parse url from semi-structured data in hash', function() {
+      const data = 'https://raw.githubusercontent.com/NetsBlox/exercises/master/AutograderTools.xml';
+      const hash = '#open:' + data;
+      const dict = driver.ide().parseUrlAnchors('', hash);
+      assert.equal(dict.get('data'), data);
+    });
+
     it('should parse mixed semi-structured hash data', function() {
       const hash = '#open:<project></project>&lang=english';
       const dict = driver.ide().parseUrlAnchors('', hash);

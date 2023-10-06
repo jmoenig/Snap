@@ -11,7 +11,8 @@ IDE_Morph.prototype.UrlActionRegistry = {};
 IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
     // Parse the hash options
     hash = hash.replace(/^#/, '');
-    const [hashAction, hashData=''] = hash.split(':');
+    const [hashAction, ...hashDataChunks] = hash.split(':');
+    const hashData = hashDataChunks.join(':');
     let hashDictStr = hashData;
 
     if (hashData.length > 0) {
