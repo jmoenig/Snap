@@ -129,11 +129,7 @@ class UrlParams {
 /**
  * Default params. Don't really do anything but apply the before & after flags.
  */
-class NoMainParam extends UrlParams {
-    async apply(ide) {
-        await ide.newProject();
-    }
-}
+class NoMainParam extends UrlParams {}
 
 /**
  * Import content (xml or URL) on open
@@ -141,8 +137,6 @@ class NoMainParam extends UrlParams {
 class OpenTextFromUrl extends UrlParams {
     async apply(ide) {
         let hash = this.getRequiredParam('data');
-
-        await ide.newProject();
 
         const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
         await ide.droppedText(text);

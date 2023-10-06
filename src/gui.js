@@ -434,6 +434,7 @@ IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
     shield.setExtent(this.parent.extent());
     this.parent.add(shield);
     try {
+        await this.newProject();
         await urlParams.applySettings(this);
     } catch(err) {
         if (err instanceof UrlParamError) {
