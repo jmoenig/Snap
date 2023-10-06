@@ -160,8 +160,12 @@ class RunProjectFromUrl extends UrlParams {
         const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
         await ide.droppedText(text);
 
-        this.params.set('appMode', true);
-        this.params.set('run', true);
+        if (!this.params.has('editMode')) {
+            this.params.set('appMode', true);
+        }
+        if (!this.params.has('noRun')) {
+            this.params.set('run', true);
+        }
     }
 }
 IDE_Morph.prototype.UrlActionRegistry.run = RunProjectFromUrl;
@@ -255,18 +259,23 @@ IDE_Morph.prototype.UrlActionRegistry.signup = CreateCloudAccount;
  */
 class OpenExampleProject extends UrlParams {
     async apply(ide) {
-        const exampleName = this.getRequiredParam('ProjectName');
+        const exampleName = this.params.get('data') || this.getRequiredParam('ProjectName');
         const source = new CloudProjectExamples(ide);
         const example = source.list().find(example => example.name === exampleName);
         if (example) {
             const msg = ide.showMessage('Opening ' + example + ' example...');
             await source.open(example);
-            this.params.set('appMode', !this.params.get('editMode'));
-            this.params.set('run', !this.params.get('noRun'));
             ide.hasChangedMedia = true;
             msg.destroy();
         } else {
             ide.showMessage('Example not found: ' + exampleName);
+        }
+
+        if (!this.params.has('editMode')) {
+            this.params.set('appMode', true);
+        }
+        if (!this.params.has('noRun')) {
+            this.params.set('run', true);
         }
     }
 }
@@ -289,10 +298,15 @@ class OpenPrivateProject extends UrlParams {
         const msg = ide.showMessage('Opening ' + name + ' example...');
         try {
             const metadata = await ide.cloud.getProjectMetadataByName(ide.cloud.username, name);
-            const source = new CloudProjectsSource(this);
+            const source = new CloudProjectsSource(ide);
             await source.open(metadata);
-            this.params.set('appMode', !this.params.get('editMode'));
-            this.params.set('run', !this.params.get('noRun'));
+
+            if (!this.params.has('editMode')) {
+                this.params.set('appMode', true);
+            }
+            if (!this.params.has('noRun')) {
+                this.params.set('run', true);
+            }
         } catch (err) {
             ide.cloudError()(err.message);
         }
