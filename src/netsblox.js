@@ -852,10 +852,12 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
     project,
     isExample,
 ) {
-    const querystring = (location.href
-        .split(/^.*\?/)[1] || '')
-        .replace(location.hash, "");
-    const dict = this.cloud.parseDict(querystring);
+    const extensions = this.parseUrlAnchors(location.search, location.hash).get('extensions');
+    const dict = {};
+    if (extensions) {
+        dict.extensions = extensions;
+    }
+
     const isPublic = project.state !== "Private" && project.saveState === 'Saved';
 
     if (isExample) {
@@ -865,10 +867,6 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
         dict.action = 'present';
         dict.Username = project.owner;
         dict.ProjectName = project.name;
-    } else {  // private project - clear the relevant qs params
-        delete dict.action;
-        delete dict.Username;
-        delete dict.ProjectName;
     }
 
     this.setQueryString(dict, project.name);
