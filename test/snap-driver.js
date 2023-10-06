@@ -280,16 +280,17 @@ SnapDriver.prototype.moveToRole = function(name) {
 };
 
 SnapDriver.prototype.login = async function(name, password='password', opts) {
+    const getMenuDialog = () => {
+        const dialog = this.dialog();
+        if (dialog instanceof this.globals().MenuMorph) {
+            return dialog;
+        }
+    };
     const btn = this.ide().controlBar.cloudButton;
     this.click(btn);
 
     let dropdown = await this.expect(
-        () => {
-            const dialog = this.dialog();
-            if (dialog instanceof this.globals().MenuMorph) {
-                return dialog;
-            }
-        },
+        getMenuDialog,
         new Error('Cloud menu never appeared'),
         opts
     );
@@ -309,7 +310,7 @@ SnapDriver.prototype.login = async function(name, password='password', opts) {
 
     // click the login button
     dropdown = await this.expect(
-        () => this.dialog(),
+        getMenuDialog,
         new Error('Cloud menu never appeared'),
         opts
     );
