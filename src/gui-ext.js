@@ -186,23 +186,16 @@ class OpenPublicProject extends UrlParams {
         await ide.droppedText(xml);
         ide.hasChangedMedia = true;
 
-        this.params.set('appMode', !this.params.get('editMode'));
-        this.params.set('run', !this.params.get('noRun'));
+        if (!this.params.has('editMode')) {
+            this.params.set('appMode', true);
+        }
+        if (!this.params.has('noRun')) {
+            this.params.set('run', true);
+        }
         msg.destroy();
     }
 }
 IDE_Morph.prototype.UrlActionRegistry.present = OpenPublicProject;
-
-/**
- * fetch project from the cloud (no running or app mode)
- */
-class OpenCloudProject extends UrlParams {
-    async apply(ide) {
-        ide.showMessage('Fetching project\nfrom the cloud...');
-      // TODO
-    }
-}
-IDE_Morph.prototype.UrlActionRegistry.cloud = OpenCloudProject;
 
 /**
  * Download a cloud project as an xml
