@@ -632,14 +632,10 @@ RoomMorph.prototype.moveToRole = async function(role) {
 
     // Load the project or make the project empty
     if (metadata.public === true) {
-        location.hash = '#present:Username=' +
-            encodeURIComponent(metadata.owner) +
-            '&ProjectName=' +
-            encodeURIComponent(metadata.name);
+        this.ide.updateUrlQueryString(metadata);
     }
 
     if (roleData.code) {
-        // TODO: add media
         this.ide.droppedText(roleData.code + roleData.media);
     } else {  // newly created role
         await SnapActions.openProject();
@@ -782,38 +778,6 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
     setTimeout(
         () => dialog.destroy(),
         15000
-    );
-};
-
-RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
-    // TODO: join the role (use the token?)
-    const cloud = this.ide.cloud;
-    cloud.respondToInvitation(
-        id,
-        accepted,
-        async project => {
-            // Load the project or make the project empty
-            if (!accepted) return;
-
-            this.ide.source = 'cloud';
-            if (project.Public === 'true') {
-                location.hash = '#present:Username=' +
-                    encodeURIComponent(cloud.username) +
-                    '&ProjectName=' +
-                    encodeURIComponent(project.ProjectName);
-            }
-            const msg = this.ide.showMessage(localize('Opening ') + role +
-                localize(' at ') + project.RoomName);
-            if (project.SourceCode) {
-                await this.ide.droppedText(project.SourceCode);
-            } else {  // Empty the project
-                this.ide.newRole(role);
-                await SnapActions.openProject();
-            }
-            msg.destroy();
-            this.ide.silentSetProjectName(role);
-        },
-        err => this.ide.showMessage(err, 2)
     );
 };
 

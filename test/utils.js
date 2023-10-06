@@ -197,4 +197,17 @@
     };
 
     global.TestUtils = TestUtils;
+
+    function recordCall(name, ...args) {
+        this.callData[name].push(args);
+    }
+
+    global.makeMock = function(...methodNames) {
+        const mock = {callData: {}};
+        methodNames.forEach(name => {
+            mock.callData[name] = [];
+            mock[name] = recordCall.bind(mock, name);
+        });
+        return mock;
+    };
 })(this);
