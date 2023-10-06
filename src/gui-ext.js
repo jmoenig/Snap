@@ -279,10 +279,8 @@ IDE_Morph.prototype.UrlActionRegistry.example = OpenExampleProject;
  */
 class OpenPrivateProject extends UrlParams {
     async apply(ide) {
-        // TODO: support "default data" version
-        var name = dict ? dict.ProjectName : loc.hash.substr(9),
-            isLoggedIn = ide.cloud.username !== null;
-
+        const name = this.params.get('data') || this.getRequiredParam('ProjectName');
+        const isLoggedIn = ide.cloud.username !== null;
         if (!isLoggedIn) {
             ide.showMessage('You are not logged in. Cannot open ' + name);
             return;
