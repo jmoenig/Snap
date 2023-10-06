@@ -75,7 +75,7 @@ class UrlParams {
         const extensions = this.params.get('extensions');
         if (extensions) {
             try {
-                const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
+                const extensionUrls = JSON.parse(decodeURIComponent(extensions));
                 await Promise.all(extensionUrls.map(url => ide.loadExtension(url)));
             } catch (err) {
                 ide.inform(
