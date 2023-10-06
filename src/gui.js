@@ -7852,13 +7852,8 @@ CloudProjectsSource.prototype.publish = async function(proj, unpublish = false) 
     }
 
     // Set the Shared URL if the project is currently open
-    if (!unpublish && proj.id === cloud.projectId) {
-        var usr = cloud.username,
-            projectId = 'Username=' +
-                encodeURIComponent(usr.toLowerCase()) +
-                '&ProjectName=' +
-                encodeURIComponent(proj.name);
-        location.hash = 'present:' + projectId;
+    if (proj.id === cloud.projectId) {
+        this.ide.updateUrlQueryString(proj);
     }
 };
 
@@ -7902,11 +7897,11 @@ CloudProjectsSource.prototype.save = async function(newProject) {
         const keys = ['owner', 'name', 'roles', 'saveState'];
         const projectCopy = utils.pick(projectData, keys);
         projectCopy.roles = Object.values(projectCopy.roles);
-        const metadata = await this.ide.cloud.importProject(projectCopy);
-        this.ide.updateUrlQueryString(metadata);
+        await this.ide.cloud.importProject(projectCopy);
     }
     const roleData = this.ide.sockets.getSerializedProject();
-    await this.ide.cloud.saveRole(roleData);
+    const metadata = await this.ide.cloud.saveRole(roleData);
+    this.ide.updateUrlQueryString(metadata);
 };
 
 CloudProjectsSource.prototype.delete = async function(project) {
