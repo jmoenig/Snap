@@ -7887,18 +7887,24 @@ CloudProjectsSource.prototype.getPreview = function(project) {
 CloudProjectsSource.prototype.save = async function(newProject) {
     const isSaveAs = newProject.name !== this.ide.room.name;
 
-    // If it is overwriting an existing
-    // We need to know:
-    //   - are we changing the project name?
-    //     - is the new name overwriting an existing?
-    //     - do we need to copy the current version of the project (ie, if it is already saved)?
+    // "Save as" is a little tricky since projects may be collaboratively
+    // edited at the time of the save. As a result, we will actually save
+    // the snapshot as the original and rename the current one
     if (isSaveAs) {
         const projectData = await this.ide.cloud.getProjectData();
+
         await this.ide.cloud.renameProject(newProject.name);
-        const keys = ['owner', 'name', 'roles', 'saveState'];
-        const projectCopy = utils.pick(projectData, keys);
-        projectCopy.roles = Object.values(projectCopy.roles);
-        await this.ide.cloud.importProject(projectCopy);
+
+        if (projectData.saveState === 'Saved') {
+            const keys = ['owner', 'name', 'roles', 'saveState'];
+            const projectCopy = utils.pick(projectData, keys);
+            projectCopy.roles = Object.values(projectCopy.roles);
+            const metadata = await this.ide.cloud.importProject(projectCopy);
+
+            if (projectData.state !== 'Private') {
+                await this.ide.cloud.publishProject(metadata.id);
+            }
+        }
     }
     const roleData = this.ide.sockets.getSerializedProject();
     const metadata = await this.ide.cloud.saveRole(roleData);
