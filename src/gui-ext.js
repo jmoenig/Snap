@@ -140,10 +140,10 @@ class NoMainParam extends UrlParams {
  */
 class OpenTextFromUrl extends UrlParams {
     async apply(ide) {
-        let hash = this.params.get('data');
+        let hash = this.getRequiredParam('data');
 
-        // TODO: support data param, too
-        // Determine if it is a URL or text
+        await ide.newProject();
+
         const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
         await ide.droppedText(text);
     }
