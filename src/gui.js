@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-September-22';
+modules.gui = '2023-October-09';
 
 // Declarations
 
@@ -8301,8 +8301,10 @@ IDE_Morph.prototype.blocksLibraryXML = function (
     localData // optional: include sprite-local variable dependencies
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
-    var globals = definitions.filter(def => def.isGlobal),
+    var prims = definitions.filter(def => def.isGlobal && def.selector),
+        globals = definitions.filter(def => def.isGlobal && !def.selector),
         locals = definitions.filter(def => !def.isGlobal),
+        primStr = prims.length ? this.serializer.serialize(prims, true) : '',
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
         dtaStr = dataFrame && dataFrame.names(true).length ?
@@ -8323,6 +8325,7 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         '>' +
         this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
+        (prims.length ? ('<primitives>' + primStr + '</primitives>') : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
         (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +

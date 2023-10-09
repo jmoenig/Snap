@@ -50,6 +50,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-09
+* gui: tweaked exporting customized primitives
+
 ### 2023-09-22
 * gui: new experimental hidden "customize primitives" mode setting
 * gui: new experimental hidden "export customized primitives" feature
