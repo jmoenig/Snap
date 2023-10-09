@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 9.0.7:
+* **Translation Updates:**
+    * Chinese, thanks, moodykeke!
+
 2023-10-09
 * Chinese translation update, thanks, moodykeke!
+* prepared v9.0.7 patch
 
 ## 9.0.6:
 * **Notable Fixes:**
