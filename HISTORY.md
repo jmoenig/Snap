@@ -2,6 +2,9 @@
 
 ## in development:
 
+2023-10-09
+* Chinese translation update, thanks, moodykeke!
+
 ## 9.0.6:
 * **Notable Fixes:**
     * fixed #3252 - local return glitch
