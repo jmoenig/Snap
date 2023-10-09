@@ -657,17 +657,22 @@ NetsBloxMorph.prototype.openProject = function (name) {
 };
 
 NetsBloxMorph.prototype.saveACopy = async function () {
-    var myself = this;
     if (this.isPreviousVersion()) {
         return this.showMessage('Please exit replay mode before saving');
     }
 
     // Save the project!
-    const name = await this.cloud.saveProjectCopy();  // TODO: handle errors
-    if (name) {
-        this.room.silentSetRoomName(name);
-    }
+    const metadata = await this.cloud.saveProjectCopy();
     this.showMessage('Made your own copy and saved it to the cloud!', 2);
+
+    const confirmed = await this.confirm(
+        localize('Would you like to open the project now?'),
+        localize('Open Project'),
+    );
+    if (confirmed) {
+        const source = new CloudProjectsSource(this);
+        await source.open(metadata);
+    }
 };
 
 NetsBloxMorph.prototype.cloudSaveError = function () {
