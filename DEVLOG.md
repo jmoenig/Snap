@@ -52,6 +52,7 @@
 
 ### 2023-10-09
 * gui: tweaked exporting customized primitives
+* store: refactored populateCustomBlocks()
 
 ### 2023-09-22
 * gui: new experimental hidden "customize primitives" mode setting
