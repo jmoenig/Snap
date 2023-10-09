@@ -690,9 +690,11 @@ describe('ide', function() {
 
         const deferred = utils.defer();
         const id = setInterval(() => {
-            const isLoaded = !!frame.contentWindow.world;
-            console.log({isLoaded});
-            if (isLoaded) {
+            const world = frame.contentWindow.world;
+            const [ide] = (world?.children || []);
+            // Wait for the IDE to have its initial project ID from the cloud
+            const isProjectReady = ide?.cloud?.projectId;
+            if (isProjectReady) {
                 clearInterval(id);
                 return deferred.resolve();
             }

@@ -6,12 +6,12 @@ describe('url anchors', function () {
         let oldRoleId = null;
         before(() => {
             const loc = {
-                href: location.origin + '?action=example&ProjectName=Dice&editMode=true',
+                search: '?action=example&ProjectName=Dice&editMode=true',
                 hash: ''
             };
             return driver.reset()
                 .then(() => {
-                    oldRoleId = driver.globals().SnapCloud.roleId;
+                    oldRoleId = driver.ide().cloud.roleId;
                     return driver.ide().interpretUrlAnchors(loc);
                 });
         });
@@ -27,7 +27,7 @@ describe('url anchors', function () {
         });
 
         it('should set role ID', function () {
-            const SnapCloud = driver.globals().SnapCloud;
+            const SnapCloud = driver.ide().cloud.roleId;
             return driver.expect(() => SnapCloud.roleId !== oldRoleId, `Role ID not updated`);
         });
 
