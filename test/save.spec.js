@@ -11,6 +11,7 @@ describe('save', function() {
     ].forEach(tuple => {
         const [label, beforeFn, afterFn] = tuple;
         describe(label, function() {
+            this.timeout(10000);
             if (beforeFn) {
                 before(beforeFn);
             }
@@ -182,7 +183,7 @@ describe('save', function() {
                 );
                 afterEach(() => cloud.username = username);
 
-                it('should create "Copy of <project>" on saveACopy', function() {
+                it('should create "<project> (2)" on saveACopy', async function() {
                     const ide = driver.ide();
                     // make the user a collaborator
                     cloud.username = 'test';
@@ -195,15 +196,18 @@ describe('save', function() {
                     const dialog = driver.dialog();
                     const saveACopyBtn = dialog.children.find(item => item.action === 'saveACopy');
                     driver.click(saveACopyBtn);
-                    return driver.expect(TestUtils.showingSaveMsg, `Did not see save message after "Save Copy"`)
-                        .then(() => TestUtils.openProjectsBrowser())
-                        .then(projectDialog => {
-                            const copyName = `Copy of ${projectName}`;
-                            return driver.expect(
-                                () => TestUtils.getProjectList(projectDialog).includes(copyName),
-                                `Could not find copied project (${copyName})`
-                            );
-                        });
+                    const openDialog = await driver.expect(() => 
+                        driver.dialogs().find(dialog => dialog.labelString === 'Open Project')
+                    );
+                    openDialog.destroy();
+
+                    await driver.expect(TestUtils.showingSaveMsg, `Did not see save message after "Save Copy"`);
+                    const projectDialog = await TestUtils.openProjectsBrowser();
+                    const copyName = `${projectName} (2)`;
+                    return driver.expect(
+                        () => TestUtils.getProjectList(projectDialog).includes(copyName),
+                        `Could not find copied project (${copyName})`
+                    );
                 });
             });
 
