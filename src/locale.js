@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-August-16';
+modules.locale = '2023-October-09';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -278,9 +278,9 @@ SnapTranslator.dict.zh_CN = {
     'language_translator':
         '五百刀/邓江华/孟锡峰/曹儒林',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org/五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'last_changed':
-        '2022-01-17'
+        '2023-09-15'
 };
 
 SnapTranslator.dict.eo = {
