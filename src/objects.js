@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-September-11';
+modules.objects = '2023-October-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -213,7 +213,12 @@ SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = {
         // Bootstrapping helpers
-        reportHyperZip: null,
+        reportHyperZip: {
+            dev: true,
+            type: 'reporter',
+            category: 'control',
+            spec: 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n'
+        },
 
         // Motion
         forward: {
@@ -1678,7 +1683,9 @@ SpriteMorph.prototype.customizeBlocks = function () {
             // and populates the slot declarations
             decl = new Map();
             spec = parts.map(word => {
-                if (word[0] === '%' && (word.length > 1) && (word !== '%br')) {
+                if (word === '%br') {
+                    return '$nl';
+                } else if (word[0] === '%' && (word.length > 1)) {
                     entry = CustomBlockDefinition.prototype.declarationFor(
                         word
                     );
@@ -2895,6 +2902,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push(block('reportHyperZip'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
             blocks.push(block('doCallCC'));
@@ -9771,6 +9779,7 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push(block('reportHyperZip'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
             blocks.push(block('doCallCC'));

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-October-09';
+modules.store = '2023-October-10';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -718,6 +718,10 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    model.primitives = model.childNamed('primitives');
+    if (model.primitives) {
+        this.loadCustomizedPrimitives(stage, model.primitives);
+    }
     varModel = model.childNamed('variables');
     if (varModel) {
         varFrame = new VariableFrame();
@@ -1110,6 +1114,107 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         if (comment) {
             definition.comment = this.loadComment(comment);
         }
+    });
+};
+
+SnapSerializer.prototype.loadCustomizedPrimitives = function (
+    object,
+    element
+) {
+    // private - overload existing customized primitives
+    element.children.forEach(child => {
+        var definition, names, inputs, vars, header, code, trans, comment, i,
+            sel = child.attributes.selector;
+
+        if (child.tag !== 'block-definition') {
+            return;
+        }
+        definition = SpriteMorph.prototype.blocks[sel];
+        if (!(definition instanceof CustomBlockDefinition)) {
+            throw new Error('unable to overload primitive "' + sel + '"');
+        }
+        definition.spec = child.attributes.s || '';
+        definition.receiver = object || null;
+        definition.category = child.attributes.category || 'other';
+        if (!SpriteMorph.prototype.allCategories().includes(
+            definition.category
+        )) {
+            definition.category = 'other';
+        }
+        definition.type = child.attributes.type || 'command';
+        definition.selector = sel || null;
+        definition.primitive = child.attributes.primitive || null;
+        definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.isGlobal = true;
+
+        names = definition.parseSpec(definition.spec).filter(
+            str => str.charAt(0) === '%' && str.length > 1
+        ).map(str => str.substr(1));
+
+        definition.names = names;
+        inputs = child.childNamed('inputs');
+        if (inputs) {
+            i = -1;
+            inputs.children.forEach(child => {
+                var options = child.childNamed('options');
+                if (child.tag !== 'input') {
+                    return;
+                }
+                i += 1;
+                definition.declarations.set(
+                    names[i],
+                    [
+                        child.attributes.type,
+                        contains(['%b', '%boolUE'], child.attributes.type) ?
+                            (child.contents ? child.contents === 'true' : null)
+                                : child.contents,
+                        options ? options.contents : undefined,
+                        child.attributes.readonly === 'true',
+                        child.attributes.irreplaceable === 'true',
+                        child.attributes.separator,
+                        child.attributes.collapse,
+                        child.attributes.expand,
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
+                    ]
+                );
+            });
+        }
+
+        vars = child.childNamed('variables');
+        if (vars) {
+            definition.variableNames = this.loadValue(
+                vars.require('list')
+            ).asArray();
+        }
+
+        header = child.childNamed('header');
+        if (header) {
+            definition.codeHeader = header.contents;
+        }
+
+        code = child.childNamed('code');
+        if (code) {
+            definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
+        }
+
+        comment = child.childNamed('comment');
+        if (comment) {
+            definition.comment = this.loadComment(comment);
+        }
+
+        this.populateCustomBlock(
+            object,
+            definition,
+            child.childNamed('script'),
+            child.childNamed('scripts')
+        );
     });
 };
 

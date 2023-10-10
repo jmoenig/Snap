@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-September-14';
+modules.byob = '2023-October-10';
 
 // Declarations
 
@@ -675,7 +675,7 @@ CustomBlockDefinition.prototype.abstractBlockSpec = function () {
 	// answer the semantic block spec substituting each input
  	// with an underscore
     return BlockMorph.prototype.parseSpec(this.blockSpec()).map(str =>
-        (str.length > 1 && (str[0]) === '%') ? '_' : str
+        str === '%br' ? '$nl' : (str.length > 1 && (str[0]) === '%') ? '_' : str
     ).join(' ');
 };
 
@@ -706,7 +706,8 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
     // private - only to be called from a Process that also does housekeeping
     // abstract block specs replace the inputs with underscores,
     // e.g. "move _ steps", "say _", "_ + _"
-    var parts = abstractSpec.split(' ').filter(each => each.length && each !== ' '),
+    var parts = abstractSpec.split(' ').filter(each =>
+            each.length && each !== ' '),
         count = parts.filter(each => each === '_').length,
         inputNames = this.inputNames(),
         spec = '',

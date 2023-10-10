@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-September-07';
+modules.blocks = '2023-October-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3159,7 +3159,7 @@ BlockMorph.prototype.abstractBlockSpec = function () {
 	// answer the semantic block spec substituting each input
  	// with an underscore. Used as "name" of the Block.
     return this.parseSpec(this.blockSpec).map(str =>
-        (str.length > 1 && (str[0]) === '%') ? '_' : str
+        str === '%br' ? '$nl' : (str.length > 1 && (str[0]) === '%') ? '_' : str
     ).join(' ');
 };
 
