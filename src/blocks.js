@@ -4353,7 +4353,8 @@ BlockMorph.prototype.toXMLString = function (receiver) {
     // following ones attached to it, including all dependencies.
     // specifying a receiver sprite is optional for cases where
     // the receiver sprite is not the currently edited one inside the IDE
-    var ide = this.parentThatIsA(IDE_Morph),
+    var ide = this.parentThatIsA(IDE_Morph) ||
+            receiver?.parentThatIsA(IDE_Morph),
         blockEditor = this.parentThatIsA(BlockEditorMorph),
         isReporter = this instanceof ReporterBlockMorph,
         varNames = [],

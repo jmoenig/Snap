@@ -34,6 +34,7 @@
     * new "bootstrapped(block)?" extension primitive
     * metaprogramming support for newlines in custom block labels ("$nl")
     * support for overloading primitives with custom block definitions and organizing them in libraries
+    * new extension primitives for encoding / decoding blocks to and from xml
 * **Notable Changes:**
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -56,6 +57,7 @@
 * objects: added hyperZip stub to blocks dictionary 
 * store: load libraries with customized primitives
 * blocks, byob: metaprogramming support for newlines in custom block labels
+* bocks, extensions: new extension primitives for encoding / decoding blocks to and from xml
 
 ### 2023-10-09
 * gui: tweaked exporting customized primitives
