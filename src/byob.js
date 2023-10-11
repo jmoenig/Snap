@@ -1874,7 +1874,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             );
         } else { // inside a script
             // if global or own method - let the user delete the definition
-            if (this.isGlobal ||
+            if (this.isGlobal && !this.definition.isBootstrapped() ||
                 contains(
                     Object.keys(rcvr.ownBlocks()),
                     this.blockSpec
