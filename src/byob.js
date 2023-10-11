@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-10';
+modules.byob = '2023-October-11';
 
 // Declarations
 
@@ -1813,10 +1813,12 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         );
                     }
                 }
-                menu.addItem(
-                    "delete block definition...",
-                    'deleteBlockDefinition'
-                );
+                if (!this.definition.isBootstrapped()) {
+                    menu.addItem(
+                        "delete block definition...",
+                        'deleteBlockDefinition'
+                    );
+                }
             } else { // local method
                 if (contains(
                         Object.keys(rcvr.inheritedBlocks()),
