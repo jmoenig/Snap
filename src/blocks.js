@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-10';
+modules.blocks = '2023-October-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4249,7 +4249,7 @@ BlockMorph.prototype.showHelp = function () {
 
     if (this.isCustomBlock) {
         if (this.isGlobal) {
-            spec = this.definition.helpSpec();
+            spec = this.definition.selector || this.definition.helpSpec();
         } else {
             spec = this.scriptTarget().getMethod(this.blockSpec).helpSpec();
         }
