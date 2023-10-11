@@ -4265,6 +4265,13 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'before it picks up an object',
             new Color(100, 0, 0)
         );
+    }
+    menu.addItem(
+        'Microphone resolution...',
+        'microphoneMenu'
+    );
+    if (shiftClicked) {
+        menu.addLine();
         menu.addItem(
             'Customize primitives',
             'userCustomizePrimitives',
@@ -4280,10 +4287,6 @@ IDE_Morph.prototype.settingsMenu = function () {
             new Color(100, 0, 0)
         );
     }
-    menu.addItem(
-        'Microphone resolution...',
-        'microphoneMenu'
-    );
     menu.addLine();
     addPreference(
         'JavaScript extensions',
@@ -7757,6 +7760,7 @@ IDE_Morph.prototype.userCustomizePrimitives = function () {
             new Project(this.scenes, this.scene)
         );
     }
+    SpriteMorph.prototype.initBlocks();
     SpriteMorph.prototype.customizeBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
