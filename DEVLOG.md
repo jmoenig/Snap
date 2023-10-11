@@ -55,6 +55,7 @@
 
 ### 2023-10-10
 * stdlib: new preloaded palette blocks definitions module
+* include new stdlib module in the pwa cache
 
 ### 2023-10-10
 * objects: added hyperZip stub to blocks dictionary 
