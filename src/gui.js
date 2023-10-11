@@ -4273,15 +4273,26 @@ IDE_Morph.prototype.settingsMenu = function () {
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
+            'Primitives palette',
+            () => this.userCustomizePalette(),
+            'EXPERIMENTAL - switch (back) to\n' +
+                'primitive blocks in the palette',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
             'Customize primitives',
-            'userCustomizePrimitives',
+            () => this.userCustomizePalette(() =>
+                SpriteMorph.prototype.customizeBlocks()),
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
         );
         menu.addItem(
             'Bootstrap palette',
-            'bootstrapCustomizedPrimitives',
+            () => this.userCustomizePalette(() => {
+                SpriteMorph.prototype.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();
+            }),
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
@@ -7742,9 +7753,9 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 
 // IDE_Morph customize primitives
 
-IDE_Morph.prototype.userCustomizePrimitives = function () {
-    // highly experimental for v10 - replace all primitives
-    // with custom block definitions
+IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
+    // highly experimental for v10 - tweak the palette blocks,
+    // e.g. replace all primitives with custom block definitions etc.
     var projectData;
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
@@ -7761,7 +7772,7 @@ IDE_Morph.prototype.userCustomizePrimitives = function () {
         );
     }
     SpriteMorph.prototype.initBlocks();
-    SpriteMorph.prototype.customizeBlocks();
+    callback();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
