@@ -58,7 +58,8 @@
 * include new stdlib module in the pwa cache
 * gui: refactored palette blocks mode selection
 * byob: disable deleting bootstrapped palette blocks in the context menu
-* blocks: enable help screens for bootstrapped custom blocks 
+* blocks: enable help screens for bootstrapped custom blocks
+* objects: added experimental "primitify" dev helper method
 
 ### 2023-10-10
 * objects: added hyperZip stub to blocks dictionary 

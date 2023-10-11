@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-October-10';
+modules.objects = '2023-October-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1706,6 +1706,23 @@ SpriteMorph.prototype.customizeBlocks = function () {
             def.type = record.type;
             def.category = record.category;
             SpriteMorph.prototype.blocks[key] = def;
+        }
+    });
+};
+
+SpriteMorph.prototype.primitify = function () {
+    // experimental dev helper
+    Object.keys(this.blocks).forEach(key => {
+        var record = this.blocks[key],
+            scr;
+        if (record instanceof CustomBlockDefinition) {
+            scr = record.body?.expression;
+            record.primitive = key;
+            if (scr instanceof BlockMorph) {
+                scr = scr.fullCopy();
+                scr.setPosition(new Point(10, 98));
+                record.scripts = [scr];
+            }
         }
     });
 };
