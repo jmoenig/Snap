@@ -344,7 +344,8 @@ IDE_Morph.prototype.init = function (config) {
 
     // turn all primitives into custom blocks
     // under construction, commented out for now
-    // SpriteMorph.prototype.customizeBlocks();
+    SpriteMorph.prototype.customizeBlocks();
+    this.bootstrapCustomizedPrimitives();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
