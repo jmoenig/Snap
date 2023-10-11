@@ -1,11 +1,13 @@
 // start a static file server w/ an extra route for index.html
 import { fileURLToPath } from "url";
 import fs from "fs";
+import fsp from "fs/promises";
 import http from "http";
 import nodeStatic from "node-static";
 import fetch from "node-fetch";
 import dot from "dot";
 import path from "path";
+import assert from "assert/strict";
 const port = process.env.PORT ? +process.env.PORT : 8000;
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const indexTpl = dot.template(
@@ -17,6 +19,23 @@ const isDevMode = ENV !== "production";
 writeCloudFile(CLOUD_URL);
 
 const file = new nodeStatic.Server(path.join(__dirname, ".."));
+const getExampleThumbnail = cached(async function (name) {
+  console.log("getting thumbnail url for", name);
+  const filepath = path.join(
+    __dirname,
+    "..",
+    "Examples",
+    name + ".xml",
+  );
+  const text = await fsp.readFile(filepath, "utf8");
+  const thumbnailXml = readFrom(
+    readUntil(text, "</thumbnail>"),
+    "<thumbnail>data:image/png;base64,",
+  );
+
+  return CLOUD_URL +
+    `/projects/thumbnail?xml=${encodeURIComponent(thumbnailXml)}`;
+});
 const server = http.createServer(async (req, res) => {
   const [url, queryString = ""] = req.url
     .split("?")
@@ -28,7 +47,7 @@ const server = http.createServer(async (req, res) => {
     const query = Object.fromEntries(
       queryString.split("&").map((chunk) => {
         const [key, value] = chunk.split("=");
-        return [key.toLowerCase(), decodeURIComponent(value)];
+        return [key, decodeURIComponent(value)];
       }),
     );
     const metaInfo = {
@@ -40,9 +59,9 @@ const server = http.createServer(async (req, res) => {
 
     if (query.action === "present") {
       const url = CLOUD_URL +
-        `/projects/user/${query.owner}/${query.name}/metadata`;
+        `/projects/user/${query.Username}/${query.ProjectName}/metadata`;
       const response = await fetch(url);
-      if (response.status < 399) {
+      if (response.ok) {
         const metadata = await response.json();
         // TODO: parse the notes? These should probably be saved separately
         metaInfo.title = metadata.name;
@@ -52,8 +71,12 @@ const server = http.createServer(async (req, res) => {
           height: 480,
         };
       }
-    } else if (query.action === "example") {
-      // TODO: add nice thumbnails for this, too
+    } else if (query.action === "example" && query.ProjectName) {
+      metaInfo.image = {
+        url: await getExampleThumbnail(query.ProjectName),
+        width: 640,
+        height: 480,
+      };
     }
 
     const userAgent = req.headers["user-agent"];
@@ -68,6 +91,32 @@ const server = http.createServer(async (req, res) => {
 });
 server.listen(port);
 console.log("listening on port", port);
+
+// Cached function
+function cached(fn) {
+  const cacheStore = {};
+  assert.equal(
+    fn.length,
+    1,
+    "Only functions accepting a single argument can be cached for now.",
+  );
+  return async function (arg) {
+    if (!cacheStore[arg]) {
+      cacheStore[arg] = await fn(arg);
+    }
+    return cacheStore[arg];
+  };
+}
+
+function readUntil(text, substring) {
+  const index = text.indexOf(substring);
+  return text.substring(0, index);
+}
+
+function readFrom(text, substring) {
+  const index = text.indexOf(substring);
+  return text.substring(index + substring.length);
+}
 
 function addScraperSettings(userAgent, metaInfo) {
   // fix the aspect ratio for facebook
