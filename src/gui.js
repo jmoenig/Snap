@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-October-09';
+modules.gui = '2023-October-11';
 
 // Declarations
 
@@ -4268,6 +4268,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         menu.addItem(
             'Customize primitives',
             'userCustomizePrimitives',
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Bootstrap palette',
+            'bootstrapCustomizedPrimitives',
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)

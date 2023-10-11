@@ -54,6 +54,9 @@
     * German
 
 ### 2023-10-10
+* stdlib: new preloaded palette blocks definitions module
+
+### 2023-10-10
 * objects: added hyperZip stub to blocks dictionary 
 * store: load libraries with customized primitives
 * blocks, byob: metaprogramming support for newlines in custom block labels
