@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
 
 ## 9.0.7:
 * **Translation Updates:**
