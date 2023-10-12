@@ -2676,10 +2676,10 @@ IDE_Morph.prototype.recordNewSound = function () {
         audio => {
             var sound;
             if (audio) {
-                sound = this.currentSprite.addSound(
+                sound = this.currentSprite.addSound(new Sound(
                 	audio,
-                    this.newSoundName('recording')
-                );
+                  this.newSoundName('recording')
+                ));
                 this.makeSureRecordingIsMono(sound);
                 this.spriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
