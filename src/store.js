@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-October-10';
+modules.store = '2023-October-13';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1253,11 +1253,14 @@ SnapSerializer.prototype.populateCustomBlock = function (
         );
         definition.body.inputs = definition.names.slice(0);
         definition.body.comment = definition.comment?.text();
+    } else {
+        definition.body = null;
     }
     if (scriptsXML) {
         definition.scripts = this.loadScriptsArray(scriptsXML, object);
+    } else {
+        definition.scripts = [];
     }
-
     delete definition.names;
 };
 

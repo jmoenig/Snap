@@ -55,6 +55,7 @@
 
 ### 2023-10-13
 * blocks: fixed a glitch when relabelling custom blocks
+* store: fixed overloading customized primitives with a library
 
 ### 2023-10-12
 * byob: made attributesMenu() available for custom blocks
