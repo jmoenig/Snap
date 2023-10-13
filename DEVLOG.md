@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * all blocks in the palette are now custom blocks, except hat blocks and rings
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -57,6 +58,7 @@
 * blocks: fixed a glitch when relabelling custom blocks
 * store: fixed overloading customized primitives with a library
 * stdlib: selected a compromise of which primitives to bootstrap as custom blocks
+* updated dev version date
 
 ### 2023-10-12
 * byob: made attributesMenu() available for custom blocks
