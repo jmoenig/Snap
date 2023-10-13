@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-11';
+modules.blocks = '2023-October-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4088,7 +4088,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     this.fixLayout();
 
     // place surplus blocks on scipts
-    if (scripts && surplus.length) {
+    if (scripts && surplus?.length) {
         surplus.forEach(blk => {
             blk.moveBy(10);
             scripts.add(blk);

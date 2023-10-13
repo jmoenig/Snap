@@ -53,6 +53,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-13
+* blocks: fixed a glitch when relabelling custom blocks
+
 ### 2023-10-12
 * byob: made attributesMenu() available for custom blocks
 
