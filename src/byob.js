@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-12';
+modules.byob = '2023-October-14';
 
 // Declarations
 
@@ -317,8 +317,14 @@ CustomBlockDefinition.prototype.typeOf = function (inputName) {
 };
 
 CustomBlockDefinition.prototype.defaultValueOf = function (inputName) {
+    var def;
     if (this.declarations.has(inputName)) {
-        return this.declarations.get(inputName)[1];
+        def = this.declarations.get(inputName)[1];
+        if (isString(def) && def.length > 2 && def.startsWith('$_')) {
+            // selector - can be translated
+            return [def.slice(2)];
+        }
+        return def;
     }
     return '';
 };
