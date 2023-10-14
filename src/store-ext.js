@@ -8,7 +8,7 @@ NetsBloxSerializer.uber = SnapSerializer.prototype;
 SnapSerializer.prototype.isSavingHistory = true;
 
 NetsBloxSerializer.prototype.appName = 'NetsBlox';
-NetsBloxSerializer.prototype.version = '2.1.3';
+NetsBloxSerializer.prototype.version = '2.1.4';
 NetsBloxSerializer.prototype.app = NetsBloxSerializer.prototype.appName + ' ' +
     NetsBloxSerializer.prototype.version + ', http://netsblox.org';
 
