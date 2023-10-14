@@ -4,17 +4,15 @@
 // Additional Process Capabilities
 Process.prototype.resolveAddresses = function (ide, targets) {
     return targets.flatMap(addr => {
-        if (addr.includes('@')) {
+        if (addr.includes('@')) {  // public address already
             return [addr];
         }
 
-        let targets;
+        let targets = [addr];
         if (addr === 'everyone in room') {
             targets = ide.room.getRoleNames();
         } else if (addr === 'others in room') {
             targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
-        } else {
-            targets = [ide.projectName];
         }
 
         const ownerId = ide.room.ownerId;
