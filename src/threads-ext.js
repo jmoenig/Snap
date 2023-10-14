@@ -2,6 +2,27 @@
  isObject, newCanvas, Point, localize */
 
 // Additional Process Capabilities
+Process.prototype.resolveAddresses = function (ide, targets) {
+    return targets.flatMap(addr => {
+        if (addr.includes('@')) {
+            return [addr];
+        }
+
+        let targets;
+        if (addr === 'everyone in room') {
+            targets = ide.room.getRoleNames();
+        } else if (addr === 'others in room') {
+            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
+        } else {
+            targets = [ide.projectName];
+        }
+
+        const ownerId = ide.room.ownerId;
+        const project = ide.room.name;
+        return targets.map(addr => `${addr}@${project}@${ownerId}`);
+    });
+};
+
 Process.prototype.doSocketMessage = function (msgInfo) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
         targetRole = arguments[arguments.length-1],
@@ -40,25 +61,8 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var dstId = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
-    function resolveAddress(addr) {
-        if (addr.includes('@')) {
-            return [addr];
-        }
-
-        let targets;
-        if (addr === 'everyone in room') {
-            targets = ide.room.getRoleNames();
-        } else if (addr === 'others in room') {
-            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
-        } else {
-            targets = [ide.projectName];
-        }
-
-        const ownerId = ide.room.ownerId;
-        const project = ide.room.name;
-        return targets.map(addr => `${addr}@${project}@${ownerId}`);
-    }
+    var targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
+    const dstId = this.resolveAddresses(ide, targets);
 
     var sendMessage = function() {
         ide.sockets.sendMessage({
