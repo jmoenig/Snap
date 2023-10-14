@@ -627,19 +627,6 @@ RoomMorph.prototype.moveToRole = async function(role) {
     await this.ide.rawLoadCloudRole(metadata, roleData);
 
     this.ide.showMessage('moved to ' + role.name + '!');
-    this.ide.silentSetProjectName(role.name);
-    this.ide.source = 'cloud';
-
-    // Load the project or make the project empty
-    if (metadata.public === true) {
-        this.ide.updateUrlQueryString(metadata);
-    }
-
-    if (roleData.code) {
-        this.ide.droppedText(roleData.code + roleData.media);
-    } else {  // newly created role
-        await SnapActions.openProject();
-    }
 };
 
 RoomMorph.prototype.deleteRole = async function(role) {

@@ -828,7 +828,8 @@ NetsBloxMorph.prototype.rawOpenBlocksMsgTypeString = function (aString) {
 
 NetsBloxMorph.prototype.rawLoadCloudRole = async function (project, roleData) {
     const rolePair = Object.entries(project.roles)
-        .find(([id, metadata]) => metadata.name === roleData.name)
+        .find(([_id, metadata]) => metadata.name === roleData.name)
+
     if (!rolePair) throw new Error(`Could not find role ${roleData.name} in project.`);
     const [roleId] = rolePair;
 
