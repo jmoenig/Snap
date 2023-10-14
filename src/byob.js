@@ -426,7 +426,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
 CustomBlockDefinition.prototype.parseChoices = function (string) {
     var dict = {},
         stack = [dict],
-        params, body;
+        params, body, key, val;
     if (string.match(/^function\s*\(.*\)\s*{.*\n/)) {
         // It's a JS function definition.
         // Let's extract its params and body, and return a Function out of them.
@@ -444,7 +444,20 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
             stack[stack.length - 1][pair[0]] = dict;
             stack.push(dict);
         } else {
-            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
+            // support translating custom drop-downs by prefixing items w/ "$_"
+            key = pair[0];
+            if (isString(key) && key.length > 2 && key.startsWith('$_')) {
+                key = localize(key.slice(2));
+            }
+            val = pair[1];
+            if (isString(val) && val.length > 2 && val.startsWith('$_')) {
+                val = [val.slice(2)];
+            }
+            if (isNil(val)) {
+                dict[key] = key;
+            } else {
+                dict[key] = val;
+            }
         }
     });
     return dict;
