@@ -67,7 +67,7 @@ Process.prototype.doSocketMessage = function (msgInfo) {
     var sendMessage = function() {
         ide.sockets.sendMessage({
             type: 'message',
-            dstId: dstId.flatMap(resolveAddress),
+            dstId: dstId,
             srcId: srcId,
             msgType: name,
             content: contents
