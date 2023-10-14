@@ -1,5 +1,5 @@
 /*globals driver, expect, assert */
-describe.only('threads', function() {
+describe('threads', function() {
   describe("resolveAddresses", function () {
     before(async () => {
       await driver.reset();
