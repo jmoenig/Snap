@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-October-11';
+modules.objects = '2023-October-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1691,6 +1691,23 @@ SpriteMorph.prototype.customizeBlocks = function () {
                     );
                     // the default values needs to be set externally (here)
                     entry[1] = record.defaults ? record.defaults[count] : null;
+                    if (entry[1] instanceof Array) {
+                        if (entry[1].length === 1 && isString(entry[1][0])) {
+                            // tag entry as selector so it becomes localizable
+                            entry[1] = '$_' + entry[1][0];
+                        } else {
+                            // encode the array as text
+                            entry[1] = entry[1].map(v =>
+                                v.toString().trim()).join('\n').trim();
+                        }
+                    } else if (
+                        (word === '%words' || word.startsWith('%mult')) &&
+                        entry[1]
+                    ) {
+                        // encode the remaining values as text
+                        entry[1] = record.defaults.slice(count).map(v =>
+                            v.toString()).join('\n').trim();
+                    }
                     count += 1;
                     slotName = '%#' + count;
                     decl.set('#' + count, entry);

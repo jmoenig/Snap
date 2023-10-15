@@ -56,7 +56,10 @@
 * **Translation Updates:**
     * German
 
-### 2023-10-13
+### 2023-10-15
+* blocks, objects: selectorized default values, fixed distribution of variadic slot defaults
+
+### 2023-10-14
 * byob: tag a default text value to behave as translateable "selector" by prefixing it with dollar-underscore
 * byob: support translating custom drop-downs by prefixing items with "$_"
 

@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-13';
+modules.blocks = '2023-October-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13669,8 +13669,9 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
 
     // parse default values to determine their arity
     function massage(str) {
-        var items = (str || '').toString().split('\n').map(line =>
-                line.trim()).filter(each => each.length);
+        var items = (str || '').toString().split('\n')
+            // .map(line => line.trim())
+            .filter(each => each.length);
         return items.length > 1 ? items : items[0] || null;
     }
 
