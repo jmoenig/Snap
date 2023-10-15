@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-14';
+modules.byob = '2023-October-15';
 
 // Declarations
 
@@ -385,40 +385,42 @@ CustomBlockDefinition.prototype.maxSlotsOfInputIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
-    var fname;
-    if (this.declarations.has(inputName) &&
-            this.declarations.get(inputName)[2]) {
-        if ((this.declarations.get(inputName)[2].indexOf('§_') === 0)) {
-            fname = this.declarations.get(inputName)[2].slice(2);
-            if (contains(
-                [
-                    'messagesMenu',
-                    'messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
-                    'objectsMenu',
-                    'costumesMenu',
-                    'soundsMenu',
-                    'getVarNamesDict',
-                    'pianoKeyboardMenu',
-                    'directionDialMenu',
-                    'destinationsMenu',
-                    'locationMenu',
-                    'typesMenu',
-                    'objectsMenuWithSelf',
-                    'clonablesMenu',
-                    'keysMenu',
-                    'gettablesMenu',
-                    'attributesMenu',
-                    'audioMenu',
-                    'scenesMenu',
-                    'primitivesMenu',
-                    'extensionsMenu'
-                ],
-                fname
-            ) || fname.indexOf('ext_') === 0) {
-                return fname;
+    var options, fname;
+    if (this.declarations.has(inputName)) {
+        options = this.declarations.get(inputName)[2];
+        if (isString(options)) {
+            if (options.startsWith('§_')) {
+                fname = options.slice(2);
+                if (contains(
+                    [
+                        'messagesMenu',
+                        'messagesReceivedMenu', // for backward (5.0.0 - 5.0.3) support
+                        'objectsMenu',
+                        'costumesMenu',
+                        'soundsMenu',
+                        'getVarNamesDict',
+                        'pianoKeyboardMenu',
+                        'directionDialMenu',
+                        'destinationsMenu',
+                        'locationMenu',
+                        'typesMenu',
+                        'objectsMenuWithSelf',
+                        'clonablesMenu',
+                        'keysMenu',
+                        'gettablesMenu',
+                        'attributesMenu',
+                        'audioMenu',
+                        'scenesMenu',
+                        'primitivesMenu',
+                        'extensionsMenu'
+                    ],
+                    fname
+                ) || fname.indexOf('ext_') === 0) {
+                    return fname;
+                }
             }
+            return this.parseChoices(options);
         }
-        return this.parseChoices(this.declarations.get(inputName)[2]);
     }
     return null;
 };
@@ -496,9 +498,7 @@ CustomBlockDefinition.prototype.decodeChoices = function (choices) {
                 list.add(new List([key, this.decodeChoices(choices[key])]));
             } else if (choices[key] instanceof Array &&
                     isString(choices[key][0])) {
-                list.add(choices[key][0] === key ? key
-                    : new List([key, choices[key][0]])
-                );
+                list.add(new List([key, '$_' + choices[key][0]]));
             } else if (choices[key] instanceof Array &&
                     choices[key][0] instanceof Object &&
                     typeof choices[key][0] !== 'function') {
