@@ -406,6 +406,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                         'typesMenu',
                         'objectsMenuWithSelf',
                         'clonablesMenu',
+                        'collidablesMenu',
                         'keysMenu',
                         'gettablesMenu',
                         'attributesMenu',
@@ -3702,6 +3703,7 @@ BlockLabelFragment.prototype.hasSpecialMenu = function () {
             '§_typesMenu',
             '§_objectsMenuWithSelf',
             '§_clonablesMenu',
+            '§_collidablesMenu',
             '§_keysMenu',
             '§_gettablesMenu',
             '§_attributesMenu',
@@ -4861,6 +4863,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     addSpecialOptions('keys', '§_keysMenu');
     addSpecialOptions('objects + self', '§_objectsMenuWithSelf');
     addSpecialOptions('sprites + self', '§_clonablesMenu');
+    addSpecialOptions('collidables', '§_collidablesMenu');
     addSpecialOptions('object attributes', '§_gettablesMenu');
     addSpecialOptions('properties', '§_attributesMenu');
     addSpecialOptions('scenes', '§_scenesMenu');

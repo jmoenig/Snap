@@ -7,7 +7,7 @@
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
     * metaprogramming support for color type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
-    * destinations, locations, keys, data types, objects + self, sprites + self, object attributes, microphone, scenes, primitives, properties and extensions dropdown menus for custom blocks
+    * destinations, locations, keys, data types, objects + self, sprites + self, collidables, object attributes, microphone, scenes, primitives, properties and extensions dropdown menus for custom blocks
     * upvars in custom blocks can now have different default names than their formal parameter names
     * "collapse" label support for variadic inputs in custom blocks
     * metaprogramming support for "collapse" labels in variadic inputs
@@ -59,6 +59,7 @@
 ### 2023-10-16
 * byob: tweaked localizing customized primitives
 * byob: tweaked decoding choices for costomized primitives
+* byob: made collidablesMenu() available for custom blocks
 
 ### 2023-10-15
 * blocks, objects: selectorized default values, fixed distribution of variadic slot defaults
