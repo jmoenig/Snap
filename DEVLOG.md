@@ -62,6 +62,7 @@
 * byob: made collidablesMenu() available for custom blocks
 * stdlib: updated stdlib (translation support for dropdowns and default values, correct distribution of default values in variadic inputs)
 * byob: tweaked relabelling customized primitives
+* blocks, byob: translate default values for customized primitives
 
 ### 2023-10-15
 * blocks, objects: selectorized default values, fixed distribution of variadic slot defaults

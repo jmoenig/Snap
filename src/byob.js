@@ -320,9 +320,12 @@ CustomBlockDefinition.prototype.defaultValueOf = function (inputName) {
     var def;
     if (this.declarations.has(inputName)) {
         def = this.declarations.get(inputName)[1];
-        if (isString(def) && def.length > 2 && def.startsWith('$_')) {
-            // selector - can be translated
-            return [def.slice(2)];
+        if (isString(def)) {
+            if (def.length > 2 && def.startsWith('$_')) {
+                // selector - can be translated later
+                return [def.slice(2)];
+            }
+            return this.selector ? localize(def) : def;
         }
         return def;
     }

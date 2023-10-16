@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-15';
+modules.blocks = '2023-October-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14084,6 +14084,13 @@ MultiArgMorph.prototype.slotSpecFor = function (index) {
 };
 
 MultiArgMorph.prototype.defaultValueFor = function (index) {
+    var dta = this.defaultValueDataFor(index);
+    return this.parentThatIsA(BlockMorph)?.definition?.selector ?
+        localize(dta) : dta;
+};
+
+MultiArgMorph.prototype.defaultValueDataFor = function (index) {
+    // private - answer the raw untranslated data
     // repeat & wrap default values inside label groups
     if (!this.parent || this.groupInputs > 1) {
         return this.defaultValue instanceof Array ?
