@@ -58,6 +58,7 @@
 
 ### 2023-10-16
 * byob: tweaked localizing customized primitives
+* byob: tweaked decoding choices for costomized primitives
 
 ### 2023-10-15
 * blocks, objects: selectorized default values, fixed distribution of variadic slot defaults

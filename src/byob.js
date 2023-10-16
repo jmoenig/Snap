@@ -486,6 +486,7 @@ CustomBlockDefinition.prototype.encodeChoices = function (list) {
 
 CustomBlockDefinition.prototype.decodeChoices = function (choices) {
     // answer a (nested) List representing the input slot dropdown menu
+    if (isNil(choices)) {return null; }
     var list = new List(),
         key;
     for (key in choices) {
