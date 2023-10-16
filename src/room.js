@@ -638,11 +638,6 @@ RoomMorph.prototype.deleteRole = async function(role) {
 };
 
 RoomMorph.prototype.createRoleClone = async function(roleId) {
-    var myself = this;
-    var roleName = this.getRoles().find(function(role) {
-        return role.id === roleId;
-    }).name;
-
     await this.ide.cloud.cloneRole(roleId);
 };
 
@@ -652,6 +647,7 @@ RoomMorph.prototype.role = function() {
 
 RoomMorph.prototype.setRoleName = function(roleId, name) {
     var myself = this;
+    name = name.trim();
 
     if (!name) return;
 
