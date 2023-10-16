@@ -1237,7 +1237,6 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
         }
         this.setSpec(newSpec, def);
         this.fixLabelColor();
-        this.restoreInputs(oldInputs, offset);
     } else { // update all input slots' drop-downs
         this.inputs().forEach((inp, i) => {
             if (inp instanceof ArgMorph &&
@@ -1275,6 +1274,11 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
         }
     });
 
+    // restore old inputs if any
+    if (oldInputs) {
+        this.restoreInputs(oldInputs, offset);
+    }
+
     // initialize block vars
     // preserve values of unchanged variable names
     if (this.isGlobal) {
@@ -1289,7 +1293,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs, offset) {
     // try to restore my previous inputs when my spec has been changed
 
-    if (offset) {
+    if (offset || this.definition?.primitive) {
         // assuming a "relabel" action that needs to shift inputs
         this.refreshDefaults();
         BlockMorph.prototype.restoreInputs.call(this, oldInputs, offset);
