@@ -388,7 +388,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
     var options, fname;
     if (this.declarations.has(inputName)) {
         options = this.declarations.get(inputName)[2];
-        if (isString(options)) {
+        if (options && isString(options)) {
             if (options.startsWith('§_')) {
                 fname = options.slice(2);
                 if (contains(
