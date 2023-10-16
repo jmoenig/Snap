@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-October-13';
+modules.gui = '2023-October-16';
 
 // Declarations
 
@@ -3547,7 +3547,7 @@ IDE_Morph.prototype.availableBackup = function (anyway) {
 };
 
 IDE_Morph.prototype.restore = function () {
-    // load the backed up project for the currently logged im user
+    // load the backed up project for the currently logged in user
     // and backup the current one, in case they want to switch back to it
     var username = this.cloud.username,
         bak;
@@ -5762,6 +5762,19 @@ IDE_Morph.prototype.exportCustomizedPrimitives = function () {
     }
 };
 
+IDE_Morph.prototype.refreshCustomizedPalette = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        this.serializer.loadBlocks(this.blocksLibraryXML(blocks));
+    }
+};
+
 IDE_Morph.prototype.removeUnusedBlocks = function () {
     var targets = this.sprites.asArray().concat([this.stage]),
         globalBlocks = this.stage.globalBlocks,
@@ -7498,6 +7511,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
@@ -7612,6 +7626,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);

@@ -64,6 +64,7 @@
 * byob: tweaked relabelling customized primitives
 * blocks, byob: translate default values for customized primitives
 * German translation update
+* gui: refresh customized palette blocks when changing the language or the block zoom
 
 ### 2023-10-15
 * blocks, objects: selectorized default values, fixed distribution of variadic slot defaults
