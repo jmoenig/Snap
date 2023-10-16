@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-15';
+modules.byob = '2023-October-16';
 
 // Declarations
 
@@ -652,13 +652,14 @@ CustomBlockDefinition.prototype.isDirectlyRecursive = function () {
 // CustomBlockDefinition localizing
 
 CustomBlockDefinition.prototype.localizedSpec = function () {
-	if (this.cachedTranslation && !this.selector) {
+    if (this.selector) {
+        return BlockMorph.prototype.localizeBlockSpec(this.blockSpec());
+    }
+	if (this.cachedTranslation) {
         return this.cachedTranslation;
     }
 
-	var loc = this.selector ?
-            localize(this.abstractBlockSpec())
-            : this.translations[SnapTranslator.language],
+	var loc = this.translations[SnapTranslator.language],
 		sem = this.blockSpec(),
         locParts,
   		inputs,

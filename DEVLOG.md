@@ -56,6 +56,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-16
+* byob: tweaked localizing customized primitives
+
 ### 2023-10-15
 * blocks, objects: selectorized default values, fixed distribution of variadic slot defaults
 * byob: selectorized drop-down menus in customized primitives
