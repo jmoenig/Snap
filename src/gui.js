@@ -7145,10 +7145,18 @@ SaveOpenDialogMorph.prototype.openItem = async function() {
     }
 };
 
+/**
+ * Helper function to get the contents of the name field.
+ * Ensures the name has leading/trailing whitespace trimmed.
+ */
+SaveOpenDialogMorph.prototype.getNameField = function() {
+    return this.nameField.contents().text.text.trim();
+};
+
 SaveOpenDialogMorph.prototype.trySaveItem = async function() {
     const newItem = {
         id: this.getNewItemID(),
-        name: this.nameField.contents().text.text,
+        name: this.getNameField(),
         notes: this.notesText.text,
     };
     const existingItem = detect(
@@ -8127,11 +8135,7 @@ ProjectDialogMorph.prototype.getNewItemID = function () {
 };
 
 ProjectDialogMorph.prototype.trySaveItem = function () {
-    var name = this.nameField.contents().text.text,
-        notes = this.notesText.text;
-
-    this.ide.projectNotes = notes || this.ide.projectNotes;
-    if (/[\.@]+/.test(name)) {
+    if (/[\.@]+/.test(this.getNameField())) {
         this.ide.inform(
             'Invalid Project Name',
             'Could not save project because\n' +
@@ -8141,12 +8145,7 @@ ProjectDialogMorph.prototype.trySaveItem = function () {
         return;
     }
 
-    const newProjectDetails = {
-        name: name,
-        notes: notes,
-    };
-    // TODO: Set the current room name?
-    ProjectDialogMorph.uber.trySaveItem.call(this, newProjectDetails);
+    ProjectDialogMorph.uber.trySaveItem.call(this);
 };
 
 ProjectDialogMorph.prototype.saveItem = async function(newItem) {
