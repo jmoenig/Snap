@@ -58,6 +58,7 @@
 
 ### 2023-10-17
 * byob: fixed a bug that assigned default values to prototype input fragments in customized primitives
+* incremented dev version
 
 ### 2023-10-16
 * byob: tweaked localizing customized primitives
