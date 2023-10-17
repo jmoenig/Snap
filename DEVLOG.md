@@ -56,6 +56,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-17
+* byob: fixed a bug that assigned default values to prototype input fragments in customized primitives
+
 ### 2023-10-16
 * byob: tweaked localizing customized primitives
 * byob: tweaked decoding choices for costomized primitives

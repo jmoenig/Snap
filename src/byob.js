@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-16';
+modules.byob = '2023-October-17';
 
 // Declarations
 
@@ -1364,6 +1364,10 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs, offset) {
 
 CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
     // fill my editable slots with the defaults specified in my definition
+    if (this.isPrototype) {
+        return;
+    }
+
     var inputs = this.inputs(),
         idx = 0;
 
