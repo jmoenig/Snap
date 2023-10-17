@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-October-09';
+modules.locale = '2023-October-17';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -433,11 +433,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller, Ville Medeiros",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2023-01-25',
+        '2023-10-17',
 };
 
 SnapTranslator.dict.bn = {

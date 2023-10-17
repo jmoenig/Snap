@@ -3,6 +3,11 @@
 ## in development:
 * **Notable Fixes:**
     * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
 
 2023-10-11
 * new dev version
