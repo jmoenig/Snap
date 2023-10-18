@@ -6732,6 +6732,9 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe, noShadow) {
     } else {
         dest = new Point(newX, newY).subtract(this.extent().divideBy(2));
     }
+    if (this.isDown && dest.eq(this.position())) {
+        this.doDrawDot();
+    }
     this.setPosition(dest, justMe);
     this.positionTalkBubble();
 };
