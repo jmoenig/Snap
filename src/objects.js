@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-October-15';
+modules.objects = '2023-October-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -6568,18 +6568,10 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
 
 SpriteMorph.prototype.forward = function (steps) {
     var dest,
-        dist = steps * this.parent.scale || 0,
-        dot = 0.1;
+        dist = steps * this.parent.scale || 0;
 
 	if (dist === 0 && this.isDown) { // draw a dot
- 		// dot = Math.min(this.size, 1);
- 		this.isDown = false;
-        this.forward(dot * -0.5);
-        this.isDown = true;
-        this.forward(dot);
-        this.isDown = false;
-        this.forward(dot * -0.5);
-        this.isDown = true;
+        this.doDrawDot();
      	return;
  	} else if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
@@ -6595,6 +6587,20 @@ SpriteMorph.prototype.forward = function (steps) {
 
     this.setPosition(dest);
     this.positionTalkBubble();
+};
+
+SpriteMorph.prototype.doDrawDot = function (dot = 0.1) {
+    // draw a dot using the current line-end settings, i.e. a round one
+    // or a centered square / rhombial dot in flat-line-end mode
+    var down = this.isDown;
+    dot = Math.max((this.useFlatLineEnds ? this.size : dot), 0.1);
+    this.isDown = false;
+    this.forward(dot * -0.5);
+    this.isDown = true;
+    this.forward(dot);
+    this.isDown = false;
+    this.forward(dot * -0.5);
+    this.isDown = down;
 };
 
 SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
