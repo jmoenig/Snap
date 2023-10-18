@@ -56,6 +56,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-18
+* updated stdlib (alternative code for sprite layer control)
+
 ### 2023-10-17
 * byob: fixed a bug that assigned default values to prototype input fragments in customized primitives
 * incremented dev version
