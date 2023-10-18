@@ -58,7 +58,6 @@
 
 ### 2023-10-18
 * updated stdlib (alternative code for sprite layer control)
-* updated stdlib (custom snap code for RUN "primitive")
 
 ### 2023-10-17
 * byob: fixed a bug that assigned default values to prototype input fragments in customized primitives
