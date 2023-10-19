@@ -216,7 +216,7 @@ SnapTranslator.dict.es = {
     "APL primitives": "",
     "About Snap": "Acerca de Snap",
     "About...": "Acerca de...",
-    "Account created.": "",
+    "Account created.": "Cuenta creada.",
     "Add interactive maps to projects": "",
     "Add scene...": "Añadir escena...",
     "Adds features from the APL language supporting hyperblocks.": "",
@@ -233,10 +233,10 @@ SnapTranslator.dict.es = {
     "Any type": "Cualquier tipo",
     "Apply": "Aplicar",
     "April": "Abril",
-    "Are you sure you want to continue?": "",
+    "Are you sure you want to continue?": "¿Estás seguro que deseas continuar?",
     "Are you sure you want to delete": "¿Seguro que quieres eliminar",
     "Are you sure you want to publish": "¿Seguro que quieres publicar",
-    "Are you sure you want to replace": "",
+    "Are you sure you want to replace": "¿Estás seguro que deseas sustituirlo?",
     "Are you sure you want to share": "¿Seguro que quieres compartir",
     "Are you sure you want to unpublish": "¿Seguro que quieres dejar de publicar",
     "Are you sure you want to unshare": "¿Seguro que quieres dejar de compartir",
@@ -252,21 +252,21 @@ SnapTranslator.dict.es = {
     "Bitmap": "",
     "Block Editor": "Editor de bloques",
     "Blocks": "Bloques",
-    "Blocks category name:": "",
+    "Blocks category name:": "Nombre de la categoría de bloques",
     "Blurred shadows": "Sombras difuminadas",
     "Boolean": "booleano",
     "Boolean (T/F)": "Booleano (V/F)",
     "Boolean (unevaluated)": "Booleano (no evaluado)",
-    "Bottom": "fondo",
+    "Bottom": "Inferior",
     "Bring back deleted sprites": "",
-    "Browser": "",
+    "Browser": "Navegador",
     "Brush size": "Tamaño de pincel",
     "Cache Inputs": "Cachear entradas",
     "Camera": "Cámara",
     "Camera not supported": "Cámara no soportada",
     "Camera support": "Soporte para cámara",
     "Cancel": "Cancelar",
-    "Case sensitivity": "",
+    "Case sensitivity": "Sensibilidad a mayúsculas/minúsculas",
     "Catch errors": "Detectar errores",
     "Catch errors in a script": "Captura de errores en programas",
     "Category color": "Categoría color",
@@ -299,7 +299,7 @@ SnapTranslator.dict.es = {
     "Crayons": "Crayones",
     "Create and manage global/sprite/script variables in a script": "",
     "Create input name": "Crear parámetro",
-    "Create variables": "",
+    "Create variables": "Crear variables",
     "Create variables in program": "",
     "Credits...": "Créditos...",
     "Custom Block Translations": "Traducciones del bloque personalizado",
@@ -311,8 +311,8 @@ SnapTranslator.dict.es = {
     "Delete Custom Block": "Eliminar bloque personalizado",
     "Delete Project": "Eliminar proyecto",
     "Delete a variable": "Borrar variable",
-    "Disable click-to-run": "",
-    "Disable dragging data": "",
+    "Disable click-to-run": "Desactivar clic para ejecutar",
+    "Disable dragging data": "Desactivar arrastrar datos",
     "Down": "abajo",
     "Download source": "Descargar código fuente",
     "Dragging threshold": "Umbral de arrastre",
@@ -320,7 +320,7 @@ SnapTranslator.dict.es = {
     "Dynamic input labels": "Etiquetas de entrada dinámicas",
     "E-mail address of parent or guardian:": "Correo electrónico del padre/madre o tutor legal",
     "E-mail address:": "Correo electrónico:",
-    "ERROR: INVALID PASSWORD": "",
+    "ERROR: INVALID PASSWORD": "ERROR: CONTRASEÑA INCORRECTA",
     "EXPERIMENTAL! check to enable live custom control structures": "¡EXPERIMENTAL! marcar para activar las estructuras de control personalizadas en vivo",
     "EXPERIMENTAL! check to enable support for compiling": "",
     "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
@@ -351,9 +351,9 @@ SnapTranslator.dict.es = {
     "Export project...": "Exportar proyecto...",
     "Export summary with drop-shadows...": "Exportar resumen (imágenes con sombra)...",
     "Export summary...": "Exportar resumen...",
-    "Extension blocks": "",
+    "Extension blocks": "Bloques de extensión",
     "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
-    "Fade blocks": "",
+    "Fade blocks": "Disipar los bloques",
     "Fade blocks...": "Disipar los bloques...",
     "February": "Febrero",
     "Fetching project from the cloud...": "Descargando proyecto desde la nube...",
@@ -369,7 +369,7 @@ SnapTranslator.dict.es = {
     "Generate costumes from letters or words of text.": "",
     "Getters and setters": "",
     "Glide, grow and rotate using easing functions.": "",
-    "HSL pen color model": "",
+    "HSL pen color model": "modelo de color HSL del lápiz",
     "Header mapping": "Mapeo a cabecera",
     "Hello!": "¡Hola!",
     "Hello, World!": "¡Hola, Mundo!",
@@ -397,12 +397,12 @@ SnapTranslator.dict.es = {
     "Input Slot Options": "Opciones de parámetro de entrada",
     "Input name": "Parámetro",
     "Input sliders": "Deslizadores en campos de entrada",
-    "Inside a custom block": "",
+    "Inside a custom block": "Dentro de un bloque personalizado",
     "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
     "Iteration, composition": "Iteración, composición",
     "JIT compiler support": "",
     "January": "Enero",
-    "JavaScript extensions": "",
+    "JavaScript extensions": "Extensiones de Javascript",
     "JavaScript extensions for Snap! are turned off": "",
     "JavaScript function ( _ ) { _ }": "función JavaScript ( _ ) { _ }",
     "July": "Julio",
@@ -461,7 +461,7 @@ SnapTranslator.dict.es = {
     "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "Una de las mejores ideas de Logo no incluída en Scratch es la de considerar un texto como una secuencia de palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca recupera esa idea.",
     "Open": "Abrir",
     "Open Project": "Abrir proyecto",
-    "Open in Community Site": "",
+    "Open in Community Site": "Abrir en el Sitio de la Comunidad",
     "Open...": "Abrir...",
     "Opening blocks...": "Abriendo bloques...",
     "Opening project...": "Abriendo proyecto...",
@@ -500,14 +500,14 @@ SnapTranslator.dict.es = {
     "Project notes...": "Notas del proyecto...",
     "Provide 100 selected colors": "Paleta de 100 colores preseleccionados",
     "Provide getters and setters for all GUI-controlled global settings": "Manejo de opciones globales",
-    "Publish": "",
+    "Publish": "Publicar",
     "Publish Project": "Publicar proyecto",
     "Rasterize SVGs": "Rasterizar SVGs",
     "Record a new sound": "grabar un nuevo sonido",
     "Recover": "Recuperar",
     "Rectangle (shift: square)": "",
     "Reference manual": "Manual de referencia",
-    "Remove a category...": "",
+    "Remove a category...": "Eliminar una categoría...",
     "Remove unused blocks": "Borrar bloques no utilizados",
     "Repeat Password:": "Repetir contraseña",
     "Repeat new password:": "Repetir nueva contraseña:",
@@ -549,8 +549,8 @@ SnapTranslator.dict.es = {
     "Set the rotation center": "establecer centro de rotación",
     "Share": "Compartir",
     "Share Project": "Compartir",
-    "Show buttons": "",
-    "Show categories": "",
+    "Show buttons": "Mostrar botones",
+    "Show categories": "Mostrar categorías",
     "Sign in": "Iniciar sesión",
     "Sign up": "Registro",
     "Signada (Network remote control)": "",
@@ -596,32 +596,32 @@ SnapTranslator.dict.es = {
     "Text to Speech": "",
     "Text to speech": "",
     "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "La torre numérica completa de Scheme. \"UTILIZAR BIGNUMS <verdadero>\" para activarla.",
-    "The question came up at": "",
+    "The question came up at": "La pregunta apareció en",
     "This global block definition contains one or more local custom blocks which must be removed first.": "",
     "This will convert your vector objects into bitmaps,": "",
     "This will erase your current drawing.": "",
     "Thread safe scripts": "Hilos de ejecución seguros",
     "Title text": "Texto",
-    "Today": "",
+    "Today": "Hoy",
     "Today,": "Hoy,",
-    "Top": "",
+    "Top": "Superior",
     "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "Bucles tradicionales (while, until, etc...) + el \"named let\" de Lisp (una generalización del for) + iteración funcional (invocación repetida de una función) y composición de funciones.",
     "Translations": "Traducciones",
     "Translators...": "Traductores...",
     "Turbo mode": "Modo turbo",
     "Turtle": "Tortuga",
     "Undelete sprites...": "",
-    "Unpublish": "",
-    "Unpublish Project": "Dejar de publicar",
-    "Unsaved Changes!": "",
+    "Unpublish": "Despublicar",
+    "Unpublish Project": "Despublicar proyecto",
+    "Unsaved Changes!": "¡Cambios sin guardar!",
     "Unshare": "No compartir",
     "Unshare Project": "Dejar de compartir",
     "Untitled": "Sin Título",
     "Unused blocks...": "Bloques no utilizados...",
-    "Unverified account:": "",
-    "Up": "",
+    "Unverified account:": "Cuenta no verificada.",
+    "Up": "Arriba",
     "Updating project list...": "Actualizando lista de proyectos...",
-    "Uploading": "",
+    "Uploading": "Cargando",
     "Upvar - make internal variable visible to caller": "Salida (hace visible una variable interna)",
     "Use CPU for graphics": "",
     "User name must be four characters or longer": "el nombre de usuario ha de tener como mínimo 4 caracteres",
@@ -639,7 +639,7 @@ SnapTranslator.dict.es = {
     "Words, sentences": "Palabras, frases",
     "World Map": "",
     "World...": "Mundo...",
-    "Would you like to replace it?": "",
+    "Would you like to replace it?": "¿Qué te gustaría sustituir?",
     "XML escape": "escapar XML",
     "XML unescape": "desescapar XML",
     "Yes": "Si",
@@ -664,7 +664,7 @@ SnapTranslator.dict.es = {
     "_ of block _": "_ de bloque _",
     "_ of costume _": "_ del disfraz _",
     "_ of sound _": "_ del sonido _",
-    "_ of text _": "",
+    "_ of text _": "_ de texto _ ",
     "_ to _": "_ a _",
     "__shout__go__": "",
     "a": "a",
@@ -676,7 +676,7 @@ SnapTranslator.dict.es = {
     "acos": "arcocoseno",
     "add _ to _": "añadir _ a _",
     "add a new Turtle sprite": "añade una nueva tortuga",
-    "add a new sprite": "",
+    "add a new sprite": "añadir un objeto nuevo",
     "add comment": "añadir comentario",
     "add comment here...": "añadir comentario aquí...",
     "agent": "",
@@ -688,8 +688,8 @@ SnapTranslator.dict.es = {
     "all but first of _": "_ sin el primer elemento",
     "all but first letter of %txt": "todas menos la primera letra de %txt",
     "all but this script": "todos los programas excepto este",
-    "all identical": "",
-    "all scenes": "",
+    "all identical": "todos idéntico",
+    "all scenes": "todos escenas",
     "all ≤": "todos ≤",
     "all ≥": "todos ≥",
     "alpha value:": "valor alfa",
@@ -738,7 +738,7 @@ SnapTranslator.dict.es = {
     "blurred shadows...": "sombras difuminadas...",
     "blurry shades, use for new browsers": "sombras difuminadas (para navegadores modernos)",
     "bold": "negrita",
-    "bottom": "",
+    "bottom": "inferior",
     "box": "caja",
     "brightness": "brillo",
     "broadcast _ _": "enviar mensaje _ _",
@@ -756,7 +756,7 @@ SnapTranslator.dict.es = {
     "cannot handle zero width or height": "",
     "cannot operate on a deleted sprite": "",
     "cannot send media, sprites or procedures to another scene": "",
-    "case sensitivity": "",
+    "case sensitivity": "sensibilidad a mayúsculas/minúsculas",
     "categories": "categorías",
     "category": "categoría",
     "ceiling": "techo",
@@ -765,7 +765,7 @@ SnapTranslator.dict.es = {
     "center y": "centro y",
     "change _ by _": "incrementar _ en _",
     "change _ effect by _": "cambiar efecto _ en _",
-    "change background _ by _": "",
+    "change background _ by _": "cambiar el fondo _ por _",
     "change balance by %n": "cambiar balance en %n",
     "change pen _ by _": "cambiar _ del lápiz en _",
     "change pen color by _": "cambiar color de lápiz en _",
@@ -815,7 +815,7 @@ SnapTranslator.dict.es = {
     "check to show category names in the palette": "",
     "check to show extension primitives in the palette": "",
     "check to show in palette": "",
-    "check to support native JavaScript functions": "",
+    "check to support native JavaScript functions": "marcar para admitir funciones nativas de JavaScript",
     "check to switch pen colors and graphic effects to HSL": "",
     "check to turn block clicking sound on": "marcar para que suene un \"clic\" cuando se coloca un bloque",
     "check to turn on logging pen vectors": "",
@@ -880,7 +880,7 @@ SnapTranslator.dict.es = {
     "current _": "actual _",
     "current module versions:": "Versiones actuales de los módulos:",
     "current parent": "padre actual",
-    "custom?": "",
+    "custom?": "¿personalizado?",
     "cut from %": "copia desde",
     "cut from _": "recorta desde _",
     "d": "d",
@@ -898,13 +898,13 @@ SnapTranslator.dict.es = {
     "delete": "eliminar",
     "delete _": "eliminar _",
     "delete _ of _": "borrar _ de _",
-    "delete a category...": "",
+    "delete a category...": "eliminar una categoría...",
     "delete block": "eliminar bloque",
     "delete block _": "eliminar bloque",
     "delete block definition...": "eliminar definición de bloque...",
-    "delete slot": "",
+    "delete slot": "eliminar una ranura",
     "delete this clone": "eliminar este clon",
-    "delete variable": "",
+    "delete variable": "eliminar variable",
     "delimiter": "delimitador",
     "demo (1.2x)": "",
     "demo...": "",
@@ -922,7 +922,7 @@ SnapTranslator.dict.es = {
     "disable dragging media and blocks out of watchers and balloons": "",
     "disconnected.": "Desconectado.",
     "distance": "distancia",
-    "distance to _": "",
+    "distance to _": "distancia a _",
     "distribution": "distribución",
     "don't rotate": "no girar",
     "down arrow": "↓ (flecha abajo)",
@@ -934,7 +934,7 @@ SnapTranslator.dict.es = {
     "dragging threshold": "umbral de arrastre",
     "dropped": "arrastren y me suelten",
     "duplicate": "duplicar",
-    "duplicate block definition...": "",
+    "duplicate block definition...": "duplicar definición de bloque...",
     "duration": "duración",
     "e": "e",
     "e^": "e^",
@@ -962,14 +962,15 @@ SnapTranslator.dict.es = {
     "experimental - under construction": "experimental (en construcción)",
     "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
     "export": "exportar",
-    "export block definition...": "",
+    "export block definition...": "exportar definición de bloque...",
     "export pen trails line segments as SVG": "",
     "export project as cloud data...": "Exportar proyecto como datos en la nube...",
     "export project media only...": "Exportar sólo medios del proyecto...",
     "export project without media...": "Exportar proyecto sin medios...",
-    "export script": "",
+    "export script": "exportar secuencia",
+    "export script...": "exportar secuencia...",
     "export...": "exportar...",
-    "extract": "",
+    "extract": "extraer",
     "f": "f",
     "false": "falso",
     "file": "fichero",
@@ -1007,13 +1008,14 @@ SnapTranslator.dict.es = {
     "fullScreen": "pantalla completa",
     "g": "g",
     "gears": "engranaje",
-    "get blocks": "",
-    "get data": "",
+    "Generate Puzzle": "Generar Rompecabezas",
+    "get blocks": "obtener bloques",
+    "get data": "obtener datos",
     "ghost": "",
     "giant (8x)": "gigantesco (8x)",
     "glide _ secs to x: _ y: _": "deslizar en _ segs a x: _ y: _",
     "glide, grow and rotate using easing functions.": "Deslizamientos, zooms y rotaciones utilizando funciones curva.",
-    "global?": "",
+    "global?": "¿global?",
     "globe": "",
     "go back _ layers": "enviar _ capas hacia atrás",
     "go to _": "ir a _",
@@ -1064,8 +1066,8 @@ SnapTranslator.dict.es = {
     "input(s), but getting": "pero se ha encontrado",
     "inputs": "argumentos",
     "insert _ at _ of _": "insertar _ en _ de _",
-    "insert a slot": "",
-    "insert a variable": "",
+    "insert a slot": "insertar una ranura",
+    "insert a variable": "insertar una variable",
     "inspect...": "inspeccionar",
     "interactively turn this morph using a dial widget": "gira este morph utilizando un control de disco",
     "is _ ?": "¿es _ ?",
@@ -1117,15 +1119,15 @@ SnapTranslator.dict.es = {
     "location": "ubicación",
     "lock": "bloquear",
     "log pen vectors": "registrar los dibujos como vectores",
-    "login": "",
+    "login": "iniciar sesión",
     "loop": "",
     "low": "baja",
-    "lower case": "",
+    "lower case": "minúsculas",
     "m": "m",
     "magnifierOutline": "lupa (contorno)",
     "magnifyingGlass": "",
     "make a block...": "crear bloque...",
-    "make a category...": "",
+    "make a category...": "crear una categoría...",
     "make a copy and pick it up": "crea una copia y permite moverla a otra parte",
     "make a morph": "crear un morph",
     "make permanent and show in the sprite corral": "lo hace permanente y lo muestra en el corral de objetos",
@@ -1239,7 +1241,7 @@ SnapTranslator.dict.es = {
     "password has been changed.": "Contraseña cambiada.",
     "password must be six characters or longer": "la contraseña ha de tener como mínimo 6 caracteres",
     "passwords do not match": "las contraseña no coindicen",
-    "paste on _": "",
+    "paste on _": "pegar en",
     "pause": "pausa",
     "pause all _": "pausar todos _",
     "pen": "tortuga",
@@ -1259,7 +1261,7 @@ SnapTranslator.dict.es = {
     "pixel": "píxel",
     "pixelate": "pixelado",
     "pixels": "píxeles",
-    "play _ Hz for _ secs": "",
+    "play _ Hz for _ secs": "tocar _ Hz por _ segs",
     "play frequency _ Hz": "reproducir frecuencia _ Hz",
     "play note _ for _ beats": "tocar nota _ por _ pulsos",
     "play sound _": "reproducir sonido _",
@@ -1287,7 +1289,7 @@ SnapTranslator.dict.es = {
     "r-g-b-a": "",
     "random": "aleatorio",
     "random position": "cualquier posición",
-    "rank": "",
+    "rank": "rango",
     "raw data...": "",
     "ray length": "",
     "read-only": "solo lectura",
@@ -1295,7 +1297,7 @@ SnapTranslator.dict.es = {
     "recording": "",
     "rectangle": "rectángulo",
     "rectangleSolid": "rectángulo (sólido)",
-    "red": "",
+    "red": "rojo",
     "redo the last undone block drop in this pane": "rehace el último cambio deshecho con bloques",
     "redraw the screen once": "redibuja la pantalla",
     "redrop": "rehacer",
@@ -1324,7 +1326,7 @@ SnapTranslator.dict.es = {
     "rest for _ beats": "silencio por _ pulsos",
     "restore display": "restaurar pantalla",
     "result pic...": "",
-    "reverse": "",
+    "reverse": "inventir",
     "right": "derecha",
     "right arrow": "→ (flecha derecha)",
     "ring": "",
@@ -1360,7 +1362,7 @@ SnapTranslator.dict.es = {
     "script": "programa",
     "script pic with result...": "imagen de programa con resultado...",
     "script pic...": "imagen de programa...",
-    "script variables _": "",
+    "script variables _": "variables de programa _",
     "scripts": "programas",
     "scripts pic...": "imagen de programas...",
     "scroll frame": "panel con deslizadores",
@@ -1418,7 +1420,7 @@ SnapTranslator.dict.es = {
     "show variable _": "mostrar variable _",
     "shown?": "¿visible?",
     "shrink": "reducir",
-    "shuffled": "",
+    "shuffled": "barajado",
     "signals": "señales",
     "sin": "seno",
     "size": "tamaño",
@@ -1429,7 +1431,8 @@ SnapTranslator.dict.es = {
     "smallStage": "escenario pequeño",
     "smaller menu fonts and sliders": "fuentes y deslizadores más pequeños",
     "snap": "instantánea",
-    "sorted": "",
+    "sort": "ordenar",
+    "sorted": "clasificado",
     "sound": "sonido",
     "sounds": "sonidos",
     "space": "espacio",
@@ -1457,10 +1460,10 @@ SnapTranslator.dict.es = {
     "stop _": "detener _",
     "stop all sounds": "detener todos los sonidos",
     "stop frequency": "parar la freqüència",
-    "stopped": "paren",
+    "stopped": "parado",
     "storage": "almacenamiento",
     "store this project in the downloads folder (in supporting browsers)": "",
-    "stretch _ x: _ y: _ %": "",
+    "stretch _ x: _ y: _ %": "estirar _ x: _ y: _ %",
     "string": "",
     "subtle (95)": "",
     "sum": "",
@@ -1493,7 +1496,7 @@ SnapTranslator.dict.es = {
     "tip": "",
     "to": "a",
     "to use instead of hue for better selection": "Para seleccionar un color por nombre en lugar de por su matiz.",
-    "top": "arriba",
+    "top": "superior",
     "touch screen settings": "perfil de pantallas táctiles",
     "touching _ ?": "¿tocando el color _ ?",
     "transient": "excluir al guardar",
@@ -1592,18 +1595,18 @@ SnapTranslator.dict.es = {
     "unused": "no utilizado",
     "unused block(s) removed": "bloque(s) no utilizado(s) eliminados",
     "up arrow": "↑ (flecha arriba)",
-    "upper case": "",
+    "upper case": "mayúsculas",
     "url...": "Url...",
     "use the keyboard to enter blocks": "permite utilizar el teclado para escribir bloques",
     "user features": "opciones de usuario",
-    "user features...": "",
+    "user features...": "opciones de usuario...",
     "user mode...": "modo usuario...",
     "v": "v",
     "value": "",
     "variable": "variable",
     "variables": "variables",
-    "video _ on _": "",
-    "video capture": "",
+    "video _ on _": "video _ sobre _",
+    "video capture": "captura de video",
     "volume": "volumen",
     "w": "w",
     "wait _ secs": "esperar _ segs",
@@ -1684,14 +1687,6 @@ SnapTranslator.dict.es = {
         'Disfraces',
     'Sounds':
         'Sonidos',
-
-    // names:
-    'Sprite':
-        'Objeto',
-    'Stage':
-        'Escenario',
-    'Turtle':
-        'Tortuga',
 
     // stage tab:
     'Empty':
@@ -1823,8 +1818,6 @@ SnapTranslator.dict.es = {
         'girar %clockwise %n grados',
     'turn %counterclockwise %n degrees':
         'girar %counterclockwise %n grados',
-    'point in direction %dir':
-        'apuntar en direcci\u00F3n %dir',
     'point towards %dst':
         'apuntar hacia %dst',
     'go to x: %n y: %n':
@@ -1850,12 +1843,6 @@ SnapTranslator.dict.es = {
     'position':
         'posici\u00F3n',
 
-    //point in direction %dir':
-    'random position':
-        'posici\u00F3n al azar',
-    'center':
-        'centro',
-
     // %dir values for (point in direction %dir):
     '(90) right':
         '(90) derecha',
@@ -1867,20 +1854,6 @@ SnapTranslator.dict.es = {
         '(180) abajo',
 
     // looks:
-    'stretch %cst x: %n y: %n %':
-        'el\u00E1stico %cst x: %n y: %n %',
-    '%img of costume %cst':
-        '%img del disfraz %cst',
-    'switch to costume %cst':
-        'cambiar al disfraz %cst',
-    'next costume':
-        'siguiente disfraz',
-    'costume #':
-        '# de disfraz',
-    'costume name':
-        'nombre del disfraz',
-    'say %s for %n secs':
-        'decir %s por %n segs',
     'say %s':
         'decir %s',
     'think %s for %n secs':
@@ -1911,20 +1884,9 @@ SnapTranslator.dict.es = {
         'ir a %layer la capa',
 
     // looks' development mode primitives:
-    'wardrobe': // objects.js:401
-        'guardarropa',
-    'console log %mult%s':
-        'registrar en consola %mult%s',
     'alert %mult%s':
         'mostrar mensaje %mult%s',
-    'save %imgsource as costume named %s':
-        'guardar %imgsource en disfraz %s',
 
-    // default values for (say %s):
-    'Hello!':
-        '\u00A1Hola!',
-    'Hello, World!':
-        '\u00A1Hola, Mundo!',
 
     // default values for (think %s):
     'Hmm...':
@@ -2135,8 +2097,6 @@ SnapTranslator.dict.es = {
     
     'define %upvar %s %repRing':
         'definir %upvar %s %repRing',
-    'delete block %repRing':
-        'eliminar bloque %upvar %s %repRing',
 
     // %send dropdown values for 'switch to scene %scn %send'
     'next':
@@ -2188,117 +2148,6 @@ SnapTranslator.dict.es = {
         'cualquier tecla',
     'enter':
         'entre',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // %interaction values for (when I am %interaction):
-    // In spanish read as "cuando me %interaction"
-    'clicked':
-        'hagan clic',
-    'pressed':
-        'pulsen',
-    'dropped':
-        'arrastren y me suelten',
-    'mouse-entered':
-        'toquen con el rat\u00F3n',
-    'mouse-departed':
-        'dejen de tocar con el rat\u00F3n',
-    'scrolled-up':
-        'giren la rueda del rat\u00F3n hacia abajo',
-    'scrolled-down':
-        'giren la rueda del rat\u00F3n hacia arriba',
-    'stopped':
-        'parado',
-
-    //'to, with data' for 'broadcast'
-    'with data':
-        'con datos',
-    'to':
-        'de',
-    'data':
-        'datos',
-    'Stage':
-        'Escenario',
-    'Sprite':
-        'Objeto',
-
-    // "any message" for (when I receive %msgHat):
-    'any message':
-        'cualquier mensaje...',
-
-    // "new..." for (broadcast %msg):
-    'new...':
-        'nuevo mensaje...',
 
 
     // %stopChoices values for (stop %stopChoices):
@@ -2338,8 +2187,6 @@ SnapTranslator.dict.es = {
         'rat\u00F3n y',
     'mouse down?':
         '\u00BFrat\u00F3n pulsado?',
-    'key %key pressed?':
-        '\u00BFtecla %key pulsada?',
     '%rel to %dst':
         '%rel a %dst',
     'reset timer':
@@ -2352,10 +2199,6 @@ SnapTranslator.dict.es = {
         'mi(s) %get',
     'url %s':
         'url %s',
-    'turbo mode?':
-        '\u00BFmodo turbo?',
-    'set turbo mode to %b':
-         'fijar modo turbo a %b',
     'current %dates':
          '%dates actual',
 
@@ -2404,8 +2247,6 @@ SnapTranslator.dict.es = {
         'partes',
     'anchor':
         'anclaje',
-    'stage':
-        'escenario',
     'children':
         'hijos',
     'parent':
@@ -2523,11 +2364,6 @@ SnapTranslator.dict.es = {
     '10^':
         '10^',
 
-    // default values for (join %words):
-    'hello':
-        'hola',
-    'world':
-        'mundo',
 
     // %delim values (split by %delim)
    'letter':
@@ -2552,10 +2388,6 @@ SnapTranslator.dict.es = {
         'booleano',
     'list':
         'lista',
-    'sprite':
-        'objeto',
-    'costume':
-        'disfraz',
     'sound':
         'sonido',
     'command':
@@ -2580,33 +2412,6 @@ SnapTranslator.dict.es = {
         'desescapar XML',
     'hex sha512 hash':
         'hash sha512 (hexadecimal)',
-
-    // variables:
-    'Make a variable':
-        'Declarar variable',
-    'Script variable name':
-        'Nombre de variable de programa',
-    'Variable name':
-        'Nombre de variable',
-    'Delete a variable':
-        'Borrar variable',
-
-    'set %var to %s':
-        'asignar a %var el valor %s',
-    'change %var by %n':
-        'incrementar %var en %n',
-    'show variable %var':
-        'mostrar variable %var',
-    'hide variable %var':
-        'esconder variable %var',
-    'script variables %scriptVars':
-        'variables de programa %scriptVars',
-    'inherit %shd':
-        'heredar %shd',
-    'a variable of name \'':
-        'no existe ninguna variable llamada\n\'',
-    '\'\ndoes not exist in this context':
-        '\'\nen este contexto',
 
     // lists:
     'list %exp':
@@ -2645,44 +2450,12 @@ SnapTranslator.dict.es = {
         'a\u00F1adir %s a %l',
     'delete %ida of %l':
         'borrar %ida de %l',
-    'insert %s at %idx of %l':
-        'insertar %s en %idx de %l',
-    'replace item %idx of %l with %s':
-        'reemplazar elemento %idx de %l con %s',
     '%la of %l':
         '%la de %l',
     
-    // %la values for '%la of %l
-    'length':
-        'longitud',
-    'rank':
-        'rango',
-    'dimensions':
-        'dimensiones',
-    'flatten':
-        'aplanar',
-    'columns':
-        'columnas',
+    //not included in mega list
     'uniques':
         'únicos',
-    'distribution':
-        'distribución',
-    'sorted':
-        'clasificado',
-    'shuffled':
-        'barajado',
-    'reverse':
-        'inventir',
-    'lines':
-        'líneas',
-    'csv':
-        '',
-    'json':
-        '',
-
-    // lists' development mode blocks:
-    'show table %l':
-        'mostrar tabla %l',
 
     // %idx values for (item %idx of %l):
     'last':
@@ -2718,10 +2491,6 @@ SnapTranslator.dict.es = {
     'Slider maximum value':
         'M\u00E1ximo valor del deslizador',
 
-    // list watchers
-    'length: ':
-        'longitud: ',
-
     // other
     'Make a block':
         'Crear bloque',
@@ -2736,37 +2505,6 @@ SnapTranslator.dict.es = {
     'map %codeListPart of %codeListKind to code %code':
         'mapear %codeListPart de %codeListKind a c\u00F3digo %code',
 
-    // %cmdRing values for (map %cmdRing to %codeKind %code):
-    'String':
-        'String',
-    'Number':
-        'n\u00FAmero',
-    // already defined
-    // 'true':
-    //     'verdadero',
-    // 'false':
-    //     'falso',
-
-    // %codeKind values for (map %cmdRing to %codeKind %code)
-    'code':
-        'c\u00F3digo',
-    'header':
-        'cabecera',
-
-    // %mapValue values for (map %mapValue to code %code):
-    // already defined
-    // 'list':
-    //    'lista',
-    'delimiter':
-        'delimitador',
-
-    // $codeListKind values for (map %codeListPart of %codeListKind to code %code)
-    'collection':
-        'colecci\u00F3n',
-    'variables':
-        'variables',
-    'parameters':
-        'par\u00E1metros',
 
     // menus
     // snap menu
@@ -2885,8 +2623,6 @@ SnapTranslator.dict.es = {
         'bloque(s) no utilizado(s) eliminados',
 
     // cloud menu
-    'Login...':
-        'Iniciar sesi\u00F3n...',
     'Signup...':
         'Registrarse...',
     'Reset Password...':
@@ -2933,43 +2669,8 @@ SnapTranslator.dict.es = {
         'Correo electr\u00F3nico:',
     'E-mail address of parent or guardian:':
         'Correo electr\u00F3nico del padre/madre o tutor legal',
-    'Password:':
-        'Contrase\u00F1a:',
-    'Repeat Password:':
-        'Repetir contrase\u00F1a',
-    'Terms of Service...':
-        'T\u00E9rminos y condiciones de uso...',
-    'Privacy...':
-        'Privacidad...',
-    'I have read and agree\nto the Terms of Service':
-        'He le\u00EDdo y acepto los t\u00E9rminos\n y condiciones de uso',
 
-    'January':
-        'Enero',
-    'February':
-        'Febrero',
-    'March':
-        'Marzo',
-    'April':
-        'Abril',
-    'May':
-        'Mayo',
-    'June':
-        'Junio',
-    'July':
-        'Julio',
-    'August':
-        'Agosto',
-    'September':
-        'Septiembre',
-    'October':
-        'Octubre',
-    'November':
-        'Noviembre',
-    'December':
-        'Diciembre',
-    'or before':
-        'o antes',
+
 
     'please fill out\nthis field':
         'por favor,\ncompleta este campo',
@@ -3063,8 +2764,6 @@ SnapTranslator.dict.es = {
     'check to run\nthe edited script\nwhen moving the slider':
         'marcar para ejecutar el programa\ncuando se mueva el deslizador',
 
-    'Turbo mode':
-        'Modo turbo',
     'uncheck to run scripts\nat normal speed':
         'desmarcar para ejecutar\nlos programas a velocidad normal',
     'check to prioritize\nscript execution':
@@ -3147,8 +2846,6 @@ SnapTranslator.dict.es = {
     'check to turn\nblock clicking\nsound on':
         'marcar para que suene un "clic"\ncuando se coloca un bloque',
 
-    'Animations':
-        'Animaciones',
     'uncheck to disable\nIDE animations':
         'desmarcar para desactivar\nlas animaciones del IDE',
     'check to enable\nIDE animations':
@@ -3366,8 +3063,6 @@ SnapTranslator.dict.es = {
         'Escribe el c\u00F3digo correspondiente a la implementaci\u00F3n del bloque\n(normalmente una \u00FAnica llamada a funci\u00F3n).\nUsa <#n> para referenciar los argumentos aqu\u00ED mostrados.',
 
     // custom blocks context menu:
-    'delete block definition...':
-        'eliminar definici\u00F3n de bloque...',
     'edit...':
         'editar...',
     'rename...':
@@ -3543,10 +3238,6 @@ SnapTranslator.dict.es = {
     'open a new window\nwith a picture of this comment':
         'abre una nueva ventana\ncon una imagen de este comentario',
 
-    // morph context menu:
-    'user features':
-        'opciones de usuario',
-
     'color...':
         'color...',
     '\ncolor:':
@@ -3610,11 +3301,6 @@ SnapTranslator.dict.es = {
     'make this morph\nmovable':
         'permite que este morph\nse pueda mover',
 
-    // already defined
-    // 'hide':
-    //     'ocultar',
-    // 'delete':
-    //     'eliminar',
 
     'World...':
         'Mundo...',
@@ -3656,9 +3342,6 @@ SnapTranslator.dict.es = {
         'activar ajuste de l\u00EDnea...',
     'enable automatic\nline wrapping':
         'activa el ajuste\nde l\u00EDnea autom\u00E1tico',
-
-    'delete block':
-        'eliminar bloque',
     'spec...':
         'definici\u00F3n...',
 
@@ -3937,72 +3620,9 @@ SnapTranslator.dict.es = {
         '(vac\u00EDo)',
     '(no matches)':
         '(ninguna coincidencia)',
-    'Open':
-        'Abrir',
-    'Delete':
-        'Eliminar',
-    'Share':
-        'Compartir',
-    'Share Project':
-        'Compartir',
-    'Unshare':
-        'No compartir',
-    'Unshare Project':
-        'Dejar de compartir',
-    'Saved!':
-        '\u00A1Guardado!',
-    'Delete Project':
-        'Eliminar proyecto',
-    'Are you sure you want to delete': // + proyect name?
-        '\u00BFSeguro que quieres eliminar', // + proyect name?
-    'Cloud':
-        'Nube',
-    'Browser':
-        'Navegador',
-    'Examples':
-        'Ejemplos',
-    'Updating\nproject list...':
-        'Actualizando\nlista de proyectos...',
-    'Saving project\nto the cloud...':
-        'Guardando proyecto\nen la nube...',
-    'saved.':
-        'Guardado.',
-    'last changed':
-        '\u00FAltima modificaci\u00F3n',
-    'Are you sure you want to share': // + project name?
-        '\u00BFSeguro que quieres\ncompartir', // + project name?
-    'Are you sure you want to unshare': // + project name?
-        '\u00BFSeguro que quieres\ndejar de compartir', // + project name?
-    'sharing\nproject...':
-        'Compartiendo proyecto...',
-    'shared.':
-        'Compartido.',
-    'unsharing\nproject...':
-        'Dejando de compartir...',
-    'unshared.':
-        'No compartido.',
-    'Are you sure you want to publish':
-        '\u00BFSeguro que quieres\npublicar', // + project name?
-    'Are you sure you want to unpublish':
-        '\u00BFSeguro que quieres\ndejar de publicar', // + project name?
-    'Publish Project':
-        'Publicar proyecto',
-    'Unpublish Project':
-        'Dejar de publicar',
-    'publishing\nproject...':
-        'Publicando proyecto...',
-    'unpublishing\nproject...':
-        'Cancelando publicaci\u00F3n...',
-    'published.':
-        'Publicado.',
-    'unpublished.':
-        'No publicado',
-    'Recover':
-        'Recuperar',
-    'Today, ':
-        'Hoy, ',
-    'Yesterday, ':
-        'Ayer, ',
+
+
+
 
     // costume editor @todo (wasn't this superseed by paint editor?)
     'Costume Editor':
@@ -4092,20 +3712,14 @@ SnapTranslator.dict.es = {
         'Texto',
     'List':
         'Lista',
-    // already defined
-    // 'Number':
-    //     'N\u00FAmero',
+
     'Any type':
         'Cualquier tipo',
     'Boolean (T/F)':
         'Booleano (V/F)',
     'Command\n(inline)':
         'Comando\n(en l\u00EDnea)',
-    // already defined
-    // 'Reporter':
-    //     'Reportero',
-    // 'Predicate':
-    //     'Predicado',
+
     'Command\n(C-shape)':
         'Comando\n(tipo C)',
     'Any\n(unevaluated)':
