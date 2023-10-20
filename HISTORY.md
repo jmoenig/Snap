@@ -1,14 +1,17 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.0.8:
 * **Notable Fixes:**
-    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
     * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
 * **Translation Updates:**
     * Brazilian Portuguese, thanks, Ville Medeiro!
 
 2023-10-20
 * threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
 
 2023-10-17
 * Brazilian Portuguese translation update, thanks, Ville Medeiro!
