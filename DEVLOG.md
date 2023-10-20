@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-20
+* updated dev branch with v9.0.8 main branch patch
+
 ### 2023-10-18
 * updated stdlib (alternative code for sprite layer control)
 * updated stdlib (decustomized "rest for beats" and fixed "point in direction")

@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-October-18';
+modules.gui = '2023-October-20';
 
 // Declarations
 
-var SnapVersion = '10-231018-dev';
+var SnapVersion = '10-231020-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -245,7 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
-        hideDefaultCat: bool, hide/show the buit-in bloc category buttons
+        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
@@ -1540,7 +1540,7 @@ IDE_Morph.prototype.createCategories = function () {
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
-        shift = this.config.hideDefaultCat ? 4 : 0,
+        shift = this.config.noDefaultCat ? 4 : 0,
         flag = true;
 
     if (this.categories) {
