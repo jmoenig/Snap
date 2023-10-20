@@ -3,8 +3,12 @@
 ## in development:
 * **Notable Fixes:**
     * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+    * SPLIT now observes the preference setting for case-sensitivity
 * **Translation Updates:**
     * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
 
 2023-10-17
 * Brazilian Portuguese translation update, thanks, Ville Medeiro!
