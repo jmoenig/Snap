@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-September-14';
+modules.threads = '2023-October-20';
 
 var ThreadManager;
 var Process;
@@ -5258,6 +5258,12 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
     */
     default:
         del = delimiter.toString();
+        if (this.isCaseInsensitive) {
+            del = new RegExp(
+                del.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'),
+                "ig"
+            );
+        }
     }
     return new List(str.split(del));
 };

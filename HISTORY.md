@@ -2,6 +2,24 @@
 
 ## in development:
 
+## 9.0.8:
+* **Notable Fixes:**
+    * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
 ## 9.0.7:
 * **Translation Updates:**
     * Chinese, thanks, moodykeke!
