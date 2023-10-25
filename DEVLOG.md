@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-25
+* stdlib: fixed initial sub-slot number for PIPE
+
 ### 2023-10-20
 * updated dev branch with v9.0.8 main branch patch
 
