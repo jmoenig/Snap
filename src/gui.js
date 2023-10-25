@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-October-20';
+modules.gui = '2023-October-25';
 
 // Declarations
 
-var SnapVersion = '10-231020-dev';
+var SnapVersion = '10-231025-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
