@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-16';
+modules.blocks = '2023-October-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12427,6 +12427,10 @@ BooleanSlotMorph.prototype.getSpec = function () {
     return this.isUnevaluated ? '%boolUE' : '%b';
 };
 
+BooleanSlotMorph.prototype.isWide = function () {
+    return this.isStatic && this.parent?.isPredicate;
+};
+
 // BooleanSlotMorph accessing:
 
 BooleanSlotMorph.prototype.evaluate = function () {
@@ -12515,7 +12519,7 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 };
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
-    if (this.isStatic) {return; }
+    if (this.isWide()) {return; }
     if (this.nextValue() === null) {
         this.progress = -1; // 'fade'
     } else {
@@ -12525,7 +12529,7 @@ BooleanSlotMorph.prototype.mouseEnter = function () {
 };
 
 BooleanSlotMorph.prototype.mouseLeave = function () {
-    if (this.isStatic) {return; }
+    if (this.isWide()) {return; }
     this.progress = 0;
     this.rerender();
 };
@@ -12598,7 +12602,7 @@ BooleanSlotMorph.prototype.mappedCode = function () {
 BooleanSlotMorph.prototype.fixLayout = function () {
     // determine my extent
     var text, h;
-    if (this.isStatic) {
+    if (this.isWide()) {
         text = this.textLabelExtent();
         h = text.y + (this.edge * 3);
         this.bounds.setWidth(text.x + (h * 1.5) + (this.edge * 2));
@@ -12784,7 +12788,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
         return;
     }
 
-    if (this.isStatic) { // draw the full text label
+    if (this.isWide()) { // draw the full text label
         text = this.textLabelExtent();
         y = this.height() - (this.height() - text.y) / 2;
         if (this.value) {

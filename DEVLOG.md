@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-27
+* blocks: tweaked BooleanSlotMorph >> isWide() 
+
 ### 2023-10-25
 * stdlib: fixed initial sub-slot number for PIPE
 * incremented dev version
