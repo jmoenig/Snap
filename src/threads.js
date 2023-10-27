@@ -7533,7 +7533,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     prim = SpriteMorph.prototype.blockForSelector(
                         'doPrimitive'
                     );
-                    prim.inputs()[0].setContents(expr.definition.usePrimitive);
+                    prim.inputs()[0].setContents(true);
                     prim.inputs()[1].setContents(expr.definition.primitive);
                     body = prim.reify();
                 } else {

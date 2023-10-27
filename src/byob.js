@@ -169,7 +169,6 @@ function CustomBlockDefinition(spec, receiver) {
     // allow libraries to overload primitives with global custom blocks
     this.selector = null;
     this.primitive = null;
-    this.usePrimitive = null;
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
@@ -791,9 +790,10 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     }
 
     // associate / disassociate the definition with a primitive
-    if (body.expression?.selector === 'doPrimitive') {
+    if (body.expression?.selector === 'doPrimitive' &&
+        body.expression.inputs()[0].value
+    ) {
         this.primitive = body.expression.inputs()[1].contents().text || null;
-        this.usePrimitive = body.expression.inputs()[0].value;
     } else {
         this.primitive = null;
     }
@@ -1177,8 +1177,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
         this.isTemplate = true;
     }
     this.category = definition.category;
-    this.selector = definition.usePrimitive && definition.primitive ?
-        definition.primitive : 'evaluateCustomBlock';
+    this.selector = definition.primitive || 'evaluateCustomBlock';
     this.variables = null;
 	this.storedTranslations = null; // transient - only for "wishes"
     this.initializeVariables();
@@ -1230,8 +1229,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
     }
 
     this.setCategory(def.category);
-    this.selector = def.usePrimitive && def.primitive ?
-        def.primitive : 'evaluateCustomBlock';
+    this.selector = def.primitive || 'evaluateCustomBlock';
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
         if (!this.zebraContrast) {
@@ -2158,8 +2156,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
     this.initializeVariables();
-    this.selector = definition.usePrimitive && definition.primitive ?
-        definition.primitive : 'evaluateCustomBlock';
+    this.selector = definition.primitive || 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
         this.refresh();
     }
@@ -3031,7 +3028,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     if (definition.primitive && !definition.body) {
         prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
-        prim.inputs()[0].setContents(definition.usePrimitive || false);
+        prim.inputs()[0].setContents(true);
         prim.inputs()[1].setContents(definition.primitive);
         proto.nextBlock(prim);
     } else if (definition?.body?.expression) {
@@ -3284,13 +3281,12 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     }
 
     this.definition.body = this.context(head);
-    if (this.definition.body?.expression?.selector === 'doPrimitive') {
+    if (this.definition.body?.expression?.selector === 'doPrimitive' &&
+        this.definition.body.expression.inputs()[0].value
+    ) {
         this.definition.primitive =
             this.definition.body.expression.inputs()[1].contents().text
                 || null;
-        this.definition.usePrimitive =
-            this.definition.body.expression.inputs()[0].value
-                || false;
     } else {
         this.definition.primitive = null;
     }

@@ -61,6 +61,7 @@
 * blocks: tweaked BooleanSlotMorph >> isWide()
 * threads, objects, byob, blocks: added definition >> usePrimitive mechanism
 * updated stdlib
+* byob, threads: tweaked usePrimitive mechanism
 
 ### 2023-10-25
 * stdlib: fixed initial sub-slot number for PIPE
