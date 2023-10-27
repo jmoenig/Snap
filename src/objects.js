@@ -95,7 +95,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-October-18';
+modules.objects = '2023-October-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -1631,7 +1631,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doPrimitive: {
             type: 'command',
             category: 'other',
-            spec: 'primitive %prim'
+            spec: '%bool primitive %prim',
+            defaults: [true]
         },
         doApplyExtension: {
             type: 'command',
@@ -1718,6 +1719,7 @@ SpriteMorph.prototype.customizeBlocks = function () {
             def = new CustomBlockDefinition(spec);
             def.selector = key;
             def.primitive = key;
+            def.usePrimitive = true;
             def.declarations = decl;
             def.isGlobal = true;
             def.type = record.type;

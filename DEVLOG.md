@@ -58,7 +58,8 @@
     * German
 
 ### 2023-10-27
-* blocks: tweaked BooleanSlotMorph >> isWide() 
+* blocks: tweaked BooleanSlotMorph >> isWide()
+* threads, objects, byob, blocks: added definition >> usePrimitive mechanism
 
 ### 2023-10-25
 * stdlib: fixed initial sub-slot number for PIPE

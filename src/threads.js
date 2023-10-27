@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-October-20';
+modules.threads = '2023-October-25';
 
 var ThreadManager;
 var Process;
@@ -858,12 +858,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 };
 
 // Process: Primitive Extensions (for libraries etc.)
-Process.prototype.doPrimitive = function () {
-    throw new Error(
-        localize('primitives can only be directly attached to\n' +
-            'a custom block definition prototype hat.')
-    );
-};
+
+Process.prototype.doPrimitive = nop;
 
 Process.prototype.doApplyExtension = function (prim, args) {
     this.reportApplyExtension(prim, args);
@@ -7533,9 +7529,12 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
-                if (expr.definition.primitive) {
-                    prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
-                    prim.inputs()[0].setContents(expr.definition.primitive);
+                if (expr.definition.primitive && !expr.definition.body) {
+                    prim = SpriteMorph.prototype.blockForSelector(
+                        'doPrimitive'
+                    );
+                    prim.inputs()[0].setContents(expr.definition.usePrimitive);
+                    prim.inputs()[1].setContents(expr.definition.primitive);
                     body = prim.reify();
                 } else {
                     body = expr.definition.body || new Context();
@@ -7546,7 +7545,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             }
         } else {
             prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
-            prim.inputs()[0].setContents(expr.selector);
+            prim.inputs()[0].setContents(true);
+            prim.inputs()[1].setContents(expr.selector);
             body = prim.reify();
         }
         if (body instanceof Context &&

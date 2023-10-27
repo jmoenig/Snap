@@ -6508,8 +6508,7 @@ CommandBlockMorph.prototype.isStop = function () {
         'doForever',
         'doReport',
         'removeClone',
-        'doSwitchToScene',
-        'doPrimitive'
+        'doSwitchToScene'
     ].indexOf(this.selector) > -1);
 };
 
