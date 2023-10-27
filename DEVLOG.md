@@ -63,6 +63,7 @@
 * updated stdlib
 * byob, threads: tweaked usePrimitive mechanism
 * updated stdlib
+* incremented dev version
 
 ### 2023-10-25
 * stdlib: fixed initial sub-slot number for PIPE
