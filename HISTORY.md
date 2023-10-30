@@ -1,17 +1,21 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed localizing relabelled primitive blocks
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
+* Spanish, translation update, thanks, David Martín!
 
 ## 9.0.8:
 * **Notable Fixes:**
     * SPLIT now observes the preference setting for case-sensitivity
     * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
-    * fixed localizing relabelled primitive blocks
 * **Translation Updates:**
     * Brazilian Portuguese, thanks, Ville Medeiro!
-
-2023-10-30
-* blocks: fixed #3263 - localizing relabelled primitive blocks
 
 2023-10-20
 * threads: made SPLIT observe the "case sensitivity" preference setting

@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-October-17';
+modules.locale = '2023-October-30';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -312,11 +312,11 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Martín',
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2020-12-01'
+        '2023-10-27'
 };
 
 SnapTranslator.dict.nl = {
