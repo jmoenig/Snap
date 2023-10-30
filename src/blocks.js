@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-October-27';
+modules.blocks = '2023-October-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1802,6 +1802,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // check for variable multi-arg-slot:
         if ((spec.length > 5) && (spec.slice(0, 5) === '%mult')) {
             part = new MultiArgMorph(spec.slice(5));
+            part.initialSlots = 1;
             part.addInput();
             return part;
         }

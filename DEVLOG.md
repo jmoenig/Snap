@@ -58,6 +58,9 @@
     * German
 
 ### 2023-10-27
+* blocks, threads, gui: tweaked meta-programming features for variadic slots
+
+### 2023-10-27
 * blocks: tweaked BooleanSlotMorph >> isWide()
 * threads, objects, byob, blocks: added definition >> usePrimitive mechanism
 * updated stdlib
