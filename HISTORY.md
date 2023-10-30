@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.0.9:
 * **Notable Fixes:**
     * fixed localizing relabelled primitive blocks
 * **Translation Updates:**
@@ -9,6 +11,7 @@
 2023-10-30
 * blocks: fixed #3263 - localizing relabelled primitive blocks
 * Spanish, translation update, thanks, David Martín!
+* prepared v9.0.9 patch
 
 ## 9.0.8:
 * **Notable Fixes:**
