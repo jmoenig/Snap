@@ -6,8 +6,12 @@
 * **Notable Fixes:**
     * SPLIT now observes the preference setting for case-sensitivity
     * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+    * fixed localizing relabelled primitive blocks
 * **Translation Updates:**
     * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
 
 2023-10-20
 * threads: made SPLIT observe the "case sensitivity" preference setting
