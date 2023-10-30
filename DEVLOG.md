@@ -57,6 +57,10 @@
 * **Translation Updates:**
     * German
 
+### 2023-10-30
+* merged main branch
+* incremented dev version
+
 ### 2023-10-27
 * blocks, threads, gui: tweaked meta-programming features for variadic slots
 
