@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-18';
+modules.blocks = '2023-October-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4099,7 +4099,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
-    this.setSpec(localize(info.spec));
+    this.setSpec(this.localizeBlockSpec(info.spec));
     this.defaults = info.defaults || [];
 
     // restore default values
