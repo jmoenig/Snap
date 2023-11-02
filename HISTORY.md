@@ -1,11 +1,14 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.0.10:
 * **Notable Fixes:**
     * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
 
 2023-11-02
 * objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
 
 ## 9.0.9:
 * **Notable Fixes:**
