@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-11-02
+* incremented dev version for localized blocks search patch
+
 ### 2023-10-30
 * merged main branch
 * incremented dev version
