@@ -309,11 +309,19 @@ StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
         const ide = this.parentThatIsA(IDE_Morph) || world?.children[0];  // This fallback isn't an ideal way to get the IDE morph...
-        const hostUrl = ide?.services.defaultHost?.url;
-        if (!hostUrl) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
+        const hosts = ide?.services ? ide.services.allHosts() : [];
+        if (hosts.length === 0) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
 
-        // FIXME: support type definitions from other hosts, too
-        const typeMeta = utils.getUrlSyncCached(`${hostUrl}/input-types`, x => JSON.parse(x));
+        const typeMetas = hosts.map(host => {
+            const hostUrl = host.url;
+            try {
+              return utils.getUrlSyncCached(`${hostUrl}/input-types`, x => JSON.parse(x));
+            } catch (err) {
+              console.warn("No input types found for " + hostUrl);
+              return {};
+            }
+        });
+        const typeMeta = Object.assign(...typeMetas);
 
         // follow the base type chain to see if we can make a strongly typed slot
         for (let type = meta.type; type; type = typeMeta[type.name].baseType) {
