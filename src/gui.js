@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-October-30';
+modules.gui = '2023-November-02';
 
 // Declarations
 
