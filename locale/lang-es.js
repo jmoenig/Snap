@@ -383,7 +383,7 @@ SnapTranslator.dict.es = {
     "If you cannot find that email, please check your spam folder.": "",
     "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
     "Import": "Importar",
-    "Import a new costume from your webcam": "importar un nuevo disfraz desde la cámara",
+    "Import a new costume from your webcam": "Importar un nuevo disfraz desde la cámara",
     "Import blocks": "Importar bloques",
     "Import library": "Importar biblioteca",
     "Import sound": "Importar sonido",
@@ -402,7 +402,7 @@ SnapTranslator.dict.es = {
     "Iteration, composition": "Iteración, composición",
     "JIT compiler support": "",
     "January": "Enero",
-    "JavaScript extensions": "Extensiones de Javascript",
+    "JavaScript extensions": "Extensiones Javascript",
     "JavaScript extensions for Snap! are turned off": "",
     "JavaScript function ( _ ) { _ }": "función JavaScript ( _ ) { _ }",
     "July": "Julio",
@@ -630,7 +630,7 @@ SnapTranslator.dict.es = {
     "Variables": "Variables",
     "Variadic reporters": "Reporteros de aridad variable",
     "Vector": "",
-    "Vector Paint Editor": "",
+    "Vector Paint Editor": "Editor gráfico de vector",
     "Versions of +, x, AND, and OR that take more than two inputs.": "Versiones de +, x, AND, y OR que toman más de dos argumentos.",
     "Virtual keyboard": "Teclado virtual",
     "Visible stepping": "Depuración paso a paso",
@@ -646,7 +646,7 @@ SnapTranslator.dict.es = {
     "Yesterday": "Ayer",
     "Yesterday,": "Ayer,",
     "You are not logged in": "No has iniciado sesión",
-    "You are now logged in, and your account is enabled for three days.": "",
+    "You are now logged in, and your account is enabled for three days.": "Ha ingresado correctamente, pero su cuenta es solo válida durante tres días?",
     "You have": "Usted tiene",
     "Zebra coloring": "Coloreado de cebra",
     "Zoom blocks": "Tamaño de bloque",
@@ -745,7 +745,7 @@ SnapTranslator.dict.es = {
     "broadcast _ _ and wait": "enviar mensaje _ _ y esperar",
     "brush": "pincel",
     "build": "construye",
-    "but getting a": "",
+    "but getting a": "pero se recibió un",
     "c": "c",
     "call _ _": "llamar _ _",
     "call _ w/continuation": "llamar _ con continuación",
@@ -765,8 +765,8 @@ SnapTranslator.dict.es = {
     "center y": "centro y",
     "change _ by _": "incrementar _ en _",
     "change _ effect by _": "cambiar efecto _ en _",
-    "change background _ by _": "cambiar el fondo _ por _",
-    "change balance by %n": "cambiar balance en %n",
+    "change background _ by _": "aumenta _ del fondo en _",
+    "change balance by %n": "aumenta el balance en %n", 
     "change pen _ by _": "cambiar _ del lápiz en _",
     "change pen color by _": "cambiar color de lápiz en _",
     "change pen shade by _": "cambiar brillo de lápiz en _",
@@ -951,13 +951,13 @@ SnapTranslator.dict.es = {
     "enable automatic line wrapping": "activa el ajuste de línea automático",
     "encode URI": "codificar URI",
     "encode URI component": "codificar componente URI",
-    "enter": "escribe",
+    "enter": "retorno",
     "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "Se ha activado el modo desarrollador. El cacheo de errores está desactivado, usa la consola del navegador para ver mensajes de error.",
     "entering user mode": "Se ha activado el modo usuario.",
     "eraser": "goma de borrar",
     "exceeding maximum number of clones": "",
     "expecting": "se esperaban las entradas",
-    "expecting a": "",
+    "expecting a": "se esperaba un",
     "expecting a finite number but getting Infinity or NaN": "",
     "experimental - under construction": "experimental (en construcción)",
     "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
@@ -1016,7 +1016,7 @@ SnapTranslator.dict.es = {
     "glide _ secs to x: _ y: _": "deslizar en _ segs a x: _ y: _",
     "glide, grow and rotate using easing functions.": "Deslizamientos, zooms y rotaciones utilizando funciones curva.",
     "global?": "¿global?",
-    "globe": "",
+    "globe": "mundo",
     "go back _ layers": "enviar _ capas hacia atrás",
     "go to _": "ir a _",
     "go to _ layer": "enviar a la capa _",
@@ -1168,14 +1168,14 @@ SnapTranslator.dict.es = {
     "move...": "mover...",
     "my": "mi",
     "my _": "mi(s) _",
-    "my anchor": "",
-    "my dangling?": "",
-    "my draggable?": "",
+    "my anchor": "atributo ancla",
+    "my dangling?": "¿atributo colgando?",
+    "my draggable?": "¿atributo arrastrable?",
     "my name": "mi nombre",
     "my parent": "mi padre",
-    "my rotation style": "",
-    "my rotation x": "",
-    "my rotation y": "",
+    "my rotation style": "atributo estilo de rotación",
+    "my rotation x": "atributo rotación x",
+    "my rotation y": "atributo rotación y",
     "my temporary?": "¿mi temporal?",
     "myself": "mí mismo",
     "n": "n",
@@ -1183,16 +1183,16 @@ SnapTranslator.dict.es = {
     "neg": "negativo",
     "negative": "negativo",
     "neighbors": "vecinos",
-    "neighbors ≠": "",
+    "neighbors ≠": "vecinos ≠",
     "new costume _ width _ height _": "nuevo disfraz _ con ancho _ y alto _",
     "new line": "nueva línea",
     "new sound _ rate _ Hz": "nuevo sonido _ a _ Hz",
     "new...": "nuevo mensaje...",
-    "next": "",
+    "next": "siguiente",
     "next costume": "siguiente disfraz",
     "no blocks were selected": "No se ha seleccionado ningún bloque",
     "none": "ninguno",
-    "normal": "siguiente",
+    "normal": "",
     "normal (1x)": "normal (1x)",
     "normal style": "estilo normal",
     "normal weight": "grosor normal",
@@ -1244,7 +1244,7 @@ SnapTranslator.dict.es = {
     "paste on _": "pegar en",
     "pause": "pausa",
     "pause all _": "pausar todos _",
-    "pen": "tortuga",
+    "pen": "lápiz",
     "pen _": "l\u00E1piz _",
     "pen down": "bajar lápiz",
     "pen down?": "¿lápiz bajado?",
@@ -1291,7 +1291,7 @@ SnapTranslator.dict.es = {
     "random position": "cualquier posición",
     "rank": "rango",
     "raw data...": "",
-    "ray length": "",
+    "ray length": "distancia de intersección",
     "read-only": "solo lectura",
     "receivers...": "",
     "recording": "",
@@ -1638,134 +1638,6 @@ SnapTranslator.dict.es = {
     "your own": "tus propios",
     "z": "z",
 
-    // original file 
-    // GUI
-    // control bar:
-    'untitled':
-        'Sin t\u00EDtulo',
-    'development mode':
-        'modo desarrollador',
-
-    // categories:
-    'Motion':
-        'Movimiento',
-    'Looks':
-        'Apariencia',
-    'Sound':
-        'Sonido',
-    'Pen':
-        'L\u00E1piz',
-    'Control':
-        'Control',
-    'Sensing':
-        'Sensores',
-    'Operators':
-        'Operadores',
-    'Variables':
-        'Variables',
-    'Lists':
-        'Listas',
-    'Other':
-        'Otros',
-
-    // editor:
-    'don\'t rotate':
-        'no girar',
-    'can rotate':
-        'puede girar',
-    'only face left/right':
-        's\u00F3lo mirar a izquierda y derecha',
-    'draggable':
-        'arrastrable',
-
-    // tabs:
-    'Scripts':
-        'Programas',
-    'Backgrounds':
-        'Fondos de escenario',
-    'Costumes':
-        'Disfraces',
-    'Sounds':
-        'Sonidos',
-
-    // stage tab:
-    'Empty':
-        'Vac\u00EDo',
-
-    // costumes tab:
-    'Paint a new costume':
-        'dibujar un nuevo disfraz',
-    'Import a new costume from your webcam':
-        'importar un nuevo disfraz desde la c\u00E1mara',
-    'costumes tab help':
-        'Puedes importar un disfraz de otro sitio web\no desde tu ordenador arrastr\u00E1ndolo hasta aqu\u00ED',
-
-    // paint editor dialog:
-    'Paint Editor':
-        'Editor gr\u00E1fico',
-    'undo':
-        'deshacer',
-    'Paintbrush tool\n(free draw)':
-        'pincel\n(dibujo libre)',
-    'Stroked Rectangle\n(shift: square)':
-        'rect\u00E1ngulo\n(\u21E7 = cuadrado)',
-    'Stroked Ellipse\n(shift: circle)':
-        'elipse\n(\u21E7 = c\u00EDrculo)',
-    'Eraser tool':
-        'goma de borrar',
-    'Set the rotation center':
-        'establecer\ncentro de rotaci\u00F3n',
-    'Line tool\n(shift: vertical/horizontal)':
-        'l\u00EDnea\n(\u21E7 = vertical/horizontal)',
-    'Filled Rectangle\n(shift: square)':
-        'rect\u00E1ngulo relleno\n(\u21E7 = cuadrado)',
-    'Filled Ellipse\n(shift: circle)':
-        'elipse rellena\n(\u21E7 = c\u00EDrculo)',
-    'Fill a region':
-        'bote de pintura',
-    'Pipette tool\n(pick a color anywhere)':
-        'cuentagotas\n(funciona dentro y fuera del editor)',
-    'grow':
-        'ampliar',
-    'shrink':
-        'reducir',
-    'flip \u2194':
-        'voltear \u2194',
-    'flip \u2195':
-        'voltear \u2195',
-    'Brush size':
-        'Tama\u00F1o de pincel',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Figuras proporcionales\n(o mant\u00E9n pulsado \u21E7)',
-
-    // camera dialog:
-    'Camera':
-        'C\u00E1mara',
-    'Camera not supported':
-        'C\u00E1mara no soportada',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Por favor, comprueba que tu navegador est\u00E9 actualizado\ny tu c\u00E1mara configurada correctamente.\n\nAlgunos navegadores necesitan que accedas a Snap!\na trav\u00E9s de HTTPS para usar la c\u00E1mara.\n\nPor favor, reemplaza el "http://" en la barra de direcciones\nde tu navegador por "https://" y vuelve a intentarlo.',
-    'camera':
-        'c\u00E1mara',
-
-    // sound tab:
-    'Record a new sound':
-        'grabar un nuevo sonido',
-    'import a sound from your computer\nby dragging it into here':
-        'Puedes importar un sonido desde tu ordenador\narrastr\u00E1ndolo hasta aqu\u00ED',
-
-    // sound recorder dialog:
-    'Sound Recorder':
-        'Grabador de sonidos',
-
-    // stage & sprite corral:
-    'add a new Turtle sprite':
-        'a\u00F1ade una nueva tortuga',
-    'paint a new sprite':
-        'dibuja un nuevo objeto',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'hace una captura de c\u00E1mara\n y la importa como nuevo objeto',
-
     // primitive blocks:
 
     /*
@@ -1798,64 +1670,13 @@ SnapTranslator.dict.es = {
         without breaking its functionality.
     */
 
-    // shared messages:
-    'development mode \ndebugging primitives:':
-        'primitivas de depuraci\u00F3n\ndel modo desarrollador:',
-    'find blocks':
-        'busca bloques',
-    'show primitives':
-        'mostrar primitivas',
-    'hide primitives':
-        'ocultar primitivas',
-
     // motion:
-    'Stage selected:\nno motion primitives':
-        'Escenario seleccionado:\nno hay primitivas de movimiento\ndisponibles',
-
-    'move %n steps':
-        'mover %n pasos',
     'turn %clockwise %n degrees':
         'girar %clockwise %n grados',
     'turn %counterclockwise %n degrees':
         'girar %counterclockwise %n grados',
-    'point towards %dst':
-        'apuntar hacia %dst',
-    'go to x: %n y: %n':
-        'ir a x: %n y: %n',
-    'go to %dst':
-        'ir a %dst',
-    'glide %n secs to x: %n y: %n':
-        'deslizar en %n segs a x: %n y: %n',
-    'change x by %n':
-        'cambiar x en %n',
-    'set x to %n':
-        'fijar x a %n',
-    'change y by %n':
-        'cambiar y en %n',
-    'set y to %n':
-        'fijar y a %n',
-    'if on edge, bounce':
-        'rebotar si toca un borde',
-    'x position':
-        'posici\u00F3n x',
-    'y position':
-        'posici\u00F3n y',
-    'position':
-        'posici\u00F3n',
-
-    // %dir values for (point in direction %dir):
-    '(90) right':
-        '(90) derecha',
-    '(-90) left':
-        '(-90) izquierda',
-    '(0) up':
-        '(0) arriba',
-    '(180) down':
-        '(180) abajo',
 
     // looks:
-    'say %s':
-        'decir %s',
     'think %s for %n secs':
         'pensar %s por %n segs',
     'think %s':
@@ -2386,10 +2207,6 @@ SnapTranslator.dict.es = {
         'texto',
     'Boolean':
         'booleano',
-    'list':
-        'lista',
-    'sound':
-        'sonido',
     'command':
         'comando',
     'reporter':
@@ -2598,15 +2415,11 @@ SnapTranslator.dict.es = {
     'Select categories of additional blocks to add to this project.':
         'a\u00F1ade bloques adicionales\npor categor\u00EDas a este proyecto',
 
-    // already defined
-    // 'Costumes':
-    //    'Disfraces',
+
     'Select a costume from the media library':
         'a\u00F1ade un disfraz desde la biblioteca',
 
-    // already defined
-    // 'Sounds':
-    //    'Sonidos',
+
     'Select a sound from the media library':
         'a\u00F1ade un sonido desde la biblioteca',
 
@@ -2738,8 +2551,7 @@ SnapTranslator.dict.es = {
     'Stage size...':
         'Tama\u00F1o del escenario...',
 
-    'Dragging threshold...':
-        'Umbral de arrastre...',
+
     'specify the distance the hand has to move\nbefore it picks up an object':
         'especifica cu\u00E1nto hay que arrastrar\nun objeto para comenzar a moverlo',
 
@@ -2977,8 +2789,6 @@ SnapTranslator.dict.es = {
         'construye',
     'your own':
         'tus propios',
-    'blocks':
-        'bloques',
     'normal (1x)':
         'normal (1x)',
     'demo (1.2x)':
@@ -3001,29 +2811,6 @@ SnapTranslator.dict.es = {
         'Anchura del escenario',
     'Stage height':
         'Altura del escenario',
-
-    // dragging threshold dialog:
-    'Dragging threshold':
-        'Umbral de arrastre',
-
-    // context menu:
-    'help':
-        'ayuda',
-
-    // blocks context menu:
-    'help...':
-        'ayuda...',
-    'relabel...':
-        'renombrar...',
-    // already defined
-    // 'duplicate':
-    //     'duplicar',
-    'make a copy\nand pick it up':
-        'crea una copia y\npermite moverla a otra parte',
-    'only duplicate this block':
-        'duplica s\u00F3lo este bloque',
-    'delete':
-        'eliminar',
 
     'script pic...':
         'imagen de programa...',
@@ -3257,11 +3044,6 @@ SnapTranslator.dict.es = {
     'show a handle\nwhich can be dragged\nto change this morph\'s extent':
         'muestra una muesca que puede ser arrastrada\npara cambiar el tama\u00F1o de este morph',
 
-    // already defined
-    // 'duplicate':
-    //     'duplicar',
-    // 'make a copy\nand pick it up':
-    //     'crea una copia y\npermite moverla a otro lugar',
 
     'pick up':
         'coger',
@@ -3426,8 +3208,6 @@ SnapTranslator.dict.es = {
         'modo usuario...',
     'disable developers\'\ncontext menus':
         'desactiva los men\u00FAs\ncontextuales de desarrollador',
-    'development mode...':
-        'modo desarrollador...',
     'about morphic.js...':
         'acerca de morphic.js',
 
@@ -3607,29 +3387,6 @@ SnapTranslator.dict.es = {
     'Help':
         'Ayuda',
 
-    // Project Manager
-    'Untitled':
-        'Sin T\u00EDtulo',
-    'Open Project':
-        'Abrir proyecto',
-    'Save Project':
-        'Guardar proyecto',
-    'Save Project As...':
-        'Guardar proyecto como...',
-    '(empty)':
-        '(vac\u00EDo)',
-    '(no matches)':
-        '(ninguna coincidencia)',
-
-
-
-
-    // costume editor @todo (wasn't this superseed by paint editor?)
-    'Costume Editor':
-        'Editor de disfraces',
-    'click or drag crosshairs to move the rotation center':
-        'haz clic o arrastra el punto de mira\npara mover el centro de rotaci\u00F3n',
-
     // project notes dialog:
     'Project Notes':
         'Notas del proyecto',
@@ -3651,15 +3408,8 @@ SnapTranslator.dict.es = {
         'No se ha seleccionado ning\u00FAn bloque',
     'select':
         'seleccionar',
-    // already defined
-    // 'all':
-    //     'todos',
-    // 'none':
-    //     'ninguno',
 
     // variable dialog:
-    'for all sprites':
-        'para todos los objetos',
     'for this sprite only':
         's\u00F3lo para este objeto',
 
@@ -3702,16 +3452,10 @@ SnapTranslator.dict.es = {
         'Texto',
     'Input name':
         'Par\u00E1metro',
-    // already defined
-    // 'Delete':
-    //     'Eliminar',
-
     'Object':
         'Objeto',
     'Text':
         'Texto',
-    'List':
-        'Lista',
 
     'Any type':
         'Cualquier tipo',
@@ -3772,41 +3516,8 @@ SnapTranslator.dict.es = {
         'Parte de',
     'Parts':
         'Partes',
-    // already defined
-    // 'Costumes':
-    //     'Disfraces',
-    // 'Sounds':
-    //     'Sonidos',
-    // 'Scripts':
-    //     'Programas',
-    'For all Sprites':
-        'Para todos los objetos',
-    'Blocks':
-        'Bloques',
-    // already defined
-    // 'Variables':
-    //     'Variables',
-
-    // exported summary dialog
-    'Could not export':
-        'No se ha podido exportar',
-    'unable to export text':
-        'No se ha podido exportar el texto',
 
     //libraries
-    'Iteration, composition':
-        'Iteraci\u00F3n, composici\u00F3n',
-    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
-        'Bucles tradicionales (while, until, etc...) + el "named let" de Lisp (una generalizaci\u00F3n del for) + iteraci\u00F3n funcional (invocaci\u00F3n repetida de una funci\u00F3n) y composici\u00F3n de funciones.',
-
-    'List utilities':
-        'Utilidades de lista',
-
-    'Streams (lazy lists)':
-        'Streams (listas perezosas)',
-    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
-        'Una variaci\u00F3n del tipo de dato lista en el que cada elemento se calcula s\u00F3lo cuando es necesario, as\u00ED que puedes construir listas de un mill\u00F3n de elementos sin gastar tiempo o memoria, o incluso listas infinitas. (Se incluye un bloque de ejemplo que reporta todos los n\u00FAmeros primos)',
-
     'Variadic reporters':
         'Reporteros de aridad variable',
     'Versions of +, x, AND, and OR that take more than two inputs.':
