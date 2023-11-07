@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-July-31';
+modules.locale = '2023-November-07';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -195,7 +195,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2022-91-03'
+        '2023-11-04'
 };
 
 SnapTranslator.dict.ja = {
@@ -259,9 +259,9 @@ SnapTranslator.dict.zh_CN = {
     'language_translator':
         '五百刀/邓江华/孟锡峰/曹儒林',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org/五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'last_changed':
-        '2022-01-17'
+        '2023-09-15'
 };
 
 SnapTranslator.dict.eo = {
@@ -312,11 +312,11 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Martín',
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2020-12-01'
+        '2023-10-27'
 };
 
 SnapTranslator.dict.nl = {
@@ -433,11 +433,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller, Ville Medeiros",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2023-01-25',
+        '2023-10-17',
 };
 
 SnapTranslator.dict.bn = {
@@ -659,6 +659,7 @@ SnapTranslator.dict.hi = {
     'last_changed':
         '2021-05-08'
 };
+
 SnapTranslator.dict.ti = {
 	'language_name':
         'ትግርኛ',
@@ -668,7 +669,7 @@ SnapTranslator.dict.ti = {
         'winna.programming@gmail.com',
     'last_changed':
         '2023-05-29'
-}
+};
 
 SnapTranslator.dict.hy = {
     'language_name':

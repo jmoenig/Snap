@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2023-July-13';
+var morphicVersion = '2023-November-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12228,12 +12228,14 @@ WorldMorph.prototype.initRetina = function () {
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
     // answer the color at the given point.
-    var dta = this.worldCanvas.getContext('2d').getImageData(
-        point.x,
-        point.y,
-        1,
-        1
-    ).data;
+    // first, create a new temporary canvas representing the fullImage
+    // and sample that one instead of the actual world canvas
+    // this slows things down but keeps Chrome from crashing
+    // in v119 in the Fall of 2023
+    var dta = Morph.prototype.fullImage.call(this)
+            .getContext('2d')
+            .getImageData(point.x, point.y, 1, 1)
+            .data;
     return new Color(dta[0], dta[1], dta[2]);
 };
 

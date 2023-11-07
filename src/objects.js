@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-July-19';
+modules.objects = '2023-November-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -3709,7 +3709,7 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.spec),
+                spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
                 rel = relevance(labelOf(spec), search);
             if (rel === -1 && block.alias) {
                 rel = relevance(block.alias, search);

@@ -1,6 +1,59 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* Italian translation update, thanks, Stefano!
+
+## 9.0.10:
+* **Notable Fixes:**
+    * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+
+2023-11-02
+* objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
+
+## 9.0.9:
+* **Notable Fixes:**
+    * fixed localizing relabelled primitive blocks
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
+* Spanish, translation update, thanks, David Martín!
+* prepared v9.0.9 patch
+
+## 9.0.8:
+* **Notable Fixes:**
+    * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
+## 9.0.7:
+* **Translation Updates:**
+    * Chinese, thanks, moodykeke!
+
+2023-10-09
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.7 patch
 
 ## 9.0.6:
 * **Notable Fixes:**
