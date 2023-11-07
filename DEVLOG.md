@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-11-07
+* incremented dev version for global color sensing patch
+
 ### 2023-11-02
 * incremented dev version for localized blocks search patch
 
