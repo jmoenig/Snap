@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
 
 ## 9.0.10:
 * **Notable Fixes:**
