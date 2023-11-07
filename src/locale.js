@@ -316,7 +316,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2023-10-27'
+        '2023-11-07'
 };
 
 SnapTranslator.dict.nl = {
