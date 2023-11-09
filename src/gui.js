@@ -7913,7 +7913,7 @@ CloudProjectsSource.prototype.getPreview = function(project) {
     };
 };
 
-CloudProjectsSource.prototype.save = async function(newProject) {
+CloudProjectsSource.prototype.save = async function(newProject, allowRetry=true) {
     const isSaveAs = newProject.name !== this.ide.room.name;
 
     // "Save as" is a little tricky since projects may be collaboratively
@@ -7935,9 +7935,26 @@ CloudProjectsSource.prototype.save = async function(newProject) {
             }
         }
     }
+
     const roleData = this.ide.sockets.getSerializedProject();
-    const metadata = await this.ide.cloud.saveRole(roleData);
-    this.ide.updateUrlQueryString(metadata);
+    try {
+      const metadata = await this.ide.cloud.saveRole(roleData);
+      this.ide.updateUrlQueryString(metadata);
+    } catch (err) {
+      // "Project not found" errors can happen if the computer closes
+      // the ws connection without saving the project. If this happens,
+      // we can make 1 attempt to save it to a new project
+      if (allowRetry && err.status === 404) {
+          // Request a new project ID
+          const metadata = await this.ide.cloud.newProject(newProject.name);
+          const roleId = Object.keys(metadata.roles).shift();
+          this.ide.cloud.setLocalState(metadata.id, roleId);
+          // Save the project
+          await this.save(newProject, false);
+      } else {
+        throw err;
+      }
+    }
 };
 
 CloudProjectsSource.prototype.delete = async function(project) {
