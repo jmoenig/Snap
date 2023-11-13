@@ -448,9 +448,6 @@ RPCInputSlotMorph.prototype.getServiceMetadata = function () {
     // The IDE_Morph is undefined when cloning or dragging from the part browser.
     // Collaborative edits result in the same issue.
     let ide = this.parentThatIsA(IDE_Morph) ?? world?.children[0];
-    if (!ide) {  // FIXME: this is a bit of an ugly hack...
-        ide = world.children[0];
-    }
 
     const services = ide.services;
     const url = field.constant ? field.evaluate()[0] :
