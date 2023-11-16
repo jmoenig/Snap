@@ -59,7 +59,7 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
+    const targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
     const dstId = this.resolveAddresses(ide, targets);
 
     var sendMessage = function() {
@@ -105,10 +105,8 @@ Process.prototype.MESSAGE_REPLY_TIMEOUT = 1500;
 Process.prototype.doSocketRequest = function (msgInfo) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
         targetRole = arguments[arguments.length-1],
-        myRole = ide.projectName,  // same as seat name
-        roomName = ide.room.name,
-        ownerId = ide.room.ownerId,
-        name = msgInfo[0], //msg name | resource name
+        srcId = [ide.projectName, ide.room.name, ide.room.ownerId].join('@'),
+        name = msgInfo[0],
         fieldNames = msgInfo[1],
         fieldValues = Array.prototype.slice.call(arguments, 1, fieldNames.length + 1),
         contents,
@@ -127,8 +125,8 @@ Process.prototype.doSocketRequest = function (msgInfo) {
 
     // if there is no requestId then init the requestId
     if (!this.requestId){
-        requestId= '__REQ' + Date.now();
-        //save the request id to check for later
+        requestId = '__REQ' + Date.now();
+        // save the request id to check for later
         this.requestId = requestId;
 
         // Create the message
@@ -137,10 +135,14 @@ Process.prototype.doSocketRequest = function (msgInfo) {
         for (var i = fieldNames.length; i--;) {
             contents[fieldNames[i]] = fieldValues[i] || '';
         }
+
+        const targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
+        const dstId = this.resolveAddresses(ide, targets);
+
         ide.sockets.sendMessage({
             type: 'message',
-            dstId: targetRole,
-            srcId: myRole+'@'+roomName+'@'+ownerId,
+            dstId: dstId,
+            srcId: srcId,
             msgType: name,
             requestId: requestId,
             content: contents
@@ -151,7 +153,7 @@ Process.prototype.doSocketRequest = function (msgInfo) {
         requestId = this.requestId;
         var reply = this.reply;
 
-        if (this.requestId === requestId ) {
+        if (this.requestId === requestId) {
             this.requestId = null;
             this.reply = null;
             this.messageSentAt = null;
