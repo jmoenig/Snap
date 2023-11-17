@@ -594,7 +594,6 @@ NetsBloxMorph.prototype.openRoomString = async function (str) {
             media: media.toString()
         };
     });
-    const roleName = room.children[0].attributes.name;
 
     const msg = this.showMessage(localize('Opening project...'));
     const {name} = room.attributes;
@@ -657,17 +656,22 @@ NetsBloxMorph.prototype.openProject = function (name) {
 };
 
 NetsBloxMorph.prototype.saveACopy = async function () {
-    var myself = this;
     if (this.isPreviousVersion()) {
         return this.showMessage('Please exit replay mode before saving');
     }
 
     // Save the project!
-    const name = await this.cloud.saveProjectCopy();  // TODO: handle errors
-    if (name) {
-        this.room.silentSetRoomName(name);
-    }
+    const metadata = await this.cloud.saveProjectCopy();
     this.showMessage('Made your own copy and saved it to the cloud!', 2);
+
+    const confirmed = await this.confirm(
+        localize('Would you like to open the project now?'),
+        localize('Open Project'),
+    );
+    if (confirmed) {
+        const source = new CloudProjectsSource(this);
+        await source.open(metadata);
+    }
 };
 
 NetsBloxMorph.prototype.cloudSaveError = function () {
@@ -692,59 +696,6 @@ NetsBloxMorph.prototype.cloudSaveError = function () {
         var explanation = 'Unable to save. Please export project if the problem persists.';
         myself.showMessage(explanation);
     };
-};
-
-NetsBloxMorph.prototype.saveProjectToCloud = async function (name) {
-    // TODO: can we save this to just call save on the current source?
-    var myself = this,
-        overwriteExisting;
-
-    if (this.cloud.username !== this.room.ownerId) {
-        return IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
-    }
-
-    overwriteExisting = function(overwrite) {
-        var contentName = myself.room.hasMultipleRoles() ?
-            myself.room.getCurrentRoleName() : myself.room.name;
-        if (name) {
-            myself.showMessage('Saving ' + contentName + '\nto the cloud...');
-            // TODO: rename the colliding name?
-            this.cloud.saveProject();  // FIXME
-            if (overwrite) {
-                myself.showMessage('Saved ' + contentName + ' to cloud!', 2);
-            } else {
-                myself.showMessage('Saved as ' + myself.room.name, 2);
-            }
-        }
-    };
-
-    // Check if it will overwrite the current one
-    // We can check this by just using the project IDs now...
-    // TODO
-    // TODO: Or we could try to save and see if it fails... This might be more performant
-    // Use 409 status code (conflict)
-    const projects = await this.cloud.getProjectList();
-    const hasConflicting = projects
-        .find(project => project.name === name && project.id !== this.cloud.projectId);
-    if (!hasConflicting) {
-        const project = await IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
-        myself.updateUrlQueryString(project);
-    } else {  // doesn't match the stored version!
-        var dialog = new DialogBoxMorph(null, function() {
-            overwriteExisting(true);
-        });
-
-        dialog.cancel = function() {  // don't overwrite
-            overwriteExisting();
-            dialog.destroy();
-        };
-        dialog.askYesNo(
-            localize('Overwrite Existing Project'),
-            localize('A project with the given name already exists.\n' +
-                'Would you like to overwrite it?'),
-            myself.world()
-        );
-    }
 };
 
 // RPC import support (both custom blocks and message types)
@@ -823,7 +774,8 @@ NetsBloxMorph.prototype.rawOpenBlocksMsgTypeString = function (aString) {
 
 NetsBloxMorph.prototype.rawLoadCloudRole = async function (project, roleData) {
     const rolePair = Object.entries(project.roles)
-        .find(([id, metadata]) => metadata.name === roleData.name)
+        .find(([_id, metadata]) => metadata.name === roleData.name)
+
     if (!rolePair) throw new Error(`Could not find role ${roleData.name} in project.`);
     const [roleId] = rolePair;
 
@@ -852,29 +804,32 @@ NetsBloxMorph.prototype.updateUrlQueryString = function (
     project,
     isExample,
 ) {
-    let url = location.pathname + "?";
+    const extensions = this.parseUrlAnchors(location.search, location.hash).get('extensions');
+    const dict = {};
+    if (extensions) {
+        dict.extensions = extensions;
+    }
 
     const isPublic = project.state !== "Private" && project.saveState === 'Saved';
+
     if (isExample) {
-        url += "action=example&ProjectName=" + encodeURIComponent(project.name) +
-          "&";
+        dict.action = 'example';
+        dict.ProjectName = project.name;
     } else if (isPublic) {
-        url += "action=present&Username=" +
-          encodeURIComponent(project.owner) +
-          "&ProjectName=" + encodeURIComponent(project.name) + "&";
+        dict.action = 'present';
+        dict.Username = project.owner;
+        dict.ProjectName = project.name;
     }
 
-    // Add other query string content (ie, extensions)
-    const querystring = location.href
-        .replace(/^.*\?/, "")
-        .replace("#" + location.hash, "");
-    const dict = this.cloud.parseDict(querystring);
+    this.setQueryString(dict, project.name);
+};
 
-    if (dict.extensions) {
-        url += "extensions=" + dict.extensions;
-    }
-
-    window.history.pushState(project.name, project.name, url);
+NetsBloxMorph.prototype.setQueryString = function (dict, stateName) {
+    const qs = Object.entries(dict)
+      .map(pair => pair.map(encodeURIComponent).join('='))
+      .join('&');
+    const url = location.pathname + "?" + qs + location.hash;
+    window.history.pushState(stateName, stateName, url);
 };
 
 // Bug reporting assistance

@@ -2,6 +2,25 @@
  isObject, newCanvas, Point, localize */
 
 // Additional Process Capabilities
+Process.prototype.resolveAddresses = function (ide, targets) {
+    return targets.flatMap(addr => {
+        if (addr.includes('@')) {  // public address already
+            return [addr];
+        }
+
+        let targets = [addr];
+        if (addr === 'everyone in room') {
+            targets = ide.room.getRoleNames();
+        } else if (addr === 'others in room') {
+            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
+        }
+
+        const ownerId = ide.room.ownerId;
+        const project = ide.room.name;
+        return targets.map(addr => `${addr}@${project}@${ownerId}`);
+    });
+};
+
 Process.prototype.doSocketMessage = function (msgInfo) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
         targetRole = arguments[arguments.length-1],
@@ -40,30 +59,13 @@ Process.prototype.doSocketMessage = function (msgInfo) {
         contents[fieldNames[i]] = fieldValues[i] || '';
     }
 
-    var dstId = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
-    function resolveAddress(addr) {
-        if (addr.includes('@')) {
-            return [addr];
-        }
-
-        let targets;
-        if (addr === 'everyone in room') {
-            targets = ide.room.getRoleNames();
-        } else if (addr === 'others in room') {
-            targets = ide.room.getRoleNames().filter(name => name !== ide.projectName);
-        } else {
-            targets = [ide.projectName];
-        }
-
-        const ownerId = ide.room.ownerId;
-        const project = ide.room.name;
-        return targets.map(addr => `${addr}@${project}@${ownerId}`);
-    }
+    const targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
+    const dstId = this.resolveAddresses(ide, targets);
 
     var sendMessage = function() {
         ide.sockets.sendMessage({
             type: 'message',
-            dstId: dstId.flatMap(resolveAddress),
+            dstId: dstId,
             srcId: srcId,
             msgType: name,
             content: contents
@@ -103,10 +105,8 @@ Process.prototype.MESSAGE_REPLY_TIMEOUT = 1500;
 Process.prototype.doSocketRequest = function (msgInfo) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
         targetRole = arguments[arguments.length-1],
-        myRole = ide.projectName,  // same as seat name
-        roomName = ide.room.name,
-        ownerId = ide.room.ownerId,
-        name = msgInfo[0], //msg name | resource name
+        srcId = [ide.projectName, ide.room.name, ide.room.ownerId].join('@'),
+        name = msgInfo[0],
         fieldNames = msgInfo[1],
         fieldValues = Array.prototype.slice.call(arguments, 1, fieldNames.length + 1),
         contents,
@@ -125,8 +125,8 @@ Process.prototype.doSocketRequest = function (msgInfo) {
 
     // if there is no requestId then init the requestId
     if (!this.requestId){
-        requestId= '__REQ' + Date.now();
-        //save the request id to check for later
+        requestId = '__REQ' + Date.now();
+        // save the request id to check for later
         this.requestId = requestId;
 
         // Create the message
@@ -135,10 +135,14 @@ Process.prototype.doSocketRequest = function (msgInfo) {
         for (var i = fieldNames.length; i--;) {
             contents[fieldNames[i]] = fieldValues[i] || '';
         }
+
+        const targets = (targetRole instanceof List ? targetRole.asArray() : [targetRole]).flat();
+        const dstId = this.resolveAddresses(ide, targets);
+
         ide.sockets.sendMessage({
             type: 'message',
-            dstId: targetRole,
-            srcId: myRole+'@'+roomName+'@'+ownerId,
+            dstId: dstId,
+            srcId: srcId,
             msgType: name,
             requestId: requestId,
             content: contents
@@ -149,7 +153,7 @@ Process.prototype.doSocketRequest = function (msgInfo) {
         requestId = this.requestId;
         var reply = this.reply;
 
-        if (this.requestId === requestId ) {
+        if (this.requestId === requestId) {
             this.requestId = null;
             this.reply = null;
             this.messageSentAt = null;

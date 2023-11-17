@@ -251,7 +251,28 @@ IDE_Morph.prototype.init = function (isAutoFill, config) {
 
     // additional properties:
     this.cloud = new Cloud(config.cloudUrl, config.clientId, config.username, localize);
-    this.cloud.onerror = error => this.cloudError()(error.message);
+    this.cloud.onerror = async error => {
+        if (error.status === 413) {
+            // Ask if they would like to disable history.
+            if (SnapSerializer.prototype.isSavingHistory) {
+                const confirmed = await this.confirm(
+                    'Project is too large to save to the cloud.\n\n' +
+                    'Would you like to disable persisting undo history to decrease your project size?',
+                    'Disable undo history?',
+                );
+
+                if (confirmed) {
+                    SnapSerializer.prototype.isSavingHistory = false;
+                    this.inform('Undo History Disabled', 'Undo history is no longer saved in the project.\n\nPlease try again.');
+                }
+            } else {
+                const message = 'Project too large to save to the cloud.\n\nPlease export and save locally or remove media and try again.';
+                this.cloudError()(message);
+            }
+        } else {
+            this.cloudError()(error.message);
+        }
+    };
     this.cloudMsg = null;
     this.source = 'local';
     this.serializer = new SnapSerializer();
@@ -424,257 +445,39 @@ IDE_Morph.prototype.onOpen = function () {
 };
 
 IDE_Morph.prototype.interpretUrlAnchors = async function (loc) {
-    var myself = this,
-        urlLanguage,
-        hash,
-        dict,
-        idx;
+    let urlLanguage;
 
     loc = loc || location;
-    function getURL(url) {
-        try {
-            return utils.getUrlSync(url);
-        } catch (err) {
-            myself.showMessage('unable to retrieve project');
-            return '';
-        }
-    }
+    const urlParams = this.getUrlSettings(loc.search, loc.hash);
 
-    function applyFlags(dict) {
-        if (dict.embedMode) {
-            myself.setEmbedMode();
-        }
-        if (dict.editMode) {
-            myself.toggleAppMode(false);
+    const shield = new Morph();
+    shield.color = this.color;
+    shield.setExtent(this.parent.extent());
+    this.parent.add(shield);
+    try {
+        await this.newProject();
+        await urlParams.applySettings(this);
+    } catch(err) {
+        if (err instanceof UrlParamError) {
+            this.inform('Error in URL', err.message);
         } else {
-            myself.toggleAppMode(true);
-        }
-        if (!dict.noRun) {
-            myself.runScripts();
-        }
-        if (dict.hideControls) {
-            myself.controlBar.hide();
-            window.onbeforeunload = nop;
-        }
-        if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
-        }
-        if (dict.lang) {
-            myself.setLanguage(dict.lang, null, true); // don't persist
-        }
-
-        // only force my world to get focus if I'm not in embed mode
-        // to prevent the iFrame from involuntarily scrolling into view
-        if (!myself.isEmbedMode) {
-            myself.world().worldCanvas.focus();
-        }
-    }
-
-    dict = {};
-    if (loc.href.indexOf('?') > -1) {
-        var querystring = loc.href
-            .replace(/^.*\?/, '')
-            .replace('#' + loc.hash, '');
-
-        dict = this.cloud.parseDict(querystring);
-    }
-    
-    if (dict.extensions) {
-        try {
-            const extensionUrls = JSON.parse(decodeURIComponent(dict.extensions));
-            await Promise.all(extensionUrls.map(url => this.loadExtension(url)));
-        } catch (err) {
             this.inform(
-                'Unable to load extensions',
-                'The following error occurred while trying to load extensions:\n\n' +
-                err.message + '\n\n' +
-                'Perhaps the URL is malformed?'
+                'Error',
+                `The following error occurred while setting up the project\naccording to the URL parameters:\n\n${err.message}`
             );
         }
+        await this.newProject();
     }
+    shield.destroy();
 
-    if (loc.hash.substr(0, 6) === '#open:') {
-        hash = loc.hash.substr(6);
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (contains(
-                ['project', 'blocks', 'sprites', 'snapdata'].map(
-                    function (each) {
-                        return hash.substr(0, 8).indexOf(each);
-                    }
-                ),
-                1
-            )) {
-            await this.droppedText(hash);
-        } else {
-            await this.droppedText(getURL(hash));
-        }
-    } else if (loc.hash.substr(0, 5) === '#run:') {
-        hash = loc.hash.substr(5);
-        idx = hash.indexOf("&");
-        if (idx > 0) {
-            hash = hash.slice(0, idx);
-        }
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (hash.substr(0, 8) === '<project>') {
-            await SnapActions.openProject(hash);
-        } else {
-            await SnapActions.openProject(getURL(hash));
-        }
-        this.toggleAppMode(true);
-        this.runScripts();
-    } else if (loc.hash.substr(0, 9) === '#present:' || dict.action === 'present') {
-        this.shield = new Morph();
-        this.shield.color = this.color;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-        myself.showMessage('Fetching project\nfrom the cloud...');
-
-        if (loc.hash.substr(0, 9) === '#present:') {
-            dict = this.cloud.parseDict(loc.hash.substr(9));
-        }
-
-        try {
-            const msg = myself.showMessage('Opening project...');
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            await myself.droppedText(xml);
-            myself.hasChangedMedia = true;
-            myself.shield.destroy();
-            myself.shield = null;
-            msg.destroy();
-            applyFlags(dict);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-    } else if (loc.hash.substr(0, 7) === '#cloud:') {
-        this.shield = new Morph();
-        this.shield.alpha = 0;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-        myself.showMessage('Fetching project\nfrom the cloud...');
-
-        dict = this.cloud.parseDict(loc.hash.substr(7));
-
-        try {
-            const msg = this.showMessage(localize('Opening project...'));
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            await SnapActions.openProject(xml);
-            this.hasChangedMedia = true;
-            this.shield.destroy();
-            this.shield = null;
-            msg.destroy();
-            this.toggleAppMode(false);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-    } else if (loc.hash.substr(0, 4) === '#dl:') {
-        let m = myself.showMessage('Fetching project\nfrom the cloud...');
-
-        // make sure to lowercase the username
-        dict = this.cloud.parseDict(loc.hash.substr(4));
-        dict.Username = dict.Username.toLowerCase();
-
-        try {
-            const projectData = await this.cloud.getProjectByName(dict.Username, dict.ProjectName);
-            const xml = this.getXMLFromProjectData(projectData);
-            const blob = new Blob([xml], {type: 'text/xml'});
-            const url = URL.createObjectURL(blob);
-
-            // Create temporary link for download
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = dict.ProjectName + ".xml";
-
-            document.body.appendChild(link);
-            link.dispatchEvent(
-                new MouseEvent('click', { 
-                bubbles: true, 
-                cancelable: true, 
-                view: window 
-                })
-            );
-
-            // Cleanup
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            m.destroy();
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-    } else if (loc.hash.substr(0, 6) === '#lang:') {
+    if (loc.hash.substr(0, 6) === '#lang:') {
         urlLanguage = loc.hash.substr(6);
         this.setLanguage(urlLanguage);
         this.loadNewProject = true;
-    } else if (loc.hash.substr(0, 7) === '#signup') {
-        this.createCloudAccount();
-    } else if (loc.hash.substr(0, 9) === '#example:' || dict.action === 'example') {
-        const exampleName = dict ? dict.ProjectName : loc.hash.substr(9);
-
-        this.shield = new Morph();
-        this.shield.alpha = 0;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-
-        const source = new CloudProjectExamples(this);
-        const example = source.list().find(example => example.name === exampleName);
-        if (example) {
-            const msg = myself.showMessage('Opening ' + example + ' example...');
-            await source.open(example);
-            myself.hasChangedMedia = true;
-            msg.destroy();
-        } else {
-            myself.showMessage('Example not found: ' + exampleName);
-        }
-
-        this.shield.destroy();
-        this.shield = null;
-        applyFlags(dict);
-
-    } else if (loc.hash.substr(0, 9) === '#private:' || dict.action === 'private') {
-        var name = dict ? dict.ProjectName : loc.hash.substr(9),
-            isLoggedIn = this.cloud.username !== null;
-
-        if (!isLoggedIn) {
-            myself.showMessage('You are not logged in. Cannot open ' + name);
-            return;
-        }
-
-        const msg = myself.showMessage('Opening ' + name + ' example...');
-        try {
-            const metadata = await this.cloud.getProjectMetadataByName(this.cloud.username, dict.ProjectName);
-            const source = new CloudProjectsSource(this);
-            await source.open(metadata);
-            applyFlags(dict);
-        } catch (err) {
-            this.cloudError()(err.message);
-        }
-        msg.destroy();
-
-    } else if (loc.hash.substr(0, 7) === '#signup' || dict.action === 'signup') {
-        this.createCloudAccount();
-    } else {
-        await myself.newProject();
     }
 
     this.world().keyboardFocus = this.stage;
     this.warnAboutIE();
-
-    if (dict.setVariable) {
-        const [varName, value] = dict.setVariable.split('=');
-        const exists = this.globalVariables.allNames().includes(varName);
-        if (exists) {
-            this.globalVariables.setVar(varName, value);
-        } else {
-            await this.droppedText(value, varName, 'text');
-        }
-    }
 };
 
 // IDE_Morph construction
@@ -2873,10 +2676,10 @@ IDE_Morph.prototype.recordNewSound = function () {
         audio => {
             var sound;
             if (audio) {
-                sound = this.currentSprite.addSound(
+                sound = this.currentSprite.addSound(new Sound(
                 	audio,
-                    this.newSoundName('recording')
-                );
+                  this.newSoundName('recording')
+                ));
                 this.makeSureRecordingIsMono(sound);
                 this.spriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
@@ -4699,14 +4502,14 @@ IDE_Morph.prototype.saveAs = function () {
     this.saveProjectsBrowser();
 };
 
-IDE_Morph.prototype.save = function () {
+IDE_Morph.prototype.save = async function () {
     if (this.isPreviousVersion()) {
         return this.showMessage('Please exit replay mode before saving');
     }
 
     if (this.source === 'examples') {
         // cannot save to examples
-        this.source = 'local';
+        this.source = 'cloud';
     }
 
     // temporary hack - only allow exporting projects to disk
@@ -4726,10 +4529,10 @@ IDE_Morph.prototype.save = function () {
     }
 
     if (this.room.name) {
-        if (this.source === 'local') { // as well as 'examples'
+        if (this.source === 'local') {
             this.saveProject(this.room.name);
         } else { // 'cloud'
-            this.saveProjectToCloud(this.room.name);
+            await this.saveProjectToCloud();
         }
     } else {
         this.saveProjectsBrowser();
@@ -5135,7 +4938,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         add(localize('by ') + this.cloud.username);
     }
     */
-    if (location.hash.indexOf('#present:') === 0) {
+    if (location.search.includes('action=present')) {
         add(location.toString(), 'a', body).attributes.href =
             location.toString();
         addImage(
@@ -6713,16 +6516,34 @@ IDE_Morph.prototype.verifyProject = function (body) {
     return encodedBody.length;
 };
 
-IDE_Morph.prototype.saveProjectToCloud = async function (name) {
+IDE_Morph.prototype.saveProjectToCloud = async function () {
     const contentName = this.room.hasMultipleRoles() ?
         this.room.getCurrentRoleName() : this.room.name;
 
     this.showMessage('Saving ' + contentName + '\nto the cloud...');
-    this.room.name = name;
-    const roleData = this.sockets.getSerializedProject();
-    const project = await this.cloud.saveRole(roleData);
+
+    const cloudSource = new CloudProjectsSource(this);
+    const projectInfo = { name: this.room.name };
+    await cloudSource.save(projectInfo);
+
     this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
-    return project;
+};
+
+/**
+ * Call the cloud client and suppress onerror callback. Specifically,
+ * this will suppress the cloud error dialog.
+ */
+IDE_Morph.prototype.callCloudSilently = async function (fn) {
+    const onerror = this.cloud.onerror;
+    this.cloud.onerror = nop;
+    try {
+      const result = await fn(this.cloud);
+      this.cloud.onerror = onerror;
+      return result;
+    } catch (err) {
+      this.cloud.onerror = onerror;
+      throw err;
+    }
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
@@ -7342,46 +7163,57 @@ SaveOpenDialogMorph.prototype.openItem = async function() {
     }
 };
 
-SaveOpenDialogMorph.prototype.trySaveItem = async function() {
-    const newItem = {
+/**
+ * Helper function to get the contents of the name field.
+ * Ensures the name has leading/trailing whitespace trimmed.
+ */
+SaveOpenDialogMorph.prototype.getNameField = function() {
+    return this.nameField.contents().text.text.trim();
+};
+
+SaveOpenDialogMorph.prototype.getCurrentItem = function() {
+    return {
         id: this.getNewItemID(),
-        name: this.nameField.contents().text.text,
+        name: this.getNameField(),
         notes: this.notesText.text,
     };
+};
+
+SaveOpenDialogMorph.prototype.trySaveItem = async function(newItem) {
+    newItem = newItem || this.getCurrentItem();
+
     const existingItem = detect(
         this.itemsList,
         item => item.name === newItem.name && item.id !== newItem.id
     );
-    const sourceName = localize(this.source.name.toLowerCase());
-    const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
-        sourceName + '...';
-    const savedMsg = localize('Saved to the ') + sourceName + '!';
-    let shouldSave = true;
+    let overwrite = false;
 
     if (existingItem) {
-        this.ide.showMessage(savingMsg);
-        shouldSave = await this.ide.confirm(
+        overwrite = await this.ide.confirm(
             localize(
                 'Are you sure you want to replace'
             ) + '\n"' + newItem.name + '"?',
             'Replace ' + this.itemName
         );
+
+        if (!overwrite) return;
     }
-    if (shouldSave) {
-        try {
-            this.ide.showMessage(savingMsg);
-            await this.saveItem(newItem);
-            this.ide.showMessage(savedMsg, 2);
-            this.destroy();
-        } catch (err) {
-            this.ide.cloudError().call(null, err.label, err.message);
-        }
-        return newItem;
-    }
+
+    const sourceName = localize(this.source.name.toLowerCase());
+    const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
+        sourceName + '...';
+    const savedMsg = localize('Saved to the ') + sourceName + '!';
+
+    this.ide.showMessage(savingMsg);
+    await this.saveItem(newItem, {overwrite});
+    this.ide.showMessage(savedMsg, 2);
+    this.destroy();
+
+    return newItem;
 };
 
-SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
-    await this.source.save(newItem);
+SaveOpenDialogMorph.prototype.saveItem = async function(newItem, opts) {
+    await this.source.save(newItem, opts);
 };
 
 SaveOpenDialogMorph.prototype.initPreview = function() {
@@ -7596,7 +7428,6 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
             this.shareButton.hide();
         }
         this.buttons.fixLayout();
-        this.fixLayout();
         this.edit();
     };
     this.body.add(this.listField);
@@ -8071,13 +7902,8 @@ CloudProjectsSource.prototype.publish = async function(proj, unpublish = false) 
     }
 
     // Set the Shared URL if the project is currently open
-    if (!unpublish && proj.id === cloud.projectId) {
-        var usr = cloud.username,
-            projectId = 'Username=' +
-                encodeURIComponent(usr.toLowerCase()) +
-                '&ProjectName=' +
-                encodeURIComponent(proj.name);
-        location.hash = 'present:' + projectId;
+    if (proj.id === cloud.projectId) {
+        this.ide.updateUrlQueryString(proj);
     }
 };
 
@@ -8107,25 +7933,66 @@ CloudProjectsSource.prototype.getPreview = function(project) {
     };
 };
 
-CloudProjectsSource.prototype.save = async function(newProject) {
+CloudProjectsSource.prototype.save = async function(newProject, opts = {}) {
+    const allowRetry = opts.allowRetry !== false;
+    const overwrite = opts.overwrite === true;
     const isSaveAs = newProject.name !== this.ide.room.name;
 
-    // If it is overwriting an existing
-    // We need to know:
-    //   - are we changing the project name?
-    //     - is the new name overwriting an existing?
-    //     - do we need to copy the current version of the project (ie, if it is already saved)?
+    // "Save as" is a little tricky since projects may be collaboratively
+    // edited at the time of the save. As a result, we will actually save
+    // the snapshot as the original and rename the current one
     if (isSaveAs) {
         const projectData = await this.ide.cloud.getProjectData();
+
         await this.ide.cloud.renameProject(newProject.name);
-        const keys = ['owner', 'name', 'roles', 'saveState'];
-        const projectCopy = utils.pick(projectData, keys);
-        projectCopy.roles = Object.values(projectCopy.roles);
-        const metadata = await this.ide.cloud.importProject(projectCopy);
-        this.ide.updateUrlQueryString(metadata);
+
+        if (projectData.saveState === 'Saved') {
+            const keys = ['owner', 'name', 'roles', 'saveState'];
+            const projectCopy = utils.pick(projectData, keys);
+            projectCopy.roles = Object.values(projectCopy.roles);
+            const metadata = await this.ide.cloud.importProject(projectCopy);
+
+            if (projectData.state !== 'Private') {
+                await this.ide.cloud.publishProject(metadata.id);
+            }
+        }
     }
+
     const roleData = this.ide.sockets.getSerializedProject();
-    await this.ide.cloud.saveRole(roleData);
+    try {
+      const metadata = await this.ide.callCloudSilently(
+          cloud => cloud.saveRole(roleData)
+      );
+      this.ide.updateUrlQueryString(metadata);
+    } catch (err) {
+      // "Project not found" errors can happen if the computer closes
+      // the ws connection without saving the project. If this happens,
+      // we can make 1 attempt to save it to a new project
+      if (allowRetry && err.status === 404) {
+          // Request a new project ID
+          const metadata = await this.ide.cloud.newProject(newProject.name);
+          const roleId = Object.keys(metadata.roles).shift();
+          this.ide.cloud.setLocalState(metadata.id, roleId);
+
+          // Save the project
+          opts.allowRetry = false;
+          await this.save(newProject, opts);
+      } else {
+        throw err;
+      }
+    }
+
+    // If save succeeded, then delete the old project (if overwrite)
+    const renameCollision = this.ide.room.name !== newProject.name;
+    if (overwrite && renameCollision) {
+        // delete the existing project and rename ourself
+        const existing = await this.ide.cloud.getProjectMetadataByName(
+            this.ide.room.ownerId,
+            newProject.name
+        );
+        await this.ide.cloud.deleteProject(existing.id);
+        await this.ide.cloud.renameProject(newProject.name);
+    }
 };
 
 CloudProjectsSource.prototype.delete = async function(project) {
@@ -8197,7 +8064,7 @@ BrowserProjectsSource.prototype.list = function() {
 
 BrowserProjectsSource.prototype.save = function(newItem) {
     this.ide.room.name = newItem.name;
-    this.ide.saveProject(name);
+    this.ide.saveProject(newItem.name);
 };
 
 BrowserProjectsSource.prototype.delete = function(item) {
@@ -8322,12 +8189,8 @@ ProjectDialogMorph.prototype.getNewItemID = function () {
     return this.ide.cloud.projectId;
 };
 
-ProjectDialogMorph.prototype.trySaveItem = function () {
-    var name = this.nameField.contents().text.text,
-        notes = this.notesText.text;
-
-    this.ide.projectNotes = notes || this.ide.projectNotes;
-    if (/[\.@]+/.test(name)) {
+ProjectDialogMorph.prototype.trySaveItem = async function () {
+    if (/[\.@]+/.test(this.getNameField())) {
         this.ide.inform(
             'Invalid Project Name',
             'Could not save project because\n' +
@@ -8337,16 +8200,11 @@ ProjectDialogMorph.prototype.trySaveItem = function () {
         return;
     }
 
-    const newProjectDetails = {
-        name: name,
-        notes: notes,
-    };
-    // TODO: Set the current room name?
-    ProjectDialogMorph.uber.trySaveItem.call(this, newProjectDetails);
+    await ProjectDialogMorph.uber.trySaveItem.call(this);
 };
 
-ProjectDialogMorph.prototype.saveItem = async function(newItem) {
-    await ProjectDialogMorph.uber.saveItem.call(this, newItem);
+ProjectDialogMorph.prototype.saveItem = async function(newItem, opts) {
+    await ProjectDialogMorph.uber.saveItem.call(this, newItem, opts);
     this.ide.source = this.source.id;
 };
 

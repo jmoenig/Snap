@@ -3869,8 +3869,7 @@ SpriteMorph.prototype.reportCostumes = function () {
 
 // SpriteMorph sound management
 
-SpriteMorph.prototype.addSound = function (audio, name) {
-    var sound = new Sound(audio, name);
+SpriteMorph.prototype.addSound = function (sound) {
     this.shadowAttribute('sounds');
     this.sounds.add(sound);
     return sound;

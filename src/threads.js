@@ -4089,7 +4089,11 @@ Process.prototype.reportMonadic = function (fname, n) {
         result = Math.pow(2, x);
         break;
     case 'id':
-        return n;
+        result = n;
+        break;
+    case 'sign':
+        result = n < 0 ? -1 : n > 0 ? 1 : 0;
+        break;
     default:
         nop();
     }

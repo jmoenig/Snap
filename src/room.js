@@ -627,23 +627,6 @@ RoomMorph.prototype.moveToRole = async function(role) {
     await this.ide.rawLoadCloudRole(metadata, roleData);
 
     this.ide.showMessage('moved to ' + role.name + '!');
-    this.ide.silentSetProjectName(role.name);
-    this.ide.source = 'cloud';
-
-    // Load the project or make the project empty
-    if (metadata.public === true) {
-        location.hash = '#present:Username=' +
-            encodeURIComponent(metadata.owner) +
-            '&ProjectName=' +
-            encodeURIComponent(metadata.name);
-    }
-
-    if (roleData.code) {
-        // TODO: add media
-        this.ide.droppedText(roleData.code + roleData.media);
-    } else {  // newly created role
-        await SnapActions.openProject();
-    }
 };
 
 RoomMorph.prototype.deleteRole = async function(role) {
@@ -655,11 +638,6 @@ RoomMorph.prototype.deleteRole = async function(role) {
 };
 
 RoomMorph.prototype.createRoleClone = async function(roleId) {
-    var myself = this;
-    var roleName = this.getRoles().find(function(role) {
-        return role.id === roleId;
-    }).name;
-
     await this.ide.cloud.cloneRole(roleId);
 };
 
@@ -669,6 +647,7 @@ RoomMorph.prototype.role = function() {
 
 RoomMorph.prototype.setRoleName = function(roleId, name) {
     var myself = this;
+    name = name.trim();
 
     if (!name) return;
 
@@ -782,38 +761,6 @@ RoomMorph.prototype.promptInvite = function (projectId, roleId, projectName, inv
     setTimeout(
         () => dialog.destroy(),
         15000
-    );
-};
-
-RoomMorph.prototype.respondToInvitation = function (id, role, accepted) {
-    // TODO: join the role (use the token?)
-    const cloud = this.ide.cloud;
-    cloud.respondToInvitation(
-        id,
-        accepted,
-        async project => {
-            // Load the project or make the project empty
-            if (!accepted) return;
-
-            this.ide.source = 'cloud';
-            if (project.Public === 'true') {
-                location.hash = '#present:Username=' +
-                    encodeURIComponent(cloud.username) +
-                    '&ProjectName=' +
-                    encodeURIComponent(project.ProjectName);
-            }
-            const msg = this.ide.showMessage(localize('Opening ') + role +
-                localize(' at ') + project.RoomName);
-            if (project.SourceCode) {
-                await this.ide.droppedText(project.SourceCode);
-            } else {  // Empty the project
-                this.ide.newRole(role);
-                await SnapActions.openProject();
-            }
-            msg.destroy();
-            this.ide.silentSetProjectName(role);
-        },
-        err => this.ide.showMessage(err, 2)
     );
 };
 
