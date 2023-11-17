@@ -594,7 +594,6 @@ NetsBloxMorph.prototype.openRoomString = async function (str) {
             media: media.toString()
         };
     });
-    const roleName = room.children[0].attributes.name;
 
     const msg = this.showMessage(localize('Opening project...'));
     const {name} = room.attributes;
