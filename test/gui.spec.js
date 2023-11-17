@@ -244,40 +244,13 @@ describe("gui", function () {
   });
 
   describe("CloudProjectsSource", function () {
-    it.only('should request new project to save if not found', async function() {
-        this.timeout(10000);
+    it('should request new project to save if not found', async function() {
         const cloud = driver.ide().cloud;
-        const projectId = cloud.projectId;
-
-        // Wait for the project to be ready to go. "Created" projects are deleted
-        // after 10 minutes
-        await driver.expect(
-          async () => {
-            const metadata = await cloud.getProjectMetadata(projectId);
-            console.log({metadata});
-            return metadata.saveState === 'Transient';
-          },
-          "Project saveState never switched from Created -> Transient"
-        );
-
-        // disconnect and wait for the project to be cleaned up
-        driver.ide().sockets.websocket.close();
-        await driver.expect(
-          async () => {
-            try {
-              const metadata = await cloud.getProjectMetadata(projectId);
-              console.log({metadata})
-              return false;
-            } catch(err) {
-              return err.status === 404;  // project has been correctly closed
-            }
-          },
-          "Project metadata still found after disconnect."
-        );
+        const projectId = cloud.projectId = 'IDontExist';
 
         // save and check that it succeeds
         driver.ide().source = 'cloud';
-        driver.ide().save();
+        await driver.ide().save();
 
         await driver.expect(
           () => cloud.projectId !== projectId,
@@ -285,8 +258,9 @@ describe("gui", function () {
         );
         const metadata = await driver.expect(
           () => cloud.getProjectMetadata(cloud.projectId),
-          "New project metadata not."
+          "New project metadata not found."
         );
+
         assert.equal(metadata.saveState, 'Saved');
     });
   });

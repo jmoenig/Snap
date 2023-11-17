@@ -699,59 +699,6 @@ NetsBloxMorph.prototype.cloudSaveError = function () {
     };
 };
 
-NetsBloxMorph.prototype.saveProjectToCloud = async function (name) {
-    // TODO: can we save this to just call save on the current source?
-    var myself = this,
-        overwriteExisting;
-
-    if (this.cloud.username !== this.room.ownerId) {
-        return IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
-    }
-
-    overwriteExisting = function(overwrite) {
-        var contentName = myself.room.hasMultipleRoles() ?
-            myself.room.getCurrentRoleName() : myself.room.name;
-        if (name) {
-            myself.showMessage('Saving ' + contentName + '\nto the cloud...');
-            // TODO: rename the colliding name?
-            this.cloud.saveProject();  // FIXME
-            if (overwrite) {
-                myself.showMessage('Saved ' + contentName + ' to cloud!', 2);
-            } else {
-                myself.showMessage('Saved as ' + myself.room.name, 2);
-            }
-        }
-    };
-
-    // Check if it will overwrite the current one
-    // We can check this by just using the project IDs now...
-    // TODO
-    // TODO: Or we could try to save and see if it fails... This might be more performant
-    // Use 409 status code (conflict)
-    const projects = await this.cloud.getProjectList();
-    const hasConflicting = projects
-        .find(project => project.name === name && project.id !== this.cloud.projectId);
-    if (!hasConflicting) {
-        const project = await IDE_Morph.prototype.saveProjectToCloud.call(myself, name);
-        myself.updateUrlQueryString(project);
-    } else {  // doesn't match the stored version!
-        var dialog = new DialogBoxMorph(null, function() {
-            overwriteExisting(true);
-        });
-
-        dialog.cancel = function() {  // don't overwrite
-            overwriteExisting();
-            dialog.destroy();
-        };
-        dialog.askYesNo(
-            localize('Overwrite Existing Project'),
-            localize('A project with the given name already exists.\n' +
-                'Would you like to overwrite it?'),
-            myself.world()
-        );
-    }
-};
-
 // RPC import support (both custom blocks and message types)
 NetsBloxMorph.prototype.droppedText = function (aString, name) {
     if (aString.startsWith('<rpc')) {
