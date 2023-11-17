@@ -224,7 +224,7 @@ class DownloadCloudProject extends UrlParams {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         } catch (err) {
-            this.cloudError()(err.message);
+            ide.cloudError()(err.message);
         }
         m.destroy();
     }
