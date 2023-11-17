@@ -7428,7 +7428,6 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
             this.shareButton.hide();
         }
         this.buttons.fixLayout();
-        this.fixLayout();
         this.edit();
     };
     this.body.add(this.listField);
