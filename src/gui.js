@@ -7199,19 +7199,16 @@ SaveOpenDialogMorph.prototype.trySaveItem = async function(newItem) {
         if (!overwrite) return;
     }
 
-    try {
-        const sourceName = localize(this.source.name.toLowerCase());
-        const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
-            sourceName + '...';
-        const savedMsg = localize('Saved to the ') + sourceName + '!';
+    const sourceName = localize(this.source.name.toLowerCase());
+    const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
+        sourceName + '...';
+    const savedMsg = localize('Saved to the ') + sourceName + '!';
 
-        this.ide.showMessage(savingMsg);
-        await this.saveItem(newItem, {overwrite});
-        this.ide.showMessage(savedMsg, 2);
-        this.destroy();
-    } catch (err) {
-        this.ide.cloudError().call(null, err.label, err.message);
-    }
+    this.ide.showMessage(savingMsg);
+    await this.saveItem(newItem, {overwrite});
+    this.ide.showMessage(savedMsg, 2);
+    this.destroy();
+
     return newItem;
 };
 
