@@ -110,7 +110,7 @@ ServicesRegistry.prototype.getServicesMetadata = async function () {
     var serviceGroups = this.allHosts().map(async hostInfo => {
         const {url, categories} = hostInfo;
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, { signal: AbortSignal.timeout(2500) });
             const services = await response.json();
             if (hostInfo !== this.defaultHost) {
                 services.forEach(service => service.url = url);

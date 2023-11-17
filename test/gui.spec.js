@@ -242,4 +242,26 @@ describe("gui", function () {
       assert(url.includes(initialHash));
     });
   });
+
+  describe("CloudProjectsSource", function () {
+    it('should request new project to save if not found', async function() {
+        const cloud = driver.ide().cloud;
+        const projectId = cloud.projectId = 'IDontExist';
+
+        // save and check that it succeeds
+        driver.ide().source = 'cloud';
+        await driver.ide().save();
+
+        await driver.expect(
+          () => cloud.projectId !== projectId,
+          "New project ID not retrieved."
+        );
+        const metadata = await driver.expect(
+          () => cloud.getProjectMetadata(cloud.projectId),
+          "New project metadata not found."
+        );
+
+        assert.equal(metadata.saveState, 'Saved');
+    });
+  });
 });

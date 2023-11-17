@@ -60,7 +60,7 @@ BlockMorph.prototype.showHelp = async function() {
         serviceName = inputs[0].evaluate(),
         methodName = inputs[1].evaluate()[0],
         isServiceURL = !!inputs[0].constant,
-        ide = this.parentThatIsA(IDE_Morph),  // FIXME: Is it possible that this is undefined?
+        ide = this.parentThatIsA(IDE_Morph) ?? world?.children[0],  // FIXME: Is it possible that this is undefined?
         services = ide.services,
         serviceNames,
         metadata;
@@ -308,7 +308,7 @@ StructInputSlotMorph.prototype.setContents = function(name, values) {
 StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={}) {
     // Input slot is empty or has a string
     if (!value || typeof value === 'string') {
-        const ide = this.parentThatIsA(IDE_Morph) || world?.children[0];  // This fallback isn't an ideal way to get the IDE morph...
+        const ide = this.parentThatIsA(IDE_Morph) ?? world?.children[0];  // This fallback isn't an ideal way to get the IDE morph...
         const hosts = ide?.services ? ide.services.allHosts() : [];
         if (hosts.length === 0) return new HintInputSlotMorph(value || '', fieldname, false, undefined, false);
 
@@ -343,7 +343,7 @@ StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={
 };
 
 InputSlotMorph.prototype.serviceNames = async function () {
-    const ide = this.parentThatIsA(IDE_Morph);  // FIXME: Is it possible that this is undefined?
+    const ide = this.parentThatIsA(IDE_Morph) ?? world?.children[0];
     const services = await ide.services.getServicesMetadata();
     let menuDict = {};
 
@@ -455,10 +455,7 @@ RPCInputSlotMorph.prototype.getServiceMetadata = function () {
 
     // The IDE_Morph is undefined when cloning or dragging from the part browser.
     // Collaborative edits result in the same issue.
-    let ide = this.parentThatIsA(IDE_Morph);
-    if (!ide) {  // FIXME: this is a bit of an ugly hack...
-        ide = world.children[0];
-    }
+    let ide = this.parentThatIsA(IDE_Morph) ?? world?.children[0];
 
     const services = ide.services;
     const url = field.constant ? field.evaluate()[0] :

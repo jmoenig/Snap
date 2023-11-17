@@ -4502,14 +4502,14 @@ IDE_Morph.prototype.saveAs = function () {
     this.saveProjectsBrowser();
 };
 
-IDE_Morph.prototype.save = function () {
+IDE_Morph.prototype.save = async function () {
     if (this.isPreviousVersion()) {
         return this.showMessage('Please exit replay mode before saving');
     }
 
     if (this.source === 'examples') {
         // cannot save to examples
-        this.source = 'local';
+        this.source = 'cloud';
     }
 
     // temporary hack - only allow exporting projects to disk
@@ -4529,10 +4529,10 @@ IDE_Morph.prototype.save = function () {
     }
 
     if (this.room.name) {
-        if (this.source === 'local') { // as well as 'examples'
+        if (this.source === 'local') {
             this.saveProject(this.room.name);
         } else { // 'cloud'
-            this.saveProjectToCloud(this.room.name);
+            await this.saveProjectToCloud();
         }
     } else {
         this.saveProjectsBrowser();
@@ -6516,16 +6516,34 @@ IDE_Morph.prototype.verifyProject = function (body) {
     return encodedBody.length;
 };
 
-IDE_Morph.prototype.saveProjectToCloud = async function (name) {
+IDE_Morph.prototype.saveProjectToCloud = async function () {
     const contentName = this.room.hasMultipleRoles() ?
         this.room.getCurrentRoleName() : this.room.name;
 
     this.showMessage('Saving ' + contentName + '\nto the cloud...');
-    this.room.name = name;
-    const roleData = this.sockets.getSerializedProject();
-    const project = await this.cloud.saveRole(roleData);
+
+    const cloudSource = new CloudProjectsSource(this);
+    const projectInfo = { name: this.room.name };
+    await cloudSource.save(projectInfo);
+
     this.showMessage('Saved ' + contentName + ' to the cloud!', 2);
-    return project;
+};
+
+/**
+ * Call the cloud client and suppress onerror callback. Specifically,
+ * this will suppress the cloud error dialog.
+ */
+IDE_Morph.prototype.callCloudSilently = async function (fn) {
+    const onerror = this.cloud.onerror;
+    this.cloud.onerror = nop;
+    try {
+      const result = await fn(this.cloud);
+      this.cloud.onerror = onerror;
+      return result;
+    } catch (err) {
+      this.cloud.onerror = onerror;
+      throw err;
+    }
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
@@ -7153,46 +7171,49 @@ SaveOpenDialogMorph.prototype.getNameField = function() {
     return this.nameField.contents().text.text.trim();
 };
 
-SaveOpenDialogMorph.prototype.trySaveItem = async function() {
-    const newItem = {
+SaveOpenDialogMorph.prototype.getCurrentItem = function() {
+    return {
         id: this.getNewItemID(),
         name: this.getNameField(),
         notes: this.notesText.text,
     };
+};
+
+SaveOpenDialogMorph.prototype.trySaveItem = async function(newItem) {
+    newItem = newItem || this.getCurrentItem();
+
     const existingItem = detect(
         this.itemsList,
         item => item.name === newItem.name && item.id !== newItem.id
     );
-    const sourceName = localize(this.source.name.toLowerCase());
-    const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
-        sourceName + '...';
-    const savedMsg = localize('Saved to the ') + sourceName + '!';
-    let shouldSave = true;
+    let overwrite = false;
 
     if (existingItem) {
-        this.ide.showMessage(savingMsg);
-        shouldSave = await this.ide.confirm(
+        overwrite = await this.ide.confirm(
             localize(
                 'Are you sure you want to replace'
             ) + '\n"' + newItem.name + '"?',
             'Replace ' + this.itemName
         );
+
+        if (!overwrite) return;
     }
-    if (shouldSave) {
-        try {
-            this.ide.showMessage(savingMsg);
-            await this.saveItem(newItem);
-            this.ide.showMessage(savedMsg, 2);
-            this.destroy();
-        } catch (err) {
-            this.ide.cloudError().call(null, err.label, err.message);
-        }
-        return newItem;
-    }
+
+    const sourceName = localize(this.source.name.toLowerCase());
+    const savingMsg = localize(`Saving ${this.itemName.toLowerCase()}\nto the `) + 
+        sourceName + '...';
+    const savedMsg = localize('Saved to the ') + sourceName + '!';
+
+    this.ide.showMessage(savingMsg);
+    await this.saveItem(newItem, {overwrite});
+    this.ide.showMessage(savedMsg, 2);
+    this.destroy();
+
+    return newItem;
 };
 
-SaveOpenDialogMorph.prototype.saveItem = async function(newItem) {
-    await this.source.save(newItem);
+SaveOpenDialogMorph.prototype.saveItem = async function(newItem, opts) {
+    await this.source.save(newItem, opts);
 };
 
 SaveOpenDialogMorph.prototype.initPreview = function() {
@@ -7407,7 +7428,6 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
             this.shareButton.hide();
         }
         this.buttons.fixLayout();
-        this.fixLayout();
         this.edit();
     };
     this.body.add(this.listField);
@@ -7913,7 +7933,9 @@ CloudProjectsSource.prototype.getPreview = function(project) {
     };
 };
 
-CloudProjectsSource.prototype.save = async function(newProject) {
+CloudProjectsSource.prototype.save = async function(newProject, opts = {}) {
+    const allowRetry = opts.allowRetry !== false;
+    const overwrite = opts.overwrite === true;
     const isSaveAs = newProject.name !== this.ide.room.name;
 
     // "Save as" is a little tricky since projects may be collaboratively
@@ -7935,9 +7957,42 @@ CloudProjectsSource.prototype.save = async function(newProject) {
             }
         }
     }
+
     const roleData = this.ide.sockets.getSerializedProject();
-    const metadata = await this.ide.cloud.saveRole(roleData);
-    this.ide.updateUrlQueryString(metadata);
+    try {
+      const metadata = await this.ide.callCloudSilently(
+          cloud => cloud.saveRole(roleData)
+      );
+      this.ide.updateUrlQueryString(metadata);
+    } catch (err) {
+      // "Project not found" errors can happen if the computer closes
+      // the ws connection without saving the project. If this happens,
+      // we can make 1 attempt to save it to a new project
+      if (allowRetry && err.status === 404) {
+          // Request a new project ID
+          const metadata = await this.ide.cloud.newProject(newProject.name);
+          const roleId = Object.keys(metadata.roles).shift();
+          this.ide.cloud.setLocalState(metadata.id, roleId);
+
+          // Save the project
+          opts.allowRetry = false;
+          await this.save(newProject, opts);
+      } else {
+        throw err;
+      }
+    }
+
+    // If save succeeded, then delete the old project (if overwrite)
+    const renameCollision = this.ide.room.name !== newProject.name;
+    if (overwrite && renameCollision) {
+        // delete the existing project and rename ourself
+        const existing = await this.ide.cloud.getProjectMetadataByName(
+            this.ide.room.ownerId,
+            newProject.name
+        );
+        await this.ide.cloud.deleteProject(existing.id);
+        await this.ide.cloud.renameProject(newProject.name);
+    }
 };
 
 CloudProjectsSource.prototype.delete = async function(project) {
@@ -8009,7 +8064,7 @@ BrowserProjectsSource.prototype.list = function() {
 
 BrowserProjectsSource.prototype.save = function(newItem) {
     this.ide.room.name = newItem.name;
-    this.ide.saveProject(name);
+    this.ide.saveProject(newItem.name);
 };
 
 BrowserProjectsSource.prototype.delete = function(item) {
@@ -8134,7 +8189,7 @@ ProjectDialogMorph.prototype.getNewItemID = function () {
     return this.ide.cloud.projectId;
 };
 
-ProjectDialogMorph.prototype.trySaveItem = function () {
+ProjectDialogMorph.prototype.trySaveItem = async function () {
     if (/[\.@]+/.test(this.getNameField())) {
         this.ide.inform(
             'Invalid Project Name',
@@ -8145,11 +8200,11 @@ ProjectDialogMorph.prototype.trySaveItem = function () {
         return;
     }
 
-    ProjectDialogMorph.uber.trySaveItem.call(this);
+    await ProjectDialogMorph.uber.trySaveItem.call(this);
 };
 
-ProjectDialogMorph.prototype.saveItem = async function(newItem) {
-    await ProjectDialogMorph.uber.saveItem.call(this, newItem);
+ProjectDialogMorph.prototype.saveItem = async function(newItem, opts) {
+    await ProjectDialogMorph.uber.saveItem.call(this, newItem, opts);
     this.ide.source = this.source.id;
 };
 

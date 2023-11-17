@@ -224,7 +224,7 @@ class DownloadCloudProject extends UrlParams {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         } catch (err) {
-            this.cloudError()(err.message);
+            ide.cloudError()(err.message);
         }
         m.destroy();
     }
@@ -1146,8 +1146,8 @@ CloudLibrarySource.prototype.list = async function() {
 
 CloudLibrarySource.prototype.save = async function(item) {
     const {name, blocks, notes} = item;
-    const publishState = await this.ide.cloud.saveLibrary(name, blocks, notes);
-    if (publishState === 'PendingApproval') {
+    const library = await this.ide.cloud.saveLibrary(name, blocks, notes);
+    if (library.state === 'PendingApproval') {
         this.ide.inform(
             'Approval Required',
             'Approval is required to re-publish the given library.\n\n' +
@@ -1248,7 +1248,7 @@ LibraryDialogMorph.prototype.init = function (ide, name, xml, notes) {
     }
 };
 
-LibraryDialogMorph.prototype.getNewItemID = async function() {
+LibraryDialogMorph.prototype.getNewItemID = function() {
     return Date.now();
 };
 
