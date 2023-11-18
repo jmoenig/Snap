@@ -977,33 +977,51 @@ MicroWorld.prototype.updateKeyFireFunction = function(){
 }
 
 MicroWorld.prototype.addBeButtonFunction = function (){
-    if(!CustomCommandBlockMorph.prototype.beButton){}
-    CustomCommandBlockMorph.prototype.beButton = function (button = true) {
-        if(button){
-            this.buttonBackup = {
-                dent: this.dent,
-                corner: this.corner,
-                inset: this.inset,
-                isDraggable: this.isDraggable,
-                attachTargets: this.attachTargets,
-                userMenu: this.userMenu
+    if(!CustomCommandBlockMorph.prototype.beButton) {
+        CustomCommandBlockMorph.prototype.beButton = function (button = true) {
+            if (button) {
+                this.buttonBackup = {
+                    dent: this.dent,
+                    corner: this.corner,
+                    inset: this.inset,
+                    isDraggable: this.isDraggable,
+                    attachTargets: this.attachTargets,
+                    userMenu: this.userMenu
+                }
+                this.dent = -1;
+                this.corner = 1;
+                this.inset = 0;
+                // this.isDraggable = false;
+                this.attachTargets = function () {
+                    return [];
+                };
+                this.userMenu = () => new MenuMorph();
+            } else if (this.buttonBackup) {
+                this.dent = this.buttonBackup.dent;
+                this.corner = this.buttonBackup.corner;
+                this.inset = this.buttonBackup.inset;
+                this.isDraggable = this.buttonBackup.isDraggable;
+                this.attachTargets = this.buttonBackup.attachTargets;
+                this.userMenu = this.buttonBackup.userMenu;
             }
-            this.dent = -1;
-            this.corner = 1;
-            this.inset = 0;
-            this.isDraggable = false;
-            this.attachTargets = function () { return []; };
-            this.userMenu = () => new MenuMorph();
+        };
+    }
+
+    if(!BlockMorph.prototype.oldFixLayout) {
+        BlockMorph.prototype.oldFixLayout = BlockMorph.prototype.fixLayout;
+
+        BlockMorph.prototype.fixLayout = function() {
+
+
+            if(currentMicroworld() && currentMicroworld().isActive && currentMicroworld().buttonBlocks.includes(this.blockSpec)){
+                        this.beButton();
+                    }
+
+            this.oldFixLayout();
+
         }
-        else if(this.buttonBackup){
-            this.dent = this.buttonBackup.dent;
-            this.corner = this.buttonBackup.corner;
-            this.inset = this.buttonBackup.inset;
-            this.isDraggable = this.buttonBackup.isDraggable;
-            this.attachTargets = this.buttonBackup.attachTargets;
-            this.userMenu = this.buttonBackup.userMenu;
-        }
-    };
+
+    }
 }
 
 /**
