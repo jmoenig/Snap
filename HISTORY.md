@@ -2,6 +2,10 @@
 
 ## in development:
 
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
 ## 9.0.12:
 * **Notable Fixes:**
     * fixed loading the "Words, sentences" library
