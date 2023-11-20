@@ -1,4 +1,4 @@
-var snapVersion = '9.0.12-dev',
+var snapVersion = '9.0.12',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -108,6 +108,8 @@ var snapVersion = '9.0.12-dev',
         'libraries/mqtt.xml',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
+        'libraries/plot_bars_module.xml',
+        'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
         'libraries/SciSnapExtensions.js',
         'libraries/SciSnap!2Blocks.xml',
@@ -165,6 +167,7 @@ var snapVersion = '9.0.12-dev',
         'libraries/textCostumes_module.xml',
         'libraries/try-catch.xml',
         'libraries/word-sentence.xml',
+        'libraries/words_module.xml',
 
         //costumes
         'Costumes/COSTUMES',
