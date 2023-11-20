@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
 
 ## 9.0.11:
 * **Notable Fixes:**
