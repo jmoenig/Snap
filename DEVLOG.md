@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-11-20
+* blocks: tweaked variadic inputs for expansion labels
+
 ### 2023-11-07
 * incremented dev version for global color sensing patch
 

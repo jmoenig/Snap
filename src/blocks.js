@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-07';
+modules.blocks = '2023-November-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13984,7 +13984,9 @@ MultiArgMorph.prototype.addInfix = function () {
         len = this.inputs().length,
         label = this.infix ? localize(this.infix)
         : (this.labelText instanceof Array ?
-            this.labelText[len % this.slotSpec.length]
+            (this.slotSpec instanceof Array ?
+                this.labelText[len % this.slotSpec.length]
+                : this.labelText[len % this.labelText.length])
             : '');
 
     if (label === '' || !len || this.children.length < 2) {return; }
@@ -13996,6 +13998,7 @@ MultiArgMorph.prototype.addInfix = function () {
 MultiArgMorph.prototype.addPostfix = function () {
     var postfix;
     if (this.labelText instanceof Array &&
+        this.slotSpec instanceof Array &&
         this.inputs().length % this.slotSpec.length === 0 &&
         this.labelText.length === (this.slotSpec.length + 1)
     ) {
