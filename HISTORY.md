@@ -7,6 +7,7 @@
 2023-11-20
 * new dev version for v9.0.12
 * gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
 
 ## 9.0.11:
 * **Notable Fixes:**

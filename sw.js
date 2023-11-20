@@ -1,4 +1,4 @@
-var snapVersion = '9.0.11',
+var snapVersion = '9.0.12-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -164,7 +164,6 @@ var snapVersion = '9.0.11',
         'libraries/strings.xml',
         'libraries/textCostumes_module.xml',
         'libraries/try-catch.xml',
-        'libraries/variadic-reporters.xml',
         'libraries/word-sentence.xml',
 
         //costumes
