@@ -2,6 +2,25 @@
 
 ## in development:
 
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
+## 9.0.12:
+* **Notable Fixes:**
+    * fixed loading the "Words, sentences" library
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+    * fixed some broken file references in the pwa cache
+* **Library Updates:**
+    * added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
+* added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+* prepared v9.0.12 patch
+
 ## 9.0.11:
 * **Notable Fixes:**
     * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
