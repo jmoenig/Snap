@@ -3286,6 +3286,18 @@ PianoMenuMorph.prototype.init = function (
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
     choices = {
+        'C (36)' : 36,
+        'D (38)' : 38,
+        'C# (37)' : 37,
+        'E (40)' : 40,
+        'Eb (39)' : 39,
+        'F (41)' : 41,
+        'G (43)' : 43,
+        'F# (42)' : 42,
+        'A (45)' : 45,
+        'G# (44)' : 44,
+        'B (47)' : 47,
+        'Bb (46)' : 46,
         'C (48)' : 48,
         'D (50)' : 50,
         'C# (49)' : 49,
@@ -3310,7 +3322,19 @@ PianoMenuMorph.prototype.init = function (
         'G# (68)' : 68,
         'B (71)' : 71,
         'Bb (70)' : 70,
-        'C (72)' : 72
+        'C (72)' : 72,
+        'D (74)' : 74,
+        'C# (73)' : 73,
+        'E (76)' : 76,
+        'Eb (75)' : 75,
+        'F (77)' : 77,
+        'G (79)' : 79,
+        'F# (78)' : 78,
+        'A (81)' : 81,
+        'G# (80)' : 80,
+        'B (83)' : 83,
+        'Bb (82)' : 82,
+        'C (84)' : 84
     };
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
