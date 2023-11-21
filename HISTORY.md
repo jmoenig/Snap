@@ -2,6 +2,9 @@
 
 ## in development:
 
+2023-11-21
+* new dev version for v9.0.14
+
 ## 9.0.13:
 * **Notable Fixes:**
     * fixed word-sentences library
