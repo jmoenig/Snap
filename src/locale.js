@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-November-07';
+modules.locale = '2023-November-20';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -276,11 +276,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/孟锡峰/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org/五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2023-09-15'
+        '2023-11-15'
 };
 
 SnapTranslator.dict.eo = {
@@ -335,7 +335,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2023-11-07'
+        '2023-11-20'
 };
 
 SnapTranslator.dict.nl = {
