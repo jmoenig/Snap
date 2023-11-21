@@ -57,6 +57,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-11-21
+* blocks: fixed restoring properties of variadic slots in custom blocks
+
 ### 2023-11-20
 * blocks: tweaked variadic inputs for expansion labels
 

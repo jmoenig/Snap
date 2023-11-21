@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-20';
+modules.blocks = '2023-November-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1539,6 +1539,12 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                         );
                     } else if (deflt instanceof MultiArgMorph) {
                         deflt.setInfix(def.separatorOfInputIdx(inp));
+                        deflt.setCollapse(def.collapseOfInputIdx(inp));
+                        deflt.setExpand(def.expandOfInputIdx(inp));
+                        deflt.setDefaultValue(def.defaultValueOfInputIdx(inp));
+                        deflt.setInitialSlots(def.initialSlotsOfInputIdx(inp));
+                        deflt.setMinSlots(def.minSlotsOfInputIdx(inp));
+                        deflt.setMaxSlots(def.maxSlotsOfInputIdx(inp));
                     }
                 }
             }
