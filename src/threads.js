@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-October-20';
+modules.threads = '2023-November-21';
 
 var ThreadManager;
 var Process;
@@ -2291,16 +2291,26 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return this.reportUniqueValues(list);
     case 'distribution':
         this.assertType(list, 'list');
-        if (list.canBeCSV()) {
-            if (Process.prototype.isCaseInsensitive) {
-                return list.map(row => row instanceof List ?
-                    row.map(cell =>
-                        cell.toString().toLowerCase()
-                    )
-                    : row.toString().toLowerCase()
-                ).distribution();
-            }
-            return list.distribution();
+        if (list.canBeJSON()) {
+            // support computing the frequency distribution of nested lists
+            // if all leaf items have atomic data,
+            // observe case-sensitivity setting
+            return list.map(row => {
+                let entry = row instanceof List ?
+                    '__json__' + row.asJSON() // internally tag as list
+                    : row;
+                return isString(entry) && Process.prototype.isCaseInsensitive ?
+                    entry.toLowerCase()
+                    : entry;
+            }).distribution().map(row => {
+                let item = row.at(1);
+                return new List([
+                    isString(item) && item.startsWith('__json__') ?
+                        this.parseJSON(item.slice(8))
+                        : item,
+                    row.at(2)
+                ]);
+            });
         }
         return this.reportDistribution(list);
     case 'sorted':
