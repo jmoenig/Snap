@@ -2278,15 +2278,10 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'uniques':
         this.assertType(list, 'list');
         if (list.canBeCSV()) {
-            if (Process.prototype.isCaseInsensitive) {
-                return list.map(row => row instanceof List ?
-                    row.map(cell =>
-                        cell.toString().toLowerCase()
-                    )
-                    : row.toString().toLowerCase()
-                ).distribution().columns().at(1);
-            }
-            return list.distribution().columns().at(1);
+            return this.reportListAttribute(
+                'distribution',
+                list
+            ).columns().at(1);
         }
         return this.reportUniqueValues(list);
     case 'distribution':
