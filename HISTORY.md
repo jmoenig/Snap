@@ -5,12 +5,14 @@
     * fixed 'distribution' and 'unique' list selectors support for nested atomic lists
 * **Translation Updates:**
     * Spanish, thanks, David Martín!
+    * Chinese, thanks, moodykeke!
 
 2023-11-21
 * new dev version for v9.0.14
 * threads: fixed 'distribution' list selector support for nested atomic lists
 * threads: fixed 'uniques' list selector support for nested atomic lists
 * Spanish translation update, thanks, David Martín!
+* Chinese translation update, thanks, moodykeke!
 
 ## 9.0.13:
 * **Notable Fixes:**

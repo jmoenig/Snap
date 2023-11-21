@@ -257,11 +257,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/孟锡峰/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org/五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2023-09-15'
+        '2023-11-15'
 };
 
 SnapTranslator.dict.eo = {
