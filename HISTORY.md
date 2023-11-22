@@ -2,6 +2,9 @@
 
 ## in development:
 
+2023-11-22
+* new dev version for v9.0.15
+
 ## 9.0.14:
 * **Notable Fixes:**
     * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
