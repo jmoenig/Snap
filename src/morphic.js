@@ -12070,7 +12070,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     if (this.useFillPage === undefined) {
         this.useFillPage = true;
     }
-    this.isDevMode = false;
+    this.isDevMode = true;
     this.broken = [];
     this.animations = [];
     this.hand = new HandMorph(this);
