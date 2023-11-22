@@ -156,8 +156,9 @@ SpriteMorph.prototype.categories =
         'sensing',
         'operators',
         'variables',
-        'lists',
-	'other'
+        'arrays',
+	'other',
+	'lists' // for compatibility
     ];
 
 SpriteMorph.prototype.blockColor = {
