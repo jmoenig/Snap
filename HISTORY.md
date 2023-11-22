@@ -3,10 +3,13 @@
 ## in development:
 * **New Features:**
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* **Translation Updates:**
+    * German
 
 2023-11-22
 * new dev version for v9.0.15
 * lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
 
 ## 9.0.14:
 * **Notable Fixes:**
