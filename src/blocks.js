@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-07';
+modules.blocks = '2023-November-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -499,6 +499,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
             '~' : null,
+            'text' : ['text'],
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']

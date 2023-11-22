@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-July-18';
+modules.lists = '2023-November-22';
 
 var List;
 var ListWatcherMorph;
@@ -1081,8 +1081,25 @@ List.prototype.canBeTXT = function () {
 
 List.prototype.asTXT = function () {
     // Caution, no error catching!
-    // this method assumes that the list.canBeJSON()
+    // this method assumes that the list.canBeTXT()
     return this.itemsArray().join('\n');
+};
+
+List.prototype.canBeWords = function () {
+    return this.itemsArray().every(item =>
+        isString(item) ||
+        (typeof item === 'number') ||
+        (item instanceof List && item.canBeWords())
+    );
+};
+
+List.prototype.asWords = function () {
+    // recursively join all leaf items with spaces between.
+    // Caution, no error catching!
+    // this method assumes that the list.canBeWords()
+    return this.itemsArray().map(each =>
+        each instanceof List ? each.asWords() : each.trim()
+    ).filter(word => word.length).join(' ');
 };
 
 // List testing
