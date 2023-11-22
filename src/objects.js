@@ -90,7 +90,8 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph,  BooleanSlotMorph,
 localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
-embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
+embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
+CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
@@ -211,6 +212,13 @@ SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = {
+        // Bootstrapping helpers
+        reportHyperZip: {
+            dev: true,
+            type: 'reporter',
+            category: 'control',
+            spec: 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n'
+        },
 
         // Motion
         forward: {
@@ -224,14 +232,14 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %clockwise %n degrees',
+            spec: 'turn $clockwise %n degrees',
             defaults: [15]
         },
         turnLeft: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %counterclockwise %n degrees',
+            spec: 'turn $counterclockwise %n degrees',
             defaults: [15]
         },
         setHeading: {
@@ -360,6 +368,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
             defaults: [['current'], 100, 50]
+        },
+        reportNewCostumeSkewed: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'skew %cst to %dir degrees %n %',
+            defaults: [['current'], 0, 50]
         },
         doSayFor: {
             only: SpriteMorph,
@@ -747,7 +761,7 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveGo: {
             type: 'hat',
             category: 'control',
-            spec: 'when %greenflag clicked'
+            spec: 'when $greenflag clicked'
         },
         receiveKey: {
             type: 'hat',
@@ -797,7 +811,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doWaitUntil: {
             type: 'command',
             category: 'control',
-            spec: 'wait until %b'
+            spec: 'wait until %boolUE'
         },
         doForever: {
             type: 'command',
@@ -813,7 +827,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %b %loop'
+            spec: 'repeat until %boolUE %loop'
         },
         doFor: {
             type: 'command',
@@ -821,13 +835,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10]
         },
-        /*
-        doVariadicIf: {
-            type: 'command',
-            category: 'control',
-            spec: 'if %b %c %elseif'
-        },
-        */
         doIf: {
             type: 'command',
             category: 'control',
@@ -841,7 +848,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportIfElse: {
             type: 'reporter',
             category: 'control',
-            spec: 'if %b then %s else %s'
+            spec: 'if %b then %anyUE else %anyUE'
         },
         doStopThis: {
             type: 'command',
@@ -969,7 +976,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doPauseAll: {
             type: 'command',
             category: 'control',
-            spec: 'pause all %pause'
+            spec: 'pause all $pause'
         },
 
         // Scenes
@@ -1546,7 +1553,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz map %repRing over %l'
+            spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
@@ -1557,7 +1564,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz keep items %predRing from %l'
+            spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
@@ -1568,7 +1575,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz find first item %predRing in %l'
+            spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
@@ -1579,7 +1586,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
             category: 'lists',
-            spec: '%blitz combine %l using %repRing'
+            spec: '$blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
@@ -1621,15 +1628,21 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Extensions
+        doPrimitive: {
+            type: 'command',
+            category: 'other',
+            spec: '%bool primitive %prim',
+            defaults: [true]
+        },
         doApplyExtension: {
             type: 'command',
             category: 'other',
-            spec: 'primitive %prim %mult%s'
+            spec: 'extension %ext %mult%s'
         },
         reportApplyExtension: {
             type: 'reporter',
             category: 'other',
-            spec: 'primitive %prim %mult%s'
+            spec: 'extension %ext %mult%s'
         },
 
         // Video motion
@@ -1649,6 +1662,99 @@ SpriteMorph.prototype.initBlocks = function () {
 };
 
 SpriteMorph.prototype.initBlocks();
+
+SpriteMorph.prototype.customizeBlocks = function () {
+    // generate custom block definition headers for all block descriptions
+    // in the blocks dictionary - experimental for v10
+    var prims = ['hat', 'ring'];
+    Object.keys(this.blocks).forEach(key => {
+        var record = this.blocks[key],
+            parts,
+            count,
+            slotName,
+            spec,
+            decl,
+            entry,
+            def;
+        if (record && !prims.includes(record.type)) {
+            parts = CustomBlockDefinition.prototype.parseSpec(record.spec);
+            count = 0;
+
+            // transform the spec into a definition spec with %names
+            // and populates the slot declarations
+            decl = new Map();
+            spec = parts.map(word => {
+                if (word === '%br') {
+                    return '$nl';
+                } else if (word[0] === '%' && (word.length > 1)) {
+                    entry = CustomBlockDefinition.prototype.declarationFor(
+                        word
+                    );
+                    // the default values needs to be set externally (here)
+                    entry[1] = record.defaults ? record.defaults[count] : null;
+                    if (entry[1] instanceof Array) {
+                        if (entry[1].length === 1 && isString(entry[1][0])) {
+                            // tag entry as selector so it becomes localizable
+                            entry[1] = '$_' + entry[1][0];
+                        } else {
+                            // encode the array as text
+                            entry[1] = entry[1].map(v =>
+                                v.toString().trim()).join('\n').trim();
+                        }
+                    } else if (
+                        (word === '%words' || word.startsWith('%mult')) &&
+                        entry[1]
+                    ) {
+                        // encode the remaining values as text
+                        entry[1] = record.defaults.slice(count).map(v =>
+                            v.toString()).join('\n').trim();
+                    }
+                    count += 1;
+                    slotName = '%#' + count;
+                    decl.set('#' + count, entry);
+                    return slotName;
+                }
+                return word;
+            }).join(' ');
+            def = new CustomBlockDefinition(spec);
+            def.selector = key;
+            def.primitive = key;
+            def.usePrimitive = true;
+            def.declarations = decl;
+            def.isGlobal = true;
+            def.type = record.type;
+            def.category = record.category;
+            SpriteMorph.prototype.blocks[key] = def;
+        }
+    });
+};
+
+SpriteMorph.prototype.primitify = function () {
+    // experimental dev helper
+    Object.keys(this.blocks).forEach(key => {
+        var record = this.blocks[key],
+            scr;
+        if (record instanceof CustomBlockDefinition) {
+            scr = record.body?.expression;
+            record.primitive = key;
+            if (scr instanceof BlockMorph) {
+                scr = scr.fullCopy();
+                scr.setPosition(new Point(10, 98));
+                record.scripts = [scr];
+            }
+        }
+    });
+};
+
+SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
+    var serializer = srzlr || new SnapSerializer();
+    Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
+        var dta = SpriteMorph.prototype.blocks[selector];
+        if (dta instanceof CustomBlockDefinition) {
+            dta.refresh(serializer);
+        }
+    });
+};
 
 SpriteMorph.prototype.initBlockMigrations = function () {
     // change blocks in existing projects to their updated version
@@ -1826,22 +1932,16 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             inputs: [['length']],
             offset: 1
         }
-    /*
-        doIf: {
-            selector: 'doVariadicIf'
-        },
-        doIfElse: {
-            selector: 'doVariadicIf',
-            // variadic: true,
-            expand: [2, 2]
-        }
-    */
-
     };
 };
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
     var selectors = ['reportJSFunction'];
+    if (version < 9.1) {
+        selectors.push(
+            'reportNewCostumeSkewed'
+        );
+    }
     // 9: no new primitives
     // 8.2: no new primitives
     if (version < 8.1) {
@@ -1894,6 +1994,8 @@ SpriteMorph.prototype.blockAlternatives = {
     doThinkFor: ['doSayFor', 'doThink', 'bubble', 'doAsk'],
     bubble: ['doThink', 'doAsk', 'doSayFor', 'doThinkFor'],
     doThink: ['bubble', 'doAsk', 'doSayFor', 'doThinkFor'],
+    reportNewCostumeStretched: ['reportNewCostumeSkewed'],
+    reportNewCostumeSkewed: ['reportNewCostumeStretched'],
     show: ['hide'],
     hide: ['show'],
     changeEffect: ['setEffect'],
@@ -2501,17 +2603,25 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     migration = this.blockMigrations[selector];
     info = this.blocks[migration ? migration.selector : selector];
     if (!info) {return null; }
-    block = info.type === 'command' ? new CommandBlockMorph()
-        : info.type === 'hat' ? new HatBlockMorph()
-            : info.type === 'ring' ? new RingMorph()
-                : new ReporterBlockMorph(info.type === 'predicate');
-    block.color = this.blockColorFor(info.category);
-    block.category = info.category;
-    block.selector = migration ? migration.selector : selector;
-    if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
-        block.isStatic = true;
+    if (info instanceof CustomBlockDefinition) {
+        // overload primitive with global custom block
+        block = info.blockInstance();
+        if (setDefaults) {
+            block.refreshDefaults(info);
+        }
+    } else {
+        block = info.type === 'command' ? new CommandBlockMorph()
+            : info.type === 'hat' ? new HatBlockMorph()
+                : info.type === 'ring' ? new RingMorph()
+                    : new ReporterBlockMorph(info.type === 'predicate');
+        block.color = this.blockColorFor(info.category);
+        block.category = info.category;
+        block.selector = migration ? migration.selector : selector;
+        if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
+            block.isStatic = true;
+        }
+        block.setSpec(block.localizeBlockSpec(info.spec));
     }
-    block.setSpec(block.localizeBlockSpec(info.spec));
     if (migration && migration.expand) {
         if (migration.expand instanceof Array) {
             for (i = 0; i < migration.expand[1]; i += 1) {
@@ -2569,6 +2679,7 @@ SpriteMorph.prototype.blockTemplates = function (
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
+        newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         if (isGhosted) {newBlock.ghost(); }
         return newBlock;
@@ -2670,6 +2781,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
+        blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -2826,6 +2938,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push(block('reportHyperZip'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
             blocks.push(block('doCallCC'));
@@ -3010,6 +3123,7 @@ SpriteMorph.prototype.blockTemplates = function (
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
+            blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }
@@ -3514,6 +3628,7 @@ SpriteMorph.prototype.isDisablingBlock = function (aBlock) {
         return !Process.prototype.enableJS;
     }
     if (
+        sel === 'doPrimitive' ||
         sel === 'doApplyExtension' ||
         sel === 'reportApplyExtension'
     ) {
@@ -6455,18 +6570,10 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
 
 SpriteMorph.prototype.forward = function (steps) {
     var dest,
-        dist = steps * this.parent.scale || 0,
-        dot = 0.1;
+        dist = steps * this.parent.scale || 0;
 
 	if (dist === 0 && this.isDown) { // draw a dot
- 		// dot = Math.min(this.size, 1);
- 		this.isDown = false;
-        this.forward(dot * -0.5);
-        this.isDown = true;
-        this.forward(dot);
-        this.isDown = false;
-        this.forward(dot * -0.5);
-        this.isDown = true;
+        this.doDrawDot();
      	return;
  	} else if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
@@ -6482,6 +6589,20 @@ SpriteMorph.prototype.forward = function (steps) {
 
     this.setPosition(dest);
     this.positionTalkBubble();
+};
+
+SpriteMorph.prototype.doDrawDot = function (dot = 0.1) {
+    // draw a dot using the current line-end settings, i.e. a round one
+    // or a centered square / rhombial dot in flat-line-end mode
+    var down = this.isDown;
+    dot = Math.max((this.useFlatLineEnds ? this.size : dot), 0.1);
+    this.isDown = false;
+    this.forward(dot * -0.5);
+    this.isDown = true;
+    this.forward(dot);
+    this.isDown = false;
+    this.forward(dot * -0.5);
+    this.isDown = down;
 };
 
 SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
@@ -6612,6 +6733,9 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe, noShadow) {
         dest = new Point(newX, newY).subtract(this.rotationOffset);
     } else {
         dest = new Point(newX, newY).subtract(this.extent().divideBy(2));
+    }
+    if (this.isDown && dest.eq(this.position())) {
+        this.doDrawDot();
     }
     this.setPosition(dest, justMe);
     this.positionTalkBubble();
@@ -9491,6 +9615,7 @@ StageMorph.prototype.blockTemplates = function (
             return null;
         }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
+        newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         return newBlock;
     }
@@ -9565,6 +9690,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
+        blocks.push(block('reportNewCostumeSkewed'));
         blocks.push(block('reportNewCostume'));
         blocks.push('-');
         blocks.push(block('changeEffect'));
@@ -9698,6 +9824,7 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(watcherToggle('getLastMessage'));
             blocks.push(block('getLastMessage'));
+            blocks.push(block('reportHyperZip'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
             blocks.push(block('doCallCC'));
@@ -9872,6 +9999,7 @@ StageMorph.prototype.blockTemplates = function (
 
         if (SpriteMorph.prototype.showingExtensions) {
             blocks.push('=');
+            blocks.push(block('doPrimitive'));
             blocks.push(block('doApplyExtension'));
             blocks.push(block('reportApplyExtension'));
         }
@@ -11119,7 +11247,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
     } else {
         contents = new TextMorph(
-            data.toString(),
+            display(data),
             this.bubbleFontSize * this.scale,
             null, // fontStyle
             this.bubbleFontIsBold,
@@ -11373,7 +11501,7 @@ Costume.prototype.copy = function () {
     return cpy;
 };
 
-// Costume flipping & stretching
+// Costume flipping, stretching & skewing
 
 Costume.prototype.flipped = function () {
 /*
@@ -11430,6 +11558,49 @@ Costume.prototype.stretched = function (w, h) {
         true
     );
     return stretched;
+};
+
+Costume.prototype.skewed = function (angle, factor) {
+    var degrees = ((+angle % 360) + 360) % 360,
+        isDown = degrees > 90 && degrees < 270,
+        w = this.width(),
+        h = this.height(),
+        trg = w * factor / 100,
+        delta = w - trg,
+        src = this.rasterized().contents,
+        shift = Math.min(
+                this.rotationCenter.y * Math.tan(radians(degrees)),
+                Math.min(w * 100, 5000, (16777216 - w) / h)
+            ) * (isDown ? -1 : 1),
+        left = (w - trg) / 2 + shift,
+        l = Math.min(left, 0),
+        right = left + trg,
+        r = Math.max(right, w),
+        pad = Math.abs(l),
+        dst = newCanvas(new Point(r - l, h), true),
+        ctx = dst.getContext('2d'),
+        step = shift / h,
+        y;
+
+    for (y = 0; y < h; y += 1) {
+        ctx.drawImage(
+            src, //image,
+            0, // sx,
+            isDown ? y : h - y, // sy,
+            w, // sWidth,
+            1, // sHeight,
+            y / h * delta * 0.5 + (step * y) + pad, // dx,
+            isDown ? y : h - y, // dy,
+            w - (y / h * delta), // dWidth,
+            1 // dHeight
+        );
+    }
+    return new Costume(
+        dst,
+        this.name,
+        this.rotationCenter.translateBy(new Point(pad, 0)),
+        true
+    );
 };
 
 // Costume actions
@@ -12642,7 +12813,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.isDraggable = false;
         } else {
             this.contentsMorph = new TextMorph(
-                !isNil(this.contents) ? this.contents.toString() : '',
+                display(this.contents),
                 fontSize,
                 null,
                 true,

@@ -30,11 +30,11 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-May-09';
+modules.extensions = '2023-October-10';
 
 // Global stuff
 
@@ -231,6 +231,102 @@ var SnapExtensions = {
 */
 
 // Primitives
+
+// meta utils (snap_):
+
+SnapExtensions.primitives.set(
+    'snap_bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.selector &&
+            !block.definition.isBootstrapped() &&
+            SpriteMorph.prototype.blocks[block.definition.selector] !==
+                undefined
+        ) {
+            block.definition.bootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_un-bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped()
+        ) {
+            block.definition.unBootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrapped(block)?',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        return block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_block_selectors',
+    function () {
+        return new List([
+            ['label'],
+            ['definition'],
+            ['comment'],
+            ['category'],
+            ['type'],
+            ['scope'],
+            ['selector'],
+            ['slots'],
+            ['defaults'],
+            ['menus'],
+            ['editables'],
+            ['replaceables'],
+            ['separators'],
+            ['collapses'],
+            ['expands'],
+            ['initial slots'],
+            ['min slots'],
+            ['max slots'],
+            ['translations']
+        ]);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_yield',
+    function (proc) {
+        if (!proc.isAtomic) {
+            proc.readyToYield = true;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_encode(script)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        return script.expression.toXMLString(this);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_decode(txt)',
+    function (xml, proc) {
+        proc.assertType(xml, 'text');
+        return this.parentThatIsA(IDE_Morph).deserializeScriptString(xml).reify();
+    }
+);
 
 // errors & exceptions (err_):
 

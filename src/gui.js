@@ -80,8 +80,8 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
-*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+CustomBlockDefinition*/
 
 /*jshint esversion: 8*/
 
@@ -91,8 +91,7 @@ modules.gui = '2023-November-22';
 
 // Declarations
 
-var SnapVersion = '9.1.0';
-
+var SnapVersion = '10-231121-dev';
 var IDE_Morph;
 var ProjectDialogMorph;
 var LibraryImportDialogMorph;
@@ -341,6 +340,11 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // turn all primitives into custom blocks
+    // under construction, commented out for now
+    SpriteMorph.prototype.customizeBlocks();
+    this.bootstrapCustomizedPrimitives();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -822,7 +826,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
         } else if (cnf.design === 'classic') {
             this.setDefaultDesign();
         }
-        SpriteMorph.prototype.initBlocks();
     }
 
     // interaction mode
@@ -838,7 +841,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
             Math.max(1, Math.min(cnf.blocksZoom, 12))
         );
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -3296,7 +3298,6 @@ IDE_Morph.prototype.refreshIDE = function () {
             new Project(this.scenes, this.scene)
         );
     }
-    SpriteMorph.prototype.initBlocks();
     this.buildPanes();
     this.fixLayout();
     if (this.loadNewProject) {
@@ -3335,7 +3336,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (zoom) {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -3546,7 +3546,7 @@ IDE_Morph.prototype.availableBackup = function (anyway) {
 };
 
 IDE_Morph.prototype.restore = function () {
-    // load the backed up project for the currently logged im user
+    // load the backed up project for the currently logged in user
     // and backup the current one, in case they want to switch back to it
     var username = this.cloud.username,
         bak;
@@ -4270,6 +4270,34 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Microphone resolution...',
         'microphoneMenu'
     );
+    if (shiftClicked) {
+        menu.addLine();
+        menu.addItem(
+            'Primitives palette',
+            () => this.userCustomizePalette(),
+            'EXPERIMENTAL - switch (back) to\n' +
+                'primitive blocks in the palette',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Customize primitives',
+            () => this.userCustomizePalette(() =>
+                SpriteMorph.prototype.customizeBlocks()),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Bootstrap palette',
+            () => this.userCustomizePalette(() => {
+                SpriteMorph.prototype.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();
+            }),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     addPreference(
         'JavaScript extensions',
@@ -4839,6 +4867,14 @@ IDE_Morph.prototype.projectMenu = function () {
             () => this.removeUnusedBlocks(),
             'find unused global custom blocks' +
                 '\nand remove their definitions'
+        );
+    }
+    if (shiftClicked) {
+        menu.addItem(
+            'Export customized primitives...',
+            () => this.exportCustomizedPrimitives(),
+            'EXPERIMENTAL!',
+            new Color(100, 0, 0)
         );
     }
     menu.addItem(
@@ -5699,6 +5735,42 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
             'this project doesn\'t have any\n'
                 + 'custom global blocks yet'
         );
+    }
+};
+
+IDE_Morph.prototype.exportCustomizedPrimitives = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        new BlockExportDialogMorph(
+            this.serializer,
+            blocks,
+            this
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Export customized primitives',
+            'this session doesn\'t have any\n'
+                + 'customized primitives yet'
+        );
+    }
+};
+
+IDE_Morph.prototype.refreshCustomizedPalette = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        this.serializer.loadBlocks(this.blocksLibraryXML(blocks));
     }
 };
 
@@ -7434,11 +7506,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
             );
         }
     }
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
@@ -7549,11 +7621,11 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
@@ -7692,6 +7764,36 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
         null, // read only
         true // numeric
     );
+};
+
+// IDE_Morph customize primitives
+
+IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
+    // highly experimental for v10 - tweak the palette blocks,
+    // e.g. replace all primitives with custom block definitions etc.
+    var projectData;
+    this.scene.captureGlobalSettings();
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
+    }
+    SpriteMorph.prototype.initBlocks();
+    callback();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.createCategories();
+    this.categories.refreshEmpty();
+    this.createCorralBar();
+    this.fixLayout();
+    this.openProjectString(projectData);
 };
 
 // IDE_Morph cloud interface
@@ -8236,8 +8338,10 @@ IDE_Morph.prototype.blocksLibraryXML = function (
     localData // optional: include sprite-local variable dependencies
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
-    var globals = definitions.filter(def => def.isGlobal),
+    var prims = definitions.filter(def => def.isGlobal && def.selector),
+        globals = definitions.filter(def => def.isGlobal && !def.selector),
         locals = definitions.filter(def => !def.isGlobal),
+        primStr = prims.length ? this.serializer.serialize(prims, true) : '',
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
         dtaStr = dataFrame && dataFrame.names(true).length ?
@@ -8258,6 +8362,7 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         '>' +
         this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
+        (prims.length ? ('<primitives>' + primStr + '</primitives>') : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
         (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +

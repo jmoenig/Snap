@@ -44,7 +44,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains, SpriteMorph*/
+/*global modules, contains, SpriteMorph, isNil*/
 
 /*jshint esversion: 6*/
 
@@ -57,6 +57,25 @@ var SnapTranslator = new Localizer();
 
 function localize(string) {
     return SnapTranslator.translate(string);
+}
+
+// wrapping a string inside an Array supports lazy translation
+
+function display(data) {
+    if (isNil(data)) {
+        return '';
+    }
+    if (data instanceof Array) {
+        return '«' + localize(data[0].toString()) + '»';
+    }
+    if (data.toString) {
+        return data.toString();
+    }
+    return '';
+}
+
+function option(data) {
+    return data instanceof Array ? data[0] : data;
 }
 
 // Localizer /////////////////////////////////////////////////////////////
@@ -184,7 +203,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2023-11-22'
+        '2023-10-16'
 };
 
 SnapTranslator.dict.it = {
@@ -433,11 +452,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller, Ville Medeiros",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2023-10-17',
+        '2023-01-25',
 };
 
 SnapTranslator.dict.bn = {

@@ -69,11 +69,11 @@ MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
 ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows,
-CostumeIconMorph, SoundIconMorph, localize*/
+CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2023-July-05';
+modules.tables = '2023-August-17';
 
 var Table;
 var TableCellMorph;
@@ -404,6 +404,9 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             dta
         ).fullImage();
     } else if (dta instanceof Array) {
+        if (dta[0] instanceof Array && isString(dta[0][0])) {
+            return display(dta[0]);
+        }
         return this.dataRepresentation(dta[0]);
     } else if (dta instanceof Variable) {
         return this.dataRepresentation(dta.value);
