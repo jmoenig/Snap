@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-November-21';
+modules.threads = '2023-November-22';
 
 var ThreadManager;
 var Process;
@@ -2363,6 +2363,14 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();
+    case 'text':
+        this.assertType(list, 'list');
+        if (list.canBeWords()) {
+            return list.asWords();
+        }
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('text')
+        );
     case 'lines':
         this.assertType(list, 'list');
         if (list.canBeTXT()) {

@@ -504,6 +504,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
             '~' : null,
+            'text' : ['text'],
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
