@@ -1118,7 +1118,7 @@ List.prototype.asWords = function () {
     // Caution, no error catching!
     // this method assumes that the list.canBeWords()
     return this.itemsArray().map(each =>
-        each instanceof List ? each.asWords() : each.trim()
+        each instanceof List ? each.asWords() : each.toString().trim()
     ).filter(word => word.length).join(' ');
 };
 
