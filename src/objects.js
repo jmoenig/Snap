@@ -156,8 +156,9 @@ SpriteMorph.prototype.categories =
         'sensing',
         'operators',
         'variables',
-        'lists',
-        'other'
+        'arrays',
+	'other',
+        'lists' // for compatibility
     ];
 
 SpriteMorph.prototype.blockColor = {
@@ -1424,22 +1425,26 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Lists
         reportNewList: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'list %exp'
         },
         reportCONS: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: '%s in front of %l'
         },
         reportListItem: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'item %idx of %l',
             defaults: [1]
         },
         reportCDR: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'all but first of %l'
@@ -1451,47 +1456,55 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'length of %l'
         },
         reportListAttribute: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: '%la of %l',
             defaults: [['length']]
         },
         reportListContainsItem: {
+			dev: true,
             type: 'predicate',
             category: 'lists',
             spec: '%l contains %s',
             defaults: [null, localize('thing')]
         },
         reportListIsEmpty: {
+			dev: true,
             type: 'predicate',
             category: 'lists',
             spec: 'is %l empty?'
         },
         reportListIndex: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'index of %s in %l',
             defaults: [localize('thing')]
         },
         doAddToList: {
+			dev: true,
             type: 'command',
             category: 'lists',
             spec: 'add %s to %l',
             defaults: [localize('thing')]
         },
         doDeleteFromList: {
+			dev: true,
             type: 'command',
             category: 'lists',
             spec: 'delete %ida of %l',
             defaults: [1]
         },
         doInsertInList: {
+			dev: true,
             type: 'command',
             category: 'lists',
             spec: 'insert %s at %idx of %l',
             defaults: [localize('thing'), 1]
         },
         doReplaceInList: {
+			dev: true,
             type: 'command',
             category: 'lists',
             spec: 'replace item %idx of %l with %s',
@@ -1500,6 +1513,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // numbers - (arrayed when hyper-blocks is on, otherwise linked)
         reportNumbers: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'numbers from %n to %n',
@@ -1514,21 +1528,25 @@ SpriteMorph.prototype.initBlocks = function () {
         },
     */
         reportConcatenatedLists: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists'
         },
         reportCrossproduct: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'combinations %lists'
         },
         reportTranspose: { // deprecated
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'transpose %l'
         },
         reportReshape: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'reshape %s to %nums',
@@ -1545,6 +1563,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // HOFs
         reportMap: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'map %repRing over %l'
@@ -1556,6 +1575,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'keep items %predRing from %l'
@@ -1567,6 +1587,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'find first item %predRing in %l'
@@ -1578,6 +1599,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
+			dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'combine %l using %repRing'
@@ -1589,6 +1611,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '$blitz combine %l using %repRing'
         },
         doForEach: {
+			dev: true,
             type: 'command',
             category: 'lists',
             spec: 'for each %upvar in %l %cla',
