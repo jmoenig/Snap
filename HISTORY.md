@@ -15,6 +15,7 @@
 * German translation update for 'lines' list selector
 * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
 * lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
 
 ## 9.0.14:
 * **Notable Fixes:**
