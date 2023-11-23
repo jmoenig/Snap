@@ -3962,7 +3962,7 @@ IDE_Morph.prototype.removeBlock = function (aBlock, justThis) {
 
 // IDE_Morph copy / paste at hand
 
-IDE_Morph.prototype.userCopy = function (event) {
+IDE_Morph.prototype.copyUnderHand = function (event) {
     var world = this.world();
     var underHand,
         hand,
@@ -3977,15 +3977,6 @@ IDE_Morph.prototype.userCopy = function (event) {
     
     if (underHand && !underHand.isTemplate && !(underHand instanceof PrototypeHatBlockMorph)) {
         let content = underHand.fullCopy();
-        isComment = content instanceof CommentMorph;
-
-        if (isComment) {
-            this.clipboard = {
-                type: 'comment',
-                content: content.text()
-            }
-            return
-        }
 
         if ((event === 'ctrl shift c') && (content instanceof CommandBlockMorph || content instanceof HatBlockMorph)) {
             var nb = content.nextBlock();
@@ -3994,21 +3985,16 @@ IDE_Morph.prototype.userCopy = function (event) {
             }
         }
 
-        content.parent = this;
-        this.clipboard = {
-            type: 'xml',
-            content: content.toXMLString()
-        };
-        content.destroy();
+        this.userCopy(content);
+    
     }
 }
 
-IDE_Morph.prototype.userCut = function (event) {
+IDE_Morph.prototype.cutUnderHand = function () {
     var world = this.world();
     var underHand,
         hand,
-        mouseOverList,
-        isComment;
+        mouseOverList;
 
     hand = world.hand;
     mouseOverList = hand.mouseOverList;
@@ -4018,16 +4004,6 @@ IDE_Morph.prototype.userCut = function (event) {
     
     if (underHand && !underHand.isTemplate && !(underHand instanceof PrototypeHatBlockMorph)) {
         let content = underHand.fullCopy();
-        isComment = content instanceof CommentMorph;
-
-        if (isComment) {
-            this.clipboard = {
-                type: 'comment',
-                content: content.text()
-            }
-            underHand.userDestroy()
-            return
-        }
 
         if (content instanceof CommandBlockMorph || content instanceof HatBlockMorph) {
             var nb = content.nextBlock();
@@ -4036,6 +4012,25 @@ IDE_Morph.prototype.userCut = function (event) {
             }
         }
 
+        this.userCopy(content);
+    
+        underHand.userDestroy();
+    }
+}
+
+IDE_Morph.prototype.userCopy = function (content) {
+    if (content instanceof CommentMorph) {
+        this.clipboard = {
+            type: 'comment',
+            content: content.text(),
+            width: content.textWidth(),
+        }
+        return
+    }
+
+    if (content instanceof BlockMorph) {
+        content = content.fullCopy();
+
         content.parent = this;
         this.clipboard = {
             type: 'xml',
@@ -4043,8 +4038,9 @@ IDE_Morph.prototype.userCut = function (event) {
         };
         content.destroy();
 
-        underHand.userDestroy()
+        return
     }
+
 }
 
 IDE_Morph.prototype.userPaste = function (event) {
@@ -4057,6 +4053,7 @@ IDE_Morph.prototype.userPaste = function (event) {
                 break;
             case 'comment':
                 let comment = new CommentMorph(this.clipboard.content);
+                if (this.clipboard.width) comment.setTextWidth(this.clipboard.width);
                 comment.pickUp(world);
                 world.hand.grabOrigin = {
                     origin: this.palette,

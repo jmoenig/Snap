@@ -3567,14 +3567,14 @@ BlockMorph.prototype.userMenu = function () {
                     content: this.toXMLString()
                 };
             },
-            'Send this block and all\nblocks underneath to the clipboard.'
+            'send this block and all\nblocks underneath to the clipboard'
         );
     }
     menu.addItem(
         'copy block',
         () => {
             let block = this.fullCopy();
-            if (this instanceof CommandBlockMorph || this instanceof HatBlockMorph) {
+            if (block instanceof CommandBlockMorph || block instanceof HatBlockMorph) {
                 var nb = block.nextBlock();
                 if (nb) {
                     nb.destroy();
@@ -3588,7 +3588,7 @@ BlockMorph.prototype.userMenu = function () {
             };
             block.destroy();
         },
-        'Send this block to the clipboard.'
+        'send this block to the clipboard'
     );
     menu.addItem(
         'cut block',
@@ -3610,7 +3610,7 @@ BlockMorph.prototype.userMenu = function () {
 
             this.userDestroy();
         },
-        'Send this block to the\nclipboard and delete this block.'
+        'send this block to the\nclipboard and it'
     );
     menu.addLine();
     menu.addItem(
@@ -15515,7 +15515,7 @@ CommentMorph.prototype.userMenu = function () {
                 );
             }
         },
-        'make a copy\nand pick it up'
+        'make a copy\nand pick it up',
     );
     menu.addItem("delete", 'userDestroy');
     menu.addItem(
@@ -15538,22 +15538,24 @@ CommentMorph.prototype.userMenu = function () {
         () => {
             ide.clipboard = {
                 type: 'comment',
-                content: this.text()
+                content: this.text(),
+                width: this.textWidth(),
             };
         },
-        'Send this comment\nto the clipboard'
+        'send this comment\nto the clipboard'
     );
     menu.addItem(
         'cut comment',
         () => {
             ide.clipboard = {
                 type: 'comment',
-                content: this.text()
+                content: this.text(),
+                width: this.textWidth(),
             };
 
             this.userDestroy()
         },
-        'Send this comment to the\nclipboard and delete this comment'
+        'send this comment to the\nclipboard and delete this comment'
     );
     return menu;
 };

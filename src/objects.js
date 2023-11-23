@@ -9232,14 +9232,14 @@ StageMorph.prototype.fireKeyEvent = function (key, event) {
          return;
     }
     if (evt === 'ctrl shift c' || (evt === 'ctrl c')) {
-        ide.userCopy(evt);
+        ide.copyUnderHand(evt);
         if (event != null) {
             event.preventDefault()
         }
         return;
     }
     if (evt === 'ctrl x') {
-        ide.userCut(evt);
+        ide.cutUnderHand();
         return;
     }
     if (evt === 'ctrl v' || (evt === 'ctrl shift v')) {
