@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-October-30';
+modules.locale = '2023-November-22';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -184,7 +184,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2023-07-12'
+        '2023-11-22'
 };
 
 SnapTranslator.dict.it = {
@@ -195,7 +195,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2022-91-03'
+        '2023-11-04'
 };
 
 SnapTranslator.dict.ja = {
@@ -257,11 +257,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/孟锡峰/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org/五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
+        'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2023-09-15'
+        '2023-11-15'
 };
 
 SnapTranslator.dict.eo = {
@@ -316,7 +316,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2023-10-27'
+        '2023-11-20'
 };
 
 SnapTranslator.dict.nl = {

@@ -1,4 +1,193 @@
+/*
+
+    lang-es.js
+
+    Spanish translation for SNAP!
+
+    written by Jens Mönig
+
+    Copyright (C) 2013 by Jens Mönig
+
+    This file is part of Snap!.
+
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    Note to Translators:
+    --------------------
+    At this stage of development, Snap! can be translated to any LTR language
+    maintaining the current order of inputs (formal parameters in blocks).
+
+    Translating Snap! is easy:
+
+
+    1. Download
+
+    Download the sources and extract them into a local folder on your
+    computer:
+
+        <http://snap.berkeley.edu/snapsource/snap.zip>
+
+    Use the German translation file (named 'lang-de.js') as template for your
+    own translations. Start with editing the original file, because that way
+    you will be able to immediately check the results in your browsers while
+    you're working on your translation (keep the local copy of snap.html open
+    in your web browser, and refresh it as you progress with your
+    translation).
+
+
+    2. Edit
+
+    Edit the translation file with a regular text editor, or with your
+    favorite JavaScript editor.
+
+    In the first non-commented line (the one right below this
+    note) replace "de" with the two-letter ISO 639-1 code for your language,
+    e.g.
+
+        fr - French => SnapTranslator.dict.fr = {
+        it - Italian => SnapTranslator.dict.it = {
+        pl - Polish => SnapTranslator.dict.pl = {
+        pt - Portuguese => SnapTranslator.dict.pt = {
+        es - Spanish => SnapTranslator.dict.es = {
+        el - Greek => => SnapTranslator.dict.el = {
+
+    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
+
+
+    3. Translate
+
+    Then work through the dictionary, replacing the German strings against
+    your translations. The dictionary is a straight-forward JavaScript ad-hoc
+    object, for review purposes it should be formatted as follows:
+
+        {
+            'English string':
+                'Translation string',
+            'last key':
+        }       'last value'
+
+    and you only edit the indented value strings. Note that each key-value
+    pair needs to be delimited by a comma, but that there shouldn't be a comma
+    after the last pair (again, just overwrite the template file and you'll be
+    fine).
+
+    If something doesn't work, or if you're unsure about the formalities you
+    should check your file with
+
+        <http://JSLint.com>
+
+    This will inform you about any missed commas etc.
+
+
+    4. Accented characters
+
+    Depending on which text editor and which file encoding you use you can
+    directly enter special characters (e.g. Umlaut, accented characters) on
+    your keyboard. However, I've noticed that some browsers may not display
+    special characters correctly, even if other browsers do. So it's best to
+    check your results in several browsers. If you want to be on the safe
+    side, it's even better to escape these characters using Unicode.
+
+        see: <http://0xcc.net/jsescape/>
+
+
+    5. Block specs:
+
+    At this time your translation of block specs will only work
+    correctly, if the order of formal parameters and their types
+    are unchanged. Placeholders for inputs (formal parameters) are
+    indicated by a preceding % prefix and followed by a type
+    abbreviation.
+
+    For example:
+
+        'say %s for %n secs'
+
+    can currently not be changed into
+
+        'say %n secs long %s'
+
+    and still work as intended.
+
+    Similarly
+
+        'point towards %dst'
+
+    cannot be changed into
+
+        'point towards %cst'
+
+    without breaking its functionality.
+
+
+    6. Submit
+
+    When you're done, rename the edited file by replacing the "de" part of the
+    filename with the two-letter ISO 639-1 code for your language, e.g.
+
+        fr - French => lang-fr.js
+        it - Italian => lang-it.js
+        pl - Polish => lang-pl.js
+        pt - Portuguese => lang-pt.js
+        es - Spanish => lang-es.js
+        el - Greek => => lang-el.js
+
+    and send it to me for inclusion in the official Snap! distribution.
+    Once your translation has been included, Your name will the shown in the
+    "Translators" tab in the "About Snap!" dialog box, and you will be able to
+    directly launch a translated version of Snap! in your browser by appending
+
+        lang:xx
+
+    to the URL, xx representing your translations two-letter code.
+
+
+    7. Known issues
+
+    In some browsers accents or ornaments located in typographic ascenders
+    above the cap height are currently (partially) cut-off.
+
+    Enjoy!
+    -Jens
+*/
+
+/*global SnapTranslator*/
+
 SnapTranslator.dict.es = {
+
+/*
+    Special characters: (see <http://0xcc.net/jsescape/>)
+
+    Ä, ä   \u00c4, \u00e4
+    Ö, ö   \u00d6, \u00f6
+    Ü, ü   \u00dc, \u00fc
+    ß      \u00df
+*/
+
+    // translations meta information
+    'language_name':
+        'Espa\u00F1ol', // the name as it should appear in the language menu
+    'language_translator':
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Mart\u00EDn', // your name for the Translators tab
+    'translator_e-mail':
+        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
+    'last_changed':
+        '2023-11-20', // this, too, will appear in the Translators tab
+
+    //ADDING jadga's newest commits
     "0": "0",
     "1": "1",
     "2": "2",
@@ -10,7 +199,6 @@ SnapTranslator.dict.es = {
     "7": "7",
     "8": "8",
     "9": "9",
-    "' does not exist in this context": "' no existe en este contexto",
     "(-90) left": "(-90) izquierda",
     "(0) up": "(0) arriba",
     "(1) sine": "(1) ∿∿ (onda sinusoidal)",
@@ -23,8 +211,8 @@ SnapTranslator.dict.es = {
     "(empty)": "(vacío)",
     "(in a new window)": "(en una nueva ventana)",
     "(no matches)": "(ninguna coincidencia)",
-    "(temporary)": "",
-    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "(temporary)": "(temporal)",
+    "A variation on the list data type in which each list item aren't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.)": "Una variación del tipo de dato lista en el que cada elemento se calcula solo cuando es necesario, así que puedes construir listas de un millón de elementos sin gastar tiempo o memoria, o incluso listas infinitas. (Se incluye un bloque de ejemplo que reporta todos los números primos)",
     "APL primitives": "Primitivas APL",
     "About Snap": "Acerca de Snap",
     "About...": "Acerca de…",
@@ -99,9 +287,9 @@ SnapTranslator.dict.es = {
     "Constrain proportions of shapes?\n(you can also hold shift)": "¿Mantener proporciones de los trazos?\n(también pulsando ⇧)",
     "Contents": "Contenido",
     "Contributors": "Colaboradores",
-    "Control": "",
+    "Control": "Control",
     "Control the Hummingbird robotics kit processor": "",
-    "Convert to bitmap?": "",
+    "Convert to bitmap?": "¿Convertir en mapa de puntos?",
     "Costume Editor": "Editor de disfraces",
     "Costumes": "Disfraces",
     "Crayons": "Pinturas",
@@ -110,7 +298,7 @@ SnapTranslator.dict.es = {
     "Create variables": "Crear variables",
     "Create variables in program": "Crea variables en un programa",
     "Credits...": "Créditos…",
-    "Custom Block Translations": "Traducciones de bloques personalizado",
+    "Custom Block Translations": "Traducciones de bloques personalizados",
     "Database": "Base de datos",
     "December": "Diciembre",
     "Default": "Predeterminado",
@@ -143,8 +331,8 @@ SnapTranslator.dict.es = {
     "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "Escribe el código correspondiente a la definición del bloque. Puedes usar tus propios parámetros formales (ignora los aquí mostrados).",
     "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "Escribe el código correspondiente a la definición del bloque. Usa los nombres de los parámetros formales aquí mostrados y <body> para referenciar el código generado del cuerpo de la definición.",
     "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "Escribe el código correspondiente a la implementación del bloque (normalmente una única llamada a función). Usa <#n> para referenciar los argumentos aquí mostrados.",
-    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
-    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "Escribe cada traducción en una línea. Utiliza «:» para separar el idioma y el mensaje y «_» para argumentos de entrada, por ejemplo: es:decir _ durante _ s",
+    "Enter one option per line.\nOptionally use \"=\" as key/value delimiter and {} for submenus. e.g.\n   the answer=42": "Introducir una opción por línea. Opcionalmente usar «=» como delimitador de clave/valor\ny «{}» para submenús. Por ejemplo:\n   la respuesta=42",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter\nand underscore (\"_\") as placeholder for an input, e.g.:\n\nen:say _ for _ secs": "Escribe cada traducción en una línea. Utiliza «:» para separar el idioma y el mensaje\ny «_» para los argumentos de entrada, por ejemplo:\n\nes:decir _ durante _ s",
     "Eraser tool": "goma de borrar",
     "Error": "Error",
     "Examples": "Ejemplos",
@@ -159,8 +347,6 @@ SnapTranslator.dict.es = {
     "Export summary...": "Exportar resumen…",
     "Extension blocks": "Bloques de extensiones",
     "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
-    "extract solution": "",
-    "delete solution": "",
     "Fade blocks": "Disipar bloques",
     "Fade blocks...": "Disipar los bloques…",
     "February": "Febrero",
@@ -176,6 +362,7 @@ SnapTranslator.dict.es = {
     "Frequency Distribution Analysis": "Análisis de distribución de frecuencias",
     "Generate costumes from letters or words of text.": "",
     "Generate puzzle": "Generar puzzle",
+    "Generate Puzzle": "Generar Rompecabezas",
     "Getters and setters": "Consultas y modificaciones",
     "Glide, grow and rotate using easing functions.": "",
     "HSL pen color model": "Modelo de color HSL",
@@ -188,7 +375,7 @@ SnapTranslator.dict.es = {
     "Hmm...": "Mmm…",
     "Hummingbird robotics": "",
     "Hyper blocks support": "Suporte de hiperbloques",
-    "I have read and agree to the Terms of Service": "He leído y acepto los términos y condiciones de uso",
+    "I have read and agree\nto the Terms of Service": "He leído y acepto los\ntérminos y condiciones de uso",
     "If you cannot find that email, please check your spam folder.": "",
     "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
     "Import": "Importar",
@@ -205,7 +392,7 @@ SnapTranslator.dict.es = {
     "Input Slot Options": "Opciones de parámetro de entrada",
     "Input name": "Parámetro",
     "Input sliders": "Deslizadores en campos de entrada",
-    "Inside a custom block": "",
+    "Inside a custom block": "Dentro de un bloque personalizado",
     "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
     "Iteration, composition": "Iteración, composición",
     "JIT compiler support": "",
@@ -248,7 +435,7 @@ SnapTranslator.dict.es = {
     "Microphone resolution...": "Resolución del micro…",
     "Modules...": "Módulos…",
     "Motion": "Movimiento",
-    "Multi-branched conditional": "",
+    "Multi-branched conditional": "Condicionales multirama",
     "Multi-branched conditional (switch)": "Condicionales multirama (switch)",
     "Multiple inputs (value is list of inputs)": "Entrada múltiple (valores accesibles como lista)",
     "Nested auto-wrapping": "Encapsular bloques internos",
@@ -307,7 +494,7 @@ SnapTranslator.dict.es = {
     "Project notes...": "Notas del proyecto…",
     "Provide 100 selected colors": "Paleta de 100 colores preseleccionados",
     "Provide getters and setters for all GUI-controlled global settings": "Manejo de opciones globales",
-    "Publish": "",
+    "Publish": "Publicar",
     "Publish Project": "Publicar proyecto",
     "Rasterize SVGs": "Rasterizar SVGs",
     "Record a new sound": "grabar un nuevo sonido",
@@ -368,7 +555,8 @@ SnapTranslator.dict.es = {
     "Slider minimum value": "Mínimo valor del deslizador",
     "Snap! website": "Sitio web de Snap!",
     "Snap!Cloud": "",
-    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Some standard functions on lists (append, reverse, etc.)": "Algunas funciones estándar de listas (anexar, inventir, etc...)",
+    "Some standard functions on lists (reverse, sort, etc.)": "Algunas funciones estándar de listas (inventir, sort, etc...)",
     "Sound": "Sonido",
     "Sound Recorder": "Grabadora de sonidos",
     "Sounds": "Sonidos",
@@ -376,7 +564,7 @@ SnapTranslator.dict.es = {
     "Sprite Nesting": "Anidamiento de objetos",
     "Stage": "Escenario",
     "Stage height": "Altura del escenario",
-    "Stage selected: no motion primitives": "Escenario seleccionado: no hay primitivas de movimiento disponibles",
+    "Stage selected:\nno motion primitives": "Está seleccionado un escenario:\nlas primitivas de movimiento\nno están disponibles",
     "Stage size": "Tamaño del escenario",
     "Stage size...": "Tamaño del escenario…",
     "Stage width": "Anchura del escenario",
@@ -399,11 +587,11 @@ SnapTranslator.dict.es = {
     "Text Costumes": "",
     "Text to Speech": "",
     "Text to speech": "",
-    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "La torre numérica completa de Scheme. «UTILIZAR BIGNUMS <verdadero>» para activarla.",
-    "The question came up at": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "La torre numérica completa de Scheme. \"UTILIZAR BIGNUMS <verdadero>\" para activarla.",
+    "The question came up at": "La pregunta apareció en",
     "This global block definition contains one or more local custom blocks which must be removed first.": "",
-    "This will convert your vector objects into bitmaps,": "",
-    "This will erase your current drawing.": "",
+    "This will convert your vector objects into bitmaps,": "Esto convertirá tus objetos vectoriales en mapas de puntos,",
+    "This will erase your current drawing.": "Esto borrará el dibujo actual.",
     "Thread safe scripts": "Hilos de ejecución seguros",
     "Title text": "Texto",
     "Today": "Hoy",
@@ -414,18 +602,18 @@ SnapTranslator.dict.es = {
     "Translators...": "Traductores…",
     "Turbo mode": "Modo turbo",
     "Turtle": "Tortuga",
-    "Undelete sprites...": "",
-    "Unpublish": "",
-    "Unpublish Project": "Dejar de publicar",
-    "Unsaved Changes!": "¡Hay cambios sin guardar!",
+    "Undelete sprites...": "Restaurar objetos…",
+    "Unpublish": "Despublicar",
+    "Unpublish Project": "Despublicar proyecto",
+    "Unsaved Changes!": "¡Cambios sin guardar!",
     "Unshare": "No compartir",
     "Unshare Project": "Dejar de compartir",
-    "Untitled": "Sin título",
+    "Untitled": "Sin Título",
     "Unused blocks...": "Bloques no utilizados…",
-    "Unverified account:": "",
+    "Unverified account:": "Cuenta no verificada.",
     "Up": "Subir",
     "Updating project list...": "Actualizando lista de proyectos…",
-    "Uploading": "",
+    "Uploading": "Cargando",
     "Upvar - make internal variable visible to caller": "Salida (hace visible una variable interna)",
     "Use CPU for graphics": "",
     "User name must be four characters or longer": "el nombre de usuario ha de tener como mínimo 4 caracteres",
@@ -433,7 +621,7 @@ SnapTranslator.dict.es = {
     "Variable name": "Nombre de variable",
     "Variables": "Variables",
     "Variadic reporters": "Reporteros de aridad variable",
-    "Vector": "Vector",
+    "Vector": "Vectorial",
     "Vector Paint Editor": "Editor de imágenes vectoriales",
     "Versions of +, x, AND, and OR that take more than two inputs.": "Versiones de +, x, AND, y OR que toman más de dos argumentos.",
     "Visible stepping": "Depuración paso a paso",
@@ -456,7 +644,7 @@ SnapTranslator.dict.es = {
     "_ combine _ using _": "_ combinar los elementos de _ con _",
     "_ contains _": "¿ _ contiene _ ?",
     "_ effect": "efecto _",
-    "_ find first item _ in _": "_ buscar primer elemento _ en _",
+    "_ find first item _ in _": "_ primer elemento donde _ en _",
     "_ in front of _": "_ delante de _",
     "_ keep items _ from _": "_ mantener los elementos donde _ de _",
     "_ map _ over _": "_ mapear _ sobre _",
@@ -471,13 +659,13 @@ SnapTranslator.dict.es = {
     "a": "a",
     "a custom block definition is missing": "",
     "a new clone of _": "un nuevo clon de _",
-    "a variable of name '": "no existe ninguna variable llamada '",
+    "a variable of name": "no existe ninguna variable llamada",
     "about morphic.js...": "acerca de morphic.js…",
     "abs": "valor absoluto",
     "acos": "arcocoseno",
     "add _ to _": "añadir _ a _",
     "add a new Turtle sprite": "añade una nueva tortuga",
-    "add a new sprite": "",
+    "add a new sprite": "añadir un objeto nuevo",
     "add comment": "añadir comentario",
     "add comment here...": "añadir comentario aquí…",
     "agent": "agente",
@@ -487,31 +675,38 @@ SnapTranslator.dict.es = {
     "all =": "todos los =",
     "all >": "todos los >",
     "all but first of _": "_ sin el primer elemento",
+    "all but first letter of %txt": "todas menos la primera letra de %txt",
     "all but this script": "todos los programas excepto este",
-    "all identical": "todos los iguales",
-    "all scenes": "",
+    "all identical": "todos idéntico",
+    "all scenes": "todos escenas",
     "all ≤": "todos los ≤",
     "all ≥": "todos los ≥",
     "alpha value:": "valor alfa",
     "anchor": "anclaje",
     "and": "y",
     "and send": "y enviar",
-    "and you will not be able to convert them back into vector drawings.": "",
+    "and you will not be able to convert them back into vector drawings.": "y no podrás volverlo a convertir en un diseño vectorial.",
     "animation demo": "demo: animación",
     "answer": "respuesta",
-    "any": "cualquiera",
+    "any": "cualquier",
     "any key": "cualquier tecla",
     "any message": "cualquier mensaje",
-    "anything": "lo que sea",
+    "anything": "cualquier cosa",
     "append _": "anexar _",
     "arrange scripts\nvertically": "alinea los programas\nverticalmente",
     "arrowDown": "flecha abajo",
+    "arrowDownThin": "flecha fina abajo",
     "arrowDownOutline": "flecha abajo (contorno)",
     "arrowLeft": "flecha izquierda",
+    "arrowLeftThin": "flecha fina izquierda",
+    "arrowLeftRightThin": "flecha fina izquierda-derecha",
     "arrowLeftOutline": "flecha izquierda (contorno)",
     "arrowRight": "flecha derecha",
+    "arrowRightThin": "flecha fina derecha",
     "arrowRightOutline": "flecha derecha (contorno)",
     "arrowUp": "flecha arriba",
+    "arrowUpDownThin": "flecha fina arriba-abajo",
+    "arrowUpThin": "flecha fina arriba",
     "arrowUpOutline": "flecha arriba (contorno)",
     "asin": "arcoseno",
     "ask _ and wait": "preguntar _ y esperar",
@@ -520,7 +715,7 @@ SnapTranslator.dict.es = {
     "attach...": "vincular…",
     "b": "b",
     "back": "trasera",
-    "balance": "",
+    "balance": "balance",
     "big (2x)": "grande (×2)",
     "bigger menu fonts and sliders": "fuentes y deslizadores más grandes",
     "bins": "resolución",
@@ -528,20 +723,21 @@ SnapTranslator.dict.es = {
     "block deletion dialog text": "¿Seguro que quieres eliminar este bloque personalizado y todas sus instancias?",
     "block variables": "variables de bloque",
     "block variables...": "variables de bloque…",
-    "block-solid (0)": "",
+    "block-solid (0)": "bloque sólido (0)",
     "blockify": "en forma de bloques",
     "blocks": "bloques",
     "blue": "azul",
     "blurred shadows...": "sombras difuminadas…",
     "blurry shades, use for new browsers": "sombras difuminadas (para navegadores modernos)",
-    "bottom": "",
+    "bold": "negrita",
+    "bottom": "inferior",
     "box": "caja",
     "brightness": "brillo",
     "broadcast _ _": "enviar mensaje _ _",
     "broadcast _ _ and wait": "enviar mensaje _ _ y esperar",
     "brush": "pincel",
     "build": "construye",
-    "but getting a": "",
+    "but getting a": "pero se recibió un",
     "c": "c",
     "call _ _": "llamar _ _",
     "call _ w/continuation": "llamar _ con continuación",
@@ -552,7 +748,7 @@ SnapTranslator.dict.es = {
     "cannot handle zero width or height": "",
     "cannot operate on a deleted sprite": "",
     "cannot send media, sprites or procedures to another scene": "",
-    "case sensitivity": "sensible a mayúsculas",
+    "case sensitivity": "sensibilidad a mayúsculas/minúsculas",
     "categories": "categorías",
     "category": "categoría",
     "ceiling": "techo",
@@ -561,8 +757,8 @@ SnapTranslator.dict.es = {
     "center y": "centro y",
     "change _ by _": "incrementar _ en _",
     "change _ effect by _": "cambiar efecto _ en _",
-    "change background _ by _": "",
-    "change balance by _": "cambiar balance en _",
+    "change background _ by _": "aumenta _ del fondo en _",
+    "change balance by _": "aumenta el balance en _", 
     "change pen _ by _": "cambiar _ del lápiz en _",
     "change pen color by _": "cambiar color de lápiz en _",
     "change pen shade by _": "cambiar brillo de lápiz en _",
@@ -572,49 +768,50 @@ SnapTranslator.dict.es = {
     "change volume by _": "cambiar volumen en _",
     "change x by _": "cambiar x en _",
     "change y by _": "cambiar y en _",
-    "check for alternative GUI design": "marcar para utilizar la interfaz alternativa",
-    "check for block to text mapping features": "marcar para activar el soporte de conversión de bloques a código",
-    "check for flat ends of lines": "marcar para dibujar líneas con extremos rectos",
+    "check for alternative\nGUI design": "marcar para utilizar\nla interfaz alternativa",
+    "check for block\nto text mapping features": "marcar para activar el\nsoporte de conversión de\nbloques a código",
+    "check for flat ends of lines": "marcar para dibujar líneas\ncon extremos rectos",
     "check for higher contrast table views": "marcar para ver tablas con un mayor contraste",
     "check for higher resolution, uses more computing resources": "marcar para una mayor resolución (usa más recursos de computación)",
     "check for multi-column list view support": "marcar para visualizar listas multicolumna como tablas",
     "check for sprite inheritance features": "marcar para activar el soporte de herencia de objetos",
     "check to allow empty Boolean slots": "marcar para permitir huecos booleanos vacíos",
-    "check to always show slot types in the input dialog": "marcar para mostrar automáticamente los tipos en el editor de parámetros",
+    "check to always show slot\ntypes in the input dialog": "marcar para mostrar automáticamente\nlos tipos en el editor de parámetros",
     "check to cache inputs boosts recursion": "marcar para cachear entradas (dispara la recusión)",
-    "check to disable directly running blocks by clicking on them": "",
-    "check to disallow script reentrance": "marcar para no permitir la reentrada de programas",
-    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to disable\ndirectly running blocks\nby clicking on them": "marcar para deshabilitar\nla ejecución directa\nal pulsar en los bloques",
+    "check to disallow\nscript reentrance": "marcar para no permitir\nla reentrada de programas",
+    "check to distinguish upper- and\n lowercase when comparing texts": "marcar para distinguir mayúsculas/minúsculas\nal comparar textos",
     "check to enable IDE animations": "marcar para activar las animaciones del IDE",
     "check to enable alternating colors for nested blocks": "marcar para activar la alternación de colores para bloques anidados",
     "check to enable auto-wrapping inside nested block stacks": "marcar para permitir que bloques tipo C puedan encapsular a otros más internos",
     "check to enable camera support": "marcar para activar el soporte de cámara",
     "check to enable dropping commands in all rings": "",
     "check to enable dynamic labels for variadic inputs": "marcar para activar las etiquetas dinámicas para entradas variables",
-    "check to enable input sliders for entry fields": "marcar para activar los deslizadores en los campos de entrada",
+    "check to enable\ninput sliders for\nentry fields": "marcar para activar\nlos deslizadores en los\ncampos de entrada",
     "check to enable keyboard editing support": "marcar para activar el soporte de edición de teclado",
     "check to enable project data in URLs": "marcar para incluir datos del proyecto en las URLs",
     "check to enable saving linked sublist identities": "marcar para permitir guardar las identidades de sublistas enlazadas",
     "check to enable sprite composition": "marcar para activar la composición de objetos",
     "check to enable support for first-class sprite": "marcar para activar el soporte de objetos de primera clase",
     "check to enable using operators on lists and tables": "",
-    "check to hide (+) symbols in block prototype labels": "marcar para ocultar los (+) durante la definición de bloques",
+    "check to hide (+) symbols\nin block prototype labels": "marcar para ocultar los «+»\nen las definiciones de bloques",
     "check to inherit from": "marcar para heredar de",
-    "check to prevent contents from being saved": "marcar para no guardar el contenido junto con el proyecto",
-    "check to prioritize script execution": "marcar para priorizar la ejecución del programa",
+    "check to prevent contents\nfrom being saved": "marcar para no guardar el contenido\njunto con el proyecto",
+    "check to prioritize\nscript execution": "marcar para priorizar\nla ejecución del programa",
     "check to rasterize SVGs on import": "marcar para rasterizar los SVGs tras haberlos importado",
-    "check to run the edited script when moving the slider": "marcar para ejecutar el programa cuando se mueva el deslizador",
-    "check to show all blocks in a single palette": "",
+    "check to run\nthe edited script\nwhen moving the slider": "marcar para ejecutar\nel programa editado\ncuando se mueva el deslizador",
+    "check to show all blocks in a single palette": "marcar para mostrar\ntodos los bloques\nen una única paleta",
     "check to show buttons in the palette": "",
     "check to show category names in the palette": "",
-    "check to show extension primitives in the palette": "",
-    "check to show in palette": "",
-    "check to support native JavaScript functions": "",
-    "check to switch pen colors and graphic effects to HSL": "",
-    "check to turn block clicking sound on": "marcar para que suene un «clic» cuando se coloque un bloque",
-    "check to turn on logging pen vectors": "",
-    "check to turn on visible stepping (slow)": "marcar para activar la depuración paso a paso (lento)",
+    "check to show extension\nprimitives in the palette": "marcar para mostrar primitivas\nde extensiones en la paleta",
+    "check to show in palette": "marcar para mostrar en la paleta",
+    "check to support\nnative JavaScript functions": "marcar para activar el soporte\npara funciones nativas en JavaScript",
+    "check to switch pen colors\nand graphic effects to HSL": "marcar para cambiar colores\nde lápiz y efectos gráficos a HSL",
+    "check to turn\nblock clicking\nsound on": "marcar para que suene\nun «clic» cuando\nse coloque un bloque",
+    "check to turn on\nlogging pen vectors": "marcar para activar\ngrabación vectorial del lápiz",
+    "check to turn on\n visible stepping (slow)": "marcar para activar la\ndepuración paso a paso (lento)",
     "check to use blurred drop shadows and highlights": "marcar para usar sombras y brillos difuminados",
+    "checkedBox": "casilla marcada",
     "children": "hijos",
     "choose another color for this morph": "cambia el color de este morph",
     "choose the World's background color": "selecciona el color de fondo del Mundo",
@@ -622,14 +819,14 @@ SnapTranslator.dict.es = {
     "circle box": "caja circular",
     "circleSolid": "círculo (sólido)",
     "clean up": "ordenar",
-    "clear": "Borrar",
+    "clear": "borrar",
     "clear graphic effects": "quitar efectos gráficos",
     "clear undrop queue": "vaciar historial de cambios",
     "click or drag crosshairs to move the rotation center": "haz clic o arrastra el punto de mira para mover el centro de rotación",
     "clicked": "hagan clic",
     "clone": "clonar",
     "clones": "clones",
-    "closedBrush": "",
+    "closedBrush": "brochazo cerrado",
     "cloud": "nube",
     "cloud unavailable without a web server.": "nube no disponible sin un servidor web.",
     "cloudGradient": "nube (degradado)",
@@ -646,12 +843,13 @@ SnapTranslator.dict.es = {
     "color:": "color:",
     "columns": "columnas",
     "combinations _": "combinaciones _",
+    "combinations": "combinaciones",
     "combine _ using _": "combinar los elementos de _ con _",
     "comic": "historieta",
     "command": "comando",
     "comment": "comentario",
     "comment pic...": "imagen de comentario…",
-    "compile": "",
+    "compile": "compilar",
     "compile _": "compilar _",
     "compile _ for _ args": "",
     "confetti": "confeti",
@@ -669,6 +867,7 @@ SnapTranslator.dict.es = {
     "create a clone of _": "crear clon de _",
     "cross": "cruz",
     "crosshairs": "punto de mira",
+    "csv": "coma",
     "current": "actual",
     "current _": "_ actual",
     "current module versions:": "Versiones actuales de los módulos:",
@@ -676,22 +875,26 @@ SnapTranslator.dict.es = {
     "custom?": "¿personalizado?",
     "cut from _": "recortar desde _",
     "d": "d",
-    "dangling?": "¿colgando de otro objeto?",
+    "dangling?": "¿cuelgo de otro objeto?",
     "data": "datos",
     "date": "día",
     "day of week": "día de la semana",
-    "days left": "",
-    "days left.": "",
+    "days left": "días restantes",
+    "days left.": "días restantes.",
+    "decode URI": "decodificar URI",
+    "decode URI component": "decodificar componente URI",
     "defaults": "predeterminados",
     "define _ _ _": "definir _ _ _",
     "definition": "definición",
     "delete": "eliminar",
     "delete _": "eliminar _",
-    "delete _ of _": "eliminar _ de _",
-    "delete a category...": "eliminar categoría…",
-    "delete block _": "eliminar bloque _",
+    "delete _ of _": "borrar _ de _",
+    "delete a category...": "eliminar una categoría…",
+    "delete block": "eliminar bloque",
+    "delete block _": "eliminar bloque",
     "delete block definition...": "eliminar definición de bloque…",
-    "delete slot": "",
+    "delete slot": "eliminar una ranura",
+    "delete solution": "eliminar solución",
     "delete this clone": "eliminar este clon",
     "delete variable": "eliminar variable",
     "delimiter": "delimitador",
@@ -703,24 +906,26 @@ SnapTranslator.dict.es = {
     "development mode": "modo desarrollador",
     "development mode debugging primitives:": "primitivas de depuración del modo desarrollador:",
     "development mode...": "modo desarrollador…",
+    "dial": "disco",
     "dimensions": "dimensiones",
     "direction": "dirección",
-    "disable deep-Morphic context menus and show user-friendly ones": "desactiva los menus contextuales de Morphic y muestra unos más fáciles de utilizar",
+    "disable deep-Morphic context menus and show user-friendly ones": "desactiva los menús contextuales de Morphic y muestra otros más fáciles de utilizar",
     "disable developers' context menus": "desactiva los menús contextuales de desarrollador",
-    "disable dragging media and blocks out of watchers and balloons": "",
+    "disable dragging media\nand blocks out of\nwatchers and balloons": "deshabilitar el arrastre\nde medios y bloques\nfuera de monitores y globos",
     "disconnected.": "Desconectado.",
     "distance": "distancia",
     "distance to _": "distancia a _",
     "distribution": "distribución",
+    "does not exist in this context": "en este contexto",
     "don't rotate": "no girar",
     "down arrow": "↓ (flecha abajo)",
     "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
     "download script": "descargar programa",
-    "download this script as an XML file": "descarga este programa en XML",
+    "download this script\nas an XML file": "descarga este programa\ncomo un archivo XML",
     "draggable": "arrastrable",
     "draggable?": "¿arrastrable?",
-    "dragging threshold": "",
-    "dropped": "arrastren y suelten",
+    "dragging threshold": "umbral de arrastre",
+    "dropped": "arrastren y me suelten",
     "duplicate": "duplicar",
     "duplicate block definition...": "duplicar definición de bloque…",
     "duration": "duración",
@@ -729,32 +934,38 @@ SnapTranslator.dict.es = {
     "edge": "borde del escenario",
     "edit": "editar",
     "edit rotation point only...": "editar solo punto de rotación…",
-    "edit the costume's rotation center": "edita el centro de rotación del disfraz",
+    "edit the costume's\nrotation center": "editar el centro de\nrotación del disfraz",
     "edit...": "editar…",
-    "editables": "",
+    "editables": "campos editables",
     "elegant (90)": "elegante (90)",
-    "else if _ _": "si no, si _ _",
-    "enable Morphic context menus and inspectors, not user-friendly!": "activa los menús contextuales e inspectores de Morphic (¡no son fáciles de utilizar!)",
-    "enter": "",
+    "ellipse": "elipse",
+    "empty word? _": "¿palabra vacía?",
+    "empty sentence? _": "¿frase vacía?",
+    "enable Morphic context menus and inspectors, not user-friendly!": "activa los menus contextuales e inspectores de Morphic (¡no son fáciles de utilizar)",
+    "enable automatic line wrapping": "activa el ajuste de línea automático",
+    "encode URI": "codificar URI",
+    "encode URI component": "codificar componente URI",
+    "enter": "retorno",
     "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "Se ha activado el modo desarrollador. El cacheo de errores está desactivado, usa la consola del navegador para ver mensajes de error.",
     "entering user mode": "Se ha activado el modo usuario.",
     "eraser": "goma de borrar",
     "exceeding maximum number of clones": "número máximo de clones excedido",
     "expecting": "se esperaban las entradas",
-    "expecting a": "",
+    "expecting a": "se esperaba un",
     "expecting a finite number but getting Infinity or NaN": "",
     "experimental - under construction": "experimental (en construcción)",
     "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
     "export": "exportar",
     "export block definition...": "exportar definición de bloque…",
-    "export pen trails line segments as SVG": "exportar línea de rastro del lápiz como SVG",
-    "export project as cloud data...": "exportar proyecto como datos en la nube…",
-    "export project media only...": "exportar solo medios del proyecto…",
-    "export project without media...": "exportar proyecto sin medios…",
-    "export script": "exportar programa",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "Exportar proyecto como datos en la nube…",
+    "export project media only...": "Exportar solo medios del proyecto…",
+    "export project without media...": "Exportar proyecto sin medios…",
+    "export script": "exportar secuencia",
+    "export script...": "exportar secuencia…",
     "export...": "exportar…",
-    "extent": "",
     "extract": "extraer",
+    "extract solution": "extraer solución",
     "f": "f",
     "false": "falso",
     "file": "archivo",
@@ -770,14 +981,17 @@ SnapTranslator.dict.es = {
     "flag": "bandera",
     "flash": "relámpago",
     "flat line ends": "punta de lápiz plana",
-    "flatten": "estirado",
-    "flip horizontal": "voltear ↔",
-    "flip vertical": "voltear ↕",
-    "flip ↔": "voltear ↔",
-    "flip ↕": "voltear ↕",
+    "flatten": "aplanar",
+    "flip ↔": "girar ↔",
+    "flip ↕": "girar ↕",
+    "flip vertical": "girar horizontalmente",
+    "flip horizontal": "girar verticalmente",
+    "flipHorizontal": "giro horizontal",
+    "flipVertical": "giro vertical",
     "floor": "suelo",
     "footprints": "huellas de pasos",
     "for _ = _ to _ _": "para _ = _ hasta _ _",
+    "generate a Parson\'s Puzzle\nfrom the current sprite": "genera un puzzle de Parsons\ndel objeto actual",
     "for all sprites": "para todos los objetos",
     "for each _ in _ _": "para cada _ de _ _",
     "for this sprite only": "solo para este objeto",
@@ -789,14 +1003,18 @@ SnapTranslator.dict.es = {
     "front": "delantera",
     "fullScreen": "pantalla completa",
     "g": "g",
+    "gearBig": "engranaje grande",
+    "gearPartial": "engranaje parcial",
     "gears": "engranaje",
-    "get blocks": "",
-    "get data": "",
+    "get blocks": "obtener bloques",
+    "get data": "obtener datos",
     "ghost": "fantasma",
     "giant (8x)": "gigantesco (×8)",
     "glide _ secs to x: _ y: _": "deslizar en _ s a x: _ y: _",
+    "glide, grow and rotate using easing functions.": "Deslizamientos, zooms y rotaciones utilizando funciones curva.",
     "global?": "¿global?",
-    "globe": "globo",
+    "globe": "mundo",
+    "globeBig": "mundo grande",
     "go back _ layers": "enviar _ capas hacia atrás",
     "go to _": "ir a _",
     "go to _ layer": "enviar a la capa _",
@@ -812,20 +1030,24 @@ SnapTranslator.dict.es = {
     "hello": "hola",
     "help": "ayuda",
     "help...": "ayuda…",
-    "hide": "ocultar",
-    "hide all...": "ocultar todo…",
+    "hex sha512 hash": "hash sha512 (hexadecimal)",
+    "hide": "esconder",
+    "hide all...": "ocultar todos…",
+    "hide blanks": "ocultar espacios",
     "hide blocks...": "ocultar bloques…",
-    "hide variable _": "ocultar variable _",
-    "high": "alta",
+    "hide characters": "ocultar caracteres",
+    "hide primitives": "ocultar primitivas",
+    "hide variable _": "esconder variable _",
+    "high": "",
     "hour": "hora",
-    "http:// _": "http:// _",
+    "http:// _": "",
     "hue": "tonalidad",
     "huge (4x)": "enorme (×4)",
     "i": "i",
     "identical to": "idéntico a",
     "if _ _ _": "si _ _ _",
     "if _ _ else _": "si _ _ si no _",
-    "if _ then _ else _": "si _ entonces _ sino _",
+    "if _ then _ else _": "si _ entonces _ si no _",
     "if on edge, bounce": "rebotar si toca un borde",
     "import a sound from your computer\nby dragging it into here": "Puedes importar un sonido desde tu ordenador\narrastrándolo hasta aquí",
     "import without attempting to parse or format data": "",
@@ -839,17 +1061,17 @@ SnapTranslator.dict.es = {
     "input list:": "con lista de argumentos:",
     "input names:": "parámetros:",
     "input(s), but getting": "pero se ha encontrado",
-    "inputs": "entradas",
-    "insert _ at _ of _": "insertar _ en posición _ de _",
-    "insert a slot": "",
+    "inputs": "argumentos",
+    "insert _ at _ of _": "insertar _ en _ de _",
+    "insert a slot": "insertar una ranura",
     "insert a variable": "insertar una variable",
     "inspect...": "inspeccionar",
     "is _ ?": "¿es _ ?",
     "is _ a _ ?": "¿es _ un _ ?",
     "is _ empty?": "¿está _ vacía?",
     "is _ on?": "¿parámetro _ activo?",
-    "is not a valid option": "",
-    "is read-only": "",
+    "is not a valid option": "no es una opción válida",
+    "is read-only": "es de solo lectura",
     "item": "elemento",
     "item _ of _": "elemento _ de _",
     "items": "elementos",
@@ -865,17 +1087,14 @@ SnapTranslator.dict.es = {
     "keyboardFilled": "teclado (sólido)",
     "l": "l",
     "label": "etiqueta",
-    "language_name": "Español",
-    "language_translator": "Víctor Manuel Muratalla Morales / Cristián Rizzi Iribarren / Alfonso Ruzafa / David Martín",
     "large": "grande",
     "last": "último",
-    "last_changed": "2023-10-27",
     "launch _ _": "iniciar _ _",
     "left": "izquierda",
     "left arrow": "← (flecha izquierda)",
     "length": "longitud",
     "length of _": "longitud de _",
-    "length:": "",
+    "length: ": "longitud: ",
     "let the World automatically adjust to browser resizing": "hace que el Mundo se ajuste automáticamente cuando se redimensione el navegador",
     "letter": "letra",
     "letter _ of _": "letra _ de _",
@@ -884,14 +1103,15 @@ SnapTranslator.dict.es = {
     "line": "línea",
     "lines": "líneas",
     "list": "lista",
+    "listNarrow": "lista estrecha",
     "list _": "lista _",
     "list view...": "ver como lista…",
     "ln": "ln",
     "location": "ubicación",
     "lock": "bloquear",
     "log pen vectors": "registrar los dibujos como vectores",
-    "login": "",
-    "loop": "",
+    "login": "iniciar sesión",
+    "loop": "repetición",
     "low": "baja",
     "lower case": "minúsculas",
     "m": "m",
@@ -925,37 +1145,38 @@ SnapTranslator.dict.es = {
     "month": "mes",
     "mosaic": "mosaico",
     "motion": "movimiento",
-    "mouse down?": "¿está pulsado el ratón?",
+    "mouse down?": "¿ratón pulsado?",
     "mouse position": "posición del ratón",
-    "mouse x": "ratón x",
-    "mouse y": "ratón y",
+    "mouse x": "x del ratón",
+    "mouse y": "y del ratón",
     "mouse-departed": "dejen de tocar con el ratón",
     "mouse-entered": "toquen con el ratón",
     "mouse-pointer": "puntero del ratón",
     "move": "mover",
-    "move _ steps": "mover _ pasos",
+    "move _ steps": "avanzar _ pasos",
     "move all inside...": "mover todos dentro…",
     "move...": "mover…",
+    "multi-line": "multilínea",
     "my": "mi",
     "my _": "mi(s) _",
-    "my anchor": "",
-    "my dangling?": "",
-    "my draggable?": "",
+    "my anchor": "atributo ancla",
+    "my dangling?": "¿atributo colgando?",
+    "my draggable?": "¿atributo arrastrable?",
     "my name": "mi nombre",
     "my parent": "mi padre",
-    "my rotation style": "mi estilo de rotación",
-    "my rotation x": "",
-    "my rotation y": "",
-    "my temporary?": "",
+    "my rotation style": "atributo estilo de rotación",
+    "my rotation x": "atributo rotación x",
+    "my rotation y": "atributo rotación y",
+    "my temporary?": "¿mi temporal?",
     "myself": "mí mismo",
     "n": "n",
     "name": "nombre",
-    "neg": "",
+    "neg": "negativo",
     "negative": "negativo",
     "neighbors": "vecinos",
     "neighbors ≠": "vecinos ≠",
     "new costume _ width _ height _": "nuevo disfraz _ con ancho _ y alto _",
-    "new line": "nueva línea",
+    "new line": "salto de línea",
     "new sound _ rate _ Hz": "nuevo sonido _ a _ Hz",
     "new...": "nuevo mensaje…",
     "next": "siguiente",
@@ -963,11 +1184,14 @@ SnapTranslator.dict.es = {
     "none": "ninguno",
     "normal": "normal",
     "normal (1x)": "normal (×1)",
-    "normalScreen": "",
+    "normal style": "estilo normal",
+    "normal weight": "grosor normal",
+    "normalScreen": "pantalla normal",
     "normalStage": "escenario normal",
     "not": "no",
     "not _": "no _",
-    "note": "nota",
+    "note": "notas",
+    "notes": "notas musicales",
     "nothing": "nada",
     "now connected.": "",
     "number": "número",
@@ -979,13 +1203,14 @@ SnapTranslator.dict.es = {
     "octagon": "octógono",
     "only duplicate this block": "duplicar solo este bloque",
     "only face left/right": "mirar solo a izquierda y derecha",
-    "only grab this block": "",
-    "open a new window with a picture of this morph": "abre una nueva ventana con una image de este morph",
+    "only grab this block": "sacar solo este bloque",
+    "open a new window with a picture of this morph": "abre una nueva ventana con una imagen de este morph",
     "open a new window with a picture of this script": "abre una nueva ventana con una imagen de este programa",
     "open a window on all properties": "abre una ventana con todas las propiedades",
     "open in another dialog...": "abrir en otro diálogo",
     "open in dialog...": "abrir en diálogo…",
     "open shared project from cloud...": "Abrir proyecto compartido en la nube…",
+    "options": "opciones",
     "options...": "opciones…",
     "or": "o",
     "or before": "o antes",
@@ -999,9 +1224,9 @@ SnapTranslator.dict.es = {
     "parent": "padre",
     "parent...": "padre…",
     "parts": "partes",
-    "password has been changed.": "Contraseña cambiada.",
-    "password must be six characters or longer": "la contraseña ha de tener como mínimo 6 caracteres",
-    "passwords do not match": "las contraseñas no coinciden",
+    "password has been changed.": "contraseña cambiada.",
+    "password must be six\ncharacters or longer": "la contraseña ha de tener\ncomo mínimo 6 caracteres",
+    "passwords do\nnot match": "las contraseñas\nno coinciden",
     "paste on _": "pegar en _",
     "pause": "pausa",
     "pause all _": "pausar todos _",
@@ -1016,7 +1241,7 @@ SnapTranslator.dict.es = {
     "pic...": "imagen…",
     "pick random _ to _": "número al azar entre _ y _",
     "pick up": "coger",
-    "pipe _ $arrowRight _": "",
+    "pipe _ $arrowRight _": "inyectar _ $arrowRight _",
     "pipette": "cuentagotas",
     "pitch": "tono",
     "pivot": "pivote",
@@ -1029,15 +1254,15 @@ SnapTranslator.dict.es = {
     "play sound _": "reproducir sonido _",
     "play sound _ at _ Hz": "reproducir sonido _ a _ Hz",
     "play sound _ until done": "reproducir sonido _ hasta el final",
-    "please agree to the TOS": "por favor, acepta los términos y condiciones de uso",
-    "please fill out this field": "por favor, completa este campo",
-    "please provide a valid email address": "por favor, escribe una dirección de correo válida",
+    "please agree to\nthe TOS": "por favor, acepta los\ntérminos y condiciones de uso",
+    "please fill out\nthis field": "por favor, completa\neste campo",
+    "please provide a valid\nemail address": "por favor, escribe una\ndirección de correo válida",
     "point in direction _": "apuntar en dirección _",
     "point towards _": "apuntar hacia _",
     "pointRight": "apuntar a la derecha",
     "polygon": "polígono",
     "position": "posición",
-    "poster": "",
+    "poster": "póster",
     "predicate": "predicado",
     "presentation (1.4x)": "presentación (×1.4)",
     "pressed": "aprieten",
@@ -1067,11 +1292,11 @@ SnapTranslator.dict.es = {
     "release": "liberar",
     "remove block variables...": "eliminar variables de bloque…",
     "rename": "renombrar",
-    "rename all blocks that access this variable": "renombra todos los bloques que acceden a esta variable",
+    "rename all blocks that\naccess this variable": "renombra todos los bloques\nque acceden a esta variable",
     "rename all...": "renombrar todos…",
     "rename background": "renombrar fondo",
     "rename costume": "renombrar disfraz",
-    "rename only this reporter": "renombrar solo este reportero",
+    "rename only\nthis reporter": "renombrar solo\neste reportero",
     "rename sound": "Renombrar sonido",
     "rename...": "renombrar…",
     "repeat _ _": "repetir _ _",
@@ -1108,14 +1333,14 @@ SnapTranslator.dict.es = {
     "samples": "muestras",
     "saturation": "saturación",
     "save _ as costume named _": "guardar _ en disfraz _",
-    "save a picture\nof all scripts": "guardar una imagen\nde todos los programas",
-    "save a picture of both this script and its result": "guardar una imagen de este programa y su resultado",
-    "save a picture of the stage": "guardar una imagen del escenario",
-    "save a picture of this comment": "guardar una imagen de este comentario",
-    "save a picture\nof this script": "guardar una imagen\nde este programa",
-    "save a summary of this project": "guardar una imagen de este proyecto",
-    "save global custom block definitions as XML": "guardar las definiciones de bloques personalizados como XML",
-    "save project data as XML to your downloads folder": "guarda el proyecto en XML en tu carpeta de descargas",
+    "save a picture\nof all scripts": "guarda una imagen\nde todos los programas",
+    "save a picture of both\nthis script and its result": "guarda una imagen de este programa\ny su resultado",
+    "save a picture\nof the stage": "guarda una imagen\ndel escenario",
+    "save a picture\nof this comment": "guarda una imagen\nde este comentario",
+    "save a picture\nof this script": "guarda una imagen\nde este programa",
+    "save a summary\nof this project": "guarda un resumen\nde este proyecto",
+    "save global custom block definitions as XML": "guarda las definiciones de bloques personalizados como XML",
+    "save project data as XML\nto your downloads folder": "guarda el proyecto en XML\nen tu carpeta de descargas",
     "saved.": "Guardado.",
     "say _": "decir _",
     "say _ for _ secs": "decir _ durante _ s",
@@ -1165,7 +1390,7 @@ SnapTranslator.dict.es = {
     "sharing project...": "Compartiendo proyecto…",
     "sharp drop shadows use for old browsers": "sombras nítidas (para navegadores antiguos)",
     "sharp shadows...": "sombras nítidas…",
-    "shimmering (80)": "",
+    "shimmering (80)": "reluciente (80)",
     "show": "mostrar",
     "show a handle which can be dragged to change this morph's extent": "muestra una muesca que puede ser arrastrada para cambiar el tamaño de este morph",
     "show a handle which can be dragged to move this morph": "muestra una muesca que puede ser arrastrada para mover este morph",
@@ -1189,6 +1414,7 @@ SnapTranslator.dict.es = {
     "smallStage": "escenario pequeño",
     "smaller menu fonts and sliders": "fuentes y deslizadores más pequeños",
     "snap": "instantánea",
+    "sort": "ordenar",
     "solutions": "",
     "sorted": "en orden",
     "sound": "sonido",
@@ -1211,10 +1437,10 @@ SnapTranslator.dict.es = {
     "stamp": "sellar",
     "standard settings": "perfil de ordenador",
     "static": "estático",
-    "stay signed in on this computer until logging out": "Mantener la sesión iniciada en este ordenador",
+    "stay signed in on this computer\nuntil logging out": "Mantener la sesión iniciada\nen este ordenador",
     "stepForward": "siguiente paso",
     "stick this morph to another one": "pega este morph a otro",
-    "stick to": "",
+    "stick to": "pegar a",
     "stop _": "detener _",
     "stop all sounds": "detener todos los sonidos",
     "stop frequency": "parar la frecuencia",
@@ -1231,7 +1457,7 @@ SnapTranslator.dict.es = {
     "t": "t",
     "tab": "",
     "table view...": "ver como tabla…",
-    "take a camera snapshot and import it as a new sprite": "hace una captura de cámara y la importa como un nuevo objeto",
+    "take a camera snapshot and\nimport it as a new sprite": "hace una captura de cámara y\nla importa como un nuevo objeto",
     "tan": "tangente",
     "tell _ to _ _": "decir a _ que _ _",
     "tempo": "",
@@ -1248,6 +1474,7 @@ SnapTranslator.dict.es = {
     "this block": "este bloque",
     "this project doesn't have any custom global blocks yet": "este proyecto no tiene todavía ningún bloque personalizado",
     "this script": "este programa",
+    "tick": "tic",
     "time in milliseconds": "tiempo en milisegundos",
     "timer": "cronómetro",
     "tip": "punta",
@@ -1258,18 +1485,20 @@ SnapTranslator.dict.es = {
     "transient": "excluir al guardar",
     "translations": "traducciones",
     "translations...": "traducciones…",
-    "translator_e-mail": "victor.muratalla@yahoo.com / rizzi.cristian@gmail.com",
     "transparency": "transparencia",
     "transparency...": "transparencia…",
+    "trash": "papelera",
     "trash is empty": "papelera vacía",
+    "trashFull": "papelera llena",
     "true": "verdadero",
     "turbo mode": "modo turbo",
     "turbo mode?": "¿modo turbo?",
     "turn _ _ degrees": "girar _ _ grados",
-    "turn all pen trails and stamps into a new background for the stage": "convierte todo rastro del lápiz en un nuevo fondo para el escenario",
-    "turn all pen trails and stamps into a new costume for the currently selected sprite": "convierte todo rastro del lápiz en un nuevo disfraz para el objeto actualmente seleccionado",
+    "turn all pen trails and stamps\ninto a new background for the stage": "convierte todo rastro del lápiz\nen un nuevo fondo para el escenario",
+    "turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite": "convierte todo rastro del lápiz\nen un nuevo disfraz para el\nobjeto actualmente seleccionado",
     "turn pen trails into new background...": "",
     "turn pen trails into new costume...": "",
+    "turnAround": "giro completo",
     "turnBack": "ir atrás",
     "turnForward": "ir adelante",
     "turnLeft": "giro a la izquierda",
@@ -1282,14 +1511,14 @@ SnapTranslator.dict.es = {
     "unable to convert to": "no se puede convertir a",
     "unable to inherit (disabled or circular?)": "no se puede heredar (¿deshabilitado o en bucle?)",
     "unable to nest (disabled or circular?)": "no se puede anidar (¿deshabilitado o en bucle?)",
-    "uncheck for default GUI design": "desmarcar para utilizar la interfaz predeterminada",
+    "uncheck for default\nGUI design": "desmarcar para utilizar\nla interfaz predeterminada",
     "uncheck for less contrast multi-column list views": "desmarcar para ver tablas con un menor contraste",
     "uncheck for lower resolution, saves computing resources": "desmarcar para una menor resolución (ahorra recursos de computación)",
     "uncheck for round ends of lines": "desmarcar para dibujar líneas con extremos redondeados",
     "uncheck for smooth scaling of vector costumes": "desmarcar para usar escalado suave en imágenes vectoriales",
     "uncheck to allow dropped reporters to kick out others": "desmarcar para permitir que los bloques puedan ocupar el lugar de otros al ser soltados",
     "uncheck to allow script reentrance": "desmarcar para permitir la reentrada de programas",
-    "uncheck to always show (+) symbols in block prototype labels": "desmarcar para mostrar los (+) durante la definición de bloques",
+    "uncheck to always show (+) symbols\nin block prototype labels": "desmarcar para mostrar los «+»\nen las definiciones de bloques",
     "uncheck to confine auto-wrapping to top-level block stacks": "desmarcar para que bloques tipo C solo puedan encapsular a otros más externos",
     "uncheck to disable IDE animations": "desmarcar para desactivar las animaciones del IDE",
     "uncheck to disable alternating colors for nested block": "desmarcar para desactivar la alternación de colores para bloques anidados",
@@ -1297,7 +1526,7 @@ SnapTranslator.dict.es = {
     "uncheck to disable camera support": "desmarcar para desactivar el soporte de cámara",
     "uncheck to disable dropping commands in reporter rings": "",
     "uncheck to disable dynamic labels for variadic inputs": "desmarcar para desactivar las etiquetas dinámicas para entradas variables",
-    "uncheck to disable input sliders for entry fields": "desmarcar para desactivar los deslizadores en los campos de entrada",
+    "uncheck to disable\ninput sliders for\nentry fields": "desmarcar para desactivar\nlos deslizadores en\nlos campos de entrada",
     "uncheck to disable keyboard editing support": "desmarcar para desactivar el soporte de edición de teclado",
     "uncheck to disable multi-column list views": "desmarcar para no visualizar listas multicolumna como tablas",
     "uncheck to disable project data in URLs": "desmarcar para no incluir datos del proyecto en las URLs",
@@ -1305,31 +1534,30 @@ SnapTranslator.dict.es = {
     "uncheck to disable sprite composition": "desmarcar para desactivar la composición de objetos",
     "uncheck to disable sprite inheritance features": "desmarcar para desactivar el soporte de herencia de objetos",
     "uncheck to disable support for first-class sprites": "desmarcar para desactivar el soporte de objetos de primera clase",
-    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable support for\nnative JavaScript functions": "desmarcar para desactivar el soporte\npara funciones nativas en JavaScript",
     "uncheck to disable using operators on lists and tables": "",
     "uncheck to disinherit": "desmarcar para no heredar",
-    "uncheck to drag media and blocks out of watchers and balloons": "",
-    "uncheck to drag media, and blocks out of watchers and balloons": "",
-    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to drag media\nand blocks out of\nwatchers and balloons": "desmarcar para arrastrar\nmedios y bloques\nfuera de monitores y globos",
+    "uncheck to enable\ndirectly running blocks\nby clicking on them": "desmarcar para ejecutar\ndirectamente los bloques\nal pulsar en ellos",
     "uncheck to hide buttons in the palette": "",
     "uncheck to hide category names in the palette": "",
-    "uncheck to hide extension primitives in the palette": "",
-    "uncheck to hide in palette": "",
-    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to hide extension\nprimitives in the palette": "desmarcar para quitar primitivas\nde extensiones de la paleta",
+    "uncheck to hide in palette": "desmarcar para quitar de la paleta",
+    "uncheck to ignore upper- and\n lowercase when comparing texts": "desmarcar para ignorar mayúsculas/minúsculas\nal comparar textos",
     "uncheck to limit Boolean slots to true / false": "desmarcar para restringir los huecos booleanos a verdadero / falso",
-    "uncheck to run scripts at normal speed": "desmarcar para ejecutar los programas a velocidad normal",
-    "uncheck to save contents in the project": "desmarcar para guardar el contenido junto con el proyecto",
+    "uncheck to run scripts\nat normal speed": "desmarcar para ejecutar los\nprogramas a velocidad normal",
+    "uncheck to save contents\nin the project": "desmarcar para guardar el contenido\njunto con el proyecto",
     "uncheck to show only the selected category's blocks": "",
     "uncheck to stop caching inputs (for debugging the evaluator)": "desmarcar para no cachear entradas (para depurar el evaluador)",
-    "uncheck to suppress running scripts when moving the slider": "desmarcar para no ejecutar el programa cuando se mueva el deslizador",
-    "uncheck to switch pen colors and graphic effects to HSV": "",
-    "uncheck to turn block clicking sound off": "desmarcar para que no suene un «clic» cuando se coloca un bloque",
-    "uncheck to turn off logging pen vectors": "",
-    "uncheck to turn off visible stepping": "desmarcar para desactivar la depuración paso a paso",
+    "uncheck to suppress\nrunning scripts\nwhen moving the slider": "desmarcar para no\nejecutar el programa\ncuando se mueva el deslizador",
+    "uncheck to switch pen colors\nand graphic effects to HSV": "desmarcar para cambiar colores\nde lápiz y efectos gráficos a HSV",
+    "uncheck to turn\nblock clicking\nsound off": "desmarcar para que\nno suene el «clic» al\ncolocar un bloque",
+    "uncheck to turn off\nlogging pen vectors": "desmarcar para desactivar\ngrabación vectorial del lápiz",
+    "uncheck to turn off\nvisible stepping": "desmarcar para desactivar\nla depuración paso a paso",
     "uncheck to use solid drop shadows and highlights": "desmarcar para usar sombras y brillos sólidos",
-    "uncheck to use the input dialog in short form": "desmarcar para ocultar automáticamente los tipos en el editor de parámetros",
-    "uncompile": "",
-    "undo": "Deshacer",
+    "uncheck to use the input\ndialog in short form": "desmarcar para usar el\neditor de parámetros sencillo",
+    "uncompile": "descompilar",
+    "undo": "deshacer",
     "undo the last\nblock drop\nin this pane": "deshace el último cambio\nhecho en este panel",
     "undrop": "deshacer",
     "unicode _ as letter": "unicódigo _ como letra",
@@ -1357,6 +1585,7 @@ SnapTranslator.dict.es = {
     "value": "valor",
     "variable": "variable",
     "variables": "variables",
+    "verticalEllipsis": "puntos en vertical",
     "video _ on _": "_ de vídeo sobre _",
     "video capture": "captura de vídeo",
     "volume": "volumen",
@@ -1364,7 +1593,7 @@ SnapTranslator.dict.es = {
     "wait _ secs": "esperar _ s",
     "wait until _": "esperar hasta que _",
     "wardrobe": "guardarropa",
-    "warp _": "instrucción atómica _",
+    "warp _": "unificar _",
     "what's your name?": "¿cuál es tu nombre?",
     "when I am _": "cuando me _",
     "when I receive _ _": "cuando me llegue _ _",

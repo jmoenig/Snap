@@ -1,6 +1,76 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* **Translation Updates:**
+    * German
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
+
+## 9.0.14:
+* **Notable Fixes:**
+    * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+    * Chinese, thanks, moodykeke!
+
+2023-11-21
+* new dev version for v9.0.14
+* threads: fixed 'distribution' list selector support for nested atomic lists
+* threads: fixed 'uniques' list selector support for nested atomic lists
+* Spanish translation update, thanks, David Martín!
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.14 patch
+
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
+## 9.0.12:
+* **Notable Fixes:**
+    * fixed loading the "Words, sentences" library
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+    * fixed some broken file references in the pwa cache
+* **Library Updates:**
+    * added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
+* added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+* prepared v9.0.12 patch
+
+## 9.0.11:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+    * Spanish (libraries), thanks, Victoria and Mary!
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* Italian translation update, thanks, Stefano!
+* Spanish (libraries) translation update, thanks, Victoria and Mary!
+* prepared v9.0.11 patch
+
+## 9.0.10:
+* **Notable Fixes:**
+    * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+
+2023-11-02
+* objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
 
 ## 9.0.9:
 * **Notable Fixes:**
