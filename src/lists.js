@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-November-22';
+modules.lists = '2023-November-23';
 
 var List;
 var ListWatcherMorph;
@@ -150,6 +150,7 @@ function List(array) {
 // List global preferences
 
 List.prototype.enableTables = true;
+List.prototype.enableWrapping = true;
 
 // List printing
 
@@ -195,11 +196,9 @@ List.prototype.cdr = function () {
 // List array setters:
 
 List.prototype.add = function (element, index) {
-/*
-    insert the element before the given slot index,
-    if no index is specifed, append the element
-*/
-    var idx = Math.round(+index) || this.length() + 1,
+    // insert the element before the given slot index,
+    // if no index is specifed, append the element
+    var idx = isNil(index) ? this.length() + 1 : this.wrapIndex(index),
         obj = isNil(element) ? null : element;
 
     this.becomeArray();
@@ -209,7 +208,7 @@ List.prototype.add = function (element, index) {
 
 List.prototype.put = function (element, index) {
     // exchange the element at the given slot for another
-    var idx = Math.round(+index) || 0,
+    var idx = this.wrapIndex(index),
         data = element === 0 ? 0
             : element === false ? false
                     : element || null;
@@ -225,7 +224,7 @@ List.prototype.put = function (element, index) {
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
     this.becomeArray();
-    this.contents.splice(Math.round(+index || 0) - 1, 1);
+    this.contents.splice(this.wrapIndex(index) - 1, 1);
     this.changed();
 };
 
@@ -251,6 +250,14 @@ List.prototype.deepMap = function (callback) {
             : callback(item));
 };
 
+List.prototype.wrapIndex = function (num) {
+    var idx = Math.round(+num || 0),
+        mod = (a, b) => ((+a % +b) + (+b)) % +b;
+    return this.enableWrapping ?
+        mod(idx - 1, this.length()) + 1
+        : idx;
+};
+
 // List getters (all hybrid):
 
 List.prototype.length = function () {
@@ -268,7 +275,7 @@ List.prototype.length = function () {
 
 List.prototype.at = function (index) {
     var value,
-        idx = Math.round(+index || 0),
+        idx = this.wrapIndex(index),
         pair = this;
     while (pair.isLinked) {
         if (idx > 1) {

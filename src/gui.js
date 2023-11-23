@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-November-22';
+modules.gui = '2023-November-23';
 
 // Declarations
 
-var SnapVersion = '9.1.0';
+var SnapVersion = '9.1.0-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4697,6 +4697,17 @@ IDE_Morph.prototype.settingsMenu = function () {
             'check to show buttons\nin the palette'
         );
     }
+    addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
     addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
