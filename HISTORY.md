@@ -4,16 +4,17 @@
 * **New Features:**
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
 * **Notable Changes:**
-    * list indices now wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
     * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
     * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+    * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
 * **Notable Fixes:**
     * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
 * **Translation Updates:**
     * German
 
 2023-11-24
-* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists 
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all 
 
 2023-11-23
 * lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.

@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-November-23';
+modules.lists = '2023-November-24';
 
 var List;
 var ListWatcherMorph;
@@ -150,7 +150,7 @@ function List(array) {
 // List global preferences
 
 List.prototype.enableTables = true;
-List.prototype.enableWrapping = true;
+List.prototype.enableWrapping = false;
 
 // List printing
 
