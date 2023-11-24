@@ -9328,10 +9328,10 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
                     (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
-    action.call(this, keyName);
+    action.call(this, keyName, event);
 };
 
-StageMorph.prototype.fireKeyEvent = function (key) {
+StageMorph.prototype.fireKeyEvent = function (key, event) {
     var evt = key.toLowerCase(),
         procs = [],
         ide = this.parentThatIsA(IDE_Morph);
@@ -9354,6 +9354,21 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
         if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
          return;
+    }
+    if (evt === 'ctrl shift c' || (evt === 'ctrl c')) {
+        ide.copyUnderHand(evt);
+        if (event != null) {
+            event.preventDefault()
+        }
+        return;
+    }
+    if (evt === 'ctrl x') {
+        ide.cutUnderHand();
+        return;
+    }
+    if (evt === 'ctrl v' || (evt === 'ctrl shift v')) {
+        ide.userPaste();
+        return;
     }
     if (evt === 'ctrl n') {
         if (!ide.isAppMode) {ide.createNewProject(); }

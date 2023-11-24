@@ -1,6 +1,21 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* **Translation Updates:**
+    * German
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
 
 ## 9.0.14:
 * **Notable Fixes:**
