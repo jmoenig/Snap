@@ -8,13 +8,15 @@
     * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
     * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
 * **Notable Fixes:**
+    * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
     * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
 * **Translation Updates:**
     * German
 
 2023-11-24
 * objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
-* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all 
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
+* blocks: fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE) 
 
 2023-11-23
 * lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.

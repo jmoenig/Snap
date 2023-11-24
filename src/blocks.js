@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-22';
+modules.blocks = '2023-November-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3190,6 +3190,7 @@ BlockMorph.prototype.userMenu = function () {
         slot,
         mult,
         alternatives,
+        compiledAlternatives,
         field,
         rcvr;
 
@@ -3412,7 +3413,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
             reportFindFirst: 'reportAtomicFindFirst',
@@ -3420,7 +3421,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'compile',
-            () => this.setSelector(alternatives[this.selector]),
+            () => this.setSelector(compiledAlternatives[this.selector]),
             'experimental!\nmake this reporter fast and uninterruptable\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
         );
@@ -3435,7 +3436,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
             reportAtomicFindFirst: 'reportFindFirst',
@@ -3443,7 +3444,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
-            () => this.setSelector(alternatives[this.selector])
+            () => this.setSelector(compiledAlternatives[this.selector])
         );
     } else if (
         contains(
