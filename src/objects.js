@@ -9234,7 +9234,7 @@ StageMorph.prototype.fireKeyEvent = function (key, event) {
     if (evt === 'ctrl shift c' || (evt === 'ctrl c')) {
         ide.copyUnderHand(evt);
         if (event != null) {
-            event.preventDefault()
+            event.preventDefault();
         }
         return;
     }
