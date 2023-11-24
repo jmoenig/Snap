@@ -9636,6 +9636,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('changeBackgroundColorDimension'));
         blocks.push(block('setBackgroundColorDimension'));
         blocks.push('-');
+        blocks.push(block('write'));
+        blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('-');
         blocks.push(block('doPasteOn'));
@@ -10147,6 +10149,55 @@ StageMorph.prototype.setColorDimension = function (idx, num) {
     }
     this.rerender();
 };
+
+// StageMorph writing on the trails canvas
+
+StageMorph.prototype.write = function (text, size) { // +++
+    var fontSize = Math.max(3, +size || 1) * this.scale,
+        textMorph, ctx, img;
+
+    // make sure text can be printed
+    if (typeof text !== 'string' && typeof text !== 'number') {
+        throw new Error(
+            localize('can only write text or numbers, not a') + ' ' +
+            typeof text
+        );
+    }
+
+    // use a TextMorph for layout
+    textMorph = new TextMorph(
+        text,
+        fontSize,
+        null, // fontStyle
+        null, // bold - this.bubbleFontIsBold,
+        null, // italic
+        null, // alignment 'center'
+        this.width() - fontSize
+    );
+
+    // try to contrast the background
+    textMorph.setColor(this.getColorDimension(2) > 50 ? BLACK : WHITE);
+
+    // stamp the text onstage
+    ctx = this.penTrails().getContext('2d');
+    img = textMorph.getImage();
+    if (img.width < 1 || (img.height < 1)) {
+        // too small to draw
+        return;
+    }
+    ctx.save();
+    ctx.scale(1 / this.scale, 1 / this.scale);
+    ctx.drawImage(
+        img,
+        fontSize / 2,
+        Math.min(0, (this.height() - img.height))
+    );
+    ctx.restore();
+    this.changed();
+    this.cachedPenTrailsMorph = null;
+};
+
+// StageMorph "pen" attributes for the background
 
 StageMorph.prototype.getColorDimension =
     SpriteMorph.prototype.getColorDimension;
