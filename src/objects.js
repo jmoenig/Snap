@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-November-02';
+modules.objects = '2023-November-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -10546,13 +10546,15 @@ StageMorph.prototype.allContextsUsing = function (definition) {
     function scanList(list) {
         if (!charted.includes(list)) {
             charted.push(list);
-            list.map(each => {
-                if (each instanceof Context) {
-                    scanContext(each);
-                } else if (each instanceof List) {
-                    scanList(each);
-                }
-            });
+            if (!list.canBeJSON()) {
+                list.map(each => {
+                    if (each instanceof Context) {
+                        scanContext(each);
+                    } else if (each instanceof List) {
+                        scanList(each);
+                    }
+                });
+            }
         }
     }
 

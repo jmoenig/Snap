@@ -7,8 +7,13 @@
     * list indices now wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
     * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
     * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* **Notable Fixes:**
+    * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
 * **Translation Updates:**
     * German
+
+2023-11-24
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists 
 
 2023-11-23
 * lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
