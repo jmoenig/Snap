@@ -1842,6 +1842,13 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
     var selectors = ['reportJSFunction'];
+    if (version < 9.1) {
+        selectors.push(
+            'reportAtan2',
+            'reportVariadicMin',
+            'reportVariadicMax'
+        );
+    }
     // 9: no new primitives
     // 8.2: no new primitives
     if (version < 8.1) {
@@ -2900,8 +2907,12 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportVariadicMin'));
+        blocks.push(block('reportVariadicMax'));
+        blocks.push('-');
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
@@ -9770,8 +9781,12 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportVariadicMin'));
+        blocks.push(block('reportVariadicMax'));
+        blocks.push('-');
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
