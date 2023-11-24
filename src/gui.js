@@ -3966,8 +3966,7 @@ IDE_Morph.prototype.copyUnderHand = function (event) {
     var world = this.world();
     var underHand,
         hand,
-        mouseOverList,
-        isComment;
+        mouseOverList;
 
     hand = world.hand;
     mouseOverList = hand.mouseOverList;
