@@ -7,7 +7,7 @@
     * added "min", "max" and "atan2" reporters to the OPERATORS palette
 * **Notable Changes:**
     * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
-    * updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+    * updated "Just Words" library for the new "text" list selector
     * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
 * **Notable Fixes:**
     * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
@@ -17,6 +17,7 @@
 
 2023-11-27
 * objects: tweaked "write" primitive for the stage
+* updated "Just Words" libary with a new version of the "sentence" reporter
 
 2023-11-24
 * objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
