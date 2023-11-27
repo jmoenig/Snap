@@ -94,7 +94,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-November-24';
+modules.objects = '2023-November-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -10167,7 +10167,7 @@ StageMorph.prototype.setColorDimension = function (idx, num) {
 
 // StageMorph writing on the trails canvas
 
-StageMorph.prototype.write = function (text, size) { // +++
+StageMorph.prototype.write = function (text, size) {
     var fontSize = Math.max(3, +size || 1) * this.scale,
         textMorph, ctx, img;
 
@@ -10205,7 +10205,7 @@ StageMorph.prototype.write = function (text, size) { // +++
     ctx.drawImage(
         img,
         fontSize / 2,
-        Math.min(0, (this.height() - img.height))
+        Math.min(0, (this.height() - img.height - fontSize / 2))
     );
     ctx.restore();
     this.changed();

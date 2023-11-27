@@ -15,6 +15,9 @@
 * **Translation Updates:**
     * German
 
+2023-11-27
+* objects: tweaked "write" primitive for the stage
+
 2023-11-24
 * objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
 * lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
