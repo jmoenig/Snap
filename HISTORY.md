@@ -5,6 +5,7 @@
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
     * added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
     * added "min", "max" and "atan2" reporters to the OPERATORS palette
+    * added "say" commands to the stage's palette
 * **Notable Changes:**
     * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
     * updated "Just Words" library for the new "text" list selector
@@ -14,6 +15,9 @@
     * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
 * **Translation Updates:**
     * German
+
+2023-11-29
+* objects, threads, scenes: added "say" commands to the stage's palette
 
 2023-11-27
 * objects: tweaked "write" primitive for the stage

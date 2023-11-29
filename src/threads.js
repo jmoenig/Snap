@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-November-22';
+modules.threads = '2023-November-29';
 
 var ThreadManager;
 var Process;
@@ -4124,9 +4124,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (data instanceof List) {
-                if (!isStage) {
-                    rcvr.stopTalking();
-                }
+                rcvr.stopTalking();
                 this.prompter = new StagePickerMorph(data);
                 this.prompter.createItems(stage.scale);
                 leftSpace = rcvr.left() - stage.left();
@@ -4152,6 +4150,8 @@ Process.prototype.doAsk = function (data) {
             } else {
                 if (!isStage && !isHiddenSprite) {
                     rcvr.bubble(data, false, true);
+                } else if (isStage) {
+                    rcvr.stopTalking();
                 }
                 this.prompter = new StagePrompterMorph(
                     isStage || isHiddenSprite ? data : null
