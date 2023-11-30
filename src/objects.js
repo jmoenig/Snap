@@ -95,7 +95,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-November-29';
+modules.objects = '2023-November-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -10991,11 +10991,15 @@ SpriteBubbleMorph.prototype.init = function (
 
 SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     var contents,
+        scroller,
         sprite = SpriteMorph.prototype,
+        maxHeight = this.stage.dimensions.y * this.scale -
+            (this.border + this.padding + 1) * 2,
         isText,
         img,
         scaledImg,
         width;
+
     if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
@@ -11261,6 +11265,23 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         }
         contents.color = this.bubbleFontColor;
         contents.setWidth(width);
+
+        if (contents.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(contents.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(contents);
+            scroller.color = new Color(0, 0, 0, 0);
+
+            // scroll to the bottom:
+            scroller.scrollY(scroller.bottom() - contents.bottom());
+            scroller.adjustScrollBars();
+
+            contents = scroller;
+        }
+
     } else if (!(data instanceof List)) {
         // scale contents image
         scaledImg = newCanvas(contents.extent().multiplyBy(this.scale));
@@ -11289,6 +11310,11 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 // SpriteBubbleMorph layout:
 
 SpriteBubbleMorph.prototype.fixLayout = function () {
+    // scale my settings
+    this.edge = this.bubbleCorner * this.scale;
+    this.border = this.bubbleBorder * this.scale;
+    this.padding = this.bubblePadding * this.scale;
+
     // rebuild my contents
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
@@ -11296,11 +11322,6 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
         this.contentsMorph = this.dataAsMorph(this.data);
     }
     this.add(this.contentsMorph);
-
-    // scale my settings
-    this.edge = this.bubbleCorner * this.scale;
-    this.border = this.bubbleBorder * this.scale;
-    this.padding = this.bubblePadding * this.scale;
 
     // adjust my dimensions
     this.adjustDimensions();
