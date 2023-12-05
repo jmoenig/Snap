@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-21';
+modules.blocks = '2023-December-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -504,6 +504,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
             '~' : null,
+            'text' : ['text'],
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
@@ -3218,6 +3219,7 @@ BlockMorph.prototype.userMenu = function () {
         slot,
         mult,
         alternatives,
+        compiledAlternatives,
         field,
         rcvr;
 
@@ -3440,7 +3442,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
             reportFindFirst: 'reportAtomicFindFirst',
@@ -3448,7 +3450,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'compile',
-            () => this.setSelector(alternatives[this.selector]),
+            () => this.setSelector(compiledAlternatives[this.selector]),
             'experimental!\nmake this reporter fast and uninterruptable\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
         );
@@ -3463,7 +3465,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
             reportAtomicFindFirst: 'reportFindFirst',
@@ -3471,7 +3473,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
-            () => this.setSelector(alternatives[this.selector])
+            () => this.setSelector(compiledAlternatives[this.selector])
         );
     } else if (
         contains(

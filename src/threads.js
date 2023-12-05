@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-November-21';
+modules.threads = '2023-November-29';
 
 var ThreadManager;
 var Process;
@@ -2363,6 +2363,14 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();
+    case 'text':
+        this.assertType(list, 'list');
+        if (list.canBeWords()) {
+            return list.asWords();
+        }
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('text')
+        );
     case 'lines':
         this.assertType(list, 'list');
         if (list.canBeTXT()) {
@@ -4205,9 +4213,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (data instanceof List) {
-                if (!isStage) {
-                    rcvr.stopTalking();
-                }
+                rcvr.stopTalking();
                 this.prompter = new StagePickerMorph(data);
                 this.prompter.createItems(stage.scale);
                 leftSpace = rcvr.left() - stage.left();
@@ -4233,6 +4239,8 @@ Process.prototype.doAsk = function (data) {
             } else {
                 if (!isStage && !isHiddenSprite) {
                     rcvr.bubble(data, false, true);
+                } else if (isStage) {
+                    rcvr.stopTalking();
                 }
                 this.prompter = new StagePrompterMorph(
                     isStage || isHiddenSprite ? data : null

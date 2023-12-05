@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-November-21';
+modules.gui = '2023-December-05';
 
 // Declarations
 
-var SnapVersion = '10-231121-dev';
+var SnapVersion = '10-231205-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4726,6 +4726,17 @@ IDE_Morph.prototype.settingsMenu = function () {
             'check to show buttons\nin the palette'
         );
     }
+    addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
     addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =

@@ -2,6 +2,55 @@
 
 ## in development:
 
+## 9.1.0:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+    * text inside "say" and "think" balloons gets vertical scroll bars if it exceeds the displayable space, is scrolled to the bottom by default to support language projects such as sengen
+    * added "say" commands to the stage's palette
+    * added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+    * added "min", "max" and "atan2" reporters to the OPERATORS palette
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector
+    * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
+* **Notable Fixes:**
+    * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+    * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
+* **Translation Updates:**
+    * German
+
+2023-12-05
+* updated "Just Words" library, made sure it's a library file, not a project
+* prepared v9.1 minor release
+
+2023-11-30
+* objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
+
+2023-11-29
+* objects, threads, scenes: added "say" commands to the stage's palette
+
+2023-11-27
+* objects: tweaked "write" primitive for the stage
+* updated "Just Words" libary with a new version of the "sentence" reporter
+
+2023-11-24
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
+* blocks: fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+* objects: added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+* objects: added "min", "max" and "atan2" reporters to the OPERATORS palette
+
+2023-11-23
+* lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
+
 ## 9.0.14:
 * **Notable Fixes:**
     * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
