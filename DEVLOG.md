@@ -58,6 +58,9 @@
     * German
 
 ### 2023-11-21
+* merged main branch (v9.1)
+
+### 2023-11-21
 * blocks: fixed restoring properties of variadic slots in custom blocks
 
 ### 2023-11-20

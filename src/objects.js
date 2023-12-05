@@ -1940,11 +1940,11 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
     if (version < 10) {
         selectors.push(
             'reportNewCostumeSkewed'
-        )
+        );
     }
     if (version < 9.1) {
         selectors.push(
-            'reportNewCostumeSkewed'
+            'reportNewCostumeSkewed',
             'reportAtan2',
             'reportVariadicMin',
             'reportVariadicMax'
