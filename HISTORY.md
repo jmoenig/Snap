@@ -17,6 +17,9 @@
 * **Translation Updates:**
     * German
 
+2023-12-05
+* updated "Just Words" library, made sure it's a library file, not a project
+
 2023-11-30
 * objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
 
