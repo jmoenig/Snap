@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.1.0:
 * **New Features:**
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
     * text inside "say" and "think" balloons gets vertical scroll bars if it exceeds the displayable space, is scrolled to the bottom by default to support language projects such as sengen
@@ -19,6 +21,7 @@
 
 2023-12-05
 * updated "Just Words" library, made sure it's a library file, not a project
+* prepared v9.1 minor release
 
 2023-11-30
 * objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
