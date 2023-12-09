@@ -3210,6 +3210,7 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
 BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
+        ide = this.parentThatIsA(IDE_Morph),
         myself = this,
         hasLine = false,
         proc = this.activeProcess(),
@@ -3502,7 +3503,6 @@ BlockMorph.prototype.userMenu = function () {
         "duplicate",
         () => {
             var dup = this.fullCopy(),
-                ide = this.parentThatIsA(IDE_Morph),
                 blockEditor = this.parentThatIsA(BlockEditorMorph);
             dup.pickUp(world);
             // register the drop-origin, so the block can
@@ -3588,6 +3588,61 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    menu.addLine();
+    if ((this instanceof CommandBlockMorph)) {
+        menu.addItem(
+            'copy all',
+            () => {
+                ide.clipboard = {
+                    type: 'xml',
+                    content: this.toXMLString()
+                };
+            },
+            'send this block and all\nblocks underneath to the clipboard'
+        );
+    }
+    menu.addItem(
+        'copy block',
+        () => {
+            let block = this.fullCopy();
+            if (block instanceof CommandBlockMorph || block instanceof HatBlockMorph) {
+                var nb = block.nextBlock();
+                if (nb) {
+                    nb.destroy();
+                }
+            }
+
+            block.parent = ide;
+            ide.clipboard = {
+                type: 'xml',
+                content: block.toXMLString()
+            };
+            block.destroy();
+        },
+        'send this block to the clipboard'
+    );
+    menu.addItem(
+        'cut block',
+        () => {
+            let block = this.fullCopy();
+            if (this instanceof CommandBlockMorph || this instanceof HatBlockMorph) {
+                var nb = block.nextBlock();
+                if (nb) {
+                    nb.destroy();
+                }
+            }
+
+            block.parent = ide;
+            ide.clipboard = {
+                type: 'xml',
+                content: block.toXMLString()
+            };
+            block.destroy();
+
+            this.userDestroy();
+        },
+        'send this block to the\nclipboard and it'
+    );
     menu.addLine();
     menu.addItem(
         "script pic...",
@@ -8657,6 +8712,16 @@ ScriptsMorph.prototype.userMenu = function () {
                 )
             );
         }
+    }
+    if (ide.clipboard) {
+        menu.addLine();
+        menu.addItem(
+            "paste",
+            () => {
+                ide.userPaste();
+            },
+            'Retrieve script\nfrom clipboard'
+        );
     }
     return menu;
 };
@@ -15573,7 +15638,13 @@ CommentMorph.prototype.fixLayout = function () {
 // CommentMorph menu:
 
 CommentMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
 
     menu.addItem(
         "duplicate",
@@ -15620,6 +15691,31 @@ CommentMorph.prototype.userMenu = function () {
             );
         },
         'save a picture\nof this comment'
+    );
+    menu.addLine();
+    menu.addItem(
+        'copy comment',
+        () => {
+            ide.clipboard = {
+                type: 'comment',
+                content: this.text(),
+                width: this.textWidth(),
+            };
+        },
+        'send this comment\nto the clipboard'
+    );
+    menu.addItem(
+        'cut comment',
+        () => {
+            ide.clipboard = {
+                type: 'comment',
+                content: this.text(),
+                width: this.textWidth(),
+            };
+
+            this.userDestroy()
+        },
+        'send this comment to the\nclipboard and delete this comment'
     );
     return menu;
 };
