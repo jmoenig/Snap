@@ -3591,14 +3591,14 @@ BlockMorph.prototype.userMenu = function () {
     menu.addLine();
     if ((this instanceof CommandBlockMorph)) {
         menu.addItem(
-            'copy all',
+            'copy below',
             () => {
                 ide.clipboard = {
                     type: 'xml',
                     content: this.toXMLString()
                 };
             },
-            'send this block and all\nblocks underneath to the clipboard'
+            'copy block and below'
         );
     }
     menu.addItem(
@@ -3619,7 +3619,7 @@ BlockMorph.prototype.userMenu = function () {
             };
             block.destroy();
         },
-        'send this block to the clipboard'
+        'copy this block'
     );
     menu.addItem(
         'cut block',
@@ -3641,7 +3641,7 @@ BlockMorph.prototype.userMenu = function () {
 
             this.userDestroy();
         },
-        'send this block to the\nclipboard and it'
+        'copy this block and delete it'
     );
     menu.addLine();
     menu.addItem(
@@ -15702,7 +15702,7 @@ CommentMorph.prototype.userMenu = function () {
                 width: this.textWidth(),
             };
         },
-        'send this comment\nto the clipboard'
+        'copy this comment'
     );
     menu.addItem(
         'cut comment',
@@ -15715,7 +15715,7 @@ CommentMorph.prototype.userMenu = function () {
 
             this.userDestroy()
         },
-        'send this comment to the\nclipboard and delete this comment'
+        'copy this comment and delete it'
     );
     return menu;
 };
