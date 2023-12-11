@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-August-01';
+modules.gui = '2023-December-05';
 
 // Declarations
 
-var SnapVersion = '9.0.5';
+var SnapVersion = '9.1.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -245,7 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
-        hideDefaultCat: bool, hide/show the buit-in bloc category buttons
+        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
@@ -1547,7 +1547,7 @@ IDE_Morph.prototype.createCategories = function () {
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
-        shift = this.config.hideDefaultCat ? 4 : 0,
+        shift = this.config.noDefaultCat ? 4 : 0,
         flag = true;
 
     if (this.categories) {
@@ -4760,6 +4760,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
+    addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
             !StageMorph.prototype.enableSublistIDs,
@@ -6685,7 +6696,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     globals.setVar(vName, data);
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
-    this.currentCategory = 'variables';
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'variables';
     this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {

@@ -2,6 +2,157 @@
 
 ## in development:
 
+## 9.1.0:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+    * text inside "say" and "think" balloons gets vertical scroll bars if it exceeds the displayable space, is scrolled to the bottom by default to support language projects such as sengen
+    * added "say" commands to the stage's palette
+    * added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+    * added "min", "max" and "atan2" reporters to the OPERATORS palette
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector
+    * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
+* **Notable Fixes:**
+    * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+    * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
+* **Translation Updates:**
+    * German
+
+2023-12-05
+* updated "Just Words" library, made sure it's a library file, not a project
+* prepared v9.1 minor release
+
+2023-11-30
+* objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
+
+2023-11-29
+* objects, threads, scenes: added "say" commands to the stage's palette
+
+2023-11-27
+* objects: tweaked "write" primitive for the stage
+* updated "Just Words" libary with a new version of the "sentence" reporter
+
+2023-11-24
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
+* blocks: fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+* objects: added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+* objects: added "min", "max" and "atan2" reporters to the OPERATORS palette
+
+2023-11-23
+* lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
+
+## 9.0.14:
+* **Notable Fixes:**
+    * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+    * Chinese, thanks, moodykeke!
+
+2023-11-21
+* new dev version for v9.0.14
+* threads: fixed 'distribution' list selector support for nested atomic lists
+* threads: fixed 'uniques' list selector support for nested atomic lists
+* Spanish translation update, thanks, David Martín!
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.14 patch
+
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
+## 9.0.12:
+* **Notable Fixes:**
+    * fixed loading the "Words, sentences" library
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+    * fixed some broken file references in the pwa cache
+* **Library Updates:**
+    * added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
+* added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+* prepared v9.0.12 patch
+
+## 9.0.11:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+    * Spanish (libraries), thanks, Victoria and Mary!
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* Italian translation update, thanks, Stefano!
+* Spanish (libraries) translation update, thanks, Victoria and Mary!
+* prepared v9.0.11 patch
+
+## 9.0.10:
+* **Notable Fixes:**
+    * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+
+2023-11-02
+* objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
+
+## 9.0.9:
+* **Notable Fixes:**
+    * fixed localizing relabelled primitive blocks
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
+* Spanish, translation update, thanks, David Martín!
+* prepared v9.0.9 patch
+
+## 9.0.8:
+* **Notable Fixes:**
+    * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
+## 9.0.7:
+* **Translation Updates:**
+    * Chinese, thanks, moodykeke!
+
+2023-10-09
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.7 patch
+
+## 9.0.6:
+* **Notable Fixes:**
+    * fixed #3252 - local return glitch
+    * fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+
+2023-09-14
+* threads: fixed #3252 - local return glitch
+* animation library: fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+* prepared v9.0.6 patch
+
 ## 9.0.5:
 * **Notable Changes:**
     * MQTT extension update, thanks, Xavier and Simon!
