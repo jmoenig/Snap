@@ -2,6 +2,17 @@
 
 ## in development:
 
+## 9.1.1:
+* **Notable Fixes:**
+    * fixed using #open: to load a library from a url, thanks, Bernat!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+2023-12-12
+* gui: fixed using #open: to load a library from a url, thanks, Bernat!
+* Catalan translation update, thanks, Joan!
+* prepared v9.1.1 patch
+
 ## 9.1.0:
 * **New Features:**
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace

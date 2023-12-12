@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-December-08';
+modules.locale = '2023-December-12';
 
 var Localizer;
 var SnapTranslator = new Localizer();
