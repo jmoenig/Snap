@@ -41,6 +41,7 @@
 * **Notable Changes:**
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
+    * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
     * the metaprogramming getter for "translations" block attribute selector now always returns a list
     * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
@@ -56,6 +57,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-12-12
+* merged main branch (v9.1.1)
+* objects: keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
 
 ### 2023-11-21
 * merged main branch (v9.1)

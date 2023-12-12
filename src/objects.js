@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-December-05';
+modules.objects = '2023-December-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -7643,6 +7643,19 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     var doubles = this.doubleDefinitionsFor(definition),
         stage,
         ide;
+
+    function mergeInto(array, source, target) {
+        // replace the target item of an array with the source item,
+        // and remove the former slot of the source item
+        var srcIdx = array.indexOf(source),
+            trgIdx = array.indexOf(target);
+        if (srcIdx < 0 || trgIdx < 0 || srcIdx === trgIdx) {
+            throw new Error('cannot merge custom block definition');
+        }
+        array[trgIdx] = source;
+        array.splice(srcIdx, 1);
+    }
+
     doubles.forEach(double =>
         this.allBlockInstances(double).forEach(block => {
             block.definition = definition;
@@ -7651,13 +7664,9 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     );
     if (definition.isGlobal) {
         stage = this.parentThatIsA(StageMorph);
-        stage.globalBlocks = stage.globalBlocks.filter(def =>
-            !contains(doubles, def)
-        );
+        doubles.forEach(def => mergeInto(stage.globalBlocks, definition, def));
     } else {
-        this.customBlocks = this.customBlocks.filter(def =>
-            !contains(doubles, def)
-        );
+        doubles.forEach(def => mergeInto(this.customBlocks, definition, def));
         this.allDependentInvocationsOf(
             definition.blockSpec()
         ).reverse().forEach(
