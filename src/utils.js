@@ -29,17 +29,46 @@ utils.requestPromise = function(request, data) {
     });
 };
 
+utils.getCacheOpts = function(opts = {}) {
+    const defaultOpts = {
+        cacheFailures: false,
+        ttl: null,
+    };
+    return Object.assign({}, defaultOpts, opts);
+}
+
 utils.memoize = function(func){
     var cache = {};
-    return function(){
-        var key = JSON.stringify(arguments);
+    return function(/*...funcArgs, cacheOpts?*/){
+        const args = [...arguments];
+        const cacheOpts = utils.getCacheOpts(args.length > func.length ? args.pop() : {});
+
+        var key = JSON.stringify(args);
         if (cache[key]){
-            return cache[key];
-        }
-        else{
-            var val = func.apply(null, arguments);
-            cache[key] = val;
-            return val;
+            if (cache[key].error) {
+                throw cache[key].error;
+            }
+            return cache[key].result;
+        } else {
+            const cachedValue = {};
+            try {
+                cachedValue.result = func.apply(null, arguments);
+            } catch (err) {
+                if (cacheOpts.cacheFailures) {
+                    cachedValue.error = err;
+                } else {
+                    throw err;
+                }
+            }
+            cache[key] = cachedValue;
+            if (cacheOpts.ttl) {
+                setTimeout(() => {
+                    if (cache[key] === cachedValue) {
+                        delete cache[key];
+                    }
+                }, cacheOpts.ttl);
+            }
+            return cachedValue.result;
         }
     };
 };

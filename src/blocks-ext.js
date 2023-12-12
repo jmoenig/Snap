@@ -315,7 +315,11 @@ StructInputSlotMorph.prototype.getFieldValue = function(fieldname, value, meta={
         const typeMetas = hosts.map(host => {
             const hostUrl = host.url;
             try {
-              return utils.getUrlSyncCached(`${hostUrl}/input-types`, x => JSON.parse(x));
+              return utils.getUrlSyncCached(
+                  `${hostUrl}/input-types`,
+                  x => JSON.parse(x),
+                  {ttl: 5000, cacheFailures: true},
+              );
             } catch (err) {
               console.warn("No input types found for " + hostUrl);
               return {};
