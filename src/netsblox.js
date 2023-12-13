@@ -943,6 +943,7 @@ NetsBloxMorph.prototype.submitBugReport = function (desc, error) {
     report.user = this.cloud.username;
     report.isAutoReport = !!error;
 
+    let url = window.location.origin + '/bugs/';
     if (report.isAutoReport) {
         var event = SnapActions.currentEvent;
         report.description = [
@@ -955,11 +956,11 @@ NetsBloxMorph.prototype.submitBugReport = function (desc, error) {
         ].join('\n');
         report.error = error;
         report.event = event;
+        url += "?auto=true";
     }
 
     // Report to the server
-    var request = new XMLHttpRequest(),
-        url = this.cloud.url + '/BugReport';
+    var request = new XMLHttpRequest();
 
     request.open('post', url);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
@@ -968,8 +969,8 @@ NetsBloxMorph.prototype.submitBugReport = function (desc, error) {
             if (request.status > 199 && request.status < 400) {  // success
                 myself.showMessage(localize('Bug has been reported!'), 2);
             } else {  // failed...
-                myself.cloudError()(url, localize('bug could not be reported:') +
-                    request.responseText);
+                myself.cloudError()(localize('Bug could not be reported:') +
+                    '\n\n' + request.responseText);
             }
         }
     };
