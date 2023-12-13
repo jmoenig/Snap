@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-October-27';
+modules.byob = '2023-December-13';
 
 // Declarations
 
@@ -1758,7 +1758,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     xml = ide.blocksLibraryXML(
                         [top.definition].concat(
                             top.definition.collectDependencies(
-                                [],
+                                SpriteMorph.prototype.bootstrappedBlocks(),
                                 [],
                                 top.scriptTarget()
                             )
@@ -1936,7 +1936,11 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
                 : rcvr.getMethod(this.blockSpec);
     new BlockExportDialogMorph(
         ide.serializer,
-        [def].concat(def.collectDependencies([], [], rcvr)),
+        [def].concat(def.collectDependencies(
+            SpriteMorph.prototype.bootstrappedBlocks(),
+            [],
+            rcvr
+        )),
         ide
     ).popUp(this.world());
 };
@@ -5247,7 +5251,8 @@ BlockExportDialogMorph.prototype.collectDataDependencies = function () {
 
 BlockExportDialogMorph.prototype.buildContents = function () {
     var palette, x, y, block, checkBox, lastCat,
-        padding = 4;
+        padding = 4,
+        bootstrapped = SpriteMorph.prototype.bootstrappedBlocks();
 
     // create plaette
     palette = new ScrollFrameMorph(
@@ -5349,7 +5354,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
                         } else {
                             this.blocks.push(definition);
                         }
-                        this.collectDependencies();
+                        this.collectDependencies(bootstrapped);
                     },
                     null,
                     () => contains(this.blocks, definition),
@@ -5433,9 +5438,10 @@ BlockExportDialogMorph.prototype.collectDependencies = function () {
 };
 
 BlockExportDialogMorph.prototype.dependencies = function () {
-    var deps = [];
+    var deps = [],
+        bootstrapped = SpriteMorph.prototype.bootstrappedBlocks();
     this.blocks.forEach(def => def.collectDependencies(
-        [],
+        bootstrapped,
         deps,
         def.receiver
     ));
@@ -5616,7 +5622,8 @@ BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
 
 BlockRemovalDialogMorph.prototype.buildContents = function () {
     var palette, x, y, block, checkBox, lastCat,
-        padding = 4;
+        padding = 4,
+        bootstrapped = SpriteMorph.prototype.bootstrappedBlocks();
 
     // create plaette
     palette = new ScrollFrameMorph(
@@ -5654,7 +5661,7 @@ BlockRemovalDialogMorph.prototype.buildContents = function () {
                         } else {
                             this.blocks.push(definition);
                         }
-                        this.collectDependencies();
+                        this.collectDependencies(bootstrapped);
                     },
                     null,
                     () => contains(this.blocks, definition),

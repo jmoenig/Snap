@@ -58,6 +58,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-12-13
+* byob, objects: ignore bootstrapped dependencies when exporting custom blocks
+
 ### 2023-12-12
 * merged main branch (v9.1.1)
 * objects: keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
