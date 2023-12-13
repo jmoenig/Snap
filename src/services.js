@@ -93,7 +93,11 @@ ServicesRegistry.prototype.getServiceURL = async function (name) {
 };
 
 ServicesRegistry.prototype.getServiceMetadataFromURLSync = function (url) {
-    return JSON.parse(utils.getUrlSync(url));
+    return utils.getUrlSyncCached(
+        url,
+        JSON.parse, 
+        {ttl: 5000, cacheFailures: true},
+    );
 };
 
 ServicesRegistry.prototype.getServiceMetadataFromURL = async function (url) {
