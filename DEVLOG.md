@@ -60,6 +60,7 @@
 
 ### 2023-12-13
 * byob, objects: ignore bootstrapped dependencies when exporting custom blocks
+* incremented dev version
 
 ### 2023-12-12
 * merged main branch (v9.1.1)
