@@ -63,6 +63,7 @@
 * byob: let users rearrange custom blocks in the palette, thanks, Simon M. for pioneering this!
 * gui: added Simon M. to the credits tab of the "about Snap!" dialog
 * German translation update for rearranging custom blocks in the palette
+* incremented dev version
 
 ### 2023-12-13
 * byob, objects: ignore bootstrapped dependencies when exporting custom blocks
