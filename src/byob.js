@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-December-13';
+modules.byob = '2023-December-14';
 
 // Declarations
 
@@ -1905,6 +1905,33 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 'exportBlockDefinition',
                 'including dependencies'
             );
+            if (!this.isGlobal || !this.definition.isBootstrapped()) {
+                menu.addLine();
+                menu.addPair(
+                    [
+                        new SymbolMorph(
+                            'arrowUp',
+                            MorphicPreferences.menuFontSize
+                        ),
+                        localize('move up')
+                    ],
+                    () => this.moveInPalette('up'),
+                    null, // shortcut
+                    'move one up in the palette'
+                );
+                menu.addPair(
+                    [
+                        new SymbolMorph(
+                            'arrowDown',
+                            MorphicPreferences.menuFontSize
+                        ),
+                        localize('move down')
+                    ],
+                    () => this.moveInPalette('down'),
+                    null, // shortcut
+                    'move one down in the palette'
+                );
+            }
         } else { // inside a script
             // if global or own method - let the user delete the definition
             if (this.isGlobal && !this.definition.isBootstrapped() ||
@@ -1926,6 +1953,49 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
+};
+
+CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
+    var method, idx, blocks, cat, t_idx,
+        rcvr = this.scriptTarget(),
+        ide = rcvr.parentThatIsA(IDE_Morph),
+        swap = (arr, i1, i2) => {
+            let tmp = arr[i1];
+            arr[i1] = arr[i2];
+            arr[i2] = tmp;
+        };
+    if (this.isGlobal) {
+        method = this.definition;
+        blocks = rcvr.parentThatIsA(StageMorph).globalBlocks;
+    } else {
+        method = rcvr.getLocalMethod(this.blockSpec);
+        blocks = rcvr.customBlocks;
+	}
+    idx = blocks.indexOf(method);
+    if (idx > -1) {
+        cat = blocks[idx].category;
+        if (dir === 'up') {
+            for (t_idx = idx - 1; t_idx > -1; t_idx -= 1) {
+                if (blocks[t_idx].category === cat) {
+                    break;
+                }
+            }
+        } else { // 'down'
+            for (t_idx = idx + 1; t_idx < blocks.length; t_idx += 1) {
+                if (blocks[t_idx].category === cat) {
+                    break;
+                }
+            }
+        }
+        if (-1 < t_idx && t_idx < blocks.length) {
+            swap(blocks, t_idx, idx);
+        }
+    }
+    if (ide) {
+        ide.flushPaletteCache();
+        ide.categories.refreshEmpty();
+        ide.refreshPalette();
+    }    
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
@@ -2240,6 +2310,9 @@ CustomReporterBlockMorph.prototype.isInUse
 
 CustomReporterBlockMorph.prototype.userMenu
     = CustomCommandBlockMorph.prototype.userMenu;
+
+CustomReporterBlockMorph.prototype.moveInPalette =
+    CustomCommandBlockMorph.prototype.moveInPalette;
 
 CustomReporterBlockMorph.prototype.duplicateBlockDefinition
     = CustomCommandBlockMorph.prototype.duplicateBlockDefinition;

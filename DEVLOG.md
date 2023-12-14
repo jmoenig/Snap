@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * all blocks in the palette are now custom blocks, except hat blocks and rings
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
@@ -57,6 +58,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-12-14
+* byob: let users rearrange custom blocks in the palette, thanks, Simon M. for pioneering this!
 
 ### 2023-12-13
 * byob, objects: ignore bootstrapped dependencies when exporting custom blocks
