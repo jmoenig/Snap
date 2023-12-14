@@ -64,6 +64,7 @@
 * gui: added Simon M. to the credits tab of the "about Snap!" dialog
 * German translation update for rearranging custom blocks in the palette
 * incremented dev version
+* byob: removed obsolete symbols context menu for BlockLabelFragments
 
 ### 2023-12-13
 * byob, objects: ignore bootstrapped dependencies when exporting custom blocks

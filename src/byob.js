@@ -3969,36 +3969,6 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
     }
 };
 
-BlockLabelFragmentMorph.prototype.userMenu = function () {
-    // show a menu of built-in special symbols
-    var symbolColor = new Color(100, 100, 130),
-        menu = new MenuMorph(
-            (string) => {
-                var tuple = this.spec.split('-');
-                this.changed();
-                tuple[0] = '$' + string;
-                this.text = tuple.join('-');
-                this.fragment.labelString = this.spec;
-                this.parent.parent.changed();
-                this.fixLayout();
-                this.parent.parent.fixLayout();
-                this.parent.parent.changed();
-            },
-            null,
-            this,
-            this.fontSize
-        );
-    SymbolMorph.prototype.names.forEach(name =>
-        menu.addItem(
-            [new SymbolMorph(name, menu.fontSize, symbolColor), localize(name)],
-            name
-        )
-    );
-    menu.addLine();
-    menu.addItem('\u23CE ' + localize('new line'), 'nl');
-    return menu;
-};
-
 // BlockLabelPlaceHolderMorph ///////////////////////////////////////////////
 
 /*
