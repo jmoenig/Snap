@@ -603,8 +603,38 @@ WebSocketManager.prototype.onConnect = async function(isReconnect) {
     }
 };
 
-WebSocketManager.prototype.updateRoomInfo = function() {
-    return this.ide.cloud.setClientState();
+WebSocketManager.prototype.updateRoomInfo = async function(opts = {}) {
+    const allowRetry = opts.allowRetry !== false;
+
+    try {
+      if (!this.ide.cloud.projectId) {
+          await reinitialize();
+      }
+      return await this.ide.callCloudSilently(
+          cloud => cloud.setClientState(),
+      );
+    } catch (err) {
+      // "Project not found" errors can happen if the ws connection closes
+      // without saving the project. If this happens, we can create a new
+      // project on the server
+      if (allowRetry && err.status === 404) {
+          await reinitialize();
+      } else {
+          throw err;
+      }
+    }
+
+    /**
+     * Re-initialize the project if the project has been deleted or the client
+     * does not yet have a project, role ID pair
+     */
+    async function reinitialize() {
+        const name = this.ide.room.name;
+        const metadata = await this.ide.cloud.newProject(name);
+        const roleId = Object.keys(metadata.roles).shift();
+        console.log("Project not found. Created new one on the server:", metadata.id)
+        await this.ide.cloud.setClientState(metadata.id, roleId);
+    }
 };
 
 /**
