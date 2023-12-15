@@ -252,7 +252,41 @@ IDE_Morph.prototype.init = function (isAutoFill, config) {
     // additional properties:
     this.cloud = new Cloud(config.cloudUrl, config.clientId, config.username, localize);
     this.cloud.onerror = async error => {
-        if (error.status === 413) {
+        if (error.status === 401 && this.cloud.username) {
+            // User is no longer logged in (perhaps logged out in another tab)
+            // Try to relogin. Otherwise, logout (which creates a new project)
+            const username = this.cloud.username;
+            const title = localize(error.message);
+            const message = localize('No longer logged in as "') + username +
+              '".\n\nWould you like to re-authenticate?';
+
+            const confirmed = await this.confirm(message, title);
+            if (confirmed) {
+                const dialog = new DialogBoxMorph(
+                  null,
+                  async password => {
+                      await this.cloud.login(username, password);
+                      const msg = localize('Logged in as ') + username;
+                      this.showMessage(msg, 2);
+                  }
+                ).withKey('reauthPassword');
+                dialog.labelString = localize('Enter password for ') + username;
+                dialog.createLabel();
+
+                // Add the password field
+                const pwd = new InputFieldMorph('');
+                pwd.contents().text.toggleIsPassword();
+                pwd.setWidth(250);
+                dialog.addBody(pwd);
+                pwd.fixLayout();
+                dialog.addButton('ok', 'OK');
+                dialog.addButton('cancel', 'Cancel');
+                dialog.fixLayout();
+                dialog.popUp(this.world());
+            } else {
+              this.logout();
+            }
+        } else if (error.status === 413) {
             // Ask if they would like to disable history.
             if (SnapSerializer.prototype.isSavingHistory) {
                 const confirmed = await this.confirm(
@@ -7978,6 +8012,8 @@ CloudProjectsSource.prototype.save = async function(newProject, opts = {}) {
           opts.allowRetry = false;
           await this.save(newProject, opts);
       } else {
+        // display the error using the standard method
+        this.ide.cloud.onerror(err);
         throw err;
       }
     }
