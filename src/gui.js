@@ -7499,7 +7499,9 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
             this.edit();
         };
         this.body.add(this.listField);
-        this.updateListFilter();
+        if (this.filterField) {
+            this.updateListFilter();
+        }
     }
 
     if (this.source.canPublish()) {
