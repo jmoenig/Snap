@@ -7382,28 +7382,30 @@ SaveOpenDialogMorph.prototype.buildFilterField = function () {
     this.body.add(this.magnifyingGlass);
     this.body.add(this.filterField);
 
-    this.filterField.reactToInput = function (evt) {
-        var text = this.getValue();
+    this.filterField.reactToInput = () => this.updateListFilter();
+};
 
-        myself.listField.elements =
-            myself.itemsList.filter(aProject => {
-                const name = aProject.name;
-                const notes = aProject.notes || '';
-                return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
-                    notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
-            });
+SaveOpenDialogMorph.prototype.updateListFilter = function () {
+    const text = this.filterField.getValue();
 
-        if (myself.listField.elements.length === 0) {
-            myself.listField.elements.push('(no matches)');
-        }
+    this.listField.elements =
+        this.itemsList.filter(aProject => {
+            const name = aProject.name;
+            const notes = aProject.notes || '';
+            return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
+                notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
+        });
 
-        myself.clearPreview();
-        myself.listField.buildListContents();
-        myself.fixListFieldItemColors();
-        myself.listField.adjustScrollBars();
-        myself.listField.scrollY(myself.listField.top());
-        myself.fixLayout();
-    };
+    if (this.listField.elements.length === 0) {
+        this.listField.elements.push('(no matches)');
+    }
+
+    this.clearPreview();
+    this.listField.buildListContents();
+    this.fixListFieldItemColors();
+    this.listField.adjustScrollBars();
+    this.listField.scrollY(this.listField.top());
+    this.fixLayout();
 };
 
 // SaveOpenDialogMorph ops
@@ -7497,6 +7499,7 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
             this.edit();
         };
         this.body.add(this.listField);
+        this.updateListFilter();
     }
 
     if (this.source.canPublish()) {
