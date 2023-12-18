@@ -1392,12 +1392,12 @@ LibraryDialogMorph.prototype.fixLayout = function () {
             100,
         ));
 
-        this.palette.setRight(this.body.right());
-        this.palette.setTop(inputField.bottom() + this.padding);
         this.palette.setExtent(new Point(
             this.notesField.width(),
             this.listField.height() - this.notesField.height() - thin
         ));
+        this.palette.setRight(this.body.right());
+        this.palette.setTop(inputField.bottom() + this.padding);
         
         this.notesField.setPosition(this.palette.bottomLeft().add(
             new Point(0, thin)
