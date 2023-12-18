@@ -461,20 +461,20 @@ NetsBloxMorph.prototype.serviceURL = function() {
 NetsBloxMorph.prototype.exportRole = NetsBloxMorph.prototype.exportProject;
 
 // Trigger the export
-NetsBloxMorph.prototype.exportProject = function () {
+NetsBloxMorph.prototype.exportProject = function (name) {
     this.showMessage('Exporting...', 3);
 
     if (this.room.getRoleCount() === 1) {
         // If only one role, we should just create the room xml locally
-        this.exportSingleRoleXml();
+        this.exportSingleRoleXml(name);
     } else {  // Trigger server export of all roles
-        this.exportMultiRoleXml();
+        this.exportMultiRoleXml(name);
     }
 };
 
-NetsBloxMorph.prototype.exportMultiRoleXml = async function () {
+NetsBloxMorph.prototype.exportMultiRoleXml = async function (name) {
     const xml = await this.getProjectXML();
-    this.exportRoom(xml);
+    this.exportRoom(xml, name);
 };
 
 NetsBloxMorph.prototype.getSnapXml = function() {
@@ -525,9 +525,9 @@ NetsBloxMorph.prototype.getSerializedRole = function (role = this.sockets.getSer
 
 };
 
-NetsBloxMorph.prototype.exportSingleRoleXml = function () {
+NetsBloxMorph.prototype.exportSingleRoleXml = function (name) {
     const xml = this.exportProjectXml(this.room.name, [this.getSerializedRole()]);
-    this.exportRoom(xml);
+    this.exportRoom(xml, name);
 };
 
 NetsBloxMorph.prototype.getProjectXML = async function () {
@@ -560,8 +560,8 @@ NetsBloxMorph.prototype.exportProjectXml = function (name, roles) {
     }
 };
 
-NetsBloxMorph.prototype.exportRoom = function (str) {
-    var name = this.room.name;
+NetsBloxMorph.prototype.exportRoom = function (str, name) {
+    name = name || this.room.name;
 
     try {
         this.saveXMLAs(str, name);
@@ -611,38 +611,6 @@ NetsBloxMorph.prototype.openCloudDataString = function (model, parsed) {
         .then(function() {
             myself.sockets.updateRoomInfo();
         });
-};
-
-// Serialize a project and save to the browser.
-NetsBloxMorph.prototype.rawSaveProject = async function (name) {
-    this.showMessage('Saving', 3);
-
-    if (name) {
-        this.room.name = name;
-    }
-
-    // Trigger server export of all roles
-    const xml = await this.getProjectXML();
-    this.saveRoomLocal(xml);
-};
-
-NetsBloxMorph.prototype.saveRoomLocal = function (str) {
-    var name = this.room.name;
-
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            localStorage['-snap-project-' + name] = str;
-
-            this.setURL('#open:' + str);
-            this.showMessage('Saved to the browser.', 1);
-        } catch (err) {
-            this.showMessage('Save failed: ' + err);
-        }
-    } else {
-        localStorage['-snap-project-' + name] = str;
-        this.setURL('#open:' + str);
-        this.showMessage('Saved to the browser.', 1);
-    }
 };
 
 NetsBloxMorph.prototype.openProject = function (name) {
