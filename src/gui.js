@@ -7487,7 +7487,8 @@ SaveOpenDialogMorph.prototype.setSource = async function (newSource) {
 };
 
 SaveOpenDialogMorph.prototype.setPreview = async function (item) {
-    const previewInfo = await this.source.getPreview(item);
+    const aspectRatio = this.preview.width() / this.preview.height();
+    const previewInfo = await this.source.getPreview(item, aspectRatio);
     this.notesText.text = previewInfo.notes || '';
     this.notesText.rerender();
     this.notesField.contents.adjustBounds();
@@ -7958,11 +7959,12 @@ CloudProjectsSource.prototype.list = async function() {
   return projects;
 };
 
-CloudProjectsSource.prototype.getPreview = function(project) {
+CloudProjectsSource.prototype.getPreview = async function(project, aspectRatio) {
     const updatedAt = new Date(project.updated.secs_since_epoch * 1000);
+    const thumbnailUrl = this.ide.cloud.api.getProjectThumbnailUrl(project.id, aspectRatio);
     return {
-        thumbnail: project.thumbnail,
-        notes: project.notes,
+        thumbnail: thumbnailUrl,
+        notes: project.notes || '',
         details: localize('last changed') + '\n' + updatedAt
     };
 };
@@ -8059,11 +8061,12 @@ SharedCloudProjectsSource.prototype.delete = function(project) {
 
 SharedCloudProjectsSource.prototype.open = CloudProjectsSource.prototype.open;
 
-SharedCloudProjectsSource.prototype.getPreview = function(project) {
+SharedCloudProjectsSource.prototype.getPreview = function(project, aspectRatio) {
     const updatedAt = new Date(project.updated.secs_since_epoch * 1000);
+    const thumbnailUrl = this.ide.cloud.api.getProjectThumbnailUrl(project.id, aspectRatio);
     return {
-        thumbnail: project.thumbnail,
-        notes: project.notes,
+        thumbnail: thumbnailUrl,
+        notes: project.notes || '',
         details: localize('last changed') + '\n' + updatedAt
     };
 };
