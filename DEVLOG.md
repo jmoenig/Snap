@@ -61,6 +61,7 @@
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
+* incremented dev version
 
 ### 2023-12-14
 * byob: let users rearrange custom blocks in the palette, thanks, Simon M. for pioneering this!
