@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-December-05';
+modules.blocks = '2023-December-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4731,7 +4731,7 @@ BlockMorph.prototype.mapToHeader = function () {
     new DialogBoxMorph(
         this,
         code => {
-            if (key === 'evaluateCustomBlock') {
+            if (this.isCustomBlock) {
                 this.definition.codeHeader = code;
             } else {
                 StageMorph.prototype.codeHeaders[key] = code;
@@ -4740,7 +4740,8 @@ BlockMorph.prototype.mapToHeader = function () {
         this
     ).promptCode(
         'Header mapping',
-        key === 'evaluateCustomBlock' ? this.definition.codeHeader || ''
+        this.isCustomBlock ?
+            this.definition.codeHeader || ''
                  : StageMorph.prototype.codeHeaders[key] || '',
         this.world(),
         pic,
@@ -4759,7 +4760,7 @@ BlockMorph.prototype.mapToCode = function () {
     new DialogBoxMorph(
         this,
         code => {
-            if (key === 'evaluateCustomBlock') {
+            if (this.isCustomBlock) {
                 this.definition.codeMapping = code;
             } else {
                 StageMorph.prototype.codeMappings[key] = code;
@@ -4768,7 +4769,8 @@ BlockMorph.prototype.mapToCode = function () {
         this
     ).promptCode(
         'Code mapping',
-        key === 'evaluateCustomBlock' ? this.definition.codeMapping || ''
+        this.isCustomBlock ?
+            this.definition.codeMapping || ''
                  : StageMorph.prototype.codeMappings[key] || '',
         this.world(),
         pic,
