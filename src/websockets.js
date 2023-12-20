@@ -606,6 +606,18 @@ WebSocketManager.prototype.onConnect = async function(isReconnect) {
 WebSocketManager.prototype.updateRoomInfo = async function(opts = {}) {
     const allowRetry = opts.allowRetry !== false;
 
+    /**
+     * Re-initialize the project if the project has been deleted or the client
+     * does not yet have a project, role ID pair
+     */
+    const reinitialize = async () => {
+        const name = this.ide.room.name;
+        const metadata = await this.ide.cloud.newProject(name);
+        const roleId = Object.keys(metadata.roles).shift();
+        console.log("Project not found. Created new one on the server:", metadata.id)
+        await this.ide.cloud.setClientState(metadata.id, roleId);
+    }
+
     try {
       if (!this.ide.cloud.projectId) {
           await reinitialize();
@@ -622,18 +634,6 @@ WebSocketManager.prototype.updateRoomInfo = async function(opts = {}) {
       } else {
           throw err;
       }
-    }
-
-    /**
-     * Re-initialize the project if the project has been deleted or the client
-     * does not yet have a project, role ID pair
-     */
-    async function reinitialize() {
-        const name = this.ide.room.name;
-        const metadata = await this.ide.cloud.newProject(name);
-        const roleId = Object.keys(metadata.roles).shift();
-        console.log("Project not found. Created new one on the server:", metadata.id)
-        await this.ide.cloud.setClientState(metadata.id, roleId);
     }
 };
 
