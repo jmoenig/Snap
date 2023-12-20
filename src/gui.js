@@ -3091,8 +3091,8 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'export project media only...',
             () => {
-                if (this.projectName) {
-                    this.exportProjectMedia(this.projectName);
+                if (this.room.name) {
+                    this.exportProjectMedia(this.room.name);
                 } else {
                     this.prompt(
                         'Export Project As...',
@@ -3108,8 +3108,8 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'export project without media...',
             () => {
-                if (this.projectName) {
-                    this.exportProjectNoMedia(this.projectName);
+                if (this.room.name) {
+                    this.exportProjectNoMedia(this.room.name);
                 } else {
                     this.prompt(
                         'Export Project As...',
@@ -3807,8 +3807,8 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Export project...') + ' ' + localize('(in a new window)'
             ),
             () => {
-                if (this.projectName) {
-                    this.exportProject(this.projectName, shiftClicked);
+                if (this.room.name) {
+                    this.exportProject(this.room.name, shiftClicked);
                 } else {
                     this.prompt(
                         'Export Project As...',
@@ -3826,9 +3826,9 @@ IDE_Morph.prototype.projectMenu = function () {
             localize('Export project without history...'),
             () => {
                 var savingHistory = this.serializer.isSavingHistory;
-                if (this.projectName) {
+                if (this.room.name) {
                     this.serializer.isSavingHistory = false;
-                    this.exportProject(this.projectName, shiftClicked);
+                    this.exportProject(this.room.name, shiftClicked);
                     this.serializer.isSavingHistory = savingHistory;
                 } else {
                     this.prompt('Export Project As...', function (name) {
@@ -3846,8 +3846,8 @@ IDE_Morph.prototype.projectMenu = function () {
         shiftClicked ?
             'Export project as plain text...' : 'Export project...',
         () => {
-            if (this.projectName) {
-                this.exportProject(this.projectName, shiftClicked);
+            if (this.room.name) {
+                this.exportProject(this.room.name, shiftClicked);
             } else {
                 this.prompt(
                     'Export Project As...',
@@ -4549,8 +4549,8 @@ IDE_Morph.prototype.save = async function () {
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
     if (location.protocol === 'file:') {
-        if (this.projectName) {
-            this.exportProject(this.projectName, false);
+        if (this.room.name) {
+            this.exportProject(this.room.name, false);
         } else {
             this.prompt(
                 'Export Project As...',

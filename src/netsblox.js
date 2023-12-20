@@ -461,7 +461,7 @@ NetsBloxMorph.prototype.serviceURL = function() {
 NetsBloxMorph.prototype.exportRole = NetsBloxMorph.prototype.exportProject;
 
 // Trigger the export
-NetsBloxMorph.prototype.exportProject = function (name) {
+NetsBloxMorph.prototype.exportProject = function (name = this.room.name) {
     this.showMessage('Exporting...', 3);
 
     if (this.room.getRoleCount() === 1) {
