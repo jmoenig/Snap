@@ -65,6 +65,7 @@
 * store: soft-fail loading customized primitives
 * gui: added "Blocks all the way" setting
 * German translation update for "Blocks all the way"
+* incremented dev version
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
