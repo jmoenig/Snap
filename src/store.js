@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-October-13';
+modules.store = '2023-November-21';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1131,7 +1131,8 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         }
         definition = SpriteMorph.prototype.blocks[sel];
         if (!(definition instanceof CustomBlockDefinition)) {
-            throw new Error('unable to overload primitive "' + sel + '"');
+            console.log('unable to overload primitive "' + sel + '"');
+            return;
         }
         definition.spec = child.attributes.s || '';
         definition.receiver = object || null;
