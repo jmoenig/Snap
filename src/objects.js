@@ -1749,20 +1749,10 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
         var prim = def.body?.expression;
         if (prim && prim.selector === 'doPrimitive' && prim.nextBlock()) {
             prim.inputs()[0].setContents(choice);
-            def.primitive = choice ?
-                prim.inputs()[1].contents().text || null
+            def.primitive = choice ? prim.inputs()[1].contents().text || null
                 : null;
             stage.allBlockInstances(def).reverse().forEach(block =>
-                block.refresh());
-            stage.allContextsUsing(def).forEach(
-                context => {
-                    if (context.expression.isCustomBlock &&
-                        context.expression.isUnattached()
-                    ) {
-                        context.expression = def.blockInstance();
-                    }
-                    context.changed();
-                }
+                block.selector = def.primitive || 'evaluateCustomBlock'
             );
         }
     });
