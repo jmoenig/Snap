@@ -39,6 +39,7 @@
     * new extension primitives for encoding / decoding blocks to and from xml
     * prefixing a default text value in the slot-type dialog with dollar-underscore tags it as translateable selector
     * support translating custom drop-downs by prefixing items with "$_"
+    * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
 * **Notable Changes:**
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
@@ -66,6 +67,7 @@
 * gui: added "Blocks all the way" setting
 * German translation update for "Blocks all the way"
 * incremented dev version
+* gui, objects: experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives

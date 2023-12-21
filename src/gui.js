@@ -4309,6 +4309,26 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'with custom block definitions',
             new Color(100, 0, 0)
         );
+        menu.addItem(
+            'Use custom blocks',
+            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                this.stage,
+                false
+            ),
+            'EXPERIMENTAL - use custom blocks\n' +
+                'in all palette blocks',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Use primitives',
+            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                this.stage,
+                true
+            ),
+            'EXPERIMENTAL - use primitives\n' +
+                'in all palette blocks',
+            new Color(100, 0, 0)
+        );
     }
     menu.addLine();
     addPreference(
