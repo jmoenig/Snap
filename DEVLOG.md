@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
-    * all blocks in the palette are now custom blocks, except hat blocks and rings
+    * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -63,7 +63,8 @@
 * blocks, byob, objects: include customized quasi-primitive dependencies in libraries and exported scripts / smart images
 * objects, gui: refactored primitive blocks dictionary initialization
 * store: soft-fail loading customized primitives
-* gui: added "Blocks all the way" preference setting
+* gui: added "Blocks all the way" setting
+* German translation update for "Blocks all the way"
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
