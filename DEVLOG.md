@@ -68,6 +68,7 @@
 * German translation update for "Blocks all the way"
 * incremented dev version
 * gui, objects: experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
+* incremented dev version
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
