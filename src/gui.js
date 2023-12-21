@@ -347,8 +347,8 @@ IDE_Morph.prototype.init = function (config) {
 
     // turn all primitives into custom blocks
     // under construction, commented out for now
-    SpriteMorph.prototype.customizeBlocks();
-    this.bootstrapCustomizedPrimitives();
+    // SpriteMorph.prototype.customizeBlocks();
+    // this.bootstrapCustomizedPrimitives();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -4311,6 +4311,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
+    addPreference(
+        'Blocks all the way',
+        () => this.userCustomizePalette(SpriteMorph.prototype.blocks.forward
+            instanceof CustomBlockDefinition ? nop
+            : () => {
+                SpriteMorph.prototype.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();
+            }
+        ),
+        SpriteMorph.prototype.blocks.forward instanceof CustomBlockDefinition,
+        'uncheck to disable editing primitives\n' +
+            'in the palette as custom blocks',
+        'check to edit primitives\nin the palette as custom blocks'
+    );
     addPreference(
         'JavaScript extensions',
         () => {

@@ -63,6 +63,7 @@
 * blocks, byob, objects: include customized quasi-primitive dependencies in libraries and exported scripts / smart images
 * objects, gui: refactored primitive blocks dictionary initialization
 * store: soft-fail loading customized primitives
+* gui: added "Blocks all the way" preference setting
 
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
