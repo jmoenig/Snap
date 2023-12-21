@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-December-19';
+modules.blocks = '2023-December-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4425,6 +4425,7 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
     // if a receiver is not specified  this method can only be called from
     // within the IDE because it needs to be able to determine the scriptTarget
     var dependencies = [],
+        quasiPrims = SpriteMorph.prototype.quasiPrimitives(),
         rcvr = onlyGlobal ? null : (receiver || this.scriptTarget());
     this.forAllChildren(morph => {
         var def;
@@ -4432,13 +4433,19 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
             if (!onlyGlobal || (onlyGlobal && morph.isGlobal)) {
                 def = morph.isGlobal ? morph.definition
                     : rcvr.getMethod(morph.semanticSpec);
-                [def].concat(def.collectDependencies([], [], rcvr)).forEach(
-                    fun => {
-                        if (!contains(dependencies, fun)) {
-                            dependencies.push(fun);
+                if (!def.isQuasiPrimitive()) {
+                    [def].concat(def.collectDependencies(
+                        quasiPrims,
+                        [],
+                        rcvr
+                    )).forEach(
+                        fun => {
+                            if (!contains(dependencies, fun)) {
+                                dependencies.push(fun);
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
         }
     });

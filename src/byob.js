@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-December-14';
+modules.byob = '2023-December-21';
 
 // Declarations
 
@@ -1147,6 +1147,13 @@ CustomBlockDefinition.prototype.unBootstrap = function (actor) {
 CustomBlockDefinition.prototype.isBootstrapped = function () {
     return this.isGlobal && this.selector &&
         SpriteMorph.prototype.blocks[this.selector] === this;
+};
+
+CustomBlockDefinition.prototype.isQuasiPrimitive = function () {
+    return this.isBootstrapped() &&
+        (this.primitive === this.selector ||
+            this.selector === 'reportHyperZip') &&
+        this.codeMapping !== null;
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
@@ -5481,10 +5488,9 @@ BlockExportDialogMorph.prototype.collectDependencies = function () {
 };
 
 BlockExportDialogMorph.prototype.dependencies = function () {
-    var deps = [],
-        bootstrapped = SpriteMorph.prototype.bootstrappedBlocks();
+    var deps = [];
     this.blocks.forEach(def => def.collectDependencies(
-        bootstrapped,
+        SpriteMorph.prototype.quasiPrimitives(),
         deps,
         def.receiver
     ));

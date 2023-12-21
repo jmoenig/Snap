@@ -59,6 +59,9 @@
 * **Translation Updates:**
     * German
 
+### 2023-12-21
+* blocks, byob, objects: include customized quasi-primitive dependencies in libraries and exported scripts / smart images 
+
 ### 2023-12-19
 * blocks: fixed codification dialogs to work with customized primitives
 * incremented dev version

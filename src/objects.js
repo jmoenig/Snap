@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-December-13';
+modules.objects = '2023-December-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1764,6 +1764,18 @@ SpriteMorph.prototype.bootstrappedBlocks = function () {
         }
     });
     return boot;
+};
+
+SpriteMorph.prototype.quasiPrimitives = function () {
+    return this.bootstrappedBlocks().filter(def =>
+            def.isQuasiPrimitive()
+    );
+};
+
+SpriteMorph.prototype.customizedPrimitives = function () {
+    return this.bootstrappedBlocks().filter(def =>
+            !def.isQuasiPrimitive()
+    );
 };
 
 SpriteMorph.prototype.initBlockMigrations = function () {
