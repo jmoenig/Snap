@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-December-19';
+modules.gui = '2023-December-21';
 
 // Declarations
 
@@ -341,6 +341,9 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // initialize the primitive blocks dictionary
+    SpriteMorph.prototype.initBlocks();
 
     // turn all primitives into custom blocks
     // under construction, commented out for now

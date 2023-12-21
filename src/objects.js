@@ -1661,8 +1661,6 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 };
 
-SpriteMorph.prototype.initBlocks();
-
 SpriteMorph.prototype.customizeBlocks = function () {
     // generate custom block definition headers for all block descriptions
     // in the blocks dictionary - experimental for v10
