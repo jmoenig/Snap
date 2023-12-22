@@ -40,6 +40,7 @@
     * prefixing a default text value in the slot-type dialog with dollar-underscore tags it as translateable selector
     * support translating custom drop-downs by prefixing items with "$_"
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
+    * new "sigmoid" easing function in the animations library
 * **Notable Changes:**
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
@@ -59,6 +60,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2023-12-22
+* added "sigmoid" easing function to the animation library, refactored easing reporter
 
 ### 2023-12-21
 * blocks, byob, objects: include customized quasi-primitive dependencies in libraries and exported scripts / smart images
