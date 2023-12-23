@@ -17,7 +17,24 @@ build().catch((err) => console.error(err));
 
 async function build() {
   // Ensure the latest version of the cloud client is built
+  await checkCloudChanged();
   await minifyJS();
+}
+
+async function checkCloudChanged() {
+  const paths = await getChangedPaths();
+  if (paths.includes("src/cloud")) {
+    console.warn(
+      `WARNING: Cloud submodule is out of sync. May generate incorrect build files.`,
+    );
+  }
+}
+
+async function getChangedPaths() {
+  const { stdout } = await execFile("git", ["status", "--porcelain"]);
+  return stdout.split("\n")
+    .filter((line) => line.startsWith(" M"))
+    .map((line) => line.replace(" M ", ""));
 }
 
 async function minifyJS() {
