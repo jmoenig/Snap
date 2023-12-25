@@ -18,7 +18,13 @@ build().catch((err) => console.error(err));
 async function build() {
   // Ensure the latest version of the cloud client is built
   await checkCloudChanged();
+  await buildCloudClient();
   await minifyJS();
+}
+
+async function buildCloudClient() {
+  const cloudDir = path.join(__dirname, "..", "src", "cloud");
+  await execFile("npm", ["run", "build"], { cwd: cloudDir });
 }
 
 async function checkCloudChanged() {
