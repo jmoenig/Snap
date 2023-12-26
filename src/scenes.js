@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2022-October-25';
+modules.scenes = '2022-November-29';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -244,6 +244,7 @@ Scene.prototype.stop = function (forGood) {
     if (this.stage.projectionSource) {
         this.stage.stopProjection();
     }
+    this.stage.stopTalking();
     this.stage.children.forEach(morph => {
         if (morph.stopTalking) {
             morph.stopTalking();

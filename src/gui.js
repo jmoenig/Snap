@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-July-18';
+modules.gui = '2023-December-12';
 
 // Declarations
 
-var SnapVersion = '9.0.0-rc19';
+var SnapVersion = '9.1.1';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -245,7 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
-        hideDefaultCat: bool, hide/show the buit-in bloc category buttons
+        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
@@ -545,6 +545,14 @@ IDE_Morph.prototype.openIn = function (world) {
                                     projectData.indexOf('<project') === 0
                                 ) {
                                     this.rawOpenProjectString(projectData);
+                                } else if (
+                                    projectData.indexOf('<blocks') === 0
+                                ) {
+                                    this.rawOpenBlocksString(
+                                        projectData,
+                                        null, // name, optional
+                                        true  // silently
+                                    );
                                 }
                                 this.hasChangedMedia = true;
                             },
@@ -1537,7 +1545,7 @@ IDE_Morph.prototype.createCategories = function () {
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
-        shift = this.config.hideDefaultCat ? 4 : 0,
+        shift = this.config.noDefaultCat ? 4 : 0,
         flag = true;
 
     if (this.categories) {
@@ -4698,6 +4706,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
+    addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
             !StageMorph.prototype.enableSublistIDs,
@@ -6623,7 +6642,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     globals.setVar(vName, data);
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
-    this.currentCategory = 'variables';
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'variables';
     this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {
@@ -8182,6 +8201,8 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
+    // Note: Do Not attemp to prevent caching of requests.
+    //   This has caused issues for BJC and the finch.
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
         rsp;
@@ -8207,9 +8228,6 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                 }
             };
         }
-        // cache-control, commented out for now
-        // added for Snap4Arduino but has issues with local robot servers
-        // request.setRequestHeader('Cache-Control', 'max-age=0');
         request.send();
         if (!async) {
             if (request.status === 200) {

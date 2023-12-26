@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-July-18';
+modules.lists = '2023-November-24';
 
 var List;
 var ListWatcherMorph;
@@ -150,6 +150,7 @@ function List(array) {
 // List global preferences
 
 List.prototype.enableTables = true;
+List.prototype.enableWrapping = false;
 
 // List printing
 
@@ -195,11 +196,9 @@ List.prototype.cdr = function () {
 // List array setters:
 
 List.prototype.add = function (element, index) {
-/*
-    insert the element before the given slot index,
-    if no index is specifed, append the element
-*/
-    var idx = Math.round(+index) || this.length() + 1,
+    // insert the element before the given slot index,
+    // if no index is specifed, append the element
+    var idx = isNil(index) ? this.length() + 1 : this.wrapIndex(index),
         obj = isNil(element) ? null : element;
 
     this.becomeArray();
@@ -209,7 +208,7 @@ List.prototype.add = function (element, index) {
 
 List.prototype.put = function (element, index) {
     // exchange the element at the given slot for another
-    var idx = Math.round(+index) || 0,
+    var idx = this.wrapIndex(index),
         data = element === 0 ? 0
             : element === false ? false
                     : element || null;
@@ -225,7 +224,7 @@ List.prototype.put = function (element, index) {
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
     this.becomeArray();
-    this.contents.splice(Math.round(+index || 0) - 1, 1);
+    this.contents.splice(this.wrapIndex(index) - 1, 1);
     this.changed();
 };
 
@@ -251,6 +250,14 @@ List.prototype.deepMap = function (callback) {
             : callback(item));
 };
 
+List.prototype.wrapIndex = function (num) {
+    var idx = Math.round(+num || 0),
+        mod = (a, b) => ((+a % +b) + (+b)) % +b;
+    return this.enableWrapping ?
+        mod(idx - 1, this.length()) + 1
+        : idx;
+};
+
 // List getters (all hybrid):
 
 List.prototype.length = function () {
@@ -268,7 +275,7 @@ List.prototype.length = function () {
 
 List.prototype.at = function (index) {
     var value,
-        idx = Math.round(+index || 0),
+        idx = this.wrapIndex(index),
         pair = this;
     while (pair.isLinked) {
         if (idx > 1) {
@@ -739,20 +746,21 @@ List.prototype.reshape = function (dimensions) {
     // truncate excess elements, if any.
     // pad with (repetitions of) existing elements
     var src = this.ravel().itemsArray(),
-	i = 0,
-    size, trg;
+        dim = this.fillDimensionsFor(dimensions, src.length),
+        i = 0,
+        size, trg;
 
     // if no dimensions, report a scalar
-    if (dimensions.isEmpty()) {return src[0]; }
+    if (dim.isEmpty()) {return src[0]; }
 
-    size = dimensions.itemsArray().reduce((a, b) => a * b);
+    size = dim.itemsArray().reduce((a, b) => a * b);
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {
         // truncate excess elements from the source
         trg = src.slice(0, size);
     } else {
-        if (size > src.length && dimensions.length() > 2 && size > 1000000) {
+        if (size > src.length && dim.length() > 2 && size > 1000000) {
             // limit usage of reshape to grow to a maximum size of 1MM rows
             // in higher dimensions to prevent accidental dimension overflow
             throw new Error('exceeding the size limit for reshape');
@@ -769,7 +777,26 @@ List.prototype.reshape = function (dimensions) {
     }
 
     // fold the doctored source into the specified dimensions
-    return new List(trg).folded(dimensions);
+    return new List(trg).folded(dim);
+};
+
+List.prototype.fillDimensionsFor = function (dimensions, leafCount) {
+    // private - answer a copy of the dimensions list with all zeroish
+    // values adjusted to accomodate the given overall leaf count from
+    // left to right, e.g. for leaf count of 10 the given dimensions
+    // (0,3) become (4,3)
+    var factor,
+        already = -1;
+    if (dimensions.contains(0) ||
+        dimensions.contains('') ||
+        dimensions.contains(false)
+    ) {
+        factor = Math.ceil(leafCount / dimensions.itemsArray().reduce((a, b) =>
+            Math.max(a, 1) * Math.max(b, 1)));
+        return dimensions.map(each =>
+            each ? each : (already++ ? factor : 1));
+    }
+    return dimensions;
 };
 
 List.prototype.folded = function (dimensions) {
@@ -1081,8 +1108,25 @@ List.prototype.canBeTXT = function () {
 
 List.prototype.asTXT = function () {
     // Caution, no error catching!
-    // this method assumes that the list.canBeJSON()
+    // this method assumes that the list.canBeTXT()
     return this.itemsArray().join('\n');
+};
+
+List.prototype.canBeWords = function () {
+    return this.itemsArray().every(item =>
+        isString(item) ||
+        (typeof item === 'number') ||
+        (item instanceof List && item.canBeWords())
+    );
+};
+
+List.prototype.asWords = function () {
+    // recursively join all leaf items with spaces between.
+    // Caution, no error catching!
+    // this method assumes that the list.canBeWords()
+    return this.itemsArray().map(each =>
+        each instanceof List ? each.asWords() : each.toString().trim()
+    ).filter(word => word.length).join(' ');
 };
 
 // List testing

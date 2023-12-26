@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-June-29';
+modules.store = '2023-July-27';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2527,11 +2527,11 @@ Context.prototype.toXML = function (serializer) {
         '<context ~><inputs>%</inputs><variables>%</variables>%' +
             '%<receiver>%</receiver><origin>%</origin>%</context>',
         this.inputs.reduce(
-                (xml, input) => xml + input.toXML ?
+                (xml, input) => xml + (input.toXML ?
                     serializer.format(
                         '<input>%</input>',
                         input.toXML(serializer)
-                    ) : serializer.format('<input>$</input>', input),
+                    ) : serializer.format('<input>$</input>', input)),
                 ''
             ),
         this.variables ? serializer.store(this.variables) : '',

@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-18';
+modules.blocks = '2023-November-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -499,6 +499,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
             '~' : null,
+            'text' : ['text'],
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
@@ -3189,6 +3190,7 @@ BlockMorph.prototype.userMenu = function () {
         slot,
         mult,
         alternatives,
+        compiledAlternatives,
         field,
         rcvr;
 
@@ -3411,7 +3413,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
             reportFindFirst: 'reportAtomicFindFirst',
@@ -3419,7 +3421,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'compile',
-            () => this.setSelector(alternatives[this.selector]),
+            () => this.setSelector(compiledAlternatives[this.selector]),
             'experimental!\nmake this reporter fast and uninterruptable\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
         );
@@ -3434,7 +3436,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
             reportAtomicFindFirst: 'reportFindFirst',
@@ -3442,7 +3444,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
-            () => this.setSelector(alternatives[this.selector])
+            () => this.setSelector(compiledAlternatives[this.selector])
         );
     } else if (
         contains(
@@ -4044,7 +4046,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
-    this.setSpec(localize(info.spec));
+    this.setSpec(this.localizeBlockSpec(info.spec));
     this.defaults = info.defaults || [];
 
     // restore default values
@@ -13170,22 +13172,27 @@ ColorSlotMorph.prototype.getUserColor = function () {
         pal = new ColorPaletteMorph(null, new Point(
             this.fontSize * 16,
             this.fontSize * 10
-        ));
+        )),
+        ctx;
     world.add(pal);
     pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
 
+    // cache the world surface property (its full image)
+    // to prevent memory issues from constantly generating
+    // huge canvasses and and reading back pixel data only once
+    // note: this optimization makes it hard / impossible for the
+    // user to "catch" and sample the color of moving sprites
+    // but without it Chrome crashes as of Fall 2023
+    ctx = Morph.prototype.fullImage.call(world).getContext('2d');
+
     hand.processMouseMove = function (event) {
-        var clr = world.getGlobalPixelColor(hand.position());
+        var pos = hand.position(),
+            dta = ctx.getImageData(pos.x, pos.y, 1, 1).data;
         hand.setPosition(new Point(
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
         ));
-        if (!clr.a) {
-            // ignore transparent,
-            // needed for retina-display support
-            return;
-        }
-        myself.setColor(clr);
+        myself.setColor(new Color(dta[0], dta[1], dta[2]));
     };
 
     hand.processMouseDown = nop;
