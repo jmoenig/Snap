@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-November-29';
+modules.threads = '2024-January-03';
 
 var ThreadManager;
 var Process;
@@ -2264,7 +2264,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
         this.assertType(list, 'list');
         return list.size();
     case 'rank':
-        return list instanceof List ? list.rank() : 0;
+        return this.reportRank(list);
     case 'dimensions':
         return list instanceof List ? list.shape() : new List();
     case 'flatten':
@@ -2372,6 +2372,10 @@ Process.prototype.reportListContainsItem = function (list, element) {
 Process.prototype.reportListIsEmpty = function (list) {
     this.assertType(list, 'list');
     return list.isEmpty();
+};
+
+Process.prototype.reportRank = function (data) {
+    return data instanceof List ? data.rank() : 0;
 };
 
 Process.prototype.doShowTable = function (list) {
