@@ -485,9 +485,12 @@ List.prototype.query = function (indices) {
     } else {
         select = new List([first]);
     }
-    return select.map(i => this.lookup(i)).map(
-            e => e instanceof List? e.query(indices.cdr()) : e
-    );
+    return select.map(i => this.lookup(i)).map(e => {
+        let rest = indices.cdr();
+        return e instanceof List ? e.query(rest)
+            : (rest.isEmpty() ? e
+                : new List([e]).query(rest));
+    });
 };
 
 List.prototype.slice = function (indices) {
