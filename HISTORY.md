@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed a RESHAPE edge case when passing in a single zero dimension
 
 2024-01-03
 * new dev version for v9.1.2
+* lists: fixed a RESHAPE edge case when passing in a single zero dimension
 
 ## 9.1.1:
 * **Notable Fixes:**

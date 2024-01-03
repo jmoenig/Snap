@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2023 by Jens Mönig and Brian Harvey
+    Copyright (C) 2024 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-November-24';
+modules.lists = '2024-January-03';
 
 var List;
 var ListWatcherMorph;
@@ -754,6 +754,7 @@ List.prototype.reshape = function (dimensions) {
     if (dim.isEmpty()) {return src[0]; }
 
     size = dim.itemsArray().reduce((a, b) => a * b);
+    if (size === Infinity) {return new List(); }
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {
