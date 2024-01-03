@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-03
+* new dev version for v9.1.2
+
 ## 9.1.1:
 * **Notable Fixes:**
     * fixed using #open: to load a library from a url, thanks, Bernat!

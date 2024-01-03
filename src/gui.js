@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-December-12';
+modules.gui = '2024-January-03';
 
 // Declarations
 
-var SnapVersion = '9.1.1';
+var SnapVersion = '9.1.2-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
