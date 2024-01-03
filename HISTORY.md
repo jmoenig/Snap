@@ -15,6 +15,7 @@
 * lists: hyperized ITEM OF
 * threads: refactored reportRank()
 * threads: tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+* threads: refactored hyperizing mechanism for coordinates
 
 ## 9.1.1:
 * **Notable Fixes:**

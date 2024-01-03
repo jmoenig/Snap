@@ -4507,16 +4507,12 @@ Process.prototype.hyperMonadic = function (baseOp, arg) {
     return baseOp(arg);
 };
 
-Process.prototype.hyperDyadic = function (baseOp, a, b, atoma = 0, atomb = 0) {
+Process.prototype.hyperDyadic = function (baseOp, a, b) {
     // enable dyadic operations to be performed on lists and tables
-    // atoma and atomb are optional integers indicating the rank at which
-    // a or b are to be treated as scalar atoms despite being
-    // lists. This is currenly used for treating 2-item numerical lists as
-    // atomic points of x-/y-coordinates in some primitives.
     var arank = this.reportRank(a),
         brank = this.reportRank(b),
         len, i, result;
-    if (arank === brank || (arank <= atoma && brank <= atomb)) {
+    if (arank === brank) {
         if (arank + brank === 0) {
             return baseOp(a, b);
         }
@@ -4526,14 +4522,23 @@ Process.prototype.hyperDyadic = function (baseOp, a, b, atoma = 0, atomb = 0) {
         len = Math.min(a.length, b.length);
         result = new Array(len);
         for (i = 0; i < len; i += 1) {
-            result[i] = this.hyperDyadic(baseOp, a[i], b[i], atoma, atomb);
+            result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
         }
         return new List(result);
     }
-    if (arank > brank || brank <= atomb) {
-        return a.map(each => this.hyperDyadic(baseOp, each, b, atoma, atomb));
+    if (arank > brank) {
+        return a.map(each => this.hyperDyadic(baseOp, each, b));
     }
-    return b.map(each => this.hyperDyadic(baseOp, a, each, atoma, atomb));
+    return b.map(each => this.hyperDyadic(baseOp, a, each));
+};
+
+Process.prototype.packCoordinates = function (list) {
+    // convert all numerical 2-item sub-lists into a variable to they
+    // can be handled as atomic by hyperDyadic(),
+    // remember to let the baseOp unpack them.
+    return this.isCoordinate(list) ? new Variable(list)
+        : list.map(each => each instanceof List ? this.packCoordinates(each)
+            : each);
 };
 
 // Process dyadic math primtives - arithmetic
@@ -5933,12 +5938,14 @@ Process.prototype.spritesAtPoint = function (point, stage) {
 
 Process.prototype.reportRelationTo = function (relation, name) {
     if (this.enableHyperOps) {
+        if (name instanceof List) {
+            // make all numerical 2-item lists atomic
+            name = this.packCoordinates(name);
+        }
         return this.hyperDyadic(
             (rel, nam) => this.reportBasicRelationTo(rel, nam),
             relation,
-            name,
-            null,
-            n => this.isCoordinate(n)
+            name
         );
     }
     return this.reportBasicRelationTo(relation, name);
@@ -5946,6 +5953,9 @@ Process.prototype.reportRelationTo = function (relation, name) {
 
 Process.prototype.reportBasicRelationTo = function (relation, name) {
 	var rel = this.inputOption(relation);
+    if (name instanceof Variable) { // atomic coordinate
+        name = name.value;
+    }
  	if (rel === 'distance') {
   		return this.reportDistanceTo(name);
   	}
