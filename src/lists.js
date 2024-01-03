@@ -470,12 +470,16 @@ List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var first, select;
+    var first, rank, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    if (indices.rank() === 1) {
+    rank = indices.rank();
+    if (rank === 1) {
         return indices.map(i => this.lookup(i));
+    }
+    if (rank > 2) {
+        return indices.map(i => this.query(i));
     }
     first = indices.at(1);
     if (first instanceof List) {

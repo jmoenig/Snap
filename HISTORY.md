@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * hyperized ITEM OF
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
     * made sure ITEM OF returns data matching the shape specified by the query struct
@@ -8,7 +10,8 @@
 2024-01-03
 * new dev version for v9.1.2
 * lists: fixed a RESHAPE edge case when passing in a single zero dimension
-* lists: made sure ITEM OF returns data matching the shape specified by the query struct 
+* lists: made sure ITEM OF returns data matching the shape specified by the query struct
+* lists: hyperized ITEM OF
 
 ## 9.1.1:
 * **Notable Fixes:**
