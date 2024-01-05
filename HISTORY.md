@@ -4,6 +4,7 @@
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * MQTT library update, thanks, Simon!
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
     * made sure ITEM OF returns data matching the shape specified by the query struct
