@@ -7,6 +7,10 @@
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
     * made sure ITEM OF returns data matching the shape specified by the query struct
+    * fixed speech balloons inside ASK menus
+
+2024-01-05
+* objects: fixed speech balloons inside ASK menus
 
 2024-01-03
 * new dev version for v9.1.2

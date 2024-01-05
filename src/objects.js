@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -95,7 +95,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-November-30';
+modules.objects = '2024-January-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -10993,7 +10993,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     var contents,
         scroller,
         sprite = SpriteMorph.prototype,
-        maxHeight = this.stage.dimensions.y * this.scale -
+        maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
             (this.border + this.padding + 1) * 2,
         isText,
         img,
