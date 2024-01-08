@@ -1,6 +1,9 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * (better) matrix-kernel convolution support, automatic zero-padding
+    * new graphic filter effects tools in the pixels library
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
@@ -11,7 +14,8 @@
     * fixed speech balloons inside ASK menus
 
 2024-01-08
-* threads: tweaked hyperDyadic() to allow explicit dimension matching 
+* threads: tweaked hyperDyadic() to allow explicit dimension matching
+* pixels library: added graphic filter effects (matrix-kernel convolutions)
 
 2024-01-05
 * objects: fixed speech balloons inside ASK menus
