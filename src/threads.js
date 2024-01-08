@@ -2266,7 +2266,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'rank':
         return this.reportRank(list);
     case 'dimensions':
-        return list instanceof List ? list.shape() : new List();
+        return this.reportDimensions(list);
     case 'flatten':
         return list instanceof List ? list.ravel() : new List([list]);
     case 'columns':
@@ -2376,6 +2376,10 @@ Process.prototype.reportListIsEmpty = function (list) {
 
 Process.prototype.reportRank = function (data) {
     return data instanceof List ? data.rank() : 0;
+};
+
+Process.prototype.reportDimensions = function (data) {
+    return data instanceof List ? data.shape() : new List();
 };
 
 Process.prototype.doShowTable = function (list) {

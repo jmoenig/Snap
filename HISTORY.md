@@ -18,6 +18,7 @@
 * pixels library: added graphic filter effects (matrix-kernel convolutions)
 * incremented dev version to v9.2.0
 * lists: added safeguard against accidentally querying too many dimensions 
+* threads: refactored reportDimensions()
 
 2024-01-05
 * objects: fixed speech balloons inside ASK menus
