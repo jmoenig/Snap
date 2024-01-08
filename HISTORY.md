@@ -10,6 +10,9 @@
     * made sure ITEM OF returns data matching the shape specified by the query struct
     * fixed speech balloons inside ASK menus
 
+2024-01-08
+* threads: tweaked hyperDyadic() to allow explicit dimension matching 
+
 2024-01-05
 * objects: fixed speech balloons inside ASK menus
 

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-03';
+modules.threads = '2024-January-08';
 
 var ThreadManager;
 var Process;
@@ -4508,13 +4508,28 @@ Process.prototype.hyperMonadic = function (baseOp, arg) {
 };
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
+    var match = Math.min(this.reportRank(a), this.reportRank(b));
+    return this.hyperZip(baseOp, a, b, match, match);
+};
+
+Process.prototype.hyperZip = function (baseOp, a, b, zipa, zipb) {
     // enable dyadic operations to be performed on lists and tables
+    // allowing to specify the ranks that are to be matched.
+    // this allows to write 2d matrix convolutions for 3+d inputs with
+    // 2d kernels e.g. for image processing without having to first
+    // reshape the kernel matrix to match the broadcast shape.
     var arank = this.reportRank(a),
         brank = this.reportRank(b),
         len, i, result;
-    if (arank === brank) {
+    if (arank === brank || (arank <= zipa && brank <= zipb)) {
         if (arank + brank === 0) {
             return baseOp(a, b);
+        }
+        if (brank === 0) {
+            return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
+        }
+        if (arank === 0) {
+            return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
         }
         // zip both arguments ignoring out-of-bounds indices
         a = a.itemsArray();
@@ -4522,14 +4537,20 @@ Process.prototype.hyperDyadic = function (baseOp, a, b) {
         len = Math.min(a.length, b.length);
         result = new Array(len);
         for (i = 0; i < len; i += 1) {
-            result[i] = this.hyperDyadic(baseOp, a[i], b[i]);
+            result[i] = this.hyperZip(baseOp, a[i], b[i], zipa, zipb);
         }
         return new List(result);
     }
-    if (arank > brank) {
-        return a.map(each => this.hyperDyadic(baseOp, each, b));
+    if (arank > zipa) {
+        return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
     }
-    return b.map(each => this.hyperDyadic(baseOp, a, each));
+    if (brank > zipb) {
+        return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
+    }
+    if (arank > brank) {
+        return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
+    }
+    return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
 };
 
 Process.prototype.packCoordinates = function (list) {
