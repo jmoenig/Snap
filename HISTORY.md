@@ -17,6 +17,7 @@
 * threads: tweaked hyperDyadic() to allow explicit dimension matching
 * pixels library: added graphic filter effects (matrix-kernel convolutions)
 * incremented dev version to v9.2.0
+* lists: added safeguard against accidentally querying too many dimensions 
 
 2024-01-05
 * objects: fixed speech balloons inside ASK menus

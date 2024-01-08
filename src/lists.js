@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-January-03';
+modules.lists = '2024-January-08';
 
 var List;
 var ListWatcherMorph;
@@ -480,6 +480,9 @@ List.prototype.query = function (indices) {
     }
     if (rank > 2) {
         return indices.map(i => this.query(i));
+    }
+    if (indices.length() > 100) {
+        throw new Error('too many dimensions');
     }
     first = indices.at(1);
     if (first instanceof List) {
