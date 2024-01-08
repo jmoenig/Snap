@@ -95,7 +95,7 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-January-05';
+modules.objects = '2024-January-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -4340,17 +4340,19 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         h = 0,
         stage;
     if (id instanceof List) { // try to turn a list of pixels into a costume
-        if (this.costume) {
-            // recycle dimensions of current costume
-            w = this.costume.width();
-            h = this.costume.height();
-        }
-        if (w * h !== id.length()) {
-            // assume stage's dimensions
-            stage = this.parentThatIsA(StageMorph);
-            w = stage.dimensions.x;
-            h = stage.dimensions.y;
-        }
+        if (id.shape().at(2) <= 4) {
+            if (this.costume) {
+                // recycle dimensions of current costume
+                w = this.costume.width();
+                h = this.costume.height();
+            }
+            if (w * h !== id.length()) {
+                // assume stage's dimensions
+                stage = this.parentThatIsA(StageMorph);
+                w = stage.dimensions.x;
+                h = stage.dimensions.y;
+            }
+        } // else try to interpret the pixels as matrix
         id = Process.prototype.reportNewCostume(
             id,
             w,

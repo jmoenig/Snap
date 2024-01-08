@@ -7,6 +7,7 @@
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices bith with or without color channels
     * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
     * MQTT library update, thanks, Simon!
 * **Notable Fixes:**
@@ -22,6 +23,7 @@
 * lists: added safeguard against accidentally querying too many dimensions 
 * threads: refactored reportDimensions()
 * threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
+* objects: accept > 4 columns pixels matrices as costumes in the SWITCH TO COSTUME reporter
 
 2024-01-05
 * objects: fixed speech balloons inside ASK menus
