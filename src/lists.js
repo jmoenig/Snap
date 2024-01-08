@@ -470,7 +470,7 @@ List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var first, rank, select;
+    var first, rank, dim, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
@@ -481,8 +481,9 @@ List.prototype.query = function (indices) {
     if (rank > 2) {
         return indices.map(i => this.query(i));
     }
-    if (indices.length() > 100) {
-        throw new Error('too many dimensions');
+    dim = indices.length();
+    if (dim > 10) {
+        throw new Error('too many dimensions (' + dim + ')?');
     }
     first = indices.at(1);
     if (first instanceof List) {
