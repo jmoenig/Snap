@@ -7176,7 +7176,7 @@ Process.prototype.costumeNamed = function (name) {
 };
 
 Process.prototype.reportNewCostume = function (pixels, width, height, name) {
-    var rcvr, stage, canvas, ctx, src, dta, i, k, px;
+    var rcvr, stage, canvas, ctx, shp, dim, src, dta, i, k, px;
 
     this.assertType(pixels, 'list');
     if (this.inputOption(width) === 'current') {
@@ -7191,15 +7191,27 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     }
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
-    if (width <= 0 || height <= 0) {
-        throw new Error(
-            'cannot handle zero width or height'
-        );
-    }
     if (!isFinite(width * height) || isNaN(width * height)) {
        throw new Error(
            'expecting a finite number\nbut getting Infinity or NaN'
        );
+    }
+    if (width <= 0 || height <= 0) {
+        // try to interpret the pixels as matrix
+        shp = this.reportDimensions(pixels);
+        if (shp.at(2) > 4) {
+            height = shp.at(1);
+            width = shp.at(2);
+            dim = new List([height * width]);
+            if (shp.length() === 3) {
+                dim.add(shp.at(3));
+            }
+            pixels = pixels.reshape(dim);
+        } else {
+            throw new Error(
+                'cannot handle zero width or height'
+            );
+        }
     }
 
     canvas = newCanvas(new Point(width, height), true);

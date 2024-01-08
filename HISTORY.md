@@ -7,11 +7,13 @@
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
     * MQTT library update, thanks, Simon!
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
     * made sure ITEM OF returns data matching the shape specified by the query struct
     * fixed speech balloons inside ASK menus
+    * added safeguard against accidentally querying too many list dimensions (forgetting to transpose a convolution)
 
 2024-01-08
 * threads: tweaked hyperDyadic() to allow explicit dimension matching
@@ -19,6 +21,7 @@
 * incremented dev version to v9.2.0
 * lists: added safeguard against accidentally querying too many dimensions 
 * threads: refactored reportDimensions()
+* threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
 
 2024-01-05
 * objects: fixed speech balloons inside ASK menus
