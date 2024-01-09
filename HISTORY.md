@@ -7,7 +7,7 @@
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
-    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices bith with or without color channels
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices both with or without color channels
     * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
     * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
     * MQTT library update, thanks, Simon!
