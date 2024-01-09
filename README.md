@@ -19,10 +19,16 @@ To host your own client files, first install dependencies:
 cd utils/  
 npm install
 ```
-
-Then start the file server with
+Next, the cloud client needs to be built:
 ```
-node utils/serve.js  # or node serve.js if you are still in utils/
+cd src/cloud
+npm install
+npm run build
+```
+
+Then return to the project root and start the file server with
+```
+node utils/serve.js
 ```
 
 ## Contact
