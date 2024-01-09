@@ -16,6 +16,9 @@
     * fixed speech balloons inside ASK menus
     * added safeguard against accidentally querying too many list dimensions (forgetting to transpose a convolution)
 
+2024-01-09
+* pixels library: added Sobel edge-detection variants for left/right/top/bottom
+
 2024-01-08
 * threads: tweaked hyperDyadic() to allow explicit dimension matching
 * pixels library: added graphic filter effects (matrix-kernel convolutions)
