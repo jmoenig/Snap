@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-08';
+modules.threads = '2024-January-09';
 
 var ThreadManager;
 var Process;
@@ -3693,7 +3693,13 @@ Process.prototype.blockReceiver = function () {
 
 Process.prototype.playSound = function (name) {
     if (name instanceof List) {
-        return this.doPlaySoundAtRate(name, 44100);
+        // use the microphone's default sample rate in case it has been
+        // initialized before, otherwise 44.1 kHz
+        return this.doPlaySoundAtRate(
+            name,
+            this.blockReceiver().parentThatIsA(StageMorph)
+                .microphone?.audioContext?.sampleRate || 44100
+        );
     }
     return this.blockReceiver().doPlaySound(name);
 };

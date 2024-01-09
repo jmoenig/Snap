@@ -9,6 +9,7 @@
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
     * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices bith with or without color channels
     * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
+    * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
     * MQTT library update, thanks, Simon!
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
@@ -18,6 +19,7 @@
 
 2024-01-09
 * pixels library: added Sobel edge-detection variants for left/right/top/bottom
+* threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
 
 2024-01-08
 * threads: tweaked hyperDyadic() to allow explicit dimension matching
