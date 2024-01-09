@@ -20,6 +20,7 @@
 2024-01-09
 * pixels library: added Sobel edge-detection variants for left/right/top/bottom
 * threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
+* pixels library: added 5x5 Gaussian blur filter
 
 2024-01-08
 * threads: tweaked hyperDyadic() to allow explicit dimension matching
