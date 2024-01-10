@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-09';
+modules.threads = '2024-January-10';
 
 var ThreadManager;
 var Process;
@@ -2378,6 +2378,11 @@ Process.prototype.reportRank = function (data) {
     return data instanceof List ? data.rank() : 0;
 };
 
+Process.prototype.reportQuickRank = function (data) {
+    // private - assume a regularly shaped nested list
+    return data instanceof List ? data.quickRank() : 0;
+};
+
 Process.prototype.reportDimensions = function (data) {
     return data instanceof List ? data.shape() : new List();
 };
@@ -4518,7 +4523,7 @@ Process.prototype.hyperMonadic = function (baseOp, arg) {
 };
 
 Process.prototype.hyperDyadic = function (baseOp, a, b) {
-    var match = Math.min(this.reportRank(a), this.reportRank(b));
+    var match = Math.min(this.reportQuickRank(a), this.reportQuickRank(b));
     return this.hyperZip(baseOp, a, b, match, match);
 };
 
@@ -4528,8 +4533,8 @@ Process.prototype.hyperZip = function (baseOp, a, b, zipa, zipb) {
     // this allows to write 2d matrix convolutions for 3+d inputs with
     // 2d kernels e.g. for image processing without having to first
     // reshape the kernel matrix to match the broadcast shape.
-    var arank = this.reportRank(a),
-        brank = this.reportRank(b),
+    var arank = this.reportQuickRank(a),
+        brank = this.reportQuickRank(b),
         len, i, result;
     if (arank === brank || (arank <= zipa && brank <= zipb)) {
         if (arank + brank === 0) {
@@ -7204,7 +7209,7 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     }
     if (width <= 0 || height <= 0) {
         // try to interpret the pixels as matrix
-        shp = this.reportDimensions(pixels);
+        shp = pixels.quickShape();
         if (shp.at(2) > 4) {
             height = shp.at(1);
             width = shp.at(2);

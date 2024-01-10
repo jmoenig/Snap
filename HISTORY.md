@@ -17,6 +17,9 @@
     * fixed speech balloons inside ASK menus
     * added safeguard against accidentally querying too many list dimensions (forgetting to transpose a convolution)
 
+2024-01-10
+* lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+
 2024-01-09
 * pixels library: added Sobel edge-detection variants for left/right/top/bottom
 * threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz

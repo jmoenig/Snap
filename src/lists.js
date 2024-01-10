@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-January-08';
+modules.lists = '2024-January-10';
 
 var List;
 var ListWatcherMorph;
@@ -660,6 +660,14 @@ List.prototype.rank = function () {
     return rank;
 };
 
+List.prototype.quickRank = function () {
+    // answer the number of my dimensions
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var item = this.at(1);
+    return item instanceof List ? item.quickRank() + 1 : 1;
+};
+
 List.prototype.shape = function () {
     // answer a list of the maximum size for each dimension
     var dim,
@@ -676,6 +684,19 @@ List.prototype.shape = function () {
         shp.add(max);
     }
     return shp;
+};
+
+List.prototype.quickShape = function () {
+    // answer a list of each dimension's size
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var shp = [],
+        item = this;
+    while (item instanceof List) {
+        shp.push(item.length());
+        item = item.at(1);
+    }
+    return new List(shp);
 };
 
 List.prototype.getDimension = function (rank = 0) {
