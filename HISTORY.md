@@ -19,6 +19,7 @@
 
 2024-01-10
 * lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+* lists: some more minor optimizations for item() and columns()
 
 2024-01-09
 * pixels library: added Sobel edge-detection variants for left/right/top/bottom

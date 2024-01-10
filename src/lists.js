@@ -119,7 +119,7 @@ var ListWatcherMorph;
     size()                  - count the number of all atomic elements
     rank()                  - answer the number of my dimensions
     shape()                 - answer a list of the max size for each dimension
-    width()                 - ansswer the maximum length of my columns, if any
+    width()                 - answer the maximum length of my columns, if any
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     columns()               - answer a 2D list with rows turned into columns
@@ -474,7 +474,7 @@ List.prototype.query = function (indices) {
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    rank = indices.rank();
+    rank = indices.quickRank();
     if (rank === 1) {
         return indices.map(i => this.lookup(i));
     }
@@ -743,7 +743,7 @@ List.prototype.flatten = function () {
 };
 
 List.prototype.transpose = function () {
-    if (this.rank() > 2) {
+    if (this.quickRank() > 2) {
         return this.strideTranspose();
     }
     return this.columns();
