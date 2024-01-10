@@ -1869,6 +1869,7 @@ Process.prototype.evaluateCustomBlock = function () {
     outer.variables.addVar(Symbol.for('self'), context);
     outer.variables.addVar(Symbol.for('caller'), this.context);
     outer.variables.addVar(Symbol.for('continuation'), cont);
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     runnable.expression = runnable.expression.blockSequence();
 };

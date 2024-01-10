@@ -4,6 +4,7 @@
 * **New Features:**
     * (better) matrix-kernel convolution support, automatic zero-padding
     * new graphic filter effects tools in the pixels library
+    * support for THIS "inputs" selector inside custom block definitions
 * **Notable Changes:**
     * hyperized ITEM OF
     * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
@@ -20,6 +21,7 @@
 2024-01-10
 * lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
 * lists: some more minor optimizations for item() and columns()
+* threads: added support for THIS "inputs" selector inside custom block definitions 
 
 2024-01-09
 * pixels library: added Sobel edge-detection variants for left/right/top/bottom
