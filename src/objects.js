@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-December-21';
+modules.objects = '2024-January-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -4490,17 +4490,19 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         h = 0,
         stage;
     if (id instanceof List) { // try to turn a list of pixels into a costume
-        if (this.costume) {
-            // recycle dimensions of current costume
-            w = this.costume.width();
-            h = this.costume.height();
-        }
-        if (w * h !== id.length()) {
-            // assume stage's dimensions
-            stage = this.parentThatIsA(StageMorph);
-            w = stage.dimensions.x;
-            h = stage.dimensions.y;
-        }
+        if (id.quickShape().at(2) <= 4) {
+            if (this.costume) {
+                // recycle dimensions of current costume
+                w = this.costume.width();
+                h = this.costume.height();
+            }
+            if (w * h !== id.length()) {
+                // assume stage's dimensions
+                stage = this.parentThatIsA(StageMorph);
+                w = stage.dimensions.x;
+                h = stage.dimensions.y;
+            }
+        } // else try to interpret the pixels as matrix
         id = Process.prototype.reportNewCostume(
             id,
             w,
@@ -11165,7 +11167,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     var contents,
         scroller,
         sprite = SpriteMorph.prototype,
-        maxHeight = this.stage.dimensions.y * this.scale -
+        maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
             (this.border + this.padding + 1) * 2,
         isText,
         img,

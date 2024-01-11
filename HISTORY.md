@@ -2,6 +2,58 @@
 
 ## in development:
 
+## 9.2.0:
+* **New Features:**
+    * (better) matrix-kernel convolution support, automatic zero-padding
+    * new graphic filter effects tools in the pixels library
+    * support for THIS "inputs" selector inside custom block definitions
+* **Notable Changes:**
+    * hyperized ITEM OF
+    * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices both with or without color channels
+    * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
+    * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
+    * MQTT library update, thanks, Simon!
+* **Notable Fixes:**
+    * fixed a RESHAPE edge case when passing in a single zero dimension
+    * made sure ITEM OF returns data matching the shape specified by the query struct (automatic zero-padding)
+    * fixed speech balloons inside ASK menus
+    * added safeguard against accidentally querying too many list dimensions (e.g. when forgetting to transpose a convolution)
+
+2024-01-11
+* prepared v9.2.0 minor release
+
+2024-01-10
+* lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+* lists: some more minor optimizations for item() and columns()
+* threads: added support for THIS "inputs" selector inside custom block definitions 
+
+2024-01-09
+* pixels library: added Sobel edge-detection variants for left/right/top/bottom
+* threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
+* pixels library: added 5x5 Gaussian blur filter
+
+2024-01-08
+* threads: tweaked hyperDyadic() to allow explicit dimension matching
+* pixels library: added graphic filter effects (matrix-kernel convolutions)
+* incremented dev version to v9.2.0
+* lists: added safeguard against accidentally querying too many dimensions 
+* threads: refactored reportDimensions()
+* threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
+* objects: accept > 4 columns pixels matrices as costumes in the SWITCH TO COSTUME reporter
+
+2024-01-05
+* objects: fixed speech balloons inside ASK menus
+
+2024-01-03
+* new dev version for v9.1.2
+* lists: fixed a RESHAPE edge case when passing in a single zero dimension
+* lists: made sure ITEM OF returns data matching the shape specified by the query struct
+* lists: hyperized ITEM OF
+* threads: refactored reportRank()
+* threads: tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+* threads: refactored hyperizing mechanism for coordinates
+
 ## 9.1.1:
 * **Notable Fixes:**
     * fixed using #open: to load a library from a url, thanks, Bernat!
