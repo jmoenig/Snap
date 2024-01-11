@@ -61,6 +61,10 @@
 * **Translation Updates:**
     * German
 
+### 2024-01-11
+* merged main branch (v9.2.0)
+* incremented dev version
+
 ### 2023-12-22
 * added "sigmoid" easing function to the animation library, refactored easing reporter
 
