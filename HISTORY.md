@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.0:
 * **New Features:**
     * (better) matrix-kernel convolution support, automatic zero-padding
     * new graphic filter effects tools in the pixels library
@@ -14,9 +16,12 @@
     * MQTT library update, thanks, Simon!
 * **Notable Fixes:**
     * fixed a RESHAPE edge case when passing in a single zero dimension
-    * made sure ITEM OF returns data matching the shape specified by the query struct
+    * made sure ITEM OF returns data matching the shape specified by the query struct (automatic zero-padding)
     * fixed speech balloons inside ASK menus
-    * added safeguard against accidentally querying too many list dimensions (forgetting to transpose a convolution)
+    * added safeguard against accidentally querying too many list dimensions (e.g. when forgetting to transpose a convolution)
+
+2024-01-11
+* prepared v9.2.0 minor release
 
 2024-01-10
 * lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
