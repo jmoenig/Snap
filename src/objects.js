@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-January-10';
+modules.objects = '2024-January-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -14323,7 +14323,7 @@ StagePickerMorph.prototype.createLabel = function () {
         this.label.destroy();
     }
     text = new TextMorph(
-        this.title,
+        this.title.toString(),
         SpriteMorph.prototype.bubbleFontSize * this.scale,
         null, // MorphicPreferences.menuFontName,
         true,

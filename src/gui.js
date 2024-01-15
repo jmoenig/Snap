@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-January-11';
+modules.gui = '2024-January-15';
 
 // Declarations
 
-var SnapVersion = '10-240111-dev';
+var SnapVersion = '10-240115-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5382,7 +5382,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nBernat Romagosa: Countless contributions'
         + '\nBartosz Leper: Retina Display Support'
-        + '\nDariusz Dorożalski: Web Serial Support'
+        + '\nDariusz Dorożalski: Web Serial Support,'
+        + '\ncountless bugfixes and optimizations'
         + '\nZhenlei Jia and Dariusz Dorożalski: IME text editing'
         + '\nKen Kahn: IME support and countless other contributions'
         + '\nJosep Ferràndiz: Video Motion Detection'

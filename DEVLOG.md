@@ -61,8 +61,12 @@
 * **Translation Updates:**
     * German
 
+### 2024-01-15
+* merged main branch (v9.2.1)
+* incremented dev version
+
 ### 2024-01-11
-* merged main branch (v9.2.0)
+* merged main branch (v9.2.1)
 * incremented dev version
 
 ### 2023-12-22

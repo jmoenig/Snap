@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2023-October-10';
+modules.extensions = '2024-January-15';
 
 // Global stuff
 
@@ -537,6 +537,26 @@ SnapExtensions.primitives.set(
     function (data, proc) {
         proc.assertType(data, 'list');
         return data.crossproduct();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_zip(list)',
+    function (data, proc) {
+        var zip, i, len,
+            join = (a, b) => [a, b],
+            append = (a, b) => {a.push(b); return a; },
+            merge = atom => atom instanceof Array ? new List(atom) : atom;
+        proc.assertType(data, 'list');
+        len = data.length();
+        if (len < 2) {
+            return data.at(1);
+        }
+        zip = proc.hyperDyadic(join, data.at(1), data.at(2));
+        for (i = 3; i <= len; i += 1) {
+            zip = proc.hyperDyadic(append, zip, data.at(i));
+        }
+        return proc.hyperMonadic(merge, zip);
     }
 );
 
