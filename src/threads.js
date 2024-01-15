@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-10';
+modules.threads = '2024-January-15';
 
 var ThreadManager;
 var Process;
@@ -6118,7 +6118,7 @@ Process.prototype.reportRayLengthTo = function (name, relativeAngle = 0) {
     top = targetBounds.top();
     bottom = targetBounds.bottom();
     left = targetBounds.left();
-    right = targetBounds.right();
+    right = targetBounds.right() - 1;
 
     // test if already inside the target
     if (targetBounds.containsPoint(rc)) {
