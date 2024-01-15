@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-15
+* new dev version for v9.2.1
+
 ## 9.2.0:
 * **New Features:**
     * (better) matrix-kernel convolution support, automatic zero-padding
