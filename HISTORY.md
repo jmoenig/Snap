@@ -5,7 +5,8 @@
 2024-01-15
 * new dev version for v9.2.1
 * threads: fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
-* objects: fixed a typecasting glitch when creating a stage menu with numerical title 
+* objects: fixed a typecasting glitch when creating a stage menu with numerical title
+* extensions: added "dta_zip(list)" extension primitive
 
 ## 9.2.0:
 * **New Features:**
