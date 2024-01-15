@@ -14,6 +14,7 @@
 * threads: fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
 * objects: fixed a typecasting glitch when creating a stage menu with numerical title
 * extensions: added experimental "dta_zip(list)" extension primitive
+* prepared v9.2.1 patch
 
 ## 9.2.0:
 * **New Features:**
