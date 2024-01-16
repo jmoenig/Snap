@@ -28,10 +28,10 @@ IDE_Morph.prototype.parseUrlAnchors = function (querystring, hash) {
       }
     }
 
-    const anchorsDict = new URLSearchParams(hashDictStr);
+    const anchorsDict = new SearchParams(hashDictStr);
 
     // parse querystring params
-    const queryDict = new URLSearchParams(querystring);
+    const queryDict = new SearchParams(querystring);
     queryDict.forEach((value, key) => anchorsDict.set(key, value));
 
     return anchorsDict;
@@ -48,6 +48,27 @@ class MissingParameterError extends UrlParamError {
   constructor(params, parameter) {
     const action = params.get('action');
     super(`"${parameter}" required for "${action}"`);
+  }
+}
+
+/**
+ * A case-insensitive search parameter dictionary.
+ */
+class SearchParams extends URLSearchParams {
+  normalizeKey(key) {
+    return key.toLowerCase();
+  }
+
+  has(key) {
+    return super.has(this.normalizeKey(key))
+  }
+
+  get(key) {
+    return super.get(this.normalizeKey(key))
+  }
+
+  set(key, value) {
+    return super.set(this.normalizeKey(key), value)
   }
 }
 
