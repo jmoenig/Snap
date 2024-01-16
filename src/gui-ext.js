@@ -84,6 +84,16 @@ class UrlParams {
         return this.params.get(name);
     }
 
+    /**
+     * Check if a parameter value is truthy. A value of "" is considered to
+     * be truthy since it means the URL parameter is added like "&editMode".
+     */
+    getParameterFlag(name) {
+        const value = this.params.get(name);
+        const falseValues = [undefined, null, '0', 'false', false];
+        return !falseValues.includes(value);
+    }
+
     async applySettings(ide) {
         await this.applyInitialFlags(ide);
         await this.apply(ide);
@@ -110,20 +120,20 @@ class UrlParams {
     }
 
     async applyFlags(ide) {
-        if (this.params.get('embedMode')) {
+        if (this.getParameterFlag('embedMode')) {
             ide.setEmbedMode();
         }
-        if (this.params.get('appMode')) {
+        if (this.getParameterFlag('appMode')) {
             ide.toggleAppMode(true);
         }
-        if (this.params.get('run')) {
+        if (this.getParameterFlag('run')) {
             ide.runScripts();
         }
-        if (this.params.get('hideControls')) {
+        if (this.getParameterFlag('hideControls')) {
             ide.controlBar.hide();
             window.onbeforeunload = nop;
         }
-        if (this.params.get('noExitWarning')) {
+        if (this.getParameterFlag('noExitWarning')) {
             window.onbeforeunload = nop;
         }
         if (this.params.get('lang')) {
