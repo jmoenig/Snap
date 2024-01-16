@@ -39,6 +39,34 @@ describe("gui", function () {
       const dict = driver.ide().parseUrlAnchors('', hash);
       assert.equal(dict.get('lang'), 'english');
     });
+
+  });
+
+  describe('SearchParams', function() {
+    it('should case-insensitive check w/ has', function() {
+      const params = driver.ide().parseUrlAnchors('A=a','');
+      assert(params.has('A'));
+      assert(params.has('a'));
+    });
+
+    it('should case-insensitive check w/ get', function() {
+      const params = driver.ide().parseUrlAnchors('A=b','');
+      assert(params.get('A'), 'b');
+      assert(params.get('a'), 'b');
+    });
+
+    it('should case-insensitive check w/ set', function() {
+      const params = driver.ide().parseUrlAnchors('','');
+
+      params.set('A', 'b');
+      assert(params.get('A'), 'b');
+      assert(params.get('a'), 'b');
+
+      const p2 = driver.ide().parseUrlAnchors('','');
+      p2.set('a', 'b');
+      assert(p2.get('A'), 'b');
+      assert(p2.get('a'), 'b');
+    });
   });
 
   describe("RunProjectFromUrl", function () {
