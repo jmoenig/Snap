@@ -185,10 +185,10 @@ class RunProjectFromUrl extends UrlParams {
         const text = hash.startsWith('<') ? hash : utils.getUrlSync(hash);
         await ide.droppedText(text);
 
-        if (!this.params.has('editMode')) {
+        if (!this.getParameterFlag('editMode')) {
             this.params.set('appMode', true);
         }
-        if (!this.params.has('noRun')) {
+        if (!this.getParameterFlag('noRun')) {
             this.params.set('run', true);
         }
     }
@@ -211,10 +211,10 @@ class OpenPublicProject extends UrlParams {
         await ide.droppedText(xml);
         ide.hasChangedMedia = true;
 
-        if (!this.params.has('editMode')) {
+        if (!this.getParameterFlag('editMode')) {
             this.params.set('appMode', true);
         }
-        if (!this.params.has('noRun')) {
+        if (!this.getParameterFlag('noRun')) {
             this.params.set('run', true);
         }
         msg.destroy();
@@ -289,10 +289,10 @@ class OpenExampleProject extends UrlParams {
             ide.showMessage('Example not found: ' + exampleName);
         }
 
-        if (!this.params.has('editMode')) {
+        if (!this.getParameterFlag('editMode')) {
             this.params.set('appMode', true);
         }
-        if (!this.params.has('noRun')) {
+        if (!this.getParameterFlag('noRun')) {
             this.params.set('run', true);
         }
     }
@@ -317,10 +317,10 @@ class OpenPrivateProject extends UrlParams {
             const source = new CloudProjectsSource(ide);
             await source.open(metadata);
 
-            if (!this.params.has('editMode')) {
+            if (!this.getParameterFlag('editMode')) {
                 this.params.set('appMode', true);
             }
-            if (!this.params.has('noRun')) {
+            if (!this.getParameterFlag('noRun')) {
                 this.params.set('run', true);
             }
         } catch (err) {
