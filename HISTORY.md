@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-18
+* new dev version for v9.2.2
+
 ## 9.2.1:
 * **New Features:**
     * experimental "dta_zip(list)" extension primitive
