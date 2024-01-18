@@ -3,10 +3,13 @@
 ## in development:
 * **New Features:**
     * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
+* **Notable Changes:**
+    * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
 
 2024-01-18
 * new dev version for v9.2.2
 * symbols: added "dot" symbol
+* threads: also accept a scalar (single number) in the variadic SUM reporter (returns its identity)
 
 ## 9.2.1:
 * **New Features:**

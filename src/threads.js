@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-15';
+modules.threads = '2024-January-18';
 
 var ThreadManager;
 var Process;
@@ -4587,6 +4587,7 @@ Process.prototype.packCoordinates = function (list) {
 */
 
 Process.prototype.reportVariadicSum = function (numbers) {
+    if (!isNaN(+numbers)) {return +numbers; }
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportSum');
 };
