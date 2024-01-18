@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
 
 2024-01-18
 * new dev version for v9.2.2
+* symbols: added "dot" symbol
 
 ## 9.2.1:
 * **New Features:**
