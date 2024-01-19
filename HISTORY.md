@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.2:
 * **New Features:**
     * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
 * **Notable Changes:**
@@ -15,6 +17,7 @@
 * gui: fixed #3296 (make sure to stop video when resizing the stage)
 * pixels library: Changed the filter effect names to lowercase
 * Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
+* prepared v9.2.2 patch
 
 2024-01-18
 * new dev version for v9.2.2
