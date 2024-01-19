@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2023-July-13';
+modules.symbols = '2024-January-18';
 
 var SymbolMorph;
 
@@ -101,6 +101,7 @@ SymbolMorph.prototype.names = [
     'rectangleSolid',
     'circle',
     'circleSolid',
+    'dot',
     'ellipse',
     'line',
     'cross',
@@ -358,6 +359,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'circleSolid':
         this.renderSymbolCircleSolid(ctx, aColor);
         break;
+    case 'dot':
+        this.renderSymbolCircleSolid(ctx, aColor);
+        break;
     case 'ellipse':
         this.renderSymbolCircle(ctx, aColor);
         break;
@@ -511,6 +515,8 @@ SymbolMorph.prototype.symbolWidth = function () {
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
     case 'verticalEllipsis':
         return size * 0.2;
+    case 'dot':
+        return size * 0.4;
     case 'listNarrow':
         return size * 0.5;
     case 'location':
@@ -1384,11 +1390,12 @@ SymbolMorph.prototype.renderSymbolCircle = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolCircleSolid = function (ctx, color) {
     // draw a solid circle
-    var w = this.symbolWidth();
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
+    ctx.arc(w / 2, h / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
 };
 

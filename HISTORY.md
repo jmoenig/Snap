@@ -2,6 +2,29 @@
 
 ## in development:
 
+## 9.2.2:
+* **New Features:**
+    * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
+* **Notable Changes:**
+    * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
+    * changed the filter names in the pixels library to lowercase
+* **Notable Fixes:**
+    * fixed #3296 (make sure to stop video when resizing the stage)
+* **Translation Updates:**
+    * Ukrainian, thanks, Serhiy Kryzhanovsky!
+
+2024-01-19
+* gui: fixed #3296 (make sure to stop video when resizing the stage)
+* pixels library: Changed the filter effect names to lowercase
+* Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
+* prepared v9.2.2 patch
+* fixed a syntax glitch in the Ukrainian translation update
+
+2024-01-18
+* new dev version for v9.2.2
+* symbols: added "dot" symbol
+* threads: also accept a scalar (single number) in the variadic SUM reporter (returns its identity)
+
 ## 9.2.1:
 * **New Features:**
     * experimental "dta_zip(list)" extension primitive

@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-January-15';
+modules.gui = '2024-January-19';
 
 // Declarations
 
-var SnapVersion = '10-240115-dev';
+var SnapVersion = '10-240119-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -7793,6 +7793,8 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.stage.stopVideo();
     this.setExtent(world.extent());
     Costume.prototype.maxDimensions = aPoint;
+    this.stage.stopVideo();
+    this.stage.stopProjection();
     if (this.isAnimating) {
         zoom();
     } else {
