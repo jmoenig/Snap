@@ -8,10 +8,13 @@
     * changed the filter names in the pixels library to lowercase
 * **Notable Fixes:**
     * fixed #3296 (make sure to stop video when resizing the stage)
+* **Translation Updates:**
+    * Ukrainian, thanks, Serhiy Kryzhanovsky!
 
 2024-01-19
 * gui: fixed #3296 (make sure to stop video when resizing the stage)
 * pixels library: Changed the filter effect names to lowercase
+* Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
 
 2024-01-18
 * new dev version for v9.2.2
