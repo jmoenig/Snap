@@ -18,6 +18,7 @@
 * pixels library: Changed the filter effect names to lowercase
 * Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
 * prepared v9.2.2 patch
+* fixed a syntax glitch in the Ukrainian translation update
 
 2024-01-18
 * new dev version for v9.2.2

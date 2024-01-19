@@ -464,7 +464,7 @@ SnapTranslator.dict.ua = {
     "_ of block _": "_ блоку _",
     "_ of costume _": "_ образу _",
     "_ of sound _": "_ звуку _",
-    "_ of text _": "_тексту_",
+    "_ of text _": "_ тексту _",
     "_ to _": "_ до _",
     "__shout__go__": "",
     "a": "a",
