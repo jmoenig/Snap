@@ -5,11 +5,13 @@
     * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
 * **Notable Changes:**
     * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
+    * changed the filter names in the pixels library to lowercase
 * **Notable Fixes:**
     * fixed #3296 (make sure to stop video when resizing the stage)
 
 2024-01-19
 * gui: fixed #3296 (make sure to stop video when resizing the stage)
+* pixels library: Changed the filter effect names to lowercase
 
 2024-01-18
 * new dev version for v9.2.2
