@@ -4,6 +4,7 @@
 * **New Features:**
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
+    * new "changeBy(data, delta)" extension primitive
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -42,6 +43,7 @@
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
     * new "sigmoid" easing function in the animations library
 * **Notable Changes:**
+    * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
@@ -60,6 +62,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2024-01-19
+* threads: hyperized "change (var) by (delta)" primitive, (recursively) mutates (!) a data structure
+* extensions: new "changeBy(data, delta)" extension primitive
 
 ### 2024-01-19
 * merged main branch (v9.2.2)

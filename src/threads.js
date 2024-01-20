@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-19';
+modules.threads = '2024-January-20';
 
 var ThreadManager;
 var Process;
@@ -1954,7 +1954,7 @@ Process.prototype.doSetVar = function (varName, value) {
 Process.prototype.doChangeVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-    this.assertType(value, 'number', '');
+    this.assertType(value, ['number', 'list'], '');
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.changeVar(
@@ -4659,6 +4659,60 @@ Process.prototype.hyperZip = function (baseOp, a, b, zipa, zipb) {
         return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
     }
     return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
+};
+
+Process.prototype.hyperChangeBy = function (data, delta) {
+    // mutate (!) a data structure the same way as performing a hyper-dyadic
+    // operation on it. Experimental for v10.
+    this.assertType(data, 'list');
+    var match = Math.min(
+        this.reportQuickRank(data),
+        this.reportQuickRank(delta)
+    );
+    this.hyperMutate(
+        this.reportBasicSum,
+        data,
+        delta,
+        match,
+        match
+    );
+};
+
+Process.prototype.hyperMutate = function (baseOp, a, b, zipa, zipb) {
+    // enable dyadic operations to be performed on lists and tables
+    // allowing to specify the ranks that are to be matched.
+    // note that this mutates (!) the first argument in place.
+    // Highly experimental for v10.
+    var arank = this.reportQuickRank(a),
+        brank = this.reportQuickRank(b),
+        len, i, k, elem;
+    if (arank === brank || (arank <= zipa && brank <= zipb)) {
+        // zip both arguments ignoring out-of-bounds indices
+        len = Math.min(a.length(), b.length());
+        for (i = 1; i <= len; i += 1) {
+            elem = a.at(i);
+            if (this.reportQuickRank(elem) === 0) {
+                a.put(this.hyperZip(baseOp, elem, b.at(i), zipa, zipb), i);
+            } else {
+                this.hyperMutate(baseOp, elem, b.at(i), zipa, zipb);
+            }
+        }
+        len = a.length();
+        // remove non-matching items
+        for (k = i; k <= len; k += 1) {
+            a.remove(i);
+        }
+        return;
+    }
+    len = a.length();
+    for (i = 1; i <= len; i += 1) {
+        elem = a.at(i);
+        if (this.reportQuickRank(elem) === 0) {
+            a.put(this.hyperZip(baseOp, elem, b, zipa, zipb), i);
+        } else {
+            this.hyperMutate(baseOp, elem, b, zipa, zipb);
+        }
+    }
 };
 
 Process.prototype.packCoordinates = function (list) {
@@ -9434,7 +9488,12 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
         value,
         newValue;
     if (frame) {
-        value = parseFloat(frame.vars[name].value);
+        value = frame.vars[name].value;
+        if (value instanceof List) {
+            Process.prototype.hyperChangeBy(value, delta);
+            return; // do not shadow in this case (problematic, experimental)
+        }
+        value = parseFloat(value);
         newValue = isNaN(value) ? +delta : value + (+delta);
         if (sender instanceof SpriteMorph &&
                 (frame.owner instanceof SpriteMorph) &&

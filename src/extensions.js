@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-January-15';
+modules.extensions = '2024-January-20';
 
 // Global stuff
 
@@ -557,6 +557,14 @@ SnapExtensions.primitives.set(
             zip = proc.hyperDyadic(append, zip, data.at(i));
         }
         return proc.hyperMonadic(merge, zip);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_changeBy(data, delta)',
+    function (data, delta, proc) {
+        proc.assertType(data, 'list');
+        proc.hyperChangeBy(data, delta);
     }
 );
 
