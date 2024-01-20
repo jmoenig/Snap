@@ -63,9 +63,10 @@
 * **Translation Updates:**
     * German
 
-### 2024-01-19
+### 2024-01-20
 * threads: hyperized "change (var) by (delta)" primitive, (recursively) mutates (!) a data structure
 * extensions: new "changeBy(data, delta)" extension primitive
+* incremented dev version
 
 ### 2024-01-19
 * merged main branch (v9.2.2)
