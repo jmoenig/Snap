@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-20';
+modules.threads = '2024-January-21';
 
 var ThreadManager;
 var Process;
@@ -9493,8 +9493,8 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
             Process.prototype.hyperChangeBy(value, delta);
             return; // do not shadow in this case (problematic, experimental)
         }
-        value = parseFloat(value);
-        newValue = isNaN(value) ? +delta : value + (+delta);
+        newValue = !(value instanceof List) && isNaN(parseFloat(value)) ? delta
+            : Process.prototype.reportSum(value, delta);
         if (sender instanceof SpriteMorph &&
                 (frame.owner instanceof SpriteMorph) &&
                 (sender !== frame.owner)) {

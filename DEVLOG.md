@@ -63,6 +63,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-01-21
+* theads: hyperized "change (var) by (delta)" for scalars
+
 ### 2024-01-20
 * threads: hyperized "change (var) by (delta)" primitive, (recursively) mutates (!) a data structure
 * extensions: new "changeBy(data, delta)" extension primitive
