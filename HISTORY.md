@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-21
+* new dev version for v9.2.3
+
 ## 9.2.2:
 * **New Features:**
     * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
