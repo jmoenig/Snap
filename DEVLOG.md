@@ -65,6 +65,7 @@
 
 ### 2024-01-21
 * theads: hyperized "change (var) by (delta)" for scalars
+* incremented dev version
 
 ### 2024-01-20
 * threads: hyperized "change (var) by (delta)" primitive, (recursively) mutates (!) a data structure
