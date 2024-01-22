@@ -411,7 +411,7 @@ the flashSpriteScripts() method highlights the blocks of the scripts of the spri
 * spriteName
     * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
 * colorCSV
-    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
 
 #### return value
 undefined

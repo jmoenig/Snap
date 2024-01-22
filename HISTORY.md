@@ -2,8 +2,18 @@
 
 ## in development:
 
+## 9.2.3:
+* **New Features:**
+    * api: added optional color-csv parameter to flashScripts() api
+* **Notable Fixes:**
+    * fixed a bug in the MQTT library, thanks, Simon!
+* **Documentation Updates:**
+    * extended API documentation for optional scripts-flashing color
+
 2024-01-22
-* api: added optional color-csv parameter to flashScripts() api 
+* api: added optional color-csv parameter to flashScripts() api
+* updated MQTT library, thanks, Simon!
+* prepared v9.2.3 patch
 
 2024-01-21
 * new dev version for v9.2.3
