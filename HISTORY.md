@@ -3,7 +3,6 @@
 ## in development:
 
 ## 9.2.3:
-
 * **New Features:**
     * api: added optional color-csv parameter to flashScripts() api
 * **Notable Fixes:**
