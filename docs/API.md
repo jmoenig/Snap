@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, July 17, 2023
+Jens Mönig, Bernat Romagosa, January 22, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -401,15 +401,17 @@ an XML String
 the flashSpriteScripts() method highlights the blocks of the scripts of the sprite indicated by name - or the current sprite or stage if none - that correspond to the portion of the text between the start- and end lines when using the current codification mapping
 
 #### syntax
-    flashSpriteScripts(fromLOC, toLOC[, spriteName]);
+    flashSpriteScripts(fromLOC, toLOC[, spriteName[, colorCSV]]);
 
 #### parameters
 * fromLOC
-    * integer representing the first line of mapped code to be signalled, starting at 1
+    * integer representing the first line of mapped code to be signaled, starting at 1
 * toLOC
-    * integer representing the last line of mapped code to be signalled
+    * integer representing the last line of mapped code to be signaled
 * spriteName
     * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used
 
 #### return value
 undefined

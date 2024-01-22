@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2023-January-30';
+modules.api = '2024-January-22';
 
 // IDE_Morph external communication API
 /*
@@ -278,14 +278,17 @@ IDE_Morph.prototype.loadSpriteScriptsXML = function (scriptsXML) {
     return this.spriteNamed(name).synchScriptsFrom(scriptsXML);
 };
 
-IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name) {
+IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name, clr) {
     // highlight the blocks of the scripts of the sprite indicated by name or
     // the current sprite or stage if none that correspond to the portion of the
     // text between the start- and end lines when using the current codification
-    // mapping
+    // mapping.
+    // Optionally a string of comma-separated "r,g,b[a]" values can be passed
+    // in to specify a specific highlight color. Of none is supplied the default
+    // flash color is used.
     var scripts = this.spriteNamed(name).scripts;
     scripts.unflash();
-    scripts.flashLOC(fromLOC, toLOC);
+    scripts.flashLOC(fromLOC, toLOC, clr);
 };
 
 IDE_Morph.prototype.unflashSpriteScripts = function (name) {
