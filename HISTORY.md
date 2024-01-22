@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-22
+* new dev version for v9.2.4
+
 ## 9.2.3:
 * **New Features:**
     * api: added optional color-csv parameter to flashScripts() api
