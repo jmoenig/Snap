@@ -13730,6 +13730,7 @@ MusicWriter.prototype.createSprites = function () {
  * @returns {Element} - The <sprite> tag.
  */
 MusicWriter.prototype.createSprite = function (part) {
+    // set up the sprite block
     const sprite = this.myRoot.createElement("sprite");
     sprite.setAttribute("name", part.name);
     sprite.setAttribute("scale", "1");
@@ -13740,10 +13741,29 @@ MusicWriter.prototype.createSprite = function (part) {
     sprite.appendChild(blocks);
     const scripts = this.createScripts([this.writeMusic(part)]);
     sprite.appendChild(scripts);
+    // create arrays to hold the note data and set them to NetsBlox variables
+    let noteNamesData = [], noteDurationsData = [], noteDottedData = [];
+    for (let i = 0; i < part.notes.length; ++i) {
+        noteNamesData.push(part.notes[i].pitch);
+        if (part.notes[i].type == "16th") {
+            noteDurationsData.push("Sixteenth");
+        } else if (part.notes[i].type == "32nd") {
+            noteDurationsData.push("ThirtySecond")
+        } else {
+            noteDurationsData.push(part.notes[i].type);
+        }
+        if (part.notes[i].dotted) {
+            noteDottedData.push("Dotted");
+        } else {
+            noteDottedData.push("");
+        }
+    }
+    // create the variables going into the sprite block. Each variable contains data on the music
+    // that the sprite is playing.
     const variableList = [
-        this.createVariable("notes"),
-        this.createVariable("duration"),
-        this.createVariable("dotted"),
+        this.createVariable("notes", noteNamesData),
+        this.createVariable("duration", noteDurationsData),
+        this.createVariable("dotted", noteDottedData),
     ];
     const variables = this.createVariables(variableList);
     sprite.appendChild(variables);
@@ -13765,30 +13785,11 @@ MusicWriter.prototype.writeMusic = function (part) {
     const text = this.myRoot.createTextNode("play");
     l.appendChild(text);
     receiver.appendChild(l);
+    script.appendChild(receiver);
 
     // set default instrument
     const instrument = this.setInstrument();
-
-    // create arrays to hold the note data and set them to NetsBlox variables
-    let noteNamesData = [], noteDurationsData = [], noteDottedData = [];
-    for (let i = 0; i < part.notes.length; ++i) {
-        noteNamesData.push(part.notes[i].pitch);
-        if (part.notes[i].type == "16th") {
-            noteDurationsData.push("Sixteenth");
-        } else if (part.notes[i].type == "32nd") {
-            noteDurationsData.push("ThirtySecond")
-        } else {
-            noteDurationsData.push(part.notes[i].type);
-        }
-        if (part.notes[i].dotted) {
-            noteDottedData.push("Dotted");
-        } else {
-            noteDottedData.push("");
-        }
-    }
-    const noteNames = this.createSetBlock("notes", this.createListBlock(noteNamesData));
-    const noteDurations = this.createSetBlock("duration", this.createListBlock(noteDurationsData));
-    const noteDotted = this.createSetBlock("dotted", this.createListBlock(noteDottedData));
+    script.appendChild(instrument);
 
     // create a script to play the notes.
     const length = this.createLengthOption("notes");
@@ -13799,13 +13800,6 @@ MusicWriter.prototype.writeMusic = function (part) {
     const scriptContainer = this.myRoot.createElement("script");
     scriptContainer.appendChild(playNote);
     const loop = this.createForLoop(length, scriptContainer);
-
-    // script to play through the notes
-    script.appendChild(receiver);
-    script.appendChild(instrument);
-    script.appendChild(noteNames);
-    script.appendChild(noteDurations);
-    script.appendChild(noteDotted);
     script.appendChild(loop);
     
     return script;
@@ -13813,19 +13807,13 @@ MusicWriter.prototype.writeMusic = function (part) {
 
 /**
  * @description - A helper function to create a NetsBlox list.
- * @param {String} arr - The data being entered into the list.
+ * @param {[String]} data - The data being entered into the list.
  * @return {Element} - The <block> tag holding a list.
  */
-MusicWriter.prototype.createListBlock = function (arr) {
+MusicWriter.prototype.createListBlock = function (data) {
     const block = this.myRoot.createElement("block");
     block.setAttribute("s", "reportNewList");
-    const list = this.myRoot.createElement("list");
-    for (let i = 0; i < arr.length; ++i) {
-        const l = this.myRoot.createElement("l");
-        const text = this.myRoot.createTextNode(arr[i]);
-        l.appendChild(text);
-        list.appendChild(l);
-    }
+    const list = this.createList(data);
     block.appendChild(list);
     return block;
 }
@@ -13866,15 +13854,22 @@ MusicWriter.prototype.createNoteBlock = function (duration, dotted, note) {
 /**
  * @description - Creates a uninitialized NetsBlox variable.
  * @param {String} name - The name of the variable.
+ * @param {Element} data - The data going into the variable tag.
  * @returns {Element} - The <variable> tag.
  */
-MusicWriter.prototype.createVariable = function (name) {
+MusicWriter.prototype.createVariable = function (name, data=[]) {
     const variable = this.myRoot.createElement("variable");
     variable.setAttribute("name", name);
-    const l = this.myRoot.createElement("l");
-    const value = this.myRoot.createTextNode("0");
-    l.appendChild(value);
-    variable.appendChild(l);
+    if (data.length != 0) {
+        const value = this.createList(data);
+        value.setAttribute("struct", "atomic");
+        variable.appendChild(value);
+    } else {
+        const l = this.myRoot.createElement("l");
+        const value = this.myRoot.createTextNode("0");
+        l.appendChild(value);
+        variable.appendChild(l);
+    }
     return variable;
 }
 
@@ -13970,4 +13965,23 @@ MusicWriter.prototype.createStartScript = function () {
     startScript.appendChild(start);
     startScript.appendChild(broadcast);
     return startScript;
+}
+
+/**
+ * @description - A helper function that creates a NetsBlox list.
+ * @param {[String]} data - The data being entered into the list.
+ * @return {Element}  -The <list> tag holding the list.
+ */
+MusicWriter.prototype.createList = function (data) {
+    const list = this.myRoot.createElement("list");
+    for (let i = 0; i < data.length; ++i) {
+        let text;
+        if (i == data.length - 1) {
+            text = this.myRoot.createTextNode(data[i]);
+        } else {
+            text = this.myRoot.createTextNode(data[i] + ",");
+        }
+        list.appendChild(text);
+    }
+    return list;
 }
