@@ -14,6 +14,7 @@
  * V1.5.4 15Feb22 When returning text to Snap!, restore explicitly making payload into a string.  Also restore cymplecy.uk instead of simplesi.cloud
  * V1.6.0 13Oct2023 If binary options selected then pub expects payload to be a flat List (values 0-255) and sub will return a List
  * V1.6.1 05Jan2024 "binary" replaced by "buffer mode"
+ * V1.6.2 17Jan2023 bugfix -remove automatic convert JSON to Snap! list
  */
 
 
@@ -179,6 +180,7 @@ SnapExtensions.primitives.set(
 				newPayload = new List(payload);
 			} else {
 				newPayload = payload.toString();
+				/*
 				try {
 					payloadObject = JSON.parse(newPayload);
 					//console.log(payloadObject);
@@ -186,6 +188,7 @@ SnapExtensions.primitives.set(
 					newPayload = arrayToList(payloadObject);
 					//console.log(newPayload);
 				} catch (e) {console.log(e)}
+				*/
 			}
 
 			try {
