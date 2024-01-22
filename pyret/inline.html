@@ -75,7 +75,9 @@
                     if (this.selectionStart < this.selectionEnd) {
                         ide.flashSpriteScripts(
                             ln(this.selectionStart),
-                            ln(this.selectionEnd)
+                            ln(this.selectionEnd),
+                            null, // sprite name
+                            '200,100,130' // rgb(a) color csv
                         );
                     }
                 };

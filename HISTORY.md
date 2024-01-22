@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-01-22
+* api: added optional color-csv parameter to flashScripts() api 
+
 2024-01-21
 * new dev version for v9.2.3
 

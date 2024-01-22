@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-November-24';
+modules.blocks = '2024-January-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9216,14 +9216,17 @@ ScriptsMorph.prototype.elementsAtLOC = function () {
     return loc;
 };
 
-ScriptsMorph.prototype.flashLOC = function (start, end = start) {
+ScriptsMorph.prototype.flashLOC = function (start, end = start, color = null) {
     // highlight all syntax elements located in the textual code indicated
-    // by start and end line numbers. End is optional.
+    // by start and end line numbers. End is optional, as is a color string of
+    // the form "r,g,b[,a]".
     var loc = this.elementsAtLOC(),
+        clr = color ? Color.fromString(color) : null,
+        flash = (idx) => loc[idx - 1].forEach(elem => elem.flash(clr)),
         i;
     this.unflash();
     for (i = start; i <= end; i += 1) {
-        loc[i - 1].forEach(elem => elem.flash());
+        flash(i);
     }
 };
 
