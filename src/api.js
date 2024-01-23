@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-January-22';
+modules.api = '2024-January-23';
 
 // IDE_Morph external communication API
 /*
@@ -290,6 +290,19 @@ IDE_Morph.prototype.flashSpriteScripts = function (fromLOC, toLOC, name, clr) {
     var scripts = this.spriteNamed(name).scripts;
     scripts.unflash();
     scripts.flashLOC(fromLOC, toLOC, clr);
+};
+
+IDE_Morph.prototype.flashSpriteScriptAt = function (charIdx, name, clr) {
+    // highlight the innermost block of the scripts of the sprite indicated by
+    // name or the current sprite or stage if none that corresponds to the index
+    // of the text given the current codification mapping.
+    // Optionally a string of comma-separated "r,g,b[,a]" values can be passed
+    // in to specify a specific highlight color, where each color component is
+    // a number between 0 and 255 and alpha is a fraction between 0 and 1.
+    // If none is supplied the default flash color is used.
+    var scripts = this.spriteNamed(name).scripts;
+    scripts.unflash();
+    scripts.flashCodeIdx(charIdx, clr);
 };
 
 IDE_Morph.prototype.unflashSpriteScripts = function (name) {

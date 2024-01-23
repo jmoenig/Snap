@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-January-22';
+modules.blocks = '2024-January-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9255,6 +9255,44 @@ ScriptsMorph.prototype.elementsAtLOC = function () {
     return loc;
 };
 
+ScriptsMorph.prototype.blockAtIdx = function (idx) {
+    // return the innermost block corresponding to the character index given
+    // at the textual code applying the current mapping
+    var elements = this.sortedElements().filter(each =>
+            each instanceof BlockMorph),
+        scripts = elements.map(each => each.mappedCode()),
+        code = (scripts.length ? scripts : ['']).reduce((a, b) =>
+            a + '\n\n' + b),
+        ln = code.substr(0, idx).split('\n').length,
+        loc = this.elementsAtLOC()[ln - 1],
+        tuples = [],
+        match, i;
+
+    function discover(index) {
+        return tuples.find(tuple =>
+            code.slice(index).replace(/\s+/g, '').startsWith(tuple[0])
+        );
+    }
+
+    loc.forEach(morph => {
+        if (morph instanceof BlockMorph) {
+            tuples.push([
+                morph.mappedCode().replace(/\s+/g, ''),
+                morph
+            ]);
+        }
+    });
+
+    for (i = idx; i >= 0; i -= 1) {
+        match = discover(i);
+        if (match && match[1].mappedCode().length > (idx - i)) {
+            return match[1];
+        }
+    }
+
+    return null;
+};
+
 ScriptsMorph.prototype.flashLOC = function (start, end = start, color = null) {
     // highlight all syntax elements located in the textual code indicated
     // by start and end line numbers. End is optional, as is a color string of
@@ -9266,6 +9304,16 @@ ScriptsMorph.prototype.flashLOC = function (start, end = start, color = null) {
     this.unflash();
     for (i = start; i <= end; i += 1) {
         flash(i);
+    }
+};
+
+ScriptsMorph.prototype.flashCodeIdx = function (idx, color = null) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    this.unflash();
+    if (block) {
+        block.flash(color ? Color.fromString(color) : null);
     }
 };
 
