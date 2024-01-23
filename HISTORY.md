@@ -3,9 +3,12 @@
 ## in development:
 * **New Features:**
     * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
+* **Documentation Updates:**
+    * extended API documentation for highlighting a single block
 
 2024-01-22
 * api, blocks: new flashSpriteScriptAt() api
+* extended API documentation for highlighting a single block
 
 2024-01-22
 * new dev version for v9.2.4

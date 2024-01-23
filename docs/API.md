@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, January 22, 2024
+Jens Mönig, Bernat Romagosa, January 23, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -53,6 +53,7 @@ Currently the API consists of the following methods:
 #### Highlight Blocks
 
 * `IDE_Morph.prototype.flashSpriteScripts()`
+* `IDE_Morph.prototype.flashSpriteScriptAt()`
 * `IDE_Morph.prototype.unflashSpriteScripts`
 
 #### Set the Language
@@ -408,6 +409,24 @@ the flashSpriteScripts() method highlights the blocks of the scripts of the spri
     * integer representing the first line of mapped code to be signaled, starting at 1
 * toLOC
     * integer representing the last line of mapped code to be signaled
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.flashSpriteScriptAt()
+the flashSpriteScriptAt() method highlights the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    flashSpriteScriptAt(charIdx[, spriteName[, colorCSV]]);
+
+#### parameters
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
 * spriteName
     * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
 * colorCSV
