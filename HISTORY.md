@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.4:
 * **New Features:**
     * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
 * **Documentation Updates:**
@@ -9,6 +11,7 @@
 2024-01-22
 * api, blocks: new flashSpriteScriptAt() api
 * extended API documentation for highlighting a single block
+* prepared v9.2.4 patch
 
 2024-01-22
 * new dev version for v9.2.4
