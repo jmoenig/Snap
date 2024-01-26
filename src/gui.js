@@ -2284,6 +2284,11 @@ IDE_Morph.prototype.droppedText = async function (aString, name, fileType) {
     if (fileType.indexOf('json') !== -1 || ext === 'json') {
         return this.openDataString(aString, lbl, 'json');
     }
+    if (ext === 'musicxml') {
+        const read = new MusicReader(aString, name.replace(/\.musicxml$/, ''));
+        const write = new MusicWriter(read);
+        return this.droppedText(write.getFile());
+    }
 
     // import as plain text data
     return this.openDataString(aString, lbl, 'text');
@@ -4076,18 +4081,6 @@ IDE_Morph.prototype.importLocalFile = function () {
     inp.addEventListener(
         "change",
         () => {
-            if (inp.files[0].type === 'application/vnd.recordare.musicxml+xml') {
-                console.log('music file found');
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const read = new MusicReader(reader.result, "BeatBlox Demo");
-                    const write = new MusicWriter(read);
-                    console.log(typeof write);
-                    console.log(typeof write.myRoot);
-                    this.droppedText(write.getFile());
-                };
-                reader.readAsText(inp.files[0]);
-            }
             document.body.removeChild(inp);
             this.filePicker = null;
             world.hand.processDrop(inp.files);
