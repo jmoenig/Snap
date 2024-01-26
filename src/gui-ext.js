@@ -311,7 +311,7 @@ class OpenPrivateProject extends UrlParams {
             return;
         }
 
-        const msg = ide.showMessage('Opening ' + name + ' example...');
+        const msg = ide.showMessage('Opening ' + name + '...');
         try {
             const metadata = await ide.cloud.getProjectMetadataByName(ide.cloud.username, name);
             const source = new CloudProjectsSource(ide);
