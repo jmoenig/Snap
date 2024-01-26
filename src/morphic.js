@@ -11814,6 +11814,7 @@ HandMorph.prototype.processDrop = function (event) {
                 // thinks OGGs are videos
             return readAudio(file);
         } else if ((file.type.indexOf("text") === 0) ||
+                suffix.includes('xml') ||  // needed to recognize musicxml as xml
                 contains(['txt', 'csv', 'json'], suffix)) {
                 // check the file-extension because Windows
                 // doesn't specify CSVs to be text/csv, sigh
