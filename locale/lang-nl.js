@@ -1330,6 +1330,7 @@ SnapTranslator.dict.nl = {
     "undrop": "ongedaan maken",
     "unicode _ as letter": "unicode _ als letter",
     "unicode of _": "unicode waarde van _",
+    "uniques": "unieke waarden",
     "unlock": "",
     "unpublished.": "",
     "unpublishing project...": "",
