@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2023-June-02';
+modules.symbols = '2024-January-18';
 
 var SymbolMorph;
 
@@ -101,6 +101,7 @@ SymbolMorph.prototype.names = [
     'rectangleSolid',
     'circle',
     'circleSolid',
+    'dot',
     'ellipse',
     'line',
     'cross',
@@ -142,6 +143,8 @@ SymbolMorph.prototype.names = [
     'globe',
     'globeBig',
     'list',
+    'listNarrow',
+    'verticalEllipsis',
     'flipVertical',
     'flipHorizontal',
     'trash',
@@ -356,6 +359,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'circleSolid':
         this.renderSymbolCircleSolid(ctx, aColor);
         break;
+    case 'dot':
+        this.renderSymbolCircleSolid(ctx, aColor);
+        break;
     case 'ellipse':
         this.renderSymbolCircle(ctx, aColor);
         break;
@@ -477,7 +483,11 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolGlobeBig(ctx, aColor);
         break;
     case 'list':
+    case 'listNarrow':
         this.renderSymbolList(ctx, aColor);
+        break;
+    case 'verticalEllipsis':
+        this.renderSymbolVerticalEllipsis(ctx, aColor);
         break;
     case 'flipVertical':
         this.renderSymbolFlipVertical(ctx, aColor);
@@ -503,6 +513,12 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'verticalEllipsis':
+        return size * 0.2;
+    case 'dot':
+        return size * 0.4;
+    case 'listNarrow':
+        return size * 0.5;
     case 'location':
         return size * 0.6;
     case 'flash':
@@ -1374,11 +1390,12 @@ SymbolMorph.prototype.renderSymbolCircle = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolCircleSolid = function (ctx, color) {
     // draw a solid circle
-    var w = this.symbolWidth();
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
+    ctx.arc(w / 2, h / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
 };
 
@@ -2248,6 +2265,18 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
     }
     ctx.clip('evenodd');
     ctx.fillRect(0, 0, w, h);
+};
+
+SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
+    // draw 3 solid circles
+    var r = this.symbolWidth() / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 5, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 9, r, radians(0), radians(360), false);
+    ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {

@@ -107,11 +107,11 @@ MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
 ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-June-06';
+modules.byob = '2023-July-14';
 
 // Declarations
 
@@ -2949,6 +2949,7 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
         true // ignore empty slots for custom block reification
     );
     stackFrame.outerContext = null;
+    stackFrame.comment = head?.comment?.text();
     return stackFrame;
 };
 
@@ -3765,7 +3766,8 @@ InputSlotDialogMorph.prototype.setType = function (fragmentType) {
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(c => c.refresh());
     this.slots.children.forEach(c => c.refresh());
-    this.isExpanded = !isNil(fragmentType) && this.isLaunchingExpanded;
+    this.isExpanded = this.isExpanded ||
+        (!isNil(fragmentType) && this.isLaunchingExpanded);
     this.types.children.forEach(c => c.refresh());
     this.changed();
     this.fixLayout();

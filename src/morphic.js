@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2023 by Jens Mönig
+    Copyright (C) 2010-2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2023-March-16';
+var morphicVersion = '2024-January-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -2130,8 +2130,8 @@ Color.prototype.toRGBstring = function () {
 
 Color.fromString = function (aString) {
     // I parse rgb/rgba strings into a Color object
-    var components = aString.split(/[\(),]/).slice(1,5);
-    return new Color(components[0], components[1], components[2], components[3]);
+    var channels = aString.split(/[\(),]/).slice(0,4);
+    return new Color(+channels[0], +channels[1], +channels[2], +channels[3]);
 };
 
 // Color copying:
@@ -2765,7 +2765,7 @@ Rectangle.prototype.boundingBox = function () {
 
 Rectangle.prototype.center = function () {
     return this.origin.add(
-        this.corner.subtract(this.origin).floorDivideBy(2)
+        this.corner.subtract(this.origin).divideBy(2)
     );
 };
 
@@ -3464,7 +3464,7 @@ Morph.prototype.setBottom = function (y) {
 Morph.prototype.setCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.extent().floorDivideBy(2)
+            this.extent().divideBy(2)
         )
     );
 };
@@ -3472,7 +3472,7 @@ Morph.prototype.setCenter = function (aPoint) {
 Morph.prototype.setFullCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.fullBounds().extent().floorDivideBy(2)
+            this.fullBounds().extent().divideBy(2)
         )
     );
 };
@@ -8261,7 +8261,7 @@ MenuMorph.prototype.adjustWidths = function () {
         if (item === this.label) {
             item.text.setPosition(
                 item.center().subtract(
-                    item.text.extent().floorDivideBy(2)
+                    item.text.extent().divideBy(2)
                 )
             );
         }
@@ -9919,7 +9919,7 @@ TriggerMorph.prototype.createLabel = function () {
 TriggerMorph.prototype.fixLayout = function () {
     this.label.setPosition(
         this.center().subtract(
-            this.label.extent().floorDivideBy(2)
+            this.label.extent().divideBy(2)
         )
     );
 };
@@ -12228,12 +12228,14 @@ WorldMorph.prototype.initRetina = function () {
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
     // answer the color at the given point.
-    var dta = this.worldCanvas.getContext('2d').getImageData(
-        point.x,
-        point.y,
-        1,
-        1
-    ).data;
+    // first, create a new temporary canvas representing the fullImage
+    // and sample that one instead of the actual world canvas
+    // this slows things down but keeps Chrome from crashing
+    // in v119 in the Fall of 2023
+    var dta = Morph.prototype.fullImage.call(this)
+            .getContext('2d')
+            .getImageData(point.x, point.y, 1, 1)
+            .data;
     return new Color(dta[0], dta[1], dta[2]);
 };
 

@@ -1,33 +1,374 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.4:
+* **New Features:**
+    * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
+* **Documentation Updates:**
+    * extended API documentation for highlighting a single block
+
+2024-01-22
+* api, blocks: new flashSpriteScriptAt() api
+* extended API documentation for highlighting a single block
+* prepared v9.2.4 patch
+
+2024-01-22
+* new dev version for v9.2.4
+
+## 9.2.3:
+* **New Features:**
+    * api: added optional color-csv parameter to flashScripts() api
+* **Notable Fixes:**
+    * fixed a bug in the MQTT library, thanks, Simon!
+* **Documentation Updates:**
+    * extended API documentation for optional scripts-flashing color
+
+2024-01-22
+* api: added optional color-csv parameter to flashScripts() api
+* updated MQTT library, thanks, Simon!
+* prepared v9.2.3 patch
+
+2024-01-21
+* new dev version for v9.2.3
+
+## 9.2.2:
+* **New Features:**
+    * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
+* **Notable Changes:**
+    * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
+    * changed the filter names in the pixels library to lowercase
+* **Notable Fixes:**
+    * fixed #3296 (make sure to stop video when resizing the stage)
+* **Translation Updates:**
+    * Ukrainian, thanks, Serhiy Kryzhanovsky!
+
+2024-01-19
+* gui: fixed #3296 (make sure to stop video when resizing the stage)
+* pixels library: Changed the filter effect names to lowercase
+* Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
+* prepared v9.2.2 patch
+* fixed a syntax glitch in the Ukrainian translation update
+
+2024-01-18
+* new dev version for v9.2.2
+* symbols: added "dot" symbol
+* threads: also accept a scalar (single number) in the variadic SUM reporter (returns its identity)
+
+## 9.2.1:
+* **New Features:**
+    * experimental "dta_zip(list)" extension primitive
+* **Notable Fixes:**
+    * fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+    * fixed a typecasting glitch when creating a stage menu with numerical title
+
+2024-01-15
+* new dev version for v9.2.1
+* threads: fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+* objects: fixed a typecasting glitch when creating a stage menu with numerical title
+* extensions: added experimental "dta_zip(list)" extension primitive
+* prepared v9.2.1 patch
+
+## 9.2.0:
+* **New Features:**
+    * (better) matrix-kernel convolution support, automatic zero-padding
+    * new graphic filter effects tools in the pixels library
+    * support for THIS "inputs" selector inside custom block definitions
+* **Notable Changes:**
+    * hyperized ITEM OF
+    * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices both with or without color channels
+    * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
+    * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
+    * MQTT library update, thanks, Simon!
+* **Notable Fixes:**
+    * fixed a RESHAPE edge case when passing in a single zero dimension
+    * made sure ITEM OF returns data matching the shape specified by the query struct (automatic zero-padding)
+    * fixed speech balloons inside ASK menus
+    * added safeguard against accidentally querying too many list dimensions (e.g. when forgetting to transpose a convolution)
+
+2024-01-11
+* prepared v9.2.0 minor release
+
+2024-01-10
+* lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+* lists: some more minor optimizations for item() and columns()
+* threads: added support for THIS "inputs" selector inside custom block definitions 
+
+2024-01-09
+* pixels library: added Sobel edge-detection variants for left/right/top/bottom
+* threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
+* pixels library: added 5x5 Gaussian blur filter
+
+2024-01-08
+* threads: tweaked hyperDyadic() to allow explicit dimension matching
+* pixels library: added graphic filter effects (matrix-kernel convolutions)
+* incremented dev version to v9.2.0
+* lists: added safeguard against accidentally querying too many dimensions 
+* threads: refactored reportDimensions()
+* threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
+* objects: accept > 4 columns pixels matrices as costumes in the SWITCH TO COSTUME reporter
+
+2024-01-05
+* objects: fixed speech balloons inside ASK menus
+
+2024-01-03
+* new dev version for v9.1.2
+* lists: fixed a RESHAPE edge case when passing in a single zero dimension
+* lists: made sure ITEM OF returns data matching the shape specified by the query struct
+* lists: hyperized ITEM OF
+* threads: refactored reportRank()
+* threads: tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+* threads: refactored hyperizing mechanism for coordinates
+
+## 9.1.1:
+* **Notable Fixes:**
+    * fixed using #open: to load a library from a url, thanks, Bernat!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+2023-12-12
+* gui: fixed using #open: to load a library from a url, thanks, Bernat!
+* Catalan translation update, thanks, Joan!
+* prepared v9.1.1 patch
+
+## 9.1.0:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+    * text inside "say" and "think" balloons gets vertical scroll bars if it exceeds the displayable space, is scrolled to the bottom by default to support language projects such as sengen
+    * added "say" commands to the stage's palette
+    * added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+    * added "min", "max" and "atan2" reporters to the OPERATORS palette
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector
+    * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
+* **Notable Fixes:**
+    * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+    * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
+* **Translation Updates:**
+    * German
+
+2023-12-05
+* updated "Just Words" library, made sure it's a library file, not a project
+* prepared v9.1 minor release
+
+2023-11-30
+* objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
+
+2023-11-29
+* objects, threads, scenes: added "say" commands to the stage's palette
+
+2023-11-27
+* objects: tweaked "write" primitive for the stage
+* updated "Just Words" libary with a new version of the "sentence" reporter
+
+2023-11-24
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
+* blocks: fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+* objects: added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+* objects: added "min", "max" and "atan2" reporters to the OPERATORS palette
+
+2023-11-23
+* lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
+
+## 9.0.14:
+* **Notable Fixes:**
+    * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+    * Chinese, thanks, moodykeke!
+
+2023-11-21
+* new dev version for v9.0.14
+* threads: fixed 'distribution' list selector support for nested atomic lists
+* threads: fixed 'uniques' list selector support for nested atomic lists
+* Spanish translation update, thanks, David Martín!
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.14 patch
+
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
+## 9.0.12:
+* **Notable Fixes:**
+    * fixed loading the "Words, sentences" library
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+    * fixed some broken file references in the pwa cache
+* **Library Updates:**
+    * added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
+* added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+* prepared v9.0.12 patch
+
+## 9.0.11:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+    * Spanish (libraries), thanks, Victoria and Mary!
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* Italian translation update, thanks, Stefano!
+* Spanish (libraries) translation update, thanks, Victoria and Mary!
+* prepared v9.0.11 patch
+
+## 9.0.10:
+* **Notable Fixes:**
+    * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+
+2023-11-02
+* objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
+
+## 9.0.9:
+* **Notable Fixes:**
+    * fixed localizing relabelled primitive blocks
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
+* Spanish, translation update, thanks, David Martín!
+* prepared v9.0.9 patch
+
+## 9.0.8:
+* **Notable Fixes:**
+    * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
+## 9.0.7:
+* **Translation Updates:**
+    * Chinese, thanks, moodykeke!
+
+2023-10-09
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.7 patch
+
+## 9.0.6:
+* **Notable Fixes:**
+    * fixed #3252 - local return glitch
+    * fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+
+2023-09-14
+* threads: fixed #3252 - local return glitch
+* animation library: fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+* prepared v9.0.6 patch
+
+## 9.0.5:
+* **Notable Changes:**
+    * MQTT extension update, thanks, Xavier and Simon!
+
+2023-08-01
+* MQTT extension update, thanks, Xavier and Simon!
+* prepared v9.0.5 patch
+
+## 9.0.4:
+* **Notable Changes:**
+    * Emergency Patch for BJC Projects.
+    * The recent cache busting in #3238 is incompatible with BJC servers.
+
+## 9.0.3:
+* **Notable Changes:**
+    * do not cache remote requests, thanks, Michael!
+* **Translation Updates:**
+    * new Tigrinya translation, yay! Thanks, Tesfaldet Negash and Heran Sium!
+    * Catalan, thanks, Joan!
+
+### 2023-07-31
+* new dev version
+* gui: do not cache remote requests, thanks, Michael!
+* Catalan translation update, thanks, Joan!
+* new Tigrinya translation, yay! Thanks, Tesfaldet Negash and Heran Sium!
+* migrated block specs of new Tigrinya translation to the new format (underscores as placeholders for input slots)
+* prepared v9.0.3 patch
+
+## 9.0.2:
+* **Notable Fixes:**
+    * fixed #3239 (a context serialization glitch)
+
+### 2023-07-27
+* store: fixed #3239 (a context serialization glitch)
+* prepared v9.0.2 patch
+
+## 9.0.1:
+* **Notable Fixes:**
+    * fixed "play sound until done" blocking glitch
+
+### 2023-07-19
+* objects: fixed "play sound until done" blocking glitch
+* prepared v9.0.1 patch
+
+## 9.0.0:
 * **New Features:**
     * new "this" reporter for introspection offering access to "script", "caller", "continuation" and "inputs", enabling programs to access their dynamic scope and runtime call-stack
     * "call" is now hyperized and accepts a list/table etc. of rings as procedure input, returns a list/table etc. of applying all arguments to each ring. Currently constrained to primitive data (text, number, Boolean) inputs, albeit in any dimension (e.g. lists of lists of data)
+    * new "extent" selector in the "(attribute) OF (object)" reporter's dropdown menu returns a list if width-height coordinates
+    * new "uniques" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set)
     * new "sorted" and "shuffled" selectors in list properties reporter's dropdown
     * new "stage", "agent" and "script" selectors in "is a?" reporter's dropdown
     * new "case sensitivity" preference setting
-    * new "case sensitivity" selector to the setting blocks' dropdowns 
+    * new "case sensitivity" selector to the setting blocks' dropdowns
     * new dropdown menu with "length", "lower case" and "upper case" selectors in the "length of text" reporter
     * new option to make individual input slots in custom blocks "static", i.e. irreplaceable by reporters
     * new option to specify a "separator" (infix) label for variadic input slots inside custom blocks
+    * new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
+    * new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
+    * new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
+    * new context comments preserve ring comments and hat block comments in the evaluator for later introspection
     * new "generate puzzle" feature - single click Parson's Puzzle generator for educators
-    * new "Sarron" costume series, thanks, Meghan and Brian!
+    * new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
+    * new "Tiles" library, divides the stage into sub-regions in each of which to perform an action
+    * new "Arcs" library, turns sprites by a delta of degrees moving them at a given radius
+    * new "Sarron" and "Aleassa" costume series, thanks, Meghan and Brian!
     * new Armenian translation, yay! Thanks to the contributors!
     * new embedding configuration options: noSpriteEdits
     * Expanded the `#open:` URL scheme to accept image URLs.
     * new "ide_translation_dict", "ide_set_translation_dict(data)" and "txt_export(txt, name)" extension primitives
+    * new "hideDefaultCat" configuration setting, lets you hide the default built-in category buttons
 * **Notable Changes:**
     * IF is now variadic and expandable with "else if" cases
     * explicit variadic input list visuals
     * "this script" reporter has been morphed into the new general "this" introspection/self reflection reporter
     * RUN/CC and CALL/CC primitives have been deprecated and removed from the palette, will still be present and work in existing projects
     * changed the first input slot of the "reshape" block from "list" type to "any" type
-    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change) 
+    * changed JOIN, APPEND and COMBINATIONS to show "with" infix label in between inputs, and to collapse from 2 inputs directly to "input list" case, same as +, min, AND etc. (monadic uses in existing projects will not change)
+    * dragging blocks and scripts out of balloons and watchers now only includes the surrounding ring if it has formal parameters
+    * changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
     * improved browser resource management for graphics and sounds
     * changed long-form input dialog setting's behavior to automatically expand / collapse slot type view
+    * made "distribution" list selector case-sensitivity setting aware and optimized for atomic data
     * slightly optimized pen drawing performance when WARPed
     * removed multibranched conditional library (cases.xml), because IF is now variadic
+    * removed the "remove duplicates" reporter from the "list utilities" libraries because it is now a primitive
     * updated audio comp library with a faster (hyper) version of the "Hz for secs" reporter
     * updated animation library with a faster (hyper) version of "glide" and added "steps" selector to the "animate" command
     * new "fade-in" block in the audio comp library lets you reduce audible "clicks" in sounds computed from raw samples
@@ -36,11 +377,13 @@
     * updated the strings library for and with the new case sensitivity and lower case primitives
     * generated JSON strings are now (somewhat) pretty printed (with newlines and indentations)
     * increased arrows heads size for variadic inputs and dropdown menus
+    * confined the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
 * **Notable Fixes:**
     * fixed #3154 (let "this script" capture variables in rings)
     * catch misspelled or non-existing translation keys in urls and elsewhere, thanks, Joan!
     * fixed a bug that led to the default input of "When I am clicked" not being translated
     * fixed serializing complex inputs to contexts (procedure objects)
+    * fixed dragging blocks, costumes and sounds out of table views
     * fixed #3207 (initial arrow head orientation for long form input slot dialog)
     * fixed a number/text type glitch in the "(ray length) TO (sprite)" reporter for hyperized angular offsets
     * fixed #3180 (preserve zero values in blockified lists instead of turning them into empty slots)
@@ -53,13 +396,136 @@
     * improved sensing precision when clicking on variadic slot arrows
     * fixed JIT-compiling variadic Boolean infix ops (AND, OR)
     * fixed identity case for COMBINATIONS
+    * fixed occasional costume reference error for computed, non-wardrobe costumes in sprite-duplicates
+    * fixed the "stage size" reporter in the "Getters and setters" library
+    * fixed accessing negative indices in linked lists
 * **Documentation Updates:**
-    * extended API documentation for "noSpriteEdits" configuration
+    * extended API documentation for "noSpriteEdits" and "hideDefaultCat" configurations
     * updated CONTRIBUTING.MD for the new underscore-placeholder notation for block input slot translations
 * **Translation Updates:**
     * German
     * Greek, thanks, HM100!
     * Armenian, thanks to the contributors!
+
+### 2023-07-18
+* lists: fixed accessing negative indices in linked lists
+* v9-rc17
+* blocks: fixed a multi-arg slot insertion / deletion glitch
+* v9-rc18
+* blocks: tweaked rendering of variadic arrows
+* v9-rc19
+* prepared v9 release
+
+### 2023-07-17
+* Getters and setter library: fixed "stage size" reporter
+* List utilities library: removed "remove duplicates" reporter (because it is now a primitive)
+* v9-rc14
+* gui: new "hideDefaultCat" configuration setting
+* updated API documentation for "hideDefaultCat" configuration
+* v9-rc15
+* updated Pyret transpilation example
+* changed list symbol representation for variadic slots
+* v9-rc16
+
+### 2023-07-14
+* byob, threads: prevent custom blocks from being deleted from scenes that have a puzzle solution
+* v9-rc12
+* byob, objects, threads: reverted disabling block deletion for puzzle-solution projects, made sure to propagate changes to solutions instead
+* v9-rc13
+
+### 2023-07-13
+* blocks: trying out alternative visuals for the variadic arrows list symbol
+* symbols: added new "verticalEllipsis" symbol
+* blocks: tweaked ArrowMorph rendering
+* morphic: increased subpixel rendering precision
+* blocks: tweaked variadic input slot arrows (made them bigger yet)
+* blocks: tweaked variadic C-Slot layout
+* v9-rc10
+* blocks: slight layout correction for list symbols
+* v9-rc11
+
+### 2023-07-12
+* blocks: confine the red drop-target halo of multi-slots to the boundaries of its arrows / arity controls
+* blocks, threads: renamed "values" list selector to "uniques"
+* German translation update for "uniques" selector
+* v9-rc7
+* blocks: replaced the variadic black "ladder" symbol with a white vertical ellipsis label
+* blocks: changed the semantics of empty list-type slots to return a new empty list instead of "nothing"
+* threads: made "distribution" list selector case-sensitivity setting aware
+* threads: optimized "uniques" list selector for atomic data sets (e.g. CSVs)
+* v9-rc8
+* threads: fixed a "uniques/distribution" optimization glitch
+* v9-rc9
+
+### 2023-07-11
+* blocks, symbols, gui: design overhaul of variadic input slots
+* v9-rc5
+* blocks: fixed displaying multi-slot separators for the first 2 sub-slots
+* blocks: fixed refreshing custom block instances whose multi-slots properties changed
+* blocks, symbols: tweaked multi-slot layout
+* v9-rc6
+
+### 2023-07-10
+* new "Tiles" library, divides the stage into sub-regions in each of which to perform an action
+* new "Arcs" library, turns sprites by a delta of degrees moving them at a given radius
+* v9-rc4
+
+### 2023-07-07
+* threads: changed order or priority for reporting comments
+* blocks: moved "comment" down one item in the dropdown menu
+* blocks, threads: new "extent" selector in the "(attribute) OF (object)" reporter's dropdown menu
+* German translation update for the new "extent" menu option string
+* byob: fixed a newly introduced non-long-form input slot bug when clicking the loop-arrow check mark
+* v9-rc2
+* fixed a dropdown menu glitch in the OF reporter
+* v9-rc3
+
+### 2023-07-06
+* v9-rc1
+
+### 2023-07-05
+* lists, blocks, threads: new "values" selector in list properties reporter's dropdown, answers a new list containing the source list's unique values based on equality (i.e. a set)
+* German translation update for "values" selector
+* blocks, objects, tables, threads: when dragging scripts and blocks out of balloons and watchers only include the surrounding ring if it has formal parameters
+* tables: fixed dragging blocks, costumes and sounds out of table views
+
+### 2023-07-04
+* gui: keep script comments (attached to top blocks) when generating or adding to a puzzle
+* threads: fixed a glitch when querying context comments
+* threads, blocks: extended "comment" selector for introspection
+* threads, blocks: new "solutions" selector in the "my (attributes)" reporter, answers a dictionary of a puzzle sprite's solution scripts tagged by their comments, if any
+* objects: fixed a possible costume reference glitch when duplicating a sprite with a non-wardrobe costume
+* German translation update for "solutions" selector
+
+### 2023-07-03
+* blocks: half-toned list symbols for collapsed RUN/CALL/LAUNCH/TELL/ASKL primitives
+* gui: added multi-sprite Parson's Puzzle capability
+
+### 2023-07-02
+* new "Aleassa" costumes series, thanks, Meghan and Brian!
+
+### 2023-06-29
+* threads: new context comments preserve ring comments in the evaluator for later introspection
+* blocks: when reifying hat blocks ("my scripts") use comments attached to them as context comments
+* byob: when querying custom block definitions use comments attached to the prototype hat as context comment
+* store: persist context comments
+
+### 2023-06-28
+* blocks, threads: tweaked "slots" result for variadic input groups, currently read-only
+* blocks, threads: new "comment" selector in block-attributes dropdown, accesses cutom block definitions' help text, i.e. comments attached to the prototype hat
+* German translation update for the "comment" block attribute
+
+### 2023-06-27
+* blocks, threads: new "replaceables" selector in block-attributes dropdown, manages whether inputs slots are static
+* blocks, threads: new "separators" selector in block-attributes dropdown, manages infix-separators for variadic input slots
+* blocks: apply declared separator to replaced default variadic inputs in custom blocks
+* German translation update for "replaceables" and "separators" block attributes
+* gui: changed naming scheme for generated puzzles
+
+### 2023-06-26
+* objects, gui, store: embed solutions in Parson's Puzzles
+* gui: limit generating puzzles to sprites that are not already puzzles themselves
+* German translation update for "solution" menu item strings
 
 ### 2023-06-09
 * gui: keep the unattached comments when generating a puzzle

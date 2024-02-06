@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -80,19 +80,18 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
-MultiArgMorph
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 */
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-June-09';
+modules.gui = '2024-January-23';
 
 // Declarations
 
-var SnapVersion = '9.0.0-dev';
+var SnapVersion = '9.2.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -246,6 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
+        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
@@ -545,6 +545,14 @@ IDE_Morph.prototype.openIn = function (world) {
                                     projectData.indexOf('<project') === 0
                                 ) {
                                     this.rawOpenProjectString(projectData);
+                                } else if (
+                                    projectData.indexOf('<blocks') === 0
+                                ) {
+                                    this.rawOpenBlocksString(
+                                        projectData,
+                                        null, // name, optional
+                                        true  // silently
+                                    );
                                 }
                                 this.hasChangedMedia = true;
                             },
@@ -1537,6 +1545,7 @@ IDE_Morph.prototype.createCategories = function () {
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
+        shift = this.config.noDefaultCat ? 4 : 0,
         flag = true;
 
     if (this.categories) {
@@ -1691,10 +1700,16 @@ IDE_Morph.prototype.createCategories = function () {
             col = (i < 4 || i > 7) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
-                t + ((row + 1) * yPadding + (row * buttonHeight) + border) +
+                t + (((row - shift) + 1) * yPadding + ((row - shift) * buttonHeight) + border) +
                     (i > 7 ? border + 2 : 0)
             ));
         });
+
+        if (shift) { // hide the built-in category buttons
+            for (i = 0; i < 8; i += 1) {
+                myself.categories.children[i].hide();
+            }
+        }
 
         if (more > 6) {
             scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
@@ -1713,15 +1728,15 @@ IDE_Morph.prototype.createCategories = function () {
             myself.categories.add(scroller);
             myself.categories.scroller = scroller;
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (4 + 1 - shift) * yPadding
+                    + (4 - shift) * buttonHeight
                     + 6 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (4 + 1) * yPadding
-                    + 4 * buttonHeight
+                (4 + 1 - shift) * yPadding
+                    + (4 - shift) * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
                             : 0)
@@ -3845,7 +3860,7 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
     );
 };
 
-IDE_Morph.prototype.removeSprite = function (sprite) {
+IDE_Morph.prototype.removeSprite = function (sprite, enableUndelete = true) {
     var idx;
     sprite.parts.slice().forEach(part =>
     	this.removeSprite(part)
@@ -3877,7 +3892,9 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.selectSprite(this.currentSprite);
 
     // remember the deleted sprite so it can be recovered again later
-    this.scene.trash.push(sprite);
+    if (enableUndelete) {
+        this.scene.trash.push(sprite);
+    }
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
@@ -4378,18 +4395,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Explicit input lists',
-        () => {
-            MultiArgMorph.prototype.enableExplicitInputLists =
-                !MultiArgMorph.prototype.enableExplicitInputLists;
-            this.refreshIDE();
-        },
-        MultiArgMorph.prototype.enableExplicitInputLists,
-        'uncheck to hide the list symbol\nin empty variadic input slots',
-        'check to show a list symbol\nin empty variadic input slots',
-        true
-    );
-    addPreference(
         'Camera support',
         'toggleCameraSupport',
         CamSnapshotDialogMorph.prototype.enableCamera,
@@ -4701,6 +4706,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
+    addPreference(
         'Persist linked sublist IDs',
         () => StageMorph.prototype.enableSublistIDs =
             !StageMorph.prototype.enableSublistIDs,
@@ -4858,12 +4874,15 @@ IDE_Morph.prototype.projectMenu = function () {
             () => this.deleteUserCategory(pos)
         );
     }
-    menu.addItem(
-        'Generate puzzle',
-        'generatePuzzle',
-        'generate a Parson\'s Puzzle\n' +
-            'from the current sprite'
-    );
+    if (this.currentSprite instanceof SpriteMorph &&
+        !this.currentSprite.solution) {
+        menu.addItem(
+            'Generate puzzle',
+            'generatePuzzle',
+            'generate a Parson\'s Puzzle\n' +
+                'from the current sprite'
+        );
+    }
     menu.addLine();
     if (this.scenes.length() > 1) {
         menu.addItem('Scenes...', 'scenesMenu');
@@ -5251,7 +5270,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2023 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2024 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -5289,7 +5308,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nBernat Romagosa: Countless contributions'
         + '\nBartosz Leper: Retina Display Support'
-        + '\nDariusz Dorożalski: Web Serial Support'
+        + '\nDariusz Dorożalski: Web Serial Support,'
+        + '\ncountless bugfixes and optimizations'
         + '\nZhenlei Jia and Dariusz Dorożalski: IME text editing'
         + '\nKen Kahn: IME support and countless other contributions'
         + '\nJosep Ferràndiz: Video Motion Detection'
@@ -5313,11 +5333,12 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet and Sarron costumes are watercolor'
-        + '\npaintings by Meghan Taylor and represent characters from'
-        + '\nher webcomic Prophecy of the Circle, licensed to us only'
-        + '\nfor use in Snap! projects. Meghan also painted the Tad'
-        + '\ncostumes, but that character is in the public domain.';
+        + 'Jahrd, Derec, Jamet, Sarron, and Aleassa costumes are'
+        + '\nwatercolor paintings by Meghan Taylor and represent'
+        + '\n characters from her webcomic Prophecy of the Circle,'
+        + '\nlicensed to us only for use in Snap! projects.'
+        + '\nMeghan also painted the Tad costumes,'
+        + '\nbut that character is in the public domain.';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
@@ -5740,6 +5761,10 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.generatePuzzle = function () {
+    if (this.sprites.asArray().some(any => any.solution)) {
+        return this.addToPuzzle();
+    }
+
     var current = this.currentSprite,
         allBlocks = current.allPaletteBlocks(),
         used = current.scripts.allChildren().filter(
@@ -5811,18 +5836,96 @@ IDE_Morph.prototype.generatePuzzle = function () {
     this.duplicateSprite(current);
     puzzle = this.currentSprite; // this is now the duplicate
     puzzle.setPosition(current.position());
-    current.hide();
-    puzzle.setName(this.newSpriteName(localize('Puzzle')));
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
 
-    // remove all scripts but keep the unattached comments
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
     puzzle.scripts.children.filter(m =>
         m instanceof BlockMorph
     ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
 
     // refresh
     this.selectSprite(puzzle);
 };
 
+IDE_Morph.prototype.addToPuzzle = function () {
+    var current = this.currentSprite,
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uCust = [],
+        unused,
+        puzzle;
+
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused local blocks only
+    used.forEach(b => {
+        if (b.isCustomBlock && !b.isGlobal) {
+            uCust.push(current.getMethod(b.semanticSpec));
+        }
+    });
+    unused = allBlocks.filter(b => b.isCustomBlock && !b.isGlobal &&
+        !contains(uCust, current.getMethod(b.semanticSpec))
+    );
+
+    // hide unused local custom bocks
+    unused.forEach(block => current.changeBlockVisibility(block, true, true));
+
+    // show used blocks
+    used.forEach(block => current.changeBlockVisibility(block, false, true));
+
+    // fire user edit event
+    current.recordUserEdit(
+        'palette',
+        'hide block'
+    );
+
+    // refresh
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.categories.refreshEmpty();
+
+    // generate a new puzzle sprite by duplicating the current one
+    this.duplicateSprite(current);
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
+
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
+
+    // refresh
+    this.selectSprite(puzzle);
+};
 IDE_Morph.prototype.exportSprite = function (sprite) {
     this.saveXMLAs(sprite.toXMLString(), sprite.name);
 };
@@ -6540,7 +6643,7 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     globals.setVar(vName, data);
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
-    this.currentCategory = 'variables';
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'variables';
     this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {
@@ -7579,6 +7682,8 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.stage.stopVideo();
     this.setExtent(world.extent());
     Costume.prototype.maxDimensions = aPoint;
+    this.stage.stopVideo();
+    this.stage.stopProjection();
     if (this.isAnimating) {
         zoom();
     } else {
@@ -8099,6 +8204,8 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
+    // Note: Do Not attemp to prevent caching of requests.
+    //   This has caused issues for BJC and the finch.
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
         rsp;
@@ -8124,9 +8231,6 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                 }
             };
         }
-        // cache-control, commented out for now
-        // added for Snap4Arduino but has issues with local robot servers
-        // request.setRequestHeader('Cache-Control', 'max-age=0');
         request.send();
         if (!async) {
             if (request.status === 200) {
@@ -10321,6 +10425,32 @@ SpriteIconMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.solution) {
+        menu.addItem(
+            'extract solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).undelete(
+                    this.object.solution.fullCopy(),
+                    this.center()
+                );
+            }
+        );
+        menu.addItem(
+            'delete solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).removeSprite(
+                    this.object.solution
+                );
+                this.object.solution = null;
+                this.object.recordUserEdit(
+                    'sprite',
+                    'solution',
+                    'delete'
+                );
+            }
+        );
+        menu.addLine();
+    }
     if (StageMorph.prototype.enableInheritance) {
         /* version that hides refactoring capability unless shift-clicked
         if (this.world().currentKey === 16) { // shift-clicked

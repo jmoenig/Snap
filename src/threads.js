@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,11 +61,11 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition*/
+StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2023-June-08';
+modules.threads = '2024-January-18';
 
 var ThreadManager;
 var Process;
@@ -1317,6 +1317,9 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         ),
         i = 0;
 
+    if (this.context?.expression instanceof RingMorph) {
+        context.comment = this.context.expression?.comment?.text();
+    }
     if (topBlock) {
         context.expression = this.enableLiveCoding ||
             this.enableSingleStepping ?
@@ -1866,6 +1869,7 @@ Process.prototype.evaluateCustomBlock = function () {
     outer.variables.addVar(Symbol.for('self'), context);
     outer.variables.addVar(Symbol.for('caller'), this.context);
     outer.variables.addVar(Symbol.for('continuation'), cont);
+    outer.variables.addVar(Symbol.for('arguments'), args);
 
     runnable.expression = runnable.expression.blockSequence();
 };
@@ -2261,9 +2265,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
         this.assertType(list, 'list');
         return list.size();
     case 'rank':
-        return list instanceof List ? list.rank() : 0;
+        return this.reportRank(list);
     case 'dimensions':
-        return list instanceof List ? list.shape() : new List();
+        return this.reportDimensions(list);
     case 'flatten':
         return list instanceof List ? list.ravel() : new List([list]);
     case 'columns':
@@ -2272,9 +2276,39 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'transpose':
         this.assertType(list, 'list');
         return list.transpose();
+    case 'uniques':
+        this.assertType(list, 'list');
+        if (list.canBeCSV()) {
+            return this.reportListAttribute(
+                'distribution',
+                list
+            ).columns().at(1);
+        }
+        return this.reportUniqueValues(list);
     case 'distribution':
         this.assertType(list, 'list');
-        return list.distribution();
+        if (list.canBeJSON()) {
+            // support computing the frequency distribution of nested lists
+            // if all leaf items have atomic data,
+            // observe case-sensitivity setting
+            return list.map(row => {
+                let entry = row instanceof List ?
+                    '__json__' + row.asJSON() // internally tag as list
+                    : row;
+                return isString(entry) && Process.prototype.isCaseInsensitive ?
+                    entry.toLowerCase()
+                    : entry;
+            }).distribution().map(row => {
+                let item = row.at(1);
+                return new List([
+                    isString(item) && item.startsWith('__json__') ?
+                        this.parseJSON(item.slice(8))
+                        : item,
+                    row.at(2)
+                ]);
+            });
+        }
+        return this.reportDistribution(list);
     case 'sorted':
         this.assertType(list, 'list');
         return this.reportSorted(list);
@@ -2284,6 +2318,14 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'reverse':
         this.assertType(list, 'list');
         return list.reversed();
+    case 'text':
+        this.assertType(list, 'list');
+        if (list.canBeWords()) {
+            return list.asWords();
+        }
+        throw new Error(
+            localize('unable to convert to') + ' ' + localize('text')
+        );
     case 'lines':
         this.assertType(list, 'list');
         if (list.canBeTXT()) {
@@ -2333,13 +2375,86 @@ Process.prototype.reportListIsEmpty = function (list) {
     return list.isEmpty();
 };
 
+Process.prototype.reportRank = function (data) {
+    return data instanceof List ? data.rank() : 0;
+};
+
+Process.prototype.reportQuickRank = function (data) {
+    // private - assume a regularly shaped nested list
+    return data instanceof List ? data.quickRank() : 0;
+};
+
+Process.prototype.reportDimensions = function (data) {
+    return data instanceof List ? data.shape() : new List();
+};
+
 Process.prototype.doShowTable = function (list) {
     // experimental
     this.assertType(list, 'list');
     new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
-// process - sorting and shuffling a list (general utility)
+// process - analyzing sorting and shuffling a list (general utility)
+
+Process.prototype.reportUniqueValues = function (list) {
+    // Filter - answer a new list representing the set of unique values
+    // in the list based on equality,
+    // interpolated so it can be interrupted by the user
+    // because snapEquals() can be a lot slower than identity comparison
+    var next;
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            idx : 0,
+            target : []
+        };
+    }
+    if (this.context.accumulator.idx === list.length()) {
+        this.returnValueToParentContext(
+            new List(this.context.accumulator.target)
+        );
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = list.at(this.context.accumulator.idx);
+    if (!this.context.accumulator.target.some(any => snapEquals(any, next))) {
+        this.context.accumulator.target.push(next);
+    }
+    this.pushContext();
+};
+
+Process.prototype.reportDistribution = function (list) {
+    // answer a new list with an entry for each unique value and the
+    // number of its occurrences in the source list,
+    // interpolated so it can be interrupted by the user
+    // because snapEquals() can be a lot slower than identity comparison
+    var next, record;
+    if (this.context.accumulator === null) {
+        this.assertType(list, 'list');
+        this.context.accumulator = {
+            idx : 0,
+            target : []
+        };
+    }
+    if (this.context.accumulator.idx === list.length()) {
+        this.returnValueToParentContext(
+            new List(this.context.accumulator.target.map(row => new List(row)))
+        );
+        return;
+    }
+    this.context.accumulator.idx += 1;
+    next = list.at(this.context.accumulator.idx);
+
+    record = this.context.accumulator.target.find(row =>
+        snapEquals(row[0], next)
+    );
+    if (record !== undefined) {
+        record[1] += 1;
+    } else {
+        this.context.accumulator.target.push([next, 1]);
+    }
+    this.pushContext();
+};
 
 Process.prototype.reportSorted = function (data) {
     return new List(data.itemsArray().slice().sort((a, b) =>
@@ -2607,7 +2722,8 @@ Process.prototype.doIf = function (block) {
     var args = this.context.inputs,
         inps = block.inputs(),
         outer = this.context.outerContext,
-        acc = this.context.accumulator;
+        acc = this.context.accumulator,
+        isCustomBlock = this.context.isCustomBlock;
 
     if (!acc) {
         acc = this.context.accumulator = {
@@ -2617,6 +2733,7 @@ Process.prototype.doIf = function (block) {
     if (!args.length) {
         if (acc.args.length) {
             this.pushContext(acc.args.shift(), outer);
+            this.context.isCustomBlock = isCustomBlock;
             return;
         }
         this.popContext();
@@ -2625,6 +2742,7 @@ Process.prototype.doIf = function (block) {
     if (args.pop()) {
         this.popContext();
         this.pushContext(acc.args.shift().evaluate()?.blockSequence(), outer);
+        this.context.isCustomBlock = isCustomBlock;
         return;
     }
     acc.args.shift();
@@ -3581,7 +3699,13 @@ Process.prototype.blockReceiver = function () {
 
 Process.prototype.playSound = function (name) {
     if (name instanceof List) {
-        return this.doPlaySoundAtRate(name, 44100);
+        // use the microphone's default sample rate in case it has been
+        // initialized before, otherwise 44.1 kHz
+        return this.doPlaySoundAtRate(
+            name,
+            this.blockReceiver().parentThatIsA(StageMorph)
+                .microphone?.audioContext?.sampleRate || 44100
+        );
     }
     return this.blockReceiver().doPlaySound(name);
 };
@@ -4020,9 +4144,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (data instanceof List) {
-                if (!isStage) {
-                    rcvr.stopTalking();
-                }
+                rcvr.stopTalking();
                 this.prompter = new StagePickerMorph(data);
                 this.prompter.createItems(stage.scale);
                 leftSpace = rcvr.left() - stage.left();
@@ -4048,6 +4170,8 @@ Process.prototype.doAsk = function (data) {
             } else {
                 if (!isStage && !isHiddenSprite) {
                     rcvr.bubble(data, false, true);
+                } else if (isStage) {
+                    rcvr.stopTalking();
                 }
                 this.prompter = new StagePrompterMorph(
                     isStage || isHiddenSprite ? data : null
@@ -4399,62 +4523,59 @@ Process.prototype.hyperMonadic = function (baseOp, arg) {
     return baseOp(arg);
 };
 
-Process.prototype.hyperDyadic = function (baseOp, a, b, atoma, atomb) {
-    // enable dyadic operations to be performed on lists and tables
-    // atoma and atomb are optional monadic callback predicates indicating
-    // whether a or b are to be treated as scalar atoms despite being
-    // lists. This is currenly used for treating 2-item numerical lists as
-    // atomic points of x-/y-coordinates in some primitives.
-    var len, i, result;
-    if (this.isMatrix(a)) {
-        if (this.isMatrix(b)) {
-            // zip both arguments ignoring out-of-bounds indices
-            a = a.itemsArray();
-            b = b.itemsArray();
-            len = Math.min(a.length, b.length);
-            result = new Array(len);
-            for (i = 0; i < len; i += 1) {
-                result[i] = this.hyperDyadic(baseOp, a[i], b[i], atoma, atomb);
-            }
-            return new List(result);
-        }
-        return a.map(each => this.hyperDyadic(baseOp, each, b, atoma, atomb));
-    }
-    if (this.isMatrix(b)) {
-        return b.map(each => this.hyperDyadic(baseOp, a, each, atoma, atomb));
-    }
-    return this.hyperZip(baseOp, a, b, atoma, atomb);
+Process.prototype.hyperDyadic = function (baseOp, a, b) {
+    var match = Math.min(this.reportQuickRank(a), this.reportQuickRank(b));
+    return this.hyperZip(baseOp, a, b, match, match);
 };
 
-Process.prototype.hyperZip = function (baseOp, a, b, atoma, atomb) {
+Process.prototype.hyperZip = function (baseOp, a, b, zipa, zipb) {
     // enable dyadic operations to be performed on lists and tables
-    // atoma and atomb are optional monadic callback predicates indicating
-    // whether a or b are to be treated as scalar atoms despite being
-    // lists. This is currenly used for treating 2-item numerical lists as
-    // atomic points of x-/y-coordinates in some primitives.
-    var len, i, result;
-    if (!(atoma && atoma(a)) && a instanceof List) {
-        if (!(atomb && atomb(b)) && b instanceof List) {
-            // zip both arguments ignoring out-of-bounds indices
-            a = a.itemsArray();
-            b = b.itemsArray();
-            len = Math.min(a.length, b.length);
-            result = new Array(len);
-            for (i = 0; i < len; i += 1) {
-                result[i] = this.hyperZip(baseOp, a[i], b[i], atoma, atomb);
-            }
-            return new List(result);
+    // allowing to specify the ranks that are to be matched.
+    // this allows to write 2d matrix convolutions for 3+d inputs with
+    // 2d kernels e.g. for image processing without having to first
+    // reshape the kernel matrix to match the broadcast shape.
+    var arank = this.reportQuickRank(a),
+        brank = this.reportQuickRank(b),
+        len, i, result;
+    if (arank === brank || (arank <= zipa && brank <= zipb)) {
+        if (arank + brank === 0) {
+            return baseOp(a, b);
         }
-        return a.map(each => this.hyperZip(baseOp, each, b, atoma, atomb));
+        if (brank === 0) {
+            return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
+        }
+        if (arank === 0) {
+            return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
+        }
+        // zip both arguments ignoring out-of-bounds indices
+        a = a.itemsArray();
+        b = b.itemsArray();
+        len = Math.min(a.length, b.length);
+        result = new Array(len);
+        for (i = 0; i < len; i += 1) {
+            result[i] = this.hyperZip(baseOp, a[i], b[i], zipa, zipb);
+        }
+        return new List(result);
     }
-    if (!(atomb && atomb(b)) && b instanceof List) {
-        return b.map(each => this.hyperZip(baseOp, a, each, atoma, atomb));
+    if (arank > zipa) {
+        return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
     }
-    return baseOp(a, b);
+    if (brank > zipb) {
+        return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
+    }
+    if (arank > brank) {
+        return a.map(each => this.hyperZip(baseOp, each, b, zipa, zipb));
+    }
+    return b.map(each => this.hyperZip(baseOp, a, each, zipa, zipb));
 };
 
-Process.prototype.isMatrix = function (data) {
-    return data instanceof List && data.at(1) instanceof List;
+Process.prototype.packCoordinates = function (list) {
+    // convert all numerical 2-item sub-lists into a variable to they
+    // can be handled as atomic by hyperDyadic(),
+    // remember to let the baseOp unpack them.
+    return this.isCoordinate(list) ? new Variable(list)
+        : list.map(each => each instanceof List ? this.packCoordinates(each)
+            : each);
 };
 
 // Process dyadic math primtives - arithmetic
@@ -4466,6 +4587,7 @@ Process.prototype.isMatrix = function (data) {
 */
 
 Process.prototype.reportVariadicSum = function (numbers) {
+    if (!isNaN(+numbers)) {return +numbers; }
     this.assertType(numbers, 'list');
     return this.reportListAggregation(numbers, 'reportSum');
 };
@@ -5071,6 +5193,12 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
     */
     default:
         del = delimiter.toString();
+        if (this.isCaseInsensitive) {
+            del = new RegExp(
+                del.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'),
+                "ig"
+            );
+        }
     }
     return new List(str.split(del));
 };
@@ -5848,12 +5976,14 @@ Process.prototype.spritesAtPoint = function (point, stage) {
 
 Process.prototype.reportRelationTo = function (relation, name) {
     if (this.enableHyperOps) {
+        if (name instanceof List) {
+            // make all numerical 2-item lists atomic
+            name = this.packCoordinates(name);
+        }
         return this.hyperDyadic(
             (rel, nam) => this.reportBasicRelationTo(rel, nam),
             relation,
-            name,
-            null,
-            n => this.isCoordinate(n)
+            name
         );
     }
     return this.reportBasicRelationTo(relation, name);
@@ -5861,6 +5991,9 @@ Process.prototype.reportRelationTo = function (relation, name) {
 
 Process.prototype.reportBasicRelationTo = function (relation, name) {
 	var rel = this.inputOption(relation);
+    if (name instanceof Variable) { // atomic coordinate
+        name = name.value;
+    }
  	if (rel === 'distance') {
   		return this.reportDistanceTo(name);
   	}
@@ -5986,7 +6119,7 @@ Process.prototype.reportRayLengthTo = function (name, relativeAngle = 0) {
     top = targetBounds.top();
     bottom = targetBounds.bottom();
     left = targetBounds.left();
-    right = targetBounds.right();
+    right = targetBounds.right() - 1;
 
     // test if already inside the target
     if (targetBounds.containsPoint(rc)) {
@@ -6194,6 +6327,18 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
                 return thatObj.getVolume();
             case 'balance':
                 return thatObj.getPan();
+            case 'extent':
+                if (thatObj instanceof StageMorph) {
+                    return new List([
+                        thatObj.dimensions.x,
+                        thatObj.dimensions.y
+                    ]);
+                }
+                this.assertType(thatObj, 'sprite');
+                return new List([
+                    thatObj.width() / stage.scale,
+                    thatObj.height() / stage.scale,
+                ]);
             case 'width':
                 if (thatObj instanceof StageMorph) {
                     return thatObj.dimensions.x;
@@ -6323,6 +6468,20 @@ Process.prototype.reportGet = function (query) {
                     each => each.fullCopy().reify()
                 )
             );
+        case 'solutions':
+            if (thisObj.solution) {
+                return new List(
+                    thisObj.solution.scripts.sortedElements().filter(
+                        each => each instanceof BlockMorph
+                    ).map(
+                        each => new List([
+                            each?.comment.text() || '',
+                            each.fullCopy().reify()
+                        ])
+                    )
+                );
+            }
+            return new List();
         case 'blocks': // palette unoordered without inherited methods
             return new List(
                 thisObj.parentThatIsA(StageMorph).globalBlocks.concat(
@@ -7030,7 +7189,7 @@ Process.prototype.costumeNamed = function (name) {
 };
 
 Process.prototype.reportNewCostume = function (pixels, width, height, name) {
-    var rcvr, stage, canvas, ctx, src, dta, i, k, px;
+    var rcvr, stage, canvas, ctx, shp, dim, src, dta, i, k, px;
 
     this.assertType(pixels, 'list');
     if (this.inputOption(width) === 'current') {
@@ -7045,15 +7204,27 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     }
     width = Math.abs(Math.floor(+width));
     height = Math.abs(Math.floor(+height));
-    if (width <= 0 || height <= 0) {
-        throw new Error(
-            'cannot handle zero width or height'
-        );
-    }
     if (!isFinite(width * height) || isNaN(width * height)) {
        throw new Error(
            'expecting a finite number\nbut getting Infinity or NaN'
        );
+    }
+    if (width <= 0 || height <= 0) {
+        // try to interpret the pixels as matrix
+        shp = pixels.quickShape();
+        if (shp.at(2) > 4) {
+            height = shp.at(1);
+            width = shp.at(2);
+            dim = new List([height * width]);
+            if (shp.length() === 3) {
+                dim.add(shp.at(3));
+            }
+            pixels = pixels.reshape(dim);
+        } else {
+            throw new Error(
+                'cannot handle zero width or height'
+            );
+        }
     }
 
     canvas = newCanvas(new Point(width, height), true);
@@ -7271,12 +7442,27 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
-        expr, body, slots, def, info, loc;
+        expr, body, slots, def, info, loc, cmt;
     this.assertType(block, ['command', 'reporter', 'predicate']);
     expr = block.expression;
     switch (choice) {
     case 'label':
         return expr ? expr.abstractBlockSpec() : '';
+    case 'comment':
+        if (block.comment) {
+            return block.comment;
+        }
+        cmt = expr?.comment?.text();
+        if (cmt) {
+            return cmt;
+        }
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            return def.comment?.text() || expr?.comment?.text() || '';
+        }
+        return '';
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
@@ -7319,7 +7505,11 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return new List(
             expr.inputs().map(each =>
                 each instanceof ReporterBlockMorph ?
-                    each.getSlotSpec() : each.getSpec()
+                    each.getSlotSpec()
+                    : (each instanceof MultiArgMorph &&
+                            each.slotSpec instanceof Array ?
+                        each.slotSpec
+                        : each.getSpec())
             )
         ).map(spec => this.slotType(spec));
     case 'defaults':
@@ -7383,6 +7573,44 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             });
         }
         return slots;
+    case 'replaceables':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(!value[4]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(!slot.isStatic);
+            });
+        }
+        return slots;
+    case 'separators':
+        slots = new List();
+        if (expr.isCustomBlock) {
+            def = (expr.isGlobal ?
+                expr.definition
+                : this.blockReceiver().getMethod(expr.semanticSpec));
+            def.declarations.forEach(value => slots.add(value[5]));
+        } else {
+            expr.inputs().forEach(slot => {
+                if (slot instanceof ReporterBlockMorph) {
+                    slot = SyntaxElementMorph.prototype.labelPart(
+                        slot.getSlotSpec()
+                    );
+                }
+                slots.add(slot instanceof MultiArgMorph ?
+                    slot.infix : ''
+                );
+            });
+        }
+        return slots;
     case 'translations':
         if (expr.isCustomBlock) {
             def = (expr.isGlobal ?
@@ -7402,6 +7630,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
 Process.prototype.slotType = function (spec) {
     // answer a number indicating the shape of a slot represented by its spec.
     // Note: you can also use it to translate mnemonics into slot type numbers
+    if (spec instanceof Array) {
+        return new List(spec.map(each => this.slotType(each)));
+    }
+
     var shift = 0,
         key = spec.toLowerCase(),
         num;
@@ -7581,6 +7813,12 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'label':
         def.setBlockLabel(val);
         break;
+    case 'comment':
+        def.comment = new CommentMorph(val);
+        if (def.body) {
+            def.body.comment = val;
+        }
+        break;
     case 'definition':
         this.assertType(val, types);
         def.setBlockDefinition(val);
@@ -7718,6 +7956,33 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 info[3] = !options;
                 def.declarations.set(name, info);
             }
+        });
+        break;
+    case 'replaceables':
+        this.assertType(val, ['list', 'Boolean', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            if ([true, false, 0, 1, '0', '1'].includes(options)) {
+                options = +options;
+                info[4] = !options;
+                def.declarations.set(name, info);
+            }
+        });
+        break;
+    case 'separators':
+        this.assertType(val, ['list', 'text', 'number']);
+        if (!(val instanceof List)) {
+            val = new List([val]);
+        }
+        def.inputNames().forEach((name, idx) => {
+            var info = def.declarations.get(name),
+                options = val.at(idx + 1);
+            info[5] = options.toString();
+            def.declarations.set(name, info);
         });
         break;
     case 'translations':
@@ -8357,6 +8622,7 @@ function Context(
     }
     this.inputs = [];
     this.pc = 0;
+    this.comment = null;
     this.isContinuation = false;
     this.startTime = null;
     this.activeSends = null;
@@ -8394,7 +8660,14 @@ Context.prototype.image = function () {
 Context.prototype.toBlock = function () {
     var ring = new RingMorph(),
         block,
+        cmt,
         cont;
+
+    if (this.comment) {
+        cmt = new CommentMorph(this.comment);
+        cmt.block = ring;
+        ring.comment = cmt;
+    }
 
     if (this.expression instanceof Morph) {
         block = this.expression.fullCopy();
@@ -8433,6 +8706,15 @@ Context.prototype.toBlock = function () {
         );
     }
     return ring;
+};
+
+Context.prototype.toUserBlock = function () {
+    var ring = this.toBlock(),
+        block = ring.contents();
+    if (!block || ring.inputNames().length) {
+        return ring;
+    }
+    return block;
 };
 
 // Context continuations:

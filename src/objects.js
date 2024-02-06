@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -58,6 +58,7 @@
             StagePickerMorph
         SpeechBubbleMorph*
             SpriteBubbleMorph
+            StageBubbleMorph
 
     * defined in Morphic.js
 
@@ -94,11 +95,12 @@ embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2023-May-24';
+modules.objects = '2024-January-15';
 
 var SpriteMorph;
 var StageMorph;
 var SpriteBubbleMorph;
+var StageBubbleMorph;
 var Costume;
 var SVG_Costume;
 var CostumeEditorMorph;
@@ -362,14 +364,12 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [['current'], 100, 50]
         },
         doSayFor: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'say %s for %n secs',
             defaults: [localize('Hello!'), 2]
         },
         bubble: {
-            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'say %s',
@@ -1842,6 +1842,13 @@ SpriteMorph.prototype.initBlockMigrations = function () {
 
 SpriteMorph.prototype.newPrimitivesSince = function (version) {
     var selectors = ['reportJSFunction'];
+    if (version < 9.1) {
+        selectors.push(
+            'reportAtan2',
+            'reportVariadicMin',
+            'reportVariadicMax'
+        );
+    }
     // 9: no new primitives
     // 8.2: no new primitives
     if (version < 8.1) {
@@ -2078,6 +2085,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotatesWithAnchor = true;
     this.layers = null; // cache for dragging nested sprites, don't serialize
 
+    // Parsons Problems properties
+    this.solution = null;
+
     this.primitivesCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.categoriesCache = null; // not to be serialized (!)
@@ -2178,6 +2188,9 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
                 block.definition = cb
             );
         });
+        if (c.costume instanceof Costume && !c.getCostumeIdx()) {
+            c.costume = c.costume.copy();
+        }
         arr = [];
         this.costumes.asArray().forEach(costume => {
             var cst = forClone ? costume : costume.copy();
@@ -2894,8 +2907,12 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportVariadicMin'));
+        blocks.push(block('reportVariadicMax'));
+        blocks.push('-');
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
@@ -3703,7 +3720,7 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.spec),
+                spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
                 rel = relevance(labelOf(spec), search);
             if (rel === -1 && block.alias) {
                 rel = relevance(block.alias, search);
@@ -4323,17 +4340,19 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         h = 0,
         stage;
     if (id instanceof List) { // try to turn a list of pixels into a costume
-        if (this.costume) {
-            // recycle dimensions of current costume
-            w = this.costume.width();
-            h = this.costume.height();
-        }
-        if (w * h !== id.length()) {
-            // assume stage's dimensions
-            stage = this.parentThatIsA(StageMorph);
-            w = stage.dimensions.x;
-            h = stage.dimensions.y;
-        }
+        if (id.quickShape().at(2) <= 4) {
+            if (this.costume) {
+                // recycle dimensions of current costume
+                w = this.costume.width();
+                h = this.costume.height();
+            }
+            if (w * h !== id.length()) {
+                // assume stage's dimensions
+                stage = this.parentThatIsA(StageMorph);
+                w = stage.dimensions.x;
+                h = stage.dimensions.y;
+            }
+        } // else try to interpret the pixels as matrix
         id = Process.prototype.reportNewCostume(
             id,
             w,
@@ -4428,6 +4447,7 @@ SpriteMorph.prototype.doPlaySound = function (name) {
             this.currentSrc = null;
             this.src = "";
             this.srcObject = null;
+            this.terminated = true;
             this.remove();
         };
 
@@ -6550,7 +6570,7 @@ SpriteMorph.prototype.xPosition = function () {
 
     var stage = this.parentThatIsA(StageMorph);
 
-    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+    if (!stage && this.parent?.grabOrigin) { // I'm currently being dragged
         stage = this.parent.grabOrigin.origin;
     }
     if (stage) {
@@ -6566,7 +6586,7 @@ SpriteMorph.prototype.yPosition = function () {
 
     var stage = this.parentThatIsA(StageMorph);
 
-    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+    if (!stage && this.parent?.grabOrigin) { // I'm currently being dragged
         stage = this.parent.grabOrigin.origin;
     }
     if (stage) {
@@ -7259,6 +7279,11 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
         objects = stage.children.filter(morph =>
             morph instanceof SpriteMorph
         );
+        objects.slice().forEach(sprite => {
+            if (sprite.solution) {
+                objects.push(sprite.solution);
+            }
+        });
         objects.push(stage);
         objects.forEach(sprite =>
             blocks = blocks.concat(
@@ -8652,6 +8677,13 @@ StageMorph.prototype.setScale = function (number) {
     this.scale = number;
     this.setExtent(this.dimensions.multiplyBy(number));
 
+    // first resize my speech balloon, if any
+    bubble = this.talkBubble();
+    if (bubble) {
+        bubble.setScale(number);
+        this.positionTalkBubble();
+    }
+
     // now move and resize all children - sprites, bubbles, watchers etc..
     this.children.forEach(morph => {
         relativePos = morph.position().subtract(pos);
@@ -9551,6 +9583,9 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
+        blocks.push(block('doSayFor'));
+        blocks.push(block('bubble'));
+        blocks.push('-');
         blocks.push(block('reportGetImageAttribute'));
         blocks.push(block('reportNewCostumeStretched'));
         blocks.push(block('reportNewCostume'));
@@ -9623,6 +9658,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('setBackgroundColor'));
         blocks.push(block('changeBackgroundColorDimension'));
         blocks.push(block('setBackgroundColorDimension'));
+        blocks.push('-');
+        blocks.push(block('write'));
         blocks.push('-');
         blocks.push(block('reportPenTrailsAsCostume'));
         blocks.push('-');
@@ -9756,8 +9793,12 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportPower'));
         blocks.push('-');
         blocks.push(block('reportModulus'));
+        blocks.push(block('reportVariadicMin'));
+        blocks.push(block('reportVariadicMax'));
+        blocks.push('-');
         blocks.push(block('reportRound'));
         blocks.push(block('reportMonadic'));
+        blocks.push(block('reportAtan2'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
@@ -10136,6 +10177,55 @@ StageMorph.prototype.setColorDimension = function (idx, num) {
     this.rerender();
 };
 
+// StageMorph writing on the trails canvas
+
+StageMorph.prototype.write = function (text, size) {
+    var fontSize = Math.max(3, +size || 1) * this.scale,
+        textMorph, ctx, img;
+
+    // make sure text can be printed
+    if (typeof text !== 'string' && typeof text !== 'number') {
+        throw new Error(
+            localize('can only write text or numbers, not a') + ' ' +
+            typeof text
+        );
+    }
+
+    // use a TextMorph for layout
+    textMorph = new TextMorph(
+        text,
+        fontSize,
+        null, // fontStyle
+        null, // bold - this.bubbleFontIsBold,
+        null, // italic
+        null, // alignment 'center'
+        this.width() - fontSize
+    );
+
+    // try to contrast the background
+    textMorph.setColor(this.getColorDimension(2) > 50 ? BLACK : WHITE);
+
+    // stamp the text onstage
+    ctx = this.penTrails().getContext('2d');
+    img = textMorph.getImage();
+    if (img.width < 1 || (img.height < 1)) {
+        // too small to draw
+        return;
+    }
+    ctx.save();
+    ctx.scale(1 / this.scale, 1 / this.scale);
+    ctx.drawImage(
+        img,
+        fontSize / 2,
+        Math.min(0, (this.height() - img.height - fontSize / 2))
+    );
+    ctx.restore();
+    this.changed();
+    this.cachedPenTrailsMorph = null;
+};
+
+// StageMorph "pen" attributes for the background
+
 StageMorph.prototype.getColorDimension =
     SpriteMorph.prototype.getColorDimension;
 
@@ -10308,6 +10398,30 @@ StageMorph.prototype.changeEffect
 
 StageMorph.prototype.clearEffects
     = SpriteMorph.prototype.clearEffects;
+
+// StageMorph talk bubble
+
+StageMorph.prototype.stopTalking = SpriteMorph.prototype.stopTalking;
+
+StageMorph.prototype.bubble = function (data) {
+    var bubble;
+    this.stopTalking();
+    if (data === '' || isNil(data)) {return; }
+    bubble = new StageBubbleMorph(data, this);
+    this.add(bubble);
+    this.positionTalkBubble();
+};
+
+StageMorph.prototype.talkBubble = SpriteMorph.prototype.talkBubble;
+
+StageMorph.prototype.positionTalkBubble = function () {
+    var bubble = this.talkBubble();
+    if (!bubble) {return null; }
+    bubble.show();
+    bubble.keepWithin(this);
+};
+
+StageMorph.prototype.doThink = StageMorph.prototype.bubble;
 
 // StageMorph sound management
 
@@ -10534,13 +10648,15 @@ StageMorph.prototype.allContextsUsing = function (definition) {
     function scanList(list) {
         if (!charted.includes(list)) {
             charted.push(list);
-            list.map(each => {
-                if (each instanceof Context) {
-                    scanContext(each);
-                } else if (each instanceof List) {
-                    scanList(each);
-                }
-            });
+            if (!list.canBeJSON()) {
+                list.map(each => {
+                    if (each instanceof Context) {
+                        scanContext(each);
+                    } else if (each instanceof List) {
+                        scanList(each);
+                    }
+                });
+            }
         }
     }
 
@@ -10851,9 +10967,11 @@ SpriteBubbleMorph.prototype.init = function (
     this.bubbleFontColor = BLACK;
     this.bubbleFontSize = sprite.bubbleFontSize;
     this.bubbleFontIsBold = sprite.bubbleFontIsBold;
+    this.bubbleFontAlignment = 'center';
     this.bubbleCorner = sprite.bubbleCorner;
     this.bubbleBorder = sprite.bubbleBorder;
     this.bubblePadding = this.bubbleCorner / 2;
+    this.maxTextWidth = sprite.bubbleMaxTextWidth;
 
     SpriteBubbleMorph.uber.init.call(
         this,
@@ -10875,11 +10993,15 @@ SpriteBubbleMorph.prototype.init = function (
 
 SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
     var contents,
+        scroller,
         sprite = SpriteMorph.prototype,
+        maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
+            (this.border + this.padding + 1) * 2,
         isText,
         img,
         scaledImg,
         width;
+
     if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
@@ -10908,7 +11030,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             null, // fontStyle
             this.bubbleFontIsBold,
             false, // italic
-            'center'
+            this.bubbleFontAlignment
         );
 
         // support exporting text / numbers directly from speech balloons:
@@ -11087,7 +11209,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.isDraggable = !sprite.disableDraggingData;
 
         contents.selectForEdit = function () {
-            var script = data.toBlock(),
+            var script = data.toUserBlock(),
                 prepare = script.prepareToBeGrabbed,
                 ide = this.parentThatIsA(IDE_Morph)||
                     this.world().childThatIsA(IDE_Morph);
@@ -11141,10 +11263,27 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             sprite.bubbleCorner * 2 * this.scale
         );
         if (isText) {
-            width = Math.min(width, sprite.bubbleMaxTextWidth * this.scale);
+            width = Math.min(width, this.maxTextWidth * this.scale);
         }
         contents.color = this.bubbleFontColor;
         contents.setWidth(width);
+
+        if (contents.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(contents.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(contents);
+            scroller.color = new Color(0, 0, 0, 0);
+
+            // scroll to the bottom:
+            scroller.scrollY(scroller.bottom() - contents.bottom());
+            scroller.adjustScrollBars();
+
+            contents = scroller;
+        }
+
     } else if (!(data instanceof List)) {
         // scale contents image
         scaledImg = newCanvas(contents.extent().multiplyBy(this.scale));
@@ -11173,6 +11312,11 @@ SpriteBubbleMorph.prototype.setScale = function (scale) {
 // SpriteBubbleMorph layout:
 
 SpriteBubbleMorph.prototype.fixLayout = function () {
+    // scale my settings
+    this.edge = this.bubbleCorner * this.scale;
+    this.border = this.bubbleBorder * this.scale;
+    this.padding = this.bubblePadding * this.scale;
+
     // rebuild my contents
     if (!(this.contentsMorph instanceof ListWatcherMorph ||
             this.contentsMorph instanceof TableFrameMorph)) {
@@ -11181,19 +11325,8 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
     }
     this.add(this.contentsMorph);
 
-    // scale my settings
-    this.edge = this.bubbleCorner * this.scale;
-    this.border = this.bubbleBorder * this.scale;
-    this.padding = this.bubblePadding * this.scale;
-
     // adjust my dimensions
-    this.bounds.setWidth(this.contentsMorph.width()
-        + (this.padding ? this.padding * 2 : this.edge * 2));
-    this.bounds.setHeight(this.contentsMorph.height()
-        + this.edge
-        + this.border * 2
-        + this.padding * 2
-        + 2);
+    this.adjustDimensions();
 
     // position my contents
     this.contentsMorph.setPosition(this.position().add(
@@ -11203,6 +11336,88 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
         )
     ));
 };
+
+SpriteBubbleMorph.prototype.adjustDimensions = function () {
+    this.bounds.setWidth(this.contentsMorph.width()
+        + (this.padding ? this.padding * 2 : this.edge * 2));
+    this.bounds.setHeight(this.contentsMorph.height()
+        + this.edge
+        + this.border * 2
+        + this.padding * 2
+        + 2);
+};
+
+// StageBubbleMorph ////////////////////////////////////////////////////////
+
+/*
+    I am a stage's scaleable speech bubble. I rely on SpriteMorph
+    for my preferences settings and quasi-inherit from SpriteBubbleMorph
+*/
+
+// StageBubbleMorph inherits from SpeechBubbleMorph:
+
+StageBubbleMorph.prototype = new SpeechBubbleMorph();
+StageBubbleMorph.prototype.constructor = StageBubbleMorph;
+StageBubbleMorph.uber = SpeechBubbleMorph.prototype;
+
+// StageBubbleMorph instance creation:
+
+function StageBubbleMorph(data, stage) {
+    this.init(data, stage);
+}
+
+StageBubbleMorph.prototype.init = function (data, stage) {
+    var sprite = SpriteMorph.prototype;
+    this.stage = stage;
+    this.scale = stage ? stage.scale : 1;
+    this.data = data;
+    this.bubbleFontColor = BLACK;
+    this.bubbleFontSize = sprite.bubbleFontSize;
+    this.bubbleFontIsBold = false; // sprite.bubbleFontIsBold;
+    this.bubbleCorner = sprite.bubbleCorner;
+    this.bubbleBorder = sprite.bubbleBorder;
+    this.bubblePadding = this.bubbleCorner / 2;
+    this.maxTextWidth = stage.dimensions.x - sprite.bubbleCorner;
+    this.bubbleFontAlignment = 'left';
+
+    StageBubbleMorph.uber.init.call(
+        this,
+        this.data,
+        sprite.bubbleColor,
+        null,
+        null,
+        sprite.bubbleBorderColor,
+        null,
+        null, // isThought
+        true // no shadow
+    );
+
+    this.isCachingImage = true;
+    this.rerender();
+};
+
+// SpriteBubbleMorph contents formatting
+
+StageBubbleMorph.prototype.dataAsMorph =
+    SpriteBubbleMorph.prototype.dataAsMorph;
+
+// SpriteBubbleMorph scaling
+
+StageBubbleMorph.prototype.setScale = SpriteBubbleMorph.prototype.setScale;
+
+// SpriteBubbleMorph layout:
+
+StageBubbleMorph.prototype.fixLayout = SpriteBubbleMorph.prototype.fixLayout;
+
+StageBubbleMorph.prototype.adjustDimensions = function () {
+    this.bounds.setWidth(this.contentsMorph.width()
+        + (this.padding ? this.padding * 2 : this.edge * 2));
+    this.bounds.setHeight(this.contentsMorph.height()
+        + this.edge
+        + this.border * 2);
+};
+
+StageBubbleMorph.prototype.outlinePath = BoxMorph.prototype.outlinePath;
 
 // Costume /////////////////////////////////////////////////////////////
 
@@ -12519,7 +12734,7 @@ CellMorph.prototype.createContents = function () {
                 !SpriteMorph.prototype.disableDraggingData;
 
             this.contentsMorph.selectForEdit = function () {
-                var script = myself.contents.toBlock(),
+                var script = myself.contents.toUserBlock(),
                     prepare = script.prepareToBeGrabbed,
                     ide = this.parentThatIsA(IDE_Morph) ||
                         this.world().childThatIsA(IDE_Morph);
@@ -13893,7 +14108,7 @@ StagePickerMorph.prototype.createLabel = function () {
         this.label.destroy();
     }
     text = new TextMorph(
-        this.title,
+        this.title.toString(),
         SpriteMorph.prototype.bubbleFontSize * this.scale,
         null, // MorphicPreferences.menuFontName,
         true,

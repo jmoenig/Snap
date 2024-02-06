@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-June-09';
+modules.locale = '2024-January-19';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -184,7 +184,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2023-06-09'
+        '2023-11-22'
 };
 
 SnapTranslator.dict.it = {
@@ -195,7 +195,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2022-91-03'
+        '2023-11-04'
 };
 
 SnapTranslator.dict.ja = {
@@ -257,11 +257,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/孟锡峰/曹儒林',
+        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2022-01-17'
+        '2023-11-15'
 };
 
 SnapTranslator.dict.eo = {
@@ -312,11 +312,11 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Martín',
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
     'last_changed':
-        '2020-12-01'
+        '2023-11-20'
 };
 
 SnapTranslator.dict.nl = {
@@ -393,7 +393,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2023-02-27'
+        '2023-11-08'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -433,11 +433,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller, Ville Medeiros",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2023-01-25',
+        '2023-10-17',
 };
 
 SnapTranslator.dict.bn = {
@@ -624,7 +624,7 @@ SnapTranslator.dict.ua = {
     'translator_e-mail':
         'kseryj@gmail.com',
     'last_changed':
-        '2018-08-21'
+        '2024-01-19'
 };
 
 SnapTranslator.dict.sk = {
@@ -658,6 +658,17 @@ SnapTranslator.dict.hi = {
         'barathkumarbasker2007@gmail.com',
     'last_changed':
         '2021-05-08'
+};
+
+SnapTranslator.dict.ti = {
+	'language_name':
+        'ትግርኛ',
+    'language_translator':
+        'Tesfaldet Negash, Heran Sium',
+    'translator_e-mail':
+        'winna.programming@gmail.com',
+    'last_changed':
+        '2023-05-29'
 };
 
 SnapTranslator.dict.hy = {
