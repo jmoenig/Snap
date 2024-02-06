@@ -420,7 +420,7 @@ IDE_Morph.prototype.openIn = function (world) {
             window.onbeforeunload = nop;
         }
         if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
+            window.onbeforeunload = window.cachedOnbeforeunload;
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
@@ -896,6 +896,11 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // disable cloud access
     if (cnf.noCloud) {
         this.cloud.disable();
+    }
+
+    // disable onbeforeunload close warning
+    if (cnf.noExitWarning) {
+        window.onbeforeunload = window.cachedOnbeforeunload;
     }
 };
 

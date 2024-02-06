@@ -12469,7 +12469,11 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
+    window.cachedOnbeforeunload = window.onbeforeunload;
     window.onbeforeunload = (evt) => {
+        if (window.cachedOnbeforeunload) {
+            window.cachedOnbeforeunload.call(null, evt);
+        }
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";
         // For IE and Firefox
