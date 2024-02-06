@@ -315,6 +315,10 @@ IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits();
 };
 
+IDE_Morph.prototype.resetUnsavedChanges = function () {
+    return this.recordSavedChanges();
+};
+
 IDE_Morph.prototype.setTranslation = function (countryCode, callback) {
     // switch to the specified language (format ISO 639-1 code) and
     // optionally run a callback afterwards, e.g. to broadcast an event

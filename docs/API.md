@@ -44,6 +44,7 @@ Currently the API consists of the following methods:
 * `IDE_Morph.prototype.getProjectXML()`
 * `IDE_Morph.prototype.loadProjectXML()`
 * `IDE_Morph.prototype.unsavedChanges()`
+* `IDE_Morph.prototype.resetUnsavedChanges()`
 
 #### Synchronize Scripts
 
@@ -124,6 +125,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noSprites:	|bool	|hide/show the stage, corral, sprite editor|
 |noPalette:	|bool	|hide/show the palette including the categories|
 |noImports:	|bool	|disable/allow importing files via drag&drop|
+|noCloud:	|bool	|disable/enable functionalities to access the Snap! cloud|
 |noOwnBlocks:	|bool	|hide/show "make a block" and "make a category" buttons|
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
 |noUserSettings:	|bool	|disable/enable persistent user preferences|
@@ -458,6 +460,17 @@ the unsavedChanges() method returns a Boolean value indicating whether the curre
 
 #### return value
 a Boolean
+
+
+### IDE_Morph.prototype.resetUnsavedChanges()
+the resetUnsavedChanges() method resets the value returned by unsavedChanges() to false.
+
+#### syntax
+    ide.resetUnsavedChanges();
+
+#### return value
+undefined
+
 
 
 ### IDE_Morph.prototype.setTranslation()
