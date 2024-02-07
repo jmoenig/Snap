@@ -10,6 +10,7 @@ list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you
 ~	~
 ~	~
 ~	~
+beetle.xml	3D Beetle Geometry	Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.
 maps_module.xml	World Map	Add interactive maps to projects
 menu_module.xml	Menus	Prompt the user to pick an option.
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
