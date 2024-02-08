@@ -69,6 +69,7 @@
 * threads, lists: refactored syntax tree generation from parsed text
 * threads: extended text syntax for custom blocks
 * threads: added aliases for blocks
+* threads: added aliases for rings
 
 ### 2024-01-21
 * theads: hyperized "change (var) by (delta)" for scalars

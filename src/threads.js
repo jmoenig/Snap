@@ -5581,6 +5581,10 @@ Process.prototype.blockAlias = function (string) {
         // sensing:
 
         // operators:
+        ring : 'reifyReporter',
+        lambda : 'reifyReporter',
+        '°' : 'reifyReporter',
+        "'" : 'reifyReporter',
         '+' : 'reportVariadicSum',
         sum : 'reportVariadicSum',
         '-' : 'reportDifference',
