@@ -66,6 +66,7 @@
 
 ### 2024-02-08
 * lists: new experimental text syntax for primitive blocks
+* threads, lists: refactored syntax tree generation from parsed text
 
 ### 2024-01-21
 * theads: hyperized "change (var) by (delta)" for scalars

@@ -59,7 +59,7 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE, ReadStream, MultiArgMorph*/
+Context, ZERO, WHITE, ReadStream*/
 
 /*jshint esversion: 6*/
 
@@ -1196,59 +1196,6 @@ List.prototype.parseStream = function (stream) {
             item += ch;
         }
     }
-};
-
-List.prototype.asBlockSyntax = function () {
-    var head;
-    if (this.isEmpty()) {
-        return this;
-    }
-    head = this.at(1);
-    return this.cons(
-        head instanceof List ? head.asBlockSyntax()
-            : SpriteMorph.prototype.blockForSelector(head).reify(),
-        this.cdr().asInputSyntax()
-    ).variadify();
-};
-
-List.prototype.asInputSyntax = function () {
-    var head;
-    if (this.isEmpty()) {
-        return this;
-    }
-    head = this.at(1);
-    return this.cons(
-        head instanceof List ? head.asBlockSyntax() : head,
-        this.cdr().asInputSyntax()
-    );
-};
-
-List.prototype.variadify = function () {
-    var ring = this.at(1),
-        slot, idx, syntax, items;
-    if (ring instanceof List) {
-        return this;
-    }
-    slot = ring.expression.inputs().find(any =>
-        any instanceof MultiArgMorph);
-    if (slot) {
-        idx = ring.expression.inputs().indexOf(slot) + 1;
-        slot.collapseAll();
-        items = this.itemsArray();
-        syntax = new List(items.slice(0, idx));
-        if (this.at(idx + 1) === ':') {
-            syntax.add(this.at(idx + 2));
-        } else {
-            syntax.add(new List(
-                [this.cons(
-                    this.length() - idx,
-                    new List(items.slice(idx))
-                )]
-            ));
-        }
-        return syntax;
-    }
-    return this;
 };
 
 // List testing

@@ -5487,6 +5487,63 @@ Process.prototype.assemble = function (blocks) {
     );
 };
 
+// Process - generating syntax trees from parsed text
+
+Process.prototype.toBlockSyntax = function (list) {
+    var head;
+    if (list.isEmpty()) {
+        return list;
+    }
+    head = list.at(1);
+    return this.variadify(
+        list.cons(
+            head instanceof List ? this.toBlockSyntax(head)
+                : SpriteMorph.prototype.blockForSelector(head).reify(),
+            this.toInputSyntax(list.cdr())
+        )
+    );
+};
+
+Process.prototype.toInputSyntax = function (list) {
+    var head;
+    if (list.isEmpty()) {
+        return list;
+    }
+    head = list.at(1);
+    return list.cons(
+        head instanceof List ? this.toBlockSyntax(head) : head,
+        this.toInputSyntax(list.cdr())
+    );
+};
+
+Process.prototype.variadify = function (list) {
+    var ring = list.at(1),
+        slot, idx, syntax, items;
+    if (ring instanceof List) {
+        return list;
+    }
+    slot = ring.expression.inputs().find(any =>
+        any instanceof MultiArgMorph);
+    if (slot) {
+        idx = ring.expression.inputs().indexOf(slot) + 1;
+        slot.collapseAll();
+        items = list.itemsArray();
+        syntax = new List(items.slice(0, idx));
+        if (list.at(idx + 1) === ':') {
+            syntax.add(list.at(idx + 2));
+        } else {
+            syntax.add(new List(
+                [list.cons(
+                    list.length() - idx,
+                    new List(items.slice(idx))
+                )]
+            ));
+        }
+        return syntax;
+    }
+    return list;
+};
+
 // Process debugging
 
 Process.prototype.alert = function (data) {
