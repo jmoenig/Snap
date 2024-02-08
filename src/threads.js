@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-21';
+modules.threads = '2024-February-08';
 
 var ThreadManager;
 var Process;
@@ -5498,10 +5498,27 @@ Process.prototype.toBlockSyntax = function (list) {
     return this.variadify(
         list.cons(
             head instanceof List ? this.toBlockSyntax(head)
-                : SpriteMorph.prototype.blockForSelector(head).reify(),
+                : this.blockMatching(head),
             this.toInputSyntax(list.cdr())
         )
     );
+};
+
+Process.prototype.blockMatching = function (string) {
+    var pal = this.reportGet('blocks'),
+        block,
+        lbl,
+        i;
+    for (i = 1; i <= pal.length(); i += 1) {
+        block = pal.at(i);
+        if (block.expression && block.expression.isCustomBlock) {
+            lbl = this.reportBasicBlockAttribute('label', block);
+            if (snapEquals(string, lbl)) {
+                return block;
+            }
+        }
+    }
+    return SpriteMorph.prototype.blockForSelector(string).reify();
 };
 
 Process.prototype.toInputSyntax = function (list) {
