@@ -5518,7 +5518,131 @@ Process.prototype.blockMatching = function (string) {
             }
         }
     }
-    return SpriteMorph.prototype.blockForSelector(string).reify();
+    return SpriteMorph.prototype.blockForSelector(
+        this.blockAlias(string)
+    ).reify();
+};
+
+Process.prototype.blockAlias = function (string) {
+    return {
+        // motion:
+        move : 'forward',
+        fd : 'forward',
+        right : 'turn',
+        rt : 'turn',
+        left : 'turnLeft',
+        lt : 'turnLeft',
+        glide : 'doGlide',
+        changeX : 'changeXPosition',
+        setX : 'setXPosition',
+        changeY : 'changeYPosition',
+        setY : 'setYPosition',
+        bounce : 'bounceOffEdge',
+        pos : 'getPosition',
+        position : 'getPosition',
+        x : 'xPosition',
+        y : 'yPosition',
+        dir : 'direction',
+
+        // looks:
+        say : 'bubble',
+        sayFor : 'doSayFor',
+        think : 'doThink',
+        thinkFor : 'doThinkFor',
+        changeSize : 'changeScale',
+        setSize : 'setScale',
+        size : 'getScale',
+
+        // sound:
+        
+        // pen:
+        trails : 'reportPenTrailsAsCostume',
+        penTrails : 'reportPenTrailsAsCostume',
+
+        // control:
+        broadcast : 'doBroadcast',
+        wait : 'doWait',
+        waitUntil : 'doWaitUntil',
+        forever : 'doForever',
+        repeat : 'doRepeat',
+        until : 'doUntil',
+        'for' : 'doFor',
+        'if' : 'doIf',
+        ifElse : 'reportIfElse',
+        stop : 'doStopThis',
+        run : 'doRun',
+        report : 'doReport',
+        warp : 'doWarp',
+        tell : 'doTellTo',
+        ask : 'reportAskFor',
+        pause : 'doPauseAll',
+        pipe : 'reportPipe',
+
+        // sensing:
+
+        // operators:
+        '+' : 'reportVariadicSum',
+        sum : 'reportVariadicSum',
+        '-' : 'reportDifference',
+        '*' : 'reportVariadicProduct',
+        product : 'reportVariadicProduct',
+        '/' : 'reportQuotient',
+        round : 'reportRound',
+        '^' : 'reportPower',
+        pow : 'reportPower',
+        '%' : 'reportModulus',
+        mod : 'reportModulus',
+        atan2 : 'reportAtan2',
+        min : 'reportVariadicMin',
+        max : 'reportVariadicMax',
+        rand : 'reportRandom',
+        '=' : 'reportVariadicEquals',
+        '!=' : 'reportVariadicNotEquals',
+        '<' : 'reportVariadicLessThan',
+        '<=' : 'reportVariadicLessThanOrEquals',
+        '>' : 'reportVariadicGreaterThan',
+        '>=' : 'reportVariadicGreaterThanOrEquals',
+        and : 'reportVariadicAnd',
+        or : 'reportVariadicOr',
+        not: 'reportNot',
+        join : 'reportJoinWords',
+        letter : 'reportLetter',
+        unicode : 'reportUnicode',
+        is : 'reportIsA',
+        identical : 'reportVariadicIsIdentical',
+        split : 'reportTextSplit',
+
+        // lists:
+
+        list : 'reportNewList',
+        lst : 'reportNewList',
+        cons : 'reportCONS',
+        cdr: 'reportCDR',
+        butFirst: 'reportCDR',
+        len : 'reportListLength',
+        length : 'reportListLength',
+        item : 'reportListItem',
+        contains : 'reportListContainsItem',
+        empty : 'reportListIsEmpty',
+        indexOf : 'reportListIndex',
+        add : 'doAddToList',
+        'delete' : 'doDeleteFromList',
+        del : 'doDeleteFromList',
+        insert: 'doInsertInList',
+        ins : 'doInsertInList',
+        replace : 'doReplaceInList',
+        repl : 'doReplaceInList',
+        numbers : 'reportNumbers',
+        fromTo : 'reportNumbers',
+        append : 'reportConcatenatedLists',
+        reshape : 'reportReshape',
+        map : 'reportMap',
+        keep : 'reportKeep',
+        find : 'reportFindFirst',
+        combine : 'reportCombine',
+        forEach : 'doForEach'
+
+    }[string] || string;
 };
 
 Process.prototype.toInputSyntax = function (list) {
