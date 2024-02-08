@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE*/
+Context, ZERO, WHITE, ReadStream, MultiArgMorph*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-January-10';
+modules.lists = '2024-February-08';
 
 var List;
 var ListWatcherMorph;
@@ -1160,6 +1160,95 @@ List.prototype.asWords = function () {
     return this.itemsArray().map(each =>
         each instanceof List ? each.asWords() : each.toString().trim()
     ).filter(word => word.length).join(' ');
+};
+
+// List to blocks parsing, highly experimental for v10
+
+List.prototype.parseString = function (string) {
+    var stream = new ReadStream(string);
+    stream.upTo('(');
+    stream.skip();
+    this.parseStream(stream);
+};
+
+List.prototype.parseStream = function (stream) {
+    var item = '', ch, child;
+    while (!stream.atEnd()) {
+        ch = stream.next();
+        if (ch === '(') {
+            child = new List();
+            child.parseStream(stream);
+            this.add(child);
+        } else if (ch === ')' || !ch.trim().length) {
+            if (item.length) {
+                this.add(item);
+                item = '';
+            }
+            if (ch === ')') {
+                return;
+            }
+        } else if (ch === '"') {
+            this.add(stream.upTo('"'));
+            stream.skip();
+        } else if (ch === '\\') {
+            item += stream.next();
+        } else {
+            item += ch;
+        }
+    }
+};
+
+List.prototype.asBlockSyntax = function () {
+    var head;
+    if (this.isEmpty()) {
+        return this;
+    }
+    head = this.at(1);
+    return this.cons(
+        head instanceof List ? head.asBlockSyntax()
+            : SpriteMorph.prototype.blockForSelector(head).reify(),
+        this.cdr().asInputSyntax()
+    ).variadify();
+};
+
+List.prototype.asInputSyntax = function () {
+    var head;
+    if (this.isEmpty()) {
+        return this;
+    }
+    head = this.at(1);
+    return this.cons(
+        head instanceof List ? head.asBlockSyntax() : head,
+        this.cdr().asInputSyntax()
+    );
+};
+
+List.prototype.variadify = function () {
+    var ring = this.at(1),
+        slot, idx, syntax, items;
+    if (ring instanceof List) {
+        return this;
+    }
+    slot = ring.expression.inputs().find(any =>
+        any instanceof MultiArgMorph);
+    if (slot) {
+        idx = ring.expression.inputs().indexOf(slot) + 1;
+        slot.collapseAll();
+        items = this.itemsArray();
+        syntax = new List(items.slice(0, idx));
+        if (this.at(idx + 1) === ':') {
+            syntax.add(this.at(idx + 2));
+        } else {
+            syntax.add(new List(
+                [this.cons(
+                    this.length() - idx,
+                    new List(items.slice(idx))
+                )]
+            ));
+        }
+        return syntax;
+    }
+    return this;
 };
 
 // List testing

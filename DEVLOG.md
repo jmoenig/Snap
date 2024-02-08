@@ -5,6 +5,7 @@
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
+    * new LISP-like text syntax for primitive blocks
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -62,6 +63,9 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2024-02-08
+* lists: new experimental text syntax for primitive blocks
 
 ### 2024-01-21
 * theads: hyperized "change (var) by (delta)" for scalars
