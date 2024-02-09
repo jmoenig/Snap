@@ -1198,23 +1198,34 @@ List.prototype.parseStream = function (stream) {
     }
 };
 
-List.prototype.encode = function () {
+List.prototype.encode = function (level = 0, indent = 4) {
     var str = '(',
         len = this.length(),
+        hasBranch = false,
+        item,
         i;
     for (i = 1; i <= len; i += 1) {
-        str += this.encodeItem(this.at(i));
+        item = this.at(i);
+        if (item instanceof List) {
+            hasBranch = true;
+        }
+        str += this.encodeItem(item, level, indent);
         if (i < len) {
             str += ' ';
         }
     }
-    str += ')';
+    str += hasBranch && indent ? '\n' + this.indentation(level, indent) + ')' : ')';
     return str;
 };
 
-List.prototype.encodeItem = function (data) {
+List.prototype.encodeItem = function (data, level = 0, indent = 4) {
     if (data instanceof List) {
-        return data.encode();
+        if (indent) {
+            return '\n' +
+                this.indentation(level + 1, indent) +
+                data.encode(level + 1, indent);
+        }
+        return data.encode(level, indent);
     }
     return isString(data) ? this.escape(data) : data;
 };
@@ -1237,6 +1248,10 @@ List.prototype.escape = function (string) {
         str += ch;
     }
     return quoted ? str + '"': str;
+};
+
+List.prototype.indentation = function (level = 0, amount = 4) {
+    return new Array(level * amount + 1).join(' ') || '';
 };
 
 // List testing
