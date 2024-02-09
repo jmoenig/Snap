@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-February-08';
+modules.threads = '2024-February-09';
 
 var ThreadManager;
 var Process;
@@ -5523,6 +5523,46 @@ Process.prototype.blockMatching = function (string) {
     ).reify();
 };
 
+Process.prototype.toInputSyntax = function (list) {
+    var head;
+    if (list.isEmpty()) {
+        return list;
+    }
+    head = list.at(1);
+    return list.cons(
+        head instanceof List ? this.toBlockSyntax(head) : head,
+        this.toInputSyntax(list.cdr())
+    );
+};
+
+Process.prototype.variadify = function (list) {
+    var ring = list.at(1),
+        slot, idx, syntax, items;
+    if (ring instanceof List) {
+        return list;
+    }
+    slot = ring.expression.inputs().find(any =>
+        any instanceof MultiArgMorph);
+    if (slot) {
+        idx = ring.expression.inputs().indexOf(slot) + 1;
+        slot.collapseAll();
+        items = list.itemsArray();
+        syntax = new List(items.slice(0, idx));
+        if (list.at(idx + 1) === ':') {
+            syntax.add(list.at(idx + 2));
+        } else {
+            syntax.add(new List(
+                [list.cons(
+                    list.length() - idx,
+                    new List(items.slice(idx))
+                )]
+            ));
+        }
+        return syntax;
+    }
+    return list;
+};
+
 Process.prototype.blockAlias = function (string) {
     return {
         // motion:
@@ -5649,44 +5689,60 @@ Process.prototype.blockAlias = function (string) {
     }[string] || string;
 };
 
-Process.prototype.toInputSyntax = function (list) {
+// Process - replacing blocks in syntax trees with text
+
+Process.prototype.toTextSyntax = function (list) {
+    var head, syn;
+    if (list.isEmpty()) {
+        return list;
+    }
+    syn = this.devariadify(list);
+    head = syn.at(1);
+    return syn.cons(
+        head instanceof List ? this.toTextSyntax(head)
+            : this.blockToken(head),
+        this.toInputTextSyntax(syn.cdr())
+    );
+};
+
+Process.prototype.devariadify = function (list) {
+    var ring = list.at(1),
+        slot, idx, syntax;
+    if (ring instanceof List) {
+        return list;
+    }
+    slot = ring.expression.inputs().find(any =>
+        any instanceof MultiArgMorph);
+    if (slot && !slot.inputs().length) {
+        idx = ring.expression.inputs().indexOf(slot) + 1;
+        syntax = list.map(each => each); // shallow copy
+        if (syntax.length() === (idx + 1) && syntax.at(idx + 1) === '') {
+            syntax.remove(idx + 1);
+            return syntax;
+        }
+        syntax.add(':', idx + 1);
+        return syntax;
+    }
+    return list;
+};
+
+Process.prototype.blockToken = function (ring) {
+    var block = ring.expression;
+    return block.isCustomBlock ? // to do: check if bootstrapped
+        this.reportBasicBlockAttribute('label', block)
+        : block.selector;
+};
+
+Process.prototype.toInputTextSyntax = function (list) {
     var head;
     if (list.isEmpty()) {
         return list;
     }
     head = list.at(1);
     return list.cons(
-        head instanceof List ? this.toBlockSyntax(head) : head,
-        this.toInputSyntax(list.cdr())
+        head instanceof List ? this.toTextSyntax(head) : head,
+        this.toInputTextSyntax(list.cdr())
     );
-};
-
-Process.prototype.variadify = function (list) {
-    var ring = list.at(1),
-        slot, idx, syntax, items;
-    if (ring instanceof List) {
-        return list;
-    }
-    slot = ring.expression.inputs().find(any =>
-        any instanceof MultiArgMorph);
-    if (slot) {
-        idx = ring.expression.inputs().indexOf(slot) + 1;
-        slot.collapseAll();
-        items = list.itemsArray();
-        syntax = new List(items.slice(0, idx));
-        if (list.at(idx + 1) === ':') {
-            syntax.add(list.at(idx + 2));
-        } else {
-            syntax.add(new List(
-                [list.cons(
-                    list.length() - idx,
-                    new List(items.slice(idx))
-                )]
-            ));
-        }
-        return syntax;
-    }
-    return list;
 };
 
 // Process debugging

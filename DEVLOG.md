@@ -64,6 +64,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-09
+* threads: partial syntax tree to text encoding
+
 ### 2024-02-08
 * lists: new experimental text syntax for primitive blocks
 * threads, lists: refactored syntax tree generation from parsed text
