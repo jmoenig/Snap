@@ -67,6 +67,7 @@
 ### 2024-02-09
 * threads: partial syntax tree to text encoding
 * lists: renamed parseString() to parse()
+* lists: syntax tree to LISP text encoding
 
 ### 2024-02-08
 * lists: new experimental text syntax for primitive blocks

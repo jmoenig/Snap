@@ -1162,7 +1162,7 @@ List.prototype.asWords = function () {
     ).filter(word => word.length).join(' ');
 };
 
-// List to blocks parsing, highly experimental for v10
+// List to blocks parsing and encoding, highly experimental for v10
 
 List.prototype.parse = function (string) {
     var stream = new ReadStream(string);
@@ -1196,6 +1196,47 @@ List.prototype.parseStream = function (stream) {
             item += ch;
         }
     }
+};
+
+List.prototype.encode = function () {
+    var str = '(',
+        len = this.length(),
+        i;
+    for (i = 1; i <= len; i += 1) {
+        str += this.encodeItem(this.at(i));
+        if (i < len) {
+            str += ' ';
+        }
+    }
+    str += ')';
+    return str;
+};
+
+List.prototype.encodeItem = function (data) {
+    if (data instanceof List) {
+        return data.encode();
+    }
+    return isString(data) ? this.escape(data) : data;
+};
+
+List.prototype.escape = function (string) {
+    var str = '',
+        quoted = false,
+        len = string.length,
+        i, ch;
+    for (i = 0; i < len; i += 1) {
+        ch = string[i];
+        if (ch === '"') {
+            ch = '\\"';
+        } else if (!ch.trim().length) {
+            if (!quoted) {
+                str = '"' + str;
+                quoted = true;
+            }
+        }
+        str += ch;
+    }
+    return quoted ? str + '"': str;
 };
 
 // List testing
