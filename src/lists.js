@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-February-08';
+modules.lists = '2024-February-09';
 
 var List;
 var ListWatcherMorph;
@@ -1164,7 +1164,7 @@ List.prototype.asWords = function () {
 
 // List to blocks parsing, highly experimental for v10
 
-List.prototype.parseString = function (string) {
+List.prototype.parse = function (string) {
     var stream = new ReadStream(string);
     stream.upTo('(');
     stream.skip();
