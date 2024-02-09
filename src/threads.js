@@ -5518,9 +5518,9 @@ Process.prototype.blockMatching = function (string) {
             }
         }
     }
-    return SpriteMorph.prototype.blockForSelector(
+    return (SpriteMorph.prototype.blockForSelector(
         this.blockAlias(string)
-    ).reify();
+    ) || SpriteMorph.prototype.variableBlock(' ')).reify();
 };
 
 Process.prototype.toInputSyntax = function (list) {
