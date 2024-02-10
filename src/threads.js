@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-February-09';
+modules.threads = '2024-February-10';
 
 var ThreadManager;
 var Process;
@@ -5567,11 +5567,8 @@ Process.prototype.blockAlias = function (string) {
     return {
         // motion:
         move : 'forward',
-        fd : 'forward',
         right : 'turn',
-        rt : 'turn',
         left : 'turnLeft',
-        lt : 'turnLeft',
         glide : 'doGlide',
         changeX : 'changeXPosition',
         setX : 'setXPosition',
@@ -5579,7 +5576,6 @@ Process.prototype.blockAlias = function (string) {
         setY : 'setYPosition',
         bounce : 'bounceOffEdge',
         pos : 'getPosition',
-        position : 'getPosition',
         x : 'xPosition',
         y : 'yPosition',
         dir : 'direction',
@@ -5597,7 +5593,6 @@ Process.prototype.blockAlias = function (string) {
         
         // pen:
         trails : 'reportPenTrailsAsCostume',
-        penTrails : 'reportPenTrailsAsCostume',
 
         // control:
         broadcast : 'doBroadcast',
@@ -5622,18 +5617,12 @@ Process.prototype.blockAlias = function (string) {
 
         // operators:
         ring : 'reifyReporter',
-        lambda : 'reifyReporter',
-        '°' : 'reifyReporter',
-        "'" : 'reifyReporter',
         '+' : 'reportVariadicSum',
-        sum : 'reportVariadicSum',
         '-' : 'reportDifference',
         '*' : 'reportVariadicProduct',
-        product : 'reportVariadicProduct',
         '/' : 'reportQuotient',
         round : 'reportRound',
         '^' : 'reportPower',
-        pow : 'reportPower',
         '%' : 'reportModulus',
         mod : 'reportModulus',
         atan2 : 'reportAtan2',
@@ -5659,25 +5648,18 @@ Process.prototype.blockAlias = function (string) {
         // lists:
 
         list : 'reportNewList',
-        lst : 'reportNewList',
         cons : 'reportCONS',
         cdr: 'reportCDR',
-        butFirst: 'reportCDR',
         len : 'reportListLength',
-        length : 'reportListLength',
-        item : 'reportListItem',
+        at : 'reportListItem',
         contains : 'reportListContainsItem',
         empty : 'reportListIsEmpty',
-        indexOf : 'reportListIndex',
+        index : 'reportListIndex',
         add : 'doAddToList',
-        'delete' : 'doDeleteFromList',
         del : 'doDeleteFromList',
-        insert: 'doInsertInList',
         ins : 'doInsertInList',
-        replace : 'doReplaceInList',
-        repl : 'doReplaceInList',
-        numbers : 'reportNumbers',
-        fromTo : 'reportNumbers',
+        put : 'doReplaceInList',
+        'from' : 'reportNumbers',
         append : 'reportConcatenatedLists',
         reshape : 'reportReshape',
         map : 'reportMap',

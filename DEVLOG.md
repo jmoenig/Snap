@@ -64,6 +64,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-10
+* threads: made unique block aliases unique
+
 ### 2024-02-09
 * threads: partial syntax tree to text encoding
 * lists: renamed parseString() to parse()
