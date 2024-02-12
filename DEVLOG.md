@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * new "Code to Blocks to Code" library, translates text code to blocks and vice-versa
     * new 3D Beetle Geometry extension, thank you, Bernat!
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
@@ -75,6 +76,7 @@
 * merged main branch (v9.2.5)
 * merged 3D Beetle extension
 * added Beetle files to PWA cache
+* added code2blocks library
 
 ### 2024-02-10
 * threads: made unique block aliases unique
