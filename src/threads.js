@@ -5630,6 +5630,7 @@ Process.prototype.blockAliases = {
     ask : 'reportAskFor',
     pause : 'doPauseAll',
     pipe : 'reportPipe',
+    'this' : 'reportEnvironment',
 
     // sensing:
 
