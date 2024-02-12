@@ -1,12 +1,18 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+* **New Features:**
+    * api: added resetUnsavedChanges(), thanks, Bernat!
+* **Documentation Updates:**
+    * extended API documentation for resetting the unsaved changes flag
 * **Translation Updates:**
     * Dutch, thanks, Jule Rapp!
 
 2024-02-12
 * new dev version for v9.2.5
 * Dutch translation update, thanks, Jule!
+* api: resetUnsavedChanged(), thanks, Bernat!
 
 ## 9.2.4:
 * **New Features:**
