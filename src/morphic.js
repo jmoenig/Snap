@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-January-22';
+var morphicVersion = '2024-February-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
