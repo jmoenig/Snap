@@ -46,6 +46,7 @@
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
+    * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
@@ -69,6 +70,7 @@
 * threads, lists: 2-way block alias look-up for text-to-blocks
 * blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
 * blocks, threads: splitting a LISP-formatted text by "blocks" returns a block-syntax tree
+* threads: converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
 
 ### 2024-02-10
 * threads: made unique block aliases unique

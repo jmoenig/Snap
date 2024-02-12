@@ -2366,6 +2366,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list.reversed();
     case 'text':
         this.assertType(list, 'list');
+        if (this.isAST(list)) {
+            return this.toTextSyntax(list).encode();
+        }
         if (list.canBeWords()) {
             return list.asWords();
         }
