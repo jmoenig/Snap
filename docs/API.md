@@ -130,6 +130,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
 |noUserSettings:	|bool	|disable/enable persistent user preferences|
 |noDevWarning:	|bool	|ignore development version incompatibility warning|
+|noExitWarning:	|bool	|do not show a browser warning when closing the IDE with unsaved changes|
 |blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`|
 |blocksFade:	|num	|fading percentage for blocks, e.g. `85`|
 |zebra:	|num	|contrast percentage for nesting same-color blocks|
