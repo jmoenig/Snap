@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 9.2.5:
 * **New Features:**
     * api: added resetUnsavedChanges(), thanks, Bernat!
 * **Notable Fixes:**
@@ -16,6 +17,7 @@
 * Dutch translation update, thanks, Jule!
 * api: resetUnsavedChanged(), thanks, Bernat!
 * api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* prepared v9.2.5 patch
 
 ## 9.2.4:
 * **New Features:**
