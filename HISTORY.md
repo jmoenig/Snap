@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-02-12
+* new dev version for v9.2.5
+
 ## 9.2.4:
 * **New Features:**
     * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
