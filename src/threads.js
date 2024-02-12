@@ -5273,6 +5273,9 @@ Process.prototype.reportBasicUnicodeAsLetter = function (num) {
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
     if (this.inputOption(delimiter) === 'blocks') {
+        if (isString(string) && string.trim().startsWith('(')) {
+            return this.parseCode(string);
+        }
         this.assertType(string, ['command', 'reporter', 'predicate']);
         return string.components();
     }
@@ -5331,8 +5334,6 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         return this.parseCSV(string);
     case 'json':
         return this.parseJSON(string);
-    case 'code':
-        return this.parseCode(string);
     default:
         del = delimiter.toString();
         if (this.isCaseInsensitive) {

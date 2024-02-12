@@ -6,7 +6,6 @@
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
-    * new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -46,6 +45,7 @@
     * new "sigmoid" easing function in the animations library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
+    * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
@@ -68,6 +68,7 @@
 ### 2024-02-12
 * threads, lists: 2-way block alias look-up for text-to-blocks
 * blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
+* blocks, threads: splitting a LISP-formatted text by "blocks" returns a block-syntax tree
 
 ### 2024-02-10
 * threads: made unique block aliases unique

@@ -452,7 +452,6 @@ SyntaxElementMorph.prototype.labelParts = {
             'csv' : ['csv'],
             'json' : ['json'],
             '~' : null,
-            'code' : ['code'],
             'blocks' : ['blocks']
         }
     },
