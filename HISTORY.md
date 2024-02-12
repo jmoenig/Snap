@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Translation Updates:**
+    * Dutch, thanks, Jule Rapp!
 
 2024-02-12
 * new dev version for v9.2.5
+* Dutch translation update, thanks, Jule!
 
 ## 9.2.4:
 * **New Features:**
