@@ -1249,7 +1249,7 @@ List.prototype.escape = function (string) {
         }
         str += ch;
     }
-    return quoted ? str + '"': str;
+    return quoted ? str + '"': str || '""';
 };
 
 List.prototype.indentation = function (level = 0, amount = 4) {
