@@ -71,6 +71,7 @@
 * blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
 * blocks, threads: splitting a LISP-formatted text by "blocks" returns a block-syntax tree
 * threads: converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
+* merged main branch (v9.2.5)
 
 ### 2024-02-10
 * threads: made unique block aliases unique
