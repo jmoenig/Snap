@@ -1206,7 +1206,7 @@ List.prototype.encode = function (level = 0, indent = 4) {
         i;
     for (i = 1; i <= len; i += 1) {
         item = this.at(i);
-        if (item instanceof List) {
+        if (item instanceof List && !(item.at(1) instanceof List)) {
             hasBranch = true;
         }
         str += this.encodeItem(item, level, indent);
@@ -1222,7 +1222,7 @@ List.prototype.encode = function (level = 0, indent = 4) {
 
 List.prototype.encodeItem = function (data, level = 0, indent = 4) {
     if (data instanceof List) {
-        if (indent) {
+        if (!(data.at(1) instanceof List) && indent) {
             return '\n' +
                 this.indentation(level + 1, indent) +
                 data.encode(level + 1, indent);
