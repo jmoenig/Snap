@@ -5607,6 +5607,8 @@ Process.prototype.blockAliases = {
     // sound:
     
     // pen:
+    stamp : 'doStamp',
+    fill: 'floodFill',
     trails : 'reportPenTrailsAsCostume',
 
     // control:
@@ -5621,6 +5623,7 @@ Process.prototype.blockAliases = {
     ifElse : 'reportIfElse',
     stop : 'doStopThis',
     run : 'doRun',
+    call : 'evaluate',
     report : 'doReport',
     warp : 'doWarp',
     tell : 'doTellTo',
