@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-January-23';
+modules.api = '2024-February-12';
 
 // IDE_Morph external communication API
 /*
@@ -313,6 +313,10 @@ IDE_Morph.prototype.unflashSpriteScripts = function (name) {
 
 IDE_Morph.prototype.unsavedChanges = function () {
     return this.hasUnsavedEdits();
+};
+
+IDE_Morph.prototype.resetUnsavedChanges = function () {
+    return this.recordSavedChanges();
 };
 
 IDE_Morph.prototype.setTranslation = function (countryCode, callback) {

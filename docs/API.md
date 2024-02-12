@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, January 23, 2024
+Jens Mönig, Bernat Romagosa, February 12, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -44,6 +44,7 @@ Currently the API consists of the following methods:
 * `IDE_Morph.prototype.getProjectXML()`
 * `IDE_Morph.prototype.loadProjectXML()`
 * `IDE_Morph.prototype.unsavedChanges()`
+* `IDE_Morph.prototype.resetUnsavedChanges()`
 
 #### Synchronize Scripts
 
@@ -124,10 +125,12 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noSprites:	|bool	|hide/show the stage, corral, sprite editor|
 |noPalette:	|bool	|hide/show the palette including the categories|
 |noImports:	|bool	|disable/allow importing files via drag&drop|
+|noCloud:	|bool	|disable/enable functionalities to access the Snap! cloud|
 |noOwnBlocks:	|bool	|hide/show "make a block" and "make a category" buttons|
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
 |noUserSettings:	|bool	|disable/enable persistent user preferences|
 |noDevWarning:	|bool	|ignore development version incompatibility warning|
+|noExitWarning:	|bool	|do not show a browser warning when closing the IDE with unsaved changes|
 |blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`|
 |blocksFade:	|num	|fading percentage for blocks, e.g. `85`|
 |zebra:	|num	|contrast percentage for nesting same-color blocks|
@@ -458,6 +461,17 @@ the unsavedChanges() method returns a Boolean value indicating whether the curre
 
 #### return value
 a Boolean
+
+
+### IDE_Morph.prototype.resetUnsavedChanges()
+the resetUnsavedChanges() method resets the value returned by unsavedChanges() to false.
+
+#### syntax
+    ide.resetUnsavedChanges();
+
+#### return value
+undefined
+
 
 
 ### IDE_Morph.prototype.setTranslation()

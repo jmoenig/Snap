@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-January-22';
+var morphicVersion = '2024-February-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12469,7 +12469,11 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
+    window.cachedOnbeforeunload = window.onbeforeunload;
     window.onbeforeunload = (evt) => {
+        if (window.cachedOnbeforeunload) {
+            window.cachedOnbeforeunload.call(null, evt);
+        }
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";
         // For IE and Firefox
