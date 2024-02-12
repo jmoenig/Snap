@@ -4,6 +4,8 @@
 
 * **New Features:**
     * api: added resetUnsavedChanges(), thanks, Bernat!
+* **Notable Fixes:**
+    * api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
 * **Documentation Updates:**
     * extended API documentation for resetting the unsaved changes flag
 * **Translation Updates:**
@@ -13,6 +15,7 @@
 * new dev version for v9.2.5
 * Dutch translation update, thanks, Jule!
 * api: resetUnsavedChanged(), thanks, Bernat!
+* api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
 
 ## 9.2.4:
 * **New Features:**
