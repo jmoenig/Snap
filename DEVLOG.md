@@ -64,6 +64,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-12
+* threads, lists: 2-way block alias look-up for text-to-blocks
+
 ### 2024-02-10
 * threads: made unique block aliases unique
 

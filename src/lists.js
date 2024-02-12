@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-February-09';
+modules.lists = '2024-February-12';
 
 var List;
 var ListWatcherMorph;
@@ -1214,7 +1214,9 @@ List.prototype.encode = function (level = 0, indent = 4) {
             str += ' ';
         }
     }
-    str += hasBranch && indent ? '\n' + this.indentation(level, indent) + ')' : ')';
+    str += hasBranch && indent ?
+        '\n' + this.indentation(level, indent) + ')'
+        : ')';
     return str;
 };
 
