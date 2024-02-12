@@ -5331,12 +5331,8 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         return this.parseCSV(string);
     case 'json':
         return this.parseJSON(string);
-    /*
-    case 'csv records':
-        return this.parseCSVrecords(string);
-    case 'csv fields':
-        return this.parseCSVfields(string);
-    */
+    case 'code':
+        return this.parseCode(string);
     default:
         del = delimiter.toString();
         if (this.isCaseInsensitive) {
@@ -5461,6 +5457,12 @@ Process.prototype.parseJSON = function (string) {
     }
 
     return listify(JSON.parse(string));
+};
+
+Process.prototype.parseCode = function (string) {
+    var data = new List();
+    data.parse(string);
+    return this.toBlockSyntax(data);
 };
 
 // Process syntax analysis

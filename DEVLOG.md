@@ -6,6 +6,7 @@
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
+    * new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -66,6 +67,7 @@
 
 ### 2024-02-12
 * threads, lists: 2-way block alias look-up for text-to-blocks
+* blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
 
 ### 2024-02-10
 * threads: made unique block aliases unique

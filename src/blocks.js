@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-January-23';
+modules.blocks = '2024-February-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -452,11 +452,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'csv' : ['csv'],
             'json' : ['json'],
             '~' : null,
+            'code' : ['code'],
             'blocks' : ['blocks']
-            /*
-            'csv records' : ['csv records'],
-            'csv fields' : ['csv fields']
-            */
         }
     },
     '%ida': {
