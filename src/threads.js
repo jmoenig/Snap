@@ -2367,7 +2367,7 @@ Process.prototype.reportListAttribute = function (choice, list) {
     case 'text':
         this.assertType(list, 'list');
         if (this.isAST(list)) {
-            return this.toTextSyntax(list).encode();
+            return this.toTextSyntax(list).encode(0, 0);
         }
         if (list.canBeWords()) {
             return list.asWords();
@@ -2377,6 +2377,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
         );
     case 'lines':
         this.assertType(list, 'list');
+        if (this.isAST(list)) {
+            return this.toTextSyntax(list).encode();
+        }
         if (list.canBeTXT()) {
             return list.asTXT();
         }
