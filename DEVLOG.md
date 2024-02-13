@@ -68,6 +68,10 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-13
+* merged main branch (v9.2.6)
+* threads: fixed blockToken() lookup for custom blocks
+
 ### 2024-02-12
 * lists: improved parser
 * lists: improved encoder for parens
