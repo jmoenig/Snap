@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-January-15';
+modules.extensions = '2024-February-13';
 
 // Global stuff
 
@@ -51,7 +51,8 @@ var SnapExtensions = {
         'https://bjc.berkeley.edu/',
         'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
-        'https://microworld.edc.org/' // EDC, E. Paul Goldenberg
+        'https://microworld.edc.org/', // EDC, E. Paul Goldenberg
+        'https://birdbraintechnologies.com/' // BirdBrain technologies, Tom Lauwers
     ]
 };
 

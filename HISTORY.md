@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-02-13
+* extensions: allow-listed birdbrain tech for extensions
+
 ## 9.2.5:
 * **New Features:**
     * api: added resetUnsavedChanges(), thanks, Bernat!
