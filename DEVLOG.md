@@ -69,6 +69,9 @@
     * German
 
 ### 2024-02-12
+* lists: improved parser
+
+### 2024-02-12
 * threads, lists: 2-way block alias look-up for text-to-blocks
 * blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
 * blocks, threads: splitting a LISP-formatted text by "blocks" returns a block-syntax tree

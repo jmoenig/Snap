@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-February-12';
+modules.lists = '2024-February-13';
 
 var List;
 var ListWatcherMorph;
@@ -1172,14 +1172,16 @@ List.prototype.parse = function (string) {
 };
 
 List.prototype.parseStream = function (stream) {
-    var item = '', ch, child;
+    var item = '',
+        quoted = false,
+        ch, child;
     while (!stream.atEnd()) {
         ch = stream.next();
-        if (ch === '(') {
+        if (ch === '(' && !quoted) {
             child = new List();
             child.parseStream(stream);
             this.add(child);
-        } else if (ch === ')' || !ch.trim().length) {
+        } else if ((ch === ')' || !ch.trim().length) && !quoted) {
             if (item.length) {
                 this.add(item);
                 item = '';
@@ -1188,8 +1190,7 @@ List.prototype.parseStream = function (stream) {
                 return;
             }
         } else if (ch === '"') {
-            this.add(stream.upTo('"'));
-            stream.skip();
+            quoted = !quoted;
         } else if (ch === '\\') {
             item += stream.next();
         } else {
