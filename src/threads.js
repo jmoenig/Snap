@@ -5668,6 +5668,7 @@ Process.prototype.blockAliases = {
     '<=' : 'reportVariadicLessThanOrEquals',
     '>' : 'reportVariadicGreaterThan',
     '>=' : 'reportVariadicGreaterThanOrEquals',
+    bool : 'reportBoolean',
     and : 'reportVariadicAnd',
     or : 'reportVariadicOr',
     not: 'reportNot',
