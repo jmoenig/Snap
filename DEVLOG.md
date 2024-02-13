@@ -74,6 +74,7 @@
 * lists: encode Boolean values as t and f
 * lists: escape "t" and "f" words
 * threads: parse "t" and "f" inputs into Booleans
+* lists: tweaked parsing quoted empty tokens
 
 ### 2024-02-12
 * lists: improved parser

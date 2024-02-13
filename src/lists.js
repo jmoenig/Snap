@@ -1191,6 +1191,9 @@ List.prototype.parseStream = function (stream) {
             }
         } else if (ch === '"') {
             quoted = !quoted;
+            if (!quoted && !item.length) {
+                this.add('');
+            }
         } else if (ch === '\\') {
             item += stream.next();
         } else {
