@@ -984,6 +984,7 @@ MicroWorld.prototype.addBeButtonFunction = function (){
                     dent: this.dent,
                     corner: this.corner,
                     inset: this.inset,
+                    edge: this.edge,
                     isDraggable: this.isDraggable,
                     attachTargets: this.attachTargets,
                     userMenu: this.userMenu
@@ -991,6 +992,7 @@ MicroWorld.prototype.addBeButtonFunction = function (){
                 this.dent = -1;
                 this.corner = 1;
                 this.inset = 0;
+                this.edge = 1;
                 // this.isDraggable = false;
                 this.attachTargets = function () {
                     return [];
@@ -1000,6 +1002,7 @@ MicroWorld.prototype.addBeButtonFunction = function (){
                 this.dent = this.buttonBackup.dent;
                 this.corner = this.buttonBackup.corner;
                 this.inset = this.buttonBackup.inset;
+                this.edge = this.buttonBackup.edge;
                 this.isDraggable = this.buttonBackup.isDraggable;
                 this.attachTargets = this.buttonBackup.attachTargets;
                 this.userMenu = this.buttonBackup.userMenu;
