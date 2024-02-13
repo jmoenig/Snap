@@ -1239,6 +1239,11 @@ List.prototype.escape = function (string) {
         quoted = false,
         len = string.length,
         i, ch;
+    if (string === 't') {
+        return '\\t';
+    } else if (string === 'f') {
+        return '\\f';
+    }
     for (i = 0; i < len; i += 1) {
         ch = string[i];
         if (ch === '"') {

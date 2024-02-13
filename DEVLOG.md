@@ -72,6 +72,7 @@
 * merged main branch (v9.2.6)
 * threads: fixed blockToken() lookup for custom blocks
 * lists: encode Boolean values as t and f
+* lists: escape "t" and "f" words
 
 ### 2024-02-12
 * lists: improved parser
