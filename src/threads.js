@@ -5647,6 +5647,7 @@ Process.prototype.blockAliases = {
     'this' : 'reportEnvironment',
 
     // sensing:
+    date : 'reportDate',
 
     // operators:
     ring : 'reifyReporter',
