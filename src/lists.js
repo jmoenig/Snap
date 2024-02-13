@@ -1230,7 +1230,8 @@ List.prototype.encodeItem = function (data, level = 0, indent = 4) {
         }
         return data.encode(level, indent);
     }
-    return isString(data) ? this.escape(data) : data;
+    return isString(data) ? this.escape(data)
+        : (typeof data === 'boolean' ? this.encodeBoolean(data) : data);
 };
 
 List.prototype.escape = function (string) {
@@ -1251,6 +1252,10 @@ List.prototype.escape = function (string) {
         str += ch;
     }
     return quoted ? str + '"' : str || '""';
+};
+
+List.prototype.encodeBoolean = function (data) {
+    return (data === true) ? 't' : 'f';
 };
 
 List.prototype.indentation = function (level = 0, amount = 4) {
