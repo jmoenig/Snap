@@ -70,6 +70,7 @@
 
 ### 2024-02-12
 * lists: improved parser
+* lists: improved encoder for parens
 
 ### 2024-02-12
 * threads, lists: 2-way block alias look-up for text-to-blocks

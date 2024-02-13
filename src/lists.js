@@ -1242,7 +1242,7 @@ List.prototype.escape = function (string) {
         ch = string[i];
         if (ch === '"') {
             ch = '\\"';
-        } else if (!ch.trim().length) {
+        } else if (!ch.trim().length || '()'.includes(ch)) {
             if (!quoted) {
                 str = '"' + str;
                 quoted = true;
@@ -1250,7 +1250,7 @@ List.prototype.escape = function (string) {
         }
         str += ch;
     }
-    return quoted ? str + '"': str || '""';
+    return quoted ? str + '"' : str || '""';
 };
 
 List.prototype.indentation = function (level = 0, amount = 4) {
