@@ -5539,9 +5539,20 @@ Process.prototype.toInputSyntax = function (list) {
     }
     head = list.at(1);
     return list.cons(
-        head instanceof List ? this.toBlockSyntax(head) : head,
+        head instanceof List ? this.toBlockSyntax(head)
+            : this.parseInputValue(head),
         this.toInputSyntax(list.cdr())
     );
+};
+
+Process.prototype.parseInputValue = function (data) {
+    if (data === 't') {
+        return true;
+    }
+    if (data === 'f') {
+        return false;
+    }
+    return data;
 };
 
 Process.prototype.variadify = function (list) {

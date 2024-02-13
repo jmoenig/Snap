@@ -73,6 +73,7 @@
 * threads: fixed blockToken() lookup for custom blocks
 * lists: encode Boolean values as t and f
 * lists: escape "t" and "f" words
+* threads: parse "t" and "f" inputs into Booleans
 
 ### 2024-02-12
 * lists: improved parser
