@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-February-12';
+modules.blocks = '2024-February-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4579,7 +4579,7 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     // distribute inputs among the slots
     slots = cpy.inputs();
     slots.forEach((slot) => {
-        var inp, i, cnt;
+        var inp, i, cnt, sub;
         if (slot instanceof MultiArgMorph && dta[count] instanceof List) {
             // let the list's first item control the arity of the polyadic slot
             // fill with the following items in the list
@@ -4594,10 +4594,15 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
                         cnt = Process.prototype.assemble(cnt);
                     }
                     if (cnt instanceof Context) {
-                        slot.replaceInput(
-                            slot.addInput(),
-                            cnt.expression.fullCopy()
-                        );
+                        sub = slot.addInput();
+                        if (sub.nestedBlock) {
+                            sub.nestedBlock(cnt.expression.fullCopy());
+                        } else {
+                            slot.replaceInput(
+                                sub,
+                                cnt.expression.fullCopy()
+                            );
+                        }
                     } else {
                         slot.addInput(cnt);
                     }

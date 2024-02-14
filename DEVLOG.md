@@ -68,6 +68,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-14
+* blocks: fixed LISP-parsing of IF (BlockMorph.copyWithInputs())
+
 ### 2024-02-13
 * merged main branch (v9.2.6)
 * threads: fixed blockToken() lookup for custom blocks
