@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-February-13';
+modules.lists = '2024-February-14';
 
 var List;
 var ListWatcherMorph;
@@ -1177,7 +1177,9 @@ List.prototype.parseStream = function (stream) {
         ch, child;
     while (!stream.atEnd()) {
         ch = stream.next();
-        if (ch === '(' && !quoted) {
+        if (ch === ';' && !quoted) { // comment
+            stream.upTo('\n');
+        } else if (ch === '(' && !quoted) {
             child = new List();
             child.parseStream(stream);
             this.add(child);

@@ -70,6 +70,7 @@
 
 ### 2024-02-14
 * blocks: fixed LISP-parsing of IF (BlockMorph.copyWithInputs())
+* lists: added comment (semi-colon) to LISP-parser
 
 ### 2024-02-13
 * merged main branch (v9.2.6)
