@@ -815,6 +815,7 @@ Beetle.prototype.init = function (controller) {
     this.updateExtrusionShapeOutline();
     this.extrusionShapeOutline.enabled = true;
     this.lastTransformMatrix = null;
+    this.lastCap = null;
 
     this.controller.changed();
 };
@@ -1007,16 +1008,6 @@ Beetle.prototype.extrudeToCurrentPoint = function () {
                 vertices = backFace.concat(frontFace).map(v => v.asArray()),
                 faces = [];
 
-            if (this.extrusionShape[0].equalsWithEpsilon(
-                    this.extrusionShape[this.extrusionShape.length - 1],
-                    0.001
-            )) {
-                // the first and last point are very close to each other, so
-                // we assume the user is trying to build a closed volume
-                faces.push([...Array(numSides).keys()].reverse()); // back
-                faces.push([...Array(numSides).keys()].map(f => f + numSides));
-            }
-
             // Add indices for all prism faces.
             // Since faces are always trapezoids, there are 4 vertices per face.
             for (var n = 0; n < numSides - 1; n++) {
@@ -1042,15 +1033,81 @@ Beetle.prototype.extrudeToCurrentPoint = function () {
             prism.visibility = this.controller.ghostModeEnabled ? .25 : 1
 
             this.controller.beetleTrails.push(prism);
+
+            if (this.extrusionShape[0].equalsWithEpsilon(
+                    this.extrusionShape[this.extrusionShape.length - 1],
+                    0.001
+            )) {
+                // The first and last point are very close to each other, so
+                // we assume the user is trying to build a closed volume.
+                this.computeExtrusionCaps(currentTransformMatrix);
+            }
         }
         this.lastTransformMatrix = currentTransformMatrix.clone();
         this.controller.changed();
     }
 };
 
+Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
+    var backCap, frontCap;
+    if (this.lastCap) {
+        // Remove the intermediate caps from inside the current
+        // extrusion.
+        this.controller.scene.removeMesh(this.lastCap);
+        this.controller.beetleTrails.splice(
+            this.controller.beetleTrails.indexOf(this.lastCap),
+            1
+        );
+    } else {
+        // Let's add the back cap. Only to be done on first
+        // extrusion. That is, when there isn't a lastCap yet.
+        backCap =
+            BABYLON.MeshBuilder.CreatePolygon(
+                'backcap',
+                {
+                    shape: this.extrusionShape,
+                    updatable: false
+                },
+                this.controller.scene
+            );
+        backCap.material = BeetleController.Cache.getMaterial(
+            this.wings.material.diffuseColor
+        );
+        backCap.material.wireframe = this.controller.wireframeEnabled;
+        backCap.visibility = this.controller.ghostModeEnabled ? .25 : 1;
+        this.controller.beetleTrails.push(backCap);
+        backCap.bakeTransformIntoVertices(this.lastTransformMatrix);
+        backCap.scalingDeterminant = this.multiplierScale;
+    }
+
+    // Let's add the new front cap.
+    frontCap =
+        BABYLON.MeshBuilder.CreatePolygon(
+            'frontcap',
+            {
+                shape: this.extrusionShape,
+                updatable: false,
+                sideOrientation: BABYLON.Mesh.BACKSIDE
+            },
+            this.controller.scene
+        );
+    
+    frontCap.material = BeetleController.Cache.getMaterial(
+        this.wings.material.diffuseColor
+    );
+    frontCap.material.wireframe = this.controller.wireframeEnabled;
+    frontCap.visibility = this.controller.ghostModeEnabled ? .25 : 1;
+    this.controller.beetleTrails.push(frontCap);
+    frontCap.bakeTransformIntoVertices(currentTransformMatrix);
+    frontCap.scalingDeterminant = this.multiplierScale;
+
+    this.lastCap = frontCap;
+};
+
 Beetle.prototype.stopExtruding = function () {
     this.extruding = false;
     this.lastTransformMatrix = null;
+    this.lastCap = null;
     this.extrusionShapeOutline.visibility = 0;
     this.lineTrail = null;
     this.controller.changed();
