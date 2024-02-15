@@ -2,6 +2,31 @@
 
 ## in development:
 
+## 9.2.6:
+* **Notable Changes:**
+    * allow-listed birdbrain tech for extensions
+
+2024-02-13
+* extensions: allow-listed birdbrain tech for extensions
+* prepared v9.2.6 patch
+
+## 9.2.5:
+* **New Features:**
+    * api: added resetUnsavedChanges(), thanks, Bernat!
+* **Notable Fixes:**
+    * api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* **Documentation Updates:**
+    * extended API documentation for resetting the unsaved changes flag
+* **Translation Updates:**
+    * Dutch, thanks, Jule Rapp!
+
+2024-02-12
+* new dev version for v9.2.5
+* Dutch translation update, thanks, Jule!
+* api: resetUnsavedChanged(), thanks, Bernat!
+* api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* prepared v9.2.5 patch
+
 ## 9.2.4:
 * **New Features:**
     * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity

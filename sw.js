@@ -1,4 +1,4 @@
-var snapVersion = '10-240123-dev',
+var snapVersion = '10-240214-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -83,11 +83,29 @@ var snapVersion = '10-240123-dev',
         'libraries/apl.xml',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
+
+        'libraries/beetle.xml',
+
+            // Beetle dependencies
+            'libraries/beetle/beetle.js',
+            'libraries/beetle/earcut.min.js',
+            'libraries/beetle/babylonjs.loaders.min.js',
+            'libraries/beetle/babylon.js.map',
+            'libraries/beetle/babylon.js',
+            'libraries/beetle/babylon.gridMaterial.min.js',
+
+            // Beetle shapes
+            'libraries/beetle/meshes/beetle-gray.obj',
+            'libraries/beetle/meshes/beetle-color.obj',
+            'libraries/beetle/meshes/beetle-black.obj',
+            'libraries/beetle/meshes/beetle-black.mtl',
+
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
         'libraries/bignums.js',
         'libraries/bitwise.xml',
         'libraries/bbtSnapExtension.js',
+        'libraries/code2blocks_module.xml',
         'libraries/colors.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',

@@ -2,9 +2,12 @@
 
 ## in development:
 * **New Features:**
+    * new "Code to Blocks to Code" library, translates text code to blocks and vice-versa
+    * new 3D Beetle Geometry extension, thank you, Bernat!
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
+    * new LISP-like text syntax for blocks and scripts
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -44,6 +47,8 @@
     * new "sigmoid" easing function in the animations library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
+    * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
+    * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
@@ -62,6 +67,50 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2024-02-14
+* blocks: fixed LISP-parsing of IF (BlockMorph.copyWithInputs())
+* lists: added comment (semi-colon) to LISP-parser
+* 3D Beetle extension extruding fix, thanks, Bernat!
+* incremented dev version
+
+### 2024-02-13
+* merged main branch (v9.2.6)
+* threads: fixed blockToken() lookup for custom blocks
+* lists: encode Boolean values as t and f
+* lists: escape "t" and "f" words
+* threads: parse "t" and "f" inputs into Booleans
+* lists: tweaked parsing quoted empty tokens
+
+### 2024-02-12
+* lists: improved parser
+* lists: improved encoder for parens
+
+### 2024-02-12
+* threads, lists: 2-way block alias look-up for text-to-blocks
+* blocks, threads: new "code" selector in the SPLIT reporter parses LISP syntax into a block-syntax tree
+* blocks, threads: splitting a LISP-formatted text by "blocks" returns a block-syntax tree
+* threads: converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
+* merged main branch (v9.2.5)
+* merged 3D Beetle extension
+* added Beetle files to PWA cache
+* added code2blocks library
+
+### 2024-02-10
+* threads: made unique block aliases unique
+
+### 2024-02-09
+* threads: partial syntax tree to text encoding
+* lists: renamed parseString() to parse()
+* lists: syntax tree to LISP text encoding
+* lists: pretty printing options for generated LISP code
+
+### 2024-02-08
+* lists: new experimental text syntax for primitive blocks
+* threads, lists: refactored syntax tree generation from parsed text
+* threads: extended text syntax for custom blocks
+* threads: added aliases for blocks
+* threads: added aliases for rings
 
 ### 2024-01-21
 * theads: hyperized "change (var) by (delta)" for scalars
