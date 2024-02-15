@@ -774,7 +774,7 @@ BeetleDialogMorph.prototype.exportSTL = function () {
         undefined, // binary ?
         undefined, // little endian?
         undefined, // do not bake transform
-        true // support instanced meshes
+        undefined // support instanced meshes
     );
 };
 
@@ -1077,7 +1077,6 @@ Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
         backCap.visibility = this.controller.ghostModeEnabled ? .25 : 1;
         this.controller.beetleTrails.push(backCap);
         backCap.bakeTransformIntoVertices(this.lastTransformMatrix);
-        backCap.scalingDeterminant = this.multiplierScale;
     }
 
     // Let's add the new front cap.
@@ -1099,7 +1098,6 @@ Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
     frontCap.visibility = this.controller.ghostModeEnabled ? .25 : 1;
     this.controller.beetleTrails.push(frontCap);
     frontCap.bakeTransformIntoVertices(currentTransformMatrix);
-    frontCap.scalingDeterminant = this.multiplierScale;
 
     this.lastCap = frontCap;
 };
