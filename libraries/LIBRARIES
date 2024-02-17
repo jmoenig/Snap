@@ -35,6 +35,7 @@ plot_bars_module.xml	Just Bars	Draw a list of numbers as vertical lines distribu
 httpBlocks.xml	Web services access (https)	An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.  Also parses JSON data.
 make-variables.xml	Create variables	Create and manage global/sprite/script variables in a script
 bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit manipulation.
+writeBlock.xml  Advanced Write Block  Added features of multi-line support, line spacing, scrolling, setting length, and more.
 ~	~
 ~	~
 ~	~
