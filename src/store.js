@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-November-21';
+modules.store = '2024-February-19';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1042,6 +1042,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         definition.selector = child.attributes.selector || null;
         definition.primitive = child.attributes.primitive || null;
         definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.spaceAbove = (child.attributes.space === 'true') || false;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -2459,7 +2460,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%%%>' +
+        '<block-definition s="@" type="@" category="@"%%%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2477,6 +2478,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             ' primitive="' + this.primitive + '"'
             : '',
         this.isHelper ? ' helper="true"' : '',
+        this.spaceAbove ? 'space="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),
