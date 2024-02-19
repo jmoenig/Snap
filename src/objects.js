@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-January-15';
+modules.objects = '2024-February-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -3314,6 +3314,9 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (
         {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
+            if (definition.spaceAbove) {
+                blocks.push('-');
+            }
             blocks.push(block);
         }
     }

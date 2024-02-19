@@ -162,6 +162,7 @@ function CustomBlockDefinition(spec, receiver) {
     this.variableNames = [];
     this.comment = null;
     this.isHelper = false;
+    this.spaceAbove = false; // support grouping templates in the palette
     this.codeMapping = null; // generate text code
     this.codeHeader = null; // generate text code
     this.translations = {}; // format: {lang : spec}
@@ -1699,7 +1700,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         rcvr = this.scriptTarget(),
         myself = this,
         shiftClicked = this.world().currentKey === 16,
-        dlg, menu;
+        dlg, menu, def;
 
     function addOption(label, toggle, test, onHint, offHint) {
         menu.addItem(
@@ -1914,6 +1915,30 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             );
             if (!this.isGlobal || !this.definition.isBootstrapped()) {
                 menu.addLine();
+                def = this.isGlobal ? this.definition
+                        : rcvr.getMethod(this.blockSpec);
+                addOption(
+                    'space above',
+                    function () {
+                        var ide = myself.parentThatIsA(IDE_Morph);
+                        def.spaceAbove = !def.spaceAbove;
+                        rcvr.recordUserEdit(
+                            'palette',
+                            'custom block',
+                            def.isGlobal ? 'global' : 'local',
+                            'space',
+                            def.spaceAbove ? 'added' : 'removed',
+                            def.abstractBlockSpec()
+                        );
+                        if (ide) {
+                            ide.flushPaletteCache();
+                            ide.refreshPalette();
+                        }
+                    },
+                    def.spaceAbove,
+                    'uncheck to\nremove space above',
+                    'check to\nadd space above'
+                );
                 menu.addPair(
                     [
                         new SymbolMorph(
