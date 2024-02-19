@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-February-13';
+modules.threads = '2024-February-19';
 
 var ThreadManager;
 var Process;
@@ -5749,9 +5749,10 @@ Process.prototype.devariadify = function (list) {
 
 Process.prototype.blockToken = function (ring) {
     var block = ring.expression;
-    return block.isCustomBlock ? // to do: check if bootstrapped
-        this.reportBasicBlockAttribute('label', ring)
-        : this.selectorAlias(block.selector);
+    return block.isCustomBlock &&
+        !(block.isGlobal && block.definition.isBootstrapped()) ?
+            this.reportBasicBlockAttribute('label', ring)
+            : this.selectorAlias(block.selector);
 };
 
 Process.prototype.toInputTextSyntax = function (list) {
