@@ -234,26 +234,12 @@ BABYLON.ArcRotateCamera.prototype.restoreViewpoint = function () {
 };
 
 BeetleController.prototype.initLights = function () {
-    this.topLight = new BABYLON.HemisphericLight(
-        'topLight',
-        new BABYLON.Vector3(0, 1, 0),
-        this.scene
-    );
-    this.topLight.specular = new BABYLON.Color3.Black; // no reflections
-
-    this.bottomLight = new BABYLON.HemisphericLight(
-        'bottomLight',
-        new BABYLON.Vector3(0, -1, 0),
-        this.scene
-    );
-    this.bottomLight.specular = new BABYLON.Color3.Black; // no reflections
-
     this.camera.light = new BABYLON.PointLight(
         'pointLight',
         this.camera.position,
         this.scene
     );
-    this.camera.light.specular = new BABYLON.Color3.White;
+    this.camera.light.specular = new BABYLON.Color3.Black; // no reflections
     this.camera.light.parent = this.camera;
 };
 
@@ -381,6 +367,10 @@ BeetleController.Cache.getMaterial = function (color) {
     if (!material) {
         material = new BABYLON.StandardMaterial(color.toString()); // name
         material.diffuseColor.set(color.r, color.g, color.b);
+        material.emissiveColor = material.diffuseColor;
+        material.linkEmissiveWithDiffuse = true;
+        material.roughness = 1;
+        material.specularPower = 512;
         this.materials.set(key, material);
     }
 
@@ -868,12 +858,17 @@ Beetle.prototype.loadMeshes = function () {
                     if (each !== 'black') {
                         meshes.forEach(
                             mesh => {
-                                mesh.material =
+                                var material =
                                     new BABYLON.StandardMaterial(
                                         each,
                                         this.controller.scene
                                     );
-                                mesh.material.diffuseColor.set(.5,.5,.5);
+                                mesh.material = material;
+                                material.diffuseColor.set(.5,.5,.5);
+                                material.emissiveColor = material.diffuseColor;
+                                material.linkEmissiveWithDiffuse = true;
+                                material.roughness = 1;
+                                material.specularPower = 512;
                             }
                         );
                     }
@@ -930,6 +925,28 @@ Beetle.prototype.newExtrusionShape = function (selector) {
                     );
                 }
                 path.push(path[0]);
+                break;
+            case 'semicircle':
+                var radius = .5,
+                    theta;
+                for (theta = Math.PI * 3 / 2; theta < (Math.PI * 5 / 2) + (Math.PI / 16); theta += Math.PI / 16) {
+                    path.push(
+                        new BABYLON.Vector3(
+                            radius * Math.cos(theta),
+                            0,
+                            radius * Math.sin(theta),
+                        )
+                    );
+                }
+                break;
+            case 'line':
+                path.push(new BABYLON.Vector3(0, 0,-0.5));
+                path.push(new BABYLON.Vector3(0, 0, 0.5));
+                break;
+            case 'right angle':
+                path.push(new BABYLON.Vector3(0, 0, 0));
+                path.push(new BABYLON.Vector3(0, 0, 1));
+                path.push(new BABYLON.Vector3(1, 0, 1));
                 break;
         }
     }
@@ -1031,6 +1048,7 @@ Beetle.prototype.extrudeToCurrentPoint = function () {
             prism.material.backFaceCulling = true;
             prism.material.wireframe = this.controller.wireframeEnabled;
             prism.visibility = this.controller.ghostModeEnabled ? .25 : 1
+            prism.convertToFlatShadedMesh();
 
             this.controller.beetleTrails.push(prism);
 
@@ -1090,7 +1108,7 @@ Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
             },
             this.controller.scene
         );
-    
+
     frontCap.material = BeetleController.Cache.getMaterial(
         this.wings.material.diffuseColor
     );
