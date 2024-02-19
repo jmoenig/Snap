@@ -74,6 +74,7 @@
 * byob, objects: let users add spaces between custom blocks in the palette
 * store: added persistence for "spaceAbove" attribute in custom block definitions
 * German translation update for custom block palette spacers
+* incremented dev version
 
 ### 2024-02-14
 * blocks: fixed LISP-parsing of IF (BlockMorph.copyWithInputs())
