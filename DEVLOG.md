@@ -68,6 +68,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-19
+* byob: added divider line in custom blocks palette context menu
+
 ### 2024-02-14
 * blocks: fixed LISP-parsing of IF (BlockMorph.copyWithInputs())
 * lists: added comment (semi-colon) to LISP-parser

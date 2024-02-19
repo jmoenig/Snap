@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-December-21';
+modules.byob = '2024-February-19';
 
 // Declarations
 
@@ -1938,6 +1938,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     null, // shortcut
                     'move one down in the palette'
                 );
+                menu.addLine();
             }
         } else { // inside a script
             // if global or own method - let the user delete the definition
