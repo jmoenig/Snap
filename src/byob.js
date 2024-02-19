@@ -1936,8 +1936,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         }
                     },
                     def.spaceAbove,
-                    'uncheck to\nremove space above',
-                    'check to\nadd space above'
+                    'uncheck to remove space above',
+                    'check to add space above'
                 );
                 menu.addPair(
                     [
