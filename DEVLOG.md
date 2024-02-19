@@ -5,6 +5,7 @@
     * new "Code to Blocks to Code" library, translates text code to blocks and vice-versa
     * new 3D Beetle Geometry extension, thank you, Bernat!
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
+    * custom blocks can be grouped in the palette by adding vertical spaces in between them
     * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
