@@ -69,6 +69,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-02-20
+* merged API changes to dev
+
 ### 2024-02-19
 * byob: added divider line in custom blocks palette context menu
 * byob, objects: let users add spaces between custom blocks in the palette
