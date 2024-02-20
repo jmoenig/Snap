@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-02-20
+* new dev version for v9.2.7
+
 ## 9.2.6:
 * **Notable Changes:**
     * allow-listed birdbrain tech for extensions
