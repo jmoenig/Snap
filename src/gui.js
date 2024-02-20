@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-February-19';
+modules.gui = '2024-February-20';
 
 // Declarations
 
@@ -5413,8 +5413,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet, Sarron, and Aleassa costumes are'
-        + '\nwatercolor paintings by Meghan Taylor and represent'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
+        + '\nare watercolor paintings by Meghan Taylor and represent'
         + '\n characters from her webcomic Prophecy of the Circle,'
         + '\nlicensed to us only for use in Snap! projects.'
         + '\nMeghan also painted the Tad costumes,'

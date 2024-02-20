@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-February-14';
+modules.blocks = '2024-February-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5438,6 +5438,12 @@ BlockMorph.prototype.getHighlight = function () {
     return null;
 };
 
+BlockMorph.prototype.flashOutline = function (color, border) {
+    this.removeHighlight();
+    this.addBack(this.outline(color, border));
+    this.fullChanged();
+};
+
 BlockMorph.prototype.outline = function (color, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
@@ -9323,8 +9329,42 @@ ScriptsMorph.prototype.unflash = function () {
         if (each instanceof SyntaxElementMorph && each.unflash) {
             each.unflash();
         }
+        if (each instanceof BlockMorph) {
+            each.removeHighlight();
+        }
     });
 
+};
+
+ScriptsMorph.prototype.flashOutlineCodeIdx = function (
+    idx,
+    color = null,
+border = 3) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    this.unflashOutline();
+    if (block) {
+        block.flashOutline(color ? Color.fromString(color) : null, border);
+    }
+};
+
+ScriptsMorph.prototype.unflashOutline = function () {
+    this.forAllChildren(each => {
+        if (each instanceof BlockMorph) {
+            each.removeHighlight();
+        }
+    });
+
+};
+
+ScriptsMorph.prototype.balloonCodeIdx = function (idx, contents) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    if (block) {
+        block.showBubble(contents);
+    }
 };
 
 // ArgMorph //////////////////////////////////////////////////////////

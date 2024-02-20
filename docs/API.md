@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, February 12, 2024
+Jens Mönig, Bernat Romagosa, February 20, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -55,7 +55,14 @@ Currently the API consists of the following methods:
 
 * `IDE_Morph.prototype.flashSpriteScripts()`
 * `IDE_Morph.prototype.flashSpriteScriptAt()`
-* `IDE_Morph.prototype.unflashSpriteScripts`
+* `IDE_Morph.prototype.unflashSpriteScripts()`
+* `IDE_Morph.prototype.flashSpriteScriptOutlineAt()`
+* `IDE_Morph.prototype.unflashSpriteScriptsOutline()`
+
+#### Display Speech Balloons next to Blocks
+
+* `IDE_Morph.prototype.showScriptBalloonAt()`
+* `IDE_Morph.prototype.closePopUps()`
 
 #### Set the Language
 
@@ -453,6 +460,68 @@ the unflashSpriteScripts() method un-highlights the blocks of the scripts of the
 undefined
 
 
+### IDE_Morph.prototype.flashSpriteScriptOutlineAt()
+the flashSpriteScriptOutlineAt() method highlights the outline of the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    flashSpriteScriptOutlineAt(charIdx[, spriteName[, colorCSV[, border]]]);
+
+#### parameters
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
+* border
+    * integer representing the pixel width of the outline highlight
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.unflashSpriteScriptsOutline()
+the unflashSpriteScriptsOutline() method un-highlights the blocks outlines of the scripts of the sprite indicated by name - or the current sprite or stage if none -
+
+#### syntax
+    unflashSpriteScriptsOutline([spriteName]);
+
+#### parameters
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.showScriptBalloonAt()
+the showScriptBalloonAt() method highlights the outline of the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    showScriptBalloonAt(contents, charIdx[, spriteName]);
+
+#### parameters
+* contents
+    * data to be displayed inside the speech balloon, can be a string, number, costume, morph, canvas, list, table etc. - anything first-class in Snap!
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.closePopUps()
+the closePopUps() method removes all pop-up menus and speech balloon, if any
+
+#### syntax
+    closePopUps();
+
+#### return value
+undefined
+
+
 ### IDE_Morph.prototype.unsavedChanges()
 the unsavedChanges() method returns a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
 
@@ -471,7 +540,6 @@ the resetUnsavedChanges() method resets the value returned by unsavedChanges() t
 
 #### return value
 undefined
-
 
 
 ### IDE_Morph.prototype.setTranslation()
