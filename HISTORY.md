@@ -6,6 +6,8 @@
     * new "Lirin" costume series, thanks, Meghan and Brian!
     * new showScriptBalloonAt() and closePopUps() API methods
     * new flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods
+* **Documentation Updates:**
+    * extended API documentation for flashing block outlines and displaying annotations in speech balloons
 
 2024-02-20
 * new dev version for v9.2.7
