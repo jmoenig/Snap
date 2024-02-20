@@ -5338,7 +5338,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet, Sarron, and Aleassa costumes are'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes are'
         + '\nwatercolor paintings by Meghan Taylor and represent'
         + '\n characters from her webcomic Prophecy of the Circle,'
         + '\nlicensed to us only for use in Snap! projects.'
