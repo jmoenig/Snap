@@ -5656,7 +5656,7 @@ Process.prototype.blockAliases = {
     url : 'reportUrl',
 
     // operators:
-    cmd : 'reifyCommand',
+    cmd : 'reifyScript',
     ring : 'reifyReporter',
     pred : 'reifyPredicate',
     '+' : 'reportVariadicSum',
