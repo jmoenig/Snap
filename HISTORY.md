@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 9.2.7:
 * **New Features:**
     * new "Lirin" costume series, thanks, Meghan and Brian!
     * new showScriptBalloonAt() and closePopUps() API methods
@@ -14,6 +15,7 @@
 * added new Lirin costumes, thanks, Brian and Meghan!
 * api: added showScriptBalloonAt() and closePopUps() API methods
 * api: added flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods 
+* prepared v9.2.7 patch
 
 ## 9.2.6:
 * **Notable Changes:**
