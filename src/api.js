@@ -311,6 +311,31 @@ IDE_Morph.prototype.unflashSpriteScripts = function (name) {
     this.spriteNamed(name).scripts.unflash();
 };
 
+IDE_Morph.prototype.flashSpriteScriptOutlineAt = function (
+    charIdx,
+    name,
+    clr,
+    border
+) {
+    // highlight the outline of the innermost block of the scripts of the sprite
+    // indicated by name or the current sprite or stage if none that corresponds
+    // to the index of the text given the current codification mapping.
+    // Optionally a string of comma-separated "r,g,b[,a]" values can be passed
+    // in to specify a specific highlight color, where each color component is
+    // a number between 0 and 255 and alpha is a fraction between 0 and 1.
+    // If none is supplied the default flash color is used.
+    // Also optionally a border width of pixels can be specified
+    var scripts = this.spriteNamed(name).scripts;
+    // scripts.unflash();
+    scripts.flashOutlineCodeIdx(charIdx, clr, border);
+};
+
+IDE_Morph.prototype.unflashSpriteScriptsOutline = function (name) {
+    // un-highlight the script outlines of the sprite indicated by name or the
+    // current sprite or stage if none
+    this.spriteNamed(name).scripts.unflashOutline();
+};
+
 IDE_Morph.prototype.showScriptBalloonAt = function (contents, charIdx, name) {
     // popup a balloon at the innermost block of the scripts of the sprite
     // indicated by name or the current sprite or stage if none that corresponds

@@ -79,6 +79,7 @@
                             null, // optional sprite name
                             null // '200,100,130' // optional rgb(a) color csv
                         );
+
                         /*
                         // alternatively: highlight the block at the
                         // selection start idx
@@ -86,6 +87,30 @@
                             this.selectionStart,
                             null, // optional sprite name
                             null // '200,100,130' // optional rgb(a) color csv
+                        );
+                        */
+
+                        /*
+                        // highlight the outline of block at the
+                        // selection start idx
+                        ide.flashSpriteScriptOutlineAt(
+                            this.selectionStart,
+                            null, // optional sprite name
+                            '200,100,130', // optional rgb(a) color csv
+                            3 // border
+                        );
+                        */
+
+                        /*
+                        // apop-up a balloon at the block at the
+                        // selection start idx
+                        ide.showScriptBalloonAt(
+                            'selection:\n' +
+                                this.selectionStart +
+                                ' - ' +
+                                this.selectionEnd,
+                            this.selectionStart,
+                            null, // optional sprite name
                         );
                         */
                     }
