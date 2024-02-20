@@ -71,6 +71,7 @@
 
 ### 2024-02-20
 * merged API changes to dev
+* threads: added primitive aliases
 
 ### 2024-02-19
 * byob: added divider line in custom blocks palette context menu

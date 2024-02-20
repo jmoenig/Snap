@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-February-19';
+modules.threads = '2024-February-20';
 
 var ThreadManager;
 var Process;
@@ -5644,13 +5644,20 @@ Process.prototype.blockAliases = {
     ask : 'reportAskFor',
     pause : 'doPauseAll',
     pipe : 'reportPipe',
+    define: 'doDefineBlock',
+    setBlock: 'doSetBlockAttribute',
+    getBlock: 'reportBlockAttribute',
     'this' : 'reportEnvironment',
 
     // sensing:
     date : 'reportDate',
+    my : 'reportGet',
+    object : 'reportObject',
+    url : 'reportUrl',
 
     // operators:
     ring : 'reifyReporter',
+    predicate : 'reifyPredicate',
     '+' : 'reportVariadicSum',
     '-' : 'reportDifference',
     '*' : 'reportVariadicProduct',
