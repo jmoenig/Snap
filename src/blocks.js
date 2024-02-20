@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-January-23';
+modules.blocks = '2024-February-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9285,6 +9285,15 @@ ScriptsMorph.prototype.unflash = function () {
         }
     });
 
+};
+
+ScriptsMorph.prototype.balloonCodeIdx = function (idx, contents) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    if (block) {
+        block.showBubble(contents);
+    }
 };
 
 // ArgMorph //////////////////////////////////////////////////////////

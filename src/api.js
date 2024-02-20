@@ -46,7 +46,7 @@ detect, isSnapObject, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-February-12';
+modules.api = '2024-February-20';
 
 // IDE_Morph external communication API
 /*
@@ -309,6 +309,23 @@ IDE_Morph.prototype.unflashSpriteScripts = function (name) {
     // un-highlight the scripts of the sprite indicated by name or the current
     // sprite or stage if none
     this.spriteNamed(name).scripts.unflash();
+};
+
+IDE_Morph.prototype.showScriptBalloonAt = function (contents, charIdx, name) {
+    // popup a balloon at the innermost block of the scripts of the sprite
+    // indicated by name or the current sprite or stage if none that corresponds
+    // to the index of the text given the current codification mapping, and
+    // display the given contents, which can be a string, number, costume,
+    // morph, canvas, list, table etc. (anything first-class in Snap!)
+    var scripts = this.spriteNamed(name).scripts;
+    // scripts.unflash();
+    // scripts.flashCodeIdx(charIdx, contents);
+    scripts.balloonCodeIdx(charIdx, contents);
+};
+
+IDE_Morph.prototype.closePopUps = function () {
+    // remove all pop-up menus and balloons, if any
+    this.world().hand.destroyTemporaries();
 };
 
 IDE_Morph.prototype.unsavedChanges = function () {

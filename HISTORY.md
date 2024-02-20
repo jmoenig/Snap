@@ -4,10 +4,12 @@
 
 * **New Features:**
     * new "Lirin" costume series, thanks, Meghan and Brian!
+    * new showScriptBalloonAt() and closePopUps() API methods
 
 2024-02-20
 * new dev version for v9.2.7
 * added new Lirin costumes, thanks, Brian and Meghan!
+* api: added showScriptBalloonAt() and closePopUps() API methods
 
 ## 9.2.6:
 * **Notable Changes:**
