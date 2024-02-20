@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-02-20
+* blocks: fixed a codification bug for strings beginning with a number, thanks, Emmanuel, for the report!
+
 ## 9.2.7:
 * **New Features:**
     * new "Lirin" costume series, thanks, Meghan and Brian!
