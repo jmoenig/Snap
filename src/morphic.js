@@ -12142,9 +12142,9 @@ WorldMorph.prototype.initKeyboardHandler = function () {
                 }
                 event.preventDefault();
             }
-            // suppress cmd-d/f/i/p/s override
+            // suppress cmd-d/f/i/o/p/s override
             if ((event.ctrlKey || event.metaKey) &&
-                    'dfips'.includes(event.key)) {
+                    'dfiops'.includes(event.key)) {
                 event.preventDefault();
             }
         },
