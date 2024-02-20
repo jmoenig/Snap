@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 9.2.8:
+* **Notable Fixes:**
+    * fixed a codification bug for strings beginning with a number, thanks, @schanzer, for the report!
+
 2024-02-20
 * blocks: fixed a codification bug for strings beginning with a number, thanks, Emmanuel, for the report!
+* prepared v9.2.8 patch
 
 ## 9.2.7:
 * **New Features:**
