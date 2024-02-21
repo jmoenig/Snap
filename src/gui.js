@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-February-20';
+modules.gui = '2024-February-21';
 
 // Declarations
 
@@ -8452,10 +8452,14 @@ IDE_Morph.prototype.paletteXML = function (categoryNames) {
 
 // IDE_Morph user dialog shortcuts
 
-IDE_Morph.prototype.showMessage = function (message, secs) {
+IDE_Morph.prototype.showMessage = function (message, secs, atHand = false) {
     var m = new MenuMorph(null, message),
         intervalHandle;
-    m.popUpCenteredInWorld(this.world());
+    if (atHand) {
+        m.popUpCenteredAtHand(this.world());
+    } else {
+        m.popUpCenteredInWorld(this.world());
+    }
     if (secs) {
         intervalHandle = setInterval(
             () => {

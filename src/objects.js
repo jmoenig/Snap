@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-February-19';
+modules.objects = '2024-February-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -11177,6 +11177,15 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         scaledImg,
         width;
 
+    async function writeClipboardText(text, ide) {
+        try {
+            await navigator.clipboard.writeText(text);
+            ide.showMessage('copied to clipboard', 1, true);
+        } catch (error) {
+            ide.showMessage(error.message, 2, true);
+        }
+    }
+
     if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
@@ -11223,9 +11232,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                     localize('data')
                 )
             );
+            menu.addItem(
+                'copy',
+                () => writeClipboardText(data, ide)
+            );
             return menu;
         };
-
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -11426,6 +11438,10 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                     'text/plain;charset=utf-8',
                     localize('data')
                 )
+            );
+            menu.addItem(
+                'copy',
+                () => writeClipboardText(data, ide)
             );
             return menu;
         };
