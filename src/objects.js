@@ -13608,6 +13608,15 @@ WatcherMorph.prototype.userMenu = function () {
         off = '\u25CB',
         vNames;
 
+    async function writeClipboardText(text, ide) {
+        try {
+            await navigator.clipboard.writeText(text);
+            ide.showMessage('copied to clipboard', 1, true);
+        } catch (error) {
+            ide.showMessage(error.message, 2, true);
+        }
+    }
+
     function monitor(vName) {
         var stage = myself.parentThatIsA(StageMorph),
             varFrame = myself.currentValue.outerContext.variables;
@@ -13723,6 +13732,10 @@ WatcherMorph.prototype.userMenu = function () {
                     'text/plain;charset=utf-8',
                     this.getter // variable name
                 )
+            );
+            menu.addItem(
+                'copy',
+                () => writeClipboardText(this.currentValue.toString(), ide)
             );
         } else if (this.currentValue instanceof Costume) {
             menu.addItem(
