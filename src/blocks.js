@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-February-20';
+modules.blocks = '2024-February-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2410,6 +2410,15 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world() || target.world();
 
+    async function writeClipboardText(text, ide) {
+        try {
+            await navigator.clipboard.writeText(text);
+            ide.showMessage('copied to clipboard', 1, true);
+        } catch (error) {
+            ide.showMessage(error.message, 2, true);
+        }
+    }
+
     if ((value === undefined) || !wrrld) {
         return null;
     }
@@ -2599,6 +2608,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                     'text/plain;charset=utf-8',
                     localize('data')
                 )
+            );
+            menu.addItem(
+                'copy',
+                () => writeClipboardText(value, ide)
             );
             return menu;
         };
