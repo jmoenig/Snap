@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-February-20';
+modules.threads = '2024-February-21';
 
 var ThreadManager;
 var Process;
@@ -5715,7 +5715,13 @@ Process.prototype.blockAliases = {
     keep : 'reportKeep',
     find : 'reportFindFirst',
     combine : 'reportCombine',
-    forEach : 'doForEach'
+    forEach : 'doForEach',
+
+    // extensions
+
+    prim : 'doPrimitive',
+    extension : 'doApplyExtension',
+    ext: 'reportApplyExtension'
 };
 
 // Process - replacing blocks in syntax trees with text
