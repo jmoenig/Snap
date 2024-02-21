@@ -5699,7 +5699,7 @@ Process.prototype.blockAliases = {
     list : 'reportNewList',
     cons : 'reportCONS',
     cdr: 'reportCDR',
-    len : 'reportListLength',
+    data : 'reportListAttribute',
     at : 'reportListItem',
     contains : 'reportListContainsItem',
     empty : 'reportListIsEmpty',
