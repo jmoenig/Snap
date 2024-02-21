@@ -76,6 +76,7 @@
 * blocks: copy text from block result balloons to the clipboard
 * objects: copy text from variable watchers to the clipboard
 * German translation update for "copy" to clipboard feature
+* incremented dev version
 
 ### 2024-02-20
 * merged API changes to dev
