@@ -4697,7 +4697,7 @@ BlockMorph.prototype.copyWithNext = function (next, parameterNames) {
 BlockMorph.prototype.reify = function (inputNames, comment) {
     // private - assumes that I've already been deep copied
     var context = new Context();
-    context.expression = this;
+    context.expression = this.fullCopy();
     context.inputs = inputNames || [];
     context.emptySlots = this.markEmptySlots();
     context.comment = comment || this.comment?.text();
