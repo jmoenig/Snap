@@ -6,7 +6,6 @@ var ide = world.children.find(child => {
 
 SnapExtensions.primitives.set(prefix + 'inform(title,message)', function(title, message) {
     ide.inform(title, message);
-
 })
 
 SnapExtensions.primitives.set(prefix + 'show_message(message,secs)', function(message, secs) {

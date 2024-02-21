@@ -43,3 +43,13 @@ TuneScope.xml	TuneScope	Music Notation, Instruments, Drums, Tones, Chords, Track
 serial_module.xml	Serial Ports	Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)
 mqtt.xml	MQTT	(Message Queuing Telemetry Transport) protocol for connecting with IOT devices ad/or other software
 signada.xml	Signada (Network remote control)	Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.
+~	~
+~	~
+~	~
+microworlds/dialogs.xml	Dialogs	Display dialogs and messages to the user.
+microworlds/fancy-text-morphs.xml	Fancy Text	Text formatting and basic fraction support for SAY and THINK blocks.
+microworlds/fancy-text.xml	Fancy Stage Writing	Text formatting and basic fraction support for writing on stage.
+microworlds/microworld.xml	Microworld	Customize the display of the Snap! UI to create a microworld programming environment.
+microworlds/script-pic-costume.xml	Script Pic Costumes	Turn a ringified block/script into a costume
+microworlds/translations.xml	Translations	Support for translating text, blocks, and dropdown/placeholder values
+
