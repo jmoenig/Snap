@@ -10,6 +10,7 @@
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
     * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
+    * new Metaprogramming library
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
     * variadic variables type input slots for custom blocks
@@ -77,6 +78,7 @@
 * objects: copy text from variable watchers to the clipboard
 * German translation update for "copy" to clipboard feature
 * incremented dev version
+* new Metaprogramming library
 
 ### 2024-02-20
 * merged API changes to dev
