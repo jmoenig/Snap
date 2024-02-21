@@ -4551,7 +4551,12 @@ BlockMorph.prototype.copyWithInputs = function (inputs) {
     var cpy = this.fullCopy(),
         slots = cpy.inputs(),
         dta = inputs.itemsArray().map(inp =>
-            inp instanceof Context ? inp.expression : inp
+            inp instanceof Context ?
+                (inp.expression instanceof BlockMorph ?
+                    inp.expression.fullCopy()
+                    : inp.expression
+                )
+                : inp
         ),
         count = 0,
         dflt;
