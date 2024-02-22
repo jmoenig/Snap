@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-02-22
+* new dev version for v9.2.9
+
 ## 9.2.8:
 * **Notable Fixes:**
     * fixed a codification bug for strings beginning with a number, thanks, @schanzer, for the report!
