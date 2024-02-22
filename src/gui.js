@@ -352,7 +352,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     window.onmessage = function (event) {
         // make the API accessible from outside an iframe
-        var ide = world.children[0];
+        var ide = myself;
         if (!isNil(event.data.selector)) {
             window.top.postMessage(
                 {
