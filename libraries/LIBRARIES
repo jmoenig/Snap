@@ -55,3 +55,12 @@ signada.xml	Signada (Network remote control)	Interact with MicroBlocks devices v
 ~	~
 ~	~
 metaprogramming_module.xml	Metaprogramming	Analyze, transform and generate blocks and scripts
+~	~
+~	~
+~	~
+microworlds/dialogs.xml	Dialogs	Display dialogs and messages to the user.
+microworlds/fancy-text-morphs.xml	Fancy Text	Text formatting and basic fraction support for SAY and THINK blocks.
+microworlds/fancy-text.xml	Fancy Stage Writing	Text formatting and basic fraction support for writing on stage.
+microworlds/microworld.xml	Microworld	Customize the display of the Snap! UI to create a microworld programming environment.
+microworlds/script-pic-costume.xml	Script Pic Costumes	Turn a ringified block/script into a costume
+microworlds/translations.xml	Translations	Support for translating text, blocks, and dropdown/placeholder values
