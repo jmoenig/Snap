@@ -55,20 +55,6 @@ modules.api = '2024-January-23';
     global variables
 */
 
-window.onmessage = function (event) {
-    // make the API accessible from outside an iframe
-    var ide = world.children[0];
-    if (!isNil(event.data.selector)) {
-        window.top.postMessage(
-            {
-                selector: event.data.selector,
-                response: ide[event.data.selector].apply(ide, event.data.params)
-            },
-            '*'
-        );
-    }
-};
-
 IDE_Morph.prototype.getScenes = function () {
     // return an array of all scenenames
     return this.scenes.itemsArray().map(each => each.name);

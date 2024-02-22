@@ -346,6 +346,23 @@ IDE_Morph.prototype.init = function (config) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this;
 
+    window.onmessage = function (event) {
+        // make the API accessible from outside an iframe
+        var ide = world.children[0];
+        if (!isNil(event.data.selector)) {
+            window.top.postMessage(
+                {
+                    selector: event.data.selector,
+                    response: ide[event.data.selector].apply(
+                        ide,
+                        event.data.params
+                    )
+                },
+                '*'
+            );
+        }
+    };
+
     function initUser(username) {
         sessionStorage.username = username;
         myself.controlBar.cloudButton.refresh();
