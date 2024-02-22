@@ -48,6 +48,7 @@
     * support translating custom drop-downs by prefixing items with "$_"
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
     * new "sigmoid" easing function in the animations library
+    * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -70,6 +71,10 @@
 * **Documentation Updates:**
 * **Translation Updates:**
     * German
+
+### 2024-02-22
+* integrated EDC Early Maths Microworlds, thanks, Zak Kolar!
+* incremented dev version
 
 ### 2024-02-21
 * threads: added more primitive aliases
