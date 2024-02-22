@@ -39,14 +39,14 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
-detect, isSnapObject, VariableFrame*/
+/*global modules, IDE_Morph, isString, Map, List, Project, detect, isSnapObject,
+VariableFrame*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-February-20';
+modules.api = '2024-February-22';
 
 // IDE_Morph external communication API
 /*
