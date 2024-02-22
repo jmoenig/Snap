@@ -254,6 +254,10 @@ function IDE_Morph(config = {}) {
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
         noDevWarning:   bool, ignore development version incompatibility warning
+        noExitWarning:  bool, do not show a browser warning when closing the IDE
+                                with unsaved changes
+        preserveTitle:  bool, do not set the tab title dynamically to reflect
+                                the current Snap! version
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -1530,8 +1534,10 @@ IDE_Morph.prototype.createControlBar = function () {
         scene = myself.scenes.at(1) !== myself.scene ?
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
-        document.title = "Snap! " +
-            (myself.getProjectName() ? name : SnapVersion);
+        if (!myself.config.preserveTitle) {
+            document.title = "Snap! " +
+                (myself.getProjectName() ? name : SnapVersion);
+        }
         txt = new StringMorph(
             prefix + name +  scene + suffix,
             14,
