@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, February 20, 2024
+Jens Mönig, Bernat Romagosa, February 22, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -139,9 +139,9 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noDevWarning:	|bool	|ignore development version incompatibility warning|
 |noExitWarning:	|bool	|do not show a browser warning when closing the IDE with unsaved changes|
 |preserveTitle:	|bool	|do not set the tab title dynamically to reflect the current Snap! version|
-|blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`| |blocksFade:	|num
-|fading percentage for blocks, e.g. `85`| |zebra:	|num	|contrast percentage
-for nesting same-color blocks|
+|blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`|
+|blocksFade:	|num	|fading percentage for blocks, e.g. `85`|
+|zebra:	|num	|contrast percentage for nesting same-color blocks|
 
 Note that such configurations will not affect the user's own preference settings, e.g. configuring the blocks zoom or language will not overwrite the user's own settings which are kept in localstorage.
 
