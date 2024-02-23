@@ -152,7 +152,7 @@ class UrlParams {
         // only force my world to get focus if I'm not in embed mode
         // to prevent the iFrame from involuntarily scrolling into view
         if (!ide.isEmbedMode) {
-            ide.world().worldCanvas.focus();
+            ide.world().keyboardHandler.focus();
         }
     }
 }
