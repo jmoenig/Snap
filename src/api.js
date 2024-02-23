@@ -39,14 +39,14 @@
 
 */
 
-/*global modules, IDE_Morph, isString, Map, List, world, isNil, Project,
-detect, isSnapObject, VariableFrame*/
+/*global modules, IDE_Morph, isString, Map, List, Project, detect, isSnapObject,
+VariableFrame*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-February-20';
+modules.api = '2024-February-22';
 
 // IDE_Morph external communication API
 /*
@@ -54,20 +54,6 @@ modules.api = '2024-February-20';
     add message listeners to Snap! broadcasts and access
     global variables
 */
-
-window.onmessage = function (event) {
-    // make the API accessible from outside an iframe
-    var ide = world.children[0];
-    if (!isNil(event.data.selector)) {
-        window.top.postMessage(
-            {
-                selector: event.data.selector,
-                response: ide[event.data.selector].apply(ide, event.data.params)
-            },
-            '*'
-        );
-    }
-};
 
 IDE_Morph.prototype.getScenes = function () {
     // return an array of all scenenames

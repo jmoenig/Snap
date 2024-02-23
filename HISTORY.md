@@ -2,6 +2,25 @@
 
 ## in development:
 
+## 9.2.9:
+* **New Features:**
+    * new "preserveTitle" API configuration, thanks, Bernat!
+    * new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+    * new "hideSettings" API configuration switch, hides / shows the project menu button in the tool bar
+* **Notable Fixes:**
+    * hide the cloud menu button when the "noCloud" API configuration is switched on
+    * hide the project menu button when the "noImports" API configuration is switched on
+
+2024-02-23
+* gui: make sure to hide the cloud menu button when "noCloud" API configuration is switched on
+* gui: hide the project menu when "noImports" API configuration is switched on
+* new: new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+* new: new "hideSettings" API configuration switch, hides / shows the settings menu button in the tool bar
+* prepared v9.2.9 patch
+
+2024-02-22
+* new dev version for v9.2.9
+
 ## 9.2.8:
 * **Notable Fixes:**
     * fixed a codification bug for strings beginning with a number, thanks, @schanzer, for the report!

@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, February 20, 2024
+Jens Mönig, Bernat Romagosa, February 23, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -127,17 +127,20 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |mode:		|str	|currently `"presentation"` or `"edit"`|
 |hideControls:	|bool	|hide/show the tool bar|
 |hideCategories:	|bool	|hide/show the palette block category buttons|
+|hideProjects:	|bool	|hide/show the projects menu button in the tool bar|
+|hideSettings:	|bool	|hide/show the settings menu button in the tool bar|
 |noDefaultCat:	|bool	|hide/show the default built-in category buttons|
 |noSpriteEdits:	|bool	|hide/show the corral & sprite controls/menus|
 |noSprites:	|bool	|hide/show the stage, corral, sprite editor|
 |noPalette:	|bool	|hide/show the palette including the categories|
-|noImports:	|bool	|disable/allow importing files via drag&drop|
+|noImports:	|bool	|disable/allow importing files via drag&drop, hides the project menu button|
 |noCloud:	|bool	|disable/enable functionalities to access the Snap! cloud|
 |noOwnBlocks:	|bool	|hide/show "make a block" and "make a category" buttons|
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
 |noUserSettings:	|bool	|disable/enable persistent user preferences|
 |noDevWarning:	|bool	|ignore development version incompatibility warning|
 |noExitWarning:	|bool	|do not show a browser warning when closing the IDE with unsaved changes|
+|preserveTitle:	|bool	|do not set the tab title dynamically to reflect the current Snap! version|
 |blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`|
 |blocksFade:	|num	|fading percentage for blocks, e.g. `85`|
 |zebra:	|num	|contrast percentage for nesting same-color blocks|
