@@ -304,6 +304,7 @@ BeetleController.prototype.beetleTrailsBoundingBox = function () {
 BeetleController.prototype.clear = function () {
     this.beetleTrails.forEach(object => object.dispose());
     this.beetleTrails = [];
+    BeetleController.Cache.clear();
     this.changed();
 };
 
@@ -358,6 +359,11 @@ BeetleController.prototype.currentView = function () {
 
 BeetleController.Cache = {
     materials: new Map(),
+};
+
+BeetleController.Cache.clear = function () {
+    this.materials.forEach(m => m.dispose());
+    this.materials = new Map();
 };
 
 BeetleController.Cache.getMaterial = function (color) {
@@ -789,7 +795,8 @@ Beetle.prototype.init = function (controller) {
     this.name = 'beetle';
 
     this.linewidth = 1;
-    this.multiplierScale = 1;
+    this.shapeScale = 1;
+    this.movementScale = 1;
 
     this.loadMeshes();
     this.wings = null;
@@ -943,11 +950,6 @@ Beetle.prototype.newExtrusionShape = function (selector) {
                 path.push(new BABYLON.Vector3(0, 0,-0.5));
                 path.push(new BABYLON.Vector3(0, 0, 0.5));
                 break;
-            case 'right angle':
-                path.push(new BABYLON.Vector3(0, 0, 0));
-                path.push(new BABYLON.Vector3(0, 0, 1));
-                path.push(new BABYLON.Vector3(1, 0, 1));
-                break;
         }
     }
 
@@ -971,7 +973,7 @@ Beetle.prototype.updateExtrusionShapeOutline = function () {
             this.controller.scene
         );
         this.extrusionShapeOutline.parent = this.body;
-        this.extrusionShapeOutline.scalingDeterminant = this.multiplierScale;
+        this.extrusionShapeOutline.scalingDeterminant = this.shapeScale;
         this.extrusionShapeOutline.rotate(BABYLON.Axis.X, Math.PI / -2);
     }
     this.extrusionShapeOutline.visibility = this.extruding ? 1 : 0;
@@ -1150,7 +1152,7 @@ Beetle.prototype.isVisible = function () {
 // User facing methods, called from blocks
 
 Beetle.prototype.move = function (axis, steps) {
-    var scaledSteps = Number(steps) * this.multiplierScale,
+    var scaledSteps = Number(steps) * this.movementScale,
         vector = new BABYLON.Vector3(
             axis === 'y' ? scaledSteps : 0,
             axis === 'z' ? scaledSteps : 0,
@@ -1233,9 +1235,9 @@ Beetle.prototype.pointTo = function (x, y, z) {
     this.controller.changed();
 };
 
-Beetle.prototype.setScale = function (scale) {
-    this.multiplierScale = scale;
-    this.updateExtrusionShapeOutline();
+Beetle.prototype.setScale = function (scale, which) {
+    this[which + 'Scale'] = scale;
+    if (which == 'shape') { this.updateExtrusionShapeOutline(); }
 };
 
 
@@ -1341,16 +1343,19 @@ SnapExtensions.primitives.set('bb_stopextruding()', function () {
     stage.beetleController.beetle.stopExtruding();
 });
 
-SnapExtensions.primitives.set('bb_setscale(scale)', function (scale) {
+SnapExtensions.primitives.set(
+    'bb_setscale(scale, which)',
+    function (scale, which) 
+{
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
-    stage.beetleController.beetle.setScale(scale);
+    stage.beetleController.beetle.setScale(scale, which);
 });
 
-SnapExtensions.primitives.set('bb_scale()', function () {
+SnapExtensions.primitives.set('bb_scale(which)', function (which) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
-    return stage.beetleController.beetle.multiplierScale;
+    return stage.beetleController.beetle[which + 'Scale'];
 });
 
 SnapExtensions.primitives.set('bb_beetleView()', function () {
