@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new "preserveTitle" API configuration, thanks, Bernat!
 * **Notable Fixes:**
     * hide the cloud menu button when the "noCloud" API configuration is switched on
 
