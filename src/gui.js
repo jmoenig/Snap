@@ -1475,7 +1475,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
         projectButton.setCenter(myself.controlBar.center());
 
-        if (myself.config.noImports) {
+        if (myself.config.noImports || myself.config.hideProjects) {
             projectButton.hide();
         }
 
