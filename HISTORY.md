@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.9:
 * **New Features:**
     * new "preserveTitle" API configuration, thanks, Bernat!
     * new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
@@ -14,6 +16,7 @@
 * gui: hide the project menu when "noImports" API configuration is switched on
 * new: new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
 * new: new "hideSettings" API configuration switch, hides / shows the settings menu button in the tool bar
+* prepared v9.2.9 patch
 
 2024-02-22
 * new dev version for v9.2.9
