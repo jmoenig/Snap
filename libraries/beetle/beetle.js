@@ -304,6 +304,7 @@ BeetleController.prototype.beetleTrailsBoundingBox = function () {
 BeetleController.prototype.clear = function () {
     this.beetleTrails.forEach(object => object.dispose());
     this.beetleTrails = [];
+    BeetleController.Cache.clear();
     this.changed();
 };
 
@@ -358,6 +359,11 @@ BeetleController.prototype.currentView = function () {
 
 BeetleController.Cache = {
     materials: new Map(),
+};
+
+BeetleController.Cache.clear = function () {
+    this.materials.forEach(m => m.dispose());
+    this.materials = new Map();
 };
 
 BeetleController.Cache.getMaterial = function (color) {
@@ -942,11 +948,6 @@ Beetle.prototype.newExtrusionShape = function (selector) {
             case 'line':
                 path.push(new BABYLON.Vector3(0, 0,-0.5));
                 path.push(new BABYLON.Vector3(0, 0, 0.5));
-                break;
-            case 'right angle':
-                path.push(new BABYLON.Vector3(0, 0, 0));
-                path.push(new BABYLON.Vector3(0, 0, 1));
-                path.push(new BABYLON.Vector3(1, 0, 1));
                 break;
         }
     }
