@@ -5,9 +5,11 @@
     * new "preserveTitle" API configuration, thanks, Bernat!
 * **Notable Fixes:**
     * hide the cloud menu button when the "noCloud" API configuration is switched on
+    * hide the project menu button when the "noImports" API configuration is switched on
 
 2024-02-23
 * gui: make sure to hide the cloud menu button when "noCloud" API configuration is switched on
+* gui: hide the project menu when "noImports" API configuration is switched on
 
 2024-02-22
 * new dev version for v9.2.9

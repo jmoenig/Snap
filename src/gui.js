@@ -1475,6 +1475,10 @@ IDE_Morph.prototype.createControlBar = function () {
 
         projectButton.setCenter(myself.controlBar.center());
 
+        if (myself.config.noImports) {
+            projectButton.hide();
+        }
+
         if (myself.cloud.disabled) {
             cloudButton.hide();
             projectButton.setRight(settingsButton.left() - padding);

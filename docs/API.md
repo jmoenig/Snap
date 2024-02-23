@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, February 22, 2024
+Jens Mönig, Bernat Romagosa, February 23, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -131,7 +131,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |noSpriteEdits:	|bool	|hide/show the corral & sprite controls/menus|
 |noSprites:	|bool	|hide/show the stage, corral, sprite editor|
 |noPalette:	|bool	|hide/show the palette including the categories|
-|noImports:	|bool	|disable/allow importing files via drag&drop|
+|noImports:	|bool	|disable/allow importing files via drag&drop, hides the project menu button|
 |noCloud:	|bool	|disable/enable functionalities to access the Snap! cloud|
 |noOwnBlocks:	|bool	|hide/show "make a block" and "make a category" buttons|
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
