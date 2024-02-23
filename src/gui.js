@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-February-22';
+modules.gui = '2024-February-23';
 
 // Declarations
 
@@ -917,6 +917,7 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // disable cloud access
     if (cnf.noCloud) {
         this.cloud.disable();
+        this.fixLayout();
     }
 
     // disable onbeforeunload close warning
