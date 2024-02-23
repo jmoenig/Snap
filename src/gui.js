@@ -1473,6 +1473,10 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
+        if (myself.config.hideSettings) {
+            settingsButton.hide();
+        }
+
         projectButton.setCenter(myself.controlBar.center());
 
         if (myself.config.noImports || myself.config.hideProjects) {
