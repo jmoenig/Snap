@@ -2,8 +2,12 @@
 
 ## in development:
 
-2024-02-23
+## 9.2.10:
+    * fixed #3322
+
+2024-03-01
 * morphic: fixed #3322
+* prepared v9.2.10 patch
 
 ## 9.2.9:
 * **New Features:**
