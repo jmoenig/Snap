@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-February-12';
+var morphicVersion = '2024-March-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -2130,7 +2130,9 @@ Color.prototype.toRGBstring = function () {
 
 Color.fromString = function (aString) {
     // I parse rgb/rgba strings into a Color object
-    var channels = aString.split(/[\(),]/).slice(0,4);
+    var components = aString.split(/[\(),]/),
+        channels = aString.startsWith('rgba') ?
+            components.slice(1, 5) : components.slice(0, 4);
     return new Color(+channels[0], +channels[1], +channels[2], +channels[3]);
 };
 
