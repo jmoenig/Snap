@@ -75,6 +75,7 @@
 ### 2024-03-01
 * merged Morphic changes into dev
 * incremented dev version
+* beetle fixes, thanks, Bernat!
 
 ### 2024-02-22
 * integrated EDC Early Maths Microworlds, thanks, Zak Kolar!
