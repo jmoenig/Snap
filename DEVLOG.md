@@ -72,6 +72,10 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-01
+* merged Morphic changes into dev
+* incremented dev version
+
 ### 2024-02-22
 * integrated EDC Early Maths Microworlds, thanks, Zak Kolar!
 * incremented dev version
