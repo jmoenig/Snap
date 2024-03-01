@@ -2,6 +2,13 @@
 
 ## in development:
 
+## 9.2.10:
+    * fixed #3322
+
+2024-03-01
+* morphic: fixed #3322
+* prepared v9.2.10 patch
+
 ## 9.2.9:
 * **New Features:**
     * new "preserveTitle" API configuration, thanks, Bernat!
