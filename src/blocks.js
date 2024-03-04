@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2023-July-18';
+modules.blocks = '2024-February-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -499,6 +499,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
             '~' : null,
+            'text' : ['text'],
             'lines' : ['lines'],
             'csv' : ['csv'],
             'json' : ['json']
@@ -3189,6 +3190,7 @@ BlockMorph.prototype.userMenu = function () {
         slot,
         mult,
         alternatives,
+        compiledAlternatives,
         field,
         rcvr;
 
@@ -3411,7 +3413,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportMap : 'reportAtomicMap',
             reportKeep : 'reportAtomicKeep',
             reportFindFirst: 'reportAtomicFindFirst',
@@ -3419,7 +3421,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'compile',
-            () => this.setSelector(alternatives[this.selector]),
+            () => this.setSelector(compiledAlternatives[this.selector]),
             'experimental!\nmake this reporter fast and uninterruptable\n' +
                 'CAUTION: Errors in the ring\ncan break your Snap! session!'
         );
@@ -3434,7 +3436,7 @@ BlockMorph.prototype.userMenu = function () {
             this.selector
         )
     ) {
-        alternatives = {
+        compiledAlternatives = {
             reportAtomicMap : 'reportMap',
             reportAtomicKeep : 'reportKeep',
             reportAtomicFindFirst: 'reportFindFirst',
@@ -3442,7 +3444,7 @@ BlockMorph.prototype.userMenu = function () {
         };
         menu.addItem(
             'uncompile',
-            () => this.setSelector(alternatives[this.selector])
+            () => this.setSelector(compiledAlternatives[this.selector])
         );
     } else if (
         contains(
@@ -4044,7 +4046,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
-    this.setSpec(localize(info.spec));
+    this.setSpec(this.localizeBlockSpec(info.spec));
     this.defaults = info.defaults || [];
 
     // restore default values
@@ -5394,6 +5396,12 @@ BlockMorph.prototype.getHighlight = function () {
         return highlights[0];
     }
     return null;
+};
+
+BlockMorph.prototype.flashOutline = function (color, border) {
+    this.removeHighlight();
+    this.addBack(this.outline(color, border));
+    this.fullChanged();
 };
 
 BlockMorph.prototype.outline = function (color, border) {
@@ -9214,14 +9222,65 @@ ScriptsMorph.prototype.elementsAtLOC = function () {
     return loc;
 };
 
-ScriptsMorph.prototype.flashLOC = function (start, end = start) {
+ScriptsMorph.prototype.blockAtIdx = function (idx) {
+    // return the innermost block corresponding to the character index given
+    // at the textual code applying the current mapping
+    var elements = this.sortedElements().filter(each =>
+            each instanceof BlockMorph),
+        scripts = elements.map(each => each.mappedCode()),
+        code = (scripts.length ? scripts : ['']).reduce((a, b) =>
+            a + '\n\n' + b),
+        ln = code.substr(0, idx).split('\n').length,
+        loc = this.elementsAtLOC()[ln - 1],
+        tuples = [],
+        match, i;
+
+    function discover(index) {
+        return tuples.find(tuple =>
+            code.slice(index).replace(/\s+/g, '').startsWith(tuple[0])
+        );
+    }
+
+    loc.forEach(morph => {
+        if (morph instanceof BlockMorph) {
+            tuples.push([
+                morph.mappedCode().replace(/\s+/g, ''),
+                morph
+            ]);
+        }
+    });
+
+    for (i = idx; i >= 0; i -= 1) {
+        match = discover(i);
+        if (match && match[1].mappedCode().length > (idx - i)) {
+            return match[1];
+        }
+    }
+
+    return null;
+};
+
+ScriptsMorph.prototype.flashLOC = function (start, end = start, color = null) {
     // highlight all syntax elements located in the textual code indicated
-    // by start and end line numbers. End is optional.
+    // by start and end line numbers. End is optional, as is a color string of
+    // the form "r,g,b[,a]".
     var loc = this.elementsAtLOC(),
+        clr = color ? Color.fromString(color) : null,
+        flash = (idx) => loc[idx - 1].forEach(elem => elem.flash(clr)),
         i;
     this.unflash();
     for (i = start; i <= end; i += 1) {
-        loc[i - 1].forEach(elem => elem.flash());
+        flash(i);
+    }
+};
+
+ScriptsMorph.prototype.flashCodeIdx = function (idx, color = null) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    this.unflash();
+    if (block) {
+        block.flash(color ? Color.fromString(color) : null);
     }
 };
 
@@ -9230,8 +9289,42 @@ ScriptsMorph.prototype.unflash = function () {
         if (each instanceof SyntaxElementMorph && each.unflash) {
             each.unflash();
         }
+        if (each instanceof BlockMorph) {
+            each.removeHighlight();
+        }
     });
 
+};
+
+ScriptsMorph.prototype.flashOutlineCodeIdx = function (
+    idx,
+    color = null,
+border = 3) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    this.unflashOutline();
+    if (block) {
+        block.flashOutline(color ? Color.fromString(color) : null, border);
+    }
+};
+
+ScriptsMorph.prototype.unflashOutline = function () {
+    this.forAllChildren(each => {
+        if (each instanceof BlockMorph) {
+            each.removeHighlight();
+        }
+    });
+
+};
+
+ScriptsMorph.prototype.balloonCodeIdx = function (idx, contents) {
+    // highlight the innermost block located in the textual code indicated
+    // by the given character index. Optional color string, form "r,g,b[,a]".
+    var block = this.blockAtIdx(idx);
+    if (block) {
+        block.showBubble(contents);
+    }
 };
 
 // ArgMorph //////////////////////////////////////////////////////////
@@ -11747,7 +11840,7 @@ InputSlotMorph.prototype.mappedCode = function () {
         code = StageMorph.prototype.codeMappings.number || '<#1>';
         return code.replace(/<#1>/g, val);
     }
-    if (!isNaN(parseFloat(val))) {return val; }
+    if (!isNaN(+val)) {return val; }
     if (!isString(val)) {return val; }
     if (block && contains(
             ['doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar'],
@@ -13170,22 +13263,27 @@ ColorSlotMorph.prototype.getUserColor = function () {
         pal = new ColorPaletteMorph(null, new Point(
             this.fontSize * 16,
             this.fontSize * 10
-        ));
+        )),
+        ctx;
     world.add(pal);
     pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
 
+    // cache the world surface property (its full image)
+    // to prevent memory issues from constantly generating
+    // huge canvasses and and reading back pixel data only once
+    // note: this optimization makes it hard / impossible for the
+    // user to "catch" and sample the color of moving sprites
+    // but without it Chrome crashes as of Fall 2023
+    ctx = Morph.prototype.fullImage.call(world).getContext('2d');
+
     hand.processMouseMove = function (event) {
-        var clr = world.getGlobalPixelColor(hand.position());
+        var pos = hand.position(),
+            dta = ctx.getImageData(pos.x, pos.y, 1, 1).data;
         hand.setPosition(new Point(
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
         ));
-        if (!clr.a) {
-            // ignore transparent,
-            // needed for retina-display support
-            return;
-        }
-        myself.setColor(clr);
+        myself.setColor(new Color(dta[0], dta[1], dta[2]));
     };
 
     hand.processMouseDown = nop;

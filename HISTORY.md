@@ -2,6 +2,361 @@
 
 ## in development:
 
+## 9.2.10:
+    * fixed #3322
+
+2024-03-01
+* morphic: fixed #3322
+* prepared v9.2.10 patch
+
+## 9.2.9:
+* **New Features:**
+    * new "preserveTitle" API configuration, thanks, Bernat!
+    * new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+    * new "hideSettings" API configuration switch, hides / shows the project menu button in the tool bar
+* **Notable Fixes:**
+    * hide the cloud menu button when the "noCloud" API configuration is switched on
+    * hide the project menu button when the "noImports" API configuration is switched on
+
+2024-02-23
+* gui: make sure to hide the cloud menu button when "noCloud" API configuration is switched on
+* gui: hide the project menu when "noImports" API configuration is switched on
+* new: new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+* new: new "hideSettings" API configuration switch, hides / shows the settings menu button in the tool bar
+* prepared v9.2.9 patch
+
+2024-02-22
+* new dev version for v9.2.9
+
+## 9.2.8:
+* **Notable Fixes:**
+    * fixed a codification bug for strings beginning with a number, thanks, @schanzer, for the report!
+
+2024-02-20
+* blocks: fixed a codification bug for strings beginning with a number, thanks, Emmanuel, for the report!
+* prepared v9.2.8 patch
+
+## 9.2.7:
+* **New Features:**
+    * new "Lirin" costume series, thanks, Meghan and Brian!
+    * new showScriptBalloonAt() and closePopUps() API methods
+    * new flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods
+* **Documentation Updates:**
+    * extended API documentation for flashing block outlines and displaying annotations in speech balloons
+
+2024-02-20
+* new dev version for v9.2.7
+* added new Lirin costumes, thanks, Brian and Meghan!
+* api: added showScriptBalloonAt() and closePopUps() API methods
+* api: added flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods 
+* prepared v9.2.7 patch
+
+## 9.2.6:
+* **Notable Changes:**
+    * allow-listed birdbrain tech for extensions
+
+2024-02-13
+* extensions: allow-listed birdbrain tech for extensions
+* prepared v9.2.6 patch
+
+## 9.2.5:
+* **New Features:**
+    * api: added resetUnsavedChanges(), thanks, Bernat!
+* **Notable Fixes:**
+    * api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* **Documentation Updates:**
+    * extended API documentation for resetting the unsaved changes flag
+* **Translation Updates:**
+    * Dutch, thanks, Jule Rapp!
+
+2024-02-12
+* new dev version for v9.2.5
+* Dutch translation update, thanks, Jule!
+* api: resetUnsavedChanged(), thanks, Bernat!
+* api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* prepared v9.2.5 patch
+
+## 9.2.4:
+* **New Features:**
+    * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
+* **Documentation Updates:**
+    * extended API documentation for highlighting a single block
+
+2024-01-22
+* api, blocks: new flashSpriteScriptAt() api
+* extended API documentation for highlighting a single block
+* prepared v9.2.4 patch
+
+2024-01-22
+* new dev version for v9.2.4
+
+## 9.2.3:
+* **New Features:**
+    * api: added optional color-csv parameter to flashScripts() api
+* **Notable Fixes:**
+    * fixed a bug in the MQTT library, thanks, Simon!
+* **Documentation Updates:**
+    * extended API documentation for optional scripts-flashing color
+
+2024-01-22
+* api: added optional color-csv parameter to flashScripts() api
+* updated MQTT library, thanks, Simon!
+* prepared v9.2.3 patch
+
+2024-01-21
+* new dev version for v9.2.3
+
+## 9.2.2:
+* **New Features:**
+    * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
+* **Notable Changes:**
+    * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
+    * changed the filter names in the pixels library to lowercase
+* **Notable Fixes:**
+    * fixed #3296 (make sure to stop video when resizing the stage)
+* **Translation Updates:**
+    * Ukrainian, thanks, Serhiy Kryzhanovsky!
+
+2024-01-19
+* gui: fixed #3296 (make sure to stop video when resizing the stage)
+* pixels library: Changed the filter effect names to lowercase
+* Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
+* prepared v9.2.2 patch
+* fixed a syntax glitch in the Ukrainian translation update
+
+2024-01-18
+* new dev version for v9.2.2
+* symbols: added "dot" symbol
+* threads: also accept a scalar (single number) in the variadic SUM reporter (returns its identity)
+
+## 9.2.1:
+* **New Features:**
+    * experimental "dta_zip(list)" extension primitive
+* **Notable Fixes:**
+    * fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+    * fixed a typecasting glitch when creating a stage menu with numerical title
+
+2024-01-15
+* new dev version for v9.2.1
+* threads: fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+* objects: fixed a typecasting glitch when creating a stage menu with numerical title
+* extensions: added experimental "dta_zip(list)" extension primitive
+* prepared v9.2.1 patch
+
+## 9.2.0:
+* **New Features:**
+    * (better) matrix-kernel convolution support, automatic zero-padding
+    * new graphic filter effects tools in the pixels library
+    * support for THIS "inputs" selector inside custom block definitions
+* **Notable Changes:**
+    * hyperized ITEM OF
+    * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices both with or without color channels
+    * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
+    * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
+    * MQTT library update, thanks, Simon!
+* **Notable Fixes:**
+    * fixed a RESHAPE edge case when passing in a single zero dimension
+    * made sure ITEM OF returns data matching the shape specified by the query struct (automatic zero-padding)
+    * fixed speech balloons inside ASK menus
+    * added safeguard against accidentally querying too many list dimensions (e.g. when forgetting to transpose a convolution)
+
+2024-01-11
+* prepared v9.2.0 minor release
+
+2024-01-10
+* lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+* lists: some more minor optimizations for item() and columns()
+* threads: added support for THIS "inputs" selector inside custom block definitions 
+
+2024-01-09
+* pixels library: added Sobel edge-detection variants for left/right/top/bottom
+* threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
+* pixels library: added 5x5 Gaussian blur filter
+
+2024-01-08
+* threads: tweaked hyperDyadic() to allow explicit dimension matching
+* pixels library: added graphic filter effects (matrix-kernel convolutions)
+* incremented dev version to v9.2.0
+* lists: added safeguard against accidentally querying too many dimensions 
+* threads: refactored reportDimensions()
+* threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
+* objects: accept > 4 columns pixels matrices as costumes in the SWITCH TO COSTUME reporter
+
+2024-01-05
+* objects: fixed speech balloons inside ASK menus
+
+2024-01-03
+* new dev version for v9.1.2
+* lists: fixed a RESHAPE edge case when passing in a single zero dimension
+* lists: made sure ITEM OF returns data matching the shape specified by the query struct
+* lists: hyperized ITEM OF
+* threads: refactored reportRank()
+* threads: tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+* threads: refactored hyperizing mechanism for coordinates
+
+## 9.1.1:
+* **Notable Fixes:**
+    * fixed using #open: to load a library from a url, thanks, Bernat!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+2023-12-12
+* gui: fixed using #open: to load a library from a url, thanks, Bernat!
+* Catalan translation update, thanks, Joan!
+* prepared v9.1.1 patch
+
+## 9.1.0:
+* **New Features:**
+    * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+    * text inside "say" and "think" balloons gets vertical scroll bars if it exceeds the displayable space, is scrolled to the bottom by default to support language projects such as sengen
+    * added "say" commands to the stage's palette
+    * added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+    * added "min", "max" and "atan2" reporters to the OPERATORS palette
+* **Notable Changes:**
+    * "reshape" now treats zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+    * updated "Just Words" library for the new "text" list selector
+    * experimental setting to let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc., turned off, probably not a good idea
+* **Notable Fixes:**
+    * fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+    * optimized scanning variable memory for function dependencies - speed up editing custom blocks in projects with large lists
+* **Translation Updates:**
+    * German
+
+2023-12-05
+* updated "Just Words" library, made sure it's a library file, not a project
+* prepared v9.1 minor release
+
+2023-11-30
+* objects: scroll text inside speech/thought balloons, display long text scrolled to the bottom to support language-centered projects (e.g. sengen)
+
+2023-11-29
+* objects, threads, scenes: added "say" commands to the stage's palette
+
+2023-11-27
+* objects: tweaked "write" primitive for the stage
+* updated "Just Words" libary with a new version of the "sentence" reporter
+
+2023-11-24
+* objects: optimized scanning variable memory for function dependencies - speeds up editing custom blocks in projects with large lists
+* lists: turned off experimental list indices wrapping by default, not sure whether this is a good idea after all
+* blocks: fixed "relabel" for HOF primitives (MAP, FIND, KEEP, COMBINE)
+* objects: added "write" command to the stage's PEN primitives palette - prints text in proportional font at specified size wrapping lines "scrolling" to the end
+* objects: added "min", "max" and "atan2" reporters to the OPERATORS palette
+
+2023-11-23
+* lists, gui: let list indices wrap around bounds, e.g. 0 returns the last element, -1 the second last etc.
+
+2023-11-22
+* new dev version for v9.0.15
+* lists, blocks, threads: new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace
+* German translation update for 'lines' list selector
+* updated "Just Words" library for the new "text" list selector, removed now redundant "append words" reporter
+* lists: changed "reshape" to treat zero-ish (0, "", false) values in its dimension input as place-holders to accomodate the whole source list
+* pushed dev version to v9.1.0
+
+## 9.0.14:
+* **Notable Fixes:**
+    * fixed 'distribution' and 'uniques' list selectors support for nested atomic lists
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+    * Chinese, thanks, moodykeke!
+
+2023-11-21
+* new dev version for v9.0.14
+* threads: fixed 'distribution' list selector support for nested atomic lists
+* threads: fixed 'uniques' list selector support for nested atomic lists
+* Spanish translation update, thanks, David Martín!
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.14 patch
+
+## 9.0.13:
+* **Notable Fixes:**
+    * fixed word-sentences library
+
+## 9.0.12:
+* **Notable Fixes:**
+    * fixed loading the "Words, sentences" library
+    * fixed importing data into single-palette mode projects (avoid garbling the palette)
+    * fixed some broken file references in the pwa cache
+* **Library Updates:**
+    * added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+
+2023-11-20
+* new dev version for v9.0.12
+* gui: fixed importing data into single-palette mode projects (avoid garbling the palette)
+* sw: fixed #3270 (service worker cache uri issues)
+* added 3 minimal library variants "Just Words", "Replace Letters" and "Just Bars"
+* prepared v9.0.12 patch
+
+## 9.0.11:
+* **Notable Fixes:**
+    * fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* **Translation Updates:**
+    * Italian, thanks, Stefano!
+    * Spanish (libraries), thanks, Victoria and Mary!
+
+2023-11-07
+* morphic: fixed global color sensing - workaround for Chrome v119's canvas clipping bug - used in pipette tool in paint editors, color input slots and color sensing primitives
+* Italian translation update, thanks, Stefano!
+* Spanish (libraries) translation update, thanks, Victoria and Mary!
+* prepared v9.0.11 patch
+
+## 9.0.10:
+* **Notable Fixes:**
+    * fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+
+2023-11-02
+* objects: fixed localizing blocks search and keyboard entry, thanks, Oliver, for the bug report!
+* prepared v9.0.10 patch
+
+## 9.0.9:
+* **Notable Fixes:**
+    * fixed localizing relabelled primitive blocks
+* **Translation Updates:**
+    * Spanish, thanks, David Martín!
+
+2023-10-30
+* blocks: fixed #3263 - localizing relabelled primitive blocks
+* Spanish, translation update, thanks, David Martín!
+* prepared v9.0.9 patch
+
+## 9.0.8:
+* **Notable Fixes:**
+    * SPLIT now observes the preference setting for case-sensitivity
+    * fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+* **Translation Updates:**
+    * Brazilian Portuguese, thanks, Ville Medeiro!
+
+2023-10-20
+* threads: made SPLIT observe the "case sensitivity" preference setting
+* prepared v9.0.8 patch
+
+2023-10-17
+* Brazilian Portuguese translation update, thanks, Ville Medeiro!
+
+2023-10-11
+* new dev version
+* gui: fixed a typo in 'noDefaultCat' configuration setting, thanks, Emmanuel, for the report!
+
+## 9.0.7:
+* **Translation Updates:**
+    * Chinese, thanks, moodykeke!
+
+2023-10-09
+* Chinese translation update, thanks, moodykeke!
+* prepared v9.0.7 patch
+
+## 9.0.6:
+* **Notable Fixes:**
+    * fixed #3252 - local return glitch
+    * fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+
+2023-09-14
+* threads: fixed #3252 - local return glitch
+* animation library: fixed #3248 - names of easing functions are swapped ("-"in"/"-"out")
+* prepared v9.0.6 patch
+
 ## 9.0.5:
 * **Notable Changes:**
     * MQTT extension update, thanks, Xavier and Simon!
