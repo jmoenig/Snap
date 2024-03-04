@@ -767,7 +767,7 @@ BeetleDialogMorph.prototype.exportSTL = function () {
         this.controller.beetleTrails,
         true, // download
         'beetle-trails', // filename
-        true,      // binary ?
+        false,     // binary ?
         undefined, // little endian?
         undefined, // do not bake transform
         undefined, // support instanced meshes
@@ -1001,9 +1001,6 @@ Beetle.prototype.extrudeToCurrentPoint = function () {
 };
 
 Beetle.prototype.extrudePoint = function () {
-    // TODO in the future: create a face when points define a closed coplanar
-    // shape
-
     // to extrude a point is to draw a line
     var points = [];
     if (this.lineTrail) {
@@ -1013,36 +1010,8 @@ Beetle.prototype.extrudePoint = function () {
             1
         );
         this.lineTrail.dispose();
-    } /*else {
-        // keep the transform matrix in case we're trying to create a surface
-        this.lastTransformMatrix = this.body.computeWorldMatrix(true).clone();
-    }*/
+    }
     points.push(this.body.position.clone());
-    /*
-    // detect whether we've closed a surface
-    if (
-        (points.length > 2) &&
-        (points[0].equalsWithEpsilon(this.body.position, 0.001)) &&
-        true // FIXME TODO detect whether all points are coplanar !!!
-    ) {
-        var surface =
-            BABYLON.MeshBuilder.CreatePolygon(
-                'polygon',
-                {
-                    shape: points,
-                    updatable: false
-                },
-                this.controller.scene
-            );
-        surface.material = BeetleController.Cache.getMaterial(
-            this.wings.material.diffuseColor
-        );
-        surface.material.wireframe = this.controller.wireframeEnabled;
-        surface.visibility = this.controller.ghostModeEnabled ? .25 : 1;
-        surface.bakeTransformIntoVertices(this.lastTransformMatrix);
-        this.controller.beetleTrails.push(surface);
-        this.lineTrail = null;
-    } else {*/
     this.lineTrail = BABYLON.MeshBuilder.CreateLines(
         'lineTrail',
         {
@@ -1054,31 +1023,35 @@ Beetle.prototype.extrudePoint = function () {
     this.lineTrail.color = this.wings.material.diffuseColor.clone();
     this.lineTrail.points = points;
     this.controller.beetleTrails.push(this.lineTrail);
-    //}
 };
 
 Beetle.prototype.extrudePolygon = function () {
-    // to extrude a polygon is to build a prism
+    // to extrude a polygon is to build a prism or a surface, depending on
+    // whether the polygon is closed
     var currentTransformMatrix =
         this.extrusionShapeOutline.computeWorldMatrix(true);
     this.extrusionShapeOutline.visibility =
         this.extrusionBaseEnabled ? 1 : 0;
     if (this.lastTransformMatrix) {
-        var backFace =
-            this.extrusionShape.map(
-                v =>
-                BABYLON.Vector3.TransformCoordinates(
-                    v,
-                    this.lastTransformMatrix
-                )
+        var isVolume = // is the polygon closed?
+            this.extrusionShape[0].equalsWithEpsilon(
+                this.extrusionShape[this.extrusionShape.length - 1],
+                0.001
             ),
+        backFace =
+                this.extrusionShape.map(v =>
+                    BABYLON.Vector3.TransformCoordinates(
+                        v,
+                        this.lastTransformMatrix
+                    )
+                ),
             frontFace =
-            this.extrusionShape.map(v =>
-                BABYLON.Vector3.TransformCoordinates(
-                    v,
-                    currentTransformMatrix
-                )
-            ),
+                this.extrusionShape.map(v =>
+                    BABYLON.Vector3.TransformCoordinates(
+                        v,
+                        currentTransformMatrix
+                    )
+                ),
             numSides = this.extrusionShape.length,
             vertices = backFace.concat(frontFace).map(v => v.asArray()),
             faces = [];
@@ -1097,7 +1070,8 @@ Beetle.prototype.extrudePolygon = function () {
             'prism',
             {
                 custom: { vertex: vertices, face: faces },
-                sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                sideOrientation:
+                    isVolume ? BABYLON.Mesh.FRONTSIDE : BABYLON.Mesh.DOUBLESIDE
             }
         );
         prism.material = BeetleController.Cache.getMaterial(
@@ -1111,14 +1085,7 @@ Beetle.prototype.extrudePolygon = function () {
         this.controller.beetleTrails.push(prism);
         this.extruded = true;
 
-        if (this.extrusionShape[0].equalsWithEpsilon(
-            this.extrusionShape[this.extrusionShape.length - 1],
-            0.001
-        )) {
-            // The first and last point are very close to each other, so
-            // we assume the user is trying to build a closed volume.
-            this.computeExtrusionCaps(currentTransformMatrix);
-        }
+        if (isVolume) { this.computeExtrusionCaps(currentTransformMatrix); }
     }
     this.lastTransformMatrix = currentTransformMatrix.clone();
 };
@@ -1401,7 +1368,7 @@ SnapExtensions.primitives.set('bb_stopextruding()', function () {
 
 SnapExtensions.primitives.set(
     'bb_setscale(scale, which)',
-    function (scale, which) 
+    function (scale, which)
 {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
