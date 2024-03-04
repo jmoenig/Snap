@@ -1077,7 +1077,7 @@ Beetle.prototype.extrudePolygon = function () {
         prism.material = BeetleController.Cache.getMaterial(
             this.wings.material.diffuseColor
         );
-        prism.material.backFaceCulling = true;
+        prism.material.backFaceCulling = false;
         prism.material.wireframe = this.controller.wireframeEnabled;
         prism.visibility = this.controller.ghostModeEnabled ? .25 : 1
         prism.convertToFlatShadedMesh();
