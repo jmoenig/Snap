@@ -377,6 +377,8 @@ BeetleController.Cache.getMaterial = function (color) {
         material.linkEmissiveWithDiffuse = true;
         material.roughness = 1;
         material.specularPower = 512;
+        material.twoSidedLighting = true;
+        material.diffuseFresnelParameters = new BABYLON.FresnelParameters();
         this.materials.set(key, material);
     }
 
