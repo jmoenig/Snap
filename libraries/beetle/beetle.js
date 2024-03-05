@@ -311,7 +311,7 @@ BeetleController.prototype.clear = function () {
 BeetleController.prototype.currentView = function () {
     var wasShowingAxes = this.dialog.axesEnabled(),
         wasShowingBeetle = this.dialog.beetleEnabled(),
-        wasShowingGrid = this.dialog.gridEnabled,
+        wasShowingGrid = this.dialog.gridEnabled(),
         wasFPV = this.dialog.fpvEnabled(),
         canvas = newCanvas(
             new Point(
