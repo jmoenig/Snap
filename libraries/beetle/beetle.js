@@ -991,7 +991,11 @@ Beetle.prototype.newExtrusionShape = function (selector) {
         selector.asArray().forEach(p => {
             if (p instanceof List) {
                 path.push(
-                    new BABYLON.Vector3(Number(p.at(1)), 0, Number(p.at(2)))
+                    new BABYLON.Vector3(
+                        Number(p.at(1)) * -1,
+                        0,
+                        Number(p.at(2))
+                    )
                 );
             }
         });
@@ -1471,6 +1475,14 @@ SnapExtensions.primitives.set('bb_setextrusionbase(base)', function (base) {
     if (!stage.beetleController) { return; }
     stage.beetleController.beetle.extrusionShapeSelector = base;
     stage.beetleController.beetle.updateExtrusionShapeOutline();
+});
+
+SnapExtensions.primitives.set('bb_extrusionbasepoints()', function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    return new List(stage.beetleController.beetle.extrusionShape.map(
+        point => new List([point.x * -1, point.z]))
+    );
 });
 
 SnapExtensions.primitives.set('bb_startextruding()', function () {
