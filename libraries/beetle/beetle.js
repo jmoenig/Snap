@@ -887,8 +887,8 @@ Beetle.prototype.init = function (controller) {
 
     this.name = 'beetle';
 
-    this.linewidth = 1;
     this.shapeScale = new BABYLON.Vector2(1,1);
+    this.shapeOffset = new BABYLON.Vector2.Zero;
     this.movementScale = 1;
 
     this.loadMeshes();
@@ -1062,9 +1062,9 @@ Beetle.prototype.newExtrusionShape = function (selector) {
 Beetle.prototype.scaledExtrusionShape = function () {
     return this.extrusionShape.map(p =>
         new BABYLON.Vector3(
-            p.x * this.shapeScale.x,
+            p.x * this.shapeScale.x + this.shapeOffset.x,
             0,
-            p.z * this.shapeScale.y
+            p.z * this.shapeScale.y + this.shapeOffset.y
         )
     );
 };
@@ -1376,7 +1376,7 @@ Beetle.prototype.setScale = function (scale, which) {
             scale = new BABYLON.Vector2(scale, scale);
         } else if (scale instanceof List) {
             scale = new BABYLON.Vector2(
-                scale.itemsArray()[0], scale.itemsArray()[1]
+                Number(scale.itemsArray()[0]), Number(scale.itemsArray()[1])
             );
         }
         this.shapeScale = scale;
@@ -1386,6 +1386,11 @@ Beetle.prototype.setScale = function (scale, which) {
     }
 };
 
+Beetle.prototype.setOffset = function (offset) {
+    this.shapeOffset.x = Number(offset[0]) * -1;
+    this.shapeOffset.y = Number(offset[1]);
+    this.updateExtrusionShapeOutline();
+};
 
 // SnapExtensions API ////////////////////////////////////////////////////
 
@@ -1519,6 +1524,12 @@ SnapExtensions.primitives.set('bb_scale(which)', function (which) {
         }
     }
     return scale;
+});
+
+SnapExtensions.primitives.set('bb_setoffset(offset)', function (offset) {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    stage.beetleController.beetle.setOffset(offset.itemsArray());
 });
 
 SnapExtensions.primitives.set('bb_beetleView()', function () {
