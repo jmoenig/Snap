@@ -10,6 +10,7 @@
 // to get rid of them someday.
 
 if (!SpriteMorph.prototype.originalSetColorDimension) {
+    // Mirror Sprite pen color
     SpriteMorph.prototype.originalSetColorDimension =
         SpriteMorph.prototype.setColorDimension;
     SpriteMorph.prototype.setColorDimension = function (idx, num) {
@@ -21,7 +22,6 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
-
     SpriteMorph.prototype.originalSetColor = SpriteMorph.prototype.setColor;
     SpriteMorph.prototype.setColor = function (aColor) {
         var stage = this.parent;
@@ -30,6 +30,27 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             this.parentThatIsA(IDE_Morph).currentSprite === this
         ) {
             stage.beetleController.beetle.setColor(this.color);
+        }
+    };
+
+    // Log positions
+    SpriteMorph.prototype.originalMoveBy = SpriteMorph.prototype.moveBy;
+    SpriteMorph.prototype.moveBy = function (delta, justMe) {
+        var newPos,
+            oldPos = this.rotationCenter(),
+            stage = this.parent;
+        this.originalMoveBy(delta, justMe);
+        newPos = this.rotationCenter();
+        if (stage?.beetleController &&
+            this.parentThatIsA(IDE_Morph).currentSprite === this
+        ) {
+            if (stage.beetleController.beetle.loggingSpritePositions
+                && !newPos.eq(oldPos)
+            ) {
+                stage.beetleController.beetle.logSpritePosition(
+                    this.getPosition().itemsArray()
+                );
+            }
         }
     };
 }
@@ -342,6 +363,7 @@ BeetleController.prototype.beetleTrailsBoundingBox = function () {
 BeetleController.prototype.clear = function () {
     this.beetleTrails.forEach(object => object.dispose());
     this.beetleTrails = [];
+    this.beetle.loggedSpritePositions = [];
     BeetleController.Cache.clear();
     this.changed();
 };
@@ -900,6 +922,8 @@ Beetle.prototype.init = function (controller) {
     this.extruding = false;
     this.extruded = false;
     this.extrusionShapeSelector = 'circle';
+    this.loggedSpritePositions = [];
+    this.loggingSpritePositions = false;
     this.lineTrail = null;
     this.extrusionShape = null;
     this.lastExtrusionShape = null;
@@ -1052,11 +1076,33 @@ Beetle.prototype.newExtrusionShape = function (selector) {
                 path.push(new BABYLON.Vector3(0, 0,-0.5));
                 path.push(new BABYLON.Vector3(0, 0, 0.5));
                 break;
+            case 'sprite positions':
+                path = this.loggedSpritePositions;
+                break;
         }
     }
 
 
     return path;
+};
+
+Beetle.prototype.logSpritePosition = function (pos) {
+    this.loggedSpritePositions.push(
+        new BABYLON.Vector3(pos[0] * -1, 0, pos[1])
+    );
+    this.updateExtrusionShapeOutline();
+    if (this.extruding) {
+        this.stopExtruding();
+        this.extrudeToCurrentPoint();
+    }
+};
+
+Beetle.prototype.setLoggingSpritePosition = function (doIt, currentPos) {
+    if (!this.loggingSpritePositions && doIt) {
+        this.loggedSpritePositions = [];
+        this.logSpritePosition(currentPos.itemsArray());
+    }
+    this.loggingSpritePositions = doIt;
 };
 
 Beetle.prototype.scaledExtrusionShape = function () {
@@ -1488,6 +1534,15 @@ SnapExtensions.primitives.set('bb_extrusionbasepoints()', function () {
     return new List(stage.beetleController.beetle.extrusionShape.map(
         point => new List([point.x * -1, point.z]))
     );
+});
+
+SnapExtensions.primitives.set(
+    'bb_logspritepositions(bool, currentPos)',
+    function (doIt, currentPos)
+{
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    stage.beetleController.beetle.setLoggingSpritePosition(doIt, currentPos);
 });
 
 SnapExtensions.primitives.set('bb_startextruding()', function () {
