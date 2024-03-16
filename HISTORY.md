@@ -2,6 +2,12 @@
 
 ## in development:
 
+## 9.2.11:
+    * fixed #3329
+
+2024-03-01
+* blocks: fixed #3329
+
 ## 9.2.10:
     * fixed #3322
 

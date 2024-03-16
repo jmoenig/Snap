@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-February-20';
+modules.blocks = '2024-March-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13851,7 +13851,9 @@ MultiArgMorph.prototype.refresh = function () {
 
 MultiArgMorph.prototype.deleteSlot = function (anInput) {
     var len = this.inputs().length,
-        idx = this.children.indexOf(anInput);
+        idx = this.children.indexOf(anInput),
+        block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget();
     if (len <= this.minInputs) {
         return;
     }
@@ -13864,11 +13866,19 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
     }
     this.removeChild(anInput);
     this.fixLayout();
+    sprite.recordUserEdit(
+        'scripts',
+        'poly slot',
+        'delete',
+        block.abstractBlockSpec()
+    );
 };
 
 MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     var idx = this.children.indexOf(anInput),
         newPart = this.labelPart(this.slotSpec),
+        block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget(),
         infix;
     
     if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
@@ -13890,6 +13900,12 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         this.parent.fixLabelColor();
     }
     this.fixLayout();
+    sprite.recordUserEdit(
+        'scripts',
+        'poly slot',
+        'insert',
+        block.abstractBlockSpec()
+    );
     return newPart;
 };
 
