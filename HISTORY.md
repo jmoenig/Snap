@@ -7,6 +7,7 @@
 
 2024-03-01
 * blocks: fixed #3329
+* prepared v9.2.11 patch
 
 ## 9.2.10:
     * fixed #3322
