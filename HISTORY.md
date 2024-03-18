@@ -2,10 +2,16 @@
 
 ## in development:
 
+## 9.2.12:
+    * fixed right-click deletion of reporters embedded in variadic slots
+
+2024-03-18
+* blocks: fixed right-click deletion of reporters embedded in variadic slots
+
 ## 9.2.11:
     * fixed #3329
 
-2024-03-01
+2024-03-16
 * blocks: fixed #3329
 * prepared v9.2.11 patch
 
