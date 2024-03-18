@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-March-17';
+modules.blocks = '2024-March-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7467,9 +7467,16 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
     var target = this.selectForEdit(), // enable copy-on-edit
-        rcvr = this.scriptTarget(true);
+        rcvr = this.scriptTarget(true),
+        parent;
+
     if (target !== this) {
         return this.userDestroy.call(target);
+    }
+
+    parent = this.parentThatIsA(SyntaxElementMorph);
+    if (parent) {
+        this.parent.reactToGrabOf(this); // fix highlight and variadic case
     }
 
     // for undrop / redrop
