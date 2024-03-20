@@ -5131,6 +5131,11 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.blocks = target.allPaletteBlocks();
     this.selection = this.blocks.filter(each => target.isHidingBlock(each));
     this.handle = null;
+    this.categories = null;
+    this.selectedCategories = [];
+    this.category = null;
+    this.countBlocksInCategories = [];
+    this.partiallySelectedCategories = [];
 
     // initialize inherited properties:
     BlockVisibilityDialogMorph.uber.init.call(
@@ -5139,7 +5144,16 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
         () => this.hideBlocks(),
         null // environment
     );
-
+    if (target.world().hidePalette != null) {
+        this.categories = Object.create(target.world().hidePalette.categories);
+        this.category = structuredClone(target.world().hidePalette.category);
+        this.selectedCategories = Object.create(target.world().hidePalette.selectedCategories);
+        this.bounds = Object.create(target.world().hidePalette.bounds);
+        this.partiallySelectedCategories = Object.create(target.world().hidePalette.partiallySelectedCategories);
+        this.refreshCategories();
+    } else {
+        this.setExtent(new Point(220, 300))
+    }
     // override inherited properites:
     this.labelString = localize('Hide blocks in palette')
         + (name ? ': ' : '')
@@ -5147,10 +5161,18 @@ BlockVisibilityDialogMorph.prototype.init = function (target) {
     this.createLabel();
 
     // build contents
-    this.buildContents();
+    this.buildContents(target);
 };
 
-BlockVisibilityDialogMorph.prototype.buildContents = function () {
+BlockVisibilityDialogMorph.prototype.createCategoryButtons
+    = BlockDialogMorph.prototype.createCategoryButtons;
+
+BlockVisibilityDialogMorph.prototype.fixCategoriesLayout
+    = BlockDialogMorph.prototype.fixCategoriesLayout;
+
+
+
+BlockVisibilityDialogMorph.prototype.buildContents = function (target) {
     var palette, x, y, checkBox, lastCat,
         padding = 4;
 
@@ -5170,6 +5192,27 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
     x = palette.left() + padding;
     y = palette.top() + padding;
 
+    this.categories = new BoxMorph(); //palette 
+    this.categories.color = SpriteMorph.prototype.paletteColor.lighter(8);
+    this.categories.borderColor = this.categories.color.lighter(40);
+    this.categories.buttons = [];
+    this.countBlocksInCategories = this.countBocksInCategories();
+
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
+    };
+
+    this.createCategoryButtons();
+    this.fixCategoriesLayout();
+    palette.addContents(this.categories);
+    this.categories.fixLayout();
+    y = this.categories.bounds.corner.y + 5
+    
     this.blocks.forEach(block => {
         if (lastCat && (block.category !== lastCat)) {
             y += padding;
@@ -5187,6 +5230,7 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
                 } else {
                     this.selection.push(block);
                 }
+                this.partiallySelectCategory();
             },
             null,
             () => contains(this.selection, block),
@@ -5206,15 +5250,196 @@ BlockVisibilityDialogMorph.prototype.buildContents = function () {
     palette.scrollY(padding);
     this.addBody(palette);
 
+    //might need to adjust cancel so that it reverts back to previous world.hidePalette morph
+    //and would also need to adjust okay so that it only applies after ok button
+    this.refreshCategories();
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
-
-    this.setExtent(new Point(220, 300));
     this.fixLayout();
 };
 
-BlockVisibilityDialogMorph.prototype.popUp
-    = BlockExportDialogMorph.prototype.popUp;
+BlockVisibilityDialogMorph.prototype.removeItem = function (value, arr) {
+    return arr.filter(elem => elem != value)
+}
+
+BlockVisibilityDialogMorph.prototype.addCategoryButton = function (category) {
+    var labelWidth = 75,
+        colors = [
+            IDE_Morph.prototype.frameColor,
+            IDE_Morph.prototype.frameColor.darker
+                (MorphicPreferences.isFlat ? 5 : 50
+            ),
+            SpriteMorph.prototype.blockColorFor(category)
+        ],
+        button;
+
+    button = new ToggleButtonMorph(
+        colors,
+        this, // this block dialog box is the target
+        () => {
+            this.category = category
+            currCategory = this.categories.buttons.find(elem => 
+                elem.label.text.toLowerCase() === category)
+            if (!this.selectedCategories.includes(category)) {
+                currCategory.userState = 'pressed';
+                currCategory.color = currCategory.pressColor
+                currCategory.state = true
+                this.blocks.forEach (block => {
+                    if (block.category === category) {
+                        this.selection.push(block)
+                        block.parent.refresh()
+                    }
+                })
+            } else {
+                currCategory.userState = 'normal';
+                this.category = null;
+                currCategory.color = new Color(30, 30, 30, 1)
+                currCategory.state = false
+
+                this.blocks.forEach (block => {
+                    if (block.category === category) {
+                        this.selection = this.removeItem(block, this.selection)
+                        block.parent.refresh()
+                    }
+                })
+            }
+                //}
+            //})
+            if (!this.selectedCategories.includes(category)) {
+                this.selectedCategories.push(category);
+            } else {
+                this.selectedCategories = this.removeItem(category, this.selectedCategories);
+            }
+            this.selectedCategories.forEach(categ => {
+                currCateg = this.categories.buttons.find(elem => 
+                    elem.label.text.toLowerCase() === categ)
+                currCateg.userState = 'pressed';
+            });
+        },
+        category[0].toUpperCase().concat(category.slice(1)), // UCase label
+        () => this.category === category, // query
+        null, // env
+        null, // hint
+        labelWidth, // minWidth
+        true // has preview
+    );
+    button.corner = 8;
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+        if (MorphicPreferences.isFlat) {
+            button.labelPressColor = WHITE;
+        }
+    button.contrast = this.buttonContrast;
+    button.fixLayout();
+    button.refresh();
+    this.categories.add(button);
+    this.categories.buttons.push(button);
+    return button;
+};
+
+BlockVisibilityDialogMorph.prototype.addCustomCategoryButton
+    = BlockVisibilityDialogMorph.prototype.addCategoryButton;
+
+BlockVisibilityDialogMorph.prototype.popUp = function (wrrld) {
+
+    var world = wrrld || this.target.world();
+    if (world) {
+        BlockExportDialogMorph.uber.popUp.call(this, world);
+        
+        this.handle = new HandleMorph(
+            this,
+            200,
+            220,
+            this.corner,
+            this.corner
+        );
+           
+        this.selectedCategories.forEach(categ => {
+            currCateg = this.categories.buttons.find(elem => 
+                elem.label.text.toLowerCase() === categ)
+            currCateg.userState = 'pressed';
+            this.category = categ;
+        });
+    }
+};
+
+BlockVisibilityDialogMorph.prototype.countBocksInCategories = function () {
+    this.countBlocksInCategories = []
+    this.categories.buttons.forEach(categ => {
+        this.countBlocksInCategories.push((this.blocks.filter(block => 
+            categ.label.text === block.category)).length)
+    })
+}
+
+BlockVisibilityDialogMorph.prototype.refreshCategories = function () {
+    this.categories.buttons.forEach(categ => {
+        if (this.partiallySelectedCategories.includes(categ.labelString.toLowerCase())) {
+            categ.color = new Color(100,100,100,1);
+            categ.userState = "highlight"
+            categ.state = false
+            this.category = null
+        } else if (this.selectedCategories.includes(categ.labelString.toLowerCase())) {
+            categ.userState = "pressed"
+            categ.state = true
+            this.category = categ.labelString
+            categ.color = categ.pressColor
+        } else {
+            categ.color = new Color(30, 30, 30, 1)
+            categ.userState = "normal"
+            categ.state = false
+        }
+        categ.refresh();
+        categ.fixLayout();
+        this.fixLayout();
+    });
+}
+
+BlockVisibilityDialogMorph.prototype.partiallySelectCategory = function () {
+    var index = 0;
+    this.countBocksInCategories();
+    this.categories.buttons.forEach(categ => {
+        var categName = categ.label.text.toLowerCase();
+        blocksInCategory = this.selection.filter(block => categName === block.category)
+        blocksThatExistInCategory = this.blocks.filter(block => categName === block.category)
+        if (blocksInCategory.length != 0) {
+            if (blocksInCategory.length === blocksThatExistInCategory.length) {
+                if (!this.selectedCategories.includes(categName)) this.selectedCategories.push(categName)
+                if (this.partiallySelectedCategories.includes(categName)) {
+                    this.partiallySelectedCategories = this.removeItem(categName, this.partiallySelectedCategories)
+                }
+                categ.userState = "pressed"
+                categ.state = true
+                this.category = categName
+                categ.color = categ.pressColor
+            } else {
+                if (!this.partiallySelectedCategories.includes(categName)) this.partiallySelectedCategories.push(categName)
+                categ.color = new Color(100,100,100,1);
+                categ.userState = "highlight"
+                categ.state = false
+                this.category = null
+                if (this.selectedCategories.includes(categName)) {
+                    this.selectedCategories = this.removeItem(categName, this.selectedCategories)
+                }
+                categ.refresh()
+            }
+        } else {
+            categ.color = new Color(30, 30, 30, 1)
+            categ.userState = "normal"
+            categ.state = false
+            if (this.selectedCategories.includes(categName)) {
+                this.selectedCategories = this.removeItem(categName, this.selectedCategories)
+            }
+        }
+        categ.rerender();
+        categ.fixLayout();
+        categ.refresh();
+        index += 1;   
+    });
+    this.categories.fixLayout();
+    this.categories.refresh();
+}
 
 // BlockVisibilityDialogMorph menu
 
@@ -5231,15 +5456,38 @@ BlockVisibilityDialogMorph.prototype.userMenu = function () {
 BlockVisibilityDialogMorph.prototype.selectAll = function () {
     this.selection = this.blocks.slice(0);
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
     });
+    this.categories.buttons.forEach(categ => {
+        var categLower = categ.children[0].text.toLowerCase();
+        this.selectedCategories.push(categLower);
+        this.category = this.selectedCategories[this.selectedCategories.length-1]
+        categ.userState = "pressed"
+        categ.state = true
+        categ.color = categ.pressColor
+    });
+    this.fixLayout();
 };
 
 BlockVisibilityDialogMorph.prototype.selectNone = function () {
     this.selection = [];
+    this.category = null
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
     });
+    this.categories.buttons.forEach(categ => {
+        categ.color = new Color(30, 30, 30, 1)
+        categ.state = false
+        categ.userState = "normal"
+    })
+    this.partiallySelectedCategories = []
+    this.selectedCategories = [];
+    this.category = null
+    this.categories.refresh();
 };
 
 BlockVisibilityDialogMorph.prototype.selectUnused = function () {
@@ -5250,13 +5498,16 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
         uVars = [];
 
     used.forEach(b => {
-        if (b.isCustomBlock) {
-            uCust.push(b.isGlobal ? b.definition
-                : this.target.getMethod(b.semanticSpec));
-        } else if (b.selector === 'reportGetVar') {
-            uVars.push(b.blockSpec);
+        if (!(b instanceof BoxMorph)) {
+            if (b.isCustomBlock) {
+                uCust.push(b.isGlobal ? b.definition
+                    : this.target.getMethod(b.semanticSpec));
+            } else if (b.selector === 'reportGetVar') {
+                uVars.push(b.blockSpec);
+            } else {
+                uPrim.push(b.selector);
+            }
         } else {
-            uPrim.push(b.selector);
         }
     });
 
@@ -5275,8 +5526,12 @@ BlockVisibilityDialogMorph.prototype.selectUnused = function () {
     });
 
     this.body.contents.children.forEach(checkBox => {
-        checkBox.refresh();
+        if (!(checkBox instanceof BoxMorph)) {
+            checkBox.refresh();
+        }
+        
     });
+    this.partiallySelectCategory();
 };
 
 // BlockVisibilityDialogMorph ops
@@ -5298,6 +5553,16 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
         'palette',
         'hide block'
     );
+};
+
+
+BlockVisibilityDialogMorph.prototype.ok = function () {
+    this.target.world().hidePalette = Object.create(this)
+    this.accept();
+};
+
+BlockVisibilityDialogMorph.prototype.cancel = function () {
+    this.destroy();
 };
 
 // BlockVisibilityDialogMorph layout
