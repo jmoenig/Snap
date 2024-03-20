@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-February-21';
+modules.blocks = '2024-March-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7467,9 +7467,16 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
     var target = this.selectForEdit(), // enable copy-on-edit
-        rcvr = this.scriptTarget(true);
+        rcvr = this.scriptTarget(true),
+        parent;
+
     if (target !== this) {
         return this.userDestroy.call(target);
+    }
+
+    parent = this.parentThatIsA(SyntaxElementMorph);
+    if (parent) {
+        this.parent.reactToGrabOf(this); // fix highlight and variadic case
     }
 
     // for undrop / redrop
@@ -14014,7 +14021,9 @@ MultiArgMorph.prototype.refresh = function () {
 
 MultiArgMorph.prototype.deleteSlot = function (anInput) {
     var len = this.inputs().length,
-        idx = this.children.indexOf(anInput);
+        idx = this.children.indexOf(anInput),
+        block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget();
     if (len <= this.minInputs) {
         return;
     }
@@ -14027,11 +14036,19 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
     }
     this.removeChild(anInput);
     this.fixLayout();
+    sprite.recordUserEdit(
+        'scripts',
+        'poly slot',
+        'delete',
+        block.abstractBlockSpec()
+    );
 };
 
 MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
     var idx = this.children.indexOf(anInput),
         newPart = this.labelPart(this.slotSpec),
+        block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget(),
         infix;
     
     if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
@@ -14053,6 +14070,12 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         this.parent.fixLabelColor();
     }
     this.fixLayout();
+    sprite.recordUserEdit(
+        'scripts',
+        'poly slot',
+        'insert',
+        block.abstractBlockSpec()
+    );
     return newPart;
 };
 

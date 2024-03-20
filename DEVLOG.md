@@ -72,6 +72,12 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-18
+* merged patch from main to dev
+
+### 2024-03-17
+* merged patch from main to dev
+
 ### 2024-03-01
 * merged Morphic changes into dev
 * incremented dev version
