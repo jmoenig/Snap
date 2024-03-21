@@ -86,6 +86,7 @@ BeetleController.prototype.init = function (stage) {
     this.initCamera();
     this.initLights();
     this.initGrid();
+    this.initAxes();
 
     this.beetleTrails = [];
 
@@ -153,7 +154,7 @@ BABYLON.ArcRotateCamera.prototype.reset = function () {
     if (this.fpvEnabled) {
         this.setFPV(false);
     }
-    if (this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
+    if (this.isOrtho()) {
         this.toggleOrtho();
         this.reset();
         this.toggleOrtho();
@@ -181,7 +182,7 @@ BABYLON.ArcRotateCamera.prototype.isMoving = function () {
 
 BABYLON.ArcRotateCamera.prototype.zoomBy = function (delta) {
     if (!this.fpvEnabled) {
-        if (this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
+        if (this.isOrtho()) {
             this.orthoLeft *= 1 - (delta / 12);
             this.orthoRight *= 1 - (delta / 12);
             this.adjustVerticalOrtho();
@@ -210,7 +211,7 @@ BABYLON.ArcRotateCamera.prototype.rotateBy = function (deltaXY) {
 
 BABYLON.ArcRotateCamera.prototype.panBy = function (deltaXY) {
     var factor =
-        this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA ? 100000 : 10000;
+        this.isOrtho() ? 100000 : 10000;
     if (!this.fpvEnabled) {
         var deltaX = deltaXY.x - this.clickOrigin.x,
             deltaY = deltaXY.y - this.clickOrigin.y;
@@ -271,7 +272,7 @@ BABYLON.ArcRotateCamera.prototype.restoreViewpoint = function () {
 };
 
 BABYLON.ArcRotateCamera.prototype.toggleOrtho = function () {
-    if (this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
+    if (this.isOrtho()) {
         this.mode = BABYLON.Camera.PERSPECTIVE_CAMERA;
         this.radius /= 6;
     } else {
@@ -282,6 +283,10 @@ BABYLON.ArcRotateCamera.prototype.toggleOrtho = function () {
         this.adjustVerticalOrtho();
     }
     this.controller.changed();
+};
+
+BABYLON.ArcRotateCamera.prototype.isOrtho = function () {
+    return this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
 };
 
 BABYLON.ArcRotateCamera.prototype.adjustVerticalOrtho = function () {
@@ -318,12 +323,48 @@ BeetleController.prototype.initGrid = function () {
         this.scene
     );
     this.grid.material = gridMaterial;
+};
 
+BeetleController.prototype.initAxes = function () {
     // Axes Gizmo
     this.gizmoManager = new BABYLON.GizmoManager(this.scene);
     this.gizmoManager.positionGizmoEnabled = true;
     this.gizmoManager.attachableMeshes = [this.grid];
     this.gizmoManager.attachToMesh(this.grid);
+
+    // Axes labels
+    ['x','y','z'].forEach(axis => {
+        this[axis + 'Label'] = new BABYLON.Sprite(
+            axis,
+            new BABYLON.SpriteManager(
+                'xManager',
+                baseUrl + axis + '.png',
+                3,
+                { width: 12, height: 16 }
+            )
+        );
+        this[axis + 'Label'].position = BABYLON.Vector3.FromArray([
+            axis === 'y' ? 1.5 : 0,
+            axis === 'z' ? 1.5 : 0,
+            axis === 'x' ? 1.5 : 0
+        ]);
+    });
+
+    this.scene.registerBeforeRender(scene => {
+        ['x','y','z'].forEach(axis => {
+            var label = this[axis + 'Label'],
+                factor = this.camera.radius;
+
+            if (this.camera.isOrtho()) { factor /= 6; }
+            
+            label.size = 0.02 * factor;
+            label.position = BABYLON.Vector3.FromArray([
+                axis === 'y' ? 0.15 * factor : 0,
+                axis === 'z' ? 0.15 * factor : 0,
+                axis === 'x' ? 0.15 * factor : 0
+            ]);
+        });
+    });
 };
 
 BeetleController.prototype.changed = function () {
@@ -806,6 +847,10 @@ BeetleDialogMorph.prototype.toggleAxes = function () {
         !this.controller.gizmoManager.positionGizmoEnabled;
     this.controller.beetle.gizmoManager.positionGizmoEnabled =
         this.controller.gizmoManager.positionGizmoEnabled;
+    ['xLabel', 'yLabel', 'zLabel'].forEach(label => {
+        this.controller[label].isVisible = 
+            this.controller.gizmoManager.positionGizmoEnabled;
+    });
     this.controller.changed();
 };
 
@@ -873,7 +918,7 @@ BeetleDialogMorph.prototype.toggleOrtho = function () {
 };
 
 BeetleDialogMorph.prototype.orthoEnabled = function () {
-    return this.controller.camera.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+    return this.controller.camera.isOrtho();
 };
 
 BeetleDialogMorph.prototype.exportSTL = function () {
