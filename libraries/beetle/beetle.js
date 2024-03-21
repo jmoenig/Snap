@@ -69,7 +69,10 @@ BeetleController.prototype.init = function (stage) {
     this.camera = null;
     this.grid = null;
     this.glCanvas = null;
-    this.gizmoManager = null;
+
+    this.axisLines = {};
+    this.axisLabels = {};
+    this.axesEnabled = true;
 
     this.ghostModeEnabled = false;
     this.wireframeEnabled = false;
@@ -86,11 +89,12 @@ BeetleController.prototype.init = function (stage) {
     this.initCamera();
     this.initLights();
     this.initGrid();
-    this.initAxes();
 
     this.beetleTrails = [];
 
     this.beetle = new Beetle(this);
+
+    this.initAxes();
     this.initDialog();
 };
 
@@ -326,15 +330,9 @@ BeetleController.prototype.initGrid = function () {
 };
 
 BeetleController.prototype.initAxes = function () {
-    // Axes Gizmo
-    this.gizmoManager = new BABYLON.GizmoManager(this.scene);
-    this.gizmoManager.positionGizmoEnabled = true;
-    this.gizmoManager.attachableMeshes = [this.grid];
-    this.gizmoManager.attachToMesh(this.grid);
-
-    // Axes labels
     ['x','y','z'].forEach(axis => {
-        this[axis + 'Label'] = new BABYLON.Sprite(
+        // Labels
+        this.axisLabels[axis] = new BABYLON.Sprite(
             axis,
             new BABYLON.SpriteManager(
                 'xManager',
@@ -343,16 +341,45 @@ BeetleController.prototype.initAxes = function () {
                 { width: 12, height: 16 }
             )
         );
-        this[axis + 'Label'].position = BABYLON.Vector3.FromArray([
+        this.axisLabels[axis].position = BABYLON.Vector3.FromArray([
             axis === 'y' ? 1.5 : 0,
             axis === 'z' ? 1.5 : 0,
             axis === 'x' ? 1.5 : 0
         ]);
+
+        // Lines, both for origin and Beetle
+        [this.beetle, this].forEach(owner => {
+            owner.axisLines[axis] = new BABYLON.MeshBuilder.CreateLines(
+                axis,
+                {
+                    points: [
+                        new BABYLON.Vector3.Zero,
+                        new BABYLON.Vector3(
+                            axis === 'y' ? 1 : 0,
+                            axis === 'z' ? 1 : 0,
+                            axis === 'x' ? 1 : 0
+                        )
+                    ],
+                    useVertexAlpha: false
+                },
+                this.scene
+            );
+
+            owner.axisLines[axis].color = new BABYLON.Color3(
+                axis === 'y' ? 1 : 0, // R
+                axis === 'z' ? 1 : 0, // G
+                axis === 'x' ? 1 : 0  // B
+            );
+
+            if (owner === this.beetle) {
+                owner.axisLines[axis].parent = this.beetle.body;
+            }
+        });
     });
 
     this.scene.registerBeforeRender(scene => {
         ['x','y','z'].forEach(axis => {
-            var label = this[axis + 'Label'],
+            var label = this.axisLabels[axis],
                 factor = this.camera.radius;
 
             if (this.camera.isOrtho()) { factor /= 6; }
@@ -363,6 +390,10 @@ BeetleController.prototype.initAxes = function () {
                 axis === 'z' ? 0.15 * factor : 0,
                 axis === 'x' ? 0.15 * factor : 0
             ]);
+
+            [this.beetle, this].forEach(owner => {
+                owner.axisLines[axis].scaling.setAll(0.125 * factor);
+            });
         });
     });
 };
@@ -843,19 +874,20 @@ BeetleDialogMorph.prototype.gridEnabled = function () {
 };
 
 BeetleDialogMorph.prototype.toggleAxes = function () {
-    this.controller.gizmoManager.positionGizmoEnabled =
-        !this.controller.gizmoManager.positionGizmoEnabled;
-    this.controller.beetle.gizmoManager.positionGizmoEnabled =
-        this.controller.gizmoManager.positionGizmoEnabled;
-    ['xLabel', 'yLabel', 'zLabel'].forEach(label => {
-        this.controller[label].isVisible = 
-            this.controller.gizmoManager.positionGizmoEnabled;
+    this.controller.axesEnabled =
+        !this.controller.axesEnabled;
+    ['x', 'y', 'z'].forEach(axis => {
+        this.controller.axisLabels[axis].isVisible = 
+            this.controller.axesEnabled;
+        [this.controller.beetle, this.controller].forEach(owner => {
+            owner.axisLines[axis].isVisible = this.controller.axesEnabled;
+        });
     });
     this.controller.changed();
 };
 
 BeetleDialogMorph.prototype.axesEnabled = function () {
-    return this.controller.gizmoManager.positionGizmoEnabled;
+    return this.controller.axesEnabled;
 };
 
 BeetleDialogMorph.prototype.toggleBeetle = function () {
@@ -961,7 +993,7 @@ Beetle.prototype.init = function (controller) {
     this.loadMeshes();
     this.wings = null;
     this.body = new BABYLON.TransformNode('body', this.controller.scene);
-    this.initAxes();
+    this.axisLines = {};
 
     // extrusion
     this.extruding = false;
@@ -979,13 +1011,6 @@ Beetle.prototype.init = function (controller) {
     this.lastCap = null;
 
     this.controller.changed();
-};
-
-Beetle.prototype.initAxes = function () {
-    this.gizmoManager = new BABYLON.GizmoManager(this.controller.scene);
-    this.gizmoManager.positionGizmoEnabled = true;
-    this.gizmoManager.attachableMeshes = [this.body];
-    this.gizmoManager.attachToMesh(this.body);
 };
 
 Beetle.prototype.initColor = function () {
