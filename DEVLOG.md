@@ -77,6 +77,7 @@
 * merged beetle dev, thanks, Bernat!
 * added new "inject into" block to the metaprogramming library
 * new "writing and formating" library, thanks, Tethrarxitet!
+* incremented dev version
 
 ### 2024-03-18
 * merged patch from main to dev
