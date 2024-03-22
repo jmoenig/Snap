@@ -10,6 +10,7 @@
 // to get rid of them someday.
 
 if (!SpriteMorph.prototype.originalSetColorDimension) {
+    // Mirror Sprite pen color
     SpriteMorph.prototype.originalSetColorDimension =
         SpriteMorph.prototype.setColorDimension;
     SpriteMorph.prototype.setColorDimension = function (idx, num) {
@@ -21,7 +22,6 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
-
     SpriteMorph.prototype.originalSetColor = SpriteMorph.prototype.setColor;
     SpriteMorph.prototype.setColor = function (aColor) {
         var stage = this.parent;
@@ -30,6 +30,27 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             this.parentThatIsA(IDE_Morph).currentSprite === this
         ) {
             stage.beetleController.beetle.setColor(this.color);
+        }
+    };
+
+    // Log positions
+    SpriteMorph.prototype.originalMoveBy = SpriteMorph.prototype.moveBy;
+    SpriteMorph.prototype.moveBy = function (delta, justMe) {
+        var newPos,
+            oldPos = this.rotationCenter(),
+            stage = this.parent;
+        this.originalMoveBy(delta, justMe);
+        newPos = this.rotationCenter();
+        if (stage?.beetleController &&
+            this.parentThatIsA(IDE_Morph).currentSprite === this
+        ) {
+            if (stage.beetleController.beetle.loggingSpritePositions
+                && !newPos.eq(oldPos)
+            ) {
+                stage.beetleController.beetle.logSpritePosition(
+                    this.getPosition().itemsArray()
+                );
+            }
         }
     };
 }
@@ -48,7 +69,10 @@ BeetleController.prototype.init = function (stage) {
     this.camera = null;
     this.grid = null;
     this.glCanvas = null;
-    this.gizmoManager = null;
+
+    this.axisLines = {};
+    this.axisLabels = {};
+    this.axesEnabled = true;
 
     this.ghostModeEnabled = false;
     this.wireframeEnabled = false;
@@ -69,6 +93,8 @@ BeetleController.prototype.init = function (stage) {
     this.beetleTrails = [];
 
     this.beetle = new Beetle(this);
+
+    this.initAxes();
     this.initDialog();
 };
 
@@ -132,14 +158,20 @@ BABYLON.ArcRotateCamera.prototype.reset = function () {
     if (this.fpvEnabled) {
         this.setFPV(false);
     }
-    this.radius = 10;
-    this.setTarget(BABYLON.Vector3.Zero());
-    this.setPosition(new BABYLON.Vector3(0, 5, -10));
-    this.alpha = Math.PI / 4;
-    this.framing = false;
-    if (this.framingBehavior) {
-        this.framingBehavior.detach(this);
-        this.framingBehavior = null;
+    if (this.isOrtho()) {
+        this.toggleOrtho();
+        this.reset();
+        this.toggleOrtho();
+    } else {
+        this.radius = 10;
+        this.setTarget(BABYLON.Vector3.Zero());
+        this.setPosition(new BABYLON.Vector3(0, 5, -10));
+        this.alpha = Math.PI / 4;
+        this.framing = false;
+        if (this.framingBehavior) {
+            this.framingBehavior.detach(this);
+            this.framingBehavior = null;
+        }
     }
 };
 
@@ -154,10 +186,18 @@ BABYLON.ArcRotateCamera.prototype.isMoving = function () {
 
 BABYLON.ArcRotateCamera.prototype.zoomBy = function (delta) {
     if (!this.fpvEnabled) {
-        // the lower radius limit gets stuck sometimes, so let's set it always
-        this.lowerRadiusLimit = 1.5;
-        this.inertialRadiusOffset = delta * (this.radius / 12);
-        this.framing = false;
+        if (this.isOrtho()) {
+            this.orthoLeft *= 1 - (delta / 12);
+            this.orthoRight *= 1 - (delta / 12);
+            this.adjustVerticalOrtho();
+            this.radius *= 1 - (delta / 12);
+        } else {
+            // the lower radius limit gets stuck sometimes, so let's set it
+            this.lowerRadiusLimit = 1.5;
+            this.inertialRadiusOffset = delta * (this.radius / 12);
+            this.framing = false;
+        }
+        this.controller.changed();
     }
 };
 
@@ -174,11 +214,13 @@ BABYLON.ArcRotateCamera.prototype.rotateBy = function (deltaXY) {
 };
 
 BABYLON.ArcRotateCamera.prototype.panBy = function (deltaXY) {
+    var factor =
+        this.isOrtho() ? 100000 : 10000;
     if (!this.fpvEnabled) {
         var deltaX = deltaXY.x - this.clickOrigin.x,
             deltaY = deltaXY.y - this.clickOrigin.y;
-        this.inertialPanningX = deltaX * (this.radius / -10000);
-        this.inertialPanningY = deltaY * (this.radius / 10000);
+        this.inertialPanningX = deltaX * (this.radius / factor * -1);
+        this.inertialPanningY = deltaY * (this.radius / factor);
         this.framing = false;
     }
 };
@@ -233,6 +275,32 @@ BABYLON.ArcRotateCamera.prototype.restoreViewpoint = function () {
     }
 };
 
+BABYLON.ArcRotateCamera.prototype.toggleOrtho = function () {
+    if (this.isOrtho()) {
+        this.mode = BABYLON.Camera.PERSPECTIVE_CAMERA;
+        this.radius /= 6;
+    } else {
+        this.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+        this.orthoRight = this.radius / 2;
+        this.orthoLeft = this.orthoRight * -1;
+        this.radius *= 6;
+        this.adjustVerticalOrtho();
+    }
+    this.controller.changed();
+};
+
+BABYLON.ArcRotateCamera.prototype.isOrtho = function () {
+    return this.mode === BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+};
+
+BABYLON.ArcRotateCamera.prototype.adjustVerticalOrtho = function () {
+    var offset =
+        (this.controller.renderWidth / this.controller.renderHeight) *
+        (this.radius / 60);
+    this.orthoTop = (this.orthoRight / 2) + offset;
+    this.orthoBottom = this.orthoLeft + offset;
+};
+
 BeetleController.prototype.initLights = function () {
     this.camera.light = new BABYLON.PointLight(
         'pointLight',
@@ -245,7 +313,7 @@ BeetleController.prototype.initLights = function () {
 
 BeetleController.prototype.initGrid = function () {
     var gridMaterial = new BABYLON.GridMaterial('default', this.scene);
-    gridMaterial.majorUnitFrequency = 10;
+    gridMaterial.majorUnitFrequency = 5;
     gridMaterial.gridRatio = 1;
     gridMaterial.backFaceCulling = false;
     gridMaterial.minorUnitVisibility = 0.45;
@@ -255,16 +323,79 @@ BeetleController.prototype.initGrid = function () {
 
     this.grid = BABYLON.MeshBuilder.CreateGround(
         'grid',
-        { width: 100, height: 100 },
+        { width: 200, height: 200 },
         this.scene
     );
     this.grid.material = gridMaterial;
+};
 
-    // Axes Gizmo
-    this.gizmoManager = new BABYLON.GizmoManager(this.scene);
-    this.gizmoManager.positionGizmoEnabled = true;
-    this.gizmoManager.attachableMeshes = [this.grid];
-    this.gizmoManager.attachToMesh(this.grid);
+BeetleController.prototype.initAxes = function () {
+    ['x','y','z'].forEach(axis => {
+        // Labels
+        this.axisLabels[axis] = new BABYLON.Sprite(
+            axis,
+            new BABYLON.SpriteManager(
+                'xManager',
+                baseUrl + axis + '.png',
+                3,
+                { width: 12, height: 16 }
+            )
+        );
+        this.axisLabels[axis].position = BABYLON.Vector3.FromArray([
+            axis === 'y' ? 1.5 : 0,
+            axis === 'z' ? 1.5 : 0,
+            axis === 'x' ? 1.5 : 0
+        ]);
+
+        // Lines, both for origin and Beetle
+        [this.beetle, this].forEach(owner => {
+            owner.axisLines[axis] = new BABYLON.MeshBuilder.CreateLines(
+                axis,
+                {
+                    points: [
+                        new BABYLON.Vector3.Zero,
+                        new BABYLON.Vector3(
+                            axis === 'y' ? 1 : 0,
+                            axis === 'z' ? 1 : 0,
+                            axis === 'x' ? 1 : 0
+                        )
+                    ],
+                    useVertexAlpha: false
+                },
+                this.scene
+            );
+
+            owner.axisLines[axis].color = new BABYLON.Color3(
+                axis === 'y' ? 1 : 0, // R
+                axis === 'z' ? 1 : 0, // G
+                axis === 'x' ? 1 : 0  // B
+            );
+
+            if (owner === this.beetle) {
+                owner.axisLines[axis].parent = this.beetle.body;
+            }
+        });
+    });
+
+    this.scene.registerBeforeRender(scene => {
+        ['x','y','z'].forEach(axis => {
+            var label = this.axisLabels[axis],
+                factor = this.camera.radius;
+
+            if (this.camera.isOrtho()) { factor /= 6; }
+            
+            label.size = 0.02 * factor;
+            label.position = BABYLON.Vector3.FromArray([
+                axis === 'y' ? 0.15 * factor : 0,
+                axis === 'z' ? 0.15 * factor : 0,
+                axis === 'x' ? 0.15 * factor : 0
+            ]);
+
+            [this.beetle, this].forEach(owner => {
+                owner.axisLines[axis].scaling.setAll(0.125 * factor);
+            });
+        });
+    });
 };
 
 BeetleController.prototype.changed = function () {
@@ -304,14 +435,15 @@ BeetleController.prototype.beetleTrailsBoundingBox = function () {
 BeetleController.prototype.clear = function () {
     this.beetleTrails.forEach(object => object.dispose());
     this.beetleTrails = [];
+    this.beetle.loggedSpritePositions = [];
     BeetleController.Cache.clear();
     this.changed();
 };
 
-BeetleController.prototype.currentView = function () {
+BeetleController.prototype.beetleView = function () {
     var wasShowingAxes = this.dialog.axesEnabled(),
         wasShowingBeetle = this.dialog.beetleEnabled(),
-        wasShowingGrid = this.dialog.gridEnabled,
+        wasShowingGrid = this.dialog.gridEnabled(),
         wasFPV = this.dialog.fpvEnabled(),
         canvas = newCanvas(
             new Point(
@@ -355,6 +487,34 @@ BeetleController.prototype.currentView = function () {
     return costume;
 };
 
+BeetleController.prototype.currentView = function () {
+    var canvas = newCanvas(
+            new Point(
+                this.renderWidth,
+                this.renderHeight
+            ),
+            true
+        ),
+        ctx = canvas.getContext('2d'),
+        costume;
+
+    this.scene.clearColor = new BABYLON.Color4(0,0,0,0);
+    this.scene.render();
+    ctx.drawImage(
+        this.glCanvas,
+        0,
+        0,
+        this.renderWidth,
+        this.renderHeight
+    );
+
+    this.scene.clearColor = new BABYLON.Color3(.5,.5,.5);
+    this.scene.render();
+
+    return canvas;
+};
+
+
 // Simple Cache //////////////////////////////////////////////////////////
 
 BeetleController.Cache = {
@@ -377,6 +537,8 @@ BeetleController.Cache.getMaterial = function (color) {
         material.linkEmissiveWithDiffuse = true;
         material.roughness = 1;
         material.specularPower = 512;
+        material.twoSidedLighting = true;
+        material.diffuseFresnelParameters = new BABYLON.FresnelParameters();
         this.materials.set(key, material);
     }
 
@@ -475,7 +637,17 @@ BeetleDialogMorph.prototype.initRenderView = function () {
     this.fullScreenButton.setTop(this.renderView.top() + 2);
     this.fullScreenButton.alpha = 0.5;
 
+    this.renderView.userMenu = () => { this.userMenu() };
+
     this.renderView.step = function () { controller.render(); };
+};
+
+BeetleDialogMorph.prototype.userMenu = function () {
+    var ide = this.controller.stage.parentThatIsA(IDE_Morph),
+        menu = new MenuMorph(ide),
+        view = this.controller.currentView();
+    menu.addItem('pic...', () => { ide.saveCanvasAs(view, 'render') });
+    return menu;
 };
 
 BeetleDialogMorph.prototype.toggleFullScreen = function () {
@@ -575,6 +747,12 @@ BeetleDialogMorph.prototype.initControlPanel = function () {
                 type: 'toggle',
                 action: 'toggleFPV',
                 query: 'fpvEnabled'
+            },
+            {
+                label: 'Orthographic mode',
+                type: 'toggle',
+                action: 'toggleOrtho',
+                query: 'orthoEnabled'
             }
         ],
         [
@@ -696,15 +874,20 @@ BeetleDialogMorph.prototype.gridEnabled = function () {
 };
 
 BeetleDialogMorph.prototype.toggleAxes = function () {
-    this.controller.gizmoManager.positionGizmoEnabled =
-        !this.controller.gizmoManager.positionGizmoEnabled;
-    this.controller.beetle.gizmoManager.positionGizmoEnabled =
-        this.controller.gizmoManager.positionGizmoEnabled;
+    this.controller.axesEnabled =
+        !this.controller.axesEnabled;
+    ['x', 'y', 'z'].forEach(axis => {
+        this.controller.axisLabels[axis].isVisible = 
+            this.controller.axesEnabled;
+        [this.controller.beetle, this.controller].forEach(owner => {
+            owner.axisLines[axis].isVisible = this.controller.axesEnabled;
+        });
+    });
     this.controller.changed();
 };
 
 BeetleDialogMorph.prototype.axesEnabled = function () {
-    return this.controller.gizmoManager.positionGizmoEnabled;
+    return this.controller.axesEnabled;
 };
 
 BeetleDialogMorph.prototype.toggleBeetle = function () {
@@ -762,12 +945,20 @@ BeetleDialogMorph.prototype.fpvEnabled = function () {
     return this.controller.camera.fpvEnabled;
 };
 
+BeetleDialogMorph.prototype.toggleOrtho = function () {
+    this.controller.camera.toggleOrtho();
+};
+
+BeetleDialogMorph.prototype.orthoEnabled = function () {
+    return this.controller.camera.isOrtho();
+};
+
 BeetleDialogMorph.prototype.exportSTL = function () {
     BABYLON.STLExport.CreateSTL(
         this.controller.beetleTrails,
         true, // download
         'beetle-trails', // filename
-        true,      // binary ?
+        false,     // binary ?
         undefined, // little endian?
         undefined, // do not bake transform
         undefined, // support instanced meshes
@@ -795,21 +986,24 @@ Beetle.prototype.init = function (controller) {
 
     this.name = 'beetle';
 
-    this.linewidth = 1;
-    this.shapeScale = 1;
+    this.shapeScale = new BABYLON.Vector2(1,1);
+    this.shapeOffset = new BABYLON.Vector2.Zero;
     this.movementScale = 1;
 
     this.loadMeshes();
     this.wings = null;
     this.body = new BABYLON.TransformNode('body', this.controller.scene);
-    this.initAxes();
+    this.axisLines = {};
 
     // extrusion
     this.extruding = false;
     this.extruded = false;
     this.extrusionShapeSelector = 'circle';
+    this.loggedSpritePositions = [];
+    this.loggingSpritePositions = false;
     this.lineTrail = null;
     this.extrusionShape = null;
+    this.lastExtrusionShape = null;
     this.extrusionShapeOutline = null;
     this.extrusionBaseEnabled = true;
     this.updateExtrusionShapeOutline();
@@ -817,13 +1011,6 @@ Beetle.prototype.init = function (controller) {
     this.lastCap = null;
 
     this.controller.changed();
-};
-
-Beetle.prototype.initAxes = function () {
-    this.gizmoManager = new BABYLON.GizmoManager(this.controller.scene);
-    this.gizmoManager.positionGizmoEnabled = true;
-    this.gizmoManager.attachableMeshes = [this.body];
-    this.gizmoManager.attachToMesh(this.body);
 };
 
 Beetle.prototype.initColor = function () {
@@ -898,7 +1085,11 @@ Beetle.prototype.newExtrusionShape = function (selector) {
         selector.asArray().forEach(p => {
             if (p instanceof List) {
                 path.push(
-                    new BABYLON.Vector3(Number(p.at(1)), 0, Number(p.at(2)))
+                    new BABYLON.Vector3(
+                        Number(p.at(1)) * -1,
+                        0,
+                        Number(p.at(2))
+                    )
                 );
             }
         });
@@ -938,7 +1129,10 @@ Beetle.prototype.newExtrusionShape = function (selector) {
             case 'semicircle':
                 var radius = .5,
                     theta;
-                for (theta = Math.PI * 3 / 2; theta < (Math.PI * 5 / 2) + (Math.PI / 16); theta += Math.PI / 16) {
+                for (theta = Math.PI * 3 / 2;
+                    theta < (Math.PI * 5 / 2) + (Math.PI / 16);
+                    theta += Math.PI / 16
+                ) {
                     path.push(
                         new BABYLON.Vector3(
                             radius * Math.cos(theta),
@@ -952,11 +1146,43 @@ Beetle.prototype.newExtrusionShape = function (selector) {
                 path.push(new BABYLON.Vector3(0, 0,-0.5));
                 path.push(new BABYLON.Vector3(0, 0, 0.5));
                 break;
+            case 'sprite positions':
+                path = this.loggedSpritePositions;
+                break;
         }
     }
 
 
     return path;
+};
+
+Beetle.prototype.logSpritePosition = function (pos) {
+    this.loggedSpritePositions.push(
+        new BABYLON.Vector3(pos[0] * -1, 0, pos[1])
+    );
+    this.updateExtrusionShapeOutline();
+    if (this.extruding) {
+        this.stopExtruding();
+        this.extrudeToCurrentPoint();
+    }
+};
+
+Beetle.prototype.setLoggingSpritePosition = function (doIt, currentPos) {
+    if (!this.loggingSpritePositions && doIt) {
+        this.loggedSpritePositions = [];
+        this.logSpritePosition(currentPos.itemsArray());
+    }
+    this.loggingSpritePositions = doIt;
+};
+
+Beetle.prototype.scaledExtrusionShape = function () {
+    return this.extrusionShape.map(p =>
+        new BABYLON.Vector3(
+            p.x * this.shapeScale.x + this.shapeOffset.x,
+            0,
+            p.z * this.shapeScale.y + this.shapeOffset.y
+        )
+    );
 };
 
 Beetle.prototype.updateExtrusionShapeOutline = function () {
@@ -969,13 +1195,12 @@ Beetle.prototype.updateExtrusionShapeOutline = function () {
         this.extrusionShapeOutline = BABYLON.MeshBuilder.CreateLines(
             'extrusionShape',
             {
-                points: this.extrusionShape,
+                points: this.scaledExtrusionShape(),
                 useVertexAlpha: false
             },
             this.controller.scene
         );
         this.extrusionShapeOutline.parent = this.body;
-        this.extrusionShapeOutline.scalingDeterminant = this.shapeScale;
         this.extrusionShapeOutline.rotate(BABYLON.Axis.X, Math.PI / -2);
     }
     this.extrusionShapeOutline.visibility =
@@ -986,6 +1211,7 @@ Beetle.prototype.updateExtrusionShapeOutline = function () {
         // yet
         this.lastTransformMatrix =
             this.extrusionShapeOutline.computeWorldMatrix(true).clone();
+        this.lastExtrusionShape = this.scaledExtrusionShape();
     }
 };
 
@@ -1001,9 +1227,6 @@ Beetle.prototype.extrudeToCurrentPoint = function () {
 };
 
 Beetle.prototype.extrudePoint = function () {
-    // TODO in the future: create a face when points define a closed coplanar
-    // shape
-
     // to extrude a point is to draw a line
     var points = [];
     if (this.lineTrail) {
@@ -1013,36 +1236,8 @@ Beetle.prototype.extrudePoint = function () {
             1
         );
         this.lineTrail.dispose();
-    } /*else {
-        // keep the transform matrix in case we're trying to create a surface
-        this.lastTransformMatrix = this.body.computeWorldMatrix(true).clone();
-    }*/
+    }
     points.push(this.body.position.clone());
-    /*
-    // detect whether we've closed a surface
-    if (
-        (points.length > 2) &&
-        (points[0].equalsWithEpsilon(this.body.position, 0.001)) &&
-        true // FIXME TODO detect whether all points are coplanar !!!
-    ) {
-        var surface =
-            BABYLON.MeshBuilder.CreatePolygon(
-                'polygon',
-                {
-                    shape: points,
-                    updatable: false
-                },
-                this.controller.scene
-            );
-        surface.material = BeetleController.Cache.getMaterial(
-            this.wings.material.diffuseColor
-        );
-        surface.material.wireframe = this.controller.wireframeEnabled;
-        surface.visibility = this.controller.ghostModeEnabled ? .25 : 1;
-        surface.bakeTransformIntoVertices(this.lastTransformMatrix);
-        this.controller.beetleTrails.push(surface);
-        this.lineTrail = null;
-    } else {*/
     this.lineTrail = BABYLON.MeshBuilder.CreateLines(
         'lineTrail',
         {
@@ -1054,31 +1249,35 @@ Beetle.prototype.extrudePoint = function () {
     this.lineTrail.color = this.wings.material.diffuseColor.clone();
     this.lineTrail.points = points;
     this.controller.beetleTrails.push(this.lineTrail);
-    //}
 };
 
 Beetle.prototype.extrudePolygon = function () {
-    // to extrude a polygon is to build a prism
+    // to extrude a polygon is to build a prism or a surface, depending on
+    // whether the polygon is closed
     var currentTransformMatrix =
         this.extrusionShapeOutline.computeWorldMatrix(true);
     this.extrusionShapeOutline.visibility =
         this.extrusionBaseEnabled ? 1 : 0;
     if (this.lastTransformMatrix) {
-        var backFace =
-            this.extrusionShape.map(
-                v =>
-                BABYLON.Vector3.TransformCoordinates(
-                    v,
-                    this.lastTransformMatrix
-                )
+        var isVolume = // is the polygon closed?
+            this.extrusionShape[0].equalsWithEpsilon(
+                this.extrusionShape[this.extrusionShape.length - 1],
+                0.001
             ),
+            backFace =
+                this.lastExtrusionShape.map(v =>
+                    BABYLON.Vector3.TransformCoordinates(
+                        v,
+                        this.lastTransformMatrix
+                    )
+                ),
             frontFace =
-            this.extrusionShape.map(v =>
-                BABYLON.Vector3.TransformCoordinates(
-                    v,
-                    currentTransformMatrix
-                )
-            ),
+                this.scaledExtrusionShape().map(v =>
+                    BABYLON.Vector3.TransformCoordinates(
+                        v,
+                        currentTransformMatrix
+                    )
+                ),
             numSides = this.extrusionShape.length,
             vertices = backFace.concat(frontFace).map(v => v.asArray()),
             faces = [];
@@ -1097,13 +1296,14 @@ Beetle.prototype.extrudePolygon = function () {
             'prism',
             {
                 custom: { vertex: vertices, face: faces },
-                sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                sideOrientation:
+                    isVolume ? BABYLON.Mesh.FRONTSIDE : BABYLON.Mesh.DOUBLESIDE
             }
         );
         prism.material = BeetleController.Cache.getMaterial(
             this.wings.material.diffuseColor
         );
-        prism.material.backFaceCulling = true;
+        prism.material.backFaceCulling = false;
         prism.material.wireframe = this.controller.wireframeEnabled;
         prism.visibility = this.controller.ghostModeEnabled ? .25 : 1
         prism.convertToFlatShadedMesh();
@@ -1111,16 +1311,10 @@ Beetle.prototype.extrudePolygon = function () {
         this.controller.beetleTrails.push(prism);
         this.extruded = true;
 
-        if (this.extrusionShape[0].equalsWithEpsilon(
-            this.extrusionShape[this.extrusionShape.length - 1],
-            0.001
-        )) {
-            // The first and last point are very close to each other, so
-            // we assume the user is trying to build a closed volume.
-            this.computeExtrusionCaps(currentTransformMatrix);
-        }
+        if (isVolume) { this.computeExtrusionCaps(currentTransformMatrix); }
     }
     this.lastTransformMatrix = currentTransformMatrix.clone();
+    this.lastExtrusionShape = this.scaledExtrusionShape();
 };
 
 Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
@@ -1140,7 +1334,7 @@ Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
             BABYLON.MeshBuilder.CreatePolygon(
                 'backcap',
                 {
-                    shape: this.extrusionShape,
+                    shape: this.scaledExtrusionShape(),
                     updatable: false
                 },
                 this.controller.scene
@@ -1159,7 +1353,7 @@ Beetle.prototype.computeExtrusionCaps = function (currentTransformMatrix) {
         BABYLON.MeshBuilder.CreatePolygon(
             'frontcap',
             {
-                shape: this.extrusionShape,
+                shape: this.scaledExtrusionShape(),
                 updatable: false,
                 sideOrientation: BABYLON.Mesh.BACKSIDE
             },
@@ -1181,6 +1375,7 @@ Beetle.prototype.stopExtruding = function () {
     this.extruding = false;
     this.extruded = false;
     this.lastTransformMatrix = null;
+    this.lastExtrusionShape = null;
     this.lastCap = null;
     this.extrusionShapeOutline.visibility = 0;
     this.lineTrail = null;
@@ -1292,10 +1487,26 @@ Beetle.prototype.pointTo = function (x, y, z) {
 };
 
 Beetle.prototype.setScale = function (scale, which) {
-    this[which + 'Scale'] = scale;
-    if (which == 'shape') { this.updateExtrusionShapeOutline(); }
+    if (which == 'shape') {
+        if (typeof scale === 'number') {
+            scale = new BABYLON.Vector2(scale, scale);
+        } else if (scale instanceof List) {
+            scale = new BABYLON.Vector2(
+                Number(scale.itemsArray()[0]), Number(scale.itemsArray()[1])
+            );
+        }
+        this.shapeScale = scale;
+        this.updateExtrusionShapeOutline();
+    } else {
+        this.movementScale = scale;
+    }
 };
 
+Beetle.prototype.setOffset = function (offset) {
+    this.shapeOffset.x = Number(offset[0]) * -1;
+    this.shapeOffset.y = Number(offset[1]);
+    this.updateExtrusionShapeOutline();
+};
 
 // SnapExtensions API ////////////////////////////////////////////////////
 
@@ -1387,6 +1598,23 @@ SnapExtensions.primitives.set('bb_setextrusionbase(base)', function (base) {
     stage.beetleController.beetle.updateExtrusionShapeOutline();
 });
 
+SnapExtensions.primitives.set('bb_extrusionbasepoints()', function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    return new List(stage.beetleController.beetle.extrusionShape.map(
+        point => new List([point.x * -1, point.z]))
+    );
+});
+
+SnapExtensions.primitives.set(
+    'bb_logspritepositions(bool, currentPos)',
+    function (doIt, currentPos)
+{
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    stage.beetleController.beetle.setLoggingSpritePosition(doIt, currentPos);
+});
+
 SnapExtensions.primitives.set('bb_startextruding()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
@@ -1401,7 +1629,7 @@ SnapExtensions.primitives.set('bb_stopextruding()', function () {
 
 SnapExtensions.primitives.set(
     'bb_setscale(scale, which)',
-    function (scale, which) 
+    function (scale, which)
 {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
@@ -1409,13 +1637,28 @@ SnapExtensions.primitives.set(
 });
 
 SnapExtensions.primitives.set('bb_scale(which)', function (which) {
+    var stage = this.parentThatIsA(StageMorph),
+        scale;
+    if (!stage.beetleController) { return; }
+    scale = stage.beetleController.beetle[which + 'Scale'];
+    if (which === 'shape') {
+        if (scale.x === scale.y) {
+            scale = scale.x;
+        } else {
+            scale = new List([scale.x, scale.y]);
+        }
+    }
+    return scale;
+});
+
+SnapExtensions.primitives.set('bb_setoffset(offset)', function (offset) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
-    return stage.beetleController.beetle[which + 'Scale'];
+    stage.beetleController.beetle.setOffset(offset.itemsArray());
 });
 
 SnapExtensions.primitives.set('bb_beetleView()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
-    return stage.beetleController.currentView();
+    return stage.beetleController.beetleView();
 });
