@@ -72,6 +72,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-22
+* merged beetle dev, thanks, Bernat!
+
 ### 2024-03-18
 * merged patch from main to dev
 
