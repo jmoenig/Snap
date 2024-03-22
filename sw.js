@@ -1,4 +1,4 @@
-var snapVersion = '10-240318-dev',
+var snapVersion = '10-240322-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -85,6 +85,11 @@ var snapVersion = '10-240318-dev',
         'libraries/bar-charts.xml',
 
         'libraries/beetle.xml',
+
+            // Beetle coordinate images
+            'libraries/beetle/x.png',
+            'libraries/beetle/y.png',
+            'libraries/beetle/z.png',
 
             // Beetle dependencies
             'libraries/beetle/beetle.js',
