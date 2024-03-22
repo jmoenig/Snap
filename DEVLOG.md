@@ -49,6 +49,7 @@
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
     * new "sigmoid" easing function in the animations library
     * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
+    * new "writing and formating" library, thanks, Tethrarxitet!
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -75,6 +76,7 @@
 ### 2024-03-22
 * merged beetle dev, thanks, Bernat!
 * added new "inject into" block to the metaprogramming library
+* new "writing and formating" library, thanks, Tethrarxitet!
 
 ### 2024-03-18
 * merged patch from main to dev
