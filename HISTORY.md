@@ -2,6 +2,13 @@
 
 ## in development:
 
+## 9.2.13:
+    * fixed "my solutions" reporter for puzzle scripts without comments
+
+2024-03-24
+* threaes: fixed "my solutions" reporter for puzzle scripts without comments
+* prepared v9.2.13 patch
+
 ## 9.2.12:
     * fixed right-click deletion of reporters embedded in variadic slots
 
