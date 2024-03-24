@@ -73,6 +73,10 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-24
+* merged patch from main to dev
+* incremented dev version
+
 ### 2024-03-22
 * merged beetle dev, thanks, Bernat!
 * added new "inject into" block to the metaprogramming library
