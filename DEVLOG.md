@@ -75,6 +75,7 @@
 
 ### 2024-03-25
 * threads: added block syntax alias "fn" for "reportMonadic"
+* lists: added "nil" as LISP text syntax representing an empty slot (synonym to double-double quote "")
 
 ### 2024-03-24
 * merged patch from main to dev

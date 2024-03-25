@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-February-14';
+modules.lists = '2024-March-25';
 
 var List;
 var ListWatcherMorph;
@@ -1185,6 +1185,9 @@ List.prototype.parseStream = function (stream) {
             this.add(child);
         } else if ((ch === ')' || !ch.trim().length) && !quoted) {
             if (item.length) {
+                if (item === 'nil') {
+                    item = '';
+                }
                 this.add(item);
                 item = '';
             }
@@ -1193,8 +1196,12 @@ List.prototype.parseStream = function (stream) {
             }
         } else if (ch === '"') {
             quoted = !quoted;
-            if (!quoted && !item.length) {
-                this.add('');
+            if (!quoted) {
+                if (!item.length) {
+                    this.add('');
+                } else if (item === 'nil') {
+                    this.add('nil');
+                }
             }
         } else if (ch === '\\') {
             item += stream.next();
@@ -1248,6 +1255,8 @@ List.prototype.escape = function (string) {
         return '\\t';
     } else if (string === 'f') {
         return '\\f';
+    } else if (string === 'nil') {
+        return '"nil"';
     }
     for (i = 0; i < len; i += 1) {
         ch = string[i];
@@ -1261,7 +1270,7 @@ List.prototype.escape = function (string) {
         }
         str += ch;
     }
-    return quoted ? str + '"' : str || '""';
+    return quoted ? str + '"' : str || 'nil';
 };
 
 List.prototype.encodeBoolean = function (data) {
