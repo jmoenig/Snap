@@ -73,6 +73,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-25
+* threads: added block syntax alias "fn" for "reportMonadic"
+
 ### 2024-03-24
 * merged patch from main to dev
 * incremented dev version
