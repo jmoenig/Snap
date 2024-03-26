@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-March-25';
+modules.threads = '2024-March-26';
 
 var ThreadManager;
 var Process;
@@ -8101,7 +8101,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
-            def.declarations.forEach(value => slots.add(value[5]));
+            def.declarations.forEach(value => slots.add(value[5] || ''));
         } else {
             expr.inputs().forEach(slot => {
                 if (slot instanceof ReporterBlockMorph) {
@@ -8121,7 +8121,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
-            def.declarations.forEach(value => slots.add(value[6]));
+            def.declarations.forEach(value => slots.add(value[6] || ''));
         } else {
             expr.inputs().forEach(slot => {
                 if (slot instanceof ReporterBlockMorph) {
@@ -8145,7 +8145,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 data = (value[7] || '').split('\n').map(each =>
                     each.trim()).filter(each =>
                         each.length);
-                slots.add(data.length > 1 ? new List(data) : data[0]);
+                slots.add(data.length > 1 ? new List(data) : data[0] || '');
             });
         } else {
             expr.inputs().forEach(slot => {
