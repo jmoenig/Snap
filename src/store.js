@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-February-19';
+modules.store = '2024-March-26';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2325,6 +2325,12 @@ ScriptsMorph.prototype.toXML = function (serializer) {
         }
         return xml;
     }, '');
+};
+
+BlockMorph.prototype.toLISP = function () {
+    return Process.prototype.toTextSyntax(
+        this.components()
+    ).encode(0, 0);
 };
 
 BlockMorph.prototype.toXML = BlockMorph.prototype.toScriptXML = function (
