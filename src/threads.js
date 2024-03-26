@@ -2600,13 +2600,13 @@ Process.prototype.reportNumbers = function (start, end) {
 Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
+    this.assertType(start, 'number');
+    this.assertType(end, 'number');
+
     var result, len, i,
         s = +start,
         e = +end,
         n = s;
-
-    this.assertType(s, 'number');
-    this.assertType(e, 'number');
 
     if (e > s) {
         len = Math.floor(e - s);
