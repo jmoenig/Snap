@@ -77,6 +77,7 @@
 * threads: tweaked metaprogramming custom block attribute access for list comparison
 * updated "scriptify" reporter in the metaprogramming library
 * incremented dev version
+* store: added experimental Block >> toLISP() method
 
 ### 2024-03-25
 * threads: added block syntax alias "fn" for "reportMonadic"
