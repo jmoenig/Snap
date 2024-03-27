@@ -3651,6 +3651,10 @@ BlockMorph.prototype.userMenu = function () {
             'download this script\nas an XML file'
         );
     }
+    menu.addItem(
+        "Lisp code...",
+        () => top.showBubble(top.toLisp(4))
+    );
     if (proc) {
         if (vNames.length) {
             menu.addLine();
@@ -4463,10 +4467,10 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
 
 // BlockMorph syntax analysis
 
-BlockMorph.prototype.toLISP = function () {
+BlockMorph.prototype.toLisp = function (indentation = 0) {
     return Process.prototype.toTextSyntax(
         this.components()
-    ).encode(0, 0);
+    ).encode(0, indentation);
 };
 
 BlockMorph.prototype.components = function (parameterNames = []) {

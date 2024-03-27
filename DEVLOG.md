@@ -50,6 +50,7 @@
     * new "sigmoid" easing function in the animations library
     * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
     * new "writing and formating" library, thanks, Tethrarxitet!
+    * new "Lisp code..." entry in blocks context menu
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -75,6 +76,7 @@
 
 ### 2024-03-27
 * blocks, store: moved Block >> toLISP() to blocks.js
+* blocks: added "Lisp code..." entry to blocks context menu
 
 ### 2024-03-26
 * threads: tweaked metaprogramming custom block attribute access for list comparison
