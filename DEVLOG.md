@@ -51,6 +51,7 @@
     * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
     * new "writing and formating" library, thanks, Tethrarxitet!
     * new "Lisp code..." entry in blocks context menu
+    * new "code..." entry to blocks context menu if "Codification support" setting is enabled
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -77,6 +78,7 @@
 ### 2024-03-27
 * blocks, store: moved Block >> toLISP() to blocks.js
 * blocks: added "Lisp code..." entry to blocks context menu
+* blocks: added "code..." entry to blocks context menu if "Codification support" setting is enabled
 
 ### 2024-03-26
 * threads: tweaked metaprogramming custom block attribute access for list comparison

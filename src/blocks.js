@@ -3651,6 +3651,13 @@ BlockMorph.prototype.userMenu = function () {
             'download this script\nas an XML file'
         );
     }
+    if (StageMorph.prototype.enableCodeMapping) {
+        menu.addLine();
+        menu.addItem(
+            "code...",
+            () => top.showBubble(top.toCode())
+        );
+    }
     menu.addItem(
         "Lisp code...",
         () => top.showBubble(top.toLisp(4))
@@ -4745,6 +4752,10 @@ BlockMorph.prototype.markEmptySlots = function () {
     source code that can be exported and compiled / embedded elsewhere,
     it's not part of Snap's evaluator and not needed for Snap itself
 */
+
+BlockMorph.prototype.toCode = function () {
+    return Process.prototype.reportMappedCode(this.reify());
+};
 
 BlockMorph.prototype.mapToHeader = function () {
     // open a dialog box letting the user map header code via the GUI
