@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-March-18';
+modules.blocks = '2024-March-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4462,6 +4462,12 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
 };
 
 // BlockMorph syntax analysis
+
+BlockMorph.prototype.toLISP = function () {
+    return Process.prototype.toTextSyntax(
+        this.components()
+    ).encode(0, 0);
+};
 
 BlockMorph.prototype.components = function (parameterNames = []) {
     if (this instanceof ReporterBlockMorph) {

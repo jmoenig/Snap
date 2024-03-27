@@ -73,6 +73,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-27
+* blocks, store: moved Block >> toLISP() to blocks.js
+
 ### 2024-03-26
 * threads: tweaked metaprogramming custom block attribute access for list comparison
 * updated "scriptify" reporter in the metaprogramming library
