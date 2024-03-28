@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-March-26';
+modules.threads = '2024-March-28';
 
 var ThreadManager;
 var Process;
@@ -5610,10 +5610,12 @@ Process.prototype.blockAliases = {
     dir : 'direction',
 
     // looks:
+    wear: 'doSwitchToCostume',
     say : 'bubble',
     sayFor : 'doSayFor',
     think : 'doThink',
     thinkFor : 'doThinkFor',
+    costume: 'reportGetImageAttribute',
     changeSize : 'changeScale',
     setSize : 'setScale',
     size : 'getScale',
@@ -5650,6 +5652,7 @@ Process.prototype.blockAliases = {
     'this' : 'reportEnvironment',
 
     // sensing:
+    attribute : 'reportAttributeOf',
     date : 'reportDate',
     my : 'reportGet',
     object : 'reportObject',
@@ -5709,7 +5712,7 @@ Process.prototype.blockAliases = {
     del : 'doDeleteFromList',
     ins : 'doInsertInList',
     put : 'doReplaceInList',
-    'from' : 'reportNumbers',
+    range : 'reportNumbers',
     append : 'reportConcatenatedLists',
     reshape : 'reportReshape',
     map : 'reportMap',
