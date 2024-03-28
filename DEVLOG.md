@@ -67,6 +67,7 @@
     * support for smooth animations in recursive control structures defined using metaprogramming
     * optimized FOR-loop and FOR-EACH-loop for speed
     * renamed "primitive" blocks into "extension"
+    * scroll long text inside result balloons instead of shortening it
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -79,6 +80,7 @@
 * blocks: tweaked bubble alignment for code display
 * threads: updated some block aliases
 * incremented dev version
+* blocks: scroll long text inside result balloons instead of shortening it
 
 ### 2024-03-27
 * blocks, store: moved Block >> toLISP() to blocks.js

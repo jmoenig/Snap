@@ -2408,7 +2408,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
-        wrrld = this.world() || target.world();
+        wrrld = this.world() || target.world(),
+        maxHeight,
+        scroller;
 
     async function writeClipboardText(text, ide) {
         try {
@@ -2592,12 +2594,26 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             value
         );
     } else if (isString(value)) {
-        txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
+        // shorten the string, commented out because we now scroll it
+        // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
+        txt  = value;
+        maxHeight = ide.height() / 2;
         morphToShow = new TextMorph(
             txt,
             this.fontSize
         );
 
+        if (morphToShow.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(morphToShow.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(morphToShow);
+            scroller.color = new Color(0, 0, 0, 0);
+            morphToShow = scroller;
+        }
+        
         // support exporting text / numbers directly from result bubbles:
         morphToShow.userMenu = function () {
             var menu = new MenuMorph(this);
