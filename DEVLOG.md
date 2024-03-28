@@ -78,6 +78,7 @@
 ### 2024-03-28
 * blocks: tweaked bubble alignment for code display
 * threads: updated some block aliases
+* incremented dev version
 
 ### 2024-03-27
 * blocks, store: moved Block >> toLISP() to blocks.js
