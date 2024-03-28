@@ -75,6 +75,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-03-28
+* blocks: tweaked bubble alignment for code display
+
 ### 2024-03-27
 * blocks, store: moved Block >> toLISP() to blocks.js
 * blocks: added "Lisp code..." entry to blocks context menu

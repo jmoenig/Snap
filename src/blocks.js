@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-March-27';
+modules.blocks = '2024-March-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3655,12 +3655,12 @@ BlockMorph.prototype.userMenu = function () {
         menu.addLine();
         menu.addItem(
             "code...",
-            () => top.showBubble(top.toCode())
+            () => top.showBubble(top.toCode(), null, rcvr || top.scriptTarget())
         );
     }
     menu.addItem(
         "Lisp code...",
-        () => top.showBubble(top.toLisp(4))
+        () => top.showBubble(top.toLisp(4), null, rcvr || top.scriptTarget())
     );
     if (proc) {
         if (vNames.length) {
