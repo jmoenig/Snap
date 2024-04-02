@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-March-28';
+modules.threads = '2024-April-02';
 
 var ThreadManager;
 var Process;
@@ -5584,148 +5584,14 @@ Process.prototype.variadify = function (list) {
 };
 
 Process.prototype.blockAlias = function (string) {
-    return this.blockAliases[string] || string;
+    return string === 'get' ? 'reportGetVar'
+        : Object.keys(SpriteMorph.prototype.blocks).find(key =>
+            SpriteMorph.prototype.blocks[key]?.code === string) || string;
 };
 
 Process.prototype.selectorAlias = function (string) {
-    return Object.keys(this.blockAliases).find(key =>
-        this.blockAliases[key] === string) || string;
-};
-
-Process.prototype.blockAliases = {
-    // motion:
-    move : 'forward',
-    right : 'turn',
-    left : 'turnLeft',
-    head: 'setHeading',
-    glide : 'doGlide',
-    changeX : 'changeXPosition',
-    setX : 'setXPosition',
-    changeY : 'changeYPosition',
-    setY : 'setYPosition',
-    bounce : 'bounceOffEdge',
-    pos : 'getPosition',
-    x : 'xPosition',
-    y : 'yPosition',
-    dir : 'direction',
-
-    // looks:
-    wear: 'doSwitchToCostume',
-    say : 'bubble',
-    sayFor : 'doSayFor',
-    think : 'doThink',
-    thinkFor : 'doThinkFor',
-    costume: 'reportGetImageAttribute',
-    changeSize : 'changeScale',
-    setSize : 'setScale',
-    size : 'getScale',
-
-    // sound:
-    
-    // pen:
-    stamp : 'doStamp',
-    fill: 'floodFill',
-    trails : 'reportPenTrailsAsCostume',
-
-    // control:
-    broadcast : 'doBroadcast',
-    wait : 'doWait',
-    waitUntil : 'doWaitUntil',
-    forever : 'doForever',
-    repeat : 'doRepeat',
-    until : 'doUntil',
-    'for' : 'doFor',
-    'if' : 'doIf',
-    ifElse : 'reportIfElse',
-    stop : 'doStopThis',
-    run : 'doRun',
-    call : 'evaluate',
-    report : 'doReport',
-    warp : 'doWarp',
-    tell : 'doTellTo',
-    ask : 'reportAskFor',
-    pause : 'doPauseAll',
-    pipe : 'reportPipe',
-    define: 'doDefineBlock',
-    setBlock: 'doSetBlockAttribute',
-    getBlock: 'reportBlockAttribute',
-    'this' : 'reportEnvironment',
-
-    // sensing:
-    attribute : 'reportAttributeOf',
-    date : 'reportDate',
-    my : 'reportGet',
-    object : 'reportObject',
-    url : 'reportUrl',
-
-    // operators:
-    cmd : 'reifyScript',
-    ring : 'reifyReporter',
-    pred : 'reifyPredicate',
-    '+' : 'reportVariadicSum',
-    '-' : 'reportDifference',
-    '*' : 'reportVariadicProduct',
-    '/' : 'reportQuotient',
-    round : 'reportRound',
-    fn : 'reportMonadic',
-    '^' : 'reportPower',
-    '%' : 'reportModulus',
-    mod : 'reportModulus',
-    atan2 : 'reportAtan2',
-    min : 'reportVariadicMin',
-    max : 'reportVariadicMax',
-    rand : 'reportRandom',
-    '=' : 'reportVariadicEquals',
-    '!=' : 'reportVariadicNotEquals',
-    '<' : 'reportVariadicLessThan',
-    '<=' : 'reportVariadicLessThanOrEquals',
-    '>' : 'reportVariadicGreaterThan',
-    '>=' : 'reportVariadicGreaterThanOrEquals',
-    bool : 'reportBoolean',
-    and : 'reportVariadicAnd',
-    or : 'reportVariadicOr',
-    not: 'reportNot',
-    join : 'reportJoinWords',
-    letter : 'reportLetter',
-    unicode : 'reportUnicode',
-    is : 'reportIsA',
-    identical : 'reportVariadicIsIdentical',
-    split : 'reportTextSplit',
-
-    // variables:
-    'var' : 'doDeclareVariables',
-    'get' : 'reportGetVar',
-    '+=' : 'doChangeVar',
-    'set' : 'doSetVar',
-
-    // lists:
-
-    list : 'reportNewList',
-    cons : 'reportCONS',
-    cdr: 'reportCDR',
-    data : 'reportListAttribute',
-    at : 'reportListItem',
-    contains : 'reportListContainsItem',
-    empty : 'reportListIsEmpty',
-    index : 'reportListIndex',
-    add : 'doAddToList',
-    del : 'doDeleteFromList',
-    ins : 'doInsertInList',
-    put : 'doReplaceInList',
-    range : 'reportNumbers',
-    append : 'reportConcatenatedLists',
-    reshape : 'reportReshape',
-    map : 'reportMap',
-    keep : 'reportKeep',
-    find : 'reportFindFirst',
-    combine : 'reportCombine',
-    forEach : 'doForEach',
-
-    // extensions
-
-    prim : 'doPrimitive',
-    extension : 'doApplyExtension',
-    ext: 'reportApplyExtension'
+    return string === 'reportGetVar' ? 'get'
+        : SpriteMorph.prototype.blocks[string]?.code || string;
 };
 
 // Process - replacing blocks in syntax trees with text

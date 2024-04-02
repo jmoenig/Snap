@@ -78,6 +78,7 @@
 
 ### 2024-04-02
 * byob, gui, objects, store, extensions: refactored bootstrapped primitives organization
+* threads, objects: integrated code keys into blocks dictionary
 
 ### 2024-03-28
 * blocks: tweaked bubble alignment for code display

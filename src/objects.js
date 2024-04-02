@@ -219,7 +219,9 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'control',
-            spec: 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n'
+            spec:
+                'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n',
+            code: 'zip'
         },
 
         // Motion
@@ -228,186 +230,214 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'motion',
             spec: 'move %n steps',
-            defaults: [10]
+            defaults: [10],
+            code: 'move'
         },
         turn: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'turn $clockwise %n degrees',
-            defaults: [15]
+            defaults: [15],
+            code: 'right'
         },
         turnLeft: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'turn $counterclockwise %n degrees',
-            defaults: [15]
+            defaults: [15],
+            code: 'left'
         },
         setHeading: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'point in direction %dir',
-            defaults: [90]
+            defaults: [90],
+            code: 'head'
         },
         doFaceTowards: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'point towards %dst',
-            defaults: [['mouse-pointer']]
+            defaults: [['mouse-pointer']],
+            code: 'face'
         },
         gotoXY: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'go to x: %n y: %n',
-            defaults: [0, 0]
+            defaults: [0, 0],
+            code: 'gotoXY'
         },
         doGotoObject: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'go to %dst',
-            defaults: [['random position']]
+            defaults: [['random position']],
+            code: 'goto'
         },
         doGlide: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'glide %n secs to x: %n y: %n',
-            defaults: [1, 0, 0]
+            defaults: [1, 0, 0],
+            code: 'glide'
         },
         changeXPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'change x by %n',
-            defaults: [10]
+            defaults: [10],
+            code: 'changeX'
         },
         setXPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'set x to %n',
-            defaults: [0]
+            defaults: [0],
+            code: 'setX'
         },
         changeYPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'change y by %n',
-            defaults: [10]
+            defaults: [10],
+            code: 'changeY'
         },
         setYPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'set y to %n',
-            defaults: [0]
+            defaults: [0],
+            code: 'setY'
         },
         bounceOffEdge: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'if on edge, bounce'
+            spec: 'if on edge, bounce',
+            code: 'bounce'
         },
         getPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'position'
+            spec: 'position',
+            code: 'pos'
         },
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'x position'
+            spec: 'x position',
+            code: 'x'
         },
         yPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'y position'
+            spec: 'y position',
+            code: 'y'
         },
         direction: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'direction'
+            spec: 'direction',
+            code: 'dir'
         },
 
         // Looks
         doSwitchToCostume: {
             type: 'command',
             category: 'looks',
-            spec: 'switch to costume %cst'
+            spec: 'switch to costume %cst',
+            code: 'wear'
         },
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
-            spec: 'next costume'
+            spec: 'next costume',
+            code: 'next',
         },
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
-            spec: 'costume #'
+            spec: 'costume #',
+            code: 'costumeIdx'
         },
         reportGetImageAttribute: {
             type: 'reporter',
             category: 'looks',
             spec: '%img of costume %cst',
-            defaults: [['width'], ['current']]
+            defaults: [['width'], ['current']],
+            code: 'costume'
         },
         reportNewCostume: {
             type: 'reporter',
             category: 'looks',
-            spec: 'new costume %l width %dim height %dim'
+            spec: 'new costume %l width %dim height %dim',
+            code: 'newCostume'
         },
         reportNewCostumeStretched: {
             type: 'reporter',
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
-            defaults: [['current'], 100, 50]
+            defaults: [['current'], 100, 50],
+            code: 'stretch'
         },
         reportNewCostumeSkewed: {
             type: 'reporter',
             category: 'looks',
             spec: 'skew %cst to %dir degrees %n %',
-            defaults: [['current'], 0, 50]
+            defaults: [['current'], 0, 50],
+            code: 'skew'
         },
         doSayFor: {
             type: 'command',
             category: 'looks',
             spec: 'say %s for %n secs',
-            defaults: [localize('Hello!'), 2]
+            defaults: [localize('Hello!'), 2],
+            code: 'sayFor'
         },
         bubble: {
             type: 'command',
             category: 'looks',
             spec: 'say %s',
-            defaults: [localize('Hello!')]
+            defaults: [localize('Hello!')],
+            code: 'say'
         },
         doThinkFor: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'think %s for %n secs',
-            defaults: [localize('Hmm...'), 2]
+            defaults: [localize('Hmm...'), 2],
+            code: 'thinkFor'
         },
         doThink: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'think %s',
-            defaults: [localize('Hmm...')]
+            defaults: [localize('Hmm...')],
+            code: 'think'
         },
         changeEffect: {
             type: 'command',
             category: 'looks',
             spec: 'change %eff effect by %n',
-            defaults: [['ghost'], 25]
+            defaults: [['ghost'], 25],
         },
         setEffect: {
             type: 'command',
@@ -419,7 +449,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'looks',
             spec: '%eff effect',
-            defaults: [['ghost']]
+            defaults: [['ghost']],
+            code: 'effect'
         },
         clearEffects: {
             type: 'command',
@@ -431,20 +462,23 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'change size by %n',
-            defaults: [10]
+            defaults: [10],
+            code: 'changeSize'
         },
         setScale: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'set size to %n %',
-            defaults: [100]
+            defaults: [100],
+            code: 'setSize'
         },
         getScale: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'looks',
-            spec: 'size'
+            spec: 'size',
+            code: 'size'
         },
         show: {
             type: 'command',
@@ -459,14 +493,16 @@ SpriteMorph.prototype.initBlocks = function () {
         reportShown: {
             type: 'predicate',
             category: 'looks',
-            spec: 'shown?'
+            spec: 'shown?',
+            code: 'shown'
         },
         goToLayer: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'go to %layer layer',
-            defaults: [['front']]
+            defaults: [['front']],
+            code: 'layer'
         },
         goBack: {
             only: SpriteMorph,
@@ -507,47 +543,55 @@ SpriteMorph.prototype.initBlocks = function () {
         playSound: {
             type: 'command',
             category: 'sound',
-            spec: 'play sound %snd'
+            spec: 'play sound %snd',
+            code: 'play'
         },
         doPlaySoundUntilDone: {
             type: 'command',
             category: 'sound',
-            spec: 'play sound %snd until done'
+            spec: 'play sound %snd until done',
+            code: 'playAll'
         },
         doPlaySoundAtRate: {
             type: 'command',
             category: 'sound',
             spec: 'play sound %snd at %rate Hz',
-            defaults: ['', 44100]
+            defaults: ['', 44100],
+            code: 'playAt'
         },
         doStopAllSounds: {
             type: 'command',
             category: 'sound',
-            spec: 'stop all sounds'
+            spec: 'stop all sounds',
+            code: 'stopSounds'
         },
         reportGetSoundAttribute: {
             type: 'reporter',
             category: 'sound',
             spec: '%aa of sound %snd',
-            defaults: [['duration']]
+            defaults: [['duration']],
+            code: 'sound'
         },
         reportNewSoundFromSamples: {
             type: 'reporter',
             category: 'sound',
             spec: 'new sound %l rate %rate Hz',
-            defaults: [null, 44100]
+            defaults: [null, 44100],
+            code: 'newSound'
         },
         doRest: {
             type: 'command',
             category: 'sound',
             spec: 'rest for %n beats',
-            defaults: [0.2]
+            defaults: [0.2],
+            code: 'rest'
         },
         doPlayNote: {
             type: 'command',
             category: 'sound',
             spec: 'play note %note for %n beats',
-            defaults: [60, 0.5]
+            defaults: [60, 0.5],
+            code: 'note'
         },
         doPlayFrequency: { // only in dev mode - experimental
             dev: true,
@@ -560,24 +604,28 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'set instrument to %inst',
-            defaults: [1]
+            defaults: [1],
+            code: 'instrument'
         },
         doChangeTempo: {
             type: 'command',
             category: 'sound',
             spec: 'change tempo by %n',
-            defaults: [20]
+            defaults: [20],
+            code: 'changeTempo'
         },
         doSetTempo: {
             type: 'command',
             category: 'sound',
             spec: 'set tempo to %n bpm',
-            defaults: [60]
+            defaults: [60],
+            code: 'setTempo'
         },
         getTempo: {
             type: 'reporter',
             category: 'sound',
-            spec: 'tempo'
+            spec: 'tempo',
+            code: 'tempo'
         },
         changeVolume: {
             type: 'command',
@@ -594,7 +642,8 @@ SpriteMorph.prototype.initBlocks = function () {
         getVolume: {
             type: 'reporter',
             category: 'sound',
-            spec: 'volume'
+            spec: 'volume',
+            code: 'vol'
         },
         changePan: {
             type: 'command',
@@ -611,13 +660,15 @@ SpriteMorph.prototype.initBlocks = function () {
         getPan: {
             type: 'reporter',
             category: 'sound',
-            spec: 'balance'
+            spec: 'balance',
+            code: 'pan'
         },
         playFreq: {
             type: 'command',
             category: 'sound',
             spec: 'play frequency %n Hz',
-            defaults: [440]
+            defaults: [440],
+            code: 'freq'
         },
         stopFreq: {
             type: 'command',
@@ -655,7 +706,8 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'pen',
-            spec: 'pen down?'
+            spec: 'pen down?',
+            code: 'isDown'
         },
         setColor: {
             only: SpriteMorph,
@@ -681,7 +733,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'pen',
             spec: 'pen %pen',
-            defaults: [['hue']]
+            defaults: [['hue']],
+            code: 'pen'
         },
         setBackgroundColor: {
             only: StageMorph,
@@ -708,26 +761,30 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'change pen size by %n',
-            defaults: [1]
+            defaults: [1],
+            code: 'changePenSize'
         },
         setSize: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'set pen size to %n',
-            defaults: [1]
+            defaults: [1],
+            code: 'penSize'
         },
         doStamp: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'stamp'
+            spec: 'stamp',
+            code: 'stamp'
         },
         floodFill: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'fill'
+            spec: 'fill',
+            code: 'fill'
         },
         write: {
             only: SpriteMorph,
@@ -739,22 +796,26 @@ SpriteMorph.prototype.initBlocks = function () {
         reportPenTrailsAsCostume: {
             type: 'reporter',
             category: 'pen',
-            spec: 'pen trails'
+            spec: 'pen trails',
+            code: 'trails'
         },
         reportPentrailsAsSVG: {
             type: 'reporter',
             category: 'pen',
-            spec: 'pen vectors'
+            spec: 'pen vectors',
+            code: 'svgTrails'
         },
         doPasteOn: {
             type: 'command',
             category: 'pen',
-            spec: 'paste on %spr'
+            spec: 'paste on %spr',
+            code: 'paste'
         },
         doCutFrom: {
             type: 'command',
             category: 'pen',
-            spec: 'cut from %spr'
+            spec: 'cut from %spr',
+             code: 'cut'
         },
 
         // Control
@@ -795,71 +856,84 @@ SpriteMorph.prototype.initBlocks = function () {
         doBroadcast: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg %receive'
+            spec: 'broadcast %msg %receive',
+            code: 'broadcast'
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg %receive and wait'
+            spec: 'broadcast %msg %receive and wait',
+            code: 'broadcastAll'
         },
         doWait: {
             type: 'command',
             category: 'control',
             spec: 'wait %n secs',
-            defaults: [1]
+            defaults: [1],
+            code: 'wait'
         },
         doWaitUntil: {
             type: 'command',
             category: 'control',
-            spec: 'wait until %boolUE'
+            spec: 'wait until %boolUE',
+            code: 'waitUntil'
         },
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %loop'
+            spec: 'forever %loop',
+            code: 'forever'
         },
         doRepeat: {
             type: 'command',
             category: 'control',
             spec: 'repeat %n %loop',
-            defaults: [10]
+            defaults: [10],
+            code: 'repeat'
         },
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %boolUE %loop'
+            spec: 'repeat until %boolUE %loop',
+            code: 'until'
         },
         doFor: {
             type: 'command',
             category: 'control',
             spec: 'for %upvar = %n to %n %cla',
-            defaults: ['i', 1, 10]
+            defaults: ['i', 1, 10],
+            code: 'for'
         },
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c %elseif'
+            spec: 'if %b %c %elseif',
+            code: 'if'
         },
         doIfElse: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c else %c'
+            spec: 'if %b %c else %c',
+            code: 'ifElse'
         },
         reportIfElse: {
             type: 'reporter',
             category: 'control',
-            spec: 'if %b then %anyUE else %anyUE'
+            spec: 'if %b then %anyUE else %anyUE',
+            code: 'ifThen'
         },
         doStopThis: {
             type: 'command',
             category: 'control',
             spec: 'stop %stopChoices',
-            defaults: [['all']]
+            defaults: [['all']],
+            code: 'stop'
         },
         doRun: {
             type: 'command',
             category: 'control',
-            spec: 'run %cmdRing %inputs'
+            spec: 'run %cmdRing %inputs',
+            code: 'run'
         },
         fork: {
             type: 'command',
@@ -869,12 +943,14 @@ SpriteMorph.prototype.initBlocks = function () {
         evaluate: {
             type: 'reporter',
             category: 'control',
-            spec: 'call %repRing %inputs'
+            spec: 'call %repRing %inputs',
+            code: 'call'
         },
         doReport: {
             type: 'command',
             category: 'control',
-            spec: 'report %s'
+            spec: 'report %s',
+            code: 'report'
         },
         doCallCC: {
             // deprecated - superseded by reportEnviornment - kept for legacy
@@ -893,7 +969,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doWarp: {
             type: 'command',
             category: 'other',
-            spec: 'warp %c'
+            spec: 'warp %c',
+            code: 'warp'
         },
 
         // Message passing
@@ -901,12 +978,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             // spec: 'tell %spr to %cl' // I liked this version better, -Jens
-            spec: 'tell %spr to %cmdRing %inputs'
+            spec: 'tell %spr to %cmdRing %inputs',
+            code: 'tell'
         },
         reportAskFor: {
             type: 'reporter',
             category: 'control',
-            spec: 'ask %spr for %repRing %inputs'
+            spec: 'ask %spr for %repRing %inputs',
+            code: 'ask'
         },
 
         // Cloning
@@ -919,7 +998,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'create a clone of %cln',
-            defaults: [['myself']]
+            defaults: [['myself']],
+            code: 'clone'
         },
         newClone: {
             type: 'reporter',
@@ -946,37 +1026,43 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'define %upvar %s %repRing',
-            defaults: [['block']]
+            defaults: [['block']],
+            code: 'define'
         },
         doSetBlockAttribute: {
             type: 'command',
             category: 'control',
             spec: 'set %byob of block %repRing to %s',
-            defaults: [['label']]
+            defaults: [['label']],
+            code: 'setBlock'
         },
         doDeleteBlock: {
             type: 'command',
             category: 'control',
-            spec: 'delete block %repRing'
+            spec: 'delete block %repRing',
+            code: 'deleteBlock'
         },
         reportBlockAttribute: {
             type: 'reporter',
             category: 'control',
             spec: '%block of block %repRing',
-            defaults: [['definition']]
+            defaults: [['definition']],
+            code: 'block'
         },
         reportEnvironment: {
             type: 'reporter',
             category: 'control',
             spec: 'this %env',
-            defaults: [['script']]
+            defaults: [['script']],
+            code: 'this'
         },
 
         // Debugging - pausing
         doPauseAll: {
             type: 'command',
             category: 'control',
-            spec: 'pause all $pause'
+            spec: 'pause all $pause',
+            code: 'pause'
         },
 
         // Scenes
@@ -984,14 +1070,16 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'switch to scene %scn %send',
-            defaults: [['next']]
+            defaults: [['next']],
+            code: 'scene'
         },
 
         // Pipe
         reportPipe: {
             type: 'reporter',
             category: 'control',
-            spec: 'pipe %s $arrowRight %mult%repRing'
+            spec: 'pipe %s $arrowRight %mult%repRing',
+            code: 'pipe'
         },
 
         // Sensing
@@ -1000,19 +1088,22 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'touching %col ?',
-            defaults: [['mouse-pointer']]
+            defaults: [['mouse-pointer']],
+            code: 'touches'
         },
         reportTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'touching %clr ?'
+            spec: 'touching %clr ?',
+            code: 'touchesColor'
         },
         reportColorIsTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'color %clr is touching %clr ?'
+            spec: 'color %clr is touching %clr ?',
+            code: 'colorTouches'
         },
         reportAspect: {
             type: 'reporter',
@@ -1064,28 +1155,33 @@ SpriteMorph.prototype.initBlocks = function () {
         reportMousePosition: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'mouse position'
+            spec: 'mouse position',
+            code: 'mouse'
         },
         reportMouseX: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'mouse x'
+            spec: 'mouse x',
+            code: 'mouseX'
         },
         reportMouseY: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'mouse y'
+            spec: 'mouse y',
+            code: 'mouseY'
         },
         reportMouseDown: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'mouse down?'
+            spec: 'mouse down?',
+            code: 'mouseDown'
         },
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
             spec: 'key %key pressed?',
-            defaults: [['space']]
+            defaults: [['space']],
+            code: 'key'
         },
         reportRelationTo: {
             only: SpriteMorph,
@@ -1097,7 +1193,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doResetTimer: {
             type: 'command',
             category: 'sensing',
-            spec: 'reset timer'
+            spec: 'reset timer',
+            code: 'resetTimer'
         },
         reportTimer: { // retained for legacy compatibility
             dev: true,
@@ -1108,25 +1205,29 @@ SpriteMorph.prototype.initBlocks = function () {
         getTimer: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'timer'
+            spec: 'timer',
+            code: 'timer'
         },
         reportAttributeOf: {
             type: 'reporter',
             category: 'sensing',
             spec: '%att of %spr',
-            defaults: [['costume #']]
+            defaults: [['costume #']],
+            code: 'attribute'
         },
         reportObject: {
             type: 'reporter',
             category: 'sensing',
             spec: 'object %self',
-            defaults: [['myself']]
+            defaults: [['myself']],
+            code: 'object'
         },
         reportURL: {
             type: 'reporter',
             category: 'sensing',
             spec: 'url %s',
-            defaults: ['snap.berkeley.edu']
+            defaults: ['snap.berkeley.edu'],
+            code: 'url'
         },
         doSetGlobalFlag: {
             type: 'command',
@@ -1138,25 +1239,29 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'is %setting on?',
-            defaults: [['turbo mode']]
+            defaults: [['turbo mode']],
+            code: 'setting'
         },
         reportDate: {
             type: 'reporter',
             category: 'sensing',
             spec: 'current %dates',
-            defaults: [['date']]
+            defaults: [['date']],
+            code: 'current'
         },
         reportGet: {
             type: 'reporter',
             category: 'sensing',
             spec: 'my %get',
-            defaults: [['neighbors']]
+            defaults: [['neighbors']],
+            code: 'my'
         },
         reportAudio: {
             type: 'reporter',
             category: 'sensing',
             spec: 'microphone %audio',
-            defaults: [['volume']]
+            defaults: [['volume']],
+            code: 'audio'
         },
 
         // Operators
@@ -1164,140 +1269,165 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'ring',
             category: 'other',
             spec: '%rc %ringparms',
-            alias: 'command ring lambda'
+            alias: 'command ring lambda',
+            code: 'cmd'
         },
         reifyReporter: {
             type: 'ring',
             category: 'other',
             spec: '%rr %ringparms',
-            alias: 'reporter ring lambda'
+            alias: 'reporter ring lambda',
+            code: 'ring'
         },
         reifyPredicate: {
             type: 'ring',
             category: 'other',
             spec: '%rp %ringparms',
-            alias: 'predicate ring lambda'
+            alias: 'predicate ring lambda',
+            code: 'pred'
         },
         reportVariadicSum: {
             type: 'reporter',
             category: 'operators',
             spec: '%sum',
-            alias: '+'
+            alias: '+',
+            code: '+'
         },
         reportDifference: {
             type: 'reporter',
             category: 'operators',
             spec: '%n \u2212 %n',
-            alias: '-'
+            alias: '-',
+            code: '-'
         },
         reportVariadicProduct: {
             type: 'reporter',
             category: 'operators',
             spec: '%product',
-            alias: '*'
+            alias: '*',
+            code: '*'
         },
         reportQuotient: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n / %n' // '%n \u00F7 %n'
+            spec: '%n / %n', // '%n \u00F7 %n'
+            code: '/'
         },
         reportRound: {
             type: 'reporter',
             category: 'operators',
-            spec: 'round %n'
+            spec: 'round %n',
+            code: 'round'
         },
         reportMonadic: {
             type: 'reporter',
             category: 'operators',
             spec: '%fun of %n',
-            defaults: [['sqrt'], 10]
+            defaults: [['sqrt'], 10],
+            code: 'fn'
         },
         reportPower: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n ^ %n'
+            spec: '%n ^ %n',
+            code: '^'
         },
         reportModulus: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n mod %n'
+            spec: '%n mod %n',
+            code: 'mod'
         },
         reportAtan2: {
             type: 'reporter',
             category: 'operators',
-            spec: 'atan2 %n ÷ %n'
+            spec: 'atan2 %n ÷ %n',
+            code: 'atan2'
         },
         reportVariadicMin: {
             type: 'reporter',
             category: 'operators',
             spec: '%min',
-            alias: 'min'
+            alias: 'min',
+            code: 'min'
         },
         reportVariadicMax: {
             type: 'reporter',
             category: 'operators',
             spec: '%max',
-            alias: 'max'
+            alias: 'max',
+            code: 'max'
         },
         reportRandom: {
             type: 'reporter',
             category: 'operators',
             spec: 'pick random %n to %n',
-            defaults: [1, 10]
+            defaults: [1, 10],
+            code: 'rand'
         },
         reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all='
+            spec: '%all=',
+            code: '='
         },
         reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all!='
+            spec: '%all!=',
+            code: '!='
         },
         reportVariadicLessThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all<'
+            spec: '%all<',
+            code: '<'
         },
         reportVariadicLessThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all<='
+            spec: '%all<=',
+            code: '<='
         },
         reportVariadicGreaterThan: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all>'
+            spec: '%all>',
+            code: '>'
         },
         reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
             category: 'operators',
-            spec: '%all>='
+            spec: '%all>=',
+            code: '>='
         },
         reportVariadicAnd: {
             type: 'predicate',
             category: 'operators',
             spec: '%all',
-            alias: '&'
+            alias: '&',
+            code: 'and'
         },
         reportVariadicOr: {
             type: 'predicate',
             category: 'operators',
             spec: '%any',
-            alias: '|'
+            alias: '|',
+            code: 'or'
         },
         reportNot: {
             type: 'predicate',
             category: 'operators',
-            spec: 'not %b'
+            spec: 'not %b',
+            code: 'not'
         },
         reportBoolean: {
             type: 'predicate',
             category: 'operators',
             spec: '%bool',
             defaults: [true],
-            alias: 'true boolean'
+            alias: 'true boolean',
+            code: 'bool'
         },
         reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
@@ -1310,13 +1440,15 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: 'join %words',
-            defaults: [localize('hello') + ' ', localize('world')]
+            defaults: [localize('hello') + ' ', localize('world')],
+            code: 'join'
         },
         reportLetter: {
             type: 'reporter',
             category: 'operators',
             spec: 'letter %ix of %s',
-            defaults: [1, localize('world')]
+            defaults: [1, localize('world')],
+            code: 'letter'
         },
         reportStringSize: { // deprecated as of v9
             type: 'reporter',
@@ -1328,41 +1460,48 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'operators',
             spec: '%ta of text %s',
-            defaults: [['length'], localize('world')]
+            defaults: [['length'], localize('world')],
+            code: 'text'
         },
         reportUnicode: {
             type: 'reporter',
             category: 'operators',
             spec: 'unicode of %s',
-            defaults: ['a']
+            defaults: ['a'],
+            code: 'unicode'
         },
         reportUnicodeAsLetter: {
             type: 'reporter',
             category: 'operators',
             spec: 'unicode %n as letter',
-            defaults: [65]
+            defaults: [65],
+            code: 'fromUnicode'
         },
         reportIsA: {
             type: 'predicate',
             category: 'operators',
             spec: 'is %s a %typ ?',
-            defaults: [5, ['number']]
+            defaults: [5, ['number']],
+            code: 'is'
         },
         reportVariadicIsIdentical: {
             type: 'predicate',
             category: 'operators',
-            spec: 'is %all== ?'
+            spec: 'is %all== ?',
+            code: 'identical'
         },
         reportTextSplit: {
             type: 'reporter',
             category: 'operators',
             spec: 'split %s by %delim',
-            defaults: [localize('hello') + ' ' + localize('world'), " "]
+            defaults: [localize('hello') + ' ' + localize('world'), " "],
+            code: 'split'
         },
         reportJSFunction: {
             type: 'reporter',
             category: 'operators',
-            spec: 'JavaScript function ( %mult%s ) { %code }'
+            spec: 'JavaScript function ( %mult%s ) { %code }',
+            code: 'js'
         },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
@@ -1391,58 +1530,68 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'variables',
             spec: 'set %var to %s',
-            defaults: [null, 0]
+            defaults: [null, 0],
+            code: 'set'
         },
         doChangeVar: {
             type: 'command',
             category: 'variables',
             spec: 'change %var by %n',
-            defaults: [null, 1]
+            defaults: [null, 1],
+            code: '+='
         },
         doShowVar: {
             type: 'command',
             category: 'variables',
-            spec: 'show variable %var'
+            spec: 'show variable %var',
+            code: 'showVar'
         },
         doHideVar: {
             type: 'command',
             category: 'variables',
-            spec: 'hide variable %var'
+            spec: 'hide variable %var',
+            code: 'hideVar'
         },
         doDeclareVariables: {
             type: 'command',
             category: 'other',
-            spec: 'script variables %scriptVars'
+            spec: 'script variables %scriptVars',
+            code: 'var'
         },
 
         // inheritance
         doDeleteAttr: {
             type: 'command',
             category: 'variables',
-            spec: 'inherit %shd'
+            spec: 'inherit %shd',
+            code: 'inherit'
         },
 
         // Lists
         reportNewList: {
             type: 'reporter',
             category: 'lists',
-            spec: 'list %exp'
+            spec: 'list %exp',
+            code: 'list'
         },
         reportCONS: {
             type: 'reporter',
             category: 'lists',
-            spec: '%s in front of %l'
+            spec: '%s in front of %l',
+            code: 'cons'
         },
         reportListItem: {
             type: 'reporter',
             category: 'lists',
             spec: 'item %idx of %l',
-            defaults: [1]
+            defaults: [1],
+            code: 'item'
         },
         reportCDR: {
             type: 'reporter',
             category: 'lists',
-            spec: 'all but first of %l'
+            spec: 'all but first of %l',
+            code: 'cdr'
         },
         reportListLength: { // deprecated as of v6.6
             dev: true,
@@ -1454,48 +1603,56 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: '%la of %l',
-            defaults: [['length']]
+            defaults: [['length']],
+            code: 'data'
         },
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
             spec: '%l contains %s',
-            defaults: [null, localize('thing')]
+            defaults: [null, localize('thing')],
+            code: 'contains'
         },
         reportListIsEmpty: {
             type: 'predicate',
             category: 'lists',
-            spec: 'is %l empty?'
+            spec: 'is %l empty?',
+            code: 'empty'
         },
         reportListIndex: {
             type: 'reporter',
             category: 'lists',
             spec: 'index of %s in %l',
-            defaults: [localize('thing')]
+            defaults: [localize('thing')],
+            code: 'idx'
         },
         doAddToList: {
             type: 'command',
             category: 'lists',
             spec: 'add %s to %l',
-            defaults: [localize('thing')]
+            defaults: [localize('thing')],
+            code: 'add'
         },
         doDeleteFromList: {
             type: 'command',
             category: 'lists',
             spec: 'delete %ida of %l',
-            defaults: [1]
+            defaults: [1],
+            code: 'del'
         },
         doInsertInList: {
             type: 'command',
             category: 'lists',
             spec: 'insert %s at %idx of %l',
-            defaults: [localize('thing'), 1]
+            defaults: [localize('thing'), 1],
+            code: 'ins'
         },
         doReplaceInList: {
             type: 'command',
             category: 'lists',
             spec: 'replace item %idx of %l with %s',
-            defaults: [1, null, localize('thing')]
+            defaults: [1, null, localize('thing')],
+            code: 'put'
         },
 
         // numbers - (arrayed when hyper-blocks is on, otherwise linked)
@@ -1503,7 +1660,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'numbers from %n to %n',
-            defaults: [1, 10]
+            defaults: [1, 10],
+            code: 'range'
         },
     /*
         reportListCombination: { // currently not in use
@@ -1516,12 +1674,14 @@ SpriteMorph.prototype.initBlocks = function () {
         reportConcatenatedLists: {
             type: 'reporter',
             category: 'lists',
-            spec: 'append %lists'
+            spec: 'append %lists',
+            code: 'append'
         },
         reportCrossproduct: {
             type: 'reporter',
             category: 'lists',
-            spec: 'combinations %lists'
+            spec: 'combinations %lists',
+            code: 'combinations'
         },
         reportTranspose: { // deprecated
             type: 'reporter',
@@ -1532,7 +1692,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'reshape %s to %nums',
-            defaults: [null, [4, 3]]
+            defaults: [null, [4, 3]],
+            code: 'reshape'
         },
     /*
         reportSlice: { // currently not in use
@@ -1547,7 +1708,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportMap: {
             type: 'reporter',
             category: 'lists',
-            spec: 'map %repRing over %l'
+            spec: 'map %repRing over %l',
+            code: 'map'
         },
         reportAtomicMap: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1558,7 +1720,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportKeep: {
             type: 'reporter',
             category: 'lists',
-            spec: 'keep items %predRing from %l'
+            spec: 'keep items %predRing from %l',
+            code: 'keep'
         },
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1569,7 +1732,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportFindFirst: {
             type: 'reporter',
             category: 'lists',
-            spec: 'find first item %predRing in %l'
+            spec: 'find first item %predRing in %l',
+            code: 'find'
         },
         reportAtomicFindFirst: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1580,7 +1744,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportCombine: {
             type: 'reporter',
             category: 'lists',
-            spec: 'combine %l using %repRing'
+            spec: 'combine %l using %repRing',
+            code: 'combine'
         },
         reportAtomicCombine: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1592,7 +1757,8 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'lists',
             spec: 'for each %upvar in %l %cla',
-            defaults: [localize('item')]
+            defaults: [localize('item')],
+            code: 'forEach'
         },
 
         // Tables - experimental
@@ -1632,17 +1798,20 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'other',
             spec: '%bool primitive %prim',
-            defaults: [true]
+            defaults: [true],
+            code: 'prim'
         },
         doApplyExtension: {
             type: 'command',
             category: 'other',
-            spec: 'extension %ext %mult%s'
+            spec: 'extension %ext %mult%s',
+            code: 'extension'
         },
         reportApplyExtension: {
             type: 'reporter',
             category: 'other',
-            spec: 'extension %ext %mult%s'
+            spec: 'extension %ext %mult%s',
+            code: 'ext'
         },
 
         // Video motion
@@ -1650,13 +1819,15 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set video transparency to %n',
-            defaults: [50]
+            defaults: [50],
+            code: 'setVideoTransparency'
         },
         reportVideo: {
             type: 'reporter',
             category: 'sensing',
             spec: 'video %vid on %self',
-            defaults: [['motion'], ['myself']]
+            defaults: [['motion'], ['myself']],
+            code: 'video'
         }
     };
 };
