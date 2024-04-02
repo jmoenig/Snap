@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-February-19';
+modules.byob = '2024-April-02';
 
 // Declarations
 
@@ -1093,7 +1093,7 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
     var rcvr = actor || this.receiver,
         stage, ide, idx;
     if (this.isGlobal && this.selector) {
-        SpriteMorph.prototype.blocks[this.selector] = this;
+        SpriteMorph.prototype.blocks[this.selector].definition = this;
         if (rcvr) {
             stage = rcvr.parentThatIsA(StageMorph);
             idx = stage.globalBlocks.indexOf(this);
@@ -1119,12 +1119,9 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
 
 CustomBlockDefinition.prototype.unBootstrap = function (actor) {
     var rcvr = actor || this.receiver,
-        stage, ide, dict;
+        stage, ide;
     if (this.isBootstrapped()) {
-        dict = SpriteMorph.prototype.blocks;
-        SpriteMorph.prototype.initBlocks();
-        dict[this.selector] = SpriteMorph.prototype.blocks[this.selector];
-        SpriteMorph.prototype.blocks = dict;
+        delete SpriteMorph.prototype.blocks[this.selector].definition;
         if (rcvr) {
             stage = rcvr.parentThatIsA(StageMorph);
             stage.globalBlocks.push(this);
@@ -1147,7 +1144,7 @@ CustomBlockDefinition.prototype.unBootstrap = function (actor) {
 
 CustomBlockDefinition.prototype.isBootstrapped = function () {
     return this.isGlobal && this.selector &&
-        SpriteMorph.prototype.blocks[this.selector] === this;
+        SpriteMorph.prototype.blocks[this.selector].definition === this;
 };
 
 CustomBlockDefinition.prototype.isQuasiPrimitive = function () {

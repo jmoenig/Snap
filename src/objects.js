@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-February-21';
+modules.objects = '2024-April-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1722,7 +1722,7 @@ SpriteMorph.prototype.customizeBlocks = function () {
             def.isGlobal = true;
             def.type = record.type;
             def.category = record.category;
-            SpriteMorph.prototype.blocks[key] = def;
+            SpriteMorph.prototype.blocks[key].definition = def;
         }
     });
 };
@@ -2645,11 +2645,11 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     migration = this.blockMigrations[selector];
     info = this.blocks[migration ? migration.selector : selector];
     if (!info) {return null; }
-    if (info instanceof CustomBlockDefinition) {
+    if (info.definition instanceof CustomBlockDefinition) {
         // overload primitive with global custom block
-        block = info.blockInstance();
+        block = info.definition.blockInstance();
         if (setDefaults) {
-            block.refreshDefaults(info);
+            block.refreshDefaults(info.definition);
         }
     } else {
         block = info.type === 'command' ? new CommandBlockMorph()

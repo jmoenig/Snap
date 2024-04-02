@@ -34,7 +34,7 @@ SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-February-13';
+modules.extensions = '2024-April-02';
 
 // Global stuff
 
@@ -244,8 +244,9 @@ SnapExtensions.primitives.set(
             block.definition.isGlobal &&
             block.definition.selector &&
             !block.definition.isBootstrapped() &&
-            SpriteMorph.prototype.blocks[block.definition.selector] !==
-                undefined
+            SpriteMorph.prototype.blocks[
+                block.definition.selector
+            ].definition !== undefined
         ) {
             block.definition.bootstrap(proc.blockReceiver());
         }

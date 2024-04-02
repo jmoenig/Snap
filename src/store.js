@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-March-27';
+modules.store = '2024-April-02';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1130,7 +1130,7 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         if (child.tag !== 'block-definition') {
             return;
         }
-        definition = SpriteMorph.prototype.blocks[sel];
+        definition = SpriteMorph.prototype.blocks[sel].definition;
         if (!(definition instanceof CustomBlockDefinition)) {
             console.log('unable to overload primitive "' + sel + '"');
             return;

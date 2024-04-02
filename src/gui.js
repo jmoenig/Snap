@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-March-28';
+modules.gui = '2024-April-02';
 
 // Declarations
 
@@ -4370,14 +4370,16 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addLine();
     addPreference(
         'Blocks all the way',
-        () => this.userCustomizePalette(SpriteMorph.prototype.blocks.forward
-            instanceof CustomBlockDefinition ? nop
+        () => this.userCustomizePalette(
+            SpriteMorph.prototype.blocks.forward.definition
+                instanceof CustomBlockDefinition ? nop
             : () => {
                 SpriteMorph.prototype.customizeBlocks();
                 this.bootstrapCustomizedPrimitives();
             }
         ),
-        SpriteMorph.prototype.blocks.forward instanceof CustomBlockDefinition,
+        SpriteMorph.prototype.blocks.forward.definition instanceof
+            CustomBlockDefinition,
         'uncheck to disable editing primitives\n' +
             'in the palette as custom blocks',
         'check to edit primitives\nin the palette as custom blocks'

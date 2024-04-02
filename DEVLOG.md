@@ -76,6 +76,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-04-02
+* byob, gui, objects, store, extensions: refactored bootstrapped primitives organization
+
 ### 2024-03-28
 * blocks: tweaked bubble alignment for code display
 * threads: updated some block aliases
