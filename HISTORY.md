@@ -2,6 +2,231 @@
 
 ## in development:
 
+## 9.2.13:
+    * fixed "my solutions" reporter for puzzle scripts without comments
+
+2024-03-24
+* threaes: fixed "my solutions" reporter for puzzle scripts without comments
+* prepared v9.2.13 patch
+
+## 9.2.12:
+    * fixed right-click deletion of reporters embedded in variadic slots
+
+2024-03-18
+* blocks: fixed right-click deletion of reporters embedded in variadic slots
+* prepared v9.2.12 patch
+
+## 9.2.11:
+    * fixed #3329
+
+2024-03-16
+* blocks: fixed #3329
+* prepared v9.2.11 patch
+
+## 9.2.10:
+    * fixed #3322
+
+2024-03-01
+* morphic: fixed #3322
+* prepared v9.2.10 patch
+
+## 9.2.9:
+* **New Features:**
+    * new "preserveTitle" API configuration, thanks, Bernat!
+    * new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+    * new "hideSettings" API configuration switch, hides / shows the project menu button in the tool bar
+* **Notable Fixes:**
+    * hide the cloud menu button when the "noCloud" API configuration is switched on
+    * hide the project menu button when the "noImports" API configuration is switched on
+
+2024-02-23
+* gui: make sure to hide the cloud menu button when "noCloud" API configuration is switched on
+* gui: hide the project menu when "noImports" API configuration is switched on
+* new: new "hideProjects" API configuration switch, hides / shows the project menu button in the tool bar
+* new: new "hideSettings" API configuration switch, hides / shows the settings menu button in the tool bar
+* prepared v9.2.9 patch
+
+2024-02-22
+* new dev version for v9.2.9
+
+## 9.2.8:
+* **Notable Fixes:**
+    * fixed a codification bug for strings beginning with a number, thanks, @schanzer, for the report!
+
+2024-02-20
+* blocks: fixed a codification bug for strings beginning with a number, thanks, Emmanuel, for the report!
+* prepared v9.2.8 patch
+
+## 9.2.7:
+* **New Features:**
+    * new "Lirin" costume series, thanks, Meghan and Brian!
+    * new showScriptBalloonAt() and closePopUps() API methods
+    * new flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods
+* **Documentation Updates:**
+    * extended API documentation for flashing block outlines and displaying annotations in speech balloons
+
+2024-02-20
+* new dev version for v9.2.7
+* added new Lirin costumes, thanks, Brian and Meghan!
+* api: added showScriptBalloonAt() and closePopUps() API methods
+* api: added flashSpriteScriptOutlineAt() and unflashSpriteScriptsOutline() API methods 
+* prepared v9.2.7 patch
+
+## 9.2.6:
+* **Notable Changes:**
+    * allow-listed birdbrain tech for extensions
+
+2024-02-13
+* extensions: allow-listed birdbrain tech for extensions
+* prepared v9.2.6 patch
+
+## 9.2.5:
+* **New Features:**
+    * api: added resetUnsavedChanges(), thanks, Bernat!
+* **Notable Fixes:**
+    * api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* **Documentation Updates:**
+    * extended API documentation for resetting the unsaved changes flag
+* **Translation Updates:**
+    * Dutch, thanks, Jule Rapp!
+
+2024-02-12
+* new dev version for v9.2.5
+* Dutch translation update, thanks, Jule!
+* api: resetUnsavedChanged(), thanks, Bernat!
+* api: fixed noExitWarning setting for sites that have their own mechanism, thanks, Bernat!
+* prepared v9.2.5 patch
+
+## 9.2.4:
+* **New Features:**
+    * api: added flashSpriteScriptAt(idx) api for highlighting a single block at a finer granularity
+* **Documentation Updates:**
+    * extended API documentation for highlighting a single block
+
+2024-01-22
+* api, blocks: new flashSpriteScriptAt() api
+* extended API documentation for highlighting a single block
+* prepared v9.2.4 patch
+
+2024-01-22
+* new dev version for v9.2.4
+
+## 9.2.3:
+* **New Features:**
+    * api: added optional color-csv parameter to flashScripts() api
+* **Notable Fixes:**
+    * fixed a bug in the MQTT library, thanks, Simon!
+* **Documentation Updates:**
+    * extended API documentation for optional scripts-flashing color
+
+2024-01-22
+* api: added optional color-csv parameter to flashScripts() api
+* updated MQTT library, thanks, Simon!
+* prepared v9.2.3 patch
+
+2024-01-21
+* new dev version for v9.2.3
+
+## 9.2.2:
+* **New Features:**
+    * new "dot" symbol (for "dot-product" block labels on machines where the unicode char is not available)
+* **Notable Changes:**
+    * the variadic SUM reporter now also accepts a scalar (single number) as input (and returns it as identity)
+    * changed the filter names in the pixels library to lowercase
+* **Notable Fixes:**
+    * fixed #3296 (make sure to stop video when resizing the stage)
+* **Translation Updates:**
+    * Ukrainian, thanks, Serhiy Kryzhanovsky!
+
+2024-01-19
+* gui: fixed #3296 (make sure to stop video when resizing the stage)
+* pixels library: Changed the filter effect names to lowercase
+* Ukrainian translation update, thanks, Serhiy Kryzhanovsky!
+* prepared v9.2.2 patch
+* fixed a syntax glitch in the Ukrainian translation update
+
+2024-01-18
+* new dev version for v9.2.2
+* symbols: added "dot" symbol
+* threads: also accept a scalar (single number) in the variadic SUM reporter (returns its identity)
+
+## 9.2.1:
+* **New Features:**
+    * experimental "dta_zip(list)" extension primitive
+* **Notable Fixes:**
+    * fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+    * fixed a typecasting glitch when creating a stage menu with numerical title
+
+2024-01-15
+* new dev version for v9.2.1
+* threads: fixed a raycasting glitch, thanks, Dariusz, for yet another brilliant catch!
+* objects: fixed a typecasting glitch when creating a stage menu with numerical title
+* extensions: added experimental "dta_zip(list)" extension primitive
+* prepared v9.2.1 patch
+
+## 9.2.0:
+* **New Features:**
+    * (better) matrix-kernel convolution support, automatic zero-padding
+    * new graphic filter effects tools in the pixels library
+    * support for THIS "inputs" selector inside custom block definitions
+* **Notable Changes:**
+    * hyperized ITEM OF
+    * tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+    * the SWITCH TO COSTUME command now accepts > 4 column pixel matrices both with or without color channels
+    * the NEW COSTUME reporter now accepts > 4 column pixel matrices both with or without color channels if its dimension inputs are left blank or zero
+    * playing back a list of numbers as sound now uses the host device's sample rate once the microphone has been initialized, otherwise 44.1 kHz (as before)
+    * MQTT library update, thanks, Simon!
+* **Notable Fixes:**
+    * fixed a RESHAPE edge case when passing in a single zero dimension
+    * made sure ITEM OF returns data matching the shape specified by the query struct (automatic zero-padding)
+    * fixed speech balloons inside ASK menus
+    * added safeguard against accidentally querying too many list dimensions (e.g. when forgetting to transpose a convolution)
+
+2024-01-11
+* prepared v9.2.0 minor release
+
+2024-01-10
+* lists, threads, objects: optimized internal matrix ops by speeding up shape & rank determination assuming well-formed tables
+* lists: some more minor optimizations for item() and columns()
+* threads: added support for THIS "inputs" selector inside custom block definitions 
+
+2024-01-09
+* pixels library: added Sobel edge-detection variants for left/right/top/bottom
+* threads: use the microphone's sample rate for playing back lists of samples once it has been used, otherwise 44.1 kHz
+* pixels library: added 5x5 Gaussian blur filter
+
+2024-01-08
+* threads: tweaked hyperDyadic() to allow explicit dimension matching
+* pixels library: added graphic filter effects (matrix-kernel convolutions)
+* incremented dev version to v9.2.0
+* lists: added safeguard against accidentally querying too many dimensions 
+* threads: refactored reportDimensions()
+* threads: accept > 4 column pixel matrices in the NEW COSTUME reporter leaving the dimension inputs blank or zero
+* objects: accept > 4 columns pixels matrices as costumes in the SWITCH TO COSTUME reporter
+
+2024-01-05
+* objects: fixed speech balloons inside ASK menus
+
+2024-01-03
+* new dev version for v9.1.2
+* lists: fixed a RESHAPE edge case when passing in a single zero dimension
+* lists: made sure ITEM OF returns data matching the shape specified by the query struct
+* lists: hyperized ITEM OF
+* threads: refactored reportRank()
+* threads: tweaked hyperDyadic() to zip matching atoms based on comparing their dimensions backwards (as in NumPy)
+* threads: refactored hyperizing mechanism for coordinates
+
+## 9.1.1:
+* **Notable Fixes:**
+    * fixed using #open: to load a library from a url, thanks, Bernat!
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+2023-12-12
+* gui: fixed using #open: to load a library from a url, thanks, Bernat!
+* Catalan translation update, thanks, Joan!
+* prepared v9.1.1 patch
+
 ## 9.1.0:
 * **New Features:**
     * new 'text' list conversion selector, recursively joins all text and number leaf elements with spaces in between, filtering out and ignoring whitespace

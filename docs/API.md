@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, July 17, 2023
+Jens Mönig, Bernat Romagosa, February 23, 2024
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -44,6 +44,7 @@ Currently the API consists of the following methods:
 * `IDE_Morph.prototype.getProjectXML()`
 * `IDE_Morph.prototype.loadProjectXML()`
 * `IDE_Morph.prototype.unsavedChanges()`
+* `IDE_Morph.prototype.resetUnsavedChanges()`
 
 #### Synchronize Scripts
 
@@ -53,7 +54,15 @@ Currently the API consists of the following methods:
 #### Highlight Blocks
 
 * `IDE_Morph.prototype.flashSpriteScripts()`
-* `IDE_Morph.prototype.unflashSpriteScripts`
+* `IDE_Morph.prototype.flashSpriteScriptAt()`
+* `IDE_Morph.prototype.unflashSpriteScripts()`
+* `IDE_Morph.prototype.flashSpriteScriptOutlineAt()`
+* `IDE_Morph.prototype.unflashSpriteScriptsOutline()`
+
+#### Display Speech Balloons next to Blocks
+
+* `IDE_Morph.prototype.showScriptBalloonAt()`
+* `IDE_Morph.prototype.closePopUps()`
 
 #### Set the Language
 
@@ -118,15 +127,20 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |mode:		|str	|currently `"presentation"` or `"edit"`|
 |hideControls:	|bool	|hide/show the tool bar|
 |hideCategories:	|bool	|hide/show the palette block category buttons|
+|hideProjects:	|bool	|hide/show the projects menu button in the tool bar|
+|hideSettings:	|bool	|hide/show the settings menu button in the tool bar|
 |noDefaultCat:	|bool	|hide/show the default built-in category buttons|
 |noSpriteEdits:	|bool	|hide/show the corral & sprite controls/menus|
 |noSprites:	|bool	|hide/show the stage, corral, sprite editor|
 |noPalette:	|bool	|hide/show the palette including the categories|
-|noImports:	|bool	|disable/allow importing files via drag&drop|
+|noImports:	|bool	|disable/allow importing files via drag&drop, hides the project menu button|
+|noCloud:	|bool	|disable/enable functionalities to access the Snap! cloud|
 |noOwnBlocks:	|bool	|hide/show "make a block" and "make a category" buttons|
 |noRingify:	|bool	|disable/enable "ringify" / "unringify" in context menus|
 |noUserSettings:	|bool	|disable/enable persistent user preferences|
 |noDevWarning:	|bool	|ignore development version incompatibility warning|
+|noExitWarning:	|bool	|do not show a browser warning when closing the IDE with unsaved changes|
+|preserveTitle:	|bool	|do not set the tab title dynamically to reflect the current Snap! version|
 |blocksZoom:	|num	|zoom factor for blocks, e.g. `1.5`|
 |blocksFade:	|num	|fading percentage for blocks, e.g. `85`|
 |zebra:	|num	|contrast percentage for nesting same-color blocks|
@@ -401,15 +415,35 @@ an XML String
 the flashSpriteScripts() method highlights the blocks of the scripts of the sprite indicated by name - or the current sprite or stage if none - that correspond to the portion of the text between the start- and end lines when using the current codification mapping
 
 #### syntax
-    flashSpriteScripts(fromLOC, toLOC[, spriteName]);
+    flashSpriteScripts(fromLOC, toLOC[, spriteName[, colorCSV]]);
 
 #### parameters
 * fromLOC
-    * integer representing the first line of mapped code to be signalled, starting at 1
+    * integer representing the first line of mapped code to be signaled, starting at 1
 * toLOC
-    * integer representing the last line of mapped code to be signalled
+    * integer representing the last line of mapped code to be signaled
 * spriteName
     * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.flashSpriteScriptAt()
+the flashSpriteScriptAt() method highlights the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    flashSpriteScriptAt(charIdx[, spriteName[, colorCSV]]);
+
+#### parameters
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
 
 #### return value
 undefined
@@ -429,6 +463,68 @@ the unflashSpriteScripts() method un-highlights the blocks of the scripts of the
 undefined
 
 
+### IDE_Morph.prototype.flashSpriteScriptOutlineAt()
+the flashSpriteScriptOutlineAt() method highlights the outline of the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    flashSpriteScriptOutlineAt(charIdx[, spriteName[, colorCSV[, border]]]);
+
+#### parameters
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+* colorCSV
+    * string with comma-separated integer values representing a color in the form "r,g,b[,a]", or none, in which case the default highlight color will be used. Color components are numbers between 0 and 255, alpha a fraction between 0 and 1.
+* border
+    * integer representing the pixel width of the outline highlight
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.unflashSpriteScriptsOutline()
+the unflashSpriteScriptsOutline() method un-highlights the blocks outlines of the scripts of the sprite indicated by name - or the current sprite or stage if none -
+
+#### syntax
+    unflashSpriteScriptsOutline([spriteName]);
+
+#### parameters
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.showScriptBalloonAt()
+the showScriptBalloonAt() method highlights the outline of the innermost block of the scripts of the sprite indicated by name - or the current sprite or stage if none - that corresponds to the position of the given character index when using the current codification mapping
+
+#### syntax
+    showScriptBalloonAt(contents, charIdx[, spriteName]);
+
+#### parameters
+* contents
+    * data to be displayed inside the speech balloon, can be a string, number, costume, morph, canvas, list, table etc. - anything first-class in Snap!
+* charIdx
+    * integer representing the character index of mapped code to be signaled, starting at 0
+* spriteName
+    * name of sprite or stage whose scripts to fetch, or none, in which case the currently edited object will be taken
+
+#### return value
+undefined
+
+
+### IDE_Morph.prototype.closePopUps()
+the closePopUps() method removes all pop-up menus and speech balloon, if any
+
+#### syntax
+    closePopUps();
+
+#### return value
+undefined
+
+
 ### IDE_Morph.prototype.unsavedChanges()
 the unsavedChanges() method returns a Boolean value indicating whether the currently edited project has been modifed since it was last saved.
 
@@ -437,6 +533,16 @@ the unsavedChanges() method returns a Boolean value indicating whether the curre
 
 #### return value
 a Boolean
+
+
+### IDE_Morph.prototype.resetUnsavedChanges()
+the resetUnsavedChanges() method resets the value returned by unsavedChanges() to false.
+
+#### syntax
+    ide.resetUnsavedChanges();
+
+#### return value
+undefined
 
 
 ### IDE_Morph.prototype.setTranslation()

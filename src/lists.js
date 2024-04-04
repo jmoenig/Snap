@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2023 by Jens Mönig and Brian Harvey
+    Copyright (C) 2024 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE*/
+Context, ZERO, WHITE, ReadStream*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-November-24';
+modules.lists = '2024-March-25';
 
 var List;
 var ListWatcherMorph;
@@ -119,7 +119,7 @@ var ListWatcherMorph;
     size()                  - count the number of all atomic elements
     rank()                  - answer the number of my dimensions
     shape()                 - answer a list of the max size for each dimension
-    width()                 - ansswer the maximum length of my columns, if any
+    width()                 - answer the maximum length of my columns, if any
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     columns()               - answer a 2D list with rows turned into columns
@@ -470,12 +470,20 @@ List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var first, select;
+    var first, rank, dim, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    if (indices.rank() === 1) {
+    rank = indices.quickRank();
+    if (rank === 1) {
         return indices.map(i => this.lookup(i));
+    }
+    if (rank > 2) {
+        return indices.map(i => this.query(i));
+    }
+    dim = indices.length();
+    if (dim > 10) {
+        throw new Error('too many dimensions (' + dim + ')?');
     }
     first = indices.at(1);
     if (first instanceof List) {
@@ -485,9 +493,12 @@ List.prototype.query = function (indices) {
     } else {
         select = new List([first]);
     }
-    return select.map(i => this.lookup(i)).map(
-            e => e instanceof List? e.query(indices.cdr()) : e
-    );
+    return select.map(i => this.lookup(i)).map(e => {
+        let rest = indices.cdr();
+        return e instanceof List ? e.query(rest)
+            : (rest.isEmpty() ? e
+                : new List([e]).query(rest));
+    });
 };
 
 List.prototype.slice = function (indices) {
@@ -649,6 +660,14 @@ List.prototype.rank = function () {
     return rank;
 };
 
+List.prototype.quickRank = function () {
+    // answer the number of my dimensions
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var item = this.at(1);
+    return item instanceof List ? item.quickRank() + 1 : 1;
+};
+
 List.prototype.shape = function () {
     // answer a list of the maximum size for each dimension
     var dim,
@@ -665,6 +684,19 @@ List.prototype.shape = function () {
         shp.add(max);
     }
     return shp;
+};
+
+List.prototype.quickShape = function () {
+    // answer a list of each dimension's size
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var shp = [],
+        item = this;
+    while (item instanceof List) {
+        shp.push(item.length());
+        item = item.at(1);
+    }
+    return new List(shp);
 };
 
 List.prototype.getDimension = function (rank = 0) {
@@ -711,7 +743,7 @@ List.prototype.flatten = function () {
 };
 
 List.prototype.transpose = function () {
-    if (this.rank() > 2) {
+    if (this.quickRank() > 2) {
         return this.strideTranspose();
     }
     return this.columns();
@@ -754,6 +786,7 @@ List.prototype.reshape = function (dimensions) {
     if (dim.isEmpty()) {return src[0]; }
 
     size = dim.itemsArray().reduce((a, b) => a * b);
+    if (size === Infinity) {return new List(); }
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {
@@ -1127,6 +1160,125 @@ List.prototype.asWords = function () {
     return this.itemsArray().map(each =>
         each instanceof List ? each.asWords() : each.toString().trim()
     ).filter(word => word.length).join(' ');
+};
+
+// List to blocks parsing and encoding, highly experimental for v10
+
+List.prototype.parse = function (string) {
+    var stream = new ReadStream(string);
+    stream.upTo('(');
+    stream.skip();
+    this.parseStream(stream);
+};
+
+List.prototype.parseStream = function (stream) {
+    var item = '',
+        quoted = false,
+        ch, child;
+    while (!stream.atEnd()) {
+        ch = stream.next();
+        if (ch === ';' && !quoted) { // comment
+            stream.upTo('\n');
+        } else if (ch === '(' && !quoted) {
+            child = new List();
+            child.parseStream(stream);
+            this.add(child);
+        } else if ((ch === ')' || !ch.trim().length) && !quoted) {
+            if (item.length) {
+                if (item === 'nil') {
+                    item = '';
+                }
+                this.add(item);
+                item = '';
+            }
+            if (ch === ')') {
+                return;
+            }
+        } else if (ch === '"') {
+            quoted = !quoted;
+            if (!quoted) {
+                if (!item.length) {
+                    this.add('');
+                } else if (item === 'nil') {
+                    this.add('nil');
+                }
+            }
+        } else if (ch === '\\') {
+            item += stream.next();
+        } else {
+            item += ch;
+        }
+    }
+};
+
+List.prototype.encode = function (level = 0, indent = 4) {
+    var str = '(',
+        len = this.length(),
+        hasBranch = false,
+        item,
+        i;
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        if (item instanceof List && !(item.at(1) instanceof List)) {
+            hasBranch = true;
+        }
+        str += this.encodeItem(item, level, indent);
+        if (i < len) {
+            str += ' ';
+        }
+    }
+    str += hasBranch && indent ?
+        '\n' + this.indentation(level, indent) + ')'
+        : ')';
+    return str;
+};
+
+List.prototype.encodeItem = function (data, level = 0, indent = 4) {
+    if (data instanceof List) {
+        if (!(data.at(1) instanceof List) && indent) {
+            return '\n' +
+                this.indentation(level + 1, indent) +
+                data.encode(level + 1, indent);
+        }
+        return data.encode(level, indent);
+    }
+    return isString(data) ? this.escape(data)
+        : (typeof data === 'boolean' ? this.encodeBoolean(data) : data);
+};
+
+List.prototype.escape = function (string) {
+    var str = '',
+        quoted = false,
+        len = string.length,
+        i, ch;
+    if (string === 't') {
+        return '\\t';
+    } else if (string === 'f') {
+        return '\\f';
+    } else if (string === 'nil') {
+        return '"nil"';
+    }
+    for (i = 0; i < len; i += 1) {
+        ch = string[i];
+        if (ch === '"') {
+            ch = '\\"';
+        } else if (!ch.trim().length || '()'.includes(ch)) {
+            if (!quoted) {
+                str = '"' + str;
+                quoted = true;
+            }
+        }
+        str += ch;
+    }
+    return quoted ? str + '"' : str || 'nil';
+};
+
+List.prototype.encodeBoolean = function (data) {
+    return (data === true) ? 't' : 'f';
+};
+
+List.prototype.indentation = function (level = 0, amount = 4) {
+    return new Array(level * amount + 1).join(' ') || '';
 };
 
 // List testing

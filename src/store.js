@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-July-27';
+modules.store = '2024-April-04';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 9.0, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 10-dev, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -718,6 +718,10 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
+    model.primitives = model.childNamed('primitives');
+    if (model.primitives) {
+        this.loadCustomizedPrimitives(stage, model.primitives);
+    }
     varModel = model.childNamed('variables');
     if (varModel) {
         varFrame = new VariableFrame();
@@ -1035,7 +1039,10 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             definition.category = 'other';
         }
         definition.type = child.attributes.type || 'command';
+        definition.selector = child.attributes.selector || null;
+        definition.primitive = child.attributes.primitive || null;
         definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.spaceAbove = (child.attributes.space === 'true') || false;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -1071,7 +1078,12 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                         options ? options.contents : undefined,
                         child.attributes.readonly === 'true',
                         child.attributes.irreplaceable === 'true',
-                        child.attributes.separator
+                        child.attributes.separator,
+                        child.attributes.collapse,
+                        child.attributes.expand,
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
                     ]
                 );
             });
@@ -1106,6 +1118,108 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     });
 };
 
+SnapSerializer.prototype.loadCustomizedPrimitives = function (
+    object,
+    element
+) {
+    // private - overload existing customized primitives
+    element.children.forEach(child => {
+        var definition, names, inputs, vars, header, code, trans, comment, i,
+            sel = child.attributes.selector;
+
+        if (child.tag !== 'block-definition') {
+            return;
+        }
+        definition = SpriteMorph.prototype.blocks[sel].definition;
+        if (!(definition instanceof CustomBlockDefinition)) {
+            console.log('unable to overload primitive "' + sel + '"');
+            return;
+        }
+        definition.spec = child.attributes.s || '';
+        definition.receiver = object || null;
+        definition.category = child.attributes.category || 'other';
+        if (!SpriteMorph.prototype.allCategories().includes(
+            definition.category
+        )) {
+            definition.category = 'other';
+        }
+        definition.type = child.attributes.type || 'command';
+        definition.selector = sel || null;
+        definition.primitive = child.attributes.primitive || null;
+        definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.isGlobal = true;
+
+        names = definition.parseSpec(definition.spec).filter(
+            str => str.charAt(0) === '%' && str.length > 1
+        ).map(str => str.substr(1));
+
+        definition.names = names;
+        inputs = child.childNamed('inputs');
+        if (inputs) {
+            i = -1;
+            inputs.children.forEach(child => {
+                var options = child.childNamed('options');
+                if (child.tag !== 'input') {
+                    return;
+                }
+                i += 1;
+                definition.declarations.set(
+                    names[i],
+                    [
+                        child.attributes.type,
+                        contains(['%b', '%boolUE'], child.attributes.type) ?
+                            (child.contents ? child.contents === 'true' : null)
+                                : child.contents,
+                        options ? options.contents : undefined,
+                        child.attributes.readonly === 'true',
+                        child.attributes.irreplaceable === 'true',
+                        child.attributes.separator,
+                        child.attributes.collapse,
+                        child.attributes.expand,
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
+                    ]
+                );
+            });
+        }
+
+        vars = child.childNamed('variables');
+        if (vars) {
+            definition.variableNames = this.loadValue(
+                vars.require('list')
+            ).asArray();
+        }
+
+        header = child.childNamed('header');
+        if (header) {
+            definition.codeHeader = header.contents;
+        }
+
+        code = child.childNamed('code');
+        if (code) {
+            definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
+        }
+
+        comment = child.childNamed('comment');
+        if (comment) {
+            definition.comment = this.loadComment(comment);
+        }
+
+        this.populateCustomBlock(
+            object,
+            definition,
+            child.childNamed('script'),
+            child.childNamed('scripts')
+        );
+    });
+};
+
 SnapSerializer.prototype.populateCustomBlocks = function (
     object,
     element,
@@ -1113,30 +1227,43 @@ SnapSerializer.prototype.populateCustomBlocks = function (
 ) {
     // private
     element.children.forEach((child, index) => {
-        var definition, script, scripts;
-        if (child.tag !== 'block-definition') {
-            return;
-        }
-        definition = isGlobal ? object.globalBlocks[index]
-                : object.customBlocks[index];
-        script = child.childNamed('script');
-        if (script) {
-            definition.body = new Context(
-                null,
-                script ? this.loadScript(script, object) : null,
-                null,
-                object
+        if (child.tag === 'block-definition') {
+            this.populateCustomBlock(
+                object,
+                isGlobal ? object.globalBlocks[index]
+                    : object.customBlocks[index],
+                child.childNamed('script'),
+                child.childNamed('scripts')
             );
-            definition.body.inputs = definition.names.slice(0);
-            definition.body.comment = definition.comment?.text();
         }
-        scripts = child.childNamed('scripts');
-        if (scripts) {
-            definition.scripts = this.loadScriptsArray(scripts, object);
-        }
-
-        delete definition.names;
     });
+};
+
+SnapSerializer.prototype.populateCustomBlock = function (
+    object,
+    definition,
+    bodyXML,
+    scriptsXML
+) {
+    // private
+    if (bodyXML) {
+        definition.body = new Context(
+            null,
+            this.loadScript(bodyXML, object),
+            null,
+            object
+        );
+        definition.body.inputs = definition.names.slice(0);
+        definition.body.comment = definition.comment?.text();
+    } else {
+        definition.body = null;
+    }
+    if (scriptsXML) {
+        definition.scripts = this.loadScriptsArray(scriptsXML, object);
+    } else {
+        definition.scripts = [];
+    }
+    delete definition.names;
 };
 
 SnapSerializer.prototype.loadScripts = function (object, scripts, model) {
@@ -2288,6 +2415,16 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
+    if (this.isGlobal && this.definition.isBootstrapped()) {
+        // treat a bootstrapped custom block as if it were a primitive
+        return serializer.format(
+            '<block s="@">%%</block>',
+            this.definition.selector,
+            serializer.store(this.inputs()),
+            this.comment ? this.comment.toXML(serializer) : ''
+        );
+    }
+
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
@@ -2323,7 +2460,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%>' +
+        '<block-definition s="@" type="@" category="@"%%%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2334,7 +2471,14 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.spec,
         this.type,
         this.category || 'other',
+        this.selector && this.isGlobal ?
+            ' selector="' + this.selector + '"'
+            : '',
+        this.primitive && this.isGlobal ?
+            ' primitive="' + this.primitive + '"'
+            : '',
         this.isHelper ? ' helper="true"' : '',
+        this.spaceAbove ? 'space="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),
@@ -2344,7 +2488,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$$$>$%</input>',
+                    '<input type="@"$$$$$$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
@@ -2353,6 +2497,31 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     this.declarations.get(decl)[5] ?
                             ' separator="' +
                                 this.declarations.get(decl)[5] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[6] ?
+                            ' collapse="' +
+                                this.declarations.get(decl)[6] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[7] ?
+                            ' expand="' +
+                                this.declarations.get(decl)[7] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[8] ?
+                            ' initial="' +
+                                this.declarations.get(decl)[8] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[9] ?
+                            ' min="' +
+                                this.declarations.get(decl)[9] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[10] ?
+                            ' max="' +
+                                this.declarations.get(decl)[10] +
                                 '"'
                             : '',
                     this.declarations.get(decl)[1],
@@ -2368,6 +2537,14 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     '<scripts>' + encodeScripts(this.scripts) + '</scripts>'
                         : ''
     );
+};
+
+CustomBlockDefinition.prototype.refresh = function (serializer) {
+    if (this.body) {
+        this.body.expression = serializer.loadScript(
+            serializer.parse(serializer.store(this.body.expression))
+        );
+    }
 };
 
 // Scripts - Inputs
@@ -2527,7 +2704,7 @@ Context.prototype.toXML = function (serializer) {
         '<context ~><inputs>%</inputs><variables>%</variables>%' +
             '%<receiver>%</receiver><origin>%</origin>%</context>',
         this.inputs.reduce(
-                (xml, input) => xml + (input.toXML ?
+                (xml, input) => xml + (input?.toXML ?
                     serializer.format(
                         '<input>%</input>',
                         input.toXML(serializer)

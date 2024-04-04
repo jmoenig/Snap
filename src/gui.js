@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -80,18 +80,18 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
-*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+CustomBlockDefinition*/
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-December-05';
+modules.gui = '2024-April-04';
 
 // Declarations
 
-var SnapVersion = '9.1.0';
+var SnapVersion = '10-240404-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -254,6 +254,10 @@ function IDE_Morph(config = {}) {
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
         noDevWarning:   bool, ignore development version incompatibility warning
+        noExitWarning:  bool, do not show a browser warning when closing the IDE
+                                with unsaved changes
+        preserveTitle:  bool, do not set the tab title dynamically to reflect
+                                the current Snap! version
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -342,10 +346,35 @@ IDE_Morph.prototype.init = function (config) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // initialize the primitive blocks dictionary
+    SpriteMorph.prototype.initBlocks();
+
+    // turn all primitives into custom blocks
+    // under construction, commented out for now
+    // SpriteMorph.prototype.customizeBlocks();
+    // this.bootstrapCustomizedPrimitives();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this;
+
+    window.onmessage = function (event) {
+        // make the API accessible from outside an iframe
+        var ide = myself;
+        if (!isNil(event.data.selector)) {
+            window.top.postMessage(
+                {
+                    selector: event.data.selector,
+                    response: ide[event.data.selector].apply(
+                        ide,
+                        event.data.params
+                    )
+                },
+                '*'
+            );
+        }
+    };
 
     function initUser(username) {
         sessionStorage.username = username;
@@ -421,7 +450,7 @@ IDE_Morph.prototype.openIn = function (world) {
             window.onbeforeunload = nop;
         }
         if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
+            window.onbeforeunload = window.cachedOnbeforeunload;
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
@@ -546,6 +575,14 @@ IDE_Morph.prototype.openIn = function (world) {
                                     projectData.indexOf('<project') === 0
                                 ) {
                                     this.rawOpenProjectString(projectData);
+                                } else if (
+                                    projectData.indexOf('<blocks') === 0
+                                ) {
+                                    this.rawOpenBlocksString(
+                                        projectData,
+                                        null, // name, optional
+                                        true  // silently
+                                    );
                                 }
                                 this.hasChangedMedia = true;
                             },
@@ -823,7 +860,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
         } else if (cnf.design === 'classic') {
             this.setDefaultDesign();
         }
-        SpriteMorph.prototype.initBlocks();
     }
 
     // interaction mode
@@ -839,7 +875,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
             Math.max(1, Math.min(cnf.blocksZoom, 12))
         );
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -889,6 +924,12 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // disable cloud access
     if (cnf.noCloud) {
         this.cloud.disable();
+        this.fixLayout();
+    }
+
+    // disable onbeforeunload close warning
+    if (cnf.noExitWarning) {
+        window.onbeforeunload = window.cachedOnbeforeunload;
     }
 };
 
@@ -1448,7 +1489,15 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
+        if (myself.config.hideSettings) {
+            settingsButton.hide();
+        }
+
         projectButton.setCenter(myself.controlBar.center());
+
+        if (myself.config.noImports || myself.config.hideProjects) {
+            projectButton.hide();
+        }
 
         if (myself.cloud.disabled) {
             cloudButton.hide();
@@ -1510,8 +1559,10 @@ IDE_Morph.prototype.createControlBar = function () {
         scene = myself.scenes.at(1) !== myself.scene ?
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
-        document.title = "Snap! " +
-            (myself.getProjectName() ? name : SnapVersion);
+        if (!myself.config.preserveTitle) {
+            document.title = "Snap! " +
+                (myself.getProjectName() ? name : SnapVersion);
+        }
         txt = new StringMorph(
             prefix + name +  scene + suffix,
             14,
@@ -3348,7 +3399,6 @@ IDE_Morph.prototype.refreshIDE = function () {
             new Project(this.scenes, this.scene)
         );
     }
-    SpriteMorph.prototype.initBlocks();
     this.buildPanes();
     this.fixLayout();
     if (this.loadNewProject) {
@@ -3387,7 +3437,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (zoom) {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
     }
 
     // blocks fade
@@ -3598,7 +3647,7 @@ IDE_Morph.prototype.availableBackup = function (anyway) {
 };
 
 IDE_Morph.prototype.restore = function () {
-    // load the backed up project for the currently logged im user
+    // load the backed up project for the currently logged in user
     // and backup the current one, in case they want to switch back to it
     var username = this.cloud.username,
         bak;
@@ -4324,7 +4373,71 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Microphone resolution...',
         'microphoneMenu'
     );
+    if (shiftClicked) {
+        menu.addLine();
+        menu.addItem(
+            'Primitives palette',
+            () => this.userCustomizePalette(),
+            'EXPERIMENTAL - switch (back) to\n' +
+                'primitive blocks in the palette',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Customize primitives',
+            () => this.userCustomizePalette(() =>
+                SpriteMorph.prototype.customizeBlocks()),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Bootstrap palette',
+            () => this.userCustomizePalette(() => {
+                SpriteMorph.prototype.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();
+            }),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Use custom blocks',
+            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                this.stage,
+                false
+            ),
+            'EXPERIMENTAL - use custom blocks\n' +
+                'in all palette blocks',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Use primitives',
+            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                this.stage,
+                true
+            ),
+            'EXPERIMENTAL - use primitives\n' +
+                'in all palette blocks',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
+    addPreference(
+        'Blocks all the way',
+        () => this.userCustomizePalette(
+            SpriteMorph.prototype.blocks.forward.definition
+                instanceof CustomBlockDefinition ? nop
+            : () => {
+                SpriteMorph.prototype.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();
+            }
+        ),
+        SpriteMorph.prototype.blocks.forward.definition instanceof
+            CustomBlockDefinition,
+        'uncheck to disable editing primitives\n' +
+            'in the palette as custom blocks',
+        'check to edit primitives\nin the palette as custom blocks'
+    );
     addPreference(
         'JavaScript extensions',
         () => {
@@ -4823,6 +4936,10 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.bootstrapCustomizedPrimitives = function () {
+    SpriteMorph.prototype.bootstrapCustomizedPrimitives(this.stage);
+};
+
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
         world = this.world(),
@@ -4912,6 +5029,14 @@ IDE_Morph.prototype.projectMenu = function () {
             () => this.removeUnusedBlocks(),
             'find unused global custom blocks' +
                 '\nand remove their definitions'
+        );
+    }
+    if (shiftClicked) {
+        menu.addItem(
+            'Export customized primitives...',
+            () => this.exportCustomizedPrimitives(),
+            'EXPERIMENTAL!',
+            new Color(100, 0, 0)
         );
     }
     menu.addItem(
@@ -5324,7 +5449,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2023 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2024 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -5362,7 +5487,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nBernat Romagosa: Countless contributions'
         + '\nBartosz Leper: Retina Display Support'
-        + '\nDariusz Dorożalski: Web Serial Support'
+        + '\nDariusz Dorożalski: Web Serial Support,'
+        + '\ncountless bugfixes and optimizations'
         + '\nZhenlei Jia and Dariusz Dorożalski: IME text editing'
         + '\nKen Kahn: IME support and countless other contributions'
         + '\nJosep Ferràndiz: Video Motion Detection'
@@ -5380,14 +5506,15 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJadga Hügle: Icons and countless other contributions'
         + '\nSimon Walters & Xavier Pi: MQTT extension'
         + '\nVictoria Phelps: Reporter results tracing'
+        + '\nSimon Mong: Custom blocks palette arrangement'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet, Sarron, and Aleassa costumes are'
-        + '\nwatercolor paintings by Meghan Taylor and represent'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
+        + '\nare watercolor paintings by Meghan Taylor and represent'
         + '\n characters from her webcomic Prophecy of the Circle,'
         + '\nlicensed to us only for use in Snap! projects.'
         + '\nMeghan also painted the Tad costumes,'
@@ -5772,6 +5899,42 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
             'this project doesn\'t have any\n'
                 + 'custom global blocks yet'
         );
+    }
+};
+
+IDE_Morph.prototype.exportCustomizedPrimitives = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        new BlockExportDialogMorph(
+            this.serializer,
+            blocks,
+            this
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Export customized primitives',
+            'this session doesn\'t have any\n'
+                + 'customized primitives yet'
+        );
+    }
+};
+
+IDE_Morph.prototype.refreshCustomizedPalette = function () {
+    var dict = SpriteMorph.prototype.blocks,
+        blocks = [];
+    Object.keys(dict).forEach(sel => {
+        if (dict[sel] instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel]);
+        }
+    });
+    if (blocks.length > 0) {
+        this.serializer.loadBlocks(this.blocksLibraryXML(blocks));
     }
 };
 
@@ -7516,11 +7679,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
             );
         }
     }
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
@@ -7631,11 +7794,11 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     }
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
@@ -7744,6 +7907,8 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.stage.stopVideo();
     this.setExtent(world.extent());
     Costume.prototype.maxDimensions = aPoint;
+    this.stage.stopVideo();
+    this.stage.stopProjection();
     if (this.isAnimating) {
         zoom();
     } else {
@@ -7774,6 +7939,36 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
         null, // read only
         true // numeric
     );
+};
+
+// IDE_Morph customize primitives
+
+IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
+    // highly experimental for v10 - tweak the palette blocks,
+    // e.g. replace all primitives with custom block definitions etc.
+    var projectData;
+    this.scene.captureGlobalSettings();
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
+    }
+    SpriteMorph.prototype.initBlocks();
+    callback();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.createCategories();
+    this.categories.refreshEmpty();
+    this.createCorralBar();
+    this.fixLayout();
+    this.openProjectString(projectData);
 };
 
 // IDE_Morph cloud interface
@@ -8318,8 +8513,10 @@ IDE_Morph.prototype.blocksLibraryXML = function (
     localData // optional: include sprite-local variable dependencies
 ) {
     // answer an XML string encoding of an array of CustomBlockDefinitions
-    var globals = definitions.filter(def => def.isGlobal),
+    var prims = definitions.filter(def => def.isGlobal && def.selector),
+        globals = definitions.filter(def => def.isGlobal && !def.selector),
         locals = definitions.filter(def => !def.isGlobal),
+        primStr = prims.length ? this.serializer.serialize(prims, true) : '',
         glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
         locStr = locals.length ? this.serializer.serialize(locals, true) : '',
         dtaStr = dataFrame && dataFrame.names(true).length ?
@@ -8340,6 +8537,7 @@ IDE_Morph.prototype.blocksLibraryXML = function (
         '>' +
         this.paletteXML(definitions.map(def => def.category).concat(cats)) +
         (globals.length ? glbStr : '') +
+        (prims.length ? ('<primitives>' + primStr + '</primitives>') : '') +
         (locals.length ? ('<local>' + locStr + '</local>') : '') +
         (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
         (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +
@@ -8363,10 +8561,14 @@ IDE_Morph.prototype.paletteXML = function (categoryNames) {
 
 // IDE_Morph user dialog shortcuts
 
-IDE_Morph.prototype.showMessage = function (message, secs) {
+IDE_Morph.prototype.showMessage = function (message, secs, atHand = false) {
     var m = new MenuMorph(null, message),
         intervalHandle;
-    m.popUpCenteredInWorld(this.world());
+    if (atHand) {
+        m.popUpCenteredAtHand(this.world());
+    } else {
+        m.popUpCenteredInWorld(this.world());
+    }
     if (secs) {
         intervalHandle = setInterval(
             () => {

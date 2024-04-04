@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2023 by Jens Mönig
+    Copyright (C) 2010-2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1306,7 +1306,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2023-November-07';
+var morphicVersion = '2024-March-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -2130,8 +2130,10 @@ Color.prototype.toRGBstring = function () {
 
 Color.fromString = function (aString) {
     // I parse rgb/rgba strings into a Color object
-    var components = aString.split(/[\(),]/).slice(1,5);
-    return new Color(components[0], components[1], components[2], components[3]);
+    var components = aString.split(/[\(),]/),
+        channels = aString.startsWith('rgba') ?
+            components.slice(1, 5) : components.slice(0, 4);
+    return new Color(+channels[0], +channels[1], +channels[2], +channels[3]);
 };
 
 // Color copying:
@@ -12469,7 +12471,11 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
+    window.cachedOnbeforeunload = window.onbeforeunload;
     window.onbeforeunload = (evt) => {
+        if (window.cachedOnbeforeunload) {
+            window.cachedOnbeforeunload.call(null, evt);
+        }
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";
         // For IE and Firefox

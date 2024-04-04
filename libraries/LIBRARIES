@@ -1,3 +1,7 @@
+code2blocks_module.xml	Code to Blocks to Code	Translate text code to blocks and vice-versa
+~	~
+~	~
+~	~
 iteration-composition.xml	Iteration, composition	Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.
 list-utilities.xml	List utilities	Some standard functions on lists (reverse, sort, etc.)
 colors.xml	Colors and Crayons	Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.
@@ -10,6 +14,7 @@ list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you
 ~	~
 ~	~
 ~	~
+beetle.xml	3D Beetle Geometry	Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.
 maps_module.xml	World Map	Add interactive maps to projects
 menu_module.xml	Menus	Prompt the user to pick an option.
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
@@ -35,6 +40,7 @@ plot_bars_module.xml	Just Bars	Draw a list of numbers as vertical lines distribu
 httpBlocks.xml	Web services access (https)	An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.  Also parses JSON data.
 make-variables.xml	Create variables	Create and manage global/sprite/script variables in a script
 bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit manipulation.
+textformat_module.xml	Writing and formating	Write text using fancy fonts, contributed by Tethrarxitet
 ~	~
 ~	~
 ~	~
@@ -46,3 +52,16 @@ TuneScope.xml	TuneScope	Music Notation, Instruments, Drums, Tones, Chords, Track
 serial_module.xml	Serial Ports	Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)
 mqtt.xml	MQTT	(Message Queuing Telemetry Transport) protocol for connecting with IOT devices and/or other software
 signada.xml	Signada (Network remote control)	Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.
+~	~
+~	~
+~	~
+metaprogramming_module.xml	Metaprogramming	Analyze, transform and generate blocks and scripts
+~	~
+~	~
+~	~
+microworlds/dialogs.xml	(EDC) Dialogs	Display dialogs and messages to the user.
+microworlds/fancy-text-morphs.xml	(EDC) Fancy Text	Text formatting and basic fraction support for SAY and THINK blocks.
+microworlds/fancy-text.xml	(EDC) Fancy Stage Writing	Text formatting and basic fraction support for writing on stage.
+microworlds/microworld.xml	(EDC) Microworld	Customize the display of the Snap! UI to create a microworld programming environment.
+microworlds/script-pic-costume.xml	(EDC) Script Pic Costumes	Turn a ringified block/script into a costume
+microworlds/translations.xml	(EDC) Translations	Support for translating text, blocks, and dropdown/placeholder values
