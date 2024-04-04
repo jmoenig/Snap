@@ -8613,69 +8613,69 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
 ScriptsMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         ide = this.parentThatIsA(IDE_Morph),
-    shiftClicked = this.world().currentKey === 16,
-    blockEditor,
-    obj = this.scriptTarget(),
-    hasUndropQueue,
-    stage = obj.parentThatIsA(StageMorph);
+        shiftClicked = this.world().currentKey === 16,
+        blockEditor,
+        obj = this.scriptTarget(),
+        hasUndropQueue,
+        stage = obj.parentThatIsA(StageMorph);
 
-function addOption(label, toggle, test, onHint, offHint) {
-    menu.addItem(
-        [
-            test ? new SymbolMorph(
-                'checkedBox',
-                MorphicPreferences.menuFontSize * 0.75
-            ) : new SymbolMorph(
-                'rectangle',
-                MorphicPreferences.menuFontSize * 0.75
-            ),
-            localize(label)
-        ],
-        toggle,
-        test ? onHint : offHint
-    );
-}
-
-if (!ide) {
-    blockEditor = this.parentThatIsA(BlockEditorMorph);
-    if (blockEditor) {
-        ide = blockEditor.target.parentThatIsA(IDE_Morph);
-    }
-}
-
-if (this.dropRecord) {
-    if (this.dropRecord.lastRecord) {
-        hasUndropQueue = true;
-        menu.addPair(
+    function addOption(label, toggle, test, onHint, offHint) {
+        menu.addItem(
             [
-                new SymbolMorph(
-                    'turnBack',
-                    MorphicPreferences.menuFontSize
+                test ? new SymbolMorph(
+                    'checkedBox',
+                    MorphicPreferences.menuFontSize * 0.75
+                ) : new SymbolMorph(
+                    'rectangle',
+                    MorphicPreferences.menuFontSize * 0.75
                 ),
-                localize('undrop')
+                localize(label)
             ],
-            'undrop',
-            '^Z',
-            'undo the last\nblock drop\nin this pane'
+            toggle,
+            test ? onHint : offHint
         );
     }
-    if (this.dropRecord.nextRecord) {
-        hasUndropQueue = true;
-        menu.addPair(
-            [
-                new SymbolMorph(
-                    'turnForward',
-                    MorphicPreferences.menuFontSize
-                ),
-                localize('redrop')
-            ],
-            'redrop',
-            '^Y',
-            'redo the last undone\nblock drop\nin this pane'
-        );
+
+    if (!ide) {
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+        if (blockEditor) {
+            ide = blockEditor.target.parentThatIsA(IDE_Morph);
+        }
     }
-    if (hasUndropQueue) {
-        if (shiftClicked) {
+
+    if (this.dropRecord) {
+        if (this.dropRecord.lastRecord) {
+            hasUndropQueue = true;
+            menu.addPair(
+                [
+                    new SymbolMorph(
+                        'turnBack',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    localize('undrop')
+                ],
+                'undrop',
+                '^Z',
+                'undo the last\nblock drop\nin this pane'
+            );
+        }
+        if (this.dropRecord.nextRecord) {
+            hasUndropQueue = true;
+            menu.addPair(
+                [
+                    new SymbolMorph(
+                        'turnForward',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    localize('redrop')
+                ],
+                'redrop',
+                '^Y',
+                'redo the last undone\nblock drop\nin this pane'
+            );
+        }
+        if (hasUndropQueue) {
+            if (shiftClicked) {
                 menu.addItem(
                     "clear undrop queue",
                     () => {
@@ -8687,7 +8687,7 @@ if (this.dropRecord) {
                     new Color(100, 0, 0)
                 );
             }
-            menu.addLine();
+                menu.addLine();
         }
     }
 
