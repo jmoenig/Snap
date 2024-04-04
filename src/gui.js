@@ -6890,6 +6890,7 @@ IDE_Morph.prototype.openProject = function (project) {
     } else {
         this.scenes = project.scenes;
     }
+    this.performerMode = false;
     this.switchToScene(
         project.currentScene || project.scenes.at(1),
         true,  // refresh album
@@ -7280,7 +7281,9 @@ IDE_Morph.prototype.togglePerformerMode = function () {
     if (!this.performerMode) {
         this.setStageExtent(new Point(480, 360));
     }
-    this.refreshIDE();
+    this.buildPanes();
+    this.fixLayout();
+    this.selectSprite(this.currentSprite);
 };
 
 IDE_Morph.prototype.setEmbedMode = function () {

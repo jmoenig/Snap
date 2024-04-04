@@ -8687,7 +8687,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     new Color(100, 0, 0)
                 );
             }
-                menu.addLine();
+            menu.addLine();
         }
     }
 
