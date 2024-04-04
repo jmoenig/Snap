@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-January-18';
+modules.threads = '2024-March-24';
 
 var ThreadManager;
 var Process;
@@ -6475,7 +6475,7 @@ Process.prototype.reportGet = function (query) {
                         each => each instanceof BlockMorph
                     ).map(
                         each => new List([
-                            each?.comment.text() || '',
+                            each?.comment?.text() || '',
                             each.fullCopy().reify()
                         ])
                     )
