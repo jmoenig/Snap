@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-02';
+modules.threads = '2024-April-04';
 
 var ThreadManager;
 var Process;
@@ -5514,7 +5514,8 @@ Process.prototype.toBlockSyntax = function (list) {
 };
 
 Process.prototype.blockMatching = function (string) {
-    var pal = this.reportGet('blocks'),
+    // allow caching the palette for bulk-bootstrapping
+    var pal = this.context.accumulator || this.reportGet('blocks'),
         block,
         lbl,
         i;

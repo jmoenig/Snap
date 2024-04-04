@@ -76,6 +76,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-04-04
+* gui, objects, store, threads, stdlib: integrated Lisp-syntax primitives into the blocks dictionary
+
 ### 2024-04-02
 * byob, gui, objects, store, extensions: refactored bootstrapped primitives organization
 * threads, objects: integrated code keys into blocks dictionary

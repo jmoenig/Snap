@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-April-02';
+modules.gui = '2024-April-04';
 
 // Declarations
 
-var SnapVersion = '10-240402-dev';
+var SnapVersion = '10-240404-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4872,6 +4872,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     menu.popup(world, pos);
+};
+
+IDE_Morph.prototype.bootstrapCustomizedPrimitives = function () {
+    SpriteMorph.prototype.bootstrapCustomizedPrimitives(this.stage);
 };
 
 IDE_Morph.prototype.projectMenu = function () {

@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-April-02';
+modules.objects = '2024-April-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -221,7 +221,27 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec:
                 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n',
-            code: 'zip'
+            code: 'zip',
+            src: `(
+                ifElse (> (data [rank] (get a)) (get a-rank))
+                    (ifElse (> (data [rank] (get b)) (get b-rank))
+                        (report (map (ring
+                            (zip (get fun)
+                                (item nil (get a)) (get a-rank)
+                                (item nil (get b)) (get b-rank)))
+                            (range 1 (min (data [length] (get a))
+                                (data [length] (get b))))))
+                        (report (map (ring
+                            (zip (get fun)
+                                nil (get a-rank) (get b) (get b-rank)))
+                            (get a))))
+                    (ifElse (> (data [rank] (get b)) (get b-rank))
+                        (report (map (ring
+                            (zip (get fun)
+                                (get a) (get a-rank) nil (get b-rank)))
+                            (get b)))
+                        (report (call (get fun) (get a) (get b))))
+                fun a a-rank b b-rank)`
         },
 
         // Motion
@@ -231,7 +251,14 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'move %n steps',
             defaults: [10],
-            code: 'move'
+            code: 'move',
+            src: `(
+                (prim t forward steps)
+                (goto (+ (pos) (*
+                    (list
+                        (fn [sin] (dir))
+                        (fn [cos] (dir)))
+                    (get steps)))))`
         },
         turn: {
             only: SpriteMorph,
@@ -239,7 +266,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'turn $clockwise %n degrees',
             defaults: [15],
-            code: 'right'
+            code: 'right',
+            src: `(
+                (prim t turn angle)
+                (head (+ (dir) (get angle))))`
         },
         turnLeft: {
             only: SpriteMorph,
@@ -247,7 +277,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'turn $counterclockwise %n degrees',
             defaults: [15],
-            code: 'left'
+            code: 'left',
+            src: `(
+                (prim t turnLeft angle)
+                (head (- (dir) (get angle))))`
         },
         setHeading: {
             only: SpriteMorph,
@@ -255,7 +288,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'point in direction %dir',
             defaults: [90],
-            code: 'head'
+            code: 'head',
+            src: `(
+                (prim t setHeading angle)
+                (face (+ (pos) (ifThen (= (join (get angle)) random)
+                    (list
+                        (fn [sin] (rand 0.1 360.1))
+                        (fn [cos] (rand 0.1 360.1)))
+                    (list
+                        (fn [sin] (get angle))
+                        (fn [cos] (get angle)))))))`
         },
         doFaceTowards: {
             only: SpriteMorph,
@@ -271,7 +313,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'go to x: %n y: %n',
             defaults: [0, 0],
-            code: 'gotoXY'
+            code: 'gotoXY',
+            src: `(
+                (prim t gotoXY x y)
+                (goto (list (get x) (get y))))`
         },
         doGotoObject: {
             only: SpriteMorph,
@@ -287,7 +332,20 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'glide %n secs to x: %n y: %n',
             defaults: [1, 0, 0],
-            code: 'glide'
+            code: 'glide',
+            src: `(
+                (prim t doGlide span x y)
+                (var pos start fract)
+                (set pos (pos))
+                (set start (current "[time in milliseconds]"))
+                (until (>= (get fract) 1) (
+                    (set fract (/
+                        (- (current "[time in milliseconds]") (get start))
+                        (* (get span) 1000)))
+                    (goto (+
+                        (get pos)
+                        (* (- (list (get x) (get y)) (get pos)) (get fract))))))
+                (gotoXY (get x) (get y)))`
         },
         changeXPosition: {
             only: SpriteMorph,
@@ -295,7 +353,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'change x by %n',
             defaults: [10],
-            code: 'changeX'
+            code: 'changeX',
+            src: `(
+                (prim t changeXPosition delta)
+                (setX (+ (x) (get delta))))`
         },
         setXPosition: {
             only: SpriteMorph,
@@ -303,7 +364,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'set x to %n',
             defaults: [0],
-            code: 'setX'
+            code: 'setX',
+            src: `(
+                (prim t setXPosition x)
+                (goto (list (get x) (y))))`
         },
         changeYPosition: {
             only: SpriteMorph,
@@ -311,7 +375,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'change y by %n',
             defaults: [10],
-            code: 'changeY'
+            code: 'changeY',
+            src: `(
+                (prim t changeYPosition delta)
+                (setY (+ (y) (get delta))))`
         },
         setYPosition: {
             only: SpriteMorph,
@@ -319,21 +386,99 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'set y to %n',
             defaults: [0],
-            code: 'setY'
+            code: 'setY',
+            src: `(
+                (prim t setYPosition y)
+                (goto (list (x) (get y))))`
         },
         bounceOffEdge: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'if on edge, bounce',
-            code: 'bounce'
+            code: 'bounce',
+            src: `(
+                (prim t bounceOffEdge)
+                (if (touches [edge]) (
+                    (var "get bounds" bounds center "stage bounds" "dir x"
+                        "dir y" "delta x" "delta y")
+                    (set "get bounds" (ring (list
+                        (min : (cons
+                            (list (my [left]) (my [bottom]))
+                            (map (ring
+                                (list
+                                    (attribute [left] nil)
+                                    (attribute [bottom] nil)))
+                                (my [parts]))))
+                        (max : (cons
+                            (list (my [right]) (my [top]))
+                            (map (ring
+                                (list
+                                    (attribute [right] nil)
+                                    (attribute [top] nil)))
+                                (my [parts])))))))
+                    (set bounds (call (get "get bounds")))
+                    (set center (/ (+ : (get bounds)) 2))
+                    (set "stage bounds" (ask (my [stage]) (ring (list
+                        (list (my [left]) (my [bottom]))
+                        (list (my [right]) (my [top]))))))
+                    (set "dir x" (fn [sin] (dir)))
+                    (set "dir y" (fn [cos] (dir)))
+                    (if (<
+                        (item 1 (item 1 (get bounds)))
+                        (item 1 (item 1 (get "stage bounds"))))
+                        (set "dir x" (fn [abs] (get "dir x"))))
+                    (if (>
+                        (item 1 (item 2 (get bounds)))
+                        (item 1 (item 2 (get "stage bounds"))))
+                        (set "dir x" (fn [neg] (fn [abs] (get "dir x")))))
+                    (if (>
+                        (item 2 (item 2 (get bounds)))
+                        (item 2 (item 2 (get "stage bounds"))))
+                        (set "dir y" (fn [neg] (fn [abs] (get "dir y")))))
+                    (if (<
+                        (item 2 (item 1 (get bounds)))
+                        (item 2 (item 1 (get "stage bounds"))))
+                        (set "dir y" (fn [abs] (get "dir y"))))
+                    (head (atan2 (get "dir x") (get "dir y")))
+                    (set bounds (call (get "get bounds")))
+                    (goto (+ (pos) (- (get center) (/ (+ : (get bounds)) 2))))
+                    (set bounds (call (get "get bounds")))
+                    (if (>
+                        (item 1 (item 2 (get bounds)))
+                        (item 1 (item 2 (get "stage bounds"))))
+                        (set "delta x" (-
+                            (item 1 (item 2 (get "stage bounds")))
+                            (item 1 (item 2 (get bounds))))))
+                    (if (<
+                        (item 2 (item 1 (get bounds)))
+                        (item 2 (item 1 (get "stage bounds"))))
+                        (set "delta y" (-
+                            (item 2 (item 1 (get "stage bounds")))
+                            (item 2 (item 1 (get bounds))))))
+                    (if (<
+                        (item 1 (item 1 (get bounds)))
+                        (item 1 (item 1 (get "stage bounds"))))
+                        (set "delta x" (-
+                            (item 1 (item 1 (get "stage bounds")))
+                            (item 1 (item 1 (get bounds))))))
+                    (if (>
+                        (item 2 (item 2 (get bounds)))
+                        (item 2 (item 2 (get "stage bounds"))))
+                        (set "delta y" (-
+                            (item 2 (item 2 (get "stage bounds")))
+                            (item 2 (item 2 (get bounds))))))
+                    (goto (+ (pos) (list (get "delta x") (get "delta y")))))))`
         },
         getPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
             spec: 'position',
-            code: 'pos'
+            code: 'pos',
+            src: `(
+                (prim t getPosition)
+                (report (list (x) (y))))`
         },
         xPosition: {
             only: SpriteMorph,
@@ -369,12 +514,21 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'next costume',
             code: 'next',
+            src: `(
+                (prim t doWearNextCostume)
+                (if (> (costumeIdx) 0)
+                    (wear (+
+                        (mod (costumeIdx) (data [length] (my [costumes])))
+                        1))))`
         },
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
             spec: 'costume #',
-            code: 'costumeIdx'
+            code: 'costumeIdx',
+            src: `(
+                (prim t getCostumeIdx)
+                (report (idx (my [costume]) (my [costumes]))))`
         },
         reportGetImageAttribute: {
             type: 'reporter',
@@ -408,7 +562,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'say %s for %n secs',
             defaults: [localize('Hello!'), 2],
-            code: 'sayFor'
+            code: 'sayFor',
+            src: `(
+                (prim t doSayFor msg time)
+                (say (get msg))
+                (wait (get time))
+                (say nil))`
         },
         bubble: {
             type: 'command',
@@ -423,7 +582,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'think %s for %n secs',
             defaults: [localize('Hmm...'), 2],
-            code: 'thinkFor'
+            code: 'thinkFor',
+            src: `(
+                (prim t doThinkFor msg time)
+                (think (get msg))
+                (wait (get time))
+                (think nil))`
         },
         doThink: {
             only: SpriteMorph,
@@ -463,7 +627,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'change size by %n',
             defaults: [10],
-            code: 'changeSize'
+            code: 'changeSize',
+            src: `(
+                (prim t changeScale delta)
+                (setSize (+ (size) (get delta))))`
         },
         setScale: {
             only: SpriteMorph,
@@ -502,7 +669,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'go to %layer layer',
             defaults: [['front']],
-            code: 'layer'
+            code: 'layer',
+            src: `(
+                (prim t goToLayer name)
+                (ifElse (= (join (get name)) back)
+                    (warp (until (= (idx (my [self]) (ask (my [stage])
+                        (ring (my "[other sprites]")))) 1)
+                        (goBack 1)))
+                    (warp (until (= (idx (my [self]) (ask (my [stage])
+                        (ring (my "[other sprites]"))))
+                        (+ (data [length] (my "[other sprites]")) 1))
+                        (goBack -1)))))`
         },
         goBack: {
             only: SpriteMorph,
@@ -550,14 +727,30 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'play sound %snd until done',
-            code: 'playAll'
+            code: 'playAll',
+            src: `(
+                (prim t doPlaySoundUntilDone target)
+                (var sound)
+                (set sound
+                    (ifThen (is (get target) [sound])
+                        (get target)
+                        (ifThen (is (get target) [list])
+                            (newSound (get target) 44100)
+                            (find (pred (= (sound [name] nil) (get target)))
+                                (my [sounds])))))
+                (if (is (get sound) [sound]) (
+                    (play (get sound))
+                    (wait (sound [duration] (get sound))))))`
         },
         doPlaySoundAtRate: {
             type: 'command',
             category: 'sound',
             spec: 'play sound %snd at %rate Hz',
             defaults: ['', 44100],
-            code: 'playAt'
+            code: 'playAt',
+            src: `(
+                (prim t doPlaySoundAtRate target rate)
+                (play (newSound (sound [samples] (get target)) (get rate))))`
         },
         doStopAllSounds: {
             type: 'command',
@@ -584,7 +777,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'rest for %n beats',
             defaults: [0.2],
-            code: 'rest'
+            code: 'rest',
+            src: `(
+                (prim t doRest beats)
+                (wait (/ 60 (* (get beats) (tempo)))))`
         },
         doPlayNote: {
             type: 'command',
@@ -612,7 +808,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'change tempo by %n',
             defaults: [20],
-            code: 'changeTempo'
+            code: 'changeTempo',
+            src: `(
+                (prim t doChangeTempo delta)
+                (setTempo (+ (tempo) (get delta))))`
         },
         doSetTempo: {
             type: 'command',
@@ -631,7 +830,10 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'change volume by %n',
-            defaults: [10]
+            defaults: [10],
+            src: `(
+                (prim t changeVolume delta)
+                (setVolume (+ (vol) (get delta))))`
         },
         setVolume: {
             type: 'command',
@@ -649,7 +851,10 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'change balance by %n',
-            defaults: [10]
+            defaults: [10],
+            src: `(
+                (prim t changePan delta)
+                (setPan (+ (pan) (get delta))))`
         },
         setPan: {
             type: 'command',
@@ -713,7 +918,10 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen color to %clr'
+            spec: 'set pen color to %clr',
+            src: `(
+                (prim t setColor color)
+                (extension "clr_setpen(clr)" (get color)))`
         },
         setPenColorDimension: {
             only: SpriteMorph,
@@ -762,7 +970,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'change pen size by %n',
             defaults: [1],
-            code: 'changePenSize'
+            code: 'changePenSize',
+            src: `(
+                (prim t changeSize delta)
+                (penSize (+ (pen [size]) (get delta))))`
         },
         setSize: {
             only: SpriteMorph,
@@ -870,57 +1081,122 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'wait %n secs',
             defaults: [1],
-            code: 'wait'
+            code: 'wait',
+            src: `(
+                (prim t doWait duration)
+                (var "start time")
+                (set "start time" (current "[time in milliseconds]"))
+                (waitUntil (>=
+                    (current "[time in milliseconds]")
+                    (+ (get "start time") (* (get duration) 1000)))))`
         },
         doWaitUntil: {
             type: 'command',
             category: 'control',
             spec: 'wait until %boolUE',
-            code: 'waitUntil'
+            code: 'waitUntil',
+            src: `(
+                (prim t doWaitUntil condition)
+                (if (not (call (get condition)))
+                    (waitUntil (call (get condition)))))`
         },
         doForever: {
             type: 'command',
             category: 'control',
             spec: 'forever %loop',
-            code: 'forever'
+            code: 'forever',
+            src: `(
+                (prim t doForever action)
+                (run (get action))
+                (run (this [script]) (get action)))`
         },
         doRepeat: {
             type: 'command',
             category: 'control',
             spec: 'repeat %n %loop',
             defaults: [10],
-            code: 'repeat'
+            code: 'repeat',
+            src: `(
+                (prim t doRepeat count action)
+                (var self)
+                (set self (this [script]))
+                (if (> (get count) 0) (
+                    (run (get action))
+                    (extension snap_yield)
+                    (run (get self) (- (get count) 1) (get action)))))`
         },
         doUntil: {
             type: 'command',
             category: 'control',
             spec: 'repeat until %boolUE %loop',
-            code: 'until'
+            code: 'until',
+            src: `(
+                (prim t doUntil condition action)
+                (var self)
+                (set self (this [script]))
+                (if (not (call (get condition))) (
+                    (run (get action))
+                    (extension snap_yield)
+                    (run (get self) (get condition) (get action)))))`
         },
         doFor: {
             type: 'command',
             category: 'control',
             spec: 'for %upvar = %n to %n %cla',
             defaults: ['i', 1, 10],
-            code: 'for'
+            code: 'for',
+            src: `(
+                (prim t doFor count start end action)
+                (var test increment)
+                (set count (get start))
+                (ifElse (< (get start) (get end))
+                    ((set test (pred (> (get count) (get end))))
+                        (set increment 1))
+                    ((set test (pred (< (get count) (get end))))
+                        (set increment -1)))
+                (until (call (get test)) (
+                    (run (get action))
+                    (+= count (get increment)))))`
         },
         doIf: {
             type: 'command',
             category: 'control',
             spec: 'if %b %c %elseif',
-            code: 'if'
+            code: 'if',
+            src: `(
+                (prim t doIf condition "true case" "else pairs")
+                (var self)
+                (set self (this [script]))
+                (ifElse (get condition)
+                    (run (get "true case"))
+                    (ifElse (empty (get "else pairs"))
+                        nil
+                        (ifElse (item 1 (get "else pairs"))
+                            (run (item 2 (get "else pairs")))
+                            (run (get self) (bool f) nil
+                                (cdr (cdr (get "else pairs"))))))))`
         },
         doIfElse: {
             type: 'command',
             category: 'control',
             spec: 'if %b %c else %c',
-            code: 'ifElse'
+            code: 'ifElse',
+            src: `(
+                (prim t doIfElse condition "true case" "false case")
+                (run (item (+ (get condition) 1)
+                    (list (get "false case") (get "true case")))))`
         },
         reportIfElse: {
             type: 'reporter',
             category: 'control',
             spec: 'if %b then %anyUE else %anyUE',
-            code: 'ifThen'
+            code: 'ifThen',
+            src: `(
+                (prim t reportIfElse condition "true case" "false case")
+                (report (zip
+                    (ring (call (item nil nil)))
+                    (+ (get condition) 1) 0
+                    (list (get "false case") (get "true case")) 1)))`
         },
         doStopThis: {
             type: 'command',
@@ -979,13 +1255,20 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             // spec: 'tell %spr to %cl' // I liked this version better, -Jens
             spec: 'tell %spr to %cmdRing %inputs',
-            code: 'tell'
+            code: 'tell',
+            src: `(
+                (prim t doTellTo target action parameters)
+                (run (attribute (get action) (get target)) : (get parameters)))`
         },
         reportAskFor: {
             type: 'reporter',
             category: 'control',
             spec: 'ask %spr for %repRing %inputs',
-            code: 'ask'
+            code: 'ask',
+            src: `(
+                (prim t reportAskFor target action parameters)
+                (report (call (attribute (get action) (get target))
+                    : (get parameters))))`
         },
 
         // Cloning
@@ -999,7 +1282,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'create a clone of %cln',
             defaults: [['myself']],
-            code: 'clone'
+            code: 'clone',
+            src: `(
+                (prim t createClone target)
+                (report (newClone (get target))))`
         },
         newClone: {
             type: 'reporter',
@@ -1079,7 +1365,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'control',
             spec: 'pipe %s $arrowRight %mult%repRing',
-            code: 'pipe'
+            code: 'pipe',
+            src: `(
+                (prim t reportPipe value functions)
+                (report (ifThen (empty (get functions))
+                    (get value)
+                    (pipe (call (item 1 (get functions)) (get value)) :
+                        (cdr (get functions))))))`
         },
 
         // Sensing
@@ -1156,7 +1448,10 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'mouse position',
-            code: 'mouse'
+            code: 'mouse',
+            src: `(
+                (prim t reportMousePosition)
+                (report (list (mouseX) (mouseY))))`
         },
         reportMouseX: {
             type: 'reporter',
@@ -1220,7 +1515,14 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'object %self',
             defaults: [['myself']],
-            code: 'object'
+            code: 'object',
+            src: `(
+                (prim t reportObject name)
+                (report (zip
+                    (ring (find (pred (= (get id) (ask nil (ring (my [name])))))
+                        (append (ask (my [stage]) (ring (my "[other sprites]")))
+                            (list (my [stage])))) id)
+                    (get name) 0 nil 0)))`
         },
         reportURL: {
             type: 'reporter',
@@ -1419,7 +1721,10 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: 'not %b',
-            code: 'not'
+            code: 'not',
+            src: `(
+                (prim t reportNot bool)
+                (report (ifThen (get bool) (bool f) (bool t))))`
         },
         reportBoolean: {
             type: 'predicate',
@@ -1427,7 +1732,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%bool',
             defaults: [true],
             alias: 'true boolean',
-            code: 'bool'
+            code: 'bool',
+            src: `(
+                (prim t reportBoolean arg)
+                (report (get arg)))`
         },
         reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
@@ -1448,7 +1756,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'letter %ix of %s',
             defaults: [1, localize('world')],
-            code: 'letter'
+            code: 'letter',
+            src: `(
+                (prim t reportLetter idx text)
+                (report (zip
+                    (ring (item nil (split nil [letter])))
+                    (get idx) 0
+                    (get text) 0)))`
         },
         reportStringSize: { // deprecated as of v9
             type: 'reporter',
@@ -1572,7 +1886,10 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'list %exp',
-            code: 'list'
+            code: 'list',
+            src: `(
+                (prim t reportNewList inputs)
+                (report (get inputs)))`
         },
         reportCONS: {
             type: 'reporter',
@@ -1611,20 +1928,35 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: '%l contains %s',
             defaults: [null, localize('thing')],
-            code: 'contains'
+            code: 'contains',
+            src: `(
+                (prim t reportListContainsItem data value)
+                (warp (for i 1 (data [length] (get data))
+                    (if (= (item (get i) (get data)) (get value))
+                        (report (bool t)))))
+                (report (bool f)))`
         },
         reportListIsEmpty: {
             type: 'predicate',
             category: 'lists',
             spec: 'is %l empty?',
-            code: 'empty'
+            code: 'empty',
+            src: `(
+                (prim t reportListIsEmpty data)
+                (report (= (get data) (list))))`
         },
         reportListIndex: {
             type: 'reporter',
             category: 'lists',
             spec: 'index of %s in %l',
             defaults: [localize('thing')],
-            code: 'idx'
+            code: 'idx',
+            src: `(
+                (prim t reportListIndex value data)
+                (warp (for i 1 (data [length] (get data))
+                    (if (= (item (get i) (get data)) (get value))
+                        (report (get i)))))
+                (report 0))`
         },
         doAddToList: {
             type: 'command',
@@ -1661,7 +1993,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'numbers from %n to %n',
             defaults: [1, 10],
-            code: 'range'
+            code: 'range',
+            src: `(
+                (prim t reportNumbers start end)
+                (report (zip (ring (
+                    (var result)
+                    (set result (list))
+                    (warp (for i nil nil
+                        (add (get i) (get result))))
+                    (report (get result))))
+                (get start) 0
+                (get end) 0)))`
         },
     /*
         reportListCombination: { // currently not in use
@@ -1675,13 +2017,30 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'append %lists',
-            code: 'append'
+            code: 'append',
+            src: `(
+                (prim t reportConcatenatedLists lists)
+                (var result)
+                (set result (list))
+                (warp (forEach list (get lists)
+                    (forEach item (get list)
+                        (add (get item) (get result)))))
+                (report (get result)))`
         },
         reportCrossproduct: {
             type: 'reporter',
             category: 'lists',
             spec: 'combinations %lists',
-            code: 'combinations'
+            code: 'combinations',
+            src: `(
+                (prim t reportCrossproduct lists)
+                (report (ifThen (empty (get lists))
+                    (list (list))
+                    (append : (map
+                        (ring (map (ring
+                            (cons (get first) nil))
+                            (combinations : (cdr (get lists)))) first)
+                        (item 1 (get lists)))))))`
         },
         reportTranspose: { // deprecated
             type: 'reporter',
@@ -1709,7 +2068,20 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'map %repRing over %l',
-            code: 'map'
+            code: 'map',
+            src: `(
+                (prim t reportMap ring data)
+                (var result implicit?)
+                (set result (list))
+                (set implicit? (empty (attribute "[input names]" (get ring))))
+                (warp (for i 1 (data [length] (get data))
+                    (add (call (get ring) :
+                        (ifThen (get implicit?)
+                            (list (item (get i) (get data)))
+                            (list (item (get i) (get data))
+                                (get i) (get data))))
+                        (get result))))
+                (report (get result)))`
         },
         reportAtomicMap: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1721,7 +2093,20 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'keep items %predRing from %l',
-            code: 'keep'
+            code: 'keep',
+            src: `(
+                (prim t reportKeep ring data)
+                (var result implicit?)
+                (set result (list))
+                (set implicit? (empty (attribute "[input names]" (get ring))))
+                (warp (for i 1 (data [length] (get data))
+                    (if (call (get ring) :
+                        (ifThen (get implicit?)
+                            (list (item (get i) (get data)))
+                            (list (item (get i) (get data))
+                                (get i) (get data))))
+                        (add (item (get i) (get data)) (get result)))))
+                (report (get result)))`
         },
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1733,7 +2118,19 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'find first item %predRing in %l',
-            code: 'find'
+            code: 'find',
+            src: `(
+                (prim t reportFindFirst ring data)
+                (var implicit?)
+                (set implicit? (empty (attribute "[input names]" (get ring))))
+                (warp (for i 1 (data [length] (get data))
+                    (if (call (get ring) :
+                        (ifThen (get implicit?)
+                            (list (item (get i) (get data)))
+                            (list (item (get i) (get data))
+                                (get i) (get data))))
+                        (report (item (get i) (get data))))))
+                (report nil))`
         },
         reportAtomicFindFirst: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1745,7 +2142,20 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'lists',
             spec: 'combine %l using %repRing',
-            code: 'combine'
+            code: 'combine',
+            src: `(
+                (prim t reportCombine data ring)
+                (if
+                    (empty (get data))
+                        (report 0)
+                    (= (data [length] (get data)) 1)
+                        (report (item 1 (get data)))
+                )
+                (report (call (get ring)
+                    (item 1 (get data))
+                    (call (this [script])
+                        (cdr (get data))
+                        (get ring)))))`
         },
         reportAtomicCombine: {
             dev: true, // not shown in palette, only accessible via relabelling
@@ -1758,7 +2168,15 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'for each %upvar in %l %cla',
             defaults: [localize('item')],
-            code: 'forEach'
+            code: 'forEach',
+            src: `(
+                (prim t doForEach item data action)
+                (report (map
+                    (ring (
+                        (set item nil)
+                        (run (get action))
+                        (report 0)))
+                    (get data))))`
         },
 
         // Tables - experimental
@@ -1894,6 +2312,22 @@ SpriteMorph.prototype.customizeBlocks = function () {
             def.type = record.type;
             def.category = record.category;
             SpriteMorph.prototype.blocks[key].definition = def;
+        }
+    });
+};
+
+SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
+    var proc = new Process(null, stage);
+
+    // cache the current palette
+    proc.pushContext();
+    proc.context.accumulator = proc.reportGet('blocks');
+
+    Object.keys(this.blocks).forEach(sel => {
+        let info = this.blocks[sel],
+            def = info.definition;
+        if (info.src && def) {
+            def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
         }
     });
 };
