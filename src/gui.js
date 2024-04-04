@@ -91,7 +91,7 @@ modules.gui = '2024-April-04';
 
 // Declarations
 
-var SnapVersion = '10-240404-dev';
+var SnapVersion = '10-240404_2-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -7276,7 +7276,6 @@ IDE_Morph.prototype.toggleSliderExecute = function () {
 };
 
 IDE_Morph.prototype.togglePerformerMode = function () {
-    var myself = this;
     this.performerMode = !this.performerMode;
     if (!this.performerMode) {
         this.setStageExtent(new Point(480, 360));

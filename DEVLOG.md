@@ -52,6 +52,7 @@
     * new "writing and formating" library, thanks, Tethrarxitet!
     * new "Lisp code..." entry in blocks context menu
     * new "code..." entry to blocks context menu if "Codification support" setting is enabled
+    * new live coding "performer mode" (currently hidden behind shift-click) setting, thank you, Bernat!
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -79,6 +80,7 @@
 ### 2024-04-04
 * gui, objects, store, threads, stdlib: integrated Lisp-syntax primitives into the blocks dictionary
 * objects: added codification shortcuts to Lisp syntax: transpile, literal, delimit, encode
+* gui, objects, blocks, store: performer mode, thank you, Bernat!
 
 ### 2024-04-02
 * byob, gui, objects, store, extensions: refactored bootstrapped primitives organization

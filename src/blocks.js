@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-March-28';
+modules.blocks = '2024-April-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
