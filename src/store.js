@@ -2009,7 +2009,8 @@ Scene.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var costumeIdx = this.getCostumeIdx();
+    var costumeIdx = this.getCostumeIdx(),
+        ide = this.parentThatIsA(IDE_Morph);
 
     this.removeAllClones();
     return serializer.format(
@@ -2035,8 +2036,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<sprites select="@">%</sprites>' +
             '</stage>',
         this.name,
-        this.dimensions.x,
-        this.dimensions.y,
+        ide?.performerMode ? 480 : this.dimensions.x,
+        ide?.performerMode ? 360 : this.dimensions.y,
         costumeIdx,
         this.color.r,
         this.color.g,

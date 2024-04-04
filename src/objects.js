@@ -9592,6 +9592,15 @@ StageMorph.prototype.clearPenTrails = function () {
     this.changed();
 };
 
+StageMorph.prototype.resizePenTrails = function () {
+    var oldCanvas = this.trailsCanvas;
+    this.cachedPenTrailsMorph = null;
+    this.trailsCanvas = newCanvas(this.dimensions, null, this.trailsCanvas);
+    this.trailsCanvas.getContext('2d').drawImage(oldCanvas, 0, 0);
+    this.trailsLog = [];
+    this.changed();
+};
+
 StageMorph.prototype.penTrails = function () {
     if (!this.trailsCanvas) {
         this.trailsCanvas = newCanvas(this.dimensions);
@@ -10777,6 +10786,40 @@ StageMorph.prototype.showAll = function () {
 StageMorph.prototype.edit = SpriteMorph.prototype.edit;
 
 StageMorph.prototype.fullImage = Morph.prototype.fullImage;
+
+// Performer mode button
+
+StageMorph.prototype.addSwitchToScriptsButton = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        scrollFrame = ide.currentSprite.scripts.parentThatIsA(ScrollFrameMorph),
+        padding = 4,
+        switchToScriptsButton = new PushButtonMorph(
+            this, // target
+            "switchToScripts",
+            new SymbolMorph('turtle', 12)
+        );
+
+    this.switchToScriptsButton = switchToScriptsButton;
+
+    switchToScriptsButton.alpha = 0.2;
+    switchToScriptsButton.padding = padding;
+    switchToScriptsButton.edge = 0;
+    switchToScriptsButton.hint =
+        'toggle focus between stage\nand scripting area';
+    switchToScriptsButton.labelShadowColor =
+        scrollFrame.toolBar.keyboardButton.labelShadowColor;
+    switchToScriptsButton.fixLayout();
+    this.add(switchToScriptsButton);
+    switchToScriptsButton.setRight(this.right() - padding);
+    switchToScriptsButton.setTop(this.top() + padding);
+};
+
+StageMorph.prototype.switchToScripts = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        scrollFrame = ide.currentSprite.scripts.parentThatIsA(ScrollFrameMorph);
+    this.switchToScriptsButton.destroy();
+    scrollFrame.show();
+};
 
 // StageMorph thumbnail
 

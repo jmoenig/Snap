@@ -328,8 +328,9 @@ IDE_Morph.prototype.init = function (config) {
     this.isAnimating = true;
     this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
+    this.performerMode = false;
 
-	this.wasSingleStepping = false; // for toggling to and from app mode
+    this.wasSingleStepping = false; // for toggling to and from app mode
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
@@ -1228,6 +1229,11 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(steppingButton);
     this.controlBar.steppingButton = steppingButton; // for refreshing
 
+    if (this.performerMode) {
+        appModeButton.hide();
+        stageSizeButton.hide();
+    }
+
     // stopButton
     button = new ToggleButtonMorph(
         null, // colors
@@ -1471,7 +1477,11 @@ IDE_Morph.prototype.createControlBar = function () {
         );
 
         slider.setCenter(myself.controlBar.center());
-        slider.setRight(stageSizeButton.left() - padding);
+        if (myself.performerMode) {
+            slider.setRight(startButton.left() - padding);
+        } else {
+            slider.setRight(stageSizeButton.left() - padding);
+        }
 
         steppingButton.setCenter(myself.controlBar.center());
         steppingButton.setRight(slider.left() - padding);
@@ -1936,8 +1946,10 @@ IDE_Morph.prototype.createStage = function () {
 IDE_Morph.prototype.createStageHandle = function () {
     // assumes that the stage has already been created
     if (this.stageHandle) {this.stageHandle.destroy(); }
-    this.stageHandle = new StageHandleMorph(this.stage);
-    this.add(this.stageHandle);
+    if (!this.performerMode) {
+        this.stageHandle = new StageHandleMorph(this.stage);
+        this.add(this.stageHandle);
+    }
 };
 
 IDE_Morph.prototype.createSpriteBar = function () {
@@ -2195,15 +2207,23 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
     if (this.currentTab === 'scripts') {
         scripts.isDraggable = false;
-        scripts.color = this.groupColor;
-        scripts.cachedTexture = this.scriptsPaneTexture;
+        if (this.performerMode) {
+            scripts.alpha = 0;
+        } else {
+            scripts.color = this.groupColor;
+            scripts.cachedTexture = this.scriptsPaneTexture;
+        }
 
         this.spriteEditor = new ScrollFrameMorph(
             scripts,
             null,
             this.sliderColor
         );
-        this.spriteEditor.color = this.groupColor;
+        if (this.performerMode) {
+            this.spriteEditor.alpha = 0;
+        } else {
+            this.spriteEditor.color = this.groupColor;
+        }
         this.spriteEditor.padding = 10;
         this.spriteEditor.growth = 50;
         this.spriteEditor.isDraggable = false;
@@ -2603,7 +2623,25 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     if (situation !== 'refreshPalette') {
         // stage
-        if (this.isEmbedMode) {
+        if (this.performerMode) {
+            this.stage.setLeft(this.palette.right() + padding);
+            this.stage.setTop(this.spriteBar.bottom() + padding);
+            this.stage.setScale(1);
+            this.stageRatio = 1;
+            this.isSmallStage = false;
+            this.stage.dimensions = new Point(
+                    this.width() - this.palette.width(),
+                    this.palette.height() -
+                        this.corralBar.height() -
+                        this.corral.childThatIsA(SpriteIconMorph).height()
+            );
+            this.stage.stopVideo();
+            this.stage.setExtent(this.stage.dimensions);
+            this.stage.resizePenTrails();
+            Costume.prototype.maxDimensions = this.stage.dimensions;
+            this.paletteHandle.fixLayout();
+            this.controlBar.stageSizeButton.hide();
+        } else if (this.isEmbedMode) {
             this.stage.setScale(Math.floor(Math.min(
                 this.width() / this.stage.dimensions.x,
                 this.height() / this.stage.dimensions.y
@@ -2680,21 +2718,28 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
         // spriteEditor
         if (this.spriteEditor.isVisible) {
-            this.spriteEditor.setLeft(this.spriteBar.left());
-            this.spriteEditor.setTop(
-                cnf.noSprites || cnf.noSpriteEdits ?
+            if (this.performerMode) {
+                this.spriteEditor.setTop(this.stage.top());
+                this.spriteEditor.setLeft(this.stage.left());
+                this.spriteEditor.setWidth(this.stage.width());
+                this.spriteEditor.setHeight(this.stage.height());
+            } else {
+                this.spriteEditor.setLeft(this.spriteBar.left());
+                this.spriteEditor.setTop(
+                    cnf.noSprites || cnf.noSpriteEdits ?
                     (cnf.hideControls ? this.top() + border
                         : this.controlBar.bottom() + padding)
                     : this.spriteBar.bottom() + padding
-            );
-            this.spriteEditor.setWidth(
-                cnf.noSprites ?
-                    this.right() - this.spriteEditor.left() - border
-                    : this.spriteBar.width()
-            );
-            this.spriteEditor.setHeight(
-                this.bottom() - this.spriteEditor.top() - border
-            );
+                );
+                this.spriteEditor.setWidth(
+                    cnf.noSprites ?
+                        this.right() - this.spriteEditor.left() - border
+                        : this.spriteBar.width()
+                );
+                this.spriteEditor.setHeight(
+                    this.bottom() - this.spriteEditor.top() - border
+                );
+            }
         }
 
         // corralBar
@@ -2778,8 +2823,11 @@ IDE_Morph.prototype.setExtent = function (point) {
             );
         }
     }
-    ext = point.max(minExt);
-
+    if (this.performerMode) {
+        ext = point;
+    } else {
+        ext = point.max(minExt);
+    }
     if (!this.isAppMode) {
         // in edit mode adjust stage ratio if necessary
         // (in presentation mode this is already handled separately)
@@ -3297,6 +3345,10 @@ IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
     this.createSpriteEditor();
     this.corral.refresh();
     this.fixLayout('selectSprite');
+    if (this.performerMode) {
+        this.fixLayout();
+        this.currentSprite.scripts.updateToolbar();
+    }
     this.currentSprite.scripts.fixMultiArgs();
 };
 
@@ -4302,10 +4354,12 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Fade blocks...',
         'userFadeBlocks'
     );
-    menu.addItem(
-        'Stage size...',
-        'userSetStageSize'
-    );
+    if (!this.performerMode) {
+        menu.addItem(
+            'Stage size...',
+            'userSetStageSize'
+        );
+    }
     if (shiftClicked) {
         menu.addItem(
             'Dragging threshold...',
@@ -4731,6 +4785,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
         'EXPERIMENTAL! check to enable\nsupport for compiling',
+        true
+    );
+    addPreference(
+        'Performer mode',
+        () => this.togglePerformerMode(),
+        this.performerMode,
+        'uncheck to go back to regular\nlayout',
+        'check to have the stage use up\nall space and go behind the\nscripting area',
         true
     );
     menu.addLine(); // everything below this line is stored in the project
@@ -6828,6 +6890,7 @@ IDE_Morph.prototype.openProject = function (project) {
     } else {
         this.scenes = project.scenes;
     }
+    this.performerMode = false;
     this.switchToScene(
         project.currentScene || project.scenes.at(1),
         true,  // refresh album
@@ -7210,6 +7273,17 @@ IDE_Morph.prototype.toggleInputSliders = function () {
 IDE_Morph.prototype.toggleSliderExecute = function () {
     ArgMorph.prototype.executeOnSliderEdit =
         !ArgMorph.prototype.executeOnSliderEdit;
+};
+
+IDE_Morph.prototype.togglePerformerMode = function () {
+    var myself = this;
+    this.performerMode = !this.performerMode;
+    if (!this.performerMode) {
+        this.setStageExtent(new Point(480, 360));
+    }
+    this.buildPanes();
+    this.fixLayout();
+    this.selectSprite(this.currentSprite);
 };
 
 IDE_Morph.prototype.setEmbedMode = function () {
