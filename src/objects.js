@@ -2192,23 +2192,27 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'other',
             spec: 'map %cmdRing to %codeKind %code',
-            defaults: [null, ['code']]
+            defaults: [null, ['code']],
+            code: 'transpile'
         },
         doMapValueCode: {
             type: 'command',
             category: 'other',
             spec: 'map %mapValue to code %code',
-            defaults: [['String'], '<#1>']
+            defaults: [['String'], '<#1>'],
+            code: 'literal'
         },
         doMapListCode: {
             type: 'command',
             category: 'other',
-            spec: 'map %codeListPart of %codeListKind to code %code'
+            spec: 'map %codeListPart of %codeListKind to code %code',
+            code: 'delimit'
         },
         reportMappedCode: {
             type: 'reporter',
             category: 'other',
-            spec: 'code of %cmdRing'
+            spec: 'code of %cmdRing',
+            code: 'encode'
         },
 
         // Extensions
