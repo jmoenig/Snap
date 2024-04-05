@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-March-25';
+modules.lists = '2024-April-05';
 
 var List;
 var ListWatcherMorph;
@@ -125,6 +125,7 @@ var ListWatcherMorph;
     columns()               - answer a 2D list with rows turned into columns
     transpose()             - answer the matrix transpose over all dimensions
     reversed()              - answer a reversed shallow copy of the list
+    ssum()                  - answer the sum of all number leafs
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
@@ -642,6 +643,13 @@ List.prototype.ravel = function () {
     var all = [];
     this.deepMap(atom => all.push(atom));
     return new List(all);
+};
+
+List.prototype.ssum = function () {
+    // answer the sum of all number leafs
+    var ss = 0;
+    this.deepMap(leaf => ss += (+leaf || 0));
+    return ss;
 };
 
 List.prototype.rank = function () {
