@@ -4355,12 +4355,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Fade blocks...',
         'userFadeBlocks'
     );
-    if (!this.performerMode) {
-        menu.addItem(
-            'Stage size...',
-            'userSetStageSize'
-        );
-    }
+    menu.addItem(
+        'Stage size...',
+        'userSetStageSize'
+    );
     if (shiftClicked) {
         menu.addItem(
             'Dragging threshold...',
@@ -7902,6 +7900,13 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
             myself.fixLayout();
             this.setExtent(world.extent());
         };
+    }
+
+    if (this.performerMode) {
+        this.performerMode = false;
+        this.buildPanes();
+        this.fixLayout();
+        this.selectSprite(this.currentSprite);
     }
 
     this.stageRatio = 1;
