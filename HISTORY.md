@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-04-05
+* new dev version for v9.2.14
+
 ## 9.2.13:
     * fixed "my solutions" reporter for puzzle scripts without comments
 
