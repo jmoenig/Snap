@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-March-18';
+modules.blocks = '2024-April-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -498,6 +498,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'sorted' : ['sorted'],
             'shuffled' : ['shuffled'],
             'reverse' : ['reverse'],
+            '\u03a3' : ['\u03a3'], // Greek capital Sigma, sum of all numbers
             '~' : null,
             'text' : ['text'],
             'lines' : ['lines'],
