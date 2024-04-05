@@ -3,10 +3,13 @@
 ## in development:
 * **New Features:**
     * new Σ selector for ssum() of a list: recursive sum of all number leafs
-
+* **Translation Updates:**
+    * Tigrinya, thanks, Tesfaldet Negash!
+    
 2024-04-05
 * new dev version for v9.2.14
-* blocks, threads, lists: added Σ selector for ssum() to the list attributes dropdown 
+* blocks, threads, lists: added Σ selector for ssum() to the list attributes dropdown
+* Tigrinya translation update, thanks, Tesfaldet Negash!
 
 ## 9.2.13:
     * fixed "my solutions" reporter for puzzle scripts without comments

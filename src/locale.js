@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2024-February-02';
+modules.locale = '2024-April-05';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -664,11 +664,11 @@ SnapTranslator.dict.ti = {
 	'language_name':
         'ትግርኛ',
     'language_translator':
-        'Tesfaldet Negash, Heran Sium',
+        'ተስፋልደት ነጋሽ እያሱ, ሄራን ተወልደ ስዩም',
     'translator_e-mail':
         'winna.programming@gmail.com',
     'last_changed':
-        '2023-05-29'
+        '2024-03-25'
 };
 
 SnapTranslator.dict.hy = {
