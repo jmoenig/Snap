@@ -77,6 +77,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-04-05
+* gui: restore scripts pane alpha when toggling out of performer mode
+
 ### 2024-04-04
 * gui, objects, store, threads, stdlib: integrated Lisp-syntax primitives into the blocks dictionary
 * objects: added codification shortcuts to Lisp syntax: transpile, literal, delimit, encode

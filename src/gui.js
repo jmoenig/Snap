@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-April-04';
+modules.gui = '2024-April-05';
 
 // Declarations
 
@@ -2210,6 +2210,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         if (this.performerMode) {
             scripts.alpha = 0;
         } else {
+            scripts.alpha = 1;
             scripts.color = this.groupColor;
             scripts.cachedTexture = this.scriptsPaneTexture;
         }
