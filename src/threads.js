@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-05';
+modules.threads = '2024-April-08';
 
 var ThreadManager;
 var Process;
@@ -5588,9 +5588,9 @@ Process.prototype.variadify = function (list) {
 };
 
 Process.prototype.blockAlias = function (string) {
-    return string === 'get' ? 'reportGetVar'
+    return snapEquals(string, 'get') ? 'reportGetVar'
         : Object.keys(SpriteMorph.prototype.blocks).find(key =>
-            SpriteMorph.prototype.blocks[key]?.code === string) || string;
+            snapEquals(SpriteMorph.prototype.blocks[key]?.code, string)) || string;
 };
 
 Process.prototype.selectorAlias = function (string) {
