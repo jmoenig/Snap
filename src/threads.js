@@ -5550,10 +5550,10 @@ Process.prototype.toInputSyntax = function (list) {
 };
 
 Process.prototype.parseInputValue = function (data) {
-    if (data === 't') {
+    if (snapEquals(data, 't')) {
         return true;
     }
-    if (data === 'f') {
+    if (snapEquals(data, 'f')) {
         return false;
     }
     return data;

@@ -1259,17 +1259,15 @@ List.prototype.escape = function (string) {
         quoted = false,
         len = string.length,
         i, ch;
-    if (string === 't') {
-        return '\\t';
-    } else if (string === 'f') {
-        return '\\f';
-    } else if (string === 'nil') {
-        return '"nil"';
+    if (string.trim().length && 'tf'.includes(string.toLowerCase())) {
+        return '\\' + string;
+    } else if (snapEquals(string, 'nil')) {
+        return '"' + string + '"';
     }
     for (i = 0; i < len; i += 1) {
         ch = string[i];
-        if (ch === '"') {
-            ch = '\\"';
+        if (ch === '"' || (ch === ';')) {
+            ch = '\\' + ch;
         } else if (!ch.trim().length || '()'.includes(ch)) {
             if (!quoted) {
                 str = '"' + str;
