@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-April-05';
+modules.lists = '2024-April-08';
 
 var List;
 var ListWatcherMorph;
@@ -1193,7 +1193,7 @@ List.prototype.parseStream = function (stream) {
             this.add(child);
         } else if ((ch === ')' || !ch.trim().length) && !quoted) {
             if (item.length) {
-                if (item === 'nil') {
+                if (snapEquals(item, 'nil')) {
                     item = '';
                 }
                 this.add(item);
@@ -1207,8 +1207,8 @@ List.prototype.parseStream = function (stream) {
             if (!quoted) {
                 if (!item.length) {
                     this.add('');
-                } else if (item === 'nil') {
-                    this.add('nil');
+                } else if (snapEquals(item, 'nil')) {
+                    this.add(item);
                 }
             }
         } else if (ch === '\\') {
