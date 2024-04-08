@@ -79,6 +79,7 @@
 
 ### 2024-04-05
 * threads: made Lisp syntax case insensitive for block names
+* objects: added alias for "answer"
 
 ### 2024-04-05
 * gui: restore scripts pane alpha when toggling out of performer mode

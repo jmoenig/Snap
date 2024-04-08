@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-April-04';
+modules.objects = '2024-April-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -1442,7 +1442,8 @@ SpriteMorph.prototype.initBlocks = function () {
         getLastAnswer: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'answer'
+            spec: 'answer',
+            code: 'answer'
         },
         reportMousePosition: {
             type: 'reporter',
