@@ -74,11 +74,13 @@
     * fixed referencing system drop-down menus in metaprogramming
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
 * **Documentation Updates:**
+    * new Snap! Lisp Syntax documentation
 * **Translation Updates:**
     * German
 
 ### 2024-04-09
 * threads: added "ring" as metaprogramming mnemonic for "repRing"
+* new Snap! Lisp Syntax documentation
 
 ### 2024-04-08
 * threads: made Lisp syntax case insensitive for block names
