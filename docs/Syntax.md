@@ -11,16 +11,16 @@ We are using this syntax internally for developing extensions and portions of Sn
 
 ### It’s not real Lisp
 
-The purpose of this syntax is - only! - to represent blocks and their parts, i.e. syntax elements, nothing else. In particular there are no provisions to represent data of any kind, especially lists. Instead, we use this syntax to represent e.g. a reporter block that returns a list once it gets evaluated. While this syntax is heavily inspired by Lisp it lacks some aspects of Lisp such as backticks, adds some others such as the variadic "input list" application syntax, and associates a slightly different meaning to others, such as ```nil```, which in Lisp stands for an empty list, but in Snap! came to mean an empty input slot. If you keep this in mind you should nevertheless be able to quickly grasp Snap’s textual Lisp-like syntax and enjoy using it for your own purposes and extensions.
+The purpose of this syntax is - only! - to represent blocks and their parts, i.e. syntax elements, nothing else. In particular there are no provisions to represent data of any kind, especially lists. Instead, we use this syntax to represent e.g. a reporter block that returns a list once it gets evaluated. While this syntax is heavily inspired by Lisp it lacks some aspects of Lisp such as backticks, adds some others such as the variadic "input list" application syntax, and associates a slightly different meaning to others, such as `nil`, which in Lisp stands for an empty list, but in Snap! came to mean an empty input slot, or `f` to represent a Boolean input slot holding a user-set value of `false`, which in "real" Lisp would also be represented by `nil`. If you keep this in mind you should nevertheless be able to quickly grasp Snap’s textual Lisp-like syntax and enjoy using it for your own purposes and extensions.
 
 
 ## Code to Blocks to Code
 
 Beginning in v10 each script (agglomeration of one or more blocks) has an entry in its context menu (available via right-click or option-click) to display its "Lisp code" equivalent in a speech bubble next to the blocks. The result can be exported as file or copied to the clipboard - again via the speech bubble’s context menu.
 
-The same can also be achieved using blocks: Snap! Blocks and Scripts can be split into syntax trees using the PLIT primitive reporter in combination with the "blocks" option. The resulting syntax tree is a nested list which can be represented in text-only form using the attribute-of-list primitive with the "text" or "lines" selectors; "text" produces a single-line output, "lines" a somewhat pretty-printed multi-line text. Such text can in turn be SPLIT back into a syntax tree by again calling SPLIT with the "blocks" selector. A syntax tree can be assembled into a script of blocks by passing it into the JOIN primitive.
+The same can also be achieved using blocks: Snap! Blocks and Scripts can be split into syntax trees using the SPLIT primitive reporter in combination with the "blocks" option. The resulting syntax tree is a nested list which can be represented in text-only form using the attribute-of-list primitive with the "text" or "lines" selectors; "text" produces a single-line output, "lines" a somewhat pretty-printed multi-line text. Such text can in turn be SPLIT back into a syntax tree by again calling SPLIT with the "blocks" selector. A syntax tree can be assembled into a script of blocks by passing it into the JOIN primitive.
 
-There is a library named "Code to Blocks to Code" that offers 2 little helper blocks that directly transform blocks to Lisp syntax ```(encode)``` and back again ```(parse)```. These blocks can themselves be expressed in Lisp syntax, as follows:
+There is a library named "Code to Blocks to Code" that offers 2 little helper blocks that directly transform blocks to Lisp syntax `(encode)` and back again `(parse)`. These blocks can themselves be expressed in Lisp syntax, as follows:
 
 **parse:**
 
@@ -132,7 +132,7 @@ Most of the time you will not have to worry about identifying a block by its nam
 
 ### Primitive Block Names
 
-Primitive blocks (including "bootstrapped" palette blocks in v10) can be identified either by their "selector" or "code" properties. Both can be looked up in the blocks dictionary defined in the ```objects.js``` source.
+Primitive blocks (including "bootstrapped" palette blocks in v10) can be identified either by their "selector" or "code" properties. Both can be looked up in the blocks dictionary defined in the `objects.js` source.
 
 for example:
 
@@ -191,7 +191,7 @@ If an input slot can be expanded to hold multiple values, these sub-slots are re
 
 ### Empty slots
 
-An empty input slot can be written as two adjacent double quotation marks or using the special token ```nil``` (without quotation marks):
+An empty input slot can be written as two adjacent double quotation marks or using the special token `nil` (without quotation marks):
 
 ```lisp
 (- "" 2)
@@ -200,14 +200,14 @@ An empty input slot can be written as two adjacent double quotation marks or usi
 
 ### Boolean slots
 
-Boolean input slots containing directly user set values can be written as ```t``` for true and ```f``` for false. Both are case-insensitive.
+Boolean input slots containing directly user set values can be written as `t` for true and `f` for false. Both are case-insensitive.
 
 ```lisp
 (waitUntil f)
 (ifThen t yes no)
 ```
 
-If a single ```t, T, f``` or ```F``` is the contents of a text input slot, it can either be escaped or enclosed in double quotation marks:
+If a single `t`, `T`, `f` or `F` is the contents of a text input slot, it can either be escaped or enclosed in double quotation marks:
 
 ```lisp
 (ifThen t \t \f)
