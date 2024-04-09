@@ -98,10 +98,10 @@ Characters following an un-escaped and unquoted semicolon are ignored by the par
 
 ```lisp
 (   ; this is the beginning of a script
-	(goto "[random position]") ; the top block
+    (goto "[random position]") ; the top block
     (face [center]) 
-	;(down) this line will be ignored
-	(move 10) 
+    ;(down) this line will be ignored
+    (move 10) 
     (up)
 )
 ```
@@ -262,8 +262,8 @@ Since tokens are delimited by white-space, blocks and their inputs can be writte
 
 ```lisp
 (ifThen (> (mouseX) 0)
-	(* (mouseX) 2)
-	0
+    (* (mouseX) 2)
+    0
 )
 ```
 
@@ -271,8 +271,8 @@ another example:
 
 ```lisp
 (goto (+
-	(list -240 -160)
-	(rand 1 (list 240 160)))
+    (list -240 -160)
+    (rand 1 (list 240 160)))
 )
 ```
 
@@ -280,14 +280,14 @@ and yet another:
 
 ```lisp
 (call 
-	(ring 
-	    (ifThen (empty (get data)) 
-	        (get data) 
-	        (cons 
-	            (call (get fn) (item 1 (get data))) 
-	            (call (this [script]) (get fn) (cdr (get data))))
-	    ) fn data) 
-	(ring  (list nil (^ nil 2))) 
+    (ring 
+        (ifThen (empty (get data)) 
+            (get data) 
+            (cons 
+                (call (get fn) (item 1 (get data))) 
+                (call (this [script]) (get fn) (cdr (get data))))
+        ) fn data) 
+    (ring  (list nil (^ nil 2))) 
     (range 1 10))
 ```
 
@@ -309,8 +309,8 @@ another example:
 
 ```lisp
 (run 
- 	(cmd (gotoXY nil nil))
-	: (+ (pos) (* 10 (list (fn [sin] (dir)) (fn [cos] (dir)))))
+    (cmd (gotoXY nil nil))
+    : (+ (pos) (* 10 (list (fn [sin] (dir)) (fn [cos] (dir)))))
 )
 ```
 
@@ -328,8 +328,8 @@ and also broken up across several lines with arbitrary indentations:
 ```lisp
 (forever 
     (ifElse (touches [mouse-pointer]) 
-    	(sayFor Gotcha! 2) 
-    	(goto "[random position]")
+        (sayFor Gotcha! 2) 
+        (goto "[random position]")
     )
 )
 ```
@@ -347,10 +347,10 @@ Again, the tokens can be arranged across multiple lines for better readability:
 
 ```lisp
 (
-	(goto "[random position]") 
+    (goto "[random position]") 
     (face [center]) 
-	(down) 
-	(move 10) 
+    (down) 
+    (move 10) 
     (up)
 )
 ```
@@ -359,11 +359,11 @@ Stacks of commands inside C-shaped input slots follow the same markings:
 
 ```lisp
 (
-	(down) 
-	(repeat 4 (
-	    (move 100) 
-	    (right 90)
-	)) 
+    (down) 
+    (repeat 4 (
+        (move 100) 
+        (right 90)
+    )) 
     (up)
 )
 ```
