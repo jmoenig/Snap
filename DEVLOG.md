@@ -77,7 +77,10 @@
 * **Translation Updates:**
     * German
 
-### 2024-04-05
+### 2024-04-09
+* threads: added "ring" as metaprogramming mnemonic for "repRing"
+
+### 2024-04-08
 * threads: made Lisp syntax case insensitive for block names
 * objects: added alias for "answer"
 * lists: made Lisp syntax for empty slots (nil) case-insensitive

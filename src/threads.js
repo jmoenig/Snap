@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-08';
+modules.threads = '2024-April-09';
 
 var ThreadManager;
 var Process;
@@ -8204,6 +8204,7 @@ Process.prototype.slotType = function (spec) {
         '7':            7,
         'repring':      7, // spec
         // mnemonics:
+        'ring':         7,
         'rep':          7,
         'reporter':     7,
 
