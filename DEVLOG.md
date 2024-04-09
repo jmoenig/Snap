@@ -81,6 +81,7 @@
 ### 2024-04-09
 * threads: added "ring" as metaprogramming mnemonic for "repRing"
 * new Snap! Lisp Syntax documentation
+* incremented dev version
 
 ### 2024-04-08
 * threads: made Lisp syntax case insensitive for block names
