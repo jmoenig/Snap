@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-April-08';
+modules.objects = '2024-April-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -675,18 +675,19 @@ SpriteMorph.prototype.initBlocks = function () {
                 (ifElse (= (join (get name)) back)
                     (warp (until (= (idx (my [self]) (ask (my [stage])
                         (ring (my "[other sprites]")))) 1)
-                        (goBack 1)))
+                        (back 1)))
                     (warp (until (= (idx (my [self]) (ask (my [stage])
                         (ring (my "[other sprites]"))))
                         (+ (data [length] (my "[other sprites]")) 1))
-                        (goBack -1)))))`
+                        (back -1)))))`
         },
         goBack: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'go back %n layers',
-            defaults: [1]
+            defaults: [1],
+            code: 'back'
         },
 
         // Looks - Debugging primitives for development mode
