@@ -1,7 +1,7 @@
 # Snap! Lisp Syntax
 
 > Jens Mönig,
-> last updated April 9, 2024
+> last updated April 10, 2024
 
 In v10 we have begun to bootstrap parts of Snap!, i.e. to write significant portions of Snap! in itself using the Snap! IDE and, of course, blocks. In order to merge these block-scripts with the JavaScript source code that launches Snap! we first handled these as separate XML files. As the bootstrapping progressed we felt the need to increasingly mix and merge both codes, Snap! and JavaScript, at a finer granularity and in a text form that would be friendlier for us to read and edit. As we were thinking about a minimal syntax for blocks the idea of Lisp kept coming back. Since we think of Snap! as a cross-breed of Scheme and Smalltalk this idea became increasingly attractive. This document describes our Lisp-inspired syntax. A few words of context and caution: 
 
@@ -11,8 +11,23 @@ We are using this syntax internally for developing extensions and portions of Sn
 
 ### It’s not real Lisp
 
-The purpose of this syntax is - only! - to represent blocks and their parts, i.e. syntax elements, nothing else. In particular there are no provisions to represent data of any kind, especially lists. Instead, we use this syntax to represent e.g. a reporter block that returns a list once it gets evaluated. While this syntax is heavily inspired by Lisp it lacks some aspects of Lisp such as backticks, adds some others such as the variadic "input list" application syntax, and associates a slightly different meaning to others, such as `nil`, which in Lisp stands for an empty list, but in Snap! came to mean an empty input slot, or `f` to represent a Boolean input slot holding a user-set value of `false`, which in "real" Lisp would also be represented by `nil`. If you keep this in mind you should nevertheless be able to quickly grasp Snap’s textual Lisp-like syntax and enjoy using it for your own purposes and extensions.
+The purpose of this syntax is - only! - to represent blocks and their parts, i.e. syntax elements, nothing else. In particular there are no provisions to represent data of any kind, especially lists. Instead, we use this syntax to represent e.g. a reporter block that returns a list once it gets evaluated. While this syntax is heavily inspired by Lisp it lacks some aspects of individual Lisp dialects such as backticks, adds some others such as the variadic "input list" application syntax, and associates a slightly different meaning to again others, such as `nil`, which in Common Lisp stands for an empty list, but in Snap! came to mean an empty input slot, or `f` to represent a Boolean input slot holding a user-set value of `false`, which in some Lisp dialects would also be represented by `nil`. If you keep this in mind you should nevertheless be able to quickly grasp Snap’s textual Lisp-like syntax and enjoy using it for your own purposes and extensions.
 
+### Syntax Highlighting
+
+A nice affordance of Snap!'s Lisp notation is that syntax highlighting can be automatically applied to it in markdown documents using the `lisp` tag:
+
+
+    ```lisp
+    (code ...)
+    ```
+
+will render as
+
+```lisp
+(code ...)
+```
+in pages that support syntax highlighting for specific programming languages such as Github.
 
 ## Code to Blocks to Code
 
@@ -49,7 +64,7 @@ These 2 examples already give a preview of what this documentation is about. The
 
 # Tokens
 
-A token is a contiguous sequence of non white-space characters. It includes numbers, punctuation and special characters, for example:
+A token is a contiguous sequence of non white space characters. It includes numbers, punctuation and special characters, for example:
 
 ```lisp
 foo
@@ -60,7 +75,7 @@ Hi!
 50%
 ```
 
-Tokens are delimited by white-space. The following examples are 2 tokens each:
+Tokens are delimited by white space. The following examples are 2 tokens each:
 
 ```lisp
 foo bar
@@ -70,7 +85,7 @@ Whoa !
 $ 29,99
 ```
 
-White-space can be used inside a token by enclosing it with double quotation marks. The following examples are single tokens:
+White space can be used inside a token by enclosing it with double quotation marks. The following examples are single tokens:
 
 ```lisp
 "foo bar garply"
@@ -145,11 +160,19 @@ both produce the same block.
 
 ### Custom Block Names
 
-Custom blocks are identified by their "label" property. Block labels replace input slots with underscores. Note that block labels often contain whitespace and therefore must be enclosed by double quotation marks, for example:
+Custom blocks are identified by their "label" property. Block labels replace input slots with underscores. Note that block labels often contain white space and therefore must be enclosed by double quotation marks, for example:
 
 ```lisp
 ("jump _ steps high" 50)
 ```
+
+or:
+
+```lisp
+("parse code _ to blocks" "(move 10)")
+```
+
+Note that the second snippet is an example of syntactical metaprogramming, it is code which parses code, therefore the second token needs to be quoted, to it doesn't become converted to a block right away, but only when the *block* represented by `"parse code _ to blocks"` gets evaluated.
 
 ## Inputs
 
@@ -200,7 +223,7 @@ An empty input slot can be written as two adjacent double quotation marks or usi
 
 ### Boolean slots
 
-Boolean input slots containing directly user set values can be written as `t` for true and `f` for false. Both are case-insensitive.
+Boolean input slots containing directly user set values can be written as `t` for *true* and `f` for *false*. Both are case-insensitive.
 
 ```lisp
 (waitUntil f)
@@ -212,6 +235,12 @@ If a single `t`, `T`, `f` or `F` is the contents of a text input slot, it can ei
 ```lisp
 (ifThen t \t \f)
 (ifThen t "t" "f")
+```
+
+Boolean slots can also be set to *empty* using `nil`:
+
+```lisp
+(ifThen nil y n)
 ```
 
 ### Input options
@@ -258,7 +287,7 @@ Nesting can span multiple levels
 (call (ring (ifThen (= nil 1) 1 (* nil (call (this [script]) (- nil 1))))) 5)
 ```
 
-Since tokens are delimited by white-space, blocks and their inputs can be written across multiple lines of text, and indented arbitrarily, for example:
+Since tokens are delimited by white space, blocks and their inputs can be written across multiple lines of text and indented arbitrarily, for example:
 
 ```lisp
 (ifThen (> (mouseX) 0)
@@ -294,7 +323,7 @@ and yet another:
 
 ### Variadic slots
 
-Input slots that can be expanded to hold multiple values can often also be replaced for reporters which answer a list of values by dropping the reporter onto their arrow head icons. This "input list:" usage can be expressed by a single colon token followed by the reporter input:
+Input slots that can be expanded to hold multiple values can often also be replaced with reporters which answer a list of values by dropping the reporter onto their arrow head icons. This "input list:" usage can be expressed by a single colon token followed by the reporter input:
 
 ```lisp
 (+ : (range 1 10))
