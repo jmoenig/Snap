@@ -82,6 +82,7 @@
 * objects: added "back" code alias for "goBack" primitive
 * objects: changed "gotoXY" code alias to "go"
 * objects: changed code aliases for setter and changer primitives
+* added appendix with primitive block names to syntax documentation
 
 ### 2024-04-09
 * threads: added "ring" as metaprogramming mnemonic for "repRing"

@@ -396,3 +396,196 @@ Stacks of commands inside C-shaped input slots follow the same markings:
     (up)
 )
 ```
+
+## Apendix: Primitive Block Names
+
+| Palette | Label | Name | Type | Example |
+|-|-|-|-|-|
+| **motion** | move _ steps | **move** | *command* | ` (move 10) ` |
+|  | turn $clockwise _ degrees | **right** |  | ` (right 15) ` |
+|  | turn $counterclockwise _ degrees | **left** |  | ` (left 15) ` |
+|  | point in direction _ | **head** |  | ` (head 90) ` |
+|  | point towards _ | **face** |  | ` (face [mouse-pointer]) ` |
+|  | go to x: _ y: _ | **go** |  | ` (go 0 0) ` |
+|  | go to _ | **goto** |  | ` (goto "[random position]") ` |
+|  | glide _ secs to x: _ y: _ | **glide** |  | ` (glide 1 0 0) ` |
+|  | change x by _ | **+x** |  | ` (+x 10) ` |
+|  | set x to _ | **x=** |  | ` (x= 0) ` |
+|  | change y by _ | **+y** |  | ` (+y 10) ` |
+|  | set y to _ | **y=** |  | ` (y= 0) ` |
+|  | if on edge, bounce | **bounce** |  | ` (bounce) ` |
+|  | position | **pos** | *reporter* | ` (pos) ` |
+|  | x position | **x** |  | ` (x) ` |
+|  | y position | **y** |  | ` (y) ` |
+|  | direction | **dir** |  | ` (dir) ` |
+| **looks** | switch to costume _ | **wear** | *command* | ` (wear nil) ` |
+|  | next costume | **next** |  | ` (next) ` |
+|  | costume # | **costume#** | *reporter* | ` (costume#) ` |
+|  | say _ for _ secs | **sayFor** | *command* | ` (sayFor Hello! 2) ` |
+|  | say _ | **say** |  | ` (say Hello!) ` |
+|  | think _ for _ secs | **thinkFor** |  | ` (thinkFor Hmm... 2) ` |
+|  | think _ | **think** |  | ` (think Hmm...) ` |
+|  | _ of costume _ | **costume** | *reporter* | ` (costume [width] [current]) ` |
+|  | stretch _ x: _ y: _ % | **stretch** |  | ` (stretch [current] 100 50) ` |
+|  | skew _ to _ degrees _ % | **skew** |  | ` (skew [current] 0 50) ` |
+|  | new costume _ width _ height _ | **newCostume** |  | ` (newCostume nil nil nil) ` |
+|  | change _ effect by _ | **+effect** | *command* | ` (+effect [ghost] 25) ` |
+|  | set _ effect to _ | **effect=** |  | ` (effect= [ghost] 0) ` |
+|  | clear graphic effects | **clearEffects** |  | ` (clearEffects) ` |
+|  | _ effect | **effect** | *reporter* | ` (effect [ghost]) ` |
+|  | change size by _ | **+size** | *command* | ` (+size 10) ` |
+|  | set size to _ % | **size=** |  | ` (size= 100) ` |
+|  | size | **size** | *reporter* | ` (size) ` |
+|  | show | **show** | *command* | ` (show) ` |
+|  | hide | **hide** |  | ` (hide) ` |
+|  | shown? | **shown** | *predicate* | ` (shown) ` |
+|  | go to _ layer | **layer** | *command* | ` (layer [front]) ` |
+|  | go back _ layers | **back** |  | ` (back 1) ` |
+| **sound** | play sound _ | **play** |  | ` (play nil) ` |
+|  | play sound _ until done | **playAll** |  | ` (playAll nil) ` |
+|  | stop all sounds | **stopSounds** |  | ` (stopSounds) ` |
+|  | play sound _ at _ Hz | **playAt** |  | ` (playAt nil 44100) ` |
+|  | _ of sound _ | **sound** | *reporter* | ` (sound [duration] nil) ` |
+|  | new sound _ rate _ Hz | **newSound** |  | ` (newSound nil 44100) ` |
+|  | rest for _ beats | **rest** | *command* | ` (rest 0.2) ` |
+|  | play note _ for _ beats | **note** |  | ` (note 60 0.5) ` |
+|  | set instrument to _ | **instrument** |  | ` (instrument 1) ` |
+|  | change tempo by _ | **+tempo** |  | ` (+tempo 20) ` |
+|  | set tempo to _ bpm | **tempo=** |  | ` (tempo= 60) ` |
+|  | tempo | **tempo** | *reporter* | ` (tempo) ` |
+|  | change volume by _ | **+vol** | *command* | ` (+vol 10) ` |
+|  | set volume to _ % | **vol=** |  | ` (vol= 100) ` |
+|  | volume | **vol** | *reporter* | ` (vol) ` |
+|  | change balance by _ | **+pan** | *command* | ` (+pan 10) ` |
+|  | set balance to _ | **pan=** |  | ` (pan= 0) ` |
+|  | balance | **pan** | *reporter* | ` (pan) ` |
+|  | play frequency _ Hz | **freq** | *command* | ` (freq 440) ` |
+|  | stop frequency | **stopFreq** |  | ` (stopFreq) ` |
+| **pen** | clear | **clear** |  | ` (clear) ` |
+|  | pen down | **down** |  | ` (down) ` |
+|  | pen up | **up** |  | ` (up) ` |
+|  | pen down? | **down?** | *predicate* | ` (down?) ` |
+|  | set pen color to _ | **setColor** | *command* | ` (setColor "rgba(145,26,68,1)") ` |
+|  | change pen _ by _ | **+pen** |  | ` (+pen [hue] 10) ` |
+|  | set pen _ to _ | **pen=** |  | ` (pen= [hue] 50) ` |
+|  | pen _ | **pen** | *reporter* | ` (pen [hue]) ` |
+|  | change pen size by _ | **+penSize** | *command* | ` (+penSize 1) ` |
+|  | set pen size to _ | **penSize=** |  | ` (penSize= 1) ` |
+|  | stamp | **stamp** |  | ` (stamp) ` |
+|  | fill | **fill** |  | ` (fill) ` |
+|  | write _ size _ | **write** |  | ` (write Hello! 12) ` |
+|  | pen trails | **trails** | *reporter* | ` (trails) ` |
+|  | paste on _ | **paste** | *command* | ` (paste nil) ` |
+|  | cut from _ | **cut** |  | ` (cut nil) ` |
+| **control** | broadcast _ _ | **send** |  | ` (send nil) ` |
+|  | broadcast _ _ and wait | **sendAll** |  | ` (sendAll nil) ` |
+|  | warp _ | **warp** |  | ` (warp nil) ` |
+|  | wait _ secs | **wait** |  | ` (wait 1) ` |
+|  | wait until _ | **waitUntil** |  | ` (waitUntil nil) ` |
+|  | forever _ | **forever** |  | ` (forever nil) ` |
+|  | repeat _ _ | **repeat** |  | ` (repeat 10 nil) ` |
+|  | repeat until _ _ | **until** |  | ` (until nil nil) ` |
+|  | for _ = _ to _ _ | **for** |  | ` (for i 1 10 nil) ` |
+|  | if _ _ _ | **if** |  | ` (if nil nil) ` |
+|  | if _ _ else _ | **ifElse** |  | ` (ifElse nil nil nil) ` |
+|  | if _ then _ else _ | **ifThen** | *reporter* | ` (ifThen nil nil nil) ` |
+|  | report _ | **report** | *command* | ` (report nil) ` |
+|  | stop _ | **stop** |  | ` (stop [all]) ` |
+|  | run _ _ | **run** |  | ` (run nil) ` |
+|  | launch _ _ | **fork** |  | ` (fork nil) ` |
+|  | call _ _ | **call** | *reporter* | ` (call nil) ` |
+|  | pipe _ $arrowRight _ | **pipe** |  | ` (pipe nil nil) ` |
+|  | tell _ to _ _ | **tell** | *command* | ` (tell nil nil) ` |
+|  | ask _ for _ _ | **ask** | *reporter* | ` (ask nil nil) ` |
+|  | create a clone of _ | **clone** | *command* | ` (clone [myself]) ` |
+|  | a new clone of _ | **newClone** | *reporter* | ` (newClone [myself]) ` |
+|  | delete this clone | **removeClone** | *command* | ` (removeClone) ` |
+|  | pause all $pause | **pause** |  | ` (pause) ` |
+|  | switch to scene _ _ | **scene** |  | ` (scene [next]) ` |
+|  | define _ _ _ | **define** |  | ` (define block nil nil) ` |
+|  | delete block _ | **deleteBlock** |  | ` (deleteBlock nil) ` |
+|  | set _ of block _ to _ | **setBlock** |  | ` (setBlock [label] nil nil) ` |
+|  | _ of block _ | **block** | *reporter* | ` (block [definition] nil) ` |
+|  | this _ | **this** |  | ` (this [script]) ` |
+| **sensing** | touching _ ? | **touch** | *predicate* | ` (touch [mouse-pointer]) ` |
+|  | touching _ ? | **touchColor** |  | ` (touchColor "rgba(145,26,68,1)") ` |
+|  | color _ is touching _ ? | **colorTouch** |  | ` (colorTouch "rgba(145,26,68,1)" "rgba(145,26,68,1)") ` |
+|  | ask _ and wait | **doAsk** | *command* | ` (doAsk "what's your name?") ` |
+|  | answer | **answer** | *reporter* | ` (answer) ` |
+|  | mouse position | **mouse** |  | ` (mouse) ` |
+|  | mouse x | **mouseX** |  | ` (mouseX) ` |
+|  | mouse y | **mouseY** |  | ` (mouseY) ` |
+|  | mouse down? | **mouseDown** | *predicate* | ` (mouseDown) ` |
+|  | key _ pressed? | **key** |  | ` (key [space]) ` |
+|  | _ to _ | **relation** | *reporter* | ` (relation [distance] [mouse-pointer]) ` |
+|  | _ at _ | **aspect** |  | ` (aspect [hue] [mouse-pointer]) ` |
+|  | reset timer | **resetTimer** | *command* | ` (resetTimer) ` |
+|  | timer | **timer** | *reporter* | ` (timer) ` |
+|  | current _ | **current** |  | ` (current [date]) ` |
+|  | _ of _ | **attribute** |  | ` (attribute "[costume #]" nil) ` |
+|  | my _ | **my** |  | ` (my [neighbors]) ` |
+|  | object _ | **object** |  | ` (object [myself]) ` |
+|  | url _ | **url** |  | ` (url snap.berkeley.edu) ` |
+|  | microphone _ | **audio** |  | ` (audio [volume]) ` |
+|  | video _ on _ | **video** |  | ` (video [motion] [myself]) ` |
+|  | set video transparency to _ | **transparency** | *command* | ` (transparency 50) ` |
+|  | is _ on? | **global** | *predicate* | ` (global "[turbo mode]") ` |
+|  | set _ to _ | **global=** | *command* | ` (global= "[video capture]" nil) ` |
+| **operators** | _ _ | **cmd** | *ring* | ` (cmd nil) ` |
+|  | _ _ | **ring** |  | ` (ring nil) ` |
+|  | _ _ | **pred** |  | ` (pred nil) ` |
+|  | _ | **+** | *reporter* | ` (+ nil nil) ` |
+|  | _ − _ | **-** |  | ` (- nil nil) ` |
+|  | _ | ***** |  | ` (* nil nil) ` |
+|  | _ / _ | **/** |  | ` (/ nil nil) ` |
+|  | _ ^ _ | **^** |  | ` (^ nil nil) ` |
+|  | _ mod _ | **mod** |  | ` (mod nil nil) ` |
+|  | _ | **min** |  | ` (min nil nil) ` |
+|  | _ | **max** |  | ` (max nil nil) ` |
+|  | round _ | **round** |  | ` (round nil) ` |
+|  | _ of _ | **fn** |  | ` (fn [sqrt] 10) ` |
+|  | atan2 _ ÷ _ | **atan2** |  | ` (atan2 nil nil) ` |
+|  | pick random _ to _ | **rand** |  | ` (rand 1 10) ` |
+|  | _ | **<** | *predicate* | ` (< nil nil) ` |
+|  | _ | **=** |  | ` (= nil nil) ` |
+|  | _ | **>** |  | ` (> nil nil) ` |
+|  | _ | **and** |  | ` (and nil nil) ` |
+|  | _ | **or** |  | ` (or nil nil) ` |
+|  | not _ | **not** |  | ` (not nil) ` |
+|  | _ | **bool** |  | ` (bool t) ` |
+|  | join _ | **join** | *reporter* | ` (join "hello " world) ` |
+|  | split _ by _ | **split** |  | ` (split "hello world" " ") ` |
+|  | letter _ of _ | **letter** |  | ` (letter 1 world) ` |
+|  | _ of text _ | **text** |  | ` (text [length] world) ` |
+|  | unicode of _ | **unicode** |  | ` (unicode a) ` |
+|  | unicode _ as letter | **toLetter** |  | ` (toLetter 65) ` |
+|  | is _ a _ ? | **is** | *predicate* | ` (is 5 [number]) ` |
+|  | is _ ? | **same** |  | ` (same nil nil) ` |
+|  | JavaScript function ( _ ) { _ } | **js** | *reporter* | ` (js nil nil) ` |
+| **variables** | set _ to _ | **set** | *command* | ` (set nil 0) ` |
+|  | change _ by _ | **+=** |  | ` (+= nil 1) ` |
+|  | show variable _ | **showVar** |  | ` (showVar nil) ` |
+|  | hide variable _ | **hideVar** |  | ` (hideVar nil) ` |
+|  | script variables _ | **var** |  | ` (var a) ` |
+|  | inherit _ | **inherit** |  | ` (inherit nil) ` |
+| **lists** | list _ | **list** | *reporter* | ` (list nil) ` |
+|  | numbers from _ to _ | **range** |  | ` (range 1 10) ` |
+|  | _ in front of _ | **cons** |  | ` (cons nil nil) ` |
+|  | item _ of _ | **item** |  | ` (item 1 nil) ` |
+|  | all but first of _ | **cdr** |  | ` (cdr nil) ` |
+|  | _ of _ | **data** |  | ` (data [length] nil) ` |
+|  | index of _ in _ | **#** |  | ` (# thing nil) ` |
+|  | _ contains _ | **contains** | *predicate* | ` (contains nil thing) ` |
+|  | is _ empty? | **empty** |  | ` (empty nil) ` |
+|  | map _ over _ | **map** | *reporter* | ` (map nil nil) ` |
+|  | keep items _ from _ | **keep** |  | ` (keep nil nil) ` |
+|  | find first item _ in _ | **find** |  | ` (find nil nil) ` |
+|  | combine _ using _ | **combine** |  | ` (combine nil nil) ` |
+|  | for each _ in _ _ | **forEach** | *command* | ` (forEach item nil nil) ` |
+|  | add _ to _ | **add** |  | ` (add thing nil) ` |
+|  | delete _ of _ | **del** |  | ` (del 1 nil) ` |
+|  | insert _ at _ of _ | **ins** |  | ` (ins thing 1 nil) ` |
+|  | replace item _ of _ with _ | **put** |  | ` (put 1 nil thing) ` |
+|  | append _ | **append** | *reporter* | ` (append nil nil) ` |
+|  | reshape _ to _ | **reshape** |  | ` (reshape nil 4 3) ` |
+|  | combinations _ | **combinations** |  | ` (combinations nil nil) ` |
