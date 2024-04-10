@@ -313,7 +313,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'go to x: %n y: %n',
             defaults: [0, 0],
-            code: 'gotoXY',
+            code: 'go',
             src: `(
                 (prim t gotoXY x y)
                 (goto (list (get x) (get y))))`
@@ -345,7 +345,7 @@ SpriteMorph.prototype.initBlocks = function () {
                     (goto (+
                         (get pos)
                         (* (- (list (get x) (get y)) (get pos)) (get fract))))))
-                (gotoXY (get x) (get y)))`
+                (go (get x) (get y)))`
         },
         changeXPosition: {
             only: SpriteMorph,

@@ -80,6 +80,7 @@
 
 ### 2024-04-10
 * objects: added "back" code alias for "goBack" primitive
+* objects: changed "gotoXY" code alias to "go"
 
 ### 2024-04-09
 * threads: added "ring" as metaprogramming mnemonic for "repRing"
