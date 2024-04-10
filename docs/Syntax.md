@@ -62,7 +62,7 @@ There is a library named "Code to Blocks to Code" that offers 2 little helper bl
 These 2 examples already give a preview of what this documentation is about. The following sections explain the details of this Lisp-inspired textual syntax.
 
 
-# Tokens
+## Tokens
 
 A token is a contiguous sequence of non white space characters. It includes numbers, punctuation and special characters, for example:
 
