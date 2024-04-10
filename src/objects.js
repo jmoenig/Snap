@@ -353,10 +353,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'change x by %n',
             defaults: [10],
-            code: 'changeX',
+            code: '+x',
             src: `(
                 (prim t changeXPosition delta)
-                (setX (+ (x) (get delta))))`
+                (x= (+ (x) (get delta))))`
         },
         setXPosition: {
             only: SpriteMorph,
@@ -364,7 +364,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'set x to %n',
             defaults: [0],
-            code: 'setX',
+            code: 'x=',
             src: `(
                 (prim t setXPosition x)
                 (goto (list (get x) (y))))`
@@ -375,10 +375,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'change y by %n',
             defaults: [10],
-            code: 'changeY',
+            code: '+y',
             src: `(
                 (prim t changeYPosition delta)
-                (setY (+ (y) (get delta))))`
+                (y= (+ (y) (get delta))))`
         },
         setYPosition: {
             only: SpriteMorph,
@@ -386,7 +386,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'set y to %n',
             defaults: [0],
-            code: 'setY',
+            code: 'y=',
             src: `(
                 (prim t setYPosition y)
                 (goto (list (x) (get y))))`
@@ -602,12 +602,14 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'change %eff effect by %n',
             defaults: [['ghost'], 25],
+            code: '+effect'
         },
         setEffect: {
             type: 'command',
             category: 'looks',
             spec: 'set %eff effect to %n',
-            defaults: [['ghost'], 0]
+            defaults: [['ghost'], 0],
+            code: 'effect='
         },
         getEffect: {
             type: 'reporter',
@@ -627,10 +629,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'change size by %n',
             defaults: [10],
-            code: 'changeSize',
+            code: '+size',
             src: `(
                 (prim t changeScale delta)
-                (setSize (+ (size) (get delta))))`
+                (size= (+ (size) (get delta))))`
         },
         setScale: {
             only: SpriteMorph,
@@ -638,7 +640,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'set size to %n %',
             defaults: [100],
-            code: 'setSize'
+            code: 'size='
         },
         getScale: {
             only: SpriteMorph,
@@ -809,17 +811,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'change tempo by %n',
             defaults: [20],
-            code: 'changeTempo',
+            code: '+tempo',
             src: `(
                 (prim t doChangeTempo delta)
-                (setTempo (+ (tempo) (get delta))))`
+                (tempo= (+ (tempo) (get delta))))`
         },
         doSetTempo: {
             type: 'command',
             category: 'sound',
             spec: 'set tempo to %n bpm',
             defaults: [60],
-            code: 'setTempo'
+            code: 'tempo='
         },
         getTempo: {
             type: 'reporter',
@@ -832,15 +834,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'change volume by %n',
             defaults: [10],
+            code: '+vol',
             src: `(
                 (prim t changeVolume delta)
-                (setVolume (+ (vol) (get delta))))`
+                (vol= (+ (vol) (get delta))))`
         },
         setVolume: {
             type: 'command',
             category: 'sound',
             spec: 'set volume to %n %',
-            defaults: [100]
+            defaults: [100],
+            code: 'vol='
         },
         getVolume: {
             type: 'reporter',
@@ -853,15 +857,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'change balance by %n',
             defaults: [10],
+            code: '+pan',
             src: `(
                 (prim t changePan delta)
-                (setPan (+ (pan) (get delta))))`
+                (pan= (+ (pan) (get delta))))`
         },
         setPan: {
             type: 'command',
             category: 'sound',
             spec: 'set balance to %n',
-            defaults: [0]
+            defaults: [0],
+            code: 'pan='
         },
         getPan: {
             type: 'reporter',
