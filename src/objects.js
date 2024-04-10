@@ -399,7 +399,7 @@ SpriteMorph.prototype.initBlocks = function () {
             code: 'bounce',
             src: `(
                 (prim t bounceOffEdge)
-                (if (touches [edge]) (
+                (if (touch [edge]) (
                     (var "get bounds" bounds center "stage bounds" "dir x"
                         "dir y" "delta x" "delta y")
                     (set "get bounds" (ring (list
@@ -516,19 +516,19 @@ SpriteMorph.prototype.initBlocks = function () {
             code: 'next',
             src: `(
                 (prim t doWearNextCostume)
-                (if (> (costumeIdx) 0)
+                (if (> (costume#) 0)
                     (wear (+
-                        (mod (costumeIdx) (data [length] (my [costumes])))
+                        (mod (costume#) (data [length] (my [costumes])))
                         1))))`
         },
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
             spec: 'costume #',
-            code: 'costumeIdx',
+            code: 'costume#',
             src: `(
                 (prim t getCostumeIdx)
-                (report (idx (my [costume]) (my [costumes]))))`
+                (report (# (my [costume]) (my [costumes]))))`
         },
         reportGetImageAttribute: {
             type: 'reporter',
@@ -675,10 +675,10 @@ SpriteMorph.prototype.initBlocks = function () {
             src: `(
                 (prim t goToLayer name)
                 (ifElse (= (join (get name)) back)
-                    (warp (until (= (idx (my [self]) (ask (my [stage])
+                    (warp (until (= (# (my [self]) (ask (my [stage])
                         (ring (my "[other sprites]")))) 1)
                         (back 1)))
-                    (warp (until (= (idx (my [self]) (ask (my [stage])
+                    (warp (until (= (# (my [self]) (ask (my [stage])
                         (ring (my "[other sprites]"))))
                         (+ (data [length] (my "[other sprites]")) 1))
                         (back -1)))))`
@@ -919,7 +919,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'pen',
             spec: 'pen down?',
-            code: 'isDown'
+            code: 'down?'
         },
         setColor: {
             only: SpriteMorph,
@@ -935,14 +935,16 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set pen %clrdim to %n',
-            defaults: [['hue'], 50]
+            defaults: [['hue'], 50],
+            code: 'pen='
         },
         changePenColorDimension: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'change pen %clrdim by %n',
-            defaults: [['hue'], 10]
+            defaults: [['hue'], 10],
+            code: '+pen'
         },
         getPenAttribute: {
             type: 'reporter',
@@ -977,10 +979,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'change pen size by %n',
             defaults: [1],
-            code: 'changePenSize',
+            code: '+penSize',
             src: `(
                 (prim t changeSize delta)
-                (penSize (+ (pen [size]) (get delta))))`
+                (penSize= (+ (pen [size]) (get delta))))`
         },
         setSize: {
             only: SpriteMorph,
@@ -988,7 +990,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'set pen size to %n',
             defaults: [1],
-            code: 'penSize'
+            code: 'penSize='
         },
         doStamp: {
             only: SpriteMorph,
@@ -1075,13 +1077,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'broadcast %msg %receive',
-            code: 'broadcast'
+            code: 'send'
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
             spec: 'broadcast %msg %receive and wait',
-            code: 'broadcastAll'
+            code: 'sendAll'
         },
         doWait: {
             type: 'command',
@@ -1388,27 +1390,28 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'touching %col ?',
             defaults: [['mouse-pointer']],
-            code: 'touches'
+            code: 'touch'
         },
         reportTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'touching %clr ?',
-            code: 'touchesColor'
+            code: 'touchColor'
         },
         reportColorIsTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?',
-            code: 'colorTouches'
+            code: 'colorTouch'
         },
         reportAspect: {
             type: 'reporter',
             category: 'sensing',
             spec: '%asp at %loc',
-            defaults: [['hue'], ['mouse-pointer']]
+            defaults: [['hue'], ['mouse-pointer']],
+            code: 'aspect'
         },
         reportStackSize: {
             dev: true,
@@ -1544,14 +1547,15 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set %setting to %b',
-            defaults: [['video capture']]
+            defaults: [['video capture']],
+            code: 'global='
         },
         reportGlobalFlag: {
             type: 'predicate',
             category: 'sensing',
             spec: 'is %setting on?',
             defaults: [['turbo mode']],
-            code: 'setting'
+            code: 'global'
         },
         reportDate: {
             type: 'reporter',
@@ -1798,7 +1802,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'unicode %n as letter',
             defaults: [65],
-            code: 'fromUnicode'
+            code: 'toLetter'
         },
         reportIsA: {
             type: 'predicate',
@@ -1811,7 +1815,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: 'is %all== ?',
-            code: 'identical'
+            code: 'same'
         },
         reportTextSplit: {
             type: 'reporter',
@@ -1959,7 +1963,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'index of %s in %l',
             defaults: [localize('thing')],
-            code: 'idx',
+            code: '#',
             src: `(
                 (prim t reportListIndex value data)
                 (warp (for i 1 (data [length] (get data))
@@ -2251,7 +2255,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'set video transparency to %n',
             defaults: [50],
-            code: 'setVideoTransparency'
+            code: 'transparency'
         },
         reportVideo: {
             type: 'reporter',
