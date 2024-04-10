@@ -29,7 +29,7 @@ will render as
 ```
 in pages that support syntax highlighting for specific programming languages such as Github.
 
-## Code to Blocks to Code
+### Code to Blocks to Code
 
 Beginning in v10 each script (agglomeration of one or more blocks) has an entry in its context menu (available via right-click or option-click) to display its "Lisp code" equivalent in a speech bubble next to the blocks. The result can be exported as file or copied to the clipboard - again via the speech bubble’s context menu.
 
