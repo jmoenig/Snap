@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-09';
+modules.threads = '2024-April-11';
 
 var ThreadManager;
 var Process;
@@ -5282,7 +5282,7 @@ Process.prototype.reportBasicUnicodeAsLetter = function (num) {
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
     if (this.inputOption(delimiter) === 'blocks') {
-        if (isString(string) && string.trim().startsWith('(')) {
+        if (isString(string) && '(;'.includes(string.trim()[0])) {
             return this.parseCode(string);
         }
         this.assertType(string, ['command', 'reporter', 'predicate']);

@@ -78,6 +78,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-04-11
+* threads: allow Lisp code to be parsed if it starts with a comment
+
 ### 2024-04-10
 * objects: added "back" code alias for "goBack" primitive
 * objects: changed "gotoXY" code alias to "go"
