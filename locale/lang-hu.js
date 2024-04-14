@@ -290,7 +290,7 @@ SnapTranslator.dict.hu = {
     "Plain prototype labels": "Egyszerű blokk prototípus címkék",
     "Play": "Lejátszás",
     "Play sound": "Hang lejátszása",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Győződj meg arról, hogy a böngésződ naprakész és a kamerát is megfelelően beállítottad. Pár böngésző megköveteli, hogy HTTPS kapcsolaton keresztül nyisd meg a Snap oldalát Próbáld meg kicserélni a cím \"http://\" részét \"https://\" előtagra és próbáld meg újra!",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Győződj meg arról, hogy a böngésződ naprakész és a kamerát is megfelelően beállítottad. Pár böngésző megköveteli, hogy HTTPS kapcsolaton keresztül nyisd meg a Snap oldalát Próbáld meg kicserélni a cím \"http://\" részét \"https://\" előtagra és próbáld meg újra!",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "Kijelentés",

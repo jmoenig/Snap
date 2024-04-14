@@ -299,7 +299,7 @@ SnapTranslator.dict.pt = {
     "Plain prototype labels": "Texto dos protótipos simples",
     "Play": "Tocar",
     "Play sound": "Tocar som.",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Por favor assegure-se de que o seu navegador está actualizado e de que a sua câmara está correctamente configurada. Alguns navegadores também exigem que aceda ao Snap! através de HTTPS para usar a câmara. Por favor substitua a parte \"http://\" do endereço no seu navegador por \"https:// e tente de novo.\"",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Por favor assegure-se de que o seu navegador está actualizado e de que a sua câmara está correctamente configurada. Alguns navegadores também exigem que aceda ao Snap! através de HTTPS para usar a câmara. Por favor substitua a parte \"http://\" do endereço no seu navegador por \"https:// e tente de novo.\"",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "Polígono",
     "Predicate": "Predicado",

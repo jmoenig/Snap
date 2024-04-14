@@ -288,7 +288,7 @@ SnapTranslator.dict.nl = {
     "Plain prototype labels": "Eenvoudige protoype-labels",
     "Play": "Speel",
     "Play sound": "Geluid afspelen",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Controleer of je webbrowser is bijgewerkt en de webcam goed geconfigureerd is. In sommige browsers moet Snap! met HTTPS geöpend worden, om de webcam aan te kunnen gebruiken. Vervang daartoe het \"http://\"-deel in de adresbalk door \"https://\"",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Controleer of je webbrowser is bijgewerkt en de webcam goed geconfigureerd is. In sommige browsers moet Snap! met HTTPS geöpend worden, om de webcam aan te kunnen gebruiken. Vervang daartoe het \"http://\"-deel in de adresbalk door \"https://\"",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "Predicaat",

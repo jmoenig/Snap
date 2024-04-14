@@ -12483,7 +12483,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'and your camera is properly configured. \n\n' +
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
-    'Plase replace the "http://" part of the address\n' +
+    'Please replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation

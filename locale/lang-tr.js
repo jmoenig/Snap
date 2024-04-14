@@ -291,7 +291,7 @@ SnapTranslator.dict.tr = {
     "Plain prototype labels": "Sade prototip etiketleri",
     "Play": "Çal",
     "Play sound": "Sesi çal",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Lütfen web tarayıcınızın güncel olduğundan ve kameranızın uygun şekilde yapılandırıldığından emin olun. Bazı tarayıcılar ayrıca Snap! Kamerayı kullanmak için HTTPS öngörürler. Lütfen tarayıcınızın adresinin \"http: //\" bölümünü \"https: //\" ile değiştirin ve tekrar deneyin.",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Lütfen web tarayıcınızın güncel olduğundan ve kameranızın uygun şekilde yapılandırıldığından emin olun. Bazı tarayıcılar ayrıca Snap! Kamerayı kullanmak için HTTPS öngörürler. Lütfen tarayıcınızın adresinin \"http: //\" bölümünü \"https: //\" ile değiştirin ve tekrar deneyin.",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "Karşılaştırma",

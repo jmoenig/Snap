@@ -288,7 +288,7 @@ SnapTranslator.dict.no = {
     "Plain prototype labels": "Enkle prototype navn",
     "Play": "",
     "Play sound": "Spill lyd",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Sjekk om nettleser er oppdatert og om Webcam er konfigurert. For noen nettlesere må Snap! åpnes med HTTPS , for bruk av kamera. Erstatt \"http://\"-delen med \"https://\"",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Sjekk om nettleser er oppdatert og om Webcam er konfigurert. For noen nettlesere må Snap! åpnes med HTTPS , for bruk av kamera. Erstatt \"http://\"-delen med \"https://\"",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "Predikat",
