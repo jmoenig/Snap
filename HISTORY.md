@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * Removed "∑" from list properties menu
 * **Notable Fixes:**
     * fixed #3342
     * fixed #3336
@@ -15,6 +17,7 @@
 * fixed a spelling glitch in the camera dialog, thanks, bruh-9000!
 * fixed another spelling glitch in the Danish translation
 * Dutch translation update, thanks, Nykki Rusticus!
+* blocks: Removed "∑" from list properties menu (commented out for backwards compatibility)
 
 ## 9.2.14:
 * **New Features:**
