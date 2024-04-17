@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-04-17
+* new dev version for v9.2.15
+
 ## 9.2.14:
 * **New Features:**
     * new Σ selector for ssum() of a list: recursive sum of all number leafs
