@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 9.2.15:
 * **Notable Changes:**
     * Removed "∑" from list properties menu
 * **Notable Fixes:**
@@ -18,6 +20,7 @@
 * fixed another spelling glitch in the Danish translation
 * Dutch translation update, thanks, Nykki Rusticus!
 * blocks: Removed "∑" from list properties menu (commented out for backwards compatibility)
+* prepared v9.2.15 patch
 
 ## 9.2.14:
 * **New Features:**
