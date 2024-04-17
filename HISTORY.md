@@ -2,6 +2,34 @@
 
 ## in development:
 
+## 9.2.16:
+* **Notable Fixes:**
+    * fixed a syntax glitch in the Dutch translation update
+
+2024-04-17
+* fixed a syntax glitch in the Dutch translation update
+* prepared v9.2.16 patch
+
+## 9.2.15:
+* **Notable Changes:**
+    * Removed "∑" from list properties menu
+* **Notable Fixes:**
+    * fixed #3342
+    * fixed #3336
+    * fixed a spelling glitch in the camera dialog, thanks, bruh-9000!
+* **Translation Updates:**
+    * Dutch, thanks, Nykki Rusticus!
+
+2024-04-17
+* new dev version for v9.2.15
+* byob: fixed #3342
+* threads: fixed #3336
+* fixed a spelling glitch in the camera dialog, thanks, bruh-9000!
+* fixed another spelling glitch in the Danish translation
+* Dutch translation update, thanks, Nykki Rusticus!
+* blocks: Removed "∑" from list properties menu (commented out for backwards compatibility)
+* prepared v9.2.15 patch
+
 ## 9.2.14:
 * **New Features:**
     * new Σ selector for ssum() of a list: recursive sum of all number leafs

@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-April-10';
+modules.gui = '2024-April-17';
 
 // Declarations
 
-var SnapVersion = '10-240410-dev';
+var SnapVersion = '10-240417-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -12716,7 +12716,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'and your camera is properly configured. \n\n' +
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
-    'Plase replace the "http://" part of the address\n' +
+    'Please replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation

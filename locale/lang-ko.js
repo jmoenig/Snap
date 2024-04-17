@@ -291,7 +291,7 @@ SnapTranslator.dict.ko = {
     "Plain prototype labels": "새로 만든 블록 인수 설정",
     "Play": "재생",
     "Play sound": "소리 재생",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "프레디키트",

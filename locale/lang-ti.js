@@ -291,7 +291,7 @@ SnapTranslator.dict.ti = {
     "Plain prototype labels": "ተራ ዕላመት ቅድመ-መርኣያ",
     "Play": "ኣቃልሕ",
     "Play sound": "ድምጺ ኣቃልሕ",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "ባብ መርበብ ሓበሬታ እዋናዊ ሙኻኑን መስኣሊት ክምዝተስታኻኸልትን ኣረጋግጽ። ኣብ ግሊኡ ባባት መርበብ ሓበሬታ መስኣሊት ንምጥቃም፡ ስናፕ! ብ HTTPS ክኽፍት ኣለዎ። አዚ ንምግባር ን \"http://\" ክፋል ኣድራሻ መርበብ ሓበሬታ ብ \"https://\" ተክእ።",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "ባብ መርበብ ሓበሬታ እዋናዊ ሙኻኑን መስኣሊት ክምዝተስታኻኸልትን ኣረጋግጽ። ኣብ ግሊኡ ባባት መርበብ ሓበሬታ መስኣሊት ንምጥቃም፡ ስናፕ! ብ HTTPS ክኽፍት ኣለዎ። አዚ ንምግባር ን \"http://\" ክፋል ኣድራሻ መርበብ ሓበሬታ ብ \"https://\" ተክእ።",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "ብዙሕ-ጎናዊ",
     "Predicate": "ኣረጋጋጺ",

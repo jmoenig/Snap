@@ -295,7 +295,7 @@ SnapTranslator.dict.gl = {
     "Plain prototype labels": "Etiquetas dos prototipos simples",
     "Play": "Reproducir",
     "Play sound": "Reproducir o son",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Comprobe que o navegador está actualizado e a webcam ben configurada. Algúns navegadores tamén requiren HTTPS para empregar a cámara. Pode probalo cambiando o enderezo «http://» por «https://»\".",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Comprobe que o navegador está actualizado e a webcam ben configurada. Algúns navegadores tamén requiren HTTPS para empregar a cámara. Pode probalo cambiando o enderezo «http://» por «https://»\".",
     "Please use the verification link that was sent to your email address when you signed up.": "Utilice a ligazón de verificación que se lle enviou ao seu enderezo de correo-e cando se inscribiu.",
     "Polygon": "Polígono",
     "Predicate": "Predicado",

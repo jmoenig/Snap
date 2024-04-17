@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2024-April-05';
+modules.locale = '2024-April-17';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -342,11 +342,11 @@ SnapTranslator.dict.nl = {
     'language_name':
         'Nederlands',
     'language_translator':
-        'Joek van Montfort, Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn, Jule Rapp',
+        'Joek van Montfort, Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn, Jule Rapp, Nykki Rusticus',
     'translator_e-mail':
-        'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl',
+        'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl, zonykki@gmail.com',
     'last_changed':
-        '2024-02-12'
+        '2024-04-15'
 };
 
 SnapTranslator.dict.pl = {

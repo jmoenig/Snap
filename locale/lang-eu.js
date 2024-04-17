@@ -300,7 +300,7 @@ SnapTranslator.dict.eu = {
     "Plain prototype labels": "Prototipoen etiketa lauak",
     "Play": "Erreproduzitu",
     "Play sound": "Erreproduzitu soinua",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Mesedez, egiaztatu nabigatzailea eguneratuta dagoela eta kamera behar bezala konfiguratuta dagoela. Zenbait nabigatzailek Snap!-era HTTPS bidez sartzea eskatzen dute kamera erabiltzeko. Mesedez, ordezkatu helbideko \"http://\" \"https://\"-rekin eta saiatu berriro.",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Mesedez, egiaztatu nabigatzailea eguneratuta dagoela eta kamera behar bezala konfiguratuta dagoela. Zenbait nabigatzailek Snap!-era HTTPS bidez sartzea eskatzen dute kamera erabiltzeko. Mesedez, ordezkatu helbideko \"http://\" \"https://\"-rekin eta saiatu berriro.",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "Poligonoa",
     "Predicate": "Predikatua",

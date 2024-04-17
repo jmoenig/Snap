@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-April-02';
+modules.byob = '2024-April-17';
 
 // Declarations
 
@@ -272,6 +272,11 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite, headerOnly) {
         );
         c.body.outerContext = null;
     }
+
+    // deep copy scripts
+    c.scripts = this.scripts.map(each => each instanceof CommentMorph ?
+        each : each.fullCopy());
+
     return c;
 };
 

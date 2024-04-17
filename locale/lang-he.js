@@ -289,7 +289,7 @@ SnapTranslator.dict.he = {
     "Plain prototype labels": "תויות אבטיפוס בסיסיות",
     "Play": "נגן",
     "Play sound": "נגן צליל",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "נא וודא שהדפדפן מעודכן ושהמצלמה מתואמת כראוי. חלק מהדפדפנים יבקשו אישור גישה למצלמה בחיבור מאובטח. נסה להחליף בתחילת הכתובת את \"http://\"-ב \"https://\"",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "נא וודא שהדפדפן מעודכן ושהמצלמה מתואמת כראוי. חלק מהדפדפנים יבקשו אישור גישה למצלמה בחיבור מאובטח. נסה להחליף בתחילת הכתובת את \"http://\"-ב \"https://\"",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "עבור תנאי",
