@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 9.2.16:
+* **Notable Fixes:**
+    * fixed a syntax glitch in the Dutch translation update
+
 2024-04-17
 * fixed a syntax glitch in the Dutch translation update
+* prepared v9.2.16 patch
 
 ## 9.2.15:
 * **Notable Changes:**
