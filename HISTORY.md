@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed #3342
 
 2024-04-17
 * new dev version for v9.2.15
+* byob: fixed #3342
 
 ## 9.2.14:
 * **New Features:**
