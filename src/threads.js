@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-05';
+modules.threads = '2024-April-17';
 
 var ThreadManager;
 var Process;
@@ -7161,7 +7161,10 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     }
     cst = this.costumeNamed(name);
     if (!cst) {
-        return new Costume();
+        throw new Error(
+            'expecting a costume\nbut getting none'
+        );
+        // return new Costume();
     }
     if (!isFinite(+xP * +yP) || isNaN(+xP * +yP)) {
         throw new Error(

@@ -3,10 +3,12 @@
 ## in development:
 * **Notable Fixes:**
     * fixed #3342
+    * fixed ##3336
 
 2024-04-17
 * new dev version for v9.2.15
 * byob: fixed #3342
+* threads: fixed ##3336
 
 ## 9.2.14:
 * **New Features:**
