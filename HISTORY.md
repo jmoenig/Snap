@@ -3,12 +3,15 @@
 ## in development:
 * **Notable Fixes:**
     * fixed #3342
-    * fixed ##3336
+    * fixed #3336
+    * fixed a spelling glitch in the camera dialog, thanks, bruh-9000!
 
 2024-04-17
 * new dev version for v9.2.15
 * byob: fixed #3342
-* threads: fixed ##3336
+* threads: fixed #3336
+* fixed a spelling glitch in the camera dialog, thanks, bruh-9000!
+* fixed another spelling glitch in the Danish translation
 
 ## 9.2.14:
 * **New Features:**
