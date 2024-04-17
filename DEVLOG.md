@@ -81,6 +81,7 @@
 ### 2024-04-17
 * merged patch from main to dev
 * incremented dev version
+* blocks: fixed #3326
 
 ### 2024-04-11
 * threads: allow Lisp code to be parsed if it starts with a comment

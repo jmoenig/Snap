@@ -1530,6 +1530,11 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                     }
                 }
                 if (def) {
+                    if (deflt instanceof ArgMorph &&
+                            !(deflt instanceof TemplateSlotMorph)) {
+                        deflt.isStatic = def.isIrreplaceableInputIdx(inp);
+                        deflt.canBeEmpty = !deflt.isStatic;
+                    }
                     if (deflt instanceof InputSlotMorph) {
                         deflt.setChoices.apply(
                             deflt,
