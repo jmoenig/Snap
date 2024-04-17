@@ -293,7 +293,7 @@ SnapTranslator.dict.ua = {
     "Plain prototype labels": "Прості заголовки блоків",
     "Play": "Відтворити",
     "Play sound": "Відтворити звук",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Будь ласка перевірте оновлення вашого браузера до останньої версії і чи Ваша камера правильно сконфігурована. деякі браузери потребують протокола HTTPS для доступу Snap до камери. Спробуйте змінити \"http://\" в рядку адреси Вашого браузера на \"https://\" і спробуйте ще раз.",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Будь ласка перевірте оновлення вашого браузера до останньої версії і чи Ваша камера правильно сконфігурована. деякі браузери потребують протокола HTTPS для доступу Snap до камери. Спробуйте змінити \"http://\" в рядку адреси Вашого браузера на \"https://\" і спробуйте ще раз.",
     "Please use the verification link that was sent to your email address when you signed up.": "Скористайтеся посиланням для підтвердження, яке було надіслано на вашу електронну адресу під час реєстрації.",
     "Polygon": "Багатокутник",
     "Predicate": "Предикат",

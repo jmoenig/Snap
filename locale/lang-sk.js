@@ -288,7 +288,7 @@ SnapTranslator.dict.sk = {
     "Plain prototype labels": "Jednoduché nadpisy prototypov",
     "Play": "spustiť",
     "Play sound": "spustiť prehrávanie",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Ubezpeč sa prosím, že Tvoj prehlidač je aktualizovaný a kamera je spr8vne nakonfigurovaná. Niektoré prehliadače vyžadujú prísput ku Snap! cez HTTPS pre použitie kamery. Prosím prepíš \"http://\" časť adresy v prehliadači na \"https://\" a skús znovu.",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Ubezpeč sa prosím, že Tvoj prehlidač je aktualizovaný a kamera je spr8vne nakonfigurovaná. Niektoré prehliadače vyžadujú prísput ku Snap! cez HTTPS pre použitie kamery. Prosím prepíš \"http://\" časť adresy v prehliadači na \"https://\" a skús znovu.",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "Podmienka",

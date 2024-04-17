@@ -304,7 +304,7 @@ SnapTranslator.dict.ca = {
     "Plain prototype labels": "Etiquetes de prototip simples",
     "Play": "Toca",
     "Play sound": "Toca el so",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Comproveu que el navegador està actualitzat i la webcam ben configurada. Alguns navegadors també requereixen HTTPS per a utilitzar la càmera. Podeu provar canviant a l'adreça el \"http://\" per \"https://\".",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Comproveu que el navegador està actualitzat i la webcam ben configurada. Alguns navegadors també requereixen HTTPS per a utilitzar la càmera. Podeu provar canviant a l'adreça el \"http://\" per \"https://\".",
     "Please use the verification link that was sent to your email address when you signed up.": "Cal usar l'enllaç de verificació que s'ha enviat al vostre correu quan vau registrar l'usuari",
     "Polygon": "Polígon",
     "Predicate": "Predicat",
