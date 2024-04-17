@@ -5620,7 +5620,7 @@ Process.prototype.devariadify = function (list) {
     if (ring instanceof List) {
         return list;
     }
-    slot = ring.expression.inputs().find(any =>
+    slot = ring.expression?.inputs().find(any =>
         any instanceof MultiArgMorph);
     if (slot && !slot.inputs().length) {
         idx = ring.expression.inputs().indexOf(slot) + 1;
@@ -5637,10 +5637,11 @@ Process.prototype.devariadify = function (list) {
 
 Process.prototype.blockToken = function (ring) {
     var block = ring.expression;
-    return block.isCustomBlock &&
-        !(block.isGlobal && block.definition.isBootstrapped()) ?
-            this.reportBasicBlockAttribute('label', ring)
-            : this.selectorAlias(block.selector);
+    return isNil(block) ? 'ring'
+        : block.isCustomBlock &&
+            !(block.isGlobal && block.definition.isBootstrapped()) ?
+                this.reportBasicBlockAttribute('label', ring)
+                : this.selectorAlias(block.selector);
 };
 
 Process.prototype.toInputTextSyntax = function (list) {
