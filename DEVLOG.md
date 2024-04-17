@@ -78,6 +78,10 @@
 * **Translation Updates:**
     * German
 
+### 2024-04-17
+* merged patch from main to dev
+* incremented dev version
+
 ### 2024-04-11
 * threads: allow Lisp code to be parsed if it starts with a comment
 
