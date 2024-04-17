@@ -2,6 +2,9 @@
 
 ## in development:
 
+2024-04-17
+* fixed a syntax glitch in the Dutch translation update
+
 ## 9.2.15:
 * **Notable Changes:**
     * Removed "∑" from list properties menu

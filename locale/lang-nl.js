@@ -971,7 +971,7 @@ SnapTranslator.dict.nl = {
     "number of channels": "aantal kanalen",
     "numbers from _ to _": "getallen van _ tot _",
     "o": "o",
-    "object _": "voorwerp_",
+    "object _": "voorwerp _",
     "octagon": "achthoek",
     "only duplicate this block": "alleen dit blok kopiëren",
     "only face left/right": "alleen links/rechts draaibaar",
