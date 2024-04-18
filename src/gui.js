@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-April-17';
+modules.gui = '2024-April-18';
 
 // Declarations
 
@@ -245,6 +245,7 @@ function IDE_Morph(config = {}) {
         mode:           str, currently "presentation" or "edit"
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
+        hideProjectName:bool, hide/show the project title in the tool bar
         noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
@@ -1553,7 +1554,7 @@ IDE_Morph.prototype.createControlBar = function () {
         if (this.label) {
             this.label.destroy();
         }
-        if (myself.isAppMode) {
+        if (myself.isAppMode || myself.config.hideProjectName) {
             return;
         }
         scene = myself.scenes.at(1) !== myself.scene ?
