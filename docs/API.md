@@ -127,6 +127,7 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |mode:		|str	|currently `"presentation"` or `"edit"`|
 |hideControls:	|bool	|hide/show the tool bar|
 |hideCategories:	|bool	|hide/show the palette block category buttons|
+|hideProjectName:	|bool	|hide/show the project title in the tool bar|
 |hideProjects:	|bool	|hide/show the projects menu button in the tool bar|
 |hideSettings:	|bool	|hide/show the settings menu button in the tool bar|
 |noDefaultCat:	|bool	|hide/show the default built-in category buttons|
