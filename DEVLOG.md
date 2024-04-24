@@ -87,6 +87,8 @@
 * byob: automatically add generic inputs in DEFINE matching the number of placeholders in the label
 * gui: new API configuration option to hide the project name, thanks, Bernat!
 * gui: new API configuration option to hide project specific entries in the file/project menu
+* merged patch from main to dev
+* incremented dev version
 
 ### 2024-04-17
 * merged patch from main to dev
