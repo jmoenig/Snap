@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 9.2.17:
+* **Notable Fixes:**
+    * fixed translation for "if" in Dutch
+
+2024-04-24
+* fixed translation for "if" in Dutch
+* prepared v9.2.17 patch
+
 ## 9.2.16:
 * **Notable Fixes:**
     * fixed a syntax glitch in the Dutch translation update
