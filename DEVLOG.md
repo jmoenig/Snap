@@ -54,6 +54,7 @@
     * new "Lisp code..." entry in blocks context menu
     * new "code..." entry to blocks context menu if "Codification support" setting is enabled
     * new live coding "performer mode" (currently hidden behind shift-click) setting, thank you, Bernat!
+    * new API configuration option to hide the project name, thanks, Bernat!
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -83,6 +84,7 @@
 ### 2024-04-24
 * threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
 * byob: automatically add generic inputs in DEFINE matching the number of placeholders in the label
+* gui: new API configuration option to hide the project name, thanks, Bernat!
 
 ### 2024-04-17
 * merged patch from main to dev
