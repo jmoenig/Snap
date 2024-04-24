@@ -59,6 +59,7 @@
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
     * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
     * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
+    * automatically add generic inputs in DEFINE matching the number of placeholders in the label
     * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
     * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
     * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
@@ -80,7 +81,8 @@
     * German
 
 ### 2024-04-24
-* threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels 
+* threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
+* byob: automatically add generic inputs in DEFINE matching the number of placeholders in the label
 
 ### 2024-04-17
 * merged patch from main to dev

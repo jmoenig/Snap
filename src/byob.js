@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-April-17';
+modules.byob = '2024-April-24';
 
 // Declarations
 
@@ -744,6 +744,12 @@ CustomBlockDefinition.prototype.setBlockLabel = function (abstractSpec) {
         inputNames = this.inputNames(),
         spec = '',
         idx = 0;
+
+    if (!inputNames.length && count) {
+        // add generic inputNames to match the number of label placeholders
+        this.addInputs(count);
+        inputNames = this.inputNames();
+    }
 
     if (count !== inputNames.length) {
         throw new Error('expecting the number of inputs to match');
