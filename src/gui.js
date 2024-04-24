@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-April-18';
+modules.gui = '2024-April-24';
 
 // Declarations
 
@@ -246,6 +246,7 @@ function IDE_Morph(config = {}) {
         hideControls:   bool, hide/show the tool bar
         hideCategories: bool, hide/show the palette block category buttons
         hideProjectName:bool, hide/show the project title in the tool bar
+        noProjectItems: bood, hide/show project specific menu items
         noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
@@ -4952,123 +4953,128 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Notes...', 'editNotes');
     menu.addLine();
-    menu.addPair('New', 'createNewProject', '^N');
-    menu.addPair('Open...', 'openProjectsBrowser', '^O');
-    menu.addPair('Save', "save", '^S');
-    menu.addItem('Save As...', 'saveProjectsBrowser');
-    if (backup) {
+    if (!this.config.noProjectItems) {
+        menu.addPair('New', 'createNewProject', '^N');
+        menu.addPair('Open...', 'openProjectsBrowser', '^O');
+        menu.addPair('Save', "save", '^S');
+        menu.addItem('Save As...', 'saveProjectsBrowser');
+        if (backup) {
+            menu.addItem(
+                'Restore unsaved project',
+                'restore',
+                backup,
+                shiftClicked ? new Color(100, 0, 0) : null
+            );
+            if (shiftClicked) {
+                menu.addItem(
+                    'Clear backup',
+                    'clearBackup',
+                    backup,
+                    new Color(100, 0, 0)
+                );
+            }
+        }
+        menu.addLine();
         menu.addItem(
-            'Restore unsaved project',
-            'restore',
-            backup,
-            shiftClicked ? new Color(100, 0, 0) : null
+            'Import...',
+            'importLocalFile',
+            'file menu import hint'
+                // looks up the actual text in the translator
+        );
+        menu.addItem(
+            'Export project...',
+            () => {
+                var pn = this.getProjectName();
+                if (pn) {
+                    this.exportProject(pn);
+                } else {
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProject(name),
+                        null,
+                        'exportProject'
+                    );
+                }
+            },
+            'save project data as XML\nto your downloads folder'
+        );
+        menu.addItem(
+            'Export summary...',
+            () => this.exportProjectSummary(),
+            'save a summary\nof this project'
         );
         if (shiftClicked) {
             menu.addItem(
-                'Clear backup',
-                'clearBackup',
-                backup,
+                'Export summary with drop-shadows...',
+                () => this.exportProjectSummary(true),
+                'download and save' +
+                    '\nwith a summary of this project' +
+                    '\nwith drop-shadows on all pictures.' +
+                    '\nnot supported by all browsers',
+                new Color(100, 0, 0)
+            );
+            menu.addItem(
+                'Export all scripts as pic...',
+                () => this.exportScriptsPicture(),
+                'show a picture of all scripts\nand block definitions',
                 new Color(100, 0, 0)
             );
         }
-    }
-    menu.addLine();
-    menu.addItem(
-        'Import...',
-        'importLocalFile',
-        'file menu import hint' // looks up the actual text in the translator
-    );
-    menu.addItem(
-        'Export project...',
-        () => {
-            var pn = this.getProjectName();
-            if (pn) {
-                this.exportProject(pn);
-            } else {
-                this.prompt(
-                    'Export Project As...',
-                    name => this.exportProject(name),
-                    null,
-                    'exportProject'
-                );
-            }
-        },
-        'save project data as XML\nto your downloads folder'
-    );
-    menu.addItem(
-        'Export summary...',
-        () => this.exportProjectSummary(),
-        'save a summary\nof this project'
-    );
-    if (shiftClicked) {
+        menu.addLine();
+        if (this.stage.globalBlocks.length) {
+            menu.addItem(
+                'Export blocks...',
+                () => this.exportGlobalBlocks(),
+                'save global custom block\ndefinitions as XML'
+            );
+            menu.addItem(
+                'Unused blocks...',
+                () => this.removeUnusedBlocks(),
+                'find unused global custom blocks' +
+                    '\nand remove their definitions'
+            );
+        }
+        if (shiftClicked) {
+            menu.addItem(
+                'Export customized primitives...',
+                () => this.exportCustomizedPrimitives(),
+                'EXPERIMENTAL!',
+                new Color(100, 0, 0)
+            );
+        }
         menu.addItem(
-            'Export summary with drop-shadows...',
-            () => this.exportProjectSummary(true),
-            'download and save' +
-                '\nwith a summary of this project' +
-                '\nwith drop-shadows on all pictures.' +
-                '\nnot supported by all browsers',
-            new Color(100, 0, 0)
+            'Hide blocks...',
+            () => new BlockVisibilityDialogMorph(
+                    this.currentSprite
+                ).popUp(world)
         );
         menu.addItem(
-            'Export all scripts as pic...',
-            () => this.exportScriptsPicture(),
-            'show a picture of all scripts\nand block definitions',
-            new Color(100, 0, 0)
+            'New category...',
+            () => this.createNewCategory()
         );
+        if (SpriteMorph.prototype.customCategories.size) {
+            menu.addItem(
+                'Remove a category...',
+                () => this.deleteUserCategory(pos)
+            );
+        }
+        if (this.currentSprite instanceof SpriteMorph &&
+            !this.currentSprite.solution) {
+            menu.addItem(
+                'Generate puzzle',
+                'generatePuzzle',
+                'generate a Parson\'s Puzzle\n' +
+                    'from the current sprite'
+            );
+        }
+        menu.addLine();
+        if (this.scenes.length() > 1) {
+            menu.addItem('Scenes...', 'scenesMenu');
+        }
+        menu.addPair('New scene', 'createNewScene');
+        menu.addPair('Add scene...', 'addScene');
+        menu.addLine();
     }
-    menu.addLine();
-    if (this.stage.globalBlocks.length) {
-        menu.addItem(
-            'Export blocks...',
-            () => this.exportGlobalBlocks(),
-            'save global custom block\ndefinitions as XML'
-        );
-        menu.addItem(
-            'Unused blocks...',
-            () => this.removeUnusedBlocks(),
-            'find unused global custom blocks' +
-                '\nand remove their definitions'
-        );
-    }
-    if (shiftClicked) {
-        menu.addItem(
-            'Export customized primitives...',
-            () => this.exportCustomizedPrimitives(),
-            'EXPERIMENTAL!',
-            new Color(100, 0, 0)
-        );
-    }
-    menu.addItem(
-        'Hide blocks...',
-        () => new BlockVisibilityDialogMorph(this.currentSprite).popUp(world)
-    );
-    menu.addItem(
-        'New category...',
-        () => this.createNewCategory()
-    );
-    if (SpriteMorph.prototype.customCategories.size) {
-        menu.addItem(
-            'Remove a category...',
-            () => this.deleteUserCategory(pos)
-        );
-    }
-    if (this.currentSprite instanceof SpriteMorph &&
-        !this.currentSprite.solution) {
-        menu.addItem(
-            'Generate puzzle',
-            'generatePuzzle',
-            'generate a Parson\'s Puzzle\n' +
-                'from the current sprite'
-        );
-    }
-    menu.addLine();
-    if (this.scenes.length() > 1) {
-        menu.addItem('Scenes...', 'scenesMenu');
-    }
-    menu.addPair('New scene', 'createNewScene');
-    menu.addPair('Add scene...', 'addScene');
-    menu.addLine();
     menu.addItem(
         'Libraries...',
         () => {
