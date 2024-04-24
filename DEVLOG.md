@@ -10,6 +10,7 @@
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
     * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
+    * allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
     * new Metaprogramming library
     * color type input slots for custom blocks
     * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
@@ -77,6 +78,9 @@
     * new Snap! Lisp Syntax documentation
 * **Translation Updates:**
     * German
+
+### 2024-04-24
+* threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels 
 
 ### 2024-04-17
 * merged patch from main to dev
