@@ -86,6 +86,7 @@
 ### 2024-04-30
 * threads: When programmatically setting the "slots" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
 * threads: dito for slot defaults, menus, editables and replaceables
+* incremented dev version
 
 ### 2024-04-24
 * threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
