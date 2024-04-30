@@ -8454,7 +8454,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'defaults':
         this.assertType(val, ['list', 'Boolean', 'number', 'text']);
         if (!(val instanceof List)) {
-            val = new List([val]);
+            val = new List(new Array(def.inputNames().length).fill(val));
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
@@ -8474,7 +8474,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'menus':
         this.assertType(val, ['list', 'text', 'number']);
         if (!(val instanceof List)) {
-            val = new List([val.toString()]);
+            val = new List(new Array(def.inputNames().length).fill(val));
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
@@ -8491,7 +8491,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'editables':
         this.assertType(val, ['list', 'Boolean', 'number']);
         if (!(val instanceof List)) {
-            val = new List([val]);
+            val = new List(new Array(def.inputNames().length).fill(val));
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
@@ -8506,7 +8506,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'replaceables':
         this.assertType(val, ['list', 'Boolean', 'number']);
         if (!(val instanceof List)) {
-            val = new List([val]);
+            val = new List(new Array(def.inputNames().length).fill(val));
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),

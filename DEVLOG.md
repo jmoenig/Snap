@@ -73,7 +73,7 @@
     * optimized FOR-loop and FOR-EACH-loop for speed
     * renamed "primitive" blocks into "extension"
     * scroll long text inside result balloons instead of shortening it
-    * When programmatically setting the "slots" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
+    * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -85,6 +85,7 @@
 
 ### 2024-04-30
 * threads: When programmatically setting the "slots" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
+* threads: dito for slot defaults, menus, editables and replaceables
 
 ### 2024-04-24
 * threads: allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
