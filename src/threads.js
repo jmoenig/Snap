@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-24';
+modules.threads = '2024-April-30';
 
 var ThreadManager;
 var Process;
@@ -8440,7 +8440,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'slots':
         this.assertType(val, ['list', 'number', 'text']);
         if (!(val instanceof List)) {
-            val = new List([val]);
+            val = new List(new Array(def.inputNames().length).fill(val));
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
