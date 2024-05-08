@@ -30,11 +30,12 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph*/
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph,
+BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-April-02';
+modules.extensions = '2024-May-08';
 
 // Global stuff
 
@@ -690,6 +691,56 @@ SnapExtensions.primitives.set(
 );
 
 // XHR:
+
+SnapExtensions.primitives.set(
+    'xhr_binary(url, webIDL_type)',
+    function (url, idl, proc) {
+        var response, buffer;
+        url = decodeURI(url);
+        proc.checkURLAllowed(url);
+        if (!proc.httpRequest) {
+            proc.httpRequest = new XMLHttpRequest();
+            proc.httpRequest.open("GET", url, true);
+            proc.httpRequest.responseType = "arraybuffer";
+            proc.httpRequest.send(null);
+        } else if (proc.httpRequest.readyState === 4) {
+            buffer = proc.httpRequest.response;
+            switch (idl) {
+                case 'byte':
+                    response = new List(new Int8Array(buffer));
+                    break;
+                case 'short':
+                    response = new List(new Int16Array(buffer));
+                    break;
+                case 'unsigned short':
+                    response = new List(new Uint16Array(buffer));
+                    break;
+                case 'long':
+                    response = new List(new Int32Array(buffer));
+                    break;
+                case 'unsigned long':
+                    response = new List(new Uint32Array(buffer));
+                    break;
+                case 'unrestricted float':
+                    response = new List(new Float32Array(buffer));
+                    break;
+                case 'unrestricted double':
+                    response = new List(new Float64Array(buffer));
+                    break;
+                case 'bigint':
+                    response = new List(new BigUint64Array(buffer));
+                    break;
+                case 'octet':
+                default:
+                    response = new List(new Uint8Array(buffer));
+            }
+            proc.httpRequest = null;
+            return response;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
 
 SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
