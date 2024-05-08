@@ -57,6 +57,7 @@
     * new API configuration option to hide the project name, thanks, Bernat!
     * new API configuration option to hide project specific entries in the file/project menu
     * new 'xhr_binary(url, webIDL_type)' extension primitive
+    * new "binary data from (url) type (webIDL)" reporter in the web-services library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -86,6 +87,7 @@
 
 ### 2024-05-08
 * extensions: new 'xhr_binary(url, webIDL_type)' extension primitive
+* web-services library: new "binary data from (url) type (webIDL)" reporter
 
 ### 2024-04-30
 * threads: When programmatically setting the "slots" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
