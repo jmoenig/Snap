@@ -1125,9 +1125,12 @@ IDE_Morph.prototype.createControlBar = function () {
 
     // let users manually enforce re-layout when changing orientation
     // on mobile devices
+    // Leaving it out, because it's most probably unneeded
+    /*
     this.controlBar.mouseClickLeft = function () {
         this.world().fillPage();
     };
+    */
 
     this.add(this.controlBar);
 
