@@ -88,6 +88,7 @@
 ### 2024-05-08
 * extensions: new 'xhr_binary(url, webIDL_type)' extension primitive
 * web-services library: new "binary data from (url) type (webIDL)" reporter
+* incremented dev version
 
 ### 2024-04-30
 * threads: When programmatically setting the "slots" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
