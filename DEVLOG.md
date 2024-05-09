@@ -58,6 +58,7 @@
     * new API configuration option to hide project specific entries in the file/project menu
     * new 'xhr_binary(url, webIDL_type)' extension primitive
     * new "binary data from (url) type (webIDL)" reporter in the web-services library
+    * new "a new clone of 'Turtle sprite'" feature - makes a new temporary Turtle sprite that does not inherit anything
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -84,6 +85,9 @@
     * new Snap! Lisp Syntax documentation
 * **Translation Updates:**
     * German
+
+### 2024-05-09
+* blocks, threads, byob, objects: "a new clone of 'Turtle sprite'" feature
 
 ### 2024-05-08
 * extensions: new 'xhr_binary(url, webIDL_type)' extension primitive

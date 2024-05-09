@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-April-17';
+modules.blocks = '2024-May-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -581,6 +581,11 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only',
         menu: 'clonablesMenu'
+    },
+    '%clntrtl': { // clones with turtle
+        type: 'input',
+        tags: 'read-only',
+        menu: 'clonablesMenuWithTurtle'
     },
     '%get': { // sprites, parts, specimen, clones
         type: 'input',
@@ -11346,6 +11351,34 @@ InputSlotMorph.prototype.clonablesMenu = function (searching) {
 
     if (rcvr instanceof SpriteMorph) {
         dict.myself = ['myself'];
+    }
+    stage.children.forEach(morph => {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
+            if (!allNames.some(n => snapEquals(n, morph.name))) {
+                allNames.push(morph.name);
+            }
+        }
+    });
+    if (allNames.length > 0) {
+        dict['~'] = null;
+        allNames.forEach(name =>
+            dict[name] = name
+        );
+    }
+    return dict;
+};
+
+InputSlotMorph.prototype.clonablesMenuWithTurtle = function (searching) {
+    if (searching) {return {}; }
+
+    var dict = {},
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allNames = [];
+
+    if (rcvr instanceof SpriteMorph) {
+        dict.myself = ['myself'];
+        dict['Turtle sprite'] = ['Turtle sprite'];
     }
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {

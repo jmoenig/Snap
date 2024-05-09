@@ -96,7 +96,7 @@ CustomBlockDefinition*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-April-10';
+modules.objects = '2024-May-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1299,7 +1299,7 @@ SpriteMorph.prototype.initBlocks = function () {
         newClone: {
             type: 'reporter',
             category: 'control',
-            spec: 'a new clone of %cln',
+            spec: 'a new clone of %clntrtl',
             defaults: [['myself']]
         },
         removeClone: {
@@ -5642,6 +5642,28 @@ SpriteMorph.prototype.newClone = function (immediately) {
         throw new Error('exceeding maximum number of clones');
     }
     return clone;
+};
+
+SpriteMorph.prototype.newTurtleSprite = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        sprite;
+    if (this.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
+    if (ide.stage && ide.stage.cloneCount <= 5000) {
+        sprite = new SpriteMorph(ide.globalVariables);
+        sprite.isTemporary = true;
+        sprite.cloneOriginName = ide.newSpriteName(sprite.name);
+        sprite.setCenter(this.center());
+        ide.stage.add(sprite);
+        ide.stage.cloneCount += 1;
+        sprite.fixLayout();
+        sprite.rerender();
+        ide.sprites.add(sprite);
+    } else {
+        throw new Error('exceeding maximum number of clones');
+    }
+    return sprite;
 };
 
 SpriteMorph.prototype.clonify = function (stage, immediately) {

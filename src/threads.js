@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-April-30';
+modules.threads = '2024-May-09';
 
 var ThreadManager;
 var Process;
@@ -6019,6 +6019,8 @@ Process.prototype.newClone = function (name) {
     if (thisObj) {
         if (this.inputOption(name) === 'myself') {
             return thisObj.newClone(!this.isFirstStep);
+        } else if (this.inputOption(name) === 'Turtle sprite') {
+            return thisObj.newTurtleSprite();
         }
         thatObj = this.getOtherObject(name, thisObj);
         if (thatObj) {
