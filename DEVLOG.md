@@ -88,6 +88,7 @@
 
 ### 2024-05-09
 * blocks, threads, byob, objects: "a new clone of 'Turtle sprite'" feature
+* German translation update for "Turtle sprite"
 
 ### 2024-05-08
 * extensions: new 'xhr_binary(url, webIDL_type)' extension primitive
