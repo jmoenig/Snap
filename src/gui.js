@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-08';
+modules.gui = '2024-May-09';
 
 // Declarations
 
-var SnapVersion = '10-240508-dev';
+var SnapVersion = '10-240509-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5503,6 +5503,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJosep Ferràndiz: Video Motion Detection'
         + '\nJoan Guillén: Countless contributions'
         + '\nKartik Chandra: Paint Editor'
+        + '\nMichael Aschauer: Embroidery machine support'
         + '\nCarles Paredes: Initial Vector Paint Editor'
         + '\n"Ava" Yuan Yuan, Deborah Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'

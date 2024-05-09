@@ -92,7 +92,7 @@ localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
 embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
-CustomBlockDefinition*/
+CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
@@ -10799,6 +10799,16 @@ StageMorph.prototype.userMenu = function () {
             'exportTrailsLogAsSVG',
             'export pen trails\nline segments as SVG'
         );
+        menu.addItem(
+            'dst...',
+            'exportTrailsLogAsDST',
+            'export pen trails\nas DST embroidery file'
+        );
+        menu.addItem(
+            'exp...',
+            'exportTrailsLogAsEXP',
+            'export pen trails\nas EXP embroidery file'
+        );
     }
     return menu;
 };
@@ -10935,8 +10945,18 @@ StageMorph.prototype.exportTrailsLogAsSVG = function () {
     ide.saveFileAs(
         this.trailsLogAsSVG().src,
         'image/svg',
-        ide.projectName || this.name
+        ide.getProjectName() || this.name
     );
+};
+
+StageMorph.prototype.exportTrailsLogAsDST = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    exportEmbroidery(this.trailsLog, ide.getProjectName() || this.name, 'dst');
+};
+
+StageMorph.prototype.exportTrailsLogAsEXP = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    exportEmbroidery(this.trailsLog, ide.getProjectName() || this.name, 'exp');
 };
 
 StageMorph.prototype.trailsLogAsSVG = function () {
