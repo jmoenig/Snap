@@ -62,6 +62,7 @@
     * export vector pen trails as embroidery files (experimental)
     * pixels library: new "grayscales of (costume)" reporter
     * new "Outlines and Halos" library
+    * piyels library: new "rectangle costume" reporter
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -93,6 +94,7 @@
 * gui: fixed experimental export/import of customized primitives palette
 * pixels library: added "grayscales of (costume)" reporter
 * new "Outlines and Halos" library
+* new "rectangle costume" reporter in the Pixels library
 
 ### 2024-05-09
 * blocks, threads, byob, objects: "a new clone of 'Turtle sprite'" feature
