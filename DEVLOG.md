@@ -87,6 +87,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-05-10
+* gui: fixed experimental export/import of customized primitives palette
+
 ### 2024-05-09
 * blocks, threads, byob, objects: "a new clone of 'Turtle sprite'" feature
 * German translation update for "Turtle sprite"

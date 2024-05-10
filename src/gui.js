@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-09';
+modules.gui = '2024-May-10';
 
 // Declarations
 
-var SnapVersion = '10-240509-dev';
+var SnapVersion = '10-240510-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5916,8 +5916,8 @@ IDE_Morph.prototype.exportCustomizedPrimitives = function () {
     var dict = SpriteMorph.prototype.blocks,
         blocks = [];
     Object.keys(dict).forEach(sel => {
-        if (dict[sel] instanceof CustomBlockDefinition) {
-            blocks.push(dict[sel]);
+        if (dict[sel].definition instanceof CustomBlockDefinition) {
+            blocks.push(dict[sel].definition);
         }
     });
     if (blocks.length > 0) {
