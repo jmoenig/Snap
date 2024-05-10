@@ -61,6 +61,7 @@
     * new "a new clone of 'Turtle sprite'" feature - makes a new temporary Turtle sprite that does not inherit anything
     * export vector pen trails as embroidery files (experimental)
     * pixels library: new "grayscales of (costume)" reporter
+    * new "Outlines and Halos" library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -91,6 +92,7 @@
 ### 2024-05-10
 * gui: fixed experimental export/import of customized primitives palette
 * pixels library: added "grayscales of (costume)" reporter
+* new "Outlines and Halos" library
 
 ### 2024-05-09
 * blocks, threads, byob, objects: "a new clone of 'Turtle sprite'" feature

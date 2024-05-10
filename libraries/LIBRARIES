@@ -40,7 +40,8 @@ plot_bars_module.xml	Just Bars	Draw a list of numbers as vertical lines distribu
 httpBlocks.xml	Web services access (https)	An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.  Also parses JSON data.
 make-variables.xml	Create variables	Create and manage global/sprite/script variables in a script
 bitwise.xml	Bitwise operators	Bitwise arithmetic operators for low-level bit manipulation.
-textformat_module.xml	Writing and formating	Write text using fancy fonts, contributed by Tethrarxitet
+textformat_module.xml    Writing and formating    Write text using fancy fonts, contributed by Tethrarxitet
+halo_module.xml	Outlines and Halos	Generate outline costumes and highlight sprites
 ~	~
 ~	~
 ~	~
