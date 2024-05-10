@@ -40,8 +40,15 @@ BLEController.prototype.connect = async function (serviceUUID, rxUUIX, txUUID) {
 };
 
 BLEController.prototype.onReceive = function (event) {
-    var data = new Uint8Array(event.target.value.buffer);
+    var data = new Uint8Array(event.target.value.buffer),
+        def = this.stage.globalBlocks.find(
+            def => def.spec == '__process_ble_data__');
     this.buffer.push(...data);
+    if (def) {
+        var block = def.blockInstance();
+        block.parent = this.stage;
+        invoke(block, null, this.stage);
+    }
 };
 
 BLEController.prototype.onDisconnect = function (event) {
