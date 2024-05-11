@@ -178,14 +178,14 @@ SnapTranslator.dict.es = {
 */
 
     // translations meta information
-    'language_name':
-        'Espa\u00F1ol', // the name as it should appear in the language menu
-    'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Mart\u00EDn', // your name for the Translators tab
-    'translator_e-mail':
-        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
-    'last_changed':
-        '2023-11-20', // this, too, will appear in the Translators tab
+    "language_name":
+        "Espa\u00F1ol", // the name as it should appear in the language menu
+    "language_translator":
+        "V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa / David Mart\u00EDn", // your name for the Translators tab
+    "translator_e-mail":
+        "victor.muratalla@yahoo.com / rizzi.cristian@gmail.com", // optional
+    "last_changed":
+        "2023-11-20", // this, too, will appear in the Translators tab
 
     //ADDING jadga's newest commits
     "0": "0",
@@ -758,7 +758,7 @@ SnapTranslator.dict.es = {
     "change _ by _": "incrementar _ en _",
     "change _ effect by _": "cambiar efecto _ en _",
     "change background _ by _": "aumenta _ del fondo en _",
-    "change balance by _": "aumenta el balance en _", 
+    "change balance by _": "aumenta el balance en _",
     "change pen _ by _": "cambiar _ del lápiz en _",
     "change pen color by _": "cambiar color de lápiz en _",
     "change pen shade by _": "cambiar brillo de lápiz en _",
