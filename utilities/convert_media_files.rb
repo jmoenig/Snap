@@ -52,9 +52,9 @@ def convert_media_file(file)
       item = {
         fileName: parts[0].strip,
         name: name,
-        # categoires: [],
+        # categoires: [], Don't add these yet
         # searchData: [],
-        translations: {}
+        # translations: {}
       }
       item[:description] = description if description
       data << item
@@ -70,6 +70,7 @@ def add_transations_to_media_data(data, translations)
       name = translation[item[:name]] || ''
       description = translation[item[:description]] || ''
       if name.length > 0 || description.length > 0
+        item[:translations] = {} unless item[:translations]
         item[:translations][lang] = {}
         item[:translations][lang][:name] = name if name.length > 0
         item[:translations][lang][:description] = description if description.length > 0

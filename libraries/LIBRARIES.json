@@ -1,0 +1,1128 @@
+[
+  {
+    "fileName": "iteration-composition.xml",
+    "name": "Iteration, composition",
+    "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.",
+    "translations": {
+      "ca": {
+        "name": "Iteracions i composició",
+        "description": "Construcció de bucles estàndard (while, until, etc.), construccions \"named let\" pròpies de Lisp (una generalització dels bucles \"for\"), iteració funcional (repeticions de crides a una funció) i composició de funcions."
+      },
+      "de": {
+        "name": "Iteration, Komposition"
+      },
+      "es": {
+        "name": "Iteración, composición",
+        "description": "Bucles tradicionales (while, until, etc...) + el \"named let\" de Lisp (una generalización del for) + iteración funcional (invocación repetida de una función) y composición de funciones."
+      },
+      "eu": {
+        "name": "Iterazioa, konposizioa",
+        "description": "Begizta egitura tradizionalak (while, until...) + Lisp-eko \"named let\" (for-aren orokortze bat) + iterazio funtzionala (funtzio bat modu errepikatuan deitzea) eta funtzioen konposizioa."
+      },
+      "gl": {
+        "name": "Iteracións e composición",
+        "description": "Construcción de bucles estándar (while, until, etc.), construcións «named let« propias de Lisp (unha xeneralización dos bucles «for»), iteración funcional (repeticións de chamadas a unha función) e composición de funcións."
+      },
+      "he": {
+        "name": "איטרציה, קומפוזיציה"
+      },
+      "hu": {
+        "name": "Ismétlés, Kompozíció"
+      },
+      "it": {
+        "name": "Iterazione, composizione",
+        "description": "Strutture cicliche tradizionali (mentre, fino a che, ecc.)"
+      },
+      "nl": {
+        "name": "Herhaling, Samenstelling",
+        "description": "Traditionele lusconstructies (tijdens, tot, etc.) plus de Lisp \"named let\" (een generalisatie van FOR) plus functionele iteratie (herhaalde aanroep van een functie) en functiesamenstelling."
+      },
+      "no": {
+        "name": "Iterasjon, komposisjon"
+      },
+      "pl": {
+        "name": "Iteracja, kompozycja"
+      },
+      "pt": {
+        "name": "Iteração e composição",
+        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções."
+      },
+      "sk": {
+        "name": "Iterácia, kompozícia"
+      },
+      "sv": {
+        "name": "Upprepning, komposition"
+      },
+      "ti": {
+        "name": "ምድግጋም, ምቛም"
+      },
+      "tr": {
+        "name": "Yineleme, kompozisyon"
+      },
+      "ua": {
+        "name": "Ітерація, композиція",
+        "description": "Традиційні конструкції циклу (while, until тощо) плюс Lisp \"named let\" (узагальнення FOR) плюс функціональна ітерація (повторний виклик функції) і композиція функції."
+      },
+      "zh_CN": {
+        "name": "迭代,组合",
+        "description": "传统的循环结构（如while、until等），加上Lisp中的\"named let\"（FOR的一般化），再加上函数迭代（反复调用一个函数）和函数组合。"
+      }
+    }
+  },
+  {
+    "fileName": "list-utilities.xml",
+    "name": "List utilities",
+    "description": "Some standard functions on lists (reverse, sort, etc.)",
+    "translations": {
+      "ca": {
+        "name": "Utilitats per a llistes",
+        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)"
+      },
+      "de": {
+        "name": "Listen bearbeiten"
+      },
+      "es": {
+        "name": "Utilidades de lista",
+        "description": "Algunas funciones estándar de listas (inventir, sort, etc...)"
+      },
+      "eu": {
+        "name": "Zerrenden utilitateak"
+      },
+      "gl": {
+        "name": "Utilidades para listas"
+      },
+      "he": {
+        "name": "עזריי רשימות"
+      },
+      "hu": {
+        "name": "Lista eszközök"
+      },
+      "it": {
+        "name": "Operazioni su liste",
+        "description": "Alcune funzioni standard per le liste (inverti, ordina, etc.)"
+      },
+      "nl": {
+        "name": "Lijst gereedschappen"
+      },
+      "no": {
+        "name": "Liste verktøy"
+      },
+      "pl": {
+        "name": "Metody listy"
+      },
+      "pt": {
+        "name": "Utilitários para listas"
+      },
+      "sk": {
+        "name": "úpravy zoznamu"
+      },
+      "sv": {
+        "name": "Listverktyg"
+      },
+      "ti": {
+        "name": "ኣገልግሎታት ዝርዝር",
+        "description": "ገለ ዝውቱራት ተግባራት ዘርዝራት (ገልብጥ፡ ስራዕ፡ ወዘተ)"
+      },
+      "tr": {
+        "name": "liste yardımcı programları"
+      },
+      "ua": {
+        "name": "Список утиліт",
+        "description": "Деякі стандартні функції для списків (перевертання, сортування тощо)"
+      },
+      "zh_CN": {
+        "name": "列表工具",
+        "description": "一些列表上的标准函数(反转、排序等)"
+      }
+    }
+  },
+  {
+    "fileName": "colors.xml",
+    "name": "Colors and Crayons",
+    "description": "Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.",
+    "translations": {
+      "ca": {
+        "name": "Colors i Paletes",
+        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat."
+      },
+      "es": {
+        "name": "Colores y pinturas"
+      },
+      "it": {
+        "name": "Colori e Pastelli"
+      },
+      "ti": {
+        "name": "ሕብርታትን ክራዮናትን"
+      },
+      "ua": {
+        "name": "Кольори та олівці"
+      },
+      "zh_CN": {
+        "name": "颜色和蜡笔"
+      }
+    }
+  },
+  {
+    "fileName": "crayons.xml",
+    "name": "Crayons",
+    "description": "Just the crayons, without the rest of the colors library.  Fast and simple.",
+    "translations": {
+      "ca": {
+        "name": "Llapis de colors",
+        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple."
+      },
+      "es": {
+        "name": "Pinturas"
+      },
+      "it": {
+        "name": "Pastelli"
+      },
+      "ti": {
+        "name": "ክራዮናት"
+      },
+      "ua": {
+        "name": "Олівці"
+      },
+      "zh_CN": {
+        "name": "蜡笔"
+      }
+    }
+  },
+  {
+    "fileName": "bignumbers.xml",
+    "name": "Bignums, rationals, complex #s",
+    "description": "The full Scheme numeric tower.  \"USE BIGNUMS <True>\" to enable.",
+    "translations": {
+      "ca": {
+        "name": "Números sencers de precisió infinita, racionals exactes i complexos",
+        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a cert) per utilitzar-ho"
+      },
+      "it": {
+        "name": "Numeri a precisione infinita, razionali, complessi"
+      },
+      "ti": {
+        "name": "ዓበይቲ ቁጽርታት, ትኽክል ተመቕራሒ ቁጽርታት, ሓሳባውያን ቁጽርታት"
+      },
+      "ua": {
+        "name": "Великі, раціональні, комплексні числа #s"
+      },
+      "zh_CN": {
+        "name": "大数、有理数、复数"
+      }
+    }
+  },
+  {
+    "fileName": "try-catch.xml",
+    "name": "Catch errors",
+    "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.",
+    "translations": {
+      "ca": {
+        "name": "Detecta errors"
+      },
+      "it": {
+        "name": "Intercettazione degli errori"
+      },
+      "ti": {
+        "name": "ምልቃም ጌጋታት"
+      },
+      "ua": {
+        "name": "Відстежити помилки"
+      },
+      "zh_CN": {
+        "name": "捕获错误"
+      }
+    }
+  },
+  {
+    "fileName": "parallel_module.xml",
+    "name": "Parallelization",
+    "description": "Run several scripts in parallel and wait until all are done.",
+    "translations": {
+      "ca": {
+        "name": "Processos en paral·lel",
+        "description": "Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d'aturar-se"
+      },
+      "es": {
+        "name": "Paralelización"
+      },
+      "gl": {
+        "name": "Paralelización",
+        "description": "Executar varios programas en paralelo e agardar que todos eles rematen."
+      },
+      "it": {
+        "name": "Parallelizzazione",
+        "description": "Esegue diversi script in parallelo e attende che tutti siano terminati."
+      },
+      "nl": {
+        "name": "Parallelisatie",
+        "description": "Voer verschillende scripts parallel uit en wacht tot ze allemaal klaar zijn."
+      },
+      "pt": {
+        "name": "Paralelização",
+        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem."
+      },
+      "ti": {
+        "name": "ተገደም ዕማማት",
+        "description": "ሓያሎ መርሓታት ብተገደም ኣዕዪ፡ ክሳብ ኩለን መርሓታት ዕማመን ዝውድኣ ተጸበ።"
+      },
+      "ua": {
+        "name": "Розпаралелювання",
+        "description": "Запустіть кілька сценаріїв паралельно та зачекайте, поки всі будуть виконані"
+      },
+      "zh_CN": {
+        "name": "平行化",
+        "description": "并行运行多个脚本并等待所有脚本完成."
+      }
+    }
+  },
+  {
+    "fileName": "Eisenbergification.xml",
+    "name": "Getters and setters",
+    "description": "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.",
+    "translations": {
+      "ca": {
+        "name": "Llegir i establir paràmetres del sistema",
+        "description": "La llei de Eisenberg diu: Des de la programació s'hauria de poder fer tot allò que es faci des de l'entorn i les seves funcionalitats i configuració. I viceversa!"
+      },
+      "es": {
+        "name": "Consultas y modificaciones",
+        "description": "Ley de Eisenberg: Cualquier cosa que pueda hacerse desde la interfaz gráfica también debería de poder hacerse desde el lenguaje de programación y viceversa."
+      },
+      "eu": {
+        "description": "Eisenberg-en legea: Erabiltzaile interfaze grafiko bidez egin daitekeen edozein gauza programazio lengoaia erabiliz ere egin daiteke, eta alderantziz."
+      },
+      "gl": {
+        "description": "A lei de Eisenberg di: Calquer cousa que poida facerse dende a interface gráfica tamén deberá poder facerse dende a linguaxe de programación e viceversa."
+      },
+      "it": {
+        "name": "Metodi di accesso e di modifica",
+        "description": "Legge di Eisenberg: Qualunque cosa che può essere fatta tramite la GUI dovrebbe poter essere fatta tramite il linguaggio di programmazione, e viceversa."
+      },
+      "nl": {
+        "description": "De wet van Eisenberg: Alles wat vanuit de GUI kan worden gedaan, moet ook vanuit de programmeertaal gedaan kunnen worden, en vice versa."
+      },
+      "pt": {
+        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa."
+      },
+      "ti": {
+        "name": "ኣምጻእትን ኣንበርትን"
+      },
+      "ua": {
+        "name": "Гетери та сетери",
+        "description": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки."
+      },
+      "zh_CN": {
+        "name": "获取器和设置器",
+        "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
+      }
+    }
+  },
+  {
+    "fileName": "list_comprehension_module.xml",
+    "name": "List comprehension",
+    "description": "HOF version of ZIP, letting you \"hyperize\" any dyadic function",
+    "translations": {
+      "ca": {
+        "name": "Compressió de llistes",
+        "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "maps_module.xml",
+    "name": "World Map",
+    "description": "Add interactive maps to projects",
+    "translations": {
+      "ca": {
+        "name": "Mapa del món",
+        "description": "Afegeix mapes interactius als projectes."
+      },
+      "es": {
+        "name": "Mapamundi",
+        "description": "Añadir mapas interactivos a los proyectos"
+      },
+      "gl": {
+        "name": "Mapa do mundo"
+      },
+      "it": {
+        "name": "Mappamondo",
+        "description": "Aggiunge mappe interattive ai progetti"
+      },
+      "nl": {
+        "name": "Wereldkaart",
+        "description": "Voeg interactieve mappen toe aan projecten"
+      },
+      "pt": {
+        "name": "Mapa do mundo"
+      },
+      "ti": {
+        "name": "ካርታ ዓለም",
+        "description": "ኣስታፊ ካርታ ኣብ ፕሮጀክት ኣእቱ"
+      },
+      "ua": {
+        "name": "Карта світу",
+        "description": "Додати інтерактивні карти до проектів"
+      },
+      "zh_CN": {
+        "name": "世界地图",
+        "description": "向项目中添加交互式地图"
+      }
+    }
+  },
+  {
+    "fileName": "menu_module.xml",
+    "name": "Menus",
+    "description": "Prompt the user to pick an option.",
+    "translations": {
+      "ca": {
+        "description": "Demana a l'usuari que triï una opció."
+      }
+    }
+  },
+  {
+    "fileName": "textCostumes_module.xml",
+    "name": "Text Costumes",
+    "description": "Generate costumes from letters or words of text.",
+    "translations": {
+      "ca": {
+        "name": "Text als vestits",
+        "description": "Genera vestits utilitzant lletres, paraules... o qualevol text."
+      },
+      "gl": {
+        "name": "Traxes de texto",
+        "description": "Xerar traxes a partires de letras ou palabras… ou calquera texto."
+      },
+      "it": {
+        "name": "Costumi Testo",
+        "description": "Genera costumi da lettere o parole di testo."
+      },
+      "nl": {
+        "name": "Tekstkostuums",
+        "description": "Genereer kostuums uit letters of woorden tekst."
+      },
+      "pt": {
+        "name": "Trajes de texto",
+        "description": "Gerar trajes a partir de letras ou palavras de texto."
+      },
+      "ti": {
+        "name": "ኣልባሳት ጽሑፍ",
+        "description": "ኣልባሳት ካብ ፊደላት ወይ ቃላት ናይ ጽሑፍ ኣዳሉ።"
+      },
+      "ua": {
+        "name": "Текстові костюми",
+        "description": "Генерування костюмів з букв та слів"
+      },
+      "zh_CN": {
+        "name": "文本样式",
+        "description": "从文本的字母或单词生成造型。"
+      }
+    }
+  },
+  {
+    "fileName": "speech_module.xml",
+    "name": "Text to Speech",
+    "description": "Output text using speech synthesis.",
+    "translations": {
+      "ca": {
+        "name": "Lector de text",
+        "description": "Utilitza la síntesi de veu per crear so des d'un text"
+      },
+      "it": {
+        "name": "Da Testo a Voce",
+        "description": "Pronuncia il testo usando un sintetizzatore"
+      },
+      "nl": {
+        "description": "Voer tekst uit met behulp van spraaksynthese."
+      },
+      "ti": {
+        "description": "ጽሑፍ ከም ናይ ዘረባ ጽማረ ኣቃልሕ"
+      },
+      "ua": {
+        "name": "Текст в мовлення",
+        "description": "Виведення тексту за допомогою синтезу мовлення."
+      },
+      "zh_CN": {
+        "name": "文本转语音",
+        "description": "使用语音合成输出文本。"
+      }
+    }
+  },
+  {
+    "fileName": "animation_module.xml",
+    "name": "Animation",
+    "description": "Glide, grow and rotate using easing functions.",
+    "translations": {
+      "ca": {
+        "name": "Animacions",
+        "description": "Fés lliscar, crèixer i girar els objectes utilitzant diferents formes i filtres a les animacions"
+      },
+      "es": {
+        "name": "Animación"
+      },
+      "eu": {
+        "name": "Animazioa"
+      },
+      "gl": {
+        "name": "Animacións"
+      },
+      "it": {
+        "name": "Animazione",
+        "description": "Scivola, cambia dimensione e ruota usando funzioni di interpolazione."
+      },
+      "nl": {
+        "name": "Animatie"
+      },
+      "ti": {
+        "name": "ተንቀሳቓሲ",
+        "description": "መሳጋገሪ ተግባራት (easing functions) ብምጥቃም ኣንሳፍፍ፡ ዕበ ከምኡውን ዙር።"
+      },
+      "ua": {
+        "name": "Анімація",
+        "description": "Ковзайте, збільшуйте та обертайте за допомогою функцій полегшення."
+      },
+      "zh_CN": {
+        "name": "动画",
+        "description": "使用缓动函数进行滑动、放大和旋转。"
+      }
+    }
+  },
+  {
+    "fileName": "pixel_module.xml",
+    "name": "Pixels",
+    "description": "Manipulate costumes pixel-wise.",
+    "translations": {
+      "ca": {
+        "name": "Píxels",
+        "description": "Manipulem els píxels dels vestits"
+      },
+      "es": {
+        "name": "Píxeles"
+      },
+      "eu": {
+        "name": "Pixelak"
+      },
+      "gl": {
+        "name": "Píxeles"
+      },
+      "it": {
+        "name": "Pixel",
+        "description": "Manipola i costumi pixel per pixel"
+      },
+      "nl": {
+        "description": "Manipuleer kostuums pixelsgewijs."
+      },
+      "pt": {
+        "name": "Píxeis"
+      },
+      "ti": {
+        "name": "ዋህዮታት ስእሊ",
+        "description": "ኣልባሳት ብደረጃ ዋህዮ ስእሊ ቀያይር ወይ ተቖጻጸር።"
+      },
+      "ua": {
+        "name": "Пікселі",
+        "description": "Керуйте костюмами піксельно."
+      },
+      "zh_CN": {
+        "name": "像素",
+        "description": "逐像素操作造型"
+      }
+    }
+  },
+  {
+    "fileName": "audioComp_module.xml",
+    "name": "Audio Comp",
+    "description": "Analyze, manipulate and generate sound samples.",
+    "translations": {
+      "ca": {
+        "name": "Composició d'audio",
+        "description": "Analitza, manipula i genera mostres de so"
+      },
+      "es": {
+        "name": "Composición de audio"
+      },
+      "eu": {
+        "name": "Audioa"
+      },
+      "gl": {
+        "name": "Composición de son"
+      },
+      "it": {
+        "name": "Compressione Audio",
+        "description": "Analizza, manipola e genera brani audio."
+      },
+      "nl": {
+        "description": "Analiseer, manipuleer en genereer geluidssamples."
+      },
+      "pt": {
+        "name": "Computação áudio"
+      },
+      "ti": {
+        "name": "ምድላው ድምጺ",
+        "description": "ናይ ድምጺ ናሙና ምርምር፡ ፍጠር፡ ለዋውጥ።"
+      },
+      "ua": {
+        "name": "Audio Comp",
+        "description": "Аналізуйте, маніпулюйте та створюйте звукові зразки."
+      },
+      "zh_CN": {
+        "name": "音频组件",
+        "description": "分析、操纵和生成声音样本."
+      }
+    }
+  },
+  {
+    "fileName": "frequency_distribution_module.xml",
+    "name": "Frequency Distribution Analysis",
+    "description": "Analyze data for frequency distribution",
+    "translations": {
+      "ca": {
+        "name": "Anàlisi de la distribució de freqüències",
+        "description": "Analitza les dades de distribució de freqüències."
+      },
+      "es": {
+        "name": "Análisis de distribución de frecuencias"
+      },
+      "gl": {
+        "name": "Analise da distribución de frecuencias"
+      },
+      "it": {
+        "name": "Analisi della Distribuzione delle Frequenze",
+        "description": "Analizza i dati per ricavare la distribuzione delle frequenze"
+      },
+      "nl": {
+        "name": "Analyse van frequentieverdeling",
+        "description": "Analyseer gegevens voor frequentieverdeling"
+      },
+      "pt": {
+        "name": "Análise da distribuição de frequências"
+      },
+      "ti": {
+        "name": "ምርምር ዝርገሐ ድግምጋም",
+        "description": "ንዝርገሐ ድግምጋም ኣብ ሓበሬታ ምርምር"
+      },
+      "ua": {
+        "name": "Аналіз розподілу частот",
+        "description": "Аналізуйте дані для розподілу частот"
+      },
+      "zh_CN": {
+        "name": "频率分布分析",
+        "description": "分析频率分布数据"
+      }
+    }
+  },
+  {
+    "fileName": "localstorage_module.xml",
+    "name": "Database",
+    "description": "Persistent key-value storage across Snap! sessions in the same browser",
+    "translations": {
+      "ca": {
+        "name": "Base de dades",
+        "description": "Desa al navegador dades (clau-valor) persistents entre sessions d'Snap!"
+      },
+      "es": {
+        "name": "Base de datos"
+      },
+      "it": {
+        "name": "Database",
+        "description": "Memorizzazione persistente di chiavi-valori in diverse sessioni di Snap! nello stesso browser"
+      },
+      "ti": {
+        "name": "መኽዘን ሓበሬታ"
+      },
+      "ua": {
+        "name": "База даних",
+        "description": "Постійне зберігання ключ-значення в Snap! сесій в одному браузері"
+      },
+      "zh_CN": {
+        "name": "数据库",
+        "description": "在同一浏览器中跨Snap!会话保持持久化的键值存储,这是关于在Snap!编程环境中实现在不同会话之间保持数据持久性的描述。"
+      }
+    }
+  },
+  {
+    "fileName": "tiles_module.xml",
+    "name": "Tiles",
+    "description": "Divide the stage into sub-regions in each of which to perform an action",
+    "translations": {
+      "ca": {
+        "name": "Rajoles d'escenari",
+        "description": "Divideix l'escenari en diferents regions iguals per realitzar la mateixa acció repetitivament"
+      }
+    }
+  },
+  {
+    "fileName": "arcs_module.xml",
+    "name": "Arcs",
+    "description": "Turn sprites by a delta of degrees moving them at a given radius",
+    "translations": {
+      "ca": {
+        "description": "Creeu arcs tot girant els objectes un número de graus i movent-los en un radi determinat"
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "word-sentence.xml",
+    "name": "Words, sentences",
+    "description": "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.",
+    "translations": {
+      "ca": {
+        "name": "Paraules i frases",
+        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea."
+      },
+      "de": {
+        "name": "Wörter, Sätze"
+      },
+      "el": {
+        "name": "Λέξεις, φράσεις"
+      },
+      "es": {
+        "name": "Palabras, frases"
+      },
+      "eu": {
+        "name": "Hitzak, esaldiak"
+      },
+      "gl": {
+        "name": "Palabras e frases"
+      },
+      "he": {
+        "name": "מילים, משפטים"
+      },
+      "hu": {
+        "name": "Szavak, mondatok"
+      },
+      "it": {
+        "name": "Parole, frasi"
+      },
+      "nl": {
+        "name": "Woorden en zinnen"
+      },
+      "no": {
+        "name": "Ord, setninger"
+      },
+      "pl": {
+        "name": "Słowa, zdania"
+      },
+      "pt": {
+        "name": "Palavras e frases"
+      },
+      "sk": {
+        "name": "Slová, vety"
+      },
+      "sv": {
+        "name": "Ord, meningar"
+      },
+      "ti": {
+        "name": "ቃላት ፡ ምሉእ ሓሳባት"
+      },
+      "tr": {
+        "name": "kelimeler, cümleler"
+      },
+      "ua": {
+        "name": "Слова, речення"
+      },
+      "zh_CN": {
+        "name": "单词，句子"
+      }
+    }
+  },
+  {
+    "fileName": "words_module.xml",
+    "name": "Just Words",
+    "description": "Use texts as if they were lists of words. A minimal variant of the Words/Sentences library for language projects like chat bots.",
+    "translations": {
+      "ca": {
+        "name": "Només paraules",
+        "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la llibreria 'Paraules i Frases' per a projectes lingüístics com ara un xat amb un robot."
+      }
+    }
+  },
+  {
+    "fileName": "strings.xml",
+    "name": "Strings, Multi-line input",
+    "description": "Extract substrings of a string in various ways. In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.",
+    "translations": {
+      "ca": {
+        "name": "Operadors de text i entrades multilínia",
+        "description": "Extreu part de cadenes de text amb diversos criteris. El bloc \"multilínia\" permet afegir entrades de text multilínia en qualsevol entrada de blocs"
+      },
+      "it": {
+        "name": "Stringhe, argomento multilinea"
+      },
+      "nl": {
+        "name": "Strings, invoer met meerdere regels"
+      },
+      "ti": {
+        "name": "ሕብረ-ፊደላት፡ ብዙሕ ዝመስመሩ ኣታዊ"
+      },
+      "ua": {
+        "name": "Рядки, багаторядковий ввід"
+      },
+      "zh_CN": {
+        "name": "字符串，多行输入"
+      }
+    }
+  },
+  {
+    "fileName": "replace_letters_module.xml",
+    "name": "Replace Letters",
+    "description": "Replace all occurrences of a letter or a sequence of letters with another in a text.",
+    "translations": {
+      "ca": {
+        "name": "Substitueix Lletres",
+        "description": "Substitueix totes les aparicions d'una lletra o d'una seqüència de lletres per unes altres en un text."
+      }
+    }
+  },
+  {
+    "fileName": "apl.xml",
+    "name": "APL primitives",
+    "description": "Adds features from the APL language supporting hyperblocks.",
+    "translations": {
+      "ca": {
+        "name": "Primitives APL",
+        "description": "Afegeix funcionalitats del llenguatge APL als hiper-blocs."
+      },
+      "es": {
+        "name": "Primitivas APL"
+      },
+      "it": {
+        "name": "Primitive APL",
+        "description": "Aggiunge caratteristiche del linguaggio APL che supportano gli iperblocchi."
+      },
+      "nl": {
+        "description": "Voegt functies toe uit de APL-taal die hyperblokken ondersteunen"
+      },
+      "ti": {
+        "name": " መባእታውይን ሕጡባት APL",
+        "description": "ንጡፋት-ሕጡባት ዝሕግዙ ባህርያት ካብ ቋንቋ APL ወስኽ"
+      },
+      "ua": {
+        "name": "примітиви APL",
+        "description": "Додає функції з мови APL, що підтримують гіперблоки."
+      },
+      "zh_CN": {
+        "name": "APL原语",
+        "description": "添加支持超级块的APL语言功能."
+      }
+    }
+  },
+  {
+    "fileName": "stream-tools.xml",
+    "name": "Streams (lazy lists)",
+    "description": "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)  See SICP 3.5 for a tutorial.",
+    "translations": {
+      "ca": {
+        "name": "Streams (llistes presconstruides)",
+        "description": "Variació del tipus de dades \"llistes\" on els elements de la llista no són avaluats fins que s'utilitzen. D'aquesta manera es poden construir llistes amb milions d'elements sense un gran consum de memòria i fins i tot construir llistes de mida infinita. (S'inclou un bloc d'exemple que reporta tots els números primers.) Veieu el tutorial a SICP 3.5."
+      },
+      "es": {
+        "name": "Streams (listas perezosas)"
+      },
+      "eu": {
+        "name": "Jarioak (zerrenda alferrak)"
+      },
+      "gl": {
+        "name": "Fluxos (listas preguizosas)"
+      },
+      "it": {
+        "name": "Stream (liste rilasciate)"
+      },
+      "pt": {
+        "name": "Canais (listas preguiçosas)"
+      },
+      "sv": {
+        "name": "Strömmar (lata listor)"
+      },
+      "ti": {
+        "name": "ዛራታት (ድንጉይ ዝርዝራት)"
+      },
+      "ua": {
+        "name": "Потоки (ліниві списки)"
+      },
+      "zh_CN": {
+        "name": "流(惰性列表)"
+      }
+    }
+  },
+  {
+    "fileName": "bar-charts.xml",
+    "name": "Bar charts",
+    "description": "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number.  The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.).  Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries).  If the field isn't numeric, leave these three inputs empty or set them to zero.  In that case, each string value of the field is its own bucket, and they appear sorted alphabetically.  The block reports a new table with three columns.  The first column contains the bucket name or smallest number.  The second column contains a nonnegative integer that says how many records in the input table fall into this bucket.  The third column is a subtable containing the actual records from the original table that fall into the bucket.  If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.",
+    "translations": {
+      "ca": {
+        "name": "Gràfics de barres",
+        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\"."
+      },
+      "it": {
+        "name": "Grafico a barre"
+      },
+      "nl": {
+        "name": "Staafdiagrammen"
+      },
+      "ti": {
+        "name": "ባር-ቻርት"
+      },
+      "ua": {
+        "name": "Стовпчасті діаграми"
+      },
+      "zh_CN": {
+        "name": "条形图"
+      }
+    }
+  },
+  {
+    "fileName": "plot_bars_module.xml",
+    "name": "Just Bars",
+    "description": "Draw a list of numbers as vertical lines distributed evenly across the stage.",
+    "translations": {
+      "ca": {
+        "name": "Només gràfics de barres",
+        "description": "Representa una llista de nombres utilitzant línies verticals distribuïdes per tot l'escenari"
+      }
+    }
+  },
+  {
+    "fileName": "httpBlocks.xml",
+    "name": "Web services access (https)",
+    "description": "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.  Also parses JSON data.",
+    "translations": {
+      "ca": {
+        "name": "Accés a serveis Web (https)",
+        "description": "Una versió ampliada del bloc URL que permet treballar amb crides \"POST\", \"PUT\", \"DELETE\" i \"GET\" i també triar el protocol \"HTTP-HTTPS\" i controlar les capçaleres. També permet treballar amb dades JSON."
+      },
+      "de": {
+        "name": "Zugriff auf Webservices"
+      },
+      "es": {
+        "name": "Acceso a servicios web (https)"
+      },
+      "eu": {
+        "name": "Web zerbitzuak atzitzea (https)"
+      },
+      "gl": {
+        "name": "Acceso a servizos web (https)"
+      },
+      "he": {
+        "name": "גישה לשירותי רשת מאובטחים"
+      },
+      "hu": {
+        "name": "Web service hozzáférés (https)"
+      },
+      "it": {
+        "name": "Accesso ai servizi web (https)"
+      },
+      "nl": {
+        "name": "Verbinding met Webservices"
+      },
+      "no": {
+        "name": "Webservices tilgang (htpps)"
+      },
+      "pl": {
+        "name": "Dostęp do usług sieciowych (https)"
+      },
+      "pt": {
+        "name": "Acesso a serviços web (https)"
+      },
+      "sk": {
+        "name": "Prístup na webové služby (https)"
+      },
+      "ti": {
+        "name": "ኣገልግሎታት መርበብ ሓበሬታ ምብጻሕ (https)"
+      },
+      "tr": {
+        "name": "Web servislerine ulaşım (https)"
+      },
+      "ua": {
+        "name": "Доступ до веб-служб (https)"
+      },
+      "zh_CN": {
+        "name": "网络服务访问（https）"
+      }
+    }
+  },
+  {
+    "fileName": "make-variables.xml",
+    "name": "Create variables",
+    "description": "Create and manage global/sprite/script variables in a script",
+    "translations": {
+      "ca": {
+        "name": "Crea variables",
+        "description": "Crea i gestiona variables de tipus global/sprite/script dins els programes"
+      },
+      "es": {
+        "name": "Crear variables"
+      },
+      "gl": {
+        "description": "Crear e xestionar \"global/sprite/script\" variábeis a partires dun programa."
+      },
+      "it": {
+        "name": "Crea variabili",
+        "description": "Crea e gestisce in uno script variabili globali/dello sprite/dello script"
+      },
+      "nl": {
+        "name": "Maak variabelen",
+        "description": "Maak en beheer globale/sprite/scriptvariabelen in een script"
+      },
+      "pt": {
+        "description": "Criar e gerir variáveis globais, de objecto e de guião a partir de um guião."
+      },
+      "ti": {
+        "name": "ተቓያየርቲ ኣዳሉ",
+        "description": "ሓፈሻውያን፡ ናይ መርሓ ፡ ከምኡ ውን ናይ ትንኩሊብ ወይ ውዱዕ ተቓያየርቲ ኣብ ውሽጢ መርሓ ኣዳሉን ኣመሓድርን።"
+      },
+      "ua": {
+        "name": "Створити змінні",
+        "description": "Створення глобальних/спрайтових/скриптових змінних у сценарії та керування ними"
+      },
+      "zh_CN": {
+        "name": "创建变量",
+        "description": "在脚本中创建和管理全局/精灵/脚本变量"
+      }
+    }
+  },
+  {
+    "fileName": "bitwise.xml",
+    "name": "Bitwise operators",
+    "description": "Bitwise arithmetic operators for low-level bit manipulation.",
+    "translations": {
+      "ca": {
+        "name": "Operadors 'bitwise'",
+        "description": "Operadors aritmètics 'bitwise' per a manipular dades a baix nivell (a nivell dels seus bits)"
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "SciSnap!2Blocks.xml",
+    "name": "SciSnap! v2",
+    "description": "Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)",
+    "translations": {
+      "ca": {
+        "description": "Funcions científiques, gràfics, comandes SQL i 'Machine Learning' creats per la Universitat de Göttingen (Eckart Modrow)"
+      }
+    }
+  },
+  {
+    "fileName": "TuneScope.xml",
+    "name": "TuneScope",
+    "description": "Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)",
+    "translations": {
+      "ca": {
+        "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)"
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "serial_module.xml",
+    "name": "Serial Ports",
+    "description": "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)",
+    "translations": {
+      "ca": {
+        "name": "Ports sèrie",
+        "description": "Connexió a microcontroladors connectats al port sèrie utilitzant el Web Serial API (requereix de la utilització del navegador Chromium, Chrome o Edge)"
+      },
+      "es": {
+        "name": "Puertos serie"
+      },
+      "it": {
+        "name": "Porte Seriali",
+        "description": "Collega a estensioni hardware usando la Web Serial API (è richiesto Chromium, Chrome o Edge)"
+      },
+      "nl": {
+        "description": "Maak verbinding met hardware-extensies via de Web Serial API (Chromium, Chrome of Edge vereist)"
+      },
+      "ti": {
+        "name": "ታርታዊ መዋሰብያ",
+        "description": "ምስ ተወሰኽቲ ናይ ኮምፒዩተር ኣቕሑ ብመገዲ ታርታዊ ናይ መርበብ ኤፒኣይ (Web Serial API) ኣራኽብ (ብ ባባት መርበብ ሓበሬታ ክሮምን ኤጅን ጥራይ እድገፍ)"
+      },
+      "ua": {
+        "name": "Послідовні порти",
+        "description": "Підключення до апаратних розширень через Web Serial API (потрібен Chromium, Chrome або Edge)"
+      },
+      "zh_CN": {
+        "name": "串行端口",
+        "description": "通过Web Serial API连接到硬件扩展(需要Chromium、Chrome或Edge)"
+      }
+    }
+  },
+  {
+    "fileName": "mqtt.xml",
+    "name": "MQTT",
+    "description": "(Message Queuing Telemetry Transport) protocol for connecting with IOT devices and/or other software",
+    "translations": {
+      "ca": {
+        "description": "MQTT (Message Queuing Telemetry Transport - Transport de telemetria de missatges en cua) Protocol per connectar dispositius IoT amb diferent programari"
+      }
+    }
+  },
+  {
+    "fileName": "signada.xml",
+    "name": "Signada (Network remote control)",
+    "description": "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.",
+    "translations": {
+      "ca": {
+        "name": "Signada (control remot per xarxa)",
+        "description": "Interactua amb dispositius programats amb Microblocks per la WiFi. Els dispositius han de tenir una pantalla TFT, dos butons i connectivitat WiFi i tenir carregat el projecte Signada de MicroBlocks. Exemples compatibles són la placa ED1 del Citilab i múltiples dispositius tipus M5Stack."
+      },
+      "it": {
+        "name": "Signada (Controllo remoto di rete)",
+        "description": "Interagisce con dispositivi MicroBlocks via WiFi. Richiede che il dispositivo sia dotato di un display TFT, due pulsanti e di WiFi, e che il progetto Signada MicroBlocks sia stato caricato. La Citilab ED1 e alcune schede M5Stack sono alcuni dei dispositivi che funzionano con Signada."
+      },
+      "ua": {
+        "name": "Signada (мережевий дистанційний контроль)",
+        "description": "Взаємодія з пристроями MicroBlocks через Wi-Fi. Потрібно, щоб пристрій мав TFT-дисплей, дві кнопки та можливість Wi-Fi, а також завантажений проект Signada MicroBlocks. Citilab ED1 і низка плат M5Stack є одними з пристроїв, які працюють з Signada"
+      },
+      "zh_CN": {
+        "name": "Signada（网络远程控制）",
+        "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks项目。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
+      }
+    }
+  }
+]
