@@ -5174,28 +5174,34 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
-    // A Resource File lists all the files that could be loaded in a submenu
-    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-    // The file format is tab-delimited, with unix newlines:
-    // file-name, Display Name, Help Text (optional)
-    var parts,
-        items = [];
+   /* A resource file is a JSON file with a list of objects:
+    1. fileName
+    2. name
+    3. description
+    4. categoires (optional, list)
+    5. searchData (optional, list of keywords)
+    6. translations (optional, map of language to name/description/searchData)
 
-    text.split('\n').map(line =>
-        line.trim()
-    ).filter(line =>
-        line.length > 0
-    ).forEach(line => {
-        parts = line.split('\t').map(str => str.trim());
+    These files are used for loading costumes, backgrounds, and sounds, and libraries.
+    Translations are merged into the dictionary before rendering resourcres.
+    Categories are not expected to be translated with each individual resource, instead
+    translations are expected to be provided in each langauge's translation file.
 
-        if (parts.length < 2) {return; }
+    -- May 2024: categories, and searchData are not used in Snap! yet
+   */
+    let items = JSON.parse(text),
+        language = this.getLocale();
 
-        items.push({
-            fileName: parts[0],
-            name: parts[1],
-            description: parts.length > 2 ? parts[2] : ''
-        });
-    });
+    // Update name, description, and searchData from translations
+    for (let item of items) {
+        if (item.translations && item.translations[language]) {
+            let translation = item.translations[language];
+            item.name = translation.name || item.name;
+            item.description = translation.description || item.description;
+            item.searchData = translation.searchData || item.searchData;
+        }
+        delete item.translations;
+    }
 
     return items;
 };
