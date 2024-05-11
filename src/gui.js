@@ -10120,7 +10120,10 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.ide = ide;
     this.key = 'importLibrary';
     this.action = 'importLibrary';
-    this.librariesData = librariesData; // [{name: , fileName: , description:}]
+
+    // [{name: , fileName: , description:, categories:, searchData:}]
+    this.librariesData = librariesData;
+    this.filteredLibrariesList = this.librariesData;
 
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
@@ -10185,15 +10188,19 @@ LibraryImportDialogMorph.prototype.buildFilterField = function () {
     this.filterField.reactToInput = function (evt) {
         var text = this.getValue().toLowerCase();
 
-        myself.listField.elements =
+        myself.filteredLibrariesList =
             myself.librariesData.filter(library => librarySearcText(library).indexOf(text) > -1);
 
-        if (myself.listField.elements.length === 0) {
-            myself.listField.elements.push('(no matches)');
+        if (myself.filteredLibrariesList.length === 0) {
+            myself.filteredLibrariesList.push({
+                name: localize('(no matches)'),
+                fileName: null,
+                description: null
+            });
         }
 
         myself.clearDetails();
-        myself.listField.buildListContents();
+        myself.installLibrariesList();
         myself.fixListFieldItemColors();
         myself.listField.adjustScrollBars();
         myself.listField.scrollY(myself.listField.top());
@@ -10249,7 +10256,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     if (this.listField) {this.listField.destroy(); }
 
     this.listField = new ListMorph(
-        this.librariesData,
+        this.filteredLibrariesList,
         element => element.name,
         null,
         () => this.importLibrary(),
@@ -10268,7 +10275,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = ({name, fileName, description}) => {
-        if (isNil(name)) {return; }
+        if (isNil(name) || isNil(fileName)) {return; }
 
         this.notesText.text = localize(description) || '';
         this.notesText.rerender();
