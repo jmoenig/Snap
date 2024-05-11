@@ -5086,7 +5086,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 return;
             }
             this.getURL(
-                this.resourceURL('libraries', 'LIBRARIES'),
+                this.resourceURL('libraries', 'LIBRARIES.json'),
                 txt => {
                     var libraries = this.parseResourceFile(txt);
                     new LibraryImportDialogMorph(this, libraries).popUp();
@@ -5149,7 +5149,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // based on the contents file.
     // If no callback is specified, synchronously return the list of files
     // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+    var url = this.resourceURL(dirname, `${dirname.toUpperCase()}.json`),
         async = callback instanceof Function,
         data;
 
@@ -5188,9 +5188,11 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     translations are expected to be provided in each langauge's translation file.
 
     -- May 2024: categories, and searchData are not used in Snap! yet
+    Categories: Used to group resources in the media/libraries viewers
+    SearchData: Used to augment search results in the viewer, but not be displayed
    */
     let items = JSON.parse(text),
-        language = this.getLocale();
+        language = SnapTranslator.language || 'en';
 
     // Update name, description, and searchData from translations
     for (let item of items) {

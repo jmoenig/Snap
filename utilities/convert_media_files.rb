@@ -49,14 +49,15 @@ def convert_media_file(file)
       next if parts.length < 2
       name = parts[1].strip
       description = parts[2].strip if parts.length > 2
-      data << {
+      item = {
         fileName: parts[0].strip,
         name: name,
-        description: description,
-        categoires: [],
-        searchData: [],
+        # categoires: [],
+        # searchData: [],
         translations: {}
       }
+      item[:description] = description if description
+      data << item
     end
   end
   data
