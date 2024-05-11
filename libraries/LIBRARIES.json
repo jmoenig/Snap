@@ -67,7 +67,27 @@
         "name": "迭代,组合",
         "description": "传统的循环结构（如while、until等），加上Lisp中的\"named let\"（FOR的一般化），再加上函数迭代（反复调用一个函数）和函数组合。"
       }
-    }
+    },
+    "searchData": [
+      "catch _ _",
+      "throw _",
+      "catch _ _",
+      "throw _ _",
+      "if _ do _ and pause all $-1-255-220-0",
+      "ignore _",
+      "cascade _ times _ _ _",
+      "cascade until _ _ _ _",
+      "compose _ _",
+      "repeat _ until _",
+      "repeat _ while _",
+      "repeat while _ _",
+      "repeat _ _ _",
+      "for _ = _ step _ to _ _",
+      "let _ be _ in _ _"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "list-utilities.xml",
@@ -134,7 +154,22 @@
         "name": "列表工具",
         "description": "一些列表上的标准函数(反转、排序等)"
       }
-    }
+    },
+    "searchData": [
+      "flash turbo fast sort _ ordering with _",
+      "flash turbo fast assoc _ _",
+      "_ for each _ of _ _",
+      "printable _",
+      "sentence _",
+      "flash turbo fast zip _",
+      "_",
+      "multimap _ over _",
+      "sentence to list _"
+    ],
+    "categories": [
+      "lists",
+      "operators"
+    ]
   },
   {
     "fileName": "colors.xml",
@@ -160,7 +195,105 @@
       "zh_CN": {
         "name": "颜色和蜡笔"
       }
-    }
+    },
+    "searchData": [
+      "$brush set pen _ to _ _",
+      "mmap _ over _",
+      "✐ update HSL",
+      "✐ update HSV",
+      "_",
+      "$brush pen _",
+      "$brush change pen _ by _",
+      "error _",
+      "✐ make integer RGB",
+      "catch _ _",
+      "throw _",
+      "ignore _",
+      "✐ no spaces _",
+      "$brush color _",
+      "$brush mix colors _ using _ rules",
+      "$brush color from _ _ _",
+      "$brush _ from color _",
+      "✐ current pen color",
+      "catch _ _",
+      "throw _ _",
+      "✐ set pen to crayon _ _",
+      "set pen color to r: _ g: _ b: _",
+      "set pen color to h: _ s: _ v: _",
+      "RGB color",
+      "HSV color",
+      "✐ hexchar _",
+      "✐ subset _ _ _ _ _",
+      "✐ initialize variables",
+      "✐ crayon number of color _",
+      "✐ RGB from color _",
+      "✐ X11 name of color _",
+      "✐ make fair hue table",
+      "✐ include transparency _ _",
+      "✐ extract rgba values _ _",
+      "✐ RGB from HSV _",
+      "✐ RGB from HSL _",
+      "✐ color number near color _",
+      "✐ HSL/HSV (hsl? _ ) from RGB _",
+      "✐ color number in _ family, from H: _ S: _ L: _  rising hue: _  rising min lightness: _ falling min lightness: _",
+      "✐ byte to hex _",
+      "✐ nybble to hex _",
+      "✐ limits _",
+      "✐ set pen to fair hue _ _",
+      "✐ set pen to color number _ _",
+      "✐ set pen to RGB hex _ _",
+      "✐ set pen to X11 name _ _",
+      "✐ color from X11 name _",
+      "✐ color from RGB hex _",
+      "✐ CMYK from RGB _",
+      "✐ RGB from CMYK _",
+      "lighten _",
+      "darken _",
+      "$brush color _ at weight _",
+      "plot _",
+      "$brush color from _ and _ _",
+      "✐ set pen to lightness _ _",
+      "✐ set pen to color _ _",
+      "✐ set pen size to _ _",
+      "✐ set pen transparency to _ _",
+      "✐ set pen red to _ _",
+      "✐ set pen green to _ _",
+      "✐ set pen blue to _ _",
+      "✐ constrain _ _ _",
+      "✐ set pen to RGB vector _ _",
+      "✐ set pen to HSL saturation _ _",
+      "✐ set pen to HSL vector _ _",
+      "✐ set pen saturation (HSV) to _ _",
+      "✐ set pen value (brightness) to _ _",
+      "✐ set pen to HSV vector _ _",
+      "✐ set pen to hue _ _",
+      "✐ set pen to fair saturation (HSL) _ _",
+      "✐ set pen to fair lightness _ _",
+      "✐ set pen to fair HSL vector _ _",
+      "✐ set pen to fair saturation (HSV) _ _",
+      "✐ set pen to fair value (brightness) _ _",
+      "✐ set pen to fair HSV vector _ _",
+      "multiline _",
+      "substring of _ before _",
+      "substring of _ after _",
+      "position of _ in _",
+      "use case-independent comparisons _",
+      "substring of _ from position _ to position _ inclusive",
+      "text _ contains _",
+      "to lower case _",
+      "use case-independent comparison",
+      "create _ var _",
+      "does var _ exist?"
+    ],
+    "categories": [
+      "pen",
+      "lists",
+      "other",
+      "control",
+      "operators",
+      "sensing",
+      "variables"
+    ]
   },
   {
     "fileName": "crayons.xml",
@@ -186,7 +319,15 @@
       "zh_CN": {
         "name": "蜡笔"
       }
-    }
+    },
+    "searchData": [
+      "set pen to crayon _",
+      "change crayon by _",
+      "pen crayon"
+    ],
+    "categories": [
+      "pen"
+    ]
   },
   {
     "fileName": "bignumbers.xml",
@@ -209,7 +350,16 @@
       "zh_CN": {
         "name": "大数、有理数、复数"
       }
-    }
+    },
+    "searchData": [
+      "USE BIGNUMS _",
+      "_ !",
+      "_",
+      "Scheme number _ of _"
+    ],
+    "categories": [
+      "operators"
+    ]
   },
   {
     "fileName": "try-catch.xml",
@@ -231,7 +381,15 @@
       "zh_CN": {
         "name": "捕获错误"
       }
-    }
+    },
+    "searchData": [
+      "safely try _ then if _ _",
+      "error _",
+      "safely try reporting _ then if _ report _"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "parallel_module.xml",
@@ -273,7 +431,14 @@
         "name": "平行化",
         "description": "并行运行多个脚本并等待所有脚本完成."
       }
-    }
+    },
+    "searchData": [
+      "do in parallel _ and wait",
+      "do in parallel _"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "Eisenbergification.xml",
@@ -315,7 +480,15 @@
         "name": "获取器和设置器",
         "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
       }
-    }
+    },
+    "searchData": [
+      "setting _",
+      "set flag _ to _",
+      "set value _ to _"
+    ],
+    "categories": [
+      "sensing"
+    ]
   },
   {
     "fileName": "list_comprehension_module.xml",
@@ -326,7 +499,13 @@
         "name": "Compressió de llistes",
         "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
       }
-    }
+    },
+    "searchData": [
+      "zip _ inputs:  _ leaf-rank _  _ leaf-rank _"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "~",
@@ -379,7 +558,28 @@
         "name": "世界地图",
         "description": "向项目中添加交互式地图"
       }
-    }
+    },
+    "searchData": [
+      "$globe show current location",
+      "$globe zoom",
+      "set $globe zoom to _",
+      "$globe longitude of x _",
+      "$globe latitude of y _",
+      "set $globe to lon: _ lat: _",
+      "y of $globe latitude _",
+      "x of $globe longitude _",
+      "change $globe by x: _ y: _ pixels",
+      "$globe distance in km to _",
+      "$globe current location",
+      "$globe current latitude",
+      "$globe current longitude",
+      "update $globe",
+      "$globe as costume",
+      "set $globe style to _"
+    ],
+    "categories": [
+      "other"
+    ]
   },
   {
     "fileName": "menu_module.xml",
@@ -389,7 +589,20 @@
       "ca": {
         "description": "Demana a l'usuari que triï una opció."
       }
-    }
+    },
+    "searchData": [
+      "ask _",
+      "notify _",
+      "prompt _ options _",
+      "submenu _ items _",
+      "divider",
+      "menu item icon _ label _ value _",
+      "menu item speech ballon _ message _ value _",
+      "menu examples"
+    ],
+    "categories": [
+      "sensing"
+    ]
   },
   {
     "fileName": "textCostumes_module.xml",
@@ -428,7 +641,14 @@
         "name": "文本样式",
         "description": "从文本的字母或单词生成造型。"
       }
-    }
+    },
+    "searchData": [
+      "costume from text _ size _",
+      "costume _ with background RGBA _ padding _"
+    ],
+    "categories": [
+      "looks"
+    ]
   },
   {
     "fileName": "speech_module.xml",
@@ -457,7 +677,14 @@
         "name": "文本转语音",
         "description": "使用语音合成输出文本。"
       }
-    }
+    },
+    "searchData": [
+      "speak _ with _ accent  and pitch _ rate _",
+      "speak _ with _ accent  and pitch _ rate _ and wait"
+    ],
+    "categories": [
+      "sound"
+    ]
   },
   {
     "fileName": "animation_module.xml",
@@ -496,7 +723,24 @@
         "name": "动画",
         "description": "使用缓动函数进行滑动、放大和旋转。"
       }
-    }
+    },
+    "searchData": [
+      "-- _",
+      "animate setter _ getter _ delta _ over _ secs easing _",
+      "PI",
+      "degrees _",
+      "error _",
+      "glide _ in _ secs easing _",
+      "animate _ by _ in _ secs easing _",
+      "easing _",
+      "for _ = _ to _  in _ secs easing _ _"
+    ],
+    "categories": [
+      "variables",
+      "control",
+      "operators",
+      "motion"
+    ]
   },
   {
     "fileName": "pixel_module.xml",
@@ -538,7 +782,24 @@
         "name": "像素",
         "description": "逐像素操作造型"
       }
-    }
+    },
+    "searchData": [
+      "$camera snap",
+      "export costume _",
+      "set name of costume _ to _",
+      "export costume list _ base name _",
+      "_ filter on _ alpha _",
+      "filter _",
+      "kernel  _ _ _  _ _ _  _ _ _",
+      "convolve matrix _ * kernel _",
+      "stretch _ by _"
+    ],
+    "categories": [
+      "sensing",
+      "looks",
+      "lists",
+      "operators"
+    ]
   },
   {
     "fileName": "audioComp_module.xml",
@@ -580,7 +841,28 @@
         "name": "音频组件",
         "description": "分析、操纵和生成声音样本."
       }
-    }
+    },
+    "searchData": [
+      "turbo _",
+      "_ Hz for _ secs at _ Hz sample rate",
+      "PI",
+      "degrees _",
+      "sound named _",
+      "plot sound _",
+      "$-1-255-0-0 record",
+      "note from _ hz",
+      "hz from note _",
+      "name of note _",
+      "average of _",
+      "fade in _ for _"
+    ],
+    "categories": [
+      "other",
+      "sound",
+      "operators",
+      "sensing",
+      "pen"
+    ]
   },
   {
     "fileName": "frequency_distribution_module.xml",
@@ -620,7 +902,22 @@
         "name": "频率分布分析",
         "description": "分析频率分布数据"
       }
-    }
+    },
+    "searchData": [
+      "flash turbo fast analyze _",
+      "flash turbo fast group _ by _",
+      "flash turbo fast sort _ by _",
+      "histogram of _ from: _ to: _ interval: _",
+      "histogram of _ grouped by: _ from: _ to: _ interval: _",
+      "fill _ key: _ from: _ to: _ interval: _ with: _",
+      "_ to lower case",
+      "plot _ _ at x: _ y: _ width: _ height: _"
+    ],
+    "categories": [
+      "lists",
+      "operators",
+      "pen"
+    ]
   },
   {
     "fileName": "localstorage_module.xml",
@@ -649,7 +946,17 @@
         "name": "数据库",
         "description": "在同一浏览器中跨Snap!会话保持持久化的键值存储,这是关于在Snap!编程环境中实现在不同会话之间保持数据持久性的描述。"
       }
-    }
+    },
+    "searchData": [
+      "store key: _ value: _ in browser",
+      "stored data in browser",
+      "remove key: _ in browser",
+      "clear data in browser",
+      "get value from key: _ in browser"
+    ],
+    "categories": [
+      "other"
+    ]
   },
   {
     "fileName": "tiles_module.xml",
@@ -660,7 +967,14 @@
         "name": "Rajoles d'escenari",
         "description": "Divideix l'escenari en diferents regions iguals per realitzar la mateixa acció repetitivament"
       }
-    }
+    },
+    "searchData": [
+      "for each tile sized _ _",
+      "for each _ in _ _ by _ _ _"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "arcs_module.xml",
@@ -670,7 +984,13 @@
       "ca": {
         "description": "Creeu arcs tot girant els objectes un número de graus i movent-los en un radi determinat"
       }
-    }
+    },
+    "searchData": [
+      "arc $turnRight _ ° radius _"
+    ],
+    "categories": [
+      "motion"
+    ]
   },
   {
     "fileName": "~",
@@ -747,7 +1067,32 @@
       "zh_CN": {
         "name": "单词，句子"
       }
-    }
+    },
+    "searchData": [
+      "all but first letter of _",
+      "all but first word of _",
+      "all but last letter of _",
+      "all but last word of _",
+      "first word of _",
+      "last letter of _",
+      "last word of _",
+      "empty word? _",
+      "empty sentence? _",
+      "join words _",
+      "list to sentence _",
+      "sentence to list _",
+      "word to list _",
+      "list to word _",
+      "sentence _",
+      "error _",
+      "printable _",
+      "first letter of _"
+    ],
+    "categories": [
+      "operators",
+      "lists",
+      "control"
+    ]
   },
   {
     "fileName": "words_module.xml",
@@ -758,7 +1103,16 @@
         "name": "Només paraules",
         "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la llibreria 'Paraules i Frases' per a projectes lingüístics com ara un xat amb un robot."
       }
-    }
+    },
+    "searchData": [
+      "first word of _",
+      "all but first word of _",
+      "sentence with _",
+      "is _ empty?"
+    ],
+    "categories": [
+      "operators"
+    ]
   },
   {
     "fileName": "strings.xml",
@@ -784,7 +1138,18 @@
       "zh_CN": {
         "name": "字符串，多行输入"
       }
-    }
+    },
+    "searchData": [
+      "multiline _",
+      "substring of _ before _",
+      "substring of _ after _",
+      "position of _ in _",
+      "substring of _ from position _ to position _ inclusive",
+      "text _ contains _"
+    ],
+    "categories": [
+      "operators"
+    ]
   },
   {
     "fileName": "replace_letters_module.xml",
@@ -795,7 +1160,13 @@
         "name": "Substitueix Lletres",
         "description": "Substitueix totes les aparicions d'una lletra o d'una seqüència de lletres per unes altres en un text."
       }
-    }
+    },
+    "searchData": [
+      "replace every _ with _ in _"
+    ],
+    "categories": [
+      "operators"
+    ]
   },
   {
     "fileName": "apl.xml",
@@ -828,7 +1199,68 @@
         "name": "APL原语",
         "description": "添加支持超级块的APL语言功能."
       }
-    }
+    },
+    "searchData": [
+      "reshape as _ $-1-255-255-0 items of _",
+      "shape of $-1-255-255-0 _",
+      "max _ $-1-255-255-0 _",
+      "flatten (ravel) $-1-255-255-0 _",
+      "rank of $-1-255-255-0 _",
+      "transpose $-1.5-255-255-0 _",
+      "reverse row order (column contents) $-1.5-255-255-0 _",
+      "generalized dotproduct _ _ with sum _ product _",
+      "inner product _ _ $-1-255-255-0 _ _",
+      "min _ $-1.2-255-255-0 _",
+      "combine in rows (reduce by column vectors) _ $-1-255-255-0 _",
+      "signum $-1-255-255-0 _",
+      "reciprocal $-1-255-255-0 _",
+      "roll $-1-255-255-0 _",
+      "NAND _ $-1.4-255-255-0 _",
+      "NOR _ $-1.4-255-255-0 _",
+      "_ ≤ _",
+      "_ ≥ _",
+      "XOR _ $-1-255-255-0 _",
+      "$-1.5-255-255-0 _",
+      "where in _ is $-1.5-255-255-0 _",
+      "crossproduct _",
+      "which of _ $-1-255-255-0 contained in _",
+      "catenate _ $-1-255-255-0 _",
+      "scalar value _",
+      "grade up $-1.5-255-255-0 _",
+      "grade down $-1.5-255-255-0 _",
+      "select rows (compress columns) _ $-1-255-255-0 _",
+      "select columns (compress rows) _ $-1.5-255-255-0 _",
+      "reverse column order (row contents) $-1-255-255-0 _",
+      "combine in columns (reduce by row vectors) _ $-1.5-255-255-0 _",
+      "catenate vertically _ $-1.5-255-255-0 _",
+      "_ scalar join _",
+      "take _ $-1-255-255-0 from _",
+      "drop _ $-1-255-255-0 from _",
+      "error _",
+      "numbers from _ to _ ascending",
+      "flash turbo fast sort _ ordering with _",
+      "printable _",
+      "_",
+      "multimap _ over _",
+      "log base _ $-1.5-255-255-0 _",
+      "combs _ at a time $-1-255-255-0 of _",
+      "factorial $-1-255-255-0 _",
+      "_ scalar _ _",
+      "GCD (or) _ $-1.2-255-255-0 _",
+      "LCM (and) _ $-1.2-255-255-0 _",
+      "NOT $-1-255-255-0 _",
+      "permutations of _ items out of _",
+      "identity $-1-255-255-0 _",
+      "deep map _ over _",
+      "_ deal $-1-255-255-0 _",
+      "outer product _ $-1-255-255-0 _ _"
+    ],
+    "categories": [
+      "lists",
+      "operators",
+      "other",
+      "control"
+    ]
   },
   {
     "fileName": "stream-tools.xml",
@@ -866,7 +1298,22 @@
       "zh_CN": {
         "name": "流(惰性列表)"
       }
-    }
+    },
+    "searchData": [
+      "_ in front of stream _",
+      "head of stream _",
+      "tail of stream _",
+      "map _ over stream _",
+      "keep items such that _ from stream _",
+      "show stream _ _",
+      "stream _",
+      "sieve _",
+      "stream with numbers from _",
+      "stream demo"
+    ],
+    "categories": [
+      "lists"
+    ]
   },
   {
     "fileName": "bar-charts.xml",
@@ -892,7 +1339,18 @@
       "zh_CN": {
         "name": "条形图"
       }
-    }
+    },
+    "searchData": [
+      "bar chart of table _ grouped by field: _ from: _ to: _ interval: _",
+      "bar chart helper function to fill _ key: _ from: _ to: _ interval: _ with: _",
+      "plot bar chart _ bars at x: _ y: _ width: _ height: _",
+      "sort table _ on field _ in _ order",
+      "group table _ by field _ by intervals of: _"
+    ],
+    "categories": [
+      "lists",
+      "pen"
+    ]
   },
   {
     "fileName": "plot_bars_module.xml",
@@ -903,7 +1361,13 @@
         "name": "Només gràfics de barres",
         "description": "Representa una llista de nombres utilitzant línies verticals distribuïdes per tot l'escenari"
       }
-    }
+    },
+    "searchData": [
+      "plot bars _ fill _ center _"
+    ],
+    "categories": [
+      "pen"
+    ]
   },
   {
     "fileName": "httpBlocks.xml",
@@ -962,7 +1426,18 @@
       "zh_CN": {
         "name": "网络服务访问（https）"
       }
-    }
+    },
+    "searchData": [
+      "listify _",
+      "value at key _ of _",
+      "_ url: _ send: _ headers: _",
+      "key: _ value: _",
+      "current location"
+    ],
+    "categories": [
+      "operators",
+      "sensing"
+    ]
   },
   {
     "fileName": "make-variables.xml",
@@ -1002,7 +1477,19 @@
         "name": "创建变量",
         "description": "在脚本中创建和管理全局/精灵/脚本变量"
       }
-    }
+    },
+    "searchData": [
+      "create _ var _",
+      "delete var _",
+      "set var _ to _",
+      "var _",
+      "does var _ exist?",
+      "show var _",
+      "hide var _"
+    ],
+    "categories": [
+      "variables"
+    ]
   },
   {
     "fileName": "bitwise.xml",
@@ -1013,7 +1500,19 @@
         "name": "Operadors 'bitwise'",
         "description": "Operadors aritmètics 'bitwise' per a manipular dades a baix nivell (a nivell dels seus bits)"
       }
-    }
+    },
+    "searchData": [
+      "bitwise not _",
+      "bitwise _ and _",
+      "bitwise _ or _",
+      "bitwise _ xor _",
+      "bitwise left shift _ by _ bits",
+      "bitwise right shift _ by _ bits",
+      "bitwise unsigned right shift _ by _ bits"
+    ],
+    "categories": [
+      "operators"
+    ]
   },
   {
     "fileName": "~",
@@ -1035,7 +1534,289 @@
       "ca": {
         "description": "Funcions científiques, gràfics, comandes SQL i 'Machine Learning' creats per la Universitat de Göttingen (Eckart Modrow)"
       }
-    }
+    },
+    "searchData": [
+      "start SciSnap!",
+      "set SciSnap! global variables and properties",
+      "set SciSnap! global property _ to _",
+      "show global message title: _  message: _",
+      "report SciSnap! error _",
+      "copy of costume _",
+      "costume of _",
+      "random",
+      "π",
+      "e",
+      "round _ to _ digits",
+      "_ !",
+      "( _ )  ( _ )",
+      "is _ a _",
+      "substring of _ from _ to _",
+      "delete _ _ in _",
+      "upper case _",
+      "lower case _",
+      "write text _ to TXT-file _",
+      "index of _ in _",
+      "replace _ _ with _ in _",
+      "datetime",
+      "datetime: _ to _",
+      "all of _",
+      "any of _",
+      "new costume _ _ _ _ _",
+      "configure _ as a PlotPad width: _  height: _ color: _ _ _",
+      "is _ a PlotPad?",
+      "PlotPadProperty _ of _",
+      "set PlotPadProperty _ of _ to _",
+      "set PlotPad costume properties width: _ height: _  back color: _ _ _ front color: _ _ _  offsets: _ _ on _",
+      "set PlotPad line properties style: _  width: _ color: _ _ _ on _",
+      "set PlotPad marker properties style: _ width: _  color: _ _ _ connected? _ on _",
+      "set PlotPad scale properties precision: _ _  textheight: _ _ number of intervals: _ _  on _",
+      "set PlotPad labels on _ to  title: _ titleheight: _  x-label: _ xLabelheight: _  y-label: _ yLabelheight: _",
+      "set PlotPad offsets from edges on _",
+      "set PlotPad ranges for x: _ _ y: _ _  with border? _ of _ pretty formatted? _  on _",
+      "add graph _ to PlotPad _",
+      "add dataplot of numeric data: _ to PlotPad _",
+      "add dataplot of mixed data: _  y-scale? _ x-scale? _ to PlotPad _",
+      "add histogram of _ with _ groups  pretty formated? _ to PlotPad _",
+      "add axes and scales to PlotPad _",
+      "clear plot of _",
+      "set pretty ranges on PlotPad _",
+      "pretty values for a PlotPad from _  to _ with _ intervals",
+      "get ranges for PlotPad _  from _ with border _",
+      "ranges of 2-dim table _",
+      "convert value _ to coordinate _  of PlotPad _",
+      "PlotPad _ on _ by mouse",
+      "EXAMPLE 1:  Plot of random data width _ height _  title _ labels _ _  line _ marker _ color _ _ _",
+      "EXAMPLE 2:  Histogram of random data width _ height _  title _ labels _ _ line _ color _ _ _",
+      "Example 3:  Simple plot of data: _  x: _ y: _ width: _ height: _  title: _ labels: _ _  line: _ marker: _ color: _ _ _",
+      "Switch to SciSnap! logo",
+      "configure SQL",
+      "is SQL configured?",
+      "connect to database server",
+      "import SQL-data from _ to SQLData",
+      "read databases",
+      "choose database no. _",
+      "read tables",
+      "attributes of table no. _",
+      "choose table no. _",
+      "SELECT _ _ FROM _ WHERE _",
+      "SELECT _ _ FROM _ WHERE _  GROUP BY _ HAVING _ ORDER BY _ _ LIMIT _",
+      "exec SQL-command _",
+      "_ = _",
+      "_ < _",
+      "_ > _",
+      "_ OR _",
+      "_ AND _",
+      "NOT _",
+      "_ IN ( _ )",
+      "_ LIKE _",
+      "AVG ( _ )",
+      "COUNT ( _ )",
+      "MIN ( _ )",
+      "MAX ( _ )",
+      "SUM ( _ )",
+      "configure _ as a GraphPad width: _  height: _ color: _ _ _",
+      "is _ a GraphPad?",
+      "GraphPadProperty _ of _",
+      "set GraphPadProperty _ of _ to _",
+      "set GraphPad costume properties width: _  height: _ color: _ _ _ on _",
+      "set GraphPad vertex properties minSize: _  growing? _ showsContent? _ on _",
+      "set GraphPad edge properties lineWidth: _  color: _ _ _ directed? _ weighted? _  showsWeight? _ on _",
+      "new vertex at _ _ content: _ on graph of _",
+      "add _ random vertices to graph on _",
+      "move vertex _ of graph on _ to _ _",
+      "add _ random edges to graph on _",
+      "add edge from vertex _ to vertex _ to graph on _",
+      "draw graph on _",
+      "delete vertex _ of graph on _",
+      "delete edge from vertex _ to vertex _  of graph on _",
+      "weight of edge from vertex _ to vertex _  of graph on _",
+      "change weight of edge from vertex _ to vertex _  to _ of graph on _",
+      "ask for new weight of graph on _",
+      "ask for new start vertex width of graph on _",
+      "content of vertex _ of graph on _",
+      "change content of vertex _ to _ of graph on _",
+      "ask for new vertex content in graph on _",
+      "set marker of vertex _ of graph on _",
+      "remove marker of vertex _ of graph on _",
+      "remove all markers of graph on _",
+      "depth first search of content _  starting at vertex _ of graph on _",
+      "breadth first search of content _  starting at vertex _ of graph on _",
+      "distance on _ from vertex _ to vertex _",
+      "shortest path in graph from vertex _  to vertex _ on _",
+      "list of all shortest paths in graph from vertex _  to all connected vertices of graph on _",
+      "vertexnumber at _ _ of graph on _",
+      "point _ _ on sprite/stage toOutline point on graph _",
+      "vertexnumber of _ in graph of _",
+      "Graph example 1: small worlds (needs some seconds)",
+      "Graph example 2: distribution of links",
+      "import Sprite",
+      "import library to category _",
+      "configure _ as a NeuralNetPad width: _  height: _ color: _ _ _",
+      "is _ a NNPad?",
+      "NNPadProperty _ of _",
+      "set NNPadProperty _ of _ to _",
+      "set NNPad costume properties width: _  height: _ color: _ _ _  offsets: _ _ on _",
+      "set NNPad properties numberOfLayers: _ layerWidth: _  imageWidth: _ imageHeight: _ on _",
+      "NN output of _ layer with input _ on _",
+      "NN add new weights for _ layers of width _ on _",
+      "NN show status with input _ on _",
+      "teach NN with input _ and target output _ by back-  propagation with learning factor _ on _",
+      "NN Example 1 on _",
+      "Example 4: regression line",
+      "remove this sprite",
+      "input dialog on _ with title _  and items _",
+      "empty table",
+      "_ x _ table initialized with _",
+      "new _ by _ table with labels: _",
+      "copy of _",
+      "import _ from  _ to SciSnap!Data",
+      "write _ to CSV-file _",
+      "_ random points with ranges x: _ _  y: _ _ inside of a _",
+      "_ random points near a straight x-range _ _  gradient _ y-axis-intercept _ range _",
+      "_ random points near _  between _ and _ range _",
+      "transpose table or list _",
+      "add _ _ to _",
+      "_ _ of _ with first item? _",
+      "delete _ _ of _",
+      "element _ _ of _",
+      "set element _ _ of _ to _",
+      "columns _ of _  from row _ to _",
+      "subsection of _ in _ from  _ _ to _ _",
+      "select rows of _ where  column _ is _ _",
+      "count values in _",
+      "entropy of _",
+      "_ without duplicates",
+      "_ normalized by _",
+      "_ compressed with  factor _ by averaging",
+      "_ pooling of _  with stride _",
+      "sort _ with predicate _",
+      "_ sorted by column _  ascending _ considering headline? _",
+      "_ of column _ of _  grouped by column _ considering headline? _",
+      "_ of column _ and _  of _ considering headline? _",
+      "regression line parameters of _",
+      "_ next neighbors of _  in _",
+      "convolution kernel _ applied  to _ _ width _ height _",
+      "_ -means clustering for _  with Euclidean metrics",
+      "_ -means clustering for _ with metric _",
+      "Levenshtein-distance of _ and _",
+      "DBSCAN clustering for _ radius _ minMembers _",
+      "decision tree ID3 for _  with labeled data in last column",
+      "SQL-Example 1: simple query",
+      "empty",
+      "copy current costume of _ to sprite costumes",
+      "vertexnumber of graph on _ at mouse position",
+      "classify _ with ID3-tree _",
+      "vector _",
+      "vector dim _ with random  components range _ to _",
+      "matrix of vectors _",
+      "_ x _ matrix with random  components range _ to _",
+      "transpose _",
+      "_ of vector _",
+      "linear operation _ _ _",
+      "apply _ to points _",
+      "solve _ *x= _",
+      "apply Gauss method to matrix _",
+      "polynomial interpolation for points _",
+      "_ ( _ )",
+      "affine transformation of _  by _ --> _ for MathPad",
+      "complex _ + _ * i",
+      "complex _ * e^i _",
+      "complex _ polar style",
+      "complex _ Cartesian style",
+      "complex _ of _",
+      "complex _ _ _",
+      "configure sprite _ as a MathPad  width: _ height: _ color: _ _ _",
+      "is _ a MathPad?",
+      "MathPadProperty _ of _",
+      "set MathPadProperty _ of _ to _",
+      "set MathPad costume properties width: _  height: _ color: _ _ _  offsets: _ _ on _",
+      "set MathPad properties lineWidth: _ onlyPoints? _  dimension: _ maxValue: _ startPoint: _ _ _  on _",
+      "add centered axes to a MathPad on _",
+      "plot _ _ color: _ _ _  on MathPad _ Change startpoint? _",
+      "MathPad Example 1: vektor addition",
+      "MathPad Example 2: affine transformation",
+      "root of _  starting at _ by Newton´s method",
+      "sequence element _ ( _ )",
+      "first _ elements of sequence _",
+      "sequence of secant slopes for _  at _ calculated with sequence _",
+      "derivative _ ´( _ )",
+      "_  ∑ _  _ = _",
+      "_  ∫ _ dx  _  calculated with _ intervals",
+      "_ of _ sampled with _ Hz",
+      "b(N= _ p= _ k= _ )",
+      "B x= _ (N= _ p= _ )",
+      "h(N= _ M= _ n= _ k= _ )",
+      "H x= _ (N= _ M= _ n= _ )",
+      "p(θ= _ k= _ )",
+      "P x= _ p(θ= _ )",
+      "pareto (xmin= _ k= _ x= _ )",
+      "n (x= _ μ= _ σ= _ )",
+      "𝜙",
+      "|R",
+      "set of { _ }",
+      "set of {x| _ }",
+      "set of {x| _ _ x _ _ }",
+      "_ ε _ ?",
+      "_ _ _",
+      "is _ ⊆ _ ?",
+      "is _ = _ ?",
+      "_ elements of _ (numbers ε |N)",
+      "element _ toOutline text",
+      "text _ toOutline elements",
+      "configure _ as an ImagePad width: _  height: _ color: _ _ _",
+      "is _ an ImagePad?",
+      "ImagePadProperty _ of _",
+      "set ImagePadProperty _ of _ to _",
+      "set ImagePad costume properties width: _  height: _ back color: _ _ _  offsets: _ _ on _",
+      "set ImagePad line properties style: _  width: _ color: _ _ _  fill color: _ _ _ on _",
+      "set ImagePad grid properties on _  horizontal cells: _ vertical cells: _",
+      "import _ from _  to myData on _",
+      "add _ image of _ to ImagePad  min/max: _ _ log? _ on _",
+      "add grid _ on _ with grid lines? _",
+      "draw line from _ _ to _ _ on _",
+      "draw rectangle from _ _ to _ _ on _",
+      "fill rectangle from _ _ to _ _ on _",
+      "draw circle center: _ _ radius: _ on _",
+      "fill circle center: _ _ radius: _ on _",
+      "draw text _ at _ _ height: _  horizontal? _ on _",
+      "draw list of points _ as _ size: _ on _",
+      "set RGB at _ _ on _ to _ _ _",
+      "RGB at _ _ on _",
+      "set image value of myData at _ _  on _ to _",
+      "image value of myData at _ _ on _",
+      "_ on _ by mouse",
+      "affine transformation of costume _  by _ --> _",
+      "brightness around _ _ within radius _  of myData of ImagePad _",
+      "fill all cells on _ range x: _ _ y: _ _  randomly with numbers _",
+      "set cell value on _ to _ by mouse",
+      "set cell value on _ at _ _ to _ with grid lines? _",
+      "_ -neighborhood as torus? _ of _ _ on _",
+      "all cells on _ as torus? _ swapped _ times  randomly inside radius _ range x: _ _ y: _ _",
+      "all cells on _ as torus? _ with value _  take value _ if number of surrounding value _ is _ _  else take value _ with noise? _ of _ %  range x: _ _ y: _ _",
+      "all cells on _ as torus? _ take _  of surrounding cells x: _ _ y: _ _ range: _",
+      "combine grid1 _ and grid2 _ by value1= _ _ value2= _ to _ else _",
+      "apply Wolfram automaton no _ to grid _  with colors for 0: _ and 1: _",
+      "Example 1: slice data of FITS-image",
+      "Example 2: false color image of moon crater albertarius",
+      "Example 3: Wolfram Automaton No. 30",
+      "is the global _ property _  with value _ present ?",
+      "SciSnap! global property _"
+    ],
+    "categories": [
+      "1. SciSnap! globals",
+      "looks",
+      "operators",
+      "sensing",
+      "5. PlotPad for data plots",
+      "4. SQL tools",
+      "7. GraphPad for graph operations",
+      "control",
+      "8. NNPad for neural networks",
+      "3. Data tools",
+      "0. My own blocks",
+      "2. Math tools",
+      "6. ImagePad for image operations"
+    ]
   },
   {
     "fileName": "TuneScope.xml",
@@ -1045,7 +1826,52 @@
       "ca": {
         "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)"
       }
-    }
+    },
+    "searchData": [
+      "show var _",
+      "set var _ to _",
+      "create _ var _",
+      "Initialize TuneScope",
+      "Set Instrument To _",
+      "Set Volume To _ %",
+      "Set Instrument _ Volume to _ %",
+      "Play Note _ for Duration _ and Wait",
+      "Play Note _ for Duration _",
+      "Play Chord _ for Duration _",
+      "Rest for Note Duration _",
+      "_ Scale: _ Octave: _",
+      "Note _ in _ Scale: _ Octave: _",
+      "Interval Between Note _ to _ in the _ Scale _",
+      "_ Chord: _ Octave: _",
+      "_ Chord: _ Octave: _ Chord Position: _",
+      "Add Note _ to Chord _",
+      "Chord Rest",
+      "Drum Pattern _",
+      "Drum _ _ Beat _ Times _",
+      "Measure _",
+      "Section _",
+      "Track: _ Instrument: _  Musical Notation (Notes or Chords): _",
+      "Play Tracks _ Time Signature: _",
+      "Beats in Measure _  Time Signature _",
+      "Note Duration Value _",
+      "Note [ Pitch: _ Duration: _ ]",
+      "Tone Number: _ Frequency: _ Amplitude: _",
+      "Tone Number: _ _ On/Off",
+      "Tone Off",
+      "Play MIDI Controller: _ Instrument: _",
+      "Stop MIDI Controller",
+      "Convert MIDI _ to Note",
+      "Convert Note _ to MIDI",
+      "flash turbo fast assoc _ _",
+      "Import MIDI File",
+      "Convert MIDI File _ to TuneScope",
+      "Current Note"
+    ],
+    "categories": [
+      "variables",
+      "Music",
+      "lists"
+    ]
   },
   {
     "fileName": "~",
@@ -1090,7 +1916,16 @@
         "name": "串行端口",
         "description": "通过Web Serial API连接到硬件扩展(需要Chromium、Chrome或Edge)"
       }
-    }
+    },
+    "searchData": [
+      "WEBSer $-1-0-255-0 open _",
+      "WEBSer $-1-255-0-0 close _",
+      "WEBSer $-1-0-255-0 read _",
+      "WEBSer $-1-0-255-0 write _ _"
+    ],
+    "categories": [
+      "other"
+    ]
   },
   {
     "fileName": "mqtt.xml",
@@ -1100,7 +1935,22 @@
       "ca": {
         "description": "MQTT (Message Queuing Telemetry Transport - Transport de telemetria de missatges en cua) Protocol per connectar dispositius IoT amb diferent programari"
       }
-    }
+    },
+    "searchData": [
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$cloudOutline MQTT unsubscribe from _ topic _",
+      "$cloudOutline MQTT disconnect from _",
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$cloudOutline MQTT example response reporter payload _ topic _",
+      "$-1-192-192-192 _",
+      "MQTT Extension Examples"
+    ],
+    "categories": [
+      "MQTT"
+    ]
   },
   {
     "fileName": "signada.xml",
@@ -1123,6 +1973,37 @@
         "name": "Signada（网络远程控制）",
         "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks项目。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
       }
-    }
+    },
+    "searchData": [
+      "🤖 connect to _",
+      "🤖 disconnect",
+      "🤖 connected",
+      "play note _ octave _ for _ ms",
+      "button _",
+      "set LED display  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _",
+      "move motor _ _ steps _",
+      "move motor 1 _ and motor 2 _ _ steps",
+      "move motor _ angle _ °",
+      "move motor _ _ complete turns",
+      "write _ at x: _ y: _ color _ scale _",
+      "clear display",
+      "set LED x: _ y: _ to _",
+      "display character _",
+      "set digital pin _ to _",
+      "set analog pin _ to _",
+      "read digital pin _",
+      "read analog pin _",
+      "tilt _",
+      "acceleration",
+      "light level",
+      "temperature °C"
+    ],
+    "categories": [
+      "other",
+      "sound",
+      "sensing",
+      "pen",
+      "motion"
+    ]
   }
 ]
