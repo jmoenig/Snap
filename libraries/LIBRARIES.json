@@ -1,5 +1,29 @@
 [
   {
+    "fileName": "code2blocks_module.xml",
+    "name": "Code to Blocks to Code",
+    "description": "Translate text code to blocks and vice-versa",
+    "searchData": [
+      "parse code _ to blocks",
+      "encode blocks _ to text _ pretty"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
     "fileName": "iteration-composition.xml",
     "name": "Iteration, composition",
     "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.",
@@ -520,6 +544,19 @@
     "name": "~"
   },
   {
+    "fileName": "beetle.xml",
+    "name": "3D Beetle Geometry",
+    "description": "Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.",
+    "searchData": [
+      "reset",
+      "go home",
+      "move _ steps"
+    ],
+    "categories": [
+      "3D Beetle"
+    ]
+  },
+  {
     "fileName": "maps_module.xml",
     "name": "World Map",
     "description": "Add interactive maps to projects",
@@ -784,19 +821,21 @@
       }
     },
     "searchData": [
-      "$camera snap",
       "export costume _",
       "set name of costume _ to _",
+      "$camera snap",
       "export costume list _ base name _",
+      "grayscales of _",
       "_ filter on _ alpha _",
       "filter _",
+      "rectangle costume _ width: _ height: _",
       "kernel  _ _ _  _ _ _  _ _ _",
       "convolve matrix _ * kernel _",
       "stretch _ by _"
     ],
     "categories": [
-      "sensing",
       "looks",
+      "sensing",
       "lists",
       "operators"
     ]
@@ -986,7 +1025,7 @@
       }
     },
     "searchData": [
-      "arc $turnRight _ ° radius _"
+      "arc turn right rotate _ ° radius _"
     ],
     "categories": [
       "motion"
@@ -1432,7 +1471,8 @@
       "value at key _ of _",
       "_ url: _ send: _ headers: _",
       "key: _ value: _",
-      "current location"
+      "current location",
+      "binary data from _ type _"
     ],
     "categories": [
       "operators",
@@ -1512,6 +1552,19 @@
     ],
     "categories": [
       "operators"
+    ]
+  },
+  {
+    "fileName": "halo_module.xml",
+    "name": "Outlines and Halos",
+    "description": "Generate outline costumes and highlight sprites",
+    "searchData": [
+      "outline color: _ width: _",
+      "halo color: _ width: _ while _",
+      "halo color: _ width: _ for _ secs"
+    ],
+    "categories": [
+      "looks"
     ]
   },
   {
@@ -2004,6 +2057,162 @@
       "sensing",
       "pen",
       "motion"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "metaprogramming_module.xml",
+    "name": "Metaprogramming",
+    "description": "Analyze, transform and generate blocks and scripts",
+    "searchData": [
+      "scriptify _",
+      "blockify _",
+      "callers of _",
+      "inject _  into _  _ each _"
+    ],
+    "categories": [
+      "control",
+      "lists",
+      "sensing",
+      "other"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "microworlds/dialogs.xml",
+    "name": "(EDC) Dialogs",
+    "description": "Display dialogs and messages to the user.",
+    "searchData": [
+      "inform title _ message _",
+      "show message _ secs _"
+    ],
+    "categories": [
+      "looks"
+    ]
+  },
+  {
+    "fileName": "microworlds/fancy-text-morphs.xml",
+    "name": "(EDC) Fancy Text",
+    "description": "Text formatting and basic fraction support for SAY and THINK blocks.",
+    "searchData": [
+      "fancy think _ size: _ max width: _ color: _ in my _ for _ seconds",
+      "fancy think _ size: _ max width: _ color: _ in my _",
+      "fancy say _ size: _ max width: _ color: _ in my _ for _ seconds",
+      "fancy say _ size: _ max width: _ color: _ in my _",
+      "fancy text costume _ size: _ max width: _ color: _ align: _ font: _"
+    ],
+    "categories": [
+      "looks"
+    ]
+  },
+  {
+    "fileName": "microworlds/fancy-text.xml",
+    "name": "(EDC) Fancy Stage Writing",
+    "description": "Text formatting and basic fraction support for writing on stage.",
+    "searchData": [
+      "write on stage text _ size: _ font: _ align: _ x: _ y: _ color: _"
+    ],
+    "categories": [
+      "pen"
+    ]
+  },
+  {
+    "fileName": "microworlds/microworld.xml",
+    "name": "(EDC) Microworld",
+    "description": "Customize the display of the Snap! UI to create a microworld programming environment.",
+    "searchData": [
+      "load microworld",
+      "switch to language _ and broadcast _ with data _ show loading screen _",
+      "block spec _",
+      "button label _ message _ data _",
+      "key: _ value: _",
+      "set buttons in _ to _",
+      "stage button label _ message _ data _ x _ y _ anchor x _ anchor y _ font size _",
+      "microworld define _ _ _",
+      "button pic labeled _",
+      "hide loading screen",
+      "show loading screen",
+      "set loading screen after translate _",
+      "set active buttons in _ to _",
+      "set broadcast after translate _",
+      "set menu _ to items _",
+      "set ide param _ to _",
+      "switch to sprite _",
+      "exit microworld",
+      "enter microworld",
+      "microworld active?",
+      "set block buttons _",
+      "set editable block specs _",
+      "set palette blocks _",
+      "set enable variables _",
+      "set enable keyboard _",
+      "set hidden UI features _",
+      "block specs _",
+      "list to comma-separated string _",
+      "hidden UI features $-1 _ category list $-1 _ make block buttons $-1 _ search button $-1 _ stepping button $-1 _ start button $-1 _ pause button"
+    ],
+    "categories": [
+      "Microworld",
+      "operators"
+    ]
+  },
+  {
+    "fileName": "microworlds/script-pic-costume.xml",
+    "name": "(EDC) Script Pic Costumes",
+    "description": "Turn a ringified block/script into a costume",
+    "searchData": [
+      "costume from script: _"
+    ],
+    "categories": [
+      "looks"
+    ]
+  },
+  {
+    "fileName": "microworlds/translations.xml",
+    "name": "(EDC) Translations",
+    "description": "Support for translating text, blocks, and dropdown/placeholder values",
+    "searchData": [
+      "update custom block translations from translations _",
+      "extract _ from translation data _",
+      "extract block translation data from _",
+      "all translated block labels for _ from translations _",
+      "translate input options with translations _ fallback _",
+      "custom block with label that translates to %label from translations %translations",
+      "add missing translation to _ language _ key _",
+      "translate _ from translations _ fallback language _ missing handler _ placeholders from list _",
+      "get translation information for _ from translations _ fallback language _ missing handler _",
+      "language",
+      "languages in translation _",
+      "IDE labels and languages limit to _",
+      "dropdown choice _ translates to _ from translations _",
+      "extract equivalent dropdown options from _",
+      "dropdown choice _ translates to _ from equivalent options _",
+      "translate input defaults with translations _ fallback _"
+    ],
+    "categories": [
+      "Translations"
     ]
   }
 ]
