@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-10';
+modules.gui = '2024-May-12';
 
 // Declarations
 
-var SnapVersion = '10-240510-dev';
+var SnapVersion = '10-240512-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -10336,7 +10336,7 @@ LibraryImportDialogMorph.prototype.clearDetails = function () {
     this.notesField.contents.adjustBounds();
     this.palette.contents = null;
     this.palette.rerender();
-}
+};
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
