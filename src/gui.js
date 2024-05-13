@@ -87,11 +87,11 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-10';
+modules.gui = '2024-May-12';
 
 // Declarations
 
-var SnapVersion = '10-240510-dev';
+var SnapVersion = '10-240512-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5086,7 +5086,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 return;
             }
             this.getURL(
-                this.resourceURL('libraries', 'LIBRARIES'),
+                this.resourceURL('libraries', 'LIBRARIES.json'),
                 txt => {
                     var libraries = this.parseResourceFile(txt);
                     new LibraryImportDialogMorph(this, libraries).popUp();
@@ -5149,7 +5149,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // based on the contents file.
     // If no callback is specified, synchronously return the list of files
     // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+    var url = this.resourceURL(dirname, `${dirname.toUpperCase()}.json`),
         async = callback instanceof Function,
         data;
 
@@ -5174,28 +5174,36 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
-    // A Resource File lists all the files that could be loaded in a submenu
-    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-    // The file format is tab-delimited, with unix newlines:
-    // file-name, Display Name, Help Text (optional)
-    var parts,
-        items = [];
+   /* A resource file is a JSON file with a list of objects:
+    1. fileName
+    2. name
+    3. description
+    4. categoires (optional, list)
+    5. searchData (optional, list of keywords)
+    6. translations (optional, map of language to name/description/searchData)
 
-    text.split('\n').map(line =>
-        line.trim()
-    ).filter(line =>
-        line.length > 0
-    ).forEach(line => {
-        parts = line.split('\t').map(str => str.trim());
+    These files are used for loading costumes, backgrounds, and sounds, and libraries.
+    Translations are merged into the dictionary before rendering resourcres.
+    Categories are not expected to be translated with each individual resource, instead
+    translations are expected to be provided in each langauge's translation file.
 
-        if (parts.length < 2) {return; }
+    -- May 2024: categories, and searchData are not used in Snap! yet
+    Categories: Used to group resources in the media/libraries viewers
+    SearchData: Used to augment search results in the viewer, but not be displayed
+   */
+    let items = JSON.parse(text),
+        language = SnapTranslator.language || 'en';
 
-        items.push({
-            fileName: parts[0],
-            name: parts[1],
-            description: parts.length > 2 ? parts[2] : ''
-        });
-    });
+    // Update name, description, and searchData from translations
+    for (let item of items) {
+        if (item.translations && item.translations[language]) {
+            let translation = item.translations[language];
+            item.name = translation.name || item.name;
+            item.description = translation.description || item.description;
+            item.searchData = translation.searchData || item.searchData;
+        }
+        delete item.translations;
+    }
 
     return items;
 };
@@ -10112,7 +10120,10 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.ide = ide;
     this.key = 'importLibrary';
     this.action = 'importLibrary';
-    this.librariesData = librariesData; // [{name: , fileName: , description:}]
+
+    // [{name: , fileName: , description:, categories:, searchData:}]
+    this.librariesData = librariesData;
+    this.filteredLibrariesList = this.librariesData;
 
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
@@ -10120,6 +10131,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.libraryCache = new Map(); // fileName: { blocks: [], palette: {} }
 
     this.handle = null;
+    this.filterField = null;
     this.listField = null;
     this.palette = null;
     this.notesText = null;
@@ -10141,6 +10153,7 @@ LibraryImportDialogMorph.prototype.captureOriginalCategories = function () {
 LibraryImportDialogMorph.prototype.buildContents = function () {
     this.addBody(new Morph());
     this.body.color = this.color;
+    this.buildFilterField();
 
     this.initializePalette();
     this.initializeLibraryDescription();
@@ -10149,8 +10162,50 @@ LibraryImportDialogMorph.prototype.buildContents = function () {
     this.addButton('ok', 'Import');
     this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(460, 455));
+    this.setExtent(new Point(500, 500));
     this.fixLayout();
+};
+
+// LibraryImportDialogMorph filter field
+
+LibraryImportDialogMorph.prototype.buildFilterField = function () {
+    var myself = this;
+
+    function librarySearcText({name, description, categies, searchData}) {
+        return [name, description, categies, searchData].join(' ').toLowerCase();
+    }
+
+    this.filterField = new InputFieldMorph('');
+    this.magnifyingGlass = new SymbolMorph(
+        'magnifyingGlass',
+        this.filterField.height(),
+        this.titleBarColor.darker(50)
+    );
+
+    this.body.add(this.magnifyingGlass);
+    this.body.add(this.filterField);
+
+    this.filterField.reactToInput = function (evt) {
+        var text = this.getValue().toLowerCase();
+
+        myself.filteredLibrariesList =
+            myself.librariesData.filter(library => librarySearcText(library).indexOf(text) > -1);
+
+        if (myself.filteredLibrariesList.length === 0) {
+            myself.filteredLibrariesList.push({
+                name: localize('(no matches)'),
+                fileName: null,
+                description: null
+            });
+        }
+
+        myself.clearDetails();
+        myself.installLibrariesList();
+        myself.fixListFieldItemColors();
+        myself.listField.adjustScrollBars();
+        myself.listField.scrollY(myself.listField.top());
+        myself.fixLayout();
+    };
 };
 
 LibraryImportDialogMorph.prototype.initializePalette = function () {
@@ -10201,7 +10256,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     if (this.listField) {this.listField.destroy(); }
 
     this.listField = new ListMorph(
-        this.librariesData,
+        this.filteredLibrariesList,
         element => element.name,
         null,
         () => this.importLibrary(),
@@ -10220,7 +10275,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = ({name, fileName, description}) => {
-        if (isNil(name)) {return; }
+        if (isNil(name) || isNil(fileName)) {return; }
 
         this.notesText.text = localize(description) || '';
         this.notesText.rerender();
@@ -10246,7 +10301,6 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         }
     };
 
-    this.listField.setWidth(200);
     this.body.add(this.listField);
 
     this.fixLayout();
@@ -10258,8 +10312,8 @@ LibraryImportDialogMorph.prototype.popUp = function () {
         LibraryImportDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
-            300,
-            300,
+            500,
+            500,
             this.corner,
             this.corner
         );
@@ -10276,12 +10330,18 @@ LibraryImportDialogMorph.prototype.destroy = function () {
 LibraryImportDialogMorph.prototype.fixListFieldItemColors =
     ProjectDialogMorph.prototype.fixListFieldItemColors;
 
-LibraryImportDialogMorph.prototype.clearDetails =
-    ProjectDialogMorph.prototype.clearDetails;
+LibraryImportDialogMorph.prototype.clearDetails = function () {
+    this.notesText.text = '';
+    this.notesText.rerender();
+    this.notesField.contents.adjustBounds();
+    this.palette.contents = null;
+    this.palette.rerender();
+};
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        thin = this.padding / 2;
+        thin = this.padding / 2,
+        inputField = this.filterField;
 
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
@@ -10291,26 +10351,40 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
             this.height()
-                - this.padding * 3 // top, bottom and button padding.
+                - this.padding * 4 // top, bottom, filterfield and button padding.
                 - titleHeight
                 - this.buttons.height()
         ));
 
-        this.listField.setExtent(new Point(
-            200,
-            this.body.height()
-        ));
+        if (this.magnifyingGlass) {
+            this.magnifyingGlass.setTop(inputField.top());
+            this.magnifyingGlass.setLeft(this.body.left());
+        }
+
+        inputField.setWidth(
+            this.body.width() - this.padding - this.magnifyingGlass.width()
+        );
+        inputField.setLeft(this.magnifyingGlass.left() + this.padding * 2);
+        inputField.setTop(this.body.top());
+
+        this.listField.setLeft(this.body.left());
+        this.listField.setWidth(240);
+
+        this.listField.setTop(inputField.bottom() + this.padding);
+        this.listField.setHeight(
+            this.body.height() - inputField.height()
+        );
+        this.listField.contents.children[0].adjustWidths();
+
         this.notesField.setExtent(new Point(
             this.body.width() - this.listField.width() - thin,
             100
         ));
         this.palette.setExtent(new Point(
-            this.notesField.width(),
-            this.body.height() - this.notesField.height() - thin
+            this.body.width() - this.listField.width() - thin,
+            this.body.height() - this.filterField.height() - this.notesField.height() - thin
         ));
-        this.listField.contents.children[0].adjustWidths();
 
-        this.listField.setPosition(this.body.position());
         this.palette.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
         ));
@@ -10332,7 +10406,6 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.buttons.setBottom(this.bottom() - this.padding);
     }
 
-    // refresh shadow
     this.removeShadow();
     this.addShadow();
 };
@@ -10373,9 +10446,9 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         this.cachedPalette(selectedLibrary).forEach((value, key) =>
             SpriteMorph.prototype.customCategories.set(key, value)
         );
-        ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
+        ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
-        ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
+        ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
             libraryText => {

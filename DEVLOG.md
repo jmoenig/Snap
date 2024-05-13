@@ -63,6 +63,7 @@
     * pixels library: new "grayscales of (costume)" reporter
     * new "Outlines and Halos" library
     * piyels library: new "rectangle costume" reporter
+    * New Search feature for the library browser
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -81,6 +82,7 @@
     * renamed "primitive" blocks into "extension"
     * scroll long text inside result balloons instead of shortening it
     * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
+    * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -410,7 +412,7 @@
 * objects: added experimental "primitify" dev helper method
 
 ### 2023-10-10
-* objects: added hyperZip stub to blocks dictionary 
+* objects: added hyperZip stub to blocks dictionary
 * store: load libraries with customized primitives
 * blocks, byob: metaprogramming support for newlines in custom block labels
 * bocks, extensions: new extension primitives for encoding / decoding blocks to and from xml
@@ -442,7 +444,7 @@
 ### 2023-09-08
 * byob: primitives and extensions menus for custom blocks
 * byob: support for running primitives inside custom block definitions
-* store: serialization of custom block definition primitives 
+* store: serialization of custom block definition primitives
 
 ### 2023-09-07
 * blocks, objects, threads: new "primitive" (pragma) block
@@ -491,13 +493,13 @@
 
 ### 2023-08-24
 * threads: support smooth animations in recursive control structures defined using metaprogramming
-* threads, blocks: new "input names" selector in the (attribute OF target) primitive reporter 
+* threads, blocks: new "input names" selector in the (attribute OF target) primitive reporter
 
 ### 2023-08-23
 * extensions: added new "snap_yield" extension primitive
 
 ### 2023-08-22
-* objects, byob, store: refresh standard library custom block definitions 
+* objects, byob, store: refresh standard library custom block definitions
 
 ### 2023-08-21
 * extensions: new "bootstrap" extension primitive
@@ -541,8 +543,8 @@
 ### 2023-08-11
 * blocks: only repeat-wrap default values in variadic slots with input groups
 * threads: added metaprogramming support for default values of variadic inputs
-* byob, blocks: initial subslot number support for variadic inputs 
-* store: serialization support for initial variadic subslots in custom block definitions 
+* byob, blocks: initial subslot number support for variadic inputs
+* store: serialization support for initial variadic subslots in custom block definitions
 * blocks, byob: added metaprogramming support for initial variadic subslots
 
 ### 2023-08-10
@@ -587,7 +589,7 @@
 * byob: made distancesMenu() available for custom blocks
 * blocks, byob: renamed distancesMenu() into destinationsMenu()
 * threads: fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
-* threads: when querying the defintion of a block via metaprogramming make sure the number of inputs of the resulting ring matches that of the header expression 
+* threads: when querying the defintion of a block via metaprogramming make sure the number of inputs of the resulting ring matches that of the header expression
 * byob, threads: tweaked some metaprogramming edge cases
 * threads: fixed referencing system drop-down menus in metaprogramming
 
@@ -598,4 +600,3 @@
 * byob: made %scriptVars input slots available for custom blocks
 * threads: metaprogramming support for %scriptVars input slots
 * threads: moved script var declaration to multi-arg evaluation, eliminates necessity for doDeclareVariables()
-
