@@ -9,7 +9,15 @@
     ],
     "categories": [
       "operators"
-    ]
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "verwandle Code _ in Blöcke",
+          "verwandle Blöcke _ in Code _ formatiert"
+        ]
+      }
+    }
   },
   {
     "fileName": "~",
@@ -33,7 +41,15 @@
         "description": "Construcció de bucles estàndard (while, until, etc.), construccions \"named let\" pròpies de Lisp (una generalització dels bucles \"for\"), iteració funcional (repeticions de crides a una funció) i composició de funcions."
       },
       "de": {
-        "name": "Iteration, Komposition"
+        "name": "Iteration, Komposition",
+        "searchData": [
+          "fange _ _\rca",
+          "wirf _\rca",
+          "fange _ _\rca",
+          "wirf _ _\rca",
+          "falls _ dann _ und pause $-1-255-220-0\rca",
+          "ignoriere _\rca"
+        ]
       },
       "es": {
         "name": "Iteración, composición",
@@ -69,7 +85,18 @@
       },
       "pt": {
         "name": "Iteração e composição",
-        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções."
+        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.",
+        "searchData": [
+          "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
+          "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
+          "a composição de _ com _\rca",
+          "repete _ até que _ $-0.7\rca",
+          "repete _ enquanto _ $-0.7\rca",
+          "enquanto _ , repete _ $-0.7",
+          "repete _ vezes _ _ $-0.7\rca",
+          "para _ de _ com passo _ a _ _ $-0.7\rca",
+          "tendo _ o valor inicial _ , executa _ definido como _\rca"
+        ]
       },
       "sk": {
         "name": "Iterácia, kompozícia"
@@ -120,10 +147,21 @@
     "translations": {
       "ca": {
         "name": "Utilitats per a llistes",
-        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)"
+        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)",
+        "searchData": [
+          "ordena _ segons criteri _",
+          "associació _ _",
+          "_ per cada _ de _ _",
+          "notació textual de _",
+          "frase _",
+          "multi-mapeja _ sobre _"
+        ]
       },
       "de": {
-        "name": "Listen bearbeiten"
+        "name": "Listen bearbeiten",
+        "searchData": [
+          "Satz to Liste _\rca"
+        ]
       },
       "es": {
         "name": "Utilidades de lista",
@@ -202,7 +240,17 @@
     "translations": {
       "ca": {
         "name": "Colors i Paletes",
-        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat."
+        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
+        "searchData": [
+          "$brush fixa el _ del llapis a _ _",
+          "$brush _ del llapis",
+          "$brush augmenta _ del llapis en _",
+          "$brush barreja colors _ amb criteri _",
+          "$brush color amb _ _ _",
+          "$brush _ del color _",
+          "✐ color de llapis actual",
+          "✐ fixa el llapis de color _ _"
+        ]
       },
       "es": {
         "name": "Colores y pinturas"
@@ -326,7 +374,12 @@
     "translations": {
       "ca": {
         "name": "Llapis de colors",
-        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple."
+        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.",
+        "searchData": [
+          "fixa el llapis de color _",
+          "canvia de llapis de color saltant _",
+          "llapis de color"
+        ]
       },
       "es": {
         "name": "Pinturas"
@@ -391,7 +444,10 @@
     "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.",
     "translations": {
       "ca": {
-        "name": "Detecta errors"
+        "name": "Detecta errors",
+        "searchData": [
+          "prova de forma segura reportant _ i si _ reportant _"
+        ]
       },
       "it": {
         "name": "Intercettazione degli errori"
@@ -441,7 +497,11 @@
       },
       "pt": {
         "name": "Paralelização",
-        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem."
+        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem.",
+        "searchData": [
+          "executa _ em paralelo e espera\rca",
+          "executa _ em paralelo\rca"
+        ]
       },
       "ti": {
         "name": "ተገደም ዕማማት",
@@ -491,7 +551,12 @@
         "description": "De wet van Eisenberg: Alles wat vanuit de GUI kan worden gedaan, moet ook vanuit de programmeertaal gedaan kunnen worden, en vice versa."
       },
       "pt": {
-        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa."
+        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.",
+        "searchData": [
+          "o valor da configuração _\rca",
+          "altera o valor da configuração _ para _\rca",
+          "altera o valor da configuração _ para _\rca"
+        ]
       },
       "ti": {
         "name": "ኣምጻእትን ኣንበርትን"
@@ -554,7 +619,9 @@
     ],
     "categories": [
       "3D Beetle"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "maps_module.xml",
@@ -805,7 +872,10 @@
         "description": "Manipuleer kostuums pixelsgewijs."
       },
       "pt": {
-        "name": "Píxeis"
+        "name": "Píxeis",
+        "searchData": [
+          "$camera a imagem actual do vídeo"
+        ]
       },
       "ti": {
         "name": "ዋህዮታት ስእሊ",
@@ -866,7 +936,19 @@
         "description": "Analiseer, manipuleer en genereer geluidssamples."
       },
       "pt": {
-        "name": "Computação áudio"
+        "name": "Computação áudio",
+        "searchData": [
+          "executa no modo turbo _",
+          "as amostras de som com _ Hz de _ s amostrado a _ Hz\rca",
+          "π",
+          "_ radianos em graus\rca",
+          "o som _\rca",
+          "desenha o gráfico do som _\rca",
+          "$-1-255-0-0 uma nova gravação\rca",
+          "a nota com _ Hz\rca",
+          "a frequência da nota _\rca",
+          "o nome da nota _\rca"
+        ]
       },
       "ti": {
         "name": "ምድላው ድምጺ",
@@ -927,7 +1009,17 @@
         "description": "Analyseer gegevens voor frequentieverdeling"
       },
       "pt": {
-        "name": "Análise da distribuição de frequências"
+        "name": "Análise da distribuição de frequências",
+        "searchData": [
+          "flash turbo fast as frequências dos itens de _\rca",
+          "o agrupamento dos itens de _ de acordo com _\rca",
+          "uma ordenação de _ com critério _\rca",
+          "o histograma de _ entre _ e _ com intervalo _\rca",
+          "o histograma de _ agrupado de acordo com _ entre _ e _ com passo _\rca",
+          "os itens de _ com a chave _ entre _ e _ com passo _ completados por _\rca",
+          "_ em minúsculas\rca",
+          "desenha gráfico de barras de _ em (x"
+        ]
       },
       "ti": {
         "name": "ምርምር ዝርገሐ ድግምጋም",
@@ -965,7 +1057,14 @@
     "translations": {
       "ca": {
         "name": "Base de dades",
-        "description": "Desa al navegador dades (clau-valor) persistents entre sessions d'Snap!"
+        "description": "Desa al navegador dades (clau-valor) persistents entre sessions d'Snap!",
+        "searchData": [
+          "desa clau",
+          "dades desades al navegador",
+          "esborra clau",
+          "esborra dades del navegador",
+          "obté valor de clau"
+        ]
       },
       "es": {
         "name": "Base de datos"
@@ -1050,10 +1149,21 @@
     "translations": {
       "ca": {
         "name": "Paraules i frases",
-        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea."
+        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.",
+        "searchData": [
+          "frase _\res",
+          "notació textual de _\res"
+        ]
       },
       "de": {
-        "name": "Wörter, Sätze"
+        "name": "Wörter, Sätze",
+        "searchData": [
+          "füge Wörter zusammen _\rca",
+          "Liste to Satz _\rca",
+          "Satz to Liste _\rca",
+          "Wort to Liste _\rca",
+          "Liste to Wort _\rca"
+        ]
       },
       "el": {
         "name": "Λέξεις, φράσεις"
@@ -1086,7 +1196,20 @@
         "name": "Słowa, zdania"
       },
       "pt": {
-        "name": "Palavras e frases"
+        "name": "Palavras e frases",
+        "searchData": [
+          "_ sem o primeiro caractere\rca",
+          "_ sem a primeira palavra\rca",
+          "_ sem o último caractere\rca",
+          "_ sem a última palavra\rca",
+          "a primeira palavra de _\rca",
+          "o último caractere de _\rca",
+          "a última palavra de _\rca",
+          "a palavra _ está vazia\rca",
+          "a frase _ está vazia\rca",
+          "lança o erro _",
+          "a primeira palavra de _\rca"
+        ]
       },
       "sk": {
         "name": "Slová, vety"
@@ -1214,7 +1337,10 @@
     "translations": {
       "ca": {
         "name": "Primitives APL",
-        "description": "Afegeix funcionalitats del llenguatge APL als hiper-blocs."
+        "description": "Afegeix funcionalitats del llenguatge APL als hiper-blocs.",
+        "searchData": [
+          "ordena _ segons criteri _"
+        ]
       },
       "es": {
         "name": "Primitivas APL"
@@ -1323,7 +1449,18 @@
         "name": "Stream (liste rilasciate)"
       },
       "pt": {
-        "name": "Canais (listas preguiçosas)"
+        "name": "Canais (listas preguiçosas)",
+        "searchData": [
+          "a prefixação de _ ao canal _",
+          "o primeiro item do canal _",
+          "um canal com todos os itens de _ menos o primeiro",
+          "a aplicação de _ aos itens dos canais _",
+          "os itens tais que _ do canal _",
+          "uma lista com os itens do canal _ até ao _ º",
+          "um canal com _",
+          "a crivagem do canal _",
+          "um canal com os números a partir de _"
+        ]
       },
       "sv": {
         "name": "Strömmar (lata listor)"
@@ -1361,7 +1498,12 @@
     "translations": {
       "ca": {
         "name": "Gràfics de barres",
-        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\"."
+        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\".",
+        "searchData": [
+          "gràfica de la taula _ agrupada pel camp",
+          "ordena taula _ pel camp _ en ordre _",
+          "agrupa taula _ pel camp _ per intervals de _"
+        ]
       },
       "it": {
         "name": "Grafico a barre"
@@ -1448,7 +1590,14 @@
         "name": "Dostęp do usług sieciowych (https)"
       },
       "pt": {
-        "name": "Acesso a serviços web (https)"
+        "name": "Acesso a serviços web (https)",
+        "searchData": [
+          "os dados JSON _ em formato de lista",
+          "o valor com chave _ em _",
+          "a resposta a _ de _ enviando _ e cabeçalhos _",
+          "um par (chave",
+          "a localização actual do dispositivo"
+        ]
       },
       "sk": {
         "name": "Prístup na webové služby (https)"
@@ -1486,7 +1635,12 @@
     "translations": {
       "ca": {
         "name": "Crea variables",
-        "description": "Crea i gestiona variables de tipus global/sprite/script dins els programes"
+        "description": "Crea i gestiona variables de tipus global/sprite/script dins els programes",
+        "searchData": [
+          "assigna a _ el valor _\res",
+          "mostra la variable _\res",
+          "amaga la variable _\res"
+        ]
       },
       "es": {
         "name": "Crear variables"
@@ -1503,7 +1657,13 @@
         "description": "Maak en beheer globale/sprite/scriptvariabelen in een script"
       },
       "pt": {
-        "description": "Criar e gerir variáveis globais, de objecto e de guião a partir de um guião."
+        "description": "Criar e gerir variáveis globais, de objecto e de guião a partir de um guião.",
+        "searchData": [
+          "cria as variáveis _ _\rca",
+          "remove as variáveis _\rca",
+          "o valor de _",
+          "a variável _ existe\rca"
+        ]
       },
       "ti": {
         "name": "ተቓያየርቲ ኣዳሉ",
@@ -1555,17 +1715,32 @@
     ]
   },
   {
-    "fileName": "halo_module.xml",
-    "name": "Outlines and Halos",
-    "description": "Generate outline costumes and highlight sprites",
+    "fileName": "textformat_module.xml",
+    "name": "Writing and formating",
+    "description": "Write text using fancy fonts, contributed by Tethrarxitet",
     "searchData": [
-      "outline color: _ width: _",
-      "halo color: _ width: _ while _",
-      "halo color: _ width: _ for _ secs"
+      "write _ size _ stats _",
+      "text costume _ size _ stats _",
+      "font _  bold _  italic _",
+      "font _  weight _  italic _"
     ],
     "categories": [
-      "looks"
-    ]
+      "pen"
+    ],
+    "translations": {
+      "es": {
+        "searchData": [
+          "escribir _ con tamaña _ e información _\rpt",
+          "disfraz de texto _ tamaño _ e información _\rpt",
+          "nombre de la fuente _ _ espesor _ _ ¿oblicuo? _\rpt"
+        ]
+      },
+      "pt": {
+        "searchData": [
+          "nome da fonte _ _ texto em negrito? _ _ oblíquo? _\res"
+        ]
+      }
+    }
   },
   {
     "fileName": "~",
@@ -1877,7 +2052,12 @@
     "description": "Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)",
     "translations": {
       "ca": {
-        "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)"
+        "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)",
+        "searchData": [
+          "mostra la variable _\res",
+          "assigna a _ el valor _\res",
+          "associació _ _"
+        ]
       }
     },
     "searchData": [
@@ -2012,7 +2192,31 @@
     "translations": {
       "ca": {
         "name": "Signada (control remot per xarxa)",
-        "description": "Interactua amb dispositius programats amb Microblocks per la WiFi. Els dispositius han de tenir una pantalla TFT, dos butons i connectivitat WiFi i tenir carregat el projecte Signada de MicroBlocks. Exemples compatibles són la placa ED1 del Citilab i múltiples dispositius tipus M5Stack."
+        "description": "Interactua amb dispositius programats amb Microblocks per la WiFi. Els dispositius han de tenir una pantalla TFT, dos butons i connectivitat WiFi i tenir carregat el projecte Signada de MicroBlocks. Exemples compatibles són la placa ED1 del Citilab i múltiples dispositius tipus M5Stack.",
+        "searchData": [
+          "🤖 connecta't a _",
+          "🤖 desconnecta't",
+          "🤖 connectat",
+          "toca la nota _ a l'octava _ durant _ ms",
+          "botó _",
+          "dibuixa a la pantalla _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+          "mou motor _ _ passos _",
+          "mou motor 1 en _ motor 2 en _ _ passos",
+          "mou motor _ angle _ °",
+          "mou motor _ _ voltes completes",
+          "escriu _ a x",
+          "neteja pantalla",
+          "posa el LED x",
+          "mostra caràcter _",
+          "posa el pin digital _ a _",
+          "posa el pin analògic _ a _",
+          "llegeix el pin digital _",
+          "llegeix el pin analògic _",
+          "inclinació _",
+          "acceleració",
+          "nivell de llum",
+          "temperatura °C"
+        ]
       },
       "it": {
         "name": "Signada (Controllo remoto di rete)",
@@ -2086,7 +2290,9 @@
       "lists",
       "sensing",
       "other"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "~",
@@ -2110,7 +2316,9 @@
     ],
     "categories": [
       "looks"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "microworlds/fancy-text-morphs.xml",
@@ -2125,7 +2333,9 @@
     ],
     "categories": [
       "looks"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "microworlds/fancy-text.xml",
@@ -2136,7 +2346,9 @@
     ],
     "categories": [
       "pen"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "microworlds/microworld.xml",
@@ -2176,7 +2388,15 @@
     "categories": [
       "Microworld",
       "operators"
-    ]
+    ],
+    "translations": {
+      "pt": {
+        "searchData": [
+          "um par (chave",
+          "altera o valor da configuração _ para _"
+        ]
+      }
+    }
   },
   {
     "fileName": "microworlds/script-pic-costume.xml",
@@ -2187,7 +2407,9 @@
     ],
     "categories": [
       "looks"
-    ]
+    ],
+    "translations": {
+    }
   },
   {
     "fileName": "microworlds/translations.xml",
@@ -2213,6 +2435,8 @@
     ],
     "categories": [
       "Translations"
-    ]
+    ],
+    "translations": {
+    }
   }
 ]
