@@ -5198,9 +5198,11 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     for (let item of items) {
         if (item.translations && item.translations[language]) {
             let translation = item.translations[language];
+            // ensure we never concatenate undefined arrays
+            let searchData = translation.searchData || [];
             item.name = translation.name || item.name;
             item.description = translation.description || item.description;
-            item.searchData = translation.searchData || item.searchData;
+            item.searchData = searchData + (item.searchData || []);
         }
         delete item.translations;
     }
@@ -10334,8 +10336,7 @@ LibraryImportDialogMorph.prototype.clearDetails = function () {
     this.notesText.text = '';
     this.notesText.rerender();
     this.notesField.contents.adjustBounds();
-    this.palette.contents = null;
-    this.palette.rerender();
+    this.initializePalette();
 };
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
@@ -10380,6 +10381,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
             this.body.width() - this.listField.width() - thin,
             100
         ));
+        debugger;
         this.palette.setExtent(new Point(
             this.body.width() - this.listField.width() - thin,
             this.body.height() - this.filterField.height() - this.notesField.height() - thin
