@@ -10381,7 +10381,6 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
             this.body.width() - this.listField.width() - thin,
             100
         ));
-        debugger;
         this.palette.setExtent(new Point(
             this.body.width() - this.listField.width() - thin,
             this.body.height() - this.filterField.height() - this.notesField.height() - thin
