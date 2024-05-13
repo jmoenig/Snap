@@ -8,7 +8,12 @@ BLEController.prototype.init = function (stage) {
     this.service = undefined;
     this.rx_char = undefined;
     this.sendInProgress = false;
+    this.lastReceiveTime = Date.now();
     this.buffer = [];
+    this.snapBLEprocessBlockDef =
+        this.stage.globalBlocks.find(
+            def => def.spec == '__process_ble_data__'
+        );
 };
 
 BLEController.BLE_PACKET_LEN = 240;
@@ -36,18 +41,26 @@ BLEController.prototype.connect = async function (serviceUUID, rxUUIX, txUUID) {
     );
 
     this.sendInProgress = false;
-    console.log('BLE connected');
 };
 
 BLEController.prototype.onReceive = function (event) {
-    var data = new Uint8Array(event.target.value.buffer),
-        def = this.stage.globalBlocks.find(
-            def => def.spec == '__process_ble_data__');
+    var data = new Uint8Array(event.target.value.buffer);
     this.buffer.push(...data);
-    if (def) {
-        var block = def.blockInstance();
+    if ((Date.now() > this.lastReceiveTime + 20) &&
+        this.snapBLEprocessBlockDef
+    ) {
+        var block = this.snapBLEprocessBlockDef.blockInstance();
         block.parent = this.stage;
-        invoke(block, null, this.stage);
+        try {
+            invoke(
+                block,
+                null,       // args
+                this.stage  // receiver
+            );
+        } catch (err) {
+            // do nothing
+        }
+        this.lastReceiveTime = Date.now();
     }
 };
 
@@ -116,8 +129,7 @@ SnapExtensions.primitives.set(
     function (data) {
         var ble = this.parentThatIsA(StageMorph).ble;
         // Write the given data (a Uint8Array) and return the number of bytes
-        // written. If not busy, start writeLoop with as much data as we can
-        // send.
+        // written.
         var data = new Uint8Array(data.itemsArray());
         if (ble.rx_char == undefined) {
             throw TypeError("Not connected");
