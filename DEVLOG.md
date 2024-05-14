@@ -92,6 +92,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-05-14
+* incremented dev version
+
 ### 2024-05-10
 * gui: fixed experimental export/import of customized primitives palette
 * pixels library: added "grayscales of (costume)" reporter
