@@ -77,7 +77,7 @@ var snapVersion = '10-240510-dev',
         'locale/lang-zh_TW.js',
 
         //libraries
-        'libraries/LIBRARIES',
+        'libraries/LIBRARIES.json',
 
         'libraries/animation_module.xml',
         'libraries/apl.xml',
@@ -195,7 +195,7 @@ var snapVersion = '10-240510-dev',
         'libraries/words_module.xml',
 
         //costumes
-        'Costumes/COSTUMES',
+        'Costumes/COSTUMES.json',
 
         'Costumes/abby-a.svg',
         'Costumes/abby-b.svg',
@@ -760,7 +760,7 @@ var snapVersion = '10-240510-dev',
         'Backgrounds/xy-grid.gif',
 
         // Sounds
-        'Sounds/SOUNDS',
+        'Sounds/SOUNDS.json',
 
         'Sounds/Cat.mp3',
         'Sounds/Chord.wav',
@@ -776,7 +776,7 @@ var snapVersion = '10-240510-dev',
         'Sounds/Pop.wav',
 
         // Examples
-        'Examples/EXAMPLES',
+        'Examples/EXAMPLES.json',
 
         'Examples/animal-game.xml',
         'Examples/Codification.xml',

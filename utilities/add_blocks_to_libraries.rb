@@ -27,15 +27,32 @@ def parse_blocks(fileName)
 
     # unescape html entities in the spec
     # replace Snap! inputs with _, e.g %'a' -> _
-    spec = cleanup_spec_for_search(spec)
+    spec = cleanup_spec_for_search(spec.strip)
     category = block['category']
 
-    # TODO: handle translations for block specs
-    blocks << { spec: spec, category: category }
+    # translations is a text file of langauge_code:block_spec pairs
+    translations = parse_translations(block.xpath('translations'))
+
+    blocks << { spec: spec, category: category, translations: translations }
   end
 
   return blocks
 end
+
+# Parse translations from a block-definition
+# translations is a text block of langauge_code:block_spec pairs
+def parse_translations(translations)
+  return {} if translations.nil? || translations.text.empty?
+
+  pairs = translations.text.split('\n').map do |translation|
+    lang, spec = translation.split(':')
+    spec = cleanup_spec_for_search(spec.strip)
+    [lang, spec]
+  end
+
+  return Hash[pairs]
+end
+
 
 # Text descriptions of symbols for easier search
 SYMBOLS = {
@@ -67,32 +84,59 @@ end
 
 def add_blocks_to_libraries(replaceexisting = false)
   # Read the libraries.json file
-  file = File.read(FILE)
-  data_hash = JSON.parse(file)
+  libraries = JSON.parse(File.read(FILE))
 
   # Iterate through each library object
-  data_hash.each do |library|
+  libraries.each do |library|
     fileName = library['fileName']
     # skip "spacer" library objects
     next if fileName == '~'
 
     blocks = parse_blocks(fileName)
+
     categories = blocks.map { |block| block[:category] }.uniq
     specs = blocks.map { |block| block[:spec] }
+    # translations are a hash of lang_code:spec pairs for each block
+    translations = blocks.map { |block| block[:translations] }
+
+    # collect all the translations into a single hash by lang_code to searchData: [specs list]
+    translations = translations.reduce({}) do |acc, translation|
+      translation.each do |lang, spec|
+        acc[lang] ||= { searchData: [] }
+        acc[lang][:searchData] << spec
+      end
+      acc
+    end
+
     if replaceexisting
       library['searchData'] = specs
       library['categories'] = categories
+      if library['translations'].nil?
+        library['translations'] = translations
+      else
+        library['translations'].each do |lang, data|
+          if !translations[lang].nil?
+            data[:searchData] = translations[lang][:searchData]
+          end
+        end
+      end
+
     else
       library['searchData'] ||= []
       library['categories'] ||= []
       library['searchData'] = (library['searchData'] + specs).uniq
       library['categories'] = (library['categories'] + categories).uniq
+      library['translations'] ||= {}
+      # merge search data for each language
+      translations.each do |lang, data|
+        library['translations'][lang] ||= { searchData: [] }
+        library['translations'][lang][:searchData] = (library['translations'][lang][:searchData] + data[:searchData]).uniq
+      end
     end
   end
 
-  # Write the updated libraries.json file
   File.open(FILE, 'w') do |f|
-    f.write(JSON.pretty_generate(data_hash))
+    f.write(JSON.pretty_generate(libraries))
   end
 end
 
