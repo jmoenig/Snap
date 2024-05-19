@@ -64,6 +64,7 @@
     * new "Outlines and Halos" library
     * piyels library: new "rectangle costume" reporter
     * New Search feature for the library browser
+    * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -91,6 +92,9 @@
     * new Snap! Lisp Syntax documentation
 * **Translation Updates:**
     * German
+
+### 2024-05-19
+* objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
 
 ### 2024-05-14
 * incremented dev version
