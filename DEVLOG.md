@@ -101,6 +101,7 @@
 * gui: added pen trails export options to the project ("file") menu
 * German translation update for "export pen trails" menu options
 * incremented dev version
+* added "call stack" reporter and dynamic variable scope getters / setters to the "Metaprogramming" library
 
 ### 2024-05-19
 * objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
