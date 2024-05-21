@@ -100,6 +100,7 @@
 * gui: added svg poly, dst, exp trails export options to the Stage icon's context menu
 * gui: added pen trails export options to the project ("file") menu
 * German translation update for "export pen trails" menu options
+* incremented dev version
 
 ### 2024-05-19
 * objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
