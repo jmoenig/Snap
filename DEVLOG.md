@@ -96,6 +96,7 @@
 
 ### 2024-05-21
 * threads: only capture the caller once in repeating recursive calls
+* gui: added svg poly, dst, exp trails export options to the Stage icon's context menu
 
 ### 2024-05-19
 * objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting

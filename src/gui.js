@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-14';
+modules.gui = '2024-May-21';
 
 // Declarations
 
@@ -10763,11 +10763,29 @@ SpriteIconMorph.prototype.userMenu = function () {
             'save a picture\nof the stage'
         );
         if (this.object.trailsLog.length) {
+            menu.addLine();
             menu.addItem(
                 'svg...',
                 () => this.object.exportTrailsLogAsSVG(),
                 'export pen trails\nline segments as SVG'
             );
+
+            menu.addItem(
+                'poly svg...',
+                () => this.object.exportTrailsLogAsPolySVG(),
+                'export pen trails\nline segments as polyline SVG'
+            );
+            menu.addItem(
+                'dst...',
+                () => this.object.exportTrailsLogAsDST(),
+                'export pen trails\nas DST embroidery file'
+            );
+            menu.addItem(
+                'exp...',
+                () => this.object.exportTrailsLogAsEXP(),
+                'export pen trails\nas EXP embroidery file'
+            );
+
         }
         return menu;
     }
