@@ -88,10 +88,14 @@
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
+    * only capture the caller once in repeating recursive calls
 * **Documentation Updates:**
     * new Snap! Lisp Syntax documentation
 * **Translation Updates:**
     * German
+
+### 2024-05-21
+* threads: only capture the caller once in repeating recursive calls
 
 ### 2024-05-19
 * objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting

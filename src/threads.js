@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-May-09';
+modules.threads = '2024-May-21';
 
 var ThreadManager;
 var Process;
@@ -1316,7 +1316,8 @@ Process.prototype.errorBubble = function (error, element) {
             // if I am a single variable, show my caller in the output.
             blockToShow = blockToShow.parent || blockToShow;
         }
-        errorMorph.children[0].text += `\n${localize('The question came up at')}`;
+        errorMorph.children[0].text +=
+            `\n${localize('The question came up at')}`;
         errorMorph.children[0].fixLayout();
         errorMorph.add(blockToShow.fullCopy());
     }
@@ -1443,7 +1444,11 @@ Process.prototype.evaluate = function (
         expr,
         parms = args.itemsArray(),
         i,
-        value;
+        value,
+        csym = Symbol.for('caller'),
+        lastCaller = this.context.variables.silentFind(csym)?.vars[csym].value,
+        isRecursiveCall = () => lastCaller instanceof Context &&
+            this.context.expression === lastCaller.expression;
 
     if (!outer.receiver) {
         outer.receiver = context.receiver; // for custom blocks
@@ -1465,11 +1470,13 @@ Process.prototype.evaluate = function (
     // assign a self-reference for introspection and recursion
     outer.variables.addVar(Symbol.for('self'), context);
 
-    // capture the dynamic scope in "this caller"
-    outer.variables.addVar(Symbol.for('caller'), this.context);
-
     // capture the current continuation
     outer.variables.addVar(Symbol.for('continuation'), cont);
+
+    // capture the dynamic scope in "this caller"
+    // only capture the caller once in repeating recursive calls
+    // to prevent TCO memory leaks
+    outer.variables.addVar(csym, isRecursiveCall() ? lastCaller : this.context);
 
     // assign arguments to parameters
 
@@ -1810,7 +1817,18 @@ Process.prototype.evaluateCustomBlock = function () {
         exit,
         i,
         value,
-        outer;
+        outer,
+        csym = Symbol.for('caller'),
+        lastCaller = this.context.variables.silentFind(csym)?.vars[csym].value,
+        isRecursiveCall = () => {
+            var clrBlock = lastCaller?.expression,
+                clr;
+            if (clrBlock instanceof BlockMorph && clrBlock.isCustomBlock) {
+                clr = clrBlock.isGlobal ? clrBlock.definition
+                        : this.blockReceiver().getMethod(clrBlock.semanticSpec);
+            }
+            return clr === method;
+        };
 
     if (!context) {return null; }
     this.procedureCount += 1;
@@ -1902,9 +1920,12 @@ Process.prototype.evaluateCustomBlock = function () {
 
     // keep track of the environment for recursion and introspection
     outer.variables.addVar(Symbol.for('self'), context);
-    outer.variables.addVar(Symbol.for('caller'), this.context);
     outer.variables.addVar(Symbol.for('continuation'), cont);
     outer.variables.addVar(Symbol.for('arguments'), args);
+
+    // only capture the caller once in repeating recursive calls
+    // to prevent TCO memory leaks
+    outer.variables.addVar(csym, isRecursiveCall() ? lastCaller : this.context);
 
     runnable.expression = runnable.expression.blockSequence();
 };
