@@ -4945,7 +4945,7 @@ IDE_Morph.prototype.bootstrapCustomizedPrimitives = function () {
 };
 
 IDE_Morph.prototype.projectMenu = function () {
-    var menu,
+    var menu, tm,
         world = this.world(),
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
@@ -5023,6 +5023,49 @@ IDE_Morph.prototype.projectMenu = function () {
                 new Color(100, 0, 0)
             );
         }
+        if (this.stage.trailsLog.length) {
+            tm = new MenuMorph(this);
+            tm.addItem(
+                'png...',
+                () => this.saveCanvasAs(
+                    this.currentSprite.reportPenTrailsAsCostume().contents,
+                    this.getProjectName() || this.stage.name
+                ),
+                'export pen trails\nas PNG image'
+            );
+            tm.addItem(
+                'svg...',
+                () => this.stage.exportTrailsLogAsSVG(),
+                'export pen trails\nline segments as SVG'
+            );
+            tm.addItem(
+                'poly svg...',
+                () => this.stage.exportTrailsLogAsPolySVG(),
+                'export pen trails\nline segments as polyline SVG'
+            );
+            tm.addItem(
+                'dst...',
+                () => this.stage.exportTrailsLogAsDST(),
+                'export pen trails\nas DST embroidery file'
+            );
+            tm.addItem(
+                'exp...',
+                () => this.stage.exportTrailsLogAsEXP(),
+                'export pen trails\nas EXP embroidery file'
+            );
+            menu.addMenu('Export pen trails', tm);
+        } else {
+            menu.addItem(
+                'Export pen trails...',
+                () => this.saveCanvasAs(
+                    this.currentSprite.reportPenTrailsAsCostume().contents,
+                    this.getProjectName() || this.stage.name
+                ),
+                'export pen trails\nas PNG image'
+            );
+        }
+
+
         menu.addLine();
         if (this.stage.globalBlocks.length) {
             menu.addItem(

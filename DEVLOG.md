@@ -65,6 +65,7 @@
     * piyels library: new "rectangle costume" reporter
     * New Search feature for the library browser
     * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
+    * added pen trails export options to the project ("file") menu
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -97,6 +98,7 @@
 ### 2024-05-21
 * threads: only capture the caller once in repeating recursive calls
 * gui: added svg poly, dst, exp trails export options to the Stage icon's context menu
+* gui: added pen trails export options to the project ("file") menu
 
 ### 2024-05-19
 * objects: new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
