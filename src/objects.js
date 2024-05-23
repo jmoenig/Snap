@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-19';
+modules.objects = '2024-May-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -2383,7 +2383,7 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
 SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
     var serializer = srzlr || new SnapSerializer();
     Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
-        var dta = SpriteMorph.prototype.blocks[selector];
+        var dta = SpriteMorph.prototype.blocks[selector].definition;
         if (dta instanceof CustomBlockDefinition) {
             dta.refresh(serializer);
         }

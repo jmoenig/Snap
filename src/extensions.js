@@ -245,7 +245,6 @@ SnapExtensions.primitives.set(
             block.definition.isGlobal &&
             block.definition.selector &&
             !block.definition.isBootstrapped()
-            
             /* // require "blocks all the way" to be enabled, commented out
             &&
             SpriteMorph.prototype.blocks[

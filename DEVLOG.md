@@ -99,6 +99,7 @@
 ### 2024-05-23
 * updated extensions.md
 * extensions: removed "blocks all the way" requirement for bootstrapping customized primitives, highly experimental
+* objects: tweaked refreshing bootstrapped blocks
 
 ### 2024-05-21
 * threads: only capture the caller once in repeating recursive calls
