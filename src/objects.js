@@ -2380,6 +2380,7 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
     });
 };
 
+/* // has issues - commented out for now
 SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
     var serializer = srzlr || new SnapSerializer();
     Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
@@ -2389,6 +2390,7 @@ SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
         }
     });
 };
+*/
 
 SpriteMorph.prototype.bootstrappedBlocks = function () {
     var boot = [];
