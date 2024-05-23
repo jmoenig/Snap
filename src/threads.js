@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-May-21';
+modules.threads = '2024-May-23';
 
 var ThreadManager;
 var Process;
@@ -5543,12 +5543,14 @@ Process.prototype.blockMatching = function (string) {
         block,
         lbl,
         i;
-    for (i = 1; i <= pal.length(); i += 1) {
-        block = pal.at(i);
-        if (block.expression && block.expression.isCustomBlock) {
-            lbl = this.reportBasicBlockAttribute('label', block);
-            if (snapEquals(string, lbl)) {
-                return block;
+    if (pal) { // when bootstrapping the palette at first launch it can be empty
+        for (i = 1; i <= pal.length(); i += 1) {
+            block = pal.at(i);
+            if (block.expression && block.expression.isCustomBlock) {
+                lbl = this.reportBasicBlockAttribute('label', block);
+                if (snapEquals(string, lbl)) {
+                    return block;
+                }
             }
         }
     }

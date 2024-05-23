@@ -101,6 +101,7 @@
 * extensions: removed "blocks all the way" requirement for bootstrapping customized primitives, highly experimental
 * objects: tweaked refreshing bootstrapped blocks
 * objects, store, byob: commented out refreshing bootstrapped blocks, has issues
+* threads: optimized bootstrapping customized primitives at first launch
 
 ### 2024-05-21
 * threads: only capture the caller once in repeating recursive calls
