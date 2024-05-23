@@ -92,8 +92,12 @@
     * only capture the caller once in repeating recursive calls
 * **Documentation Updates:**
     * new Snap! Lisp Syntax documentation
+    * updated extensions.md
 * **Translation Updates:**
     * German
+
+### 2024-05-23
+* updated extensions.md
 
 ### 2024-05-21
 * threads: only capture the caller once in repeating recursive calls
