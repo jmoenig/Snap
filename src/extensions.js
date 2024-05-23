@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-May-08';
+modules.extensions = '2024-May-23';
 
 // Global stuff
 
@@ -244,10 +244,14 @@ SnapExtensions.primitives.set(
         if (block.isCustomBlock &&
             block.definition.isGlobal &&
             block.definition.selector &&
-            !block.definition.isBootstrapped() &&
+            !block.definition.isBootstrapped()
+            
+            /* // require "blocks all the way" to be enabled, commented out
+            &&
             SpriteMorph.prototype.blocks[
                 block.definition.selector
             ].definition !== undefined
+            */
         ) {
             block.definition.bootstrap(proc.blockReceiver());
         }
