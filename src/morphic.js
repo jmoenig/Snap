@@ -12472,7 +12472,8 @@ WorldMorph.prototype.initEventListeners = function () {
     );
 
     window.cachedOnbeforeunload = window.onbeforeunload;
-    window.onbeforeunload = (evt) => {
+    this.onbeforeunloadListener = (evt) => {
+        if (!this.hasUnsavedEdits()) return;
         if (window.cachedOnbeforeunload) {
             window.cachedOnbeforeunload.call(null, evt);
         }
@@ -12485,6 +12486,12 @@ WorldMorph.prototype.initEventListeners = function () {
         // For Safari / chrome
         return msg;
     };
+     window.addEventListener("beforeunload", this.onbeforeunloadListener);
+};
+
+WorldMorph.prototype.hasUnsavedEdits = function () {
+    // app should override this and report if it has something unsaved so that user gets a warning before closing
+    return false;
 };
 
 WorldMorph.prototype.mouseDownLeft = nop;
@@ -12931,4 +12938,9 @@ WorldMorph.prototype.togglePreferences = function () {
 WorldMorph.prototype.toggleHolesDisplay = function () {
     MorphicPreferences.showHoles = !MorphicPreferences.showHoles;
     this.rerender();
+};
+
+WorldMorph.prototype.destroy = function () {
+    window.removeEventListener("onbeforeunload", this.onbeforeunloadListener);
+    WorldMorph.uber.destroy.call(this);
 };
