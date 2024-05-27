@@ -99,6 +99,7 @@
 
 ### 2024-05-27
 * blocks: fixed a rendering situation glitch for live rings
+* objects: refactored customizing palette primitives
 
 ### 2024-05-23
 * updated extensions.md

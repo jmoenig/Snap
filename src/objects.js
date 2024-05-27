@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-23';
+modules.objects = '2024-May-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -2267,70 +2267,80 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 };
 
+SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
+    // generate a custom block definition header for the primitive block entry
+    // identified by the selector - experimental for v10
+
+    var record = this.blocks[selector],
+        parts,
+        count,
+        slotName,
+        spec,
+        decl,
+        entry,
+        def;
+
+    if (!record || ['hat', 'ring'].includes(record.type)) {
+        return null;
+    }
+
+    parts = CustomBlockDefinition.prototype.parseSpec(record.spec);
+    count = 0;
+
+    // transform the spec into a definition spec with %names
+    // and populates the slot declarations
+    decl = new Map();
+    spec = parts.map(word => {
+        if (word === '%br') {
+            return '$nl';
+        } else if (word[0] === '%' && (word.length > 1)) {
+            entry = CustomBlockDefinition.prototype.declarationFor(
+                word
+            );
+            // the default values needs to be set externally (here)
+            entry[1] = record.defaults ? record.defaults[count] : null;
+            if (entry[1] instanceof Array) {
+                if (entry[1].length === 1 && isString(entry[1][0])) {
+                    // tag entry as selector so it becomes localizable
+                    entry[1] = '$_' + entry[1][0];
+                } else {
+                    // encode the array as text
+                    entry[1] = entry[1].map(v =>
+                        v.toString().trim()).join('\n').trim();
+                }
+            } else if (
+                (word === '%words' || word.startsWith('%mult')) &&
+                entry[1]
+            ) {
+                // encode the remaining values as text
+                entry[1] = record.defaults.slice(count).map(v =>
+                    v.toString()).join('\n').trim();
+            }
+            count += 1;
+            slotName = '%#' + count;
+            decl.set('#' + count, entry);
+            return slotName;
+        }
+        return word;
+    }).join(' ');
+    def = new CustomBlockDefinition(spec);
+    def.selector = selector;
+    def.primitive = selector;
+    def.usePrimitive = true;
+    def.declarations = decl;
+    def.isGlobal = true;
+    def.type = record.type;
+    def.category = record.category;
+    return def;
+};
+
 SpriteMorph.prototype.customizeBlocks = function () {
     // generate custom block definition headers for all block descriptions
     // in the blocks dictionary - experimental for v10
-    var prims = ['hat', 'ring'];
-    Object.keys(this.blocks).forEach(key => {
-        var record = this.blocks[key],
-            parts,
-            count,
-            slotName,
-            spec,
-            decl,
-            entry,
-            def;
-        if (record && !prims.includes(record.type)) {
-            parts = CustomBlockDefinition.prototype.parseSpec(record.spec);
-            count = 0;
-
-            // transform the spec into a definition spec with %names
-            // and populates the slot declarations
-            decl = new Map();
-            spec = parts.map(word => {
-                if (word === '%br') {
-                    return '$nl';
-                } else if (word[0] === '%' && (word.length > 1)) {
-                    entry = CustomBlockDefinition.prototype.declarationFor(
-                        word
-                    );
-                    // the default values needs to be set externally (here)
-                    entry[1] = record.defaults ? record.defaults[count] : null;
-                    if (entry[1] instanceof Array) {
-                        if (entry[1].length === 1 && isString(entry[1][0])) {
-                            // tag entry as selector so it becomes localizable
-                            entry[1] = '$_' + entry[1][0];
-                        } else {
-                            // encode the array as text
-                            entry[1] = entry[1].map(v =>
-                                v.toString().trim()).join('\n').trim();
-                        }
-                    } else if (
-                        (word === '%words' || word.startsWith('%mult')) &&
-                        entry[1]
-                    ) {
-                        // encode the remaining values as text
-                        entry[1] = record.defaults.slice(count).map(v =>
-                            v.toString()).join('\n').trim();
-                    }
-                    count += 1;
-                    slotName = '%#' + count;
-                    decl.set('#' + count, entry);
-                    return slotName;
-                }
-                return word;
-            }).join(' ');
-            def = new CustomBlockDefinition(spec);
-            def.selector = key;
-            def.primitive = key;
-            def.usePrimitive = true;
-            def.declarations = decl;
-            def.isGlobal = true;
-            def.type = record.type;
-            def.category = record.category;
-            SpriteMorph.prototype.blocks[key].definition = def;
-        }
-    });
+    Object.keys(this.blocks).forEach(key =>
+        SpriteMorph.prototype.blocks[key].definition =
+            this.customBlockDefinitionFor(key)
+    );
 };
 
 SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
