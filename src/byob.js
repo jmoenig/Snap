@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2023-July-14';
+modules.byob = '2024-April-17';
 
 // Declarations
 
@@ -257,6 +257,11 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite, headerOnly) {
         );
         c.body.outerContext = null;
     }
+
+    // deep copy scripts
+    c.scripts = this.scripts.map(each => each instanceof CommentMorph ?
+        each : each.fullCopy());
+
     return c;
 };
 

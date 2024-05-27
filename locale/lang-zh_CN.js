@@ -308,7 +308,7 @@ SnapTranslator.dict.zh_CN = {
     "Plain prototype labels": "普通原型标签",
     "Play": "播放",
     "Play sound": "播放声音",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "请确保您的网页浏览器是最新的，并且您的摄像头已正确配置。一些浏览器还要求您通过HTTPS访问Snap!以使用摄像头。请将浏览器地址栏中的“http://”部分替换为“https://”，然后再试一次。",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "请确保您的网页浏览器是最新的，并且您的摄像头已正确配置。一些浏览器还要求您通过HTTPS访问Snap!以使用摄像头。请将浏览器地址栏中的“http://”部分替换为“https://”，然后再试一次。",
     "Please use the verification link that was sent to your email address when you signed up.": "请使用您在注册时发送到您电子邮件地址的验证链接。",
     "Polygon": "多边形",
     "Predicate": "谓语",

@@ -291,7 +291,7 @@ SnapTranslator.dict.zh_TW = {
     "Plain prototype labels": "",
     "Play": "播放",
     "Play sound": "播放聲音",
-    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Plase replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
     "Please use the verification link that was sent to your email address when you signed up.": "",
     "Polygon": "",
     "Predicate": "謂語",

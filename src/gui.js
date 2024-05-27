@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2023-December-12';
+modules.gui = '2024-April-24';
 
 // Declarations
 
-var SnapVersion = '9.1.1';
+var SnapVersion = '9.2.17';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -254,6 +254,10 @@ function IDE_Morph(config = {}) {
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
         noDevWarning:   bool, ignore development version incompatibility warning
+        noExitWarning:  bool, do not show a browser warning when closing the IDE
+                                with unsaved changes
+        preserveTitle:  bool, do not set the tab title dynamically to reflect
+                                the current Snap! version
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -346,6 +350,23 @@ IDE_Morph.prototype.init = function (config) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, myself = this;
 
+    window.onmessage = function (event) {
+        // make the API accessible from outside an iframe
+        var ide = myself;
+        if (!isNil(event.data.selector)) {
+            window.top.postMessage(
+                {
+                    selector: event.data.selector,
+                    response: ide[event.data.selector].apply(
+                        ide,
+                        event.data.params
+                    )
+                },
+                '*'
+            );
+        }
+    };
+
     function initUser(username) {
         sessionStorage.username = username;
         myself.controlBar.cloudButton.refresh();
@@ -420,7 +441,7 @@ IDE_Morph.prototype.openIn = function (world) {
             window.onbeforeunload = nop;
         }
         if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
+            window.onbeforeunload = window.cachedOnbeforeunload;
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
@@ -896,6 +917,12 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // disable cloud access
     if (cnf.noCloud) {
         this.cloud.disable();
+        this.fixLayout();
+    }
+
+    // disable onbeforeunload close warning
+    if (cnf.noExitWarning) {
+        window.onbeforeunload = window.cachedOnbeforeunload;
     }
 };
 
@@ -1098,9 +1125,12 @@ IDE_Morph.prototype.createControlBar = function () {
 
     // let users manually enforce re-layout when changing orientation
     // on mobile devices
+    // Leaving it out, because it's most probably unneeded
+    /*
     this.controlBar.mouseClickLeft = function () {
         this.world().fillPage();
     };
+    */
 
     this.add(this.controlBar);
 
@@ -1446,7 +1476,15 @@ IDE_Morph.prototype.createControlBar = function () {
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
+        if (myself.config.hideSettings) {
+            settingsButton.hide();
+        }
+
         projectButton.setCenter(myself.controlBar.center());
+
+        if (myself.config.noImports || myself.config.hideProjects) {
+            projectButton.hide();
+        }
 
         if (myself.cloud.disabled) {
             cloudButton.hide();
@@ -1508,8 +1546,10 @@ IDE_Morph.prototype.createControlBar = function () {
         scene = myself.scenes.at(1) !== myself.scene ?
                 ' (' + myself.scene.name + ')' : '';
         name = (myself.getProjectName() || localize('untitled'));
-        document.title = "Snap! " +
-            (myself.getProjectName() ? name : SnapVersion);
+        if (!myself.config.preserveTitle) {
+            document.title = "Snap! " +
+                (myself.getProjectName() ? name : SnapVersion);
+        }
         txt = new StringMorph(
             prefix + name +  scene + suffix,
             14,
@@ -5270,7 +5310,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2023 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2024 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -5308,7 +5348,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nBernat Romagosa: Countless contributions'
         + '\nBartosz Leper: Retina Display Support'
-        + '\nDariusz Dorożalski: Web Serial Support'
+        + '\nDariusz Dorożalski: Web Serial Support,'
+        + '\ncountless bugfixes and optimizations'
         + '\nZhenlei Jia and Dariusz Dorożalski: IME text editing'
         + '\nKen Kahn: IME support and countless other contributions'
         + '\nJosep Ferràndiz: Video Motion Detection'
@@ -5332,8 +5373,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet, Sarron, and Aleassa costumes are'
-        + '\nwatercolor paintings by Meghan Taylor and represent'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
+        + '\nare watercolor paintings by Meghan Taylor and represent'
         + '\n characters from her webcomic Prophecy of the Circle,'
         + '\nlicensed to us only for use in Snap! projects.'
         + '\nMeghan also painted the Tad costumes,'
@@ -7681,6 +7722,8 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.stage.stopVideo();
     this.setExtent(world.extent());
     Costume.prototype.maxDimensions = aPoint;
+    this.stage.stopVideo();
+    this.stage.stopProjection();
     if (this.isAnimating) {
         zoom();
     } else {
@@ -12443,7 +12486,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'and your camera is properly configured. \n\n' +
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
-    'Plase replace the "http://" part of the address\n' +
+    'Please replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation

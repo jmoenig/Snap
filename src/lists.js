@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2023 by Jens Mönig and Brian Harvey
+    Copyright (C) 2024 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@ Context, ZERO, WHITE*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2023-November-24';
+modules.lists = '2024-April-05';
 
 var List;
 var ListWatcherMorph;
@@ -119,12 +119,13 @@ var ListWatcherMorph;
     size()                  - count the number of all atomic elements
     rank()                  - answer the number of my dimensions
     shape()                 - answer a list of the max size for each dimension
-    width()                 - ansswer the maximum length of my columns, if any
+    width()                 - answer the maximum length of my columns, if any
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     columns()               - answer a 2D list with rows turned into columns
     transpose()             - answer the matrix transpose over all dimensions
     reversed()              - answer a reversed shallow copy of the list
+    ssum()                  - answer the sum of all number leafs
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
@@ -470,12 +471,20 @@ List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var first, select;
+    var first, rank, dim, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    if (indices.rank() === 1) {
+    rank = indices.quickRank();
+    if (rank === 1) {
         return indices.map(i => this.lookup(i));
+    }
+    if (rank > 2) {
+        return indices.map(i => this.query(i));
+    }
+    dim = indices.length();
+    if (dim > 10) {
+        throw new Error('too many dimensions (' + dim + ')?');
     }
     first = indices.at(1);
     if (first instanceof List) {
@@ -485,9 +494,12 @@ List.prototype.query = function (indices) {
     } else {
         select = new List([first]);
     }
-    return select.map(i => this.lookup(i)).map(
-            e => e instanceof List? e.query(indices.cdr()) : e
-    );
+    return select.map(i => this.lookup(i)).map(e => {
+        let rest = indices.cdr();
+        return e instanceof List ? e.query(rest)
+            : (rest.isEmpty() ? e
+                : new List([e]).query(rest));
+    });
 };
 
 List.prototype.slice = function (indices) {
@@ -633,6 +645,13 @@ List.prototype.ravel = function () {
     return new List(all);
 };
 
+List.prototype.ssum = function () {
+    // answer the sum of all number leafs
+    var ss = 0;
+    this.deepMap(leaf => ss += (+leaf || 0));
+    return ss;
+};
+
 List.prototype.rank = function () {
     // answer the number of my dimensions
     // traverse the whole structure for irregularly shaped nested lists
@@ -647,6 +666,14 @@ List.prototype.rank = function () {
         }
     }
     return rank;
+};
+
+List.prototype.quickRank = function () {
+    // answer the number of my dimensions
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var item = this.at(1);
+    return item instanceof List ? item.quickRank() + 1 : 1;
 };
 
 List.prototype.shape = function () {
@@ -665,6 +692,19 @@ List.prototype.shape = function () {
         shp.add(max);
     }
     return shp;
+};
+
+List.prototype.quickShape = function () {
+    // answer a list of each dimension's size
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var shp = [],
+        item = this;
+    while (item instanceof List) {
+        shp.push(item.length());
+        item = item.at(1);
+    }
+    return new List(shp);
 };
 
 List.prototype.getDimension = function (rank = 0) {
@@ -711,7 +751,7 @@ List.prototype.flatten = function () {
 };
 
 List.prototype.transpose = function () {
-    if (this.rank() > 2) {
+    if (this.quickRank() > 2) {
         return this.strideTranspose();
     }
     return this.columns();
@@ -754,6 +794,7 @@ List.prototype.reshape = function (dimensions) {
     if (dim.isEmpty()) {return src[0]; }
 
     size = dim.itemsArray().reduce((a, b) => a * b);
+    if (size === Infinity) {return new List(); }
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {

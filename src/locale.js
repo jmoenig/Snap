@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2023-December-12';
+modules.locale = '2024-April-17';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -323,11 +323,11 @@ SnapTranslator.dict.nl = {
     'language_name':
         'Nederlands',
     'language_translator':
-        'Joek van Montfort, Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn',
+        'Joek van Montfort, Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn, Jule Rapp, Nykki Rusticus',
     'translator_e-mail':
-        'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl',
+        'joek@xota.nl, sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl, zonykki@gmail.com',
     'last_changed':
-        '2022-12-01'
+        '2024-04-15'
 };
 
 SnapTranslator.dict.pl = {
@@ -624,7 +624,7 @@ SnapTranslator.dict.ua = {
     'translator_e-mail':
         'kseryj@gmail.com',
     'last_changed':
-        '2018-08-21'
+        '2024-01-19'
 };
 
 SnapTranslator.dict.sk = {
@@ -664,11 +664,11 @@ SnapTranslator.dict.ti = {
 	'language_name':
         'ትግርኛ',
     'language_translator':
-        'Tesfaldet Negash, Heran Sium',
+        'ተስፋልደት ነጋሽ እያሱ, ሄራን ተወልደ ስዩም',
     'translator_e-mail':
         'winna.programming@gmail.com',
     'last_changed':
-        '2023-05-29'
+        '2024-03-25'
 };
 
 SnapTranslator.dict.hy = {
