@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-May-23';
+modules.byob = '2024-May-27';
 
 // Declarations
 
@@ -1113,11 +1113,6 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
                 stage.globalBlocks.splice(idx, 1);
             }
             ide = rcvr.parentThatIsA(IDE_Morph);
-
-            /* // refreshing has issues - commented out for now
-            SpriteMorph.prototype.refreshBoostrappedBlocks(ide?.serializer);
-            */
-
             if (ide) {
                 ide.flushBlocksCache();
                 ide.categories.refreshEmpty();

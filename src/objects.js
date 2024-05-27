@@ -2337,10 +2337,12 @@ SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
 SpriteMorph.prototype.customizeBlocks = function () {
     // generate custom block definition headers for all block descriptions
     // in the blocks dictionary - experimental for v10
-    Object.keys(this.blocks).forEach(key =>
-        SpriteMorph.prototype.blocks[key].definition =
-            this.customBlockDefinitionFor(key)
-    );
+    Object.keys(this.blocks).forEach(key => {
+        if (isNil(SpriteMorph.prototype.blocks[key].definition)) {
+            SpriteMorph.prototype.blocks[key].definition =
+                this.customBlockDefinitionFor(key);
+        }
+    });
 };
 
 SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
@@ -2359,23 +2361,6 @@ SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
     });
 };
 
-SpriteMorph.prototype.primitify = function () {
-    // experimental dev helper
-    Object.keys(this.blocks).forEach(key => {
-        var record = this.blocks[key],
-            scr;
-        if (record instanceof CustomBlockDefinition) {
-            scr = record.body?.expression;
-            record.primitive = key;
-            if (scr instanceof BlockMorph) {
-                scr = scr.fullCopy();
-                scr.setPosition(new Point(10, 98));
-                record.scripts = [scr];
-            }
-        }
-    });
-};
-
 SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
     this.bootstrappedBlocks().forEach(def => {
         var prim = def.body?.expression;
@@ -2389,18 +2374,6 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
         }
     });
 };
-
-/* // has issues - commented out for now
-SpriteMorph.prototype.refreshBoostrappedBlocks = function (srzlr) {
-    var serializer = srzlr || new SnapSerializer();
-    Object.keys(SpriteMorph.prototype.blocks).forEach(selector => {
-        var dta = SpriteMorph.prototype.blocks[selector].definition;
-        if (dta instanceof CustomBlockDefinition) {
-            dta.refresh(serializer);
-        }
-    });
-};
-*/
 
 SpriteMorph.prototype.bootstrappedBlocks = function () {
     var boot = [];

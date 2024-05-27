@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-May-23';
+modules.store = '2024-May-27';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2539,16 +2539,6 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                         : ''
     );
 };
-
-/* // refreshing has issues, this use case is currently obsolete
-CustomBlockDefinition.prototype.refresh = function (serializer) {
-    if (this.body) {
-        this.body.expression = serializer.loadScript(
-            serializer.parse(serializer.store(this.body.expression))
-        );
-    }
-};
-*/
 
 // Scripts - Inputs
 
