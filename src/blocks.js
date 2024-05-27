@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-May-09';
+modules.blocks = '2024-May-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8011,6 +8011,8 @@ RingMorph.prototype.init = function () {
 RingMorph.prototype.render = function (ctx) {
     var slot = this.inputs()[0],
         pos = this.position();
+
+    if (!slot) {return; }
 
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();

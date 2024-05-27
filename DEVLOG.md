@@ -90,11 +90,15 @@
     * fixed referencing system drop-down menus in metaprogramming
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
     * only capture the caller once in repeating recursive calls
+    * fixed a rendering situation glitch for live rings
 * **Documentation Updates:**
     * new Snap! Lisp Syntax documentation
     * updated extensions.md
 * **Translation Updates:**
     * German
+
+### 2024-05-27
+* blocks: fixed a rendering situation glitch for live rings
 
 ### 2024-05-23
 * updated extensions.md
