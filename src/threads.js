@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-May-23';
+modules.threads = '2024-May-28';
 
 var ThreadManager;
 var Process;
@@ -8337,9 +8337,19 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     this.assertType(block, types);
     expr = block.expression;
     if (!expr.isCustomBlock) {
-        throw new Error('expecting a custom block\nbut getting a primitive');
+        if (choice === 'definition') {
+            rcvr.customizePrimitive(expr.selector);
+            def = SpriteMorph.prototype.blocks[expr.selector].definition;
+        } else {
+            throw new Error(
+                'expecting a custom block\nbut getting a primitive'
+            );
+        }
+    } else {
+        def = expr.isGlobal ?
+            expr.definition
+            : rcvr.getMethod(expr.semanticSpec);
     }
-    def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
     oldSpec = def.blockSpec();
 
     function isInUse() {

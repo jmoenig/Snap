@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-27';
+modules.objects = '2024-May-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -2337,12 +2337,34 @@ SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
 SpriteMorph.prototype.customizeBlocks = function () {
     // generate custom block definition headers for all block descriptions
     // in the blocks dictionary - experimental for v10
-    Object.keys(this.blocks).forEach(key => {
-        if (isNil(SpriteMorph.prototype.blocks[key].definition)) {
-            SpriteMorph.prototype.blocks[key].definition =
-                this.customBlockDefinitionFor(key);
-        }
+    Object.keys(SpriteMorph.prototype.blocks).forEach(key =>
+        this.customizePrimitive(key));
+    this.parentThatIsA(IDE_Morph).refreshPalette();
+};
+
+SpriteMorph.prototype.customizePrimitive = function (selector) {
+    var blocks = SpriteMorph.prototype.blocks,
+        def, prot;
+
+    if (blocks[selector].definition instanceof CustomBlockDefinition) {
+        return;
+    }
+    def = SpriteMorph.prototype.customBlockDefinitionFor(selector);
+    if (isNil(def)) {return; }
+    blocks[selector].definition = def;
+    prot = Object.getPrototypeOf(def.blockInstance());
+    this.allPrimitiveBlockInstances(selector).forEach(block => {
+        Object.setPrototypeOf(block, prot);
+        block.selector = def.primitive || 'evaluateCustomBlock';
+        block.definition = def;
+        block.isCustomBlock = true;
+        block.isGlobal = def.isGlobal;
+        block.isPrototype = false;
+        block.variables = null;
+        block.initializeVariables();
+        block.refresh();
     });
+    this.parentThatIsA(IDE_Morph).flushBlocksCache();
 };
 
 SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
@@ -8348,6 +8370,104 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
     }
 };
 
+// SpriteMorph enumerating primitive block instances
+
+SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
+    // answer an Array of all block instances in the system that are
+    // primitive blocks (i.e. non-custom ones) with the given selector
+    var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        charted = [],
+        blocks = [];
+
+    function collect(morph) {
+        if (morph instanceof BlockMorph &&
+            !morph.isCustomBlock &&
+            morph.selector === selector
+        ) {
+            blocks.push(morph);
+        }
+    }
+
+    function scanVariables(varFrame) {
+        varFrame.names().forEach(vname => {
+            var value = varFrame.getVar(vname);
+            if (value instanceof Context) {
+                scanContext(value);
+            } else if (value instanceof List) {
+                scanList(value);
+            }
+        });
+    }
+
+    function scanContext(context) {
+        if (!charted.includes(context)) {
+            charted.push(context);
+        }
+        if (context.expression instanceof BlockMorph) {
+            context.expression.allChildren().forEach(collect);
+        }
+    }
+
+    function scanList(list) {
+        if (!charted.includes(list)) {
+            charted.push(list);
+            if (!list.canBeJSON()) {
+                list.map(each => {
+                    if (each instanceof Context) {
+                        scanContext(each);
+                    } else if (each instanceof List) {
+                        scanList(each);
+                    }
+                });
+            }
+        }
+    }
+
+    ide.sprites.asArray().forEach(sprite => {
+        sprite.scripts.allChildren().forEach(collect);
+        sprite.customBlocks.forEach(def => {
+            def.scripts.forEach(eachScript =>
+                eachScript.allChildren().forEach(collect)
+            );
+            if (def.body) {
+                def.body.expression.allChildren().forEach(collect);
+            }
+        });
+        scanVariables(sprite.variables);
+        if (sprite.solution) {
+            sprite.solution.scripts.allChildren().forEach(collect);
+            sprite.solution.customBlocks.forEach(def => {
+                def.scripts.forEach(eachScript =>
+                    eachScript.allChildren().forEach(collect)
+                );
+                if (def.body) {
+                    def.body.expression.allChildren().forEach(collect);
+                }
+            });
+            scanVariables(sprite.solution.variables);
+        }
+    });
+
+    stage.globalBlocks.forEach(def => {
+        def.scripts.forEach(eachScript =>
+            eachScript.allChildren().forEach(collect)
+        );
+        if (def.body) {
+            def.body.expression.allChildren().forEach(collect);
+        }
+    });
+    scanVariables(stage.globalVariables());
+    stage.threads.processes.forEach(proc => {
+        if (proc.context instanceof Context) {
+            scanContext(proc.context);
+        }
+    });
+
+    return blocks;
+
+};
+
 // SpriteMorph controlling generic WHEN hats
 
 SpriteMorph.prototype.pauseGenericHatBlocks = function () {
@@ -11750,6 +11870,15 @@ StageMorph.prototype.allIndependentInvocationsOf
 
 StageMorph.prototype.allDependentInvocationsOf
     = SpriteMorph.prototype.allInvocationsOf;
+
+StageMorph.prototype.customizeBlocks =
+    SpriteMorph.prototype.customizeBlocks;
+
+StageMorph.prototype.customizePrimitive =
+    SpriteMorph.prototype.customizePrimitive;
+
+StageMorph.prototype.allPrimitiveBlockInstances =
+    SpriteMorph.prototype.allPrimitiveBlockInstances;
 
 // StageMorph inheritance support - general
 

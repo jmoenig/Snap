@@ -97,6 +97,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-05-28
+* threads, objects, gui: customize primitives in place
+
 ### 2024-05-27
 * blocks: fixed a rendering situation glitch for live rings
 * objects: refactored customizing palette primitives

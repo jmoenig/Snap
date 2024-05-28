@@ -87,7 +87,7 @@ CustomBlockDefinition*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-21';
+modules.gui = '2024-May-28';
 
 // Declarations
 
@@ -4388,18 +4388,16 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
         menu.addItem(
             'Customize primitives',
-            () => this.userCustomizePalette(() =>
-                SpriteMorph.prototype.customizeBlocks()),
+            () => this.stage.customizeBlocks(),
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
         );
         menu.addItem(
             'Bootstrap palette',
-            () => this.userCustomizePalette(() => {
-                SpriteMorph.prototype.customizeBlocks();
-                this.bootstrapCustomizedPrimitives();
-            }),
+            () => {
+                this.stage.customizeBlocks();
+                this.bootstrapCustomizedPrimitives();},
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
