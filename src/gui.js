@@ -4395,10 +4395,9 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
         menu.addItem(
             'Bootstrap palette',
-            () => {
-                this.stage.customizeBlocks();
-                this.bootstrapCustomizedPrimitives();
-            },
+            () => this.bootstrapCustomizedPrimitives(
+                this.stage.customizeBlocks()
+            ),
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
@@ -4431,8 +4430,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             if (SpriteMorph.prototype.isBlocksAllTheWay()) {
                 this.userCustomizePalette(nop);
             } else {
-                this.stage.customizeBlocks();
-                this.bootstrapCustomizedPrimitives();
+                this.bootstrapCustomizedPrimitives(
+                    this.stage.customizeBlocks()
+                );
             }
         },
         SpriteMorph.prototype.isBlocksAllTheWay(),
@@ -4938,8 +4938,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.bootstrapCustomizedPrimitives = function () {
-    SpriteMorph.prototype.bootstrapCustomizedPrimitives(this.stage);
+IDE_Morph.prototype.bootstrapCustomizedPrimitives = function (skipped) {
+    SpriteMorph.prototype.bootstrapCustomizedPrimitives(this.stage, skipped);
 };
 
 IDE_Morph.prototype.projectMenu = function () {

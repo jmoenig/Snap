@@ -2346,9 +2346,14 @@ SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
 SpriteMorph.prototype.customizeBlocks = function () {
     // generate custom block definition headers for all block descriptions
     // in the blocks dictionary - experimental for v10
-    Object.keys(SpriteMorph.prototype.blocks).forEach(key =>
-        this.customizePrimitive(key));
+    var skipped = [];
+    Object.keys(SpriteMorph.prototype.blocks).forEach(key => {
+        if (!this.customizePrimitive(key)) {
+            skipped.push(key);
+        }
+    });
     this.parentThatIsA(IDE_Morph).refreshPalette();
+    return skipped;
 };
 
 SpriteMorph.prototype.customizePrimitive = function (selector, withCode) {
@@ -2356,10 +2361,10 @@ SpriteMorph.prototype.customizePrimitive = function (selector, withCode) {
         def, prot, proc;
 
     if (info.definition instanceof CustomBlockDefinition) {
-        return;
+        return false;
     }
     def = SpriteMorph.prototype.customBlockDefinitionFor(selector);
-    if (isNil(def)) {return; }
+    if (isNil(def)) {return false; }
     info.definition = def;
     prot = Object.getPrototypeOf(def.blockInstance());
     this.allPrimitiveBlockInstances(selector).forEach(block => {
@@ -2379,9 +2384,13 @@ SpriteMorph.prototype.customizePrimitive = function (selector, withCode) {
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
     }
     this.parentThatIsA(IDE_Morph).flushBlocksCache();
+    return true;
 };
 
-SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
+SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (
+    stage,
+    skipped = []
+) {
     var proc = new Process(null, stage);
 
     // cache the current palette
@@ -2389,6 +2398,7 @@ SpriteMorph.prototype.bootstrapCustomizedPrimitives = function (stage) {
     proc.context.accumulator = proc.reportGet('blocks');
 
     Object.keys(this.blocks).forEach(sel => {
+        if (skipped.includes(sel)) {return; }
         let info = this.blocks[sel],
             def = info.definition;
         if (info.src && def) {
