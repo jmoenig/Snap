@@ -100,6 +100,7 @@
 ### 2024-05-28
 * threads, objects, gui: customize primitives in place
 * threads, objects: include blocks code when customizing primitives
+* threads: return the alternative blocks code when querying the definition of a non-customized primitive
 
 ### 2024-05-27
 * blocks: fixed a rendering situation glitch for live rings

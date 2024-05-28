@@ -7843,10 +7843,16 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     new Context();
             }
         } else {
-            prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
-            prim.inputs()[0].setContents(true);
-            prim.inputs()[1].setContents(expr.selector);
-            body = prim.reify();
+            prim = SpriteMorph.prototype.blocks[expr.selector].src;
+            if (prim) {
+                this.context.accumulator = this.reportGet('blocks');
+                body = this.assemble(this.parseCode(prim));
+            } else {
+                prim = SpriteMorph.prototype.blockForSelector('doPrimitive');
+                prim.inputs()[0].setContents(true);
+                prim.inputs()[1].setContents(expr.selector);
+                body = prim.reify();
+            }
         }
         if (body instanceof Context &&
             (!body.expression || prim) &&
