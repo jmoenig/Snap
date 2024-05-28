@@ -2267,6 +2267,15 @@ SpriteMorph.prototype.initBlocks = function () {
     };
 };
 
+SpriteMorph.prototype.isBlocksAllTheWay = function () {
+    var excluded = ['hat', 'ring'];
+    return Object.keys(this.blocks).every(selector => {
+        var record = this.blocks[selector];
+        return record.definition instanceof CustomBlockDefinition ||
+            excluded.includes(record.type);
+    });
+};
+
 SpriteMorph.prototype.customBlockDefinitionFor = function (selector) {
     // generate a custom block definition header for the primitive block entry
     // identified by the selector - experimental for v10

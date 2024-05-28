@@ -4397,7 +4397,8 @@ IDE_Morph.prototype.settingsMenu = function () {
             'Bootstrap palette',
             () => {
                 this.stage.customizeBlocks();
-                this.bootstrapCustomizedPrimitives();},
+                this.bootstrapCustomizedPrimitives();
+            },
             'EXPERIMENTAL - overload primitives\n' +
                 'with custom block definitions',
             new Color(100, 0, 0)
@@ -4426,16 +4427,15 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addLine();
     addPreference(
         'Blocks all the way',
-        () => this.userCustomizePalette(
-            SpriteMorph.prototype.blocks.forward.definition
-                instanceof CustomBlockDefinition ? nop
-            : () => {
-                SpriteMorph.prototype.customizeBlocks();
+        () => {
+            if (SpriteMorph.prototype.isBlocksAllTheWay()) {
+                this.userCustomizePalette(nop);
+            } else {
+                this.stage.customizeBlocks();
                 this.bootstrapCustomizedPrimitives();
             }
-        ),
-        SpriteMorph.prototype.blocks.forward.definition instanceof
-            CustomBlockDefinition,
+        },
+        SpriteMorph.prototype.isBlocksAllTheWay(),
         'uncheck to disable editing primitives\n' +
             'in the palette as custom blocks',
         'check to edit primitives\nin the palette as custom blocks'
