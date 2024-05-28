@@ -103,6 +103,7 @@
 * threads: return the alternative blocks code when querying the definition of a non-customized primitive
 * gui, objects: refactored "blocks all the way"
 * gui, objects: only bootstrap primitives that aren't already customized
+* objects, scenes: sceneified customized primitives
 
 ### 2024-05-27
 * blocks: fixed a rendering situation glitch for live rings

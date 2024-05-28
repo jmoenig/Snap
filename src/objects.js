@@ -212,8 +212,8 @@ SpriteMorph.prototype.bubbleBorder = 3;
 SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
 SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
-SpriteMorph.prototype.initBlocks = function () {
-    SpriteMorph.prototype.blocks = {
+SpriteMorph.prototype.primitiveBlocks = function () {
+    return {
         // Bootstrapping helpers
         reportHyperZip: {
             dev: true,
@@ -2265,6 +2265,16 @@ SpriteMorph.prototype.initBlocks = function () {
             code: 'video'
         }
     };
+};
+
+SpriteMorph.prototype.initBlocks = function () {
+    SpriteMorph.prototype.blocks = this.primitiveBlocks();
+};
+
+SpriteMorph.prototype.hasCustomizedPrimitives = function () {
+    return Object.keys(this.blocks).some(selector =>
+        this.blocks[selector].definition instanceof CustomBlockDefinition
+    );
 };
 
 SpriteMorph.prototype.isBlocksAllTheWay = function () {
