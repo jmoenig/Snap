@@ -8336,15 +8336,14 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
 
     this.assertType(block, types);
     expr = block.expression;
-    if (!expr.isCustomBlock) {
-        if (choice === 'definition') {
-            rcvr.customizePrimitive(expr.selector);
-            def = SpriteMorph.prototype.blocks[expr.selector].definition;
-        } else {
+    if (expr instanceof RingMorph) {
             throw new Error(
-                'expecting a custom block\nbut getting a primitive'
+                'expecting a custom block\nbut getting a ring'
             );
-        }
+    }
+    if (!expr.isCustomBlock) {
+        rcvr.customizePrimitive(expr.selector, choice !== 'definition');
+        def = SpriteMorph.prototype.blocks[expr.selector].definition;
     } else {
         def = expr.isGlobal ?
             expr.definition

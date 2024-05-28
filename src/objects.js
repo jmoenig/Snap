@@ -2342,16 +2342,16 @@ SpriteMorph.prototype.customizeBlocks = function () {
     this.parentThatIsA(IDE_Morph).refreshPalette();
 };
 
-SpriteMorph.prototype.customizePrimitive = function (selector) {
-    var blocks = SpriteMorph.prototype.blocks,
-        def, prot;
+SpriteMorph.prototype.customizePrimitive = function (selector, withCode) {
+    var info = SpriteMorph.prototype.blocks[selector],
+        def, prot, proc;
 
-    if (blocks[selector].definition instanceof CustomBlockDefinition) {
+    if (info.definition instanceof CustomBlockDefinition) {
         return;
     }
     def = SpriteMorph.prototype.customBlockDefinitionFor(selector);
     if (isNil(def)) {return; }
-    blocks[selector].definition = def;
+    info.definition = def;
     prot = Object.getPrototypeOf(def.blockInstance());
     this.allPrimitiveBlockInstances(selector).forEach(block => {
         Object.setPrototypeOf(block, prot);
@@ -2364,6 +2364,11 @@ SpriteMorph.prototype.customizePrimitive = function (selector) {
         block.initializeVariables();
         block.refresh();
     });
+    if (withCode) {
+        proc = new Process(null, this.parentThatIsA(StageMorph));
+        proc.pushContext();
+        def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    }
     this.parentThatIsA(IDE_Morph).flushBlocksCache();
 };
 
