@@ -2438,8 +2438,8 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
 SpriteMorph.prototype.bootstrappedBlocks = function () {
     var boot = [];
     Object.keys(SpriteMorph.prototype.blocks).forEach(each => {
-        if (this.blocks[each] instanceof CustomBlockDefinition) {
-            boot.push(this.blocks[each]);
+        if (this.blocks[each].definition instanceof CustomBlockDefinition) {
+            boot.push(this.blocks[each].definition);
         }
     });
     return boot;

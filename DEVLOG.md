@@ -100,6 +100,7 @@
 ### 2024-05-29
 * store: overload stored customized primitives in place
 * objects, blocks, byob: made primitives editable
+* gui, objects: refactored bootstrapped blocks
 
 ### 2024-05-28
 * threads, objects, gui: customize primitives in place

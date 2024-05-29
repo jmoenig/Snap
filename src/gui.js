@@ -80,14 +80,14 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
-CustomBlockDefinition*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
+*/
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-28';
+modules.gui = '2024-May-29';
 
 // Declarations
 
@@ -5964,13 +5964,7 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 };
 
 IDE_Morph.prototype.exportCustomizedPrimitives = function () {
-    var dict = SpriteMorph.prototype.blocks,
-        blocks = [];
-    Object.keys(dict).forEach(sel => {
-        if (dict[sel].definition instanceof CustomBlockDefinition) {
-            blocks.push(dict[sel].definition);
-        }
-    });
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks();
     if (blocks.length > 0) {
         new BlockExportDialogMorph(
             this.serializer,
@@ -5987,13 +5981,7 @@ IDE_Morph.prototype.exportCustomizedPrimitives = function () {
 };
 
 IDE_Morph.prototype.refreshCustomizedPalette = function () {
-    var dict = SpriteMorph.prototype.blocks,
-        blocks = [];
-    Object.keys(dict).forEach(sel => {
-        if (dict[sel] instanceof CustomBlockDefinition) {
-            blocks.push(dict[sel]);
-        }
-    });
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks();
     if (blocks.length > 0) {
         this.serializer.loadBlocks(this.blocksLibraryXML(blocks));
     }
