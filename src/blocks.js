@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-May-27';
+modules.blocks = '2024-May-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3308,6 +3308,11 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
+    if (!this.isCustomBlock &&
+        SpriteMorph.prototype.customBlockDefinitionFor(this.selector)
+    ) {
+        menu.addItem("edit...", "editPrimitive");
+    }
     if (this.isTemplate) {
         if (this.parent instanceof SyntaxElementMorph) { // in-line
             if (this.selector === 'reportGetVar') { // script var definition
@@ -6231,6 +6236,22 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
     }
     return null;
  };
+ 
+ // BlockMorph - editing as custom block
+ 
+BlockMorph.prototype.editPrimitive = function () {
+    var info = SpriteMorph.prototype.blocks[this.selector],
+        rcvr = this.scriptTarget(),
+        proc = new Process(null, rcvr.parentThatIsA(StageMorph)),
+        def = SpriteMorph.prototype.customBlockDefinitionFor(this.selector),
+        editor;
+    proc.pushContext();
+    def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    editor = new BlockEditorMorph(def, rcvr);
+    editor.primitive = this.selector;
+    editor.popUp();
+    editor.changed();
+};
  
 // CommandBlockMorph ///////////////////////////////////////////////////
 

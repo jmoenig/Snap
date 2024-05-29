@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-28';
+modules.objects = '2024-May-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -2366,14 +2366,18 @@ SpriteMorph.prototype.customizeBlocks = function () {
     return skipped;
 };
 
-SpriteMorph.prototype.customizePrimitive = function (selector, withCode) {
+SpriteMorph.prototype.customizePrimitive = function (
+    selector,
+    withCode,
+    ersatz // optional alternative definition, e.g. when editing a primitive
+) {
     var info = SpriteMorph.prototype.blocks[selector],
         def, prot, proc;
 
     if (info.definition instanceof CustomBlockDefinition) {
         return false;
     }
-    def = SpriteMorph.prototype.customBlockDefinitionFor(selector);
+    def = ersatz || SpriteMorph.prototype.customBlockDefinitionFor(selector);
     if (isNil(def)) {return false; }
     info.definition = def;
     prot = Object.getPrototypeOf(def.blockInstance());

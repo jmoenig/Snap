@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-May-27';
+modules.byob = '2024-May-29';
 
 // Declarations
 
@@ -3113,6 +3113,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.definition = definition;
     this.translations = definition.translationsAsText();
     this.handle = null;
+    this.primitive = null; // optional selector when editing a primitive block
 
     // initialize inherited properties:
     BlockEditorMorph.uber.init.call(
@@ -3227,6 +3228,13 @@ BlockEditorMorph.prototype.accept = function (origin) {
     // check DialogBoxMorph comment for accept()
     if (origin instanceof CursorMorph) {return; }
     if (this.action) {
+        if (this.primitive) {
+            this.target.customizePrimitive(
+                this.primitive,
+                false,
+                this.definition
+            );
+        }
         if (typeof this.target === 'function') {
             if (typeof this.action === 'function') {
                 this.target.call(this.environment, this.action.call());
