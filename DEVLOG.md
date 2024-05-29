@@ -97,6 +97,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-05-29
+* store: overload stored customized primitives in place
+
 ### 2024-05-28
 * threads, objects, gui: customize primitives in place
 * threads, objects: include blocks code when customizing primitives

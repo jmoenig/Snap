@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-May-27';
+modules.store = '2024-May-29';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -720,7 +720,7 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     }
     model.primitives = model.childNamed('primitives');
     if (model.primitives) {
-        this.loadCustomizedPrimitives(stage, model.primitives);
+        this.loadCustomizedPrimitives(stage, model.primitives, targetStage);
     }
     varModel = model.childNamed('variables');
     if (varModel) {
@@ -1120,7 +1120,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
 
 SnapSerializer.prototype.loadCustomizedPrimitives = function (
     object,
-    element
+    element,
+    stage
 ) {
     // private - overload existing customized primitives
     element.children.forEach(child => {
@@ -1132,8 +1133,12 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         }
         definition = SpriteMorph.prototype.blocks[sel].definition;
         if (!(definition instanceof CustomBlockDefinition)) {
-            console.log('unable to overload primitive "' + sel + '"');
-            return;
+            stage.customizePrimitive(sel);
+            definition = SpriteMorph.prototype.blocks[sel].definition;
+            if (!(definition instanceof CustomBlockDefinition)) {
+                console.log('unable to overload primitive "' + sel + '"');
+                return;
+            }
         }
         definition.spec = child.attributes.s || '';
         definition.receiver = object || null;
