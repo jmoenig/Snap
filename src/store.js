@@ -523,12 +523,6 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
         );
     }
 
-    model.primitives = model.scene.childNamed('primitives');
-    if (model.primitives && !this.noPrims) {
-        this.loadCustomizedPrimitives(scene.stage, model.primitives);
-        scene.blocks = SpriteMorph.prototype.blocks;
-    }
-
     model.globalBlocks = model.scene.childNamed('blocks');
     if (model.globalBlocks) {
         this.loadCustomBlocks(scene.stage, model.globalBlocks, true);
@@ -539,6 +533,12 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
         );
     }
     this.loadObject(scene.stage, model.stage);
+
+    model.primitives = model.scene.childNamed('primitives');
+    if (model.primitives && !this.noPrims) {
+        this.loadCustomizedPrimitives(scene.stage, model.primitives);
+        scene.blocks = SpriteMorph.prototype.blocks;
+    }
 
     /* Sprites */
 
