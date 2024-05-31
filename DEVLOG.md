@@ -100,6 +100,7 @@
 ### 2024-05-31
 * store: update all block instances when importing customized primitives
 * store: made all "Undefined!" blocks gray
+* store, objects, gui: save & restore customized primitives in projects 
 
 ### 2024-05-29
 * store: overload stored customized primitives in place

@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-29';
+modules.gui = '2024-May-31';
 
 // Declarations
 
@@ -6523,37 +6523,37 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     );
 };
 
-IDE_Morph.prototype.openProjectString = function (str, callback) {
+IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
     var msg;
     if (this.bulkDropInProgress || this.isAddingScenes) {
-            this.rawOpenProjectString(str);
+            this.rawOpenProjectString(str, noPrims);
             if (callback) {callback(); }
             return;
     }
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
-            this.rawOpenProjectString(str);
+            this.rawOpenProjectString(str, noPrims);
             msg.destroy();
             if (callback) {callback(); }
         }
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str) {
+IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.openProject(
-                this.serializer.load(str, this)
+                this.serializer.load(str, this, noPrims)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
         this.openProject(
-            this.serializer.load(str, this)
+            this.serializer.load(str, this, noPrims)
         );
     }
     this.autoLoadExtensions();
@@ -6930,7 +6930,8 @@ IDE_Morph.prototype.openProjectName = function (name) {
     }
 };
 
-IDE_Morph.prototype.openProject = function (project) {
+IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
+    var scn = project.currentScene || project.scenes.at(1);
     if (this.isAddingScenes) {
         project.scenes.itemsArray().forEach(scene => {
             scene.name = this.newSceneName(scene.name, scene);
@@ -6940,8 +6941,11 @@ IDE_Morph.prototype.openProject = function (project) {
         this.scenes = project.scenes;
     }
     this.performerMode = false;
+    if (purgeCustomizedPrims) {
+        scn.blocks = SpriteMorph.prototype.primitiveBlocks();
+    }
     this.switchToScene(
-        project.currentScene || project.scenes.at(1),
+        scn,
         true,  // refresh album
         null, // msg
         null, // data
@@ -8026,7 +8030,7 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     this.categories.refreshEmpty();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData);
+    this.openProjectString(projectData, null, true); // no prims
 };
 
 // IDE_Morph cloud interface

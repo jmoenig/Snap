@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-29';
+modules.objects = '2024-May-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -2372,6 +2372,7 @@ SpriteMorph.prototype.customizePrimitive = function (
     ersatz // optional alternative definition, e.g. when editing a primitive
 ) {
     var info = SpriteMorph.prototype.blocks[selector],
+        ide = this.parentThatIsA(IDE_Morph),
         def, prot, proc;
 
     if (info.definition instanceof CustomBlockDefinition) {
@@ -2397,7 +2398,9 @@ SpriteMorph.prototype.customizePrimitive = function (
         proc.pushContext();
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
     }
-    this.parentThatIsA(IDE_Morph).flushBlocksCache();
+    if (ide) {
+        ide.flushBlocksCache();
+    }
     return true;
 };
 
@@ -8462,6 +8465,7 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
         }
     }
 
+    if (ide) { // +++
     ide.sprites.asArray().forEach(sprite => {
         sprite.scripts.allChildren().forEach(collect);
         sprite.customBlocks.forEach(def => {
@@ -8486,6 +8490,7 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
             scanVariables(sprite.solution.variables);
         }
     });
+    }
 
     stage.globalBlocks.forEach(def => {
         def.scripts.forEach(eachScript =>
