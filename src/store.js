@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-May-29';
+modules.store = '2024-May-31';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1128,6 +1128,13 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         var definition, names, inputs, vars, header, code, trans, comment, i,
             sel = child.attributes.selector;
 
+        function isMajorTypeChange(oldType) {
+            var rep = ['reporter', 'predicate'],
+                type = definition.type;
+            return (type === 'command' && rep.includes(oldType)) ||
+                (oldType == 'command' && rep.includes(type));
+        }
+
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -1222,6 +1229,24 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
             child.childNamed('script'),
             child.childNamed('scripts')
         );
+
+        if (stage) { // update all instances
+            stage.allBlockInstances(definition).reverse().forEach(
+                block => block.refresh()
+            );
+            stage.allContextsUsing(definition).forEach(
+                context => {
+                    if (context.expression.isCustomBlock &&
+                        context.expression.isUnattached() &&
+                        isMajorTypeChange(context.expression.type())
+                    ) {
+                        context.expression = definition.blockInstance();
+                    }
+                    context.changed();
+                }
+            );
+        }
+
     });
 };
 

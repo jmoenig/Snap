@@ -97,6 +97,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-05-31
+* store: update all block instances when importing customized primitives
+
 ### 2024-05-29
 * store: overload stored customized primitives in place
 * objects, blocks, byob: made primitives editable
