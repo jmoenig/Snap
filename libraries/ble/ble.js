@@ -5,14 +5,13 @@ function BLEController (stage) {
 BLEController.prototype.init = function (stage) {
     this.stage = stage;
     this.device = undefined;
-    this.service = undefined;
     this.rx_char = undefined;
     this.sendInProgress = false;
     this.lastReceiveTime = Date.now();
     this.buffer = [];
     this.snapBLEprocessBlockDef =
         this.stage.globalBlocks.find(
-            def => def.spec == '__process_ble_data__'
+            def => def.spec == '__mb_process_data__'
         );
 };
 
@@ -29,7 +28,7 @@ BLEController.prototype.connect = async function (serviceUUID, rxUUIX, txUUID) {
     );
 
     const server = await this.device.gatt.connect();
-    this.service = await server.getPrimaryService(serviceUUID);
+    const service = await server.getPrimaryService(serviceUUID);
     const tx_char = await this.service.getCharacteristic(txUUID);
     this.rx_char = await this.service.getCharacteristic(rxUUIX);
     await tx_char.startNotifications();
@@ -128,21 +127,24 @@ SnapExtensions.primitives.set(
     'ble_write(data)',
     function (data) {
         var ble = this.parentThatIsA(StageMorph).ble;
-        // Write the given data (a Uint8Array) and return the number of bytes
-        // written.
-        var data = new Uint8Array(data.itemsArray());
-        if (ble.rx_char == undefined) {
-            throw TypeError("Not connected");
+        if (ble) {
+            // Write the given data (a Uint8Array) and return the number of
+            // bytes written.
+            var data = new Uint8Array(data.itemsArray());
+            if (ble.rx_char == undefined) {
+                throw TypeError("Not connected");
+            }
+            if (ble.sendInProgress) {
+                return 0;
+            }
+            var byteCount = 
+                (data.length > BLEController.BLE_PACKET_LEN) ?
+                BLEController.BLE_PACKET_LEN :
+                data.length;
+            ble.write(data.subarray(0, byteCount));
+            return byteCount;
         }
-        if (ble.sendInProgress) {
-            return 0;
-        }
-        var byteCount = 
-            (data.length > BLEController.BLE_PACKET_LEN) ?
-            BLEController.BLE_PACKET_LEN :
-            data.length;
-        ble.write(data.subarray(0, byteCount));
-        return byteCount;
+        return 0;
     }
 );
 

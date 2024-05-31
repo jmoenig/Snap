@@ -1358,7 +1358,29 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'srl_open(baud, buffer)',
     function (baud, buf, proc) {
-        var acc = proc.context.accumulator;
+        var acc = proc.context.accumulator,
+            stage = this.parentThatIsA(StageMorph),
+            snapProcessBlockDef =
+            stage.globalBlocks.find(
+                def => def.spec == '__mb_process_data__'
+            );
+
+        function readCallback (port) {
+            var block = snapProcessBlockDef.blockInstance();
+            if (block && port?.writable) {
+                block.parent = stage;
+                try {
+                    invoke(
+                        block,
+                        null,  // args
+                        stage  // receiver
+                    );
+                } catch (err) {
+                    // do nothing
+                }
+            }
+            setTimeout(function() { readCallback(port); }, 25);
+        };
 
         async function forceClose(port){
             try {
@@ -1394,6 +1416,9 @@ SnapExtensions.primitives.set(
         } else if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
+            }
+            if (snapProcessBlockDef) {
+                setTimeout(function(){ readCallback(acc.result); }, 25); 
             }
             return acc.result;
         }
