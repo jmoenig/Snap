@@ -1,4 +1,4 @@
-var snapVersion = '10-240521-dev',
+var snapVersion = '10-240531-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -114,6 +114,7 @@ var snapVersion = '10-240521-dev',
         'libraries/colors.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
+        'libraries/embroidery_module.xml',
         'libraries/frequency_distribution_module.xml',
         'libraries/httpBlocks.xml',
         'libraries/HummingbirdBlocks.xml',
