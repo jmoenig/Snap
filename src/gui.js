@@ -4379,6 +4379,24 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     if (shiftClicked) {
         menu.addLine();
+        addPreference(
+            'Blocks all the way',
+            () => {
+                if (SpriteMorph.prototype.isBlocksAllTheWay()) {
+                    this.userCustomizePalette(nop);
+                } else {
+                    this.bootstrapCustomizedPrimitives(
+                        this.stage.customizeBlocks()
+                    );
+                }
+            },
+            SpriteMorph.prototype.isBlocksAllTheWay(),
+            'uncheck to disable editing primitives\n' +
+                'in the palette as custom blocks',
+            'check to edit primitives\nin the palette as custom blocks',
+            new Color(100, 0, 0)
+
+        );
         menu.addItem(
             'Primitives palette',
             () => this.userCustomizePalette(),
@@ -4424,22 +4442,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
-    addPreference(
-        'Blocks all the way',
-        () => {
-            if (SpriteMorph.prototype.isBlocksAllTheWay()) {
-                this.userCustomizePalette(nop);
-            } else {
-                this.bootstrapCustomizedPrimitives(
-                    this.stage.customizeBlocks()
-                );
-            }
-        },
-        SpriteMorph.prototype.isBlocksAllTheWay(),
-        'uncheck to disable editing primitives\n' +
-            'in the palette as custom blocks',
-        'check to edit primitives\nin the palette as custom blocks'
-    );
     addPreference(
         'JavaScript extensions',
         () => {
