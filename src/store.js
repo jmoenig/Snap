@@ -1524,7 +1524,8 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
     var block = isReporter ? new ReporterBlockMorph()
             : new CommandBlockMorph();
     block.selector = 'errorObsolete';
-    block.color = new Color(200, 0, 20);
+    block.category = 'other';
+    block.color = SpriteMorph.prototype.blockColor.other;
     block.setSpec('Undefined!');
     block.isDraggable = true;
     return block;
