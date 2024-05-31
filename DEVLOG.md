@@ -66,6 +66,7 @@
     * New Search feature for the library browser
     * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
     * added pen trails export options to the project ("file") menu
+    * new experimental "Embroidery" library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -102,6 +103,7 @@
 * store: made all "Undefined!" blocks gray
 * store, objects, gui: save & restore customized primitives in projects
 * gui: took out "Blocks all the way" setting (because all blocks are now always "blocks all the way")
+* new experimental "Embroidery" library
 
 ### 2024-05-29
 * store: overload stored customized primitives in place
