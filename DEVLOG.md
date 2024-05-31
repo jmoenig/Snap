@@ -104,6 +104,7 @@
 * store, objects, gui: save & restore customized primitives in projects
 * gui: took out "Blocks all the way" setting (because all blocks are now always "blocks all the way")
 * new experimental "Embroidery" library
+* incremented dev version
 
 ### 2024-05-29
 * store: overload stored customized primitives in place
