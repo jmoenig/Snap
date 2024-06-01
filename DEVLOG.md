@@ -98,6 +98,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-01
+* objects, threads, byob: reset customized primitives by deleting their definitions
+
 ### 2024-05-31
 * store: update all block instances when importing customized primitives
 * store: made all "Undefined!" blocks gray

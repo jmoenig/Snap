@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-31';
+modules.objects = '2024-June-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -2398,6 +2398,35 @@ SpriteMorph.prototype.customizePrimitive = function (
         proc.pushContext();
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
     }
+    if (ide) {
+        ide.flushBlocksCache();
+    }
+    return true;
+};
+
+SpriteMorph.prototype.restorePrimitive = function (definition) {
+    var selector = definition.selector,
+        info = SpriteMorph.prototype.blocks[selector],
+        all = this.allBlockInstances(definition),
+        ide = this.parentThatIsA(IDE_Morph),
+        inst, prot;
+
+    if (!info.definition) {
+        return false;
+    }
+    delete info.definition;
+    inst = SpriteMorph.prototype.blockForSelector(selector);
+    prot = Object.getPrototypeOf(inst);
+    all.forEach(block => {
+        block.selector = selector;
+        delete block.definition;
+        delete block.isCustomBlock;
+        delete block.isGlobal;
+        delete block.isPrototype;
+        delete block.variables;
+        Object.setPrototypeOf(block, prot);
+        block.setSelector(selector);
+    });
     if (ide) {
         ide.flushBlocksCache();
     }
@@ -8465,21 +8494,10 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
         }
     }
 
-    if (ide) { // +++
-    ide.sprites.asArray().forEach(sprite => {
-        sprite.scripts.allChildren().forEach(collect);
-        sprite.customBlocks.forEach(def => {
-            def.scripts.forEach(eachScript =>
-                eachScript.allChildren().forEach(collect)
-            );
-            if (def.body) {
-                def.body.expression.allChildren().forEach(collect);
-            }
-        });
-        scanVariables(sprite.variables);
-        if (sprite.solution) {
-            sprite.solution.scripts.allChildren().forEach(collect);
-            sprite.solution.customBlocks.forEach(def => {
+    if (ide) {
+        ide.sprites.asArray().forEach(sprite => {
+            sprite.scripts.allChildren().forEach(collect);
+            sprite.customBlocks.forEach(def => {
                 def.scripts.forEach(eachScript =>
                     eachScript.allChildren().forEach(collect)
                 );
@@ -8487,9 +8505,20 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
                     def.body.expression.allChildren().forEach(collect);
                 }
             });
-            scanVariables(sprite.solution.variables);
-        }
-    });
+            scanVariables(sprite.variables);
+            if (sprite.solution) {
+                sprite.solution.scripts.allChildren().forEach(collect);
+                sprite.solution.customBlocks.forEach(def => {
+                    def.scripts.forEach(eachScript =>
+                        eachScript.allChildren().forEach(collect)
+                    );
+                    if (def.body) {
+                        def.body.expression.allChildren().forEach(collect);
+                    }
+                });
+                scanVariables(sprite.solution.variables);
+            }
+        });
     }
 
     stage.globalBlocks.forEach(def => {

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-May-29';
+modules.byob = '2024-June-01';
 
 // Declarations
 
@@ -1862,12 +1862,10 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         );
                     }
                 }
-                if (!this.definition.isBootstrapped()) {
-                    menu.addItem(
-                        "delete block definition...",
-                        'deleteBlockDefinition'
-                    );
-                }
+                menu.addItem(
+                    "delete block definition...",
+                    'deleteBlockDefinition'
+                );
             } else { // local method
                 if (contains(
                         Object.keys(rcvr.inheritedBlocks()),
@@ -1975,8 +1973,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             }
         } else { // inside a script
             // if global or own method - let the user delete the definition
-            if (this.isGlobal && !this.definition.isBootstrapped() ||
-                contains(
+            if (this.isGlobal && contains(
                     Object.keys(rcvr.ownBlocks()),
                     this.blockSpec
                 )
@@ -2113,6 +2110,10 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     }
     method = this.isGlobal? this.definition
             : rcvr.getLocalMethod(this.blockSpec);
+    if (method.isBootstrapped()) {
+        rcvr.restorePrimitive(method);
+        return;
+    }
     block = method.blockInstance();
     new DialogBoxMorph(
         this,

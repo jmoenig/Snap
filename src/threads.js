@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-May-28';
+modules.threads = '2024-June-01';
 
 var ThreadManager;
 var Process;
@@ -8832,24 +8832,28 @@ Process.prototype.doDeleteBlock = function (context) {
         throw new Error('expecting a custom block\nbut getting a primitive');
     }
     def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
-    rcvr.deleteAllBlockInstances(def);
-    if (def.isGlobal) {
-        idx = stage.globalBlocks.indexOf(def);
-        if (idx !== -1) {
-            stage.globalBlocks.splice(idx, 1);
-        }
+    if (def.isBootstrapped()) {
+        rcvr.restorePrimitive(def);
     } else {
-        // delete local definition
-        idx = rcvr.customBlocks.indexOf(def);
-        if (idx !== -1) {
-            rcvr.customBlocks.splice(idx, 1);
-        }
-        // refresh instances of inherited method, if any
-        method = rcvr.getMethod(def.blockSpec);
-        if (method) {
-            rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
-                block => block.refresh(method)
-            );
+        rcvr.deleteAllBlockInstances(def);
+        if (def.isGlobal) {
+            idx = stage.globalBlocks.indexOf(def);
+            if (idx !== -1) {
+                stage.globalBlocks.splice(idx, 1);
+            }
+        } else {
+            // delete local definition
+            idx = rcvr.customBlocks.indexOf(def);
+            if (idx !== -1) {
+                rcvr.customBlocks.splice(idx, 1);
+            }
+            // refresh instances of inherited method, if any
+            method = rcvr.getMethod(def.blockSpec);
+            if (method) {
+                rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
+                    block => block.refresh(method)
+                );
+            }
         }
     }
 
