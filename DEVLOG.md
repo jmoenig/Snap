@@ -100,6 +100,7 @@
 
 ### 2024-06-01
 * objects, threads, byob: reset customized primitives by deleting their definitions
+* objects, gui: restore all primitives, new experimental "Blocks all the way" mechanism
 
 ### 2024-05-31
 * store: update all block instances when importing customized primitives

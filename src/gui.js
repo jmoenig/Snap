@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-May-31';
+modules.gui = '2024-June-01';
 
 // Declarations
 
@@ -4377,13 +4377,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Microphone resolution...',
         'microphoneMenu'
     );
+    menu.addLine();
     if (shiftClicked) {
-        menu.addLine();
         addPreference(
             'Blocks all the way',
             () => {
                 if (SpriteMorph.prototype.isBlocksAllTheWay()) {
-                    this.userCustomizePalette(nop);
+                    this.stage.restorePrimitives();
                 } else {
                     this.bootstrapCustomizedPrimitives(
                         this.stage.customizeBlocks()
@@ -4397,9 +4397,10 @@ IDE_Morph.prototype.settingsMenu = function () {
             new Color(100, 0, 0)
 
         );
+        /*
         menu.addItem(
             'Primitives palette',
-            () => this.userCustomizePalette(),
+            () => this.stage.restorePrimitives(),
             'EXPERIMENTAL - switch (back) to\n' +
                 'primitive blocks in the palette',
             new Color(100, 0, 0)
@@ -4420,28 +4421,31 @@ IDE_Morph.prototype.settingsMenu = function () {
                 'with custom block definitions',
             new Color(100, 0, 0)
         );
-        menu.addItem(
-            'Use custom blocks',
-            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
-                this.stage,
-                false
-            ),
-            'EXPERIMENTAL - use custom blocks\n' +
-                'in all palette blocks',
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Use primitives',
-            () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
-                this.stage,
-                true
-            ),
-            'EXPERIMENTAL - use primitives\n' +
-                'in all palette blocks',
-            new Color(100, 0, 0)
-        );
+        */
+        if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
+            menu.addItem(
+                'Use custom blocks',
+                () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                    this.stage,
+                    false
+                ),
+                'EXPERIMENTAL - use custom blocks\n' +
+                    'in all palette blocks',
+                new Color(100, 0, 0)
+            );
+            menu.addItem(
+                'Use primitives',
+                () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                    this.stage,
+                    true
+                ),
+                'EXPERIMENTAL - use primitives\n' +
+                    'in all palette blocks',
+                new Color(100, 0, 0)
+            );
+            menu.addLine();
+        }
     }
-    menu.addLine();
     addPreference(
         'JavaScript extensions',
         () => {

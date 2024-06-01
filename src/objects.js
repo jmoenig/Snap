@@ -2404,6 +2404,16 @@ SpriteMorph.prototype.customizePrimitive = function (
     return true;
 };
 
+SpriteMorph.prototype.restorePrimitives = function () {
+    Object.keys(SpriteMorph.prototype.blocks).forEach(key => {
+        let def = SpriteMorph.prototype.blocks[key].definition;
+        if (def instanceof CustomBlockDefinition) {
+            this.restorePrimitive(def);
+        }
+    });
+    this.parentThatIsA(IDE_Morph).refreshPalette();
+};
+
 SpriteMorph.prototype.restorePrimitive = function (definition) {
     var selector = definition.selector,
         info = SpriteMorph.prototype.blocks[selector],
@@ -11945,6 +11955,12 @@ StageMorph.prototype.allDependentInvocationsOf
 
 StageMorph.prototype.customizeBlocks =
     SpriteMorph.prototype.customizeBlocks;
+
+StageMorph.prototype.restorePrimitives =
+    SpriteMorph.prototype.restorePrimitives;
+
+StageMorph.prototype.restorePrimitive =
+    SpriteMorph.prototype.restorePrimitive;
 
 StageMorph.prototype.customizePrimitive =
     SpriteMorph.prototype.customizePrimitive;
