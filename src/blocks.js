@@ -6248,7 +6248,9 @@ BlockMorph.prototype.editPrimitive = function () {
         def = SpriteMorph.prototype.customBlockDefinitionFor(this.selector),
         editor;
     proc.pushContext();
-    def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    if (info.src) {
+        def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    }
     editor = new BlockEditorMorph(def, rcvr);
     editor.primitive = this.selector;
     editor.popUp();
