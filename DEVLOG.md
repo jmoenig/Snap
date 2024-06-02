@@ -100,6 +100,7 @@
 
 ### 2024-06-01
 * blocks, threads: new Boolean "primitive" selector for blocks metaprogramming
+* incremented dev version
 
 ### 2024-06-01
 * objects, threads, byob: reset customized primitives by deleting their definitions
