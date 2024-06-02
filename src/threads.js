@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-June-01';
+modules.threads = '2024-June-02';
 
 var ThreadManager;
 var Process;
@@ -7867,6 +7867,17 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             return body.expression.inputs()[0].reify(body.inputs);
         }
         return body;
+    case 'primitive':
+        if (expr.isCustomBlock) {
+            if (expr.isGlobal) {
+                prim = expr.definition.body?.expression;
+                if (prim && prim.selector === 'doPrimitive') {
+                    return prim.inputs()[0].value || false;
+                }
+            }
+            return false;
+        }
+        return true;
     case 'category':
         return expr ?
             SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
@@ -8338,7 +8349,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
         scopes = ['global', 'local'],
-        idx, oldSpec, expr, def, inData, template, oldType, type, loc;
+        idx, oldSpec, expr, def, inData, template, oldType, type, loc, prim;
 
     this.assertType(block, types);
     expr = block.expression;
@@ -8396,6 +8407,18 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'definition':
         this.assertType(val, types);
         def.setBlockDefinition(val);
+        break;
+    case 'primitive':
+        // +++
+
+    case 'primitive':
+        prim = def.body?.expression;
+        val = [true, 1, '1'].includes(val);
+        if (prim && prim.selector === 'doPrimitive' && prim.nextBlock()) {
+            prim.inputs()[0].setContents(val);
+            def.primitive = val ? prim.inputs()[1].contents().text || null
+                : null;
+        }
         break;
     case 'category':
         this.assertType(val, ['number', 'text']);

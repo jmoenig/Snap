@@ -99,6 +99,9 @@
     * German
 
 ### 2024-06-01
+* blocks, threads: new Boolean "primitive" selector for blocks metaprogramming
+
+### 2024-06-01
 * objects, threads, byob: reset customized primitives by deleting their definitions
 * objects, gui: restore all primitives, new experimental "Blocks all the way" mechanism
 * incremented dev version
