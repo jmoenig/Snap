@@ -98,6 +98,7 @@
 ### 2024-06-03
 * threads: tweaked Boolean "primitive" block selector
 * blocks, threads, extensions: added "select/unselect" text transformations
+* gui: tweaked experimental debugging settings
 
 ### 2024-06-02
 * blocks, threads: new Boolean "primitive" selector for blocks metaprogramming

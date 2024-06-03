@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-June-02';
+modules.gui = '2024-June-03';
 
 // Declarations
 
@@ -4379,6 +4379,21 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     menu.addLine();
     if (shiftClicked) {
+        menu.addItem(
+            'Primitives palette',
+            () => this.stage.restorePrimitives(),
+            'EXPERIMENTAL - switch (back) to\n' +
+                'primitive blocks in the palette',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Customize primitives',
+            () => this.stage.customizeBlocks(),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
         addPreference(
             'Blocks all the way',
             () => {
@@ -4397,31 +4412,6 @@ IDE_Morph.prototype.settingsMenu = function () {
             new Color(100, 0, 0)
 
         );
-        /*
-        menu.addItem(
-            'Primitives palette',
-            () => this.stage.restorePrimitives(),
-            'EXPERIMENTAL - switch (back) to\n' +
-                'primitive blocks in the palette',
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Customize primitives',
-            () => this.stage.customizeBlocks(),
-            'EXPERIMENTAL - overload primitives\n' +
-                'with custom block definitions',
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Bootstrap palette',
-            () => this.bootstrapCustomizedPrimitives(
-                this.stage.customizeBlocks()
-            ),
-            'EXPERIMENTAL - overload primitives\n' +
-                'with custom block definitions',
-            new Color(100, 0, 0)
-        );
-        */
         if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
             menu.addItem(
                 'Use custom blocks',
