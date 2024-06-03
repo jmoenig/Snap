@@ -6,7 +6,7 @@
     * new 3D Beetle Geometry extension, thank you, Bernat!
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * custom blocks can be grouped in the palette by adding vertical spaces in between them
-    * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
+    * "Blocks all the way": all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
     * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
@@ -35,13 +35,10 @@
     * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
     * new "snap" category with new "snap_block_selectors" extension primitive
     * lazy translation support for data
-    * bootstrap global custom blocks as primitives
-    * new "bootstrap" and "un-bootstrap" extension primitives
     * new "snap_yield" extension primitive
     * new "input names" selector in the (attribute OF target) primitive reporter
     * new "primitive" (pragma) block for custom block definitions
     * support for associating custom block definitions with primitives
-    * new "bootstrapped(block)?" extension primitive
     * metaprogramming support for newlines in custom block labels ("$nl")
     * support for overloading primitives with custom block definitions and organizing them in libraries
     * new extension primitives for encoding / decoding blocks to and from xml
@@ -50,7 +47,7 @@
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
     * new "sigmoid" easing function in the animations library
     * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
-    * new "writing and formating" library, thanks, Tethrarxitet!
+    * new "writing and formatting" library, thanks, Tethrarxitet!
     * new "Lisp code..." entry in blocks context menu
     * new "code..." entry to blocks context menu if "Codification support" setting is enabled
     * new live coding "performer mode" (currently hidden behind shift-click) setting, thank you, Bernat!
