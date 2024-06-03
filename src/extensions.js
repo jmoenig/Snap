@@ -30,12 +30,12 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph,
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph,
 BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-May-23';
+modules.extensions = '2024-June-03';
 
 // Global stuff
 
@@ -237,79 +237,6 @@ var SnapExtensions = {
 // meta utils (snap_):
 
 SnapExtensions.primitives.set(
-    'snap_bootstrap(block)',
-    function (script, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate']);
-        var block = script.expression;
-        if (block.isCustomBlock &&
-            block.definition.isGlobal &&
-            block.definition.selector &&
-            !block.definition.isBootstrapped()
-            /* // require "blocks all the way" to be enabled, commented out
-            &&
-            SpriteMorph.prototype.blocks[
-                block.definition.selector
-            ].definition !== undefined
-            */
-        ) {
-            block.definition.bootstrap(proc.blockReceiver());
-        }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_un-bootstrap(block)',
-    function (script, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate']);
-        var block = script.expression;
-        if (block.isCustomBlock &&
-            block.definition.isGlobal &&
-            block.definition.isBootstrapped()
-        ) {
-            block.definition.unBootstrap(proc.blockReceiver());
-        }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_bootstrapped(block)?',
-    function (script, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate']);
-        var block = script.expression;
-        return block.isCustomBlock &&
-            block.definition.isGlobal &&
-            block.definition.isBootstrapped();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_block_selectors',
-    function () {
-        return new List([
-            ['label'],
-            ['definition'],
-            ['comment'],
-            ['category'],
-            ['type'],
-            ['scope'],
-            ['selector'],
-            ['slots'],
-            ['defaults'],
-            ['menus'],
-            ['editables'],
-            ['replaceables'],
-            ['separators'],
-            ['collapses'],
-            ['expands'],
-            ['initial slots'],
-            ['min slots'],
-            ['max slots'],
-            ['translations']
-        ]);
-    }
-);
-
-SnapExtensions.primitives.set(
     'snap_yield',
     function (proc) {
         if (!proc.isAtomic) {
@@ -419,6 +346,8 @@ SnapExtensions.primitives.set(
     /*
         supported transformation names:
         -------------------------------
+        select
+        unselect
         encode URI
         decode URI
         encode URI component

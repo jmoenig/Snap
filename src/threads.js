@@ -5149,9 +5149,14 @@ Process.prototype.reportBasicMonadic = function (fname, n) {
 Process.prototype.reportTextFunction = function (fname, string) {
     // currently in dev mode only, not hyper-monadic
     var x = (isNil(string) ? '' : string).toString(),
-        result = '';
+        result = x;
 
     switch (this.inputOption(fname)) {
+    case 'select':
+        result = [x];
+        break;
+    case 'unselect':
+        break;
     case 'encode URI':
         result = encodeURI(x);
         break;

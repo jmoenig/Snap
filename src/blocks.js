@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-June-02';
+modules.blocks = '2024-June-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -737,6 +737,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            'select' : ['select'],
+            'unselect' : ['unselect'],
             'encode URI' : ['encode URI'],
             'decode URI' : ['decode URI'],
             'encode URI component' : ['encode URI component'],
