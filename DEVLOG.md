@@ -100,6 +100,7 @@
 * blocks, threads, extensions: added "select/unselect" text transformations
 * gui: tweaked experimental debugging settings
 * updated experimental embroidery library - under construction
+* incremented dev version
 
 ### 2024-06-02
 * blocks, threads: new Boolean "primitive" selector for blocks metaprogramming
