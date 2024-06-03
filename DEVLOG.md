@@ -98,7 +98,10 @@
 * **Translation Updates:**
     * German
 
-### 2024-06-01
+### 2024-06-03
+* threads: tweaked Boolean "primitive" block selector
+
+### 2024-06-02
 * blocks, threads: new Boolean "primitive" selector for blocks metaprogramming
 * incremented dev version
 

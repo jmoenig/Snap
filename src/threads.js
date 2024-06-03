@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-June-02';
+modules.threads = '2024-June-03';
 
 var ThreadManager;
 var Process;
@@ -8408,9 +8408,6 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         this.assertType(val, types);
         def.setBlockDefinition(val);
         break;
-    case 'primitive':
-        // +++
-
     case 'primitive':
         prim = def.body?.expression;
         val = [true, 1, '1'].includes(val);
