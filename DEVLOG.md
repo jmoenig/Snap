@@ -86,6 +86,7 @@
     * scroll long text inside result balloons instead of shortening it
     * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
     * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
+    * Confirmation pop-ups when closing the browser tab only appears in the event of unsaved changes, thanks, 2-www
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
