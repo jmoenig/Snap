@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-June-03';
+modules.gui = '2024-June-04';
 
 // Declarations
 
@@ -6522,9 +6522,9 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
     var msg;
     if (this.bulkDropInProgress || this.isAddingScenes) {
-            this.rawOpenProjectString(str, noPrims);
-            if (callback) {callback(); }
-            return;
+        this.rawOpenProjectString(str, noPrims);
+        if (callback) {callback(); }
+        return;
     }
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),

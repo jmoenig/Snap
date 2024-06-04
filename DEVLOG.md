@@ -95,6 +95,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-04
+* store, gui: reset customized primitives when loading a project
+
 ### 2024-06-03
 * threads: tweaked Boolean "primitive" block selector
 * blocks, threads, extensions: added "select/unselect" text transformations

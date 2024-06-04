@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-May-31';
+modules.store = '2024-June-04';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -536,6 +536,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
 
     model.primitives = model.scene.childNamed('primitives');
     if (model.primitives && !this.noPrims) {
+        SpriteMorph.prototype.initBlocks();
         this.loadCustomizedPrimitives(scene.stage, model.primitives);
         scene.blocks = SpriteMorph.prototype.blocks;
     }
