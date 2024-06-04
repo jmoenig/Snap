@@ -1363,9 +1363,9 @@ SnapExtensions.primitives.set(
         var acc = proc.context.accumulator,
             stage = this.parentThatIsA(StageMorph),
             snapProcessBlockDef =
-            stage.globalBlocks.find(
-                def => def.spec == '__mb_process_data__'
-            );
+                stage.globalBlocks.find(
+                    def => def.spec == '__mb_process_data__'
+                );
 
         function readCallback (port) {
             var block = snapProcessBlockDef.blockInstance();
@@ -1378,7 +1378,7 @@ SnapExtensions.primitives.set(
                         stage  // receiver
                     );
                 } catch (err) {
-                    // do nothing
+                    throw(err);
                 }
             }
             setTimeout(function() { readCallback(port); }, 25);
