@@ -378,6 +378,8 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     };
 
+    world.hasUnsavedEdits = () => this.hasUnsavedEdits();
+
     function initUser(username) {
         sessionStorage.username = username;
         myself.controlBar.cloudButton.refresh();
