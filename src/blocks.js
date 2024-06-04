@@ -7907,6 +7907,8 @@ RingMorph.prototype.render = function (ctx) {
     var slot = this.inputs()[0],
         pos = this.position();
 
+    if (!slot) {return; }
+
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
