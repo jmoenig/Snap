@@ -624,6 +624,21 @@
     }
   },
   {
+    "fileName": "embroidery_module.xml",
+    "name": "Embroidery",
+    "description": "Generate embroidery files for stitching pen trails on a sewing machine, experimental and under construction.",
+    "searchData": [
+      "stitch",
+      "embroider",
+      "density"
+    ],
+    "categories": [
+      "Embroidery"
+    ],
+    "translations": {
+    }
+  },
+  {
     "fileName": "maps_module.xml",
     "name": "World Map",
     "description": "Add interactive maps to projects",

@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-May-28';
+modules.threads = '2024-June-03';
 
 var ThreadManager;
 var Process;
@@ -5149,9 +5149,14 @@ Process.prototype.reportBasicMonadic = function (fname, n) {
 Process.prototype.reportTextFunction = function (fname, string) {
     // currently in dev mode only, not hyper-monadic
     var x = (isNil(string) ? '' : string).toString(),
-        result = '';
+        result = x;
 
     switch (this.inputOption(fname)) {
+    case 'select':
+        result = [x];
+        break;
+    case 'unselect':
+        break;
     case 'encode URI':
         result = encodeURI(x);
         break;
@@ -7867,6 +7872,17 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             return body.expression.inputs()[0].reify(body.inputs);
         }
         return body;
+    case 'primitive':
+        if (expr.isCustomBlock) {
+            if (expr.isGlobal) {
+                prim = expr.definition.body?.expression;
+                if (prim && prim.selector === 'doPrimitive') {
+                    return prim.inputs()[0].value || false;
+                }
+            }
+            return false;
+        }
+        return true;
     case 'category':
         return expr ?
             SpriteMorph.prototype.allCategories().indexOf(expr.category) + 1
@@ -8338,7 +8354,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         ide = rcvr.parentThatIsA(IDE_Morph),
         types = ['command', 'reporter', 'predicate'],
         scopes = ['global', 'local'],
-        idx, oldSpec, expr, def, inData, template, oldType, type, loc;
+        idx, oldSpec, expr, def, inData, template, oldType, type, loc, prim;
 
     this.assertType(block, types);
     expr = block.expression;
@@ -8396,6 +8412,15 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     case 'definition':
         this.assertType(val, types);
         def.setBlockDefinition(val);
+        break;
+    case 'primitive':
+        prim = def.body?.expression;
+        val = [true, 1, '1'].includes(val);
+        if (prim && prim.selector === 'doPrimitive' && prim.nextBlock()) {
+            prim.inputs()[0].setContents(val);
+            def.primitive = val ? prim.inputs()[1].contents().text || null
+                : null;
+        }
         break;
     case 'category':
         this.assertType(val, ['number', 'text']);
@@ -8832,24 +8857,28 @@ Process.prototype.doDeleteBlock = function (context) {
         throw new Error('expecting a custom block\nbut getting a primitive');
     }
     def = expr.isGlobal ? expr.definition : rcvr.getMethod(expr.semanticSpec);
-    rcvr.deleteAllBlockInstances(def);
-    if (def.isGlobal) {
-        idx = stage.globalBlocks.indexOf(def);
-        if (idx !== -1) {
-            stage.globalBlocks.splice(idx, 1);
-        }
+    if (def.isBootstrapped()) {
+        rcvr.restorePrimitive(def);
     } else {
-        // delete local definition
-        idx = rcvr.customBlocks.indexOf(def);
-        if (idx !== -1) {
-            rcvr.customBlocks.splice(idx, 1);
-        }
-        // refresh instances of inherited method, if any
-        method = rcvr.getMethod(def.blockSpec);
-        if (method) {
-            rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
-                block => block.refresh(method)
-            );
+        rcvr.deleteAllBlockInstances(def);
+        if (def.isGlobal) {
+            idx = stage.globalBlocks.indexOf(def);
+            if (idx !== -1) {
+                stage.globalBlocks.splice(idx, 1);
+            }
+        } else {
+            // delete local definition
+            idx = rcvr.customBlocks.indexOf(def);
+            if (idx !== -1) {
+                rcvr.customBlocks.splice(idx, 1);
+            }
+            // refresh instances of inherited method, if any
+            method = rcvr.getMethod(def.blockSpec);
+            if (method) {
+                rcvr.allDependentInvocationsOf(method.blockSpec).forEach(
+                    block => block.refresh(method)
+                );
+            }
         }
     }
 

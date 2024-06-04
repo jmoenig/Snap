@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-May-31';
+modules.store = '2024-June-04';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -294,6 +294,7 @@ SnapSerializer.prototype.init = function () {
     this.scene = new Scene();
     this.objects = {};
     this.mediaDict = {};
+    this.noPrims = false;
 };
 
 // SnapSerializer saving:
@@ -318,9 +319,13 @@ XML_Serializer.prototype.mediaXML = function (name) {
 
 // SnapSerializer loading:
 
-SnapSerializer.prototype.load = function (xmlString, ide) {
+SnapSerializer.prototype.load = function (xmlString, ide, noPrims) {
     // public - answer a new Project represented by the given XML String
-    return this.loadProjectModel(this.parse(xmlString), ide);
+    var obj;
+    this.noPrims = noPrims || false;
+    obj = this.loadProjectModel(this.parse(xmlString), ide);
+    this.noPrims = false;
+    return obj;
 };
 
 SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
@@ -528,6 +533,13 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
         );
     }
     this.loadObject(scene.stage, model.stage);
+
+    model.primitives = model.scene.childNamed('primitives');
+    if (model.primitives && !this.noPrims) {
+        SpriteMorph.prototype.initBlocks();
+        this.loadCustomizedPrimitives(scene.stage, model.primitives);
+        scene.blocks = SpriteMorph.prototype.blocks;
+    }
 
     /* Sprites */
 
@@ -1140,7 +1152,7 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         }
         definition = SpriteMorph.prototype.blocks[sel].definition;
         if (!(definition instanceof CustomBlockDefinition)) {
-            stage.customizePrimitive(sel);
+            (stage || object).customizePrimitive(sel);
             definition = SpriteMorph.prototype.blocks[sel].definition;
             if (!(definition instanceof CustomBlockDefinition)) {
                 console.log('unable to overload primitive "' + sel + '"');
@@ -2010,6 +2022,7 @@ Scene.prototype.toXML = function (serializer) {
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
+            '<primitives>%</primitives>' +
             '%' + // stage
             '<variables>%</variables>' +
             '</scene>',
@@ -2031,6 +2044,7 @@ Scene.prototype.toXML = function (serializer) {
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),
+        serializer.store(SpriteMorph.prototype.bootstrappedBlocks()),
         serializer.store(this.stage),
         serializer.store(this.globalVariables)
     );

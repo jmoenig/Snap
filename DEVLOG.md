@@ -6,7 +6,7 @@
     * new 3D Beetle Geometry extension, thank you, Bernat!
     * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
     * custom blocks can be grouped in the palette by adding vertical spaces in between them
-    * new "Blocks all the way" setting, if enabled all blocks in the palette are now custom blocks, except hat blocks and rings
+    * "Blocks all the way": all blocks in the palette are now custom blocks, except hat blocks and rings
     * new "changeBy(data, delta)" extension primitive
     * new LISP-like text syntax for blocks and scripts
     * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
@@ -37,11 +37,11 @@
     * lazy translation support for data
     * bootstrap global custom blocks as primitives
     * new "bootstrap" and "un-bootstrap" extension primitives
+    * new "bootstrapped(block)?" extension primitive
     * new "snap_yield" extension primitive
     * new "input names" selector in the (attribute OF target) primitive reporter
     * new "primitive" (pragma) block for custom block definitions
     * support for associating custom block definitions with primitives
-    * new "bootstrapped(block)?" extension primitive
     * metaprogramming support for newlines in custom block labels ("$nl")
     * support for overloading primitives with custom block definitions and organizing them in libraries
     * new extension primitives for encoding / decoding blocks to and from xml
@@ -50,7 +50,7 @@
     * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
     * new "sigmoid" easing function in the animations library
     * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
-    * new "writing and formating" library, thanks, Tethrarxitet!
+    * new "writing and formatting" library, thanks, Tethrarxitet!
     * new "Lisp code..." entry in blocks context menu
     * new "code..." entry to blocks context menu if "Codification support" setting is enabled
     * new live coding "performer mode" (currently hidden behind shift-click) setting, thank you, Bernat!
@@ -66,6 +66,7 @@
     * New Search feature for the library browser
     * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
     * added pen trails export options to the project ("file") menu
+    * new experimental "Embroidery" library
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -85,6 +86,7 @@
     * scroll long text inside result balloons instead of shortening it
     * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
     * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
+    * Confirmation pop-ups when closing the browser tab only appears in the event of unsaved changes, thanks, 2-www
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -97,9 +99,37 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-04
+* store, gui: reset customized primitives when loading a project
+* updated experimental embroidery library - under construction
+* merged patch from main to dev
+* new unsaved changes mechanism, thanks, 2-www!
+* tweaked unsaved changes mechanism
+* extensions: revived experimental bootstrapping extension primitives 
+
+### 2024-06-03
+* threads: tweaked Boolean "primitive" block selector
+* blocks, threads, extensions: added "select/unselect" text transformations
+* gui: tweaked experimental debugging settings
+* updated experimental embroidery library - under construction
+* incremented dev version
+
+### 2024-06-02
+* blocks, threads: new Boolean "primitive" selector for blocks metaprogramming
+* incremented dev version
+
+### 2024-06-01
+* objects, threads, byob: reset customized primitives by deleting their definitions
+* objects, gui: restore all primitives, new experimental "Blocks all the way" mechanism
+* incremented dev version
+
 ### 2024-05-31
 * store: update all block instances when importing customized primitives
 * store: made all "Undefined!" blocks gray
+* store, objects, gui: save & restore customized primitives in projects
+* gui: took out "Blocks all the way" setting (because all blocks are now always "blocks all the way")
+* new experimental "Embroidery" library
+* incremented dev version
 
 ### 2024-05-29
 * store: overload stored customized primitives in place

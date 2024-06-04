@@ -2,6 +2,19 @@
 
 ## in development:
 
+## 9.2.18:
+* **Notable Fixes:**
+    * fixed a live-rendering glitch in rings
+* **Translation Updates:**
+    * Ukrainian, thanks, ww2!
+    * Polish, thanks, P1neF0rest935!
+
+2024-06-04
+* blocks: fixed a live-rendering glitch in rings
+* Ukrainian translation update, thanks, ww2!
+* Polish translation update, thanks, P1neF0rest935!
+* prepared v9.2.18 patch 
+
 ## 9.2.17:
 * **Notable Fixes:**
     * fixed translation for "if" in Dutch

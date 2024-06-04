@@ -49,6 +49,7 @@
             (f) resize event
             (g) combined mouse-keyboard events
             (h) text editing events
+            (i) indicating unsaved changes
         (4) stepping
         (5) creating new kinds of morphs
             (a) drawing the shape
@@ -856,6 +857,19 @@
     single-line text elements can hold them apart.
 
 
+    (i) indicating unsaved changes
+    ------------------------------
+    Before closing a browser tab with a Morphic world any top level morph
+    can signal unsaved changes by implementing a
+    
+        hasUnsavedChanges()
+    
+    method, which returns a Boolean value indicating whether it is safe to
+    destroy. If any top level morph indicates unsaved changes the browser
+    pops up a dialog box warning about unsaved changes and prompting for user
+    confirmation to close it.
+
+
     (4) stepping
     ------------
     Stepping is what makes Morphic "magical". Two properties control
@@ -1306,7 +1320,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-March-01';
+var morphicVersion = '2024-June-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12472,7 +12486,8 @@ WorldMorph.prototype.initEventListeners = function () {
     );
 
     window.cachedOnbeforeunload = window.onbeforeunload;
-    window.onbeforeunload = (evt) => {
+    this.onbeforeunloadListener = (evt) => {
+        if (!this.hasUnsavedEdits()) return;
         if (window.cachedOnbeforeunload) {
             window.cachedOnbeforeunload.call(null, evt);
         }
@@ -12485,6 +12500,14 @@ WorldMorph.prototype.initEventListeners = function () {
         // For Safari / chrome
         return msg;
     };
+     window.addEventListener("beforeunload", this.onbeforeunloadListener);
+};
+
+WorldMorph.prototype.hasUnsavedEdits = function () {
+    // any top-level morph can implement an hasUnsavedEdits() method
+    return this.children.some(any =>
+        any.hasUnsavedEdits && any.hasUnsavedEdits()
+    );
 };
 
 WorldMorph.prototype.mouseDownLeft = nop;
@@ -12931,4 +12954,9 @@ WorldMorph.prototype.togglePreferences = function () {
 WorldMorph.prototype.toggleHolesDisplay = function () {
     MorphicPreferences.showHoles = !MorphicPreferences.showHoles;
     this.rerender();
+};
+
+WorldMorph.prototype.destroy = function () {
+    window.removeEventListener("onbeforeunload", this.onbeforeunloadListener);
+    WorldMorph.uber.destroy.call(this);
 };

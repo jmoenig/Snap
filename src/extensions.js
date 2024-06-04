@@ -30,12 +30,12 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, SpriteMorph,
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph,
 BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-May-23';
+modules.extensions = '2024-June-04';
 
 // Global stuff
 
@@ -237,6 +237,31 @@ var SnapExtensions = {
 // meta utils (snap_):
 
 SnapExtensions.primitives.set(
+    'snap_yield',
+    function (proc) {
+        if (!proc.isAtomic) {
+            proc.readyToYield = true;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_encode(script)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        return script.expression.toXMLString(this);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_decode(txt)',
+    function (xml, proc) {
+        proc.assertType(xml, 'text');
+        return this.parentThatIsA(IDE_Morph).deserializeScriptString(xml).reify();
+    }
+);
+
+SnapExtensions.primitives.set(
     'snap_bootstrap(block)',
     function (script, proc) {
         proc.assertType(script, ['command', 'reporter', 'predicate']);
@@ -306,31 +331,6 @@ SnapExtensions.primitives.set(
             ['max slots'],
             ['translations']
         ]);
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_yield',
-    function (proc) {
-        if (!proc.isAtomic) {
-            proc.readyToYield = true;
-        }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_xml_encode(script)',
-    function (script, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate']);
-        return script.expression.toXMLString(this);
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_xml_decode(txt)',
-    function (xml, proc) {
-        proc.assertType(xml, 'text');
-        return this.parentThatIsA(IDE_Morph).deserializeScriptString(xml).reify();
     }
 );
 
@@ -419,6 +419,8 @@ SnapExtensions.primitives.set(
     /*
         supported transformation names:
         -------------------------------
+        select
+        unselect
         encode URI
         decode URI
         encode URI component

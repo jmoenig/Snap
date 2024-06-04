@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-May-29';
+modules.objects = '2024-June-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -2372,6 +2372,7 @@ SpriteMorph.prototype.customizePrimitive = function (
     ersatz // optional alternative definition, e.g. when editing a primitive
 ) {
     var info = SpriteMorph.prototype.blocks[selector],
+        ide = this.parentThatIsA(IDE_Morph),
         def, prot, proc;
 
     if (info.definition instanceof CustomBlockDefinition) {
@@ -2397,7 +2398,48 @@ SpriteMorph.prototype.customizePrimitive = function (
         proc.pushContext();
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
     }
-    this.parentThatIsA(IDE_Morph).flushBlocksCache();
+    if (ide) {
+        ide.flushBlocksCache();
+    }
+    return true;
+};
+
+SpriteMorph.prototype.restorePrimitives = function () {
+    Object.keys(SpriteMorph.prototype.blocks).forEach(key => {
+        let def = SpriteMorph.prototype.blocks[key].definition;
+        if (def instanceof CustomBlockDefinition) {
+            this.restorePrimitive(def);
+        }
+    });
+    this.parentThatIsA(IDE_Morph).refreshPalette();
+};
+
+SpriteMorph.prototype.restorePrimitive = function (definition) {
+    var selector = definition.selector,
+        info = SpriteMorph.prototype.blocks[selector],
+        all = this.allBlockInstances(definition),
+        ide = this.parentThatIsA(IDE_Morph),
+        inst, prot;
+
+    if (!info.definition) {
+        return false;
+    }
+    delete info.definition;
+    inst = SpriteMorph.prototype.blockForSelector(selector);
+    prot = Object.getPrototypeOf(inst);
+    all.forEach(block => {
+        block.selector = selector;
+        delete block.definition;
+        delete block.isCustomBlock;
+        delete block.isGlobal;
+        delete block.isPrototype;
+        delete block.variables;
+        Object.setPrototypeOf(block, prot);
+        block.setSelector(selector);
+    });
+    if (ide) {
+        ide.flushBlocksCache();
+    }
     return true;
 };
 
@@ -8462,20 +8504,10 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
         }
     }
 
-    ide.sprites.asArray().forEach(sprite => {
-        sprite.scripts.allChildren().forEach(collect);
-        sprite.customBlocks.forEach(def => {
-            def.scripts.forEach(eachScript =>
-                eachScript.allChildren().forEach(collect)
-            );
-            if (def.body) {
-                def.body.expression.allChildren().forEach(collect);
-            }
-        });
-        scanVariables(sprite.variables);
-        if (sprite.solution) {
-            sprite.solution.scripts.allChildren().forEach(collect);
-            sprite.solution.customBlocks.forEach(def => {
+    if (ide) {
+        ide.sprites.asArray().forEach(sprite => {
+            sprite.scripts.allChildren().forEach(collect);
+            sprite.customBlocks.forEach(def => {
                 def.scripts.forEach(eachScript =>
                     eachScript.allChildren().forEach(collect)
                 );
@@ -8483,9 +8515,21 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
                     def.body.expression.allChildren().forEach(collect);
                 }
             });
-            scanVariables(sprite.solution.variables);
-        }
-    });
+            scanVariables(sprite.variables);
+            if (sprite.solution) {
+                sprite.solution.scripts.allChildren().forEach(collect);
+                sprite.solution.customBlocks.forEach(def => {
+                    def.scripts.forEach(eachScript =>
+                        eachScript.allChildren().forEach(collect)
+                    );
+                    if (def.body) {
+                        def.body.expression.allChildren().forEach(collect);
+                    }
+                });
+                scanVariables(sprite.solution.variables);
+            }
+        });
+    }
 
     stage.globalBlocks.forEach(def => {
         def.scripts.forEach(eachScript =>
@@ -11911,6 +11955,12 @@ StageMorph.prototype.allDependentInvocationsOf
 
 StageMorph.prototype.customizeBlocks =
     SpriteMorph.prototype.customizeBlocks;
+
+StageMorph.prototype.restorePrimitives =
+    SpriteMorph.prototype.restorePrimitives;
+
+StageMorph.prototype.restorePrimitive =
+    SpriteMorph.prototype.restorePrimitive;
 
 StageMorph.prototype.customizePrimitive =
     SpriteMorph.prototype.customizePrimitive;

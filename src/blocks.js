@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-May-29';
+modules.blocks = '2024-June-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -737,6 +737,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            'select' : ['select'],
+            'unselect' : ['unselect'],
             'encode URI' : ['encode URI'],
             'decode URI' : ['decode URI'],
             'encode URI component' : ['encode URI component'],
@@ -851,6 +853,7 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             'label': ['label'],
             'definition': ['definition'],
+            'primitive' : ['primitive'],
             'comment': ['comment'],
             'category': ['category'],
             'custom?': ['custom?'],
@@ -880,6 +883,7 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             'label': ['label'],
             'definition': ['definition'],
+            'primitive' : ['primitive'],
             'comment': ['comment'],
             'category': ['category'],
             'type': ['type'],
@@ -6246,7 +6250,9 @@ BlockMorph.prototype.editPrimitive = function () {
         def = SpriteMorph.prototype.customBlockDefinitionFor(this.selector),
         editor;
     proc.pushContext();
-    def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    if (info.src) {
+        def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
+    }
     editor = new BlockEditorMorph(def, rcvr);
     editor.primitive = this.selector;
     editor.popUp();
