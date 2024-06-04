@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-June-03';
+modules.extensions = '2024-June-04';
 
 // Global stuff
 
@@ -258,6 +258,79 @@ SnapExtensions.primitives.set(
     function (xml, proc) {
         proc.assertType(xml, 'text');
         return this.parentThatIsA(IDE_Morph).deserializeScriptString(xml).reify();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.selector &&
+            !block.definition.isBootstrapped()
+            /* // require "blocks all the way" to be enabled, commented out
+            &&
+            SpriteMorph.prototype.blocks[
+                block.definition.selector
+            ].definition !== undefined
+            */
+        ) {
+            block.definition.bootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_un-bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped()
+        ) {
+            block.definition.unBootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrapped(block)?',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        return block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_block_selectors',
+    function () {
+        return new List([
+            ['label'],
+            ['definition'],
+            ['comment'],
+            ['category'],
+            ['type'],
+            ['scope'],
+            ['selector'],
+            ['slots'],
+            ['defaults'],
+            ['menus'],
+            ['editables'],
+            ['replaceables'],
+            ['separators'],
+            ['collapses'],
+            ['expands'],
+            ['initial slots'],
+            ['min slots'],
+            ['max slots'],
+            ['translations']
+        ]);
     }
 );
 

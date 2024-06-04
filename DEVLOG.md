@@ -35,6 +35,9 @@
     * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
     * new "snap" category with new "snap_block_selectors" extension primitive
     * lazy translation support for data
+    * bootstrap global custom blocks as primitives
+    * new "bootstrap" and "un-bootstrap" extension primitives
+    * new "bootstrapped(block)?" extension primitive
     * new "snap_yield" extension primitive
     * new "input names" selector in the (attribute OF target) primitive reporter
     * new "primitive" (pragma) block for custom block definitions
@@ -101,7 +104,7 @@
 * merged patch from main to dev
 * new unsaved changes mechanism, thanks, 2-www!
 * tweaked unsaved changes mechanism
-
+* extensions: revived experimental bootstrapping extension primitives 
 
 ### 2024-06-03
 * threads: tweaked Boolean "primitive" block selector
