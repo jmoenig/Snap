@@ -99,6 +99,8 @@
 * store, gui: reset customized primitives when loading a project
 * updated experimental embroidery library - under construction
 * merged patch from main to dev
+* new unsaved changes mechanism, thanks, 2-www!
+* tweaked unsaved changes mechanism
 
 
 ### 2024-06-03
