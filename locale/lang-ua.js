@@ -872,7 +872,7 @@ SnapTranslator.dict.ua = {
     "large": "збільшений",
     "last": "останній",
     "last changed": "остання зміна",
-    "last_changed": "2024-01-19",
+    "last_changed": "2024-06-04",
     "launch _ _": "запустити _ _",
     "left": "вліво",
     "left arrow": "стрілка вліво",

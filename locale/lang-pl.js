@@ -893,7 +893,7 @@ SnapTranslator.dict.pl = {
     "large": "wielki",
     "last": "ostatni",
     "last changed": "ostatnio zmieniany",
-    "last_changed": "2024-05-27",
+    "last_changed": "2024-06-04",
     "launch _ _": "rozpocznij _ _",
     "left": "lewa",
     "left arrow": "strzałka w lewo",
