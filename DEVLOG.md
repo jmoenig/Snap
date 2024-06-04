@@ -98,6 +98,8 @@
 ### 2024-06-04
 * store, gui: reset customized primitives when loading a project
 * updated experimental embroidery library - under construction
+* merged patch from main to dev
+
 
 ### 2024-06-03
 * threads: tweaked Boolean "primitive" block selector
