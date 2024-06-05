@@ -99,6 +99,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-05
+* embroidery library: better arcs
+
 ### 2024-06-04
 * store, gui: reset customized primitives when loading a project
 * updated experimental embroidery library - under construction
