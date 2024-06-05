@@ -105,6 +105,7 @@
 * embroidery library: more stitching patterns (running stitch, triple run, satin)
 * incremented dev version
 * tweaked "primitive" block selector
+* objects: include customized primitives when enumerating all block instances
 
 ### 2024-06-04
 * store, gui: reset customized primitives when loading a project

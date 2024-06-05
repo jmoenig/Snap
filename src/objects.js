@@ -8183,7 +8183,9 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
                 sprite.allLocalBlockInstances(definition)
             )
         );
-        stage.globalBlocks.forEach(def => {
+        stage.globalBlocks.concat(
+            SpriteMorph.prototype.bootstrappedBlocks()
+        ).forEach(def => {
             def.scripts.forEach(eachScript =>
                 eachScript.allChildren().forEach(c => {
                     if (c.isCustomBlock && (c.definition === definition)) {
