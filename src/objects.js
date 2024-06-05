@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-June-01';
+modules.objects = '2024-June-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -2393,7 +2393,7 @@ SpriteMorph.prototype.customizePrimitive = function (
         block.initializeVariables();
         block.refresh();
     });
-    if (withCode) {
+    if (withCode && info.src) {
         proc = new Process(null, this.parentThatIsA(StageMorph));
         proc.pushContext();
         def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
