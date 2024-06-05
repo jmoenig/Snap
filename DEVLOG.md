@@ -102,6 +102,7 @@
 ### 2024-06-05
 * embroidery library: better arcs
 * objects: tweaked customizing primitives with default code
+* embroidery library: more stitching patterns (running stitch, triple run, satin)
 
 ### 2024-06-04
 * store, gui: reset customized primitives when loading a project
