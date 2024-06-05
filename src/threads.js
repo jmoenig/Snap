@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-June-03';
+modules.threads = '2024-June-05';
 
 var ThreadManager;
 var Process;
@@ -8364,6 +8364,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             );
     }
     if (!expr.isCustomBlock) {
+        if (choice === 'primitive' && [true, 1, '1'].includes(val)) {
+            return; // already a primitive, do nothing
+        }
         rcvr.customizePrimitive(expr.selector, choice !== 'definition');
         def = SpriteMorph.prototype.blocks[expr.selector].definition;
     } else {
