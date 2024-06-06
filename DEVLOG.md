@@ -103,6 +103,7 @@
 ### 2024-06-06
 * embroidery library: fixed occasional arc issue
 * arcs library: changed label wording to TurtleStitch convention, added "arc left" version
+* embroidery library: added "arc left" block and changed label wording to TurtleStitch convention
 
 ### 2024-06-05
 * embroidery library: better arcs
