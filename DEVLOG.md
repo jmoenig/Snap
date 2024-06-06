@@ -99,6 +99,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-06
+* embroidery library: fixed occasional arc issue
+
 ### 2024-06-05
 * embroidery library: better arcs
 * objects: tweaked customizing primitives with default code
