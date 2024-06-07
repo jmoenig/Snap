@@ -103,6 +103,8 @@
 ### 2024-06-07
 * blocks: correctly record block snaps in "when () is edited" data, thanks, @dardoro, for the bug report!
 * objects: include customized primitives when enumerating primitive instances
+* new microblocks & ble libraries, thanks, Bernat!
+* updated sw cache for ble and microblocks libraries
 
 ### 2024-06-06
 * embroidery library: fixed occasional arc issue

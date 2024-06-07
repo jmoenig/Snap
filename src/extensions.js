@@ -30,12 +30,12 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph,
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
 BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-June-04';
+modules.extensions = '2024-June-07';
 
 // Global stuff
 
@@ -1382,7 +1382,7 @@ SnapExtensions.primitives.set(
                 }
             }
             setTimeout(function() { readCallback(port); }, 25);
-        };
+        }
 
         async function forceClose(port){
             try {
