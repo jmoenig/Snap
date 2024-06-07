@@ -100,6 +100,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-07
+* blocks: correctly record block snaps in "when () is edited" data, thanks, @dardoro, for the bug report!
+
 ### 2024-06-06
 * embroidery library: fixed occasional arc issue
 * arcs library: changed label wording to TurtleStitch convention, added "arc left" version

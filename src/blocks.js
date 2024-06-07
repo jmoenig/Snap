@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-June-03';
+modules.blocks = '2024-June-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6524,12 +6524,6 @@ CommandBlockMorph.prototype.snap = function (hand) {
         return;
     }
     scripts.lastDropTarget = target;
-    scripts.scriptTarget().recordUserEdit(
-        'scripts',
-        'block',
-        'snap',
-        this.abstractBlockSpec()
-    );
     if (target.loc === 'bottom') {
         if (target.type === 'slot') {
             this.removeHighlight();
@@ -6590,6 +6584,12 @@ CommandBlockMorph.prototype.snap = function (hand) {
     }
     this.fixBlockColor();
     CommandBlockMorph.uber.snap.call(this); // align stuck comments
+    scripts.scriptTarget().recordUserEdit(
+        'scripts',
+        'block',
+        'snap',
+        this.abstractBlockSpec()
+    );
     if (hand) {
         scripts.recordDrop(hand.grabOrigin);
     }
