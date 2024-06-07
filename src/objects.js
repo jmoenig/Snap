@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-June-05';
+modules.objects = '2024-June-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -8505,6 +8505,15 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
             }
         }
     }
+
+    SpriteMorph.prototype.bootstrappedBlocks().forEach(def => {
+        def.scripts.forEach(eachScript =>
+            eachScript.allChildren().forEach(collect)
+        );
+        if (def.body) {
+            def.body.expression.allChildren().forEach(collect);
+        }
+    });
 
     if (ide) {
         ide.sprites.asArray().forEach(sprite => {
