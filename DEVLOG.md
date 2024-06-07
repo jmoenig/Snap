@@ -106,6 +106,7 @@
 * new microblocks & ble libraries, thanks, Bernat!
 * updated sw cache for ble and microblocks libraries
 * incremented dev version
+* byob: fixed restoring renamed upvars when customizing primitives
 
 ### 2024-06-06
 * embroidery library: fixed occasional arc issue

@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-June-01';
+modules.byob = '2024-June-07';
 
 // Declarations
 
@@ -1311,7 +1311,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs, offset) {
     // try to restore my previous inputs when my spec has been changed
 
-    if (offset || this.definition?.primitive) {
+    if (offset) { // || this.definition?.primitive) {
         // assuming a "relabel" action that needs to shift inputs
         this.refreshDefaults();
         BlockMorph.prototype.restoreInputs.call(this, oldInputs, offset);

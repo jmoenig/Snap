@@ -5074,7 +5074,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     '\nand remove their definitions'
             );
         }
-        if (shiftClicked) {
+        if (shiftClicked && SpriteMorph.prototype.hasCustomizedPrimitives()) {
             menu.addItem(
                 'Export customized primitives...',
                 () => this.exportCustomizedPrimitives(),
