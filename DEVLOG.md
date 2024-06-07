@@ -105,6 +105,7 @@
 * objects: include customized primitives when enumerating primitive instances
 * new microblocks & ble libraries, thanks, Bernat!
 * updated sw cache for ble and microblocks libraries
+* incremented dev version
 
 ### 2024-06-06
 * embroidery library: fixed occasional arc issue
