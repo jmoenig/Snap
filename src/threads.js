@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-June-05';
+modules.threads = '2024-June-10';
 
 var ThreadManager;
 var Process;
@@ -8359,9 +8359,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     this.assertType(block, types);
     expr = block.expression;
     if (expr instanceof RingMorph) {
-            throw new Error(
-                'expecting a custom block\nbut getting a ring'
-            );
+        throw new Error(
+            'expecting a custom block\nbut getting a ring'
+        );
     }
     if (!expr.isCustomBlock) {
         if (choice === 'primitive' && [true, 1, '1'].includes(val)) {
