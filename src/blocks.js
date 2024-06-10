@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-June-07';
+modules.blocks = '2024-June-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4489,7 +4489,7 @@ BlockMorph.prototype.dependencies = function (onlyGlobal, receiver) {
             if (!onlyGlobal || (onlyGlobal && morph.isGlobal)) {
                 def = morph.isGlobal ? morph.definition
                     : rcvr.getMethod(morph.semanticSpec);
-                if (!def.isQuasiPrimitive()) {
+                if (!def.isBootstrapped()) {
                     [def].concat(def.collectDependencies(
                         quasiPrims,
                         [],
