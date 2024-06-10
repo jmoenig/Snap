@@ -104,6 +104,7 @@
 * updated extensions.md with autoloading mechanism
 * blocks: exclude customized primitives from libraries and smart costume dependencies
 * threads: tweaked format
+* incremented dev version
 
 ### 2024-06-07
 * blocks: correctly record block snaps in "when () is edited" data, thanks, @dardoro, for the bug report!
