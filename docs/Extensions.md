@@ -1,6 +1,6 @@
 # Snap! Extensions
 
-> Last updated May 23, 2024
+> Last updated June 10, 2024
 
 Snap! Extensions take the idea of a library, and expand it by allowing you to add your own JavaScript code.
 Much of the work happens through two (hidden) primitive blocks.
@@ -120,6 +120,10 @@ will ignore any subsequent calls to load the same external extension again.
 This lets you lazily initialize your extension by simply adding a
 "src_load(url)" command for your external JS file before calling any of its
 added functions.
+
+#### autoloading JavaScript files
+
+If you want a library of custom blocks to automatically also load an external JavaScript file - and possibly also perform an initialization - you can include a global variable in the blocks library whose name has to begin with the word "module" enclosed in double-underscores (``__module__``), and whose value can be the url of a JavaScript file to be loaded. Notice that you can hide such a variable in the palette so the user will not be confused by its presence.
 
 ### 5. Miscellaneous
 
