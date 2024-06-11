@@ -7,6 +7,7 @@ try-catch.xml	Catch errors	Run a script; if an error happens, instead of stoppin
 parallel_module.xml	Parallelization	Run several scripts in parallel and wait until all are done.
 Eisenbergification.xml	Getters and setters	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
 list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you "hyperize" any dyadic function
+procedure_modification.xml	Procedure modification	Allows procedure modifying.
 ~	~
 ~	~
 ~	~
