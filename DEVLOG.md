@@ -100,6 +100,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-12
+* store: fixed an xml formatting glitch for blocks libraries
+
 ### 2024-06-10
 * updated extensions.md with autoloading mechanism
 * blocks: exclude customized primitives from libraries and smart costume dependencies

@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-June-04';
+modules.store = '2024-June-12';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2524,7 +2524,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             ' primitive="' + this.primitive + '"'
             : '',
         this.isHelper ? ' helper="true"' : '',
-        this.spaceAbove ? 'space="true"' : '',
+        this.spaceAbove ? ' space="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),
