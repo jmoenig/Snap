@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-June-10';
+modules.gui = '2024-June-12';
 
 // Declarations
 
@@ -5058,15 +5058,17 @@ IDE_Morph.prototype.projectMenu = function () {
                 'export pen trails\nas PNG image'
             );
         }
-
-
         menu.addLine();
-        if (this.stage.globalBlocks.length) {
+        if (this.stage.globalBlocks.length ||
+            SpriteMorph.prototype.hasCustomizedPrimitives()
+        ) {
             menu.addItem(
                 'Export blocks...',
                 () => this.exportGlobalBlocks(),
                 'save global custom block\ndefinitions as XML'
             );
+        }
+        if (this.stage.globalBlocks.length) {
             menu.addItem(
                 'Unused blocks...',
                 () => this.removeUnusedBlocks(),
@@ -5944,10 +5946,12 @@ IDE_Morph.prototype.exportProject = function (name) {
 };
 
 IDE_Morph.prototype.exportGlobalBlocks = function () {
-    if (this.stage.globalBlocks.length > 0) {
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks().concat(
+        this.stage.globalBlocks);
+    if (blocks.length > 0) {
         new BlockExportDialogMorph(
             this.serializer,
-            this.stage.globalBlocks,
+            blocks,
             this
         ).popUp(this.world());
     } else {

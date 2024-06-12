@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-June-07';
+modules.byob = '2024-June-12';
 
 // Declarations
 
@@ -5495,9 +5495,24 @@ BlockExportDialogMorph.prototype.popUp = function (wrrld) {
 // BlockExportDialogMorph menu
 
 BlockExportDialogMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this, 'select');
+    var menu = new MenuMorph(this, 'select'),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        );
     menu.addItem('all', 'selectAll');
     menu.addItem('none', 'selectNone');
+    if (this.blocks.some(any => any.isBootstrapped()) &&
+        this.blocks.some(any => !any.isBootstrapped())
+    ) {
+        menu.addItem(
+            [
+                on,
+                localize('primitives')
+            ],
+            'noPrims'
+        );
+    }
     return menu;
 };
 
@@ -5511,6 +5526,13 @@ BlockExportDialogMorph.prototype.selectAll = function () {
 
 BlockExportDialogMorph.prototype.selectNone = function () {
     this.blocks = [];
+    this.body.contents.children.forEach(checkBox => {
+        checkBox.refresh();
+    });
+};
+
+BlockExportDialogMorph.prototype.noPrims = function () {
+    this.blocks = this.blocks.filter(def => !def.isBootstrapped());
     this.body.contents.children.forEach(checkBox => {
         checkBox.refresh();
     });

@@ -67,6 +67,7 @@
     * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
     * added pen trails export options to the project ("file") menu
     * new experimental "Embroidery" library
+    * export and include customized primitives in libraries
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -102,6 +103,7 @@
 
 ### 2024-06-12
 * store: fixed an xml formatting glitch for blocks libraries
+* gui, byob: export and include customized primitives in libraries
 
 ### 2024-06-10
 * updated extensions.md with autoloading mechanism
