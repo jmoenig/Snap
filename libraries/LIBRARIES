@@ -13,6 +13,7 @@ list_comprehension_module.xml	List comprehension	HOF version of ZIP, letting you
 maps_module.xml	World Map	Add interactive maps to projects
 menu_module.xml	Menus	Prompt the user to pick an option.
 textCostumes_module.xml	Text Costumes	Generate costumes from letters or words of text.
+gif.xml	GIF utilities	Generate GIF animations
 speech_module.xml	Text to Speech	Output text using speech synthesis.
 animation_module.xml	Animation	Glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	Manipulate costumes pixel-wise.
