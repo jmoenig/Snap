@@ -103,6 +103,7 @@
 
 ### 2024-06-13
 * store: fixed a glitch when deserializing inputs for customized primitives
+* objects: enumerate every block, experimental
 
 ### 2024-06-12
 * store: fixed an xml formatting glitch for blocks libraries

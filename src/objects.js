@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-June-07';
+modules.objects = '2024-June-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -8451,6 +8451,92 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
         ide.refreshPalette();
     }
 };
+
+// SpriteMorph enumerating blocks
+
+SpriteMorph.prototype.everyBlock = function () {
+    // answer an array of every block in the system - under construction
+    var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        charted = [],
+        blocks = [];
+
+    function collect(morph) {
+        if (morph instanceof BlockMorph) {
+            blocks.push(morph);
+        }
+    }
+
+    function scanVariables(varFrame) {
+        varFrame.names().forEach(vname => {
+            var value = varFrame.getVar(vname);
+            if (value instanceof Context) {
+                scanContext(value);
+            } else if (value instanceof List) {
+                scanList(value);
+            }
+        });
+    }
+
+    function scanContext(context) {
+        if (!charted.includes(context)) {
+            charted.push(context);
+        }
+        if (context.expression instanceof BlockMorph) {
+            context.expression.allChildren().forEach(collect);
+        }
+    }
+
+    function scanList(list) {
+        if (!charted.includes(list)) {
+            charted.push(list);
+            if (!list.canBeJSON()) {
+                list.map(each => {
+                    if (each instanceof Context) {
+                        scanContext(each);
+                    } else if (each instanceof List) {
+                        scanList(each);
+                    }
+                });
+            }
+        }
+    }
+
+    function scanDefinition(def) {
+        def.scripts.forEach(eachScript =>
+            eachScript.allChildren().forEach(collect)
+        );
+        if (def.body) {
+            def.body.expression.allChildren().forEach(collect);
+        }
+    }
+
+    SpriteMorph.prototype.bootstrappedBlocks().forEach(scanDefinition);
+
+    if (ide) {
+        ide.sprites.asArray().forEach(sprite => {
+            sprite.scripts.allChildren().forEach(collect);
+            sprite.customBlocks.forEach(scanDefinition);
+            scanVariables(sprite.variables);
+            if (sprite.solution) {
+                sprite.solution.scripts.allChildren().forEach(collect);
+                sprite.solution.customBlocks.forEach(scanDefinition);
+                scanVariables(sprite.solution.variables);
+            }
+        });
+    }
+
+    stage.globalBlocks.forEach(scanDefinition);
+    scanVariables(stage.globalVariables());
+    stage.threads.processes.forEach(proc => {
+        if (proc.context instanceof Context) {
+            scanContext(proc.context);
+        }
+    });
+
+    return blocks;
+};
+
 
 // SpriteMorph enumerating primitive block instances
 
