@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-June-12';
+modules.store = '2024-June-13';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1181,6 +1181,7 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         inputs = child.childNamed('inputs');
         if (inputs) {
             i = -1;
+            definition.declarations = new Map();
             inputs.children.forEach(child => {
                 var options = child.childNamed('options');
                 if (child.tag !== 'input') {

@@ -101,6 +101,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-06-13
+* store: fixed a glitch when deserializing inputs for customized primitives
+
 ### 2024-06-12
 * store: fixed an xml formatting glitch for blocks libraries
 * gui, byob: export and include customized primitives in libraries
