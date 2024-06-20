@@ -64,6 +64,8 @@ function BeetleController (stage) {
 BeetleController.prototype.init = function (stage) {
     this.stage = stage;
 
+    this.firstTimeOpenCount = 0; // for stupid Chrome
+
     this.engine = null;
     this.scene = null;
     this.camera = null;
@@ -166,7 +168,7 @@ BABYLON.ArcRotateCamera.prototype.reset = function () {
         this.radius = 10;
         this.setTarget(BABYLON.Vector3.Zero());
         this.setPosition(new BABYLON.Vector3(0, 5, -10));
-        this.alpha = Math.PI / 4;
+        this.alpha = Math.PI * 2 / 3;
         this.framing = false;
         if (this.framingBehavior) {
             this.framingBehavior.detach(this);
@@ -342,9 +344,9 @@ BeetleController.prototype.initAxes = function () {
             )
         );
         this.axisLabels[axis].position = BABYLON.Vector3.FromArray([
+            axis === 'x' ? -1.5 : 0,
             axis === 'y' ? 1.5 : 0,
-            axis === 'z' ? 1.5 : 0,
-            axis === 'x' ? 1.5 : 0
+            axis === 'z' ? 1.5 : 0
         ]);
 
         // Lines, both for origin and Beetle
@@ -355,9 +357,9 @@ BeetleController.prototype.initAxes = function () {
                     points: [
                         new BABYLON.Vector3.Zero,
                         new BABYLON.Vector3(
+                            axis === 'x' ? -1 : 0,
                             axis === 'y' ? 1 : 0,
-                            axis === 'z' ? 1 : 0,
-                            axis === 'x' ? 1 : 0
+                            axis === 'z' ? 1 : 0
                         )
                     ],
                     useVertexAlpha: false
@@ -386,9 +388,9 @@ BeetleController.prototype.initAxes = function () {
             
             label.size = 0.02 * factor;
             label.position = BABYLON.Vector3.FromArray([
+                axis === 'x' ? -0.15 * factor : 0,
                 axis === 'y' ? 0.15 * factor : 0,
-                axis === 'z' ? 0.15 * factor : 0,
-                axis === 'x' ? 0.15 * factor : 0
+                axis === 'z' ? 0.15 * factor : 0
             ]);
 
             [this.beetle, this].forEach(owner => {
@@ -410,7 +412,10 @@ BeetleController.prototype.render = function () {
         } else {
             this.dialog.changed();
         }
-        this.shouldRerender = false;
+        if (this.firstTimeOpenCount > 5) {
+            this.shouldRerender = false;
+            this.firstTimeOpenCount += 1;
+        }
     }
 };
 
@@ -1405,9 +1410,9 @@ Beetle.prototype.isVisible = function () {
 Beetle.prototype.move = function (axis, steps) {
     var scaledSteps = Number(steps) * this.movementScale,
         vector = new BABYLON.Vector3(
+            axis === 'x' ? scaledSteps * -1 : 0,
             axis === 'y' ? scaledSteps : 0,
-            axis === 'z' ? scaledSteps : 0,
-            axis === 'x' ? scaledSteps : 0
+            axis === 'z' ? scaledSteps : 0
         );
     this.body.locallyTranslate(vector);
     this.controller.changed();
@@ -1415,18 +1420,18 @@ Beetle.prototype.move = function (axis, steps) {
 };
 
 Beetle.prototype.goto = function (x, y, z) {
-    if (x !== '') { this.body.position.z = Number(x); }
-    if (y !== '') { this.body.position.x = Number(y); }
-    if (z !== '') { this.body.position.y = Number(z); }
+    if (x !== '') { this.body.position.x = Number(x) * -1; }
+    if (y !== '') { this.body.position.y = Number(y); }
+    if (z !== '') { this.body.position.z = Number(z); }
     this.controller.changed();
     if (this.extruding) { this.extrudeToCurrentPoint(); }
 };
 
 Beetle.prototype.getPosition = function () {
     return new List([
-        this.body.position.z,
-        this.body.position.x,
-        this.body.position.y
+        this.body.position.x * -1,
+        this.body.position.y,
+        this.body.position.z
     ]);
 };
 
@@ -1437,19 +1442,19 @@ Beetle.prototype.setRotations = function (x, y, z) {
     }
     this.body.rotationQuaternion = null;
     if (x !== '') {
-        this.body.rotation.z = radians(Number(x));
-    } else if (oldRotation) {
-        this.body.rotation.z = oldRotation.z;
-    }
-    if (y !== '') {
-        this.body.rotation.x = radians(Number(y) * -1);
+        this.body.rotation.x = radians(Number(x) * -1);
     } else if (oldRotation) {
         this.body.rotation.x = oldRotation.x;
     }
-    if (z !== '') {
-        this.body.rotation.y = radians(Number(z) * -1);
+    if (y !== '') {
+        this.body.rotation.y = radians(Number(y) * -1);
     } else if (oldRotation) {
         this.body.rotation.y = oldRotation.y;
+    }
+    if (z !== '') {
+        this.body.rotation.z = radians(Number(z) * -1);
+    } else if (oldRotation) {
+        this.body.rotation.z = oldRotation.z;
     }
     this.body.rotationQuaternion = this.body.rotation.toQuaternion();
     this.controller.changed();
@@ -1459,9 +1464,9 @@ Beetle.prototype.getRotation = function () {
     if (this.body.rotationQuaternion) {
         var rotation = this.body.rotationQuaternion.toEulerAngles();
         return new List([
-            degrees(rotation.z),
             degrees(rotation.x * -1),
-            degrees(rotation.y * -1)
+            degrees(rotation.y * -1),
+            degrees(rotation.z * -1)
         ]);
     } else {
         return new List([0,0,0]);
@@ -1470,19 +1475,19 @@ Beetle.prototype.getRotation = function () {
 
 Beetle.prototype.rotate = function (x, y, z) {
     if (x !== '') {
-        this.body.rotate(BABYLON.Axis.Z, radians(Number(x)));
+        this.body.rotate(BABYLON.Axis.X, radians(Number(x)) * -1);
     }
     if (y !== '') {
-        this.body.rotate(BABYLON.Axis.X, radians(Number(y)) * -1);
+        this.body.rotate(BABYLON.Axis.Y, radians(Number(y)) * -1);
     }
     if (z !== '') {
-        this.body.rotate(BABYLON.Axis.Y, radians(Number(z)) * -1);
+        this.body.rotate(BABYLON.Axis.Z, radians(Number(z)) * -1);
     }
     this.controller.changed();
 };
 
 Beetle.prototype.pointTo = function (x, y, z) {
-    this.body.lookAt(new BABYLON.Vector3(Number(z), Number(x), Number(y)));
+    this.body.lookAt(new BABYLON.Vector3(Number(x) * -1, Number(y), Number(z)));
     this.controller.changed();
 };
 
