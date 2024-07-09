@@ -101,6 +101,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-07-09
+* store, objects: fixed a glitch when deserializing customized primitive instances
+
 ### 2024-06-13
 * store: fixed a glitch when deserializing inputs for customized primitives
 * objects: enumerate every block, experimental
