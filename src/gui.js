@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-June-13';
+modules.gui = '2024-July-11';
 
 // Declarations
 
@@ -3405,6 +3405,7 @@ IDE_Morph.prototype.refreshIDE = function () {
             new Project(this.scenes, this.scene)
         );
     }
+    SpriteMorph.prototype.initBlocks();
     this.buildPanes();
     this.fixLayout();
     if (this.loadNewProject) {
