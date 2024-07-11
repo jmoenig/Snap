@@ -101,6 +101,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-07-11
+* store, objects: fixed another glitch when loading customized primitives
+
 ### 2024-07-09
 * store, objects: fixed a glitch when deserializing customized primitive instances
 

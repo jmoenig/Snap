@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-July-09';
+modules.objects = '2024-July-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -2369,7 +2369,8 @@ SpriteMorph.prototype.customizeBlocks = function () {
 SpriteMorph.prototype.customizePrimitive = function (
     selector,
     withCode,
-    ersatz // optional alternative definition, e.g. when editing a primitive
+    ersatz, // optional alternative definition, e.g. when editing a primitive
+    alsoIn // optional alternative stage to scan when deserializing
 ) {
     var info = SpriteMorph.prototype.blocks[selector],
         ide = this.parentThatIsA(IDE_Morph),
@@ -2382,7 +2383,7 @@ SpriteMorph.prototype.customizePrimitive = function (
     if (isNil(def)) {return false; }
     info.definition = def;
     prot = Object.getPrototypeOf(def.blockInstance());
-    this.allPrimitiveBlockInstances(selector).forEach(block => {
+    this.allPrimitiveBlockInstances(selector, alsoIn).forEach(block => {
         Object.setPrototypeOf(block, prot);
         block.selector = def.primitive || 'evaluateCustomBlock';
         block.definition = def;
@@ -8542,7 +8543,7 @@ SpriteMorph.prototype.everyBlock = function () {
 
 // SpriteMorph enumerating primitive block instances
 
-SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
+SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector, alsoIn) {
     // answer an Array of all block instances in the system that are
     // primitive blocks (i.e. non-custom ones) with the given selector
     var stage = this.parentThatIsA(StageMorph),
@@ -8644,6 +8645,17 @@ SpriteMorph.prototype.allPrimitiveBlockInstances = function (selector) {
             scanContext(proc.context);
         }
     });
+
+    if (alsoIn) {
+        alsoIn.globalBlocks.forEach(def => {
+            def.scripts.forEach(eachScript =>
+                eachScript.allChildren().forEach(collect)
+            );
+            if (def.body) {
+                def.body.expression.allChildren().forEach(collect);
+            }
+        });
+    }
 
     return blocks;
 

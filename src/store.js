@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-July-09';
+modules.store = '2024-July-11';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1152,7 +1152,12 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         }
         definition = SpriteMorph.prototype.blocks[sel].definition;
         if (!(definition instanceof CustomBlockDefinition)) {
-            (stage || object).customizePrimitive(sel);
+            (stage || object).customizePrimitive(
+                sel,
+                null,
+                null,
+                this.scene.stage
+            );
             definition = SpriteMorph.prototype.blocks[sel].definition;
             if (!(definition instanceof CustomBlockDefinition)) {
                 console.log('unable to overload primitive "' + sel + '"');
@@ -1265,6 +1270,24 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
                 }
             });
         }
+
+        // update global custom blocks
+        this.scene.stage.globalBlocks.forEach(def => {
+            def.scripts.forEach(eachScript =>
+                eachScript.allChildren().forEach(m => {
+                    if (m.definition === definition) {
+                        m.refresh();
+                    }
+                })
+            );
+            if (def.body) {
+                def.body.expression.allChildren().forEach(m => {
+                    if (m.definition === definition) {
+                        m.refresh();
+                    }
+                });
+            }
+        });
     });
 };
 
