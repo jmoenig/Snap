@@ -105,6 +105,7 @@
 * store, objects: fixed another glitch when loading customized primitives
 * gui: reset palette primitives when refreshing the IDE
 * new Embroidery library, supports sprite specific stitching patterns
+* incremented dev version
 
 ### 2024-07-09
 * store, objects: fixed a glitch when deserializing customized primitive instances
