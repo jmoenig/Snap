@@ -7735,6 +7735,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
             );
         }
     }
+    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
