@@ -123,6 +123,7 @@
 * merged dev into master branch
 * merged devlog into history
 * fixed a bug in the colors library, thanks, Brian!
+* v10-rc1
 
 ### 2024-07-11
 * store, objects: fixed another glitch when loading customized primitives
