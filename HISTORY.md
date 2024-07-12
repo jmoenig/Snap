@@ -108,6 +108,7 @@
     * fixed correctly evaluating (reifying) static (irreplaceable) C-slots inside custom blocks
     * only capture the caller once in repeating recursive calls
     * fixed a rendering situation glitch for live rings
+    * fixed a bug in the colors library, thanks, Brian!
 * **Documentation Updates:**
     * new Snap! Lisp Syntax documentation
     * updated extensions.md
@@ -121,6 +122,7 @@
 * incremented dev version
 * merged dev into master branch
 * merged devlog into history
+* fixed a bug in the colors library, thanks, Brian!
 
 ### 2024-07-11
 * store, objects: fixed another glitch when loading customized primitives
