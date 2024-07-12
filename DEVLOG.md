@@ -2,72 +2,85 @@
 
 ## in development:
 * **New Features:**
-    * new "Code to Blocks to Code" library, translates text code to blocks and vice-versa
-    * new 3D Beetle Geometry extension, thank you, Bernat!
-    * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
-    * custom blocks can be grouped in the palette by adding vertical spaces in between them
-    * "Blocks all the way": all blocks in the palette are now custom blocks, except hat blocks and rings
-    * new "changeBy(data, delta)" extension primitive
-    * new LISP-like text syntax for blocks and scripts
-    * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
-    * allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
-    * new Metaprogramming library
-    * color type input slots for custom blocks
-    * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
-    * variadic variables type input slots for custom blocks
-    * metaprogramming support for color type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
-    * destinations, locations, keys, data types, objects + self, sprites + self, collidables, object attributes, microphone, scenes, primitives, properties and extensions dropdown menus for custom blocks
-    * upvars in custom blocks can now have different default names than their formal parameter names
-    * "collapse" label support for variadic inputs in custom blocks
-    * metaprogramming support for "collapse" labels in variadic inputs
-    * metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
-    * variadic "collapse" (prefix label) support for custom blocks
-    * metaprogramming support for "expand" (slot prefix) labels in variadic inputs
-    * default values for variadic slots inside custom blocks
-    * metaprogramming support for default values of variadic inputs
-    * initial subslot number support for variadic inputs
-    * metaprogramming support for initial variadic subslots
-    * new "skew" primitive block for costumes
-    * special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
-    * metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
-    * special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
-    * metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
-    * max/min subslot number support for variadic inputs in custom blocks + metapgrogramming
-    * new "snap" category with new "snap_block_selectors" extension primitive
-    * lazy translation support for data
-    * bootstrap global custom blocks as primitives
-    * new "bootstrap" and "un-bootstrap" extension primitives
-    * new "bootstrapped(block)?" extension primitive
-    * new "snap_yield" extension primitive
-    * new "input names" selector in the (attribute OF target) primitive reporter
-    * new "primitive" (pragma) block for custom block definitions
-    * support for associating custom block definitions with primitives
-    * metaprogramming support for newlines in custom block labels ("$nl")
-    * support for overloading primitives with custom block definitions and organizing them in libraries
-    * new extension primitives for encoding / decoding blocks to and from xml
-    * prefixing a default text value in the slot-type dialog with dollar-underscore tags it as translateable selector
-    * support translating custom drop-downs by prefixing items with "$_"
-    * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
-    * new "sigmoid" easing function in the animations library
-    * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
-    * new "writing and formatting" library, thanks, Tethrarxitet!
-    * new "Lisp code..." entry in blocks context menu
-    * new "code..." entry to blocks context menu if "Codification support" setting is enabled
-    * new live coding "performer mode" setting, thank you, Bernat!
-    * new API configuration option to hide the project name, thanks, Bernat!
-    * new API configuration option to hide project specific entries in the file/project menu
-    * new 'xhr_binary(url, webIDL_type)' extension primitive
-    * new "binary data from (url) type (webIDL)" reporter in the web-services library
-    * new "a new clone of 'Turtle sprite'" feature - makes a new temporary Turtle sprite that does not inherit anything
-    * export vector pen trails as embroidery files (experimental)
-    * pixels library: new "grayscales of (costume)" reporter
-    * new "Outlines and Halos" library
-    * piyels library: new "rectangle costume" reporter
-    * New Search feature for the library browser
-    * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
-    * added pen trails export options to the project ("file") menu
-    * new experimental "Embroidery" library
-    * export and include customized primitives in libraries
+    1. Blocks all the way
+        * all blocks in the palette are now custom blocks, except hat blocks and rings
+        * bootstrap global custom blocks as primitives
+        * new "primitive" (pragma) block for custom block definitions
+        * support for associating custom block definitions with primitives
+        * support for overloading primitives with custom block definitions and organizing them in libraries
+        * new experimental (hidden) option to bulk-toggle the use-primitive switch in all customized primitives
+        * export and include customized primitives in libraries
+    2. New blocks and new block features 
+        * new "skew" primitive block for costumes
+        * new "a new clone of 'Turtle sprite'" feature - makes a new temporary Turtle sprite that does not inherit anything
+        * lazy translation support for data
+    3. Customizing Blocks
+        * color type input slots for custom blocks
+        * variadic variables type input slots for custom blocks
+        * destinations, locations, keys, data types, objects + self, sprites + self, collidables, object attributes, microphone, scenes, primitives, properties and extensions dropdown menus for custom blocks
+        * upvars in custom blocks can now have different default names than their formal parameter names
+        * "collapse" label support for variadic inputs in custom blocks
+        * variadic "collapse" (prefix label) support for custom blocks
+        * default values for variadic slots inside custom blocks
+        * initial subslot number support for variadic inputs
+        * special "receivers" type input slots for custom blocks (as in the "broadcast" primitive)
+        * special "send data" type input slots for custom blocks (as in the "switch to scene" primitive)
+        * max/min subslot number support for variadic inputs in custom blocks
+        * new "input names" selector in the (attribute OF target) primitive reporter
+        * prefixing a default text value in the slot-type dialog with dollar-underscore tags it as translatable selector
+        * support translating custom drop-downs by prefixing items with `$_`
+    4. Customizing the palette
+        * custom blocks can be rearranged in the palette via their context menu, thanks, Simon Mong for pioneering this!
+        * custom blocks can be grouped in the palette by adding vertical spaces in between them
+    5. Customizing the IDE
+        * new API configuration option to hide the project name, thanks, Bernat!
+        * new API configuration option to hide project specific entries in the file/project menu
+    6. Metaprogramming
+        * new Metaprogramming library
+        * allow (nested) lists of block label parts in the DEFINE command to express multi-line block labels
+        * metaprogramming support for color type input slots (number: 13, spec: "clr", mnemonic: "color")
+        * metaprogramming support for color type variadic variables slots (number: 14, spec: "scriptVars", mnemonic: "vars")
+        * metaprogramming support for "collapse" labels in variadic inputs
+        * metaprogramming support for c-slots with loop arrows (number: 15, spec: "ca", mnemonic: "loop")
+        * metaprogramming support for "expand" (slot prefix) labels in variadic inputs
+        * metaprogramming support for default values of variadic inputs
+        * metaprogramming support for initial variadic subslots
+        * metaprogramming support for message-receiver type multi-slots (number: 16, spec: "receive", mnemonic: "receivers")
+        * metaprogramming support for send-data type multi-slots (number: 17, spec: "send")
+        * metaprogramming support for max/min subslot number in variadic inputs in custom blocks
+        * metaprogramming support for newlines in custom block labels ("$nl")
+    7. Extensions
+        * new "Code to Blocks to Code" library, translates text code to blocks and vice-versa
+        * new 3D Beetle Geometry extension, thank you, Bernat!
+        * new experimental "Embroidery" library
+        * new EDC Early Maths Microworlds, thanks, Zak Kolar and Bernat!
+        * new "writing and formatting" library, thanks, Tethrarxitet!
+        * new "Outlines and Halos" library
+        * new "snap" category with new "snap_block_selectors" extension primitive
+        * new "bootstrap" and "un-bootstrap" extension primitives
+        * new "bootstrapped(block)?" extension primitive
+        * new "snap_yield" extension primitive
+        * new extension primitives for encoding / decoding blocks to and from xml
+        * new 'xhr_binary(url, webIDL_type)' extension primitive
+        * new "binary data from (url) type (webIDL)" reporter in the web-services library
+        * pixels library: new "grayscales of (costume)" reporter
+        * pixels library: new "rectangle costume" reporter
+        * new "sigmoid" easing function in the animations library (for neural networks)
+    8. Hypermutation
+        * new "changeBy(data, delta)" extension primitive
+    9. Live Coding
+        * new live coding "performer mode" setting, thank you, Bernat!
+    10. Matrix-kernel convolutions
+    11. Lisp code / codification
+        * new LISP-like text syntax for blocks and scripts
+        * new "Lisp code..." entry in blocks context menu
+        * new "code..." entry to blocks context menu if "Codification support" setting is enabled
+    12. User interface
+        * copy text from variable watchers, block result bubbles and sprite speech/thought balloons to the clipboard
+        * new Search feature for the library browser, thanks, Michael!
+        * new "svg poly" export format for vector pen trails, optimized for speed and laser-cutting
+        * export vector pen trails as embroidery files (DST, EXP)
+        * added pen trails export options to the project ("file") menu
 * **Notable Changes:**
     * the "change by" command for variables is now hyperized and even recursively mutates (!) data
     * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
@@ -100,6 +113,9 @@
     * updated extensions.md
 * **Translation Updates:**
     * German
+
+### 2024-07-12
+* updated v10 change log/release notes
 
 ### 2024-07-11
 * gui: added performer mode to regular session settings
