@@ -118,6 +118,7 @@
 * gui: added performer mode to regular session settings
 * gui: reset palette primitives when refreshing the IDE to change the language
 * updated v10 change log/release notes
+* incremented dev version
 
 ### 2024-07-11
 * store, objects: fixed another glitch when loading customized primitives
