@@ -1,7 +1,7 @@
 /* MQTTExtension.js - add MQTT protocol to Snap!
  * ===========================================
  * MQTT library developed by Xavier Pi
- * Modified by Simon Walters
+ * Modified by Simon Walters and Xavier Pi
  * and converted into an extension
  * November 2021
  * V1.1 - change back to using standard naming e.g payload not message
@@ -15,6 +15,7 @@
  * V1.6.0 13Oct2023 If binary options selected then pub expects payload to be a flat List (values 0-255) and sub will return a List
  * V1.6.1 05Jan2024 "binary" replaced by "buffer mode"
  * V1.6.2 17Jan2023 bugfix -remove automatic convert JSON to Snap! list
+ * V1.7.0 12Jul2024 Add in maximum QoS for subscribe
  */
 
 
@@ -135,6 +136,7 @@ SnapExtensions.primitives.set(
 		/* github.com/pixavier/mqtt4snap  */
 		/* adapted into extension by cymplecy 26Nov21 */
         /* modified 13OCt2023 by cymplecy to return binary data as a list */
+		/* modified 11Jul2024 by pixavier to add paramete	 for qos */
 		function log(txt) {
 			console.log('mqt_sub: ', new Date().toString(), txt);
 		}
@@ -154,6 +156,10 @@ SnapExtensions.primitives.set(
 		
 		topic = topic ? topic.trim() : topic;
 		options = JSON.parse(options);
+		const opts = {};
+		if (options['qos']) {
+			opts.qos = Number(options['qos']);
+		}
 
 		let stage =  this.parentThatIsA(StageMorph);
 
@@ -169,26 +175,15 @@ SnapExtensions.primitives.set(
 			throw new Error('No connection to broker '+broker);
 		}
 
-		stage.mqtt[brokerKey].subscribe(topic);
-
+		stage.mqtt[brokerKey].subscribe(topic, opts);
+		
 		let mqttListener = function (aTopic, payload) {
 			if (!mqttWildcard(aTopic, topic)) {return;}
 			let p = new Process();
 			if (options['mode'] && options['mode'] == true) {
-				//console.log(new List(payload));
-				//newPayload = payload.reduce( (res, val) => res+String.fromCharCode( val), "");
 				newPayload = new List(payload);
 			} else {
 				newPayload = payload.toString();
-				/*
-				try {
-					payloadObject = JSON.parse(newPayload);
-					//console.log(payloadObject);
-					//newPayload = new List([new List([0,1,2,3]),new List([9,9,9,9])]);
-					newPayload = arrayToList(payloadObject);
-					//console.log(newPayload);
-				} catch (e) {console.log(e)}
-				*/
 			}
 
 			try {
@@ -225,6 +220,7 @@ SnapExtensions.primitives.set(
 		}
 	}
 );
+
 
 SnapExtensions.primitives.set(
 	'mqt_pub(broker,topic,payload,options)',
