@@ -102,6 +102,9 @@
     * German
 
 ### 2024-07-11
+* gui: added performer mode to regular session settings
+
+### 2024-07-11
 * store, objects: fixed another glitch when loading customized primitives
 * gui: reset palette primitives when refreshing the IDE
 * new Embroidery library, supports sprite specific stitching patterns

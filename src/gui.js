@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-July-11';
+modules.gui = '2024-July-12';
 
 // Declarations
 
@@ -4569,6 +4569,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to cache\nsprite renderings',
         true
     );
+    addPreference(
+        'Performer mode',
+        () => this.togglePerformerMode(),
+        this.performerMode,
+        'uncheck to go back to regular\nlayout',
+        'check to have the stage use up\nall space and go behind the\n' +
+        'scripting area'
+    );
     menu.addLine(); // everything visible below is persistent
     addPreference(
         'Blurred shadows',
@@ -4784,14 +4792,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
         'EXPERIMENTAL! check to enable\nsupport for compiling',
-        true
-    );
-    addPreference(
-        'Performer mode',
-        () => this.togglePerformerMode(),
-        this.performerMode,
-        'uncheck to go back to regular\nlayout',
-        'check to have the stage use up\nall space and go behind the\nscripting area',
         true
     );
     menu.addLine(); // everything below this line is stored in the project
