@@ -53,7 +53,7 @@
     * new "writing and formatting" library, thanks, Tethrarxitet!
     * new "Lisp code..." entry in blocks context menu
     * new "code..." entry to blocks context menu if "Codification support" setting is enabled
-    * new live coding "performer mode" (currently hidden behind shift-click) setting, thank you, Bernat!
+    * new live coding "performer mode" setting, thank you, Bernat!
     * new API configuration option to hide the project name, thanks, Bernat!
     * new API configuration option to hide project specific entries in the file/project menu
     * new 'xhr_binary(url, webIDL_type)' extension primitive
