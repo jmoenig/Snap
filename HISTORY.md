@@ -82,26 +82,33 @@
         * export vector pen trails as embroidery files (DST, EXP)
         * added pen trails export options to the project ("file") menu
 * **Notable Changes:**
-    * the "change by" command for variables is now hyperized and even recursively mutates (!) data
-    * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
-    * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
-    * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
-    * automatically add generic inputs in DEFINE matching the number of placeholders in the label
-    * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
-    * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
-    * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
-    * the metaprogramming getter for "translations" block attribute selector now always returns a list
-    * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
-    * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
-    * support for multiple separator lines in input slot dropdown menus
-    * support for smooth animations in recursive control structures defined using metaprogramming
-    * optimized FOR-loop and FOR-EACH-loop for speed
-    * renamed "primitive" blocks into "extension"
-    * scroll long text inside result balloons instead of shortening it
-    * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
-    * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
-    * Confirmation pop-ups when closing the browser tab only appears in the event of unsaved changes, thanks, 2-www
-    * arcs library: changed label wording to TurtleStitch convention, added "arc left" version
+    1. Blocks all the way
+        * renamed "primitive" blocks into "extension"
+    2. Blocks behavior
+        * drawing a dot when moving zero steps now observes the flat-line-ends settings and draws a centered square or rhombus the size of current pen and in its direction
+        * optimized FOR-loop and FOR-EACH-loop for speed
+    3. Custom Blocks
+        * keep the order & position of existing custom blocks in the project palette when overloading them with imported blocks
+        * support for multiple separator lines in input slot dropdown menus
+        * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
+        * arcs library: changed label wording to TurtleStitch convention, added "arc left" version
+    4. Metaprogramming
+        * automatically add generic inputs in DEFINE matching the number of placeholders in the label
+        * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
+        * block label symbols are now shown with their name prefixed by "$" instead of an underscore to avoid confusing them with inputs when metaprogramming
+        * the metaprogramming getter for "translations" block attribute selector now always returns a list
+        * custom block definition comments can now be deleted by setting them to nothing (empty string, zero or false)
+        * the "define" block now always creates a new custom block definition instead of sometimes modifying the definition body of an existing one with a matching label
+        * support for smooth animations in recursive control structures defined using metaprogramming
+        * When programmatically setting the "slots", "defaults", "menus", "editables" or "replaceables" of a custom block to a non-list type, apply the type to all slots instead of just the first one.
+    5. Hypermutation
+        * the "change by" command for variables is now hyperized and even recursively mutates (!) data
+    6. User interface
+        * scroll long text inside result balloons instead of shortening it
+        * Confirmation pop-ups when closing the browser tab only appears in the event of unsaved changes, thanks, 2-www
+    7. Lisp code
+        * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
+        * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
 * **Notable Fixes:**
     * fixed a type error when using metaprogramming to copy default inputs from a primitive over to a custom block definition
     * fixed referencing system drop-down menus in metaprogramming
@@ -114,6 +121,9 @@
     * updated extensions.md
 * **Translation Updates:**
     * German
+
+### 2024-07-15
+* updated v10 change log/release notes
 
 ### 2024-07-12
 * gui: added performer mode to regular session settings
