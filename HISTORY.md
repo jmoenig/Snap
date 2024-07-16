@@ -122,6 +122,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-07-16
+* German translation update
+
 ### 2024-07-15
 * updated v10 change log/release notes
 
