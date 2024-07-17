@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-June-07';
+modules.extensions = '2024-July-17';
 
 // Global stuff
 
@@ -53,7 +53,8 @@ var SnapExtensions = {
         'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
         'https://microworld.edc.org/', // EDC, E. Paul Goldenberg
-        'https://birdbraintechnologies.com/' // BirdBrain technologies, Tom Lauwers
+        'https://birdbraintechnologies.com/', // BirdBrain technologies, Tom Lauwers
+        'https://www.birdbraintechnologies.com/' // compatibility
     ]
 };
 
