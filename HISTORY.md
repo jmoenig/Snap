@@ -122,6 +122,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-07-17
+* store: incremented app version to rc
+
 ### 2024-07-16
 * German translation update
 * translation support & German translation for embroidery library
