@@ -124,7 +124,8 @@
 
 ### 2024-07-17
 * store: incremented app version to rc
-* extensions: added "www" url prefix variant to birdbrain's extension entry 
+* extensions: added "www" url prefix variant to birdbrain's extension entry
+* MQTT extension update, thanks, Simon and Xavier!
 
 ### 2024-07-16
 * German translation update
