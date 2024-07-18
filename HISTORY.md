@@ -124,6 +124,7 @@
 
 ### 2024-07-18
 * gui: refresh IDE when loading a library from the cloud to support customized primitives
+* v10-rc3
 
 ### 2024-07-17
 * store: incremented app version to rc
