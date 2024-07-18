@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-July-17';
+modules.gui = '2024-July-18';
 
 // Declarations
 
@@ -10473,6 +10473,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
+    /*
     if (this.hasCached(selectedLibrary)) {
         this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
@@ -10484,6 +10485,11 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         );
         ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
+    */
+
+    // disabled loading cached libraries to better support customized
+    // primitives. -jens
+
         ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -10492,7 +10498,8 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
                 this.isLoadingLibrary = true;
             }
         );
-    }
+
+    // }
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {

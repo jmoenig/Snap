@@ -122,6 +122,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-07-18
+* gui: disabled loading cached libraries to better support customized primitives
+
 ### 2024-07-17
 * store: incremented app version to rc
 * extensions: added "www" url prefix variant to birdbrain's extension entry
