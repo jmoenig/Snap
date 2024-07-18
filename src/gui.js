@@ -10473,7 +10473,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
-    /*
     if (this.hasCached(selectedLibrary)) {
         this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
@@ -10485,11 +10484,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         );
         ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
-    */
-
-    // disabled loading cached libraries to better support customized
-    // primitives. -jens
-
         ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -10498,8 +10492,8 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
                 this.isLoadingLibrary = true;
             }
         );
-
-    // }
+    }
+    ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {

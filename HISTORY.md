@@ -123,7 +123,7 @@
     * German
 
 ### 2024-07-18
-* gui: disabled loading cached libraries to better support customized primitives
+* gui: refresh IDE when loading a library from the cloud to support customized primitives
 
 ### 2024-07-17
 * store: incremented app version to rc
