@@ -3653,7 +3653,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     
     key = detect(
         this.children,
-        each => each.pitch === note;
+        each => each.pitch === note
     );
     if (key) {
         this.select(key);
