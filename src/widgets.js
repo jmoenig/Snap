@@ -3505,32 +3505,20 @@ PianoMenuMorph.prototype.init = function (
     var choices, key;
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+    this.octave = 4
     choices = {
-        'C (48)' : 48,
-        'D (50)' : 50,
-        'C# (49)' : 49,
-        'E (52)' : 52,
-        'Eb (51)' : 51,
-        'F (53)' : 53,
-        'G (55)' : 55,
-        'F# (54)' : 54,
-        'A (57)' : 57,
-        'G# (56)' : 56,
-        'B (59)' : 59,
-        'Bb (58)' : 58,
-        'C (60)' : 60,
-        'D (62)' : 62,
-        'C# (61)' : 61,
-        'E (64)' : 64,
-        'Eb (63)' : 63,
-        'F (65)' : 65,
-        'G (67)' : 67,
-        'F# (66)' : 66,
-        'A (69)' : 69,
-        'G# (68)' : 68,
-        'B (71)' : 71,
-        'Bb (70)' : 70,
-        'C (72)' : 72
+        'C' : 1,
+        'D' : 3,
+        'C#' : 2,
+        'E' : 5,
+        'Eb' : 4,
+        'F' : 6,
+        'G' : 8,
+        'F#' : 7,
+        'A' : 10,
+        'G#' : 9,
+        'B' : 12,
+        'Bb' : 11,
     };
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
@@ -3566,7 +3554,7 @@ PianoMenuMorph.prototype.createItems = function () {
     y = this.top() + (this.fontSize * 1.5) + 2;
     label = new StringMorph('', this.fontSize);
     this.items.forEach(tuple => {
-        blackkey = tuple[0][1] !== " ";
+        blackkey = tuple[0].length > 1;
         key = new BoxMorph(1, 1);
         if (blackkey) {
             keycolor = BLACK;
@@ -3601,8 +3589,27 @@ PianoMenuMorph.prototype.createItems = function () {
         this.add(item);
     });
     fb = this.fullBounds();
-    label.setPosition(new Point((fb.width() / 2) - this.fontSize, 2));
+    label.setPosition(new Point((fb.width() / 2) - this.fontSize * 1.6, 2));
     this.add(label);
+
+    var downOctave = new ArrowMorph(
+        'left',
+        fontHeight(this.fontSize),
+        Math.max(Math.floor(this.fontSize / 6), 1),
+    );
+    downOctave.setPosition(new Point(5, 3));
+    downOctave.mouseClickLeft = () => {this.octaveDown()};
+    this.add(downOctave);
+
+    var upOctave = new ArrowMorph(
+        'right',
+        fontHeight(this.fontSize),
+        Math.max(Math.floor(this.fontSize / 6), 1),
+    );
+    upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
+    upOctave.mouseClickLeft = () => {this.octaveUp()};
+    this.add(upOctave);
+
     fb = this.fullBounds();
     this.bounds.setExtent(fb.extent().add(2));
 };
@@ -3626,19 +3633,32 @@ PianoMenuMorph.prototype.unselectAllItems = function () {
     this.changed();
 };
 
-PianoMenuMorph.prototype.selectKey = function (midiNum) {
-    var key;
+PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
+    var key,
+        note;
+    
     if (isNil(midiNum)) {
         return;
     }
+
+    if (isNil(octave)) {
+        note = (midiNum % 12) + 1;
+        octave = Math.floor((midiNum / 12) - 1);
+    } else {
+        note = midiNum;
+        octave = this.octave;
+    }
+
+    this.octave = octave;
+    
     key = detect(
         this.children,
-        each => each.action === midiNum
+        each => each.pitch === note;
     );
     if (key) {
         this.select(key);
     } else {
-        this.selectKey(48);
+        this.selectKey(1);
     }
 };
 
@@ -3658,44 +3678,45 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     case 37: // 'left arrow'
     case 40: // 'down arrow'
     case 189: // -
-        return this.selectDown();
+        if (event.shiftKey) {
+            return this.octaveDown();
+        } else {
+            return this.selectDown();
+        }
     case 38: // 'up arrow'
     case 39: // 'right arrow'
     case 187: // +
     case 220: // #
-        return this.selectUp();
+        if (event.shiftKey) {
+            return this.octaveUp();
+        } else {
+            return this.selectUp();
+        }
     default:
         switch(event.key) {
-        case 'C':
-            return this.selectKey(48);
         case 'c':
-            return this.selectKey(60);
-        case 'D':
-            return this.selectKey(50);
+        case 'C':
+            return this.selectKey(1, this.octave);
         case 'd':
-            return this.selectKey(62);
-        case 'E':
-            return this.selectKey(52);
+        case 'D':
+            return this.selectKey(3, this.octave);
         case 'e':
-            return this.selectKey(64);
-        case 'F':
-            return this.selectKey(53);
+        case 'E':
+            return this.selectKey(5, this.octave);
         case 'f':
-            return this.selectKey(65);
-        case 'G':
-            return this.selectKey(55);
+        case 'F':
+            return this.selectKey(6, this.octave);
         case 'g':
-            return this.selectKey(67);
-        case 'A':
-            return this.selectKey(57);
+        case 'G':
+            return this.selectKey(8, this.octave);
         case 'a':
-            return this.selectKey(69);
-        case 'B':
-        case 'H':
-            return this.selectKey(59);
+        case 'A':
+            return this.selectKey(10, this.octave);
         case 'b':
+        case 'B':
         case 'h':
-            return this.selectKey(71);
+        case 'H':
+            return this.selectKey(12, this.octave);
         default:
             nop();
         }
@@ -3703,26 +3724,44 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
 };
 
 PianoMenuMorph.prototype.selectUp = function () {
-    var next = 48;
+    var next = 1;
     if (this.selection) {
         next = this.selection.action + 1;
-        if (next > 72) {
-            next = 48;
+        if (next > 143) {
+            next = 143;
         }
     }
     this.selectKey(next);
 };
 
 PianoMenuMorph.prototype.selectDown = function () {
-    var next = 48;
+    var next = 1;
     if (this.selection) {
         next = this.selection.action - 1;
-        if (next < 48) {
-            next = 72;
+        if (next < 0) {
+            next = 0;
         }
     }
     this.selectKey(next);
 };
+
+PianoMenuMorph.prototype.octaveUp = function () {
+    this.octave += 1;
+    this.octave = Math.min(this.octave, 10);
+
+    if (this.selection) {
+        this.selection.mouseEnter();
+    }
+};
+
+PianoMenuMorph.prototype.octaveDown = function () {
+    this.octave -= 1;
+    this.octave = Math.max(-1, this.octave);
+
+    if (this.selection) {
+        this.selection.mouseEnter();
+    }
+}
 
 PianoMenuMorph.prototype.destroy = function () {
     this.children.forEach(key => {
@@ -3787,6 +3826,7 @@ PianoKeyMorph.prototype.init = function (
 ) {
     // additional "note" property for sound output:
     this.note = new Note(action);
+    this.pitch = action
     PianoKeyMorph.uber.init.call(
         this,
         target,
@@ -3809,6 +3849,7 @@ PianoKeyMorph.prototype.createLabel = function () {
     if (this.label !== null) {
         this.label.destroy();
     }
+
     // assume its pattern is: [icon, string]
     this.label = new Morph();
     icon = this.createIcon(this.labelString[0]);
@@ -3821,17 +3862,23 @@ PianoKeyMorph.prototype.createLabel = function () {
 
 PianoKeyMorph.prototype.mouseEnter = function () {
     var piano = this.parentThatIsA(PianoMenuMorph),
-        soundType = piano ? piano.soundType : 1;
+        soundType = piano ? piano.soundType : 1,
+        octave = 1;
+        
     if (piano) {
         piano.unselectAllItems();
         piano.selection = this;
         piano.world.keyboardFocus = piano;
         piano.hasFocus = true;
+        
+        octave = piano.octave;
     }
+    this.action = (this.pitch - 1) + (12 * (octave + 1));
+    this.note.pitch = this.action;
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
-    this.feedback.text = this.labelString[1];
+    this.feedback.text = `${this.labelString[1]}${octave} (${this.action})`;
     this.feedback.fixLayout();
     this.note.play(soundType);
     setTimeout(
