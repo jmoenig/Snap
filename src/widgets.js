@@ -3505,7 +3505,7 @@ PianoMenuMorph.prototype.init = function (
     var choices, key;
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
-    this.octave = 4
+    this.octave = 3;
     choices = {
         'C' : 1,
         'D' : 3,
@@ -3523,6 +3523,12 @@ PianoMenuMorph.prototype.init = function (
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             this.addItem(key, choices[key]);
+        }
+    }
+    // second octave
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            this.addItem(key, choices[key] + 12);
         }
     }
 };
@@ -3644,10 +3650,15 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     if (isNil(octave)) {
         note = (midiNum % 12) + 1;
         octave = Math.floor((midiNum / 12) - 1);
+        if (!(octave % 2)) {
+            note += 12;
+            octave -= 1;
+        }
     } else {
         note = midiNum;
         octave = this.octave;
     }
+
 
     this.octave = octave;
     
@@ -3695,28 +3706,35 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     default:
         switch(event.key) {
         case 'c':
-        case 'C':
             return this.selectKey(1, this.octave);
+        case 'C':
+            return this.selectKey(13, this.octave);
         case 'd':
-        case 'D':
             return this.selectKey(3, this.octave);
+        case 'D':
+            return this.selectKey(15, this.octave);
         case 'e':
-        case 'E':
             return this.selectKey(5, this.octave);
+        case 'E':
+            return this.selectKey(17, this.octave);
         case 'f':
-        case 'F':
             return this.selectKey(6, this.octave);
+        case 'F':
+            return this.selectKey(18, this.octave);
         case 'g':
-        case 'G':
             return this.selectKey(8, this.octave);
+        case 'G':
+            return this.selectKey(20, this.octave);
         case 'a':
-        case 'A':
             return this.selectKey(10, this.octave);
+        case 'A':
+            return this.selectKey(22, this.octave);
         case 'b':
-        case 'B':
         case 'h':
-        case 'H':
             return this.selectKey(12, this.octave);
+        case 'B':
+        case 'H':
+            return this.selectKey(24, this.octave);
         default:
             nop();
         }
@@ -3746,8 +3764,8 @@ PianoMenuMorph.prototype.selectDown = function () {
 };
 
 PianoMenuMorph.prototype.octaveUp = function () {
-    this.octave += 1;
-    this.octave = Math.min(this.octave, 10);
+    this.octave += 2;
+    this.octave = Math.min(this.octave, 9);
 
     if (this.selection) {
         this.selection.mouseEnter();
@@ -3755,7 +3773,7 @@ PianoMenuMorph.prototype.octaveUp = function () {
 };
 
 PianoMenuMorph.prototype.octaveDown = function () {
-    this.octave -= 1;
+    this.octave -= 2;
     this.octave = Math.max(-1, this.octave);
 
     if (this.selection) {
@@ -3863,7 +3881,8 @@ PianoKeyMorph.prototype.createLabel = function () {
 PianoKeyMorph.prototype.mouseEnter = function () {
     var piano = this.parentThatIsA(PianoMenuMorph),
         soundType = piano ? piano.soundType : 1,
-        octave = 1;
+        octave = 1,
+        octaveOffset = 0;
         
     if (piano) {
         piano.unselectAllItems();
@@ -3873,12 +3892,14 @@ PianoKeyMorph.prototype.mouseEnter = function () {
         
         octave = piano.octave;
     }
+    octaveOffset = Math.floor((this.pitch - 1) / 12)
+    
     this.action = (this.pitch - 1) + (12 * (octave + 1));
     this.note.pitch = this.action;
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
-    this.feedback.text = `${this.labelString[1]}${octave} (${this.action})`;
+    this.feedback.text = `${this.labelString[1]}${octave + octaveOffset} (${this.action})`;
     this.feedback.fixLayout();
     this.note.play(soundType);
     setTimeout(
