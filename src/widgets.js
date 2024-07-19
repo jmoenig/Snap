@@ -3844,7 +3844,7 @@ PianoKeyMorph.prototype.init = function (
 ) {
     // additional "note" property for sound output:
     this.note = new Note(action);
-    this.pitch = action
+    this.pitch = action;
     PianoKeyMorph.uber.init.call(
         this,
         target,
@@ -3881,7 +3881,7 @@ PianoKeyMorph.prototype.createLabel = function () {
 PianoKeyMorph.prototype.mouseEnter = function () {
     var piano = this.parentThatIsA(PianoMenuMorph),
         soundType = piano ? piano.soundType : 1,
-        octave = 1,
+        octave = Math.floor((this.action - 1) / 12),
         octaveOffset = 0;
         
     if (piano) {
@@ -3892,10 +3892,10 @@ PianoKeyMorph.prototype.mouseEnter = function () {
         
         octave = piano.octave;
     }
-    octaveOffset = Math.floor((this.pitch - 1) / 12)
-    
+    octaveOffset = Math.floor((this.pitch - 1) / 12);
     this.action = (this.pitch - 1) + (12 * (octave + 1));
     this.note.pitch = this.action;
+    
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
