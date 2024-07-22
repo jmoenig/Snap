@@ -125,10 +125,11 @@
 
 ### 2024-07-22
 * edited help screen for doDeleteBlock, converted to PNG, reduced file size
+* v10-rc5
 
 ### 2024-07-22
 * more help screens, thanks, Brian and the forum gang!
-* v10-rc3
+* v10-rc4
 
 ### 2024-07-18
 * gui: refresh IDE when loading a library from the cloud to support customized primitives
