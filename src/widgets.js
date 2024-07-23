@@ -3657,7 +3657,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
         visibleOctave = octave - octaveIndex;
         note = (midiNum % 12) + 1 + (12 * octaveIndex);
     } else {
-        note = midiNum;
+        note = ((midiNum - 1) % (12 * this.visibleOctaves)) + 1;
         visibleOctave = this.octave;
     }
 
