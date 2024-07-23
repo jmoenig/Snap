@@ -3766,7 +3766,7 @@ PianoMenuMorph.prototype.selectDown = function () {
 
 PianoMenuMorph.prototype.octaveUp = function () {
     this.octave += this.visibleOctaves;
-    this.octave = Math.min(this.octave, 9);
+    this.octave = Math.min(this.octave, 10 - (11) % this.visibleOctaves);
 
     if (this.selection) {
         this.selection.mouseEnter();
