@@ -3500,12 +3500,17 @@ PianoMenuMorph.prototype.init = function (
     target,
     environment,
     fontSize,
-    soundType // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+    soundType, // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+    visibleOctaves
 ) {
     var choices, key;
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
-    this.octave = 3;
+    if (isNil(visibleOctaves)) {
+        visibleOctaves = 2;
+    }
+    this.visibleOctaves = visibleOctaves;
+    this.octave = 4 - (3 % this.visibleOctaves);
     choices = {
         'C' : 1,
         'D' : 3,
@@ -3520,17 +3525,14 @@ PianoMenuMorph.prototype.init = function (
         'B' : 12,
         'Bb' : 11,
     };
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            this.addItem(key, choices[key]);
+    for (var octave = 0; octave < this.visibleOctaves; octave++) {
+        for (key in choices) {
+            if (Object.prototype.hasOwnProperty.call(choices, key)) {
+                this.addItem(key, choices[key] + (12 * octave));
+            }
         }
     }
-    // second octave
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            this.addItem(key, choices[key] + 12);
-        }
-    }
+    this.addItem('C', choices['C'] + (12 * this.visibleOctaves))
 };
 
 PianoMenuMorph.prototype.createItems = function () {
@@ -3641,26 +3643,25 @@ PianoMenuMorph.prototype.unselectAllItems = function () {
 
 PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     var key,
-        note;
+        note,
+        visibleOctave;
     
     if (isNil(midiNum)) {
         return;
     }
 
     if (isNil(octave)) {
-        note = (midiNum % 12) + 1;
         octave = Math.floor((midiNum / 12) - 1);
-        if (!(octave % 2)) {
-            note += 12;
-            octave -= 1;
-        }
+        var octaveIndex = (octave + 1) % this.visibleOctaves;
+
+        visibleOctave = octave - octaveIndex;
+        note = (midiNum % 12) + 1 + (12 * octaveIndex);
     } else {
         note = midiNum;
-        octave = this.octave;
+        visibleOctave = this.octave;
     }
 
-
-    this.octave = octave;
+    this.octave = visibleOctave;
     
     key = detect(
         this.children,
@@ -3669,7 +3670,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     if (key) {
         this.select(key);
     } else {
-        this.selectKey(1);
+        this.selectKey(1, this.octave);
     }
 };
 
@@ -3764,7 +3765,7 @@ PianoMenuMorph.prototype.selectDown = function () {
 };
 
 PianoMenuMorph.prototype.octaveUp = function () {
-    this.octave += 2;
+    this.octave += this.visibleOctaves;
     this.octave = Math.min(this.octave, 9);
 
     if (this.selection) {
@@ -3773,7 +3774,7 @@ PianoMenuMorph.prototype.octaveUp = function () {
 };
 
 PianoMenuMorph.prototype.octaveDown = function () {
-    this.octave -= 2;
+    this.octave -= this.visibleOctaves;
     this.octave = Math.max(-1, this.octave);
 
     if (this.selection) {
