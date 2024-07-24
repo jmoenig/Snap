@@ -127,6 +127,7 @@
 ### 2024-07-24
 * widgets: added ability to switch octaves in the piano keyboard widget, thanks, ego-lay-atman-bay!
 * gui: added credits for ego-lay-atman-bay
+* v10-rc6
 
 ### 2024-07-22
 * edited help screen for doDeleteBlock, converted to PNG, reduced file size
