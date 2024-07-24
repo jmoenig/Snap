@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.0:
 * **New Features:**
     1. Blocks all the way
         * all blocks in the palette are now custom blocks, except hat blocks and rings
@@ -130,6 +132,7 @@
 * v10-rc6
 * reverted piano keyboard behavior
 * v10-rc7
+* prepared v10.0.0 release
 
 ### 2024-07-22
 * edited help screen for doDeleteBlock, converted to PNG, reduced file size
