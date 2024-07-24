@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-July-22';
+modules.gui = '2024-July-24';
 
 // Declarations
 
@@ -5569,6 +5569,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nSimon Mong: Custom blocks palette arrangement'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
+        + '\nego-lay-atman-bay: Piano Keyboard Octave Switching'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
