@@ -129,6 +129,7 @@
 * gui: added credits for ego-lay-atman-bay
 * v10-rc6
 * reverted piano keyboard behavior
+* v10-rc7
 
 ### 2024-07-22
 * edited help screen for doDeleteBlock, converted to PNG, reduced file size
