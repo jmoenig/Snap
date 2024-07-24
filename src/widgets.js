@@ -3692,15 +3692,15 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     case 40: // 'down arrow'
     case 189: // -
         return event.shiftKey ?
-            this.octaveUp()
-            : this.octaveDown();
+            this.octaveDown()
+            : this.selectDown();
     case 38: // 'up arrow'
     case 39: // 'right arrow'
     case 187: // +
     case 220: // #
         return event.shiftKey ?
-            this.octaveDown()
-            : this.octaveUp();
+            this.octaveUp()
+            : this.selectUp();
     default:
         switch(event.key) {
         case 'c':
@@ -3737,6 +3737,22 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
             nop();
         }
     }
+};
+
+PianoMenuMorph.prototype.selectUp = function () {
+    this.selectKey(
+        this.selection ?
+            Math.min(this.selection.action + 1, 143)
+            : 1
+    );
+};
+
+PianoMenuMorph.prototype.selectDown = function () {
+    this.selectKey(
+        this.selection ?
+            Math.max(this.selection.action - 1, 0)
+            : 1
+    );
 };
 
 PianoMenuMorph.prototype.octaveUp = function () {
