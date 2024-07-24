@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -33,6 +33,7 @@
     credits
     -------
     Lucas Karahadian contributed a first prototype of the piano keyboard
+    ego-lay-atman-bay contributed the capability to switch octaves
 
 
     I. hierarchy
@@ -87,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2023-May-24';
+modules.widgets = '2024-July-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3532,7 +3533,7 @@ PianoMenuMorph.prototype.init = function (
             }
         }
     }
-    this.addItem('C', choices['C'] + (12 * this.visibleOctaves))
+    this.addItem('C', choices.C + (12 * this.visibleOctaves));
 };
 
 PianoMenuMorph.prototype.createItems = function () {
@@ -3603,19 +3604,19 @@ PianoMenuMorph.prototype.createItems = function () {
     var downOctave = new ArrowMorph(
         'left',
         fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1),
+        Math.max(Math.floor(this.fontSize / 6), 1)
     );
     downOctave.setPosition(new Point(5, 3));
-    downOctave.mouseClickLeft = () => {this.octaveDown()};
+    downOctave.mouseClickLeft = () => this.octaveDown();
     this.add(downOctave);
 
     var upOctave = new ArrowMorph(
         'right',
         fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1),
+        Math.max(Math.floor(this.fontSize / 6), 1)
     );
     upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
-    upOctave.mouseClickLeft = () => {this.octaveUp()};
+    upOctave.mouseClickLeft = () => this.octaveUp();
     this.add(upOctave);
 
     fb = this.fullBounds();
@@ -3690,20 +3691,16 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     case 37: // 'left arrow'
     case 40: // 'down arrow'
     case 189: // -
-        if (event.shiftKey) {
-            return this.octaveDown();
-        } else {
-            return this.selectDown();
-        }
+        return event.shiftKey ?
+            this.octaveUp()
+            : this.octaveDown();
     case 38: // 'up arrow'
     case 39: // 'right arrow'
     case 187: // +
     case 220: // #
-        if (event.shiftKey) {
-            return this.octaveUp();
-        } else {
-            return this.selectUp();
-        }
+        return event.shiftKey ?
+            this.octaveDown()
+            : this.octaveUp();
     default:
         switch(event.key) {
         case 'c':
@@ -3742,28 +3739,6 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     }
 };
 
-PianoMenuMorph.prototype.selectUp = function () {
-    var next = 1;
-    if (this.selection) {
-        next = this.selection.action + 1;
-        if (next > 143) {
-            next = 143;
-        }
-    }
-    this.selectKey(next);
-};
-
-PianoMenuMorph.prototype.selectDown = function () {
-    var next = 1;
-    if (this.selection) {
-        next = this.selection.action - 1;
-        if (next < 0) {
-            next = 0;
-        }
-    }
-    this.selectKey(next);
-};
-
 PianoMenuMorph.prototype.octaveUp = function () {
     this.octave += this.visibleOctaves;
     this.octave = Math.min(this.octave, 10 - (11) % this.visibleOctaves);
@@ -3780,7 +3755,7 @@ PianoMenuMorph.prototype.octaveDown = function () {
     if (this.selection) {
         this.selection.mouseEnter();
     }
-}
+};
 
 PianoMenuMorph.prototype.destroy = function () {
     this.children.forEach(key => {
