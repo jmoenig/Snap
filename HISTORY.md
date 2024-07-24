@@ -106,6 +106,7 @@
     6. User interface
         * scroll long text inside result balloons instead of shortening it
         * Confirmation pop-ups when closing the browser tab only appears in the event of unsaved changes, thanks, 2-www
+        * more help screens, thanks, Brian and the forum gang!
     7. Lisp code
         * splitting a LISP-formatted text by "blocks" returns a block-syntax tree
         * converting a block-syntax tree to "text" using the list-selectors reporters reeturns LISP code
@@ -121,6 +122,14 @@
     * updated extensions.md
 * **Translation Updates:**
     * German
+
+### 2024-07-22
+* edited help screen for doDeleteBlock, converted to PNG, reduced file size
+* v10-rc5
+
+### 2024-07-22
+* more help screens, thanks, Brian and the forum gang!
+* v10-rc4
 
 ### 2024-07-18
 * gui: refresh IDE when loading a library from the cloud to support customized primitives
