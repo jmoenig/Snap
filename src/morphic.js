@@ -1631,7 +1631,7 @@ function embedMetadataPNG(aCanvas, aString) {
             embedTag
         );
     try {
-        bPart.splice(-12, 0, ...newChunk);
+        bPart = bPart.slice(0, -12).concat( newChunk.split(""), bPart.slice( -12));
         parts[1] = btoa(bPart.join(""));
     } catch (err) {
         console.log(err);
