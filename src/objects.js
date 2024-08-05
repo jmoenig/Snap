@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-July-11';
+modules.objects = '2024-August-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -2269,6 +2269,18 @@ SpriteMorph.prototype.primitiveBlocks = function () {
 
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = this.primitiveBlocks();
+    this.initHyperZip();
+};
+
+SpriteMorph.prototype.initHyperZip = function () {
+    var info = SpriteMorph.prototype.blocks.reportHyperZip,
+        def = SpriteMorph.prototype.customBlockDefinitionFor('reportHyperZip'),
+        proc = new Process(null, this.parentThatIsA(StageMorph));
+
+    def.primitive = false;
+    info.definition = def;
+    proc.pushContext();
+    def.setBlockDefinition(proc.assemble(proc.parseCode(info.src)));
 };
 
 SpriteMorph.prototype.hasCustomizedPrimitives = function () {

@@ -3,10 +3,12 @@
 ## in development:
 * **Notable Fixes:**
     * fixed a variable scope bug when evaluating a ring with a same-named formal parameter as an outer scoped variable
+    * fixed disabling a primitive that has ZIP as a custom fallback, e.g. numbers, reporter-if 
 
 ### 2024-08-05
 * new dev version
 * threads: fixed a variable scope bug when evaluating a ring with a same-named formal parameter as an outer scoped variable
+* objects: fixed disabling a primitive that has ZIP as a custom fallback, e.g. numbers, reporter-if 
 
 ## 10.0.0:
 * **New Features:**
