@@ -98,6 +98,8 @@
         * support for multiple separator lines in input slot dropdown menus
         * Libraries (and Costumes, etc) media files are now in a JSON format, which supports translation and additional search metadata.
         * arcs library: changed label wording to TurtleStitch convention, added "arc left" version
+        * new Streams 2.0 library, thanks, qw23 and Brian!
+        * new BLE and MicroBlocks library, thanks, John, Bernat and Peter!
     4. Metaprogramming
         * automatically add generic inputs in DEFINE matching the number of placeholders in the label
         * when querying the defintion of a block via metaprogramming the number of inputs of the resulting ring now matches that of the header expression
