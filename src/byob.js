@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-June-12';
+modules.byob = '2024-August-05';
 
 // Declarations
 
@@ -5113,7 +5113,7 @@ InputSlotDialogMorph.prototype.editVariadicMaxSlots = function () {
         num => this.fragment.maxSlots = num,
         this
     ).prompt(
-        "Min slots",
+        "Max slots",
         (this.fragment.maxSlots || 0).toString(),
         this.world(),
         null, // pic
