@@ -6,6 +6,10 @@
     * fixed disabling a primitive that has ZIP as a custom fallback, e.g. numbers, reporter-if 
     * fixed dialog box label to show "Max slots" when editing the max slots setting of a variadic custom block input
     * fixed occasional buffer overflow issue for code embedded in script pics, thanks, Dariusz!
+    * embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
+
+### 2024-08-07
+* embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
 
 ### 2024-08-06
 * morphic: fixed occasional buffer overflow issue for code embedded in script pics, thanks, Dariusz! 
