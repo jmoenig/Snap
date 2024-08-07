@@ -6613,7 +6613,6 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
-    console.log('opening library', name, silently) // +++
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening blocks...'),
@@ -10475,7 +10474,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
-/*
     if (this.hasCached(selectedLibrary)) {
         this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
@@ -10487,19 +10485,16 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         );
         ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
-*/
         ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
             libraryText => {
                 ide.droppedText(libraryText, libraryName);
-                // +++ this.isLoadingLibrary = true;
+                this.isLoadingLibrary = true;
             }
         );
-/*
     }
-    ide.refreshIDE(); // +++ get rid of this
-*/
+    ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
