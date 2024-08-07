@@ -10492,7 +10492,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             ide.resourceURL('libraries', selectedLibrary),
             libraryText => {
                 ide.droppedText(libraryText, libraryName);
-                this.isLoadingLibrary = true;
+                // this.isLoadingLibrary = true;
             }
         );
 /*
