@@ -1770,8 +1770,8 @@
     "name": "~"
   },
   {
-    "fileName": "SciSnap!2Blocks.xml",
-    "name": "SciSnap! v2",
+    "fileName": "SciSnap3Blocks.xml",
+    "name": "SciSnap! v3",
     "description": "Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)",
     "translations": {
       "ca": {

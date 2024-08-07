@@ -142,8 +142,9 @@ var snapVersion = '10.0.1-dev',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
-        'libraries/SciSnapExtensions.js',
-        'libraries/SciSnap!2Blocks.xml',
+        'libraries/SciSnap3Blocks.xml',
+        'libraries/SciSnap3Extensions.js',
+        'libraries/SciSnap3Costumedata.js',
 
         'libraries/TuneScope.xml',
 
