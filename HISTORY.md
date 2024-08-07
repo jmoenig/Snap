@@ -10,6 +10,7 @@
 
 ### 2024-08-07
 * embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
+* objects: exclude "reportHyperZip" from collected block dependencies for libraries etc.
 
 ### 2024-08-06
 * morphic: fixed occasional buffer overflow issue for code embedded in script pics, thanks, Dariusz! 

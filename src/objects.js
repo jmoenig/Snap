@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-August-05';
+modules.objects = '2024-August-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -2285,7 +2285,8 @@ SpriteMorph.prototype.initHyperZip = function () {
 
 SpriteMorph.prototype.hasCustomizedPrimitives = function () {
     return Object.keys(this.blocks).some(selector =>
-        this.blocks[selector].definition instanceof CustomBlockDefinition
+        selector !== 'reportHyperZip' &&
+            this.blocks[selector].definition instanceof CustomBlockDefinition
     );
 };
 
@@ -2493,7 +2494,8 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
 SpriteMorph.prototype.bootstrappedBlocks = function () {
     var boot = [];
     Object.keys(SpriteMorph.prototype.blocks).forEach(each => {
-        if (this.blocks[each].definition instanceof CustomBlockDefinition) {
+        if (each !== 'reportHyperZip' &&
+                this.blocks[each].definition instanceof CustomBlockDefinition) {
             boot.push(this.blocks[each].definition);
         }
     });
