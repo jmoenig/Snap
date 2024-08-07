@@ -3,6 +3,7 @@
 ## in development:
 * **Notable Changes:**
     * exclude "reportHyperZip" from collected block dependencies for libraries etc.
+    * MQTT extension update, thanks, Simon and Xavier! 
 * **Notable Fixes:**
     * fixed a variable scope bug when evaluating a ring with a same-named formal parameter as an outer scoped variable
     * fixed disabling a primitive that has ZIP as a custom fallback, e.g. numbers, reporter-if 
