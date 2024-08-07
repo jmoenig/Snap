@@ -6613,6 +6613,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
+    console.log('opening library', name, silently) // +++
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening blocks...'),
@@ -10492,7 +10493,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             ide.resourceURL('libraries', selectedLibrary),
             libraryText => {
                 ide.droppedText(libraryText, libraryName);
-                // this.isLoadingLibrary = true;
+                // +++ this.isLoadingLibrary = true;
             }
         );
 /*
