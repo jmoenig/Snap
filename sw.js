@@ -29,6 +29,7 @@ var snapVersion = '10.0.1-dev',
         'src/sha512.js',
         'src/FileSaver.min.js',
 
+/*
         // translations
         'locale/lang-ar.js',
         'locale/lang-bg.js',
@@ -142,11 +143,9 @@ var snapVersion = '10.0.1-dev',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
-/*
         'libraries/SciSnap3Blocks.xml',
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
-*/
 
         'libraries/TuneScope.xml',
 
@@ -798,6 +797,7 @@ var snapVersion = '10.0.1-dev',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
         'Examples/vee.xml'
+*/
     ];
 
 console.log('service worker executed')
