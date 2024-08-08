@@ -1248,7 +1248,9 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
             child.childNamed('scripts')
         );
 
+console.log('customizing prim', definition.selector)
         if (stage) { // update all instances
+console.log('   ...updating stage blocks...')
             stage.allBlockInstances(definition).reverse().forEach(
                 block => block.refresh()
             );
@@ -1264,8 +1266,10 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
                 }
             );
         } else { // at least update instances found in customized prims
+console.log('   ...no stage, updating customized prim', definition.selector)
             SpriteMorph.prototype.everyBlock().forEach(block => {
                 if (block.definition === definition) {
+console.log('      ...updating', block)
                     block.refresh();
                 }
             });
