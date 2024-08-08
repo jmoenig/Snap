@@ -76,8 +76,6 @@ var snapVersion = '10.0.1-dev',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
 
-/*
-
         //libraries
         'libraries/LIBRARIES.json',
 
@@ -203,6 +201,8 @@ var snapVersion = '10.0.1-dev',
         'libraries/try-catch.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
+
+/*
 
         //costumes
         'Costumes/COSTUMES.json',
