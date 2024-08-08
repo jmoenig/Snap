@@ -202,6 +202,8 @@ var snapVersion = '10.0.1-dev',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
 
+/*
+
         //costumes
         'Costumes/COSTUMES.json',
 
@@ -766,8 +768,6 @@ var snapVersion = '10.0.1-dev',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
-
-/*
 
         // Sounds
         'Sounds/SOUNDS.json',
