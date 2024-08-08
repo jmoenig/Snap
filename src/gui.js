@@ -10475,6 +10475,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
     if (this.hasCached(selectedLibrary)) {
+console.log('CACHED Lib')
         this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
@@ -10485,6 +10486,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
         );
         ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
+console.log('UNCACHED Lib')
         ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
@@ -10494,7 +10496,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             }
         );
     }
-    ide.refreshIDE();
+    // ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
