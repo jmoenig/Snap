@@ -1248,7 +1248,6 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
             child.childNamed('scripts')
         );
 
-stage = this.scene.stage; // +++
         if (stage) { // update all instances
             stage.allBlockInstances(definition).reverse().forEach(
                 block => block.refresh()
