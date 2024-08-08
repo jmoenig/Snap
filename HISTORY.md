@@ -10,7 +10,11 @@
     * fixed disabling a primitive that has ZIP as a custom fallback, e.g. numbers, reporter-if 
     * fixed dialog box label to show "Max slots" when editing the max slots setting of a variadic custom block input
     * fixed occasional buffer overflow issue for code embedded in script pics, thanks, Dariusz!
+    * fixed PWA cache for backgrounds
     * embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
+
+### 2024-08-08
+* sw.js: fixed PWA cache for backgrounds
 
 ### 2024-08-07
 * embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
