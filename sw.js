@@ -751,8 +751,6 @@ var snapVersion = '10.0.1-dev',
         'Costumes/wizard2.svg',
         'Costumes/wizard.svg',
 
-/*
-
         // Backgrounds
         'Backgrounds/BACKGROUNDS',
 
@@ -768,6 +766,8 @@ var snapVersion = '10.0.1-dev',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
+
+/*
 
         // Sounds
         'Sounds/SOUNDS.json',
