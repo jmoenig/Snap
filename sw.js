@@ -29,7 +29,6 @@ var snapVersion = '10.0.1-dev',
         'src/sha512.js',
         'src/FileSaver.min.js',
 
-/*
         // translations
         'locale/lang-ar.js',
         'locale/lang-bg.js',
@@ -76,6 +75,8 @@ var snapVersion = '10.0.1-dev',
         'locale/lang-ua.js',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
+
+/*
 
         //libraries
         'libraries/LIBRARIES.json',
