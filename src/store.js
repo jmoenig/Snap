@@ -1135,9 +1135,6 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
     element,
     stage
 ) {
-
-console.log('loading custom prims for stage', stage, world.children[0].stage === stage)
-
     // private - overload existing customized primitives
     element.children.forEach(child => {
         var definition, names, inputs, vars, header, code, trans, comment, i,
@@ -1251,6 +1248,7 @@ console.log('loading custom prims for stage', stage, world.children[0].stage ===
             child.childNamed('scripts')
         );
 
+stage = this.scene.stage; // +++
         if (stage) { // update all instances
             stage.allBlockInstances(definition).reverse().forEach(
                 block => block.refresh()
