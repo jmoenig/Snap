@@ -76,7 +76,6 @@ var snapVersion = '10.0.1-dev',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
 
-/*
         //libraries
         'libraries/LIBRARIES.json',
 
@@ -143,9 +142,11 @@ var snapVersion = '10.0.1-dev',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
+/*
         'libraries/SciSnap3Blocks.xml',
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
+*/
 
         'libraries/TuneScope.xml',
 
@@ -202,7 +203,7 @@ var snapVersion = '10.0.1-dev',
         'libraries/try-catch.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
-*/
+
         //costumes
         'Costumes/COSTUMES.json',
 
