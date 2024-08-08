@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.1:
 * **Notable Changes:**
     * SciSnap! v3 extension, update - new major release -, thanks, Eckart!
     * exclude "reportHyperZip" from collected block dependencies for libraries etc.
@@ -15,6 +17,7 @@
 
 ### 2024-08-08
 * sw.js: fixed PWA cache for backgrounds
+* prepared v10.0.1 patch
 
 ### 2024-08-07
 * embroidery library: fixed customized "GO TO" primitive for selected target sprite, (partially) enables nested sprites trails embroidery
