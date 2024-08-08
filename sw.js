@@ -202,8 +202,6 @@ var snapVersion = '10.0.1-dev',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
 
-/*
-
         //costumes
         'Costumes/COSTUMES.json',
 
@@ -752,6 +750,8 @@ var snapVersion = '10.0.1-dev',
         'Costumes/wizard1.svg',
         'Costumes/wizard2.svg',
         'Costumes/wizard.svg',
+
+/*
 
         // Backgrounds
         'Backgrounds/BACKGROUNDS',
