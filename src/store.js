@@ -537,7 +537,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     model.primitives = model.scene.childNamed('primitives');
     if (model.primitives && !this.noPrims) {
         SpriteMorph.prototype.initBlocks();
-        this.loadCustomizedPrimitives(scene.stage, model.primitives, scene.stage); // +++
+        this.loadCustomizedPrimitives(scene.stage, model.primitives, scene.targetStage); // +++
         scene.blocks = SpriteMorph.prototype.blocks;
     }
 
