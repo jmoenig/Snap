@@ -751,10 +751,8 @@ var snapVersion = '10.0.1-dev',
         'Costumes/wizard2.svg',
         'Costumes/wizard.svg',
 
-/*
-
         // Backgrounds
-        'Backgrounds/BACKGROUNDS',
+        'Backgrounds/BACKGROUNDS.json',
 
         'Backgrounds/atom_playground.jpg',
         'Backgrounds/bedroom1.gif',
@@ -798,7 +796,6 @@ var snapVersion = '10.0.1-dev',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
         'Examples/vee.xml'
-*/
     ];
 
 console.log('service worker executed')
