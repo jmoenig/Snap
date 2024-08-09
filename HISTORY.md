@@ -1,12 +1,16 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.2:
 * **Notable Fixes:**
     * allow assigning non-catalog selectors to custom block definitions (doesn't make sense, but people do it anyway...)
     * SciSnap3: fixed a color channel typo in the variadic color reporter
 
 ### 2024-08-09
 * byob: allow assigning non-catalog selectors to custom block definitions (doesn't make sense, but people do it anyway...) 
+* SciSnap3: fixed a color channel typo in the variadic color reporter
+* prepared v10.0.2 patch
 
 ## 10.0.1:
 * **Notable Changes:**
