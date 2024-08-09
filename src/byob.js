@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-August-05';
+modules.byob = '2024-August-09';
 
 // Declarations
 
@@ -1155,7 +1155,7 @@ CustomBlockDefinition.prototype.unBootstrap = function (actor) {
 
 CustomBlockDefinition.prototype.isBootstrapped = function () {
     return this.isGlobal && this.selector &&
-        SpriteMorph.prototype.blocks[this.selector].definition === this;
+        SpriteMorph.prototype.blocks[this.selector]?.definition === this;
 };
 
 CustomBlockDefinition.prototype.isQuasiPrimitive = function () {

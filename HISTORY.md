@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * allow assigning non-catalog selectors to custom block definitions (doesn't make sense, but people do it anyway...)
+
+### 2024-08-09
+* byob: allow assigning non-catalog selectors to custom block definitions (doesn't make sense, but people do it anyway...) 
 
 ## 10.0.1:
 * **Notable Changes:**
