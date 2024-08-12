@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * enabled setting custom blocks labels to (nested) lists of label parts, not just in DEFINE but also in SET
+    
+### 2024-08-12
+* threads: enabled setting custom blocks labels to (nested) lists of label parts
 
 ## 10.0.2:
 * **Notable Fixes:**

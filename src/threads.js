@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-August-05';
+modules.threads = '2024-August-12';
 
 var ThreadManager;
 var Process;
@@ -8404,8 +8404,16 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
             (oldType == 'command' && rep.includes(type));
     }
 
+    function labelFromList(list) {
+        return list.map(each => each instanceof List ? each.asWords()
+            : each).asTXT().replaceAll('\n', ' $nl ');
+    }
+
     switch (choice) {
     case 'label':
+        if (val instanceof List) {
+            val = labelFromList(val);
+        }
         def.setBlockLabel(val);
         break;
     case 'comment':
