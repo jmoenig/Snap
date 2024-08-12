@@ -3,9 +3,12 @@
 ## in development:
 * **Notable Changes:**
     * enabled setting custom blocks labels to (nested) lists of label parts, not just in DEFINE but also in SET
+* **Notable Fixes:**
+    * fixed initial number of inputs in the parallelization library
     
 ### 2024-08-12
 * threads: enabled setting custom blocks labels to (nested) lists of label parts
+* fixed initial number of inputs in the parallelization library
 
 ## 10.0.2:
 * **Notable Fixes:**
