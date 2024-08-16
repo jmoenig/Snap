@@ -2,9 +2,16 @@
 
 ## in development:
 
+## 10.0.4:
+* **Notable Changes:**
+    * tiles library update: new "render" block, German translation update for upvar names
+* **Translation Updates:**
+    * German
+
 ### 2024-08-16
 * German translation update for tiles library
 * tiles library update: new "render" block, German translation update for upvar names
+* prepared v10.0.4 patch
 
 ## 10.0.3:
 * **Notable Changes:**
