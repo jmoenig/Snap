@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-08-16
+* German translation update for tiles library
+
 ## 10.0.3:
 * **Notable Changes:**
     * enabled setting custom block labels to (nested) lists of label parts, not just in DEFINE but also in SET
