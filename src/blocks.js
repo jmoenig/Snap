@@ -6967,7 +6967,7 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (ctx, x, y) {
     ctx.strokeStyle = lowerGradient;
     ctx.beginPath();
     ctx.moveTo(indent + shift, y + this.corner - shift);
-    ctx.lineTo(indent + this.dent, y + this.corner - shift);
+    ctx.moveTo(indent + this.dent, y + this.corner - shift);
     ctx.stroke();
 
     rightGradient = ctx.createLinearGradient(
