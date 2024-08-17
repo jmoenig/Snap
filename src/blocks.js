@@ -6879,10 +6879,10 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
-    /*ctx.moveTo(
-        x + this.corner * 3 + this.inset + this.dent + shift,
+    ctx.moveTo(
+        x + this.corner,
         y + shift
-    );*/
+    );
     ctx.lineTo(this.width() - this.corner, y + shift);
     ctx.stroke();
 
