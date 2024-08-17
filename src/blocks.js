@@ -10118,46 +10118,6 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
     );
     ctx.stroke();
 
-    // dent bottom
-    lowerGradient = ctx.createLinearGradient(
-        0,
-        this.corner,
-        0,
-        this.corner + edge
-    );
-    lowerGradient.addColorStop(0, this.cachedClr);
-    lowerGradient.addColorStop(1, this.cachedClrDark);
-
-    ctx.strokeStyle = lowerGradient;
-    ctx.beginPath();
-    ctx.moveTo(indent + edge + rf * 2 + shift, this.corner + shift);
-    ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
-        this.corner + shift
-    );
-    ctx.stroke();
-
-    // dent right edge
-    rightGradient = ctx.createLinearGradient(
-        indent + edge  + rf * 2 + (dent - rf * 2) - shift,
-        this.corner,
-        indent + edge  + rf * 2 + (dent - rf * 2) + shift * 0.7,
-        this.corner + shift + shift * 0.7
-    );
-    rightGradient.addColorStop(0, this.cachedClr);
-    rightGradient.addColorStop(1, this.cachedClrDark);
-
-    ctx.strokeStyle = rightGradient;
-    ctx.beginPath();
-    ctx.moveTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
-        this.corner + shift
-    );
-    ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
-        shift
-    );
-    ctx.stroke();
 
     // upper edge (right side)
     ctx.strokeStyle = upperGradient;
