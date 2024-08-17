@@ -6794,11 +6794,13 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
     );
 
     // top dent:
-    ctx.lineTo(this.corner + this.inset, inset);
-    ctx.lineTo(indent, this.corner + inset);
-    ctx.lineTo(indent + this.dent, this.corner + inset);
-    ctx.lineTo(this.corner * 3 + this.inset + this.dent, inset);
-    ctx.lineTo(this.width() - this.corner, inset);
+    if(false){
+        ctx.lineTo(this.corner + this.inset, inset);
+        ctx.lineTo(indent, this.corner + inset);
+        ctx.lineTo(indent + this.dent, this.corner + inset);
+        ctx.lineTo(this.corner * 3 + this.inset + this.dent, inset);
+        ctx.lineTo(this.width() - this.corner, inset);
+    }
 
     // top right:
     ctx.arc(
@@ -6882,10 +6884,10 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
-    ctx.moveTo(
+    /*ctx.moveTo(
         x + this.corner * 3 + this.inset + this.dent + shift,
         y + shift
-    );
+    );*/
     ctx.lineTo(this.width() - this.corner, y + shift);
     ctx.stroke();
 
