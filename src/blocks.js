@@ -7187,41 +7187,41 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         bottom = this.height() - this.corner,
         bottomCorner = this.height() - this.corner * 2,
         radius = Math.max(this.corner - inset, 0),
-        s = this.hatWidth,
-        h = this.hatHeight,
-        r = ((4 * h * h) + (s * s)) / (8 * h),
-        a = degrees(4 * Math.atan(2 * h / s)),
-        sa = a / 2,
-        sp = Math.min(s * 1.7, this.width() - this.corner);
+        pos = this.position();
 
-    // top arc:
-    ctx.moveTo(inset, h + this.corner);
+    // top left:
     ctx.arc(
-        s / 2,
-        r,
-        r,
-        radians(-sa - 90),
+        this.corner*2,
+        this.corner*2,
+        radius,
+        radians(-180),
         radians(-90),
         false
     );
-    ctx.bezierCurveTo(
-        s,
-        0,
-        s,
-        h,
-        sp,
-        h
-    );
+
+    // top dent:
+    if (false) {
+        ctx.lineTo(this.corner + this.inset, inset);
+        ctx.lineTo(indent, this.corner + inset);
+        ctx.lineTo(indent + this.dent, this.corner + inset);
+        ctx.lineTo(this.corner * 3 + this.inset + this.dent, inset);
+        ctx.lineTo(this.width() - this.corner, inset);
+    }
 
     // top right:
     ctx.arc(
-        this.width() - this.corner,
-        h + this.corner,
+        this.width() - this.corner*2,
+        this.corner*2,
         radius,
         radians(-90),
         radians(-0),
         false
     );
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
 
     // bottom right:
     ctx.arc(
@@ -7233,7 +7233,7 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         false
     );
 
-    if (!this.isStop()) {
+    if (false) {
         ctx.lineTo(this.width() - this.corner, bottom - inset);
         ctx.lineTo(this.corner * 3 + this.inset + this.dent, bottom - inset);
         ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
@@ -7265,14 +7265,17 @@ HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
 
     ctx.strokeStyle = gradient;
     ctx.beginPath();
-    ctx.moveTo(shift, this.hatHeight + shift);
+    ctx.moveTo(shift, this.corner);
     ctx.lineTo(shift, this.height() - this.corner * 2 - shift);
     ctx.stroke();
 };
 
 HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
+        cslots = this.cSlots(),
+        top = this.top(),
         x = this.width(),
+        y,
         gradient;
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
@@ -7282,10 +7285,22 @@ HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-
     ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(x - shift, this.corner + this.hatHeight + shift);
+
+    if (cslots.length) {
+        ctx.beginPath();
+        ctx.moveTo(x - shift, this.corner + shift);
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(x - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x - shift, y + slot.height());
+        });
+    } else {
+        ctx.beginPath();
+        ctx.moveTo(x - shift, this.corner + shift);
+    }
     ctx.lineTo(x - shift, this.height() - this.corner * 2);
     ctx.stroke();
 };
@@ -10485,22 +10500,6 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
     // jigsaw shape:
     ctx.lineTo(
         this.width() - this.corner + ox,
-        this.corner + oy - inset
-    );
-    ctx.lineTo(
-        (this.inset * 2) + (this.corner * 3) + this.dent + ox,
-        this.corner + oy - inset
-    );
-    ctx.lineTo(
-        (this.inset * 2) + (this.corner * 2) + this.dent + ox,
-        this.corner * 2 + oy - inset
-    );
-    ctx.lineTo(
-        (this.inset * 2) + (this.corner * 2) + ox,
-        this.corner * 2 + oy - inset
-    );
-    ctx.lineTo(
-        (this.inset * 2) + this.corner + ox,
         this.corner + oy - inset
     );
     ctx.lineTo(
