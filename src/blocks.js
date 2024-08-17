@@ -7182,7 +7182,7 @@ HatBlockMorph.prototype.reify = function () {
 
 // HatBlockMorph drawing:
 
-HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
+/*HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
     var indent = this.corner * 2 + this.inset,
         bottom = this.height() - this.corner,
         bottomCorner = this.height() - this.corner * 2,
@@ -7353,7 +7353,7 @@ HatBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
     );
     ctx.lineTo(this.width() - this.corner, h + shift);
     ctx.stroke();
-};
+};*/
 
 // ReporterBlockMorph //////////////////////////////////////////////////
 
