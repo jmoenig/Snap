@@ -3133,7 +3133,7 @@ Process.prototype.doForever = function (body) {
     // (lambda)
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
-    if (body) {
+    if (!body) {
         this.pushContext(this.nextBlock());
     }
     this.pushContext();
