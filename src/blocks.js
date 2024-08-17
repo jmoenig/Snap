@@ -10590,10 +10590,10 @@ CSlotMorph.prototype.drawTopEdge = function (ctx, x, y) {
 
     ctx.strokeStyle = rightGradient;
     ctx.beginPath();
-    ctx.moveTo(
+    /*ctx.moveTo(
         x + this.inset + (this.corner * 2) + this.dent,
         y + this.corner - shift
-    );
+    );*/
     ctx.lineTo(
         x + this.corner * 3 + this.inset + this.dent,
         y - shift
