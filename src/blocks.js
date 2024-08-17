@@ -6825,7 +6825,7 @@ CommandBlockMorph.prototype.outlinePath = function(ctx, inset) {
         false
     );
 
-    if (!this.isStop()) {
+    if (false) {
         ctx.lineTo(this.width() - this.corner, bottom - inset);
         ctx.lineTo(this.corner * 3 + this.inset + this.dent, bottom - inset);
         ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
@@ -6901,7 +6901,7 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
 
     ctx.strokeStyle = leftGradient;
     ctx.beginPath();
-    ctx.moveTo(x + this.corner + this.inset, y + shift);
+    ctx.lineTo(this.width() - this.corner, y - shift);
     ctx.lineTo(indent, y + this.corner + shift);
     ctx.stroke();
 
