@@ -2987,7 +2987,7 @@ BlockMorph.uber = SyntaxElementMorph.prototype;
 // BlockMorph preferences settings:
 
 BlockMorph.prototype.isCachingInputs = true;
-BlockMorph.prototype.zebraContrast = 40; // alternating color brightness
+BlockMorph.prototype.zebraContrast = 0; // alternating color brightness
 
 // BlockMorph sound feedback:
 
@@ -6477,14 +6477,14 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
             );
         }
     }
-    if (!bottomBlock.isStop()) {
+    //if (!bottomBlock.isStop()) {
         ref.push(
             {
                 point: bottomBlock.bottomAttachPoint(),
                 loc: 'bottom'
             }
         );
-    }
+    //}
     this.allAttachTargets(target).forEach(eachTarget =>
         ref.forEach(eachRef => {
             // match: either both locs are 'wrap' or both are different,
