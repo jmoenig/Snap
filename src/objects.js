@@ -1112,7 +1112,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %loop',
+            spec: 'forever',
             code: 'forever',
             src: `(
                 (prim t doForever action)

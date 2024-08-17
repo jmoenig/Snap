@@ -6533,7 +6533,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
             scripts.lastNextBlock = target.element.nextBlock();
             target.element.nextBlock(this);
         }
-        if (this.isStop()) {
+        /*if (this.isStop()) {
             next = this.nextBlock();
             if (next) {
                 scripts.add(next);
@@ -6546,7 +6546,7 @@ CommandBlockMorph.prototype.snap = function (hand) {
                     affected.fixLayout();
                 }
             }
-        }
+        }*/
     } else if (target.loc === 'top') {
         target.element.removeHighlight();
         offsetY = this.bottomBlock().bottom() - this.bottom();

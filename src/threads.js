@@ -1092,7 +1092,8 @@ Process.prototype.isAutoLambda = function (inputSlot) {
         'doIfElse',
         'doWarp',
         'doFor',
-        'doForEach'
+        'doForEach',
+        'reportBlocksNative'
     ].includes(inputSlot.parent?.selector)) {
         // special cases when overloading those primitives
         // with custom block definitions
@@ -3133,7 +3134,7 @@ Process.prototype.doForever = function (body) {
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
     if (body) {
-        this.pushContext(body.blockSequence());
+        this.pushContext(this.nextBlock().blockSequence());
     }
     this.pushContext();
 };
