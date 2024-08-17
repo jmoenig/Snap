@@ -6944,14 +6944,14 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (ctx, x, y) {
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
     ctx.moveTo(this.corner, y - shift);
-    if (this.isStop()) {
+    if (true) {
         ctx.lineTo(this.width() - this.corner, y - shift);
     } else {
         ctx.lineTo(x + this.corner + this.inset - shift, y - shift);
     }
     ctx.stroke();
 
-    if (this.isStop()) {    // draw straight bottom edge
+    if (true) {    // draw straight bottom edge
         return null;
     }
 
