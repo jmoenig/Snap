@@ -815,7 +815,9 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             selector ===  'reportVariadicAnd' ||
             selector === 'doIf' ||
             selector === 'reportIfElse' ||
-            selector === 'doReport') {
+            selector === 'doReport'||
+            selector === 'doForever'
+        ) {
         if (this.isCatchingErrors) {
             try {
                 return this[selector](block);
@@ -3134,7 +3136,7 @@ Process.prototype.doForever = function (body) {
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
 
-    this.pushContext(this.context);
+    this.pushContext(body);
     this.pushContext();
 };
 
