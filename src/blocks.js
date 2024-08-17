@@ -6876,11 +6876,6 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
     upperGradient.addColorStop(0, this.cachedClrBright);
     upperGradient.addColorStop(1, this.cachedClr);
 
-    ctx.strokeStyle = upperGradient;
-    ctx.beginPath();
-    ctx.moveTo(this.corner, y + shift);
-    ctx.lineTo(x + this.corner + this.inset, y + shift);
-    ctx.stroke();
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
@@ -6906,6 +6901,9 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
     ctx.lineTo(this.width() - this.corner, y - shift);
     ctx.lineTo(indent, y + this.corner + shift);
     ctx.stroke();
+    if (true) {    // draw straight bottom edge
+        return null;
+    }
 
     lowerGradient = ctx.createLinearGradient(
         0,
