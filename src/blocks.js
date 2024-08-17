@@ -6896,14 +6896,14 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
     leftGradient.addColorStop(0, this.cachedClr);
     leftGradient.addColorStop(1, this.cachedClrBright);
 
+    if (true) {    // draw straight bottom edge
+        return null;
+    }
     ctx.strokeStyle = leftGradient;
     ctx.beginPath();
     ctx.lineTo(this.width() - this.corner, y - shift);
     ctx.lineTo(indent, y + this.corner + shift);
     ctx.stroke();
-    if (true) {    // draw straight bottom edge
-        return null;
-    }
 
     lowerGradient = ctx.createLinearGradient(
         0,
