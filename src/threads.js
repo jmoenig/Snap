@@ -3128,7 +3128,8 @@ Process.prototype.doPauseAll = function () {
 
 // Process loop primitives
 
-Process.prototype.doForever = function (body) {
+Process.prototype.doForever = function (block) {
+    var body = block.nextBlock()
     // non-special-form version, requires the C-slot input to
     // be marked as non-unevaluated (applicative order), which makes it
     // return its plain nested block without reifying it into a Context
@@ -3136,7 +3137,7 @@ Process.prototype.doForever = function (body) {
     this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
     if (body){
-        this.pushContext(body.nextBlock().blockSequence());
+        this.pushContext(body.blockSequence());
     }
     this.pushContext();
 };
