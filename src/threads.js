@@ -3072,6 +3072,14 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
     }
 };
 
+Process.prototype.getStatInfo = async function (object,info,callback) {
+    var api = require('file')
+    if (typeof(object) == "number") {
+        this.evaluate(callback,new List([(await api.IDToObject(object))[info]]));return
+    }
+    this.evaluate(callback, new List([(await api.getStat(object))[info]]))
+}
+
 Process.prototype.reportGlobalFlag = function (name) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);

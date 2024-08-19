@@ -2263,6 +2263,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']],
             code: 'video'
+        },
+        getStatInfo:{
+            type:'command',
+            category: 'other',
+            spec: '$magnifyingGlass-2 %s %StatInfo',
+            code: 'filestat'
         }
     };
 };
@@ -3765,6 +3771,8 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('reportFrameCount'));
             blocks.push(block('reportYieldCount'));
         }
+        blocks.push('-')
+        blocks.push(block("getStatInfo"));
     } else if (category === 'operators') {
 
         blocks.push(block('reifyScript'));
@@ -10917,6 +10925,9 @@ StageMorph.prototype.blockTemplates = function (
             blocks.push(block('reportFrameCount'));
             blocks.push(block('reportYieldCount'));
         }
+
+        blocks.push('-')
+        blocks.push(block("getStatInfo"));
     }
     if (category === 'operators') {
 

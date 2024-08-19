@@ -330,6 +330,11 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'unevaluated'
     },
+    '%StatInfo':{
+        type: 'input',
+        tags: 'readonly',
+        menu:'statinfoMenu'
+    },
     '%dir': {
         type: 'input',
         tags: 'numeric',
@@ -10839,10 +10844,6 @@ InputSlotMorph.prototype.setContents = function (data) {
 	}
 
     if (isConstant) {
-        // migrate old "any" constants
-        if (dta[0] === 'any') {
-            dta[0] = 'random';
-        }
         if (dta[0] === '__shout__go__') {
             this.symbol = this.labelPart('$greenflag');
             this.add(this.symbol);
@@ -10982,9 +10983,9 @@ InputSlotMorph.prototype.menuFromDict = function (
             return;
         }
     }
-    if (!noEmptyOption) {
+    /*if (!noEmptyOption) {
         menu.addItem(' ', null);
-    }
+    }*/
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0].split('').every(c => c === '~')) {
@@ -11068,6 +11069,41 @@ InputSlotMorph.prototype.menuFromDict = function (
     }
     return menu;
 };
+
+InputSlotMorph.prototype.statinfoMenu = function(){
+    return {
+        ObjType:"ObjType",
+        size:"size",
+        blksize:"blksize",
+        blocks:"blocks",
+        time:{
+            atimeNs:"atimeNs",
+            mtimeNs:"mtimeNs",
+            ctimeNs:"ctimeNs",
+            birthtimeNs:"birthtimeNs",
+        },
+        device:{
+            id:"dev",
+            "file device number":"rdev",
+            bavail:"bavail",
+            "bfree":"bfree",
+            blocks:"blocks",
+            bsize:"bsize",
+            fs:{
+                ffree:"ffree",
+                file:"file",
+                type:"type",
+            }
+        },
+        INode:"ino",
+        permissions:"mode",
+        "hardlink count🧱🔗#":"nlink",
+        owner:{
+            user:"uid",
+            group:"gid",
+        }
+    }
+}
 
 // InputSlotMorph special drop-down menus:
 // Note each function returning a drop-down menu
