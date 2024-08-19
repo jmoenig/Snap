@@ -6623,7 +6623,6 @@ CommandBlockMorph.prototype.isStop = function () {
         return choice instanceof Array && choice[0].length < 12;
     }
     return ([
-        'doForever',
         'doReport',
         'removeClone',
         'doSwitchToScene'
