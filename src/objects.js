@@ -2267,7 +2267,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         getStatInfo:{
             type:'command',
             category: 'other',
-            spec: '$magnifyingGlass-2 %s %StatInfo',
+            spec: '$magnifyingGlass-2 %s %StatInfo %cmdRing',
             code: 'filestat'
         }
     };
