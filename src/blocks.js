@@ -332,7 +332,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%StatInfo':{
         type: 'input',
-        tags: 'readonly',
+        tags: 'read-only',
         menu:'statinfoMenu'
     },
     '%dir': {
