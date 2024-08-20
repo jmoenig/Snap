@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-August-07';
+modules.objects = '2024-August-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -13142,7 +13142,7 @@ Costume.prototype.pixels = function () {
         i;
 
     if (!this.contents.width || !this.contents.height) {
-        return pixels;
+        return new List(pixels);
     }
     src = this.contents.getContext('2d').getImageData(
         0,
