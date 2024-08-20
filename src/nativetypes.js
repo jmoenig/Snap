@@ -1,6 +1,5 @@
 class SnapFunction extends Function {
     constructor(context){
-        properties = new Map([])
         super()
         this.getContext=()=>context
         return new Proxy(this,{
