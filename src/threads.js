@@ -1008,6 +1008,14 @@ Process.prototype.doReport = function (block) {
     // in any case evaluate (and ignore)
     // the input, because it could be
     // an HTTP Request for a hardware extension
+    if (this.context.funct){
+        this.stop()
+        if (block.inputs()[0] instanceof BlockMorph){
+            this.context.funct.Return(this.evaluateBlock(block.inputs()[0], block.inputs()[0].inputs().length));return
+        }
+        this.context.funct.Return(this.evaluateInput(block.inputs()[0]));return
+    }
+    
     this.pushContext(block.inputs()[0], outer);
     this.context.isCustomCommand = block.partOfCustomCommand;
 };
@@ -3077,7 +3085,21 @@ Process.prototype.getStatInfo = async function (object,info,callback) {
     if (typeof(object) == "number") {
         this.evaluate(callback,new List([(await api.IDToObject(object))[info]]));return
     }
-    this.evaluate(callback, new List([(await api.getStat(object))[info]]))
+    (await api.getStat(object,(e)=>{
+
+    }))
+}
+
+
+
+Process.prototype.promiseThen = function(promise,cmds){
+    return promise.then(new SnapFunction(cmds));
+}
+Process.prototype.promiseCatch = function (promise, cmds) {
+    return promise.catch(new SnapFunction(cmds));
+}
+Process.prototype.newPromise = function (cmds){
+    return new Promise(new SnapFunction(cmds));
 }
 
 Process.prototype.reportGlobalFlag = function (name) {

@@ -335,6 +335,11 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu:'statinfoMenu'
     },
+    '%promise':{
+        type: 'input',
+        tags: 'read-only',
+        value: '<Promise>'
+    },
     '%dir': {
         type: 'input',
         tags: 'numeric',

@@ -2269,6 +2269,24 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'other',
             spec: '$magnifyingGlass-2 %s %StatInfo %cmdRing',
             code: 'filestat'
+        },
+        newPromise:{
+            type:'reporter',
+            category: 'control',
+            spec: 'promise %cmdRing',
+            code: 'promiseNew'
+        },
+        promiseThen: {
+            type: 'reporter',
+            category: 'control',
+            spec: '%promise promise %cmdRing',
+            code: 'then'
+        },
+        promiseCatch: {
+            type: 'reporter',
+            category: 'control',
+            spec: '%promise catch %cmdRing',
+            code: 'then'
         }
     };
 };
@@ -3716,6 +3734,10 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doCallCC'));
             blocks.push(block('reportCallCC'));
         }
+        blocks.push('-');
+        blocks.push(block('newPromise'));
+        blocks.push(block('promiseCatch'));
+        blocks.push(block('promiseThen'));
 
     } else if (category === 'sensing') {
 
