@@ -5308,30 +5308,33 @@ BlockMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
+    var fill = this.color.copy()
+    fill.a = .5
+    var cssfill = fill.toString();
 
     if (MorphicPreferences.isFlat) {
         // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
+        ctx.fillStyle = cssfill;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
 
         // draw the inner filled shaped
-        ctx.fillStyle = this.cachedClr;
+        ctx.fillStyle = cssfill;
         ctx.beginPath();
         this.outlinePath(ctx, this.flatEdge);
         ctx.closePath();
         ctx.fill();
     } else {
         // draw the flat shape
-        ctx.fillStyle = this.cachedClr;
+        ctx.fillStyle = cssfill;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
 
-        // add 3D-Effect:
+        // add outline:
         this.drawEdges(ctx);
     }
 
@@ -6881,8 +6884,8 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
         0,
         y + this.edge
     );
-    upperGradient.addColorStop(0, this.cachedClrBright);
-    upperGradient.addColorStop(1, this.cachedClr);
+    upperGradient.addColorStop(0, this.color+"");
+    upperGradient.addColorStop(1, this.color+"");
 
 
     ctx.strokeStyle = upperGradient;
@@ -6901,8 +6904,8 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
         lgx,
         y
     );
-    leftGradient.addColorStop(0, this.cachedClr);
-    leftGradient.addColorStop(1, this.cachedClrBright);
+    leftGradient.addColorStop(0, this.color+"");
+    leftGradient.addColorStop(1, this.color+"");
 
     if (true) {    // draw straight bottom edge
         return null;
@@ -6946,8 +6949,8 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (ctx, x, y) {
         0,
         y
     );
-    upperGradient.addColorStop(0, this.cachedClr);
-    upperGradient.addColorStop(1, this.cachedClrDark);
+    upperGradient.addColorStop(0, this.color+"");
+    upperGradient.addColorStop(1, this.color+"");
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
@@ -7020,8 +7023,8 @@ CommandBlockMorph.prototype.drawLeftEdge = function (ctx) {
     var shift = this.edge * 0.5,
         gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
 
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -7043,8 +7046,8 @@ CommandBlockMorph.prototype.drawRightEdge = function (ctx) {
         gradient;
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -7081,8 +7084,8 @@ CommandBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
         this.corner,
         this.corner - this.edge
     );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -7116,8 +7119,8 @@ CommandBlockMorph.prototype.drawBottomRightEdge = function (ctx) {
         y,
         this.corner - this.edge
     );
-    gradient.addColorStop(0, this.cachedClrDark);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -7725,8 +7728,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         h - r,
         r + this.edge
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrBright);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -7748,8 +7751,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         r,
         r + this.edge
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -7771,8 +7774,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r - shift, shift);
@@ -7788,8 +7791,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         r,
         r
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrBright);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -7811,8 +7814,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         h - r,
         r
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -7832,8 +7835,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
         0,
         h
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r - shift, h - shift);
@@ -7842,8 +7845,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
 
     // left edge: straight vertical line
     gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(shift, r);
@@ -7852,8 +7855,8 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
 
     // right edge: straight vertical line
     gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
 
     if (cslots.length) {
@@ -7899,8 +7902,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         r,
         0
     );
-    gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(shift, h2);
@@ -7916,8 +7919,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         r,
         0
     );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(shift, h2);
@@ -7932,8 +7935,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r, shift);
@@ -7947,8 +7950,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
 
         // right vertical edge
         gradient = ctx.createLinearGradient(w - r - this.edge, 0, w - r, 0);
-        gradient.addColorStop(0, this.cachedClr);
-        gradient.addColorStop(1, this.cachedClrDark);
+        gradient.addColorStop(0, this.color+"");
+        gradient.addColorStop(1, this.color+"");
 
         ctx.lineWidth = this.edge;
         ctx.lineJoin = 'round';
@@ -7979,8 +7982,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
             w + r,
             0
         );
-        gradient.addColorStop(0, this.cachedClr);
-        gradient.addColorStop(1, this.cachedClrDark);
+        gradient.addColorStop(0, this.color+"");
+        gradient.addColorStop(1, this.color+"");
         ctx.strokeStyle = gradient;
         ctx.beginPath();
         ctx.moveTo(w - shift, h2);
@@ -7995,8 +7998,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
             w,
             0
         );
-        gradient.addColorStop(0, this.cachedClr);
-        gradient.addColorStop(1, this.cachedClrDark);
+        gradient.addColorStop(0, this.color+"");
+        gradient.addColorStop(1, this.color+"");
         ctx.strokeStyle = gradient;
         ctx.beginPath();
         ctx.moveTo(w - r, h - shift);
@@ -8012,8 +8015,8 @@ ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
         0,
         h
     );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(0, this.color+"");
+    gradient.addColorStop(1, this.color+"");
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r + shift, h - shift);
