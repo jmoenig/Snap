@@ -2279,14 +2279,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         promiseThen: {
             type: 'reporter',
             category: 'control',
-            spec: '%ros promise %cmdRing',
+            spec: '%ros then %cmdRing',
             code: 'then'
         },
         promiseCatch: {
             type: 'reporter',
             category: 'control',
             spec: '%ros catch %cmdRing',
-            code: 'then'
+            code: 'catch'
         }
     };
 };

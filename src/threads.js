@@ -1009,11 +1009,20 @@ Process.prototype.doReport = function (block) {
     // the input, because it could be
     // an HTTP Request for a hardware extension
     if (this.context.funct){
-        this.stop()
         if (block.inputs()[0] instanceof BlockMorph){
-            this.context.funct.Return(this.evaluateBlock(block.inputs()[0], block.inputs()[0].inputs().length));return
+            this.context.funct.Return(this.evaluateBlock(block.inputs()[0], block.inputs()[0].inputs().length))
+            this.readyToYield = true;
+            this.readyToTerminate = true;
+            this.errorFlag = false;
+            this.canBroadcast = false;
+            return
         }
-        this.context.funct.Return(this.evaluateInput(block.inputs()[0]));return
+        this.context.funct.Return(this.evaluateInput(block.inputs()[0]));
+        this.readyToYield = true;
+        this.readyToTerminate = true;
+        this.errorFlag = false;
+        this.canBroadcast = false;
+        return
     }
     
     this.pushContext(block.inputs()[0], outer);

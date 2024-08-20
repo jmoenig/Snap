@@ -13,11 +13,6 @@ class SnapFunction extends Function {
                 // proc.pushContext('doYield');
                 stage.threads.processes.push(proc);
                 proc.runStep();
-                try{
-                    proc.stop();
-                }catch(err){
-                    console.log('stop error, ok :)')
-                }
                 return target.returnValue
             }
         })
