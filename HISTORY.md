@@ -1,11 +1,14 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.5:
 * **Notable Fixes:**
     * fixed querying the pixels of an empty costume
 
 ### 2024-08-20
 * objects: fixed querying the pixels of an empty costume
+* prepared v10.0.5 patch
 
 ## 10.0.4:
 * **Notable Changes:**
