@@ -12897,9 +12897,9 @@ BooleanSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
-    this.drawDiamond(ctx, this.progress);
+    //this.drawDiamond(ctx, this.progress);
     this.drawLabel(ctx);
-    this.drawKnob(ctx, this.progress);
+    //this.drawKnob(ctx, this.progress);
 };
 
 BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
@@ -13062,7 +13062,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
         return;
     }
 
-    if (this.isWide()) { // draw the full text label
+     { // draw the full text label
         text = this.textLabelExtent();
         y = this.height() - (this.height() - text.y) / 2;
         if (this.value) {
@@ -13354,7 +13354,7 @@ ArrowMorph.prototype.getRenderColor = function () {
         if (MorphicPreferences.isFlat) {
             return this.color;
         }
-        return SyntaxElementMorph.prototype.alpha > 0.5 ? this.color : WHITE;
+        return this.parent.color;
     }
     return this.color;
 };
