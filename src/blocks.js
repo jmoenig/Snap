@@ -10774,6 +10774,8 @@ InputSlotMorph.prototype.init = function (
     choiceDict,
     isReadOnly
 ) {
+
+    this.alpha = 0
     var contents = new InputSlotStringMorph(''),
         arrow = new ArrowMorph(
             'down',
@@ -12139,6 +12141,7 @@ InputSlotMorph.prototype.unflash = function () {
 InputSlotMorph.prototype.render = function (ctx) {
     var borderColor, r;
     this.alpha = 0
+    this.color = this.parentThatIsA(BlockMorph).color
     // initialize my surface property
     if (this.cachedNormalColor) { // if flashing
         borderColor = this.color;
