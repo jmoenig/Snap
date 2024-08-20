@@ -19,7 +19,4 @@ class SnapFunction extends Function {
     Return(value){
         this.returnValue=value
     }
-    getContext() {
-        throw new Error("WHAT, MAKE A NEW ONE, THEN WE WILL TALK")
-    }
 }
