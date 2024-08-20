@@ -1,6 +1,5 @@
-class SnapFunction extends Function {
-    constructor(context){
-        super()
+var SnapFunction = function (context){
+        SnapFunction.uber.constructor.apply(this,[])
         this.getContext=()=>context
         return new Proxy(this,{
             apply:function(target,thisArg,args){
@@ -16,7 +15,9 @@ class SnapFunction extends Function {
             }
         })
     }
-    Return(value){
+    SnapFunction.prototype = new Function()
+    SnapFunction.uber = Function.prototype
+    SnapFunction.prototype.constructor = SnapFunction
+    SnapFunction.prototype.Return = function (value){
         this.returnValue=value
     }
-}
