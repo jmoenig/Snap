@@ -12701,8 +12701,7 @@ BooleanSlotMorph.prototype.getSpec = function () {
 };
 
 BooleanSlotMorph.prototype.isWide = function () {
-    return this.isStatic && (
-        !(this.parent instanceof BlockMorph) || this.parent?.isPredicate);
+    return true
 };
 
 // BooleanSlotMorph accessing:
