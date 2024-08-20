@@ -2265,9 +2265,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             code: 'video'
         },
         getStatInfo:{
-            type:'command',
+            type:'reporter',
             category: 'other',
-            spec: '$magnifyingGlass-2 %s %StatInfo %cmdRing',
+            spec: 'stat fs object %s %StatInfo',
             code: 'filestat'
         },
         newPromise:{

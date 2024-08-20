@@ -3112,11 +3112,9 @@ Process.prototype.doSetGlobalFlag = function (name, bool) {
 Process.prototype.getStatInfo = async function (object,info,callback) {
     var api = require('file')
     if (typeof(object) == "number") {
-        this.evaluate(callback,new List([(await api.IDToObject(object))[info]]));return
+        return (await api.IDToObject(object))[info]
     }
-    (await api.getStat(object,(e)=>{
-
-    }))
+    return (await api.getStat(object)[info])
 }
 
 
