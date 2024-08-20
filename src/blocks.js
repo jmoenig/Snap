@@ -10899,6 +10899,11 @@ InputSlotMorph.prototype.setContents = function (data) {
     }
 };
 
+InputSlotMorph.prototype.loop = function(...args){
+    InputSlotMorph.uber.loop.apply(this,args)
+    this.alpha = 0
+}
+
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
     // enable copy-on-edit for inherited scripts
     var block = this.parentThatIsA(BlockMorph),
