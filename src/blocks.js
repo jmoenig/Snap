@@ -12701,7 +12701,7 @@ BooleanSlotMorph.prototype.getSpec = function () {
 };
 
 BooleanSlotMorph.prototype.isWide = function () {
-    return true
+    return false
 };
 
 // BooleanSlotMorph accessing:
@@ -13064,11 +13064,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
      { // draw the full text label
         text = this.textLabelExtent();
         y = this.height() - (this.height() - text.y) / 2;
-        if (this.value) {
-            x = this.height() / 2;
-        } else {
-            x = this.width() - (this.height() / 2) - text.x;
-        }
+            x = 0;
         ctx.save();
         if (!MorphicPreferences.isFlat && useBlurredShadows) {
             ctx.shadowOffsetX = -shift;
@@ -13080,8 +13076,11 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = this.value ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)';
+        if (this.value == null) {
+            ctx.fillStyle = 'rgb(0, 0, 255)'
+        }
         ctx.fillText(
-            localize(this.value ? 'true' : 'false'),
+            ((this.value == null)? "null" : (this.value ? 'true' : 'false')),
             x,
             y
         );
