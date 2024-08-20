@@ -340,6 +340,9 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
+        if(msg instanceof Error){
+            throw msg
+        }
         throw new Error(msg, {cause: 'user'});
     }
 );
@@ -348,6 +351,27 @@ SnapExtensions.primitives.set(
     'err_try(cmd, catch, err)',
     function (action, exception, errVarName, proc) {
         proc.tryCatch(action, exception, errVarName);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'err_name(err:Error)',
+    function (err, proc) {
+        return proc.errorName(err)
+    }
+);
+
+SnapExtensions.primitives.set(
+    'err_message(err:Error)',
+    function (err, proc) {
+        return proc.errorMessage(err)
+    }
+);
+
+SnapExtensions.primitives.set(
+    'err_new(name,message)',
+    function (name,message, proc) {
+        return proc.newError(name,message)
     }
 );
 

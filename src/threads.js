@@ -1277,6 +1277,9 @@ Process.prototype.throwError = function (error, element) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
     this.stop();
     this.errorFlag = true;
+    if (this.funct){
+        funct.throw(error);return
+    }
     this.topBlock.addErrorHighlight();
     if (ide.isAppMode) {
         ide.showMessage(localize(error.name) + '\n' + error.message);
@@ -1300,13 +1303,30 @@ Process.prototype.tryCatch = function (action, exception, errVarName) {
         }
         exception.pc = 0;
         exception.outerContext.variables.addVar(errVarName);
-        exception.outerContext.variables.setVar(errVarName, error.message);
+        exception.outerContext.variables.setVar(errVarName, error);
         this.context = exception;
         this.evaluate(next, new List(), true);
     };
 
     this.evaluate(action, new List(), true);
 };
+
+Process.prototype.errorMessage = function(err){
+    return err.message
+}
+
+Process.prototype.errorName = function (err) {
+    return err.name
+}
+
+Process.prototype.newError = function (Name='Hmm...',Message,Snap=true) {
+    var err = new Error(Message)
+    err.name = Name
+    if (Snap){
+        err.cause = 'user'
+    }
+    return err
+}
 
 Process.prototype.resetErrorHandling = function () {
     this.handleError = this.throwError;
