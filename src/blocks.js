@@ -5309,7 +5309,7 @@ BlockMorph.prototype.render = function (ctx) {
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
     var fill = this.color.copy()
-    fill.a = .5
+    fill.a = .25
     var cssfill = fill.toString();
 
     if (MorphicPreferences.isFlat) {
