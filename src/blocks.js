@@ -13057,9 +13057,6 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
         x,
         y = this.height() / 2;
 
-    if (this.isEmptySlot() || this.progress < 0) {
-        return;
-    }
 
      { // draw the full text label
         text = this.textLabelExtent();
