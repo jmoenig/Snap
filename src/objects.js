@@ -3720,6 +3720,10 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportEnvironment'));
+        blocks.push('-');
+        blocks.push(block('newPromise'));
+        blocks.push(block('promiseCatch'));
+        blocks.push(block('promiseThen'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -3734,10 +3738,6 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doCallCC'));
             blocks.push(block('reportCallCC'));
         }
-        blocks.push('-');
-        blocks.push(block('newPromise'));
-        blocks.push(block('promiseCatch'));
-        blocks.push(block('promiseThen'));
 
     } else if (category === 'sensing') {
 
