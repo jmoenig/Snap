@@ -3117,6 +3117,35 @@ Process.prototype.getStatInfo = async function (object,info,callback) {
     return (await api.getStat(object)[info])
 }
 
+Process.prototype.Await = function (promise){
+    if (!this.awaiting){
+        this.value = void 0
+        this.done = false
+        this.errored = false
+        promise.then((r) => {
+            this.value = r
+            this.done = true
+        }, (e) => {
+            this.value = e
+            this.done = true
+            this.errored = true
+        })
+    }
+    this.awaiting = true
+    if (this.done) {
+        this.popContext();
+        this.pushContext('doYield');
+        if (this.errored) {
+            this.awaiting = false;
+            throw this.value
+        }
+        this.awaiting = false;
+        return this.value;
+    }
+    this.context.inputs = [];
+    this.pushContext('doYield');
+    this.pushContext();
+}
 
 
 Process.prototype.promiseThen = function(promise,cmds){

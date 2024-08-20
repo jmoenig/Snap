@@ -192,12 +192,12 @@ SpriteMorph.prototype.blockColorFor = function (category) {
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
 SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
-    = SpriteMorph.prototype.paletteColor.lighter(30);
+    = SpriteMorph.prototype.paletteColor.lighter(10);
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.enableFirstClass = true;
-SpriteMorph.prototype.showingExtensions = false;
+SpriteMorph.prototype.showingExtensions = true;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.penColorModel = 'hsv'; // or 'hsl'
 SpriteMorph.prototype.disableDraggingData = false;
@@ -2287,6 +2287,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: '%ros catch %cmdRing',
             code: 'catch'
+        },
+        Await: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'await %ros',
+            code: 'await'
         }
     };
 };

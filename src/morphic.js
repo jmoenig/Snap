@@ -8151,7 +8151,7 @@ MenuMorph.prototype.createLabel = function () {
         'center'
     );
     text.alignment = 'center';
-    text.color = WHITE;
+    text.color = this.color;
     text.backgroundColor = this.borderColor;
     text.fixLayout();
     this.label = new BoxMorph(3, 0);
@@ -8178,8 +8178,8 @@ MenuMorph.prototype.createItems = function () {
         this.edge = MorphicPreferences.isFlat ? 0 : 5;
         this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
-    this.color = WHITE;
-    this.borderColor = new Color(60, 60, 60);
+    this.color = new Color(20, 20, 25);
+    this.borderColor = new Color(125,125,125);
     this.setExtent(new Point(0, 0));
 
     y = 2;
@@ -9887,7 +9887,7 @@ TriggerMorph.prototype.init = function (
     this.fontStyle = fontStyle || 'sans-serif';
     this.highlightColor = new Color(192, 192, 192);
     this.pressColor = new Color(128, 128, 128);
-    this.labelColor = labelColor || new Color(0, 0, 0);
+    this.labelColor = labelColor || WHITE;
     this.labelBold = labelBold || false;
     this.labelItalic = labelItalic || false;
     this.userState = 'normal'; // 'highlight', 'pressed'
@@ -9896,7 +9896,7 @@ TriggerMorph.prototype.init = function (
     TriggerMorph.uber.init.call(this);
 
     // override inherited properites:
-    this.color = WHITE;
+    this.color = new Color(20, 20, 25);
     this.createLabel();
 };
 
