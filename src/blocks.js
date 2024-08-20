@@ -12142,69 +12142,6 @@ InputSlotMorph.prototype.render = function (ctx) {
     var borderColor, r;
     this.alpha = 0
     this.color = this.parentThatIsA(BlockMorph).color
-    // initialize my surface property
-    if (this.cachedNormalColor) { // if flashing
-        borderColor = this.color;
-    } else if (this.parent) {
-        borderColor = this.parent.color;
-    } else {
-        borderColor = new Color(120, 120, 120);
-    }
-    ctx.fillStyle = this.color.toString();
-    if (this.isReadOnly && !this.cachedNormalColor) { // unless flashing
-        ctx.fillStyle = borderColor.darker().toString();
-    }
-
-    // cache my border colors
-    this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
-        .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
-
-    if (!this.isNumeric) {
-        ctx.fillRect(
-            this.edge,
-            this.edge,
-            this.width() - this.edge * 2,
-            this.height() - this.edge * 2
-        );
-        if (!MorphicPreferences.isFlat) {
-            this.drawRectBorder(ctx);
-        }
-    } else {
-        r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
-        ctx.beginPath();
-        ctx.arc(
-            r + this.edge,
-            r + this.edge,
-            r,
-            radians(90),
-            radians(-90),
-            false
-        );
-        ctx.arc(
-            this.width() - r - this.edge,
-            r + this.edge,
-            r,
-            radians(-90),
-            radians(90),
-            false
-        );
-        ctx.closePath();
-        ctx.fill();
-        if (!MorphicPreferences.isFlat) {
-            this.drawRoundBorder(ctx);
-        }
-    }
-
-	// draw my "wish" block, if any
-	if (this.selectedBlock) {
- 		ctx.drawImage(
-        	this.doWithAlpha(1, () => this.selectedBlock.fullImage()),
-            this.edge + this.typeInPadding,
-            this.edge
-        );
- 	}
 };
 
 InputSlotMorph.prototype.drawRectBorder = function (ctx) {
