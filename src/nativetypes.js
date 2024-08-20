@@ -15,7 +15,7 @@ var SnapFunction = function (context){
             }
         })
     }
-    SnapFunction.prototype = new Function()
+    SnapFunction.prototype = Object.create(Function.prototype)
     SnapFunction.uber = Function.prototype
     SnapFunction.prototype.constructor = SnapFunction
     SnapFunction.prototype.Return = function (value){
