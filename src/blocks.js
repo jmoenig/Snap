@@ -13080,7 +13080,7 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
         ctx.font = new StringMorph(null, this.fontSize, null, true).font();
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
-        ctx.fillStyle = 'rgb(255, 255, 255';
+        ctx.fillStyle = this.value ? 'rgb(0, 255, 0)' : 'rgb(255, 0, 0)';
         ctx.fillText(
             localize(this.value ? 'true' : 'false'),
             x,
