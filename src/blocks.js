@@ -11877,12 +11877,7 @@ InputSlotMorph.prototype.fixLayout = function () {
             + this.typeInPadding * 2;
     } else {
         height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
-        if (this.isNumeric) {
-            width = contents.width()
-                + Math.floor(arrowWidth * 0.5)
-                + height
-                + this.typeInPadding * 2;
-        } else {
+        {
             width = Math.max(
                 contents.width()
                     + arrowWidth
