@@ -3731,6 +3731,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('newPromise'));
         blocks.push(block('promiseCatch'));
         blocks.push(block('promiseThen'));
+        blocks.push(block('Await'));
 
         // for debugging: ///////////////
         if (devMode) {
