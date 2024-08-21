@@ -1010,8 +1010,8 @@ IDE_Morph.prototype.createLogo = function () {
                 this.width(),
                 0
             );
-        gradient.addColorStop(0, 'black');
-        gradient.addColorStop(0.5, myself.frameColor.toString());
+        gradient.addColorStop(0, 'rgb(20,20,25)');
+        gradient.addColorStop(0.5, 'rgb(20,20,25)');
         ctx.fillStyle = MorphicPreferences.isFlat ?
                 myself.frameColor.toString() : gradient;
         ctx.fillRect(0, 0, this.width(), this.height());
@@ -1035,7 +1035,7 @@ IDE_Morph.prototype.createLogo = function () {
         myself.snapMenu();
     };
 
-    this.logo.color = BLACK;
+    this.logo.color = new Color(20,20,25);
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
 };
