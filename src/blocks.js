@@ -2803,9 +2803,7 @@ BlockLabelMorph.prototype.getRenderColor = function () {
 
 BlockLabelMorph.prototype.getShadowRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
-    return (block && block.alpha > 0.5) ?
-        this.shadowColor
-            : CLEAR;
+    return CLEAR;
 };
 
 // BlockSymbolMorph //////////////////////////////////////////////////////////
