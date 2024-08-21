@@ -11842,7 +11842,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.color = WHITE;
     } else {
         contents.enableSelecting();
-        contents.color = BLACK;
+        contents.color = WHITE;
     }
     contents.isShowingBlanks = this.isReadOnly
     {
@@ -12381,7 +12381,7 @@ InputSlotStringMorph.prototype.getRenderColor = function () {
         }
         return this.parent.alpha > 0.5 ? this.color : BLACK;
     }
-    return this.parent.alpha > 0.25 ? this.color : WHITE;
+    return this.color;
 };
 
 InputSlotStringMorph.prototype.getShadowRenderColor = function () {
