@@ -11844,6 +11844,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.enableSelecting();
         contents.color = BLACK;
     }
+    contents.isShowingBlanks = this.isReadOnly
     {
         contents.isBold = false
     }
