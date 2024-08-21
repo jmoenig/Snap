@@ -1057,7 +1057,7 @@ IDE_Morph.prototype.createControlBar = function () {
         x,
         colors = MorphicPreferences.isFlat ? this.tabColors
         : [
-            this.groupColor,
+                new Color(20, 20, 25),
             this.frameColor.darker(50),
             this.frameColor.darker(50)
         ],
