@@ -11848,7 +11848,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.bold = this.readonly
     }
     if (this.isStatic)
-        contents.color = this.parent.color
+        contents.color = (this.parent||{color:WHITE}).color
 
     if (this.choices) {
         arrow.setSize(fontHeight(this.fontSize));
