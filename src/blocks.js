@@ -2852,8 +2852,7 @@ BlockSymbolMorph.prototype.getRenderColor = function () {
             : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
     }
     if (this.color.eq(WHITE)) {
-        return block.alpha > 0.5 ? this.color
-            : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
+        return block.color;
     }
     return this.color;
 };
