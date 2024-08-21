@@ -5317,7 +5317,7 @@ BlockMorph.prototype.render = function (ctx) {
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
     var fill = this.color.copy()
-    fill.a = 0.25
+    fill.a = 0
     var cssfill = fill.toString();
 
     if (MorphicPreferences.isFlat) {
@@ -8085,6 +8085,9 @@ RingMorph.prototype.render = function (ctx) {
         ctx.fillStyle = this.cachedClrDark;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
+        var fill = this.color.copy()
+        fill.a = 0
+        var cssfill = fill.toString();
 
         // render the hole:
         slot.outlinePath(ctx, slot.position().subtract(pos));
@@ -8108,7 +8111,7 @@ RingMorph.prototype.render = function (ctx) {
     } else {
         // draw the flat shape
         // draw the outline
-        ctx.fillStyle = this.cachedClr;
+        ctx.fillStyle = cssfill;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
 
