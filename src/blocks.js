@@ -1310,6 +1310,10 @@ SyntaxElementMorph.prototype.labelParts = {
         dflt: [true, null],
         tags: 'static widget'
     },
+    '%staticmult':{
+        type:'multi',
+        tags: 'static'
+    },
     '%numberInputBlock': {
         type: 'input',
         tags: 'numeric static',

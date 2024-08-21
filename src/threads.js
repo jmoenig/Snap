@@ -3165,6 +3165,38 @@ Process.prototype.NumberInput = function (num) {
     return new Number(num).valueOf()
 }
 
+Process.prototype.Function = function (inputs,body){
+    body.inputs = inputs.itemsArray()
+    return new SnapFunction(body)
+}
+
+Process.prototype.GetThis = function(){
+    return this.This
+}
+
+Process.prototype.JsGet = function(obj,prop){
+    return obj[prop]
+}
+
+Process.prototype.JsSet = function(obj,prop,val){
+    obj[prop]=val
+}
+
+Process.prototype.JsCallMethod = function(obj,method,inputs){ //spec:%s [ %s ] %staticmult
+    var val = obj[method](...inputs.itemsArray())
+    if (val === void 0){
+        throw new TypeError('Expected return but seen void')
+    }
+    return val
+}
+Process.prototype.JsRunMethod = function (obj, method, inputs) { //spec:%s [ %s ] %staticmult
+    return obj[method](...inputs.itemsArray())
+}
+
+Process.prototype.globalHtmlWorldsParent = function () {
+    return window
+}
+
 Process.prototype.reportGlobalFlag = function (name) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);
