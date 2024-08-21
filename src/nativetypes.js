@@ -7,7 +7,8 @@ class SnapFunction extends Function {
 SnapFunction.prototype.init = function(context){
     this.getContext = () => context
     this.context = context
-    return new Proxy(this, {
+    var proxyobj = {proxy:{}}
+    proxyobj.proxy = new Proxy(this, {
         apply: function (target, thisArg, args) {
             var stage = world.children[0].children[3]
             var proc = new Process()
@@ -15,6 +16,7 @@ SnapFunction.prototype.init = function(context){
             proc.initializeFor(context, new List(args));
             proc.context.funct = target;
             stage.threads.processes.push(proc);
+            proc.This=thisArg
             proc.runStep();
             if(target.Error){
                 throw target.Error
@@ -23,6 +25,25 @@ SnapFunction.prototype.init = function(context){
             target.returnValue = void 0
             target.Error = void 0
             return retval
+        }, construct : function (target, args ,funct) {
+            var obj = Object.create(target.prototype)
+            obj.constructor = proxyobj.proxy
+            var stage = world.children[0].children[3]
+            var proc = new Process()
+            proc.receiver = obj || stage;
+            proc.initializeFor(context, new List(args));
+            proc.context.funct = target;
+            stage.threads.processes.push(proc);
+            proc.This = obj
+            proc.runStep();
+            if (target.Error) {
+                throw target.Error
+            }
+            var retval = target.returnValue
+            target.returnValue = void 0
+            target.Error = void 0
+            if (retval instanceof proxyobj.proxy) return retval
+            return obj
         }
     })
 }

@@ -7,7 +7,7 @@
         <link rel="apple-touch-icon" href="img/snap-icon-152.png">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="white"/>
+        <meta name="theme-color" content="rgb(20,20,25)"/>
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-title" content="Snap!">
@@ -46,9 +46,6 @@
 
                 loop = (timestamp) => {
                     requestAnimationFrame(loop);
-                    if (timestamp - lastTime < 1000 / FPS) {
-                        return;
-                    }
                     world.doOneCycle();
                     lastTime = Math.max(
                         lastTime + 1000 / FPS,
