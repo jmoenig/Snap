@@ -1333,8 +1333,8 @@ function SyntaxElementMorph() {
 
 SyntaxElementMorph.prototype.init = function () {
     this.cachedClr = null;
-    this.cachedClrBright = null;
-    this.cachedClrDark = null;
+    this.cachedClr = null;
+    this.cachedClr = null;
     this.cachedNormalColor = null; // for single-stepping
     this.isStatic = false; // if true, I cannot be exchanged
 
@@ -5314,8 +5314,8 @@ BlockMorph.prototype.clearAlpha = function () {
 
 BlockMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     var fill = this.color.copy()
     fill.a = 0
     var cssfill = fill.toString();
@@ -5368,7 +5368,7 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
     if (this instanceof CommandBlockMorph) {
         y += this.corner;
     }
-    ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+    ctx.fillStyle = isNormal ? this.cachedClr : this.cachedClr;
 
     // pin
     ctx.beginPath();
@@ -6930,7 +6930,7 @@ CommandBlockMorph.prototype.drawTopDentEdge = function (ctx, x, y) {
         0,
         y + this.corner + this.edge
     );
-    lowerGradient.addColorStop(0, this.cachedClrBright);
+    lowerGradient.addColorStop(0, this.cachedClr);
     lowerGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = lowerGradient;
@@ -6981,7 +6981,7 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (ctx, x, y) {
         y + this.corner
     );
     lowerGradient.addColorStop(0, this.cachedClr);
-    lowerGradient.addColorStop(1, this.cachedClrDark);
+    lowerGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = lowerGradient;
     ctx.beginPath();
@@ -6996,7 +6996,7 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (ctx, x, y) {
         y + this.corner
     );
     rightGradient.addColorStop(0, this.cachedClr);
-    rightGradient.addColorStop(1, this.cachedClrDark);
+    rightGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = rightGradient;
     ctx.beginPath();
@@ -7275,7 +7275,7 @@ HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
     var shift = this.edge * 0.5,
         gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
 
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
 
     ctx.lineWidth = this.edge;
@@ -7299,7 +7299,7 @@ HatBlockMorph.prototype.drawRightEdge = function (ctx) {
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -7344,7 +7344,7 @@ HatBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
         r,
         r
     );
-    gradient.addColorStop(1, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
 
     ctx.lineWidth = this.edge;
@@ -8076,13 +8076,13 @@ RingMorph.prototype.render = function (ctx) {
     if (!slot) {return; }
 
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
 
     if (MorphicPreferences.isFlat) {
         // draw the outer filled shape
         // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
+        ctx.fillStyle = this.cachedClr;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
         var fill = this.color.copy()
@@ -9910,8 +9910,8 @@ CommandSlotMorph.prototype.unwind = function () {
 
 CommandSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
     ctx.fillRect(0, 0, this.width(), this.height());
 
@@ -10021,7 +10021,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         this.height() - this.edge
     );
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -10041,7 +10041,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         this.height() - (this.corner + edge),
         this.corner + edge
     );
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
@@ -10064,7 +10064,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         0
     );
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -10089,7 +10089,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         0
     );
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -10106,7 +10106,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         this.corner + edge,
         this.corner + edge
     );
-    gradient.addColorStop(0, this.cachedClrDark);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
@@ -10129,7 +10129,7 @@ CommandSlotMorph.prototype.drawEdges = function (ctx) {
         this.edge
     );
     upperGradient.addColorStop(0, this.cachedClr);
-    upperGradient.addColorStop(1, this.cachedClrDark);
+    upperGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
@@ -10198,8 +10198,8 @@ RingCommandSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
@@ -10233,14 +10233,6 @@ RingCommandSlotMorph.prototype.outlinePath = function (ctx, offset) {
     // dent:
     ctx.lineTo(this.corner + ins + edge + rf * 2 + ox, edge + oy);
     ctx.lineTo(indent + edge + rf * 2 + ox, this.corner + edge + oy);
-    ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + ox,
-        this.corner + edge + oy
-    );
-    ctx.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner + ox,
-        edge + oy
-    );
     ctx.lineTo(this.width() - this.corner - edge + ox, edge + oy);
 
     // top right:
@@ -10448,8 +10440,8 @@ CSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
@@ -10538,8 +10530,7 @@ CSlotMorph.prototype.drawTopRightEdge = function (ctx) {
         y,
         this.corner - this.edge
     );
-    gradient.addColorStop(0, this.cachedClrDark);
-    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.cachedClr);
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -10577,7 +10568,7 @@ CSlotMorph.prototype.drawTopEdge = function (ctx, x, y) {
         y
     );
     upperGradient.addColorStop(0, this.cachedClr);
-    upperGradient.addColorStop(1, this.cachedClrDark);
+    upperGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
@@ -10592,7 +10583,7 @@ CSlotMorph.prototype.drawTopEdge = function (ctx, x, y) {
         y + this.corner
     );
     lowerGradient.addColorStop(0, this.cachedClr);
-    lowerGradient.addColorStop(1, this.cachedClrDark);
+    lowerGradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = lowerGradient;
     ctx.beginPath();
@@ -10607,7 +10598,7 @@ CSlotMorph.prototype.drawTopEdge = function (ctx, x, y) {
         (y + this.corner - shift) + (shift * 0.7)
     );
     rightGradient.addColorStop(0, this.cachedClr);
-    rightGradient.addColorStop(1, this.cachedClrDark);
+    rightGradient.addColorStop(1, this.cachedClr);
 
 
     ctx.strokeStyle = rightGradient;
@@ -10644,7 +10635,7 @@ CSlotMorph.prototype.drawTopLeftEdge = function (ctx) {
         this.corner * 2,
         this.corner + this.edge
     );
-    gradient.addColorStop(0, this.cachedClrDark);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
 
     ctx.lineWidth = this.edge;
@@ -10672,7 +10663,7 @@ CSlotMorph.prototype.drawRightEdge = function (ctx) {
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
 
     ctx.lineWidth = this.edge;
     ctx.lineJoin = 'round';
@@ -10702,7 +10693,7 @@ CSlotMorph.prototype.drawBottomEdge = function (ctx) {
         this.height() - (this.corner * 2),
         this.corner + this.edge
     );
-    upperGradient.addColorStop(0, this.cachedClrBright);
+    upperGradient.addColorStop(0, this.cachedClr);
     upperGradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = upperGradient;
     ctx.beginPath();
@@ -10722,7 +10713,7 @@ CSlotMorph.prototype.drawBottomEdge = function (ctx) {
         0,
         this.height() - this.corner + this.edge
     );
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
 
     ctx.strokeStyle = gradient;
@@ -12171,7 +12162,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
         this.edge
     );
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(this.edge, shift);
@@ -12187,7 +12178,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
         0
     );
     gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(shift, this.edge);
@@ -12204,7 +12195,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
         0,
         this.height()
     );
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -12218,7 +12209,7 @@ InputSlotMorph.prototype.drawRectBorder = function (ctx) {
         this.width(),
         0
     );
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -12258,7 +12249,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
             this.edge
         );
         gradient.addColorStop(0, this.cachedClr);
-        gradient.addColorStop(1, this.cachedClrDark);
+        gradient.addColorStop(1, this.cachedClr);
         ctx.strokeStyle = gradient;
         ctx.beginPath();
 
@@ -12278,7 +12269,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
         0,
         this.height()
     );
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     gradient.addColorStop(1, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -12305,7 +12296,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrDark);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -12333,7 +12324,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -12845,8 +12836,8 @@ BooleanSlotMorph.prototype.render = function (ctx) {
                 this.parent.color : new Color(200, 200, 200);
     }
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     //this.drawDiamond(ctx, this.progress);
     this.drawLabel(ctx);
     //this.drawKnob(ctx, this.progress);
@@ -12932,7 +12923,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         this.edge * 0.6,
         r + (this.edge * 0.6)
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -12954,7 +12945,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         0,
         this.edge
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -12974,7 +12965,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(w - r, h - shift);
@@ -12990,7 +12981,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r, h - shift);
@@ -13498,9 +13489,9 @@ ColorSlotMorph.prototype.render = function (ctx) {
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
+    this.cachedClr = borderColor.lighter(this.contrast)
         .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
+    this.cachedClr = borderColor.darker(this.contrast).toString();
 
     ctx.fillRect(
         this.edge,
@@ -14713,9 +14704,9 @@ FunctionSlotMorph.prototype.render = function (ctx) {
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
+    this.cachedClr = borderColor.lighter(this.contrast)
         .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
+    this.cachedClr = borderColor.darker(this.contrast).toString();
 
     if (this.isPredicate) {
         this.drawDiamond(ctx);
@@ -14827,7 +14818,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -14845,7 +14836,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrDark);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -14860,7 +14851,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
 
     // left edge: straight vertical line
     gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -14882,7 +14873,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -14903,7 +14894,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r - shift, h - shift);
@@ -14913,7 +14904,7 @@ FunctionSlotMorph.prototype.drawRounded = function (ctx) {
     // right edge: straight vertical line
     gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(w - shift, r + shift);
@@ -14982,7 +14973,7 @@ FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
         r,
         0
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -14997,7 +14988,7 @@ FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -15017,7 +15008,7 @@ FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
         0
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(w - r, h - shift);
@@ -15032,7 +15023,7 @@ FunctionSlotMorph.prototype.drawDiamond = function (ctx) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r + shift, h - shift);
@@ -15244,8 +15235,8 @@ RingReporterSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClrBright = this.bright();
-    this.cachedClrDark = this.dark();
+    this.cachedClr = this.bright();
+    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
@@ -15371,7 +15362,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -15389,7 +15380,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrDark);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -15404,7 +15395,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
 
     // left edge: straight vertical line
     gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -15426,7 +15417,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
         r
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.arc(
@@ -15447,7 +15438,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r - shift, h - shift);
@@ -15457,7 +15448,7 @@ RingReporterSlotMorph.prototype.drawEdgesOval = function (ctx) {
     // right edge: straight vertical line
     gradient = ctx.createLinearGradient(w - this.edge, 0, w, 0);
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(w - shift, r + shift);
@@ -15526,7 +15517,7 @@ RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
         r,
         0
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -15541,7 +15532,7 @@ RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
         0,
         this.edge
     );
-    gradient.addColorStop(1, this.cachedClrDark);
+    gradient.addColorStop(1, this.cachedClr);
     gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
@@ -15561,7 +15552,7 @@ RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
         0
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(w - r, h - shift);
@@ -15576,7 +15567,7 @@ RingReporterSlotMorph.prototype.drawEdgesDiamond = function (ctx) {
         h
     );
     gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(0, this.cachedClr);
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(r + shift, h - shift);
