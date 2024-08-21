@@ -6941,7 +6941,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     this.pressColor = new Color(80, 80, 160);
     this.userState = 'normal'; // 'highlight', 'pressed'
     this.is3D = false;
-    this.hasMiddleDip = true;
+    this.hasMiddleDip = false;
     SliderButtonMorph.uber.init.call(this, orientation);
 };
 
@@ -7037,7 +7037,6 @@ SliderButtonMorph.prototype.renderEdges = function (ctx) {
             0,
             ctx.lineWidth
         );
-        gradient.addColorStop(0, 'white');
         gradient.addColorStop(1, this.color.toString());
 
         ctx.strokeStyle = gradient;
@@ -7053,7 +7052,6 @@ SliderButtonMorph.prototype.renderEdges = function (ctx) {
             h
         );
         gradient.addColorStop(0, this.color.toString());
-        gradient.addColorStop(1, 'black');
 
         ctx.strokeStyle = gradient;
         ctx.beginPath();
@@ -7070,10 +7068,7 @@ SliderButtonMorph.prototype.renderEdges = function (ctx) {
             );
 
             radius = h / 4;
-            gradient.addColorStop(0, 'black');
-            gradient.addColorStop(0.35, this.color.toString());
-            gradient.addColorStop(0.65, this.color.toString());
-            gradient.addColorStop(1, 'white');
+            gradient.addColorStop(0, this.color.toString());
 
             ctx.fillStyle = gradient;
             ctx.beginPath();

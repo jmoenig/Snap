@@ -3158,6 +3158,13 @@ Process.prototype.newPromise = function (cmds){
     return new Promise(new SnapFunction(cmds));
 }
 
+Process.prototype.StringInput = function(str){
+    return JSON.parse('"'+str+'"')
+}
+Process.prototype.NumberInput = function (num) {
+    return new Number(num).valueOf()
+}
+
 Process.prototype.reportGlobalFlag = function (name) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);

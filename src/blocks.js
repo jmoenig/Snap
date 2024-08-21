@@ -1309,6 +1309,19 @@ SyntaxElementMorph.prototype.labelParts = {
         group: 'else if %b %cs',
         dflt: [true, null],
         tags: 'static widget'
+    },
+    '%numberInputBlock': {
+        type: 'input',
+        tags: 'numeric static',
+        menu: {
+            'Infinity':'Infinity',
+            '-Infinity':'-Infinity',
+            'NaN':"NaN"
+        }
+    },
+    '%stringInputBlock':{
+        type: 'input',
+        tags: 'static'
     }
 };
 
@@ -10971,7 +10984,7 @@ InputSlotMorph.prototype.menuFromDict = function (
 
     if (choices instanceof Function) {
         if (!Process.prototype.enableJS) {
-            menu.addItem('JavaScript extensions for Snap!\nare turned off');
+            menu.addItem('JavaScript extensions for Devtools!\nare turned off');
             return menu;
         }
         choices = choices.call(this);
@@ -11038,7 +11051,7 @@ InputSlotMorph.prototype.menuFromDict = function (
                 // show the green flag symbol
                 flag = new SymbolMorph('flag');
                 flag.size = this.fontSize * 1.5;
-                flag.setColor(new Color(0, 200, 0));
+                flag.setColor(new Color(0, 255, 0));
                 flag.fixLayout();
                 menu.addItem(flag, ['__shout__go__']);
             } else if (choices[key] instanceof Object &&
@@ -11894,12 +11907,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     }
     this.bounds.setExtent(new Point(width, height));
 
-    if (this.isNumeric) {
-        contents.setPosition(new Point(
-            Math.floor(height / 2),
-            this.edge
-        ).add(new Point(this.typeInPadding, 0)).add(this.position()));
-    } else {
+    {
         contents.setPosition(new Point(
             this.edge,
             this.edge
