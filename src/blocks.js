@@ -5314,8 +5314,6 @@ BlockMorph.prototype.clearAlpha = function () {
 
 BlockMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     var fill = this.color.copy()
     fill.a = 0
     var cssfill = fill.toString();
@@ -8076,8 +8074,6 @@ RingMorph.prototype.render = function (ctx) {
     if (!slot) {return; }
 
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
 
     if (MorphicPreferences.isFlat) {
         // draw the outer filled shape
@@ -9910,8 +9906,6 @@ CommandSlotMorph.prototype.unwind = function () {
 
 CommandSlotMorph.prototype.render = function (ctx) {
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
     ctx.fillRect(0, 0, this.width(), this.height());
 
@@ -10198,8 +10192,6 @@ RingCommandSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
@@ -10440,8 +10432,6 @@ CSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
@@ -12836,8 +12826,6 @@ BooleanSlotMorph.prototype.render = function (ctx) {
                 this.parent.color : new Color(200, 200, 200);
     }
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     //this.drawDiamond(ctx, this.progress);
     this.drawLabel(ctx);
     //this.drawKnob(ctx, this.progress);
@@ -15235,8 +15223,6 @@ RingReporterSlotMorph.prototype.render = function (ctx) {
 
     // init
     this.cachedClr = this.color.toString();
-    this.cachedClr = this.bright();
-    this.cachedClr = this.dark();
     ctx.fillStyle = this.cachedClr;
 
     // only add 3D-Effect here, rendering of the flat shape happens at the
