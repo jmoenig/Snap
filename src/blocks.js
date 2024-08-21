@@ -11844,6 +11844,11 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.enableSelecting();
         contents.color = BLACK;
     }
+    {
+        contents.bold = this.readonly
+    }
+    if (this.isStatic)
+        contents.color = this.parent.color
 
     if (this.choices) {
         arrow.setSize(fontHeight(this.fontSize));
