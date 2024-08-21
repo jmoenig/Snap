@@ -8111,7 +8111,7 @@ RingMorph.prototype.render = function (ctx) {
     } else {
         // draw the flat shape
         // draw the outline
-        ctx.fillStyle = cssfill;
+        /*ctx.fillStyle = cssfill;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
 
@@ -8121,7 +8121,7 @@ RingMorph.prototype.render = function (ctx) {
         // ctx.closePath();
         ctx.clip('evenodd');
         ctx.fillRect(0, 0, this.width(), this.height());
-
+    */
         // add 3D-Effect:
         this.drawEdges(ctx);
     }
