@@ -2795,11 +2795,9 @@ function BlockLabelMorph(
 BlockLabelMorph.prototype.getRenderColor = function () {
     var block = this.parentThatIsA(BlockMorph);
     if (MorphicPreferences.isFlat) {
-        return !block || block.alpha > 0.5 ? this.color
-            : block.color.solid().darker(Math.max(block.alpha * 200, 0.1));
+        return !block || block.color;
     }
-    return !block || block.alpha > 0.5 ? this.color
-        : block.color.solid().lighter(Math.max(block.alpha * 200, 0.1));
+    return !block || block.color
 
 };
 
