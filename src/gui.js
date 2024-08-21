@@ -1101,7 +1101,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1133,7 +1133,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1162,7 +1162,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => Process.prototype.enableSingleStepping // query
     );
 
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = activeColor;
@@ -1199,7 +1199,7 @@ IDE_Morph.prototype.createControlBar = function () {
             : true
     );
 
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1233,7 +1233,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1258,7 +1258,7 @@ IDE_Morph.prototype.createControlBar = function () {
         'pressStart',
         new SymbolMorph('flag', 14)
     );
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1329,7 +1329,7 @@ IDE_Morph.prototype.createControlBar = function () {
         new SymbolMorph('file', 14)
         //'\u270E'
     );
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1352,7 +1352,7 @@ IDE_Morph.prototype.createControlBar = function () {
         new SymbolMorph('gears', 14)
         //'\u2699'
     );
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1381,7 +1381,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 3;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -2271,7 +2271,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "addNewSprite",
         new SymbolMorph("turtle", 14)
     );
-    newbutton.corner = 12;
+    newbutton.corner = 3;
     newbutton.color = colors[0];
     newbutton.highlightColor = colors[1];
     newbutton.pressColor = colors[2];
@@ -2292,7 +2292,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "paintNewSprite",
         new SymbolMorph("brush", 15)
     );
-    paintbutton.corner = 12;
+    paintbutton.corner = 3;
     paintbutton.color = colors[0];
     paintbutton.highlightColor = colors[1];
     paintbutton.pressColor = colors[2];
@@ -2316,7 +2316,7 @@ IDE_Morph.prototype.createCorralBar = function () {
                 "newCamSprite",
                 new SymbolMorph("camera", 15)
                 );
-        cambutton.corner = 12;
+        cambutton.corner = 3;
         cambutton.color = colors[0];
         cambutton.highlightColor = colors[1];
         cambutton.pressColor = colors[2];
@@ -2355,7 +2355,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "undeleteSprites",
         new SymbolMorph("trash", 18)
     );
-    trashbutton.corner = 12;
+    trashbutton.corner = 3;
     trashbutton.color = colors[0];
     trashbutton.highlightColor = colors[1];
     trashbutton.pressColor = colors[2];
@@ -11608,7 +11608,7 @@ WardrobeMorph.prototype.updateList = function () {
         new SymbolMorph("brush", 15)
     );
     paintbutton.padding = 0;
-    paintbutton.corner = 12;
+    paintbutton.corner = 3;
     paintbutton.color = IDE_Morph.prototype.groupColor;
     paintbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
     paintbutton.pressColor = paintbutton.highlightColor;
@@ -11632,7 +11632,7 @@ WardrobeMorph.prototype.updateList = function () {
             new SymbolMorph("camera", 15)
         );
         cambutton.padding = 0;
-        cambutton.corner = 12;
+        cambutton.corner = 3;
         cambutton.color = IDE_Morph.prototype.groupColor;
         cambutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
         cambutton.pressColor = paintbutton.highlightColor;
@@ -12100,7 +12100,7 @@ JukeboxMorph.prototype.updateList = function () {
         new SymbolMorph('circleSolid', 15)
     );
     recordButton.padding = 0;
-    recordButton.corner = 12;
+    recordbutton.corner = 3;
     recordButton.color = IDE_Morph.prototype.groupColor;
     recordButton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
     recordButton.pressColor = recordButton.highlightColor;
