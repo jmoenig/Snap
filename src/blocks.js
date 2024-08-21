@@ -11845,11 +11845,11 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.color = BLACK;
     }
     {
-        contents.bold = false
+        contents.isBold = false
     }
     if (this.isStatic){
         contents.color = (this.parent||{color:WHITE}).color
-        contents.bold = this.isReadOnly
+        contents.isBold = this.isReadOnly
     }
     if (this.choices) {
         arrow.setSize(fontHeight(this.fontSize));
