@@ -3050,7 +3050,7 @@ BlockMorph.prototype.init = function () {
         },
         set(val){
             this.select = val
-        }, configurable:false
+        }, configurable:false,enumerable:true
     })
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
