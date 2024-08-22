@@ -3158,15 +3158,15 @@ Process.prototype.Await = function (promise){
 
 
 Process.prototype.promiseThen = function(promise,cmds){
-    if (!cmds) return promise.then(cmds);
+    if (cmds instanceof Function) return promise.then(cmds);
     return promise.then(new SnapFunction(cmds));
 }
 Process.prototype.promiseCatch = function (promise, cmds) {
-    if (!cmds) return promise.catch(cmds);
+    if (cmds instanceof Function) return promise.catch(cmds);
     return promise.catch(new SnapFunction(cmds));
 }
 Process.prototype.newPromise = function (cmds) {
-    if (!cmds) return new Promise(cmds);
+    if (cmds instanceof Function) return new Promise(cmds);
     return new Promise(new SnapFunction(cmds));
 }
 
