@@ -1163,6 +1163,12 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'widget',
         min: 1
     },
+    '%inputs': {
+        type: 'multi',
+        slots: '%t',
+        tags: 'widget',
+        min: 0
+    },
     '%blockVars': {
         type: 'multi',
         slots: '%t',
