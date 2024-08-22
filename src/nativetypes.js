@@ -55,7 +55,7 @@ SnapFunction.prototype.Throw = function (error) {
     this.Error = error
 }
 SnapFunction.prototype.toString = function (indent = 4){
-    return this.context.expression.toLisp(indent)
+    return 'function ('+ this.context.inputs +')\n'+ (this.context.expression||{toLisp(){return "[blank]"}}).toLisp(indent)
 }
 
 Error.prototype.toString = function(){
