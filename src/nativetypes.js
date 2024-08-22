@@ -1,6 +1,6 @@
 class SnapFunction extends Function {
     constructor(context){
-        super()
+        super("alert('OH NO')")
         return this.init(context)
     }
 }
