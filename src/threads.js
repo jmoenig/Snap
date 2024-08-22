@@ -979,7 +979,7 @@ Process.prototype.reportBasicAnd = function (a, b) {
 };
 
 Process.prototype.Return = function(output){
-    this.context.funct.Return(output);
+    this.ReturnVal(output);
     this.readyToYield = true;
     this.readyToTerminate = true;
     this.errorFlag = false;
@@ -3182,7 +3182,7 @@ Process.prototype.New = function (funct,inputs){
 }
 
 Process.prototype.Function = function (inputs,body){
-    body = body||new Context()
+    body = new Context(null,body)
     body.inputs = inputs.itemsArray()
     return new SnapFunction(body)
 }

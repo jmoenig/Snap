@@ -2304,7 +2304,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         Function: {
             type: 'reporter',
             category: 'operators',
-            spec: 'function $( %inputParams $){ %cl $}',
+            spec: 'function $( %inputParams $){ %c $}',
             code: 'newFunct'
         },
         Return: { //the same as doReport and switches between this and doReport
