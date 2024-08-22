@@ -54,6 +54,9 @@ SnapFunction.prototype.Return = function (value){
 SnapFunction.prototype.Throw = function (error) {
     this.Error = error
 }
+SnapFunction.prototype.toString = function (indent = 4){
+    return this.context.expression.toLisp(indent)
+}
 
 Error.prototype.toString = function(){
     return localize(this.name) + '\n' + this.message
