@@ -2304,7 +2304,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         Function: {
             type: 'reporter',
             category: 'operators',
-            spec: 'function $( %inputs $){ %cl $}',
+            spec: 'function $( %inputParams $){ %cl $}',
             code: 'newFunct'
         }
     };
