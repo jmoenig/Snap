@@ -980,6 +980,7 @@ Process.prototype.reportBasicAnd = function (a, b) {
 
 Process.prototype.doReport = function (block) {
     var outer = this.context.outerContext;
+    var ctx = this.context;
     if (this.flashContext()) {return; } // flash the block here, special form
     if (this.isClicked && (block.topBlock() === this.topBlock)) {
         this.isShowingResult = true;
@@ -1008,16 +1009,16 @@ Process.prototype.doReport = function (block) {
     // in any case evaluate (and ignore)
     // the input, because it could be
     // an HTTP Request for a hardware extension
-    if (this.context.funct){
+    if (ctx.funct){
         if (block.inputs()[0] instanceof BlockMorph){
-            this.context.funct.Return(this.evaluateBlock(block.inputs()[0], block.inputs()[0].inputs().length))
+            ctx.funct.Return(this.evaluateBlock(block.inputs()[0], block.inputs()[0].inputs().length))
             this.readyToYield = true;
             this.readyToTerminate = true;
             this.errorFlag = false;
             this.canBroadcast = false;
             return
         }
-        this.context.funct.Return(this.evaluateInput(block.inputs()[0]));
+        ctx.funct.Return(this.evaluateInput(block.inputs()[0]));
         this.readyToYield = true;
         this.readyToTerminate = true;
         this.errorFlag = false;
