@@ -3165,6 +3165,10 @@ Process.prototype.NumberInput = function (num) {
     return new Number(num).valueOf()
 }
 
+Process.prototype.New = function (funct,inputs){
+    return new funct(inputs.itemsArray())
+}
+
 Process.prototype.Function = function (inputs,body){
     body.inputs = inputs.itemsArray()
     return new SnapFunction(body)
@@ -3178,18 +3182,18 @@ Process.prototype.JsGet = function(obj,prop){
     return obj[prop]
 }
 
-Process.prototype.JsSet = function(obj,prop,val){
+Process.prototype.JsSet = function(obj,prop,val){ //command spec:%s [ %s ] = %s
     obj[prop]=val
 }
 
-Process.prototype.JsCallMethod = function(obj,method,inputs){ //spec:%s [ %s ] %staticmult
+Process.prototype.JsCallMethod = function(obj,method,inputs){ //reporter spec:%s [ %s ] %staticmult
     var val = obj[method](...inputs.itemsArray())
     if (val === void 0){
         throw new TypeError('Expected return but seen void')
     }
     return val
 }
-Process.prototype.JsRunMethod = function (obj, method, inputs) { //spec:%s [ %s ] %staticmult
+Process.prototype.JsRunMethod = function (obj, method, inputs) { //command spec:%s [ %s ] %staticmult
     return obj[method](...inputs.itemsArray())
 }
 

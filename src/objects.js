@@ -2294,6 +2294,18 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'await %ros',
             code: 'await'
+        },
+        New: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'new %ros %staticmult',
+            code: 'new'
+        },
+        Function: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'function $( %blockVars $){ %cl $}',
+            code: 'newFunct'
         }
     };
 };
@@ -3805,6 +3817,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block("getStatInfo"));
     } else if (category === 'operators') {
 
+        blocks.push(block('Function'));
         blocks.push(block('reifyScript'));
         blocks.push(block('reifyReporter'));
         blocks.push(block('reifyPredicate'));
@@ -3844,6 +3857,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportVariadicIsIdentical'));
+        blocks.push(block("New"));
 
         if (Process.prototype.enableJS) {
             blocks.push('-');
