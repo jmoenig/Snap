@@ -3149,12 +3149,15 @@ Process.prototype.Await = function (promise){
 
 
 Process.prototype.promiseThen = function(promise,cmds){
+    if (!cmds) return promise.then(cmds);
     return promise.then(new SnapFunction(cmds));
 }
 Process.prototype.promiseCatch = function (promise, cmds) {
+    if (!cmds) return promise.catch(cmds);
     return promise.catch(new SnapFunction(cmds));
 }
-Process.prototype.newPromise = function (cmds){
+Process.prototype.newPromise = function (cmds) {
+    if (!cmds) return new Promise(cmds);
     return new Promise(new SnapFunction(cmds));
 }
 
@@ -3170,6 +3173,7 @@ Process.prototype.New = function (funct,inputs){
 }
 
 Process.prototype.Function = function (inputs,body){
+    body = body||new Context()
     body.inputs = inputs.itemsArray()
     return new SnapFunction(body)
 }
