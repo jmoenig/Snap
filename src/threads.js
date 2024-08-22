@@ -979,7 +979,7 @@ Process.prototype.reportBasicAnd = function (a, b) {
 };
 
 Process.prototype.Return = function(output){
-    this.context.outerContext.funct.Return(output);
+    this.context.funct.Return(output);
     this.readyToYield = true;
     this.readyToTerminate = true;
     this.errorFlag = false;
