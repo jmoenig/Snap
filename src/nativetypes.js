@@ -46,6 +46,7 @@ SnapFunction.prototype.init = function(context){
             return obj
         }
     })
+    return proxyobj.proxy
 }
 SnapFunction.prototype.Return = function (value){
     this.returnValue = value
