@@ -3037,6 +3037,21 @@ function BlockMorph() {
 }
 
 BlockMorph.prototype.init = function () {
+    var selector = null
+    Object.defineProperty(this,'selector',{
+        get(){
+            if ((selector === "doReport") && ((this.parent || {}).selector === "Function")){
+                return 'Return'
+            }
+            if ((selector === "Return") && ((this.parent || {}).selector !== "Function")) {
+                return 'doReport'
+            }
+            return selector
+        },
+        set(val){
+            selector = val
+        }
+    })
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph

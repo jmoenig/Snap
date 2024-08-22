@@ -980,7 +980,6 @@ Process.prototype.reportBasicAnd = function (a, b) {
 
 Process.prototype.Return = function(output){
     this.context.outerContext.funct.Return(output);
-    this.context.expression.selector = "doReport"
     this.readyToYield = true;
     this.readyToTerminate = true;
     this.errorFlag = false;
@@ -990,10 +989,6 @@ Process.prototype.Return = function(output){
 Process.prototype.doReport = function (block) {
     var outer = this.context.outerContext;
     var ctx = this.context;
-    if (ctx.funct) {
-        block.selector = "Return"
-        this.pushContext(block,ctx)
-    }
     if (this.flashContext()) {return; } // flash the block here, special form
     if (this.isClicked && (block.topBlock() === this.topBlock)) {
         this.isShowingResult = true;
