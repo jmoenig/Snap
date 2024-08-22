@@ -3040,17 +3040,17 @@ BlockMorph.prototype.init = function () {
     var selector = null
     Object.defineProperty(this,'selector',{
         get(){
-            if ((selector === "doReport") && ((this.parent || {}).selector === "Function")){
+            if ((this.select === "doReport") && ((this.parent || {}).select === "Function")){
                 return 'Return'
             }
-            if ((selector === "Return") && ((this.parent || {}).selector !== "Function")) {
+            if ((this.select === "Return") && ((this.parent || {}).select !== "Function")) {
                 return 'doReport'
             }
-            return selector
+            return this.select
         },
         set(val){
-            selector = val
-        }
+            this.select = val
+        }, configurable:false
     })
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
