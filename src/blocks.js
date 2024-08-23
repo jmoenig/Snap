@@ -11619,7 +11619,9 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
         varNames;
 
     if (searching) {return dict; }
-
+    if (block.inputs()[1].selector === 'globalHtmlWorldsParent'){
+        return Object.keys(window)
+    }
     block = this.parentThatIsA(BlockMorph);
     objName = block.inputs()[1].evaluate();
     rcvr = block.scriptTarget();
