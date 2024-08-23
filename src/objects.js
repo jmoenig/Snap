@@ -2307,6 +2307,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'function $( %inputParams $){ %c $}',
             code: 'newFunct'
         },
+        globalHtmlWorldsParent: {
+            type: 'reporter',
+            category: 'variables',
+            spec: 'window',
+            code: 'get window'
+        },
         Return: { //the same as doReport and switches between this and doReport
             type: 'command',
             category: 'control',
@@ -3884,6 +3890,8 @@ SpriteMorph.prototype.blockTemplates = function (
     } else if (category === 'variables') {
 
         blocks.push(this.makeVariableButton());
+        blocks.push(watcherToggle('globalHtmlWorldsParent'));
+        blocks.push(block('globalHtmlWorldsParent'));
         if (this.deletableVariableNames().length > 0) {
             blocks.push(this.deleteVariableButton());
         }
