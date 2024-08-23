@@ -6748,11 +6748,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     // sprite-local variables. Attributes such as "width", "direction" etc.
     // can only be queried via the dropdown menu and are, therefore, not
     // reachable as dyadic inputs
-    return this.hyper(
-        (att, obj) => this.reportBasicAttributeOf(att, obj),
-        attribute,
-        name
-    );
+    return this.reportBasicAttributeOf(att, obj)
 };
 
 Process.prototype.reportBasicAttributeOf = function (attribute, name) {
