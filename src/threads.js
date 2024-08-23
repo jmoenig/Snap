@@ -1121,7 +1121,8 @@ Process.prototype.isAutoLambda = function (inputSlot) {
         'doWarp',
         'doFor',
         'doForEach',
-        'reportBlocksNative'
+        'reportBlocksNative',
+        'Function'
     ].includes(inputSlot.parent?.selector)) {
         // special cases when overloading those primitives
         // with custom block definitions
@@ -6759,6 +6760,12 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
+    if (attribute instanceof Function){
+        return attribute.bind(name)
+    }
+    if (!isSnapObject(name) && typeof(name)!=='string'){
+        return name[attribute]
+    }
     if (name instanceof Context && attribute instanceof Context) {
         if (attribute?.expression.selector === 'reportEnvironment') {
             this.returnValueToParentContext(this.reportEnvironment(
@@ -6769,6 +6776,7 @@ Process.prototype.reportBasicAttributeOf = function (attribute, name) {
         }
         return this.reportContextFor(attribute, name);
     }
+
     if (thisObj) {
         this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
