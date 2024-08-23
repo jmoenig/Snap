@@ -11619,7 +11619,7 @@ InputSlotMorph.prototype.attributesMenu = function (searching) {
         varNames;
 
     if (searching) {return dict; }
-    if (block.inputs()[1].selector === 'globalHtmlWorldsParent'){
+    if (this.parentThatIsA(BlockMorph).inputs()[1].selector === 'globalHtmlWorldsParent'){
         return Object.keys(window)
     }
     block = this.parentThatIsA(BlockMorph);
