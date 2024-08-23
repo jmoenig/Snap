@@ -3183,7 +3183,7 @@ Process.prototype.New = function (funct,inputs){
 }
 
 Process.prototype.Function = function (inputs,body){
-    body = new Context(null,body)
+    body = new Context(null,body,this.context)
     body.inputs = inputs.itemsArray()
     return new SnapFunction(body)
 }
