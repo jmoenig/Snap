@@ -13,6 +13,7 @@
 ### 2024-08-20
 * new list-dictionary-based object system with data scope and prototypical inheritance
 * new OOP library
+* updated dev version
 
 ### 2024-08-20
 * new dev version
