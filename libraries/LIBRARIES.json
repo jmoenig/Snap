@@ -30,6 +30,12 @@
       "lists"
     ],
     "translations": {
+      "de": {
+        "searchData": [
+          "object _",
+          "clone object _"
+        ]
+      }
     }
   },
   {
