@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-June-10';
+modules.blocks = '2024-August-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -790,7 +790,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%var': {
         type: 'input',
-        tags: 'read-only static',
+        tags: 'read-only', // was also static until v10.0
         menu: 'getVarNamesDict'
     },
     '%shd': {
@@ -1822,6 +1822,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new MultiArgMorph(spec.slice(5));
             part.initialSlots = 1;
             part.addInput();
+            return part;
+        }
+        // check for input group multi-arg-slot:
+        if ((spec.length > 6) && (spec.slice(0, 6) === '%group')) {
+            tokens = spec.slice(7).split('%').map(each => '%' + each);
+            part = new MultiArgMorph(tokens);
+            part.groupInputs = tokens.length;
             return part;
         }
 
@@ -2953,6 +2960,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor =
     arity: multiple
 
     %mult%x      - where %x stands for any of the above single inputs
+    %group%x%y   - where %x and %y stand for any of the above single inputs
     %inputs      - for an additional text label 'with inputs'
     %words       - for an expandable list of default 2 (used in JOIN)
     %lists       - for an expandable list of default 2 lists (CONCAT)
@@ -13642,6 +13650,7 @@ BlockHighlightMorph.prototype.updateReadout = function () {
     my block specs are
 
         %mult%x - where x is any single input slot
+        %group%x%y - where x and y are any single input slots
         %inputs - for an additional text label 'with inputs'
 
     evaluation is handles by the interpreter
@@ -13883,7 +13892,7 @@ MultiArgMorph.prototype.setInfix = function (separator = '') {
     }
     inps = this.inputs();
     this.collapseAll();
-    this.infix = separator;
+    this.infix = (separator === '$nl' ? '%br' : separator);
     inps.forEach(slot => this.replaceInput(this.addInput(), slot));
     if (inps.length === 1 && this.infix) { // show at least 2 slots with infix
         this.addInput();
@@ -13917,8 +13926,10 @@ MultiArgMorph.prototype.setExpand = function (expand) {
 
     // parse expansion labels to determine its cardiinality
     function massage(str) {
-        var items = (str || '').toString().split('\n').map(line =>
-                line.trim()).filter(each => each.length);
+        var items = (str || '').toString().split('\n').map(line => {
+                let dta = line.trim();
+                return dta === '$nl' ? '%br' : dta;
+            }).filter(each => each.length);
         return items.length > 1 ? items : items[0] || null;
     }
 

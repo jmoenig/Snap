@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-April-08';
+modules.lists = '2024-August-26';
 
 var List;
 var ListWatcherMorph;
@@ -332,17 +332,28 @@ List.prototype.indexOf = function (element) {
 
 // List key-value accessing (experimental in v8.1):
 
-List.prototype.lookup = function (key) {
-    var rec;
+List.prototype.lookup = function (key, ifNone = '') {
+    // look up the value of a given key, return optional ifNone value,
+    // which can also be a niladic callback, or an empty string
+    var rec, parent;
     if (parseFloat(key) === +key) { // treat as numerical index
         return this.at(key);
     }
     rec = this.itemsArray().find(elem => elem instanceof List &&
         elem.length() > 0 &&
         snapEquals(elem.at(1), key));
-    return rec ?
-        (rec.length() > 2 ? rec.cdr() : rec.at(2))
-        : '';
+    if (rec) {
+        return rec.length() > 2 ? rec.cdr() : rec.at(2);
+    }
+    if (snapEquals(key, '...')) {
+        if (typeof ifNone === 'function') {
+            return ifNone();
+        }
+        return ifNone;
+    }
+    parent = this.lookup('...');
+    return parent instanceof List ? parent.lookup(key, ifNone)
+        : (typeof ifNone === 'function' ? ifNone() : ifNone);
 };
 
 List.prototype.bind = function (key, value) {

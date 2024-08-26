@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-August-12';
+modules.threads = '2024-August-26';
 
 var ThreadManager;
 var Process;
@@ -1993,9 +1993,15 @@ Process.prototype.doChangeVar = function (varName, value) {
 
 Process.prototype.reportGetVar = function () {
     // assumes a getter block whose blockSpec is a variable name
-    return this.context.variables.getVar(
-        this.context.expression.blockSpec
-    );
+    var block = this.context.expression,
+        accessors = ['doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar'];
+
+    // allow dropping variable reporters into the variable name slot of
+    // primitive accessors
+    if (accessors.includes(block.parent.selector)) {
+        return block.blockSpec;
+    }
+    return this.context.variables.getVar(block.blockSpec);
 };
 
 Process.prototype.doShowVar = function (varName, context) {
@@ -2274,6 +2280,7 @@ Process.prototype.shadowListAttribute = function (list) {
 // Process accessing list elements - hyper dyadic
 
 Process.prototype.reportListItem = function (index, list) {
+    var value;
     this.assertType(list, 'list');
     if (index === '') {
         return '';
@@ -2290,7 +2297,14 @@ Process.prototype.reportListItem = function (index, list) {
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
     }
-    return list.lookup(index);
+    if (index instanceof Context) { // bind to list as environment
+        return this.reportContextFor(index, list);
+    }
+    value = list.lookup(index);
+    if (value instanceof Context) {
+        value = this.reportContextFor(value, list);
+    }
+    return value;
 };
 
 // Process - tabular list ops
@@ -7059,6 +7073,12 @@ Process.prototype.reportContextFor = function (context, otherObj) {
         receiverVars,
         rootVars;
 
+    if (otherObj instanceof List) { // OOP 2.0
+        result.outerContext = new Context();
+        result.outerContext.variables.parentFrame = otherObj;
+        return result;
+    }
+
     if (otherObj instanceof Context) {
         result.outerContext = otherObj.outerContext;
         result.variables.parentFrame = otherObj.outerContext.variables;
@@ -9712,6 +9732,9 @@ VariableFrame.prototype.silentFind = function (name) {
         return this;
     }
     if (this.parentFrame) {
+        if (this.parentFrame instanceof List) {
+            return this.parentFrame;
+        }
         return this.parentFrame.silentFind(name);
     }
     return null;
@@ -9728,6 +9751,11 @@ VariableFrame.prototype.setVar = function (name, value, sender) {
 
     var frame = this.find(name);
     if (frame) {
+        if (frame instanceof List) { // OOP 2.0
+            frame.lookup(name, () => this.variableError(name));
+            frame.bind(name, value);
+            return;
+        }
         if (sender instanceof SpriteMorph &&
                 (frame.owner instanceof SpriteMorph) &&
                 (sender !== frame.owner)) {
@@ -9751,6 +9779,14 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
         value,
         newValue;
     if (frame) {
+        if (frame instanceof List) { // OOP 2.0
+            value = frame.lookup(name, () => this.variableError(name));
+            // hypermutation is not supported for use inside dictionaries
+            newValue = isNaN(parseFloat(value)) ? delta
+                : Process.prototype.reportSum(value, delta);
+            frame.bind(name, newValue);
+            return;
+        }
         value = frame.vars[name].value;
         if (value instanceof List) {
             Process.prototype.hyperChangeBy(value, delta);
@@ -9765,7 +9801,6 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
         } else {
             frame.vars[name].value = newValue;
         }
-
     }
 };
 
@@ -9773,6 +9808,9 @@ VariableFrame.prototype.getVar = function (name) {
     var frame = this.silentFind(name),
         value;
     if (frame) {
+        if (frame instanceof List) { // OOP 2.0
+            return frame.lookup(name, () => this.variableError(name));
+        }
         value = frame.vars[name].value;
         return (value === 0 ? 0
                 : value === false ? false

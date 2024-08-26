@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-August-09';
+modules.byob = '2024-August-26';
 
 // Declarations
 
@@ -3871,11 +3871,12 @@ BlockLabelFragment.prototype.isSingleInput = function () {
 };
 
 BlockLabelFragment.prototype.isMultipleInput = function () {
-    // answer true if the type begins with '%mult'
+    // answer true if the type begins with '%mult' or '%group'
     if (!this.type) {
         return false; // not an input at all
     }
-    return this.type.indexOf('%mult') > -1;
+    return this.type.indexOf('%mult') > -1 ||
+        this.type.indexOf('%group') > -1;
 };
 
 BlockLabelFragment.prototype.isUpvar = function () {
@@ -4838,7 +4839,9 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 this.specialOptionsMenu()
             );
         }
-        if (this.fragment.type.includes('%mult')) {
+        if (this.fragment.type.includes('%mult') ||
+            this.fragment.type.includes('%group')
+        ) {
             menu.addItem(
                 (this.fragment.separator ? on : off) +
                     localize('separator') +
@@ -4880,6 +4883,12 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     localize('max slots') +
                     '...',
                 'editVariadicMaxSlots'
+            );
+            menu.addItem(
+                (this.fragment.type.includes('%group') ? on : off) +
+                    localize('group') +
+                    '...',
+                'editVariadicGroup'
             );
             menu.addLine();
         }
@@ -5135,6 +5144,27 @@ InputSlotDialogMorph.prototype.editVariadicMaxSlots = function () {
         20, // slider-max
         null, // slider-action
         0 // decimals
+    );
+};
+
+InputSlotDialogMorph.prototype.editVariadicGroup = function () {
+    new DialogBoxMorph(
+        this,
+        str => this.fragment.type = '%group' + str.split('\n').map(
+                each => '%' + each.trim()
+                /*
+                each => Process.prototype.slotSpec(
+                    Process.prototype.slotType(each.trim())
+                )
+                */
+            ).join(''),
+        this
+    ).promptCode(
+        "Input group (experimental!)",
+        this.fragment.type.split('%').slice(2).join('\n'),
+        this.world(),
+        null, // pic
+        localize('Enter one item per line.')
     );
 };
 

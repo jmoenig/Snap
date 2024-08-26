@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-August-20';
+modules.objects = '2024-August-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -14509,6 +14509,8 @@ WatcherMorph.prototype.update = function () {
                     SpriteMorph.prototype.blockColor.variables
                 );
             }
+        } else if (this.target instanceof List) { // OOP 2.0
+            newValue = this.target.lookup(this.getter);
         } else {
             newValue = this.target[this.getter]();
 
