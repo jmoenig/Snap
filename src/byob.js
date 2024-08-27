@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-August-26';
+modules.byob = '2024-August-27';
 
 // Declarations
 
@@ -5151,17 +5151,16 @@ InputSlotDialogMorph.prototype.editVariadicGroup = function () {
     new DialogBoxMorph(
         this,
         str => this.fragment.type = '%group' + str.split('\n').map(
-                each => '%' + each.trim()
-                /*
                 each => Process.prototype.slotSpec(
                     Process.prototype.slotType(each.trim())
                 )
-                */
             ).join(''),
         this
     ).promptCode(
-        "Input group (experimental!)",
-        this.fragment.type.split('%').slice(2).join('\n'),
+        "Input group",
+        this.fragment.type.split('%').slice(2).map(each =>
+            Process.prototype.slotType(each.trim())
+        ).join('\n'),
         this.world(),
         null, // pic
         localize('Enter one item per line.')
