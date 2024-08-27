@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-August-26';
+modules.threads = '2024-August-27';
 
 var ThreadManager;
 var Process;
@@ -2209,6 +2209,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
+    } else if (this.inputOption(index) === 'parent') {
+        idx = '...';
     }
     list.forget(idx);
 };
@@ -2228,6 +2230,8 @@ Process.prototype.doInsertInList = function (element, index, list) {
             idx = this.reportBasicRandom(1, list.length() + 1);
         } else if (index[0] === 'last') {
             idx = list.length() + 1;
+        } else if (index[0] === 'parent') {
+            idx = '...';
         } else {
             idx = list.length() + 1;
         }
@@ -2253,6 +2257,8 @@ Process.prototype.doReplaceInList = function (index, list, element) {
             idx = this.reportBasicRandom(1, list.length() + 1);
         } else if (index[0] === 'last') {
             idx = list.length();
+        } else if (index[0] === 'parent') {
+            idx = '...';
         } else {
             idx = 0;
         }
@@ -2292,7 +2298,11 @@ Process.prototype.reportListItem = function (index, list) {
         if (index[0] === 'last') {
             return list.at(list.length());
         }
-        return '';
+        if (index[0] === 'parent') {
+            index = '...';
+        } else {
+            return '';
+        }
     }
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);

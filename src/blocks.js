@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-August-26';
+modules.blocks = '2024-August-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -462,7 +462,8 @@ SyntaxElementMorph.prototype.labelParts = {
             '1' : 1,
             last : ['last'],
             '~' : null,
-            all : ['all']
+            all : ['all'],
+            parent : ['parent']
         }
     },
     '%idx': {
@@ -471,7 +472,9 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            random : ['random']
+            random : ['random'],
+            '~' : null,
+            parent : ['parent']
         }
     },
     '%ix': {
