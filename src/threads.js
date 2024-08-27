@@ -1998,7 +1998,7 @@ Process.prototype.reportGetVar = function () {
 
     // allow dropping variable reporters into the variable name slot of
     // primitive accessors
-    if (accessors.includes(block.parent.selector)) {
+    if (accessors.includes(block.parent?.selector)) {
         return block.blockSpec;
     }
     return this.context.variables.getVar(block.blockSpec);
