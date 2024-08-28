@@ -16,6 +16,7 @@
     
 ### 2024-08-28
 * threads: added metaprogramming support for input groups
+* updated dev version
 
 ### 2024-08-27
 * blocks, threads: new localized "parent" selector for accessing list items, points to entry at ellipsis "..."
