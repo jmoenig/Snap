@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-August-27';
+modules.threads = '2024-August-28';
 
 var ThreadManager;
 var Process;
@@ -7960,7 +7960,9 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 : this.blockReceiver().getMethod(expr.semanticSpec));
             // def.declarations.forEach(value => slots.add(value[1]));
             def.declarations.forEach(value => {
-                if((value[0] || '').toString().startsWith('%mult')) {
+                if((value[0] || '').toString().startsWith('%mult') ||
+                    (value[0] || '').toString().startsWith('%group')
+                ) {
                     data = (value[1] || '').split('\n').map(each =>
                         each.trim()).filter(each =>
                             each.length);
@@ -8226,6 +8228,10 @@ Process.prototype.slotType = function (spec) {
                 shift = 0;
                 key = 'variables';
             }
+        } else if (key.startsWith('group')) {
+            return new List(
+                key.split('%').slice(1).map(each => this.slotType(each))
+            );
         }
     } else if (spec.endsWith('...')) {
         shift = 100;
@@ -8361,6 +8367,12 @@ Process.prototype.slotSpec = function (num) {
     var prefix = '',
         id = this.reportIsA(num, 'text') ? this.slotType(num) : +num,
         spec;
+
+    if (num instanceof List) { // input group
+        return '%group' + num.itemsArray().map(each =>
+            this.slotSpec(each)
+        ).join('');
+    }
 
     if (id >= 100) {
         prefix = '%mult';
