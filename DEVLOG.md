@@ -3,7 +3,7 @@
 ## in development:
 * **New Features:**
     1. OOP 2.0
-        * new list-dictionary based object system with data scope and prototypical inheritance
+        * new list-dictionary based object system with data scope and Lieberman style prototypical inheritance
         * new OOP library
         * new "parent" selector for accessing list items, points to entry at ellipsis "..."
         * change: "primitive" variable accessor blocks now accept reporters in their first input field expecting a variable name
@@ -16,6 +16,9 @@
     
 ### 2024-08-29
 * blocks: avoid errors when specifying default values for non-editable slots
+* updated dev from master (pulled Catalan translation update v10.0.6)
+* store: updated file version to 11-dev
+* updated dev version
 
 ### 2024-08-28
 * threads: added metaprogramming support for input groups
