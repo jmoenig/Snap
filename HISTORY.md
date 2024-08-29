@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.0.6:
+* **Translation Updates:**
+    * Catalan, thanks, Joan!
+
+### 2024-08-29
+* Catalan translation update, thanks, Joan!
+* prepared v10.0.6 patch
+
 ## 10.0.5:
 * **Notable Fixes:**
     * fixed querying the pixels of an empty costume
