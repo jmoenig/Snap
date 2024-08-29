@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-August-27';
+modules.blocks = '2024-August-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8187,6 +8187,11 @@ RingMorph.prototype.contents = function () {
     return this.parts()[0].nestedBlock();
 };
 
+RingMorph.prototype.setContents = function () {
+    // subclass responsibility
+    nop();
+};
+
 RingMorph.prototype.inputNames = function () {
     return this.parts()[1].evaluate();
 };
@@ -9581,6 +9586,11 @@ ArgMorph.prototype.reactToSliderEdit = function () {
             }
         }
     }
+};
+
+ArgMorph.prototype.setContents = function () {
+    // subclass responsibility
+    nop();
 };
 
 // ArgMorph drag & drop: for demo puposes only

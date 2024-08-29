@@ -14,6 +14,9 @@
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     
+### 2024-08-29
+* blocks: avoid errors when specifying default values for non-editable slots
+
 ### 2024-08-28
 * threads: added metaprogramming support for input groups
 * updated dev version
