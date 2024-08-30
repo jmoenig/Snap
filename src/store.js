@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2023-July-27';
+modules.store = '2024-July-24';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -259,7 +259,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 9.0, https://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'Snap! 10, https://snap.berkeley.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -294,6 +294,7 @@ SnapSerializer.prototype.init = function () {
     this.scene = new Scene();
     this.objects = {};
     this.mediaDict = {};
+    this.noPrims = false;
 };
 
 // SnapSerializer saving:
@@ -318,9 +319,13 @@ XML_Serializer.prototype.mediaXML = function (name) {
 
 // SnapSerializer loading:
 
-SnapSerializer.prototype.load = function (xmlString, ide) {
+SnapSerializer.prototype.load = function (xmlString, ide, noPrims) {
     // public - answer a new Project represented by the given XML String
-    return this.loadProjectModel(this.parse(xmlString), ide);
+    var obj;
+    this.noPrims = noPrims || false;
+    obj = this.loadProjectModel(this.parse(xmlString), ide);
+    this.noPrims = false;
+    return obj;
 };
 
 SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
@@ -529,6 +534,13 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     }
     this.loadObject(scene.stage, model.stage);
 
+    model.primitives = model.scene.childNamed('primitives');
+    if (model.primitives && !this.noPrims) {
+        SpriteMorph.prototype.initBlocks();
+        this.loadCustomizedPrimitives(scene.stage, model.primitives);
+        scene.blocks = SpriteMorph.prototype.blocks;
+    }
+
     /* Sprites */
 
     model.sprites = model.stage.require('sprites');
@@ -717,6 +729,10 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage) {
     if (model.local) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
+    }
+    model.primitives = model.childNamed('primitives');
+    if (model.primitives) {
+        this.loadCustomizedPrimitives(stage, model.primitives, targetStage);
     }
     varModel = model.childNamed('variables');
     if (varModel) {
@@ -1035,7 +1051,10 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             definition.category = 'other';
         }
         definition.type = child.attributes.type || 'command';
+        definition.selector = child.attributes.selector || null;
+        definition.primitive = child.attributes.primitive || null;
         definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.spaceAbove = (child.attributes.space === 'true') || false;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -1071,7 +1090,12 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                         options ? options.contents : undefined,
                         child.attributes.readonly === 'true',
                         child.attributes.irreplaceable === 'true',
-                        child.attributes.separator
+                        child.attributes.separator,
+                        child.attributes.collapse,
+                        child.attributes.expand,
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
                     ]
                 );
             });
@@ -1106,6 +1130,167 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     });
 };
 
+SnapSerializer.prototype.loadCustomizedPrimitives = function (
+    object,
+    element,
+    stage
+) {
+    // private - overload existing customized primitives
+    element.children.forEach(child => {
+        var definition, names, inputs, vars, header, code, trans, comment, i,
+            sel = child.attributes.selector;
+
+        function isMajorTypeChange(oldType) {
+            var rep = ['reporter', 'predicate'],
+                type = definition.type;
+            return (type === 'command' && rep.includes(oldType)) ||
+                (oldType == 'command' && rep.includes(type));
+        }
+
+        if (child.tag !== 'block-definition') {
+            return;
+        }
+        definition = SpriteMorph.prototype.blocks[sel].definition;
+        if (!(definition instanceof CustomBlockDefinition)) {
+            (stage || object).customizePrimitive(
+                sel,
+                null,
+                null,
+                this.scene.stage
+            );
+            definition = SpriteMorph.prototype.blocks[sel].definition;
+            if (!(definition instanceof CustomBlockDefinition)) {
+                console.log('unable to overload primitive "' + sel + '"');
+                return;
+            }
+        }
+        definition.spec = child.attributes.s || '';
+        definition.receiver = object || null;
+        definition.category = child.attributes.category || 'other';
+        if (!SpriteMorph.prototype.allCategories().includes(
+            definition.category
+        )) {
+            definition.category = 'other';
+        }
+        definition.type = child.attributes.type || 'command';
+        definition.selector = sel || null;
+        definition.primitive = child.attributes.primitive || null;
+        definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.isGlobal = true;
+
+        names = definition.parseSpec(definition.spec).filter(
+            str => str.charAt(0) === '%' && str.length > 1
+        ).map(str => str.substr(1));
+
+        definition.names = names;
+        inputs = child.childNamed('inputs');
+        if (inputs) {
+            i = -1;
+            definition.declarations = new Map();
+            inputs.children.forEach(child => {
+                var options = child.childNamed('options');
+                if (child.tag !== 'input') {
+                    return;
+                }
+                i += 1;
+                definition.declarations.set(
+                    names[i],
+                    [
+                        child.attributes.type,
+                        contains(['%b', '%boolUE'], child.attributes.type) ?
+                            (child.contents ? child.contents === 'true' : null)
+                                : child.contents,
+                        options ? options.contents : undefined,
+                        child.attributes.readonly === 'true',
+                        child.attributes.irreplaceable === 'true',
+                        child.attributes.separator,
+                        child.attributes.collapse,
+                        child.attributes.expand,
+                        +child.attributes.initial,
+                        +child.attributes.min,
+                        +child.attributes.max
+                    ]
+                );
+            });
+        }
+
+        vars = child.childNamed('variables');
+        if (vars) {
+            definition.variableNames = this.loadValue(
+                vars.require('list')
+            ).asArray();
+        }
+
+        header = child.childNamed('header');
+        if (header) {
+            definition.codeHeader = header.contents;
+        }
+
+        code = child.childNamed('code');
+        if (code) {
+            definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
+        }
+
+        comment = child.childNamed('comment');
+        if (comment) {
+            definition.comment = this.loadComment(comment);
+        }
+
+        this.populateCustomBlock(
+            object,
+            definition,
+            child.childNamed('script'),
+            child.childNamed('scripts')
+        );
+
+        if (stage) { // update all instances
+            stage.allBlockInstances(definition).reverse().forEach(
+                block => block.refresh()
+            );
+            stage.allContextsUsing(definition).forEach(
+                context => {
+                    if (context.expression.isCustomBlock &&
+                        context.expression.isUnattached() &&
+                        isMajorTypeChange(context.expression.type())
+                    ) {
+                        context.expression = definition.blockInstance();
+                    }
+                    context.changed();
+                }
+            );
+        } else { // at least update instances found in customized prims
+            SpriteMorph.prototype.everyBlock().forEach(block => {
+                if (block.definition === definition) {
+                    block.refresh();
+                }
+            });
+        }
+
+        // update global custom blocks
+        this.scene.stage.globalBlocks.forEach(def => {
+            def.scripts.forEach(eachScript =>
+                eachScript.allChildren().forEach(m => {
+                    if (m.definition === definition) {
+                        m.refresh();
+                    }
+                })
+            );
+            if (def.body) {
+                def.body.expression.allChildren().forEach(m => {
+                    if (m.definition === definition) {
+                        m.refresh();
+                    }
+                });
+            }
+        });
+    });
+};
+
 SnapSerializer.prototype.populateCustomBlocks = function (
     object,
     element,
@@ -1113,30 +1298,43 @@ SnapSerializer.prototype.populateCustomBlocks = function (
 ) {
     // private
     element.children.forEach((child, index) => {
-        var definition, script, scripts;
-        if (child.tag !== 'block-definition') {
-            return;
-        }
-        definition = isGlobal ? object.globalBlocks[index]
-                : object.customBlocks[index];
-        script = child.childNamed('script');
-        if (script) {
-            definition.body = new Context(
-                null,
-                script ? this.loadScript(script, object) : null,
-                null,
-                object
+        if (child.tag === 'block-definition') {
+            this.populateCustomBlock(
+                object,
+                isGlobal ? object.globalBlocks[index]
+                    : object.customBlocks[index],
+                child.childNamed('script'),
+                child.childNamed('scripts')
             );
-            definition.body.inputs = definition.names.slice(0);
-            definition.body.comment = definition.comment?.text();
         }
-        scripts = child.childNamed('scripts');
-        if (scripts) {
-            definition.scripts = this.loadScriptsArray(scripts, object);
-        }
-
-        delete definition.names;
     });
+};
+
+SnapSerializer.prototype.populateCustomBlock = function (
+    object,
+    definition,
+    bodyXML,
+    scriptsXML
+) {
+    // private
+    if (bodyXML) {
+        definition.body = new Context(
+            null,
+            this.loadScript(bodyXML, object),
+            null,
+            object
+        );
+        definition.body.inputs = definition.names.slice(0);
+        definition.body.comment = definition.comment?.text();
+    } else {
+        definition.body = null;
+    }
+    if (scriptsXML) {
+        definition.scripts = this.loadScriptsArray(scriptsXML, object);
+    } else {
+        definition.scripts = [];
+    }
+    delete definition.names;
 };
 
 SnapSerializer.prototype.loadScripts = function (object, scripts, model) {
@@ -1367,7 +1565,8 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
     var block = isReporter ? new ReporterBlockMorph()
             : new CommandBlockMorph();
     block.selector = 'errorObsolete';
-    block.color = new Color(200, 0, 20);
+    block.category = 'other';
+    block.color = SpriteMorph.prototype.blockColor.other;
     block.setSpec('Undefined!');
     block.isDraggable = true;
     return block;
@@ -1852,6 +2051,7 @@ Scene.prototype.toXML = function (serializer) {
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
+            '<primitives>%</primitives>' +
             '%' + // stage
             '<variables>%</variables>' +
             '</scene>',
@@ -1873,6 +2073,7 @@ Scene.prototype.toXML = function (serializer) {
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),
+        serializer.store(SpriteMorph.prototype.bootstrappedBlocks()),
         serializer.store(this.stage),
         serializer.store(this.globalVariables)
     );
@@ -1882,7 +2083,8 @@ Scene.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var costumeIdx = this.getCostumeIdx();
+    var costumeIdx = this.getCostumeIdx(),
+        ide = this.parentThatIsA(IDE_Morph);
 
     this.removeAllClones();
     return serializer.format(
@@ -1908,8 +2110,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<sprites select="@">%</sprites>' +
             '</stage>',
         this.name,
-        this.dimensions.x,
-        this.dimensions.y,
+        ide?.performerMode ? 480 : this.dimensions.x,
+        ide?.performerMode ? 360 : this.dimensions.y,
         costumeIdx,
         this.color.r,
         this.color.g,
@@ -2288,6 +2490,16 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
+    if (this.isGlobal && this.definition.isBootstrapped()) {
+        // treat a bootstrapped custom block as if it were a primitive
+        return serializer.format(
+            '<block s="@">%%</block>',
+            this.definition.selector,
+            serializer.store(this.inputs()),
+            this.comment ? this.comment.toXML(serializer) : ''
+        );
+    }
+
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
@@ -2323,7 +2535,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%>' +
+        '<block-definition s="@" type="@" category="@"%%%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2334,7 +2546,14 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.spec,
         this.type,
         this.category || 'other',
+        this.selector && this.isGlobal ?
+            ' selector="' + this.selector + '"'
+            : '',
+        this.primitive && this.isGlobal ?
+            ' primitive="' + this.primitive + '"'
+            : '',
         this.isHelper ? ' helper="true"' : '',
+        this.spaceAbove ? ' space="true"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),
@@ -2344,7 +2563,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         Array.from(this.declarations.keys()).reduce((xml, decl) => {
             // to be refactored now that we've moved to ES6 Map:
                 return xml + serializer.format(
-                    '<input type="@"$$$>$%</input>',
+                    '<input type="@"$$$$$$$$>$%</input>',
                     this.declarations.get(decl)[0],
                     this.declarations.get(decl)[3] ?
                             ' readonly="true"' : '',
@@ -2353,6 +2572,31 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                     this.declarations.get(decl)[5] ?
                             ' separator="' +
                                 this.declarations.get(decl)[5] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[6] ?
+                            ' collapse="' +
+                                this.declarations.get(decl)[6] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[7] ?
+                            ' expand="' +
+                                this.declarations.get(decl)[7] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[8] ?
+                            ' initial="' +
+                                this.declarations.get(decl)[8] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[9] ?
+                            ' min="' +
+                                this.declarations.get(decl)[9] +
+                                '"'
+                            : '',
+                    this.declarations.get(decl)[10] ?
+                            ' max="' +
+                                this.declarations.get(decl)[10] +
                                 '"'
                             : '',
                     this.declarations.get(decl)[1],
@@ -2527,7 +2771,7 @@ Context.prototype.toXML = function (serializer) {
         '<context ~><inputs>%</inputs><variables>%</variables>%' +
             '%<receiver>%</receiver><origin>%</origin>%</context>',
         this.inputs.reduce(
-                (xml, input) => xml + (input.toXML ?
+                (xml, input) => xml + (input?.toXML ?
                     serializer.format(
                         '<input>%</input>',
                         input.toXML(serializer)

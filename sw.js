@@ -1,4 +1,4 @@
-var snapVersion = '9.2.17',
+var snapVersion = '10.0.6',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -25,6 +25,7 @@ var snapVersion = '9.2.17',
         'src/locale.js',
         'src/cloud.js',
         'src/api.js',
+        'src/embroider.js',
         'src/sha512.js',
         'src/FileSaver.min.js',
 
@@ -76,20 +77,49 @@ var snapVersion = '9.2.17',
         'locale/lang-zh_TW.js',
 
         //libraries
-        'libraries/LIBRARIES',
+        'libraries/LIBRARIES.json',
 
         'libraries/animation_module.xml',
         'libraries/apl.xml',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
+
+        'libraries/beetle.xml',
+
+            // Beetle coordinate images
+            'libraries/beetle/x.png',
+            'libraries/beetle/y.png',
+            'libraries/beetle/z.png',
+
+            // Beetle dependencies
+            'libraries/beetle/beetle.js',
+            'libraries/beetle/earcut.min.js',
+            'libraries/beetle/babylonjs.loaders.min.js',
+            'libraries/beetle/babylon.js.map',
+            'libraries/beetle/babylon.js',
+            'libraries/beetle/babylon.gridMaterial.min.js',
+
+            // Beetle shapes
+            'libraries/beetle/meshes/beetle-gray.obj',
+            'libraries/beetle/meshes/beetle-color.obj',
+            'libraries/beetle/meshes/beetle-black.obj',
+            'libraries/beetle/meshes/beetle-black.mtl',
+
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
         'libraries/bignums.js',
         'libraries/bitwise.xml',
         'libraries/bbtSnapExtension.js',
+
+        // BLE
+        'libraries/ble/ble.js',
+        'libraries/ble/init.js',
+
+        'libraries/code2blocks_module.xml',
         'libraries/colors.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
+        'libraries/embroidery_module.xml',
         'libraries/frequency_distribution_module.xml',
         'libraries/httpBlocks.xml',
         'libraries/HummingbirdBlocks.xml',
@@ -103,6 +133,7 @@ var snapVersion = '9.2.17',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
         'libraries/menu_module.xml',
+        'libraries/microblocks.xml',
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
@@ -111,8 +142,9 @@ var snapVersion = '9.2.17',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
-        'libraries/SciSnapExtensions.js',
-        'libraries/SciSnap!2Blocks.xml',
+        'libraries/SciSnap3Blocks.xml',
+        'libraries/SciSnap3Extensions.js',
+        'libraries/SciSnap3Costumedata.js',
 
         'libraries/TuneScope.xml',
 
@@ -165,12 +197,13 @@ var snapVersion = '9.2.17',
         'libraries/stream-tools.xml',
         'libraries/strings.xml',
         'libraries/textCostumes_module.xml',
+        'libraries/textformat_module.xml',
         'libraries/try-catch.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
 
         //costumes
-        'Costumes/COSTUMES',
+        'Costumes/COSTUMES.json',
 
         'Costumes/abby-a.svg',
         'Costumes/abby-b.svg',
@@ -719,7 +752,7 @@ var snapVersion = '9.2.17',
         'Costumes/wizard.svg',
 
         // Backgrounds
-        'Backgrounds/BACKGROUNDS',
+        'Backgrounds/BACKGROUNDS.json',
 
         'Backgrounds/atom_playground.jpg',
         'Backgrounds/bedroom1.gif',
@@ -735,7 +768,7 @@ var snapVersion = '9.2.17',
         'Backgrounds/xy-grid.gif',
 
         // Sounds
-        'Sounds/SOUNDS',
+        'Sounds/SOUNDS.json',
 
         'Sounds/Cat.mp3',
         'Sounds/Chord.wav',
@@ -751,7 +784,7 @@ var snapVersion = '9.2.17',
         'Sounds/Pop.wav',
 
         // Examples
-        'Examples/EXAMPLES',
+        'Examples/EXAMPLES.json',
 
         'Examples/animal-game.xml',
         'Examples/Codification.xml',

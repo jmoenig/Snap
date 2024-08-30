@@ -1,21 +1,21 @@
 # Snap! Extensions
 
-> Last updated October 19, 2022
+> Last updated June 10, 2024
 
 Snap! Extensions take the idea of a library, and expand it by allowing you to add your own JavaScript code.
 Much of the work happens through two (hidden) primitive blocks.
 
 ## Enable Extensions Blocks
 Go to the Settings Menu (the cog) and turn on "Extension Blocks".
-You now have two new blocks in the _Other_ category title called `primitive`.
+You now have two new blocks in the _Other_ category title called `extension`.
 
 The first argument is a dropdown menu which contains list of allowed JavaScript calls, showing the function signature.
 The second argument is a variadic input to pass data to the selected JavaScript function.
 Both the reporter and command block have access to the same set of functions, you can use whichever is necessary.
 
-It is expected that you'll use the `primitive` block directly in a library, but you'll want to wrap it inside a custom block.
+It is expected that you'll use the `extension` block directly in a library, but you'll want to wrap it inside a custom block.
 
-## Adding New Primitive Functions
+## Adding New Extension Functions
 
 The built-in set of primitives will get you a lot of functionality, but you'll likely want to do something more.
 You can also extend Snap! with your own externally hosted JavaScript file(s)
@@ -23,12 +23,12 @@ and have them add your own extension primitives and menus to the global
 SnapExtensions dictionaries. This lets you provide libraries to support
 special APIs and custom hardware.
 
-### 1. Primitives (additional blocks)
+### 1. Extension Primitives (additional blocks)
 
-The names under which primitives are stored will apear in the dropdown
-menus of the hidden extension "primitive" blocks sorted alphabetically.
+The names under which extension primitives are stored will apear in the dropdown
+menus of the hidden "extension" primitive blocks sorted alphabetically.
 (You can find those extension primitives in Snap's search bar or in dev
-mode. There are two version of the primitive block, a command version and
+mode. There are two version of the extension block, a command version and
 a reporter one, both show the same list of available extensions.)
 
 #### naming conventions
@@ -41,7 +41,7 @@ example: 'lst_sort(list, fn)'
 - parameter-list: comma separated names or type indicators
 
 #### function semantics
-- functions are called by the "primitive" blocks with any arguments provided
+- functions are called by the "extension" blocks with any arguments provided
 - use the "function () {}" notation to define functions, not the ES6 arrow
   notation, otherwise "this" will not get scoped correctly
 - "this" refers to the current snap object (sprite or stage) at call-time
@@ -121,6 +121,10 @@ This lets you lazily initialize your extension by simply adding a
 "src_load(url)" command for your external JS file before calling any of its
 added functions.
 
+#### autoloading JavaScript files
+
+If you want a library of custom blocks to automatically also load an external JavaScript file - and possibly also perform an initialization - you can include a global variable in the blocks library whose name has to begin with the word "module" enclosed in double-underscores (``__module__``), and whose value can be the url of a JavaScript file to be loaded. Notice that you can hide such a variable in the palette so the user will not be confused by its presence.
+
 ### 5. Miscellaneous
 
 #### calling extension primitives in other JavaScript functions
@@ -139,16 +143,16 @@ correctly, e.g.:
 Don't forget to pass in a reference to the current process as last parameter
 in case the callee requires it.
 
-#### adding primitives to SnapExtensions
+#### adding extension primitives to SnapExtensions
 
 It is the suggested best practice to expose your own extension primitives
-by adding them to the global SnapExtensions libraries (for primitives and
+by adding them to the global SnapExtensions libraries (for extension primitives and
 menus) using the very same conventions described herein, and then to offer
 a library of custom blocks that make calls to your additional operations.
 
 #### developing an extension
 
-Running the "src_load(url)" primitive will throw an error unless you first
+Running the "src_load(url)" extension primitive will throw an error unless you first
 check the "Enable JavaScript extensions" setting in Snap's preferences menu,
 or if your JavaScript extension comes from a list of trusted hosts.
 While you develop your JavaScript extension it's recommended to turn on the

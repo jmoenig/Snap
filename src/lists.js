@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE*/
+Context, ZERO, WHITE, ReadStream*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-April-05';
+modules.lists = '2024-April-08';
 
 var List;
 var ListWatcherMorph;
@@ -1168,6 +1168,123 @@ List.prototype.asWords = function () {
     return this.itemsArray().map(each =>
         each instanceof List ? each.asWords() : each.toString().trim()
     ).filter(word => word.length).join(' ');
+};
+
+// List to blocks parsing and encoding, highly experimental for v10
+
+List.prototype.parse = function (string) {
+    var stream = new ReadStream(string);
+    stream.upTo('(');
+    stream.skip();
+    this.parseStream(stream);
+};
+
+List.prototype.parseStream = function (stream) {
+    var item = '',
+        quoted = false,
+        ch, child;
+    while (!stream.atEnd()) {
+        ch = stream.next();
+        if (ch === ';' && !quoted) { // comment
+            stream.upTo('\n');
+        } else if (ch === '(' && !quoted) {
+            child = new List();
+            child.parseStream(stream);
+            this.add(child);
+        } else if ((ch === ')' || !ch.trim().length) && !quoted) {
+            if (item.length) {
+                if (snapEquals(item, 'nil')) {
+                    item = '';
+                }
+                this.add(item);
+                item = '';
+            }
+            if (ch === ')') {
+                return;
+            }
+        } else if (ch === '"') {
+            quoted = !quoted;
+            if (!quoted) {
+                if (!item.length) {
+                    this.add('');
+                } else if (snapEquals(item, 'nil')) {
+                    this.add(item);
+                }
+            }
+        } else if (ch === '\\') {
+            item += stream.next();
+        } else {
+            item += ch;
+        }
+    }
+};
+
+List.prototype.encode = function (level = 0, indent = 4) {
+    var str = '(',
+        len = this.length(),
+        hasBranch = false,
+        item,
+        i;
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        if (item instanceof List && !(item.at(1) instanceof List)) {
+            hasBranch = true;
+        }
+        str += this.encodeItem(item, level, indent);
+        if (i < len) {
+            str += ' ';
+        }
+    }
+    str += hasBranch && indent ?
+        '\n' + this.indentation(level, indent) + ')'
+        : ')';
+    return str;
+};
+
+List.prototype.encodeItem = function (data, level = 0, indent = 4) {
+    if (data instanceof List) {
+        if (!(data.at(1) instanceof List) && indent) {
+            return '\n' +
+                this.indentation(level + 1, indent) +
+                data.encode(level + 1, indent);
+        }
+        return data.encode(level, indent);
+    }
+    return isString(data) ? this.escape(data)
+        : (typeof data === 'boolean' ? this.encodeBoolean(data) : data);
+};
+
+List.prototype.escape = function (string) {
+    var str = '',
+        quoted = false,
+        len = string.length,
+        i, ch;
+    if (string.trim().length && 'tf'.includes(string.toLowerCase())) {
+        return '\\' + string;
+    } else if (snapEquals(string, 'nil')) {
+        return '"' + string + '"';
+    }
+    for (i = 0; i < len; i += 1) {
+        ch = string[i];
+        if (ch === '"' || (ch === ';')) {
+            ch = '\\' + ch;
+        } else if (!ch.trim().length || '()'.includes(ch)) {
+            if (!quoted) {
+                str = '"' + str;
+                quoted = true;
+            }
+        }
+        str += ch;
+    }
+    return quoted ? str + '"' : str || 'nil';
+};
+
+List.prototype.encodeBoolean = function (data) {
+    return (data === true) ? 't' : 'f';
+};
+
+List.prototype.indentation = function (level = 0, amount = 4) {
+    return new Array(level * amount + 1).join(' ') || '';
 };
 
 // List testing

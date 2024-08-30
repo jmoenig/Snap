@@ -44,19 +44,38 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains, SpriteMorph*/
+/*global modules, contains, SpriteMorph, isNil*/
 
 /*jshint esversion: 6*/
 
 // Global stuff
 
-modules.locale = '2024-April-17';
+modules.locale = '2024-August-29';
 
 var Localizer;
 var SnapTranslator = new Localizer();
 
 function localize(string) {
     return SnapTranslator.translate(string);
+}
+
+// wrapping a string inside an Array supports lazy translation
+
+function display(data) {
+    if (isNil(data)) {
+        return '';
+    }
+    if (data instanceof Array) {
+        return '«' + localize(data[0].toString()) + '»';
+    }
+    if (data.toString) {
+        return data.toString();
+    }
+    return '';
+}
+
+function option(data) {
+    return data instanceof Array ? data[0] : data;
 }
 
 // Localizer /////////////////////////////////////////////////////////////
@@ -184,7 +203,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2023-11-22'
+        '2024-08-16'
 };
 
 SnapTranslator.dict.it = {
@@ -334,11 +353,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski',
     'language_translator':
-        'Witek Kranas & deKrain & Andrzej Batorski',
+        'Witek Kranas & deKrain & Andrzej Batorski & P1neF0rest935',
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2021-05-15'
+        '2024-06-04'
 };
 
 SnapTranslator.dict.zh_TW = {
@@ -393,7 +412,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2023-11-08'
+        '2024-08-25'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -433,11 +452,11 @@ SnapTranslator.dict.pt_BR = {
     'language_name':
         'Português do Brasil',
     'language_translator':
-        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller, Ville Medeiros",
+        "Aldo von Wangenheim, Cassiano D'Andrea, Artur Arnhold-Müller",
     'translator_e-mail':
         'awangenh@inf.ufsc.br, cassiano.dandrea@tagview.com.br',
     'last_changed':
-        '2023-10-17',
+        '2023-01-25',
 };
 
 SnapTranslator.dict.bn = {
@@ -624,7 +643,7 @@ SnapTranslator.dict.ua = {
     'translator_e-mail':
         'kseryj@gmail.com',
     'last_changed':
-        '2024-01-19'
+        '2024-06-04'
 };
 
 SnapTranslator.dict.sk = {

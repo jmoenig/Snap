@@ -1,0 +1,2462 @@
+[
+  {
+    "fileName": "code2blocks_module.xml",
+    "name": "Code to Blocks to Code",
+    "description": "Translate text code to blocks and vice-versa",
+    "searchData": [
+      "parse code _ to blocks",
+      "encode blocks _ to text _ pretty"
+    ],
+    "categories": [
+      "operators"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "verwandle Code _ in Blöcke",
+          "verwandle Blöcke _ in Code _ formatiert"
+        ]
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "iteration-composition.xml",
+    "name": "Iteration, composition",
+    "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.",
+    "translations": {
+      "ca": {
+        "name": "Iteracions i composició",
+        "description": "Construcció de bucles estàndard (while, until, etc.), construccions \"named let\" pròpies de Lisp (una generalització dels bucles \"for\"), iteració funcional (repeticions de crides a una funció) i composició de funcions."
+      },
+      "de": {
+        "name": "Iteration, Komposition",
+        "searchData": [
+          "fange _ _\rca",
+          "wirf _\rca",
+          "fange _ _\rca",
+          "wirf _ _\rca",
+          "falls _ dann _ und pause $-1-255-220-0\rca",
+          "ignoriere _\rca"
+        ]
+      },
+      "es": {
+        "name": "Iteración, composición",
+        "description": "Bucles tradicionales (while, until, etc...) + el \"named let\" de Lisp (una generalización del for) + iteración funcional (invocación repetida de una función) y composición de funciones."
+      },
+      "eu": {
+        "name": "Iterazioa, konposizioa",
+        "description": "Begizta egitura tradizionalak (while, until...) + Lisp-eko \"named let\" (for-aren orokortze bat) + iterazio funtzionala (funtzio bat modu errepikatuan deitzea) eta funtzioen konposizioa."
+      },
+      "gl": {
+        "name": "Iteracións e composición",
+        "description": "Construcción de bucles estándar (while, until, etc.), construcións «named let« propias de Lisp (unha xeneralización dos bucles «for»), iteración funcional (repeticións de chamadas a unha función) e composición de funcións."
+      },
+      "he": {
+        "name": "איטרציה, קומפוזיציה"
+      },
+      "hu": {
+        "name": "Ismétlés, Kompozíció"
+      },
+      "it": {
+        "name": "Iterazione, composizione",
+        "description": "Strutture cicliche tradizionali (mentre, fino a che, ecc.)"
+      },
+      "nl": {
+        "name": "Herhaling, Samenstelling",
+        "description": "Traditionele lusconstructies (tijdens, tot, etc.) plus de Lisp \"named let\" (een generalisatie van FOR) plus functionele iteratie (herhaalde aanroep van een functie) en functiesamenstelling."
+      },
+      "no": {
+        "name": "Iterasjon, komposisjon"
+      },
+      "pl": {
+        "name": "Iteracja, kompozycja"
+      },
+      "pt": {
+        "name": "Iteração e composição",
+        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.",
+        "searchData": [
+          "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
+          "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
+          "a composição de _ com _\rca",
+          "repete _ até que _ $-0.7\rca",
+          "repete _ enquanto _ $-0.7\rca",
+          "enquanto _ , repete _ $-0.7",
+          "repete _ vezes _ _ $-0.7\rca",
+          "para _ de _ com passo _ a _ _ $-0.7\rca",
+          "tendo _ o valor inicial _ , executa _ definido como _\rca"
+        ]
+      },
+      "sk": {
+        "name": "Iterácia, kompozícia"
+      },
+      "sv": {
+        "name": "Upprepning, komposition"
+      },
+      "ti": {
+        "name": "ምድግጋም, ምቛም"
+      },
+      "tr": {
+        "name": "Yineleme, kompozisyon"
+      },
+      "ua": {
+        "name": "Ітерація, композиція",
+        "description": "Традиційні конструкції циклу (while, until тощо) плюс Lisp \"named let\" (узагальнення FOR) плюс функціональна ітерація (повторний виклик функції) і композиція функції."
+      },
+      "zh_CN": {
+        "name": "迭代,组合",
+        "description": "传统的循环结构（如while、until等），加上Lisp中的\"named let\"（FOR的一般化），再加上函数迭代（反复调用一个函数）和函数组合。"
+      }
+    },
+    "searchData": [
+      "catch _ _",
+      "throw _",
+      "catch _ _",
+      "throw _ _",
+      "if _ do _ and pause all $-1-255-220-0",
+      "ignore _",
+      "cascade _ times _ _ _",
+      "cascade until _ _ _ _",
+      "compose _ _",
+      "repeat _ until _",
+      "repeat _ while _",
+      "repeat while _ _",
+      "repeat _ _ _",
+      "for _ = _ step _ to _ _",
+      "let _ be _ in _ _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "list-utilities.xml",
+    "name": "List utilities",
+    "description": "Some standard functions on lists (reverse, sort, etc.)",
+    "translations": {
+      "ca": {
+        "name": "Utilitats per a llistes",
+        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)",
+        "searchData": [
+          "ordena _ segons criteri _",
+          "associació _ _",
+          "_ per cada _ de _ _",
+          "notació textual de _",
+          "frase _",
+          "multi-mapeja _ sobre _"
+        ]
+      },
+      "de": {
+        "name": "Listen bearbeiten",
+        "searchData": [
+          "Satz to Liste _\rca"
+        ]
+      },
+      "es": {
+        "name": "Utilidades de lista",
+        "description": "Algunas funciones estándar de listas (inventir, sort, etc...)"
+      },
+      "eu": {
+        "name": "Zerrenden utilitateak"
+      },
+      "gl": {
+        "name": "Utilidades para listas"
+      },
+      "he": {
+        "name": "עזריי רשימות"
+      },
+      "hu": {
+        "name": "Lista eszközök"
+      },
+      "it": {
+        "name": "Operazioni su liste",
+        "description": "Alcune funzioni standard per le liste (inverti, ordina, etc.)"
+      },
+      "nl": {
+        "name": "Lijst gereedschappen"
+      },
+      "no": {
+        "name": "Liste verktøy"
+      },
+      "pl": {
+        "name": "Metody listy"
+      },
+      "pt": {
+        "name": "Utilitários para listas"
+      },
+      "sk": {
+        "name": "úpravy zoznamu"
+      },
+      "sv": {
+        "name": "Listverktyg"
+      },
+      "ti": {
+        "name": "ኣገልግሎታት ዝርዝር",
+        "description": "ገለ ዝውቱራት ተግባራት ዘርዝራት (ገልብጥ፡ ስራዕ፡ ወዘተ)"
+      },
+      "tr": {
+        "name": "liste yardımcı programları"
+      },
+      "ua": {
+        "name": "Список утиліт",
+        "description": "Деякі стандартні функції для списків (перевертання, сортування тощо)"
+      },
+      "zh_CN": {
+        "name": "列表工具",
+        "description": "一些列表上的标准函数(反转、排序等)"
+      }
+    },
+    "searchData": [
+      "flash turbo fast sort _ ordering with _",
+      "flash turbo fast assoc _ _",
+      "_ for each _ of _ _",
+      "printable _",
+      "sentence _",
+      "flash turbo fast zip _",
+      "_",
+      "multimap _ over _",
+      "sentence to list _"
+    ],
+    "categories": [
+      "lists",
+      "operators"
+    ]
+  },
+  {
+    "fileName": "colors.xml",
+    "name": "Colors and Crayons",
+    "description": "Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.",
+    "translations": {
+      "ca": {
+        "name": "Colors i Paletes",
+        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
+        "searchData": [
+          "$brush fixa el _ del llapis a _ _",
+          "$brush _ del llapis",
+          "$brush augmenta _ del llapis en _",
+          "$brush barreja colors _ amb criteri _",
+          "$brush color amb _ _ _",
+          "$brush _ del color _",
+          "✐ color de llapis actual",
+          "✐ fixa el llapis de color _ _"
+        ]
+      },
+      "es": {
+        "name": "Colores y pinturas"
+      },
+      "it": {
+        "name": "Colori e Pastelli"
+      },
+      "ti": {
+        "name": "ሕብርታትን ክራዮናትን"
+      },
+      "ua": {
+        "name": "Кольори та олівці"
+      },
+      "zh_CN": {
+        "name": "颜色和蜡笔"
+      }
+    },
+    "searchData": [
+      "$brush set pen _ to _ _",
+      "mmap _ over _",
+      "✐ update HSL",
+      "✐ update HSV",
+      "_",
+      "$brush pen _",
+      "$brush change pen _ by _",
+      "error _",
+      "✐ make integer RGB",
+      "catch _ _",
+      "throw _",
+      "ignore _",
+      "✐ no spaces _",
+      "$brush color _",
+      "$brush mix colors _ using _ rules",
+      "$brush color from _ _ _",
+      "$brush _ from color _",
+      "✐ current pen color",
+      "catch _ _",
+      "throw _ _",
+      "✐ set pen to crayon _ _",
+      "set pen color to r: _ g: _ b: _",
+      "set pen color to h: _ s: _ v: _",
+      "RGB color",
+      "HSV color",
+      "✐ hexchar _",
+      "✐ subset _ _ _ _ _",
+      "✐ initialize variables",
+      "✐ crayon number of color _",
+      "✐ RGB from color _",
+      "✐ X11 name of color _",
+      "✐ make fair hue table",
+      "✐ include transparency _ _",
+      "✐ extract rgba values _ _",
+      "✐ RGB from HSV _",
+      "✐ RGB from HSL _",
+      "✐ color number near color _",
+      "✐ HSL/HSV (hsl? _ ) from RGB _",
+      "✐ color number in _ family, from H: _ S: _ L: _  rising hue: _  rising min lightness: _ falling min lightness: _",
+      "✐ byte to hex _",
+      "✐ nybble to hex _",
+      "✐ limits _",
+      "✐ set pen to fair hue _ _",
+      "✐ set pen to color number _ _",
+      "✐ set pen to RGB hex _ _",
+      "✐ set pen to X11 name _ _",
+      "✐ color from X11 name _",
+      "✐ color from RGB hex _",
+      "✐ CMYK from RGB _",
+      "✐ RGB from CMYK _",
+      "lighten _",
+      "darken _",
+      "$brush color _ at weight _",
+      "plot _",
+      "$brush color from _ and _ _",
+      "✐ set pen to lightness _ _",
+      "✐ set pen to color _ _",
+      "✐ set pen size to _ _",
+      "✐ set pen transparency to _ _",
+      "✐ set pen red to _ _",
+      "✐ set pen green to _ _",
+      "✐ set pen blue to _ _",
+      "✐ constrain _ _ _",
+      "✐ set pen to RGB vector _ _",
+      "✐ set pen to HSL saturation _ _",
+      "✐ set pen to HSL vector _ _",
+      "✐ set pen saturation (HSV) to _ _",
+      "✐ set pen value (brightness) to _ _",
+      "✐ set pen to HSV vector _ _",
+      "✐ set pen to hue _ _",
+      "✐ set pen to fair saturation (HSL) _ _",
+      "✐ set pen to fair lightness _ _",
+      "✐ set pen to fair HSL vector _ _",
+      "✐ set pen to fair saturation (HSV) _ _",
+      "✐ set pen to fair value (brightness) _ _",
+      "✐ set pen to fair HSV vector _ _",
+      "multiline _",
+      "substring of _ before _",
+      "substring of _ after _",
+      "position of _ in _",
+      "use case-independent comparisons _",
+      "substring of _ from position _ to position _ inclusive",
+      "text _ contains _",
+      "to lower case _",
+      "use case-independent comparison",
+      "create _ var _",
+      "does var _ exist?"
+    ],
+    "categories": [
+      "pen",
+      "lists",
+      "other",
+      "control",
+      "operators",
+      "sensing",
+      "variables"
+    ]
+  },
+  {
+    "fileName": "crayons.xml",
+    "name": "Crayons",
+    "description": "Just the crayons, without the rest of the colors library.  Fast and simple.",
+    "translations": {
+      "ca": {
+        "name": "Llapis de colors",
+        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.",
+        "searchData": [
+          "fixa el llapis de color _",
+          "canvia de llapis de color saltant _",
+          "llapis de color"
+        ]
+      },
+      "es": {
+        "name": "Pinturas"
+      },
+      "it": {
+        "name": "Pastelli"
+      },
+      "ti": {
+        "name": "ክራዮናት"
+      },
+      "ua": {
+        "name": "Олівці"
+      },
+      "zh_CN": {
+        "name": "蜡笔"
+      }
+    },
+    "searchData": [
+      "set pen to crayon _",
+      "change crayon by _",
+      "pen crayon"
+    ],
+    "categories": [
+      "pen"
+    ]
+  },
+  {
+    "fileName": "bignumbers.xml",
+    "name": "Bignums, rationals, complex #s",
+    "description": "The full Scheme numeric tower.  \"USE BIGNUMS <True>\" to enable.",
+    "translations": {
+      "ca": {
+        "name": "Números sencers de precisió infinita, racionals exactes i complexos",
+        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a cert) per utilitzar-ho"
+      },
+      "it": {
+        "name": "Numeri a precisione infinita, razionali, complessi"
+      },
+      "ti": {
+        "name": "ዓበይቲ ቁጽርታት, ትኽክል ተመቕራሒ ቁጽርታት, ሓሳባውያን ቁጽርታት"
+      },
+      "ua": {
+        "name": "Великі, раціональні, комплексні числа #s"
+      },
+      "zh_CN": {
+        "name": "大数、有理数、复数"
+      }
+    },
+    "searchData": [
+      "USE BIGNUMS _",
+      "_ !",
+      "_",
+      "Scheme number _ of _"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "try-catch.xml",
+    "name": "Catch errors",
+    "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.",
+    "translations": {
+      "ca": {
+        "name": "Detecta errors",
+        "searchData": [
+          "prova de forma segura reportant _ i si _ reportant _"
+        ]
+      },
+      "it": {
+        "name": "Intercettazione degli errori"
+      },
+      "ti": {
+        "name": "ምልቃም ጌጋታት"
+      },
+      "ua": {
+        "name": "Відстежити помилки"
+      },
+      "zh_CN": {
+        "name": "捕获错误"
+      }
+    },
+    "searchData": [
+      "safely try _ then if _ _",
+      "error _",
+      "safely try reporting _ then if _ report _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "parallel_module.xml",
+    "name": "Parallelization",
+    "description": "Run several scripts in parallel and wait until all are done.",
+    "translations": {
+      "ca": {
+        "name": "Processos en paral·lel",
+        "description": "Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d'aturar-se"
+      },
+      "es": {
+        "name": "Paralelización"
+      },
+      "gl": {
+        "name": "Paralelización",
+        "description": "Executar varios programas en paralelo e agardar que todos eles rematen."
+      },
+      "it": {
+        "name": "Parallelizzazione",
+        "description": "Esegue diversi script in parallelo e attende che tutti siano terminati."
+      },
+      "nl": {
+        "name": "Parallelisatie",
+        "description": "Voer verschillende scripts parallel uit en wacht tot ze allemaal klaar zijn."
+      },
+      "pt": {
+        "name": "Paralelização",
+        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem.",
+        "searchData": [
+          "executa _ em paralelo e espera\rca",
+          "executa _ em paralelo\rca"
+        ]
+      },
+      "ti": {
+        "name": "ተገደም ዕማማት",
+        "description": "ሓያሎ መርሓታት ብተገደም ኣዕዪ፡ ክሳብ ኩለን መርሓታት ዕማመን ዝውድኣ ተጸበ።"
+      },
+      "ua": {
+        "name": "Розпаралелювання",
+        "description": "Запустіть кілька сценаріїв паралельно та зачекайте, поки всі будуть виконані"
+      },
+      "zh_CN": {
+        "name": "平行化",
+        "description": "并行运行多个脚本并等待所有脚本完成."
+      }
+    },
+    "searchData": [
+      "do in parallel _ and wait",
+      "do in parallel _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "Eisenbergification.xml",
+    "name": "Getters and setters",
+    "description": "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.",
+    "translations": {
+      "ca": {
+        "name": "Llegir i establir paràmetres del sistema",
+        "description": "La llei de Eisenberg diu: Des de la programació s'hauria de poder fer tot allò que es faci des de l'entorn i les seves funcionalitats i configuració. I viceversa!"
+      },
+      "es": {
+        "name": "Consultas y modificaciones",
+        "description": "Ley de Eisenberg: Cualquier cosa que pueda hacerse desde la interfaz gráfica también debería de poder hacerse desde el lenguaje de programación y viceversa."
+      },
+      "eu": {
+        "description": "Eisenberg-en legea: Erabiltzaile interfaze grafiko bidez egin daitekeen edozein gauza programazio lengoaia erabiliz ere egin daiteke, eta alderantziz."
+      },
+      "gl": {
+        "description": "A lei de Eisenberg di: Calquer cousa que poida facerse dende a interface gráfica tamén deberá poder facerse dende a linguaxe de programación e viceversa."
+      },
+      "it": {
+        "name": "Metodi di accesso e di modifica",
+        "description": "Legge di Eisenberg: Qualunque cosa che può essere fatta tramite la GUI dovrebbe poter essere fatta tramite il linguaggio di programmazione, e viceversa."
+      },
+      "nl": {
+        "description": "De wet van Eisenberg: Alles wat vanuit de GUI kan worden gedaan, moet ook vanuit de programmeertaal gedaan kunnen worden, en vice versa."
+      },
+      "pt": {
+        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.",
+        "searchData": [
+          "o valor da configuração _\rca",
+          "altera o valor da configuração _ para _\rca",
+          "altera o valor da configuração _ para _\rca"
+        ]
+      },
+      "ti": {
+        "name": "ኣምጻእትን ኣንበርትን"
+      },
+      "ua": {
+        "name": "Гетери та сетери",
+        "description": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки."
+      },
+      "zh_CN": {
+        "name": "获取器和设置器",
+        "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
+      }
+    },
+    "searchData": [
+      "setting _",
+      "set flag _ to _",
+      "set value _ to _"
+    ],
+    "categories": [
+      "sensing"
+    ]
+  },
+  {
+    "fileName": "list_comprehension_module.xml",
+    "name": "List comprehension",
+    "description": "HOF version of ZIP, letting you \"hyperize\" any dyadic function",
+    "translations": {
+      "ca": {
+        "name": "Compressió de llistes",
+        "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
+      }
+    },
+    "searchData": [
+      "zip _ inputs:  _ leaf-rank _  _ leaf-rank _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "beetle.xml",
+    "name": "3D Beetle Geometry",
+    "description": "Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.",
+    "searchData": [
+      "reset",
+      "go home",
+      "move _ steps"
+    ],
+    "categories": [
+      "3D Beetle"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "embroidery_module.xml",
+    "name": "Embroidery",
+    "description": "Generate embroidery files for stitching pen trails on a sewing machine, experimental and under construction.",
+    "searchData": [
+      "stitch",
+      "embroider",
+      "density"
+    ],
+    "categories": [
+      "Embroidery"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "maps_module.xml",
+    "name": "World Map",
+    "description": "Add interactive maps to projects",
+    "translations": {
+      "ca": {
+        "name": "Mapa del món",
+        "description": "Afegeix mapes interactius als projectes."
+      },
+      "es": {
+        "name": "Mapamundi",
+        "description": "Añadir mapas interactivos a los proyectos"
+      },
+      "gl": {
+        "name": "Mapa do mundo"
+      },
+      "it": {
+        "name": "Mappamondo",
+        "description": "Aggiunge mappe interattive ai progetti"
+      },
+      "nl": {
+        "name": "Wereldkaart",
+        "description": "Voeg interactieve mappen toe aan projecten"
+      },
+      "pt": {
+        "name": "Mapa do mundo"
+      },
+      "ti": {
+        "name": "ካርታ ዓለም",
+        "description": "ኣስታፊ ካርታ ኣብ ፕሮጀክት ኣእቱ"
+      },
+      "ua": {
+        "name": "Карта світу",
+        "description": "Додати інтерактивні карти до проектів"
+      },
+      "zh_CN": {
+        "name": "世界地图",
+        "description": "向项目中添加交互式地图"
+      }
+    },
+    "searchData": [
+      "$globe show current location",
+      "$globe zoom",
+      "set $globe zoom to _",
+      "$globe longitude of x _",
+      "$globe latitude of y _",
+      "set $globe to lon: _ lat: _",
+      "y of $globe latitude _",
+      "x of $globe longitude _",
+      "change $globe by x: _ y: _ pixels",
+      "$globe distance in km to _",
+      "$globe current location",
+      "$globe current latitude",
+      "$globe current longitude",
+      "update $globe",
+      "$globe as costume",
+      "set $globe style to _"
+    ],
+    "categories": [
+      "other"
+    ]
+  },
+  {
+    "fileName": "menu_module.xml",
+    "name": "Menus",
+    "description": "Prompt the user to pick an option.",
+    "translations": {
+      "ca": {
+        "description": "Demana a l'usuari que triï una opció."
+      }
+    },
+    "searchData": [
+      "ask _",
+      "notify _",
+      "prompt _ options _",
+      "submenu _ items _",
+      "divider",
+      "menu item icon _ label _ value _",
+      "menu item speech ballon _ message _ value _",
+      "menu examples"
+    ],
+    "categories": [
+      "sensing"
+    ]
+  },
+  {
+    "fileName": "textCostumes_module.xml",
+    "name": "Text Costumes",
+    "description": "Generate costumes from letters or words of text.",
+    "translations": {
+      "ca": {
+        "name": "Text als vestits",
+        "description": "Genera vestits utilitzant lletres, paraules... o qualevol text."
+      },
+      "gl": {
+        "name": "Traxes de texto",
+        "description": "Xerar traxes a partires de letras ou palabras… ou calquera texto."
+      },
+      "it": {
+        "name": "Costumi Testo",
+        "description": "Genera costumi da lettere o parole di testo."
+      },
+      "nl": {
+        "name": "Tekstkostuums",
+        "description": "Genereer kostuums uit letters of woorden tekst."
+      },
+      "pt": {
+        "name": "Trajes de texto",
+        "description": "Gerar trajes a partir de letras ou palavras de texto."
+      },
+      "ti": {
+        "name": "ኣልባሳት ጽሑፍ",
+        "description": "ኣልባሳት ካብ ፊደላት ወይ ቃላት ናይ ጽሑፍ ኣዳሉ።"
+      },
+      "ua": {
+        "name": "Текстові костюми",
+        "description": "Генерування костюмів з букв та слів"
+      },
+      "zh_CN": {
+        "name": "文本样式",
+        "description": "从文本的字母或单词生成造型。"
+      }
+    },
+    "searchData": [
+      "costume from text _ size _",
+      "costume _ with background RGBA _ padding _"
+    ],
+    "categories": [
+      "looks"
+    ]
+  },
+  {
+    "fileName": "speech_module.xml",
+    "name": "Text to Speech",
+    "description": "Output text using speech synthesis.",
+    "translations": {
+      "ca": {
+        "name": "Lector de text",
+        "description": "Utilitza la síntesi de veu per crear so des d'un text"
+      },
+      "it": {
+        "name": "Da Testo a Voce",
+        "description": "Pronuncia il testo usando un sintetizzatore"
+      },
+      "nl": {
+        "description": "Voer tekst uit met behulp van spraaksynthese."
+      },
+      "ti": {
+        "description": "ጽሑፍ ከም ናይ ዘረባ ጽማረ ኣቃልሕ"
+      },
+      "ua": {
+        "name": "Текст в мовлення",
+        "description": "Виведення тексту за допомогою синтезу мовлення."
+      },
+      "zh_CN": {
+        "name": "文本转语音",
+        "description": "使用语音合成输出文本。"
+      }
+    },
+    "searchData": [
+      "speak _ with _ accent  and pitch _ rate _",
+      "speak _ with _ accent  and pitch _ rate _ and wait"
+    ],
+    "categories": [
+      "sound"
+    ]
+  },
+  {
+    "fileName": "animation_module.xml",
+    "name": "Animation",
+    "description": "Glide, grow and rotate using easing functions.",
+    "translations": {
+      "ca": {
+        "name": "Animacions",
+        "description": "Fés lliscar, crèixer i girar els objectes utilitzant diferents formes i filtres a les animacions"
+      },
+      "es": {
+        "name": "Animación"
+      },
+      "eu": {
+        "name": "Animazioa"
+      },
+      "gl": {
+        "name": "Animacións"
+      },
+      "it": {
+        "name": "Animazione",
+        "description": "Scivola, cambia dimensione e ruota usando funzioni di interpolazione."
+      },
+      "nl": {
+        "name": "Animatie"
+      },
+      "ti": {
+        "name": "ተንቀሳቓሲ",
+        "description": "መሳጋገሪ ተግባራት (easing functions) ብምጥቃም ኣንሳፍፍ፡ ዕበ ከምኡውን ዙር።"
+      },
+      "ua": {
+        "name": "Анімація",
+        "description": "Ковзайте, збільшуйте та обертайте за допомогою функцій полегшення."
+      },
+      "zh_CN": {
+        "name": "动画",
+        "description": "使用缓动函数进行滑动、放大和旋转。"
+      }
+    },
+    "searchData": [
+      "-- _",
+      "animate setter _ getter _ delta _ over _ secs easing _",
+      "PI",
+      "degrees _",
+      "error _",
+      "glide _ in _ secs easing _",
+      "animate _ by _ in _ secs easing _",
+      "easing _",
+      "for _ = _ to _  in _ secs easing _ _"
+    ],
+    "categories": [
+      "variables",
+      "control",
+      "operators",
+      "motion"
+    ]
+  },
+  {
+    "fileName": "pixel_module.xml",
+    "name": "Pixels",
+    "description": "Manipulate costumes pixel-wise.",
+    "translations": {
+      "ca": {
+        "name": "Píxels",
+        "description": "Manipulem els píxels dels vestits"
+      },
+      "es": {
+        "name": "Píxeles"
+      },
+      "eu": {
+        "name": "Pixelak"
+      },
+      "gl": {
+        "name": "Píxeles"
+      },
+      "it": {
+        "name": "Pixel",
+        "description": "Manipola i costumi pixel per pixel"
+      },
+      "nl": {
+        "description": "Manipuleer kostuums pixelsgewijs."
+      },
+      "pt": {
+        "name": "Píxeis",
+        "searchData": [
+          "$camera a imagem actual do vídeo"
+        ]
+      },
+      "ti": {
+        "name": "ዋህዮታት ስእሊ",
+        "description": "ኣልባሳት ብደረጃ ዋህዮ ስእሊ ቀያይር ወይ ተቖጻጸር።"
+      },
+      "ua": {
+        "name": "Пікселі",
+        "description": "Керуйте костюмами піксельно."
+      },
+      "zh_CN": {
+        "name": "像素",
+        "description": "逐像素操作造型"
+      }
+    },
+    "searchData": [
+      "export costume _",
+      "set name of costume _ to _",
+      "$camera snap",
+      "export costume list _ base name _",
+      "grayscales of _",
+      "_ filter on _ alpha _",
+      "filter _",
+      "rectangle costume _ width: _ height: _",
+      "kernel  _ _ _  _ _ _  _ _ _",
+      "convolve matrix _ * kernel _",
+      "stretch _ by _"
+    ],
+    "categories": [
+      "looks",
+      "sensing",
+      "lists",
+      "operators"
+    ]
+  },
+  {
+    "fileName": "audioComp_module.xml",
+    "name": "Audio Comp",
+    "description": "Analyze, manipulate and generate sound samples.",
+    "translations": {
+      "ca": {
+        "name": "Composició d'audio",
+        "description": "Analitza, manipula i genera mostres de so"
+      },
+      "es": {
+        "name": "Composición de audio"
+      },
+      "eu": {
+        "name": "Audioa"
+      },
+      "gl": {
+        "name": "Composición de son"
+      },
+      "it": {
+        "name": "Compressione Audio",
+        "description": "Analizza, manipola e genera brani audio."
+      },
+      "nl": {
+        "description": "Analiseer, manipuleer en genereer geluidssamples."
+      },
+      "pt": {
+        "name": "Computação áudio",
+        "searchData": [
+          "executa no modo turbo _",
+          "as amostras de som com _ Hz de _ s amostrado a _ Hz\rca",
+          "π",
+          "_ radianos em graus\rca",
+          "o som _\rca",
+          "desenha o gráfico do som _\rca",
+          "$-1-255-0-0 uma nova gravação\rca",
+          "a nota com _ Hz\rca",
+          "a frequência da nota _\rca",
+          "o nome da nota _\rca"
+        ]
+      },
+      "ti": {
+        "name": "ምድላው ድምጺ",
+        "description": "ናይ ድምጺ ናሙና ምርምር፡ ፍጠር፡ ለዋውጥ።"
+      },
+      "ua": {
+        "name": "Audio Comp",
+        "description": "Аналізуйте, маніпулюйте та створюйте звукові зразки."
+      },
+      "zh_CN": {
+        "name": "音频组件",
+        "description": "分析、操纵和生成声音样本."
+      }
+    },
+    "searchData": [
+      "turbo _",
+      "_ Hz for _ secs at _ Hz sample rate",
+      "PI",
+      "degrees _",
+      "sound named _",
+      "plot sound _",
+      "$-1-255-0-0 record",
+      "note from _ hz",
+      "hz from note _",
+      "name of note _",
+      "average of _",
+      "fade in _ for _"
+    ],
+    "categories": [
+      "other",
+      "sound",
+      "operators",
+      "sensing",
+      "pen"
+    ]
+  },
+  {
+    "fileName": "frequency_distribution_module.xml",
+    "name": "Frequency Distribution Analysis",
+    "description": "Analyze data for frequency distribution",
+    "translations": {
+      "ca": {
+        "name": "Anàlisi de la distribució de freqüències",
+        "description": "Analitza les dades de distribució de freqüències."
+      },
+      "es": {
+        "name": "Análisis de distribución de frecuencias"
+      },
+      "gl": {
+        "name": "Analise da distribución de frecuencias"
+      },
+      "it": {
+        "name": "Analisi della Distribuzione delle Frequenze",
+        "description": "Analizza i dati per ricavare la distribuzione delle frequenze"
+      },
+      "nl": {
+        "name": "Analyse van frequentieverdeling",
+        "description": "Analyseer gegevens voor frequentieverdeling"
+      },
+      "pt": {
+        "name": "Análise da distribuição de frequências",
+        "searchData": [
+          "flash turbo fast as frequências dos itens de _\rca",
+          "o agrupamento dos itens de _ de acordo com _\rca",
+          "uma ordenação de _ com critério _\rca",
+          "o histograma de _ entre _ e _ com intervalo _\rca",
+          "o histograma de _ agrupado de acordo com _ entre _ e _ com passo _\rca",
+          "os itens de _ com a chave _ entre _ e _ com passo _ completados por _\rca",
+          "_ em minúsculas\rca",
+          "desenha gráfico de barras de _ em (x"
+        ]
+      },
+      "ti": {
+        "name": "ምርምር ዝርገሐ ድግምጋም",
+        "description": "ንዝርገሐ ድግምጋም ኣብ ሓበሬታ ምርምር"
+      },
+      "ua": {
+        "name": "Аналіз розподілу частот",
+        "description": "Аналізуйте дані для розподілу частот"
+      },
+      "zh_CN": {
+        "name": "频率分布分析",
+        "description": "分析频率分布数据"
+      }
+    },
+    "searchData": [
+      "flash turbo fast analyze _",
+      "flash turbo fast group _ by _",
+      "flash turbo fast sort _ by _",
+      "histogram of _ from: _ to: _ interval: _",
+      "histogram of _ grouped by: _ from: _ to: _ interval: _",
+      "fill _ key: _ from: _ to: _ interval: _ with: _",
+      "_ to lower case",
+      "plot _ _ at x: _ y: _ width: _ height: _"
+    ],
+    "categories": [
+      "lists",
+      "operators",
+      "pen"
+    ]
+  },
+  {
+    "fileName": "localstorage_module.xml",
+    "name": "Database",
+    "description": "Persistent key-value storage across Snap! sessions in the same browser",
+    "translations": {
+      "ca": {
+        "name": "Base de dades",
+        "description": "Desa al navegador dades (clau-valor) persistents entre sessions d'Snap!",
+        "searchData": [
+          "desa clau",
+          "dades desades al navegador",
+          "esborra clau",
+          "esborra dades del navegador",
+          "obté valor de clau"
+        ]
+      },
+      "es": {
+        "name": "Base de datos"
+      },
+      "it": {
+        "name": "Database",
+        "description": "Memorizzazione persistente di chiavi-valori in diverse sessioni di Snap! nello stesso browser"
+      },
+      "ti": {
+        "name": "መኽዘን ሓበሬታ"
+      },
+      "ua": {
+        "name": "База даних",
+        "description": "Постійне зберігання ключ-значення в Snap! сесій в одному браузері"
+      },
+      "zh_CN": {
+        "name": "数据库",
+        "description": "在同一浏览器中跨Snap!会话保持持久化的键值存储,这是关于在Snap!编程环境中实现在不同会话之间保持数据持久性的描述。"
+      }
+    },
+    "searchData": [
+      "store key: _ value: _ in browser",
+      "stored data in browser",
+      "remove key: _ in browser",
+      "clear data in browser",
+      "get value from key: _ in browser"
+    ],
+    "categories": [
+      "other"
+    ]
+  },
+  {
+    "fileName": "tiles_module.xml",
+    "name": "Tiles",
+    "description": "Divide the stage into sub-regions in each of which to perform an action",
+    "translations": {
+      "ca": {
+        "name": "Rajoles d'escenari",
+        "description": "Divideix l'escenari en diferents regions iguals per realitzar la mateixa acció repetitivament"
+      }
+    },
+    "searchData": [
+      "for each tile sized _ _",
+      "for each _ in _ _ by _ _ _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "arcs_module.xml",
+    "name": "Arcs",
+    "description": "Turn sprites by a delta of degrees moving them at a given radius",
+    "translations": {
+      "ca": {
+        "description": "Creeu arcs tot girant els objectes un número de graus i movent-los en un radi determinat"
+      }
+    },
+    "searchData": [
+      "arc turn right rotate _ ° radius _"
+    ],
+    "categories": [
+      "motion"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "word-sentence.xml",
+    "name": "Words, sentences",
+    "description": "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library brings back that idea.",
+    "translations": {
+      "ca": {
+        "name": "Paraules i frases",
+        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.",
+        "searchData": [
+          "frase _\res",
+          "notació textual de _\res"
+        ]
+      },
+      "de": {
+        "name": "Wörter, Sätze",
+        "searchData": [
+          "füge Wörter zusammen _\rca",
+          "Liste to Satz _\rca",
+          "Satz to Liste _\rca",
+          "Wort to Liste _\rca",
+          "Liste to Wort _\rca"
+        ]
+      },
+      "el": {
+        "name": "Λέξεις, φράσεις"
+      },
+      "es": {
+        "name": "Palabras, frases"
+      },
+      "eu": {
+        "name": "Hitzak, esaldiak"
+      },
+      "gl": {
+        "name": "Palabras e frases"
+      },
+      "he": {
+        "name": "מילים, משפטים"
+      },
+      "hu": {
+        "name": "Szavak, mondatok"
+      },
+      "it": {
+        "name": "Parole, frasi"
+      },
+      "nl": {
+        "name": "Woorden en zinnen"
+      },
+      "no": {
+        "name": "Ord, setninger"
+      },
+      "pl": {
+        "name": "Słowa, zdania"
+      },
+      "pt": {
+        "name": "Palavras e frases",
+        "searchData": [
+          "_ sem o primeiro caractere\rca",
+          "_ sem a primeira palavra\rca",
+          "_ sem o último caractere\rca",
+          "_ sem a última palavra\rca",
+          "a primeira palavra de _\rca",
+          "o último caractere de _\rca",
+          "a última palavra de _\rca",
+          "a palavra _ está vazia\rca",
+          "a frase _ está vazia\rca",
+          "lança o erro _",
+          "a primeira palavra de _\rca"
+        ]
+      },
+      "sk": {
+        "name": "Slová, vety"
+      },
+      "sv": {
+        "name": "Ord, meningar"
+      },
+      "ti": {
+        "name": "ቃላት ፡ ምሉእ ሓሳባት"
+      },
+      "tr": {
+        "name": "kelimeler, cümleler"
+      },
+      "ua": {
+        "name": "Слова, речення"
+      },
+      "zh_CN": {
+        "name": "单词，句子"
+      }
+    },
+    "searchData": [
+      "all but first letter of _",
+      "all but first word of _",
+      "all but last letter of _",
+      "all but last word of _",
+      "first word of _",
+      "last letter of _",
+      "last word of _",
+      "empty word? _",
+      "empty sentence? _",
+      "join words _",
+      "list to sentence _",
+      "sentence to list _",
+      "word to list _",
+      "list to word _",
+      "sentence _",
+      "error _",
+      "printable _",
+      "first letter of _"
+    ],
+    "categories": [
+      "operators",
+      "lists",
+      "control"
+    ]
+  },
+  {
+    "fileName": "words_module.xml",
+    "name": "Just Words",
+    "description": "Use texts as if they were lists of words. A minimal variant of the Words/Sentences library for language projects like chat bots.",
+    "translations": {
+      "ca": {
+        "name": "Només paraules",
+        "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la llibreria 'Paraules i Frases' per a projectes lingüístics com ara un xat amb un robot."
+      }
+    },
+    "searchData": [
+      "first word of _",
+      "all but first word of _",
+      "sentence with _",
+      "is _ empty?"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "strings.xml",
+    "name": "Strings, Multi-line input",
+    "description": "Extract substrings of a string in various ways. In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.",
+    "translations": {
+      "ca": {
+        "name": "Operadors de text i entrades multilínia",
+        "description": "Extreu part de cadenes de text amb diversos criteris. El bloc \"multilínia\" permet afegir entrades de text multilínia en qualsevol entrada de blocs"
+      },
+      "it": {
+        "name": "Stringhe, argomento multilinea"
+      },
+      "nl": {
+        "name": "Strings, invoer met meerdere regels"
+      },
+      "ti": {
+        "name": "ሕብረ-ፊደላት፡ ብዙሕ ዝመስመሩ ኣታዊ"
+      },
+      "ua": {
+        "name": "Рядки, багаторядковий ввід"
+      },
+      "zh_CN": {
+        "name": "字符串，多行输入"
+      }
+    },
+    "searchData": [
+      "multiline _",
+      "substring of _ before _",
+      "substring of _ after _",
+      "position of _ in _",
+      "substring of _ from position _ to position _ inclusive",
+      "text _ contains _"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "replace_letters_module.xml",
+    "name": "Replace Letters",
+    "description": "Replace all occurrences of a letter or a sequence of letters with another in a text.",
+    "translations": {
+      "ca": {
+        "name": "Substitueix Lletres",
+        "description": "Substitueix totes les aparicions d'una lletra o d'una seqüència de lletres per unes altres en un text."
+      }
+    },
+    "searchData": [
+      "replace every _ with _ in _"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "apl.xml",
+    "name": "APL primitives",
+    "description": "Adds features from the APL language supporting hyperblocks.",
+    "translations": {
+      "ca": {
+        "name": "Primitives APL",
+        "description": "Afegeix funcionalitats del llenguatge APL als hiper-blocs.",
+        "searchData": [
+          "ordena _ segons criteri _"
+        ]
+      },
+      "es": {
+        "name": "Primitivas APL"
+      },
+      "it": {
+        "name": "Primitive APL",
+        "description": "Aggiunge caratteristiche del linguaggio APL che supportano gli iperblocchi."
+      },
+      "nl": {
+        "description": "Voegt functies toe uit de APL-taal die hyperblokken ondersteunen"
+      },
+      "ti": {
+        "name": " መባእታውይን ሕጡባት APL",
+        "description": "ንጡፋት-ሕጡባት ዝሕግዙ ባህርያት ካብ ቋንቋ APL ወስኽ"
+      },
+      "ua": {
+        "name": "примітиви APL",
+        "description": "Додає функції з мови APL, що підтримують гіперблоки."
+      },
+      "zh_CN": {
+        "name": "APL原语",
+        "description": "添加支持超级块的APL语言功能."
+      }
+    },
+    "searchData": [
+      "reshape as _ $-1-255-255-0 items of _",
+      "shape of $-1-255-255-0 _",
+      "max _ $-1-255-255-0 _",
+      "flatten (ravel) $-1-255-255-0 _",
+      "rank of $-1-255-255-0 _",
+      "transpose $-1.5-255-255-0 _",
+      "reverse row order (column contents) $-1.5-255-255-0 _",
+      "generalized dotproduct _ _ with sum _ product _",
+      "inner product _ _ $-1-255-255-0 _ _",
+      "min _ $-1.2-255-255-0 _",
+      "combine in rows (reduce by column vectors) _ $-1-255-255-0 _",
+      "signum $-1-255-255-0 _",
+      "reciprocal $-1-255-255-0 _",
+      "roll $-1-255-255-0 _",
+      "NAND _ $-1.4-255-255-0 _",
+      "NOR _ $-1.4-255-255-0 _",
+      "_ ≤ _",
+      "_ ≥ _",
+      "XOR _ $-1-255-255-0 _",
+      "$-1.5-255-255-0 _",
+      "where in _ is $-1.5-255-255-0 _",
+      "crossproduct _",
+      "which of _ $-1-255-255-0 contained in _",
+      "catenate _ $-1-255-255-0 _",
+      "scalar value _",
+      "grade up $-1.5-255-255-0 _",
+      "grade down $-1.5-255-255-0 _",
+      "select rows (compress columns) _ $-1-255-255-0 _",
+      "select columns (compress rows) _ $-1.5-255-255-0 _",
+      "reverse column order (row contents) $-1-255-255-0 _",
+      "combine in columns (reduce by row vectors) _ $-1.5-255-255-0 _",
+      "catenate vertically _ $-1.5-255-255-0 _",
+      "_ scalar join _",
+      "take _ $-1-255-255-0 from _",
+      "drop _ $-1-255-255-0 from _",
+      "error _",
+      "numbers from _ to _ ascending",
+      "flash turbo fast sort _ ordering with _",
+      "printable _",
+      "_",
+      "multimap _ over _",
+      "log base _ $-1.5-255-255-0 _",
+      "combs _ at a time $-1-255-255-0 of _",
+      "factorial $-1-255-255-0 _",
+      "_ scalar _ _",
+      "GCD (or) _ $-1.2-255-255-0 _",
+      "LCM (and) _ $-1.2-255-255-0 _",
+      "NOT $-1-255-255-0 _",
+      "permutations of _ items out of _",
+      "identity $-1-255-255-0 _",
+      "deep map _ over _",
+      "_ deal $-1-255-255-0 _",
+      "outer product _ $-1-255-255-0 _ _"
+    ],
+    "categories": [
+      "lists",
+      "operators",
+      "other",
+      "control"
+    ]
+  },
+  {
+    "fileName": "stream-tools.xml",
+    "name": "Streams (lazy lists)",
+    "description": "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)  See SICP 3.5 for a tutorial.",
+    "translations": {
+      "ca": {
+        "name": "Streams (llistes presconstruides)",
+        "description": "Variació del tipus de dades \"llistes\" on els elements de la llista no són avaluats fins que s'utilitzen. D'aquesta manera es poden construir llistes amb milions d'elements sense un gran consum de memòria i fins i tot construir llistes de mida infinita. (S'inclou un bloc d'exemple que reporta tots els números primers.) Veieu el tutorial a SICP 3.5."
+      },
+      "es": {
+        "name": "Streams (listas perezosas)"
+      },
+      "eu": {
+        "name": "Jarioak (zerrenda alferrak)"
+      },
+      "gl": {
+        "name": "Fluxos (listas preguizosas)"
+      },
+      "it": {
+        "name": "Stream (liste rilasciate)"
+      },
+      "pt": {
+        "name": "Canais (listas preguiçosas)",
+        "searchData": [
+          "a prefixação de _ ao canal _",
+          "o primeiro item do canal _",
+          "um canal com todos os itens de _ menos o primeiro",
+          "a aplicação de _ aos itens dos canais _",
+          "os itens tais que _ do canal _",
+          "uma lista com os itens do canal _ até ao _ º",
+          "um canal com _",
+          "a crivagem do canal _",
+          "um canal com os números a partir de _"
+        ]
+      },
+      "sv": {
+        "name": "Strömmar (lata listor)"
+      },
+      "ti": {
+        "name": "ዛራታት (ድንጉይ ዝርዝራት)"
+      },
+      "ua": {
+        "name": "Потоки (ліниві списки)"
+      },
+      "zh_CN": {
+        "name": "流(惰性列表)"
+      }
+    },
+    "searchData": [
+      "_ in front of stream _",
+      "head of stream _",
+      "tail of stream _",
+      "map _ over stream _",
+      "keep items such that _ from stream _",
+      "show stream _ _",
+      "stream _",
+      "sieve _",
+      "stream with numbers from _",
+      "stream demo"
+    ],
+    "categories": [
+      "lists"
+    ]
+  },
+  {
+    "fileName": "bar-charts.xml",
+    "name": "Bar charts",
+    "description": "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number.  The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.).  Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries).  If the field isn't numeric, leave these three inputs empty or set them to zero.  In that case, each string value of the field is its own bucket, and they appear sorted alphabetically.  The block reports a new table with three columns.  The first column contains the bucket name or smallest number.  The second column contains a nonnegative integer that says how many records in the input table fall into this bucket.  The third column is a subtable containing the actual records from the original table that fall into the bucket.  If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.",
+    "translations": {
+      "ca": {
+        "name": "Gràfics de barres",
+        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\".",
+        "searchData": [
+          "gràfica de la taula _ agrupada pel camp",
+          "ordena taula _ pel camp _ en ordre _",
+          "agrupa taula _ pel camp _ per intervals de _"
+        ]
+      },
+      "it": {
+        "name": "Grafico a barre"
+      },
+      "nl": {
+        "name": "Staafdiagrammen"
+      },
+      "ti": {
+        "name": "ባር-ቻርት"
+      },
+      "ua": {
+        "name": "Стовпчасті діаграми"
+      },
+      "zh_CN": {
+        "name": "条形图"
+      }
+    },
+    "searchData": [
+      "bar chart of table _ grouped by field: _ from: _ to: _ interval: _",
+      "bar chart helper function to fill _ key: _ from: _ to: _ interval: _ with: _",
+      "plot bar chart _ bars at x: _ y: _ width: _ height: _",
+      "sort table _ on field _ in _ order",
+      "group table _ by field _ by intervals of: _"
+    ],
+    "categories": [
+      "lists",
+      "pen"
+    ]
+  },
+  {
+    "fileName": "plot_bars_module.xml",
+    "name": "Just Bars",
+    "description": "Draw a list of numbers as vertical lines distributed evenly across the stage.",
+    "translations": {
+      "ca": {
+        "name": "Només gràfics de barres",
+        "description": "Representa una llista de nombres utilitzant línies verticals distribuïdes per tot l'escenari"
+      }
+    },
+    "searchData": [
+      "plot bars _ fill _ center _"
+    ],
+    "categories": [
+      "pen"
+    ]
+  },
+  {
+    "fileName": "httpBlocks.xml",
+    "name": "Web services access (https)",
+    "description": "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.  Also parses JSON data.",
+    "translations": {
+      "ca": {
+        "name": "Accés a serveis Web (https)",
+        "description": "Una versió ampliada del bloc URL que permet treballar amb crides \"POST\", \"PUT\", \"DELETE\" i \"GET\" i també triar el protocol \"HTTP-HTTPS\" i controlar les capçaleres. També permet treballar amb dades JSON."
+      },
+      "de": {
+        "name": "Zugriff auf Webservices"
+      },
+      "es": {
+        "name": "Acceso a servicios web (https)"
+      },
+      "eu": {
+        "name": "Web zerbitzuak atzitzea (https)"
+      },
+      "gl": {
+        "name": "Acceso a servizos web (https)"
+      },
+      "he": {
+        "name": "גישה לשירותי רשת מאובטחים"
+      },
+      "hu": {
+        "name": "Web service hozzáférés (https)"
+      },
+      "it": {
+        "name": "Accesso ai servizi web (https)"
+      },
+      "nl": {
+        "name": "Verbinding met Webservices"
+      },
+      "no": {
+        "name": "Webservices tilgang (htpps)"
+      },
+      "pl": {
+        "name": "Dostęp do usług sieciowych (https)"
+      },
+      "pt": {
+        "name": "Acesso a serviços web (https)",
+        "searchData": [
+          "os dados JSON _ em formato de lista",
+          "o valor com chave _ em _",
+          "a resposta a _ de _ enviando _ e cabeçalhos _",
+          "um par (chave",
+          "a localização actual do dispositivo"
+        ]
+      },
+      "sk": {
+        "name": "Prístup na webové služby (https)"
+      },
+      "ti": {
+        "name": "ኣገልግሎታት መርበብ ሓበሬታ ምብጻሕ (https)"
+      },
+      "tr": {
+        "name": "Web servislerine ulaşım (https)"
+      },
+      "ua": {
+        "name": "Доступ до веб-служб (https)"
+      },
+      "zh_CN": {
+        "name": "网络服务访问（https）"
+      }
+    },
+    "searchData": [
+      "listify _",
+      "value at key _ of _",
+      "_ url: _ send: _ headers: _",
+      "key: _ value: _",
+      "current location",
+      "binary data from _ type _"
+    ],
+    "categories": [
+      "operators",
+      "sensing"
+    ]
+  },
+  {
+    "fileName": "make-variables.xml",
+    "name": "Create variables",
+    "description": "Create and manage global/sprite/script variables in a script",
+    "translations": {
+      "ca": {
+        "name": "Crea variables",
+        "description": "Crea i gestiona variables de tipus global/sprite/script dins els programes",
+        "searchData": [
+          "assigna a _ el valor _\res",
+          "mostra la variable _\res",
+          "amaga la variable _\res"
+        ]
+      },
+      "es": {
+        "name": "Crear variables"
+      },
+      "gl": {
+        "description": "Crear e xestionar \"global/sprite/script\" variábeis a partires dun programa."
+      },
+      "it": {
+        "name": "Crea variabili",
+        "description": "Crea e gestisce in uno script variabili globali/dello sprite/dello script"
+      },
+      "nl": {
+        "name": "Maak variabelen",
+        "description": "Maak en beheer globale/sprite/scriptvariabelen in een script"
+      },
+      "pt": {
+        "description": "Criar e gerir variáveis globais, de objecto e de guião a partir de um guião.",
+        "searchData": [
+          "cria as variáveis _ _\rca",
+          "remove as variáveis _\rca",
+          "o valor de _",
+          "a variável _ existe\rca"
+        ]
+      },
+      "ti": {
+        "name": "ተቓያየርቲ ኣዳሉ",
+        "description": "ሓፈሻውያን፡ ናይ መርሓ ፡ ከምኡ ውን ናይ ትንኩሊብ ወይ ውዱዕ ተቓያየርቲ ኣብ ውሽጢ መርሓ ኣዳሉን ኣመሓድርን።"
+      },
+      "ua": {
+        "name": "Створити змінні",
+        "description": "Створення глобальних/спрайтових/скриптових змінних у сценарії та керування ними"
+      },
+      "zh_CN": {
+        "name": "创建变量",
+        "description": "在脚本中创建和管理全局/精灵/脚本变量"
+      }
+    },
+    "searchData": [
+      "create _ var _",
+      "delete var _",
+      "set var _ to _",
+      "var _",
+      "does var _ exist?",
+      "show var _",
+      "hide var _"
+    ],
+    "categories": [
+      "variables"
+    ]
+  },
+  {
+    "fileName": "bitwise.xml",
+    "name": "Bitwise operators",
+    "description": "Bitwise arithmetic operators for low-level bit manipulation.",
+    "translations": {
+      "ca": {
+        "name": "Operadors 'bitwise'",
+        "description": "Operadors aritmètics 'bitwise' per a manipular dades a baix nivell (a nivell dels seus bits)"
+      }
+    },
+    "searchData": [
+      "bitwise not _",
+      "bitwise _ and _",
+      "bitwise _ or _",
+      "bitwise _ xor _",
+      "bitwise left shift _ by _ bits",
+      "bitwise right shift _ by _ bits",
+      "bitwise unsigned right shift _ by _ bits"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "textformat_module.xml",
+    "name": "Writing and formatting",
+    "description": "Write text using fancy fonts, contributed by Tethrarxitet",
+    "searchData": [
+      "write _ size _ stats _",
+      "text costume _ size _ stats _",
+      "font _  bold _  italic _",
+      "font _  weight _  italic _"
+    ],
+    "categories": [
+      "pen"
+    ],
+    "translations": {
+      "es": {
+        "searchData": [
+          "escribir _ con tamaña _ e información _\rpt",
+          "disfraz de texto _ tamaño _ e información _\rpt",
+          "nombre de la fuente _ _ espesor _ _ ¿oblicuo? _\rpt"
+        ]
+      },
+      "pt": {
+        "searchData": [
+          "nome da fonte _ _ texto em negrito? _ _ oblíquo? _\res"
+        ]
+      }
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "SciSnap3Blocks.xml",
+    "name": "SciSnap! v3",
+    "description": "Scientific Functions, Graphing, SQL interface, Machine Learning, from Uni Göttingen (Eckart Modrow)",
+    "translations": {
+      "ca": {
+        "description": "Funcions científiques, gràfics, comandes SQL i 'Machine Learning' creats per la Universitat de Göttingen (Eckart Modrow)"
+      }
+    },
+    "searchData": [
+      "start SciSnap!",
+      "set SciSnap! global variables and properties",
+      "set SciSnap! global property _ to _",
+      "show global message title: _  message: _",
+      "report SciSnap! error _",
+      "copy of costume _",
+      "costume of _",
+      "random",
+      "π",
+      "e",
+      "round _ to _ digits",
+      "_ !",
+      "( _ )  ( _ )",
+      "is _ a _",
+      "substring of _ from _ to _",
+      "delete _ _ in _",
+      "upper case _",
+      "lower case _",
+      "write text _ to TXT-file _",
+      "index of _ in _",
+      "replace _ _ with _ in _",
+      "datetime",
+      "datetime: _ to _",
+      "all of _",
+      "any of _",
+      "new costume _ _ _ _ _",
+      "configure _ as a PlotPad width: _  height: _ color: _ _ _",
+      "is _ a PlotPad?",
+      "PlotPadProperty _ of _",
+      "set PlotPadProperty _ of _ to _",
+      "set PlotPad costume properties width: _ height: _  back color: _ _ _ front color: _ _ _  offsets: _ _ on _",
+      "set PlotPad line properties style: _  width: _ color: _ _ _ on _",
+      "set PlotPad marker properties style: _ width: _  color: _ _ _ connected? _ on _",
+      "set PlotPad scale properties precision: _ _  textheight: _ _ number of intervals: _ _  on _",
+      "set PlotPad labels on _ to  title: _ titleheight: _  x-label: _ xLabelheight: _  y-label: _ yLabelheight: _",
+      "set PlotPad offsets from edges on _",
+      "set PlotPad ranges for x: _ _ y: _ _  with border? _ of _ pretty formatted? _  on _",
+      "add graph _ to PlotPad _",
+      "add dataplot of numeric data: _ to PlotPad _",
+      "add dataplot of mixed data: _  y-scale? _ x-scale? _ to PlotPad _",
+      "add histogram of _ with _ groups  pretty formated? _ to PlotPad _",
+      "add axes and scales to PlotPad _",
+      "clear plot of _",
+      "set pretty ranges on PlotPad _",
+      "pretty values for a PlotPad from _  to _ with _ intervals",
+      "get ranges for PlotPad _  from _ with border _",
+      "ranges of 2-dim table _",
+      "convert value _ to coordinate _  of PlotPad _",
+      "PlotPad _ on _ by mouse",
+      "EXAMPLE 1:  Plot of random data width _ height _  title _ labels _ _  line _ marker _ color _ _ _",
+      "EXAMPLE 2:  Histogram of random data width _ height _  title _ labels _ _ line _ color _ _ _",
+      "Example 3:  Simple plot of data: _  x: _ y: _ width: _ height: _  title: _ labels: _ _  line: _ marker: _ color: _ _ _",
+      "Switch to SciSnap! logo",
+      "configure SQL",
+      "is SQL configured?",
+      "connect to database server",
+      "import SQL-data from _ to SQLData",
+      "read databases",
+      "choose database no. _",
+      "read tables",
+      "attributes of table no. _",
+      "choose table no. _",
+      "SELECT _ _ FROM _ WHERE _",
+      "SELECT _ _ FROM _ WHERE _  GROUP BY _ HAVING _ ORDER BY _ _ LIMIT _",
+      "exec SQL-command _",
+      "_ = _",
+      "_ < _",
+      "_ > _",
+      "_ OR _",
+      "_ AND _",
+      "NOT _",
+      "_ IN ( _ )",
+      "_ LIKE _",
+      "AVG ( _ )",
+      "COUNT ( _ )",
+      "MIN ( _ )",
+      "MAX ( _ )",
+      "SUM ( _ )",
+      "configure _ as a GraphPad width: _  height: _ color: _ _ _",
+      "is _ a GraphPad?",
+      "GraphPadProperty _ of _",
+      "set GraphPadProperty _ of _ to _",
+      "set GraphPad costume properties width: _  height: _ color: _ _ _ on _",
+      "set GraphPad vertex properties minSize: _  growing? _ showsContent? _ on _",
+      "set GraphPad edge properties lineWidth: _  color: _ _ _ directed? _ weighted? _  showsWeight? _ on _",
+      "new vertex at _ _ content: _ on graph of _",
+      "add _ random vertices to graph on _",
+      "move vertex _ of graph on _ to _ _",
+      "add _ random edges to graph on _",
+      "add edge from vertex _ to vertex _ to graph on _",
+      "draw graph on _",
+      "delete vertex _ of graph on _",
+      "delete edge from vertex _ to vertex _  of graph on _",
+      "weight of edge from vertex _ to vertex _  of graph on _",
+      "change weight of edge from vertex _ to vertex _  to _ of graph on _",
+      "ask for new weight of graph on _",
+      "ask for new start vertex width of graph on _",
+      "content of vertex _ of graph on _",
+      "change content of vertex _ to _ of graph on _",
+      "ask for new vertex content in graph on _",
+      "set marker of vertex _ of graph on _",
+      "remove marker of vertex _ of graph on _",
+      "remove all markers of graph on _",
+      "depth first search of content _  starting at vertex _ of graph on _",
+      "breadth first search of content _  starting at vertex _ of graph on _",
+      "distance on _ from vertex _ to vertex _",
+      "shortest path in graph from vertex _  to vertex _ on _",
+      "list of all shortest paths in graph from vertex _  to all connected vertices of graph on _",
+      "vertexnumber at _ _ of graph on _",
+      "point _ _ on sprite/stage toOutline point on graph _",
+      "vertexnumber of _ in graph of _",
+      "Graph example 1: small worlds (needs some seconds)",
+      "Graph example 2: distribution of links",
+      "import Sprite",
+      "import library to category _",
+      "configure _ as a NeuralNetPad width: _  height: _ color: _ _ _",
+      "is _ a NNPad?",
+      "NNPadProperty _ of _",
+      "set NNPadProperty _ of _ to _",
+      "set NNPad costume properties width: _  height: _ color: _ _ _  offsets: _ _ on _",
+      "set NNPad properties numberOfLayers: _ layerWidth: _  imageWidth: _ imageHeight: _ on _",
+      "NN output of _ layer with input _ on _",
+      "NN add new weights for _ layers of width _ on _",
+      "NN show status with input _ on _",
+      "teach NN with input _ and target output _ by back-  propagation with learning factor _ on _",
+      "NN Example 1 on _",
+      "Example 4: regression line",
+      "remove this sprite",
+      "input dialog on _ with title _  and items _",
+      "empty table",
+      "_ x _ table initialized with _",
+      "new _ by _ table with labels: _",
+      "copy of _",
+      "import _ from  _ to SciSnap!Data",
+      "write _ to CSV-file _",
+      "_ random points with ranges x: _ _  y: _ _ inside of a _",
+      "_ random points near a straight x-range _ _  gradient _ y-axis-intercept _ range _",
+      "_ random points near _  between _ and _ range _",
+      "transpose table or list _",
+      "add _ _ to _",
+      "_ _ of _ with first item? _",
+      "delete _ _ of _",
+      "element _ _ of _",
+      "set element _ _ of _ to _",
+      "columns _ of _  from row _ to _",
+      "subsection of _ in _ from  _ _ to _ _",
+      "select rows of _ where  column _ is _ _",
+      "count values in _",
+      "entropy of _",
+      "_ without duplicates",
+      "_ normalized by _",
+      "_ compressed with  factor _ by averaging",
+      "_ pooling of _  with stride _",
+      "sort _ with predicate _",
+      "_ sorted by column _  ascending _ considering headline? _",
+      "_ of column _ of _  grouped by column _ considering headline? _",
+      "_ of column _ and _  of _ considering headline? _",
+      "regression line parameters of _",
+      "_ next neighbors of _  in _",
+      "convolution kernel _ applied  to _ _ width _ height _",
+      "_ -means clustering for _  with Euclidean metrics",
+      "_ -means clustering for _ with metric _",
+      "Levenshtein-distance of _ and _",
+      "DBSCAN clustering for _ radius _ minMembers _",
+      "decision tree ID3 for _  with labeled data in last column",
+      "SQL-Example 1: simple query",
+      "empty",
+      "copy current costume of _ to sprite costumes",
+      "vertexnumber of graph on _ at mouse position",
+      "classify _ with ID3-tree _",
+      "vector _",
+      "vector dim _ with random  components range _ to _",
+      "matrix of vectors _",
+      "_ x _ matrix with random  components range _ to _",
+      "transpose _",
+      "_ of vector _",
+      "linear operation _ _ _",
+      "apply _ to points _",
+      "solve _ *x= _",
+      "apply Gauss method to matrix _",
+      "polynomial interpolation for points _",
+      "_ ( _ )",
+      "affine transformation of _  by _ --> _ for MathPad",
+      "complex _ + _ * i",
+      "complex _ * e^i _",
+      "complex _ polar style",
+      "complex _ Cartesian style",
+      "complex _ of _",
+      "complex _ _ _",
+      "configure sprite _ as a MathPad  width: _ height: _ color: _ _ _",
+      "is _ a MathPad?",
+      "MathPadProperty _ of _",
+      "set MathPadProperty _ of _ to _",
+      "set MathPad costume properties width: _  height: _ color: _ _ _  offsets: _ _ on _",
+      "set MathPad properties lineWidth: _ onlyPoints? _  dimension: _ maxValue: _ startPoint: _ _ _  on _",
+      "add centered axes to a MathPad on _",
+      "plot _ _ color: _ _ _  on MathPad _ Change startpoint? _",
+      "MathPad Example 1: vektor addition",
+      "MathPad Example 2: affine transformation",
+      "root of _  starting at _ by Newton´s method",
+      "sequence element _ ( _ )",
+      "first _ elements of sequence _",
+      "sequence of secant slopes for _  at _ calculated with sequence _",
+      "derivative _ ´( _ )",
+      "_  ∑ _  _ = _",
+      "_  ∫ _ dx  _  calculated with _ intervals",
+      "_ of _ sampled with _ Hz",
+      "b(N= _ p= _ k= _ )",
+      "B x= _ (N= _ p= _ )",
+      "h(N= _ M= _ n= _ k= _ )",
+      "H x= _ (N= _ M= _ n= _ )",
+      "p(θ= _ k= _ )",
+      "P x= _ p(θ= _ )",
+      "pareto (xmin= _ k= _ x= _ )",
+      "n (x= _ μ= _ σ= _ )",
+      "𝜙",
+      "|R",
+      "set of { _ }",
+      "set of {x| _ }",
+      "set of {x| _ _ x _ _ }",
+      "_ ε _ ?",
+      "_ _ _",
+      "is _ ⊆ _ ?",
+      "is _ = _ ?",
+      "_ elements of _ (numbers ε |N)",
+      "element _ toOutline text",
+      "text _ toOutline elements",
+      "configure _ as an ImagePad width: _  height: _ color: _ _ _",
+      "is _ an ImagePad?",
+      "ImagePadProperty _ of _",
+      "set ImagePadProperty _ of _ to _",
+      "set ImagePad costume properties width: _  height: _ back color: _ _ _  offsets: _ _ on _",
+      "set ImagePad line properties style: _  width: _ color: _ _ _  fill color: _ _ _ on _",
+      "set ImagePad grid properties on _  horizontal cells: _ vertical cells: _",
+      "import _ from _  to myData on _",
+      "add _ image of _ to ImagePad  min/max: _ _ log? _ on _",
+      "add grid _ on _ with grid lines? _",
+      "draw line from _ _ to _ _ on _",
+      "draw rectangle from _ _ to _ _ on _",
+      "fill rectangle from _ _ to _ _ on _",
+      "draw circle center: _ _ radius: _ on _",
+      "fill circle center: _ _ radius: _ on _",
+      "draw text _ at _ _ height: _  horizontal? _ on _",
+      "draw list of points _ as _ size: _ on _",
+      "set RGB at _ _ on _ to _ _ _",
+      "RGB at _ _ on _",
+      "set image value of myData at _ _  on _ to _",
+      "image value of myData at _ _ on _",
+      "_ on _ by mouse",
+      "affine transformation of costume _  by _ --> _",
+      "brightness around _ _ within radius _  of myData of ImagePad _",
+      "fill all cells on _ range x: _ _ y: _ _  randomly with numbers _",
+      "set cell value on _ to _ by mouse",
+      "set cell value on _ at _ _ to _ with grid lines? _",
+      "_ -neighborhood as torus? _ of _ _ on _",
+      "all cells on _ as torus? _ swapped _ times  randomly inside radius _ range x: _ _ y: _ _",
+      "all cells on _ as torus? _ with value _  take value _ if number of surrounding value _ is _ _  else take value _ with noise? _ of _ %  range x: _ _ y: _ _",
+      "all cells on _ as torus? _ take _  of surrounding cells x: _ _ y: _ _ range: _",
+      "combine grid1 _ and grid2 _ by value1= _ _ value2= _ to _ else _",
+      "apply Wolfram automaton no _ to grid _  with colors for 0: _ and 1: _",
+      "Example 1: slice data of FITS-image",
+      "Example 2: false color image of moon crater albertarius",
+      "Example 3: Wolfram Automaton No. 30",
+      "is the global _ property _  with value _ present ?",
+      "SciSnap! global property _"
+    ],
+    "categories": [
+      "1. SciSnap! globals",
+      "looks",
+      "operators",
+      "sensing",
+      "5. PlotPad for data plots",
+      "4. SQL tools",
+      "7. GraphPad for graph operations",
+      "control",
+      "8. NNPad for neural networks",
+      "3. Data tools",
+      "0. My own blocks",
+      "2. Math tools",
+      "6. ImagePad for image operations"
+    ]
+  },
+  {
+    "fileName": "TuneScope.xml",
+    "name": "TuneScope",
+    "description": "Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)",
+    "translations": {
+      "ca": {
+        "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)",
+        "searchData": [
+          "mostra la variable _\res",
+          "assigna a _ el valor _\res",
+          "associació _ _"
+        ]
+      }
+    },
+    "searchData": [
+      "show var _",
+      "set var _ to _",
+      "create _ var _",
+      "Initialize TuneScope",
+      "Set Instrument To _",
+      "Set Volume To _ %",
+      "Set Instrument _ Volume to _ %",
+      "Play Note _ for Duration _ and Wait",
+      "Play Note _ for Duration _",
+      "Play Chord _ for Duration _",
+      "Rest for Note Duration _",
+      "_ Scale: _ Octave: _",
+      "Note _ in _ Scale: _ Octave: _",
+      "Interval Between Note _ to _ in the _ Scale _",
+      "_ Chord: _ Octave: _",
+      "_ Chord: _ Octave: _ Chord Position: _",
+      "Add Note _ to Chord _",
+      "Chord Rest",
+      "Drum Pattern _",
+      "Drum _ _ Beat _ Times _",
+      "Measure _",
+      "Section _",
+      "Track: _ Instrument: _  Musical Notation (Notes or Chords): _",
+      "Play Tracks _ Time Signature: _",
+      "Beats in Measure _  Time Signature _",
+      "Note Duration Value _",
+      "Note [ Pitch: _ Duration: _ ]",
+      "Tone Number: _ Frequency: _ Amplitude: _",
+      "Tone Number: _ _ On/Off",
+      "Tone Off",
+      "Play MIDI Controller: _ Instrument: _",
+      "Stop MIDI Controller",
+      "Convert MIDI _ to Note",
+      "Convert Note _ to MIDI",
+      "flash turbo fast assoc _ _",
+      "Import MIDI File",
+      "Convert MIDI File _ to TuneScope",
+      "Current Note"
+    ],
+    "categories": [
+      "variables",
+      "Music",
+      "lists"
+    ]
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "serial_module.xml",
+    "name": "Serial Ports",
+    "description": "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)",
+    "translations": {
+      "ca": {
+        "name": "Ports sèrie",
+        "description": "Connexió a microcontroladors connectats al port sèrie utilitzant el Web Serial API (requereix de la utilització del navegador Chromium, Chrome o Edge)"
+      },
+      "es": {
+        "name": "Puertos serie"
+      },
+      "it": {
+        "name": "Porte Seriali",
+        "description": "Collega a estensioni hardware usando la Web Serial API (è richiesto Chromium, Chrome o Edge)"
+      },
+      "nl": {
+        "description": "Maak verbinding met hardware-extensies via de Web Serial API (Chromium, Chrome of Edge vereist)"
+      },
+      "ti": {
+        "name": "ታርታዊ መዋሰብያ",
+        "description": "ምስ ተወሰኽቲ ናይ ኮምፒዩተር ኣቕሑ ብመገዲ ታርታዊ ናይ መርበብ ኤፒኣይ (Web Serial API) ኣራኽብ (ብ ባባት መርበብ ሓበሬታ ክሮምን ኤጅን ጥራይ እድገፍ)"
+      },
+      "ua": {
+        "name": "Послідовні порти",
+        "description": "Підключення до апаратних розширень через Web Serial API (потрібен Chromium, Chrome або Edge)"
+      },
+      "zh_CN": {
+        "name": "串行端口",
+        "description": "通过Web Serial API连接到硬件扩展(需要Chromium、Chrome或Edge)"
+      }
+    },
+    "searchData": [
+      "WEBSer $-1-0-255-0 open _",
+      "WEBSer $-1-255-0-0 close _",
+      "WEBSer $-1-0-255-0 read _",
+      "WEBSer $-1-0-255-0 write _ _"
+    ],
+    "categories": [
+      "other"
+    ]
+  },
+  {
+    "fileName": "mqtt.xml",
+    "name": "MQTT",
+    "description": "(Message Queuing Telemetry Transport) protocol for connecting with IOT devices and/or other software",
+    "translations": {
+      "ca": {
+        "description": "MQTT (Message Queuing Telemetry Transport - Transport de telemetria de missatges en cua) Protocol per connectar dispositius IoT amb diferent programari"
+      }
+    },
+    "searchData": [
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$cloudOutline MQTT unsubscribe from _ topic _",
+      "$cloudOutline MQTT disconnect from _",
+      "$-1-192-192-192 _",
+      "$-1-192-192-192 _",
+      "$cloudOutline MQTT example response reporter payload _ topic _",
+      "$-1-192-192-192 _",
+      "MQTT Extension Examples"
+    ],
+    "categories": [
+      "MQTT"
+    ]
+  },
+  {
+    "fileName": "signada.xml",
+    "name": "Signada (Network remote control)",
+    "description": "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.",
+    "translations": {
+      "ca": {
+        "name": "Signada (control remot per xarxa)",
+        "description": "Interactua amb dispositius programats amb Microblocks per la WiFi. Els dispositius han de tenir una pantalla TFT, dos butons i connectivitat WiFi i tenir carregat el projecte Signada de MicroBlocks. Exemples compatibles són la placa ED1 del Citilab i múltiples dispositius tipus M5Stack.",
+        "searchData": [
+          "🤖 connecta't a _",
+          "🤖 desconnecta't",
+          "🤖 connectat",
+          "toca la nota _ a l'octava _ durant _ ms",
+          "botó _",
+          "dibuixa a la pantalla _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _",
+          "mou motor _ _ passos _",
+          "mou motor 1 en _ motor 2 en _ _ passos",
+          "mou motor _ angle _ °",
+          "mou motor _ _ voltes completes",
+          "escriu _ a x",
+          "neteja pantalla",
+          "posa el LED x",
+          "mostra caràcter _",
+          "posa el pin digital _ a _",
+          "posa el pin analògic _ a _",
+          "llegeix el pin digital _",
+          "llegeix el pin analògic _",
+          "inclinació _",
+          "acceleració",
+          "nivell de llum",
+          "temperatura °C"
+        ]
+      },
+      "it": {
+        "name": "Signada (Controllo remoto di rete)",
+        "description": "Interagisce con dispositivi MicroBlocks via WiFi. Richiede che il dispositivo sia dotato di un display TFT, due pulsanti e di WiFi, e che il progetto Signada MicroBlocks sia stato caricato. La Citilab ED1 e alcune schede M5Stack sono alcuni dei dispositivi che funzionano con Signada."
+      },
+      "ua": {
+        "name": "Signada (мережевий дистанційний контроль)",
+        "description": "Взаємодія з пристроями MicroBlocks через Wi-Fi. Потрібно, щоб пристрій мав TFT-дисплей, дві кнопки та можливість Wi-Fi, а також завантажений проект Signada MicroBlocks. Citilab ED1 і низка плат M5Stack є одними з пристроїв, які працюють з Signada"
+      },
+      "zh_CN": {
+        "name": "Signada（网络远程控制）",
+        "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks项目。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
+      }
+    },
+    "searchData": [
+      "🤖 connect to _",
+      "🤖 disconnect",
+      "🤖 connected",
+      "play note _ octave _ for _ ms",
+      "button _",
+      "set LED display  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _  _ _ _ _ _",
+      "move motor _ _ steps _",
+      "move motor 1 _ and motor 2 _ _ steps",
+      "move motor _ angle _ °",
+      "move motor _ _ complete turns",
+      "write _ at x: _ y: _ color _ scale _",
+      "clear display",
+      "set LED x: _ y: _ to _",
+      "display character _",
+      "set digital pin _ to _",
+      "set analog pin _ to _",
+      "read digital pin _",
+      "read analog pin _",
+      "tilt _",
+      "acceleration",
+      "light level",
+      "temperature °C"
+    ],
+    "categories": [
+      "other",
+      "sound",
+      "sensing",
+      "pen",
+      "motion"
+    ]
+  },
+  {
+    "fileName": "microblocks.xml",
+    "name": "MicroBlocks",
+    "description": "Interact with MicroBlocks devices over a USB cable or wirelessly through BLE. Broadcasts generated by the MicroBlocks device will automatically be received on the Snap! side after connecting."
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "metaprogramming_module.xml",
+    "name": "Metaprogramming",
+    "description": "Analyze, transform and generate blocks and scripts",
+    "searchData": [
+      "scriptify _",
+      "blockify _",
+      "callers of _",
+      "inject _  into _  _ each _"
+    ],
+    "categories": [
+      "control",
+      "lists",
+      "sensing",
+      "other"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "microworlds/dialogs.xml",
+    "name": "(EDC) Dialogs",
+    "description": "Display dialogs and messages to the user.",
+    "searchData": [
+      "inform title _ message _",
+      "show message _ secs _"
+    ],
+    "categories": [
+      "looks"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "microworlds/fancy-text-morphs.xml",
+    "name": "(EDC) Fancy Text",
+    "description": "Text formatting and basic fraction support for SAY and THINK blocks.",
+    "searchData": [
+      "fancy think _ size: _ max width: _ color: _ in my _ for _ seconds",
+      "fancy think _ size: _ max width: _ color: _ in my _",
+      "fancy say _ size: _ max width: _ color: _ in my _ for _ seconds",
+      "fancy say _ size: _ max width: _ color: _ in my _",
+      "fancy text costume _ size: _ max width: _ color: _ align: _ font: _"
+    ],
+    "categories": [
+      "looks"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "microworlds/fancy-text.xml",
+    "name": "(EDC) Fancy Stage Writing",
+    "description": "Text formatting and basic fraction support for writing on stage.",
+    "searchData": [
+      "write on stage text _ size: _ font: _ align: _ x: _ y: _ color: _"
+    ],
+    "categories": [
+      "pen"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "microworlds/microworld.xml",
+    "name": "(EDC) Microworld",
+    "description": "Customize the display of the Snap! UI to create a microworld programming environment.",
+    "searchData": [
+      "load microworld",
+      "switch to language _ and broadcast _ with data _ show loading screen _",
+      "block spec _",
+      "button label _ message _ data _",
+      "key: _ value: _",
+      "set buttons in _ to _",
+      "stage button label _ message _ data _ x _ y _ anchor x _ anchor y _ font size _",
+      "microworld define _ _ _",
+      "button pic labeled _",
+      "hide loading screen",
+      "show loading screen",
+      "set loading screen after translate _",
+      "set active buttons in _ to _",
+      "set broadcast after translate _",
+      "set menu _ to items _",
+      "set ide param _ to _",
+      "switch to sprite _",
+      "exit microworld",
+      "enter microworld",
+      "microworld active?",
+      "set block buttons _",
+      "set editable block specs _",
+      "set palette blocks _",
+      "set enable variables _",
+      "set enable keyboard _",
+      "set hidden UI features _",
+      "block specs _",
+      "list to comma-separated string _",
+      "hidden UI features $-1 _ category list $-1 _ make block buttons $-1 _ search button $-1 _ stepping button $-1 _ start button $-1 _ pause button"
+    ],
+    "categories": [
+      "Microworld",
+      "operators"
+    ],
+    "translations": {
+      "pt": {
+        "searchData": [
+          "um par (chave",
+          "altera o valor da configuração _ para _"
+        ]
+      }
+    }
+  },
+  {
+    "fileName": "microworlds/script-pic-costume.xml",
+    "name": "(EDC) Script Pic Costumes",
+    "description": "Turn a ringified block/script into a costume",
+    "searchData": [
+      "costume from script: _"
+    ],
+    "categories": [
+      "looks"
+    ],
+    "translations": {
+    }
+  },
+  {
+    "fileName": "microworlds/translations.xml",
+    "name": "(EDC) Translations",
+    "description": "Support for translating text, blocks, and dropdown/placeholder values",
+    "searchData": [
+      "update custom block translations from translations _",
+      "extract _ from translation data _",
+      "extract block translation data from _",
+      "all translated block labels for _ from translations _",
+      "translate input options with translations _ fallback _",
+      "custom block with label that translates to %label from translations %translations",
+      "add missing translation to _ language _ key _",
+      "translate _ from translations _ fallback language _ missing handler _ placeholders from list _",
+      "get translation information for _ from translations _ fallback language _ missing handler _",
+      "language",
+      "languages in translation _",
+      "IDE labels and languages limit to _",
+      "dropdown choice _ translates to _ from translations _",
+      "extract equivalent dropdown options from _",
+      "dropdown choice _ translates to _ from equivalent options _",
+      "translate input defaults with translations _ fallback _"
+    ],
+    "categories": [
+      "Translations"
+    ],
+    "translations": {
+    }
+  }
+]

@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2023 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -33,6 +33,7 @@
     credits
     -------
     Lucas Karahadian contributed a first prototype of the piano keyboard
+    ego-lay-atman-bay contributed the capability to switch octaves
 
 
     I. hierarchy
@@ -87,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2023-May-24';
+modules.widgets = '2024-July-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3500,43 +3501,39 @@ PianoMenuMorph.prototype.init = function (
     target,
     environment,
     fontSize,
-    soundType // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+    soundType, // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+    visibleOctaves
 ) {
     var choices, key;
     this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+    if (isNil(visibleOctaves)) {
+        visibleOctaves = 2;
+    }
+    this.visibleOctaves = visibleOctaves;
+    this.octave = 4 - (3 % this.visibleOctaves);
     choices = {
-        'C (48)' : 48,
-        'D (50)' : 50,
-        'C# (49)' : 49,
-        'E (52)' : 52,
-        'Eb (51)' : 51,
-        'F (53)' : 53,
-        'G (55)' : 55,
-        'F# (54)' : 54,
-        'A (57)' : 57,
-        'G# (56)' : 56,
-        'B (59)' : 59,
-        'Bb (58)' : 58,
-        'C (60)' : 60,
-        'D (62)' : 62,
-        'C# (61)' : 61,
-        'E (64)' : 64,
-        'Eb (63)' : 63,
-        'F (65)' : 65,
-        'G (67)' : 67,
-        'F# (66)' : 66,
-        'A (69)' : 69,
-        'G# (68)' : 68,
-        'B (71)' : 71,
-        'Bb (70)' : 70,
-        'C (72)' : 72
+        'C' : 1,
+        'D' : 3,
+        'C#' : 2,
+        'E' : 5,
+        'Eb' : 4,
+        'F' : 6,
+        'G' : 8,
+        'F#' : 7,
+        'A' : 10,
+        'G#' : 9,
+        'B' : 12,
+        'Bb' : 11,
     };
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            this.addItem(key, choices[key]);
+    for (var octave = 0; octave < this.visibleOctaves; octave++) {
+        for (key in choices) {
+            if (Object.prototype.hasOwnProperty.call(choices, key)) {
+                this.addItem(key, choices[key] + (12 * octave));
+            }
         }
     }
+    this.addItem('C', choices.C + (12 * this.visibleOctaves));
 };
 
 PianoMenuMorph.prototype.createItems = function () {
@@ -3566,7 +3563,7 @@ PianoMenuMorph.prototype.createItems = function () {
     y = this.top() + (this.fontSize * 1.5) + 2;
     label = new StringMorph('', this.fontSize);
     this.items.forEach(tuple => {
-        blackkey = tuple[0][1] !== " ";
+        blackkey = tuple[0].length > 1;
         key = new BoxMorph(1, 1);
         if (blackkey) {
             keycolor = BLACK;
@@ -3601,8 +3598,27 @@ PianoMenuMorph.prototype.createItems = function () {
         this.add(item);
     });
     fb = this.fullBounds();
-    label.setPosition(new Point((fb.width() / 2) - this.fontSize, 2));
+    label.setPosition(new Point((fb.width() / 2) - this.fontSize * 1.6, 2));
     this.add(label);
+
+    var downOctave = new ArrowMorph(
+        'left',
+        fontHeight(this.fontSize),
+        Math.max(Math.floor(this.fontSize / 6), 1)
+    );
+    downOctave.setPosition(new Point(5, 3));
+    downOctave.mouseClickLeft = () => this.octaveDown();
+    this.add(downOctave);
+
+    var upOctave = new ArrowMorph(
+        'right',
+        fontHeight(this.fontSize),
+        Math.max(Math.floor(this.fontSize / 6), 1)
+    );
+    upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
+    upOctave.mouseClickLeft = () => this.octaveUp();
+    this.add(upOctave);
+
     fb = this.fullBounds();
     this.bounds.setExtent(fb.extent().add(2));
 };
@@ -3626,19 +3642,36 @@ PianoMenuMorph.prototype.unselectAllItems = function () {
     this.changed();
 };
 
-PianoMenuMorph.prototype.selectKey = function (midiNum) {
-    var key;
+PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
+    var key,
+        note,
+        visibleOctave;
+    
     if (isNil(midiNum)) {
         return;
     }
+
+    if (isNil(octave)) {
+        octave = Math.floor((midiNum / 12) - 1);
+        var octaveIndex = (octave + 1) % this.visibleOctaves;
+
+        visibleOctave = octave - octaveIndex;
+        note = (midiNum % 12) + 1 + (12 * octaveIndex);
+    } else {
+        note = ((midiNum - 1) % (12 * this.visibleOctaves)) + 1;
+        visibleOctave = this.octave;
+    }
+
+    this.octave = visibleOctave;
+    
     key = detect(
         this.children,
-        each => each.action === midiNum
+        each => each.pitch === note
     );
     if (key) {
         this.select(key);
     } else {
-        this.selectKey(48);
+        this.selectKey(1, this.octave);
     }
 };
 
@@ -3658,44 +3691,48 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     case 37: // 'left arrow'
     case 40: // 'down arrow'
     case 189: // -
-        return this.selectDown();
+        return event.shiftKey ?
+            this.octaveDown()
+            : this.selectDown();
     case 38: // 'up arrow'
     case 39: // 'right arrow'
     case 187: // +
     case 220: // #
-        return this.selectUp();
+        return event.shiftKey ?
+            this.octaveUp()
+            : this.selectUp();
     default:
         switch(event.key) {
-        case 'C':
-            return this.selectKey(48);
         case 'c':
-            return this.selectKey(60);
-        case 'D':
-            return this.selectKey(50);
+            return this.selectKey(1, this.octave);
+        case 'C':
+            return this.selectKey(13, this.octave);
         case 'd':
-            return this.selectKey(62);
-        case 'E':
-            return this.selectKey(52);
+            return this.selectKey(3, this.octave);
+        case 'D':
+            return this.selectKey(15, this.octave);
         case 'e':
-            return this.selectKey(64);
-        case 'F':
-            return this.selectKey(53);
+            return this.selectKey(5, this.octave);
+        case 'E':
+            return this.selectKey(17, this.octave);
         case 'f':
-            return this.selectKey(65);
-        case 'G':
-            return this.selectKey(55);
+            return this.selectKey(6, this.octave);
+        case 'F':
+            return this.selectKey(18, this.octave);
         case 'g':
-            return this.selectKey(67);
-        case 'A':
-            return this.selectKey(57);
+            return this.selectKey(8, this.octave);
+        case 'G':
+            return this.selectKey(20, this.octave);
         case 'a':
-            return this.selectKey(69);
-        case 'B':
-        case 'H':
-            return this.selectKey(59);
+            return this.selectKey(10, this.octave);
+        case 'A':
+            return this.selectKey(22, this.octave);
         case 'b':
         case 'h':
-            return this.selectKey(71);
+            return this.selectKey(12, this.octave);
+        case 'B':
+        case 'H':
+            return this.selectKey(24, this.octave);
         default:
             nop();
         }
@@ -3703,25 +3740,37 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
 };
 
 PianoMenuMorph.prototype.selectUp = function () {
-    var next = 48;
-    if (this.selection) {
-        next = this.selection.action + 1;
-        if (next > 72) {
-            next = 48;
-        }
-    }
-    this.selectKey(next);
+    this.selectKey(
+        this.selection ?
+            Math.min(this.selection.action + 1, 143)
+            : 1
+    );
 };
 
 PianoMenuMorph.prototype.selectDown = function () {
-    var next = 48;
+    this.selectKey(
+        this.selection ?
+            Math.max(this.selection.action - 1, 0)
+            : 1
+    );
+};
+
+PianoMenuMorph.prototype.octaveUp = function () {
+    this.octave += this.visibleOctaves;
+    this.octave = Math.min(this.octave, 10 - (11) % this.visibleOctaves);
+
     if (this.selection) {
-        next = this.selection.action - 1;
-        if (next < 48) {
-            next = 72;
-        }
+        this.selection.mouseEnter();
     }
-    this.selectKey(next);
+};
+
+PianoMenuMorph.prototype.octaveDown = function () {
+    this.octave -= this.visibleOctaves;
+    this.octave = Math.max(-1, this.octave);
+
+    if (this.selection) {
+        this.selection.mouseEnter();
+    }
 };
 
 PianoMenuMorph.prototype.destroy = function () {
@@ -3787,6 +3836,7 @@ PianoKeyMorph.prototype.init = function (
 ) {
     // additional "note" property for sound output:
     this.note = new Note(action);
+    this.pitch = action;
     PianoKeyMorph.uber.init.call(
         this,
         target,
@@ -3809,6 +3859,7 @@ PianoKeyMorph.prototype.createLabel = function () {
     if (this.label !== null) {
         this.label.destroy();
     }
+
     // assume its pattern is: [icon, string]
     this.label = new Morph();
     icon = this.createIcon(this.labelString[0]);
@@ -3821,17 +3872,26 @@ PianoKeyMorph.prototype.createLabel = function () {
 
 PianoKeyMorph.prototype.mouseEnter = function () {
     var piano = this.parentThatIsA(PianoMenuMorph),
-        soundType = piano ? piano.soundType : 1;
+        soundType = piano ? piano.soundType : 1,
+        octave = Math.floor((this.action - 1) / 12),
+        octaveOffset = 0;
+        
     if (piano) {
         piano.unselectAllItems();
         piano.selection = this;
         piano.world.keyboardFocus = piano;
         piano.hasFocus = true;
+        
+        octave = piano.octave;
     }
+    octaveOffset = Math.floor((this.pitch - 1) / 12);
+    this.action = (this.pitch - 1) + (12 * (octave + 1));
+    this.note.pitch = this.action;
+    
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
-    this.feedback.text = this.labelString[1];
+    this.feedback.text = `${this.labelString[1]}${octave + octaveOffset} (${this.action})`;
     this.feedback.fixLayout();
     this.note.play(soundType);
     setTimeout(

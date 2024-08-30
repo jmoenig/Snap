@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2022-November-29';
+modules.scenes = '2024-May-28';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -131,6 +131,7 @@ function Scene(aStageMorph) {
     this.codeMappings = {};
     this.codeHeaders = {};
     this.customCategories = new Map(); // key: name, value: color
+    this.blocks = SpriteMorph.prototype.primitiveBlocks();
 
     // global settings (copied)
     this.enableCodeMapping = false;
@@ -202,6 +203,7 @@ Scene.prototype.captureGlobalSettings = function () {
     this.disableClickToRun = ThreadManager.prototype.disableClickToRun;
     this.disableDraggingData = SpriteMorph.prototype.disableDraggingData;
     this.penColorModel = SpriteMorph.prototype.penColorModel;
+    this.blocks = SpriteMorph.prototype.blocks;
 };
 
 Scene.prototype.applyGlobalSettings = function () {
@@ -220,6 +222,7 @@ Scene.prototype.applyGlobalSettings = function () {
     ThreadManager.prototype.disableClickToRun = this.disableClickToRun;
     SpriteMorph.prototype.disableDraggingData = this.disableDraggingData;
     SpriteMorph.prototype.penColorModel = this.penColorModel;
+    SpriteMorph.prototype.blocks = this.blocks;
 };
 
 // Scene ops:
