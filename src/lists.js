@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE, ReadStream*/
+Context, ZERO, WHITE, ReadStream, Process*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-August-26';
+modules.lists = '2024-September-02';
 
 var List;
 var ListWatcherMorph;
@@ -352,8 +352,13 @@ List.prototype.lookup = function (key, ifNone = '') {
         return ifNone;
     }
     parent = this.lookup('...');
-    return parent instanceof List ? parent.lookup(key, ifNone)
-        : (typeof ifNone === 'function' ? ifNone() : ifNone);
+    if (parent instanceof List) {
+        return parent.lookup(key, ifNone);
+    } else if (isSnapObject(parent)) {
+        Process.prototype.assertAlive(parent);
+        return parent.variables.getVar(key);
+    }
+    return typeof ifNone === 'function' ? ifNone() : ifNone;
 };
 
 List.prototype.bind = function (key, value) {

@@ -14,6 +14,9 @@
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     
+### 2024-09-02
+* lists: let list-based objects inherit variables from both other lists and also sprites and the stage, including from global variable scope
+
 ### 2024-08-29
 * blocks: avoid errors when specifying default values for non-editable slots
 * updated dev from master (pulled Catalan translation update v10.0.6)
