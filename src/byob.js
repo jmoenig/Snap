@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-August-27';
+modules.byob = '2024-September-03';
 
 // Declarations
 
@@ -2654,7 +2654,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker
-                (MorphicPreferences.isFlat ? 5 : 50
+                (IDE_Morph.prototype.isBright ? 5 : 50
             ),
             SpriteMorph.prototype.blockColorFor(category)
         ],
@@ -2702,7 +2702,7 @@ BlockDialogMorph.prototype.addCustomCategoryButton = function (category, clr) {
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker
-                (MorphicPreferences.isFlat ? 5 : 50
+                (IDE_Morph.prototype.isBright ? 5 : 50
             ),
             clr
         ],
@@ -3135,7 +3135,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
-    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
+    scripts.cachedTexture = MorphicPreferences.isFlat ? null
+        : IDE_Morph.prototype.scriptsTexture();
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);

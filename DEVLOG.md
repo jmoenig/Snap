@@ -11,9 +11,15 @@
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
+    3. UI Looks
+        * flat / default (skeuomorphic) design
+        * bright / dark (color) theme
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     
+### 2024-09-03
+* gui, objects, blocks, byob: decoupled skeuomorphic/flat UI design from dark/bright UI theme
+
 ### 2024-09-02
 * lists: let list-based objects inherit variables from both other lists and also sprites and the stage, including from global variable scope
 
