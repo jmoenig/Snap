@@ -16,9 +16,12 @@
         * bright / dark (color) theme
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
-    
+* **Translation Updates:**
+    * German
+
 ### 2024-09-03
 * gui, objects, blocks, byob: decoupled skeuomorphic/flat UI design from dark/bright UI theme
+* German translation update for UI Looks
 
 ### 2024-09-02
 * lists: let list-based objects inherit variables from both other lists and also sprites and the stage, including from global variable scope
