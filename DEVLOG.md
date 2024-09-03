@@ -7,7 +7,7 @@
         * new OOP library
         * new "parent" selector for accessing list items, points to entry at ellipsis "..."
         * change: "primitive" variable accessor blocks now accept reporters in their first input field expecting a variable name
-        * change: variable getters can be dropped into "primitive" variable accessor inputs expecting a variable name
+        * change: ringified variable getters can be dropped into "primitive" variable accessor inputs expecting a variable name
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
@@ -23,6 +23,7 @@
 * gui, objects, blocks, byob: decoupled skeuomorphic/flat UI design from dark/bright UI theme
 * German translation update for UI Looks
 * updated dev version
+* threads: reverted to ringified variable blobs as valid inputs for variable setters
 
 ### 2024-09-02
 * lists: let list-based objects inherit variables from both other lists and also sprites and the stage, including from global variable scope

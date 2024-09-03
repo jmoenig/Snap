@@ -1993,15 +1993,7 @@ Process.prototype.doChangeVar = function (varName, value) {
 
 Process.prototype.reportGetVar = function () {
     // assumes a getter block whose blockSpec is a variable name
-    var block = this.context.expression,
-        accessors = ['doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar'];
-
-    // allow dropping variable reporters into the variable name slot of
-    // primitive accessors
-    if (accessors.includes(block.parent?.selector)) {
-        return block.blockSpec;
-    }
-    return this.context.variables.getVar(block.blockSpec);
+    return this.context.variables.getVar(this.context.expression.blockSpec);
 };
 
 Process.prototype.doShowVar = function (varName, context) {
