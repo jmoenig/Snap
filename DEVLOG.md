@@ -8,6 +8,7 @@
         * new "parent" selector for accessing list items, points to entry at ellipsis "..."
         * change: "primitive" variable accessor blocks now accept reporters in their first input field expecting a variable name
         * change: ringified variable getters can be dropped into "primitive" variable accessor inputs expecting a variable name
+        * change: variable getters become automatically ringified when dropped into such accessor slots
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
@@ -18,6 +19,9 @@
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
 * **Translation Updates:**
     * German
+
+### 2024-09-05
+* blocks: auto-ringify variable getter reporters when they are dropped into the variable (name) slot of variable accessor commands
 
 ### 2024-09-03
 * gui, objects, blocks, byob: decoupled skeuomorphic/flat UI design from dark/bright UI theme

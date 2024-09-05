@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-September-03';
+modules.blocks = '2024-September-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7426,6 +7426,14 @@ ReporterBlockMorph.prototype.snap = function (hand) {
             'snap',
             this.abstractBlockSpec()
         );
+        if (this.selector === 'reportGetVar') {
+            if (target.choices === 'getVarNamesDict' ||
+                (target instanceof ReporterBlockMorph &&
+                    target.getSlotSpec() === '%var')
+            ) {
+                this.ringify();
+            }
+        }
     }
     this.fixBlockColor();
     ReporterBlockMorph.uber.snap.call(this);
@@ -8170,6 +8178,7 @@ RingMorph.prototype.vanishForSimilar = function () {
             || (this.parent instanceof RingCommandSlotMorph)) {
         return null;
     }
+    if (this.getSlotSpec() === '%var') {return null; }
     if ((block.selector === 'reportGetVar' &&
             !contains(this.inputNames(), block.blockSpec)) ||
         // block.selector === 'reportListItem' ||
