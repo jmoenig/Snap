@@ -12751,7 +12751,12 @@ BooleanSlotMorph.prototype.isBinary = function () {
 };
 
 BooleanSlotMorph.prototype.setContents = function (boolOrNull) {
-    this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
+    this.value = (typeof boolOrNull === 'boolean') ? boolOrNull
+        : (isNil(boolOrNull) ||
+            ['', ' ', 'null'].includes(boolOrNull) ||
+            +boolOrNull < 0 ? null
+                : ['true', 'on', 'yes', 'ok', 'y', '+'].includes(boolOrNull) ||
+                    +boolOrNull > 0);
     this.rerender();
 };
 

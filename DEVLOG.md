@@ -17,11 +17,14 @@
         * bright / dark (color) theme
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
+    * Boolean input slot default values can be specified through metaprogramming
+    * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
 * **Translation Updates:**
     * German
 
 ### 2024-09-05
 * blocks: auto-ringify variable getter reporters when they are dropped into the variable (name) slot of variable accessor commands
+* blocks: support for setting (variadic) Boolean input slot defaults
 
 ### 2024-09-03
 * gui, objects, blocks, byob: decoupled skeuomorphic/flat UI design from dark/bright UI theme
