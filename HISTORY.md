@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Translation Updates:**
+    * Polish, thanks, P1neF0rest935!
+
+### 2024-09-06
+* Polish translation update, thanks, P1neF0rest935!
+* restored "easing" reporter in animation library to its latest version
 
 ## 10.0.6:
 * **Translation Updates:**
