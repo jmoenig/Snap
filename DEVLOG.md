@@ -27,6 +27,7 @@
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme
+* updated pyret transpilation study with new "bright" theme configuration
 
 ### 2024-09-05
 * blocks: auto-ringify variable getter reporters when they are dropped into the variable (name) slot of variable accessor commands
