@@ -15,12 +15,18 @@
     3. UI Looks
         * flat / default (skeuomorphic) design
         * bright / dark (color) theme
+        * new "theme" configuration key in the API
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     * Boolean input slot default values can be specified through metaprogramming
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
+* **Documentation Updates:**
+    * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
 * **Translation Updates:**
     * German
+
+### 2024-09-06
+* API: new "theme" configuration key for "bright" or "dark" GUI theme
 
 ### 2024-09-05
 * blocks: auto-ringify variable getter reporters when they are dropped into the variable (name) slot of variable accessor commands

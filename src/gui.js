@@ -87,7 +87,7 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-September-03';
+modules.gui = '2024-September-06';
 
 // Declarations
 
@@ -874,6 +874,15 @@ IDE_Morph.prototype.applyConfigurations = function () {
             this.setFlatDesign();
         } else if (cnf.design === 'classic') {
             this.setDefaultDesign();
+        }
+    }
+
+    // theme
+    if (cnf.theme) {
+        if (cnf.theme === 'bright') {
+            this.setBrightTheme();
+        } else if (cnf.theme === 'dark') {
+            this.setDefaultTheme();
         }
     }
 
