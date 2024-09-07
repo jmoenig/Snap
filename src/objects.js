@@ -2342,6 +2342,24 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: '%numberInputBlock',
             category: 'inputs',
 
+        },
+        JsGet: {
+            type: 'reporter',
+            code: 'getProp',
+            spec: '%anyBlock $[ %anyBlock $]',
+            category: 'sensing'
+        },
+        JsCallMethod: {
+            type: 'reporter',
+            code: 'callMethod',
+            spec: '%anyBlock $[ %anyBlock $]( %staticmult )',
+            category: 'control'
+        },
+        JsRunMethod: {
+            type: 'command',
+            code: 'RunMethod',
+            spec: '%anyBlock $[ %anyBlock $]( %staticmult )',
+            category: 'control'
         }
     };
 };
@@ -3756,6 +3774,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push(block('JsCallMethod'));
+        blocks.push(block('JsRunMethod'));
         blocks.push(block('reportPipe'));
         blocks.push('-');
         blocks.push(block('doTellTo'));
@@ -3823,6 +3843,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportDate'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
+        blocks.push(block('JsGet'));
 
         if (SpriteMorph.prototype.enableFirstClass) {
             blocks.push(block('reportGet'));
