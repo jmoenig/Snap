@@ -3296,7 +3296,7 @@ Morph.prototype.stepFrame = function () {
             nxt.call(this);
         }
         this.step();
-        this.children.forEach(child => child.stepFrame());
+        this.children.forEach(child => { try{child.stepFrame()}catch(err){console.err(err)}});
     }
 };
 
@@ -3579,7 +3579,11 @@ Morph.prototype.getImage = function () {
     if (this.isCachingImage) {
         this.cachedImage = img;
     }
+    try{
     this.render(img.getContext('2d'));
+    } catch(err) {
+        console.error(err)
+    }
     this.shouldRerender = false;
     return img;
 };
