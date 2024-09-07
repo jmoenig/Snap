@@ -2352,13 +2352,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         JsCallMethod: {
             type: 'reporter',
             code: 'callMethod',
-            spec: '%anyBlock $[ %anyBlock $]( %staticmult )',
+            spec: '%anyBlock $[ %anyBlock $]( %staticmult $)',
             category: 'control'
         },
         JsRunMethod: {
             type: 'command',
             code: 'RunMethod',
-            spec: '%anyBlock $[ %anyBlock $]( %staticmult )',
+            spec: '%anyBlock $[ %anyBlock $]( %staticmult $)',
             category: 'control'
         }
     };
