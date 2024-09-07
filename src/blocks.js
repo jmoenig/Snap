@@ -2647,7 +2647,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     } else if (isString(value)) {
         // shorten the string, commented out because we now scroll it
         // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
-        txt  = value;
+        txt  = JSON.stringify(value);
         maxHeight = ide.height() / 2;
         morphToShow = new TextMorph(
             txt,
@@ -2683,11 +2683,43 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return menu;
         };
     } else {
-        return this.showBubble(
-            display(value),
-            exportPic,
-            target
+        // shorten the string, commented out because we now scroll it
+        // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
+        txt = value+"";
+        maxHeight = ide.height() / 2;
+        morphToShow = new TextMorph(
+            txt,
+            this.fontSize
         );
+
+        if (morphToShow.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(morphToShow.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(morphToShow);
+            scroller.color = new Color(0, 0, 0, 0);
+            morphToShow = scroller;
+        }
+
+        // support exporting text / numbers directly from result bubbles:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this);
+            menu.addItem(
+                'export',
+                () => ide.saveFileAs(
+                    value,
+                    'text/plain;charset=utf-8',
+                    localize('data')
+                )
+            );
+            menu.addItem(
+                'copy',
+                () => writeClipboardText(value, ide)
+            );
+            return menu;
+        };
     }
     if (ide && (ide.currentSprite !== target)) {
         if (target instanceof StageMorph) {
