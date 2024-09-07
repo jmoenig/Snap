@@ -2319,6 +2319,17 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'report %s',
             code: 'report'
         },
+        GetThis :{
+            type: 'reporter',
+            category: 'variables',
+            code:'this',
+            spec: 'this'
+        },
+        JsSet: {
+            type: 'command',
+            code: 'setProp',
+            spec: '%anyBlock $[ %anyBlock $]= %anyBlock'
+        }
     };
 };
 
@@ -3892,6 +3903,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(this.makeVariableButton());
         blocks.push(watcherToggle('globalHtmlWorldsParent'));
         blocks.push(block('globalHtmlWorldsParent'));
+        blocks.push(block('GetThis'));
         if (this.deletableVariableNames().length > 0) {
             blocks.push(this.deleteVariableButton());
         }
@@ -3916,6 +3928,7 @@ SpriteMorph.prototype.blockTemplates = function (
         }
 
         blocks.push(block('doSetVar'));
+        blocks.push(block('JsSet'));
         blocks.push(block('doChangeVar'));
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));

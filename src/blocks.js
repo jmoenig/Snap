@@ -1332,6 +1332,10 @@ SyntaxElementMorph.prototype.labelParts = {
     '%stringInputBlock':{
         type: 'input',
         tags: 'static'
+    },
+    '%anyBlock': {
+        type: 'input',
+        tags: 'read-only'
     }
 };
 
