@@ -3681,7 +3681,11 @@ Morph.prototype.drawOn = function (ctx, rect) {
         ctx.rect(clipped.left(), clipped.top(), clipped.width(), clipped.height());
         ctx.clip();
         ctx.translate(pos.x, pos.y);
+        try{
         this.render(ctx);
+        }catch(err){
+            console.error(err)
+        }
         if (MorphicPreferences.showHoles) { // debug hole rendering
             ctx.translate(-pos.x, -pos.y);
             ctx.globalAlpha = 0.25;
