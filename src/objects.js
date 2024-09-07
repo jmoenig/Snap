@@ -2336,6 +2336,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: '" %stringInputBlock "',
             category: 'inputs',
 
+        },
+        NumberInput: {
+            type: 'reporter',
+            spec: '%numberInputBlock',
+            category: 'inputs',
+
         }
     };
 };
@@ -3847,6 +3853,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block("getStatInfo"));
     } else if (category === 'operators') {
         blocks.push(block('StringInput'))
+        blocks.push(block('NumberInput'))
         blocks.push(block('Function'));
         blocks.push(block('reifyScript'));
         blocks.push(block('reifyReporter'));
