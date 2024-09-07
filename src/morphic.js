@@ -12117,7 +12117,11 @@ WorldMorph.prototype.updateBroken = function () {
     this.condenseDamages();
     this.broken.forEach(rect => {
         if (rect.extent().gt(ZERO)) {
+            try{
             this.fullDrawOn(ctx, rect);
+            }catch(err){
+                console.error(err)
+            }
         }
     });
     this.broken = [];
