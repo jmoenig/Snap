@@ -33,6 +33,7 @@
 * threads: automatically declare upvars inside custom block input groups
 * updated OOP library
 * new "Declare & Initialize Script Variables" library
+* updated dev version
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme
