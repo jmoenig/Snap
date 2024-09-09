@@ -30,6 +30,7 @@
 * blocks, morphic: exclude variables declared inside input rings from the dropdown menu of reachable variables
 * threads: automatically declare variadic upvars inside custom blocks when evaluating them
 * threads: automatically declare upvars inside custom block input groups
+* updated OOP library
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme
