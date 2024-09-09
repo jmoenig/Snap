@@ -6,9 +6,6 @@
         * new list-dictionary based object system with data scope and Lieberman style prototypical inheritance
         * new OOP library
         * new "parent" selector for accessing list items, points to entry at ellipsis "..."
-        * change: "primitive" variable accessor blocks now accept reporters in their first input field expecting a variable name
-        * change: ringified variable getters can be dropped into "primitive" variable accessor inputs expecting a variable name
-        * change: variable getters become automatically ringified when dropped into such accessor slots
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
@@ -24,6 +21,9 @@
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
 * **Translation Updates:**
     * German
+
+### 2024-09-09
+* blocks: disabled experimental change allowing dropping reporters into variable accessor input slots and auto-ringification
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme

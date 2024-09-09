@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-September-05';
+modules.blocks = '2024-September-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -793,7 +793,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%var': {
         type: 'input',
-        tags: 'read-only', // was also static until v10.0
+        tags: 'read-only static', // if "static" is removed, enable auto-ringify
         menu: 'getVarNamesDict'
     },
     '%shd': {
@@ -7426,6 +7426,14 @@ ReporterBlockMorph.prototype.snap = function (hand) {
             'snap',
             this.abstractBlockSpec()
         );
+        /*  // auto-ringify dropped variable accessors,
+            // experimental for OOP 2.0,
+            // needs to also remove the "static"
+            // flag in the %var input slot definition,
+            // and the auto-vanishing gimmick for rings,
+            // commented out b/c not strictly needed
+            // and potentially very confusing to users
+            // unfamiliar with rings.
         if (this.selector === 'reportGetVar') {
             if (target.choices === 'getVarNamesDict' ||
                 (target instanceof ReporterBlockMorph &&
@@ -7434,6 +7442,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
                 this.ringify();
             }
         }
+        */
     }
     this.fixBlockColor();
     ReporterBlockMorph.uber.snap.call(this);
@@ -8178,7 +8187,12 @@ RingMorph.prototype.vanishForSimilar = function () {
             || (this.parent instanceof RingCommandSlotMorph)) {
         return null;
     }
+    /*  // adjustment for auto-ringification of variable getter accessors
+        // inside variable assigment blocks,
+        // experimental for OOP 2.0
+        // currently not needed, commented out for now.
     if (this.getSlotSpec() === '%var') {return null; }
+    */
     if ((block.selector === 'reportGetVar' &&
             !contains(this.inputNames(), block.blockSpec)) ||
         // block.selector === 'reportListItem' ||
