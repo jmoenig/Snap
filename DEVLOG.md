@@ -17,6 +17,8 @@
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     * Boolean input slot default values can be specified through metaprogramming
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
+* **Notable Fixes:**
+    * exclude variables declared inside input rings from the dropdown menu of reachable variables
 * **Documentation Updates:**
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
 * **Translation Updates:**
@@ -24,6 +26,7 @@
 
 ### 2024-09-09
 * blocks: disabled experimental change allowing dropping reporters into variable accessor input slots and auto-ringification
+* blocks, morphic: exclude variables declared inside input rings from the dropdown menu of reachable variables
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme

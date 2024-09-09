@@ -1320,7 +1320,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-August-06';
+var morphicVersion = '2024-September-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3100,6 +3100,16 @@ Node.prototype.allChildren = function () {
     var result = [this];
     this.children.forEach(child => {
         result = result.concat(child.allChildren());
+    });
+    return result;
+};
+
+Node.prototype.allChildrenExcept = function (callback) {
+    // includes myself, stops at nodes that satisfy the callback predicate
+    var result = [this];
+    if (callback(this)) {return []; }
+    this.children.forEach(child => {
+        result = result.concat(child.allChildrenExcept(callback));
     });
     return result;
 };

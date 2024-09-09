@@ -1628,7 +1628,10 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
             );
         } else if (morph instanceof BlockMorph) {
             morph.inputs().forEach(inp => {
-                inp.allChildren().forEach(child => {
+                inp.allChildrenExcept(each =>
+                    // exclude declarations inside rings
+                    each instanceof RingMorph
+                ).forEach(child => {
                     if (child instanceof TemplateSlotMorph) {
                         tempVars.push(child.contents());
                     } else if (child instanceof MultiArgMorph) {
