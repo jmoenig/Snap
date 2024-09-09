@@ -1664,6 +1664,24 @@
     ]
   },
   {
+    "fileName": "variable_declaration_module.xml",
+    "name": "Declare & Initialize Script Variables",
+    "description": "Declare and initialize multiple script variables",
+    "searchData": [
+      "let _"
+    ],
+    "categories": [
+      "variables"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "let _"
+        ]
+      }
+    }
+  },
+  {
     "fileName": "make-variables.xml",
     "name": "Create variables",
     "description": "Create and manage global/sprite/script variables in a script",

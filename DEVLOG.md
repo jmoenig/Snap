@@ -9,6 +9,7 @@
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
+        * new "Declare & Initialize Script Variables" library
     3. UI Looks
         * flat / default (skeuomorphic) design
         * bright / dark (color) theme
@@ -31,6 +32,7 @@
 * threads: automatically declare variadic upvars inside custom blocks when evaluating them
 * threads: automatically declare upvars inside custom block input groups
 * updated OOP library
+* new "Declare & Initialize Script Variables" library
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme

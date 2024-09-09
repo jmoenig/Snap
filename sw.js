@@ -199,6 +199,7 @@ var snapVersion = '11-240906-dev',
         'libraries/textCostumes_module.xml',
         'libraries/textformat_module.xml',
         'libraries/try-catch.xml',
+        'libraries/variable_declaration_module.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
 
