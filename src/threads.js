@@ -1015,7 +1015,7 @@ Process.prototype.doReport = function (block) {
 Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
     // first evaluate all subslots, then return a list of their values
     var inputs = this.context.inputs,
-        ans;
+        ans, i;
     if (multiSlot.bindingID) {
         if (this.isCatchingErrors) {
             try {
@@ -1041,6 +1041,20 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
                 inputs.forEach(vname =>
                     this.context.outerContext.variables.addVar(vname)
                 );
+            } else if (multiSlot.slotSpec instanceof Array) { // input group
+                if (multiSlot.slotSpec.includes('%t') ||
+                    multiSlot.slotSpec.includes('%upvar')
+                ) { // identify and declare every upvar
+                    for (i = 0; i < inputs.length; i += 1) {
+                        if (['%t', '%upvar'].includes(
+                            multiSlot.slotSpec[i % multiSlot.slotSpec.length]
+                        )) {
+                            this.context.outerContext.variables.addVar(
+                                inputs[i]
+                            );
+                        }
+                    }
+                }
             }
             this.returnValueToParentContext(new List(inputs));
             this.popContext();
