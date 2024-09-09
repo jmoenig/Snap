@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-August-28';
+modules.threads = '2024-September-09';
 
 var ThreadManager;
 var Process;
@@ -1035,7 +1035,7 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
         } else {
             // declare a new script var in the current context for every
             // variable template, excluding formal ring parameters
-            if (multiSlot.slotSpec === '%t' && // variable template
+            if (['%t', '%upvar'].includes(multiSlot.slotSpec) && // var template
                 !(multiSlot.parentThatIsA(BlockMorph) instanceof RingMorph)
             ) {
                 inputs.forEach(vname =>

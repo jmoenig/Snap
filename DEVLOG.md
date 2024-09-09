@@ -19,6 +19,7 @@
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
 * **Notable Fixes:**
     * exclude variables declared inside input rings from the dropdown menu of reachable variables
+    * automatically declare variadic upvars inside custom blocks when evaluating them
 * **Documentation Updates:**
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
 * **Translation Updates:**
@@ -27,6 +28,7 @@
 ### 2024-09-09
 * blocks: disabled experimental change allowing dropping reporters into variable accessor input slots and auto-ringification
 * blocks, morphic: exclude variables declared inside input rings from the dropdown menu of reachable variables
+* threads: automatically declare variadic upvars inside custom blocks when evaluating them 
 
 ### 2024-09-06
 * API: new "theme" configuration key for "bright" or "dark" GUI theme
