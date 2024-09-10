@@ -29,6 +29,7 @@
 ### 2024-09-09
 * threads: bind rings to object scope when INSERT / REPLACE -ing them into an object-list
 * updated OOP library: added "ADD field" command
+* updated dev version
 
 ### 2024-09-09
 * blocks: disabled experimental change allowing dropping reporters into variable accessor input slots and auto-ringification
