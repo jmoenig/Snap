@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-09';
+modules.threads = '2024-September-10';
 
 var ThreadManager;
 var Process;
@@ -2243,6 +2243,9 @@ Process.prototype.doInsertInList = function (element, index, list) {
         }
     }
     if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
+        if (element instanceof Context) { // OOP 2.0: treat ring as method
+            element = this.reportContextFor(element, list);
+        }
         return list.bind(idx, element);
     }
     list.add(element, idx);
@@ -2268,6 +2271,9 @@ Process.prototype.doReplaceInList = function (index, list, element) {
         } else {
             idx = 0;
         }
+    }
+    if (element instanceof Context) { // OOP 2.0: treat ring as method
+        element = this.reportContextFor(element, list);
     }
     list.bind(idx, element);
 };

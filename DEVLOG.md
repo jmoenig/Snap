@@ -27,6 +27,9 @@
     * German
 
 ### 2024-09-09
+* threads: bind rings to object scope when INSERT / REPLACE -ing them into an object-list
+
+### 2024-09-09
 * blocks: disabled experimental change allowing dropping reporters into variable accessor input slots and auto-ringification
 * blocks, morphic: exclude variables declared inside input rings from the dropdown menu of reachable variables
 * threads: automatically declare variadic upvars inside custom blocks when evaluating them
