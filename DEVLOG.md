@@ -26,7 +26,10 @@
 * **Translation Updates:**
     * German
 
-### 2024-09-09
+### 2024-09-11
+* threads: bind looked up variables inside objects to their receiver ("self")
+
+### 2024-09-10
 * threads: bind rings to object scope when INSERT / REPLACE -ing them into an object-list
 * updated OOP library: added "ADD field" command
 * updated dev version

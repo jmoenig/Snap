@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-10';
+modules.threads = '2024-September-11';
 
 var ThreadManager;
 var Process;
@@ -9843,7 +9843,11 @@ VariableFrame.prototype.getVar = function (name) {
         value;
     if (frame) {
         if (frame instanceof List) { // OOP 2.0
-            return frame.lookup(name, () => this.variableError(name));
+            value = frame.lookup(name, () => this.variableError(name));
+            if (value instanceof Context) {
+                value = Process.prototype.reportContextFor(value, frame);
+            }
+            return value;
         }
         value = frame.vars[name].value;
         return (value === 0 ? 0
