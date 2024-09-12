@@ -1,7 +1,7 @@
 # Snap! Lisp Syntax
 
 > Jens Mönig,
-> last updated April 10, 2024
+> last updated September 12, 2024
 
 In v10 we have begun to bootstrap parts of Snap!, i.e. to write significant portions of Snap! in itself using the Snap! IDE and, of course, blocks. In order to merge these block-scripts with the JavaScript source code that launches Snap! we first handled these as separate XML files. As the bootstrapping progressed we felt the need to increasingly mix and merge both codes, Snap! and JavaScript, at a finer granularity and in a text form that would be friendlier for us to read and edit. As we were thinking about a minimal syntax for blocks the idea of Lisp kept coming back. Since we think of Snap! as a cross-breed of Scheme and Smalltalk this idea became increasingly attractive. This document describes our Lisp-inspired syntax. A few words of context and caution: 
 
@@ -397,6 +397,48 @@ Stacks of commands inside C-shaped input slots follow the same markings:
 )
 ```
 
+
+### Script Parameters
+
+When parsed by Snap!, a script is reported as a nested reporter block or as a stack of command blocks enclosed by a ring, which turns it into an anonymous function. If that script function is to have one or more formal parameters those variable names can be added as additional tokens of the first block in the script.
+
+Here is an example for an anonymous function that squares a given number:
+
+```lisp
+(^ (get n) 2 n)
+```
+
+Since the POW reporter only takes 2 inputs, the third one - the token `n` becomes a formal parameter of the script ring, which in turn becomes a monadic function.
+
+Another example of a monadic procedure that draws an arbitrarily sized triangle:
+
+```lisp
+(
+    (down steps) 
+    (repeat 3 (
+        (move (get steps)) 
+        (right 90)
+    )) 
+    (up)
+)
+```
+
+Again, because the first block in this script (`pen down`) doesn't have any input slots, its `steps` token becomes a formal parameter of the procedure script.
+
+
+#### Declaring Script Parameters for Polyadic Block Inputs
+
+In cases in which the first block in a script ends with a polyadic input slot - one that can hold any number of inputs - script inputs cannot be simply added to the list of its tokens. Instead the polyadic slot's actual inputs need to be explicitly listed apart from the script parameters. This can be accomplished with the colon (`:`) notation followed by a pseudo-block named `items` whose tokens represent the multi-slot's inputs.
+
+Here's an example of using the variadic addition reporter for a function that doubles a given number:
+
+```lisp
+(+ : (items (get n) (get n)) n)
+```
+
+Note that when Snap! encodes a function to LISP syntax it automatically recognizes this situation and explicitly enumerates polyadic input tokens followed by script parameters. Unless you're writing LISP code by hand you don't have to remember the syntax for this special case.
+
+
 ## Apendix: Primitive Block Names
 
 | Palette | Label | Name | Type | Example |
@@ -589,3 +631,4 @@ Stacks of commands inside C-shaped input slots follow the same markings:
 |  | append _ | **append** | *reporter* | ` (append nil nil) ` |
 |  | reshape _ to _ | **reshape** |  | ` (reshape nil 4 3) ` |
 |  | combinations _ | **combinations** |  | ` (combinations nil nil) ` |
+| **special** | (hidden) | **input items** | *polyadic input* | ` : (items foo bar baz) ` |

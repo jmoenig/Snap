@@ -24,11 +24,13 @@
     * fixed a LISP-encoding conflict between a variadic expression and formal ring parameters
 * **Documentation Updates:**
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
+    * updated LISP syntax documentation for script parameters
 * **Translation Updates:**
     * German
 
 ### 2024-09-12
 * threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters
+* updated LISP syntax documentation for script parameters
 
 ### 2024-09-11
 * threads: bind looked up variables inside objects to their receiver ("self")
