@@ -18,6 +18,7 @@
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     * Boolean input slot default values can be specified through metaprogramming
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
+    * added an official "Restore primitives" item to the project menu, if a project / scene has customized prims
 * **Notable Fixes:**
     * exclude variables declared inside input rings from the dropdown menu of reachable variables
     * automatically declare variadic upvars inside custom blocks when evaluating them
@@ -33,6 +34,7 @@
 * updated LISP syntax documentation for script parameters
 * changed dev version to 10.1
 * updated dev version
+* gui: added an official "Restore primitives" item to the project menu, if a project / scene has customized prims
 
 ### 2024-09-11
 * threads: bind looked up variables inside objects to their receiver ("self")

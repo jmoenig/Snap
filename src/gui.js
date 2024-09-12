@@ -5131,12 +5131,20 @@ IDE_Morph.prototype.projectMenu = function () {
                     '\nand remove their definitions'
             );
         }
-        if (shiftClicked && SpriteMorph.prototype.hasCustomizedPrimitives()) {
+        if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
+            if (shiftClicked) {
+                menu.addItem(
+                    'Export customized primitives...',
+                    () => this.exportCustomizedPrimitives(),
+                    'EXPERIMENTAL!',
+                    new Color(100, 0, 0)
+                );
+            }
             menu.addItem(
-                'Export customized primitives...',
-                () => this.exportCustomizedPrimitives(),
-                'EXPERIMENTAL!',
-                new Color(100, 0, 0)
+                'Restore primitives',
+                () => this.stage.restorePrimitives(),
+                'switch (back) to primitive blocks in the palette,\n' +
+                    'CAUTION - can break extensions.'
             );
         }
         menu.addItem(
