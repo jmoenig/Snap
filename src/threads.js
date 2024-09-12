@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-11';
+modules.threads = '2024-September-12';
 
 var ThreadManager;
 var Process;
@@ -5566,11 +5566,15 @@ Process.prototype.assemble = function (blocks) {
 // Process - generating syntax trees from parsed text
 
 Process.prototype.toBlockSyntax = function (list) {
-    var head;
+    var head, data;
     if (list.isEmpty()) {
         return list;
     }
     head = list.at(1);
+    if (snapEquals(head, 'items')) { // reserved token for data
+        data = this.toInputSyntax(list.cdr());
+        return list.cons(data.length(), data);
+    }
     return this.variadify(
         list.cons(
             head instanceof List ? this.toBlockSyntax(head)
@@ -5640,6 +5644,12 @@ Process.prototype.variadify = function (list) {
         syntax = new List(items.slice(0, idx));
         if (list.at(idx + 1) === ':') {
             syntax.add(list.at(idx + 2));
+            if (list.length() > idx + 2) {
+                // add following tokens as ring parameters, if any
+                for (idx = idx + 3; idx <= list.length(); idx += 1) {
+                    syntax.add(list.at(idx));
+                }
+            }
         } else {
             syntax.add(new List(
                 [list.cons(
@@ -5675,28 +5685,51 @@ Process.prototype.toTextSyntax = function (list) {
     head = syn.at(1);
     return syn.cons(
         head instanceof List ? this.toTextSyntax(head)
-            : this.blockToken(head),
+            : (head === Symbol.for('items') ? 'items' // reserved token for data
+                : this.blockToken(head)),
         this.toInputTextSyntax(syn.cdr())
     );
 };
 
 Process.prototype.devariadify = function (list) {
     var ring = list.at(1),
-        slot, idx, syntax;
+        slot, idx, syntax,
+        arr, slots, inps, slotInputs;
     if (ring instanceof List) {
         return list;
     }
     slot = ring.expression?.inputs().find(any =>
         any instanceof MultiArgMorph);
-    if (slot && !slot.inputs().length) {
-        idx = ring.expression.inputs().indexOf(slot) + 1;
-        syntax = list.map(each => each); // shallow copy
-        if (syntax.length() === (idx + 1) && syntax.at(idx + 1) === '') {
-            syntax.remove(idx + 1);
+
+    if (slot) {
+        if (!slot.inputs().length) {
+            // "with input list"
+            idx = ring.expression.inputs().indexOf(slot) + 1;
+            syntax = list.map(each => each); // shallow copy
+            if (syntax.length() === (idx + 1) && syntax.at(idx + 1) === '') {
+                syntax.remove(idx + 1);
+                return syntax;
+            }
+            syntax.add(':', idx + 1);
             return syntax;
         }
-        syntax.add(':', idx + 1);
-        return syntax;
+        inps = slot.inputs();
+        slots = ring.expression.inputs();
+        if (inps.length + slots.length < list.length()) {
+            // special case: the first expression has a variadic slot
+            // that conflicts with surplus ring parameters
+            // solution: collect the slot inputs in a separate data list
+            arr = list.itemsArray();
+            idx = slots.indexOf(slot) + 1;
+            syntax = new List(arr.slice(0, idx));
+            slotInputs = arr.slice(idx, idx + inps.length);
+            slotInputs.unshift(Symbol.for('items'));
+            syntax.add(':');
+            syntax.add(new List(slotInputs));
+            arr.slice(idx + inps.length, list.length()).forEach(each =>
+                syntax.add(each));
+            return syntax;
+        }
     }
     return list;
 };

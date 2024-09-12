@@ -21,10 +21,14 @@
 * **Notable Fixes:**
     * exclude variables declared inside input rings from the dropdown menu of reachable variables
     * automatically declare variadic upvars inside custom blocks when evaluating them
+    * fixed a LISP-encoding conflict between a variadic expression and formal ring parameters
 * **Documentation Updates:**
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
 * **Translation Updates:**
     * German
+
+### 2024-09-12
+* threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters
 
 ### 2024-09-11
 * threads: bind looked up variables inside objects to their receiver ("self")
