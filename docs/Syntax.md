@@ -423,7 +423,7 @@ Another example of a monadic procedure that draws an arbitrarily sized triangle:
 )
 ```
 
-Again, because the first block in this script (`pen down`) doesn't have any input slots, its `steps` token becomes a formal parameter of the procedure script.
+Again, because the first block in this script `(down)` doesn't have any input slots, its `steps` token becomes a formal parameter of the procedure script.
 
 
 #### Declaring Script Parameters for Polyadic Block Inputs
