@@ -31,6 +31,8 @@
 ### 2024-09-12
 * threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters
 * updated LISP syntax documentation for script parameters
+* changed dev version to 10.1
+* updated dev version
 
 ### 2024-09-11
 * threads: bind looked up variables inside objects to their receiver ("self")
