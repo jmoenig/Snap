@@ -14,6 +14,7 @@
         * flat / default (skeuomorphic) design
         * bright / dark (color) theme
         * new "theme" configuration key in the API
+        * new "cube" and "cubeSolid" symbols
 * **Notable Changes:**
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     * Boolean input slot default values can be specified through metaprogramming
@@ -33,6 +34,7 @@
 * updated from master branch
 * updated dev version
 * updated OOP library: added "FIELD OF" reporter
+* symbols: new "cube" and "cubeSolid" symbols
 
 ### 2024-09-12
 * threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters

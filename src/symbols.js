@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2024-January-18';
+modules.symbols = '2024-September-13';
 
 var SymbolMorph;
 
@@ -148,7 +148,9 @@ SymbolMorph.prototype.names = [
     'flipVertical',
     'flipHorizontal',
     'trash',
-    'trashFull'
+    'trashFull',
+    'cube',
+    'cubeSolid'
 ];
 
 // SymbolMorph instance creation:
@@ -500,6 +502,12 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'trashFull':
         this.renderSymbolTrashFull(ctx, aColor);
+        break;
+    case 'cube':
+        this.renderSymbolCube(ctx, aColor);
+        break;
+    case 'cubeSolid':
+        this.renderSymbolCubeSolid(ctx, aColor);
         break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
@@ -2419,6 +2427,59 @@ SymbolMorph.prototype.renderSymbolTrashFull = function (ctx, color) {
     ctx.closePath();
     ctx.fill();
 };
+
+SymbolMorph.prototype.renderSymbolCube = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outer hexagon
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, quarter);
+    ctx.lineTo(half, l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.lineTo(l, side-quarter);
+    ctx.closePath();
+    ctx.stroke();
+
+    // draw the inner edges
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(half, side - l);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolCubeSolid = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outline
+    this.renderSymbolCube(ctx, color);
+
+    // fill the bottom right square
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.closePath();
+    ctx.fill();
+};
+
 
 /*
 // register examples with the World demo menu
