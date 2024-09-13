@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-July-24';
+modules.store = '2024-September-13';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1052,7 +1052,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         }
         definition.type = child.attributes.type || 'command';
         definition.selector = child.attributes.selector || null;
-        definition.primitive = child.attributes.primitive || null;
+        definition.setPrimitive(child.attributes.primitive || null);
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.spaceAbove = (child.attributes.space === 'true') || false;
         definition.isGlobal = (isGlobal === true);
@@ -1174,7 +1174,7 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         }
         definition.type = child.attributes.type || 'command';
         definition.selector = sel || null;
-        definition.primitive = child.attributes.primitive || null;
+        definition.setPrimitive(child.attributes.primitive || null);
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.isGlobal = true;
 

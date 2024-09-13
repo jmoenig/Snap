@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * disabled abusing the "primitive" block with metaprogramming to run arbitrary JS code. Sigh.
+
+### 2024-09-13
+* byob, objects, threads, store: disabled abusing the "primitive" block with metaprogramming to run arbitrary JS code. Sigh.
 
 ## 10.0.7:
 * **Translation Updates:**
