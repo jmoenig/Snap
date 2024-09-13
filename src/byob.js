@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-September-03';
+modules.byob = '2024-September-13';
 
 // Declarations
 
@@ -661,6 +661,15 @@ CustomBlockDefinition.prototype.isDirectlyRecursive = function () {
     return this.cachedIsRecursive;
 };
 
+CustomBlockDefinition.prototype.setPrimitive = function (prim) {
+    if (isString(prim) &&
+            !Object.keys(SpriteMorph.prototype.blocks).includes(prim)) {
+        // console.warn('attempted to set unlisted primitive:', prim);
+        return;
+    }
+    this.primitive = prim;
+};
+
 // CustomBlockDefinition localizing
 
 CustomBlockDefinition.prototype.localizedSpec = function () {
@@ -806,7 +815,7 @@ CustomBlockDefinition.prototype.setBlockDefinition = function (aContext) {
     if (body.expression?.selector === 'doPrimitive' &&
         body.expression.inputs()[0].value
     ) {
-        this.primitive = body.expression.inputs()[1].contents().text || null;
+        this.setPrimitive(body.expression.inputs()[1].contents().text || null);
     } else {
         this.primitive = null;
     }
@@ -3412,9 +3421,9 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     if (this.definition.body?.expression?.selector === 'doPrimitive' &&
         this.definition.body.expression.inputs()[0].value
     ) {
-        this.definition.primitive =
-            this.definition.body.expression.inputs()[1].contents().text
-                || null;
+        this.definition.setPrimitive(
+            this.definition.body.expression.inputs()[1].contents().text || null
+        );
     } else {
         this.definition.primitive = null;
     }

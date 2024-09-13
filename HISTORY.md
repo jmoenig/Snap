@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.0.8:
+* **Notable Fixes:**
+    * disabled abusing the "primitive" block with metaprogramming to run arbitrary JS code. Sigh.
+
+### 2024-09-13
+* byob, objects, threads, store: disabled abusing the "primitive" block with metaprogramming to run arbitrary JS code. Sigh.
+* prepared v10.0.8 patch
+
 ## 10.0.7:
 * **Translation Updates:**
     * Polish, thanks, P1neF0rest935!

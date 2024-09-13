@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-September-03';
+modules.objects = '2024-September-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -2482,8 +2482,9 @@ SpriteMorph.prototype.toggleAllCustomizedPrimitives = function (stage, choice) {
         var prim = def.body?.expression;
         if (prim && prim.selector === 'doPrimitive' && prim.nextBlock()) {
             prim.inputs()[0].setContents(choice);
-            def.primitive = choice ? prim.inputs()[1].contents().text || null
-                : null;
+            def.setPrimitive(
+                choice ? prim.inputs()[1].contents().text || null : null
+            );
             stage.allBlockInstances(def).reverse().forEach(block =>
                 block.selector = def.primitive || 'evaluateCustomBlock'
             );

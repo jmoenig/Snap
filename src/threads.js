@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-12';
+modules.threads = '2024-September-13';
 
 var ThreadManager;
 var Process;
@@ -8518,8 +8518,9 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         val = [true, 1, '1'].includes(val);
         if (prim && prim.selector === 'doPrimitive' && prim.nextBlock()) {
             prim.inputs()[0].setContents(val);
-            def.primitive = val ? prim.inputs()[1].contents().text || null
-                : null;
+            def.setPrimitive(
+                val ? prim.inputs()[1].contents().text || null : null
+            );
         }
         break;
     case 'category':
