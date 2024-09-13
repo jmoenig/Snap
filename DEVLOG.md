@@ -32,6 +32,7 @@
 ### 2024-09-13
 * updated from master branch
 * updated dev version
+* updated OOP library: added "FIELD OF" reporter
 
 ### 2024-09-12
 * threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters
