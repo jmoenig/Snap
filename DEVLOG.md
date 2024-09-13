@@ -29,6 +29,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-09-13
+* updated from master branch
+
 ### 2024-09-12
 * threads: fixed #3394 - LISP-encoding conflict between a variadic expression and formal ring parameters
 * updated LISP syntax documentation for script parameters
