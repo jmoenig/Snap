@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-September-09';
+modules.blocks = '2024-September-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13972,7 +13972,8 @@ MultiArgMorph.prototype.setExpand = function (expand) {
     function massage(str) {
         var items = (str || '').toString().split('\n').map(line => {
                 let dta = line.trim();
-                return dta === '$nl' ? '%br' : dta;
+                return dta === '$nl' ? '%br'
+                    : (dta.startsWith('$_') ? localize(dta.slice(2)) : dta);
             }).filter(each => each.length);
         return items.length > 1 ? items : items[0] || null;
     }
@@ -14007,8 +14008,10 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
     // parse default values to determine their arity
     function massage(str) {
         var items = (str || '').toString().split('\n')
-            // .map(line => line.trim())
-            .filter(each => each.length);
+            .filter(each => each.length).map(each =>
+                isString(each) && each.length > 2 && each.startsWith('$_') ?
+                    localize(each.slice(2))
+                    : each);
         return items.length > 1 ? items : items[0] || null;
     }
 

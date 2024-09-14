@@ -20,6 +20,7 @@
     * Boolean input slot default values can be specified through metaprogramming
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
     * added an official "Restore primitives" item to the project menu, if a project / scene has customized prims
+    * default values and expansion labels of variadic input slots in custom blocks are now translatable by prefixing them with $-underscore
 * **Notable Fixes:**
     * exclude variables declared inside input rings from the dropdown menu of reachable variables
     * automatically declare variadic upvars inside custom blocks when evaluating them
@@ -29,6 +30,9 @@
     * updated LISP syntax documentation for script parameters
 * **Translation Updates:**
     * German
+
+### 2024-09-14
+* blocks, byob: made default values and expansion labels of variadic input slots in custom blocks translatable
 
 ### 2024-09-13
 * updated from master branch

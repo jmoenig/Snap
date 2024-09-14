@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-September-13';
+modules.byob = '2024-September-14';
 
 // Declarations
 
@@ -327,7 +327,7 @@ CustomBlockDefinition.prototype.defaultValueOf = function (inputName) {
     if (this.declarations.has(inputName)) {
         def = this.declarations.get(inputName)[1];
         if (isString(def)) {
-            if (def.length > 2 && def.startsWith('$_')) {
+            if (def.length > 2 && def.startsWith('$_') && !def.includes('\n')) {
                 // selector - can be translated later
                 return [def.slice(2)];
             }
