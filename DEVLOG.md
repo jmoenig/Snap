@@ -36,6 +36,7 @@
 * German translation update for "field" (in the OOP library)
 * updated OOP library with German translation
 * updated variable declaration library with German translation
+* updated dev version
 
 ### 2024-09-13
 * updated from master branch
