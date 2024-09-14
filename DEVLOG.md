@@ -34,6 +34,7 @@
 ### 2024-09-14
 * blocks, byob: made default values and expansion labels of variadic input slots in custom blocks translatable
 * German translation update for "field" (in the OOP library)
+* updated OOP library with German translation
 
 ### 2024-09-13
 * updated from master branch
