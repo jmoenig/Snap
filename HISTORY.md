@@ -1,15 +1,18 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.9:
 * **Notable Fixes:**
     * tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
     * optimized canvasBoundingBox for speed, thanks, @SArpnt, for the contribution!
     * fixed initializing formal ring parameters if called without passing actual arguments, thanks, @DarDoro, for the report!
 
 ### 2024-09-16
-    * blocks: tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
-    * objects: optimized canvasBoundingBox() for speed, thanks, @SArpnt!
-    * threads: fixed initializing formal ring parameters if called without passing actual arguments
+* blocks: tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
+* objects: optimized canvasBoundingBox() for speed, thanks, @SArpnt!
+* threads: fixed initializing formal ring parameters if called without passing actual arguments
+* prepared v10.0.9 patch
 
 ## 10.0.8:
 * **Notable Fixes:**
