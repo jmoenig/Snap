@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-13';
+modules.threads = '2024-September-16';
 
 var ThreadManager;
 var Process;
@@ -1500,46 +1500,41 @@ Process.prototype.evaluate = function (
     // parameter ID Symbol.for('arguments'), to be used for variadic inputs
     outer.variables.addVar(Symbol.for('arguments'), args);
 
-    // assign arguments that are actually passed
-    if (parms.length > 0) {
-
-        // assign formal parameters
-        for (i = 0; i < context.inputs.length; i += 1) {
-            value = 0;
-            if (!isNil(parms[i])) {
-                value = parms[i];
-            }
-            outer.variables.addVar(context.inputs[i], value);
+    // assign formal parameters
+    for (i = 0; i < context.inputs.length; i += 1) {
+        value = 0;
+        if (!isNil(parms[i])) {
+            value = parms[i];
         }
+        outer.variables.addVar(context.inputs[i], value);
+    }
 
-        // assign implicit parameters if there are no formal ones
-        if (context.inputs.length === 0) {
-            // in case there is only one input
-            // assign it to all empty slots...
-            if (parms.length === 1) {
-                // ... unless it's an empty reporter ring,
-                // in which special case it gets treated as the ID-function;
-                // experimental feature jens is not at all comfortable with
-                if (!context.emptySlots) {
-                    expr = context.expression;
-                    if (expr instanceof Array &&
-                            expr.length === 1 &&
-                            expr[0].selector &&
-                            expr[0].selector === 'reifyReporter' &&
-                            !expr[0].contents()) {
-                        runnable.expression = new Variable(parms[0]);
-                    }
-                } else {
-                    for (i = 1; i <= context.emptySlots; i += 1) {
-                        outer.variables.addVar(i, parms[0]);
-                    }
+    // assign implicit parameters if there are no formal ones
+    if (context.inputs.length === 0) {
+        // in case there is only one input
+        // assign it to all empty slots...
+        if (parms.length === 1) {
+            // ... unless it's an empty reporter ring,
+            // in which special case it gets treated as the ID-function;
+            if (!context.emptySlots) {
+                expr = context.expression;
+                if (expr instanceof Array &&
+                        expr.length === 1 &&
+                        expr[0].selector &&
+                        expr[0].selector === 'reifyReporter' &&
+                        !expr[0].contents()) {
+                    runnable.expression = new Variable(parms[0]);
                 }
-            // otherwise match the inputs sequentially to the empty slots,
-            // disregard unmatched or excess inputs or slots
             } else {
-                for (i = 1; i <= parms.length; i += 1) {
-                    outer.variables.addVar(i, parms[i - 1]);
+                for (i = 1; i <= context.emptySlots; i += 1) {
+                    outer.variables.addVar(i, parms[0]);
                 }
+            }
+        // otherwise match the inputs sequentially to the empty slots,
+        // disregard unmatched or excess inputs or slots
+        } else {
+            for (i = 1; i <= parms.length; i += 1) {
+                outer.variables.addVar(i, parms[i - 1]);
             }
         }
     }
