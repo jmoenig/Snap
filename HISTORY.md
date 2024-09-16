@@ -3,11 +3,13 @@
 ## in development:
 * **Notable Fixes:**
     * tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
-    * optimized canvasBoundingBox for speed, thanks, @SArpnt!
+    * optimized canvasBoundingBox for speed, thanks, @SArpnt, for the contribution!
+    * fixed initializing formal ring parameters if called without passing actual arguments, thanks, @DarDoro, for the report!
 
 ### 2024-09-16
     * blocks: tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
     * objects: optimized canvasBoundingBox() for speed, thanks, @SArpnt!
+    * threads: fixed initializing formal ring parameters if called without passing actual arguments
 
 ## 10.0.8:
 * **Notable Fixes:**
