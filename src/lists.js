@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-September-02';
+modules.lists = '2024-September-16';
 
 var List;
 var ListWatcherMorph;
@@ -368,12 +368,14 @@ List.prototype.bind = function (key, value) {
     if (key instanceof List) {
         return; // cannot use lists as key because of hyperization
     }
-    this.forget(key); // ensure unique entry
-    this.add(new List([key, value]));
+    this.add(new List([key, value]), this.forget(key) + 1);
 };
 
 List.prototype.forget = function (key) {
+    // remove all records indicated by the key
+    // and return the index of the first match, if any
     var idx = 0,
+        match = this.length(),
         query = rec =>
             snapEquals(rec, key) || (
                 rec instanceof List &&
@@ -382,14 +384,17 @@ List.prototype.forget = function (key) {
             );
 
     if (parseFloat(key) === +key) { // treat as numerical index
-        return this.remove(key);
+        this.remove(key);
+        return key;
     }
     while (idx > -1) {
         idx = this.itemsArray().findIndex(query);
         if (idx > -1) {
+            match = Math.min(match, idx);
             this.remove(idx + 1);
         }
     }
+    return match;
 };
 
 // List table (2D) accessing (for table morph widget):

@@ -16,6 +16,7 @@
         * new "theme" configuration key in the API
         * new "cube" and "cubeSolid" symbols
 * **Notable Changes:**
+    * preserve the order of items when using lists as dictionaries or data objects
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
     * Boolean input slot default values can be specified through metaprogramming
     * variadic Boolean input slot defaults can be specified both in the UI and through metaprogramming
@@ -30,6 +31,9 @@
     * updated LISP syntax documentation for script parameters
 * **Translation Updates:**
     * German
+
+### 2024-09-16
+* lists: preserve the order of items when using lists as dictionaries or data objects 
 
 ### 2024-09-14
 * blocks, byob: made default values and expansion labels of variadic input slots in custom blocks translatable
