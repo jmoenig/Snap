@@ -34,6 +34,8 @@
 
 ### 2024-09-16
 * lists: preserve the order of items when using lists as dictionaries or data objects 
+* updated from master branch
+* updated dev version
 
 ### 2024-09-14
 * blocks, byob: made default values and expansion labels of variadic input slots in custom blocks translatable
