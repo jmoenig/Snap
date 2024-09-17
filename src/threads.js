@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-16';
+modules.threads = '2024-September-17';
 
 var ThreadManager;
 var Process;
@@ -1676,6 +1676,8 @@ Process.prototype.reportEnvironment = function (choice, trgt = this.context) {
         return this.reportContinuation(trgt);
     case 'inputs':
         return this.reportInputs(trgt);
+    case 'object':
+        return this.reportData(trgt);
     default:
         return this.reportSelf(trgt);
     }
@@ -1745,6 +1747,20 @@ Process.prototype.reportInputs = function (trgt) {
     var sym = Symbol.for('arguments'),
         frame = trgt.variables.silentFind(sym);
     return frame ? frame.vars[sym].value : new List();
+};
+
+Process.prototype.reportData = function (trgt) {
+    var data = trgt.variables;
+    while (!isNil(data)) {
+        if (data instanceof List) {
+            return data;
+        }
+        if (isSnapObject(data.owner)) {
+            return data.owner;
+        }
+        data = data.parentFrame;
+    }
+    return data;
 };
 
 // Process stopping blocks primitives

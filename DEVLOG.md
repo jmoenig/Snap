@@ -4,8 +4,9 @@
 * **New Features:**
     1. OOP 2.0
         * new list-dictionary based object system with data scope and Lieberman style prototypical inheritance
-        * new OOP library
         * new "parent" selector for accessing list items, points to entry at ellipsis "..."
+        * new "object" item in the THIS (runtime environment) primitive reporter's dropdown menu
+        * new OOP library
     2. support for input-groups in custom blocks
         * new "group" option in custom block slot type editor's special settings menu for multiple inputs
         * metaprogramming support for input groups (represented by a list of slot types)
@@ -31,6 +32,9 @@
     * updated LISP syntax documentation for script parameters
 * **Translation Updates:**
     * German
+
+### 2024-09-17
+* blocks, threads: new "object" item in the THIS (runtime environment) primitive reporter's dropdown menu
 
 ### 2024-09-16
 * lists: preserve the order of items when using lists as dictionaries or data objects 
