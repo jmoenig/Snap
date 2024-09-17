@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-September-16';
+modules.objects = '2024-September-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -12838,7 +12838,6 @@ Costume.prototype.shrinkWrap = function () {
     this.version = Date.now();
 };
 
-/* // original unoptimized version - retained for now in case we need to revert
 Costume.prototype.canvasBoundingBox = function (pic) {
     // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
@@ -12897,72 +12896,6 @@ Costume.prototype.canvasBoundingBox = function (pic) {
     }
 
     return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
-};
-*/
-
-Costume.prototype.canvasBoundingBox = function (pic) {
-    // answer the rectangle surrounding my contents' non-transparent pixels
-    // thanks to @SArpnt for the optimization
-    var x,
-        y,
-        w = pic.width,
-        h = pic.height,
-        dta = pic.getContext('2d').getImageData(0, 0, w, h).data,
-        left, top, right, bottom;
-
-    // the stage is usually wider than tall, but costumes usually around square
-    // left/right is done first because it usually reduces the amount of pixels
-    // checked twice (not by a lot, it would be less than half the height of the
-    // stage)
-
-    getLeft: {
-        for (x = 0; x < w; x += 1) {
-            for (y = 0; y < h; y += 1) {
-                if (dta[(x + y * w) * 4 + 3]) { // get alpha
-                    left = x;
-                    break getLeft; // Ugh, I don't like this, -jens
-                }
-            }
-        }
-        // all the pixels are transparent since the loop went through
-        // all of them, this will create a 1x1 costume
-        return new Rectangle(0, 0, 1, 1);
-    }
-    // note that since at least ONE pixel isn't transparent, all of the other
-    // loops must finish. Because of this some conditions are left out
-    // (if there's a mistake in this code it'll be bad though)
-
-    right = (function getRight() {
-        for (x = h-1; ; x -= 1) {
-            for (y = 0; y < h; y +=1 ) {
-                if (dta[(x + y * w) * 4 + 3]) {
-                    return x + 1;
-                }
-            }
-        }
-    })();
-
-    top = (function getTop() {
-        for (y = 0; ; y += 1) {
-            for (x = left; x < right; x += 1) {
-                if (dta[(x + y * w) * 4 + 3]) {
-                    return y;
-                }
-            }
-        }
-    })();
-
-    bottom = (function getBottom() {
-        for (y = h-1; ; y -= 1) {
-            for (x = left; x < right; x += 1) {
-                if (dta[(x + y * w) * 4 + 3]) {
-                    return y + 1;
-                }
-            }
-        }
-    })();
-
-    return new Rectangle(left, top, right, bottom);
 };
 
 Costume.prototype.boundingBox = function () {

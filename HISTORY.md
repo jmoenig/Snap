@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.0.10:
+* **Notable Fixes:**
+    * fixed bounding box bug in paint editor by reverting @SArpnt's optimization PR
+
+### 2024-09-17
+* ojects: fixed bounding box bug in paint editor by reverting @SArpnt's optimization PR
+* prepared v10.0.10 patch
+
 ## 10.0.9:
 * **Notable Fixes:**
     * tweaked refactoring variables ("rename all") for auto-lambdafying C-Slots inside custom blocks
