@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-17';
+modules.threads = '2024-September-18';
 
 var ThreadManager;
 var Process;
@@ -2018,7 +2018,10 @@ Process.prototype.doChangeVar = function (varName, value) {
 
 Process.prototype.reportGetVar = function () {
     // assumes a getter block whose blockSpec is a variable name
-    return this.context.variables.getVar(this.context.expression.blockSpec);
+    return this.context.variables.getVar(
+        this.context.expression.blockSpec,
+        this // fallback for OOP 2.0 List environments
+    );
 };
 
 Process.prototype.doShowVar = function (varName, context) {
@@ -9883,12 +9886,18 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
     }
 };
 
-VariableFrame.prototype.getVar = function (name) {
+VariableFrame.prototype.getVar = function (name, proc) {
     var frame = this.silentFind(name),
         value;
+
     if (frame) {
         if (frame instanceof List) { // OOP 2.0
-            value = frame.lookup(name, () => this.variableError(name));
+            value = frame.lookup(
+                name,
+                proc ?
+                    () => proc.blockReceiver().globalVariables().getVar(name)
+                    : () => this.variableError(name)
+            );
             if (value instanceof Context) {
                 value = Process.prototype.reportContextFor(value, frame);
             }

@@ -37,6 +37,7 @@
 * blocks: fixed unevaluated slots for input groups
 * updated OOP library
 * updated dev version
+* threads: added read-only access to global variables to unbound data objects
 
 ### 2024-09-17
 * blocks, threads: new "object" item in the THIS (runtime environment) primitive reporter's dropdown menu
