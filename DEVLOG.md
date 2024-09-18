@@ -33,6 +33,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-09-18
+* blocks: fixed unevaluated slots for input groups
+
 ### 2024-09-17
 * blocks, threads: new "object" item in the THIS (runtime environment) primitive reporter's dropdown menu
 * updated German translation for "object" string

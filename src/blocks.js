@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-September-17';
+modules.blocks = '2024-September-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7532,6 +7532,11 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
         }
     }
     if (this.parent instanceof MultiArgMorph) {
+        if (this.parent.slotSpec instanceof Array) { // input group
+            idx = this.parent.inputs().indexOf(this);
+            parts = this.parent.slotSpec;
+            return parts[idx % parts.length];
+        }
         return this.parent.slotSpec;
     }
     if (this.parent instanceof TemplateSlotMorph) {
