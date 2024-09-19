@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.0.11:
+* **Notable Changes:**
+    * disabled pwa service worker in an attempt to address reporterd Chrome v129 memory issue
+
+### 2024-09-19
+* disabled pwa service worker in an attempt to address reporterd Chrome v129 memory issue
+* prepared v10.0.11 patch
+
 ## 10.0.10:
 * **Notable Fixes:**
     * fixed bounding box bug in paint editor by reverting @SArpnt's optimization PR
