@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * added extensions to access the "Thread safe scripts" setting
 
 ### 2024-10-08:
 * renamed service worker to ensure that it doesn't get launched by Chrome
+* extensions: added 'snap_threadsafe?' and 'snap_threadsafe(on?)' extensions
 
 ## 10.0.11:
 * **Notable Changes:**

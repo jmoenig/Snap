@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-July-17';
+modules.extensions = '2024-October-08';
 
 // Global stuff
 
@@ -332,6 +332,20 @@ SnapExtensions.primitives.set(
             ['max slots'],
             ['translations']
         ]);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe?',
+    function () {
+        return this.parentThatIsA(StageMorph).isThreadSafe;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe(on?)',
+    function (bool) {
+        this.parentThatIsA(StageMorph).isThreadSafe = (bool === true);
     }
 );
 
