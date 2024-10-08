@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array*/
+BigUint64Array, Animation*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -1377,6 +1377,7 @@ SnapExtensions.primitives.set(
     function (baud, buf, proc) {
         var acc = proc.context.accumulator,
             stage = this.parentThatIsA(StageMorph),
+            world = stage.world(),
             snapProcessBlockDef =
                 stage.globalBlocks.find(
                     def => def.spec == '__mb_process_data__'
@@ -1392,11 +1393,18 @@ SnapExtensions.primitives.set(
                         null,  // args
                         stage  // receiver
                     );
+                    world.animations.push(new Animation(
+                        nop, // setter
+                        nop, // getter
+                        0, // delta
+                        0, // duration msecs
+                        nop, // easing
+                        () => readCallback(port) // onComplete
+                    ));
                 } catch (err) {
                     throw(err);
                 }
             }
-            setTimeout(function() { readCallback(port); }, 25);
         }
 
         async function forceClose(port){
@@ -1431,11 +1439,11 @@ SnapExtensions.primitives.set(
                 }
             }) (baud || 115200);
         } else if (acc.result !== false) {
-            if (acc.result instanceof  Error) {
+            if (acc.result instanceof Error) {
                 throw acc.result;
             }
             if (snapProcessBlockDef) {
-                setTimeout(function(){ readCallback(acc.result); }, 25); 
+                readCallback(acc.result);
             }
             return acc.result;
         }
