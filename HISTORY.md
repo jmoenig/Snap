@@ -6,12 +6,15 @@
 * **Notable Changes:**
     * changed polling scheduler for streaming data from serial ports to be in lock step with Morphic
     * updated Microblocks library to improve event streaming fluency
+* **Notable Fixes:**
+    * removed "average" reporter from the audioComp library
 
 ### 2024-10-08:
 * renamed service worker to ensure that it doesn't get launched by Chrome
 * extensions: added 'snap_threadsafe?' and 'snap_threadsafe(on?)' extensions
 * extensions: changed polling scheduler for streaming data from serial ports to be in lock step with Morphic
 * updated Microblocks library to improve event streaming fluency
+* removed "average" reporter from the audioComp library
 
 ## 10.0.11:
 * **Notable Changes:**
