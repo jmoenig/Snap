@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-10-08:
+* renamed service worker to ensure that it doesn't get launched by Chrome
+
 ## 10.0.11:
 * **Notable Changes:**
     * disabled pwa service worker in an attempt to address reporterd Chrome v129 memory issue
