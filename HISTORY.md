@@ -4,6 +4,7 @@
 * **New Features:**
     * added extensions to access the "Thread safe scripts" setting
 * **Notable Changes:**
+    * reenabled pwa service worker because the Chrome v129 memory issue seems to have been fixed by Google
     * changed polling scheduler for streaming data from serial ports to be in lock step with Morphic
     * updated Microblocks library to improve event streaming fluency
 * **Notable Fixes:**
