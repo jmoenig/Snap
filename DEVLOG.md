@@ -34,6 +34,9 @@
     * German
 
 ### 2024-09-18
+* updated from master branch
+
+### 2024-09-18
 * blocks: fixed unevaluated slots for input groups
 * updated OOP library
 * updated dev version
