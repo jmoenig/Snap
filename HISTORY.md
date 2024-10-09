@@ -9,6 +9,9 @@
 * **Notable Fixes:**
     * removed "average" reporter from the audioComp library
 
+### 2024-10-09:
+* morphic, extensions: new World>>schedule() shortcut for one-time callbacks
+
 ### 2024-10-08:
 * renamed service worker to ensure that it doesn't get launched by Chrome
 * extensions: added 'snap_threadsafe?' and 'snap_threadsafe(on?)' extensions

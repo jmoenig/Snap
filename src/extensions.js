@@ -31,11 +31,11 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, Animation*/
+BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-October-08';
+modules.extensions = '2024-October-09';
 
 // Global stuff
 
@@ -1393,14 +1393,7 @@ SnapExtensions.primitives.set(
                         null,  // args
                         stage  // receiver
                     );
-                    world.animations.push(new Animation(
-                        nop, // setter
-                        nop, // getter
-                        0, // delta
-                        0, // duration msecs
-                        nop, // easing
-                        () => readCallback(port) // onComplete
-                    ));
+                    world.schedule(() => readCallback(port));
                 } catch (err) {
                     throw(err);
                 }
