@@ -1385,7 +1385,7 @@ SnapExtensions.primitives.set(
 
         function readCallback (port) {
             var block = snapProcessBlockDef.blockInstance();
-            if (block && port?.writable) {
+            if (block && port?.connected && port?.writable) {
                 block.parent = stage;
                 try {
                     invoke(
