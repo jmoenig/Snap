@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.0.12:
 * **New Features:**
     * added extensions to access the "Thread safe scripts" setting
 * **Notable Changes:**
@@ -12,6 +14,7 @@
 
 ### 2024-10-09:
 * morphic, extensions: new World>>schedule() shortcut for one-time callbacks
+* prepared v10.0.12 patch
 
 ### 2024-10-08:
 * renamed service worker to ensure that it doesn't get launched by Chrome
