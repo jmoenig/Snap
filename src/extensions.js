@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-July-17';
+modules.extensions = '2024-October-09';
 
 // Global stuff
 
@@ -332,6 +332,20 @@ SnapExtensions.primitives.set(
             ['max slots'],
             ['translations']
         ]);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe?',
+    function () {
+        return this.parentThatIsA(StageMorph).isThreadSafe;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe(on?)',
+    function (bool) {
+        this.parentThatIsA(StageMorph).isThreadSafe = (bool === true);
     }
 );
 
@@ -1363,6 +1377,7 @@ SnapExtensions.primitives.set(
     function (baud, buf, proc) {
         var acc = proc.context.accumulator,
             stage = this.parentThatIsA(StageMorph),
+            world = stage.world(),
             snapProcessBlockDef =
                 stage.globalBlocks.find(
                     def => def.spec == '__mb_process_data__'
@@ -1370,7 +1385,7 @@ SnapExtensions.primitives.set(
 
         function readCallback (port) {
             var block = snapProcessBlockDef.blockInstance();
-            if (block && port?.writable) {
+            if (block && port?.connected && port?.writable) {
                 block.parent = stage;
                 try {
                     invoke(
@@ -1378,11 +1393,11 @@ SnapExtensions.primitives.set(
                         null,  // args
                         stage  // receiver
                     );
+                    world.schedule(() => readCallback(port));
                 } catch (err) {
                     throw(err);
                 }
             }
-            setTimeout(function() { readCallback(port); }, 25);
         }
 
         async function forceClose(port){
@@ -1417,11 +1432,11 @@ SnapExtensions.primitives.set(
                 }
             }) (baud || 115200);
         } else if (acc.result !== false) {
-            if (acc.result instanceof  Error) {
+            if (acc.result instanceof Error) {
                 throw acc.result;
             }
             if (snapProcessBlockDef) {
-                setTimeout(function(){ readCallback(acc.result); }, 25); 
+                readCallback(acc.result);
             }
             return acc.result;
         }

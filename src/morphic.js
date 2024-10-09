@@ -1242,6 +1242,24 @@
 
     are implemented.
 
+    Animations can also be used to schedule a function execution just once
+    in lockstep with the Morphic scheduler, avoiding the setTimeout() pattern.
+    A syntactic shortcut for single-time scheduling exists in the WorldMorph's
+
+        schedule()
+
+    method.
+
+    For usage examples look at how TriggerMorph implements
+
+        bubbleHelp()
+
+    or at MenuItemMorph's
+
+        delaySubmenu()
+
+    method.
+
 
     (10) minifying morphic.js
     -------------------------
@@ -1320,7 +1338,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-September-09';
+var morphicVersion = '2024-October-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -10061,16 +10079,10 @@ TriggerMorph.prototype.rootForGrab = function () {
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
-    var world = this.world();
-    this.schedule = new Animation(
-        nop,
-        nop,
-        0,
-        500,
-        nop,
-        () => this.popUpbubbleHelp(contents)
+    this.schedule = this.world().schedule(
+        () => this.popUpbubbleHelp(contents),
+        500
     );
-    world.animations.push(this.schedule);
 };
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
@@ -10303,16 +10315,10 @@ MenuItemMorph.prototype.isShowingSubmenu = function () {
 // MenuItemMorph submenus:
 
 MenuItemMorph.prototype.delaySubmenu = function () {
-    var world = this.world();
-    this.schedule = new Animation(
-        nop,
-        nop,
-        0,
-        500,
-        nop,
-        () => this.popUpSubmenu()
+    this.schedule = this.world().schedule(
+        () => this.popUpSubmenu(),
+        500
     );
-    world.animations.push(this.schedule);
 };
 
 MenuItemMorph.prototype.popUpSubmenu = function () {
@@ -12248,6 +12254,25 @@ WorldMorph.prototype.initRetina = function () {
     this.worldCanvas.style.height = canvasHeight + 'px';
     this.worldCanvas.height = canvasHeight;
     this.setHeight(canvasHeight);
+};
+
+// WorldMorph scheduling:
+
+WorldMorph.prototype.schedule = function (callback, timeout) {
+    // run a function once after a given time in msecs in lockstep
+    // with the Morphic scheduler, answer an Animation object
+    // if timeout is omitted the callback is executed at the next
+    // display cycle
+    var schedule = new Animation(
+        nop, // setter
+        nop, // getter
+        0, // delta
+        timeout || 0, // duration msecs
+        nop, // easing
+        callback || nop // onComplete
+    );
+    this.animations.push(schedule);
+    return schedule;
 };
 
 // WorldMorph global pixel access:

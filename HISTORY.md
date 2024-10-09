@@ -2,6 +2,39 @@
 
 ## in development:
 
+## 10.0.13:
+* **Notable Changes:**
+    * disabled pwa service worker in yet an attempt to address reporterd Chrome v129 memory issue
+
+## 10.0.12:
+* **New Features:**
+    * added extensions to access the "Thread safe scripts" setting
+* **Notable Changes:**
+    * reenabled pwa service worker because the Chrome v129 memory issue seems to have been fixed by Google
+    * changed polling scheduler for streaming data from serial ports to be in lock step with Morphic
+    * updated Microblocks library to improve event streaming fluency
+* **Notable Fixes:**
+    * removed "average" reporter from the audioComp library
+
+### 2024-10-09:
+* morphic, extensions: new World>>schedule() shortcut for one-time callbacks
+* prepared v10.0.12 patch
+
+### 2024-10-08:
+* renamed service worker to ensure that it doesn't get launched by Chrome
+* extensions: added 'snap_threadsafe?' and 'snap_threadsafe(on?)' extensions
+* extensions: changed polling scheduler for streaming data from serial ports to be in lock step with Morphic
+* updated Microblocks library to improve event streaming fluency
+* removed "average" reporter from the audioComp library
+
+## 10.0.11:
+* **Notable Changes:**
+    * disabled pwa service worker in an attempt to address reporterd Chrome v129 memory issue
+
+### 2024-09-19
+* disabled pwa service worker in an attempt to address reporterd Chrome v129 memory issue
+* prepared v10.0.11 patch
+
 ## 10.0.10:
 * **Notable Fixes:**
     * fixed bounding box bug in paint editor by reverting @SArpnt's optimization PR
