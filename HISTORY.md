@@ -2,6 +2,10 @@
 
 ## in development:
 
+## 10.0.13:
+* **Notable Changes:**
+    * disabled pwa service worker in yet an attempt to address reporterd Chrome v129 memory issue
+
 ## 10.0.12:
 * **New Features:**
     * added extensions to access the "Thread safe scripts" setting

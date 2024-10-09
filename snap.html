@@ -55,9 +55,11 @@
                         );
                     };
 
+            /*
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.register('sw.js');
                 }
+            */
                 world = new WorldMorph(document.getElementById('world'));
                 new IDE_Morph().openIn(world);
                 requestAnimationFrame(loop);

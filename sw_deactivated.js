@@ -1,4 +1,8 @@
-var snapVersion = '10.0.12',
+/*
+    the PWA service worker is currently not used because of a memory leak
+    issue introduced in Chrome v129
+*/
+var snapVersion = '10.0.12', // disabled in v10.0.11-13
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
