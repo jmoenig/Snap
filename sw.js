@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-rc1',
+var snapVersion = '10.1-rc2',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -817,6 +817,7 @@ self.addEventListener('install', function(e) {
 });
 
 self.addEventListener('activate', (evt) => {
+    self.skipWaiting();
     evt.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
