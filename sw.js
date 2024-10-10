@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_2-dev',
+var snapVersion = '10.1-241010_3-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -31,7 +31,6 @@ var snapVersion = '10.1-241010_2-dev',
         'src/sha512.js',
         'src/FileSaver.min.js',
 
-/*
         // translations
         'locale/lang-ar.js',
         'locale/lang-bg.js',
@@ -79,6 +78,7 @@ var snapVersion = '10.1-241010_2-dev',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
 
+/*
         //libraries
         'libraries/LIBRARIES.json',
 
@@ -205,6 +205,7 @@ var snapVersion = '10.1-241010_2-dev',
         'libraries/variable_declaration_module.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
+*/
 
         //costumes
         'Costumes/COSTUMES.json',
@@ -800,7 +801,6 @@ var snapVersion = '10.1-241010_2-dev',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
         'Examples/vee.xml'
-*/
     ];
 
 console.log('service worker executed');

@@ -42,6 +42,7 @@
 * html: adjusted obsolete "apple" meta tags for mobile sites
 * reduced and re-activated pwa service worker
 * reduced number of pwa-cached files
+* added everything except libraries to pwa cache
 
 ### 2024-09-09
 * updated from master branch
