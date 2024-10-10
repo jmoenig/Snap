@@ -33,7 +33,10 @@
 * **Translation Updates:**
     * German
 
-### 2024-09-18
+### 2024-09-10
+* threads: changed evaluation of input groups to return a 2D (or empty) list
+
+### 2024-09-09
 * updated from master branch
 
 ### 2024-09-18

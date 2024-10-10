@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-September-18';
+modules.threads = '2024-October-10';
 
 var ThreadManager;
 var Process;
@@ -1054,6 +1054,13 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
                             );
                         }
                     }
+                }
+                if (inputs.length) {
+                    // format the inputs as 2D table
+                    ans = new List(inputs);
+                    inputs = this.reportNumbers(1, ans.length()).reshape(
+                        new List([0, multiSlot.slotSpec.length])
+                    ).map(indices => ans.query(indices)).itemsArray();
                 }
             }
             this.returnValueToParentContext(new List(inputs));
