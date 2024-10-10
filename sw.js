@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_5-dev',
+var snapVersion = '10.1-241010_6-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -151,7 +151,6 @@ var snapVersion = '10.1-241010_5-dev',
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
 */
-/*
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies
@@ -195,7 +194,6 @@ var snapVersion = '10.1-241010_5-dev',
             'libraries/TuneScope/0291_LesPaul_sf2_file.js',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
-*/
 
         'libraries/serial_module.xml',
         'libraries/signada.js',
