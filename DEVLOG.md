@@ -47,6 +47,7 @@
 * added Beetle and MQTT libraries to pwa cache
 * added Tunescope library to pwa cache
 * added SciSnap library to pwa cache
+* removed SciSnap library from pwa cache (again)
 
 ### 2024-09-09
 * updated from master branch
