@@ -48,6 +48,7 @@
 * added Tunescope library to pwa cache
 * added SciSnap library to pwa cache
 * removed SciSnap library from pwa cache (again)
+* added SciSnap library to pwa cache (again), except for the costume js file
 
 ### 2024-09-09
 * updated from master branch
