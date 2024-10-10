@@ -53,6 +53,7 @@
 * added SciSnap library to pwa cache (again), except for the costume js file
 * new "Continuations" library
 * updated "iteration / composition" library with new continuation blocks
+* updated dev version
 
 ### 2024-09-09
 * updated from master branch
