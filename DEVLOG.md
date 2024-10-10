@@ -16,6 +16,8 @@
         * bright / dark (color) theme
         * new "theme" configuration key in the API
         * new "cube" and "cubeSolid" symbols
+    4. Other
+        * new Continuations library for run/cc and call/cc
 * **Notable Changes:**
     * preserve the order of items when using lists as dictionaries or data objects
     * variadic slots in custom blocks now support '%nl' as separators and expansion labels
@@ -49,6 +51,7 @@
 * added SciSnap library to pwa cache
 * removed SciSnap library from pwa cache (again)
 * added SciSnap library to pwa cache (again), except for the costume js file
+* new "Continuations" library
 
 ### 2024-09-09
 * updated from master branch

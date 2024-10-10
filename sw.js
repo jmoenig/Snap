@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_9-dev',
+var snapVersion = '10.1-241010_10-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -119,6 +119,7 @@ var snapVersion = '10.1-241010_9-dev',
 
         'libraries/code2blocks_module.xml',
         'libraries/colors.xml',
+        'libraries/continuations_module.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
         'libraries/embroidery_module.xml',

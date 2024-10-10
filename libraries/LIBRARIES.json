@@ -2353,6 +2353,20 @@
     }
   },
   {
+    "fileName": "continuations_module.xml",
+    "name": "Continuations",
+    "description": "Capture runtime continuations to build fancy control structures",
+    "searchData": [
+      "run _ with continuation",
+      "call _ with continuation"
+    ],
+    "categories": [
+      "control"
+    ],
+    "translations": {
+    }
+  },
+  {
     "fileName": "~",
     "name": "~"
   },
