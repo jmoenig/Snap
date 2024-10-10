@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_1-dev',
+var snapVersion = '10.1-241010_2-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -31,6 +31,7 @@ var snapVersion = '10.1-241010_1-dev',
         'src/sha512.js',
         'src/FileSaver.min.js',
 
+/*
         // translations
         'locale/lang-ar.js',
         'locale/lang-bg.js',
@@ -86,7 +87,6 @@ var snapVersion = '10.1-241010_1-dev',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
-/*
         'libraries/beetle.xml',
 
             // Beetle coordinate images
@@ -107,7 +107,6 @@ var snapVersion = '10.1-241010_1-dev',
             'libraries/beetle/meshes/beetle-color.obj',
             'libraries/beetle/meshes/beetle-black.obj',
             'libraries/beetle/meshes/beetle-black.mtl',
-*/
 
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
@@ -150,7 +149,6 @@ var snapVersion = '10.1-241010_1-dev',
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
 
-/*
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies
@@ -194,7 +192,6 @@ var snapVersion = '10.1-241010_1-dev',
             'libraries/TuneScope/0291_LesPaul_sf2_file.js',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
-*/
 
         'libraries/serial_module.xml',
         'libraries/signada.js',
@@ -803,6 +800,7 @@ var snapVersion = '10.1-241010_1-dev',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
         'Examples/vee.xml'
+*/
     ];
 
 console.log('service worker executed');

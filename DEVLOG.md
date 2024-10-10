@@ -41,6 +41,7 @@
 * libraries: adjusted OOP module to the new input group evaluation
 * html: adjusted obsolete "apple" meta tags for mobile sites
 * reduced and re-activated pwa service worker
+* reduced number of pwa-cached files
 
 ### 2024-09-09
 * updated from master branch
