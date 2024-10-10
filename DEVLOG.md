@@ -54,6 +54,7 @@
 * new "Continuations" library
 * updated "iteration / composition" library with new continuation blocks
 * updated dev version
+* v10.1-rc1
 
 ### 2024-09-09
 * updated from master branch
