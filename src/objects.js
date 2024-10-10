@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-September-17';
+modules.objects = '2024-October-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -1180,10 +1180,10 @@ SpriteMorph.prototype.primitiveBlocks = function () {
                     (run (get "true case"))
                     (ifElse (empty (get "else pairs"))
                         nil
-                        (ifElse (item 1 (get "else pairs"))
-                            (run (item 2 (get "else pairs")))
+                        (ifElse (item 1 (item 1 (get "else pairs")))
+                            (run (item 2 (item 1 (get "else pairs"))))
                             (run (get self) (bool f) nil
-                                (cdr (cdr (get "else pairs"))))))))`
+                                (cdr (get "else pairs")))))))`
         },
         doIfElse: {
             type: 'command',
