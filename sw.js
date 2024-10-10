@@ -148,7 +148,7 @@ var snapVersion = '10.1-241010_9-dev',
 
         'libraries/SciSnap3Blocks.xml',
         'libraries/SciSnap3Extensions.js',
-        // 'libraries/SciSnap3Costumedata.js',
+        // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
 
         'libraries/TuneScope.xml',
 
