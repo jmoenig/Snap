@@ -1,8 +1,6 @@
-/*
-    the PWA service worker is currently not used because of a memory leak
-    issue introduced in Chrome v129
-*/
-var snapVersion = '10.0.12', // disabled in v10.0.11-13
+/*global self, caches*/
+/*jshint esversion: 6*/
+var snapVersion = '10.1-241010_1-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -88,6 +86,7 @@ var snapVersion = '10.0.12', // disabled in v10.0.11-13
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
+/*
         'libraries/beetle.xml',
 
             // Beetle coordinate images
@@ -108,6 +107,7 @@ var snapVersion = '10.0.12', // disabled in v10.0.11-13
             'libraries/beetle/meshes/beetle-color.obj',
             'libraries/beetle/meshes/beetle-black.obj',
             'libraries/beetle/meshes/beetle-black.mtl',
+*/
 
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
@@ -150,6 +150,7 @@ var snapVersion = '10.0.12', // disabled in v10.0.11-13
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
 
+/*
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies
@@ -193,6 +194,7 @@ var snapVersion = '10.0.12', // disabled in v10.0.11-13
             'libraries/TuneScope/0291_LesPaul_sf2_file.js',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
+*/
 
         'libraries/serial_module.xml',
         'libraries/signada.js',
@@ -803,7 +805,7 @@ var snapVersion = '10.0.12', // disabled in v10.0.11-13
         'Examples/vee.xml'
     ];
 
-console.log('service worker executed')
+console.log('service worker executed');
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(
