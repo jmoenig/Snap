@@ -39,6 +39,7 @@
 * byob: for input groups set "initial slots" to the length of the group
 * libraries: adjusted variable declaration module to the new input group evaluation
 * libraries: adjusted OOP module to the new input group evaluation
+* html: adjusted obsolete "apple" meta tags for mobile sites
 
 ### 2024-09-09
 * updated from master branch
