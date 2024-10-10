@@ -36,6 +36,7 @@
 ### 2024-09-10
 * threads: changed evaluation of input groups to return a 2D (or empty) list
 * objects: adjusted LISP formulation of primitive IF block to the new input group evaluation
+* byob: for input groups set "initial slots" to the length of the group 
 
 ### 2024-09-09
 * updated from master branch

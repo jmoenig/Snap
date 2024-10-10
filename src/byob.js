@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-September-14';
+modules.byob = '2024-October-10';
 
 // Declarations
 
@@ -5160,11 +5160,15 @@ InputSlotDialogMorph.prototype.editVariadicMaxSlots = function () {
 InputSlotDialogMorph.prototype.editVariadicGroup = function () {
     new DialogBoxMorph(
         this,
-        str => this.fragment.type = '%group' + str.split('\n').map(
+        str => {
+            let slots = str.split('\n');
+            this.fragment.type = '%group' + slots.map(
                 each => Process.prototype.slotSpec(
                     Process.prototype.slotType(each.trim())
                 )
-            ).join(''),
+            ).join('');
+            this.fragment.initialSlots = Math.min(slots.length, 12);
+        },
         this
     ).promptCode(
         "Input group",
