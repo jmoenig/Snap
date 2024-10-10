@@ -43,6 +43,7 @@
 * reduced and re-activated pwa service worker
 * reduced number of pwa-cached files
 * added everything except libraries to pwa cache
+* added everything except some libraries to pwa cache
 
 ### 2024-09-09
 * updated from master branch

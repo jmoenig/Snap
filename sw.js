@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_3-dev',
+var snapVersion = '10.1-241010_4-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -78,7 +78,6 @@ var snapVersion = '10.1-241010_3-dev',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
 
-/*
         //libraries
         'libraries/LIBRARIES.json',
 
@@ -87,6 +86,7 @@ var snapVersion = '10.1-241010_3-dev',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
+/*
         'libraries/beetle.xml',
 
             // Beetle coordinate images
@@ -107,6 +107,7 @@ var snapVersion = '10.1-241010_3-dev',
             'libraries/beetle/meshes/beetle-color.obj',
             'libraries/beetle/meshes/beetle-black.obj',
             'libraries/beetle/meshes/beetle-black.mtl',
+*/
 
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
@@ -127,7 +128,6 @@ var snapVersion = '10.1-241010_3-dev',
         'libraries/httpBlocks.xml',
         'libraries/HummingbirdBlocks.xml',
         'libraries/iteration-composition.xml',
-        'libraries/leap-library.xml',
         'libraries/list_comprehension_module.xml',
         'libraries/list-utilities.xml',
         'libraries/localstorage_module.xml',
@@ -137,18 +137,25 @@ var snapVersion = '10.1-241010_3-dev',
         'libraries/maps_module.xml',
         'libraries/menu_module.xml',
         'libraries/microblocks.xml',
+
+/*
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
+*/
+
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
+
+/*
         'libraries/SciSnap3Blocks.xml',
         'libraries/SciSnap3Extensions.js',
         'libraries/SciSnap3Costumedata.js',
-
+*/
+/*
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies
@@ -192,6 +199,7 @@ var snapVersion = '10.1-241010_3-dev',
             'libraries/TuneScope/0291_LesPaul_sf2_file.js',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
+*/
 
         'libraries/serial_module.xml',
         'libraries/signada.js',
@@ -205,7 +213,6 @@ var snapVersion = '10.1-241010_3-dev',
         'libraries/variable_declaration_module.xml',
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
-*/
 
         //costumes
         'Costumes/COSTUMES.json',
