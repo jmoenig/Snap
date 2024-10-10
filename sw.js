@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.1-241010_4-dev',
+var snapVersion = '10.1-241010_5-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -86,7 +86,6 @@ var snapVersion = '10.1-241010_4-dev',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
-/*
         'libraries/beetle.xml',
 
             // Beetle coordinate images
@@ -107,7 +106,6 @@ var snapVersion = '10.1-241010_4-dev',
             'libraries/beetle/meshes/beetle-color.obj',
             'libraries/beetle/meshes/beetle-black.obj',
             'libraries/beetle/meshes/beetle-black.mtl',
-*/
 
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
@@ -138,11 +136,9 @@ var snapVersion = '10.1-241010_4-dev',
         'libraries/menu_module.xml',
         'libraries/microblocks.xml',
 
-/*
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
-*/
 
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
