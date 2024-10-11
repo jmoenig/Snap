@@ -1818,7 +1818,7 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 SyntaxElementMorph.prototype.labelPart = function (spec) {
     var info = this.labelParts[spec],
         part, tokens, cnts, i;
-    if (((info && Object.hasOwn('type')) ||
+    if (((info && Object.hasOwn(info, 'type')) ||
         (spec[0] === '%' && spec.length > 1)) &&
         (this.selector !== 'reportGetVar' ||
             (['$turtleOutline', '$pipette'].includes(spec) &&
@@ -1844,7 +1844,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // single-arg and specialized multi-arg slots:
 
         // look up the spec
-        if (!info) {
+        if (!info || !Object.hasOwn(info, 'type')) {
             throw new Error('label part spec not found: "' + spec + '"');
         }
 
