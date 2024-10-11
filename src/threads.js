@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-10';
+modules.threads = '2024-October-11';
 
 var ThreadManager;
 var Process;
@@ -2339,9 +2339,6 @@ Process.prototype.reportListItem = function (index, list) {
     }
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
-    }
-    if (index instanceof Context) { // bind to list as environment
-        return this.reportContextFor(index, list);
     }
     value = list.lookup(index);
     if (value instanceof Context) {

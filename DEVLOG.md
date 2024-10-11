@@ -38,6 +38,7 @@
 
 ### 2024-09-11
 * blocks: fixed #3401 - naming a block "constructor" fails
+* threads: removed explicit macros for data objects
 
 ### 2024-09-10
 * threads: changed evaluation of input groups to return a 2D (or empty) list
