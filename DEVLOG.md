@@ -29,11 +29,15 @@
     * exclude variables declared inside input rings from the dropdown menu of reachable variables
     * automatically declare variadic upvars inside custom blocks when evaluating them
     * fixed a LISP-encoding conflict between a variadic expression and formal ring parameters
+    * fixed naming a block to a JS property such as "constructor"
 * **Documentation Updates:**
     * updated API.md with new "theme" configuration key for "bright" or "dark" UI modes
     * updated LISP syntax documentation for script parameters
 * **Translation Updates:**
     * German
+
+### 2024-09-11
+* blocks: fixed #3401 - naming a block "constructor" fails
 
 ### 2024-09-10
 * threads: changed evaluation of input groups to return a 2D (or empty) list

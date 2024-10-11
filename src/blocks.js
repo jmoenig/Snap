@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-September-18';
+modules.blocks = '2024-October-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1816,15 +1816,16 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 // SyntaxElementMorph label parts:
 
 SyntaxElementMorph.prototype.labelPart = function (spec) {
-    var part, info, tokens, cnts, i;
-    if ((this.labelParts[spec] || (spec[0] === '%' && spec.length > 1)) &&
-            (this.selector !== 'reportGetVar' ||
-                (['$turtleOutline', '$pipette'].includes(spec) &&
-                    this.isObjInputFragment()
-                )
+    var info = this.labelParts[spec],
+        part, tokens, cnts, i;
+    if (((info && Object.hasOwn('type')) ||
+        (spec[0] === '%' && spec.length > 1)) &&
+        (this.selector !== 'reportGetVar' ||
+            (['$turtleOutline', '$pipette'].includes(spec) &&
+                this.isObjInputFragment()
             )
+        )
     ) {
-
         // check for variable multi-arg-slot:
         if ((spec.length > 5) && (spec.slice(0, 5) === '%mult')) {
             part = new MultiArgMorph(spec.slice(5));
@@ -1843,7 +1844,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // single-arg and specialized multi-arg slots:
 
         // look up the spec
-        info = this.labelParts[spec];
         if (!info) {
             throw new Error('label part spec not found: "' + spec + '"');
         }
