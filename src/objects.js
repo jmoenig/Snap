@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-10';
+modules.objects = '2024-October-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -4999,9 +4999,11 @@ SpriteMorph.prototype.renameVariable = function (
         container, newWatcher, targets;
 
     function renameVariableInCustomBlock(definition) {
-        definition.scripts.forEach(eachScript =>
-            eachScript.refactorVariable(oldName, newName)
-        );
+        definition.scripts.forEach(eachScript => {
+            if (eachScript instanceof BlockMorph) { // skip comments
+                eachScript.refactorVariable(oldName, newName);
+            }
+        });
         if (definition.body) {
             definition.body.expression.refactorVariable(
                 oldName,
