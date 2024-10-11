@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.1.1:
+* **Notable Fixes:**
+    * only bind rings fetched from a list to the list as environment if they are accessed by a non-numerical index (OOP 2.0)
+
+### 2024-09-12
+* threads: only bind rings retrieved from a list to the list as environment if they are retrieved by a non-numerical index (OOP 2.0)
+* prepared v10.1.1 patch
+
 ## 10.1.0:
 * **New Features:**
     1. OOP 2.0
