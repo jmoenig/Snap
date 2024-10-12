@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-11';
+modules.objects = '2024-October-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -3376,6 +3376,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         if (setDefaults) {
             block.refreshDefaults(info.definition);
         }
+        return block;
     } else {
         block = info.type === 'command' ? new CommandBlockMorph()
             : info.type === 'hat' ? new HatBlockMorph()

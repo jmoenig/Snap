@@ -3,9 +3,11 @@
 ## in development:
 * **Notable Fixes:**
     * only bind rings that replace list items to the list as environment if they are referred to by a non-numerical index (OOP 2.0)
+    * fixed #3403 editing a primitive and changing a default input
 
 ### 2024-09-12
 * threads: only bind rings replaced in a list to the list as environment if they are referred to by a non-numerical index (OOP 2.0)
+* objects: fixed #3403 editing a primitive and changing a default input
 
 ## 10.1.1:
 * **Notable Fixes:**
