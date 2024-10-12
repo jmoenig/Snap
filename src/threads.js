@@ -2293,7 +2293,8 @@ Process.prototype.doReplaceInList = function (index, list, element) {
             idx = 0;
         }
     }
-    if (element instanceof Context) { // OOP 2.0: treat ring as method
+    if (element instanceof Context && (parseFloat(idx) !== +idx)) {
+        // OOP 2.0: treat ring as method
         element = this.reportContextFor(element, list);
     }
     list.bind(idx, element);
