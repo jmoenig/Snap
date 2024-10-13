@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 10.1.3:
+* **Notable Fixes:**
+    * fixed a dictionary lookup glitch for custom block categories
+
 ### 2024-09-13
 * objects, gui: fixed a dictionary lookup glitch for custom block categories 
+* prepared v10.1.3 patch
 
 ## 10.1.2:
 * **Notable Fixes:**
