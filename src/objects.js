@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-12';
+modules.objects = '2024-October-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -4145,7 +4145,9 @@ SpriteMorph.prototype.makeBlock = function () {
 };
 
 SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
-    var blocks = this.primitivesCache[category];
+    var blocks = Object.hasOwn(this.primitivesCache, category) ?
+            this.primitivesCache[category]
+            : null;
     if (!blocks) {
         blocks = this.blockTemplates(category);
         if (this.isCachingPrimitives) {

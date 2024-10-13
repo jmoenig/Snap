@@ -4,6 +4,10 @@
 * **Notable Fixes:**
     * only bind rings that replace list items to the list as environment if they are referred to by a non-numerical index (OOP 2.0)
     * fixed #3403 editing a primitive and changing a default input
+    * fixed naming a custom block category to a JS property such as "constructor"
+
+### 2024-09-13
+* objects: fixed naming a custom block category to a JS property such as "constructor"
 
 ### 2024-09-12
 * threads: only bind rings replaced in a list to the list as environment if they are referred to by a non-numerical index (OOP 2.0)
