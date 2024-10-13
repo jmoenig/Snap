@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-09-13
+* objects, gui: fixed a dictionary lookup glitch for custom block categories 
+
 ## 10.1.2:
 * **Notable Fixes:**
     * only bind rings that replace list items to the list as environment if they are referred to by a non-numerical index (OOP 2.0)

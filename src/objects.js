@@ -184,9 +184,8 @@ SpriteMorph.prototype.allCategories = function () {
 };
 
 SpriteMorph.prototype.blockColorFor = function (category) {
-    return this.blockColor[category] ||
-        this.customCategories.get(category) ||
-        this.blockColor.other;
+    return Object.hasOwn(this.blockColor, category) ? this.blockColor[category]
+        : this.customCategories.get(category) || this.blockColor.other;
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
@@ -4158,7 +4157,7 @@ SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
 };
 
 SpriteMorph.prototype.palette = function (category) {
-    if (!this.paletteCache[category]) {
+    if (!Object.hasOwn(this.paletteCache, category)) {
         this.paletteCache[category] = this.freshPalette(category);
     }
     return this.paletteCache[category];

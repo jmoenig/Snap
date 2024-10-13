@@ -1656,7 +1656,7 @@ IDE_Morph.prototype.createCategories = function () {
         var dict = myself.currentSprite.emptyCategories();
         dict.variables = dict.variables || dict.lists || dict.other;
         this.buttons.forEach(cat => {
-            if (dict[cat.category]) {
+            if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
                 cat.enable();
             } else {
                 cat.disable();
