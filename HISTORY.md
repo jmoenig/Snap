@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.1.4:
+* **Notable Fixes:**
+    * fixed a dictionary lookup glitch for primitive block palettes
+
+### 2024-09-13
+* objects: fixed another dictionary lookup glitch for primitive palettes 
+* prepared v10.1.4 patch
+
 ## 10.1.3:
 * **Notable Fixes:**
     * fixed a dictionary lookup glitch for custom block categories

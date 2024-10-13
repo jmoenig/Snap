@@ -4157,7 +4157,9 @@ SpriteMorph.prototype.getPrimitiveTemplates = function (category) {
 };
 
 SpriteMorph.prototype.palette = function (category) {
-    if (!Object.hasOwn(this.paletteCache, category)) {
+    if (!Object.hasOwn(this.paletteCache, category) ||
+        !this.paletteCache[category]
+    ) {
         this.paletteCache[category] = this.freshPalette(category);
     }
     return this.paletteCache[category];
