@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-12';
+modules.threads = '2024-October-13';
 
 var ThreadManager;
 var Process;
