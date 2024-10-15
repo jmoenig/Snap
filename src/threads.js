@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-13';
+modules.threads = '2024-October-15';
 
 var ThreadManager;
 var Process;
@@ -1055,8 +1055,11 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
                         }
                     }
                 }
-                if (inputs.length) {
-                    // format the inputs as 2D table
+                if (inputs.length &&
+                    !['%receive', '%send'].includes(multiSlot.elementSpec)
+                ) {
+                    // format the inputs as 2D table, unless it's a "built-in"
+                    // group, e.g. for broadcast, scene changes etc.
                     ans = new List(inputs);
                     inputs = this.reportNumbers(1, ans.length()).reshape(
                         new List([0, multiSlot.slotSpec.length])

@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.1.5:
+* **Notable Fixes:**
+    * fixed broadcasting and sending messages with data
+
+### 2024-09-15
+* threads: fixed broadcasting with data
+* prepared v10.1.5 patch
+
 ## 10.1.4:
 * **Notable Fixes:**
     * fixed a dictionary lookup glitch for primitive block palettes
