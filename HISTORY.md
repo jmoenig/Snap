@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 10.1.6:
+* **Notable Fixes:**
+    * fixed #3409 - do not remove custom blocks referenced in customized primitives as "unused"
+
 ### 2024-09-18
 * objects: fixed #3409 - do not remove custom blocks referenced in customized primitives as "unused" 
+* prepared v10.1.6 patch
 
 ## 10.1.5:
 * **Notable Fixes:**
