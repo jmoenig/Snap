@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-13';
+modules.objects = '2024-October-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -8386,7 +8386,9 @@ SpriteMorph.prototype.usesBlockInstance = function (
 
     if (definition.isGlobal && !skipGlobals) {
         inDefinitions = [];
-        this.parentThatIsA(StageMorph).globalBlocks.forEach(def => {
+        this.parentThatIsA(StageMorph).globalBlocks.concat(
+            this.customizedPrimitives()
+        ).forEach(def => {
             if (forRemoval && (definition === def)) {return; }
             if (skipBlocks && contains(skipBlocks, def)) {return; }
             if (def.body) {

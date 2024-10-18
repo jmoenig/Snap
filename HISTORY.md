@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-09-18
+* objects: fixed #3409 - do not remove custom blocks referenced in customized primitives as "unused" 
+
 ## 10.1.5:
 * **Notable Fixes:**
     * fixed broadcasting and sending messages with data
