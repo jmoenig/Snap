@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 10.1.7:
+* **Notable Fixes:**
+    * fixed a BlockSymbolMorph getRenderColor() null case glitch
+
 ### 2024-09-19
 * objects: fixed a BlockSymbolMorph getRenderColor() null case glitch
+* prepared v10.1.7 patch
 
 ## 10.1.6:
 * **Notable Fixes:**
