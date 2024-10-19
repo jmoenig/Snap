@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-October-11';
+modules.blocks = '2024-October-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2836,7 +2836,7 @@ function BlockSymbolMorph(name, size, color, shadowOffset, shadowColor) {
 }
 
 BlockSymbolMorph.prototype.getRenderColor = function () {
-    var block = this.parentThatIsA(BlockMorph);
+    var block = this.parentThatIsA(BlockMorph) || this;
     if (IDE_Morph.prototype.isBright) {
         if (this.isFading) {
             return this.color.mixed(block.alpha, WHITE);

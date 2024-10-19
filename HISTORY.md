@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-09-19
+* objects: fixed a BlockSymbolMorph getRenderColor() null case glitch
+
 ## 10.1.6:
 * **Notable Fixes:**
     * fixed #3409 - do not remove custom blocks referenced in customized primitives as "unused"
