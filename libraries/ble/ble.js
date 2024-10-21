@@ -47,25 +47,27 @@ BLEController.prototype.connect = async function (serviceUUID, rxUUIX, txUUID) {
 };
 
 BLEController.prototype.onReceive = function (event) {
-    var data = new Uint8Array(event.target.value.buffer);
+    world.schedule(
+        () => this.processData(new Uint8Array(event.target.value.buffer))
+    );
+};
+
+BLEController.prototype.processData = function (data) {
     this.buffer.push(...data);
-    // To Do: call snapBLEprocessBlockDef if it is not already running
-    // instead of using time to limit receive rate
-    if ((Date.now() > this.lastReceiveTime + 20) &&
-        this.snapBLEprocessBlockDef
-    ) {
+    if (this.snapBLEprocessBlockDef) {
         var block = this.snapBLEprocessBlockDef.blockInstance();
-        block.parent = this.stage;
-        try {
-            invoke(
-                block,
-                null,       // args
-                this.stage  // receiver
-            );
-        } catch (err) {
-            // do nothing
+        if (block) {
+            block.parent = this.stage;
+            try {
+                invoke(
+                    block,
+                    null,       // args
+                    this.stage  // receiver
+                );
+            } catch (err) {
+                throw(err);
+            }
         }
-        this.lastReceiveTime = Date.now();
     }
 };
 
