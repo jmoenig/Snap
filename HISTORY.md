@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-10-22
+    * updated the text costumes library with a special case for a space character
+
 ## 10.1.7:
 * **Notable Fixes:**
     * fixed a BlockSymbolMorph getRenderColor() null case glitch
