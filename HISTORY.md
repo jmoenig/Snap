@@ -2,8 +2,15 @@
 
 ## in development:
 
+## 10.1.8:
+* **Notable Fixes:**
+    * updated the text costumes library with a special case for a space character
+    * updated BLE library for Morphic scheduling, thanks, Bernat!
+
 ### 2024-10-22
     * updated the text costumes library with a special case for a space character
+    * updated BLE library for Morphic scheduling, thanks, Bernat!
+    * prepared v10.1.8 patch
 
 ## 10.1.7:
 * **Notable Fixes:**
