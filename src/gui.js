@@ -87,11 +87,11 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-October-22';
+modules.gui = '2024-October-28';
 
 // Declarations
 
-var SnapVersion = '10.1.8';
+var SnapVersion = '10.1.9';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -136,6 +136,9 @@ IDE_Morph.prototype.setFlatDesign = function () {
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.isBright = false;
 
+    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+    PushButtonMorph.prototype.outlineGradient = false;
+
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
@@ -178,6 +181,9 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
 
 IDE_Morph.prototype.setBrightTheme = function () {
     IDE_Morph.prototype.isBright = true;
+
+    PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
+    PushButtonMorph.prototype.outlineGradient = true;
 
     SpriteMorph.prototype.paletteColor = WHITE;
     SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);

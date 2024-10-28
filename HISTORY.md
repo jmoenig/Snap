@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.1.9:
+* **Notable Changes:**
+    * adjusted push-button outlines for bright gui theme
+
+### 2024-10-22
+* gui: tweaked push button outlines for bright theme
+* prepared v10.1.9 patch
+
 ## 10.1.8:
 * **Notable Fixes:**
     * updated the text costumes library with a special case for a space character
