@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-October-10';
+modules.byob = '2024-October-29';
 
 // Declarations
 
@@ -402,6 +402,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
                 fname = options.slice(2);
                 if (contains(
                     [
+                        'dynamicMenu',
                         'messagesMenu',
                         'messagesReceivedMenu', // for backward (5.0.0 - 5.0.3) support
                         'objectsMenu',
@@ -3839,6 +3840,7 @@ BlockLabelFragment.prototype.hasOptions = function () {
 BlockLabelFragment.prototype.hasSpecialMenu = function () {
     return contains(
         [
+            '§_dynamicMenu',
             '§_messagesMenu',
             '§_messagesReceivedMenu',    //for backward (5.0.0 - 5.0.3) support
             '§_objectsMenu',
@@ -4978,6 +4980,8 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     }
 
     addSpecialOptions('(none)', '');
+    addSpecialOptions('dynamic', '§_dynamicMenu');
+    menu.addLine();
     addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
     addSpecialOptions('data types', '§_typesMenu');
