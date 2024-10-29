@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-18';
+modules.objects = '2024-October-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -1349,6 +1349,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'this %env',
             defaults: [['script']],
             code: 'this'
+        },
+
+        // dynamic user defined drop-down menus
+        receiveMenuRequest: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when %menu menu is clicked'
         },
 
         // Debugging - pausing
@@ -2727,6 +2734,18 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'reportEnvironment'
         );
     }
+    if (version < 10) {
+        selectors.push(
+            'reportNewCostumeSkewed'
+        );
+    }
+    // 10.1: no new primitives
+    if (version < 10.2) {
+        selectors.push(
+            'receiveMenuRequest'
+        );
+    }
+
     return selectors;
 };
 
@@ -3697,6 +3716,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportEnvironment'));
+        blocks.push('-');
+        blocks.push(block('receiveMenuRequest'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -10862,6 +10883,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetBlockAttribute'));
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportEnvironment'));
+        blocks.push('-');
+        blocks.push(block('receiveMenuRequest'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

@@ -151,17 +151,17 @@ String, StringMorph, TextMorph, contains, degrees, detect, PianoMenuMorph, nop,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, parseFloat, isNil,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, SymbolMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph, Rectangle,
-DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, BLACK,
+DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, display,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, display*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, VariableFrame, BLACK*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-October-19';
+modules.blocks = '2024-October-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -659,6 +659,11 @@ SyntaxElementMorph.prototype.labelParts = {
     '%msgSend': {
         type: 'input',
         menu: 'eventsMenu'
+    },
+    '%menu': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'menuSelectorsMenu'
     },
     '%att': {
         type: 'input',
@@ -6443,7 +6448,10 @@ CommandBlockMorph.prototype.allAttachTargets = function (newParent) {
         answer = [],
         topBlocks;
 
-    if (this instanceof HatBlockMorph && newParent.rejectsHats) {
+    if (this instanceof HatBlockMorph &&
+        newParent.rejectsHats &&
+        this.selector !== 'receiveMenuRequest'
+    ) {
         return answer;
     }
     topBlocks = target.children.filter(child =>
@@ -9318,7 +9326,7 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        return !this.rejectsHats;
+        return !this.rejectsHats || aMorph.selector === 'receiveMenuRequest';
     }
     return aMorph instanceof SyntaxElementMorph ||
         aMorph instanceof CommentMorph;
@@ -11006,7 +11014,11 @@ InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
-    var menu = this.menuFromDict(this.choices, null, enableKeyboard);
+    var menu;
+    if (this.choices === 'dynamicMenu') {
+        return this.dynamicMenu(null, enableKeyboard);
+    }
+    menu = this.menuFromDict(this.choices, null, enableKeyboard);
     if (!menu) { // has already happened
         return;
     }
@@ -11169,6 +11181,80 @@ InputSlotMorph.prototype.menuFromDict = function (
 // Note each function returning a drop-down menu
 // must accept a Boolean parameter enabling its
 // access for searching
+
+InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
+    if (searching) {return {}; }
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(this)],
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveMenuRequest' &&
+                each.inputs()[0].evaluate() === inputName),
+        stage = rcvr.parentThatIsA(StageMorph),
+        i, vars, show;
+
+    show = (result = new List()) => {
+        var dict = {},
+            menu;
+        result.map(item => dict[item] = item);
+        menu = this.menuFromDict(dict, null, enableKeyboard);
+        if (!menu) { // has already happened
+            return;
+        }
+        if (menu.items.length > 0) {
+            menu.popup(this.world(), this.bottomLeft());
+            if (enableKeyboard) {
+                menu.getFocus();
+            }
+        }
+    };
+
+    if (!script) {return show(); }
+
+    // evaluate the block's literal inputs
+    vars = new VariableFrame();
+    i = 0;
+    block.inputs().forEach(slot => {
+        if (slot instanceof InputSlotMorph ||
+        slot instanceof BooleanSlotMorph) {
+            vars.addVar(names[i], slot.evaluate());
+        }
+        i += 1;
+    });
+
+    // evaluate the script that makes the menu
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        show, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars
+    );
+};
+
+InputSlotMorph.prototype.menuSelectorsMenu = function () {
+    var blockEditor = this.parentThatIsA(BlockEditorMorph),
+        dict = {},
+        def;
+    if (blockEditor) {
+        def = blockEditor.definition;
+        def.inputNames().forEach(name => {
+            if (def.declarations.has(name) &&
+                def.declarations.get(name)[2] === '§_dynamicMenu'
+            ) {
+                dict[name] = name;
+            }
+        });
+    }
+    return dict;
+};
 
 InputSlotMorph.prototype.keysMenu = function () {
     return {

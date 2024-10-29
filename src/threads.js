@@ -425,7 +425,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     }
                 }
             } else if (proc.onComplete instanceof Function) {
-                proc.onComplete();
+                proc.onComplete(proc.homeContext.inputs[0]);
             }
         } else {
             remaining.push(proc);
