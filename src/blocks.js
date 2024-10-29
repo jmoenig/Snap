@@ -11194,13 +11194,36 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
             each.selector === 'receiveMenuRequest' &&
                 each.inputs()[0].evaluate() === inputName),
         stage = rcvr.parentThatIsA(StageMorph),
-        i, vars, show;
+        i, vars, show, format, isTxtOrNum;
+
+    isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta;
+
+    format = list => {
+        var dict = {};
+        if (!(list instanceof List)) {
+            return dict;
+        }
+        list.map(item => {
+            var key, val;
+            if (item instanceof List && item.length() === 2) {
+                key = item.at(1);
+                val = item.at(2);
+                if (isTxtOrNum(key)) {
+                    if (val instanceof List) {
+                        dict[key] = format(val);
+                    } else if (isTxtOrNum(val)) {
+                        dict[key] = val;
+                    }
+                }
+            } else if (isTxtOrNum(item)) {
+                dict[item] = item;
+            }
+        });
+        return dict;
+    };
 
     show = (result = new List()) => {
-        var dict = {},
-            menu;
-        result.map(item => dict[item] = item);
-        menu = this.menuFromDict(dict, null, enableKeyboard);
+        var menu = this.menuFromDict(format(result), null, enableKeyboard);
         if (!menu) { // has already happened
             return;
         }

@@ -11,3 +11,4 @@
 * threads: fixed a context-binding glitch in invoke()
 * byob: dynamic drop down menu option for custom block input slots
 * threads, blocks, objects: new "When ... menu is clicked" hat block for use inside custom block editors
+* blocks: support for nested dynamic drop down menus
