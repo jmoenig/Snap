@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-15';
+modules.threads = '2024-October-29';
 
 var ThreadManager;
 var Process;
@@ -149,7 +149,7 @@ function invoke(
 
     if (action instanceof Context) {
         if (receiver) { // optional
-            action = proc.reportContextFor(receiver);
+            action = proc.reportContextFor(action, receiver);
         }
         proc.initializeFor(action, contextArgs || new List());
     } else if (action instanceof BlockMorph) {

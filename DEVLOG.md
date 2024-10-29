@@ -4,3 +4,4 @@
 
 ### 2024-10-29
 * new dev version
+* threads: fixed a context-binding glitch in invoke()
