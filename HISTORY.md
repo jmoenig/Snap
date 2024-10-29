@@ -6,7 +6,7 @@
 * **Notable Changes:**
     * adjusted push-button outlines for bright gui theme
 
-### 2024-10-22
+### 2024-10-28
 * gui: tweaked push button outlines for bright theme
 * prepared v10.1.9 patch
 
