@@ -12,6 +12,7 @@
 * byob: changed wording in the ui for dynamic menus to "scripted"
 * objects: changed wording for "when ... input menu" hat block
 * threads: metaprogramming support for dynamic drop down menus
+* updated dev version
 
 ### 2024-10-29
 * new dev version
