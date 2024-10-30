@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-October-29';
+modules.byob = '2024-October-30';
 
 // Declarations
 
@@ -4980,7 +4980,7 @@ InputSlotDialogMorph.prototype.specialOptionsMenu = function () {
     }
 
     addSpecialOptions('(none)', '');
-    addSpecialOptions('dynamic', '§_dynamicMenu');
+    addSpecialOptions('scripted', '§_dynamicMenu');
     menu.addLine();
     addSpecialOptions('messages', '§_messagesMenu');
     addSpecialOptions('objects', '§_objectsMenu');
