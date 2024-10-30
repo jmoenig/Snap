@@ -13,6 +13,7 @@
 * objects: changed wording for "when ... input menu" hat block
 * threads: metaprogramming support for dynamic drop down menus
 * updated dev version
+* blocks: tweaked menuSelectorsMenu() to scan the block editor's current prototype declarations instead of the (changed) definition
 
 ### 2024-10-29
 * new dev version
