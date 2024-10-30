@@ -2683,9 +2683,19 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return menu;
         };
     } else if (value instanceof Array) {
-        return this.showBubble(new ListWatcherMorph(new List(value)))
+        morphToShow = new ListWatcherMorph(new List(value));
+        morphToShow.update(true);
+        morphToShow.step = value.update;
+        morphToShow.isDraggable = false;
+        morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
+        isClickable = true; 
     } else if (value instanceof Map) {
-        return this.showBubble(new ListWatcherMorph(new List(value.entries().map((v)=>new List(v)))))
+        morphToShow = new ListWatcherMorph(new List(value.entries().map((v) => new List(v))));
+        morphToShow.update(true);
+        morphToShow.step = value.update;
+        morphToShow.isDraggable = false;
+        morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
+        isClickable = true;
     } else {
         // shorten the string, commented out because we now scroll it
         // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
