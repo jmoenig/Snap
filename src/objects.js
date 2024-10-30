@@ -1355,7 +1355,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveMenuRequest: {
             type: 'hat',
             category: 'control',
-            spec: 'when %menu menu'
+            spec: 'when %menu input menu'
         },
 
         // Debugging - pausing
