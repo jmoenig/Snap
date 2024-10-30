@@ -2683,7 +2683,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             return menu;
         };
     } else if (value instanceof Array) {
-        return this.showBubble(new List(value))
+        return this.showBubble(new ListWatcherMorph(new List(value)))
+    } else if (value instanceof Map) {
+        return this.showBubble(new ListWatcherMorph(new List(value.entries().map((v)=>new List(v)))))
     } else {
         // shorten the string, commented out because we now scroll it
         // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
