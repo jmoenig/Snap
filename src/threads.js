@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-29';
+modules.threads = '2024-October-30';
 
 var ThreadManager;
 var Process;
@@ -8062,11 +8062,20 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
             def = (expr.isGlobal ?
                 expr.definition
                 : this.blockReceiver().getMethod(expr.semanticSpec));
-            def.declarations.forEach(value => slots.add(
-                isString(value[2]) ?
+            def.declarations.forEach((value, key) => {
+                var dta = isString(value[2]) ?
                     def.decodeChoices(def.parseChoices(value[2]))
-                    : ''
-            ));
+                        : '',
+                    script;
+                if (dta instanceof List && dta.at(1) === '§_dynamicMenu') {
+                    script = detect(def.scripts, each =>
+                        each.selector === 'receiveMenuRequest' &&
+                            each.inputs()[0].evaluate() === key);
+                    slots.add(script ? script.fullCopy().reify() : dta);
+                } else {
+                    slots.add(dta);
+                }
+            });
         } else {
             expr.inputs().forEach(slot => {
                 if (slot instanceof ReporterBlockMorph) {
@@ -8668,8 +8677,33 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         }
         def.inputNames().forEach((name, idx) => {
             var info = def.declarations.get(name),
-                options = val.at(idx + 1);
+                options = val.at(idx + 1),
+                block;
             if (options !== '') {
+                if (options instanceof Context) {
+                    expr = options.expression;
+                    if (expr instanceof ReporterBlockMorph) {
+                        block = SpriteMorph.prototype.blockForSelector(
+                            'doReport'
+                        );
+                        block.replaceInput(block.inputs()[0], expr.fullCopy());
+                        expr = block;
+                    }
+                    if (expr instanceof CommandBlockMorph) {
+                        block = SpriteMorph.prototype.blockForSelector(
+                            'receiveMenuRequest'
+                        );
+                        block.inputs()[0].setContents(name);
+                        block.nextBlock(expr);
+                        expr = block;
+                        expr.setPosition(new Point(20, 120));
+                        def.scripts = def.scripts.filter(each =>
+                            !(each.selector === 'receiveMenuRequest' &&
+                                each.inputs()[0].evaluate() === name));
+                        def.scripts.push(expr);
+                    }
+                    options = '§_dynamicMenu';
+                }
                 if (!(options instanceof List)) {
                     options = new List([options]);
                 }
