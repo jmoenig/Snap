@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-30';
+modules.threads = '2024-October-31';
 
 var ThreadManager;
 var Process;
@@ -265,6 +265,13 @@ ThreadManager.prototype.startProcess = function (
             newProc.context.outerContext.variables.vars[vName] =
                 variables.vars[vName]
         );
+    }
+
+    // in case the optional variable frame is an InputList,
+    // evaluate all inputs and then copy them into the new
+    // outer context
+    else if (variables instanceof InputList) {
+        newProc.pushContext(variables);
     }
 
     // show a highlight around the running stack
@@ -794,7 +801,7 @@ Process.prototype.evaluateContext = function () {
     if (exp instanceof ArgMorph || (exp && exp.bindingID)) {
         return this.evaluateInput(exp);
     }
-    if (exp instanceof BlockMorph) {
+    if (exp instanceof BlockMorph || exp instanceof InputList) {
         return this.evaluateBlock(exp, exp.inputs().length);
     }
     if (isString(exp)) {
@@ -1985,6 +1992,12 @@ Process.prototype.doDeclareVariables = function (varNames) {
         varFrame.addVar(name)
     );
     */
+};
+
+Process.prototype.mergeVariables = function () {
+    this.context.expression.names.forEach((name, i) =>
+        this.context.outerContext.variables.addVar(name, this.context.inputs[i])
+    );
 };
 
 Process.prototype.doSetVar = function (varName, value) {
@@ -10025,6 +10038,18 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
         }
     }
     return answer;
+};
+
+// InputList ////////////////////////////////////////////////////////////////
+
+function InputList(names = [], items = []) {
+    this.names = names;
+    this.items = items;
+    this.selector = 'mergeVariables';
+}
+
+InputList.prototype.inputs = function () {
+    return this.items;
 };
 
 // JSCompiler ////////////////////////////////////////////////////////////////

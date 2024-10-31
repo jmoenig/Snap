@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, display,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, VariableFrame, BLACK*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 /*jshint esversion: 11*/
 
@@ -11194,7 +11194,7 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
             each.selector === 'receiveMenuRequest' &&
                 each.inputs()[0].evaluate() === inputName),
         stage = rcvr.parentThatIsA(StageMorph),
-        i, vars, show, format, isTxtOrNum;
+        vars, show, format, isTxtOrNum;
 
     isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta;
 
@@ -11237,7 +11237,9 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
 
     if (!script) {return show(); }
 
-    // evaluate the block's literal inputs
+    /*
+    // evaluate only the block's literal inputs, commented out,
+    // because we want to try full evaluation of all inputs instead
     vars = new VariableFrame();
     i = 0;
     block.inputs().forEach(slot => {
@@ -11249,6 +11251,10 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         );
         i += 1;
     });
+    */
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(names, block.inputs());
 
     // evaluate the script that makes the menu
     stage.threads.startProcess(
