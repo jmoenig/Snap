@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, VariableFrame, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-October-30';
+modules.blocks = '2024-October-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11241,10 +11241,12 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
     vars = new VariableFrame();
     i = 0;
     block.inputs().forEach(slot => {
-        if (slot instanceof InputSlotMorph ||
-        slot instanceof BooleanSlotMorph) {
-            vars.addVar(names[i], slot.evaluate());
-        }
+        vars.addVar(
+            names[i],
+            (slot instanceof InputSlotMorph ||
+                slot instanceof BooleanSlotMorph) ? slot.evaluate()
+                : ''
+        );
         i += 1;
     });
 
