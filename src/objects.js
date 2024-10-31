@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-30';
+modules.objects = '2024-October-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -1355,7 +1355,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveMenuRequest: {
             type: 'hat',
             category: 'control',
-            spec: 'when %menu input menu'
+            spec: 'when %menu menu clicked'
         },
 
         // Debugging - pausing
