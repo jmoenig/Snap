@@ -10,6 +10,7 @@
 ### 2024-10-31
 * objects: changed wording for "when ... menu clicked" hat block
 * blocks: fixed skipping evaluation of nested reporters for dynamicMenu()
+* byob: enabled visible stepping of input menu scripts inside the block editor
 
 ### 2024-10-30
 * objects: changed wording for "when ... menu" hat block

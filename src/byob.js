@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-October-30';
+modules.byob = '2024-October-31';
 
 // Declarations
 
@@ -3170,7 +3170,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts.add(proto);
 
     this.definition.scripts.forEach(element => {
-        block = element.fullCopy();
+        block = isLive ? element : element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
         scripts.add(block);
         if (block instanceof BlockMorph) {
