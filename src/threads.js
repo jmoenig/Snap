@@ -7018,6 +7018,23 @@ Process.prototype.reportGet = function (query) {
             return stage ? thisObj.height() / stage.scale : 0;
         }
     }
+    if ([
+            'other sprites',
+            'parts',
+            'children',
+            'clones',
+            'other clones',
+            'neighbors',
+            'scripts',
+            'solutions',
+            'blocks',
+            'categories',
+            'costumes',
+            'sounds'
+        ].includes(this.inputOption(query))
+    ) {
+        return new List();
+    }
     return '';
 };
 
