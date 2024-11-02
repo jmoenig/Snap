@@ -9,6 +9,7 @@
     * custom block instance scripting support
     * new "When slot (slot) edited" hat block for use inside custom block editors
     * new "set slot (slot) to ..." commmand block for use inside custom block editors in "when (slot) edited" hatted scripts 
+    * new "expand (input) to (n) slots" command block for use inside custo block editors in "when (slot) edited" hatted scripts
 * **Notable Changes:**
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
 
@@ -17,6 +18,7 @@
 * objects, blocks, byob, threads: new "set (slot) slot to ..." commmand block for use inside custom block editors in "when (slot) edited" hatted scripts
 * objects: changed wordings for slot-based primitives
 * threads: changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
+* objects, blocks, threads: new "expand (input) to (n) slots" command block for use inside custo block editors in "when (slot) edited" hatted scripts
 
 ### 2024-10-31
 * objects: changed wording for "when ... menu clicked" hat block

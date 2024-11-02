@@ -670,6 +670,11 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: 'inputSlotsMenu'
     },
+    '%variadicSlot': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'variadicSlotsMenu'
+    },
     '%att': {
         type: 'input',
         tags: 'read-only',
@@ -11288,6 +11293,19 @@ InputSlotMorph.prototype.inputSlotsMenu = function () {
     return dict;
 };
 
+InputSlotMorph.prototype.variadicSlotsMenu = function () {
+    var blockEditor = this.parentThatIsA(BlockEditorMorph),
+        dict = {};
+    if (blockEditor) {
+        blockEditor.prototypeSlots().forEach((value, key) => {
+            if (value[0].startsWith('%mult')) {
+                dict[key] = key;
+            }
+        });
+    }
+    return dict;
+};
+
 InputSlotMorph.prototype.keysMenu = function () {
     return {
         'any key' : ['any key'],
@@ -14531,8 +14549,28 @@ MultiArgMorph.prototype.removeInput = function () {
 MultiArgMorph.prototype.collapseAll = function () {
     var len = this.inputs().length,
         i;
-    for (i = 0; i < len; i+= 1) {
+    for (i = 0; i < len; i += 1) {
         this.removeInput();
+    }
+};
+
+MultiArgMorph.prototype.expandTo = function (arity = 0) {
+    // experimental for custom block arity control in v10.2 only
+    var len = this.inputs().length,
+        i;
+
+    arity = Math.max(arity, this.minInputs);
+    if (this.maxInputs > 0) {
+        arity = Math.min(arity, this.maxInputs);
+    }
+    if (arity > len) {
+        for (i = len; i < arity; i += 1) {
+            this.addInput();
+        }
+    } else if (arity < len) {
+        for (i = len; i > arity; i -= 1) {
+            this.removeInput();
+        }
     }
 };
 

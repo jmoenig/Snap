@@ -1796,6 +1796,18 @@ Process.prototype.doSetSlot = function(name, value) {
     }
 };
 
+Process.prototype.doExpandSlot = function(name, arity) {
+    if (!name) {return; }
+    var block = this.context.variables.getVar(Symbol.for('block')),
+        slot;
+    if (block.isCustomBlock) {
+        slot = block.inputSlotNamed(name);
+        if (slot instanceof MultiArgMorph) {
+            slot.expandTo(arity);
+        }
+    }
+};
+
 // Process stopping blocks primitives
 
 Process.prototype.doStopBlock = function () {

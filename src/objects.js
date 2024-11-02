@@ -1367,6 +1367,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'set slot %inputSlot to %s'
         },
+        doExpandSlot: {
+            type: 'command',
+            category: 'control',
+            spec: 'expand %variadicSlot to %n slots'
+        },
 
         // Debugging - pausing
         doPauseAll: {
@@ -2754,7 +2759,8 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
         selectors.push(
             'receiveMenuRequest',
             'receiveSlotEdit',
-            'doSetSlot'
+            'doSetSlot',
+            'doExpandSlot'
         );
     }
 
@@ -3732,6 +3738,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
         blocks.push(block('doSetSlot'));
+        blocks.push(block('doExpandSlot'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -10901,6 +10908,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
         blocks.push(block('doSetSlot'));
+        blocks.push(block('doExpandSlot'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
