@@ -4,8 +4,12 @@
 * **New Features:**
     * dynamic (scriptable) drop down menus for custom block input slots
     * new "scripted" menu option for custom block input slots
-    * new "When ... menu clicked" hat block for use inside custom block editors, has to report a list of drop-down menu items
+    * new "When (slot) menu clicked" hat block for use inside custom block editors, has to report a list of drop-down menu items
     * metaprogramming support for scriptable input slot menus
+    * new "When (slot) edited" hat block for use inside custom block editors 
+
+### 2024-11-02
+* objects, blocks, byob: new "When (slot) edited" hat block for use inside custom block editors 
 
 ### 2024-10-31
 * objects: changed wording for "when ... menu clicked" hat block

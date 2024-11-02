@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-October-31';
+modules.blocks = '2024-November-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -664,6 +664,11 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: 'menuSelectorsMenu'
+    },
+    '%inputSlot': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: 'inputSlotsMenu'
     },
     '%att': {
         type: 'input',
@@ -6450,7 +6455,7 @@ CommandBlockMorph.prototype.allAttachTargets = function (newParent) {
 
     if (this instanceof HatBlockMorph &&
         newParent.rejectsHats &&
-        this.selector !== 'receiveMenuRequest'
+        !(['receiveMenuRequest', 'receiveSlotEdit'].includes(this.selector))
     ) {
         return answer;
     }
@@ -9326,7 +9331,8 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        return !this.rejectsHats || aMorph.selector === 'receiveMenuRequest';
+        return !this.rejectsHats ||
+            ['receiveMenuRequest', 'receiveSlotEdit'].includes(aMorph.selector);
     }
     return aMorph instanceof SyntaxElementMorph ||
         aMorph instanceof CommentMorph;
@@ -11009,6 +11015,7 @@ InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
             aStringOrFloat
         );
     }
+    this.reactToEdit();
 };
 
 // InputSlotMorph drop-down menu:
@@ -11276,6 +11283,20 @@ InputSlotMorph.prototype.menuSelectorsMenu = function () {
     if (blockEditor) {
         blockEditor.prototypeSlots().forEach((value, key) => {
             if (value[2] === '§_dynamicMenu') {
+                dict[key] = key;
+            }
+        });
+    }
+    return dict;
+};
+
+InputSlotMorph.prototype.inputSlotsMenu = function () {
+    var blockEditor = this.parentThatIsA(BlockEditorMorph),
+        dict = {};
+    if (blockEditor) {
+        blockEditor.prototypeSlots().forEach((value, key) => {
+            let info = SyntaxElementMorph.prototype.labelParts[value[0]];
+            if (info && ['input', 'boolean'].includes(info.type)) {
                 dict[key] = key;
             }
         });
@@ -12128,6 +12149,9 @@ InputSlotMorph.prototype.reactToEdit = function () {
             this.evaluate()
         );
     }
+    if (block.isCustomBlock) {
+        block.fireSlotEditedEvent(this);
+    }
 };
 
 InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
@@ -12916,6 +12940,9 @@ BooleanSlotMorph.prototype.toggleValue = function () {
                 block.abstractBlockSpec(),
                 this.value
             );
+        }
+        if (block.isCustomBlock) {
+            block.fireSlotEditedEvent(this);
         }
         ide = sprite.parentThatIsA(IDE_Morph);
         if (ide && !ide.isAnimating) {

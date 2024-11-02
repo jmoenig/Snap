@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-October-31';
+modules.objects = '2024-November-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -1356,6 +1356,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'hat',
             category: 'control',
             spec: 'when %menu menu clicked'
+        },
+        receiveSlotEdit: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when %inputSlot slot edited'
         },
 
         // Debugging - pausing
@@ -2742,7 +2747,8 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
     // 10.1: no new primitives
     if (version < 10.2) {
         selectors.push(
-            'receiveMenuRequest'
+            'receiveMenuRequest',
+            'receiveSlotEdit'
         );
     }
 
@@ -3718,6 +3724,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportEnvironment'));
         blocks.push('-');
         blocks.push(block('receiveMenuRequest'));
+        blocks.push(block('receiveSlotEdit'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -10885,6 +10892,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportEnvironment'));
         blocks.push('-');
         blocks.push(block('receiveMenuRequest'));
+        blocks.push(block('receiveSlotEdit'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {

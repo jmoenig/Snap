@@ -105,13 +105,13 @@ ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
 WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
-ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph*/
+ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-October-31';
+modules.byob = '2024-November-02';
 
 // Declarations
 
@@ -2247,6 +2247,39 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
     );
 };
 
+// CustomCommandBlockMorph events /////////////////////////////////////
+
+CustomCommandBlockMorph.prototype.fireSlotEditedEvent= function (slot) {
+    var rcvr = this.scriptTarget(),
+        def = this.isGlobal ? this.definition
+            : rcvr.getMethod(this.blockSpec),
+        names = def.inputNames(),
+        inputName = names[this.inputs().indexOf(slot)],
+        scripts = def.scripts.filter(each =>
+            each.selector === 'receiveSlotEdit' &&
+                each.inputs()[0].evaluate() === inputName),
+        stage = rcvr.parentThatIsA(StageMorph),
+        vars;
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(names, this.inputs());
+
+    // evaluate the scripts concurrently
+    scripts.forEach(script =>
+        stage.threads.startProcess(
+            script,
+            rcvr,
+            null, // threadsafe
+            null, // export result
+            null, // callback
+            null, // clicked
+            null, // right away
+            null, // atomic
+            vars
+        )
+    );
+};
+
 // CustomReporterBlockMorph ////////////////////////////////////////////
 
 // CustomReporterBlockMorph inherits from ReporterBlockMorph:
@@ -2376,6 +2409,11 @@ CustomReporterBlockMorph.prototype.exportBlockDefinition
     = CustomCommandBlockMorph.prototype.exportBlockDefinition;
 
 // CustomReporterBlockMorph events:
+
+// CustomCommandBlockMorph events /////////////////////////////////////
+
+CustomReporterBlockMorph.prototype.fireSlotEditedEvent =
+    CustomCommandBlockMorph.prototype.fireSlotEditedEvent;
 
 // hover help - commented out for now
 /*
