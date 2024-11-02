@@ -11244,24 +11244,8 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
 
     if (!script) {return show(); }
 
-    /*
-    // evaluate only the block's literal inputs, commented out,
-    // because we want to try full evaluation of all inputs instead
-    vars = new VariableFrame();
-    i = 0;
-    block.inputs().forEach(slot => {
-        vars.addVar(
-            names[i],
-            (slot instanceof InputSlotMorph ||
-                slot instanceof BooleanSlotMorph) ? slot.evaluate()
-                : ''
-        );
-        i += 1;
-    });
-    */
-
     // fully evaluate the block's inputs, including embedded reporters, if any
-    vars = new InputList(names, block.inputs());
+    vars = new InputList(block, names);
 
     // evaluate the script that makes the menu
     stage.threads.startProcess(

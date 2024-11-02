@@ -61,11 +61,11 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition, CommentMorph*/
+StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-October-31';
+modules.threads = '2024-November-02';
 
 var ThreadManager;
 var Process;
@@ -1780,6 +1780,22 @@ Process.prototype.reportData = function (trgt) {
     return data;
 };
 
+// Process custom block slot primitives
+
+Process.prototype.doSetSlot = function(name, value) {
+    if (!name) {return; }
+    var block = this.context.variables.getVar(Symbol.for('block')),
+        slot;
+    if (block.isCustomBlock) {
+        slot = block.inputSlotNamed(name);
+        if (slot instanceof InputSlotMorph) {
+            slot.setContents(value.toString());
+        } else if (slot instanceof BooleanSlotMorph) {
+            slot.setContents(value);
+        }
+    }
+};
+
 // Process stopping blocks primitives
 
 Process.prototype.doStopBlock = function () {
@@ -1995,6 +2011,10 @@ Process.prototype.doDeclareVariables = function (varNames) {
 };
 
 Process.prototype.mergeVariables = function () {
+    this.context.outerContext.variables.addVar(
+        Symbol.for('block'),
+        this.context.expression.block // expression is an InputList
+    );
     this.context.expression.names.forEach((name, i) =>
         this.context.outerContext.variables.addVar(name, this.context.inputs[i])
     );
@@ -10042,14 +10062,14 @@ VariableFrame.prototype.allNames = function (upTo, includeHidden) {
 
 // InputList ////////////////////////////////////////////////////////////////
 
-function InputList(names = [], items = []) {
+function InputList(block, names = []) {
+    this.block = block;
     this.names = names;
-    this.items = items;
     this.selector = 'mergeVariables';
 }
 
 InputList.prototype.inputs = function () {
-    return this.items;
+    return this.block.inputs();
 };
 
 // JSCompiler ////////////////////////////////////////////////////////////////

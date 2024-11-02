@@ -2262,7 +2262,7 @@ CustomCommandBlockMorph.prototype.fireSlotEditedEvent= function (slot) {
         vars;
 
     // fully evaluate the block's inputs, including embedded reporters, if any
-    vars = new InputList(names, this.inputs());
+    vars = new InputList(this, names);
 
     // evaluate the scripts concurrently
     scripts.forEach(script =>
@@ -2278,6 +2278,15 @@ CustomCommandBlockMorph.prototype.fireSlotEditedEvent= function (slot) {
             vars
         )
     );
+};
+
+// CustomCommandBlockMorph accessing slots by their name //////////////
+
+CustomCommandBlockMorph.prototype.inputSlotNamed = function (name) {
+    var rcvr = this.scriptTarget(),
+        def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec);
+    return this.inputs()[def.inputNames().map(each =>
+        each.toLowerCase()).indexOf(name.toLowerCase())];
 };
 
 // CustomReporterBlockMorph ////////////////////////////////////////////
@@ -2410,10 +2419,13 @@ CustomReporterBlockMorph.prototype.exportBlockDefinition
 
 // CustomReporterBlockMorph events:
 
-// CustomCommandBlockMorph events /////////////////////////////////////
-
 CustomReporterBlockMorph.prototype.fireSlotEditedEvent =
     CustomCommandBlockMorph.prototype.fireSlotEditedEvent;
+
+// CustomReporterBlockMorph accessing slots by their name
+
+CustomReporterBlockMorph.prototype.inputSlotNamed =
+    CustomCommandBlockMorph.prototype.inputSlotNamed;
 
 // hover help - commented out for now
 /*

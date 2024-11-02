@@ -1362,6 +1362,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'when %inputSlot slot edited'
         },
+        doSetSlot: {
+            type: 'command',
+            category: 'control',
+            spec: 'set %inputSlot slot to %s'
+        },
 
         // Debugging - pausing
         doPauseAll: {
@@ -2748,7 +2753,8 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
     if (version < 10.2) {
         selectors.push(
             'receiveMenuRequest',
-            'receiveSlotEdit'
+            'receiveSlotEdit',
+            'doSetSlot'
         );
     }
 
@@ -3725,6 +3731,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
+        blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -10893,6 +10900,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
+        blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
