@@ -1351,21 +1351,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             code: 'this'
         },
 
-        // dynamic user defined drop-down menus
+        // custom block slot control & dynamic user defined drop-down menus
         receiveMenuRequest: {
             type: 'hat',
             category: 'control',
-            spec: 'when %menu menu clicked'
+            spec: 'when slot %menu menu clicked'
         },
         receiveSlotEdit: {
             type: 'hat',
             category: 'control',
-            spec: 'when %inputSlot slot edited'
+            spec: 'when slot %inputSlot edited'
         },
         doSetSlot: {
             type: 'command',
             category: 'control',
-            spec: 'set %inputSlot slot to %s'
+            spec: 'set slot %inputSlot to %s'
         },
 
         // Debugging - pausing
