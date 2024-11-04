@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-02';
+modules.threads = '2024-November-04';
 
 var ThreadManager;
 var Process;
@@ -2030,6 +2030,8 @@ Process.prototype.mergeVariables = function () {
     this.context.expression.names.forEach((name, i) =>
         this.context.outerContext.variables.addVar(name, this.context.inputs[i])
     );
+    this.context.outerContext.variables.parentFrame =
+        this.context.expression.block.variables;
 };
 
 Process.prototype.doSetVar = function (varName, value) {

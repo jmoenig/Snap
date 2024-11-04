@@ -13,6 +13,9 @@
 * **Notable Changes:**
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
 
+### 2024-11-04
+* threades: added access to global custom block instance variables to "When slot ..." scripts inside definitions
+
 ### 2024-11-02
 * objects, blocks, byob: new "When (slot) edited" hat block for use inside custom block editors
 * objects, blocks, byob, threads: new "set (slot) slot to ..." commmand block for use inside custom block editors in "when (slot) edited" hatted scripts
