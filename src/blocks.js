@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-02';
+modules.blocks = '2024-November-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11206,9 +11206,8 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
             each.selector === 'receiveMenuRequest' &&
                 each.inputs()[0].evaluate() === inputName),
         stage = rcvr.parentThatIsA(StageMorph),
-        vars, show, format, isTxtOrNum;
-
-    isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta;
+        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        vars, show, format;
 
     format = list => {
         var dict = {};
