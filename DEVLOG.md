@@ -19,6 +19,7 @@
 * threads: added access to global custom block instance variables to "When slot ..." scripts inside definitions
 * blocks: slightly refactored dynamicMenu()
 * German translation update for the new v10.2 blocks
+* updated dev version
 
 ### 2024-11-02
 * objects, blocks, byob: new "When (slot) edited" hat block for use inside custom block editors
