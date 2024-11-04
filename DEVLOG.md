@@ -12,10 +12,13 @@
     * new "expand (input) to (n) slots" command block for use inside custo block editors in "when (slot) edited" hatted scripts
 * **Notable Changes:**
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
+* **Translation Updates:**
+    * German
 
 ### 2024-11-04
 * threads: added access to global custom block instance variables to "When slot ..." scripts inside definitions
-* blocks: slightly refactored dynamicMenu() 
+* blocks: slightly refactored dynamicMenu()
+* German translation update for the new v10.2 blocks
 
 ### 2024-11-02
 * objects, blocks, byob: new "When (slot) edited" hat block for use inside custom block editors
