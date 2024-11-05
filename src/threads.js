@@ -1783,9 +1783,12 @@ Process.prototype.reportData = function (trgt) {
 // Process custom block slot primitives
 
 Process.prototype.doSetSlot = function(name, value) {
+    var sym = Symbol.for('block'),
+        frame, block, slot;
     if (!name) {return; }
-    var block = this.context.variables.getVar(Symbol.for('block')),
-        slot;
+    frame = this.context.variables.silentFind(sym);
+    if (!frame) {return; }
+    block = frame.getVar(sym);
     if (block.isCustomBlock) {
         slot = block.inputSlotNamed(name);
         if (slot instanceof InputSlotMorph) {
@@ -1797,9 +1800,12 @@ Process.prototype.doSetSlot = function(name, value) {
 };
 
 Process.prototype.doExpandSlot = function(name, arity) {
+    var sym = Symbol.for('block'),
+        frame, block, slot;
     if (!name) {return; }
-    var block = this.context.variables.getVar(Symbol.for('block')),
-        slot;
+    frame = this.context.variables.silentFind(sym);
+    if (!frame) {return; }
+    block = frame.getVar(sym);
     if (block.isCustomBlock) {
         slot = block.inputSlotNamed(name);
         if (slot instanceof MultiArgMorph) {
