@@ -153,6 +153,8 @@ var snapVersion = '10.2.0-241104-dev',
         'libraries/SciSnap3Extensions.js',
         // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
 
+        'libraries/sprite_api_module.xml',
+
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies

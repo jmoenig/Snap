@@ -1795,6 +1795,28 @@
       }
     }
   },
+{
+    "fileName": "sprite_api_module.xml",
+    "name": "Sprite Method API",
+    "description": "Run and call a sprite's local custom blocks from another sprite",
+    "searchData": [
+      "api",
+      "methods",
+      "run",
+      "call"
+    ],
+    "categories": [
+      "control",
+      "sensing"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "api"
+        ]
+      }
+    }
+  }
   {
     "fileName": "~",
     "name": "~"
