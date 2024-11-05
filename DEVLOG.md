@@ -12,6 +12,7 @@
     * new "expand (input) to (n) slots" command block for use inside custo block editors in "when (slot) edited" hatted scripts
 * **Notable Changes:**
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
+    * OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
 * **Translation Updates:**
     * German
 
@@ -19,6 +20,7 @@
 * blocks, threads: extended "When (slot) edited" event to variadic inputs, fires when a subslot is edited or when the user changes the arity
 * threads: turned "set slot" and "expand (input)" to noop when used outside their domain
 * blocks: tweaked internel dropdown menus to avoid bugs in user scripted ones
+* OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
 
 ### 2024-11-04
 * threads: added access to global custom block instance variables to "When slot ..." scripts inside definitions
