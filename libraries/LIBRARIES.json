@@ -1795,7 +1795,7 @@
       }
     }
   },
-{
+  {
     "fileName": "sprite_api_module.xml",
     "name": "Sprite Method API",
     "description": "Run and call a sprite's local custom blocks from another sprite",
@@ -1816,7 +1816,7 @@
         ]
       }
     }
-  }
+  },
   {
     "fileName": "~",
     "name": "~"
