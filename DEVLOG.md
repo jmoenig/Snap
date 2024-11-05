@@ -23,6 +23,7 @@
 * blocks: tweaked internel dropdown menus to avoid bugs in user scripted ones
 * OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
 * new "Sprite Method API" library for teaching OOP with dot notation
+* updated dev version
 
 ### 2024-11-04
 * threads: added access to global custom block instance variables to "When slot ..." scripts inside definitions
