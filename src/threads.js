@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-04';
+modules.threads = '2024-November-05';
 
 var ThreadManager;
 var Process;
@@ -1363,7 +1363,7 @@ Process.prototype.variableError = function (varName) {
     throw new Error(
         localize('a variable of name')
             + ' \''
-            + varName
+            + varName.toString()
             + '\'\n'
             + localize('does not exist in this context')
     );

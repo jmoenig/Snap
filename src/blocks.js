@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-04';
+modules.blocks = '2024-November-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11284,7 +11284,9 @@ InputSlotMorph.prototype.inputSlotsMenu = function () {
     if (blockEditor) {
         blockEditor.prototypeSlots().forEach((value, key) => {
             let info = SyntaxElementMorph.prototype.labelParts[value[0]];
-            if (info && ['input', 'boolean'].includes(info.type)) {
+            if (value[0].startsWith('%mult') ||
+                (info && ['input', 'boolean'].includes(info.type))
+            ) {
                 dict[key] = key;
             }
         });
@@ -12151,7 +12153,9 @@ InputSlotMorph.prototype.reactToEdit = function () {
         );
     }
     if (block.isCustomBlock) {
-        block.fireSlotEditedEvent(this);
+        block.fireSlotEditedEvent(
+            this.parent instanceof MultiArgMorph ? this.parent : this
+        );
     }
 };
 
@@ -14386,6 +14390,9 @@ MultiArgMorph.prototype.deleteSlot = function (anInput) {
         'delete',
         block.abstractBlockSpec()
     );
+    if (block.isCustomBlock) {
+        block.fireSlotEditedEvent(this);
+    }
 };
 
 MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
@@ -14691,6 +14698,9 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
                 'collapse',
                 block.abstractBlockSpec()
             );
+        }
+        if (block.isCustomBlock) {
+            block.fireSlotEditedEvent(this);
         }
     } else {
         target.escalateEvent('mouseClickLeft', pos);

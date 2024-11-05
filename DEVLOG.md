@@ -15,6 +15,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-11-05
+* blocks, threads: extended "When (slot) edited" event to variadic inputs, fires when a subslot is edited or when the user changes the arity
+
 ### 2024-11-04
 * threads: added access to global custom block instance variables to "When slot ..." scripts inside definitions
 * blocks: slightly refactored dynamicMenu()
