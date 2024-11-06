@@ -2,24 +2,27 @@
 
 ## in development:
 * **New Features:**
-    * dynamic (scriptable) drop down menus for custom block input slots
-    * new "scripted" menu option for custom block input slots
-    * new "When slot (slot) menu clicked" hat block for use inside custom block editors, has to report a list of drop-down menu items
-    * metaprogramming support for scriptable input slot menus
-    * custom block instance scripting support
-    * new "When slot (slot) edited" hat block for use inside custom block editors
-    * new "set slot (slot) to ..." commmand block for use inside custom block editors in "when (slot) edited" hatted scripts 
-    * new "expand (input) to (n) slots" command block for use inside custom block editors in "when (slot) edited" hatted scripts
-    * block (-instance) variables for sprite-local custom blocks
-    + new "Sprite Method API" library for teaching OOP with dot notation
+    1. Block instance scripting
+        * dynamic (scriptable) drop down menus for custom block input slots
+        * new "scripted" menu option for custom block input slots
+        * new "When slot (slot) menu clicked" hat block for use inside custom block editors, has to report a list of drop-down menu items
+        * metaprogramming support for scriptable input slot menus
+        * custom block instance scripting support
+        * new "When slot (slot) edited" hat block for use inside custom block editors
+        * new "set slot (slot) to ..." commmand block for use inside custom block editors in "when (slot) edited" hatted scripts 
+        * new "expand (input) to (n) slots" command block for use inside custom block editors in "when (slot) edited" hatted scripts
+    2. OOP
+        * new "Sprite Method API" library for teaching OOP with dot notation
+        * OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
+    3. Block instance variables for sprite-local custom blocks
 * **Notable Changes:**
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
-    * OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
 * **Translation Updates:**
     * German
 
 ### 2024-11-06
 * byob, blocks, objects, store: added block (-instance) variables to sprite-local custom blocks ("methods")
+* updated dev version
 
 ### 2024-11-05
 * blocks, threads: extended "When (slot) edited" event to variadic inputs, fires when a subslot is edited or when the user changes the arity
