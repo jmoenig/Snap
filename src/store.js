@@ -63,7 +63,7 @@ Project*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-September-13';
+modules.store = '2024-November-06';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2507,8 +2507,7 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
         this.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
-        this.isGlobal &&
-        	this.definition.variableNames.length &&
+        this.variables.names().length &&
             !serializer.isExportingBlocksLibrary ?
                 '<variables>' +
                     this.variables.toXML(serializer) +

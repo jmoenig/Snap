@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-05';
+modules.blocks = '2024-November-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5696,7 +5696,7 @@ BlockMorph.prototype.fullCopy = function () {
         if (block instanceof SyntaxElementMorph) {
             block.cachedInputs = null;
             if (block.isCustomBlock) {
-                block.initializeVariables();
+                block.initializeVariables(block.variables.names());
             }
         }
         return !isNil(block.comment);
@@ -5719,9 +5719,7 @@ BlockMorph.prototype.reactToTemplateCopy = function () {
 
 BlockMorph.prototype.hasBlockVars = function () {
     return this.anyChild(any =>
-        any.isCustomBlock &&
-            any.isGlobal &&
-                any.definition.variableNames.length
+        any.isCustomBlock && any.variables.names().length
     );
 };
 

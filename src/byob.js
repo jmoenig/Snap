@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-02';
+modules.byob = '2024-November-06';
 
 // Declarations
 
@@ -1206,7 +1206,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.selector = definition.primitive || 'evaluateCustomBlock';
     this.variables = null;
 	this.storedTranslations = null; // transient - only for "wishes"
-    this.initializeVariables();
+    this.initializeVariables(definition.variableNames);
     if (definition) { // needed for de-serializing
         this.refresh();
     }
@@ -1224,13 +1224,10 @@ CustomCommandBlockMorph.prototype.reactToTemplateCopy = function () {
     CustomCommandBlockMorph.uber.reactToTemplateCopy.call(this);
 };
 
-CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
+CustomCommandBlockMorph.prototype.initializeVariables = function (names, old) {
     this.variables = new VariableFrame();
-    if (!this.isGlobal) {
-        return;
-    }
-    this.definition.variableNames.forEach(name => {
-        var v = oldVars ? oldVars[name] : null;
+    names.forEach(name => {
+        var v = old ? old[name] : null;
         this.variables.addVar(
             name,
             v instanceof Variable ? v.value : null
@@ -1309,9 +1306,7 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
 
     // initialize block vars
     // preserve values of unchanged variable names
-    if (this.isGlobal) {
-        this.initializeVariables(this.variables.vars);
-    }
+    this.initializeVariables(def.variableNames, this.variables.vars);
 
     // make (double) sure I'm colored correctly
     this.forceNormalColoring();
@@ -1807,22 +1802,22 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 hat.parentThatIsA(BlockEditorMorph).editTranslations();
             }
         );
+        if (hat.inputs().length < 2) {
+            menu.addItem(
+                "block variables...",
+                function () {
+                    hat.enableBlockVars();
+                }
+            );
+        } else {
+            menu.addItem(
+                "remove block variables...",
+                function () {
+                    hat.enableBlockVars(false);
+                }
+            );
+        }
         if (this.isGlobal) {
-            if (hat.inputs().length < 2) {
-                menu.addItem(
-                    "block variables...",
-                    function () {
-                        hat.enableBlockVars();
-                    }
-                );
-            } else {
-                menu.addItem(
-                    "remove block variables...",
-                    function () {
-                        hat.enableBlockVars(false);
-                    }
-                );
-            }
             menu.addItem(
                 "selector...",
                 () => hat.editSelector(),
@@ -2323,7 +2318,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.category = definition.category;
     this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
-    this.initializeVariables();
+    this.initializeVariables(definition.variableNames);
     this.selector = definition.primitive || 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
         this.refresh();

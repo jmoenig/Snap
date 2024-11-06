@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-02';
+modules.objects = '2024-November-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -2425,7 +2425,7 @@ SpriteMorph.prototype.customizePrimitive = function (
         block.isGlobal = def.isGlobal;
         block.isPrototype = false;
         block.variables = null;
-        block.initializeVariables();
+        block.initializeVariables(def.variableNames);
         block.refresh();
     });
     if (withCode && info.src) {
