@@ -1986,6 +1986,8 @@ Process.prototype.mergeVariables = function () {
     this.context.expression.names.forEach((name, i) =>
         this.context.outerContext.variables.addVar(name, this.context.inputs[i])
     );
+    this.context.expression.block.variables.parentFrame =
+        this.context.outerContext.variables.parentFrame;
     this.context.outerContext.variables.parentFrame =
         this.context.expression.block.variables;
 };
