@@ -946,6 +946,25 @@
     ]
   },
   {
+    "fileName": "halo_module.xml",
+    "name": "Outlines and Halos",
+    "description": "Compute and display outlines of costumes and halos around sprites",
+    "searchData": [
+      "outline",
+      "halo"
+    ],
+    "categories": [
+      "looks"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "umriss"
+        ]
+      }
+    }
+  },
+  {
     "fileName": "audioComp_module.xml",
     "name": "Audio Comp",
     "description": "Analyze, manipulate and generate sound samples.",

@@ -18,6 +18,8 @@
 * **Notable Changes:**
     * simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
+* **Notable Fixes:**
+    * added the "Outlines and Halos" library to the libraries browser
 * **Translation Updates:**
     * German
 
@@ -25,6 +27,7 @@
 * threads, objects, blocks: simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
 * threads: fixed #3414 - accessing global variables in slot scripts
 * updated dev version
+* added the "outlines and halos" library to the libraries browser
 
 ### 2024-11-06
 * byob, blocks, objects, store: added block (-instance) variables to sprite-local custom blocks ("methods")
