@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-06';
+modules.objects = '2024-November-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -10331,7 +10331,17 @@ StageMorph.prototype.stepGenericConditions = function (stopAll) {
         if (isSnapObject(morph)) {
             morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
-                this.threads.doWhen(block, morph, stopAll);
+                if (!this.threads.pauseCustomHatBlocks) {
+                    this.threads.startProcess (
+                        block,
+                        morph, // receiver
+                        true, // isThreadSafe
+                        null, // exportResult
+                        null, // callback
+                        null, // isClicked
+                        true, // rightAway
+                    );
+                }
             });
         }
     });

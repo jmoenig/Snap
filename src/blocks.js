@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-06';
+modules.blocks = '2024-November-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7192,7 +7192,9 @@ HatBlockMorph.prototype.init = function () {
 
 HatBlockMorph.prototype.blockSequence = function () {
     // override my inherited method so that I am not part of my sequence
-    var result = HatBlockMorph.uber.blockSequence.call(this);
+    var result;
+    if (this.selector === 'receiveCondition') {return this; }
+    result = HatBlockMorph.uber.blockSequence.call(this);
     result.shift();
     return result;
 };

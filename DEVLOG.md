@@ -16,9 +16,13 @@
         * OOP library: updated "field ... of (obj)" reporter with a new dynamic dropdown and automatic input slot variadicity
     3. Block instance variables for sprite-local custom blocks
 * **Notable Changes:**
+    * simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
     * changed "my (attribute)" primitive to report an empty list instead of an empty (scalar) value in case of no existing block, costumes, etc.
 * **Translation Updates:**
     * German
+
+### 2024-11-07
+* threads, objects, blocks: simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
 
 ### 2024-11-06
 * byob, blocks, objects, store: added block (-instance) variables to sprite-local custom blocks ("methods")

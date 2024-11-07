@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-05';
+modules.threads = '2024-November-07';
 
 var ThreadManager;
 var Process;
@@ -456,56 +456,6 @@ ThreadManager.prototype.processesForBlock = function (block, only) {
             each.isRunning() &&
                 !each.isDead
     );
-};
-
-ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
-    if (this.pauseCustomHatBlocks) {return; }
-    if ((!block) || this.findProcess(block, receiver)) {
-        return;
-    }
-    var pred = block.inputs()[0], world, test;
-    if (block.removeHighlight()) {
-        world = block.world();
-        if (world) {
-            world.hand.destroyTemporaries();
-        }
-    }
-    if (stopIt) {return; }
-    try {
-        test = invoke(
-            pred,
-            null,
-            receiver,
-            50, // timeout in msecs
-            'the predicate takes\ntoo long for a\ncustom hat block',
-            true, // suppress errors => handle them right here instead
-            null, // caller process for JS-functions
-            true // return the whole home context instead of just he result
-        );
-    } catch (error) {
-        block.addErrorHighlight();
-        block.showBubble(
-            error.name
-            + '\n'
-            + error.message
-        );
-    }
-    // since we're asking for the whole context instead of just the result
-    // of the computation, we need to look at the result-context's first
-    // input to find out whether the condition is met
-    if (test === true || (test && test.inputs && test.inputs[0] === true)) {
-        this.startProcess(
-            block,
-            receiver,
-            null, // isThreadSafe
-            null, // exportResult
-            null, // callback
-            null, // isClicked
-            true,  // rightAway
-            null, // atomic
-            test.variables // make the test-context's variables available
-        );
-    }
 };
 
 ThreadManager.prototype.toggleSingleStepping = function () {
@@ -2882,6 +2832,16 @@ Process.prototype.doIf = function () {
     this.pushContext();
 };
 */
+
+Process.prototype.receiveCondition = function (bool) {
+    var nb = this.context.expression.nextBlock(),
+        outer = this.context.outerContext;
+    this.popContext();
+    if (bool === true && nb) {
+        this.pushContext(nb.blockSequence(), outer);
+    }
+    this.pushContext();
+};
 
 Process.prototype.doIfElse = function () {
     // version with trancending variable scope, i.e. the C-slots are
