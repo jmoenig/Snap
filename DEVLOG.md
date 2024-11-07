@@ -24,6 +24,7 @@
 ### 2024-11-07
 * threads, objects, blocks: simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
 * threads: fixed #3414 - accessing global variables in slot scripts
+* updated dev version
 
 ### 2024-11-06
 * byob, blocks, objects, store: added block (-instance) variables to sprite-local custom blocks ("methods")
