@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-07';
+modules.blocks = '2024-November-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6457,8 +6457,7 @@ CommandBlockMorph.prototype.allAttachTargets = function (newParent) {
         topBlocks;
 
     if (this instanceof HatBlockMorph &&
-        newParent.rejectsHats &&
-        !(['receiveMenuRequest', 'receiveSlotEdit'].includes(this.selector))
+        newParent.rejectsHats && !this.isCustomBlockSpecific()
     ) {
         return answer;
     }
@@ -7197,6 +7196,12 @@ HatBlockMorph.prototype.blockSequence = function () {
     result = HatBlockMorph.uber.blockSequence.call(this);
     result.shift();
     return result;
+};
+
+// HatBlockMorph accessing:
+
+HatBlockMorph.prototype.isCustomBlockSpecific = function () {
+    return ['receiveMenuRequest', 'receiveSlotEdit'].includes(this.selector);
 };
 
 // HatBlockMorph syntax analysis
@@ -9336,8 +9341,7 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        return !this.rejectsHats ||
-            ['receiveMenuRequest', 'receiveSlotEdit'].includes(aMorph.selector);
+        return !this.rejectsHats || aMorph.isCustomBlockSpecific();
     }
     return aMorph instanceof SyntaxElementMorph ||
         aMorph instanceof CommentMorph;

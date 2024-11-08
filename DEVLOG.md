@@ -23,6 +23,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-11-08
+* blocks: refactored droppability of custom-block definition specific hat blocks
+
 ### 2024-11-07
 * threads, objects, blocks: simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates
 * threads: fixed #3414 - accessing global variables in slot scripts
