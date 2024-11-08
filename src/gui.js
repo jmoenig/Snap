@@ -80,14 +80,14 @@ BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
 BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
-BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals
-*/
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+HatBlockMorph*/
 
 /*jshint esversion: 8*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-November-07';
+modules.gui = '2024-November-08';
 
 // Declarations
 
@@ -11153,7 +11153,11 @@ SpriteIconMorph.prototype.wantsDropOf = function (morph) {
 
 SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
     if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
-        this.copyStack(morph);
+        if (!(morph instanceof HatBlockMorph &&
+            morph.isCustomBlockSpecific())
+        ) {
+            this.copyStack(morph);
+        }
     } else if (morph instanceof CostumeIconMorph) {
         this.copyCostume(morph.object);
     } else if (morph instanceof SoundIconMorph) {

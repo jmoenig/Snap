@@ -25,6 +25,7 @@
 
 ### 2024-11-08
 * blocks: refactored droppability of custom-block definition specific hat blocks
+* blocks, gui: prevent custom-block specific hats to be dropped into non-block-editor scripting panes and on sprite-icons in the corral
 
 ### 2024-11-07
 * threads, objects, blocks: simplified evaluation of generic "When ..." hat blocks, removed time-slice threshold for predicates

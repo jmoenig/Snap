@@ -6457,7 +6457,8 @@ CommandBlockMorph.prototype.allAttachTargets = function (newParent) {
         topBlocks;
 
     if (this instanceof HatBlockMorph &&
-        newParent.rejectsHats && !this.isCustomBlockSpecific()
+        ((newParent.rejectsHats && !this.isCustomBlockSpecific()) ||
+            (!newParent.rejectsHats && this.isCustomBlockSpecific()))
     ) {
         return answer;
     }
@@ -9341,7 +9342,9 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        return !this.rejectsHats || aMorph.isCustomBlockSpecific();
+        // return !this.rejectsHats || aMorph.isCustomBlockSpecific();
+        return (!this.rejectsHats && !aMorph.isCustomBlockSpecific()) ||
+            (this.rejectsHats && aMorph.isCustomBlockSpecific());
     }
     return aMorph instanceof SyntaxElementMorph ||
         aMorph instanceof CommentMorph;
