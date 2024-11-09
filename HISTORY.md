@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-11-09
+* threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
+
 ## 10.2.0:
 * **New Features:**
     1. Block instance scripting

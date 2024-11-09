@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-07';
+modules.threads = '2024-November-09';
 
 var ThreadManager;
 var Process;
@@ -1734,7 +1734,7 @@ Process.prototype.reportData = function (trgt) {
 
 Process.prototype.doSetSlot = function(name, value) {
     var sym = Symbol.for('block'),
-        frame, block, slot;
+        frame, block, slot, subslots;
     if (!name) {return; }
     frame = this.context.variables.silentFind(sym);
     if (!frame) {return; }
@@ -1745,6 +1745,19 @@ Process.prototype.doSetSlot = function(name, value) {
             slot.setContents(value.toString());
         } else if (slot instanceof BooleanSlotMorph) {
             slot.setContents(value);
+        } else if (slot instanceof MultiArgMorph) {
+            if (!(value instanceof List)) {
+                value = new List([value]);
+            }
+            slot.expandTo(value.length());
+            subslots = slot.inputs();
+            value.itemsArray().forEach((item, i) => {
+                if (subslots[i] instanceof InputSlotMorph) {
+                    subslots[i].setContents(item.toString());
+                } else if (subslots[i] instanceof BooleanSlotMorph) {
+                    subslots[i].setContents(item);
+                }
+            });
         }
     }
 };
