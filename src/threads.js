@@ -1763,6 +1763,8 @@ Process.prototype.doSetSlot = function(name, value) {
 };
 
 Process.prototype.doExpandSlot = function(name, arity) {
+    // deprecated b/c superseded by doSetSlot(),
+    // kept for backwards compatibility with v10.2.0
     var sym = Symbol.for('block'),
         frame, block, slot;
     if (!name) {return; }

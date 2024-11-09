@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-07';
+modules.objects = '2024-November-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1367,7 +1367,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'set slot %inputSlot to %s'
         },
-        doExpandSlot: {
+        doExpandSlot: { // deprecated, kept for backwards compatibility
             type: 'command',
             category: 'control',
             spec: 'expand %variadicSlot to %n slots'
@@ -3738,7 +3738,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
         blocks.push(block('doSetSlot'));
-        blocks.push(block('doExpandSlot'));
+        // blocks.push(block('doExpandSlot')); // deprecated in v10.2.1
 
         // for debugging: ///////////////
         if (devMode) {
@@ -10918,7 +10918,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMenuRequest'));
         blocks.push(block('receiveSlotEdit'));
         blocks.push(block('doSetSlot'));
-        blocks.push(block('doExpandSlot'));
+        // blocks.push(block('doExpandSlot')); // deprecated in v10.2.1
 
         // for debugging: ///////////////
         if (this.world().isDevMode) {
