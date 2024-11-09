@@ -1753,7 +1753,9 @@ Process.prototype.doSetSlot = function(name, value) {
             subslots = slot.inputs();
             value.itemsArray().forEach((item, i) => {
                 if (subslots[i] instanceof InputSlotMorph) {
-                    subslots[i].setContents(item.toString());
+                    subslots[i].setContents(
+                        isNil(item) ? '' : item.toString()
+                    );
                 } else if (subslots[i] instanceof BooleanSlotMorph) {
                     subslots[i].setContents(item);
                 }
