@@ -7,6 +7,7 @@
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
 * threads, objects: deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value
+* updated OOP library - replaced "expand" with "set slot"
 
 ## 10.2.0:
 * **New Features:**
