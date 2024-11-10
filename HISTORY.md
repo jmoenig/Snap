@@ -9,6 +9,7 @@
 * threads, objects, blocks: removed support for "expand" block (b/c reorganizing the whole feature)
 * threads, objects, blocks, byob: merged both ustom block slot event hat blocks into one "when slot ... gets ..."
 * updated OOP library for the new slot event hat block
+* updated Sprite Method API library for the new slot event hat block
 
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
