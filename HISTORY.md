@@ -13,6 +13,7 @@
 * updated OOP library for the new slot event hat block
 * updated Sprite Method API library for the new slot event hat block
 * updated German translation: removed obsolete strings of deprecated slot-interaction blocks
+* updated German translation: added new strings for slot-interaction blocks
 
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
