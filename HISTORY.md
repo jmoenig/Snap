@@ -4,6 +4,9 @@
 * **Notable Changes:**
     * deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value
 
+### 2024-11-10
+* threads, objects, blocks: removed support for "expand" block (b/c reorganizing the whole feature)
+
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
 * threads, objects: deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value

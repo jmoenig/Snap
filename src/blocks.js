@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-08';
+modules.blocks = '2024-November-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -669,11 +669,6 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: 'inputSlotsMenu'
-    },
-    '%variadicSlot': {
-        type: 'input',
-        tags: 'read-only static',
-        menu: 'variadicSlotsMenu'
     },
     '%att': {
         type: 'input',
@@ -11294,19 +11289,6 @@ InputSlotMorph.prototype.inputSlotsMenu = function () {
             if (value[0].startsWith('%mult') ||
                 (info && ['input', 'boolean'].includes(info.type))
             ) {
-                dict[key] = key;
-            }
-        });
-    }
-    return dict;
-};
-
-InputSlotMorph.prototype.variadicSlotsMenu = function () {
-    var blockEditor = this.parentThatIsA(BlockEditorMorph),
-        dict = {};
-    if (blockEditor) {
-        blockEditor.prototypeSlots().forEach((value, key) => {
-            if (value[0].startsWith('%mult')) {
                 dict[key] = key;
             }
         });

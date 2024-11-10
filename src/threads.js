@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-09';
+modules.threads = '2024-November-10';
 
 var ThreadManager;
 var Process;
@@ -1760,23 +1760,6 @@ Process.prototype.doSetSlot = function(name, value) {
                     subslots[i].setContents(item);
                 }
             });
-        }
-    }
-};
-
-Process.prototype.doExpandSlot = function(name, arity) {
-    // deprecated b/c superseded by doSetSlot(),
-    // kept for backwards compatibility with v10.2.0
-    var sym = Symbol.for('block'),
-        frame, block, slot;
-    if (!name) {return; }
-    frame = this.context.variables.silentFind(sym);
-    if (!frame) {return; }
-    block = frame.getVar(sym);
-    if (block.isCustomBlock) {
-        slot = block.inputSlotNamed(name);
-        if (slot instanceof MultiArgMorph) {
-            slot.expandTo(arity);
         }
     }
 };
