@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-06';
+modules.byob = '2024-November-10';
 
 // Declarations
 
@@ -2251,8 +2251,9 @@ CustomCommandBlockMorph.prototype.fireSlotEditedEvent= function (slot) {
         names = def.inputNames(),
         inputName = names[this.inputs().indexOf(slot)],
         scripts = def.scripts.filter(each =>
-            each.selector === 'receiveSlotEdit' &&
-                each.inputs()[0].evaluate() === inputName),
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'edited'),
         stage = rcvr.parentThatIsA(StageMorph),
         vars;
 

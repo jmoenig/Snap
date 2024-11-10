@@ -670,6 +670,14 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: 'inputSlotsMenu'
     },
+    '%slotEvent': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            edited : ['edited'],
+            menu : ['menu']
+        }
+    },
     '%att': {
         type: 'input',
         tags: 'read-only',
@@ -7197,7 +7205,7 @@ HatBlockMorph.prototype.blockSequence = function () {
 // HatBlockMorph accessing:
 
 HatBlockMorph.prototype.isCustomBlockSpecific = function () {
-    return ['receiveMenuRequest', 'receiveSlotEdit'].includes(this.selector);
+    return this.selector === 'receiveSlotEvent';
 };
 
 // HatBlockMorph syntax analysis
@@ -11205,8 +11213,9 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         names = def.inputNames(),
         inputName = names[block.inputs().indexOf(this)],
         script = detect(def.scripts, each =>
-            each.selector === 'receiveMenuRequest' &&
-                each.inputs()[0].evaluate() === inputName),
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'menu'),
         stage = rcvr.parentThatIsA(StageMorph),
         isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
         vars, show, format;
@@ -12286,6 +12295,11 @@ InputSlotMorph.prototype.evaluate = function () {
         }
     }
     return contents.text;
+};
+
+InputSlotMorph.prototype.evaluateOption = function () {
+    var val = this.evaluate();
+    return val instanceof Array ? val[0] : val;
 };
 
 InputSlotMorph.prototype.isEmptySlot = function () {

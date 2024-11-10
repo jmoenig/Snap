@@ -8101,8 +8101,9 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                     script;
                 if (dta instanceof List && dta.at(1) === '§_dynamicMenu') {
                     script = detect(def.scripts, each =>
-                        each.selector === 'receiveMenuRequest' &&
-                            each.inputs()[0].evaluate() === key);
+                        each.selector === 'receiveSlotEvent' &&
+                            each.inputs()[0].evaluate() === key &&
+                            each.inputs()[1].evaluateOption() === 'menu');
                     slots.add(script ? script.fullCopy().reify() : dta);
                 } else {
                     slots.add(dta);
@@ -8723,15 +8724,17 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                     }
                     if (expr instanceof CommandBlockMorph) {
                         block = SpriteMorph.prototype.blockForSelector(
-                            'receiveMenuRequest'
+                            'receiveSlotEvent'
                         );
                         block.inputs()[0].setContents(name);
+                        block.inputs()[1].setContents(['menu']);
                         block.nextBlock(expr);
                         expr = block;
                         expr.setPosition(new Point(20, 120));
                         def.scripts = def.scripts.filter(each =>
-                            !(each.selector === 'receiveMenuRequest' &&
-                                each.inputs()[0].evaluate() === name));
+                            !(each.selector === 'receiveSlotEvent' &&
+                                each.inputs()[0].evaluate() === name &&
+                                each.inputs()[1].evaluateOption() === 'menu'));
                         def.scripts.push(expr);
                     }
                     options = '§_dynamicMenu';

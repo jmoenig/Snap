@@ -1352,15 +1352,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
 
         // custom block slot control & dynamic user defined drop-down menus
-        receiveMenuRequest: {
+        receiveSlotEvent: {
             type: 'hat',
             category: 'control',
-            spec: 'when slot %menu menu clicked'
-        },
-        receiveSlotEdit: {
-            type: 'hat',
-            category: 'control',
-            spec: 'when slot %inputSlot edited'
+            spec: 'when slot %inputSlot gets %slotEvent',
+            defaults: ['', ['edited']]
         },
         doSetSlot: {
             type: 'command',
@@ -2752,8 +2748,7 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
     // 10.1: no new primitives
     if (version < 10.2) {
         selectors.push(
-            'receiveMenuRequest',
-            'receiveSlotEdit',
+            'receiveSlotEvent',
             'doSetSlot'
         );
     }
@@ -3729,8 +3724,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportEnvironment'));
         blocks.push('-');
-        blocks.push(block('receiveMenuRequest'));
-        blocks.push(block('receiveSlotEdit'));
+        blocks.push(block('receiveSlotEvent'));
         blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
@@ -10908,8 +10902,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportBlockAttribute'));
         blocks.push(block('reportEnvironment'));
         blocks.push('-');
-        blocks.push(block('receiveMenuRequest'));
-        blocks.push(block('receiveSlotEdit'));
+        blocks.push(block('receiveSlotEvent'));
         blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
