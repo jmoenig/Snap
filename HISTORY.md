@@ -2,6 +2,16 @@
 
 ## in development:
 
+## 10.2.2:
+* **Notable Changes:**
+    * changed wording for "when slot ... gets ..." hat block to "when slot ... signals ..."
+* **Translation Updates:**
+    * German
+
+### 2024-11-10
+* objects: changed wording for "when slot ... gets ..." hat block to "when slot ... signals ..."
+* prepared v10.2.2 patch
+
 ## 10.2.1:
 * **Notable Changes:**
     * deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value

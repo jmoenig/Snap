@@ -1388,7 +1388,7 @@ SnapTranslator.dict.de = {
     "when I am _": "Wenn ich _ werde",
     "when I receive _ _": "Wenn ich _ empfange _",
     "when I start as a clone": "Wenn ich als Klon starte",
-    "when slot _ gets _" : "Wenn Eingabefeld _ Ereignis _",
+    "when slot _ signals _" : "Wenn Eingabefeld _ Ereignis _",
     "when _": "Wenn _",
     "when _ clicked": "Wenn _ angeklickt",
     "when _ is edited _": "Wenn _ bearbeitet wird _",

@@ -1355,7 +1355,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveSlotEvent: {
             type: 'hat',
             category: 'control',
-            spec: 'when slot %inputSlot gets %slotEvent',
+            spec: 'when slot %inputSlot signals %slotEvent',
             defaults: ['', ['menu']]
         },
         doSetSlot: {
