@@ -4,12 +4,15 @@
 * **Notable Changes:**
     * deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value
     * merged both custom block slot event hat blocks into one "when slot ... gets ..."
+* **Translation Updates:**
+    * German
 
 ### 2024-11-10
 * threads, objects, blocks: removed support for "expand" block (b/c reorganizing the whole feature)
 * threads, objects, blocks, byob: merged both ustom block slot event hat blocks into one "when slot ... gets ..."
 * updated OOP library for the new slot event hat block
 * updated Sprite Method API library for the new slot event hat block
+* updated German translation: removed obsolete strings of deprecated slot-interaction blocks
 
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
