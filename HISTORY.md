@@ -15,6 +15,7 @@
 * updated German translation: removed obsolete strings of deprecated slot-interaction blocks
 * updated German translation: added new strings for slot-interaction blocks
 * objects: changed default value for slot-event to "menu"
+* prepared v10.2.1 patch
 
 ### 2024-11-09
 * threads: enhanced "set slot ... to ..." command to also handle variadic inputs, setting them to a list of values
