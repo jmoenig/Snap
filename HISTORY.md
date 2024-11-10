@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.2.1:
 * **Notable Changes:**
     * deprecated "expand (input) to (n) slots" command, because "set slot ... to ..." can now do this by passing a list as value
     * merged both custom block slot event hat blocks into one "when slot ... gets ..."
