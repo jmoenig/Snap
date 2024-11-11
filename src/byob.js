@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-10';
+modules.byob = '2024-November-11';
 
 // Declarations
 
@@ -3422,6 +3422,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         oldSpec = this.definition.blockSpec(),
         pos = this.body.contents.position(),
         count = 1,
+        menuHats = [],
         spec, element;
 
     this.definition.receiver = this.target; // only for serialization
@@ -3443,6 +3444,11 @@ BlockEditorMorph.prototype.updateDefinition = function () {
             element.parent = null;
             element.setPosition(morph.position().subtract(pos));
             this.definition.scripts.push(element);
+            if (element.selector === 'receiveSlotEvent' &&
+                element.inputs()[1].evaluateOption() === 'menu'
+            ) {
+                menuHats.push(element);
+            }
         }
     });
 
@@ -3462,6 +3468,20 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         } else {
             this.definition.comment = null;
         }
+    }
+
+    // automatically declare custom dropdown menus
+    if (menuHats.length) {
+        menuHats.forEach(hat => {
+            let slot = hat.inputs()[0].evaluate(),
+                info = this.definition.declarations.get(slot);
+            if (slot !== '' && !info[2]) {
+                info[2] = this.definition.encodeChoices(
+                    new List(['§_dynamicMenu'])
+                );
+                this.definition.declarations.set(slot, info);
+            }
+        });
     }
 
     this.definition.body = this.context(head);
