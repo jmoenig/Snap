@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
+    * new "input slots" menu option for custom block input slots 
 * **Notable Changes:**
     * automatically add a dropdown menu to any custom block input slot whose definition has a slot menu event hat block for it
 
@@ -10,6 +11,7 @@
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
 * blocks: reversed order of slot-event dropdown items
 * byob: automatically add a dropdown menu to any custom block input slot whose definition has a slot menu event hat block for it
+* byob: added "input slots" menu as option to custom block input slot dialog
 
 ## 10.2.2:
 * **Notable Changes:**
