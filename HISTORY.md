@@ -6,6 +6,7 @@
 
 ### 2024-11-11
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
+* blocks: reversed order of slot-event dropdown items
 
 ## 10.2.2:
 * **Notable Changes:**

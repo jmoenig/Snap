@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-10';
+modules.blocks = '2024-November-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -674,8 +674,8 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
-            edited : ['edited'],
-            menu : ['menu']
+            menu : ['menu'],
+            edited : ['edited']
         }
     },
     '%att': {
