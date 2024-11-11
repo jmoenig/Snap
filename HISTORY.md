@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
+
+### 2024-11-11
+* threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
 
 ## 10.2.2:
 * **Notable Changes:**

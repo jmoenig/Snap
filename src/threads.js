@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-10';
+modules.threads = '2024-November-11';
 
 var ThreadManager;
 var Process;
@@ -1982,6 +1982,12 @@ Process.prototype.mergeVariables = function () {
     this.context.outerContext.variables.addVar(
         Symbol.for('block'),
         this.context.expression.block // expression is an InputList
+    );
+    // bind a copy of the block instance to "this caller"
+    // not entirely convinced about the benefits, but let's play with it
+    this.context.outerContext.variables.addVar(
+        Symbol.for('caller'),
+        this.context.expression.block.fullCopy().reify()
     );
     this.context.expression.names.forEach((name, i) =>
         this.context.outerContext.variables.addVar(name, this.context.inputs[i])
