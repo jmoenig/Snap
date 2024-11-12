@@ -6,6 +6,11 @@
     * new "input slots" menu option for custom block input slots 
 * **Notable Changes:**
     * automatically add a dropdown menu to any custom block input slot whose definition has a slot menu event hat block for it
+* **Notable Fixes:**
+    * fixed input names when querying a custom block definition that has no function body script
+
+### 2024-11-12
+* threads: fixed input names when querying a custom block definition that has no function body script
 
 ### 2024-11-11
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions

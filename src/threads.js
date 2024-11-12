@@ -65,7 +65,7 @@ StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-11';
+modules.threads = '2024-November-12';
 
 var ThreadManager;
 var Process;
@@ -7972,19 +7972,24 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'definition':
         if (expr.isCustomBlock) {
             if (expr.isGlobal) {
-                if (expr.definition.primitive && !expr.definition.body) {
+                def = expr.definition;
+                if (def.primitive && !def.body) {
                     prim = SpriteMorph.prototype.blockForSelector(
                         'doPrimitive'
                     );
                     prim.inputs()[0].setContents(true);
-                    prim.inputs()[1].setContents(expr.definition.primitive);
+                    prim.inputs()[1].setContents(def.primitive);
                     body = prim.reify();
-                } else {
-                    body = expr.definition.body || new Context();
                 }
             } else {
-                body = this.blockReceiver().getMethod(expr.semanticSpec).body ||
-                    new Context();
+                def = this.blockReceiver().getMethod(expr.semanticSpec);
+            }
+            if (!body) {
+                body = def.body;
+                if (!body) {
+                    body = new Context();
+                    def.inputNames().forEach(name => body.addInput(name));
+                }
             }
         } else {
             prim = SpriteMorph.prototype.blocks[expr.selector].src;
@@ -7997,14 +8002,14 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 prim.inputs()[1].setContents(expr.selector);
                 body = prim.reify();
             }
-        }
-        if (body instanceof Context &&
-            (!body.expression || prim) &&
-            !body.inputs.length
-        ) {
-            // make sure the definition has the same number of inputs as the
-            // block prototype (i.e. the header)
-            expr.inputs().forEach((inp, i) => body.addInput('#' + (i + 1)));
+            if (body instanceof Context &&
+                (!body.expression || prim) &&
+                !body.inputs.length
+            ) {
+                // make sure the definition has the same number of inputs as the
+                // block prototype (i.e. the header)
+                expr.inputs().forEach((inp, i) => body.addInput('#' + (i + 1)));
+            }
         }
         if (body.expression && body.expression.selector === 'doReport' &&
                 body.expression.inputs()[0] instanceof BlockMorph) {
