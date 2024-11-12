@@ -1594,6 +1594,10 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
     }
     this.replaceInput(arg, deflt);
     if (deflt instanceof MultiArgMorph) {
+        if (deflt.initialSlots) {
+            deflt.collapseAll();
+            deflt.expandTo(deflt.initialSlots);
+        }
         deflt.refresh();
     } else if (deflt instanceof RingMorph) {
         deflt.fixBlockColor();
@@ -14572,7 +14576,7 @@ MultiArgMorph.prototype.collapseAll = function () {
 };
 
 MultiArgMorph.prototype.expandTo = function (arity = 0) {
-    // experimental for custom block arity control in v10.2 only
+    // experimental in v10.2
     var len = this.inputs().length,
         i;
 

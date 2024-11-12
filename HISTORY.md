@@ -11,10 +11,13 @@
 * **Notable Fixes:**
     * fixed input names when querying a custom block definition that has no function body script
     * hide variadic input arrows in case the number of slots is fixed  
+    * expand variadic inputs to their initial slots amount (if any is specified) when restoring them (i.e. when removing an embedded reporter block)
 
 ### 2024-11-12
 * threads: fixed input names when querying a custom block definition that has no function body script
 * metaprogramming library: new "expand (input) to (n) slots" command
+* blocks: hide variadic input arrows in case the number of slots is fixed
+* blocks: expand variadic inputs to their initial slots amount (if any is specified) when restoring them (i.e. when removing an embedded reporter block)
 
 ### 2024-11-11
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
