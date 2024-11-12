@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.2.3:
 * **New Features:**
     * expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
     * new "input slots" menu option for custom block input slots
@@ -20,6 +22,7 @@
 * metaprogramming library: new "expand (input) to (n) slots" command
 * blocks: hide variadic input arrows in case the number of slots is fixed
 * blocks: expand variadic inputs to their initial slots amount (if any is specified) when restoring them (i.e. when removing an embedded reporter block)
+* prepared v10.2.3 patch
 
 ### 2024-11-11
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
