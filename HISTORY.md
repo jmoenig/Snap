@@ -12,6 +12,8 @@
     * fixed input names when querying a custom block definition that has no function body script
     * hide variadic input arrows in case the number of slots is fixed  
     * expand variadic inputs to their initial slots amount (if any is specified) when restoring them (i.e. when removing an embedded reporter block)
+* Note to overeager enthusiasts and online geniuses (tm):
+    * Please, oh please, use metaprogramming capabilities and variadic inputs wisely, if at all. They can be powerful abstractions, but there ain't not free lunch, they come with costs in expressivity and comprehensibility. Remember that naming things (and chosing distinct names) is a great strategy when communicating with fellow humans. It's sure nice to be revered by your peers for your inconceivable brilliance, but so much nicer to be understood. Never forget that among humans expressive is better than impressive, straight ist better than crooked, flat is better than nested, named is better than anonymous and explicit is better than implicit. Also remember that the one you're most likely talking to is your future you. Be nice to them!
 
 ### 2024-11-12
 * threads: fixed input names when querying a custom block definition that has no function body script
