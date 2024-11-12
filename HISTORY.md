@@ -3,7 +3,8 @@
 ## in development:
 * **New Features:**
     * expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
-    * new "input slots" menu option for custom block input slots 
+    * new "input slots" menu option for custom block input slots
+    * new "expand (input) to (n) slots" command in the metaprogramming library 
 * **Notable Changes:**
     * automatically add a dropdown menu to any custom block input slot whose definition has a slot menu event hat block for it
 * **Notable Fixes:**
@@ -11,6 +12,7 @@
 
 ### 2024-11-12
 * threads: fixed input names when querying a custom block definition that has no function body script
+* metaprogramming library: new "expand (input) to (n) slots" command
 
 ### 2024-11-11
 * threads: expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
