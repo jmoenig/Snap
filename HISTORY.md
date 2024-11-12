@@ -7,8 +7,10 @@
     * new "expand (input) to (n) slots" command in the metaprogramming library 
 * **Notable Changes:**
     * automatically add a dropdown menu to any custom block input slot whose definition has a slot menu event hat block for it
+    * tweaked variadic input slot arrows layout
 * **Notable Fixes:**
     * fixed input names when querying a custom block definition that has no function body script
+    * hide variadic input arrows in case the number of slots is fixed  
 
 ### 2024-11-12
 * threads: fixed input names when querying a custom block definition that has no function body script

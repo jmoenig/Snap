@@ -161,7 +161,7 @@ SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-11';
+modules.blocks = '2024-November-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14306,6 +14306,9 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             label.hide();
         }
         leftArrow.hide();
+        if (this.minInputs === this.maxInputs) {
+            rightArrow.hide();
+        }
         if (this.isStatic) {
             arrows.setWidth(dim.x);
         } else {
@@ -14328,7 +14331,12 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
         if (this.maxInputs && inpCount > this.maxInputs - 1) {
             // hide right arrow
             rightArrow.hide();
-            arrows.setWidth(dim.x);
+            if (this.isStatic) {
+                arrows.setWidth(dim.x);
+            } else {
+                arrows.setWidth(dim.x * 1.3 + listSymbol.width());
+                centerList = false;
+            }
         }
     }
     leftArrow.setCenter(arrows.center());
