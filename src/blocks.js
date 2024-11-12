@@ -14310,7 +14310,7 @@ MultiArgMorph.prototype.fixArrowsLayout = function () {
             label.hide();
         }
         leftArrow.hide();
-        if (this.minInputs === this.maxInputs) {
+        if (this.minInputs && this.minInputs === this.maxInputs) {
             rightArrow.hide();
         }
         if (this.isStatic) {

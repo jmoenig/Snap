@@ -2,6 +2,10 @@
 
 ## in development:
 
+## 10.2.4:
+* **Notable Fixes:**
+    * fixed a variadic input slot arrow layout bug
+
 ## 10.2.3:
 * **New Features:**
     * expose a copy of the custom block as "caller" to input slot reaction scripts inside custom block definitions
