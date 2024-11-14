@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2024-September-16';
+modules.lists = '2024-November-14';
 
 var List;
 var ListWatcherMorph;
@@ -847,14 +847,15 @@ List.prototype.fillDimensionsFor = function (dimensions, leafCount) {
     // values adjusted to accomodate the given overall leaf count from
     // left to right, e.g. for leaf count of 10 the given dimensions
     // (0,3) become (4,3)
-    var factor,
+    var product, factor,
         already = -1;
     if (dimensions.contains(0) ||
         dimensions.contains('') ||
         dimensions.contains(false)
     ) {
-        factor = Math.ceil(leafCount / dimensions.itemsArray().reduce((a, b) =>
-            Math.max(a, 1) * Math.max(b, 1)));
+        product = dimensions.itemsArray().reduce((a, b) =>
+            Math.max(a, 1) * Math.max(b, 1));
+        factor = Math.ceil(leafCount / Math.max(product, 1));
         return dimensions.map(each =>
             each ? each : (already++ ? factor : 1));
     }

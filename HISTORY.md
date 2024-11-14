@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed "reshape" to let a zero dimension consistenly refer to the available leaf count, e.g. reshape (['foo', 'bar'], 0) => ['foo', 'bar']
+
+### 2024-11-14
+* lists: fixed "reshape" to let a zero dimension consistenly refer to the available leaf count, e.g. reshape (['foo', 'bar'], 0) => ['foo', 'bar']  
 
 ## 10.2.4:
 * **Notable Fixes:**
