@@ -111,7 +111,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-11';
+modules.byob = '2024-November-14';
 
 // Declarations
 
@@ -3476,7 +3476,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         menuHats.forEach(hat => {
             let slot = hat.inputs()[0].evaluate(),
                 info = this.definition.declarations.get(slot);
-            if (slot !== '' && !info[2]) {
+            if (slot !== '' && info && !info[2]) {
                 info[2] = this.definition.encodeChoices(
                     new List(['§_dynamicMenu'])
                 );

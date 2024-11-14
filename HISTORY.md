@@ -3,9 +3,11 @@
 ## in development:
 * **Notable Fixes:**
     * fixed "reshape" to let a zero dimension consistenly refer to the available leaf count, e.g. reshape (['foo', 'bar'], 0) => ['foo', 'bar']
+    * fixed an error when referencing a renamed or nonexisting input slot in a slot-menu-event hat block
 
 ### 2024-11-14
-* lists: fixed "reshape" to let a zero dimension consistenly refer to the available leaf count, e.g. reshape (['foo', 'bar'], 0) => ['foo', 'bar']  
+* lists: fixed "reshape" to let a zero dimension consistenly refer to the available leaf count, e.g. reshape (['foo', 'bar'], 0) => ['foo', 'bar']
+* byob: fixed an error when referencing a renamed or nonexisting input slot in a slot-menu-event hat block
 
 ## 10.2.4:
 * **Notable Fixes:**
