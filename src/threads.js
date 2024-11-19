@@ -61,11 +61,12 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
+StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph,
+CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-12';
+modules.threads = '2024-November-19';
 
 var ThreadManager;
 var Process;
@@ -1832,6 +1833,12 @@ Process.prototype.runContinuation = function (aContext, args) {
 // Process custom block primitives
 
 Process.prototype.evaluateCustomBlock = function () {
+    if (this.context.expression instanceof CustomHatBlockMorph &&
+        !this.context.accumulator
+    ) {
+        return this.evaluateCustomHatBlock();
+    }
+
     var caller = this.context.parentContext,
         block = this.context.expression,
         method = block.isGlobal ? block.definition
@@ -2847,6 +2854,29 @@ Process.prototype.receiveCondition = function (bool) {
     this.popContext();
     if (bool === true && nb) {
         this.pushContext(nb.blockSequence(), outer);
+    }
+    this.pushContext();
+};
+
+Process.prototype.evaluateCustomHatBlock = function () {
+    var runnable = new Context(
+        this.context.parentContext,
+        'dispatchEvent',
+        this.context.outerContext
+        // receiver
+    );
+    runnable.addInput(this.context.expression.nextBlock());
+    this.context.parentContext = runnable;
+    this.context.accumulator = true;
+    this.evaluateCustomBlock();
+};
+
+Process.prototype.dispatchEvent = function (script, bool) {
+    // this.popContext();
+    var outer = this.context.outerContext;
+    this.popContext();
+    if (bool === true && script) {
+        this.pushContext(script.blockSequence(), outer);
     }
     this.pushContext();
 };

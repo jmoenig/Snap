@@ -155,13 +155,14 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, display,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK,
+CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-12';
+modules.blocks = '2024-November-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5376,7 +5377,7 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         h = ext.y,
         r = w / 2,
         x = this.edge + this.labelPadding,
-        y = this.edge,
+        y = this instanceof HatBlockMorph ? this.hatHeight : this.edge,
         isNormal =
             this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
@@ -6039,7 +6040,9 @@ BlockMorph.prototype.snap = function () {
         top.addHighlight(top.removeHighlight());
     }
     // register generic hat blocks
-    if (this.selector === 'receiveCondition') {
+    if (this instanceof CustomHatBlockMorph ||
+        this.selector === 'receiveCondition'
+    ) {
         receiver = top.scriptTarget();
         if (receiver) {
             stage = receiver.parentThatIsA(StageMorph);
@@ -7200,7 +7203,9 @@ HatBlockMorph.prototype.init = function () {
 HatBlockMorph.prototype.blockSequence = function () {
     // override my inherited method so that I am not part of my sequence
     var result;
-    if (this.selector === 'receiveCondition') {return this; }
+    if (this.isCustomBlock || this.selector === 'receiveCondition') {
+        return this;
+    }
     result = HatBlockMorph.uber.blockSequence.call(this);
     result.shift();
     return result;
@@ -16674,7 +16679,9 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
     this.fixLayout();
 
     // register generic hat blocks
-    if (block.selector === 'receiveCondition') {
+    if (block instanceof CustomHatBlockMorph ||
+        block.selector === 'receiveCondition'
+    ) {
         rcvr = this.editor.scriptTarget();
         if (rcvr) {
             stage = rcvr.parentThatIsA(StageMorph);

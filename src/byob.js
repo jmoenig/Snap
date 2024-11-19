@@ -44,6 +44,7 @@
     CommandBlockMorph***
         CustomCommandBlockMorph
         HatBlockMorph***
+            CustomHatBlockMorph
             PrototypeHatBlockMorph
 
     DialogBoxMorph**
@@ -111,12 +112,13 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-14';
+modules.byob = '2024-November-19';
 
 // Declarations
 
 var CustomBlockDefinition;
 var CustomCommandBlockMorph;
+var CustomHatBlockMorph;
 var CustomReporterBlockMorph;
 var BlockDialogMorph;
 var BlockEditorMorph;
@@ -187,6 +189,8 @@ CustomBlockDefinition.prototype.blockInstance = function (storeTranslations) {
     var block;
     if (this.type === 'command') {
         block = new CustomCommandBlockMorph(this);
+    } else if (this.type === 'hat') {
+        block = new CustomHatBlockMorph(this);
     } else {
         block = new CustomReporterBlockMorph(
             this,
@@ -215,6 +219,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
     // make a new block instance and mark it as prototype
     if (this.type === 'command') {
         block = new CustomCommandBlockMorph(this, true);
+    } else if (this.type === 'hat') {
+        block = new CustomHatBlockMorph(this, true);
     } else {
         block = new CustomReporterBlockMorph(
             this,
@@ -2449,6 +2455,140 @@ CustomReporterBlockMorph.prototype.relabel
 CustomReporterBlockMorph.prototype.alternatives
     = CustomCommandBlockMorph.prototype.alternatives;
 
+// CustomHatBlockMorph ////////////////////////////////////////////
+
+// CustomHatBlockMorph inherits from HatBlockMorph:
+
+CustomHatBlockMorph.prototype = new HatBlockMorph();
+CustomHatBlockMorph.prototype.constructor = CustomHatBlockMorph;
+CustomHatBlockMorph.uber = HatBlockMorph.prototype;
+
+// CustomHatBlockMorph shared settings:
+
+CustomHatBlockMorph.prototype.isCustomBlock = true;
+
+// CustomHatBlockMorph instance creation:
+
+function CustomHatBlockMorph(definition, isProto) {
+    this.init(definition, isProto);
+}
+
+CustomHatBlockMorph.prototype.init =
+    CustomCommandBlockMorph.prototype.init;
+
+CustomHatBlockMorph.prototype.initializeVariables =
+    CustomCommandBlockMorph.prototype.initializeVariables;
+
+CustomHatBlockMorph.prototype.reactToTemplateCopy =
+    CustomCommandBlockMorph.prototype.reactToTemplateCopy;
+
+CustomHatBlockMorph.prototype.refresh =
+    CustomCommandBlockMorph.prototype.refresh;
+
+CustomHatBlockMorph.prototype.mouseClickLeft = function () {
+    if (!this.isPrototype) {
+        return CustomHatBlockMorph.uber.mouseClickLeft.call(this);
+    }
+    this.edit();
+};
+
+CustomHatBlockMorph.prototype.placeHolder =
+    CustomCommandBlockMorph.prototype.placeHolder;
+
+CustomHatBlockMorph.prototype.parseSpec =
+    CustomCommandBlockMorph.prototype.parseSpec;
+
+CustomHatBlockMorph.prototype.edit =
+    CustomCommandBlockMorph.prototype.edit;
+
+CustomHatBlockMorph.prototype.labelPart =
+    CustomCommandBlockMorph.prototype.labelPart;
+
+CustomHatBlockMorph.prototype.upvarFragmentNames =
+    CustomCommandBlockMorph.prototype.upvarFragmentNames;
+
+CustomHatBlockMorph.prototype.upvarFragmentName
+    = CustomCommandBlockMorph.prototype.upvarFragmentName;
+
+CustomHatBlockMorph.prototype.inputFragmentNames
+    = CustomCommandBlockMorph.prototype.inputFragmentNames;
+
+CustomHatBlockMorph.prototype.specFromFragments
+    = CustomCommandBlockMorph.prototype.specFromFragments;
+
+CustomHatBlockMorph.prototype.blockSpecFromFragments
+    = CustomCommandBlockMorph.prototype.blockSpecFromFragments;
+
+CustomHatBlockMorph.prototype.declarationsFromFragments
+    = CustomCommandBlockMorph.prototype.declarationsFromFragments;
+
+CustomHatBlockMorph.prototype.refreshPrototype
+    = CustomCommandBlockMorph.prototype.refreshPrototype;
+
+CustomHatBlockMorph.prototype.refreshPrototypeSlotTypes
+    = CustomCommandBlockMorph.prototype.refreshPrototypeSlotTypes;
+
+CustomHatBlockMorph.prototype.restoreInputs
+    = CustomCommandBlockMorph.prototype.restoreInputs;
+
+CustomHatBlockMorph.prototype.refreshDefaults
+    = CustomCommandBlockMorph.prototype.refreshDefaults;
+
+CustomHatBlockMorph.prototype.isInUse
+    = CustomCommandBlockMorph.prototype.isInUse;
+
+// CustomHatBlockMorph menu:
+
+CustomHatBlockMorph.prototype.userMenu
+    = CustomCommandBlockMorph.prototype.userMenu;
+
+CustomHatBlockMorph.prototype.moveInPalette =
+    CustomCommandBlockMorph.prototype.moveInPalette;
+
+CustomHatBlockMorph.prototype.duplicateBlockDefinition
+    = CustomCommandBlockMorph.prototype.duplicateBlockDefinition;
+
+CustomHatBlockMorph.prototype.deleteBlockDefinition
+    = CustomCommandBlockMorph.prototype.deleteBlockDefinition;
+
+CustomHatBlockMorph.prototype.exportBlockDefinition
+    = CustomCommandBlockMorph.prototype.exportBlockDefinition;
+
+// CustomHatBlockMorph events:
+
+CustomHatBlockMorph.prototype.fireSlotEditedEvent =
+    CustomCommandBlockMorph.prototype.fireSlotEditedEvent;
+
+// CustomHatBlockMorph accessing slots by their name
+
+CustomHatBlockMorph.prototype.inputSlotNamed =
+    CustomCommandBlockMorph.prototype.inputSlotNamed;
+
+// hover help - commented out for now
+/*
+CustomHatBlockMorph.prototype.mouseEnter
+    = CustomCommandBlockMorph.prototype.mouseEnter;
+
+CustomHatBlockMorph.prototype.mouseLeave
+    = CustomCommandBlockMorph.prototype.mouseLeave;
+*/
+
+// CustomHatBlockMorph bubble help:
+
+CustomHatBlockMorph.prototype.bubbleHelp
+    = CustomCommandBlockMorph.prototype.bubbleHelp;
+
+CustomHatBlockMorph.prototype.popUpbubbleHelp
+    = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
+
+// CustomHatBlockMorph relabelling
+
+CustomHatBlockMorph.prototype.relabel
+    = CustomCommandBlockMorph.prototype.relabel;
+
+CustomHatBlockMorph.prototype.alternatives
+    = CustomCommandBlockMorph.prototype.alternatives;
+
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
 /*
@@ -2915,6 +3055,15 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
         block,
         () => this.blockType === 'predicate'
     );
+
+    block = new HatBlockMorph();
+    block.setColor(clr);
+    block.setSpec(localize('Event hat'));
+    this.addBlockTypeButton(
+        () => this.setType('hat'),
+        block,
+        () => this.blockType === 'hat'
+    );
 };
 
 BlockDialogMorph.prototype.addBlockTypeButton = function (
@@ -3014,7 +3163,7 @@ BlockDialogMorph.prototype.getInput = function () {
     def.type = this.blockType;
     def.category = this.category;
     def.isGlobal = this.isGlobal;
-    if (def.type === 'reporter' || def.type === 'predicate') {
+    if (def.type !== 'command') {
         body = Process.prototype.reify.call(
             null,
             SpriteMorph.prototype.blockForSelector('doReport'),
@@ -3082,11 +3231,6 @@ BlockDialogMorph.prototype.fixLayout = function () {
         }
     }
 
-    if (this.label) {
-        this.label.setCenter(this.center());
-        this.label.setTop(this.top() + (th - this.label.height()) / 2);
-    }
-
     if (this.types) {
         this.types.fixLayout();
         this.bounds.setHeight(
@@ -3101,9 +3245,21 @@ BlockDialogMorph.prototype.fixLayout = function () {
         this.types.setCenter(this.center());
         if (this.body) {
             this.types.setTop(this.body.bottom() + this.padding);
+            this.body.setWidth(this.types.width() - this.padding);
         } else if (this.categories) {
             this.types.setTop(this.categories.bottom() + this.padding);
         }
+    }
+
+    if (this.label) {
+        this.label.setCenter(this.center());
+        this.label.setTop(this.top() + (th - this.label.height()) / 2);
+    }
+
+    if (this.body && this.categories) {
+        this.categories.setLeft(
+            this.body.left() + (this.body.width() - this.categories.width()) / 2
+        );
     }
 
     if (this.scopes) {

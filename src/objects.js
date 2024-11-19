@@ -92,11 +92,11 @@ localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
 embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
-CustomBlockDefinition, exportEmbroidery*/
+CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-10';
+modules.objects = '2024-November-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -2752,6 +2752,7 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'doSetSlot'
         );
     }
+    // 10.3: no new primitives
 
     return selectors;
 };
@@ -7908,17 +7909,16 @@ SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
 
 SpriteMorph.prototype.hasGenericHatBlocks = function () {
     return this.scripts.children.some(morph =>
-        morph.selector === 'receiveCondition'
+        morph instanceof CustomHatBlockMorph ||
+            morph.selector === 'receiveCondition'
     );
 };
 
 SpriteMorph.prototype.allGenericHatBlocks = function () {
-    return this.scripts.children.filter(morph => {
-        if (morph.selector) {
-            return morph.selector === 'receiveCondition';
-        }
-        return false;
-    });
+    return this.scripts.children.filter(morph =>
+        morph instanceof CustomHatBlockMorph ||
+            morph.selector === 'receiveCondition'
+    );
 };
 
 SpriteMorph.prototype.allScripts = function () {
