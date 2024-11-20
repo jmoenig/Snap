@@ -7,6 +7,7 @@
 
 ### 2024-11-20
 * libraries: new "Events" library featuring custom hat blocks reacting to various state changes
+* updated dev version
 
 ### 2024-11-19
 * byob, blocks, objects, threads, store: Custom Event Hat Blocks, expressed as predicate defining a condition that fires the event
