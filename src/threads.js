@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-19';
+modules.threads = '2024-November-21';
 
 var ThreadManager;
 var Process;
@@ -2852,7 +2852,7 @@ Process.prototype.receiveCondition = function (bool) {
     var nb = this.context.expression.nextBlock(),
         outer = this.context.outerContext;
     this.popContext();
-    if (bool === true && nb) {
+    if ((bool === true || this.isClicked) && nb) {
         this.pushContext(nb.blockSequence(), outer);
     }
     this.pushContext();
@@ -2875,7 +2875,7 @@ Process.prototype.dispatchEvent = function (script, bool) {
     // this.popContext();
     var outer = this.context.outerContext;
     this.popContext();
-    if (bool === true && script) {
+    if ((bool === true || this.isClicked) && script) {
         this.pushContext(script.blockSequence(), outer);
     }
     this.pushContext();
