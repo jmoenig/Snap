@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-19';
+modules.objects = '2024-November-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -10248,15 +10248,14 @@ StageMorph.prototype.step = function () {
     }
 
     // manage threads
-    if (this.enableCustomHatBlocks) {
-        this.stepGenericConditions();
-    }
     if (this.isFastTracked && this.threads.processes.length) {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
+            this.stepGenericConditions();
             this.threads.step(); // approx. 67 fps
         }
         this.changed();
     } else {
+        this.stepGenericConditions();
         this.threads.step();
 
         // single-stepping hook:
@@ -10314,6 +10313,7 @@ StageMorph.prototype.updateProjection = function () {
 StageMorph.prototype.stepGenericConditions = function (stopAll) {
     var hatCount = 0,
         ide;
+    if (!this.enableCustomHatBlocks) {return; }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allGenericHatBlocks().forEach(block => {
