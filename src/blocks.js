@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-19';
+modules.blocks = '2024-November-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11712,6 +11712,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
+    dict.hat = ['hat'];
     dict['~'] = null;
     // the following entries are collective types and thus not unique:
     if (SpriteMorph.prototype.enableFirstClass) {

@@ -4718,12 +4718,18 @@ Process.prototype.reportTypeOf = function (thing) {
             if (exp instanceof ReporterBlockMorph) {
                 return 'reporter';
             }
+            if (exp instanceof HatBlockMorph) {
+                return 'hat';
+            }
             if (exp instanceof CommandBlockMorph) {
                 return 'command';
             }
             return 'reporter'; // 'ring';
         }
 
+        if (thing.expression instanceof HatBlockMorph) {
+            return 'hat';
+        }
         if (thing.expression instanceof CommandBlockMorph) {
             return 'command';
         }
@@ -5424,7 +5430,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         if (isString(string) && '(;'.includes(string.trim()[0])) {
             return this.parseCode(string);
         }
-        this.assertType(string, ['command', 'reporter', 'predicate']);
+        this.assertType(string, ['command', 'reporter', 'predicate', 'hat']);
         return string.components();
     }
     return this.hyper(
@@ -7979,7 +7985,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
         expr, body, slots, data, def, info, loc, cmt, prim;
-    this.assertType(block, ['command', 'reporter', 'predicate']);
+    this.assertType(block, ['command', 'reporter', 'predicate', 'hat']);
     expr = block.expression;
     switch (choice) {
     case 'label':
@@ -8066,7 +8072,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
     case 'type':
-        return ['command', 'reporter', 'predicate'].indexOf(
+        return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)
         ) + 1;
     case 'scope':
@@ -8548,7 +8554,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     var choice = this.inputOption(attribute),
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
-        types = ['command', 'reporter', 'predicate'],
+        types = ['command', 'reporter', 'predicate', 'hat'],
         scopes = ['global', 'local'],
         idx, oldSpec, expr, def, inData, template, oldType, type, loc, prim;
 
@@ -8978,7 +8984,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     this.assertType(label, 'text');
     label = label.trim();
     if (label === '') {return ''; }
-    this.assertType(context, ['command', 'reporter', 'predicate']);
+    this.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
 
     // replace upvar self references inside the definition body
     // with "reportEnvironment" reporters
@@ -9086,7 +9092,7 @@ Process.prototype.doDeleteBlock = function (context) {
         stage = ide.stage,
         expr, def, method, idx;
 
-    this.assertType(context, ['command', 'reporter', 'predicate']);
+    this.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
     expr = context.expression;
     if (!expr.isCustomBlock) {
         throw new Error('expecting a custom block\nbut getting a primitive');

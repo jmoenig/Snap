@@ -2592,6 +2592,10 @@ CustomHatBlockMorph.prototype.relabel
 CustomHatBlockMorph.prototype.alternatives
     = CustomCommandBlockMorph.prototype.alternatives;
 
+// CustomHatBlockMorph syntax analysis
+
+CustomHatBlockMorph.prototype.reify = BlockMorph.prototype.reify;
+
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
 /*
@@ -3061,7 +3065,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
 
     block = new HatBlockMorph();
     block.setColor(clr);
-    block.setSpec(localize('Event hat'));
+    block.setSpec(localize('Hat'));
     this.addBlockTypeButton(
         () => this.setType('hat'),
         block,
