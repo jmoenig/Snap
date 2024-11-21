@@ -4556,7 +4556,8 @@ BlockMorph.prototype.toLisp = function (indentation = 0) {
 };
 
 BlockMorph.prototype.components = function (parameterNames = []) {
-    if (this instanceof ReporterBlockMorph) {
+    if (this instanceof ReporterBlockMorph || this instanceof HatBlockMorph) {
+        // under construction for hat blocks...
         return this.syntaxTree(parameterNames);
     }
     var seq = new List(this.blockSequence()).map((block, i) =>
