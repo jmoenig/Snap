@@ -17,6 +17,7 @@
 * objects: fixed generic and custom hat block scheduling for turbo mode
 * blocks, byob, threads: basic metaprogramming support for custom hat blocks
 * extensions: new "obj_version(obj)" extension for observing compound structures (lists, actors, scripts)
+* updated dev version
 
 ### 2024-11-20
 * libraries: new "Events" library featuring custom hat blocks reacting to various state changes
