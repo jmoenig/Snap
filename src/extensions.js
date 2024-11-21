@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-October-09';
+modules.extensions = '2024-November-21';
 
 // Global stuff
 
@@ -946,6 +946,13 @@ SnapExtensions.primitives.set(
             ide.hasChangedMedia = true;
             ide.recordUnsavedChanges();
         }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'obj_version(obj)',
+    function (obj) {
+        return +(obj instanceof List ? obj.lastChanged : obj?.version) || 0;
     }
 );
 
