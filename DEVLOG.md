@@ -10,6 +10,10 @@
     * directly clicking on a generic or custom hat block runs it no matter what
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
+    * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
+
+### 2024-11-22
+* fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
 
 ### 2024-11-21
 * byob: fixed custom hat block prototype attach points (there should be none)
