@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-19';
+modules.byob = '2024-November-21';
 
 // Declarations
 
@@ -2536,6 +2536,9 @@ CustomHatBlockMorph.prototype.refreshDefaults
 
 CustomHatBlockMorph.prototype.isInUse
     = CustomCommandBlockMorph.prototype.isInUse;
+
+CustomHatBlockMorph.prototype.attachTargets
+    = CustomCommandBlockMorph.prototype.attachTargets;
 
 // CustomHatBlockMorph menu:
 
