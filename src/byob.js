@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-21';
+modules.byob = '2024-November-24';
 
 // Declarations
 
@@ -2484,6 +2484,10 @@ CustomHatBlockMorph.prototype.reactToTemplateCopy =
 
 CustomHatBlockMorph.prototype.refresh =
     CustomCommandBlockMorph.prototype.refresh;
+
+CustomHatBlockMorph.prototype.isRuleHat = function () {
+    return true; // tbd
+};
 
 CustomHatBlockMorph.prototype.mouseClickLeft = function () {
     if (!this.isPrototype) {

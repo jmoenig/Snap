@@ -9,12 +9,14 @@
     * new "infinity" / chain link symbol
 * **Notable Changes:**
     * directly clicking on a generic or custom hat block runs it no matter what
+    * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
     * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol
+* blocks, byob: mark "rule" hat blocks with an infinity symbol to distinguish them from "event" hats 
 
 ### 2024-11-22
 * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse

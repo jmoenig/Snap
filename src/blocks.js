@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-21';
+modules.blocks = '2024-November-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5366,6 +5366,11 @@ BlockMorph.prototype.render = function (ctx) {
         this.drawEdges(ctx);
     }
 
+    // draw infinity / chain link icon if applicable
+    if (this.isRuleHat()) {
+        this.drawRuleIcon(ctx);
+    }
+
     // draw location pin icon if applicable
     if (this.hasLocationPin()) {
         this.drawMethodIcon(ctx);
@@ -5423,6 +5428,10 @@ BlockMorph.prototype.cSlots = function () {
 
 BlockMorph.prototype.hasLocationPin = function () {
 	return (this.isCustomBlock && !this.isGlobal) || this.isLocalVarTemplate;
+};
+
+BlockMorph.prototype.isRuleHat = function () {
+    return false;
 };
 
 // BlockMorph highlighting
@@ -7218,6 +7227,10 @@ HatBlockMorph.prototype.isCustomBlockSpecific = function () {
     return this.selector === 'receiveSlotEvent';
 };
 
+HatBlockMorph.prototype.isRuleHat = function () {
+    return this.selector === 'receiveCondition';
+};
+
 // HatBlockMorph syntax analysis
 
 HatBlockMorph.prototype.reify = function () {
@@ -7390,6 +7403,30 @@ HatBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
         h + shift
     );
     ctx.lineTo(this.width() - this.corner, h + shift);
+    ctx.stroke();
+};
+
+BlockMorph.prototype.drawRuleIcon = function (ctx) {
+    var h = this.hatHeight * 0.8,
+        l = Math.max(h / 4, 1),
+        r = h / 2,
+        x = (this.hatWidth - h * 1.75) * 0.55,
+        y = h / 2,
+        isNormal =
+            this.color === SpriteMorph.prototype.blockColorFor(this.category);
+
+    ctx.lineWidth = l;
+    // ctx.strokeStyle = color.toString();
+    ctx.strokeStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+
+    // left arc
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r - l / 2, radians(60), radians(360), false);
+    ctx.stroke();
+
+    // right arc
+    ctx.beginPath();
+    ctx.arc(x + r * 3 - l, y + r, r - l / 2, radians(-120), radians(180), false);
     ctx.stroke();
 };
 
@@ -12843,6 +12880,10 @@ TemplateSlotMorph.prototype.drawEdges = ReporterBlockMorph
     .prototype.drawEdgesOval;
 
 TemplateSlotMorph.prototype.hasLocationPin = function () {
+    return false;
+};
+
+TemplateSlotMorph.prototype.isRuleHat = function () {
     return false;
 };
 
