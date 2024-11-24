@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2024-September-13';
+modules.symbols = '2024-November-24';
 
 var SymbolMorph;
 
@@ -150,7 +150,8 @@ SymbolMorph.prototype.names = [
     'trash',
     'trashFull',
     'cube',
-    'cubeSolid'
+    'cubeSolid',
+    'infinity'
 ];
 
 // SymbolMorph instance creation:
@@ -509,6 +510,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'cubeSolid':
         this.renderSymbolCubeSolid(ctx, aColor);
         break;
+    case 'infinity':
+        this.renderSymbolInfinity(ctx, aColor);
+        break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
@@ -548,6 +552,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'keyboard':
     case 'keyboardFilled':
         return size * 1.6;
+    case 'infinity':
+        return size * 1.75;
     case 'turnRight':
     case 'turnLeft':
         return size / 3 * 2;
@@ -2480,6 +2486,24 @@ SymbolMorph.prototype.renderSymbolCubeSolid = function (ctx, color) {
     ctx.fill();
 };
 
+SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
+    var h = this.size,
+        l = Math.max(h / 4, 1),
+        r = h / 2;
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+
+    // left arc
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(60), radians(360), false);
+    ctx.stroke();
+
+    // right arc
+    ctx.beginPath();
+    ctx.arc(r * 3 - l, r, r - l / 2, radians(-120), radians(180), false);
+    ctx.stroke();
+};
 
 /*
 // register examples with the World demo menu

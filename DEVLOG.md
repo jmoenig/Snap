@@ -6,11 +6,15 @@
     * new "Events" library featuring custom hat blocks reacting to various state changes
     * new data type: "hat"
     * new "obj_version(obj)" extension for observing compound structures (lists, actors, scripts)
+    * new "infinity" / chain link symbol
 * **Notable Changes:**
     * directly clicking on a generic or custom hat block runs it no matter what
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
     * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
+
+### 2024-11-24
+* symbols: new "infinity" / chain link symbol
 
 ### 2024-11-22
 * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
