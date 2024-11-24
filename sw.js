@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '10.3-dev-241121',
+var snapVersion = '10.3-dev-241124',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',

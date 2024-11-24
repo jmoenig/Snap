@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-November-21';
+modules.gui = '2024-November-24';
 
 // Declarations
 
-var SnapVersion = '10.3-dev-241121';
+var SnapVersion = '10.3-dev-241124';
 
 var IDE_Morph;
 var ProjectDialogMorph;

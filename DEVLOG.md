@@ -17,6 +17,7 @@
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol
 * blocks, byob: mark "rule" hat blocks with an infinity symbol to distinguish them from "event" hats 
+* updated dev version
 
 ### 2024-11-22
 * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
