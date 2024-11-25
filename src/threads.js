@@ -2884,13 +2884,14 @@ Process.prototype.dispatchRule = function (hatBlock, bool) {
 Process.prototype.dispatchEvent = function (hatBlock, bool) {
     var outer = this.context.outerContext,
         next = hatBlock.nextBlock();
-    if (!next) { return; }
     this.popContext();
-    if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
-        hatBlock.isLoaded = false;
-        this.pushContext(next.blockSequence(), outer);
-    } else if (!bool) {
-        hatBlock.isLoaded = true;
+    if (next) {
+        if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
+            hatBlock.isLoaded = false;
+            this.pushContext(next.blockSequence(), outer);
+        } else if (!bool) {
+            hatBlock.isLoaded = true;
+        }
     }
     this.pushContext();
 };
