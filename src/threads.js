@@ -2858,7 +2858,7 @@ Process.prototype.receiveCondition = function (bool) {
     this.pushContext();
 };
 
-Process.prototype.receiveEventCondition = function (bool) {
+Process.prototype.receiveConditionEvent = function (bool) {
     var hatBlock = this.context.expression,
         next = hatBlock.nextBlock(),
         outer = this.context.outerContext;

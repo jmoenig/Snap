@@ -25,6 +25,7 @@
 * threads: new "event" semantics (default) for custom hat blocks
 * blocks, byob: refactored HatBlock >> isLoaded
 * threads: new generic "receiveEventCondition" primitive for generic hat blocks
+* blocks, objects, threads: replaced generic "When" hat in the palette with event semantics version
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol

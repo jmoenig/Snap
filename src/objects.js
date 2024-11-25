@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-21';
+modules.objects = '2024-November-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -1062,6 +1062,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when %b'
+        },
+        receiveConditionEvent: {
             type: 'hat',
             category: 'control',
             spec: 'when %b'
@@ -3678,7 +3683,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveCondition'));
+        blocks.push(block('receiveConditionEvent'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
@@ -7908,16 +7913,18 @@ SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
 };
 
 SpriteMorph.prototype.hasGenericHatBlocks = function () {
+    var generics = ['receiveCondition', 'receiveConditionEvent'];
     return this.scripts.children.some(morph =>
         morph instanceof CustomHatBlockMorph ||
-            morph.selector === 'receiveCondition'
+            generics.includes(morph.selector)
     );
 };
 
 SpriteMorph.prototype.allGenericHatBlocks = function () {
+    var generics = ['receiveCondition', 'receiveConditionEvent'];
     return this.scripts.children.filter(morph =>
         morph instanceof CustomHatBlockMorph ||
-            morph.selector === 'receiveCondition'
+            generics.includes(morph.selector)
     );
 };
 
@@ -10857,7 +10864,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveCondition'));
+        blocks.push(block('receiveConditionEvent'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));

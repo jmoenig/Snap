@@ -7216,7 +7216,7 @@ HatBlockMorph.prototype.init = function () {
 HatBlockMorph.prototype.blockSequence = function () {
     // override my inherited method so that I am not part of my sequence
     var result;
-    if (this.isCustomBlock || this.selector === 'receiveCondition') {
+    if (this.isCustomBlock || this.selector.startsWith('receiveCondition')) {
         return this;
     }
     result = HatBlockMorph.uber.blockSequence.call(this);
