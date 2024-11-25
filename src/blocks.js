@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-24';
+modules.blocks = '2024-November-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5383,7 +5383,8 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         h = ext.y,
         r = w / 2,
         x = this.edge + this.labelPadding,
-        y = this instanceof HatBlockMorph ? this.hatHeight : this.edge,
+        y = this instanceof HatBlockMorph ?
+            this.hatHeight + this.edge : this.edge,
         isNormal =
             this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
