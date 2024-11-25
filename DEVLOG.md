@@ -18,6 +18,7 @@
 ### 2024-11-25
 * gui: fixed contrast for local method icon (location pin) in bright ui theme
 * blocks: tweaked vertical positioning of method icon in local custom hat blocks
+* byob: introduced "semantics" property to distinguish between "event" and "rule" custom hat blocks
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol

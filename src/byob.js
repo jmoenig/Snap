@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-24';
+modules.byob = '2024-November-25';
 
 // Declarations
 
@@ -172,6 +172,9 @@ function CustomBlockDefinition(spec, receiver) {
     // allow libraries to overload primitives with global custom blocks
     this.selector = null;
     this.primitive = null;
+
+    // allow hat blocks to distinguish between "events" (default) and "rules"
+    this.semantics = null;
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
@@ -1831,6 +1834,18 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 "overload a primitive"
             );
         }
+        if (this instanceof CustomHatBlockMorph) {
+            addOption(
+                'rule',
+                () => {
+                    this.semantics = this.semantics ? null : 'rule';
+                    this.changed();
+                },
+                this.semantics === 'rule',
+                'uncheck for\nevent semantics',
+                'check for\nrule semantics'
+            );
+        }
         addOption(
             'in palette',
             () => hat.isHelper = !hat.isHelper,
@@ -2473,8 +2488,29 @@ function CustomHatBlockMorph(definition, isProto) {
     this.init(definition, isProto);
 }
 
-CustomHatBlockMorph.prototype.init =
-    CustomCommandBlockMorph.prototype.init;
+CustomHatBlockMorph.prototype.init = function (definition, isProto) {
+    this.definition = definition; // mandatory
+    this.semanticSpec = '';
+    this.isGlobal = definition ? definition.isGlobal : false;
+    this.isPrototype = isProto || false; // optional
+
+    // additional properties for custom hat blocks
+    this.semantics = null; // "event" (default) or "rule"
+    this.isLoaded = null; // for hat blocks with event-semantics
+
+    CustomCommandBlockMorph.uber.init.call(this);
+    if (isProto) {
+        this.isTemplate = true;
+    }
+    this.category = definition.category;
+    this.selector = definition.primitive || 'evaluateCustomBlock';
+    this.variables = null;
+	this.storedTranslations = null; // transient - only for "wishes"
+    this.initializeVariables(definition.variableNames);
+    if (definition) { // needed for de-serializing
+        this.refresh();
+    }
+};
 
 CustomHatBlockMorph.prototype.initializeVariables =
     CustomCommandBlockMorph.prototype.initializeVariables;
@@ -2482,11 +2518,15 @@ CustomHatBlockMorph.prototype.initializeVariables =
 CustomHatBlockMorph.prototype.reactToTemplateCopy =
     CustomCommandBlockMorph.prototype.reactToTemplateCopy;
 
-CustomHatBlockMorph.prototype.refresh =
-    CustomCommandBlockMorph.prototype.refresh;
+CustomHatBlockMorph.prototype.refresh = function (aDefinition, offset) {
+    var def = aDefinition || this.definition;
+    this.semantics = def.semantics || null;
+    CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
+    this.changed();
+};
 
 CustomHatBlockMorph.prototype.isRuleHat = function () {
-    return true; // tbd
+    return !!this.semantics; // currently either "rule" or null for "event"
 };
 
 CustomHatBlockMorph.prototype.mouseClickLeft = function () {
@@ -3597,6 +3637,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.spec = this.prototypeSpec();
     this.definition.declarations = this.prototypeSlots();
     this.definition.variableNames = this.variableNames();
+    this.definition.semantics = this.prototypeSemantics();
     this.definition.scripts = [];
     this.definition.updateTranslations(this.translations);
     this.definition.cachedTranslation = null;
@@ -3725,6 +3766,14 @@ BlockEditorMorph.prototype.prototypeSlots = function () {
         this.body.contents.children,
         c => c instanceof PrototypeHatBlockMorph
     ).parts()[0].declarationsFromFragments();
+};
+
+BlockEditorMorph.prototype.prototypeSemantics = function () {
+    // answer the semantics represented by my (edited) block prototype
+    return detect(
+        this.body.contents.children,
+        c => c instanceof PrototypeHatBlockMorph
+    ).parts()[0].semantics;
 };
 
 BlockEditorMorph.prototype.variableNames = function () {
