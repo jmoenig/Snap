@@ -26,6 +26,7 @@
 * blocks, byob: refactored HatBlock >> isLoaded
 * threads: new generic "receiveEventCondition" primitive for generic hat blocks
 * blocks, objects, threads: replaced generic "When" hat in the palette with event semantics version
+* objects: added "relabel" options to generic "When" hat block to switch between "event" and "rule" semantics
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol

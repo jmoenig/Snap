@@ -2843,6 +2843,8 @@ SpriteMorph.prototype.blockAlternatives = {
         ['doForEach', 2]],
     doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2],
         ['doForEach', -1]],
+    receiveCondition: ['receiveConditionEvent'],
+    receiveConditionEvent: ['receiveCondition'],
     // doRun: ['fork'],
     // fork: ['doRun'],
 
