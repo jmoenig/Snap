@@ -22,6 +22,7 @@
 * byob: introduced "semantics" property to distinguish between "event" and "rule" custom hat blocks
 * store: added support for "semantics" property of custom block definitions
 * blocks: changed positioning of local method icon (location pin) to be vertically centered
+* threads: new "event" semantics (default) for custom hat blocks
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol

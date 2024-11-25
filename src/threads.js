@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-21';
+modules.threads = '2024-November-25';
 
 var ThreadManager;
 var Process;
@@ -2859,24 +2859,38 @@ Process.prototype.receiveCondition = function (bool) {
 };
 
 Process.prototype.evaluateCustomHatBlock = function () {
-    var runnable = new Context(
-        this.context.parentContext,
-        'dispatchEvent',
-        this.context.outerContext
-        // receiver
-    );
-    runnable.addInput(this.context.expression.nextBlock());
+    var hatBlock = this.context.expression,
+        runnable = new Context(
+            this.context.parentContext,
+            hatBlock.semantics === 'rule' ? 'dispatchRule' :'dispatchEvent',
+            hatBlock
+        );
+    runnable.addInput(hatBlock);
     this.context.parentContext = runnable;
     this.context.accumulator = true;
     this.evaluateCustomBlock();
 };
 
-Process.prototype.dispatchEvent = function (script, bool) {
-    // this.popContext();
-    var outer = this.context.outerContext;
+Process.prototype.dispatchRule = function (hatBlock, bool) {
+    var outer = this.context.outerContext,
+        next = hatBlock.nextBlock();
     this.popContext();
-    if ((bool === true || this.isClicked) && script) {
-        this.pushContext(script.blockSequence(), outer);
+    if ((bool === true || this.isClicked) && next) {
+        this.pushContext(next.blockSequence(), outer);
+    }
+    this.pushContext();
+};
+
+Process.prototype.dispatchEvent = function (hatBlock, bool) {
+    var outer = this.context.outerContext,
+        next = hatBlock.nextBlock();
+    if (!next) { return; }
+    this.popContext();
+    if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
+        hatBlock.isLoaded = false;
+        this.pushContext(next.blockSequence(), outer);
+    } else if (!bool) {
+        hatBlock.isLoaded = true;
     }
     this.pushContext();
 };
