@@ -5383,16 +5383,15 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         h = ext.y,
         r = w / 2,
         x = this.edge + this.labelPadding,
-        y = this instanceof HatBlockMorph ?
-            this.hatHeight + this.edge : this.edge,
+        y = (this.height() - h) / 2,
         isNormal =
             this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
+    if (this instanceof HatBlockMorph) {
+        y = (this.height() - this.hatHeight + h) / 2;
+    }
     if (this.isPredicate) {
         x = this.rounding;
-    }
-    if (this instanceof CommandBlockMorph) {
-        y += this.corner;
     }
     ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
 

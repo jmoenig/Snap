@@ -10,6 +10,7 @@
 * **Notable Changes:**
     * directly clicking on a generic or custom hat block runs it no matter what
     * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
+    * changed positioning of local method icon (location pin) to be vertically centered
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
     * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
@@ -20,6 +21,7 @@
 * blocks: tweaked vertical positioning of method icon in local custom hat blocks
 * byob: introduced "semantics" property to distinguish between "event" and "rule" custom hat blocks
 * store: added support for "semantics" property of custom block definitions
+* blocks: changed positioning of local method icon (location pin) to be vertically centered
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol
