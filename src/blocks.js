@@ -6051,7 +6051,7 @@ BlockMorph.prototype.snap = function () {
     }
     // register generic hat blocks
     if (this instanceof CustomHatBlockMorph ||
-        this.selector === 'receiveCondition'
+        this.selector.startsWith('receiveCondition')
     ) {
         receiver = top.scriptTarget();
         if (receiver) {
@@ -16726,7 +16726,7 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
 
     // register generic hat blocks
     if (block instanceof CustomHatBlockMorph ||
-        block.selector === 'receiveCondition'
+        block.selector.startsWith('receiveCondition')
     ) {
         rcvr = this.editor.scriptTarget();
         if (rcvr) {
