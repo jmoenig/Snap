@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-November-19';
+modules.store = '2024-November-25';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1055,6 +1055,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         definition.setPrimitive(child.attributes.primitive || null);
         definition.isHelper = (child.attributes.helper === 'true') || false;
         definition.spaceAbove = (child.attributes.space === 'true') || false;
+        definition.semantics = child.attributes.semantics || null;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -1176,6 +1177,7 @@ SnapSerializer.prototype.loadCustomizedPrimitives = function (
         definition.selector = sel || null;
         definition.setPrimitive(child.attributes.primitive || null);
         definition.isHelper = (child.attributes.helper === 'true') || false;
+        definition.semantics = child.attributes.semantics || null;
         definition.isGlobal = true;
 
         names = definition.parseSpec(definition.spec).filter(
@@ -2540,7 +2542,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%%%%>' +
+        '<block-definition s="@" type="@" category="@"%%%%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2559,6 +2561,8 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             : '',
         this.isHelper ? ' helper="true"' : '',
         this.spaceAbove ? ' space="true"' : '',
+        this.type === 'hat' && this.semantics === 'rule' ?
+            ' semantics="rule"' : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),
