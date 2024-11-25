@@ -2858,6 +2858,22 @@ Process.prototype.receiveCondition = function (bool) {
     this.pushContext();
 };
 
+Process.prototype.receiveEventCondition = function (bool) {
+    var hatBlock = this.context.expression,
+        next = hatBlock.nextBlock(),
+        outer = this.context.outerContext;
+    this.popContext();
+    if (next) {
+        if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
+            hatBlock.isLoaded = false;
+            this.pushContext(next.blockSequence(), outer);
+        } else if (!bool) {
+            hatBlock.isLoaded = true;
+        }
+    }
+    this.pushContext();
+};
+
 Process.prototype.evaluateCustomHatBlock = function () {
     var hatBlock = this.context.expression,
         runnable = new Context(
