@@ -7202,6 +7202,9 @@ function HatBlockMorph() {
 }
 
 HatBlockMorph.prototype.init = function () {
+    // additional property for generic hat block variations
+    this.isLoaded = null; // for hat blocks with event-semantics
+
     HatBlockMorph.uber.init.call(this);
     this.bounds.setExtent(new Point(120, 36).multiplyBy(this.scale));
     this.fixLayout();

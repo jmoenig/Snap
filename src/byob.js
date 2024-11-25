@@ -2494,9 +2494,8 @@ CustomHatBlockMorph.prototype.init = function (definition, isProto) {
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
 
-    // additional properties for custom hat blocks
+    // additional property for custom hat blocks
     this.semantics = null; // "event" (default) or "rule"
-    this.isLoaded = null; // for hat blocks with event-semantics
 
     CustomCommandBlockMorph.uber.init.call(this);
     if (isProto) {
