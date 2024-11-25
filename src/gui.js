@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-November-24';
+modules.gui = '2024-November-25';
 
 // Declarations
 
@@ -219,7 +219,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
     SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
-    SyntaxElementMorph.prototype.contrast = 25;
+    SyntaxElementMorph.prototype.contrast = 65;
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
 

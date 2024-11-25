@@ -13,6 +13,10 @@
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
     * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
+    * fixed contrast for local method icon (location pin) in bright ui theme
+
+### 2024-11-25
+* gui: fixed contrast for local method icon (location pin) in bright ui theme
 
 ### 2024-11-24
 * symbols: new "infinity" / chain link symbol
