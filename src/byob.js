@@ -3108,7 +3108,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
 
     block = new HatBlockMorph();
     block.setColor(clr);
-    block.setSpec(localize('Hat'));
+    block.setSpec(localize('Event Hat'));
     this.addBlockTypeButton(
         () => this.setType('hat'),
         block,

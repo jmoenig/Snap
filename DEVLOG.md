@@ -21,6 +21,7 @@
 
 ### 2024-11-26
 * byob: fixed a layout glitch in the input slot dialog
+* byob: renamed the block type button in the make-a-block dialog to "Event Hat"
 
 ### 2024-11-25
 * gui: fixed contrast for local method icon (location pin) in bright ui theme
