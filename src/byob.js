@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-25';
+modules.byob = '2024-November-26';
 
 // Declarations
 
@@ -3295,7 +3295,10 @@ BlockDialogMorph.prototype.fixLayout = function () {
         this.types.setCenter(this.center());
         if (this.body) {
             this.types.setTop(this.body.bottom() + this.padding);
-            this.body.setWidth(this.types.width() - this.padding);
+            this.body.setWidth(Math.max(
+                this.types.width() - this.padding,
+                this.body.width()
+            ));
         } else if (this.categories) {
             this.types.setTop(this.categories.bottom() + this.padding);
         }
