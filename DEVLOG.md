@@ -23,6 +23,7 @@
 
 ### 2024-11-28
 * threads: fixed upvars for custom hat blocks
+* updated dev version
 
 ### 2024-11-26
 * byob: fixed a layout glitch in the input slot dialog
