@@ -21,6 +21,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-11-28
+* threads: fixed upvars for custom hat blocks
+
 ### 2024-11-26
 * byob: fixed a layout glitch in the input slot dialog
 * byob: renamed the block type button in the make-a-block dialog to "Event Hat"

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-25';
+modules.threads = '2024-November-28';
 
 var ThreadManager;
 var Process;
@@ -2879,7 +2879,7 @@ Process.prototype.evaluateCustomHatBlock = function () {
         runnable = new Context(
             this.context.parentContext,
             hatBlock.semantics === 'rule' ? 'dispatchRule' :'dispatchEvent',
-            hatBlock
+            this.context.outerContext
         );
     runnable.addInput(hatBlock);
     this.context.parentContext = runnable;
