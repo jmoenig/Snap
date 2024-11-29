@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-25';
+modules.objects = '2024-November-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -10336,6 +10336,9 @@ StageMorph.prototype.stepGenericConditions = function (stopAll) {
                         null, // callback
                         null, // isClicked
                         true, // rightAway
+                        null, // atomic
+                        null, // variables
+                        true // no halo
                     );
                 }
             });

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-28';
+modules.threads = '2024-November-29';
 
 var ThreadManager;
 var Process;
@@ -237,11 +237,11 @@ ThreadManager.prototype.startProcess = function (
     isClicked,
     rightAway,
     atomic, // special option used (only) for "onStop" scripts
-    variables // optional variable frame, used for WHEN hats
+    variables, // optional variable frame, used for WHEN hats
+    noHalo
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
-        glow,
         newProc;
     if (active) {
         if (isThreadSafe) {
@@ -276,15 +276,8 @@ ThreadManager.prototype.startProcess = function (
     }
 
     // show a highlight around the running stack
-    // if there are more than one active processes
-    // for a block, display the thread count
-    // next to it
-    glow = top.getHighlight();
-    if (glow) {
-        glow.threadCount = this.processesForBlock(top).length + 1;
-        glow.updateReadout();
-    } else {
-        top.addHighlight();
+    if (!noHalo) {
+        this.highlight(newProc);
     }
 
     this.processes.push(newProc);
@@ -292,6 +285,21 @@ ThreadManager.prototype.startProcess = function (
         newProc.runStep();
     }
     return newProc;
+};
+
+ThreadManager.prototype.highlight = function (aProcess) {
+    // show a highlight around the running stack
+    // if there are more than one active processes
+    // for a block, display the thread count
+    // next to it
+    var top = aProcess.topBlock,
+        glow = top.getHighlight();
+    if (glow) {
+        glow.threadCount = this.processesForBlock(top).length + 1;
+        glow.updateReadout();
+    } else {
+        top.addHighlight();
+    }
 };
 
 ThreadManager.prototype.stopAll = function (excpt) {
@@ -358,6 +366,7 @@ ThreadManager.prototype.step = function () {
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
             if (proc.isInterrupted) {
+                if (proc.wantsHalo) { this.highlight(proc); }
                 proc.runStep();
                 isInterrupted = true;
             } else {
@@ -375,6 +384,7 @@ ThreadManager.prototype.step = function () {
 
     this.processes.forEach(proc => {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
+            if (proc.wantsHalo) { this.highlight(proc); }
             proc.runStep();
         }
     });
@@ -576,6 +586,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isDead = false;
     this.isClicked = false;
     this.isShowingResult = false;
+    this.wantsHalo = false;
     this.errorFlag = false;
     this.context = null;
     this.homeContext = new Context(null, null, null, receiver);
@@ -2854,6 +2865,7 @@ Process.prototype.receiveCondition = function (bool) {
     this.popContext();
     if ((bool === true || this.isClicked) && nb) {
         this.pushContext(nb.blockSequence(), outer);
+        this.wantsHalo = true;
     }
     this.pushContext();
 };
@@ -2867,6 +2879,7 @@ Process.prototype.receiveConditionEvent = function (bool) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
             hatBlock.isLoaded = false;
             this.pushContext(next.blockSequence(), outer);
+            this.wantsHalo = true;
         } else if (!bool) {
             hatBlock.isLoaded = true;
         }
@@ -2893,6 +2906,7 @@ Process.prototype.dispatchRule = function (hatBlock, bool) {
     this.popContext();
     if ((bool === true || this.isClicked) && next) {
         this.pushContext(next.blockSequence(), outer);
+        this.wantsHalo = true;
     }
     this.pushContext();
 };
@@ -2905,6 +2919,7 @@ Process.prototype.dispatchEvent = function (hatBlock, bool) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
             hatBlock.isLoaded = false;
             this.pushContext(next.blockSequence(), outer);
+            this.wantsHalo = true;
         } else if (!bool) {
             hatBlock.isLoaded = true;
         }
