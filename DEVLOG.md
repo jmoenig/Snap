@@ -23,6 +23,7 @@
 
 ### 2024-11-29
 * threads, objects: optimized generic and custom hat block execution
+* updated dev version
 
 ### 2024-11-28
 * threads: fixed upvars for custom hat blocks
