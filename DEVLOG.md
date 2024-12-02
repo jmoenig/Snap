@@ -13,6 +13,7 @@
     * directly clicking on a generic or custom hat block runs it no matter what
     * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
     * the generic "When" hat block in the palette now has "event" semantics and only fires on state change, blocks in existing projects keep their "rule" semantics
+    * optimized evaluation speed of generic (and custom) "when" hat block predicates
     * hat blocks can be ringified (but not - yet - dropped into rings)
     * changed positioning of local method icon (location pin) to be vertically centered
 * **Notable Fixes:**
