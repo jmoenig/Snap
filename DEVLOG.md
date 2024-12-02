@@ -13,6 +13,7 @@
     * directly clicking on a generic or custom hat block runs it no matter what
     * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
     * the generic "When" hat block in the palette now has "event" semantics and only fires on state change, blocks in existing projects keep their "rule" semantics
+    * hat blocks can be ringified (but not - yet - dropped into rings)
     * changed positioning of local method icon (location pin) to be vertically centered
 * **Notable Fixes:**
     * fixed generic and custom hat block scheduling for turbo mode
@@ -20,6 +21,9 @@
     * fixed contrast for local method icon (location pin) in bright ui theme
 * **Translation Updates:**
     * German
+
+### 2024-12-02
+* added partial metaprgramming support for hat blocks
 
 ### 2024-11-29
 * threads, objects: optimized generic and custom hat block execution

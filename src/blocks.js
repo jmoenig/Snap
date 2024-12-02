@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-25';
+modules.blocks = '2024-December-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3760,10 +3760,7 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
-        if (this instanceof ReporterBlockMorph ||
-                (!(top instanceof HatBlockMorph))) {
-            menu.addItem("ringify", 'ringify');
-        }
+        menu.addItem("ringify", 'ringify');
         return menu;
     }
     if (contains(
@@ -3781,11 +3778,10 @@ BlockMorph.prototype.userMenu = function () {
     }
     if (this.parent instanceof ReporterSlotMorph
             || (this.parent instanceof CommandSlotMorph)
-            || (this instanceof HatBlockMorph)
-            || (this instanceof CommandBlockMorph
-                && (top instanceof HatBlockMorph))) {
+    ) {
         return menu;
     }
+
     if (!hasLine) {menu.addLine(); }
     rcvr = rcvr || this.scriptTarget(true);
     if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
@@ -4048,10 +4044,7 @@ BlockMorph.prototype.ringify = function () {
         if (this instanceof ReporterBlockMorph) {
             this.parent.replaceInput(this, ring, true); // don't vanish
             ring.embed(this, null, true); // don't vanish
-        } else if (top) { // command
-            if (top instanceof HatBlockMorph) {
-                return;
-            }
+        } else if (top) { // command or hat
             top.parent.add(ring);
             ring.embed(top);
             ring.setCenter(center);
@@ -4556,11 +4549,10 @@ BlockMorph.prototype.toLisp = function (indentation = 0) {
 };
 
 BlockMorph.prototype.components = function (parameterNames = []) {
-    if (this instanceof ReporterBlockMorph || this instanceof HatBlockMorph) {
-        // under construction for hat blocks...
+    if (this instanceof ReporterBlockMorph) {
         return this.syntaxTree(parameterNames);
     }
-    var seq = new List(this.blockSequence()).map((block, i) =>
+    var seq = new List(this.blockSequence(true)).map((block, i) =>
         block.syntaxTree(i < 1 ? parameterNames : [])
     );
     return seq.length() === 1 ? seq.at(1) : seq;
@@ -7213,9 +7205,12 @@ HatBlockMorph.prototype.init = function () {
 
 // HatBlockMorph enumerating:
 
-HatBlockMorph.prototype.blockSequence = function () {
+HatBlockMorph.prototype.blockSequence = function (forSyntax) {
     // override my inherited method so that I am not part of my sequence
     var result;
+    if (forSyntax) {
+        return HatBlockMorph.uber.blockSequence.call(this);
+    }
     if (this.isCustomBlock || this.selector.startsWith('receiveCondition')) {
         return this;
     }
@@ -7232,21 +7227,6 @@ HatBlockMorph.prototype.isCustomBlockSpecific = function () {
 
 HatBlockMorph.prototype.isRuleHat = function () {
     return this.selector === 'receiveCondition';
-};
-
-// HatBlockMorph syntax analysis
-
-HatBlockMorph.prototype.reify = function () {
-    // private - assumes that I've already been deep copied
-    var nb = this.nextBlock(),
-        cmt = this.comment?.text(),
-        ctx;
-    if (!nb) {
-        ctx = new Context();
-        ctx.comment = cmt;
-        return ctx;
-    }
-    return nb.reify(null, cmt);
 };
 
 // HatBlockMorph drawing:
@@ -8224,7 +8204,9 @@ RingMorph.prototype.embed = function (aBlock, inputNames, noVanish) {
     this.isDraggable = true;
 
     // set my type, selector, and nested block:
-    if (aBlock instanceof CommandBlockMorph) {
+    if (aBlock instanceof CommandBlockMorph &&
+        !(aBlock instanceof HatBlockMorph)
+    ) {
         this.isStatic = false;
         this.setSpec('%rc %ringparms');
         this.selector = 'reifyScript';
@@ -9395,7 +9377,6 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        // return !this.rejectsHats || aMorph.isCustomBlockSpecific();
         return (!this.rejectsHats && !aMorph.isCustomBlockSpecific()) ||
             (this.rejectsHats && aMorph.isCustomBlockSpecific());
     }
