@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-November-26';
+modules.byob = '2024-December-02';
 
 // Declarations
 
@@ -4046,6 +4046,14 @@ PrototypeHatBlockMorph.prototype.selectorMenu = function () {
         }
     });
     return lst;
+};
+
+PrototypeHatBlockMorph.prototype.blockSequence = function () {
+    // override my inherited method so that I am not part of my sequence
+    var result;
+    result = HatBlockMorph.uber.blockSequence.call(this);
+    result.shift();
+    return result;
 };
 
 // BlockLabelFragment //////////////////////////////////////////////////

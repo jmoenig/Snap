@@ -26,6 +26,7 @@
 ### 2024-12-02
 * added partial metaprgramming support for hat blocks
 * updated dev version
+* byob: tweaked LISP-ification of custom block definition scripts
 
 ### 2024-11-29
 * threads, objects: optimized generic and custom hat block execution
