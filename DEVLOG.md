@@ -26,6 +26,7 @@
 
 ### 2024-12-03
 * blocks, gui: minor refactorings
+* updated dev version
 
 ### 2024-12-02
 * added partial metaprgramming support for hat blocks
