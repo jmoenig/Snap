@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-December-02';
+modules.gui = '2024-December-03';
 
 // Declarations
 
@@ -7826,10 +7826,16 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
 // IDE_Morph design settings
 
 IDE_Morph.prototype.looksMenu = function () {
+    this.looksMenuData().popup(
+        this.world(),
+        this.controlBar.settingsButton.bottomLeft()
+    );
+};
+
+IDE_Morph.prototype.looksMenuData = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         shiftClicked = (world.currentKey === 16),
-        pos = this.controlBar.settingsButton.bottomLeft(),
         tick = new SymbolMorph(
             'tick',
             MorphicPreferences.menuFontSize * 0.75
@@ -7844,7 +7850,7 @@ IDE_Morph.prototype.looksMenu = function () {
             MorphicPreferences.menuFontSize * 0.75
         );
 
-    function addPreference(label, toggle, test, onHint, offHint, hide) {
+    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
         if (!hide || shiftClicked) {
             menu.addItem(
                 [
@@ -7856,26 +7862,28 @@ IDE_Morph.prototype.looksMenu = function () {
                 hide ? new Color(100, 0, 0) : null
             );
         }
-    }
+    };
 
     empty.render = nop;
 
     menu.addItem(
         [
-            MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty : tick,
+            MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
+                : tick,
             localize('Default')
         ],
         this.defaultLooks
     );
     menu.addItem(
         [
-            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick : empty,
+            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick
+                : empty,
             localize('Flat Bright')
         ],
         this.flatBrightLooks
     );
     menu.addLine();
-    addPreference(
+    menu.addPreference(
         'Flat design',
         () => {
             if (MorphicPreferences.isFlat) {
@@ -7888,7 +7896,7 @@ IDE_Morph.prototype.looksMenu = function () {
         'check for alternative\nGUI design',
         false
     );
-    addPreference(
+    menu.addPreference(
         'Bright theme',
         () => {
             if (IDE_Morph.prototype.isBright) {
@@ -7901,7 +7909,7 @@ IDE_Morph.prototype.looksMenu = function () {
         'check for alternative\nGUI theme',
         false
     );
-    menu.popup(world, pos);
+    return menu;
 };
 
 // IDE_Morph blocks scaling

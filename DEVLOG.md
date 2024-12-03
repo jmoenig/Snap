@@ -9,6 +9,7 @@
     * new "obj_version(obj)" extension for observing compound structures (lists, actors, scripts)
     * new "infinity" / chain link symbol
     * new "relabel" option for generic "When" hat block lets you switch between "event" (new default) and old "rule" semantics, indicated by the infinity symbol
+    * Surprise XMas Skin
 * **Notable Changes:**
     * directly clicking on a generic or custom hat block runs it no matter what
     * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
@@ -22,6 +23,9 @@
     * fixed contrast for local method icon (location pin) in bright ui theme
 * **Translation Updates:**
     * German
+
+### 2024-12-03
+* blocks, gui: minor refactorings
 
 ### 2024-12-02
 * added partial metaprgramming support for hat blocks

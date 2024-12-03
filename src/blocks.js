@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-December-02';
+modules.blocks = '2024-December-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7409,7 +7409,13 @@ BlockMorph.prototype.drawRuleIcon = function (ctx) {
 
     // right arc
     ctx.beginPath();
-    ctx.arc(x + r * 3 - l, y + r, r - l / 2, radians(-120), radians(180), false);
+    ctx.arc(
+        x + r * 3 - l,
+        y + r,
+        r - l / 2,
+        radians(-120),
+        radians(180), false
+    );
     ctx.stroke();
 };
 
