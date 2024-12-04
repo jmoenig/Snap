@@ -30,6 +30,7 @@ var snapVersion = '10.3-dev-241204',
         'src/embroider.js',
         'src/sha512.js',
         'src/FileSaver.min.js',
+        'src/santa.js',
 
         // translations
         'locale/lang-ar.js',

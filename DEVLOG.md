@@ -30,6 +30,7 @@
 * locale: fixed #3420
 * blocks, objects: keep musical notes from going of out midi-value bounds
 * updated dev version
+* threads: tweaked custom / event hat block evaluation for visible stepping
 
 ### 2024-12-03
 * blocks, gui: minor refactorings

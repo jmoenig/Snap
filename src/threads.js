@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-29';
+modules.threads = '2024-December-04';
 
 var ThreadManager;
 var Process;
@@ -2878,7 +2878,7 @@ Process.prototype.receiveConditionEvent = function (bool) {
     this.popContext();
     if (next) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
-            hatBlock.isLoaded = false;
+            hatBlock.isLoaded = this.enableSingleStepping; // false;
             this.pushContext(next.blockSequence(), outer);
             this.wantsHalo = true;
         } else if (!bool) {
@@ -2918,7 +2918,7 @@ Process.prototype.dispatchEvent = function (hatBlock, bool) {
     this.popContext();
     if (next) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
-            hatBlock.isLoaded = false;
+            hatBlock.isLoaded = this.enableSingleStepping; // false;
             this.pushContext(next.blockSequence(), outer);
             this.wantsHalo = true;
         } else if (!bool) {
