@@ -24,6 +24,9 @@
 * **Translation Updates:**
     * German
 
+### 2024-12-04
+* objects: double-clock event hats to enable observing script-induced state transitions
+
 ### 2024-12-03
 * blocks, gui: minor refactorings
 * updated dev version

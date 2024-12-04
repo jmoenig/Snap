@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-29';
+modules.objects = '2024-December-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -10261,11 +10261,29 @@ StageMorph.prototype.step = function () {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
             this.threads.step(); // approx. 67 fps
+
+            // double-clock event hats:
+            if (this.enableCustomHatBlocks &&
+                !this.threads.pauseCustomHatBlocks &&
+                !Process.prototype.enableSingleStepping
+            ) {
+                this.stepGenericConditions(null, true); // only events
+                this.threads.removeTerminatedProcesses();
+            }
         }
         this.changed();
     } else {
         this.stepGenericConditions();
         this.threads.step();
+
+        // double-clock event hats:
+        if (this.enableCustomHatBlocks &&
+            !this.threads.pauseCustomHatBlocks &&
+            !Process.prototype.enableSingleStepping
+        ) {
+            this.stepGenericConditions(null, true); // only events
+            this.threads.removeTerminatedProcesses();
+        }
 
         // single-stepping hook:
         if (this.threads.wantsToPause) {
@@ -10319,7 +10337,7 @@ StageMorph.prototype.updateProjection = function () {
     this.changed();
 };
 
-StageMorph.prototype.stepGenericConditions = function (stopAll) {
+StageMorph.prototype.stepGenericConditions = function (stopAll, onlyEvents) {
     var hatCount = 0,
         ide;
     if (!this.enableCustomHatBlocks) {return; }
@@ -10328,6 +10346,9 @@ StageMorph.prototype.stepGenericConditions = function (stopAll) {
             morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
                 if (!this.threads.pauseCustomHatBlocks) {
+                    if (onlyEvents && block.isRuleHat()) {
+                        return;
+                    }
                     this.threads.startProcess (
                         block,
                         morph, // receiver
