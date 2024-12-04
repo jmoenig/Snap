@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2024-November-26';
+modules.locale = '2024-December-04';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -65,7 +65,7 @@ function display(data) {
     if (isNil(data)) {
         return '';
     }
-    if (data instanceof Array) {
+    if (data instanceof Array && !isNil(data[0])) {
         return '«' + localize(data[0].toString()) + '»';
     }
     if (data.toString) {

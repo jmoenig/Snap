@@ -26,6 +26,7 @@
 
 ### 2024-12-04
 * objects: double-clock event hats to enable observing script-induced state transitions
+* locale: fixed #3420
 
 ### 2024-12-03
 * blocks, gui: minor refactorings
