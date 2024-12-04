@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-December-03';
+modules.blocks = '2024-December-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11984,7 +11984,7 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function (searching) {
         this.right() - (menu.width() / 2),
         this.bottom()
     ));
-    menu.selectKey(+this.evaluate());
+    menu.selectKey(Math.min(Math.max(+this.evaluate(), 0), 143));
 };
 
 InputSlotMorph.prototype.directionDialMenu = function (searching) {

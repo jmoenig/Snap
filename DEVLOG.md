@@ -21,12 +21,14 @@
     * fixed generic and custom hat block scheduling for turbo mode
     * fixed "expand _ to _ slots" block in the metapgroamming libary to be able to fully collapse
     * fixed contrast for local method icon (location pin) in bright ui theme
+    * keep musical notes from going of out midi-value bounds
 * **Translation Updates:**
     * German
 
 ### 2024-12-04
 * objects: double-clock event hats to enable observing script-induced state transitions
 * locale: fixed #3420
+* blocks, objects: keep musical notes from going of out midi-value bounds
 
 ### 2024-12-03
 * blocks, gui: minor refactorings

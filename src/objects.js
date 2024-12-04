@@ -13577,7 +13577,7 @@ Sound.prototype.toDataURL = function () {
 // Note instance creation
 
 function Note(pitch) {
-    this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.pitch = pitch === 0 ? 0 : Math.min(Math.max(pitch, 0), 144) || 69;
     this.frequency = null; // alternative for playing a non-note frequency
     this.setupContext();
     this.oscillator = null;
