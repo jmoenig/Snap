@@ -29,6 +29,7 @@
 * objects: double-clock event hats to enable observing script-induced state transitions
 * locale: fixed #3420
 * blocks, objects: keep musical notes from going of out midi-value bounds
+* updated dev version
 
 ### 2024-12-03
 * blocks, gui: minor refactorings
