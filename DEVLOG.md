@@ -32,6 +32,7 @@
 * updated dev version
 * threads: tweaked custom / event hat block evaluation for visible stepping
 * byob: renamed "rule" hat block semantics option to "condition"
+* German translation update for "condition"
 
 ### 2024-12-03
 * blocks, gui: minor refactorings
