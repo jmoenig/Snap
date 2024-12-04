@@ -3,17 +3,17 @@
 ## in development:
 * **New Features:**
     * Custom Hat Blocks, expressed as predicate defining a condition that fires the event
-    * Custom Hat Blocks can choose to be "events" reacting to a state change (default) or "rules" observing state (indicated by an infinity symbol) 
+    * Custom Hat Blocks can choose to be "events" reacting to a state change (default) or "conditions" observing state (indicated by an infinity symbol) 
     * new "Events" library featuring custom hat blocks reacting to various state changes
     * new data type: "hat"
     * new "obj_version(obj)" extension for observing compound structures (lists, actors, scripts)
     * new "infinity" / chain link symbol
-    * new "relabel" option for generic "When" hat block lets you switch between "event" (new default) and old "rule" semantics, indicated by the infinity symbol
+    * new "relabel" option for generic "When" hat block lets you switch between "event" (new default) and old "condition" semantics, indicated by the infinity symbol
     * Surprise XMas Skin
 * **Notable Changes:**
     * directly clicking on a generic or custom hat block runs it no matter what
-    * "rule" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
-    * the generic "When" hat block in the palette now has "event" semantics and only fires on state change, blocks in existing projects keep their "rule" semantics
+    * "condition" hat blocks (that always fire when their condition is true) are indicated by an infinity symbol
+    * the generic "When" hat block in the palette now has "event" semantics and only fires on state change, blocks in existing projects keep their "condition" semantics
     * optimized evaluation speed of generic (and custom) "when" hat block predicates
     * hat blocks can be ringified (but not - yet - dropped into rings)
     * changed positioning of local method icon (location pin) to be vertically centered
@@ -31,6 +31,7 @@
 * blocks, objects: keep musical notes from going of out midi-value bounds
 * updated dev version
 * threads: tweaked custom / event hat block evaluation for visible stepping
+* byob: renamed "rule" hat block semantics option to "condition"
 
 ### 2024-12-03
 * blocks, gui: minor refactorings

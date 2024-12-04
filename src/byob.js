@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-December-02';
+modules.byob = '2024-December-04';
 
 // Declarations
 
@@ -1864,14 +1864,14 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         }
         if (this instanceof CustomHatBlockMorph) {
             addOption(
-                'rule',
+                'condition',
                 () => {
                     this.semantics = this.semantics ? null : 'rule';
                     this.changed();
                 },
                 this.semantics === 'rule',
                 'uncheck for\nevent semantics',
-                'check for\nrule semantics'
+                'check for\ncondition semantics'
             );
         }
         addOption(
