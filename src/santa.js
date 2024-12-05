@@ -27,18 +27,18 @@
 
     prerequisites:
     --------------
-    needs blocks.js, gui.js and morphic.js
+    needs blocks.js, gui.js, locale.js and morphic.js
 
 */
 
 /*global modules, HatBlockMorph, MorphicPreferences, Color, radians, degrees,
-WHITE, IDE_Morph*/
+WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, SnapTranslator*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.santa = '2024-December-04';
+modules.santa = '2024-December-05';
 
 // HatBlockMorph Xmas Skin (2024)
 
@@ -48,6 +48,9 @@ HatBlockMorph.prototype.xmasSkin =
 HatBlockMorph.prototype.render = function (ctx) {
     if (this.xmasSkin) {
         this.renderHatLess(ctx);
+        if (this instanceof PrototypeHatBlockMorph) {
+            return this.renderHouseHat(ctx);
+        }
         switch (this.selector) {
         case 'receiveKey':
             return this.renderTrumpetHat(ctx);
@@ -60,6 +63,10 @@ HatBlockMorph.prototype.render = function (ctx) {
             return this.renderGiftHat(ctx);
         case 'receiveOnClone':
             return this.renderPretzelHat(ctx);
+        case 'receiveUserEdit':
+            return this.renderLetterHat(ctx);
+        case 'receiveSlotEvent':
+            return this.renderTrainHat(ctx);
         default:
             return this.renderSantaHat(ctx);
         }
@@ -68,6 +75,8 @@ HatBlockMorph.prototype.render = function (ctx) {
 };
 
 HatBlockMorph.prototype.renderHatLess = function (ctx) {
+    var c = this.corner;
+
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
@@ -96,7 +105,7 @@ HatBlockMorph.prototype.renderHatLess = function (ctx) {
 
         // add 3D-Effect:
         this.drawTopDentEdge(ctx, 0, 0);
-        this.drawBottomDentEdge(ctx, 0, this.height() - this.corner);
+        this.drawBottomDentEdge(ctx, 0, this.height() - c);
         this.drawLeftEdge(ctx);
         this.drawRightEdge(ctx);
         this.drawBottomRightEdge(ctx);
@@ -104,18 +113,19 @@ HatBlockMorph.prototype.renderHatLess = function (ctx) {
 };
 
 HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
-    var indent = this.corner * 2 + this.inset,
-        bottom = this.height() - this.corner,
-        bottomCorner = this.height() - this.corner * 2,
-        radius = Math.max(this.corner - inset, 0),
+    var c = this.corner,
+        indent = c * 2 + this.inset,
+        bottom = this.height() - c,
+        bottomCorner = this.height() - c * 2,
+        radius = Math.max(c - inset, 0),
         h = this.hatHeight;
 
     ctx.moveTo(inset, h + inset);
 
     // top right:
     ctx.arc(
-        this.width() - this.corner,
-        h + this.corner,
+        this.width() - c,
+        h + c,
         radius,
         radians(-90),
         radians(-0),
@@ -124,7 +134,7 @@ HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
 
     // bottom right:
     ctx.arc(
-        this.width() - this.corner,
+        this.width() - c,
         bottomCorner,
         radius,
         radians(0),
@@ -133,16 +143,16 @@ HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
     );
 
     if (!this.isStop()) {
-        ctx.lineTo(this.width() - this.corner, bottom - inset);
-        ctx.lineTo(this.corner * 3 + this.inset + this.dent, bottom - inset);
-        ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
-        ctx.lineTo(indent, bottom + this.corner - inset);
-        ctx.lineTo(this.corner + this.inset, bottom - inset);
+        ctx.lineTo(this.width() - c, bottom - inset);
+        ctx.lineTo(c * 3 + this.inset + this.dent, bottom - inset);
+        ctx.lineTo(indent + this.dent, bottom + c - inset);
+        ctx.lineTo(indent, bottom + c - inset);
+        ctx.lineTo(c + this.inset, bottom - inset);
     }
 
     // bottom left:
     ctx.arc(
-        this.corner,
+        c,
         bottomCorner,
         radius,
         radians(90),
@@ -152,31 +162,66 @@ HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
 };
 
 HatBlockMorph.prototype.renderSantaHat = function (ctx) {
+    var w = this.hatWidth,
+        h = this.hatHeight,
+        c = this.corner,
+        r = ((4 * h * h) + (w * w)) / (8 * h),
+        a = degrees(4 * Math.atan(2 * h / w)),
+        sa = a / 2,
+
+        red = new Color(200, 0, 0).toString(),
+        brightRed = new Color(255, 0, 0).toString(),
+        darkRed = new Color(100, 0, 0).toString(),
+        gray = new Color(200, 200, 200).toString(),
+        darkGray = new Color(150, 150, 150).toString(),
+        white = WHITE.toString(),
+
+        hat = () => {
+            // top arc:
+            ctx.moveTo(0, h + c);
+            ctx.arc(
+                w / 2,
+                r,
+                r,
+                radians(-sa - 90),
+                radians(-75),
+                false
+            );
+            ctx.arc(
+                w * 0.9,
+                h + c * 6,
+                w / 3,
+                radians(-70),
+                radians(-140),
+                true
+            );
+        };
+
     // draw Santa Hat
-    ctx.fillStyle = new Color(200, 0, 0).toString();
+    ctx.fillStyle = red;
     ctx.beginPath();
-    this.santaHatPath(ctx, 0);
+    hat();
     ctx.closePath();
     ctx.fill();
 
     // top outline
-    this.cachedClr = new Color(255, 0, 0).toString();
-    this.cachedClrBright = new Color(200, 200, 200).toString();
+    this.cachedClr = brightRed;
+    this.cachedClrBright = gray;
     // top arc:
     ctx.strokeStyle = this.cachedClr;
-    ctx.lineWidth = this.corner / 4;
+    ctx.lineWidth = c / 4;
     ctx.beginPath();
-    this.santaHatTopPath(ctx);
+    hat();
     ctx.stroke();
 
     // hat bottom outline
-    ctx.strokeStyle = new Color(100, 0, 0).toString();
-    ctx.lineWidth = this.corner / 4;
+    ctx.strokeStyle = darkRed;
+    ctx.lineWidth = c / 4;
     ctx.beginPath();
     ctx.arc(
-        this.hatWidth * 0.9,
-            this.hatHeight + this.corner * 6,
-        this.hatWidth / 3,
+        w * 0.9,
+        h + c * 6,
+        w / 3,
         radians(-70),
         radians(-140),
         true
@@ -184,34 +229,34 @@ HatBlockMorph.prototype.renderSantaHat = function (ctx) {
     ctx.stroke();
 
     // brim
-    ctx.strokeStyle = new Color(150, 150, 150).toString();
-    ctx.lineWidth = this.corner * 2;
+    ctx.strokeStyle = darkGray;
+    ctx.lineWidth = c * 2;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(this.corner * 0.75, this.hatHeight + this.corner * 0.5);
+    ctx.moveTo(c * 0.75, h + c * 0.5);
     ctx.lineTo(
-        this.hatWidth * 0.6 + this.corner,
-        this.hatHeight + this.corner * 0.5
+        w * 0.6 + c,
+        h + c * 0.5
     );
     ctx.stroke();
 
-    ctx.strokeStyle = WHITE.toString();
-    ctx.lineWidth = this.corner * 1.3;
+    ctx.strokeStyle = white;
+    ctx.lineWidth = c * 1.3;
     ctx.beginPath();
-    ctx.moveTo(this.corner, this.hatHeight + this.corner * 0.4);
+    ctx.moveTo(c, h + c * 0.4);
     ctx.lineTo(
-        this.hatWidth * 0.6 + this.corner,
-        this.hatHeight + this.corner * 0.4
+        w * 0.6 + c,
+        h + c * 0.4
     );
     ctx.stroke();
 
     // bobble
-    ctx.fillStyle = new Color(150, 150, 150).toString();
+    ctx.fillStyle = darkGray;
     ctx.beginPath();
     ctx.arc(
-        this.hatWidth,
-        this.hatHeight * 0.6,
-        this.corner * 2,
+        w,
+        h * 0.6,
+        c * 2,
         radians(0),
         radians(360),
         false
@@ -219,12 +264,12 @@ HatBlockMorph.prototype.renderSantaHat = function (ctx) {
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = WHITE.toString();
+    ctx.fillStyle = white;
     ctx.beginPath();
     ctx.arc(
-        this.hatWidth,
-        this.hatHeight * 0.5,
-        this.corner * 1.2,
+        w,
+        h * 0.5,
+        c * 1.2,
         radians(0),
         radians(360),
         false
@@ -248,66 +293,77 @@ HatBlockMorph.prototype.renderSantaHat = function (ctx) {
 };
 
 HatBlockMorph.prototype.renderAdventHat = function (ctx) {
-    var i;
+    var c = this.corner,
+        w = this.hatWidth,
+        h = this.hatHeight,
+        i,
+
+        red = new Color(200, 0, 0).toString(),
+        darkRed = new Color(100, 0, 0).toString(),
+        green = new Color(0, 200, 0).toString(),
+        darkGreen = new Color(0, 100, 0).toString(),
+        yellow = new Color(255, 255, 100).toString(),
+        brightYellow = new Color(255, 255, 200).toString(),
+        white = WHITE.toString();
 
     // wreath
-    ctx.strokeStyle = new Color(0, 100, 0).toString();
-    ctx.lineWidth = this.corner * 2;
+    ctx.strokeStyle = darkGreen;
+    ctx.lineWidth = c * 2;
     ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(this.corner * 0.75, this.hatHeight + this.corner * 0.5);
+    ctx.moveTo(c * 0.75, h + c * 0.5);
     ctx.lineTo(
-        this.hatWidth * 0.6 + this.corner,
-        this.hatHeight + this.corner * 0.5
+        w * 0.6 + c,
+        h + c * 0.5
     );
     ctx.stroke();
 
-    ctx.strokeStyle = new Color(0, 200, 0).toString();
-    ctx.lineWidth = this.corner * 1.3;
+    ctx.strokeStyle = green;
+    ctx.lineWidth = c * 1.3;
     ctx.beginPath();
-    ctx.moveTo(this.corner, this.hatHeight + this.corner * 0.4);
+    ctx.moveTo(c, h + c * 0.4);
     ctx.lineTo(
-        this.hatWidth * 0.6 + this.corner,
-        this.hatHeight + this.corner * 0.4
+        w * 0.6 + c,
+        h + c * 0.4
     );
     ctx.stroke();
 
     // candles
 
     for (i = 1; i < 5; i +=1 ) {
-        ctx.strokeStyle = new Color(100, 0, 0).toString();
-        ctx.lineWidth = this.corner * 2;
+        ctx.strokeStyle = darkRed;
+        ctx.lineWidth = c * 2;
         ctx.lineCap = 'butt';
         ctx.beginPath();
-        ctx.moveTo(this.corner * 3 * i, this.hatHeight);
-        ctx.lineTo(this.corner * 3 * i, this.corner);
+        ctx.moveTo(c * 3 * i, h);
+        ctx.lineTo(c * 3 * i, c);
         ctx.stroke();
 
-        ctx.strokeStyle = new Color(200, 0, 0).toString();
-        ctx.lineWidth = this.corner * 1.3;
+        ctx.strokeStyle = red;
+        ctx.lineWidth = c * 1.3;
         ctx.beginPath();
-        ctx.moveTo(this.corner * 3 * i, this.hatHeight);
-        ctx.lineTo(this.corner * 3 * i, this.corner);
+        ctx.moveTo(c * 3 * i, h);
+        ctx.lineTo(c * 3 * i, c);
         ctx.stroke();
 
         // flames
-        ctx.shadowColor = WHITE.toString();
-        ctx.shadowBlur = this.corner;
+        ctx.shadowColor = white;
+        ctx.shadowBlur = c;
 
-        ctx.strokeStyle = new Color(255, 255, 200).toString();
-        ctx.lineWidth = this.corner * 1.5;
+        ctx.strokeStyle = brightYellow;
+        ctx.lineWidth = c * 1.5;
         ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.moveTo(this.corner * 3 * i, this.corner);
-        ctx.lineTo(this.corner * 3 * i, this.corner);
+        ctx.moveTo(c * 3 * i, c);
+        ctx.lineTo(c * 3 * i, c);
         ctx.stroke();
 
-        ctx.strokeStyle = new Color(255, 255, 100).toString();
-        ctx.lineWidth = this.corner * 0.5;
+        ctx.strokeStyle = yellow;
+        ctx.lineWidth = c * 0.5;
         ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.moveTo(this.corner * 3 * i, this.corner);
-        ctx.lineTo(this.corner * 3 * i, 0);
+        ctx.moveTo(c * 3 * i, c);
+        ctx.lineTo(c * 3 * i, 0);
         ctx.stroke();
 
         ctx.shadowBlur = 0;
@@ -328,72 +384,60 @@ HatBlockMorph.prototype.renderAdventHat = function (ctx) {
     }
 };
 
-HatBlockMorph.prototype.santaHatTopPath = function (ctx) {
-    var s = this.hatWidth,
-        h = this.hatHeight,
-        r = ((4 * h * h) + (s * s)) / (8 * h),
-        a = degrees(4 * Math.atan(2 * h / s)),
-        sa = a / 2;
-
-    ctx.moveTo(0, this.hatHeight + this.corner);
-    ctx.arc(
-        s / 2,
-        r + (this.corner / 8),
-        r,
-        radians(-sa - 90),
-        radians(-75),
-        false
-    );
-};
-
 HatBlockMorph.prototype.renderTrumpetHat = function (ctx) {
-    ctx.strokeStyle = new Color(150, 150, 50).toString();
-    ctx.fillStyle = new Color(150, 150, 50).toString();
-    ctx.lineWidth = this.corner * 2;
-    this.drawTrumpet(ctx);
-    ctx.strokeStyle = new Color(255, 255, 100).toString();
-    ctx.fillStyle = new Color(255, 255, 100).toString();
-    ctx.lineWidth = this.corner * 1;
-    this.drawTrumpet(ctx);
-};
+    var c = this.corner,
+        w = this.hatWidth,
+        h = this.hatHeight,
+        i,
 
-HatBlockMorph.prototype.drawTrumpet = function (ctx) {
-    var i;
+        yellow = new Color(255, 255, 100).toString(),
+        darkYellow = new Color(150, 150, 50).toString(),
 
-    // trumpet
-    ctx.lineJoin = 'miter';
-    ctx.beginPath();
-    ctx.roundRect(
-        this.corner * 5,
-        this.corner * 2,
-        this.hatWidth * 0.3,
-        this.hatHeight * 0.7,
-        [0, 0, this.corner * 2, this.corner * 2]
-    );
-    ctx.stroke();
+        trumpet = () => {
+            // trumpet
+            ctx.lineJoin = 'miter';
+            ctx.beginPath();
+            ctx.roundRect(
+                c * 5,
+                c * 2,
+                w * 0.3,
+                h * 0.7,
+                [0, 0, c * 2, c * 2]
+            );
+            ctx.stroke();
 
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(this.corner * 2, this.corner * 2);
-    ctx.lineTo(this.corner * 5, this.corner * 2);
-    ctx.stroke();
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(c * 2, c * 2);
+            ctx.lineTo(c * 5, c * 2);
+            ctx.stroke();
 
-    ctx.beginPath();
-    ctx.moveTo(this.corner * 5 + this.hatWidth * 0.3, this.corner * 1.5);
-    ctx.lineTo(this.hatWidth * 0.7, this.corner * 2 - ctx.lineWidth);
-    ctx.lineTo(this.hatWidth * 0.7, this.corner * 2 + ctx.lineWidth);
-    ctx.lineTo(this.corner * 5 + this.hatWidth * 0.3, this.corner * 2.5);
-    ctx.closePath();
+            ctx.beginPath();
+            ctx.moveTo(c * 5 + w * 0.3, c * 1.5);
+            ctx.lineTo(w * 0.7, c * 2 - ctx.lineWidth);
+            ctx.lineTo(w * 0.7, c * 2 + ctx.lineWidth);
+            ctx.lineTo(c * 5 + w * 0.3, c * 2.5);
+            ctx.closePath();
 
-    ctx.fill();
+            ctx.fill();
 
-    // keys
-    for (i = 1; i < 4; i +=1 ) {
-        ctx.beginPath();
-        ctx.moveTo(this.corner * 4 + this.corner * 2 * i, this.corner * 2);
-        ctx.lineTo(this.corner * 4 + this.corner * 2 * i, this.corner);
-        ctx.stroke();
-    }
+            // keys
+            for (i = 1; i < 4; i +=1 ) {
+                ctx.beginPath();
+                ctx.moveTo(c * 4 + c * 2 * i, c * 2);
+                ctx.lineTo(c * 4 + c * 2 * i, c);
+                ctx.stroke();
+            }
+        };
+
+    ctx.strokeStyle = darkYellow;
+    ctx.fillStyle = darkYellow;
+    ctx.lineWidth = c * 2;
+    trumpet();
+    ctx.strokeStyle = yellow;
+    ctx.fillStyle = yellow;
+    ctx.lineWidth = c * 1;
+    trumpet();
 
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
@@ -404,136 +448,154 @@ HatBlockMorph.prototype.drawTrumpet = function (ctx) {
 };
 
 HatBlockMorph.prototype.renderStarHat = function (ctx) {
+    var c = this.corner,
+        w = this.hatWidth,
+        h = this.hatHeight,
+
+        gray = new Color(200, 200, 200).toString(),
+        darkGray = new Color(100, 100, 100).toString(),
+        white = WHITE.toString(),
+
+        star = () => {
+            ctx.beginPath();
+            ctx.moveTo(this.edge, h * 0.8);
+            ctx.lineTo(c * 3, h);
+            ctx.lineTo(c * 2, h + c);
+            ctx.lineTo(c * 5, h);
+            ctx.lineTo(c * 6, h + c);
+            ctx.lineTo(c * 7, h);
+            ctx.lineTo(c * 9, h + c);
+            ctx.lineTo(c * 8, h - c);
+            ctx.lineTo(c * 12, h - c * 2);
+            ctx.lineTo(c * 8, c * 2);
+            ctx.lineTo(c * 8.5, this.edge);
+            ctx.lineTo(c * 6, c * 1.5);
+            ctx.lineTo(c * 5, this.edge);
+            ctx.lineTo(c * 4.5, c * 2);
+            ctx.lineTo(c * 1.5, c * 0.5);
+            ctx.lineTo(c * 3, c * 2.5);
+            ctx.closePath();
+        },
+
+        tail = () => {
+            ctx.beginPath();
+            ctx.arc(
+                w * 0.65,
+                h * 3,
+                w * 0.5,
+                radians(-130),
+                radians(-50),
+                false
+            );
+            ctx.lineTo(w * 0.8, h - c * 1.5);
+            ctx.arc(
+                w * 0.5,
+                h * 3.7,
+                w * 0.5,
+                radians(-50),
+                radians(-110),
+                true
+            );
+            ctx.closePath();
+        };
+
     // tail
     ctx.lineWidth = this.edge;
-    ctx.strokeStyle = new Color(100, 100, 100).toString();
-    ctx.fillStyle = new Color(200, 200, 200).toString();
+    ctx.strokeStyle = darkGray;
+    ctx.fillStyle = gray;
 
-    this.starTailPath(ctx);
+    tail();
     ctx.stroke();
 
-    ctx.fillStyle = WHITE.toString();
-    this.starTailPath(ctx);
+    ctx.fillStyle = white;
+    tail();
     ctx.fill();
 
     // star
-    this.starPath(ctx);
+    star();
     ctx.stroke();
 
-    ctx.fillStyle = WHITE.toString();
-    this.starPath(ctx);
+    ctx.fillStyle = white;
+    star();
     ctx.fill();
-};
-
-HatBlockMorph.prototype.starTailPath = function (ctx) {
-    ctx.beginPath();
-    ctx.arc(
-        this.hatWidth * 0.65,
-        this.hatHeight * 3,
-        this.hatWidth * 0.5,
-        radians(-130),
-        radians(-50),
-        false
-    );
-    ctx.lineTo(this.hatWidth * 0.8, this.hatHeight - this.corner * 1.5);
-    ctx.arc(
-        this.hatWidth * 0.5,
-        this.hatHeight * 3.7,
-        this.hatWidth * 0.5,
-        radians(-50),
-        radians(-110),
-        true
-    );
-    ctx.closePath();
-};
-
-HatBlockMorph.prototype.starPath = function (ctx) {
-    ctx.beginPath();
-    ctx.moveTo(this.edge, this.hatHeight * 0.8);
-    ctx.lineTo(this.corner * 3, this.hatHeight);
-    ctx.lineTo(this.corner * 2, this.hatHeight + this.corner);
-    ctx.lineTo(this.corner * 5, this.hatHeight);
-    ctx.lineTo(this.corner * 6, this.hatHeight + this.corner);
-    ctx.lineTo(this.corner * 7, this.hatHeight);
-    ctx.lineTo(this.corner * 9, this.hatHeight + this.corner);
-    ctx.lineTo(this.corner * 8, this.hatHeight - this.corner);
-    ctx.lineTo(this.corner * 12, this.hatHeight - this.corner * 2);
-    ctx.lineTo(this.corner * 8, this.corner * 2);
-    ctx.lineTo(this.corner * 8.5, this.edge);
-    ctx.lineTo(this.corner * 6, this.corner * 1.5);
-    ctx.lineTo(this.corner * 5, this.edge);
-    ctx.lineTo(this.corner * 4.5, this.corner * 2);
-    ctx.lineTo(this.corner * 1.5, this.corner * 0.5);
-    ctx.lineTo(this.corner * 3, this.corner * 2.5);
-    ctx.closePath();
 };
 
 HatBlockMorph.prototype.renderGiftHat = function (ctx) {
+    var c = this.corner,
+        w = this.hatWidth,
+        h = this.hatHeight,
+
+        blue = new Color(0, 0, 255).toString(),
+        brightBlue = new Color(100, 100, 255).toString(),
+        darkBlue = new Color(0, 0, 100).toString(),
+        red = new Color(200, 0, 0).toString(),
+        brightRed = new Color(250, 0, 0).toString();
+
     // parcel
-    ctx.fillStyle = new Color(0, 0, 255).toString();
+    ctx.fillStyle = blue;
     ctx.beginPath();
     ctx.rect(
-        this.corner * 2,
-        this.corner ,
-        this.hatWidth * 0.3,
-        this.hatHeight
+        c * 2,
+        c ,
+        w * 0.3,
+        h
     );
     ctx.fill();
 
-    ctx.fillStyle = new Color(100, 100, 255).toString();
+    ctx.fillStyle = brightBlue;
     ctx.beginPath();
-    ctx.moveTo(this.corner * 2, this.corner);
-    ctx.lineTo(this.corner * 3, 0);
-    ctx.lineTo(this.corner * 3 + this.hatWidth * 0.3, 0);
-    ctx.lineTo(this.corner * 2 + this.hatWidth * 0.3, this.corner);
+    ctx.moveTo(c * 2, c);
+    ctx.lineTo(c * 3, 0);
+    ctx.lineTo(c * 3 + w * 0.3, 0);
+    ctx.lineTo(c * 2 + w * 0.3, c);
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = new Color(0, 0, 100).toString();
+    ctx.fillStyle = darkBlue;
     ctx.beginPath();
-    ctx.moveTo(this.corner * 3 + this.hatWidth * 0.3, 0);
-    ctx.lineTo(this.corner * 2 + this.hatWidth * 0.3, this.corner);
+    ctx.moveTo(c * 3 + w * 0.3, 0);
+    ctx.lineTo(c * 2 + w * 0.3, c);
     ctx.lineTo(
-        this.corner * 2 + this.hatWidth * 0.3,
-        this.corner + this.hatHeight
+        c * 2 + w * 0.3,
+        c + h
     );
-    ctx.lineTo(this.corner * 3 + this.hatWidth * 0.3, this.hatHeight);
+    ctx.lineTo(c * 3 + w * 0.3, h);
     ctx.closePath();
     ctx.fill();
 
     // ribbon
-    ctx.strokeStyle = new Color(200, 0, 0).toString();
+    ctx.strokeStyle = red;
     ctx.lineCap = 'butt';
-    ctx.lineWidth = this.corner;
+    ctx.lineWidth = c;
 
     // horizontal
     ctx.beginPath();
-    ctx.moveTo(this.corner * 2, this.corner + this.hatHeight * 0.5);
+    ctx.moveTo(c * 2, c + h * 0.5);
     ctx.lineTo(
-        this.corner * 2 + this.hatWidth * 0.3,
-        this.corner + this.hatHeight * 0.5
+        c * 2 + w * 0.3,
+        c + h * 0.5
     );
     ctx.stroke();
 
     // vertical
     ctx.beginPath();
-    ctx.moveTo(this.corner * 2 + this.hatWidth * 0.15, this.corner);
+    ctx.moveTo(c * 2 + w * 0.15, c);
     ctx.lineTo(
-        this.corner * 2 + this.hatWidth * 0.15,
-        this.corner + this.hatHeight
+        c * 2 + w * 0.15,
+        c + h
     );
     ctx.stroke();
 
     // loop
-    ctx.strokeStyle = new Color(250, 0, 0).toString();
-    ctx.lineWidth = this.corner * 0.5;
+    ctx.strokeStyle = brightRed;
+    ctx.lineWidth = c * 0.5;
 
     ctx.beginPath();
     ctx.ellipse(
-        this.corner * 3 + this.hatWidth * 0.15,
-        this.corner * 0.7,
-        this.corner * 0.5,
-        this.corner * 0.8,
+        c * 3 + w * 0.15,
+        c * 0.7,
+        c * 0.5,
+        c * 0.8,
         radians(60),
         0,
         2 * Math.PI
@@ -542,10 +604,10 @@ HatBlockMorph.prototype.renderGiftHat = function (ctx) {
 
     ctx.beginPath();
     ctx.ellipse(
-        this.corner + this.hatWidth * 0.15,
-        this.corner * 0.7,
-        this.corner * 0.5,
-        this.corner,
+        c + w * 0.15,
+        c * 0.7,
+        c * 0.5,
+        c,
         radians(-80),
         0,
         2 * Math.PI
@@ -554,53 +616,325 @@ HatBlockMorph.prototype.renderGiftHat = function (ctx) {
 };
 
 HatBlockMorph.prototype.renderPretzelHat = function (ctx) {
-    ctx.strokeStyle = new Color(100, 40, 0);
-    ctx.lineWidth = this.corner * 1.5;
-    this.pretzelHatPath(ctx);
+    var c = this.corner,
+        w = this.hatWidth,
+        h = this.hatHeight,
 
-    ctx.strokeStyle = new Color(220, 80, 0);
-    ctx.lineWidth = this.corner;
-    this.pretzelHatPath(ctx);
+        brown = new Color(220, 80, 0).toString(),
+        darkBrown = new Color(100, 40, 0).toString(),
+
+        pretzel = () => {
+            var i, x, y;
+            ctx.beginPath();
+            for (i = 105; i <= 255; i += 1) {
+                x = Math.sin(radians(i * 3)) * w * 0.2;
+                y = Math.cos(radians(i * 4)) * h * 0.48;
+                ctx.lineTo(x + w * 0.3, y + h * 0.65);
+            }
+            ctx.stroke();
+        };
+
+    ctx.strokeStyle = darkBrown;
+    ctx.lineWidth = c * 1.5;
+    pretzel();
+
+    ctx.strokeStyle = brown;
+    ctx.lineWidth = c;
+    pretzel();
 };
 
-HatBlockMorph.prototype.pretzelHatPath = function (ctx) {
-    var i, x, y;
+HatBlockMorph.prototype.renderLetterHat = function (ctx) {
+    var c = this.corner,
+
+        gray = new Color(150, 150, 150).toString(),
+        red = new Color(200, 0, 0).toString(),
+        blue = new Color(0, 0, 180).toString(),
+        white = WHITE.toString(),
+    
+        letter = () => {
+            ctx.beginPath();
+            ctx.moveTo(c * 4, c * 2);
+            ctx.lineTo(c * 14, c * 0.25);
+            ctx.lineTo(c * 14.75, c * 4);
+            ctx.lineTo(c * 4.75, c * 6.25);
+            ctx.closePath();
+        },
+
+        stamp = () => {
+            ctx.beginPath();
+            ctx.moveTo(c * 12, c * 1.25);
+            ctx.lineTo(c * 13.5, c * 1);
+            ctx.lineTo(c * 13.75, c * 2);
+            ctx.lineTo(c * 12.25, c * 2.35);
+            ctx.closePath();
+        };
+
+    // letter
+    ctx.lineWidth = c * 0.5;
+    ctx.strokeStyle = gray;
+    letter();
+    ctx.stroke();
+    ctx.fillStyle = white;
+    letter();
+    ctx.fill();
+
+    // stamp
+    ctx.fillStyle = red;
+    stamp();
+    ctx.fill();
+
+    // address
+    ctx.lineCap = 'round';
+    ctx.setLineDash([c* 0.5, c * 0.5, c * 1.2, c * 0.5]);
+    ctx.strokeStyle = blue;
     ctx.beginPath();
-    for (i = 105; i <= 255; i += 1) {
-        x = Math.sin(radians(i * 3)) * this.hatWidth * 0.2;
-        y = Math.cos(radians(i * 4)) * this.hatHeight * 0.48;
-        ctx.lineTo(x + this.hatWidth * 0.3, y + this.hatHeight * 0.65);
+    ctx.moveTo(c * 6, c * 3.6);
+    ctx.lineTo(c * 9, c * 3);
+    ctx.moveTo(c * 6.3, c * 4.7);
+    ctx.lineTo(c * 9.3, c * 4);
+    ctx.stroke();
+    ctx.setLineDash([]);
+};
+
+HatBlockMorph.prototype.renderTrainHat = function (ctx) {
+    var c = this.corner,
+        w = this.hatWidth,
+
+        gray = new Color(200, 200, 200).toString(),
+        red = new Color(200, 0, 0).toString(),
+        green = new Color(0, 200, 0).toString(),
+        darkGreen = new Color(0, 100, 0).toString(),
+        black = BLACK.toString(),
+    
+    chimney = () => {
+        ctx.beginPath();
+        ctx.roundRect(
+            c * 12,
+            c * 0.5,
+            c * 2,
+            c * 0.75,
+            [c * 0.5, c * 0.5,
+            c * 0.5, c * 0.5]
+        );
+        ctx.rect(
+            c * 12.5,
+            c * 1.25,
+            c * 1,
+            c * 1.25
+        );
+    },
+
+    wheels = (start, stop) => {
+        var i;
+        for (i = start; i <= stop; i += 1) {
+            ctx.beginPath();
+            ctx.fillStyle = black;
+            ctx.arc(
+                c * 4 + c * i * 2.5,
+                c * 5,
+                c * 1.2,
+                radians(0),
+                radians(360),
+                false
+            );
+            ctx.fill();
+        }
+        ctx.fillStyle = red;
+        for (i = start; i <= stop; i += 1) {
+            ctx.beginPath();
+            ctx.arc(
+                c * 4 + c * i * 2.5,
+                c * 5,
+                c * 0.8,
+                radians(0),
+                radians(360),
+                false
+            );
+            ctx.fill();
+        }
+    },
+
+    boiler = () => {
+        ctx.roundRect(
+            c * 5,
+            c * 2,
+            w * 0.5,
+            c * 2,
+            [0, c * 2, c * 2, 0]
+        );
+    },
+
+    cabin = () => {
+        ctx.rect(
+            c * 5,
+            c * 0.5,
+            c * 2,
+            c * 1.75
+        );
+    },
+
+    roof = () => {
+        ctx.moveTo(c * 4, c * 0.5);
+        ctx.lineTo(c * 8, c * 0.5);
+    },
+
+    catcher = () => {
+        ctx.beginPath();
+        ctx.moveTo(c * 4, c * 4);
+        ctx.lineTo(c * 4 + w * 0.5, c * 4);
+        ctx.lineTo(c * 5 + w * 0.5, c * 5);
+        ctx.lineTo(c * 4, c * 5);
+        ctx.closePath();
+    };
+
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'miter';
+
+    // outline
+    // chimney
+    ctx.strokeStyle = gray;
+    ctx.lineWidth = c * 0.5;
+    ctx.beginPath();
+    chimney();
+    ctx.stroke();
+    
+    // boiler
+    ctx.beginPath();
+    boiler();
+    ctx.stroke();
+
+    // cabin
+    ctx.lineWidth = c;
+    ctx.beginPath();
+    cabin();
+    ctx.stroke();
+    ctx.beginPath();
+    roof();
+    ctx.stroke();
+
+    // catcher
+    ctx.lineWidth = c * 0.5;
+    catcher();
+    ctx.stroke();
+
+
+    // inner shape:
+    // chimney
+    ctx.fillStyle = red;
+    ctx.beginPath();
+    chimney();
+    ctx.fill();
+
+    // front wheels
+    wheels(3, 4);
+
+    // boiler
+    ctx.fillStyle = green;
+    ctx.beginPath();
+    boiler();
+    ctx.fill();
+
+    // cabin
+    ctx.strokeStyle = red;
+    ctx.lineWidth = c * 0.5;
+    ctx.beginPath();
+    cabin();
+    ctx.stroke();
+    //ctx.lineWidth = c;
+    ctx.beginPath();
+    roof();
+    ctx.stroke();
+
+    // catcher
+    ctx.fillStyle = darkGreen;
+    catcher();
+    ctx.fill();
+
+    // rear wheels
+    wheels(1, 2);
+};
+
+HatBlockMorph.prototype.renderHouseHat = function (ctx) {
+    var c = this.corner,
+
+        brown = new Color(220, 80, 0),
+        white = WHITE.toString(),
+        i,
+    
+        house = () => {
+            ctx.beginPath();
+            ctx.moveTo(c * 4, c * 2.5);
+            ctx.lineTo(c * 2, c * 2.5);
+
+            ctx.lineTo(c * 4, c * 0.5);
+            ctx.lineTo(c * 12, c * 0.5);
+
+            ctx.lineTo(c * 14, c * 2.5);
+            ctx.lineTo(c * 12, c * 2.5);
+
+            ctx.lineTo(c * 12, c * 4.5);
+            ctx.lineTo(c * 4, c * 4.5);
+            ctx.closePath();
+        };
+
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // house
+    ctx.lineWidth = c;
+    ctx.strokeStyle = brown;
+    house();
+    ctx.stroke();
+
+    ctx.fillStyle = brown;
+    house();
+    ctx.fill();
+    
+    ctx.lineWidth = c * 0.25;
+    ctx.strokeStyle = white;
+    house();
+    ctx.stroke();
+
+    // tiles
+    ctx.beginPath();
+    for (i = 0; i < 7; i += 1) {
+        ctx.arc(
+            c * 5 + (c * i),
+            c * 1.25,
+            c * 0.5,
+            radians(-200),
+            radians(20),
+            true
+        );
     }
     ctx.stroke();
-};
 
-HatBlockMorph.prototype.santaHatPath = function (ctx, inset) {
-    var s = this.hatWidth,
-        h = this.hatHeight,
-        r = ((4 * h * h) + (s * s)) / (8 * h),
-        a = degrees(4 * Math.atan(2 * h / s)),
-        sa = a / 2;
-
-    // top arc:
-    ctx.moveTo(inset, h + this.corner);
+    // door
+    ctx.beginPath();
+    ctx.moveTo(c * 5, c * 4.5);
+    ctx.lineTo(c * 5, c * 3.5);
     ctx.arc(
-        s / 2,
-        r,
-        r,
-        radians(-sa - 90),
-        radians(-75),
-        false
+        c * 6,
+        c * 3.5,
+        c,
+        radians(-180),
+        radians(0)
     );
+    ctx.lineTo(c * 7, c * 4.5);
+    ctx.moveTo(c * 6, c * 4.5);
+    ctx.lineTo(c * 6, c * 3.5);
+    ctx.stroke();
 
-    ctx.arc(
-        inset + this.hatWidth * 0.9,
-        h + this.corner * 6,
-        this.hatWidth / 3,
-        radians(-70),
-        radians(-140),
-        true
+
+    // window
+    ctx.beginPath();
+    ctx.rect(
+        c * 8.5,
+        c * 2.7,
+        c * 2,
+        c * 1.2
     );
-
+    ctx.stroke();
 };
 
 IDE_Morph.prototype.looksMenu = function () {
@@ -610,12 +944,10 @@ IDE_Morph.prototype.looksMenu = function () {
         () => {
              HatBlockMorph.prototype.xmasSkin =
                 !HatBlockMorph.prototype.xmasSkin;
-             this.world().changed();
-            if (HatBlockMorph.prototype.xmasSkin) {
-                this.saveSetting('skin', 'xmas');
-            } else {
-                this.removeSetting('skin');
-            }
+            this.world().changed();
+            this.bakeYourOwnBlocks();
+            this.flushBlocksCache();
+            this.refreshPalette();
         },
         HatBlockMorph.prototype.xmasSkin,
         'uncheck for default\nhat block skin',
@@ -627,3 +959,21 @@ IDE_Morph.prototype.looksMenu = function () {
         this.controlBar.settingsButton.bottomLeft()
     );
 };
+
+IDE_Morph.prototype.bakeYourOwnBlocks = function () {
+    if (HatBlockMorph.prototype.xmasSkin) {
+        SnapTranslator.dict.en['Make a block'] = 'Bake a block';
+        SnapTranslator.dict.en['Make a block...'] = 'Bake a block...';
+        SnapTranslator.dict.en['make a block...'] = 'bake a block...';
+        SnapTranslator.dict.en['Block Editor'] = 'Block Bakery';
+        this.saveSetting('skin', 'xmas');
+    } else {
+        delete SnapTranslator.dict.en['Make a block'];
+        delete SnapTranslator.dict.en['Make a block...'];
+        delete SnapTranslator.dict.en['make a block...'];
+        delete SnapTranslator.dict.en['Block Editor'];
+        this.removeSetting('skin');
+    }
+};
+
+IDE_Morph.prototype.bakeYourOwnBlocks();

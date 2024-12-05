@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-December-04';
+modules.threads = '2024-December-05';
 
 var ThreadManager;
 var Process;
@@ -287,7 +287,7 @@ ThreadManager.prototype.startProcess = function (
     return newProc;
 };
 
-ThreadManager.prototype.highlight = function (aProcess) {
+ThreadManager.prototype.highlight = function (aProcess, adjustCount = 0) {
     // show a highlight around the running stack
     // if there are more than one active processes
     // for a block, display the thread count
@@ -295,7 +295,7 @@ ThreadManager.prototype.highlight = function (aProcess) {
     var top = aProcess.topBlock,
         glow = top.getHighlight();
     if (glow) {
-        glow.threadCount = this.processesForBlock(top).length + 1;
+        glow.threadCount = this.processesForBlock(top).length + 1 + adjustCount;
         glow.updateReadout();
     } else {
         top.addHighlight();
@@ -367,7 +367,7 @@ ThreadManager.prototype.step = function () {
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
             if (proc.isInterrupted) {
-                if (proc.wantsHalo) { this.highlight(proc); }
+                if (proc.wantsHalo) { this.highlight(proc, -1); }
                 proc.runStep();
                 isInterrupted = true;
             } else {
@@ -385,7 +385,7 @@ ThreadManager.prototype.step = function () {
 
     this.processes.forEach(proc => {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
-            if (proc.wantsHalo) { this.highlight(proc); }
+            if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
         }
     });
