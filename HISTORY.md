@@ -2,10 +2,12 @@
 
 ## in development:
 * **Notable Fixes:**
-    fixed c-slot rendering for hat blocks
+    * fixed c-slot rendering for hat blocks
+    * loosened type assertions to include hat blocks in some script related extensions
 
 ### 2024-12-07
 * blocks, santa: fixed c-slot rendering for hat blocks
+* extensions: loosened type assertions to include hat blocks in some script related extensions
 
 ## 10.3.0:
 * **New Features:**
