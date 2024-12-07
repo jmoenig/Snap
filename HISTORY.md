@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.3.1:
 * **Notable Fixes:**
     * fixed c-slot rendering for hat blocks
     * loosened type assertions to include hat blocks in some script related extensions
@@ -8,6 +10,7 @@
 ### 2024-12-07
 * blocks, santa: fixed c-slot rendering for hat blocks
 * extensions: loosened type assertions to include hat blocks in some script related extensions
+* prepared v10.3.1 patch
 
 ## 10.3.0:
 * **New Features:**
