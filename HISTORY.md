@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    fixed c-slot rendering for hat blocks
+
+### 2024-12-07
+* blocks, santa: fixed c-slot rendering for hat blocks
 
 ## 10.3.0:
 * **New Features:**

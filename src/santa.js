@@ -38,7 +38,7 @@ WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.santa = '2024-December-05';
+modules.santa = '2024-December-07';
 
 // HatBlockMorph Xmas Skin (2024)
 
@@ -118,7 +118,8 @@ HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
         bottom = this.height() - c,
         bottomCorner = this.height() - c * 2,
         radius = Math.max(c - inset, 0),
-        h = this.hatHeight;
+        h = this.hatHeight,
+        pos = this.position();
 
     ctx.moveTo(inset, h + inset);
 
@@ -131,6 +132,11 @@ HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
         radians(-0),
         false
     );
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
 
     // bottom right:
     ctx.arc(

@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-December-04';
+modules.blocks = '2024-December-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7241,7 +7241,9 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         r = ((4 * h * h) + (s * s)) / (8 * h),
         a = degrees(4 * Math.atan(2 * h / s)),
         sa = a / 2,
-        sp = Math.min(s * 1.7, this.width() - this.corner);
+        sp = Math.min(s * 1.7, this.width() - this.corner),
+        pos = this.position();
+
 
     // top arc:
     ctx.moveTo(inset, h + this.corner);
@@ -7271,6 +7273,11 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         radians(-0),
         false
     );
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
 
     // bottom right:
     ctx.arc(
@@ -7321,7 +7328,8 @@ HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
 
 HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
-        x = this.width(),
+        x = this.width(), y,
+        cslots = this.cSlots(),
         gradient;
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
@@ -7335,6 +7343,15 @@ HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(x - shift, this.corner + this.hatHeight + shift);
+    if (cslots.length) {
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(x - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x - shift, y + slot.height());
+        });
+    }
     ctx.lineTo(x - shift, this.height() - this.corner * 2);
     ctx.stroke();
 };
