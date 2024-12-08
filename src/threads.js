@@ -61,11 +61,12 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph*/
+StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph,
+CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-November-12';
+modules.threads = '2024-December-05';
 
 var ThreadManager;
 var Process;
@@ -236,11 +237,11 @@ ThreadManager.prototype.startProcess = function (
     isClicked,
     rightAway,
     atomic, // special option used (only) for "onStop" scripts
-    variables // optional variable frame, used for WHEN hats
+    variables, // optional variable frame, used for WHEN hats
+    noHalo
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
-        glow,
         newProc;
     if (active) {
         if (isThreadSafe) {
@@ -275,15 +276,8 @@ ThreadManager.prototype.startProcess = function (
     }
 
     // show a highlight around the running stack
-    // if there are more than one active processes
-    // for a block, display the thread count
-    // next to it
-    glow = top.getHighlight();
-    if (glow) {
-        glow.threadCount = this.processesForBlock(top).length + 1;
-        glow.updateReadout();
-    } else {
-        top.addHighlight();
+    if (!noHalo) {
+        this.highlight(newProc);
     }
 
     this.processes.push(newProc);
@@ -291,6 +285,22 @@ ThreadManager.prototype.startProcess = function (
         newProc.runStep();
     }
     return newProc;
+};
+
+ThreadManager.prototype.highlight = function (aProcess, adjustCount = 0) {
+    // show a highlight around the running stack
+    // if there are more than one active processes
+    // for a block, display the thread count
+    // next to it
+    var top = aProcess.topBlock,
+        glow = top.getHighlight();
+    if (glow) {
+        glow.threadCount = this.processesForBlock(top).length + 1 + adjustCount;
+        glow.updateReadout();
+    } else {
+        top.addHighlight();
+    }
+    this.wantsHalo = false;
 };
 
 ThreadManager.prototype.stopAll = function (excpt) {
@@ -357,6 +367,7 @@ ThreadManager.prototype.step = function () {
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
             if (proc.isInterrupted) {
+                if (proc.wantsHalo) { this.highlight(proc, -1); }
                 proc.runStep();
                 isInterrupted = true;
             } else {
@@ -374,6 +385,7 @@ ThreadManager.prototype.step = function () {
 
     this.processes.forEach(proc => {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
+            if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
         }
     });
@@ -575,6 +587,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isDead = false;
     this.isClicked = false;
     this.isShowingResult = false;
+    this.wantsHalo = false;
     this.errorFlag = false;
     this.context = null;
     this.homeContext = new Context(null, null, null, receiver);
@@ -1832,6 +1845,12 @@ Process.prototype.runContinuation = function (aContext, args) {
 // Process custom block primitives
 
 Process.prototype.evaluateCustomBlock = function () {
+    if (this.context.expression instanceof CustomHatBlockMorph &&
+        !this.context.accumulator
+    ) {
+        return this.evaluateCustomHatBlock();
+    }
+
     var caller = this.context.parentContext,
         block = this.context.expression,
         method = block.isGlobal ? block.definition
@@ -2845,8 +2864,66 @@ Process.prototype.receiveCondition = function (bool) {
     var nb = this.context.expression.nextBlock(),
         outer = this.context.outerContext;
     this.popContext();
-    if (bool === true && nb) {
+    if ((bool === true || this.isClicked) && nb) {
         this.pushContext(nb.blockSequence(), outer);
+        this.wantsHalo = true;
+    }
+    this.pushContext();
+};
+
+Process.prototype.receiveConditionEvent = function (bool) {
+    var hatBlock = this.context.expression,
+        next = hatBlock.nextBlock(),
+        outer = this.context.outerContext;
+    this.popContext();
+    if (next) {
+        if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
+            hatBlock.isLoaded = this.enableSingleStepping; // false;
+            this.pushContext(next.blockSequence(), outer);
+            this.wantsHalo = true;
+        } else if (!bool) {
+            hatBlock.isLoaded = true;
+        }
+    }
+    this.pushContext();
+};
+
+Process.prototype.evaluateCustomHatBlock = function () {
+    var hatBlock = this.context.expression,
+        runnable = new Context(
+            this.context.parentContext,
+            hatBlock.semantics === 'rule' ? 'dispatchRule' :'dispatchEvent',
+            this.context.outerContext
+        );
+    runnable.addInput(hatBlock);
+    this.context.parentContext = runnable;
+    this.context.accumulator = true;
+    this.evaluateCustomBlock();
+};
+
+Process.prototype.dispatchRule = function (hatBlock, bool) {
+    var outer = this.context.outerContext,
+        next = hatBlock.nextBlock();
+    this.popContext();
+    if ((bool === true || this.isClicked) && next) {
+        this.pushContext(next.blockSequence(), outer);
+        this.wantsHalo = true;
+    }
+    this.pushContext();
+};
+
+Process.prototype.dispatchEvent = function (hatBlock, bool) {
+    var outer = this.context.outerContext,
+        next = hatBlock.nextBlock();
+    this.popContext();
+    if (next) {
+        if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
+            hatBlock.isLoaded = this.enableSingleStepping; // false;
+            this.pushContext(next.blockSequence(), outer);
+            this.wantsHalo = true;
+        } else if (!bool) {
+            hatBlock.isLoaded = true;
+        }
     }
     this.pushContext();
 };
@@ -4688,12 +4765,18 @@ Process.prototype.reportTypeOf = function (thing) {
             if (exp instanceof ReporterBlockMorph) {
                 return 'reporter';
             }
+            if (exp instanceof HatBlockMorph) {
+                return 'hat';
+            }
             if (exp instanceof CommandBlockMorph) {
                 return 'command';
             }
             return 'reporter'; // 'ring';
         }
 
+        if (thing.expression instanceof HatBlockMorph) {
+            return 'hat';
+        }
         if (thing.expression instanceof CommandBlockMorph) {
             return 'command';
         }
@@ -5394,7 +5477,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         if (isString(string) && '(;'.includes(string.trim()[0])) {
             return this.parseCode(string);
         }
-        this.assertType(string, ['command', 'reporter', 'predicate']);
+        this.assertType(string, ['command', 'reporter', 'predicate', 'hat']);
         return string.components();
     }
     return this.hyper(
@@ -7949,7 +8032,7 @@ Process.prototype.reportBlockAttribute = function (attribute, block) {
 Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     var choice = this.inputOption(attribute),
         expr, body, slots, data, def, info, loc, cmt, prim;
-    this.assertType(block, ['command', 'reporter', 'predicate']);
+    this.assertType(block, ['command', 'reporter', 'predicate', 'hat']);
     expr = block.expression;
     switch (choice) {
     case 'label':
@@ -8036,7 +8119,7 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
     case 'type':
-        return ['command', 'reporter', 'predicate'].indexOf(
+        return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)
         ) + 1;
     case 'scope':
@@ -8518,7 +8601,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     var choice = this.inputOption(attribute),
         rcvr = this.blockReceiver(),
         ide = rcvr.parentThatIsA(IDE_Morph),
-        types = ['command', 'reporter', 'predicate'],
+        types = ['command', 'reporter', 'predicate', 'hat'],
         scopes = ['global', 'local'],
         idx, oldSpec, expr, def, inData, template, oldType, type, loc, prim;
 
@@ -8948,7 +9031,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
     this.assertType(label, 'text');
     label = label.trim();
     if (label === '') {return ''; }
-    this.assertType(context, ['command', 'reporter', 'predicate']);
+    this.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
 
     // replace upvar self references inside the definition body
     // with "reportEnvironment" reporters
@@ -9056,7 +9139,7 @@ Process.prototype.doDeleteBlock = function (context) {
         stage = ide.stage,
         expr, def, method, idx;
 
-    this.assertType(context, ['command', 'reporter', 'predicate']);
+    this.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
     expr = context.expression;
     if (!expr.isCustomBlock) {
         throw new Error('expecting a custom block\nbut getting a primitive');

@@ -92,11 +92,11 @@ localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
 embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
-CustomBlockDefinition, exportEmbroidery*/
+CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-November-10';
+modules.objects = '2024-December-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1062,6 +1062,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when %b'
+        },
+        receiveConditionEvent: {
             type: 'hat',
             category: 'control',
             spec: 'when %b'
@@ -2752,6 +2757,7 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'doSetSlot'
         );
     }
+    // 10.3: no new primitives
 
     return selectors;
 };
@@ -2837,6 +2843,8 @@ SpriteMorph.prototype.blockAlternatives = {
         ['doForEach', 2]],
     doFor: [['doForever', -3], ['doRepeat', -2], ['doUntil', -2],
         ['doForEach', -1]],
+    receiveCondition: ['receiveConditionEvent'],
+    receiveConditionEvent: ['receiveCondition'],
     // doRun: ['fork'],
     // fork: ['doRun'],
 
@@ -3677,7 +3685,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveCondition'));
+        blocks.push(block('receiveConditionEvent'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
@@ -7907,18 +7915,19 @@ SpriteMorph.prototype.allHatBlocksForUserEdit = function (spriteName) {
 };
 
 SpriteMorph.prototype.hasGenericHatBlocks = function () {
+    var generics = ['receiveCondition', 'receiveConditionEvent'];
     return this.scripts.children.some(morph =>
-        morph.selector === 'receiveCondition'
+        morph instanceof CustomHatBlockMorph ||
+            generics.includes(morph.selector)
     );
 };
 
 SpriteMorph.prototype.allGenericHatBlocks = function () {
-    return this.scripts.children.filter(morph => {
-        if (morph.selector) {
-            return morph.selector === 'receiveCondition';
-        }
-        return false;
-    });
+    var generics = ['receiveCondition', 'receiveConditionEvent'];
+    return this.scripts.children.filter(morph =>
+        morph instanceof CustomHatBlockMorph ||
+            generics.includes(morph.selector)
+    );
 };
 
 SpriteMorph.prototype.allScripts = function () {
@@ -10248,16 +10257,33 @@ StageMorph.prototype.step = function () {
     }
 
     // manage threads
-    if (this.enableCustomHatBlocks) {
-        this.stepGenericConditions();
-    }
     if (this.isFastTracked && this.threads.processes.length) {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
+            this.stepGenericConditions();
             this.threads.step(); // approx. 67 fps
+
+            // double-clock event hats:
+            if (this.enableCustomHatBlocks &&
+                !this.threads.pauseCustomHatBlocks &&
+                !Process.prototype.enableSingleStepping
+            ) {
+                this.stepGenericConditions(null, true); // only events
+                this.threads.removeTerminatedProcesses();
+            }
         }
         this.changed();
     } else {
+        this.stepGenericConditions();
         this.threads.step();
+
+        // double-clock event hats:
+        if (this.enableCustomHatBlocks &&
+            !this.threads.pauseCustomHatBlocks &&
+            !Process.prototype.enableSingleStepping
+        ) {
+            this.stepGenericConditions(null, true); // only events
+            this.threads.removeTerminatedProcesses();
+        }
 
         // single-stepping hook:
         if (this.threads.wantsToPause) {
@@ -10311,14 +10337,18 @@ StageMorph.prototype.updateProjection = function () {
     this.changed();
 };
 
-StageMorph.prototype.stepGenericConditions = function (stopAll) {
+StageMorph.prototype.stepGenericConditions = function (stopAll, onlyEvents) {
     var hatCount = 0,
         ide;
+    if (!this.enableCustomHatBlocks) {return; }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
                 if (!this.threads.pauseCustomHatBlocks) {
+                    if (onlyEvents && block.isRuleHat()) {
+                        return;
+                    }
                     this.threads.startProcess (
                         block,
                         morph, // receiver
@@ -10327,6 +10357,9 @@ StageMorph.prototype.stepGenericConditions = function (stopAll) {
                         null, // callback
                         null, // isClicked
                         true, // rightAway
+                        null, // atomic
+                        null, // variables
+                        true // no halo
                     );
                 }
             });
@@ -10857,7 +10890,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveCondition'));
+        blocks.push(block('receiveConditionEvent'));
         blocks.push('-');
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
@@ -13544,7 +13577,7 @@ Sound.prototype.toDataURL = function () {
 // Note instance creation
 
 function Note(pitch) {
-    this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.pitch = pitch === 0 ? 0 : Math.min(Math.max(pitch, 0), 144) || 69;
     this.frequency = null; // alternative for playing a non-note frequency
     this.setupContext();
     this.oscillator = null;

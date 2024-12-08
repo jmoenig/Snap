@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-October-09';
+modules.extensions = '2024-December-07';
 
 // Global stuff
 
@@ -249,7 +249,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'snap_xml_encode(script)',
     function (script, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        proc.assertType(script, ['command', 'reporter', 'predicate', 'hat']);
         return script.expression.toXMLString(this);
     }
 );
@@ -949,6 +949,13 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'obj_version(obj)',
+    function (obj) {
+        return +(obj instanceof List ? obj.lastChanged : obj?.version) || 0;
+    }
+);
+
 // Costumes (cst_):
 
 SnapExtensions.primitives.set(
@@ -1158,7 +1165,7 @@ SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        proc.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
         this.changeBlockVisibility(context.expression, true);
         ide.flushBlocksCache();
         ide.refreshPalette();
@@ -1170,7 +1177,7 @@ SnapExtensions.primitives.set(
     'ide_show(block)',
     function (context, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        proc.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
         this.changeBlockVisibility(context.expression, false);
         ide.flushBlocksCache();
         ide.refreshPalette();

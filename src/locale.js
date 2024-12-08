@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2024-November-10';
+modules.locale = '2024-December-04';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -65,7 +65,7 @@ function display(data) {
     if (isNil(data)) {
         return '';
     }
-    if (data instanceof Array) {
+    if (data instanceof Array && !isNil(data[0])) {
         return '«' + localize(data[0].toString()) + '»';
     }
     if (data.toString) {
@@ -203,7 +203,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2024-11-10'
+        '2024-12-04'
 };
 
 SnapTranslator.dict.it = {

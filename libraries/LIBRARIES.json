@@ -40,6 +40,30 @@
     }
   },
   {
+    "fileName": "events_module.xml",
+    "name": "Events",
+    "description": "Write scripts that react to data transitions, state changes and sensor threshold passings",
+    "searchData": [
+      "when _ happens",
+      "has _ happened?"
+    ],
+    "categories": [
+      "looks",
+      "control",
+      "sensing",
+      "operators",
+      "variables"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "Wenn _ sich ereignet",
+          "hat _ sich ereignet?"
+        ]
+      }
+    }
+  },
+  {
     "fileName": "~",
     "name": "~"
   },

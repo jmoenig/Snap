@@ -155,13 +155,14 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, WHITE, display,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
-SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK*/
+SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK,
+CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-November-12';
+modules.blocks = '2024-December-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3759,10 +3760,7 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
-        if (this instanceof ReporterBlockMorph ||
-                (!(top instanceof HatBlockMorph))) {
-            menu.addItem("ringify", 'ringify');
-        }
+        menu.addItem("ringify", 'ringify');
         return menu;
     }
     if (contains(
@@ -3780,11 +3778,10 @@ BlockMorph.prototype.userMenu = function () {
     }
     if (this.parent instanceof ReporterSlotMorph
             || (this.parent instanceof CommandSlotMorph)
-            || (this instanceof HatBlockMorph)
-            || (this instanceof CommandBlockMorph
-                && (top instanceof HatBlockMorph))) {
+    ) {
         return menu;
     }
+
     if (!hasLine) {menu.addLine(); }
     rcvr = rcvr || this.scriptTarget(true);
     if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
@@ -4047,10 +4044,7 @@ BlockMorph.prototype.ringify = function () {
         if (this instanceof ReporterBlockMorph) {
             this.parent.replaceInput(this, ring, true); // don't vanish
             ring.embed(this, null, true); // don't vanish
-        } else if (top) { // command
-            if (top instanceof HatBlockMorph) {
-                return;
-            }
+        } else if (top) { // command or hat
             top.parent.add(ring);
             ring.embed(top);
             ring.setCenter(center);
@@ -4558,7 +4552,7 @@ BlockMorph.prototype.components = function (parameterNames = []) {
     if (this instanceof ReporterBlockMorph) {
         return this.syntaxTree(parameterNames);
     }
-    var seq = new List(this.blockSequence()).map((block, i) =>
+    var seq = new List(this.blockSequence(true)).map((block, i) =>
         block.syntaxTree(i < 1 ? parameterNames : [])
     );
     return seq.length() === 1 ? seq.at(1) : seq;
@@ -5364,6 +5358,11 @@ BlockMorph.prototype.render = function (ctx) {
         this.drawEdges(ctx);
     }
 
+    // draw infinity / chain link icon if applicable
+    if (this.isRuleHat()) {
+        this.drawRuleIcon(ctx);
+    }
+
     // draw location pin icon if applicable
     if (this.hasLocationPin()) {
         this.drawMethodIcon(ctx);
@@ -5376,15 +5375,15 @@ BlockMorph.prototype.drawMethodIcon = function (ctx) {
         h = ext.y,
         r = w / 2,
         x = this.edge + this.labelPadding,
-        y = this.edge,
+        y = (this.height() - h) / 2,
         isNormal =
             this.color === SpriteMorph.prototype.blockColorFor(this.category);
 
+    if (this instanceof HatBlockMorph) {
+        y = (this.height() - this.hatHeight + h) / 2;
+    }
     if (this.isPredicate) {
         x = this.rounding;
-    }
-    if (this instanceof CommandBlockMorph) {
-        y += this.corner;
     }
     ctx.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
 
@@ -5421,6 +5420,10 @@ BlockMorph.prototype.cSlots = function () {
 
 BlockMorph.prototype.hasLocationPin = function () {
 	return (this.isCustomBlock && !this.isGlobal) || this.isLocalVarTemplate;
+};
+
+BlockMorph.prototype.isRuleHat = function () {
+    return false;
 };
 
 // BlockMorph highlighting
@@ -6039,7 +6042,9 @@ BlockMorph.prototype.snap = function () {
         top.addHighlight(top.removeHighlight());
     }
     // register generic hat blocks
-    if (this.selector === 'receiveCondition') {
+    if (this instanceof CustomHatBlockMorph ||
+        this.selector.startsWith('receiveCondition')
+    ) {
         receiver = top.scriptTarget();
         if (receiver) {
             stage = receiver.parentThatIsA(StageMorph);
@@ -7189,6 +7194,9 @@ function HatBlockMorph() {
 }
 
 HatBlockMorph.prototype.init = function () {
+    // additional property for generic hat block variations
+    this.isLoaded = null; // for hat blocks with event-semantics
+
     HatBlockMorph.uber.init.call(this);
     this.bounds.setExtent(new Point(120, 36).multiplyBy(this.scale));
     this.fixLayout();
@@ -7197,10 +7205,15 @@ HatBlockMorph.prototype.init = function () {
 
 // HatBlockMorph enumerating:
 
-HatBlockMorph.prototype.blockSequence = function () {
+HatBlockMorph.prototype.blockSequence = function (forSyntax) {
     // override my inherited method so that I am not part of my sequence
     var result;
-    if (this.selector === 'receiveCondition') {return this; }
+    if (forSyntax) {
+        return HatBlockMorph.uber.blockSequence.call(this);
+    }
+    if (this.isCustomBlock || this.selector.startsWith('receiveCondition')) {
+        return this;
+    }
     result = HatBlockMorph.uber.blockSequence.call(this);
     result.shift();
     return result;
@@ -7212,19 +7225,8 @@ HatBlockMorph.prototype.isCustomBlockSpecific = function () {
     return this.selector === 'receiveSlotEvent';
 };
 
-// HatBlockMorph syntax analysis
-
-HatBlockMorph.prototype.reify = function () {
-    // private - assumes that I've already been deep copied
-    var nb = this.nextBlock(),
-        cmt = this.comment?.text(),
-        ctx;
-    if (!nb) {
-        ctx = new Context();
-        ctx.comment = cmt;
-        return ctx;
-    }
-    return nb.reify(null, cmt);
+HatBlockMorph.prototype.isRuleHat = function () {
+    return this.selector === 'receiveCondition';
 };
 
 // HatBlockMorph drawing:
@@ -7239,7 +7241,9 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         r = ((4 * h * h) + (s * s)) / (8 * h),
         a = degrees(4 * Math.atan(2 * h / s)),
         sa = a / 2,
-        sp = Math.min(s * 1.7, this.width() - this.corner);
+        sp = Math.min(s * 1.7, this.width() - this.corner),
+        pos = this.position();
+
 
     // top arc:
     ctx.moveTo(inset, h + this.corner);
@@ -7269,6 +7273,11 @@ HatBlockMorph.prototype.outlinePath = function(ctx, inset) {
         radians(-0),
         false
     );
+
+    // C-Slots
+    this.cSlots().forEach(slot => {
+        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+    });
 
     // bottom right:
     ctx.arc(
@@ -7319,7 +7328,8 @@ HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
 
 HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     var shift = this.edge * 0.5,
-        x = this.width(),
+        x = this.width(), y,
+        cslots = this.cSlots(),
         gradient;
 
     gradient = ctx.createLinearGradient(x - this.edge, 0, x, 0);
@@ -7333,6 +7343,15 @@ HatBlockMorph.prototype.drawRightEdge = function (ctx) {
     ctx.strokeStyle = gradient;
     ctx.beginPath();
     ctx.moveTo(x - shift, this.corner + this.hatHeight + shift);
+    if (cslots.length) {
+        cslots.forEach(slot => {
+            y = slot.top() - top;
+            ctx.lineTo(x - shift, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x - shift, y + slot.height());
+        });
+    }
     ctx.lineTo(x - shift, this.height() - this.corner * 2);
     ctx.stroke();
 };
@@ -7384,6 +7403,36 @@ HatBlockMorph.prototype.drawTopLeftEdge = function (ctx) {
         h + shift
     );
     ctx.lineTo(this.width() - this.corner, h + shift);
+    ctx.stroke();
+};
+
+BlockMorph.prototype.drawRuleIcon = function (ctx) {
+    var h = this.hatHeight * 0.8,
+        l = Math.max(h / 4, 1),
+        r = h / 2,
+        x = (this.hatWidth - h * 1.75) * 0.55,
+        y = h / 2,
+        isNormal =
+            this.color === SpriteMorph.prototype.blockColorFor(this.category);
+
+    ctx.lineWidth = l;
+    // ctx.strokeStyle = color.toString();
+    ctx.strokeStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+
+    // left arc
+    ctx.beginPath();
+    ctx.arc(x + r, y + r, r - l / 2, radians(60), radians(360), false);
+    ctx.stroke();
+
+    // right arc
+    ctx.beginPath();
+    ctx.arc(
+        x + r * 3 - l,
+        y + r,
+        r - l / 2,
+        radians(-120),
+        radians(180), false
+    );
     ctx.stroke();
 };
 
@@ -8178,7 +8227,9 @@ RingMorph.prototype.embed = function (aBlock, inputNames, noVanish) {
     this.isDraggable = true;
 
     // set my type, selector, and nested block:
-    if (aBlock instanceof CommandBlockMorph) {
+    if (aBlock instanceof CommandBlockMorph &&
+        !(aBlock instanceof HatBlockMorph)
+    ) {
         this.isStatic = false;
         this.setSpec('%rc %ringparms');
         this.selector = 'reifyScript';
@@ -9349,7 +9400,6 @@ ScriptsMorph.prototype.fixMultiArgs = function () {
 ScriptsMorph.prototype.wantsDropOf = function (aMorph) {
     // override the inherited method
     if (aMorph instanceof HatBlockMorph) {
-        // return !this.rejectsHats || aMorph.isCustomBlockSpecific();
         return (!this.rejectsHats && !aMorph.isCustomBlockSpecific()) ||
             (this.rejectsHats && aMorph.isCustomBlockSpecific());
     }
@@ -11707,6 +11757,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
+    dict.hat = ['hat'];
     dict['~'] = null;
     // the following entries are collective types and thus not unique:
     if (SpriteMorph.prototype.enableFirstClass) {
@@ -11950,7 +12001,7 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function (searching) {
         this.right() - (menu.width() / 2),
         this.bottom()
     ));
-    menu.selectKey(+this.evaluate());
+    menu.selectKey(Math.min(Math.max(+this.evaluate(), 0), 143));
 };
 
 InputSlotMorph.prototype.directionDialMenu = function (searching) {
@@ -12836,6 +12887,10 @@ TemplateSlotMorph.prototype.drawEdges = ReporterBlockMorph
     .prototype.drawEdgesOval;
 
 TemplateSlotMorph.prototype.hasLocationPin = function () {
+    return false;
+};
+
+TemplateSlotMorph.prototype.isRuleHat = function () {
     return false;
 };
 
@@ -16674,7 +16729,9 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
     this.fixLayout();
 
     // register generic hat blocks
-    if (block.selector === 'receiveCondition') {
+    if (block instanceof CustomHatBlockMorph ||
+        block.selector.startsWith('receiveCondition')
+    ) {
         rcvr = this.editor.scriptTarget();
         if (rcvr) {
             stage = rcvr.parentThatIsA(StageMorph);
