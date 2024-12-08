@@ -937,7 +937,7 @@ SnapTranslator.dict.zh_CN = {
     "large": "大型",
     "last": "最后一个",
     "last changed": "最后修改",
-    "last_changed": "2024-11-26",
+    "last_changed": "2024-12-08",
     "launch _ _": "启动 _ _",
     "left": "左端坐标",
     "left arrow": "←",
