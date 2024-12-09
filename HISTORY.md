@@ -1,6 +1,13 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Translation Updates:**
+    * Japanese katagana and Hiragana, thanks, @fumiyasu-aizu!
+    * Simplified Chinese, thanks, @moodykeke!
+
+### 2024-12-09
+* Japanese katagana and Hiragana translation updates, thanks, @fumiyasu-aizu!
+* Simplified Chinese translation update, thanks, @moodykeke!
 
 ## 10.3.1:
 * **Notable Fixes:**
