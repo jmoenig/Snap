@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-12-12
+* Japanese and Spanish translation fixes
+
 ## 10.3.2:
 * **Translation Updates:**
     * Japanese katagana and Hiragana, thanks, @fumiyasu-aizu!
