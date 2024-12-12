@@ -2,8 +2,13 @@
 
 ## in development:
 
+## 10.3.3:
+* **Translation Updates:**
+    * Japanese and Spanish
+
 ### 2024-12-12
 * Japanese and Spanish translation fixes
+* prepared v10.3.3 patch
 
 ## 10.3.2:
 * **Translation Updates:**
