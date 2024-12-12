@@ -891,7 +891,7 @@ SnapTranslator.dict.es = {
     "delete _ of _": "borrar _ de _",
     "delete a category...": "eliminar una categoría…",
     "delete block": "eliminar bloque",
-    "delete block _": "eliminar bloque",
+    "delete block _": "eliminar bloque _",
     "delete block definition...": "eliminar definición de bloque…",
     "delete slot": "eliminar una ranura",
     "delete solution": "eliminar solución",
