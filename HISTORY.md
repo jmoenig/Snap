@@ -2,10 +2,19 @@
 
 ## in development:
 
-### 2024-12-18
-    * byob: tweaked dropdown-menu parser
-    * added "compress ... by ..." reporter to the pixels library
+## 10.3.4:
+* **Notable Changes:**
+    * added "compress ... by ..." reporter to the Pixels library
     * added "stretch" and "compress" reporters to the AudioComp library
+* **Translation Updates:**
+    * German (parts of the Pixels and AudioComp libraries)
+
+### 2024-12-18
+* byob: tweaked dropdown-menu parser
+* added "compress ... by ..." reporter to the pixels library
+* added "stretch" and "compress" reporters to the AudioComp library
+* updated German translation for data streching / compression library blocks
+* prepared v10.3.4 patch
 
 ## 10.3.3:
 * **Translation Updates:**
