@@ -4,6 +4,7 @@
 
 ### 2024-12-18
     * byob: tweaked dropdown-menu parser
+    * added "compress ... by ..." reporter to the pixels library
 
 ## 10.3.3:
 * **Translation Updates:**
