@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-December-04';
+modules.byob = '2024-December-18';
 
 // Declarations
 
@@ -478,6 +478,11 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
                 val = [val.slice(2)];
             }
             if (isNil(val)) {
+                if (key === '~') {
+                    key = '~'.repeat(
+                        Object.keys(dict).filter(each => each.startsWith('~')
+                    ).length + 1);
+                }
                 dict[key] = key;
             } else {
                 dict[key] = val;

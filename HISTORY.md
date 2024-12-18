@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2024-12-18
+    * byob: tweaked dropdown-menu parser
+
 ## 10.3.3:
 * **Translation Updates:**
     * Japanese and Spanish
