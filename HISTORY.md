@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.3.5:
+* **Notable Fixes:**
+    * disabled some theoretical albeit unsupported programmatical variadic slot settings
+
+### 2024-12-23
+* threads: added some guards against assholes
+* prepared v10.3.5 patch
+
 ## 10.3.4:
 * **Notable Changes:**
     * added "compress ... by ..." reporter to the Pixels library

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-December-05';
+modules.threads = '2024-December-23';
 
 var ThreadManager;
 var Process;
@@ -8592,6 +8592,14 @@ Process.prototype.slotSpec = function (num) {
         return null;
     }
     if (spec === 'upvar' && id > 100) {
+        return null;
+    }
+    if (num > 100 && [
+        'loop', 'scriptVars', 'receive', 'send', 'elseif'
+        ].includes(spec) && num > 100)
+    {
+        // guard against unimaginative metaprogramming fetishist assholes
+        // badmouthing Snap! "bugs" in the forums
         return null;
     }
     return prefix + '%' + spec;
