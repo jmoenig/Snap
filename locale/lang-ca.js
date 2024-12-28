@@ -1001,6 +1001,7 @@ SnapTranslator.dict.ca = {
     "mouse-entered": "el ratolí toqui",
     "mouse-pointer": "punter del ratolí",
     "move": "mou",
+    "movement": "moviment",
     "move _ steps": "mou-te _ passos",
     "move all inside...": "mou tot a dins",
     "move down": "mou cap avall",
