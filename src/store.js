@@ -700,9 +700,15 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     return scene.initialize();
 };
 
-SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage, forPreview) { // +++
-    // public - answer a new dictionary of custom block definitions
+SnapSerializer.prototype.loadBlocks = function (
+    xmlString,
+    targetStage,
+    forPreview
+) { // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
+    // forPreview is an optional Boolean flag that prevents customized
+    // primitives from being installed when merely previewing the blocks
+    // of a library before actually importing them
     var model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
@@ -710,9 +716,15 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage, forPrevi
     return this.loadBlocksModel(model, targetStage, forPreview);
 };
 
-SnapSerializer.prototype.loadBlocksModel = function (model, targetStage, forPreview) { // +++
-    // public - answer a new dictionary of custom block definitions
-    // represented by the given already parsed XML Node
+SnapSerializer.prototype.loadBlocksModel = function (
+    model,
+    targetStage,
+    forPreview
+) { // public - answer a new dictionary of custom block definitions
+    // represented by the given already parsed XML Node,
+    // forPreview is an optional Boolean flag that prevents customized
+    // primitives from being installed when merely previewing the blocks
+    // of a library before actually importing them
     var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
@@ -733,7 +745,7 @@ SnapSerializer.prototype.loadBlocksModel = function (model, targetStage, forPrev
         this.populateCustomBlocks( stage, model.local, false); // not global
     }
     model.primitives = model.childNamed('primitives');
-    if (model.primitives && !forPreview) { // +++
+    if (model.primitives && !forPreview) {
         this.loadCustomizedPrimitives(stage, model.primitives, targetStage);
     }
     varModel = model.childNamed('variables');
