@@ -1,7 +1,8 @@
-/*global self, caches*/
+/*global self, caches, SnapVersion*/
 /*jshint esversion: 6*/
-var snapVersion = '10.3.5',
-    cacheName = `snap-pwa-${snapVersion}`,
+var // +++ snapVersion = '10.3.6-241230-dev',
+    // +++ cacheName = `snap-pwa-${snapVersion}`,
+    cacheName = `snap-pwa-${SnapVersion}`,
     filesToCache = [
         'snap.html',
 
@@ -811,7 +812,8 @@ var snapVersion = '10.3.5',
         'Examples/vee.xml'
     ];
 
-console.log('service worker executed');
+// +++ console.log('service worker executed');
+console.log('service worker executed', SnapVersion);
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(

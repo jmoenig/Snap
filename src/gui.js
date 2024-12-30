@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-December-23';
+modules.gui = '2024-December-30';
 
 // Declarations
 
-var SnapVersion = '10.3.5';
+var SnapVersion = '10.3.6-241230-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -10484,13 +10484,15 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
             this.ide.getURL(
                 this.ide.resourceURL('libraries', fileName),
                 libraryXML => {
+// /* +++
                     let serializer = this.ide.serializer,
                         palette = serializer.parse(libraryXML).childNamed('palette');
                     this.cacheLibrary(
                         fileName,
-                        serializer.loadBlocks(libraryXML),
+                        serializer.loadBlocks(libraryXML, null, true), // +++
                         palette ? serializer.loadPalette(palette) : {}
                     );
+//*/
                     this.displayBlocks(fileName);
                 }
             );
@@ -10632,6 +10634,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     // restore captured user-blocks categories
     SpriteMorph.prototype.customCategories = this.originalCategories;
 
+/* +++
     if (this.hasCached(selectedLibrary)) {
         this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
@@ -10652,6 +10655,17 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             }
         );
     }
+*/
+
+    ide.showMessage(`${localize('Loading')} ${libraryName}`);
+    ide.getURL(
+        ide.resourceURL('libraries', selectedLibrary),
+        libraryText => {
+            ide.droppedText(libraryText, libraryName);
+            this.isLoadingLibrary = true;
+        }
+    );
+
     ide.refreshIDE();
 };
 

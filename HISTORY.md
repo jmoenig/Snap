@@ -2,6 +2,11 @@
 
 ## in development:
 
+### 2024-12-30
+* new dev version
+* tweaked versioning
+* tweaked library preview (ongoing)
+
 ## 10.3.5:
 * **Notable Fixes:**
     * disabled some theoretical albeit unsupported programmatical variadic slot settings
