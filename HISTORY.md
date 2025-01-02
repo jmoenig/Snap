@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-01-02
+* new dev version
+
 ## 10.3.6:
 * **Notable Fixes:**
     * Previewing a library in the import dialog no longer accidentally overwrites palette primitives

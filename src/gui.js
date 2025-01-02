@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-December-30';
+modules.gui = '2025-January-02';
 
 // Declarations
 
-var SnapVersion = '10.3.6';
+var SnapVersion = '10.3.7-250102-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
