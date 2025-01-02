@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-December-23';
+modules.threads = '2025-January-02';
 
 var ThreadManager;
 var Process;
@@ -4986,7 +4986,12 @@ Process.prototype.reportRandom = function (a, b) {
 Process.prototype.reportBasicRandom = function (min, max) {
     var floor = Math.min(+min, +max),
         ceil = Math.max(+min, +max);
-    if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
+
+    function isFloat(n) {
+        return (+n % 1 !== 0) || (isString(n) && n.includes('.'));
+    }
+
+    if (isFloat(min) || isFloat(max)) {
         return Math.random() * (ceil - floor) + floor;
     }
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;

@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 
 ### 2025-01-02
 * new dev version
+* blocks, threads: added the capability to pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 
 ## 10.3.6:
 * **Notable Fixes:**
