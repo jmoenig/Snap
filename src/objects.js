@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-03';
+modules.objects = '2025-January-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -10331,13 +10331,9 @@ StageMorph.prototype.step = function () {
         // v10.4 "turbo by default"
         // keep stepping processes with non-visual animation
         while (!isDone && (Date.now() - this.lastTime) < 15) {
-            // capturing computational events disabled for performance reasons:
-            // this.stepGenericConditions();
-
+            this.stepGenericConditions();
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
 
-            // capturing computational events disabled for performance reasons:
-            /*
             // double-clock computational event hats:
             if (this.enableCustomHatBlocks &&
                 !this.threads.pauseCustomHatBlocks &&
@@ -10346,7 +10342,6 @@ StageMorph.prototype.step = function () {
                 this.stepGenericConditions(null, true); // only events
                 this.threads.removeTerminatedProcesses();
             }
-            */
         }
     }
 

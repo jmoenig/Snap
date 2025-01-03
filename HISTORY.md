@@ -7,6 +7,9 @@
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
 
+### 2025-01-04
+* objects: enabled "turbo by default" to capture atomic custom events
+
 ### 2025-01-03
 * objects, threads: "turbo by default" - keep scheduling non-animating processes between animation ticks
 * updated version
