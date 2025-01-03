@@ -4,10 +4,13 @@
 * **Notable Changes:**
     * "turbo by default" - keep scheduling non-animating processes between animation ticks
     * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
+* **Notable Fixes:**
+    * SciSnap file reader, thanks, Eckart!
 
 ### 2025-01-03
 * objects, threads: "turbo by default" - keep scheduling non-animating processes between animation ticks
 * updated version
+* integrated SciSnap file reader fix, thanks, Eckart!
 
 ### 2025-01-02
 * new dev version
