@@ -817,11 +817,9 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         // this.evaluateNextInput(block);
         this.evaluateNextInputSet(block); // frame-optimized version
     } else {
-        if (!this.isAnimated &&
-            !['reportGetVar', 'evaluateCustomBlock'].includes(selector)
-        ) {
+        if (!this.isAnimated) {
             this.isAnimated =
-                SpriteMorph.prototype.blocks[selector].animation || false;
+                SpriteMorph.prototype.blocks[selector]?.animation || false;
         }
         if (this.flashContext()) {return; } // yield to flash the block
         if (this[selector]) {
