@@ -10311,6 +10311,15 @@ StageMorph.prototype.step = function () {
         this.stepGenericConditions();
         this.threads.step();
 
+        // double-clock user event hats:
+        if (this.enableCustomHatBlocks &&
+            !this.threads.pauseCustomHatBlocks &&
+            !Process.prototype.enableSingleStepping
+        ) {
+            this.stepGenericConditions(null, true); // only events
+            this.threads.removeTerminatedProcesses();
+        }
+
         // single-stepping hook:
         if (this.threads.wantsToPause) {
             ide = this.parentThatIsA(IDE_Morph);
@@ -10322,10 +10331,14 @@ StageMorph.prototype.step = function () {
         // v10.4 "turbo by default"
         // keep stepping processes with non-visual animation
         while (!isDone && (Date.now() - this.lastTime) < 15) {
-            this.stepGenericConditions();
+            // capturing computational events disabled for performance reasons:
+            // this.stepGenericConditions();
+
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
 
-            // double-clock event hats:
+            // capturing computational events disabled for performance reasons:
+            /*
+            // double-clock computational event hats:
             if (this.enableCustomHatBlocks &&
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
@@ -10333,6 +10346,7 @@ StageMorph.prototype.step = function () {
                 this.stepGenericConditions(null, true); // only events
                 this.threads.removeTerminatedProcesses();
             }
+            */
         }
     }
 
