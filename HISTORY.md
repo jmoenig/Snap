@@ -6,7 +6,8 @@
     * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 
 ### 2025-01-03
-    * objects, threads: "turbo by default" - keep scheduling non-animating processes between animation ticks 
+* objects, threads: "turbo by default" - keep scheduling non-animating processes between animation ticks
+* updated version
 
 ### 2025-01-02
 * new dev version
