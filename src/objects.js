@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2024-December-04';
+modules.objects = '2025-January-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -250,6 +250,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'move %n steps',
             defaults: [10],
+            animation: true,
             code: 'move',
             src: `(
                 (prim t forward steps)
@@ -265,6 +266,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'turn $clockwise %n degrees',
             defaults: [15],
+            animation: true,
             code: 'right',
             src: `(
                 (prim t turn angle)
@@ -276,6 +278,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'turn $counterclockwise %n degrees',
             defaults: [15],
+            animation: true,
             code: 'left',
             src: `(
                 (prim t turnLeft angle)
@@ -287,6 +290,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'point in direction %dir',
             defaults: [90],
+            animation: true,
             code: 'head',
             src: `(
                 (prim t setHeading angle)
@@ -304,6 +308,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'point towards %dst',
             defaults: [['mouse-pointer']],
+            animation: true,
             code: 'face'
         },
         gotoXY: {
@@ -312,6 +317,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'go to x: %n y: %n',
             defaults: [0, 0],
+            animation: true,
             code: 'go',
             src: `(
                 (prim t gotoXY x y)
@@ -323,6 +329,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'go to %dst',
             defaults: [['random position']],
+            animation: true,
             code: 'goto'
         },
         doGlide: {
@@ -331,6 +338,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'glide %n secs to x: %n y: %n',
             defaults: [1, 0, 0],
+            animation: false,
             code: 'glide',
             src: `(
                 (prim t doGlide span x y)
@@ -352,6 +360,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'change x by %n',
             defaults: [10],
+            animation: true,
             code: '+x',
             src: `(
                 (prim t changeXPosition delta)
@@ -363,6 +372,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'set x to %n',
             defaults: [0],
+            animation: true,
             code: 'x=',
             src: `(
                 (prim t setXPosition x)
@@ -374,6 +384,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'change y by %n',
             defaults: [10],
+            animation: true,
             code: '+y',
             src: `(
                 (prim t changeYPosition delta)
@@ -385,6 +396,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'motion',
             spec: 'set y to %n',
             defaults: [0],
+            animation: true,
             code: 'y=',
             src: `(
                 (prim t setYPosition y)
@@ -395,6 +407,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'motion',
             spec: 'if on edge, bounce',
+            animation: true,
             code: 'bounce',
             src: `(
                 (prim t bounceOffEdge)
@@ -506,12 +519,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'switch to costume %cst',
+            animation: true,
             code: 'wear'
         },
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
             spec: 'next costume',
+            animation: true,
             code: 'next',
             src: `(
                 (prim t doWearNextCostume)
@@ -601,6 +616,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'change %eff effect by %n',
             defaults: [['ghost'], 25],
+            animation: true,
             code: '+effect'
         },
         setEffect: {
@@ -608,6 +624,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'set %eff effect to %n',
             defaults: [['ghost'], 0],
+            animation: true,
             code: 'effect='
         },
         getEffect: {
@@ -620,6 +637,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clearEffects: {
             type: 'command',
             category: 'looks',
+            animation: true,
             spec: 'clear graphic effects'
         },
         changeScale: {
@@ -628,6 +646,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'change size by %n',
             defaults: [10],
+            animation: true,
             code: '+size',
             src: `(
                 (prim t changeScale delta)
@@ -639,6 +658,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'set size to %n %',
             defaults: [100],
+            animation: true,
             code: 'size='
         },
         getScale: {
@@ -670,6 +690,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'go to %layer layer',
             defaults: [['front']],
+            animation: true,
             code: 'layer',
             src: `(
                 (prim t goToLayer name)
@@ -688,6 +709,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'looks',
             spec: 'go back %n layers',
             defaults: [1],
+            animation: true,
             code: 'back'
         },
 
@@ -899,7 +921,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clear: {
             type: 'command',
             category: 'pen',
-            spec: 'clear'
+            spec: 'clear',
+            animation: true
         },
         down: {
             only: SpriteMorph,
@@ -956,21 +979,24 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set background color to %clr'
+            spec: 'set background color to %clr',
+            animation: true
         },
         setBackgroundColorDimension: {
             only: StageMorph,
             type: 'command',
             category: 'pen',
             spec: 'set background %clrdim to %n',
-            defaults: [['hue'], 50]
+            defaults: [['hue'], 50],
+            animation: true
         },
         changeBackgroundColorDimension: {
             only: StageMorph,
             type: 'command',
             category: 'pen',
             spec: 'change background %clrdim by %n',
-            defaults: [['hue'], 10]
+            defaults: [['hue'], 10],
+            animation: true
         },
         changeSize: {
             only: SpriteMorph,
@@ -978,6 +1004,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'pen',
             spec: 'change pen size by %n',
             defaults: [1],
+            animation: true,
             code: '+penSize',
             src: `(
                 (prim t changeSize delta)
@@ -989,6 +1016,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'pen',
             spec: 'set pen size to %n',
             defaults: [1],
+            animation: true,
             code: 'penSize='
         },
         doStamp: {
@@ -996,6 +1024,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'stamp',
+            animation: true,
             code: 'stamp'
         },
         floodFill: {
@@ -1003,6 +1032,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'fill',
+            animation: true,
             code: 'fill'
         },
         write: {
@@ -1010,7 +1040,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'write %s size %n',
-            defaults: [localize('Hello!'), 12]
+            defaults: [localize('Hello!'), 12],
+            animation: true
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
@@ -1028,13 +1059,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'paste on %spr',
-            code: 'paste'
+            code: 'paste',
+            animation: true
         },
         doCutFrom: {
             type: 'command',
             category: 'pen',
             spec: 'cut from %spr',
-             code: 'cut'
+             code: 'cut',
+            animation: true
         },
 
         // Control
@@ -10246,7 +10279,9 @@ StageMorph.prototype.reactToDropOf = function (morph, hand) {
 // StageMorph stepping
 
 StageMorph.prototype.step = function () {
-    var current, elapsed, leftover, ide, world = this.world();
+    var current, elapsed, leftover, ide,
+        world = this.world(),
+        isDone = false;
 
     // handle keyboard events
     if (world.keyboardFocus === null) {
@@ -10276,20 +10311,27 @@ StageMorph.prototype.step = function () {
         this.stepGenericConditions();
         this.threads.step();
 
-        // double-clock event hats:
-        if (this.enableCustomHatBlocks &&
-            !this.threads.pauseCustomHatBlocks &&
-            !Process.prototype.enableSingleStepping
-        ) {
-            this.stepGenericConditions(null, true); // only events
-            this.threads.removeTerminatedProcesses();
-        }
-
         // single-stepping hook:
         if (this.threads.wantsToPause) {
             ide = this.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.controlBar.pauseButton.refresh();
+            }
+        }
+
+        // v10.4 "turbo by default"
+        // keep stepping processes with non-visual animation
+        while (!isDone && (Date.now() - this.lastTime) < 15) {
+            this.stepGenericConditions();
+            isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
+
+            // double-clock event hats:
+            if (this.enableCustomHatBlocks &&
+                !this.threads.pauseCustomHatBlocks &&
+                !Process.prototype.enableSingleStepping
+            ) {
+                this.stepGenericConditions(null, true); // only events
+                this.threads.removeTerminatedProcesses();
             }
         }
     }

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-02';
+modules.threads = '2025-January-03';
 
 var ThreadManager;
 var Process;
@@ -358,12 +358,13 @@ ThreadManager.prototype.resumeAll = function (stage) {
     }
 };
 
-ThreadManager.prototype.step = function () {
+ThreadManager.prototype.step = function (skipAnimations) {
     // run each process until it gives up control, skipping processes
     // for sprites that are currently picked up, then filter out any
     // processes that have been terminated
 
-    var isInterrupted;
+    var animating = true,
+        isInterrupted;
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
             if (proc.isInterrupted) {
@@ -384,12 +385,22 @@ ThreadManager.prototype.step = function () {
     }
 
     this.processes.forEach(proc => {
+        if (skipAnimations) {
+            if (proc.isAnimated) {
+                return;
+            } else {
+                animating = false;
+            }
+        } else { // reset animation flag
+            proc.isAnimated = false;
+        }
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
         }
     });
     this.removeTerminatedProcesses();
+    return animating;
 };
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {
@@ -608,6 +619,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.flashingContext = null; // for single-stepping
     this.isInterrupted = false; // for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
+    this.isAnimated = false; // temporary - used to control yields for animation
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -805,6 +817,12 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         // this.evaluateNextInput(block);
         this.evaluateNextInputSet(block); // frame-optimized version
     } else {
+        if (!this.isAnimated &&
+            !['reportGetVar', 'evaluateCustomBlock'].includes(selector)
+        ) {
+            this.isAnimated =
+                SpriteMorph.prototype.blocks[selector].animation || false;
+        }
         if (this.flashContext()) {return; } // yield to flash the block
         if (this[selector]) {
             rcvr = this;
