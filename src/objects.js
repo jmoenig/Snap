@@ -10302,7 +10302,7 @@ StageMorph.prototype.step = function () {
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
             ) {
-                this.stepGenericConditions();
+                this.stepGenericConditions(true); // only events
                 this.threads.removeTerminatedProcesses();
             }
         }
@@ -10316,7 +10316,7 @@ StageMorph.prototype.step = function () {
             !this.threads.pauseCustomHatBlocks &&
             !Process.prototype.enableSingleStepping
         ) {
-            this.stepGenericConditions();
+            this.stepGenericConditions(true); // only events
             this.threads.removeTerminatedProcesses();
         }
 
@@ -10328,7 +10328,7 @@ StageMorph.prototype.step = function () {
             }
         }
 
-        // v10.4 "quicksteps"
+        // v10.4 "Quicksteps"
         // keep stepping processes with non-visual animation
         while (!isDone && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
@@ -10338,7 +10338,7 @@ StageMorph.prototype.step = function () {
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
             ) {
-                this.stepGenericConditions();
+                this.stepGenericConditions(true); // only events
                 this.threads.removeTerminatedProcesses();
             }
         }
@@ -10387,7 +10387,7 @@ StageMorph.prototype.updateProjection = function () {
     this.changed();
 };
 
-StageMorph.prototype.stepGenericConditions = function () {
+StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
     var hatCount = 0,
         ide;
     if (!this.enableCustomHatBlocks) {return; }
@@ -10396,6 +10396,9 @@ StageMorph.prototype.stepGenericConditions = function () {
             morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
                 if (!this.threads.pauseCustomHatBlocks) {
+                    if (onlyEvents && block.isRuleHat()) {
+                        return;
+                    }
                     this.threads.startProcess (
                         block,
                         morph, // receiver
