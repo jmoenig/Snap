@@ -2,7 +2,7 @@
 
 ## in development:
 * **Notable Changes:**
-    * "Quicksteps" - keep scheduling non-animating processes between animation ticks, makes "warp" and "turbo mode" largely obsolete
+    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete
     * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
