@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-03';
+modules.threads = '2025-January-04';
 
 var ThreadManager;
 var Process;
@@ -400,7 +400,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
         }
     });
     this.removeTerminatedProcesses();
-    return animating;
+    return animating || !this.processes.length;
 };
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {

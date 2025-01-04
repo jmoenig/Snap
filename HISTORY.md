@@ -2,17 +2,18 @@
 
 ## in development:
 * **Notable Changes:**
-    * "turbo by default" - keep scheduling non-animating processes between animation ticks
+    * "Quicksteps" - keep scheduling non-animating processes between animation ticks, makes "warp" and "turbo mode" largely obsolete
     * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
 
 ### 2025-01-04
-* objects: enabled "turbo by default" to capture atomic custom events
+* objects: enabled "quicksteps" to capture atomic custom events
 * updated version
+* objects, threads: tweaked "quicksteps" performance for rule hats
 
 ### 2025-01-03
-* objects, threads: "turbo by default" - keep scheduling non-animating processes between animation ticks
+* objects, threads: "quicksteps" - keep scheduling non-animating processes between animation ticks
 * updated version
 * integrated SciSnap file reader fix, thanks, Eckart!
 

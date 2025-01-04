@@ -10302,7 +10302,7 @@ StageMorph.prototype.step = function () {
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
             ) {
-                this.stepGenericConditions(null, true); // only events
+                this.stepGenericConditions();
                 this.threads.removeTerminatedProcesses();
             }
         }
@@ -10316,7 +10316,7 @@ StageMorph.prototype.step = function () {
             !this.threads.pauseCustomHatBlocks &&
             !Process.prototype.enableSingleStepping
         ) {
-            this.stepGenericConditions(null, true); // only events
+            this.stepGenericConditions();
             this.threads.removeTerminatedProcesses();
         }
 
@@ -10328,18 +10328,17 @@ StageMorph.prototype.step = function () {
             }
         }
 
-        // v10.4 "turbo by default"
+        // v10.4 "quicksteps"
         // keep stepping processes with non-visual animation
         while (!isDone && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
-
             // double-clock computational event hats:
             if (this.enableCustomHatBlocks &&
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
             ) {
-                this.stepGenericConditions(null, true); // only events
+                this.stepGenericConditions();
                 this.threads.removeTerminatedProcesses();
             }
         }
@@ -10388,7 +10387,7 @@ StageMorph.prototype.updateProjection = function () {
     this.changed();
 };
 
-StageMorph.prototype.stepGenericConditions = function (stopAll, onlyEvents) {
+StageMorph.prototype.stepGenericConditions = function () {
     var hatCount = 0,
         ide;
     if (!this.enableCustomHatBlocks) {return; }
@@ -10397,9 +10396,6 @@ StageMorph.prototype.stepGenericConditions = function (stopAll, onlyEvents) {
             morph.allGenericHatBlocks().forEach(block => {
                 hatCount += 1;
                 if (!this.threads.pauseCustomHatBlocks) {
-                    if (onlyEvents && block.isRuleHat()) {
-                        return;
-                    }
                     this.threads.startProcess (
                         block,
                         morph, // receiver
