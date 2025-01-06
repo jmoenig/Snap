@@ -2364,7 +2364,7 @@ Array.prototype.lookup = function(key){
 }
 
 Process.prototype.reportListItem = function (index, list) {
-    this.assertType(list, 'list');
+    //this.assertType(list, 'list');
     if (index === '') {
         return '';
     }
