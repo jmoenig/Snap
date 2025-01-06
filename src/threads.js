@@ -2220,6 +2220,10 @@ Process.prototype.reportNewList = function (elements) {
     return elements;
 };
 
+Process.prototype.reportNewArray = function (elements) {
+    return elements.itemsArray();
+};
+
 Process.prototype.reportCONS = function (car, cdr) {
     this.assertType(cdr, 'list');
     return new List().cons(car, cdr);
@@ -2229,9 +2233,11 @@ Process.prototype.reportCDR = function (list) {
     this.assertType(list, 'list');
     return list.cdr();
 };
-
+Array.prototype.add = function(element){
+    return this.push(element);
+}
 Process.prototype.doAddToList = function (element, list) {
-    this.assertType(list, 'list');
+    //this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
         list = this.shadowListAttribute(list);
@@ -2239,9 +2245,17 @@ Process.prototype.doAddToList = function (element, list) {
     list.add(element);
 };
 
+Array.prototype.clear = function(){
+    this.length = 0;
+}
+
+Array.prototype.forget = function(idx){
+    this.splice(idx-1,1);
+}
+
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
-    this.assertType(list, 'list');
+    //this.assertType(list, 'list');
     if (list.type) {
         list = this.shadowListAttribute(list);
     }
@@ -2252,14 +2266,18 @@ Process.prototype.doDeleteFromList = function (index, list) {
         return null;
     }
     if (this.inputOption(index) === 'last') {
-        idx = list.length();
+        idx = list instanceof List ? list.length() : list.length;
     }
     list.forget(idx);
 };
 
+Array.prototype.add = function(element,idx){
+    this.splice(idx-1,0,element);
+}
+
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
-    this.assertType(list, 'list');
+    //this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
         list = this.shadowListAttribute(list);
@@ -2269,11 +2287,11 @@ Process.prototype.doInsertInList = function (element, index, list) {
     }
     if (index instanceof Array) {
         if (index[0] === 'random') {
-            idx = this.reportBasicRandom(1, list.length() + 1);
+            idx = this.reportBasicRandom(1, (list instanceof List ? list.length() : list.length) + 1);
         } else if (index[0] === 'last') {
-            idx = list.length() + 1;
+            idx = (list instanceof List ? list.length() : list.length) + 1;
         } else {
-            idx = list.length() + 1;
+            idx = (list instanceof List ? list.length() : list.length) + 1;
         }
     }
     if (parseFloat(idx) !== +idx) { // treat as alphanumerical index
@@ -2282,9 +2300,13 @@ Process.prototype.doInsertInList = function (element, index, list) {
     list.add(element, idx);
 };
 
+Array.prototype.bind = function(idx,element){
+    this[idx-1]=element;
+}
+
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
-    this.assertType(list, 'list');
+    //this.assertType(list, 'list');
     if (list.type) {
         this.assertType(element, list.type);
         list = this.shadowListAttribute(list);
@@ -2294,9 +2316,9 @@ Process.prototype.doReplaceInList = function (index, list, element) {
     }
     if (index instanceof Array) {
         if (index[0] === 'random') {
-            idx = this.reportBasicRandom(1, list.length() + 1);
+            idx = this.reportBasicRandom(1, (list instanceof List ? list.length() : list.length) + 1);
         } else if (index[0] === 'last') {
-            idx = list.length();
+            idx = (list instanceof List ? list.length() : list.length);
         } else {
             idx = 0;
         }
@@ -2322,6 +2344,24 @@ Process.prototype.shadowListAttribute = function (list) {
 };
 
 // Process accessing list elements - hyper dyadic
+Array.prototype.itemsArray =function(){
+    return this;
+}
+Array.prototype.lookup = function(key){
+        var rec;
+        if (parseFloat(key) === +key) { // treat as numerical index
+            return this.at(key);
+        }
+        rec = this.itemsArray().find(elem => (elem instanceof List &&
+            elem.length() > 0)|| (elem instanceof Array && elem.length > 0) &&
+            snapEquals(elem.at(1), key));
+        if (rec instanceof Array) {
+            rec = new List(rec)
+        }
+        return rec ?
+            (rec.length() > 2 ? rec.cdr() : rec.at(2))
+            : '';
+}
 
 Process.prototype.reportListItem = function (index, list) {
     this.assertType(list, 'list');
@@ -2330,10 +2370,10 @@ Process.prototype.reportListItem = function (index, list) {
     }
     if (index instanceof Array) {
         if (index[0] === 'random') {
-            return list.at(this.reportBasicRandom(1, list.length()));
+            return list.at(this.reportBasicRandom(1, list instanceof List ? list.length() : list.length));
         }
         if (index[0] === 'last') {
-            return list.at(list.length());
+            return list.at(list instanceof List ? list.length() : list.length);
         }
         return '';
     }
