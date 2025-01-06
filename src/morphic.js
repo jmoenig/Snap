@@ -3296,7 +3296,7 @@ Morph.prototype.stepFrame = function () {
             nxt.call(this);
         }
         this.step();
-        this.children.forEach(child => { try{child.stepFrame()}catch(err){console.err(err)}});
+        this.children.forEach(child => { try{child.stepFrame()}catch(err){console.error(err)}});
     }
 };
 
