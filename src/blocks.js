@@ -5416,7 +5416,7 @@ BlockMorph.prototype.render = function (ctx) {
         ctx.fill();
 
         // add outline:
-        //this.drawEdges(ctx);
+        this.drawEdges(ctx);
     }
 
     // draw location pin icon if applicable
