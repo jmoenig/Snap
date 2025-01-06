@@ -2418,8 +2418,8 @@ Process.prototype.reportListAttribute = function (choice, list) {
     var option = this.inputOption(choice);
     switch (option) {
     case 'length':
-        this.assertType(list, 'list');
-        return list.length();
+        //this.assertType(list, 'list');
+        return list instanceof List ? list.length() : list.length;
     case 'size':
         this.assertType(list, 'list');
         return list.size();
