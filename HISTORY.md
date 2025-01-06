@@ -10,6 +10,7 @@
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
 * objects, threads: harmonized Quickstep / Doublestep interaction
+* updated version
 
 ### 2025-01-04
 * objects: enabled "quicksteps" to capture atomic custom events
