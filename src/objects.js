@@ -10297,7 +10297,7 @@ StageMorph.prototype.step = function () {
             this.stepGenericConditions();
             this.threads.step(); // approx. 67 fps
 
-            // "Twosteps": double-clock event hats:
+            // "Twostep": double-clock event hats:
             if (this.enableCustomHatBlocks &&
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
@@ -10311,7 +10311,7 @@ StageMorph.prototype.step = function () {
         isDone = this.stepGenericConditions();
         this.threads.step();
 
-        // "Twosteps": double-clock user event hats:
+        // "Twostep": double-clock user event hats:
         if (this.enableCustomHatBlocks &&
             !this.threads.pauseCustomHatBlocks &&
             !Process.prototype.enableSingleStepping
@@ -10333,7 +10333,8 @@ StageMorph.prototype.step = function () {
         while (!isDone && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
-            // "Twosteps": double-clock computational event hats:
+
+            // "Twostep": double-clock computational event hats:
             if (this.enableCustomHatBlocks &&
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
