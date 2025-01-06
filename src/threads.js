@@ -3341,7 +3341,11 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext();
 };
 
-// Process interpolated iteration primitives
+// Process interpolated iteration primitives]
+
+Array.prototype.at = function(idx){
+    return this[idx-1];
+}
 
 Process.prototype.doForEach = function (upvar, list, script) {
     // perform a script for each element of a list, assigning the
@@ -3352,10 +3356,9 @@ Process.prototype.doForEach = function (upvar, list, script) {
 
     var next;
     if (this.context.accumulator === null) {
-        this.assertType(list, 'list');
         this.context.accumulator = {
             source : list,
-            remaining : list.length(),
+            remaining : list instanceof List ? list.length(): list.length,
             idx : 0
         };
     }
