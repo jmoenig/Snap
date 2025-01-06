@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-04';
+modules.threads = '2025-January-06';
 
 var ThreadManager;
 var Process;
@@ -297,7 +297,7 @@ ThreadManager.prototype.highlight = function (aProcess, adjustCount = 0) {
     if (glow) {
         glow.threadCount = this.processesForBlock(top).length + 1 + adjustCount;
         glow.updateReadout();
-    } else {
+    } else if (aProcess.isRunning()) {
         top.addHighlight();
     }
     this.wantsHalo = false;
@@ -363,7 +363,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
     // for sprites that are currently picked up, then filter out any
     // processes that have been terminated
 
-    var animating = true,
+    var animating = false,
         isInterrupted;
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
@@ -380,23 +380,16 @@ ThreadManager.prototype.step = function (skipAnimations) {
             if (this.wantsToPause) {
                 this.pauseAll();
             }
-            return;
+            return true;
         }
     }
 
     this.processes.forEach(proc => {
-        if (skipAnimations) {
-            if (proc.isAnimated) {
-                return;
-            } else {
-                animating = false;
-            }
-        } else { // reset animation flag
-            proc.isAnimated = false;
-        }
+        if (proc.isAnimated && skipAnimations) { return; }
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
+            animating = animating || proc.isAnimated;
         }
     });
     this.removeTerminatedProcesses();
@@ -646,6 +639,8 @@ Process.prototype.isRunning = function () {
 Process.prototype.runStep = function (deadline) {
     // a step is an an uninterruptable 'atom', it can consist
     // of several contexts, even of several blocks
+
+    this.isAnimated = false;
 
     if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();

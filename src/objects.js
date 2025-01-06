@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-04';
+modules.objects = '2025-January-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -10308,7 +10308,7 @@ StageMorph.prototype.step = function () {
         }
         this.changed();
     } else {
-        this.stepGenericConditions();
+        isDone = this.stepGenericConditions();
         this.threads.step();
 
         // "Twosteps": double-clock user event hats:
@@ -10316,7 +10316,7 @@ StageMorph.prototype.step = function () {
             !this.threads.pauseCustomHatBlocks &&
             !Process.prototype.enableSingleStepping
         ) {
-            this.stepGenericConditions(true); // only events
+            isDone = this.stepGenericConditions(true) || isDone; // only events
             this.threads.removeTerminatedProcesses();
         }
 
@@ -10338,7 +10338,7 @@ StageMorph.prototype.step = function () {
                 !this.threads.pauseCustomHatBlocks &&
                 !Process.prototype.enableSingleStepping
             ) {
-                this.stepGenericConditions(true); // only events
+                isDone = this.stepGenericConditions(true) || isDone; // only events
                 this.threads.removeTerminatedProcesses();
             }
         }
@@ -10389,8 +10389,9 @@ StageMorph.prototype.updateProjection = function () {
 
 StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
     var hatCount = 0,
+        animating = false,
         ide;
-    if (!this.enableCustomHatBlocks) {return; }
+    if (!this.enableCustomHatBlocks) {return false; }
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {
             morph.allGenericHatBlocks().forEach(block => {
@@ -10399,7 +10400,7 @@ StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
                     if (onlyEvents && block.isRuleHat()) {
                         return;
                     }
-                    this.threads.startProcess (
+                    animating = this.threads.startProcess (
                         block,
                         morph, // receiver
                         true, // isThreadSafe
@@ -10410,7 +10411,7 @@ StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
                         null, // atomic
                         null, // variables
                         true // no halo
-                    );
+                    ).isAnimated || animating;
                 }
             });
         }
@@ -10422,6 +10423,7 @@ StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
             ide.controlBar.stopButton.refresh();
         }
     }
+    return animating;
 };
 
 StageMorph.prototype.developersMenu = function () {
