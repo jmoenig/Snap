@@ -7444,7 +7444,7 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
     }
 };
 
-SpriteMorph.prototype.forward = function (steps) {
+SpriteMorph.prototype.forward = function (steps, raw) {
     var dest,
         dist = steps * this.parent.scale || 0;
 
@@ -7460,8 +7460,10 @@ SpriteMorph.prototype.forward = function (steps) {
         );
     }
 
-    this.shadowAttribute('x position');
-    this.shadowAttribute('y position');
+    if (!raw) { // don't shadow attributes
+        this.shadowAttribute('x position');
+        this.shadowAttribute('y position');
+    }
 
     this.setPosition(dest);
     this.positionTalkBubble();
@@ -7473,11 +7475,11 @@ SpriteMorph.prototype.doDrawDot = function (dot = 0.1) {
     var down = this.isDown;
     dot = Math.max((this.useFlatLineEnds ? this.size : dot), 0.1);
     this.isDown = false;
-    this.forward(dot * -0.5);
+    this.forward(dot * -0.5, true); // don't shadow attributes
     this.isDown = true;
-    this.forward(dot);
+    this.forward(dot, true); // don't shadow attributes
     this.isDown = false;
-    this.forward(dot * -0.5);
+    this.forward(dot * -0.5, true); // don't shadow attributes
     this.isDown = down;
 };
 
