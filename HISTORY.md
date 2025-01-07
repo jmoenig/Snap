@@ -2,14 +2,16 @@
 
 ## in development:
 * **Notable Changes:**
-    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete
-    * pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
+    * "Quickstep" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete
+    * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
+    * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
 * objects: refactored Quickstep frame scheduling
+* disabled santa hats, still loadable as extension
 
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
