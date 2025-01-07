@@ -12,6 +12,7 @@
 * objects: refactored Twostep event evaluation
 * objects: refactored Quickstep frame scheduling
 * disabled santa hats, still loadable as extension
+* updated version
 
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
