@@ -1328,6 +1328,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'create a clone of %cln',
             defaults: [['myself']],
+            animation: true,
             code: 'clone',
             src: `(
                 (prim t createClone target)
@@ -1337,7 +1338,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             category: 'control',
             spec: 'a new clone of %clntrtl',
-            defaults: [['myself']]
+            defaults: [['myself']],
+            animation: true
         },
         removeClone: {
             type: 'command',
@@ -10341,9 +10343,9 @@ StageMorph.prototype.scheduleFrame = function () {
 
         // v10.4 "Quicksteps"
         // keep stepping processes with non-visual animation
-        while (!isDone && (Date.now() - this.lastTime) < 16.7) {
+        while (!isDone && (Date.now() - this.lastTime) < 16.7) { // 60 fps
             this.stepGenericConditions();
-            isDone = this.threads.step(true); // only non-visuals, approx. 60 fps
+            isDone = this.threads.step(true); // only non-visuals
             isDone = this.twostep() || isDone; // double-clock event hats
         }
     }

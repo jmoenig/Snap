@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-06';
+modules.threads = '2025-January-07';
 
 var ThreadManager;
 var Process;
@@ -361,9 +361,11 @@ ThreadManager.prototype.resumeAll = function (stage) {
 ThreadManager.prototype.step = function (skipAnimations) {
     // run each process until it gives up control, skipping processes
     // for sprites that are currently picked up, then filter out any
-    // processes that have been terminated
+    // processes that have been terminated.
+    // answer <true> if any process is animated or none are left
 
     var animating = false,
+        skipped = 0,
         isInterrupted;
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
@@ -385,7 +387,10 @@ ThreadManager.prototype.step = function (skipAnimations) {
     }
 
     this.processes.forEach(proc => {
-        if (proc.isAnimated && skipAnimations) { return; }
+        if (proc.isAnimated && skipAnimations) {
+            skipped += 1;
+            return;
+        }
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
@@ -393,7 +398,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
         }
     });
     this.removeTerminatedProcesses();
-    return animating || !this.processes.length;
+    return animating || (this.processes.length - skipped < 1);
 };
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {

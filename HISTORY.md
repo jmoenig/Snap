@@ -17,6 +17,7 @@
 * updated version
 * objects: reduced animation speed from 67 fps to 60 fps
 * lists: handle more cases of circularity in data structures more gracefully
+* objects, threads: tweaked quickstepping
 
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
