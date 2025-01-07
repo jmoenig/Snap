@@ -7,9 +7,12 @@
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
 
+### 2025-01-07
+* objects: refactored Twostep event evaluation
+
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
-* objects, threads: harmonized Quickstep / Doublestep interaction
+* objects, threads: harmonized Quickstep / Twostep interaction
 * updated version
 
 ### 2025-01-04

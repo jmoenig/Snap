@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-06';
+modules.objects = '2025-January-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -10296,29 +10296,13 @@ StageMorph.prototype.step = function () {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
             this.threads.step(); // approx. 67 fps
-
-            // "Twostep": double-clock event hats:
-            if (this.enableCustomHatBlocks &&
-                !this.threads.pauseCustomHatBlocks &&
-                !Process.prototype.enableSingleStepping
-            ) {
-                this.stepGenericConditions(true); // only events
-                this.threads.removeTerminatedProcesses();
-            }
+            this.twostep(); // double-clock event hats
         }
         this.changed();
     } else {
         isDone = this.stepGenericConditions();
         this.threads.step();
-
-        // "Twostep": double-clock user event hats:
-        if (this.enableCustomHatBlocks &&
-            !this.threads.pauseCustomHatBlocks &&
-            !Process.prototype.enableSingleStepping
-        ) {
-            isDone = this.stepGenericConditions(true) || isDone; // only events
-            this.threads.removeTerminatedProcesses();
-        }
+        isDone = this.twostep() || isDone; // double-clock event hats
 
         // single-stepping hook:
         if (this.threads.wantsToPause) {
@@ -10333,15 +10317,7 @@ StageMorph.prototype.step = function () {
         while (!isDone && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
-
-            // "Twostep": double-clock computational event hats:
-            if (this.enableCustomHatBlocks &&
-                !this.threads.pauseCustomHatBlocks &&
-                !Process.prototype.enableSingleStepping
-            ) {
-                isDone = this.stepGenericConditions(true) || isDone; // only events
-                this.threads.removeTerminatedProcesses();
-            }
+            isDone = this.twostep() || isDone; // double-clock event hats
         }
     }
 
@@ -10358,6 +10334,26 @@ StageMorph.prototype.step = function () {
     if (this.continuousProjection && this.projectionSource) {
         this.updateProjection();
     }
+};
+
+StageMorph.prototype.twostep = function () {
+    // double-clocking event hats involves stepping through all events twice,
+    // before and after each regular atom in every process. This is necessary
+    // so events get a chance to "reset" their internal state, e.g. to determine
+    // a change in data they are set up to observe.
+    // This function performs the second step, calling only the event hats,
+    // and determining whether any animation happens or no atoms are left to
+    // quickstep through afterwards.
+
+    var atEnd = false;
+    if (this.enableCustomHatBlocks &&
+        !this.threads.pauseCustomHatBlocks &&
+        !Process.prototype.enableSingleStepping
+    ) {
+        atEnd = this.stepGenericConditions(true); // only events
+        this.threads.removeTerminatedProcesses();
+    }
+    return atEnd;
 };
 
 StageMorph.prototype.updateProjection = function () {
