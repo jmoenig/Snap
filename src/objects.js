@@ -10320,9 +10320,9 @@ StageMorph.prototype.scheduleFrame = function () {
         ide;
 
     if (this.isFastTracked && this.threads.processes.length) {
-        while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
+        while (this.isFastTracked && (Date.now() - this.lastTime) < 16.7) {
             this.stepGenericConditions();
-            this.threads.step(); // approx. 67 fps
+            this.threads.step(); // approx. 60 fps
             this.twostep(); // double-clock event hats
         }
         this.changed();
@@ -10341,9 +10341,9 @@ StageMorph.prototype.scheduleFrame = function () {
 
         // v10.4 "Quicksteps"
         // keep stepping processes with non-visual animation
-        while (!isDone && (Date.now() - this.lastTime) < 15) {
+        while (!isDone && (Date.now() - this.lastTime) < 16.7) {
             this.stepGenericConditions();
-            isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
+            isDone = this.threads.step(true); // only non-visuals, approx. 60 fps
             isDone = this.twostep() || isDone; // double-clock event hats
         }
     }
