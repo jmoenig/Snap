@@ -10279,9 +10279,8 @@ StageMorph.prototype.reactToDropOf = function (morph, hand) {
 // StageMorph stepping
 
 StageMorph.prototype.step = function () {
-    var current, elapsed, leftover, ide,
-        world = this.world(),
-        isDone = false;
+    var current, elapsed, leftover,
+        world = this.world();
 
     // handle keyboard events
     if (world.keyboardFocus === null) {
@@ -10292,6 +10291,34 @@ StageMorph.prototype.step = function () {
     }
 
     // manage threads
+    this.scheduleFrame();
+
+    // update watchers
+    current = Date.now();
+    elapsed = current - this.lastWatcherUpdate;
+    leftover = (1000 / this.watcherUpdateFrequency) - elapsed;
+    if (leftover < 1) {
+        this.watchers().forEach(w => w.update());
+        this.lastWatcherUpdate = Date.now();
+    }
+
+    // projection layer update (e.g. video frame capture)
+    if (this.continuousProjection && this.projectionSource) {
+        this.updateProjection();
+    }
+};
+
+StageMorph.prototype.scheduleFrame = function () {
+    // manage threads - perform one complete evaluation frame:
+    // 1. evaluate every generic / custom hat block
+    // 2. evaluate the next atom in every process
+    // 3. "Twostep": re-evaluate every generic / custom event-only hat block
+    // 4. "Quickstep": fill up the remaining time in the frame by stepping
+    //    through all non-animating (visual) processes
+
+    var isDone = false,
+        ide;
+
     if (this.isFastTracked && this.threads.processes.length) {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 15) {
             this.stepGenericConditions();
@@ -10319,20 +10346,6 @@ StageMorph.prototype.step = function () {
             isDone = this.threads.step(true); // only non-visuals, approx. 67 fps
             isDone = this.twostep() || isDone; // double-clock event hats
         }
-    }
-
-    // update watchers
-    current = Date.now();
-    elapsed = current - this.lastWatcherUpdate;
-    leftover = (1000 / this.watcherUpdateFrequency) - elapsed;
-    if (leftover < 1) {
-        this.watchers().forEach(w => w.update());
-        this.lastWatcherUpdate = Date.now();
-    }
-
-    // projection layer update (e.g. video frame capture)
-    if (this.continuousProjection && this.projectionSource) {
-        this.updateProjection();
     }
 };
 

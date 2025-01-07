@@ -9,6 +9,7 @@
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
+* objects: refactored Quickstep frame scheduling
 
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
