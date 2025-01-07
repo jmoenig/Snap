@@ -2,7 +2,7 @@
 
 ## in development:
 * **Notable Changes:**
-    * "Quickstep" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete
+    * "Quickstep" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
     * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
     * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
