@@ -8,6 +8,7 @@
     * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
+    * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
@@ -15,6 +16,7 @@
 * disabled santa hats, still loadable as extension
 * updated version
 * objects: reduced animation speed from 67 fps to 60 fps
+* lists: handle more cases of circularity in data structures more gracefully
 
 ### 2025-01-06
 * threads: optimized rapid evaluation of generic conditions & custom hat blocks
