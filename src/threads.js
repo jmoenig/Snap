@@ -389,9 +389,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
     this.processes.forEach(proc => {
         if (proc.isAnimated && skipAnimations) {
             skipped += 1;
-            return;
-        }
-        if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
+        } else if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
             animating = animating || proc.isAnimated;
