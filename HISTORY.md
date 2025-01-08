@@ -12,6 +12,7 @@
 
 ### 2025-01-08
 * gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
+* updated version
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
