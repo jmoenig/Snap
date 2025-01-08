@@ -2,9 +2,9 @@
 
 ## in development:
 * **Notable Changes:**
-    * reduced animation speed from 67 fps to 60 fps
     * "Quickstep" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
     * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
+    * reduced animation speed from 67 fps to 60 fps
     * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
