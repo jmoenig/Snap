@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-January-07';
+modules.gui = '2025-January-08';
 
 // Declarations
 
@@ -4640,6 +4640,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         !SpriteMorph.prototype.isCachingImage,
         'uncheck to render\nsprites dynamically',
         'check to cache\nsprite renderings',
+        true
+    );
+    addPreference(
+        'Dynamic scheduling',
+        () => StageMorph.prototype.enableQuicksteps =
+            !StageMorph.prototype.enableQuicksteps,
+        StageMorph.prototype.enableQuicksteps,
+        'uncheck to schedule\nthreads framewise',
+        'check to quickstep\nthreads atomically',
         true
     );
     addPreference(

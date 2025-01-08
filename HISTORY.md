@@ -10,6 +10,9 @@
     * SciSnap file reader, thanks, Eckart!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
 
+### 2025-01-08
+* gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
+
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
 * objects: refactored Quickstep frame scheduling

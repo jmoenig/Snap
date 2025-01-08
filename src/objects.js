@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-07';
+modules.objects = '2025-January-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -9769,6 +9769,7 @@ StageMorph.prototype.enableCodeMapping = false;
 StageMorph.prototype.enableInheritance = true;
 StageMorph.prototype.enableSublistIDs = false;
 StageMorph.prototype.enablePenLogging = false; // for SVG generation
+StageMorph.prototype.enableQuicksteps = true; // dynamic thread scheduling
 
 // StageMorph instance creation
 
@@ -10345,10 +10346,12 @@ StageMorph.prototype.scheduleFrame = function () {
 
         // v10.4 "Quicksteps"
         // keep stepping processes with non-visual animation
-        while (!isDone && (Date.now() - this.lastTime) < 16.7) { // 60 fps
-            this.stepGenericConditions();
-            isDone = this.threads.step(true); // only non-visuals
-            isDone = this.twostep() || isDone; // double-clock event hats
+        if (this.enableQuicksteps) {
+            while (!isDone && (Date.now() - this.lastTime) < 16.7) { // 60 fps
+                this.stepGenericConditions();
+                isDone = this.threads.step(true); // only non-visuals
+                isDone = this.twostep() || isDone; // double-clock event hats
+            }
         }
     }
 };
