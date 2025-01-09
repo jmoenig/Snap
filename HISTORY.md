@@ -9,6 +9,7 @@
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
+    * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
 
 ### 2025-01-09
 * extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
@@ -17,6 +18,7 @@
 ### 2025-01-08
 * gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
 * updated version
+* fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation

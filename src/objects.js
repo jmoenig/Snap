@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-08';
+modules.objects = '2025-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -2792,7 +2792,12 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'doSetSlot'
         );
     }
-    // 10.3: no new primitives
+    if (version < 10.3) {
+        selectors.push(
+            'receiveConditionEvent',
+        );
+    }
+    // 10.4: no new primitives
 
     return selectors;
 };
