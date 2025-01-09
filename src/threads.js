@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-07';
+modules.threads = '2025-January-09';
 
 var ThreadManager;
 var Process;
@@ -2730,8 +2730,8 @@ Process.prototype.reportNumbers = function (start, end) {
 Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
-    this.assertType(start, 'number');
-    this.assertType(end, 'number');
+    this.assertType(+start, 'number');
+    this.assertType(+end, 'number');
 
     var result, len, i,
         s = +start,
@@ -3426,8 +3426,8 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     var vars = this.context.outerContext.variables,
         dta = this.context.accumulator;
     if (dta === null) {
-        this.assertType(start, 'number');
-        this.assertType(end, 'number');
+        this.assertType(+start, 'number');
+        this.assertType(+end, 'number');
         dta = this.context.accumulator = {
             test : +start < +end ?
                 (() => vars.getVar(upvar) > +end)
@@ -7266,14 +7266,14 @@ Process.prototype.doSet = function (attribute, value) {
     case 'rotation x':
     case 'my rotation x':
         this.assertType(rcvr, 'sprite');
-        this.assertType(value, 'number');
-        rcvr.setRotationX(value);
+        this.assertType(+value, 'number');
+        rcvr.setRotationX(+value);
         break;
     case 'rotation y':
     case 'my rotation y':
         this.assertType(rcvr, 'sprite');
-        this.assertType(value, 'number');
-        rcvr.setRotationY(value);
+        this.assertType(+value, 'number');
+        rcvr.setRotationY(+value);
         break;
     case 'microphone modifier':
         this.setMicrophoneModifier(value);
