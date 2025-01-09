@@ -12,6 +12,7 @@
 
 ### 2025-01-09
 * extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
+* v10.4 rc1
 
 ### 2025-01-08
 * gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
