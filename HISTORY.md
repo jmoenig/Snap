@@ -2,13 +2,16 @@
 
 ## in development:
 * **Notable Changes:**
-    * "Quickstep" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
+    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
     * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
     * reduced animation speed from 67 fps to 60 fps
     * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
+
+### 2025-01-09
+* extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
 
 ### 2025-01-08
 * gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
