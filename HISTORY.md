@@ -14,11 +14,13 @@
 ### 2025-01-09
 * extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
 * v10.4 rc1
+* fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
+* fixed #3428
+* v10.4 rc2
 
 ### 2025-01-08
 * gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
 * updated version
-* fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
 
 ### 2025-01-07
 * objects: refactored Twostep event evaluation
