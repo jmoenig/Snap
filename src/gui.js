@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-January-09';
+modules.gui = '2025-January-10';
 
 // Declarations
 
@@ -6609,6 +6609,9 @@ IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
         if (callback) {callback(); }
         return;
     }
+    // reset prims
+    SpriteMorph.prototype.initBlocks();
+
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {

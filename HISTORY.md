@@ -10,6 +10,10 @@
     * SciSnap file reader, thanks, Eckart!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
+    * fixed loading customized primitives in different scenes
+
+### 2025-01-10
+* store, gui: fixed loading customized primitives in different scenes
 
 ### 2025-01-09
 * extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
