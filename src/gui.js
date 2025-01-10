@@ -9668,6 +9668,7 @@ ProjectDialogMorph.prototype.addCloudScene = function (project, delta) {
 ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
     this.ide.backup(
         () => {
+            SpriteMorph.prototype.initBlocks(); // reset prims
             this.ide.nextSteps([
                 () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
                 () => this.rawOpenCloudProject(project, delta)
