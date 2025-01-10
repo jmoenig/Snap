@@ -14,6 +14,7 @@
 
 ### 2025-01-10
 * store, gui: fixed loading customized primitives in different scenes
+* v10.4 rc3
 
 ### 2025-01-09
 * extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
