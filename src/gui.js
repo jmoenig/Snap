@@ -3144,7 +3144,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     this.recordUnsavedChanges();
 
     if (aString.indexOf('<blocks') === 0) {
-        return this.openBlocksString(aString, lbl, true);
+        return; // this.openBlocksString(aString, lbl, true); // +++
     }
     if (aString.indexOf('<sprites') === 0) {
         return this.openSpritesString(aString);
@@ -10686,7 +10686,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     ide.getURL(
         ide.resourceURL('libraries', selectedLibrary),
         libraryText => {
-            ide.droppedText(libraryText, libraryName);
+            ide.droppedText(libraryText, libraryName);  // +++
             this.isLoadingLibrary = true;
         }
     );
