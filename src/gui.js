@@ -6021,6 +6021,7 @@ IDE_Morph.prototype.exportProject = function (name) {
                 throw err;
             }
         }
+        this.scene.applyGlobalSettings();
     }
 };
 
