@@ -3111,8 +3111,6 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
         ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '',
         setting = this.isAddingScenes;
 
-console.log('handling dropped text', name, aString); // +++
-
     // handle the special situation of adding a scene to the current project
     if (this.isAddingNextScene) {
         this.isAddingScenes = true;
@@ -3127,8 +3125,6 @@ console.log('handling dropped text', name, aString); // +++
         this.isAddingNextScene = false;
         return;
     }
-
-console.log('checking for specific files'); // +++
 
     // check for Snap specific files, projects, libraries, sprites, scripts
     if (aString.indexOf('<project') === 0) {
@@ -3148,10 +3144,8 @@ console.log('checking for specific files'); // +++
     this.recordUnsavedChanges();
 
     if (aString.indexOf('<blocks') === 0) {
-console.log('opening blocks string - disabled'); // +++
-        return; // this.openBlocksString(aString, lbl, true); // +++
+        return this.openBlocksString(aString, lbl, true);
     }
-console.log('did *not* open blocks string!'); // +++
     if (aString.indexOf('<sprites') === 0) {
         return this.openSpritesString(aString);
     }
@@ -10692,13 +10686,12 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     ide.getURL(
         ide.resourceURL('libraries', selectedLibrary),
         libraryText => {
-            console.log('dropping library text', libraryName, libraryText); // +++
             ide.droppedText(libraryText, libraryName);  // +++
             this.isLoadingLibrary = true;
         }
     );
 
-    ide.refreshIDE();
+    // ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
