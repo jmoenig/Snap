@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-January-10';
+modules.gui = '2025-January-11';
 
 // Declarations
 
-var SnapVersion = '10.4-rc3';
+var SnapVersion = '10.4-rc4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -10686,12 +10686,10 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     ide.getURL(
         ide.resourceURL('libraries', selectedLibrary),
         libraryText => {
-            ide.droppedText(libraryText, libraryName);  // +++
+            ide.droppedText(libraryText, libraryName);
             this.isLoadingLibrary = true;
         }
     );
-
-    // ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {

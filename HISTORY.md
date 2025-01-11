@@ -12,6 +12,10 @@
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
     * fixed loading customized primitives in different scenes
 
+### 2025-01-11
+* gui: tweaked loading libraries from the cloud to bypass resetting customized primitives
+* v10.4 rc4
+
 ### 2025-01-10
 * store, gui: fixed loading customized primitives in different scenes
 * v10.4 rc3
