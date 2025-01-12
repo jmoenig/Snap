@@ -15,6 +15,8 @@
 ### 2025-01-12
 * gui: tweaked capturing and restoring global settings when serializing scenes
 * v10.4 rc5
+* gui: tweaked capturing and restoring global settingd when serializing scenes for cloud storage
+* v10.4 rc6
 
 ### 2025-01-11
 * gui: tweaked loading libraries from the cloud to bypass resetting customized primitives
