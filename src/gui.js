@@ -8422,6 +8422,7 @@ IDE_Morph.prototype.buildProjectRequest = function () {
     };
     this.serializer.isCollectingMedia = false;
     this.serializer.flushMedia();
+    this.scene.applyGlobalSettings();
 
     return body;
 };
