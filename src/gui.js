@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-January-12_1';
+modules.gui = '2025-January-13';
 
 // Declarations
 
@@ -8021,6 +8021,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
             new Project(this.scenes, this.scene)
         );
     }
+    SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
     this.spriteBar.tabBar.tabTo('scripts');

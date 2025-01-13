@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-09';
+modules.objects = '2025-January-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -8280,11 +8280,11 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
             }
         });
         objects.push(stage);
-        objects.forEach(sprite =>
+        objects.forEach(sprite => {
             blocks = blocks.concat(
                 sprite.allLocalBlockInstances(definition)
-            )
-        );
+            );
+        });
         stage.globalBlocks.concat(
             SpriteMorph.prototype.bootstrappedBlocks()
         ).forEach(def => {
