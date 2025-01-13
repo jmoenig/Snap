@@ -8,6 +8,7 @@
     * disabled santa hats until next Christmas, still loadable as extension
 * **Notable Fixes:**
     * SciSnap file reader, thanks, Eckart!
+    * fixed Beetle extension for extrusion and scaling, thanks, Bernat and Joan!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
     * fixed a series of glitches handling customized primitives
@@ -16,6 +17,8 @@
 * blocks: removed option to ringify prototype hat blocks inside block editors
 * gui, objects: fixed a block zooming / ide refreshing glitch
 * v10.4 rc7
+* Beetle extension fixes to extrusion and scaling, thanks, Bernat and Joan!
+* v10.4 rc8
 
 ### 2025-01-12
 * gui: tweaked capturing and restoring global settings when serializing scenes
