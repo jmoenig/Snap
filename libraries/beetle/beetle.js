@@ -1492,12 +1492,12 @@ Beetle.prototype.pointTo = function (x, y, z) {
 
 Beetle.prototype.setScale = function (scale, which) {
     if (which == 'shape') {
-        if (typeof scale === 'number') {
-            scale = new BABYLON.Vector2(Number(scale), Number(scale));
-        } else if (scale instanceof List) {
+        if (scale instanceof List) {
             scale = new BABYLON.Vector2(
                 Number(scale.itemsArray()[0]), Number(scale.itemsArray()[1])
             );
+        } else {
+            scale = new BABYLON.Vector2(Number(scale), Number(scale));
         }
         this.shapeScale = scale;
         this.updateExtrusionShapeOutline();
