@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-January-02';
+modules.blocks = '2025-January-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3781,11 +3781,12 @@ BlockMorph.prototype.userMenu = function () {
     ) {
         return menu;
     }
-
-    if (!hasLine) {menu.addLine(); }
-    rcvr = rcvr || this.scriptTarget(true);
-    if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
-        menu.addItem("ringify", 'ringify');
+    if (!(top instanceof PrototypeHatBlockMorph)) {
+        if (!hasLine) {menu.addLine(); }
+        rcvr = rcvr || this.scriptTarget(true);
+        if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
+            menu.addItem("ringify", 'ringify');
+        }
     }
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();

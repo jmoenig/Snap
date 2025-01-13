@@ -12,6 +12,9 @@
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
     * fixed loading customized primitives in different scenes
 
+### 2025-01-13
+* blocks: removed option to ringify prototype hat blocks inside block editors
+
 ### 2025-01-12
 * gui: tweaked capturing and restoring global settings when serializing scenes
 * v10.4 rc5
