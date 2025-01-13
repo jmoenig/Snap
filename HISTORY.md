@@ -15,6 +15,7 @@
 ### 2025-01-13
 * blocks: removed option to ringify prototype hat blocks inside block editors
 * gui, objects: fixed a block zooming / ide refreshing glitch
+* v10.4 rc7
 
 ### 2025-01-12
 * gui: tweaked capturing and restoring global settings when serializing scenes
