@@ -10,7 +10,7 @@
     * SciSnap file reader, thanks, Eckart!
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
-    * fixed loading customized primitives in different scenes
+    * fixed a series of glitches handling customized primitives
 
 ### 2025-01-13
 * blocks: removed option to ringify prototype hat blocks inside block editors
