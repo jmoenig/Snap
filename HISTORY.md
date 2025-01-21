@@ -12,6 +12,10 @@
     * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
     * fixed a series of glitches handling customized primitives
+    * fixed morphic Pen demo and "doIt" for inspectors
+
+### 2025-01-21
+* morphic: fixed Pen demo and "doIt" for inspectors
 
 ### 2025-01-13
 * blocks: removed option to ringify prototype hat blocks inside block editors
