@@ -16,6 +16,7 @@
 
 ### 2025-01-21
 * morphic: fixed Pen demo and "doIt" for inspectors
+* v10.4 rc9
 
 ### 2025-01-13
 * blocks: removed option to ringify prototype hat blocks inside block editors
