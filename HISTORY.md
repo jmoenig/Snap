@@ -1,8 +1,10 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.4.0:
 * **Notable Changes:**
-    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
+    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete for number crunching and improves musical thread synching
     * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
     * reduced animation speed from 67 fps to 60 fps
     * disabled santa hats until next Christmas, still loadable as extension
@@ -18,6 +20,7 @@
 
 ### 2025-01-22
 * Armenian translation update, thanks, Antrohoos Education Foundation!
+* prepared v10.4 minor release
 
 ### 2025-01-21
 * morphic: fixed Pen demo and "doIt" for inspectors
