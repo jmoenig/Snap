@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2024-December-30';
+modules.locale = '2025-January-22';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -694,9 +694,9 @@ SnapTranslator.dict.hy = {
     'language_name':
         'Հայերեն',
     'language_translator':
-        'Symotec LLC and Armath team',
+        'Symotec LLC, Armath team and Antrohoos Education Foundation',
     'translator_e-mail':
         'info@symotec.am and info@armath.am',
     'last_changed':
-        '2023-04-12',
+        '2025-01-22',
 };

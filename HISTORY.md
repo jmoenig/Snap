@@ -13,6 +13,11 @@
     * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
     * fixed a series of glitches handling customized primitives
     * fixed morphic Pen demo and "doIt" for inspectors
+* **Translation Updates:**
+    * Armenian, thanks, Antrohoos Education Foundation!
+
+### 2025-01-22
+* Armenian translation update, thanks, Antrohoos Education Foundation!
 
 ### 2025-01-21
 * morphic: fixed Pen demo and "doIt" for inspectors
