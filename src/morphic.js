@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2024 by Jens Mönig
+    Copyright (C) 2010-2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1338,7 +1338,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2024-October-09';
+var morphicVersion = '2025-January-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -3879,6 +3879,7 @@ Morph.prototype.penTrails = function () {
     // obtained canvas will be around at the next display cycle,
     // so they might also wish to set the receiver's "isCachingImage"
     // property to "true".
+    this.isCachingImage = true;
     return this.getImage();
 };
 
@@ -11512,7 +11513,9 @@ HandMorph.prototype.processMouseDown = function (event) {
             }
         }
         if (this.world.cursor) {
-            if (morph !== this.world.cursor.target) {
+            if (morph !== this.world.cursor.target &&
+                    !morph.parentThatIsA(MenuItemMorph)
+            ) {
                 this.world.stopEditing();
             }
         }

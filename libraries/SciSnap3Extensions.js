@@ -834,7 +834,7 @@ SnapExtensions.primitives.set('SciS_selectFileWithFilepicker(choice)',
 //read file as BLOB --------------------------------------------------------------------------------------------------------------------------------------
 SnapExtensions.primitives.set('SciS_readFileAsBLOB(source)',
   function (source) {
-    var result = 0, done = false, isFITS = false, header, properties, min = 100000, max = -100000, typeOfData = 'undefined', filename = 'unknown', sum = 0;
+    var result = 0, done = false, isFITS = false, header, properties, min = 100000, max = -100000, typeOfData = 'undefined', filename = 'unknown', sum = 0, ide = this.parent.parent;
     function setCursor(val) {
       document.body.style.cursor = val;
       top.window.document.body.style.cursor = val;

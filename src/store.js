@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2024-December-30';
+modules.store = '2025-January-10';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2042,7 +2042,7 @@ Project.prototype.toXML = function (serializer) {
 };
 
 Scene.prototype.toXML = function (serializer) {
-    var xml;
+    var xml, prims;
 
     function code(key) {
         var str = '';
@@ -2061,6 +2061,10 @@ Scene.prototype.toXML = function (serializer) {
     }
 
     serializer.scene = this; // keep the order of sprites in the corral
+
+    // capture primitives and apply own ones
+    prims = SpriteMorph.prototype.bootstrappedBlocks();
+    SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
         '<scene name="@"%%%%%%>' +
@@ -2096,6 +2100,10 @@ Scene.prototype.toXML = function (serializer) {
         serializer.store(this.stage),
         serializer.store(this.globalVariables)
     );
+
+    // restore prims
+    SpriteMorph.prototype.blocks = prims;
+
     return xml;
 };
 

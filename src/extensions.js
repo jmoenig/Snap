@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -35,7 +35,7 @@ BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2024-December-07';
+modules.extensions = '2025-January-09';
 
 // Global stuff
 
@@ -346,6 +346,20 @@ SnapExtensions.primitives.set(
     'snap_threadsafe(on?)',
     function (bool) {
         this.parentThatIsA(StageMorph).isThreadSafe = (bool === true);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_quicksteps?',
+    function () {
+        return StageMorph.prototype.enableQuicksteps;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_quicksteps(on?)',
+    function (bool) {
+        StageMorph.prototype.enableQuicksteps = (bool === true);
     }
 );
 

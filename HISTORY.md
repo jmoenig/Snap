@@ -1,6 +1,82 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete and improves musical thread synching
+    * Floating point precision random numbers - pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
+    * reduced animation speed from 67 fps to 60 fps
+    * disabled santa hats until next Christmas, still loadable as extension
+* **Notable Fixes:**
+    * SciSnap file reader, thanks, Eckart!
+    * fixed Beetle extension for extrusion and scaling, thanks, Bernat and Joan!
+    * handle more cases of circularity in data structures more gracefully, thanks, blockpointstudios, for the report!
+    * fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
+    * fixed a series of glitches handling customized primitives
+    * fixed morphic Pen demo and "doIt" for inspectors
+
+### 2025-01-21
+* morphic: fixed Pen demo and "doIt" for inspectors
+* v10.4 rc9
+
+### 2025-01-13
+* blocks: removed option to ringify prototype hat blocks inside block editors
+* gui, objects: fixed a block zooming / ide refreshing glitch
+* v10.4 rc7
+* Beetle extension fixes to extrusion and scaling, thanks, Bernat and Joan!
+* v10.4 rc8
+
+### 2025-01-12
+* gui: tweaked capturing and restoring global settings when serializing scenes
+* v10.4 rc5
+* gui: tweaked capturing and restoring global settingd when serializing scenes for cloud storage
+* v10.4 rc6
+
+### 2025-01-11
+* gui: tweaked loading libraries from the cloud to bypass resetting customized primitives
+* v10.4 rc4
+
+### 2025-01-10
+* store, gui: fixed loading customized primitives in different scenes
+* v10.4 rc3
+
+### 2025-01-09
+* extensions: added "snap_quicksteps" extension blocks, mostly for debugging purposes
+* v10.4 rc1
+* fixed #3429: Previously hidden generic WHEN hat blocks reappeared in v10.3
+* fixed #3428
+* v10.4 rc2
+
+### 2025-01-08
+* gui, objects: hidden "Dynamic scheduling" setting for analyzing and debugging (the Snap! source code, not your projects, folks)
+* updated version
+
+### 2025-01-07
+* objects: refactored Twostep event evaluation
+* objects: refactored Quickstep frame scheduling
+* disabled santa hats, still loadable as extension
+* updated version
+* objects: reduced animation speed from 67 fps to 60 fps
+* lists: handle more cases of circularity in data structures more gracefully
+* objects, threads: tweaked quickstepping
+
+### 2025-01-06
+* threads: optimized rapid evaluation of generic conditions & custom hat blocks
+* objects, threads: harmonized Quickstep / Twostep interaction
+* updated version
+
+### 2025-01-04
+* objects: enabled "quicksteps" to capture atomic custom events
+* updated version
+* objects, threads: tweaked "quicksteps" performance for rule hats
+
+### 2025-01-03
+* objects, threads: "quicksteps" - keep scheduling non-animating processes between animation ticks
+* updated version
+* integrated SciSnap file reader fix, thanks, Eckart!
+
+### 2025-01-02
+* new dev version
+* blocks, threads: added the capability to pick a random float by entering an integer with a decimal point into at least one of the "pick random" reporter's input slots
 
 ## 10.3.6:
 * **Notable Fixes:**

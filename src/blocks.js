@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2024-December-07';
+modules.blocks = '2025-January-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3781,11 +3781,12 @@ BlockMorph.prototype.userMenu = function () {
     ) {
         return menu;
     }
-
-    if (!hasLine) {menu.addLine(); }
-    rcvr = rcvr || this.scriptTarget(true);
-    if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
-        menu.addItem("ringify", 'ringify');
+    if (!(top instanceof PrototypeHatBlockMorph)) {
+        if (!hasLine) {menu.addLine(); }
+        rcvr = rcvr || this.scriptTarget(true);
+        if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
+            menu.addItem("ringify", 'ringify');
+        }
     }
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();
@@ -12321,14 +12322,8 @@ InputSlotMorph.prototype.mappedCode = function () {
 // InputSlotMorph evaluating:
 
 InputSlotMorph.prototype.evaluate = function () {
-/*
-    answer my contents, which can be a "wish", i.e. a block that refers to
-    another sprite's local method, or a text string. If I am numerical convert
-    that string to a number. If the conversion fails answer the string
-    (e.g. for special choices like 'random', 'all' or 'last') otherwise
-    the numerical value.
-*/
-    var num, contents;
+    // answer my contents, which can be a "wish", i.e. a block that refers to
+    // another sprite's local method, or a text string.
 
  	if (this.selectedBlock) {
   		return this.selectedBlock;
@@ -12342,14 +12337,7 @@ InputSlotMorph.prototype.evaluate = function () {
     if (this.constant) {
         return this.constant;
     }
-    contents = this.contents();
-    if (this.isNumeric) {
-        num = parseFloat(contents.text || '0');
-        if (!isNaN(num)) {
-            return num;
-        }
-    }
-    return contents.text;
+    return this.contents().text;
 };
 
 InputSlotMorph.prototype.evaluateOption = function () {

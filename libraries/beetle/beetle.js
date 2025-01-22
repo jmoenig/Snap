@@ -578,7 +578,7 @@ BeetleDialogMorph.uber = DialogBoxMorph.prototype;
 
 function BeetleDialogMorph(stage, controller, onAccept) {
     this.init(controller, onAccept);
-}
+};
 
 BeetleDialogMorph.prototype.init = function (controller, onAccept) {
     this.controller = controller;
@@ -1157,7 +1157,6 @@ Beetle.prototype.newExtrusionShape = function (selector) {
         }
     }
 
-
     return path;
 };
 
@@ -1493,17 +1492,17 @@ Beetle.prototype.pointTo = function (x, y, z) {
 
 Beetle.prototype.setScale = function (scale, which) {
     if (which == 'shape') {
-        if (typeof scale === 'number') {
-            scale = new BABYLON.Vector2(scale, scale);
-        } else if (scale instanceof List) {
+        if (scale instanceof List) {
             scale = new BABYLON.Vector2(
                 Number(scale.itemsArray()[0]), Number(scale.itemsArray()[1])
             );
+        } else {
+            scale = new BABYLON.Vector2(Number(scale), Number(scale));
         }
         this.shapeScale = scale;
         this.updateExtrusionShapeOutline();
     } else {
-        this.movementScale = scale;
+        this.movementScale = Number(scale);
     }
 };
 

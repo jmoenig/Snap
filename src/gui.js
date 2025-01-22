@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2024-December-30';
+modules.gui = '2025-January-21';
 
 // Declarations
 
-var SnapVersion = '10.3.6';
+var SnapVersion = '10.4-rc9';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4643,6 +4643,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
+        'Dynamic scheduling',
+        () => StageMorph.prototype.enableQuicksteps =
+            !StageMorph.prototype.enableQuicksteps,
+        StageMorph.prototype.enableQuicksteps,
+        'uncheck to schedule\nthreads framewise',
+        'check to quickstep\nthreads atomically',
+        true
+    );
+    addPreference(
         'Performer mode',
         () => this.togglePerformerMode(),
         this.performerMode,
@@ -5576,7 +5585,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2024 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2025 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -6012,6 +6021,7 @@ IDE_Morph.prototype.exportProject = function (name) {
                 throw err;
             }
         }
+        this.scene.applyGlobalSettings();
     }
 };
 
@@ -6600,6 +6610,9 @@ IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
         if (callback) {callback(); }
         return;
     }
+    // reset prims
+    SpriteMorph.prototype.initBlocks();
+
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
@@ -8008,6 +8021,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
             new Project(this.scenes, this.scene)
         );
     }
+    SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
     this.spriteBar.tabBar.tabTo('scripts');
@@ -8409,6 +8423,7 @@ IDE_Morph.prototype.buildProjectRequest = function () {
     };
     this.serializer.isCollectingMedia = false;
     this.serializer.flushMedia();
+    this.scene.applyGlobalSettings();
 
     return body;
 };
@@ -9656,6 +9671,7 @@ ProjectDialogMorph.prototype.addCloudScene = function (project, delta) {
 ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
     this.ide.backup(
         () => {
+            SpriteMorph.prototype.initBlocks(); // reset prims
             this.ide.nextSteps([
                 () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
                 () => this.rawOpenCloudProject(project, delta)
@@ -10677,8 +10693,6 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
             this.isLoadingLibrary = true;
         }
     );
-
-    ide.refreshIDE();
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {

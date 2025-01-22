@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2024-December-23';
+modules.threads = '2025-January-09';
 
 var ThreadManager;
 var Process;
@@ -297,7 +297,7 @@ ThreadManager.prototype.highlight = function (aProcess, adjustCount = 0) {
     if (glow) {
         glow.threadCount = this.processesForBlock(top).length + 1 + adjustCount;
         glow.updateReadout();
-    } else {
+    } else if (aProcess.isRunning()) {
         top.addHighlight();
     }
     this.wantsHalo = false;
@@ -358,12 +358,15 @@ ThreadManager.prototype.resumeAll = function (stage) {
     }
 };
 
-ThreadManager.prototype.step = function () {
+ThreadManager.prototype.step = function (skipAnimations) {
     // run each process until it gives up control, skipping processes
     // for sprites that are currently picked up, then filter out any
-    // processes that have been terminated
+    // processes that have been terminated.
+    // answer <true> if any process is animated or none are left
 
-    var isInterrupted;
+    var animating = false,
+        skipped = 0,
+        isInterrupted;
     if (Process.prototype.enableSingleStepping) {
         this.processes.forEach(proc => {
             if (proc.isInterrupted) {
@@ -379,17 +382,21 @@ ThreadManager.prototype.step = function () {
             if (this.wantsToPause) {
                 this.pauseAll();
             }
-            return;
+            return true;
         }
     }
 
     this.processes.forEach(proc => {
-        if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
+        if (proc.isAnimated && skipAnimations) {
+            skipped += 1;
+        } else if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
+            animating = animating || proc.isAnimated;
         }
     });
     this.removeTerminatedProcesses();
+    return animating || (this.processes.length - skipped < 1);
 };
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {
@@ -608,6 +615,7 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.flashingContext = null; // for single-stepping
     this.isInterrupted = false; // for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
+    this.isAnimated = false; // temporary - used to control yields for animation
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -634,6 +642,8 @@ Process.prototype.isRunning = function () {
 Process.prototype.runStep = function (deadline) {
     // a step is an an uninterruptable 'atom', it can consist
     // of several contexts, even of several blocks
+
+    this.isAnimated = false;
 
     if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
@@ -805,6 +815,10 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         // this.evaluateNextInput(block);
         this.evaluateNextInputSet(block); // frame-optimized version
     } else {
+        if (!this.isAnimated) {
+            this.isAnimated =
+                SpriteMorph.prototype.blocks[selector]?.animation || false;
+        }
         if (this.flashContext()) {return; } // yield to flash the block
         if (this[selector]) {
             rcvr = this;
@@ -2716,8 +2730,8 @@ Process.prototype.reportNumbers = function (start, end) {
 Process.prototype.reportBasicNumbers = function (start, end) {
     // answer a new arrayed list containing an linearly ascending progression
     // of integers beginning at start to end.
-    this.assertType(start, 'number');
-    this.assertType(end, 'number');
+    this.assertType(+start, 'number');
+    this.assertType(+end, 'number');
 
     var result, len, i,
         s = +start,
@@ -3412,8 +3426,8 @@ Process.prototype.doFor = function (upvar, start, end, script) {
     var vars = this.context.outerContext.variables,
         dta = this.context.accumulator;
     if (dta === null) {
-        this.assertType(start, 'number');
-        this.assertType(end, 'number');
+        this.assertType(+start, 'number');
+        this.assertType(+end, 'number');
         dta = this.context.accumulator = {
             test : +start < +end ?
                 (() => vars.getVar(upvar) > +end)
@@ -4986,7 +5000,12 @@ Process.prototype.reportRandom = function (a, b) {
 Process.prototype.reportBasicRandom = function (min, max) {
     var floor = Math.min(+min, +max),
         ceil = Math.max(+min, +max);
-    if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
+
+    function isFloat(n) {
+        return (+n % 1 !== 0) || (isString(n) && n.includes('.'));
+    }
+
+    if (isFloat(min) || isFloat(max)) {
         return Math.random() * (ceil - floor) + floor;
     }
     return Math.floor(Math.random() * (ceil - floor + 1)) + floor;
@@ -7247,14 +7266,14 @@ Process.prototype.doSet = function (attribute, value) {
     case 'rotation x':
     case 'my rotation x':
         this.assertType(rcvr, 'sprite');
-        this.assertType(value, 'number');
-        rcvr.setRotationX(value);
+        this.assertType(+value, 'number');
+        rcvr.setRotationX(+value);
         break;
     case 'rotation y':
     case 'my rotation y':
         this.assertType(rcvr, 'sprite');
-        this.assertType(value, 'number');
-        rcvr.setRotationY(value);
+        this.assertType(+value, 'number');
+        rcvr.setRotationY(+value);
         break;
     case 'microphone modifier':
         this.setMicrophoneModifier(value);
