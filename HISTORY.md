@@ -2,10 +2,18 @@
 
 ## in development:
 
+## 10.4.1:
+* **Notable Fixes:**
+    * fixed backup mechanism when creating a new project over an unsaved one
+    * fixed #3435 - evaluate empty numerical input slots as zero, also fixes string library issues
+* **Translation Updates:**
+    * Greek, thanks, HM100!
+
 ### 2025-01-23
 * gui: fixed backup mechanism when creating a new project over an unsaved one
 * blocks: fixed #3435 - evaluate empty numerical input slots as zero
 * Greek translation update, thanks, HM100!
+* prepared v10.4.1 patch
 
 ## 10.4.0:
 * **Notable Changes:**
