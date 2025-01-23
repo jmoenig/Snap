@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-January-22';
+modules.gui = '2025-January-23';
 
 // Declarations
 
@@ -7106,6 +7106,7 @@ IDE_Morph.prototype.switchToScene = function (
         this.stage.pauseGenericHatBlocks();
     }
     this.createCorral(!refreshAlbum); // keep scenes
+    scene.applyGlobalSettings();
     this.selectSprite(this.scene.currentSprite, true);
     this.corral.album.updateSelection();
     this.fixLayout();
@@ -7114,7 +7115,6 @@ IDE_Morph.prototype.switchToScene = function (
             morph.scrollIntoView();
         }
     });
-    scene.applyGlobalSettings();
     if (!SpriteMorph.prototype.allCategories().includes(this.currentCategory)) {
         this.currentCategory = 'motion';
     }

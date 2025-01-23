@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-01-23
+* gui: fixed backup mechanism when creating a new project over an unsaved one
+
 ## 10.4.0:
 * **Notable Changes:**
     * "Quicksteps" Evaluation - Dynamic Scheduling: Keep stepping non-animating processes between animation frames, makes "warp" and "turbo mode" largely obsolete for number crunching and improves musical thread synching
