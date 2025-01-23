@@ -107,7 +107,7 @@ SnapTranslator.dict.el = {
     "Create variables": "Δημιουργία μεταβλητών",
     "Create variables in program": "Δημιουργία μεταβλητών σε πρόγραμμα",
     "Credits...": "Συντελεστές...",
-    "Custom Block Translations": "Προσαρμοσμένες Μεταφράσεις Μπλοκ",
+    "Custom Block Translations": "Μεταφράσεις Προσαρμοσμένου Μπλοκ",
     "Database": "Βάση δεδομένων",
     "December": "Δεκέμβριος",
     "Default": "Προεπιλογή",
