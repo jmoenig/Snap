@@ -5,6 +5,7 @@
 ### 2025-01-23
 * gui: fixed backup mechanism when creating a new project over an unsaved one
 * blocks: fixed #3435 - evaluate empty numerical input slots as zero
+* Greek translation update, thanks, HM100!
 
 ## 10.4.0:
 * **Notable Changes:**

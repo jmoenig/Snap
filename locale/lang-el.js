@@ -866,7 +866,7 @@ SnapTranslator.dict.el = {
     "large": "μεγάλο",
     "last": "τελευταίο",
     "last changed": "",
-    "last_changed": "2023-04-15",
+    "last_changed": "2025-01-23",
     "launch _ _": "ξεκίνα _ επάνω σε _",
     "left": "αριστερά",
     "left arrow": "αριστερό βέλος",
