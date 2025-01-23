@@ -300,7 +300,7 @@ ThreadManager.prototype.highlight = function (aProcess, adjustCount = 0) {
     } else if (aProcess.isRunning()) {
         top.addHighlight();
     }
-    this.wantsHalo = false;
+    aProcess.wantsHalo = false;
 };
 
 ThreadManager.prototype.stopAll = function (excpt) {
