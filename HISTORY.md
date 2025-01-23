@@ -4,6 +4,14 @@
 
 ## 10.4.1:
 * **Notable Fixes:**
+    * fixed a syntax error in the Greek translation file
+
+### 2025-01-23
+* fixed a syntax error in the Greek translation file
+* prepared v10.4.2 patch
+
+## 10.4.1:
+* **Notable Fixes:**
     * fixed backup mechanism when creating a new project over an unsaved one
     * fixed #3435 - evaluate empty numerical input slots as zero, also fixes string library issues
 * **Translation Updates:**
