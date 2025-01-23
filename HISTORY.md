@@ -2,7 +2,7 @@
 
 ## in development:
 
-## 10.4.1:
+## 10.4.2:
 * **Notable Fixes:**
     * fixed a syntax error in the Greek translation file
 
