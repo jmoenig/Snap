@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-January-13';
+modules.blocks = '2025-January-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12324,7 +12324,7 @@ InputSlotMorph.prototype.mappedCode = function () {
 InputSlotMorph.prototype.evaluate = function () {
     // answer my contents, which can be a "wish", i.e. a block that refers to
     // another sprite's local method, or a text string.
-
+    var val;
  	if (this.selectedBlock) {
   		return this.selectedBlock;
   	}
@@ -12337,7 +12337,10 @@ InputSlotMorph.prototype.evaluate = function () {
     if (this.constant) {
         return this.constant;
     }
-    return this.contents().text;
+    val = this.contents().text;
+
+    // let an empty numerical slot return the number zero
+    return this.isNumeric && val === '' ? 0 : val;
 };
 
 InputSlotMorph.prototype.evaluateOption = function () {
