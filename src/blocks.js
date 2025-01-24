@@ -12349,7 +12349,10 @@ InputSlotMorph.prototype.evaluate = function () {
         return this.constant;
     }
     val = this.contents().text;
-    if (this.isNumeric && (!this.evaluateAsString || val === '')) {
+    if (this.isNumeric &&
+        !this.isAlphanumeric &&
+        (!this.evaluateAsString || val === '')
+    ) {
         return +val;
     }
     return val;
