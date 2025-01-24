@@ -2,7 +2,7 @@
 
 ## in development:
 
-## 10.4.2:
+## 10.4.3:
 * **Notable Fixes:**
     * special cased RANDOM reporter's input slots to evaluate as String instead of Number, fixes some extension issues, e.g. Hummingbird
 
