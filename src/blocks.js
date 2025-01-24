@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-January-23';
+modules.blocks = '2025-January-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -311,7 +311,8 @@ SyntaxElementMorph.prototype.labelParts = {
         Input slots
 
         type: 'input'
-        tags: 'numeric alphanum read-only unevaluated landscape static'
+        tags: 'numeric numstring alphanum read-only unevaluated landscape
+               static'
         menu: dictionary or selector
         react: selector
         value: string, number or Array for localized strings / constants
@@ -322,6 +323,10 @@ SyntaxElementMorph.prototype.labelParts = {
     '%n': {
         type: 'input',
         tags: 'numeric'
+    },
+    '%ns': {
+        type: 'input',
+        tags: 'numstring'
     },
     '%txt': {
         type: 'input',
@@ -1970,7 +1975,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // apply the tags
         // ---------------
-        // input: numeric, alphanum, read-only, unevaluated, landscape, static
+        // input: numeric, numstring, alphanum, read-only, unevaluated,
+        //        landscape, static
         // text entry: monospace
         // boolean: unevaluated, static
         // symbol: static, fading, protected
@@ -1994,6 +2000,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     case 'alphanum':
                         part.isNumeric = true;
                         part.isAlphanumeric = true;
+                        break;
+                    case 'numstring':
+                        part.isNumeric = true;
+                        part.evaluateAsString = true;
                         break;
                     case 'read-only':
                         part.isReadOnly = true;
@@ -10961,6 +10971,7 @@ InputSlotMorph.prototype.init = function (
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
+    this.evaluateAsString = false; // special case for RANDOM NUMBER reporter
     this.isAlphanumeric = false; // temporary override for allowing text
     this.isReadOnly = isReadOnly || false;
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
@@ -12338,9 +12349,10 @@ InputSlotMorph.prototype.evaluate = function () {
         return this.constant;
     }
     val = this.contents().text;
-
-    // let an empty numerical slot return the number zero
-    return this.isNumeric && val === '' ? 0 : val;
+    if (this.isNumeric && (!this.evaluateAsString || val === '')) {
+        return +val;
+    }
+    return val;
 };
 
 InputSlotMorph.prototype.evaluateOption = function () {

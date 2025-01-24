@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-13';
+modules.objects = '2025-January-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1728,7 +1728,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportRandom: {
             type: 'reporter',
             category: 'operators',
-            spec: 'pick random %n to %n',
+            spec: 'pick random %ns to %ns',
             defaults: [1, 10],
             code: 'rand'
         },

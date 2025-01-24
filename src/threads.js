@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-09';
+modules.threads = '2025-January-24';
 
 var ThreadManager;
 var Process;
@@ -8473,6 +8473,7 @@ Process.prototype.slotType = function (spec) {
 
         '1':            1,
         'n':            1, // spec
+        'ns':           1, // spec for random numbers reporter
         // mnemonics:
         '#':            1,
         'num':          1,

@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-01-24
+* blocks, objects, threads: special cased RANDOM reporter's input slots to evaluate as String instead of Number, hopefully fixes some extension issues, e.g. Hummingbird
+
 ## 10.4.2:
 * **Notable Fixes:**
     * fixed a syntax error in the Greek translation file
