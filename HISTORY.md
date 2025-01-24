@@ -2,9 +2,14 @@
 
 ## in development:
 
+## 10.4.2:
+* **Notable Fixes:**
+    * special cased RANDOM reporter's input slots to evaluate as String instead of Number, fixes some extension issues, e.g. Hummingbird
+
 ### 2025-01-24
 * blocks, objects, threads: special cased RANDOM reporter's input slots to evaluate as String instead of Number, hopefully fixes some extension issues, e.g. Hummingbird
 * new dev version for testing
+* prepared v10.4.3 patch
 
 ## 10.4.2:
 * **Notable Fixes:**
