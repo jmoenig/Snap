@@ -2,6 +2,10 @@
 
 ## in development:
 
+## 10.4.4:
+* **Notable Fixes:**
+    * fixed alphanumeric input slot evaluation for list accessors
+
 ## 10.4.3:
 * **Notable Fixes:**
     * special cased RANDOM reporter's input slots to evaluate as String instead of Number, fixes some extension issues, e.g. Hummingbird
