@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 10.4.5:
+* **Notable Fixes:**
+    * fixed evaluating special strings inside numerical input slots
+
+### 2025-01-25
+* blocks: fixed evaluating special strings inside numerical input slots
+* prepared v10.4.5 patch 
+
 ## 10.4.4:
 * **Notable Fixes:**
     * fixed alphanumeric input slot evaluation for list accessors
