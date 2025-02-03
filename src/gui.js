@@ -5584,8 +5584,11 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2025 Jens M\u00F6nig and '
+    aboutTxt = 'Startr Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
+        + 'Startr Features Copyright Startr LLC 2022-2025\n'
+        + ''
+        + '\n\n'
+        + 'Snap! Copyright \u24B8 2008-2025 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -5595,11 +5598,11 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
 
-        + 'for more information see https://snap.berkeley.edu';
+        + 'for more information see https://snap.startr.cloud';
 
     noticeTxt = localize('License')
         + '\n\n'
-        + 'Snap! is free software: you can redistribute it and/or modify\n'
+        + 'Startr Snap! is free software: you can redistribute it and/or modify\n'
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
@@ -5617,7 +5620,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'Get in touch with us, we\'ll make it work.';
 
     creditsTxt = localize('Contributors')
-        + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
+        + '\n\n'
+        + '\n\nJens Mönig: concept, design, coding'
+        + '\n\nNathan Dinsmore: Saving/Loading, Original Snap-Logo Design, '
         + '\ncountless bugfixes and optimizations'
         + '\nMichael Ball: Time/Date UI, Library Import Dialog,'
         + '\ncountless bugfixes and optimizations'
