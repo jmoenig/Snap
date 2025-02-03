@@ -1,0 +1,2801 @@
+[
+  {
+    "fileName": "0-pixel.svg",
+    "name": "0 pixel"
+  },
+  {
+    "fileName": "1-glow.svg",
+    "name": "1 glow"
+  },
+  {
+    "fileName": "1-pixel.svg",
+    "name": "1 pixel"
+  },
+  {
+    "fileName": "2-glow.svg",
+    "name": "2 glow"
+  },
+  {
+    "fileName": "2-pixel.svg",
+    "name": "2 pixel"
+  },
+  {
+    "fileName": "3-glow.svg",
+    "name": "3 glow"
+  },
+  {
+    "fileName": "3-pixel.svg",
+    "name": "3 pixel"
+  },
+  {
+    "fileName": "4-glow.svg",
+    "name": "4 glow"
+  },
+  {
+    "fileName": "4-pixel.svg",
+    "name": "4 pixel"
+  },
+  {
+    "fileName": "5-glow.svg",
+    "name": "5 glow"
+  },
+  {
+    "fileName": "5-pixel.svg",
+    "name": "5 pixel"
+  },
+  {
+    "fileName": "6-glow.svg",
+    "name": "6 glow"
+  },
+  {
+    "fileName": "6-pixel.svg",
+    "name": "6 pixel"
+  },
+  {
+    "fileName": "7-glow.svg",
+    "name": "7 glow"
+  },
+  {
+    "fileName": "7-pixel.svg",
+    "name": "7 pixel"
+  },
+  {
+    "fileName": "8-glow.svg",
+    "name": "8 glow"
+  },
+  {
+    "fileName": "8-pixel.svg",
+    "name": "8 pixel"
+  },
+  {
+    "fileName": "9-glow.svg",
+    "name": "9 glow"
+  },
+  {
+    "fileName": "9-pixel.svg",
+    "name": "9 pixel"
+  },
+  {
+    "fileName": "abby-a.svg",
+    "name": "abby a"
+  },
+  {
+    "fileName": "abby-b.svg",
+    "name": "abby b"
+  },
+  {
+    "fileName": "abby-c.svg",
+    "name": "abby c"
+  },
+  {
+    "fileName": "abby-d.svg",
+    "name": "abby d"
+  },
+  {
+    "fileName": "a-block.svg",
+    "name": "a block"
+  },
+  {
+    "fileName": "A-glow.svg",
+    "name": "A glow"
+  },
+  {
+    "fileName": "airplane2.png",
+    "name": "airplane2"
+  },
+  {
+    "fileName": "alonzo.gif",
+    "name": "alonzo"
+  },
+  {
+    "fileName": "alonzo.png",
+    "name": "alonzo"
+  },
+  {
+    "fileName": "amon.gif",
+    "name": "amon"
+  },
+  {
+    "fileName": "anina_pop_down.png",
+    "name": "anina pop down"
+  },
+  {
+    "fileName": "anina_pop_front.png",
+    "name": "anina pop front"
+  },
+  {
+    "fileName": "anina_pop_L_arm.png",
+    "name": "anina pop L arm"
+  },
+  {
+    "fileName": "anina_pop_left.png",
+    "name": "anina pop left"
+  },
+  {
+    "fileName": "anina_pop_R_arm.png",
+    "name": "anina pop R arm"
+  },
+  {
+    "fileName": "anina_pop_right.png",
+    "name": "anina pop right"
+  },
+  {
+    "fileName": "anina_pop_stand.png",
+    "name": "anina pop stand"
+  },
+  {
+    "fileName": "anina_R_cross.png",
+    "name": "anina R cross"
+  },
+  {
+    "fileName": "anina_stance.png",
+    "name": "anina stance"
+  },
+  {
+    "fileName": "anina_top_freeze.png",
+    "name": "anina top freeze"
+  },
+  {
+    "fileName": "anina_top_L_step.png",
+    "name": "anina top L step"
+  },
+  {
+    "fileName": "anina_top_R_step.png",
+    "name": "anina top R step"
+  },
+  {
+    "fileName": "anina_top_stand.png",
+    "name": "anina top stand"
+  },
+  {
+    "fileName": "anna01.png",
+    "name": "anna01"
+  },
+  {
+    "fileName": "anna02.png",
+    "name": "anna02"
+  },
+  {
+    "fileName": "anna03.png",
+    "name": "anna03"
+  },
+  {
+    "fileName": "anna04.png",
+    "name": "anna04"
+  },
+  {
+    "fileName": "anna05.png",
+    "name": "anna05"
+  },
+  {
+    "fileName": "anna06.png",
+    "name": "anna06"
+  },
+  {
+    "fileName": "anna07b.png",
+    "name": "anna07b"
+  },
+  {
+    "fileName": "anna07c.png",
+    "name": "anna07c"
+  },
+  {
+    "fileName": "anna07.png",
+    "name": "anna07"
+  },
+  {
+    "fileName": "anna08.png",
+    "name": "anna08"
+  },
+  {
+    "fileName": "anna09.png",
+    "name": "anna09"
+  },
+  {
+    "fileName": "anna10.png",
+    "name": "anna10"
+  },
+  {
+    "fileName": "anna11.png",
+    "name": "anna11"
+  },
+  {
+    "fileName": "anna12.png",
+    "name": "anna12"
+  },
+  {
+    "fileName": "anna-a.png",
+    "name": "anna a"
+  },
+  {
+    "fileName": "anna-b.png",
+    "name": "anna b"
+  },
+  {
+    "fileName": "A-pixel.svg",
+    "name": "A pixel"
+  },
+  {
+    "fileName": "apple.svg",
+    "name": "apple"
+  },
+  {
+    "fileName": "arrow1-a.svg",
+    "name": "arrow1 a"
+  },
+  {
+    "fileName": "arrow1-b.svg",
+    "name": "arrow1 b"
+  },
+  {
+    "fileName": "arrow1-c.svg",
+    "name": "arrow1 c"
+  },
+  {
+    "fileName": "arrow1-d.svg",
+    "name": "arrow1 d"
+  },
+  {
+    "fileName": "A-story-1.svg",
+    "name": "A story 1"
+  },
+  {
+    "fileName": "A-story-2.svg",
+    "name": "A story 2"
+  },
+  {
+    "fileName": "A-story-3.svg",
+    "name": "A story 3"
+  },
+  {
+    "fileName": "avery-a.svg",
+    "name": "avery a"
+  },
+  {
+    "fileName": "avery-b.svg",
+    "name": "avery b"
+  },
+  {
+    "fileName": "avery_walking-a.svg",
+    "name": "avery walking a"
+  },
+  {
+    "fileName": "avery_walking-b.svg",
+    "name": "avery walking b"
+  },
+  {
+    "fileName": "avery_walking-c.svg",
+    "name": "avery walking c"
+  },
+  {
+    "fileName": "avery_walking-d.svg",
+    "name": "avery walking d"
+  },
+  {
+    "fileName": "AZ_pop_down.png",
+    "name": "AZ pop down"
+  },
+  {
+    "fileName": "AZ_pop_front.png",
+    "name": "AZ pop front"
+  },
+  {
+    "fileName": "AZ_pop_L_arm.png",
+    "name": "AZ pop L arm"
+  },
+  {
+    "fileName": "AZ_pop_left.png",
+    "name": "AZ pop left"
+  },
+  {
+    "fileName": "AZ_pop_R_arm.png",
+    "name": "AZ pop R arm"
+  },
+  {
+    "fileName": "AZ_pop_right.png",
+    "name": "AZ pop right"
+  },
+  {
+    "fileName": "AZ_pop_stand.png",
+    "name": "AZ pop stand"
+  },
+  {
+    "fileName": "AZ_stance.png",
+    "name": "AZ stance"
+  },
+  {
+    "fileName": "AZ_top_freeze.png",
+    "name": "AZ top freeze"
+  },
+  {
+    "fileName": "AZ_top_L_step.png",
+    "name": "AZ top L step"
+  },
+  {
+    "fileName": "AZ_top_R_cross.png",
+    "name": "AZ top R cross"
+  },
+  {
+    "fileName": "AZ_top_R_step.png",
+    "name": "AZ top R step"
+  },
+  {
+    "fileName": "AZ_top_stand.png",
+    "name": "AZ top stand"
+  },
+  {
+    "fileName": "ball-a.svg",
+    "name": "ball a"
+  },
+  {
+    "fileName": "ball-b.svg",
+    "name": "ball b"
+  },
+  {
+    "fileName": "ball-c.svg",
+    "name": "ball c"
+  },
+  {
+    "fileName": "ball-d.svg",
+    "name": "ball d"
+  },
+  {
+    "fileName": "ballerina-a.svg",
+    "name": "ballerina a"
+  },
+  {
+    "fileName": "ballerina-b.svg",
+    "name": "ballerina b"
+  },
+  {
+    "fileName": "ballerina-c.svg",
+    "name": "ballerina c"
+  },
+  {
+    "fileName": "ballerina-d.svg",
+    "name": "ballerina d"
+  },
+  {
+    "fileName": "ball-e.svg",
+    "name": "ball e"
+  },
+  {
+    "fileName": "balloon1-a.svg",
+    "name": "balloon1 a"
+  },
+  {
+    "fileName": "balloon1-b.svg",
+    "name": "balloon1 b"
+  },
+  {
+    "fileName": "balloon1-c.svg",
+    "name": "balloon1 c"
+  },
+  {
+    "fileName": "ball-soccer.svg",
+    "name": "ball soccer"
+  },
+  {
+    "fileName": "bananas.svg",
+    "name": "bananas"
+  },
+  {
+    "fileName": "baseball.svg",
+    "name": "baseball"
+  },
+  {
+    "fileName": "basketball.svg",
+    "name": "basketball"
+  },
+  {
+    "fileName": "bass.svg",
+    "name": "bass"
+  },
+  {
+    "fileName": "bat1-a.png",
+    "name": "bat1 a"
+  },
+  {
+    "fileName": "bat1-a_.svg",
+    "name": "bat1 a"
+  },
+  {
+    "fileName": "bat1-b.png",
+    "name": "bat1 b"
+  },
+  {
+    "fileName": "bat1-b_.svg",
+    "name": "bat1 b"
+  },
+  {
+    "fileName": "bat2-a.png",
+    "name": "bat2 a"
+  },
+  {
+    "fileName": "bat2-a_.svg",
+    "name": "bat2 a"
+  },
+  {
+    "fileName": "bat2-b.png",
+    "name": "bat2 b"
+  },
+  {
+    "fileName": "bat2-b_.svg",
+    "name": "bat2 b"
+  },
+  {
+    "fileName": "b-block.svg",
+    "name": "b block"
+  },
+  {
+    "fileName": "beachball.svg",
+    "name": "beachball"
+  },
+  {
+    "fileName": "bear1-a.svg",
+    "name": "bear1 a"
+  },
+  {
+    "fileName": "bear1-b.svg",
+    "name": "bear1 b"
+  },
+  {
+    "fileName": "bear2-a.svg",
+    "name": "bear2 a"
+  },
+  {
+    "fileName": "bear2-b.svg",
+    "name": "bear2 b"
+  },
+  {
+    "fileName": "beetle.svg",
+    "name": "beetle"
+  },
+  {
+    "fileName": "bell1.svg",
+    "name": "bell1"
+  },
+  {
+    "fileName": "bells-a.svg",
+    "name": "bells a"
+  },
+  {
+    "fileName": "bells-b.svg",
+    "name": "bells b"
+  },
+  {
+    "fileName": "B-glow.svg",
+    "name": "B glow"
+  },
+  {
+    "fileName": "bowl-a.svg",
+    "name": "bowl a"
+  },
+  {
+    "fileName": "bowtie-a.svg",
+    "name": "bowtie a"
+  },
+  {
+    "fileName": "bowtie-b.svg",
+    "name": "bowtie b"
+  },
+  {
+    "fileName": "boy1-standing.gif",
+    "name": "boy1 standing"
+  },
+  {
+    "fileName": "boy1-walking.gif",
+    "name": "boy1 walking"
+  },
+  {
+    "fileName": "boy2.gif",
+    "name": "boy2"
+  },
+  {
+    "fileName": "boy3.gif",
+    "name": "boy3"
+  },
+  {
+    "fileName": "B-pixel.svg",
+    "name": "B pixel"
+  },
+  {
+    "fileName": "breakdancer1-a.png",
+    "name": "breakdancer1 a"
+  },
+  {
+    "fileName": "breakdancer1-b.png",
+    "name": "breakdancer1 b"
+  },
+  {
+    "fileName": "breakdancer1-c.png",
+    "name": "breakdancer1 c"
+  },
+  {
+    "fileName": "B-story-1.svg",
+    "name": "B story 1"
+  },
+  {
+    "fileName": "B-story-2.svg",
+    "name": "B story 2"
+  },
+  {
+    "fileName": "B-story-3.svg",
+    "name": "B story 3"
+  },
+  {
+    "fileName": "building-a.svg",
+    "name": "building a"
+  },
+  {
+    "fileName": "building-b.svg",
+    "name": "building b"
+  },
+  {
+    "fileName": "building-c.svg",
+    "name": "building c"
+  },
+  {
+    "fileName": "building-d.svg",
+    "name": "building d"
+  },
+  {
+    "fileName": "building-e.svg",
+    "name": "building e"
+  },
+  {
+    "fileName": "building-f.svg",
+    "name": "building f"
+  },
+  {
+    "fileName": "building-g.svg",
+    "name": "building g"
+  },
+  {
+    "fileName": "building-h.svg",
+    "name": "building h"
+  },
+  {
+    "fileName": "building-i.svg",
+    "name": "building i"
+  },
+  {
+    "fileName": "building-j.svg",
+    "name": "building j"
+  },
+  {
+    "fileName": "bus.png",
+    "name": "bus"
+  },
+  {
+    "fileName": "butterfly1-a.svg",
+    "name": "butterfly1 a"
+  },
+  {
+    "fileName": "butterfly1-b_.svg",
+    "name": "butterfly1 b"
+  },
+  {
+    "fileName": "butterfly2_.svg",
+    "name": "butterfly2"
+  },
+  {
+    "fileName": "butterfly3_.svg",
+    "name": "butterfly3"
+  },
+  {
+    "fileName": "button1.svg",
+    "name": "button1"
+  },
+  {
+    "fileName": "button2-a.svg",
+    "name": "button2 a"
+  },
+  {
+    "fileName": "button2-b.svg",
+    "name": "button2 b"
+  },
+  {
+    "fileName": "button3-a.svg",
+    "name": "button3 a"
+  },
+  {
+    "fileName": "button3-b.svg",
+    "name": "button3 b"
+  },
+  {
+    "fileName": "button4-a.svg",
+    "name": "button4 a"
+  },
+  {
+    "fileName": "button4-b.svg",
+    "name": "button4 b"
+  },
+  {
+    "fileName": "button5-a.svg",
+    "name": "button5 a"
+  },
+  {
+    "fileName": "button5-b.svg",
+    "name": "button5 b"
+  },
+  {
+    "fileName": "cake-a.svg",
+    "name": "cake a"
+  },
+  {
+    "fileName": "cake-b.svg",
+    "name": "cake b"
+  },
+  {
+    "fileName": "calvrett_jumping.png",
+    "name": "calvrett jumping"
+  },
+  {
+    "fileName": "calvrett_thinking.png",
+    "name": "calvrett thinking"
+  },
+  {
+    "fileName": "candle1-a.svg",
+    "name": "candle1 a"
+  },
+  {
+    "fileName": "candle1-b.svg",
+    "name": "candle1 b"
+  },
+  {
+    "fileName": "candles1.svg",
+    "name": "candles1"
+  },
+  {
+    "fileName": "candles2.svg",
+    "name": "candles2"
+  },
+  {
+    "fileName": "car-bug.png",
+    "name": "car bug"
+  },
+  {
+    "fileName": "cassy-a.png",
+    "name": "cassy a"
+  },
+  {
+    "fileName": "cassy-b.png",
+    "name": "cassy b"
+  },
+  {
+    "fileName": "cassy-c.png",
+    "name": "cassy c"
+  },
+  {
+    "fileName": "cassy_dance-a.png",
+    "name": "cassy dance a"
+  },
+  {
+    "fileName": "cassy_dance-b.png",
+    "name": "cassy dance b"
+  },
+  {
+    "fileName": "cassy_dance-c.png",
+    "name": "cassy dance c"
+  },
+  {
+    "fileName": "cassy_dance-d.png",
+    "name": "cassy dance d"
+  },
+  {
+    "fileName": "cassy-d.png",
+    "name": "cassy d"
+  },
+  {
+    "fileName": "cat2.gif",
+    "name": "cat2"
+  },
+  {
+    "fileName": "cat2.svg",
+    "name": "cat2"
+  },
+  {
+    "fileName": "cat3.png",
+    "name": "cat3"
+  },
+  {
+    "fileName": "cat4.png",
+    "name": "cat4"
+  },
+  {
+    "fileName": "cat5.gif",
+    "name": "cat5"
+  },
+  {
+    "fileName": "catherine-a.png",
+    "name": "catherine a"
+  },
+  {
+    "fileName": "catherine-b.png",
+    "name": "catherine b"
+  },
+  {
+    "fileName": "catherine-c.png",
+    "name": "catherine c"
+  },
+  {
+    "fileName": "catherine-d.png",
+    "name": "catherine d"
+  },
+  {
+    "fileName": "c-block.svg",
+    "name": "c block"
+  },
+  {
+    "fileName": "C-glow.svg",
+    "name": "C glow"
+  },
+  {
+    "fileName": "champ99-a.png",
+    "name": "champ99 a"
+  },
+  {
+    "fileName": "champ99-b.png",
+    "name": "champ99 b"
+  },
+  {
+    "fileName": "champ99-c.png",
+    "name": "champ99 c"
+  },
+  {
+    "fileName": "champ99-d.png",
+    "name": "champ99 d"
+  },
+  {
+    "fileName": "champ99-e.png",
+    "name": "champ99 e"
+  },
+  {
+    "fileName": "champ99-f.png",
+    "name": "champ99 f"
+  },
+  {
+    "fileName": "champ99-g.png",
+    "name": "champ99 g"
+  },
+  {
+    "fileName": "cheesy-puffs.png",
+    "name": "cheesy puffs"
+  },
+  {
+    "fileName": "cloud-a.svg",
+    "name": "cloud a"
+  },
+  {
+    "fileName": "cloud-b.svg",
+    "name": "cloud b"
+  },
+  {
+    "fileName": "cloud-c.svg",
+    "name": "cloud c"
+  },
+  {
+    "fileName": "cloud-d.svg",
+    "name": "cloud d"
+  },
+  {
+    "fileName": "cloud.svg",
+    "name": "cloud",
+    "translations": {
+      "ca": {
+        "name": "núvol"
+      },
+      "es": {
+        "name": "nube"
+      },
+      "et": {
+        "name": "pilv"
+      },
+      "eu": {
+        "name": "hodeia"
+      },
+      "gl": {
+        "name": "nube"
+      },
+      "hr": {
+        "name": "oblak"
+      },
+      "hu": {
+        "name": "felhő"
+      },
+      "it": {
+        "name": "cloud"
+      },
+      "pt": {
+        "name": "nuvem"
+      },
+      "ti": {
+        "name": "ደበና"
+      },
+      "ua": {
+        "name": "хмара"
+      },
+      "zh_CN": {
+        "name": "云"
+      }
+    }
+  },
+  {
+    "fileName": "cm_pop_L_arm.png",
+    "name": "cm pop L arm"
+  },
+  {
+    "fileName": "cm_pop_R_arm.png",
+    "name": "cm pop R arm"
+  },
+  {
+    "fileName": "cm_top_L_cross.png",
+    "name": "cm top L cross"
+  },
+  {
+    "fileName": "cm_top_L_leg.png",
+    "name": "cm top L leg"
+  },
+  {
+    "fileName": "cm_top_R_cross.png",
+    "name": "cm top R cross"
+  },
+  {
+    "fileName": "cm_top_ready.png",
+    "name": "cm top ready"
+  },
+  {
+    "fileName": "cm_top_R_leg.png",
+    "name": "cm top R leg"
+  },
+  {
+    "fileName": "cm_top_stand.png",
+    "name": "cm top stand"
+  },
+  {
+    "fileName": "convertible1.png",
+    "name": "convertible1"
+  },
+  {
+    "fileName": "convertible2.png",
+    "name": "convertible2"
+  },
+  {
+    "fileName": "convertible3.svg",
+    "name": "convertible3"
+  },
+  {
+    "fileName": "cowbell.svg",
+    "name": "cowbell"
+  },
+  {
+    "fileName": "C-pixel.svg",
+    "name": "C pixel"
+  },
+  {
+    "fileName": "crab-a.svg",
+    "name": "crab a"
+  },
+  {
+    "fileName": "crab-b.svg",
+    "name": "crab b"
+  },
+  {
+    "fileName": "creature1-a.svg",
+    "name": "creature1 a"
+  },
+  {
+    "fileName": "creature1-b.svg",
+    "name": "creature1 b"
+  },
+  {
+    "fileName": "creature1-c.svg",
+    "name": "creature1 c"
+  },
+  {
+    "fileName": "C-story-1.svg",
+    "name": "C story 1"
+  },
+  {
+    "fileName": "C-story-2.svg",
+    "name": "C story 2"
+  },
+  {
+    "fileName": "C-story-3.svg",
+    "name": "C story 3"
+  },
+  {
+    "fileName": "cymbal-a.svg",
+    "name": "cymbal a"
+  },
+  {
+    "fileName": "cymbal-b.svg",
+    "name": "cymbal b"
+  },
+  {
+    "fileName": "dan-a.png",
+    "name": "dan a"
+  },
+  {
+    "fileName": "dan-b.png",
+    "name": "dan b"
+  },
+  {
+    "fileName": "dani-a.svg",
+    "name": "dani a"
+  },
+  {
+    "fileName": "dani-b.svg",
+    "name": "dani b"
+  },
+  {
+    "fileName": "dani-c.svg",
+    "name": "dani c"
+  },
+  {
+    "fileName": "d-block.svg",
+    "name": "d block"
+  },
+  {
+    "fileName": "dee-a.svg",
+    "name": "dee a"
+  },
+  {
+    "fileName": "dee-b.svg",
+    "name": "dee b"
+  },
+  {
+    "fileName": "dee-c.svg",
+    "name": "dee c"
+  },
+  {
+    "fileName": "dee-d.svg",
+    "name": "dee d"
+  },
+  {
+    "fileName": "dee-e.svg",
+    "name": "dee e"
+  },
+  {
+    "fileName": "devin-a.svg",
+    "name": "devin a"
+  },
+  {
+    "fileName": "devin-b.svg",
+    "name": "devin b"
+  },
+  {
+    "fileName": "devin-c.svg",
+    "name": "devin c"
+  },
+  {
+    "fileName": "devin-d.svg",
+    "name": "devin d"
+  },
+  {
+    "fileName": "D-glow.svg",
+    "name": "D glow"
+  },
+  {
+    "fileName": "dinosaur1-a.svg",
+    "name": "dinosaur1 a"
+  },
+  {
+    "fileName": "dinosaur1-b.svg",
+    "name": "dinosaur1 b"
+  },
+  {
+    "fileName": "dinosaur1-c.svg",
+    "name": "dinosaur1 c"
+  },
+  {
+    "fileName": "dinosaur1-d.svg",
+    "name": "dinosaur1 d"
+  },
+  {
+    "fileName": "dinosaur1-e.svg",
+    "name": "dinosaur1 e"
+  },
+  {
+    "fileName": "dinosaur1-f.svg",
+    "name": "dinosaur1 f"
+  },
+  {
+    "fileName": "dinosaur1-g.svg",
+    "name": "dinosaur1 g"
+  },
+  {
+    "fileName": "dinosaur2-a.svg",
+    "name": "dinosaur2 a"
+  },
+  {
+    "fileName": "dinosaur2-b.svg",
+    "name": "dinosaur2 b"
+  },
+  {
+    "fileName": "dinosaur3.svg",
+    "name": "dinosaur3"
+  },
+  {
+    "fileName": "diver1.svg",
+    "name": "diver1"
+  },
+  {
+    "fileName": "diver2.svg",
+    "name": "diver2"
+  },
+  {
+    "fileName": "dm_freeze.png",
+    "name": "dm freeze"
+  },
+  {
+    "fileName": "dm_pop_down.png",
+    "name": "dm pop down"
+  },
+  {
+    "fileName": "dm_pop_front.png",
+    "name": "dm pop front"
+  },
+  {
+    "fileName": "dm_pop_L_arm.png",
+    "name": "dm pop L arm"
+  },
+  {
+    "fileName": "dm_pop_left.png",
+    "name": "dm pop left"
+  },
+  {
+    "fileName": "dm_pop_R_arm.png",
+    "name": "dm pop R arm"
+  },
+  {
+    "fileName": "dm_pop_right.png",
+    "name": "dm pop right"
+  },
+  {
+    "fileName": "dm_pop_stand.png",
+    "name": "dm pop stand"
+  },
+  {
+    "fileName": "dm_stance.svg",
+    "name": "dm stance"
+  },
+  {
+    "fileName": "dm_top_L_leg.png",
+    "name": "dm top L leg"
+  },
+  {
+    "fileName": "dm_top_R_leg.png",
+    "name": "dm top R leg"
+  },
+  {
+    "fileName": "dm_top_stand.png",
+    "name": "dm top stand"
+  },
+  {
+    "fileName": "dog1-a.png",
+    "name": "dog1 a"
+  },
+  {
+    "fileName": "dog1-a.svg",
+    "name": "dog1 a"
+  },
+  {
+    "fileName": "dog1-b.png",
+    "name": "dog1 b"
+  },
+  {
+    "fileName": "dog1-b.svg",
+    "name": "dog1 b"
+  },
+  {
+    "fileName": "dog2-a.png",
+    "name": "dog2 a"
+  },
+  {
+    "fileName": "dog2-a.svg",
+    "name": "dog2 a"
+  },
+  {
+    "fileName": "dog2-b.png",
+    "name": "dog2 b"
+  },
+  {
+    "fileName": "dog2-b.svg",
+    "name": "dog2 b"
+  },
+  {
+    "fileName": "dog2-c.png",
+    "name": "dog2 c"
+  },
+  {
+    "fileName": "dog2-c.svg",
+    "name": "dog2 c"
+  },
+  {
+    "fileName": "dog_puppy_back.png",
+    "name": "dog puppy back"
+  },
+  {
+    "fileName": "dog_puppy_right.png",
+    "name": "dog puppy right"
+  },
+  {
+    "fileName": "dog_puppy_side.png",
+    "name": "dog puppy side"
+  },
+  {
+    "fileName": "dog_puppy_sit.png",
+    "name": "dog puppy sit"
+  },
+  {
+    "fileName": "donut.svg",
+    "name": "donut"
+  },
+  {
+    "fileName": "dove1-a.svg",
+    "name": "dove1 a"
+  },
+  {
+    "fileName": "dove1-b.svg",
+    "name": "dove1 b"
+  },
+  {
+    "fileName": "dove2-a.svg",
+    "name": "dove2 a"
+  },
+  {
+    "fileName": "dove2-b.svg",
+    "name": "dove2 b"
+  },
+  {
+    "fileName": "D-pixel.svg",
+    "name": "D pixel"
+  },
+  {
+    "fileName": "dragon1-a.png",
+    "name": "dragon1 a"
+  },
+  {
+    "fileName": "dragon1-a.svg",
+    "name": "dragon1 a"
+  },
+  {
+    "fileName": "dragon1-b.png",
+    "name": "dragon1 b"
+  },
+  {
+    "fileName": "dragon1-b.svg",
+    "name": "dragon1 b"
+  },
+  {
+    "fileName": "dragon2.gif",
+    "name": "dragon2"
+  },
+  {
+    "fileName": "drum1-a.svg",
+    "name": "drum1 a"
+  },
+  {
+    "fileName": "drum1-b.svg",
+    "name": "drum1 b"
+  },
+  {
+    "fileName": "drum2-a.svg",
+    "name": "drum2 a"
+  },
+  {
+    "fileName": "drum2-b.svg",
+    "name": "drum2 b"
+  },
+  {
+    "fileName": "drum_bass-a.svg",
+    "name": "drum bass a"
+  },
+  {
+    "fileName": "drum_bass-b.svg",
+    "name": "drum bass b"
+  },
+  {
+    "fileName": "drums_conga-a.svg",
+    "name": "drums conga a"
+  },
+  {
+    "fileName": "drums_conga-b.svg",
+    "name": "drums conga b"
+  },
+  {
+    "fileName": "drum_snare-a.svg",
+    "name": "drum snare a"
+  },
+  {
+    "fileName": "drum_snare-b.svg",
+    "name": "drum snare b"
+  },
+  {
+    "fileName": "D-story-1.svg",
+    "name": "D story 1"
+  },
+  {
+    "fileName": "D-story-2.svg",
+    "name": "D story 2"
+  },
+  {
+    "fileName": "D-story-3.svg",
+    "name": "D story 3"
+  },
+  {
+    "fileName": "duck.svg",
+    "name": "duck"
+  },
+  {
+    "fileName": "earth.svg",
+    "name": "earth"
+  },
+  {
+    "fileName": "e-block.svg",
+    "name": "e block"
+  },
+  {
+    "fileName": "E-glow.svg",
+    "name": "E glow"
+  },
+  {
+    "fileName": "elephant-a_.svg",
+    "name": "elephant a"
+  },
+  {
+    "fileName": "elephant-b_.svg",
+    "name": "elephant b"
+  },
+  {
+    "fileName": "E-pixel.svg",
+    "name": "E pixel"
+  },
+  {
+    "fileName": "E-story-1.svg",
+    "name": "E story 1"
+  },
+  {
+    "fileName": "E-story-2.svg",
+    "name": "E story 2"
+  },
+  {
+    "fileName": "E-story-3.svg",
+    "name": "E story 3"
+  },
+  {
+    "fileName": "f-block.svg",
+    "name": "f block"
+  },
+  {
+    "fileName": "F-glow.svg",
+    "name": "F glow"
+  },
+  {
+    "fileName": "fire_hydrant.png",
+    "name": "fire hydrant"
+  },
+  {
+    "fileName": "fish1.svg",
+    "name": "fish1"
+  },
+  {
+    "fileName": "fish2.svg",
+    "name": "fish2"
+  },
+  {
+    "fileName": "fish3.svg",
+    "name": "fish3"
+  },
+  {
+    "fileName": "flower_shape.svg",
+    "name": "flower shape"
+  },
+  {
+    "fileName": "football_running.png",
+    "name": "football running"
+  },
+  {
+    "fileName": "football_standing.png",
+    "name": "football standing"
+  },
+  {
+    "fileName": "fortunecookie.png",
+    "name": "fortunecookie"
+  },
+  {
+    "fileName": "fox.svg",
+    "name": "fox"
+  },
+  {
+    "fileName": "F-pixel.svg",
+    "name": "F pixel"
+  },
+  {
+    "fileName": "frog.svg",
+    "name": "frog"
+  },
+  {
+    "fileName": "fruit_platter.png",
+    "name": "fruit platter"
+  },
+  {
+    "fileName": "fruitsalad.svg",
+    "name": "fruitsalad"
+  },
+  {
+    "fileName": "F-story-1.svg",
+    "name": "F story 1"
+  },
+  {
+    "fileName": "F-story-2.svg",
+    "name": "F story 2"
+  },
+  {
+    "fileName": "F-story-3.svg",
+    "name": "F story 3"
+  },
+  {
+    "fileName": "g-block.svg",
+    "name": "g block"
+  },
+  {
+    "fileName": "G-glow.svg",
+    "name": "G glow"
+  },
+  {
+    "fileName": "ghost1_.svg",
+    "name": "ghost1"
+  },
+  {
+    "fileName": "ghost2-a.svg",
+    "name": "ghost2 a"
+  },
+  {
+    "fileName": "ghost2-b.svg",
+    "name": "ghost2 b"
+  },
+  {
+    "fileName": "ghoul-a.svg",
+    "name": "ghoul a"
+  },
+  {
+    "fileName": "ghoul-b.svg",
+    "name": "ghoul b"
+  },
+  {
+    "fileName": "gift-a.svg",
+    "name": "gift a"
+  },
+  {
+    "fileName": "gift-b.svg",
+    "name": "gift b"
+  },
+  {
+    "fileName": "girl1-standing.gif",
+    "name": "girl1 standing"
+  },
+  {
+    "fileName": "girl1-walking.gif",
+    "name": "girl1 walking"
+  },
+  {
+    "fileName": "girl2-shouting.gif",
+    "name": "girl2 shouting"
+  },
+  {
+    "fileName": "girl2-standing.gif",
+    "name": "girl2 standing"
+  },
+  {
+    "fileName": "girl3-basketball.gif",
+    "name": "girl3 basketball"
+  },
+  {
+    "fileName": "girl3-running.gif",
+    "name": "girl3 running"
+  },
+  {
+    "fileName": "girl3-standing.gif",
+    "name": "girl3 standing"
+  },
+  {
+    "fileName": "glasses.svg",
+    "name": "glasses"
+  },
+  {
+    "fileName": "glass_water-a.svg",
+    "name": "glass water a"
+  },
+  {
+    "fileName": "glass_water-b.svg",
+    "name": "glass water b"
+  },
+  {
+    "fileName": "G-pixel.svg",
+    "name": "G pixel"
+  },
+  {
+    "fileName": "green_flag.svg",
+    "name": "green flag"
+  },
+  {
+    "fileName": "G-story-1.svg",
+    "name": "G story 1"
+  },
+  {
+    "fileName": "G-story-2.svg",
+    "name": "G story 2"
+  },
+  {
+    "fileName": "G-story-3.svg",
+    "name": "G story 3"
+  },
+  {
+    "fileName": "guitar_bass.svg",
+    "name": "guitar bass"
+  },
+  {
+    "fileName": "guitar_electric.svg",
+    "name": "guitar electric"
+  },
+  {
+    "fileName": "guitar.svg",
+    "name": "guitar"
+  },
+  {
+    "fileName": "hannah-a.png",
+    "name": "hannah a"
+  },
+  {
+    "fileName": "hannah-b.png",
+    "name": "hannah b"
+  },
+  {
+    "fileName": "hannah-c.png",
+    "name": "hannah c"
+  },
+  {
+    "fileName": "hat_beanie.svg",
+    "name": "hat beanie"
+  },
+  {
+    "fileName": "hat_party2-a.svg",
+    "name": "hat party2 a"
+  },
+  {
+    "fileName": "Hat.svg",
+    "name": "Hat"
+  },
+  {
+    "fileName": "hat_winter.svg",
+    "name": "hat winter"
+  },
+  {
+    "fileName": "hat_wizard.svg",
+    "name": "hat wizard"
+  },
+  {
+    "fileName": "h-block.svg",
+    "name": "h block"
+  },
+  {
+    "fileName": "headband.svg",
+    "name": "headband"
+  },
+  {
+    "fileName": "heart_code.svg",
+    "name": "heart code"
+  },
+  {
+    "fileName": "heart_face.svg",
+    "name": "heart face"
+  },
+  {
+    "fileName": "heart_love_it.svg",
+    "name": "heart love it"
+  },
+  {
+    "fileName": "heart_purple.svg",
+    "name": "heart purple"
+  },
+  {
+    "fileName": "heart_red.svg",
+    "name": "heart red"
+  },
+  {
+    "fileName": "heart_smile.svg",
+    "name": "heart smile"
+  },
+  {
+    "fileName": "heart_sweet.svg",
+    "name": "heart sweet"
+  },
+  {
+    "fileName": "helicopter.png",
+    "name": "helicopter"
+  },
+  {
+    "fileName": "H-glow.svg",
+    "name": "H glow"
+  },
+  {
+    "fileName": "hippo1-a.svg",
+    "name": "hippo1 a"
+  },
+  {
+    "fileName": "hippo1-b.svg",
+    "name": "hippo1 b"
+  },
+  {
+    "fileName": "holly1.svg",
+    "name": "holly1"
+  },
+  {
+    "fileName": "holly2.svg",
+    "name": "holly2"
+  },
+  {
+    "fileName": "home_button.svg",
+    "name": "home button"
+  },
+  {
+    "fileName": "horse1-a.svg",
+    "name": "horse1 a"
+  },
+  {
+    "fileName": "horse1-b.svg",
+    "name": "horse1 b"
+  },
+  {
+    "fileName": "H-pixel.svg",
+    "name": "H pixel"
+  },
+  {
+    "fileName": "H-story-1.svg",
+    "name": "H story 1"
+  },
+  {
+    "fileName": "H-story-2.svg",
+    "name": "H story 2"
+  },
+  {
+    "fileName": "H-story-3.svg",
+    "name": "H story 3"
+  },
+  {
+    "fileName": "i-block.svg",
+    "name": "i block"
+  },
+  {
+    "fileName": "I-glow.svg",
+    "name": "I glow"
+  },
+  {
+    "fileName": "I-pixel.svg",
+    "name": "I pixel"
+  },
+  {
+    "fileName": "I-story-1.svg",
+    "name": "I story 1"
+  },
+  {
+    "fileName": "I-story-2.svg",
+    "name": "I story 2"
+  },
+  {
+    "fileName": "I-story-3.svg",
+    "name": "I story 3"
+  },
+  {
+    "fileName": "jaime-a.png",
+    "name": "jaime a"
+  },
+  {
+    "fileName": "jaime-b.png",
+    "name": "jaime b"
+  },
+  {
+    "fileName": "jaime_walking-a.png",
+    "name": "jaime walking a"
+  },
+  {
+    "fileName": "jaime_walking-b.png",
+    "name": "jaime walking b"
+  },
+  {
+    "fileName": "jaime_walking-c.png",
+    "name": "jaime walking c"
+  },
+  {
+    "fileName": "jaime_walking-d.png",
+    "name": "jaime walking d"
+  },
+  {
+    "fileName": "jaime_walking-e.png",
+    "name": "jaime walking e"
+  },
+  {
+    "fileName": "jay.gif",
+    "name": "jay"
+  },
+  {
+    "fileName": "j-block.svg",
+    "name": "j block"
+  },
+  {
+    "fileName": "jeans-a.svg",
+    "name": "jeans a"
+  },
+  {
+    "fileName": "jeans-b.svg",
+    "name": "jeans b"
+  },
+  {
+    "fileName": "J-glow.svg",
+    "name": "J glow"
+  },
+  {
+    "fileName": "jodi.gif",
+    "name": "jodi"
+  },
+  {
+    "fileName": "jo_pop_down.png",
+    "name": "jo pop down"
+  },
+  {
+    "fileName": "jo_pop_front.png",
+    "name": "jo pop front"
+  },
+  {
+    "fileName": "jo_pop_L_arm.png",
+    "name": "jo pop L arm"
+  },
+  {
+    "fileName": "jo_pop_left.png",
+    "name": "jo pop left"
+  },
+  {
+    "fileName": "jo_pop_R_arm.png",
+    "name": "jo pop R arm"
+  },
+  {
+    "fileName": "jo_pop_right.png",
+    "name": "jo pop right"
+  },
+  {
+    "fileName": "jo_pop_stand.png",
+    "name": "jo pop stand"
+  },
+  {
+    "fileName": "jo_stance.png",
+    "name": "jo stance"
+  },
+  {
+    "fileName": "jo_top_L_cross.png",
+    "name": "jo top L cross"
+  },
+  {
+    "fileName": "jo_top_L_leg.png",
+    "name": "jo top L leg"
+  },
+  {
+    "fileName": "jo_top_R_cross.png",
+    "name": "jo top R cross"
+  },
+  {
+    "fileName": "jo_top_R_leg.png",
+    "name": "jo top R leg"
+  },
+  {
+    "fileName": "jo_top_stand.png",
+    "name": "jo top stand"
+  },
+  {
+    "fileName": "J-pixel.svg",
+    "name": "J pixel"
+  },
+  {
+    "fileName": "J-story-1.svg",
+    "name": "J story 1"
+  },
+  {
+    "fileName": "J-story-2.svg",
+    "name": "J story 2"
+  },
+  {
+    "fileName": "J-story-3.svg",
+    "name": "J story 3"
+  },
+  {
+    "fileName": "kai-a.png",
+    "name": "kai a"
+  },
+  {
+    "fileName": "kai-b.png",
+    "name": "kai b"
+  },
+  {
+    "fileName": "k-block.svg",
+    "name": "k block"
+  },
+  {
+    "fileName": "keyboard-a.svg",
+    "name": "keyboard a"
+  },
+  {
+    "fileName": "keyboard-b.svg",
+    "name": "keyboard b"
+  },
+  {
+    "fileName": "keyboard-c.svg",
+    "name": "keyboard c"
+  },
+  {
+    "fileName": "keyboard-d.svg",
+    "name": "keyboard d"
+  },
+  {
+    "fileName": "key.svg",
+    "name": "key",
+    "translations": {
+      "ca": {
+        "name": "tecla"
+      },
+      "de": {
+        "name": "Taste"
+      },
+      "es": {
+        "name": "tecla"
+      },
+      "it": {
+        "name": "tasto"
+      },
+      "nl": {
+        "name": "toets"
+      },
+      "pt_BR": {
+        "name": "tecla"
+      },
+      "ti": {
+        "name": "መፍትሕ"
+      },
+      "ua": {
+        "name": "клавіша"
+      },
+      "zh_CN": {
+        "name": "键"
+      }
+    }
+  },
+  {
+    "fileName": "K-glow.svg",
+    "name": "K glow"
+  },
+  {
+    "fileName": "khalid-a.png",
+    "name": "khalid a"
+  },
+  {
+    "fileName": "Khalid-b.png",
+    "name": "Khalid b"
+  },
+  {
+    "fileName": "khalid-c.png",
+    "name": "khalid c"
+  },
+  {
+    "fileName": "khalid-d.png",
+    "name": "khalid d"
+  },
+  {
+    "fileName": "knight.svg",
+    "name": "knight"
+  },
+  {
+    "fileName": "K-pixel.svg",
+    "name": "K pixel"
+  },
+  {
+    "fileName": "K-story-1.svg",
+    "name": "K story 1"
+  },
+  {
+    "fileName": "K-story-2.svg",
+    "name": "K story 2"
+  },
+  {
+    "fileName": "K-story-3.svg",
+    "name": "K story 3"
+  },
+  {
+    "fileName": "ladybug2-a.svg",
+    "name": "ladybug2 a"
+  },
+  {
+    "fileName": "ladybug2-b.svg",
+    "name": "ladybug2 b"
+  },
+  {
+    "fileName": "ladybug2.svg",
+    "name": "ladybug2"
+  },
+  {
+    "fileName": "lamp.png",
+    "name": "lamp"
+  },
+  {
+    "fileName": "laptop.svg",
+    "name": "laptop"
+  },
+  {
+    "fileName": "l-block.svg",
+    "name": "l block"
+  },
+  {
+    "fileName": "lb_pop_down.png",
+    "name": "lb pop down"
+  },
+  {
+    "fileName": "lb_pop_front.png",
+    "name": "lb pop front"
+  },
+  {
+    "fileName": "lb_pop_L_arm.png",
+    "name": "lb pop L arm"
+  },
+  {
+    "fileName": "lb_pop_left.png",
+    "name": "lb pop left"
+  },
+  {
+    "fileName": "lb_pop_R_arm.png",
+    "name": "lb pop R arm"
+  },
+  {
+    "fileName": "lb_pop_right.png",
+    "name": "lb pop right"
+  },
+  {
+    "fileName": "lb_pop_stand.png",
+    "name": "lb pop stand"
+  },
+  {
+    "fileName": "lb_stance.png",
+    "name": "lb stance"
+  },
+  {
+    "fileName": "lb_top_L_cross.png",
+    "name": "lb top L cross"
+  },
+  {
+    "fileName": "lb_top_L_leg.png",
+    "name": "lb top L leg"
+  },
+  {
+    "fileName": "lb_top_R_cross.png",
+    "name": "lb top R cross"
+  },
+  {
+    "fileName": "lb_top_R_leg.png",
+    "name": "lb top R leg"
+  },
+  {
+    "fileName": "lb_top_stand.png",
+    "name": "lb top stand"
+  },
+  {
+    "fileName": "L-glow.svg",
+    "name": "L glow"
+  },
+  {
+    "fileName": "lightning.svg",
+    "name": "lightning"
+  },
+  {
+    "fileName": "lion-a.svg",
+    "name": "lion a"
+  },
+  {
+    "fileName": "lion-b.svg",
+    "name": "lion b"
+  },
+  {
+    "fileName": "lioness.svg",
+    "name": "lioness"
+  },
+  {
+    "fileName": "lorenz01.png",
+    "name": "lorenz01"
+  },
+  {
+    "fileName": "lorenz02.png",
+    "name": "lorenz02"
+  },
+  {
+    "fileName": "lorenz03.png",
+    "name": "lorenz03"
+  },
+  {
+    "fileName": "lorenz04.png",
+    "name": "lorenz04"
+  },
+  {
+    "fileName": "lorenz05.png",
+    "name": "lorenz05"
+  },
+  {
+    "fileName": "lorenz06.png",
+    "name": "lorenz06"
+  },
+  {
+    "fileName": "lorenz07b.png",
+    "name": "lorenz07b"
+  },
+  {
+    "fileName": "lorenz07.png",
+    "name": "lorenz07"
+  },
+  {
+    "fileName": "L-pixel.svg",
+    "name": "L pixel"
+  },
+  {
+    "fileName": "L-story-1.svg",
+    "name": "L story 1"
+  },
+  {
+    "fileName": "L-story-2.svg",
+    "name": "L story 2"
+  },
+  {
+    "fileName": "L-story-3.svg",
+    "name": "L story 3"
+  },
+  {
+    "fileName": "magiccarpet.png",
+    "name": "magiccarpet"
+  },
+  {
+    "fileName": "magicwand.svg",
+    "name": "magicwand"
+  },
+  {
+    "fileName": "marble-building.png",
+    "name": "marble building"
+  },
+  {
+    "fileName": "marissa-crouching.gif",
+    "name": "marissa crouching"
+  },
+  {
+    "fileName": "marissa.gif",
+    "name": "marissa"
+  },
+  {
+    "fileName": "marissa-sitting.gif",
+    "name": "marissa sitting"
+  },
+  {
+    "fileName": "maya.png",
+    "name": "maya"
+  },
+  {
+    "fileName": "m-block.svg",
+    "name": "m block"
+  },
+  {
+    "fileName": "M-glow.svg",
+    "name": "M glow"
+  },
+  {
+    "fileName": "microphonestand.svg",
+    "name": "microphonestand"
+  },
+  {
+    "fileName": "microphone.svg",
+    "name": "microphone"
+  },
+  {
+    "fileName": "monkey1-a.svg",
+    "name": "monkey1 a"
+  },
+  {
+    "fileName": "monkey1-b.svg",
+    "name": "monkey1 b"
+  },
+  {
+    "fileName": "monkey2-a.svg",
+    "name": "monkey2 a"
+  },
+  {
+    "fileName": "monkey2-b.svg",
+    "name": "monkey2 b"
+  },
+  {
+    "fileName": "monkey2-c.svg",
+    "name": "monkey2 c"
+  },
+  {
+    "fileName": "mori.png",
+    "name": "mori"
+  },
+  {
+    "fileName": "mouse1-a.svg",
+    "name": "mouse1 a"
+  },
+  {
+    "fileName": "mouse1-b.svg",
+    "name": "mouse1 b"
+  },
+  {
+    "fileName": "M-pixel.svg",
+    "name": "M pixel"
+  },
+  {
+    "fileName": "M-story-1.svg",
+    "name": "M story 1"
+  },
+  {
+    "fileName": "M-story-2.svg",
+    "name": "M story 2"
+  },
+  {
+    "fileName": "M-story-3.svg",
+    "name": "M story 3"
+  },
+  {
+    "fileName": "muffin-a.svg",
+    "name": "muffin a"
+  },
+  {
+    "fileName": "muffin-b.svg",
+    "name": "muffin b"
+  },
+  {
+    "fileName": "n-block.svg",
+    "name": "n block"
+  },
+  {
+    "fileName": "N-glow.svg",
+    "name": "N glow"
+  },
+  {
+    "fileName": "N-pixel.svg",
+    "name": "N pixel"
+  },
+  {
+    "fileName": "N-story-1.svg",
+    "name": "N story 1"
+  },
+  {
+    "fileName": "N-story-2.svg",
+    "name": "N story 2"
+  },
+  {
+    "fileName": "N-story-3.svg",
+    "name": "N story 3"
+  },
+  {
+    "fileName": "o-block.svg",
+    "name": "o block"
+  },
+  {
+    "fileName": "octopus-a.svg",
+    "name": "octopus a"
+  },
+  {
+    "fileName": "octopus-b.svg",
+    "name": "octopus b"
+  },
+  {
+    "fileName": "O-glow.svg",
+    "name": "O glow"
+  },
+  {
+    "fileName": "O-pixel.svg",
+    "name": "O pixel"
+  },
+  {
+    "fileName": "orange2-a.svg",
+    "name": "orange2 a"
+  },
+  {
+    "fileName": "orange2-b.svg",
+    "name": "orange2 b"
+  },
+  {
+    "fileName": "orange2-c.svg",
+    "name": "orange2 c"
+  },
+  {
+    "fileName": "orange.svg",
+    "name": "orange"
+  },
+  {
+    "fileName": "O-story-1.svg",
+    "name": "O story 1"
+  },
+  {
+    "fileName": "O-story-2.svg",
+    "name": "O story 2"
+  },
+  {
+    "fileName": "O-story-3.svg",
+    "name": "O story 3"
+  },
+  {
+    "fileName": "paddle.svg",
+    "name": "paddle"
+  },
+  {
+    "fileName": "palmtree.gif",
+    "name": "palmtree"
+  },
+  {
+    "fileName": "parrot2-a.svg",
+    "name": "parrot2 a"
+  },
+  {
+    "fileName": "parrot2-b.svg",
+    "name": "parrot2 b"
+  },
+  {
+    "fileName": "parrot-a.svg",
+    "name": "parrot a"
+  },
+  {
+    "fileName": "parrot-b.svg",
+    "name": "parrot b"
+  },
+  {
+    "fileName": "partyhat1.svg",
+    "name": "partyhat1"
+  },
+  {
+    "fileName": "paul.gif",
+    "name": "paul"
+  },
+  {
+    "fileName": "p-block.svg",
+    "name": "p block"
+  },
+  {
+    "fileName": "pencil-a.svg",
+    "name": "pencil a"
+  },
+  {
+    "fileName": "pencil-b.svg",
+    "name": "pencil b"
+  },
+  {
+    "fileName": "penguin1.svg",
+    "name": "penguin1"
+  },
+  {
+    "fileName": "penguin1_talk-a.svg",
+    "name": "penguin1 talk a"
+  },
+  {
+    "fileName": "penguin1_talk-b.svg",
+    "name": "penguin1 talk b"
+  },
+  {
+    "fileName": "penguin2.svg",
+    "name": "penguin2"
+  },
+  {
+    "fileName": "penguin2_talk-a.svg",
+    "name": "penguin2 talk a"
+  },
+  {
+    "fileName": "penguin2_talk-b.svg",
+    "name": "penguin2 talk b"
+  },
+  {
+    "fileName": "penguin3-a.svg",
+    "name": "penguin3 a"
+  },
+  {
+    "fileName": "penguin3-b.svg",
+    "name": "penguin3 b"
+  },
+  {
+    "fileName": "penguin3-c.svg",
+    "name": "penguin3 c"
+  },
+  {
+    "fileName": "P-glow.svg",
+    "name": "P glow"
+  },
+  {
+    "fileName": "piano.svg",
+    "name": "piano"
+  },
+  {
+    "fileName": "planet2.svg",
+    "name": "planet2"
+  },
+  {
+    "fileName": "P-pixel.svg",
+    "name": "P pixel"
+  },
+  {
+    "fileName": "princess.svg",
+    "name": "princess"
+  },
+  {
+    "fileName": "prince.svg",
+    "name": "prince"
+  },
+  {
+    "fileName": "P-story-1.svg",
+    "name": "P story 1"
+  },
+  {
+    "fileName": "P-story-2.svg",
+    "name": "P story 2"
+  },
+  {
+    "fileName": "P-story-3.svg",
+    "name": "P story 3"
+  },
+  {
+    "fileName": "q-block.svg",
+    "name": "q block"
+  },
+  {
+    "fileName": "Q-glow.svg",
+    "name": "Q glow"
+  },
+  {
+    "fileName": "Q-pixel.svg",
+    "name": "Q pixel"
+  },
+  {
+    "fileName": "Q-story-1.svg",
+    "name": "Q story 1"
+  },
+  {
+    "fileName": "Q-story-2.svg",
+    "name": "Q story 2"
+  },
+  {
+    "fileName": "Q-story-3.svg",
+    "name": "Q story 3"
+  },
+  {
+    "fileName": "rainbow.svg",
+    "name": "rainbow"
+  },
+  {
+    "fileName": "r-block.svg",
+    "name": "r block"
+  },
+  {
+    "fileName": "referee.gif",
+    "name": "referee"
+  },
+  {
+    "fileName": "reindeer.svg",
+    "name": "reindeer"
+  },
+  {
+    "fileName": "R-glow.svg",
+    "name": "R glow"
+  },
+  {
+    "fileName": "robot1.svg",
+    "name": "robot1"
+  },
+  {
+    "fileName": "rocks.svg",
+    "name": "rocks"
+  },
+  {
+    "fileName": "rory.png",
+    "name": "rory"
+  },
+  {
+    "fileName": "R-pixel.svg",
+    "name": "R pixel"
+  },
+  {
+    "fileName": "R-story-1.svg",
+    "name": "R story 1"
+  },
+  {
+    "fileName": "R-story-2.svg",
+    "name": "R story 2"
+  },
+  {
+    "fileName": "R-story-3.svg",
+    "name": "R story 3"
+  },
+  {
+    "fileName": "ruby-a.png",
+    "name": "ruby a"
+  },
+  {
+    "fileName": "ruby-b.png",
+    "name": "ruby b"
+  },
+  {
+    "fileName": "sail-boat.png",
+    "name": "sail boat"
+  },
+  {
+    "fileName": "sam.gif",
+    "name": "sam"
+  },
+  {
+    "fileName": "saxophone-a.svg",
+    "name": "saxophone a"
+  },
+  {
+    "fileName": "saxophone-b.svg",
+    "name": "saxophone b"
+  },
+  {
+    "fileName": "s-block.svg",
+    "name": "s block"
+  },
+  {
+    "fileName": "scarf1.svg",
+    "name": "scarf1"
+  },
+  {
+    "fileName": "scarf2.svg",
+    "name": "scarf2"
+  },
+  {
+    "fileName": "S-glow.svg",
+    "name": "S glow"
+  },
+  {
+    "fileName": "shark-a_.svg",
+    "name": "shark a"
+  },
+  {
+    "fileName": "shark-b_.svg",
+    "name": "shark b"
+  },
+  {
+    "fileName": "shark-c_.svg",
+    "name": "shark c"
+  },
+  {
+    "fileName": "shirt2-a2.svg",
+    "name": "shirt2 a2"
+  },
+  {
+    "fileName": "shirt2-a.svg",
+    "name": "shirt2 a"
+  },
+  {
+    "fileName": "shirt-a.svg",
+    "name": "shirt a"
+  },
+  {
+    "fileName": "shirt_blouse.svg",
+    "name": "shirt blouse"
+  },
+  {
+    "fileName": "shirt-b.svg",
+    "name": "shirt b"
+  },
+  {
+    "fileName": "shirt_collar-a.svg",
+    "name": "shirt collar a"
+  },
+  {
+    "fileName": "shirt_collar-b.svg",
+    "name": "shirt collar b"
+  },
+  {
+    "fileName": "shirt_collar-c.svg",
+    "name": "shirt collar c"
+  },
+  {
+    "fileName": "shoes1.svg",
+    "name": "shoes1"
+  },
+  {
+    "fileName": "shoes2.svg",
+    "name": "shoes2"
+  },
+  {
+    "fileName": "Singer1.svg",
+    "name": "Singer1"
+  },
+  {
+    "fileName": "skates.svg",
+    "name": "skates"
+  },
+  {
+    "fileName": "sl_pop_L_arm.png",
+    "name": "sl pop L arm"
+  },
+  {
+    "fileName": "sl_pop_R_arm.png",
+    "name": "sl pop R arm"
+  },
+  {
+    "fileName": "sl_top_L_cross.png",
+    "name": "sl top L cross"
+  },
+  {
+    "fileName": "sl_top_L_leg.png",
+    "name": "sl top L leg"
+  },
+  {
+    "fileName": "sl_top_R_cross.png",
+    "name": "sl top R cross"
+  },
+  {
+    "fileName": "sl_top_ready.png",
+    "name": "sl top ready"
+  },
+  {
+    "fileName": "sl_top_R_leg.png",
+    "name": "sl top R leg"
+  },
+  {
+    "fileName": "sl_top_stand.png",
+    "name": "sl top stand"
+  },
+  {
+    "fileName": "snowflake.svg",
+    "name": "snowflake"
+  },
+  {
+    "fileName": "snowman.svg",
+    "name": "snowman"
+  },
+  {
+    "fileName": "spaceship-a.svg",
+    "name": "spaceship a"
+  },
+  {
+    "fileName": "spaceship-b.svg",
+    "name": "spaceship b"
+  },
+  {
+    "fileName": "speaker.svg",
+    "name": "speaker"
+  },
+  {
+    "fileName": "S-pixel.svg",
+    "name": "S pixel"
+  },
+  {
+    "fileName": "squirrel1.png",
+    "name": "squirrel1"
+  },
+  {
+    "fileName": "S-story-1.svg",
+    "name": "S story 1"
+  },
+  {
+    "fileName": "S-story-2.svg",
+    "name": "S story 2"
+  },
+  {
+    "fileName": "S-story-3.svg",
+    "name": "S story 3"
+  },
+  {
+    "fileName": "star1.svg",
+    "name": "star1"
+  },
+  {
+    "fileName": "star2.svg",
+    "name": "star2"
+  },
+  {
+    "fileName": "star3-a.svg",
+    "name": "star3 a"
+  },
+  {
+    "fileName": "star3-b.svg",
+    "name": "star3 b"
+  },
+  {
+    "fileName": "starfish-a.svg",
+    "name": "starfish a"
+  },
+  {
+    "fileName": "starfish-b_.svg",
+    "name": "starfish b"
+  },
+  {
+    "fileName": "stop.svg",
+    "name": "stop"
+  },
+  {
+    "fileName": "street-cleaner-mit.png",
+    "name": "street cleaner mit"
+  },
+  {
+    "fileName": "sunglasses1.svg",
+    "name": "sunglasses1"
+  },
+  {
+    "fileName": "sunglasses2.svg",
+    "name": "sunglasses2"
+  },
+  {
+    "fileName": "sun.svg",
+    "name": "sun"
+  },
+  {
+    "fileName": "tabla-a.svg",
+    "name": "tabla a"
+  },
+  {
+    "fileName": "tabla-b.svg",
+    "name": "tabla b"
+  },
+  {
+    "fileName": "taco-a.svg",
+    "name": "taco a"
+  },
+  {
+    "fileName": "taco-b.svg",
+    "name": "taco b"
+  },
+  {
+    "fileName": "t-block.svg",
+    "name": "t block"
+  },
+  {
+    "fileName": "tennisball.png",
+    "name": "tennisball"
+  },
+  {
+    "fileName": "text_awesome.svg",
+    "name": "text awesome"
+  },
+  {
+    "fileName": "text_Halloween.svg",
+    "name": "text Halloween"
+  },
+  {
+    "fileName": "T-glow.svg",
+    "name": "T glow"
+  },
+  {
+    "fileName": "T-pixel.svg",
+    "name": "T pixel"
+  },
+  {
+    "fileName": "trampoline.png",
+    "name": "trampoline"
+  },
+  {
+    "fileName": "tree1.svg",
+    "name": "tree1"
+  },
+  {
+    "fileName": "tree2.svg",
+    "name": "tree2"
+  },
+  {
+    "fileName": "tree-lights-a.svg",
+    "name": "tree lights a"
+  },
+  {
+    "fileName": "tree-lights-b.svg",
+    "name": "tree lights b"
+  },
+  {
+    "fileName": "trees-a.svg",
+    "name": "trees a"
+  },
+  {
+    "fileName": "trees-b.svg",
+    "name": "trees b"
+  },
+  {
+    "fileName": "trombone-a.svg",
+    "name": "trombone a"
+  },
+  {
+    "fileName": "trombone-b.svg",
+    "name": "trombone b"
+  },
+  {
+    "fileName": "trumpet-a2.svg",
+    "name": "trumpet a2"
+  },
+  {
+    "fileName": "trumpet-a.svg",
+    "name": "trumpet a"
+  },
+  {
+    "fileName": "T-story-1.svg",
+    "name": "T story 1"
+  },
+  {
+    "fileName": "T-story-2.svg",
+    "name": "T story 2"
+  },
+  {
+    "fileName": "T-story-3.svg",
+    "name": "T story 3"
+  },
+  {
+    "fileName": "u-block.svg",
+    "name": "u block"
+  },
+  {
+    "fileName": "U-glow.svg",
+    "name": "U glow"
+  },
+  {
+    "fileName": "ukulele.svg",
+    "name": "ukulele"
+  },
+  {
+    "fileName": "umbrella.png",
+    "name": "umbrella"
+  },
+  {
+    "fileName": "unicorn1.png",
+    "name": "unicorn1"
+  },
+  {
+    "fileName": "unicorn.svg",
+    "name": "unicorn"
+  },
+  {
+    "fileName": "U-pixel.svg",
+    "name": "U pixel"
+  },
+  {
+    "fileName": "U-story-1.svg",
+    "name": "U story 1"
+  },
+  {
+    "fileName": "U-story-2.svg",
+    "name": "U story 2"
+  },
+  {
+    "fileName": "U-story-3.svg",
+    "name": "U story 3"
+  },
+  {
+    "fileName": "v-block.svg",
+    "name": "v block"
+  },
+  {
+    "fileName": "vest-a.svg",
+    "name": "vest a"
+  },
+  {
+    "fileName": "vest-b.svg",
+    "name": "vest b"
+  },
+  {
+    "fileName": "V-glow.svg",
+    "name": "V glow"
+  },
+  {
+    "fileName": "V-pixel.svg",
+    "name": "V pixel"
+  },
+  {
+    "fileName": "V-story-1.svg",
+    "name": "V story 1"
+  },
+  {
+    "fileName": "V-story-2.svg",
+    "name": "V story 2"
+  },
+  {
+    "fileName": "V-story-3.svg",
+    "name": "V story 3"
+  },
+  {
+    "fileName": "wanda.svg",
+    "name": "wanda"
+  },
+  {
+    "fileName": "watermelon-a.svg",
+    "name": "watermelon a"
+  },
+  {
+    "fileName": "watermelon-b.svg",
+    "name": "watermelon b"
+  },
+  {
+    "fileName": "watermelon-c.svg",
+    "name": "watermelon c"
+  },
+  {
+    "fileName": "w-block.svg",
+    "name": "w block"
+  },
+  {
+    "fileName": "W-glow.svg",
+    "name": "W glow"
+  },
+  {
+    "fileName": "witch.svg",
+    "name": "witch"
+  },
+  {
+    "fileName": "wizard1.svg",
+    "name": "wizard1"
+  },
+  {
+    "fileName": "wizard2.svg",
+    "name": "wizard2"
+  },
+  {
+    "fileName": "wizard.svg",
+    "name": "wizard"
+  },
+  {
+    "fileName": "W-pixel.svg",
+    "name": "W pixel"
+  },
+  {
+    "fileName": "W-story-1.svg",
+    "name": "W story 1"
+  },
+  {
+    "fileName": "W-story-2.svg",
+    "name": "W story 2"
+  },
+  {
+    "fileName": "W-story-3.svg",
+    "name": "W story 3"
+  },
+  {
+    "fileName": "x-block.svg",
+    "name": "x block"
+  },
+  {
+    "fileName": "X-glow.svg",
+    "name": "X glow"
+  },
+  {
+    "fileName": "X-pixel.svg",
+    "name": "X pixel"
+  },
+  {
+    "fileName": "X-story-1.svg",
+    "name": "X story 1"
+  },
+  {
+    "fileName": "X-story-2.svg",
+    "name": "X story 2"
+  },
+  {
+    "fileName": "X-story-3.svg",
+    "name": "X story 3"
+  }
+]

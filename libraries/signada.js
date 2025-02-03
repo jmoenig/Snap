@@ -36,7 +36,7 @@ SnapExtensions.primitives.set(
         stage.signada.responses = {};
         stage.signada.responseCache = {};
         stage.signada.lastID = 0;
-        stage.signada.eventListener = function(event) {
+        stage.signada.eventListener = function (event) {
             response = JSON.parse(event.data);
             if (Array.isArray(response[1])) {
                 response[1] = new List(response[1]);
@@ -109,13 +109,16 @@ SnapExtensions.primitives.set(
                     // request it again until we get a response from the device
                     signada.responseCache[blockname].updating = true;
                     signada.responseCache[blockname].requestID = proc.requestID;
+                    signada.responseCache[blockname].requestTime =
+                        (new Date()).getTime();
                 } else {
                     // Never sent a similar request before. Let's give it a
                     // default value.
                     signada.responseCache[blockname] = {
                         requestID: proc.requestID,
                         updating: true,
-                        value: defaultresponse
+                        value: defaultresponse,
+                        requestTime: (new Date()).getTime()
                     };
                 }
 
@@ -135,6 +138,7 @@ SnapExtensions.primitives.set(
             } else if ((new Date() - proc.startTime) > 1000) {
                 // Timeout after 1 second. Return last cached value
                 proc.requestID = null;
+                signada.responseCache[blockname].updating = false;
                 return signada.responseCache[blockname].value;
             }
         }
@@ -142,6 +146,13 @@ SnapExtensions.primitives.set(
         if (needsCaching) {
             // This reporter needs caching. Let's return the last value for this
             // particular block name.
+            if (updatingCache &&
+                (((new Date()).getTime() -
+                    signada.responseCache[blockname].requestTime) > 250)) {
+                // We've been waiting for the cache to update for a long time.
+                // Let's invalidate it so the value is requested again.
+                signada.responseCache[blockname].updating = false;
+            }
             return signada.responseCache[blockname].value;
         }
 

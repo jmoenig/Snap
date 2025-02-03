@@ -1,1282 +1,1384 @@
-/*
-
-    lang-fi.js
-
-    Finnish translation for SNAP!
-
-    written by Jouni K. Seppänen
-
-    Copyright (C) 2014 by Jens Mönig
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.fi = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    →     \u2192
-    \u200B zero-width space, useful to escape % at the beginning of words
-*/
-
-    // translations meta information
-    'language_name':
-        'suomi', // the name as it should appear in the language menu
-    'language_translator':
-        'Jouni K. Sepp\u00e4nen', // your name for the Translators tab
-    'translator_e-mail':
-        'jks@iki.fi', // optional
-    'last_changed':
-        '2014-04-18', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'nimet\u00f6n',
-    'development mode':
-        'kehitysmoodi',
-
-    // categories:
-    'Motion':
-        'Liike',
-    'Looks':
-        'Ulkon\u00e4k\u00f6',
-    'Sound':
-        '\u00c4\u00e4ni',
-    'Pen':
-        'Kyn\u00e4',
-    'Control':
-        'Ohjaus',
-    'Sensing':
-        'Tuntoaisti',
-    'Operators':
-        'Laskenta',
-    'Variables':
-        'Muuttujat',
-    'Lists':
-        'Listat',
-    'Other':
-        'Muut',
-
-    // editor:
-    'draggable':
-        'hiirell\u00e4 liikuteltava',
-
-    // tabs:
-    'Scripts':
-        'Skriptit',
-    'Costumes':
-        'Asut',
-    'Sounds':
-        '\u00c4\u00e4net',
-
-    // names:
-    'Sprite':
-        'Hahmo',
-    'Stage':
-        'Esiintymislava',
-
-    // rotation styles:
-    'don\'t rotate':
-        'ei py\u00f6ri',
-    'can rotate':
-        'py\u00f6rii vapaasti',
-    'only face left/right':
-        'k\u00e4\u00e4ntyy vain vasemmalle ja oikealle',
-
-    // new sprite button:
-    'add a new sprite':
-        'lis\u00e4\u00e4 uusi hahmo',
-
-    // tab help
-    'costumes tab help':
-        'Tuo kuva verkosta tai koneeltasi\n'
-            + 'siirt\u00e4m\u00e4ll\u00e4 se hiirell\u00e4 t\u00e4h\u00e4n',
-    'import a sound from your computer\nby dragging it into here':
-        'Tuo \u00e4\u00e4ni koneeltasi\n'
-            + 'siirt\u00e4m\u00e4ll\u00e4 se hiirell\u00e4 t\u00e4h\u00e4n',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Esiintymislava valittuna\nei liikekomentoja',
-
-    'move %n steps':
-        'liiku %n askelta',
-    'turn %clockwise %n degrees':
-        'k\u00e4\u00e4nny %clockwise %n astetta',
-    'turn %counterclockwise %n degrees':
-        'k\u00e4\u00e4nny %counterclockwise %n astetta',
-    'point in direction %dir':
-        'osoita suuntaan %dir',
-    'point towards %dst':
-        'osoita hahmoa %dst kohti',
-    'go to x: %n y: %n':
-        'mene paikkaan x: %n y: %n',
-    'go to %dst':
-        'mene hahmon %dst luo',
-    'glide %n secs to x: %n y: %n':
-        'liu\'u %n s \u2192 x: %n y: %n',
-    'change x by %n':
-        'muuta x:\u00e4\u00e4 %n askelta',
-    'set x to %n':
-        'aseta x:ksi %n',
-    'change y by %n':
-        'muuta y:t\u00e4 %n askelta',
-    'set y to %n':
-        'aseta y:ksi %n',
-    'if on edge, bounce':
-        'kimpoa reunasta',
-    'x position':
-        'x-paikka',
-    'y position':
-        'y-paikka',
-    'direction':
-        'suunta',
-
-    // looks:
-    'switch to costume %cst':
-        'vaihda asuun %cst',
-    'next costume':
-        'seuraava asu',
-    'costume #':
-        'asun nro',
-    'say %s for %n secs':
-        'sano %s %n sekunnin ajan',
-    'say %s':
-        'sano %s',
-    'think %s for %n secs':
-        'ajattele %s %n sekunnin ajan',
-    'think %s':
-        'ajattele %s',
-    'Hello!':
-        'Hei!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        'muuta efekti\u00e4 %eff %n yksikk\u00f6\u00e4',
-    'set %eff effect to %n':
-        'aseta efektin %eff m\u00e4\u00e4r\u00e4ksi %n',
-    'clear graphic effects':
-        'poista efektit',
-    'change size by %n':
-        // using a zero-width space to hide % at word beginning
-        'muuta kokoa %n \u200B%-yksikk\u00f6\u00e4',
-    'set size to %n %':
-        'aseta kooksi %n %',
-    'size':
-        'koko',
-    'show':
-        'n\u00e4yt\u00e4',
-    'hide':
-        'piilota',
-    'go to front':
-        'tule etualalle',
-    'go back %n layers':
-        'siirry %n kerrosta taakse',
-
-    'development mode \ndebugging primitives:':
-        'Kehitysmoodin \ndebuggauskomennot:',
-    'console log %mult%s':
-        'kirjoita konsoliin: %mult%s',
-    'alert %mult%s':
-        'ponnahdusikkuna: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'soita \u00e4\u00e4ni %snd',
-    'play sound %snd until done':
-        'soita \u00e4\u00e4ni %snd kokonaan',
-    'stop all sounds':
-        'pys\u00e4yt\u00e4 kaikki \u00e4\u00e4net',
-    'rest for %n beats':
-        'tauko %n iskua',
-    'play note %n for %n beats':
-        'nuotti %n %n iskua',
-    'change tempo by %n':
-        'vaihda tempoa %n iskulla/min',
-    'set tempo to %n bpm':
-        'aseta tempoksi %n iskua/min',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'tyhjenn\u00e4',
-    'pen down':
-        'kyn\u00e4 alas',
-    'pen up':
-        'kyn\u00e4 yl\u00f6s',
-    'set pen color to %clr':
-        'aseta kyn\u00e4n v\u00e4riksi %clr',
-    'change pen color by %n':
-        'vaihda kyn\u00e4n v\u00e4ri\u00e4 m\u00e4\u00e4r\u00e4ll\u00e4 %n',
-    'set pen color to %n':
-        'aseta kyn\u00e4n v\u00e4riksi %n',
-    'change pen shade by %n':
-        // using a zero-width space to hide % at word beginning
-        'muuta kirkkautta %n \u200b%-yks.',
-    'set pen shade to %n':
-        'aseta kirkkaudeksi %n %',
-    'change pen size by %n':
-        'muuta paksuutta m\u00e4\u00e4r\u00e4ll\u00e4 %n',
-    'set pen size to %n':
-        'aseta kyn\u00e4n paksuudeksi %n',
-    'stamp':
-        'leimaa',
-
-    // control:
-    'when %greenflag clicked':
-        'kun klikataan %greenflag',
-    'when %keyHat key pressed %keyName':
-        'kun painetaan %keyHat %keyName',
-    'when I am %interaction':
-        'kun minua %interaction',
-    'clicked':
-        'klikataan',
-    'when I receive %msgHat %message':
-        'kun vastaanotan sanoman %msgHat %message',
-    'broadcast %msg %receive':
-        'l\u00e4het\u00e4 sanoma %msg %receive',
-    'broadcast %msg %receive and wait':
-        'l\u00e4het\u00e4 sanoma %msg %receive ja odota',
-    'Message name':
-        'Sanoma',
-    'message':
-        'sanoma',
-    'any message':
-        'mik\u00e4 tahansa',
-    'wait %n secs':
-        'odota %n sekuntia',
-    'wait until %b':
-        'odota kunnes %b',
-    'forever %loop':
-        'ikuisesti %loop',
-    'repeat %n %loop':
-        'toista %n kertaa %loop',
-    'repeat until %b %loop':
-        'toista kunnes %b %loop',
-    'if %b %c':
-        'jos %b %c',
-    'if %b %c else %c':
-        'jos %b %c muuten %c',
-    'report %s':
-        'vastaa %s',
-    'stop %stopChoices':
-        'pys\u00e4yt\u00e4 %stopChoices',
-    'all':
-        'kaikki',
-    'this script':
-        't\u00e4m\u00e4 skripti',
-    'this block':
-        't\u00e4m\u00e4 palikka',
-    'stop %stopOthersChoices':
-        'pys\u00e4yt\u00e4 %stopOthersChoices',
-    'all but this script':
-        'kaikki paitsi t\u00e4m\u00e4 skripti',
-    'other scripts in sprite':
-        'hahmon muut skriptit',
-    'pause all %pause':
-        'keskeyt\u00e4 kaikki %pause',
-    'run %cmdRing %inputs':
-        'suorita %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'k\u00e4ynnist\u00e4 %cmdRing %inputs',
-    'call %repRing %inputs':
-        'kutsu %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'suorita %cmdRing kontinuaatiolla',
-    'call %cmdRing w/continuation':
-        'kutsu %cmdRing kontinuaatiolla',
-    'warp %c':
-        'supernopeasti %c',
-    'when I start as a clone':
-        'Kun aloitan kloonina',
-    'create a clone of %cln':
-        'kloonaa %cln',
-    'myself':
-        'minut',
-    'delete this clone':
-        'poista t\u00e4m\u00e4 klooni',
-
-    // sensing:
-    'touching %col ?':
-        'koskettaa hahmoa %col ?',
-    'touching %clr ?':
-        'koskettaa v\u00e4ri\u00e4 %clr ?',
-    'color %clr is touching %clr ?':
-        'v\u00e4ri %clr koskettaa v\u00e4ri\u00e4 %clr ?',
-    'ask %s and wait':
-        'kysy %s ja odota',
-    'what\'s your name?':
-        'Mik\u00e4 sinun nimesi on?',
-    'answer':
-        'vastaus',
-    'mouse x':
-        'hiiren x-paikka',
-    'mouse y':
-        'hiiren y-paikka',
-    'mouse down?':
-        'hiiren n\u00e4pp\u00e4in painettuna?',
-    'key %key pressed?':
-        'n\u00e4pp\u00e4in %key painettuna?',
-    'distance to %dst':
-        'et\u00e4isyys hahmoon %dst',
-    'reset timer':
-        'nollaa ajastin',
-    'timer':
-        'ajastin',
-    '%att of %spr':
-        '%att hahmolla %spr',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'turbonopeus?',
-    'set turbo mode to %b':
-        'kytke turbonopeus p\u00e4\u00e4lle jos %b',
-
-    'filtered for %clr':
-        'suodatettuna v\u00e4ri %clr',
-    'stack size':
-        'pinon koko',
-    'frames':
-        'ruutuja',
-
-    // operators:
-    '%n mod %n':
-        'jakoj\u00e4\u00e4nn\u00f6s laskusta %n / %n',
-    'round %n':
-        'py\u00f6rist\u00e4 %n',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        'arvo satunnaisluku %n .. %n',
-    '%b and %b':
-        '%b ja %b',
-    '%b or %b':
-        '%b tai %b',
-    'not %b':
-        'ei %b',
-    'true':
-        'tosi',
-    'false':
-        'ep\u00e4tosi',
-    'join %words':
-        'yhdist\u00e4 %words',
-    'split %s by %delim':
-        'pilko %s %delim kohdalta',
-    'hello':
-        'Hei',
-    'world':
-        'maailma',
-    'letter %idx of %s':
-        'kirjain nro %idx tekstist\u00e4 %s',
-    'length of %s':
-        'tekstin %s pituus',
-    'unicode of %s':
-        'merkin %s Unicode-arvo',
-    'unicode %n as letter':
-        'Unicode-arvoa %n vastaava merkki',
-    'is %s a %typ ?':
-        'onko %s %typ ?',
-    'is %s identical to %s ?':
-        'onko %s sama kuin %s ?',
-
-    'type of %s':
-        '%s:n tyyppi',
-
-    // variables:
-    'Make a variable':
-        'Uusi muuttuja',
-    'Variable name':
-        'Muuttujan nimi',
-    'Script variable name':
-        'Skriptimuuttujan nimi',
-    'Delete a variable':
-        'poista muuttuja',
-
-    'set %var to %s':
-        'aseta muuttujan %var arvoksi %s',
-    'change %var by %n':
-        'muuta muuttujaa %var m\u00e4\u00e4r\u00e4ll\u00e4 %n',
-    'show variable %var':
-        'n\u00e4yt\u00e4 muuttuja %var',
-    'hide variable %var':
-        'piilota muuttuja %var',
-    'script variables %scriptVars':
-        'skriptimuuttujat %scriptVars',
-
-    // lists:
-    'list %exp':
-        'lista %exp',
-    '%s in front of %l':
-        '%s listan %l aluksi',
-    'item %idx of %l':
-        'alkio kohdassa %idx listassa %l',
-    'all but first of %l':
-        'kaikki paitsi ensimm\u00e4inen alkio listasta %l',
-    'length of %l':
-        'listan %l pituus',
-    '%l contains %s':
-        'lista %l sis\u00e4lt\u00e4\u00e4 %s',
-    'thing':
-        'alkio',
-    'add %s to %l':
-        'lis\u00e4\u00e4 %s listaan %l',
-    'delete %ida of %l':
-        'poista %ida listasta %l',
-    'insert %s at %idx of %l':
-        'lis\u00e4\u00e4 %s kohtaan %idx listassa %l',
-    'replace item %idx of %l with %s':
-        'vaihda kohtaan %idx listassa %l alkio %s',
-
-    // other
-    'Make a block':
-        'Uusi palikka',
-
-    // menus
-    // snap menu
-    'About...':
-        'Tietoa Snapista...',
-    'Reference manual':
-        'K\u00e4ytt\u00f6ohje',
-    'Snap! website':
-        'Snapin kotisivu',
-    'Download source':
-        'Lataa l\u00e4hdekoodi',
-    'Switch back to user mode':
-        'Palaa k\u00e4ytt\u00e4j\u00e4moodiin',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'poista Morphic-valikot k\u00e4yt\u00f6st\u00e4\n'
-            + 'ja n\u00e4yt\u00e4 helpot valikot',
-    'Switch to dev mode':
-        'vaihda kehitysmoodiin',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'n\u00e4yt\u00e4 Morphic-toiminnot,\n'
-            + 'ei kovin helppok\u00e4ytt\u00f6isi\u00e4',
-
-    // project menu
-    'Project notes...':
-        'Projektimerkint\u00f6j\u00e4...',
-    'New':
-        'Uusi',
-    'Open...':
-        'Avaa...',
-    'Save':
-        'Tallenna',
-    'Save As...':
-        'Tallenna nimell\u00e4...',
-    'Import...':
-        'Tuo...',
-    'file menu import hint':
-        'lataa viety projekti,\npalikkakirjasto, asu\ntai \u00e4\u00e4ni',
-    'Export project as plain text...':
-        'Vie projekti tekstin\u00e4...',
-    'Export project...':
-        'Vie projekti...',
-    'show project data as XML\nin a new browser window':
-        'n\u00e4yt\u00e4 projekti XML-muodossa\nuudessa selainikkunassa',
-    'Export blocks...':
-        'Vie palikoita...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'n\u00e4yt\u00e4 yhteiset palikkam\u00e4\u00e4rittelyt\n'
-            + 'XML-muodossa uudessa selainikkunassa',
-    'Import tools':
-        'Tuo ty\u00f6kaluja',
-    'load the official library of\npowerful blocks':
-        'lataa virallinen tehopalikoiden kirjasto',
-    'Libraries...':
-        'Kirjastot...',
-    'Import library':
-        'Tuo kirjasto',
-
-    // cloud menu
-    'Login...':
-        'Kirjaudu...',
-    'Signup...':
-        'Luo k\u00e4ytt\u00e4j\u00e4tili...',
-
-    // settings menu
-    'Language...':
-        'Kieli...',
-    'Zoom blocks...':
-        'Suurenna palikoita...',
-    'Stage size...':
-        'Esiintymislavan koko...',
-    'Stage size':
-        'Esiintymislavan koko',
-    'Stage width':
-        'Esiintymislavan leveys',
-    'Stage height':
-        'Esiintymislavan korkeus',
-    'Default':
-        'Tavallinen',
-    'Blurred shadows':
-        'Sumeat varjot',
-    'uncheck to use solid drop\nshadows and highlights':
-        'poistamalla saat kiinte\u00e4t varjot\nja korostukset',
-    'check to use blurred drop\nshadows and highlights':
-        'asettamalla saat sumeat varjot\nja korostukset',
-    'Zebra coloring':
-        'Seeprav\u00e4ritys',
-    'check to enable alternating\ncolors for nested blocks':
-        'asettamalla saat vaihtuvat v\u00e4rit\nsis\u00e4kk\u00e4isille palikoille',
-    'uncheck to disable alternating\ncolors for nested block':
-        'poistamalla saat samat v\u00e4rit\nsis\u00e4kk\u00e4isille palikoille',
-    'Dynamic input labels':
-        'Vaihtuvat sy\u00f6tetunnukset',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'poistamalla est\u00e4t vaihtuvien\nsy\u00f6tteiden vaihtuvat tunnukset',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'asettamalla saat vaihtuville\nsy\u00f6tteille vaihtuvat tunnukset',
-    'Prefer empty slot drops':
-        'Suosi asettamista tyhjiin aukkoihin',
-    'settings menu prefer empty slots hint':
-        'asettamalla saat asetettavat\npalikat osumaan tyhjiin aukkoihin',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'poistamalla sallit asetettujen\npalikoiden pois potkimisen',
-    'Long form input dialog':
-        'Yksityiskohtainen sy\u00f6tevalinta',
-    'Plain prototype labels':
-        'Yksinkertaiset palikkatunnisteet',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'poistamalla saat (+)-merkit\nn\u00e4kym\u00e4\u00e4n aina\n'
-            + 'palikan muokkauksessa',
-    'check to hide (+) symbols\nin block prototype labels':
-        'asettamalla piilotat (+)-merkit\npalikan muokkauksessa',
-    'check to always show slot\ntypes in the input dialog':
-        'asettamalla n\u00e4et aina\ntietotyyppivalinnat\n'
-            + 'palikan sy\u00f6tteit\u00e4 lis\u00e4tess\u00e4',
-    'uncheck to use the input\ndialog in short form':
-        'poistamalla teet palikan\nsy\u00f6tteiden lis\u00e4\u00e4misikkunasta\n'
-            + 'yksinkertaisen',
-    'Virtual keyboard':
-        'Virtuaalin\u00e4pp\u00e4imist\u00f6',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'poistamalla est\u00e4t mobiililaitteiden\n'
-            + 'virtuaalin\u00e4pp\u00e4imist\u00f6n k\u00e4yt\u00f6n',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'asettamalla sallit mobiililaitteiden\n'
-            + 'virtuaalin\u00e4pp\u00e4imist\u00f6n k\u00e4yt\u00f6n',
-    'Input sliders':
-        'Liukus\u00e4\u00e4timet',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'poistamalla piilotat\nliukus\u00e4\u00e4timet sy\u00f6tekentist\u00e4\n',
-    'check to enable\ninput sliders for\nentry fields':
-        'asettamalla saat\nsy\u00f6tekenttiin liukus\u00e4\u00e4timet',
-    'Clicking sound':
-        'Klikkaus\u00e4\u00e4ni',
-    'uncheck to turn\nblock clicking\nsound off':
-        'poistamalla hiljenn\u00e4t\npalikoiden klikkaus\u00e4\u00e4nen',
-    'check to turn\nblock clicking\nsound on':
-        'asettamalla kytket p\u00e4\u00e4lle\npalikoiden klikkaus\u00e4\u00e4nen',
-    'Animations':
-        'Animaatiot',
-    'uncheck to disable\nIDE animations':
-        'poistamalla piilotat\nk\u00e4ytt\u00f6liittym\u00e4n animaatiot',
-    'Turbo mode':
-        'Turbonopeus',
-    'check to prioritize\nscript execution':
-        'asettamalla nostat\nskriptien prioriteettia',
-    'uncheck to run scripts\nat normal speed':
-        'poistamalla ajat\nskriptit normaalinopeudella',
-    'check to enable\nIDE animations':
-        'asettamalla kytket p\u00e4\u00e4lle\n'
-            + 'k\u00e4ytt\u00f6liittym\u00e4n animaatiot',
-    'Thread safe scripts':
-        'S\u00e4ieturvalliset skriptit',
-    'uncheck to allow\nscript reentrance':
-        'poistamalla sallit skriptin\nk\u00e4ynnistymisen vaikka se on ajossa',
-    'check to disallow\nscript reentrance':
-        'asettamalla est\u00e4t skriptin\nk\u00e4ynnistymisen jos se on jo ajossa',
-    'Prefer smooth animations':
-        'Pyri sulaviin animaatioihin',
-    'uncheck for greater speed\nat variable frame rates':
-        'poistamalla saat lis\u00e4\u00e4 nopeutta\n'
-            + 'mutta p\u00e4ivitystaajuus vaihtelee',
-    'check for smooth, predictable\nanimations across computers':
-        'asettamalla saat sulavat\nanimaatiot eri tietokoneilla',
-    'Flat line ends':
-        'Tasaiset viivanp\u00e4\u00e4t',
-    'check for flat ends of lines':
-        'asettamalla saat viivan p\u00e4ist\u00e4 suorat',
-    'uncheck for round ends of lines':
-        'poistamalla saat viivan p\u00e4ist\u00e4 py\u00f6ristetyt',
-
-    // inputs
-    'with inputs':
-        'sy\u00f6tteill\u00e4',
-    'input names:':
-        'sy\u00f6tteet:',
-    'Input Names:':
-        'Sy\u00f6tteet:',
-    'input list:':
-        'sy\u00f6telista:',
-
-    // context menus:
-    'help':
-        'apua',
-
-    // palette:
-    'hide primitives':
-        'piilota peruspalikat',
-    'show primitives':
-        'n\u00e4yt\u00e4 peruspalikat',
-
-    // blocks:
-    'help...':
-        'apua...',
-    'relabel...':
-        'nime\u00e4 uudestaan...',
-    'duplicate':
-        'kopioi',
-    'make a copy\nand pick it up':
-        'ota kopio mukaan',
-    'only duplicate this block':
-        'kopioi vain t\u00e4m\u00e4 palikka',
-    'delete':
-        'poista',
-    'script pic...':
-        'kuva skriptist\u00e4...',
-    'open a new window\nwith a picture of this script':
-        'avaa kuva t\u00e4st\u00e4 skriptist\u00e4\nuudessa selainikkunassa',
-    'ringify':
-        'ympyr\u00f6i',
-    'unringify':
-        'poista ympyr\u00f6inti',
-
-    // custom blocks:
-    'delete block definition...':
-        'poista palikkam\u00e4\u00e4rittely',
-    'edit...':
-        'muokkaa...',
-
-    // sprites:
-    'edit':
-        'muokkaa',
-    'detach from':
-        'irrota',
-    'detach all parts':
-        'irrota kaikki osat',
-    'export...':
-        'Vie...',
-
-    // stage:
-    'show all':
-        'N\u00e4yt\u00e4 kaikki',
-    'pic...':
-        'Vie kuva...',
-    'open a new window\nwith a picture of the stage':
-        'Avaa esiintymislavan kuva\nuuteen selainikkunaan',
-
-    // scripting area
-    'clean up':
-        'siivoa',
-    'arrange scripts\nvertically':
-        'j\u00e4rjest\u00e4 pystysuorasti',
-    'add comment':
-        'lis\u00e4\u00e4 kommentti',
-    'undrop':
-        'peruuta asetus',
-    'undo the last\nblock drop\nin this pane':
-        'peruuta viimeisin\npalikan asetus',
-    'scripts pic...':
-        'kuva skripteist\u00e4...',
-    'open a new window\nwith a picture of all scripts':
-        'avaa kuva\nkaikista skripteist\u00e4\nuudessa selainikkunassa',
-    'make a block...':
-        'tee uusi palikka...',
-
-    // costumes
-    'rename':
-        'nime\u00e4 uudestaan',
-    'export':
-        'vie',
-    'rename costume':
-        'nime\u00e4 asu uudestaan',
-
-    // sounds
-    'Play sound':
-        'Soita \u00e4\u00e4ni',
-    'Stop sound':
-        'Pys\u00e4yt\u00e4 \u00e4\u00e4ni',
-    'Stop':
-        'Pys\u00e4yt\u00e4',
-    'Play':
-        'Soita',
-    'rename sound':
-        'nime\u00e4 \u00e4\u00e4ni uudestaan',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'OK',
-    'Cancel':
-        'Peruuta',
-    'Yes':
-        'Kyll\u00e4',
-    'No':
-        'Ei',
-
-    // help
-    'Help':
-        'Apua',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Suurenna palikoita',
-    'build':
-        'rakenna',
-    'your own':
-        'omia',
-    'blocks':
-        'palikoita',
-    'normal (1x)':
-        'normaali (1x)',
-    'demo (1.2x)':
-        'demo (1.2x)',
-    'presentation (1.4x)':
-        'esitys (1.4x)',
-    'big (2x)':
-        'iso (2x)',
-    'huge (4x)':
-        'valtava (4x)',
-    'giant (8x)':
-        'j\u00e4ttim\u00e4inen (8x)',
-    'monstrous (10x)':
-        'hirvi\u00f6m\u00e4inen (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Nimet\u00f6n',
-    'Open Project':
-        'Avaa projekti',
-    '(empty)':
-        '(tyhj\u00e4)',
-    'Saved!':
-        'Tallennettu!',
-    'Delete Project':
-        'Poista projekti',
-    'Are you sure you want to delete':
-        'Poistetaanko varmasti?',
-    'rename...':
-        'nime\u00e4 uusiksi...',
-
-    // costume editor
-    'Costume Editor':
-        'Asun muokkaus',
-    'click or drag crosshairs to move the rotation center':
-        'siirr\u00e4 kiertokeskusta klikkaamalla\n'
-            + 'tai pit\u00e4m\u00e4ll\u00e4 hiirt\u00e4 '
-            + 'painettuna ja liikuttamalla',
-
-    // project notes
-    'Project Notes':
-        'Projektin muistiinpanot',
-
-    // new project
-    'New Project':
-        'Uusi projekti',
-    'Replace the current project with a new one?':
-        'Korvataanko nykyinen projekti uudella?',
-
-    // save project
-    'Save Project As...':
-        'Tallenna projekti nimell\u00e4...',
-
-    // export blocks
-    'Export blocks':
-        'Vie palikoita',
-    'Import blocks':
-        'Tuo palikoita',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'projektilla ei ole viel\u00e4\nyht\u00e4\u00e4n yhteist\u00e4\n'
-            + 'muokattua palikkaa',
-    'select':
-        'valitse',
-    'none':
-        'ei mit\u00e4\u00e4n',
-
-    // variable dialog
-    'for all sprites':
-        'kaikille hahmoille',
-    'for this sprite only':
-        'vain t\u00e4lle hahmolle',
-
-    // block dialog
-    'Change block':
-        'Muuta palikkaa',
-    'Command':
-        'Komento',
-    'Reporter':
-        'Funktio',
-    'Predicate':
-        'Predikaatti',
-
-    // block editor
-    'Block Editor':
-        'Palikan muokkaus',
-    'Apply':
-        'Tee muutokset',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Poista palikka',
-    'block deletion dialog text':
-        'Poistetaanko t\u00e4m\u00e4 palikka\n ja kaikki sen esiintym\u00e4t?',
-
-
-    // input dialog
-    'Create input name':
-        'Nime\u00e4 sy\u00f6te',
-    'Edit input name':
-        'Muokkaa sy\u00f6tteen nime\u00e4',
-    'Edit label fragment':
-        'Muokkaa otsikkoa',
-    'Title text':
-        'Otsikko',
-    'Input name':
-        'Sy\u00f6te',
-    'Delete':
-        'Poista',
-    'Object':
-        'Objekti',
-    'Number':
-        'Luku',
-    'Text':
-        'Teksti',
-    'List':
-        'Lista',
-    'Any type':
-        'Mik\u00e4 vain',
-    'Boolean (T/F)':
-        'Totuusarvo',
-    'Command\n(inline)':
-        'Komento',
-    'Command\n(C-shape)':
-        'Komento\n(C-muoto)',
-    'Any\n(unevaluated)':
-        'Mik\u00e4 vain\n(sitaatti)',
-    'Boolean\n(unevaluated)':
-        'Totuusarvo\n(sitaatti)',
-    'Single input.':
-        'Yksi sy\u00f6te.',
-    'Default Value:':
-        'Oletusarvo:',
-    'Multiple inputs (value is list of inputs)':
-        'Useita sy\u00f6tteit\u00e4 (listana)',
-    'Upvar - make internal variable visible to caller':
-        'Paljasta sis\u00e4inen muuttuja ulkopuolelle',
-
-    // About Snap
-    'About Snap':
-        'Tietoa Snapista',
-    'Back...':
-        'Takaisin...',
-    'License...':
-        'Tekij\u00e4noikeudet...',
-    'Modules...':
-        'Osat...',
-    'Credits...':
-        'Kiitokset...',
-    'Translators...':
-        'K\u00e4\u00e4nt\u00e4j\u00e4t...',
-    'License':
-        'Tekij\u00e4noikeudet',
-    'current module versions:':
-        'Osien versiot:',
-    'Contributors':
-        'Osallistujat',
-    'Translations':
-        'K\u00e4\u00e4nn\u00f6kset',
-
-    // variable watchers
-    'normal':
-        'tavallinen',
-    'large':
-        'suuri',
-    'slider':
-        'liukus\u00e4\u00e4din',
-    'slider min...':
-        'minimiarvo...',
-    'slider max...':
-        'maksimiarvo...',
-    'import...':
-        'tuo...',
-    'Slider minimum value':
-        'Liukus\u00e4\u00e4timen minimiarvo',
-    'Slider maximum value':
-        'Liukus\u00e4\u00e4timen maksimiarvo',
-
-    // list watchers
-    'length: ':
-        'pituus: ',
-
-    // coments
-    'add comment here...':
-        'Kirjoita kommentti t\u00e4h\u00e4n...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) oikealle',
-    '(-90) left':
-        '(-90) vasemmalle',
-    '(0) up':
-        '(0) yl\u00f6s',
-    '(180) down':
-        '(180) alas',
-
-    // collision detection
-    'mouse-pointer':
-        'hiiren osoitin',
-    'edge':
-        'reuna',
-    'pen trails':
-        'kyn\u00e4n j\u00e4lki',
-
-    // costumes
-    'Turtle':
-        'Osoitin',
-    'Empty':
-        'Tyhj\u00e4',
-
-    // graphical effects
-    'ghost':
-        'l\u00e4pin\u00e4kyvyys',
-
-    // keys
-    'space':
-        'v\u00e4lily\u00f6nti',
-    'up arrow':
-        'nuoli yl\u00f6s',
-    'down arrow':
-        'nuoli alas',
-    'right arrow':
-        'nuoli oikealle',
-    'left arrow':
-        'nuoli vasemmalle',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'uusi...',
-
-    // math functions
-    'abs':
-        'itseisarvo',
-    'floor':
-        'py\u00f6ristys alas',
-    'sqrt':
-        'neli\u00f6juuri',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'whitespace':
-        'tyhjien v\u00e4lien',
-    'line':
-        'rivinvaihtojen (lf)',
-    'tab':
-        'sarkaimien (tab)',
-    'cr':
-        'vaununpalautusten (cr)',
-
-    // data types
-    'number':
-        'luku',
-    'text':
-        'teksti',
-    'Boolean':
-        'totuusarvo',
-    'list':
-        'lista',
-    'command':
-        'komentopalikka',
-    'reporter':
-        'funktiopalikka',
-    'predicate':
-        'predikaatti',
-
-    // list indices
-    'last':
-        'viimeinen',
-    'any':
-        'mik\u00e4 tahansa'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) vasemmalle",
+    "(0) up": "(0) ylös",
+    "(1) sine": "",
+    "(180) down": "(180) alas",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) oikealle",
+    "(empty)": "(tyhjä)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Tietoa Snapista",
+    "About...": "Tietoa Snapista...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "Animaatiot",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "Mikä vain (sitaatti)",
+    "Any type": "Mikä vain",
+    "Apply": "Tee muutokset",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Poistetaanko varmasti?",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "Takaisin...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "Palikan muokkaus",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "Sumeat varjot",
+    "Boolean": "totuusarvo",
+    "Boolean (T/F)": "Totuusarvo",
+    "Boolean (unevaluated)": "Totuusarvo (sitaatti)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "Peruuta",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "Muuta palikkaa",
+    "Clear backup": "",
+    "Clicking sound": "Klikkausääni",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "Komento",
+    "Command (C-shape)": "Komento (C-muoto)",
+    "Command (inline)": "Komento",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "Osallistujat",
+    "Control": "Ohjaus",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "Asun muokkaus",
+    "Costumes": "Asut",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "Nimeä syöte",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "Kiitokset...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "Tavallinen",
+    "Default Value:": "Oletusarvo:",
+    "Delete": "Poista",
+    "Delete Custom Block": "Poista palikka",
+    "Delete Project": "Poista projekti",
+    "Delete a variable": "poista muuttuja",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "Lataa lähdekoodi",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Vaihtuvat syötetunnukset",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "Muokkaa syötteen nimeä",
+    "Edit label fragment": "Muokkaa otsikkoa",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "Tyhjä",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "Vie palikoita",
+    "Export blocks...": "Vie palikoita...",
+    "Export project as plain text...": "Vie projekti tekstinä...",
+    "Export project...": "Vie projekti...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "Tasaiset viivanpäät",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "Hei!",
+    "Hello, World!": "",
+    "Help": "Apua",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "Tuo palikoita",
+    "Import library": "Tuo kirjasto",
+    "Import sound": "",
+    "Import tools": "Tuo työkaluja",
+    "Import...": "Tuo...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "Syötteet:",
+    "Input Slot Options": "",
+    "Input name": "Syöte",
+    "Input sliders": "Liukusäätimet",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "Kieli...",
+    "Libraries...": "Kirjastot...",
+    "License": "Tekijänoikeudet",
+    "License...": "Tekijänoikeudet...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "Lista",
+    "List utilities": "",
+    "Lists": "Listat",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "Kirjaudu...",
+    "Logout": "",
+    "Long form input dialog": "Yksityiskohtainen syötevalinta",
+    "Looks": "Ulkonäkö",
+    "Make a block": "Uusi palikka",
+    "Make a variable": "Uusi muuttuja",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "Sanoma",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "Osat...",
+    "Motion": "Liike",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "Useita syötteitä (listana)",
+    "Nested auto-wrapping": "",
+    "New": "Uusi",
+    "New Category": "",
+    "New Project": "Uusi projekti",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "Ei",
+    "November": "",
+    "Number": "Luku",
+    "OK": "",
+    "Object": "Objekti",
+    "October": "",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "Avaa projekti",
+    "Open in Community Site": "",
+    "Open...": "Avaa...",
+    "Opening project...": "",
+    "Operators": "Laskenta",
+    "Other": "Muut",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "Kynä",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "Yksinkertaiset palikkatunnisteet",
+    "Play": "Soita",
+    "Play sound": "Soita ääni",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Predikaatti",
+    "Prefer empty slot drops": "Suosi asettamista tyhjiin aukkoihin",
+    "Prefer smooth animations": "Pyri sulaviin animaatioihin",
+    "Privacy...": "",
+    "Project Notes": "Projektin muistiinpanot",
+    "Project URLs": "",
+    "Project notes...": "Projektimerkintöjä...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "Käyttöohje",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "Korvataanko nykyinen projekti uudella?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "Funktio",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "Tallenna",
+    "Save As...": "Tallenna nimellä...",
+    "Save Project": "",
+    "Save Project As...": "Tallenna projekti nimellä...",
+    "Save to disk": "",
+    "Saved!": "Tallennettu!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "Skriptimuuttujan nimi",
+    "Scripts": "Skriptit",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "Tuntoaisti",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "Luo käyttäjätili...",
+    "Single input.": "Yksi syöte.",
+    "Single palette": "",
+    "Slider maximum value": "Liukusäätimen maksimiarvo",
+    "Slider minimum value": "Liukusäätimen minimiarvo",
+    "Snap! website": "Snapin kotisivu",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "Ääni",
+    "Sound Recorder": "",
+    "Sounds": "Äänet",
+    "Sprite": "Hahmo",
+    "Sprite Nesting": "",
+    "Stage": "Esiintymislava",
+    "Stage height": "Esiintymislavan korkeus",
+    "Stage selected: no motion primitives": "Esiintymislava valittuna ei liikekomentoja",
+    "Stage size": "Esiintymislavan koko",
+    "Stage size...": "Esiintymislavan koko...",
+    "Stage width": "Esiintymislavan leveys",
+    "Stop": "Pysäytä",
+    "Stop sound": "Pysäytä ääni",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "Palaa käyttäjämoodiin",
+    "Switch to dev mode": "vaihda kehitysmoodiin",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "Teksti",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "Säieturvalliset skriptit",
+    "Title text": "Otsikko",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "Käännökset",
+    "Translators...": "Kääntäjät...",
+    "Turbo mode": "Turbonopeus",
+    "Turtle": "Osoitin",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "Nimetön",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Paljasta sisäinen muuttuja ulkopuolelle",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "Muuttujan nimi",
+    "Variables": "Muuttujat",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Virtuaalinäppäimistö",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "Kyllä",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "Seepraväritys",
+    "Zoom blocks": "Suurenna palikoita",
+    "Zoom blocks...": "Suurenna palikoita...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "lista _ sisältää _",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ listan _ aluksi",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "jakojäännös laskusta _ / _",
+    "_ of _": "_ hahmolla _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "itseisarvo",
+    "acos": "acos",
+    "add _ to _": "lisää _ listaan _",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "lisää uusi hahmo",
+    "add comment": "lisää kommentti",
+    "add comment here...": "Kirjoita kommentti tähän...",
+    "agent": "",
+    "alert _": "ponnahdusikkuna: _",
+    "all": "kaikki",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "kaikki paitsi ensimmäinen alkio listasta _",
+    "all but this script": "kaikki paitsi tämä skripti",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "ja",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "vastaus",
+    "any": "",
+    "any key": "",
+    "any message": "mikä tahansa",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "järjestä pystysuorasti",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "kysy _ ja odota",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "iso (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "Poistetaanko tämä palikka ja kaikki sen esiintymät?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "palikoita",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "lähetä sanoma _ _",
+    "broadcast _ _ and wait": "lähetä sanoma _ _ ja odota",
+    "brush": "",
+    "build": "rakenna",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "kutsu _ _",
+    "call _ w/continuation": "kutsu _ kontinuaatiolla",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "pyörii vapaasti",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "muuta muuttujaa _ määrällä _",
+    "change _ effect by _": "muuta efektiä _ _ yksikköä",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "vaihda kynän väriä määrällä _",
+    "change pen shade by _": "muuta kirkkautta _ ​%-yks.",
+    "change pen size by _": "muuta paksuutta määrällä _",
+    "change size by _": "muuta kokoa _ ​%-yksikköä",
+    "change tempo by _": "vaihda tempoa _ iskulla/min",
+    "change volume by _": "",
+    "change x by _": "muuta x:ää _ askelta",
+    "change y by _": "muuta y:tä _ askelta",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "asettamalla saat viivan päistä suorat",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "asettamalla saat sulavat animaatiot eri tietokoneilla",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "asettamalla näet aina tietotyyppivalinnat palikan syötteitä lisätessä",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "asettamalla estät skriptin käynnistymisen jos se on jo ajossa",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "asettamalla kytket päälle käyttöliittymän animaatiot",
+    "check to enable alternating colors for nested blocks": "asettamalla saat vaihtuvat värit sisäkkäisille palikoille",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "asettamalla saat vaihtuville syötteille vaihtuvat tunnukset",
+    "check to enable input sliders for entry fields": "asettamalla saat syötekenttiin liukusäätimet",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "asettamalla sallit mobiililaitteiden virtuaalinäppäimistön käytön",
+    "check to hide (+) symbols in block prototype labels": "asettamalla piilotat (+)-merkit palikan muokkauksessa",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "asettamalla nostat skriptien prioriteettia",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "asettamalla kytket päälle palikoiden klikkausäänen",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "asettamalla saat sumeat varjot ja korostukset",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "siivoa",
+    "clear": "tyhjennä",
+    "clear graphic effects": "poista efektit",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "siirrä kiertokeskusta klikkaamalla tai pitämällä hiirtä painettuna ja liikuttamalla",
+    "clicked": "klikataan",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "väri _ koskettaa väriä _ ?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "komentopalikka",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "kirjoita konsoliin: _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "asun nro",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "Tuo kuva verkosta tai koneeltasi siirtämällä se hiirellä tähän",
+    "could not connect to:": "",
+    "cr": "vaununpalautusten (cr)",
+    "create a clone of _": "kloonaa _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "Osien versiot:",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "poista",
+    "delete _": "",
+    "delete _ of _": "poista _ listasta _",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "poista palikkamäärittely",
+    "delete slot": "",
+    "delete this clone": "poista tämä klooni",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "irrota kaikki osat",
+    "detach and put into the hand": "",
+    "detach from": "irrota",
+    "development mode": "kehitysmoodi",
+    "development mode debugging primitives:": "Kehitysmoodin debuggauskomennot:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "suunta",
+    "disable deep-Morphic context menus and show user-friendly ones": "poista Morphic-valikot käytöstä ja näytä helpot valikot",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "etäisyys hahmoon _",
+    "distribution": "",
+    "don't rotate": "ei pyöri",
+    "down arrow": "nuoli alas",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "hiirellä liikuteltava",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "kopioi",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "reuna",
+    "edit": "muokkaa",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "muokkaa...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "näytä Morphic-toiminnot, ei kovin helppokäyttöisiä",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "vie",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "Vie...",
+    "extract": "",
+    "f": "f",
+    "false": "epätosi",
+    "file": "",
+    "file menu import hint": "lataa viety projekti, palikkakirjasto, asu tai ääni",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "suodatettuna väri _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "pyöristys alas",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "kaikille hahmoille",
+    "for each _ in _ _": "",
+    "for this sprite only": "vain tälle hahmolle",
+    "forever _": "ikuisesti _",
+    "frame": "",
+    "frames": "ruutuja",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "läpinäkyvyys",
+    "giant (8x)": "jättimäinen (8x)",
+    "glide _ secs to x: _ y: _": "liu'u _ s → x: _ y: _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "siirry _ kerrosta taakse",
+    "go to _": "mene hahmon _ luo",
+    "go to _ layer": "",
+    "go to front": "tule etualalle",
+    "go to x: _ y: _": "mene paikkaan x: _ y: _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "Hei",
+    "help": "apua",
+    "help...": "apua...",
+    "hide": "piilota",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "piilota peruspalikat",
+    "hide variable _": "piilota muuttuja _",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "valtava (4x)",
+    "i": "i",
+    "identical to": "sama kuin",
+    "if _ _": "jos _ _",
+    "if _ _ else _": "jos _ _ muuten _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "kimpoa reunasta",
+    "import a sound from your computer by dragging it into here": "Tuo ääni koneeltasi siirtämällä se hiirellä tähän",
+    "import without attempting to parse or format data": "",
+    "import...": "tuo...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "syötelista:",
+    "input names:": "syötteet:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "lisää _ kohtaan _ listassa _",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "onko _ ?",
+    "is _ a _ ?": "onko _ _ ?",
+    "is _ empty?": "",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "alkio kohdassa _ listassa _",
+    "items": "",
+    "j": "j",
+    "join _": "yhdistä _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "näppäin _ painettuna?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "suomi",
+    "language_translator": "Jouni K. Seppänen",
+    "large": "suuri",
+    "last": "viimeinen",
+    "last changed": "",
+    "last_changed": "2014-04-18",
+    "launch _ _": "käynnistä _ _",
+    "left": "",
+    "left arrow": "nuoli vasemmalle",
+    "length": "",
+    "length of _": "tekstin _ pituus",
+    "length:": "pituus:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "kirjain nro _ tekstistä _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "rivinvaihtojen (lf)",
+    "lines": "",
+    "list": "lista",
+    "list _": "lista _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "lataa virallinen tehopalikoiden kirjasto",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "tee uusi palikka...",
+    "make a category...": "",
+    "make a copy and pick it up": "ota kopio mukaan",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "sanoma",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "hirviömäinen (10x)",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "hiiren näppäin painettuna?",
+    "mouse position": "",
+    "mouse x": "hiiren x-paikka",
+    "mouse y": "hiiren y-paikka",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "hiiren osoitin",
+    "move": "",
+    "move _ steps": "liiku _ askelta",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "minut",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "uusi...",
+    "next": "",
+    "next costume": "seuraava asu",
+    "none": "ei mitään",
+    "normal": "tavallinen",
+    "normal (1x)": "normaali (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "ei _",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "luku",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "kopioi vain tämä palikka",
+    "only face left/right": "kääntyy vain vasemmalle ja oikealle",
+    "only grab this block": "",
+    "open a new window with a picture of all scripts": "avaa kuva kaikista skripteistä uudessa selainikkunassa",
+    "open a new window with a picture of the stage": "Avaa esiintymislavan kuva uuteen selainikkunaan",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "avaa kuva tästä skriptistä uudessa selainikkunassa",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "tai",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "hahmon muut skriptit",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "keskeytä kaikki _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "kynä alas",
+    "pen down?": "",
+    "pen trails": "kynän jälki",
+    "pen up": "kynä ylös",
+    "pen vectors": "",
+    "pic...": "Vie kuva...",
+    "pick random _ to _": "arvo satunnaisluku _ .. _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "nuotti _ _ iskua",
+    "play sound _": "soita ääni _",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "soita ääni _ kokonaan",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "osoita suuntaan _",
+    "point towards _": "osoita hahmoa _ kohti",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "predikaatti",
+    "presentation (1.4x)": "esitys (1.4x)",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "mikä tahansa",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "nimeä uudestaan...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "nimeä uudestaan",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "nimeä asu uudestaan",
+    "rename only this reporter": "",
+    "rename sound": "nimeä ääni uudestaan",
+    "rename...": "nimeä uusiksi...",
+    "repeat _ _": "toista _ kertaa _",
+    "repeat until _ _": "toista kunnes _ _",
+    "replace item _ of _ with _": "vaihda kohtaan _ listassa _ alkio _",
+    "report _": "vastaa _",
+    "reporter": "funktiopalikka",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "nollaa ajastin",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "tauko _ iskua",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "nuoli oikealle",
+    "ring": "",
+    "ringify": "ympyröi",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "pyöristä _",
+    "run _ _": "suorita _ _",
+    "run _ w/continuation": "suorita _ kontinuaatiolla",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "sano _",
+    "say _ for _ secs": "sano _ _ sekunnin ajan",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "kuva skriptistä...",
+    "script variables _": "skriptimuuttujat _",
+    "scripts": "",
+    "scripts pic...": "kuva skripteistä...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "valitse",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "aseta efektin _ määräksi _",
+    "set _ of block _ to _": "",
+    "set _ to _": "aseta muuttujan _ arvoksi _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "aseta kynän väriksi _",
+    "set pen shade to _": "aseta kirkkaudeksi _ %",
+    "set pen size to _": "aseta kynän paksuudeksi _",
+    "set size to _ %": "aseta kooksi _ %",
+    "set tempo to _ bpm": "aseta tempoksi _ iskua/min",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "kytke turbonopeus päälle jos _",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "aseta x:ksi _",
+    "set y to _": "aseta y:ksi _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "asettamalla saat asetettavat palikat osumaan tyhjiin aukkoihin",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "näytä",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "Näytä kaikki",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "näytä yhteiset palikkamäärittelyt XML-muodossa uudessa selainikkunassa",
+    "show primitives": "näytä peruspalikat",
+    "show project data as XML in a new browser window": "näytä projekti XML-muodossa uudessa selainikkunassa",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "näytä muuttuja _",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "koko",
+    "slider": "liukusäädin",
+    "slider max...": "maksimiarvo...",
+    "slider min...": "minimiarvo...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "välilyönti",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "pilko _ _ kohdalta",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "neliöjuuri",
+    "square": "",
+    "stack size": "pinon koko",
+    "stage": "",
+    "stage image": "",
+    "stamp": "leimaa",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "pysäytä _",
+    "stop all sounds": "pysäytä kaikki äänet",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "vaihda asuun _",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "sarkaimien (tab)",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "",
+    "temporary?": "",
+    "text": "teksti",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "alkio",
+    "think _": "ajattele _",
+    "think _ for _ secs": "ajattele _ _ sekunnin ajan",
+    "this _": "",
+    "this block": "tämä palikka",
+    "this project doesn't have any custom global blocks yet": "projektilla ei ole vielä yhtään yhteistä muokattua palikkaa",
+    "this script": "tämä skripti",
+    "time in milliseconds": "",
+    "timer": "ajastin",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "koskettaa väriä _ ?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "jks@iki.fi",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "tosi",
+    "turbo mode": "",
+    "turbo mode?": "turbonopeus?",
+    "turn _ _ degrees": "käänny _ _ astetta",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "_ tyyppi",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "poistamalla saat lisää nopeutta mutta päivitystaajuus vaihtelee",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "poistamalla saat viivan päistä pyöristetyt",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "poistamalla sallit asetettujen palikoiden pois potkimisen",
+    "uncheck to allow script reentrance": "poistamalla sallit skriptin käynnistymisen vaikka se on ajossa",
+    "uncheck to always show (+) symbols in block prototype labels": "poistamalla saat (+)-merkit näkymään aina palikan muokkauksessa",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "poistamalla piilotat käyttöliittymän animaatiot",
+    "uncheck to disable alternating colors for nested block": "poistamalla saat samat värit sisäkkäisille palikoille",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "poistamalla estät vaihtuvien syötteiden vaihtuvat tunnukset",
+    "uncheck to disable input sliders for entry fields": "poistamalla piilotat liukusäätimet syötekentistä",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "poistamalla estät mobiililaitteiden virtuaalinäppäimistön käytön",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "poistamalla ajat skriptit normaalinopeudella",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "poistamalla hiljennät palikoiden klikkausäänen",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "poistamalla saat kiinteät varjot ja korostukset",
+    "uncheck to use the input dialog in short form": "poistamalla teet palikan syötteiden lisäämisikkunasta yksinkertaisen",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "peruuta viimeisin palikan asetus",
+    "undrop": "peruuta asetus",
+    "unicode _ as letter": "Unicode-arvoa _ vastaava merkki",
+    "unicode of _": "merkin _ Unicode-arvo",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "poista ympyröinti",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "nimetön",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "nuoli ylös",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "odota _ sekuntia",
+    "wait until _": "odota kunnes _",
+    "wardrobe": "",
+    "warp _": "supernopeasti _",
+    "what's your name?": "Mikä sinun nimesi on?",
+    "when I am _": "kun minua _",
+    "when I receive _ _": "kun vastaanotan sanoman _ _",
+    "when I start as a clone": "Kun aloitan kloonina",
+    "when _": "",
+    "when _ clicked": "kun klikataan _",
+    "when _ is edited _": "",
+    "when _ key pressed _": "kun painetaan _ _",
+    "whirl": "",
+    "whitespace": "tyhjien välien",
+    "width": "",
+    "with data": "",
+    "with inputs": "syötteillä",
+    "word": "",
+    "world": "maailma",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x-paikka",
+    "y": "y",
+    "y position": "y-paikka",
+    "year": "",
+    "year:": "",
+    "your own": "omia",
+    "z": "z"
+}

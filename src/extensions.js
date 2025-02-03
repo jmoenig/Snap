@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -29,38 +29,49 @@
 
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
-Color, Process, contains*/
+Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
+BigUint64Array*/
 
-/*jshint esversion: 11*/
+/*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2022-January-13';
+modules.extensions = '2025-January-09';
 
 // Global stuff
 
 var SnapExtensions = {
     primitives: new Map(),
     menus: new Map(),
+    buttons: {
+        palette: []
+    },
     scripts: [],
     urls: [ // allow-list of trusted servers
         'libraries/',
         'https://snap.berkeley.edu/',
+        'https://bjc.berkeley.edu/',
+        'https://cs10.org/',
         'https://ecraft2learn.github.io/ai/', // Uni-Oxford, Ken Kahn
-        'https://microworld.edc.org' // EDC, E. Paul Goldenberg
+        'https://microworld.edc.org/', // EDC, E. Paul Goldenberg
+        'https://birdbraintechnologies.com/', // BirdBrain technologies, Tom Lauwers
+        'https://www.birdbraintechnologies.com/' // compatibility
     ]
 };
 
 /*
-    SnapExtensions is a set of two global dictionaries of named functions to be
-    used as extension primitives for blocks or dynamic dropdown menus. Block
-    extensions are stored in the "primitives" dictionary of SnapExtensions,
-    dynamic dropdown menus in the "menus" section.
-    
-    You can also extend Snap! with your own externally hosted JavaScript file(s)
-    and have them add your own extension primitives and menus to the global
-    SnapExtensions dictionaries. This lets you provide libraries to support
-    special APIs and custom hardware.
+    SnapExtensions is a set of three global dictionaries of named functions to
+    be used as extension primitives for blocks, dynamic dropdown menus and
+    custom push-buttons inside block palette categories. Block extensions are
+    stored in the "primitives" dictionary of SnapExtensions, dynamic dropdown
+    menus in the "menus" section and custom palette push-buttons in the
+    "buttons" collection.
 
-    
+    You can also extend Snap! with your own externally hosted JavaScript file(s)
+    and have them add your own extension primitives, menus and buttons to the
+    global SnapExtensions dictionaries. This lets you provide libraries to
+    support special APIs and custom hardware.
+
+
     1. Primitives (additional blocks)
     =================================
     The names under which primitives are stored will apear in the dropdown
@@ -125,14 +136,40 @@ var SnapExtensions = {
       You can access the contents of an input slot by calling "slot.evaluate()"
 
 
-    3. External JavaScript files
+    3. Buttons
+    ==========
+    You can have your extension add buttons at the top of the palette in a
+    particular category. Usually, you will want to add these buttons to the
+    category created by your XML library.
+
+    To do so, just add a button entry in your JS extension file:
+
+    SnapExtensions.buttons.palette.push(
+        {
+            category: 'My Extension',
+            label: 'Do Something',
+            action: function () { doYourStuffWith(this); },
+            hint: 'This button does things',
+            hideable: false
+        }
+    );
+
+    Inside the action, "this" points to the currently selected object, be it a
+    sprite or the Stage.
+
+    The "hideable" attribute defines whether the button will be hidden when
+    turning off "Show buttons" in single palette mode. By default, extension
+    buttons will not be hidden.
+
+
+    4. External JavaScript files
     ============================
     You can provide extensions for your custom hardware or for arbitrary APIs
     or extend Snap! with JavaScript libraries from other parties. You can
     load additional JavaScript files using the
-    
+
         src_load(url)
-    
+
     extension primitive inside Snap, which you can find using Snap's search bar
     in the IDE. The loading primitive will wait until the source file has fully
     loaded and its defined functions are ready to be called.
@@ -141,9 +178,9 @@ var SnapExtensions = {
     This lets you lazily initialize your extension by simply adding a
     "src_load(url)" command for your external JS file before calling any of its
     added functions.
-    
 
-    4. Miscellaneous
+
+    5. Miscellaneous
     ================
 
     calling extension primitives in other JavaScript functions
@@ -181,7 +218,6 @@ var SnapExtensions = {
 
     publishing an extension
     -----------------------
-
     When you're ready to publish your extension you can contact us to allow-list
     the url hosting your JS file, or you can send me a Github pull-request to
     include it in the main Snap branch.
@@ -198,6 +234,134 @@ var SnapExtensions = {
 */
 
 // Primitives
+
+// meta utils (snap_):
+
+SnapExtensions.primitives.set(
+    'snap_yield',
+    function (proc) {
+        if (!proc.isAtomic) {
+            proc.readyToYield = true;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_encode(script)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate', 'hat']);
+        return script.expression.toXMLString(this);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_xml_decode(txt)',
+    function (xml, proc) {
+        proc.assertType(xml, 'text');
+        return this.parentThatIsA(IDE_Morph).deserializeScriptString(xml).reify();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.selector &&
+            !block.definition.isBootstrapped()
+            /* // require "blocks all the way" to be enabled, commented out
+            &&
+            SpriteMorph.prototype.blocks[
+                block.definition.selector
+            ].definition !== undefined
+            */
+        ) {
+            block.definition.bootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_un-bootstrap(block)',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        if (block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped()
+        ) {
+            block.definition.unBootstrap(proc.blockReceiver());
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_bootstrapped(block)?',
+    function (script, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate']);
+        var block = script.expression;
+        return block.isCustomBlock &&
+            block.definition.isGlobal &&
+            block.definition.isBootstrapped();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_block_selectors',
+    function () {
+        return new List([
+            ['label'],
+            ['definition'],
+            ['comment'],
+            ['category'],
+            ['type'],
+            ['scope'],
+            ['selector'],
+            ['slots'],
+            ['defaults'],
+            ['menus'],
+            ['editables'],
+            ['replaceables'],
+            ['separators'],
+            ['collapses'],
+            ['expands'],
+            ['initial slots'],
+            ['min slots'],
+            ['max slots'],
+            ['translations']
+        ]);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe?',
+    function () {
+        return this.parentThatIsA(StageMorph).isThreadSafe;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_threadsafe(on?)',
+    function (bool) {
+        this.parentThatIsA(StageMorph).isThreadSafe = (bool === true);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_quicksteps?',
+    function () {
+        return StageMorph.prototype.enableQuicksteps;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_quicksteps(on?)',
+    function (bool) {
+        StageMorph.prototype.enableQuicksteps = (bool === true);
+    }
+);
 
 // errors & exceptions (err_):
 
@@ -259,6 +423,110 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'txt_to_utf8(txt)',
+    function (txt) {
+        var lst = new List(Array.from(new TextEncoder().encode(txt)));
+        // lst.type = 'number';
+        return lst;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_from_utf8(utf8List)',
+    function (utf8List) {
+        var arr = utf8List.itemsArray();
+        if (!(arr instanceof Uint8Array)) {
+            arr = new Uint8Array(arr);
+        }
+        return new TextDecoder("utf-8").decode(arr);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_transform(name, txt)',
+    /*
+        supported transformation names:
+        -------------------------------
+        select
+        unselect
+        encode URI
+        decode URI
+        encode URI component
+        decode URI component
+        XML escape
+        XML unescape
+        JS escape
+        hex sha512 hash
+    */
+    function (name, txt) {
+        return Process.prototype.reportTextFunction(name, txt);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_export(txt, name)',
+    function (txt, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(txt, ['text', 'number']);
+        name = name || localize('data');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        ide.saveFileAs(txt.toString(), 'text/txt', name);
+    }
+);
+
+// bitwise operations
+
+SnapExtensions.primitives.set(
+    'bit_and(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a & b), a, b);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_or(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a | b), a, b);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_xor(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a ^ b), a, b);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_not(a)',
+    function (a, proc) {
+        return proc.hyper(n => ~ n, a);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_left_shift(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a << b), a, b);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_right_shift(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a >> b), a, b);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'bit_unsigned_right_shift(a, b)',
+    function (a, b, proc) {
+        return proc.hyper(((a, b) => a >>> b), a, b);
+    }
+);
+
 // data sciene & frequency distribution analysis (dta_):
 
 SnapExtensions.primitives.set(
@@ -301,10 +569,39 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    // no longer needed because it's a regular primitive now
     'dta_crossproduct(list)',
     function (data, proc) {
         proc.assertType(data, 'list');
         return data.crossproduct();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_zip(list)',
+    function (data, proc) {
+        var zip, i, len,
+            join = (a, b) => [a, b],
+            append = (a, b) => {a.push(b); return a; },
+            merge = atom => atom instanceof Array ? new List(atom) : atom;
+        proc.assertType(data, 'list');
+        len = data.length();
+        if (len < 2) {
+            return data.at(1);
+        }
+        zip = proc.hyperDyadic(join, data.at(1), data.at(2));
+        for (i = 3; i <= len; i += 1) {
+            zip = proc.hyperDyadic(append, zip, data.at(i));
+        }
+        return proc.hyperMonadic(merge, zip);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_changeBy(data, delta)',
+    function (data, delta, proc) {
+        proc.assertType(data, 'list');
+        proc.hyperChangeBy(data, delta);
     }
 );
 
@@ -430,9 +727,60 @@ SnapExtensions.primitives.set(
 // XHR:
 
 SnapExtensions.primitives.set(
+    'xhr_binary(url, webIDL_type)',
+    function (url, idl, proc) {
+        var response, buffer;
+        url = decodeURI(url);
+        proc.checkURLAllowed(url);
+        if (!proc.httpRequest) {
+            proc.httpRequest = new XMLHttpRequest();
+            proc.httpRequest.open("GET", url, true);
+            proc.httpRequest.responseType = "arraybuffer";
+            proc.httpRequest.send(null);
+        } else if (proc.httpRequest.readyState === 4) {
+            buffer = proc.httpRequest.response;
+            switch (idl) {
+                case 'byte':
+                    response = new List(new Int8Array(buffer));
+                    break;
+                case 'short':
+                    response = new List(new Int16Array(buffer));
+                    break;
+                case 'unsigned short':
+                    response = new List(new Uint16Array(buffer));
+                    break;
+                case 'long':
+                    response = new List(new Int32Array(buffer));
+                    break;
+                case 'unsigned long':
+                    response = new List(new Uint32Array(buffer));
+                    break;
+                case 'unrestricted float':
+                    response = new List(new Float32Array(buffer));
+                    break;
+                case 'unrestricted double':
+                    response = new List(new Float64Array(buffer));
+                    break;
+                case 'bigint':
+                    response = new List(new BigUint64Array(buffer));
+                    break;
+                case 'octet':
+                default:
+                    response = new List(new Uint8Array(buffer));
+            }
+            proc.httpRequest = null;
+            return response;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
     'xhr_request(mth, url, dta, hdrs)',
     function (method, url, data, headers, proc) {
         var response, i, header;
+        url = decodeURI(url);
         Process.prototype.checkURLAllowed(url);
         if (!proc.httpRequest) {
             proc.httpRequest = new XMLHttpRequest();
@@ -599,9 +947,9 @@ SnapExtensions.primitives.set(
     function (obj, name, proc) {
         var ide = this.parentThatIsA(IDE_Morph);
         proc.assertType(obj, ['sprite', 'stage', 'costume', 'sound']);
+        name = name.toString();
         if (isSnapObject(obj)) {
             obj.setName(ide.newSpriteName(name, obj));
-            ide.recordUnsavedChanges();
         } else if (obj instanceof Costume) {
             obj.name = this.newCostumeName(name, obj);
             obj.version = Date.now();
@@ -615,13 +963,79 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'obj_version(obj)',
+    function (obj) {
+        return +(obj instanceof List ? obj.lastChanged : obj?.version) || 0;
+    }
+);
+
+// Costumes (cst_):
+
+SnapExtensions.primitives.set(
+    'cst_load(url)',
+    function (url, proc) {
+        if (!proc.context.accumulator) {
+            proc.context.accumulator = {
+                img: new Image(),
+                cst: null,
+            };
+            proc.context.accumulator.img.onload = function () {
+                var canvas = newCanvas(new Point(this.width, this.height));
+                canvas.getContext('2d').drawImage(this, 0, 0);
+                proc.context.accumulator.cst = new Costume(canvas);
+            };
+            proc.context.accumulator.img.src = url;
+        } else if (proc.context.accumulator.cst) {
+            return proc.context.accumulator.cst;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'cst_export(cst, name)',
+    function (cst, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        name = name || cst.name || localize('costume');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
+        if (cst instanceof SVG_Costume) {
+            ide.saveFileAs(cst.contents.src, 'text/svg', name);
+        } else if (cst.embeddedData) {
+            // embed payload data (e.g blocks)  inside the PNG image data
+            ide.saveFileAs(cst.pngData(), 'image/png', name);
+        } else { // rasterized Costume
+            ide.saveCanvasAs(cst.contents, name);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    // experimental, will probably be taken out again, don't rely on this
+    'cst_embed(cst, data)',
+    function (cst, data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(cst, 'costume');
+        proc.assertType(data, 'text');
+        if (cst instanceof SVG_Costume) {
+            throw new Error('option currently not supported for SVG costumes');
+        }
+        cst.embeddedData = data || null;
+        cst.version = Date.now();
+        ide.recordUnsavedChanges();
+    }
+);
+
 // Variables (var_):
 
 SnapExtensions.primitives.set(
     'var_declare(scope, name)',
     function (scope, name, proc) {
         var ide, frame;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         if (scope === 'script') {
             frame = proc.context.isInCustomBlock() ?
@@ -642,10 +1056,28 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'var_names(scope)',
+    function (scope, proc) {
+        var frame;
+        if (scope === 'script') {
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables;
+        } else if (scope === 'sprite') {
+            frame = this.variables;
+        } else {
+            frame = this.globalVariables();
+        }
+        return new List(frame.allNames());
+    }
+);
+
+SnapExtensions.primitives.set(
     'var_delete(name)',
     function (name, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
+        name = name.toString();
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables
@@ -661,7 +1093,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'var_get(name)',
     function (name, proc) {
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         return proc.homeContext.variables.getVar(name);
     }
 );
@@ -670,7 +1102,7 @@ SnapExtensions.primitives.set(
     'var_set(name, val)',
     function (name, val, proc) {
         var local;
-        proc.assertType(name, 'text');
+        proc.assertType(name, ['text', 'number']);
         if (name === '') {return; }
         local = proc.context.isInCustomBlock() ?
                         proc.homeContext.variables
@@ -703,21 +1135,67 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'var_showing(name)?',
+    function (name, proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            frame = proc.context.isInCustomBlock() ?
+                        proc.homeContext.variables
+                        : proc.context.outerContext.variables,
+            target = frame.silentFind(name),
+            watcher;
+
+        if (!target) {return false; }
+        watcher = detect(
+            stage.children,
+            morph => morph instanceof WatcherMorph &&
+                morph.target === target &&
+                    morph.getter === name
+        );
+        return watcher ? watcher.isVisible : false;
+    }
+);
+
 // IDE (ide_):
+
+// Returns all blocks of the current sprite, regardless of visibility
+SnapExtensions.primitives.set(
+    'ide_blocks',
+    function () {
+        return new List(
+            this.allPaletteBlocks().filter(
+                each => each instanceof BlockMorph &&
+                    !(each instanceof HatBlockMorph)
+            ).map(block => {
+                let instance = block.fullCopy();
+                instance.isTemplate = false;
+                return instance.reify();
+            })
+        );
+    }
+);
 
 SnapExtensions.primitives.set(
     'ide_hide(block)',
     function (context, proc) {
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
         this.changeBlockVisibility(context.expression, true);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
     }
 );
 
 SnapExtensions.primitives.set(
     'ide_show(block)',
     function (context, proc) {
-        proc.assertType(context, ['command', 'reporter', 'predicate']);
+        var ide = this.parentThatIsA(IDE_Morph);
+        proc.assertType(context, ['command', 'reporter', 'predicate', 'hat']);
         this.changeBlockVisibility(context.expression, false);
+        ide.flushBlocksCache();
+        ide.refreshPalette();
+        ide.categories.refreshEmpty();
     }
 );
 
@@ -735,6 +1213,118 @@ SnapExtensions.primitives.set(
     }
 );
 */
+
+SnapExtensions.primitives.set(
+    'ide_translate(text)',
+    function (text, proc) {
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return localize(txt);
+            },
+            text
+        );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translateback(text)',
+    function (text, proc) {
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        return proc.hyper(
+            txt => {
+                proc.assertType(txt, ['text', 'number']);
+                return detect(
+                    Object.keys(dict),
+                    key => dict[key] === txt
+                ) || txt;
+            },
+            text
+        );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_language',
+    function () {
+        return SnapTranslator.language;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_setlang(language, [msg])',
+    function (lang, msg, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            disabled = ['receiveGo', 'receiveCondition', 'receiveMessage'],
+            flag = ide.isAppMode,
+            restoreMode = () => {
+                ide.toggleAppMode(flag);
+                ide.stage.fireUserEditEvent(
+                    ide.currentSprite.name,
+                        ['project', 'language', lang],
+                        ide.version
+                    );
+                },
+            callback = restoreMode;
+        proc.assertType(lang, 'text');
+        ide.loadNewProject = false;
+        if (isString(msg) && !contains(disabled, proc.topBlock.selector)) {
+            // require an explicit user input to trigger a project reload
+            callback = () => {
+                restoreMode();
+                ide.broadcast(msg);
+            };
+        }
+        ide.setLanguage(lang, callback, true); // don't save language setting
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translations',
+    function () {
+        return new List(
+            SnapTranslator.languages().map(lang =>
+                new List([SnapTranslator.languageName(lang), lang])
+            )
+        );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_translation_dict',
+    function () {
+        var dict = SnapTranslator.dict[SnapTranslator.language];
+        return new List(
+            Object.keys(dict).slice().sort().map(key =>
+                new List([key, dict[key]]))
+        );
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_set_translation_dict(data)',
+    function (data, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            dict = {};
+        proc.assertType(data, 'list');
+        data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
+        SnapTranslator.dict[SnapTranslator.language] = dict;
+        ide.reflectLanguage(SnapTranslator.language);
+    }
+);
+
+// Synchronization
+
+SnapExtensions.primitives.set(
+    'syn_scripts([xml])',
+    function (xml, proc) {
+        if (xml instanceof Process) {
+            return this.scriptsOnlyXML();
+        }
+        proc.assertType(xml, 'text');
+        this.synchScriptsFrom(xml);
+    }
+);
 
 // Colors (clr_):
 
@@ -806,7 +1396,30 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'srl_open(baud, buffer)',
     function (baud, buf, proc) {
-        var acc = proc.context.accumulator;
+        var acc = proc.context.accumulator,
+            stage = this.parentThatIsA(StageMorph),
+            world = stage.world(),
+            snapProcessBlockDef =
+                stage.globalBlocks.find(
+                    def => def.spec == '__mb_process_data__'
+                );
+
+        function readCallback (port) {
+            var block = snapProcessBlockDef.blockInstance();
+            if (block && port?.connected && port?.writable) {
+                block.parent = stage;
+                try {
+                    invoke(
+                        block,
+                        null,  // args
+                        stage  // receiver
+                    );
+                    world.schedule(() => readCallback(port));
+                } catch (err) {
+                    throw(err);
+                }
+            }
+        }
 
         async function forceClose(port){
             try {
@@ -834,13 +1447,17 @@ SnapExtensions.primitives.set(
                         bufferSize: buf || 15000
                     });
                     acc.result = port;
+                    port._bklog = [];//backlog
                 } catch(e) {
                     acc.result = e;
                 }
             }) (baud || 115200);
         } else if (acc.result !== false) {
-            if (acc.result instanceof  Error) {
+            if (acc.result instanceof Error) {
                 throw acc.result;
+            }
+            if (snapProcessBlockDef) {
+                readCallback(acc.result);
             }
             return acc.result;
         }
@@ -859,7 +1476,7 @@ SnapExtensions.primitives.set(
             (async function (port) {
                 try {
                     // console.log("pending close...", port);
-                    if (port._reader) {await port._read.cancel(); }
+                    if (port._reader) {await port._reader.cancel(); }
                     if (port?.readable) {await port.readable.cancel(); }
                     if (port?.writable) {await port.writable.abort(); }
                     if (port?.readable || port?.writable) {await port.close(); }
@@ -883,40 +1500,37 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'srl_read(port)',
     function (port, proc) {
-        var acc = proc.context.accumulator;
-
-        function timeout(msecs) {
-            return new Promise((resolve, reject) =>
-                setTimeout(
-                    () => reject(Error("Timeout")),
-                    msecs
-                )
-            );
+        var acc = {result: false};
+        if(!port?.readable) {throw Error( "Port not opened."); }
+        if( port.readable?.locked){ //No reentry
+            return (port._bklog?.length > 0) ? port._bklog.splice(0) : true;
         }
-
-        if (!acc) {
-            acc = proc.context.accumulator = {result: false};
-            (async function (port) {
-                var reader, data;
-                try {
-                    if(!port?.readable) {throw Error( "Port not opened."); }
-                    reader = port.readable.getReader();
-                    data = await Promise.race([ reader.read(), timeout(0)]);
-                    acc.result = new List( data?.value);
-                } catch (e) {
-                    if (reader) {await reader.cancel(); }
-                    acc.result = (e.message === "Timeout") ? true : e;
+        (async function (port) {
+            var reader, data;
+            try {
+                reader = port._reader = port.readable.getReader();
+                data = await reader.read();
+                delete port._reader;
+                if( data.value){
+                    port._bklog.push( ...data.value);
                 }
-                if (reader) {await reader.releaseLock(); }
-            }) (port);
-        } else if (acc.result !== false) {
+            } catch (e) {
+                await reader.cancel();
+                acc.result = e;
+            }
+            if (reader) {await reader.releaseLock(); }
+        }) (port);
+
+        if (acc.result !== false) {
             if (acc.result instanceof  Error) {
                 throw acc.result;
             }
             return acc.result;
         }
-        proc.pushContext('doYield');
-        proc.pushContext();
+
+        return (port._bklog?.length > 0) ?
+            new List( Array.from( port._bklog.splice(0)))
+            : true;
     }
 );
 

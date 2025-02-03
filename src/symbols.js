@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2021 by Jens Mönig
+    Copyright (C) 2024 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2021-March-03';
+modules.symbols = '2024-November-24';
 
 var SymbolMorph;
 
@@ -101,6 +101,7 @@ SymbolMorph.prototype.names = [
     'rectangleSolid',
     'circle',
     'circleSolid',
+    'dot',
     'ellipse',
     'line',
     'cross',
@@ -142,16 +143,21 @@ SymbolMorph.prototype.names = [
     'globe',
     'globeBig',
     'list',
+    'listNarrow',
+    'verticalEllipsis',
     'flipVertical',
     'flipHorizontal',
     'trash',
-    'trashFull'
+    'trashFull',
+    'cube',
+    'cubeSolid',
+    'infinity'
 ];
 
 // SymbolMorph instance creation:
 
-function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
-    this.init(name, size, color, shadowOffset, shadowColor);
+function SymbolMorph(name, size, color, shadowOffset, shadowColor, bg) {
+    this.init(name, size, color, shadowOffset, shadowColor, bg);
 }
 
 SymbolMorph.prototype.init = function (
@@ -159,7 +165,8 @@ SymbolMorph.prototype.init = function (
     size,
     color,
     shadowOffset,
-    shadowColor
+    shadowColor,
+    bg
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
@@ -169,6 +176,7 @@ SymbolMorph.prototype.init = function (
     this.shadowColor = shadowColor || null;
     SymbolMorph.uber.init.call(this);
     this.color = color || BLACK;
+    this.backgroundColor = bg || null;
     this.fixLayout();
     this.rerender();
 };
@@ -228,6 +236,12 @@ SymbolMorph.prototype.render = function (ctx) {
         x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0,
         y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
 
+    if (this.backgroundColor) {
+        ctx.save();
+        ctx.fillStyle = this.backgroundColor.toString();
+        ctx.fillRect(0, 0, this.symbolWidth(), this.size);
+        ctx.restore();
+    }
     if (this.shadowColor) {
         ctx.save();
         ctx.translate(sx, sy);
@@ -346,6 +360,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolCircle(ctx, aColor);
         break;
     case 'circleSolid':
+        this.renderSymbolCircleSolid(ctx, aColor);
+        break;
+    case 'dot':
         this.renderSymbolCircleSolid(ctx, aColor);
         break;
     case 'ellipse':
@@ -469,7 +486,11 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         this.renderSymbolGlobeBig(ctx, aColor);
         break;
     case 'list':
+    case 'listNarrow':
         this.renderSymbolList(ctx, aColor);
+        break;
+    case 'verticalEllipsis':
+        this.renderSymbolVerticalEllipsis(ctx, aColor);
         break;
     case 'flipVertical':
         this.renderSymbolFlipVertical(ctx, aColor);
@@ -483,6 +504,15 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'trashFull':
         this.renderSymbolTrashFull(ctx, aColor);
         break;
+    case 'cube':
+        this.renderSymbolCube(ctx, aColor);
+        break;
+    case 'cubeSolid':
+        this.renderSymbolCubeSolid(ctx, aColor);
+        break;
+    case 'infinity':
+        this.renderSymbolInfinity(ctx, aColor);
+        break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
@@ -495,6 +525,12 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'verticalEllipsis':
+        return size * 0.2;
+    case 'dot':
+        return size * 0.4;
+    case 'listNarrow':
+        return size * 0.5;
     case 'location':
         return size * 0.6;
     case 'flash':
@@ -516,6 +552,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'keyboard':
     case 'keyboardFilled':
         return size * 1.6;
+    case 'infinity':
+        return size * 1.75;
     case 'turnRight':
     case 'turnLeft':
         return size / 3 * 2;
@@ -1366,11 +1404,12 @@ SymbolMorph.prototype.renderSymbolCircle = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolCircleSolid = function (ctx, color) {
     // draw a solid circle
-    var w = this.symbolWidth();
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
+    ctx.arc(w / 2, h / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
 };
 
@@ -2242,6 +2281,18 @@ SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
     ctx.fillRect(0, 0, w, h);
 };
 
+SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
+    // draw 3 solid circles
+    var r = this.symbolWidth() / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 5, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 9, r, radians(0), radians(360), false);
+    ctx.fill();
+};
+
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
     var w = this.symbolWidth(),
         h = this.size,
@@ -2381,6 +2432,77 @@ SymbolMorph.prototype.renderSymbolTrashFull = function (ctx, color) {
     ctx.lineTo(step * 6, step * 2);
     ctx.closePath();
     ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolCube = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outer hexagon
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, quarter);
+    ctx.lineTo(half, l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.lineTo(l, side-quarter);
+    ctx.closePath();
+    ctx.stroke();
+
+    // draw the inner edges
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(half, side - l);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolCubeSolid = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outline
+    this.renderSymbolCube(ctx, color);
+
+    // fill the bottom right square
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
+    var h = this.size,
+        l = Math.max(h / 4, 1),
+        r = h / 2;
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+
+    // left arc
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(60), radians(360), false);
+    ctx.stroke();
+
+    // right arc
+    ctx.beginPath();
+    ctx.arc(r * 3 - l, r, r - l / 2, radians(-120), radians(180), false);
+    ctx.stroke();
 };
 
 /*

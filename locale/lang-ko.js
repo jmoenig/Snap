@@ -1,1394 +1,1388 @@
-/*
-
-	lang-ko.js
-
-	Korean translation for SNAP!
-
-	written by Jens Mönig
-
-	Copyright (C) 2012 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ko = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        '한국어', // the name as it should appear in the language menu
-    'language_translator':
-        'Yunjae Jang', // your name for the Translators tab
-    'translator_e-mail':
-        'janggoons@gmail.com', // optional
-    'last_changed':
-        '2015-01-21', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        '이름없음',
-    'development mode':
-        '개발자 모드',
-
-    // categories:
-    'Motion':
-        '동작',
-    'Looks':
-        '형태',
-    'Sound':
-        '소리',
-    'Pen':
-        '펜',
-    'Control':
-        '제어',
-    'Sensing':
-        '관찰',
-    'Operators':
-        '연산',
-    'Variables':
-        '변수',
-    'Lists':
-        '리스트',
-    'Other':
-        '기타',
-
-    // editor:
-    'draggable':
-        '마우스로 직접 움직이기',
-
-    // tabs:
-    'Scripts':
-        '스크립트',
-    'Costumes':
-        '모양',
-    'Sounds':
-        '소리',
-
-    // names:
-    'Sprite':
-        '스프라이트',
-    'Stage':
-        '무대',
-
-    // rotation styles:
-    'don\'t rotate':
-        '회전할 수 없습니다',
-    'can rotate':
-        '회전가능',
-    'only face left/right':
-        '왼쪽에서 오른쪽으로만',
-
-    // new sprite button:
-    'add a new Turtle sprite':
-        '새로운 스프라이트 추가하기',
-
-    // new paint sprite button:
-    'paint a new sprite':
-        '새로운 스프라이트 그리기',
-
-    // new paint costume button:
-    'Paint a new costume':
-        '새로운 모양 그리기',
-
-    // tab help
-    'costumes tab help':
-        '다른 웹페이지나 컴퓨터에 있는 이미지 파일을\n'
-            + '여기로 드래그해서 가져옵니다.',
-    'import a sound from your computer\nby dragging it into here':
-        '컴퓨터에 있는 소리 파일을\n 여기로 드래그해서 가져옵니다.',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        '무대 선택: 사용 가능한 동작 블록이 없습니다.',
-
-    'move %n steps':
-        '%n 만큼 움직이기',
-    'turn %clockwise %n degrees':
-        '%clockwise %n 도 돌기',
-    'turn %counterclockwise %n degrees':
-        '%counterclockwise %n 도 돌기',
-    'point in direction %dir':
-        '%dir 도 방향 보기',
-    'point towards %dst':
-        '%dst 쪽 보기',
-    'go to x: %n y: %n':
-        'x: %n 、y: %n 쪽으로 이동하기',
-    'go to %dst':
-        '%dst 위치로 이동하기',
-    'glide %n secs to x: %n y: %n':
-        '%n 초 동안 x: %n 、y: %n 쪽으로 이동하기',
-    'change x by %n':
-        'x좌표 %n 만큼 바꾸기',
-    'set x to %n':
-        'x좌표 %n (으)로 정하기',
-    'change y by %n':
-        'y좌표 %n 만큼 바꾸기',
-    'set y to %n':
-        'y좌표 %n (으)로 정하기',
-    'if on edge, bounce':
-        '벽에 닿으면 튕기기',
-    'x position':
-        'x좌표',
-    'y position':
-        'y좌표',
-    'direction':
-        '방향',
-
-    // looks:
-    'switch to costume %cst':
-        '모양 %cst 로 바꾸기',
-    'next costume':
-        '다음 모양',
-    'costume #':
-        '모양 번호',
-    'say %s for %n secs':
-        '%s 을(를) %n 초 동안 말하기',
-    'say %s':
-        '%s 말하기',
-    'think %s for %n secs':
-        '%s 을(를) %n 초 동안 생각하기',
-    'think %s':
-        '%s 생각하기',
-    'Hello!':
-        '안녕!',
-    'Hmm...':
-        '흠…',
-    'change %eff effect by %n':
-        '%eff 효과를 %n 만큼 바꾸기',
-    'set %eff effect to %n':
-        '%eff 효과를 %n 만큼 정하기',
-    'clear graphic effects':
-        '그래픽 효과 지우기',
-    'change size by %n':
-        '크기를 %n 만큼 바꾸기',
-    'set size to %n %':
-        '크기를 %n % 로 정하기',
-    'size':
-        '크기',
-    'show':
-        '보이기',
-    'hide':
-        '숨기기',
-    'go to front':
-        '맨 앞으로 나오기',
-    'go back %n layers':
-        '%n 번째로 물러나기',
-
-    'development mode \ndebugging primitives:':
-        '개발자 모드\n디버깅 프리미티브:',
-    'console log %mult%s':
-        '콘솔 로그 %mult%s',
-    'alert %mult%s':
-        '경고: %mult%s',
-
-    // sound:
-    'play sound %snd':
-        '%snd 소리내기',
-    'play sound %snd until done':
-        '%snd 을(를) 끝까지 소리내기',
-    'stop all sounds':
-        '모든 소리 끄기',
-    'rest for %n beats':
-        '%n 박자 동안 쉬기',
-    'play note %n for %n beats':
-        '%n 음을 %n 박자로 연주하기',
-    'change tempo by %n':
-        '빠르기를 %n 만큼 바꾸기',
-    'set tempo to %n bpm':
-        '빠르기를 %n bpm으로 정하기',
-    'tempo':
-        '빠르기',
-
-
-    // pen:
-    'clear':
-        '펜 자국 지우기',
-    'pen down':
-        '펜 내리기',
-    'pen up':
-        '펜 올리기',
-    'set pen color to %clr':
-        '펜 색깔을 %clr 으로 정하기',
-    'change pen color by %n':
-        '펜 색깔을 %n 만큼 바꾸기',
-    'set pen color to %n':
-        '펜 색깔을 %n (으)로 정하기',
-    'change pen shade by %n':
-        '펜 음영을 %n 만큼 바꾸기',
-    'set pen shade to %n':
-        '펜 음영을 %n 으로 정하기',
-    'change pen size by %n':
-        '펜 굵기를 %n 만큼 바꾸기',
-    'set pen size to %n':
-        '펜 굵기를 %n (으)로 정하기',
-    'stamp':
-        '도장찍기',
-
-    // control:
-    'when %greenflag clicked':
-        '%greenflag 클릭했을 때',
-    'when %keyHat key pressed %keyName':
-        '%keyHat %keyName 키를 눌렀을 때',
-    'when I am %interaction':
-        '이 스프라이트를 클릭했을 때 %interaction',
-    'when I receive %msgHat %message':
-        '%msgHat %message 을(를) 받았을 때',
-    'broadcast %msg %receive':
-        '%msg %receive 방송하기',
-    'broadcast %msg %receive and wait':
-        '%msg %receive 방송하고 기다리기',
-    'Message name':
-        '메시지 이름',
-    'message':
-        '메시지',
-    'any message':
-        '어떤 메시지',
-    'wait %n secs':
-        '%n 초 기다리기',
-    'wait until %b':
-        '%b 까지 기다리기',
-    'forever %loop':
-        '무한 반복하기 %loop',
-    'repeat %n %loop':
-        '%n 번 반복하기 %loop',
-    'repeat until %b %loop':
-        '%b 까지 반복하기 %loop',
-    'if %b %c':
-        '만약 %b 라면 %c',
-    'if %b %c else %c':
-        '만약 %b 라면 %c 아니면 %c',
-    'report %s':
-        '%s 출력하기',
-    'stop %stopChoices':
-        '%stopChoices 멈추기',
-    'all':
-        '모두',
-    'this script':
-        '이 스크립트',
-    'this block':
-        '이 블록',    
-    'stop %stopOthersChoices':
-        '%stopOthersChoices 멈추기',
-    'all but this script':
-        '이 스크립트를 제외한 모두',
-    'other scripts in sprite':
-        '이 스프라이트에 있는 다른 스크립트',    
-    'pause all %pause':
-        '모두 잠시 멈추기 %pause',
-    'run %cmdRing %inputs':
-        '%cmdRing 을(를) %inputs 으로 실행하기',
-    'launch %cmdRing %inputs':
-        '%cmdRing 을(를) %inputs 으로 동시실행하기',
-    'call %repRing %inputs':
-        '%repRing 을(를) %inputs 으로 호출하기',
-    'run %cmdRing w/continuation':
-        '반복해서 %cmdRing 을(를) 실행하기',
-    'call %cmdRing w/continuation':
-        '반복해서 %cmdRing 을(를) 호출하기',
-    'warp %c':
-        '워프 %c',
-    'when I start as a clone':
-        '복제되었을 때',
-    'create a clone of %cln':
-        '%cln 을(를) 복제하기',
-    'myself':
-        '나 자신',
-    'delete this clone':
-        '이 복제본 삭제하기',
-
-
-    // sensing:
-    'touching %col ?':
-        '%col 에 닿았는가?',
-    'touching %clr ?':
-        '%clr 색에 닿았는가?',
-    'color %clr is touching %clr ?':
-        '%clr 색이 %clr 색에 닿았는가?',
-    'ask %s and wait':
-        '%s 을(를) 묻고 기다리기',
-    'what\'s your name?':
-        '당신의 이름은?',
-    'answer':
-        '대답',
-    'mouse x':
-        '마우스의 x좌표',
-    'mouse y':
-        '마우스의 y좌표',
-    'mouse down?':
-        '마우스를 클릭했는가?',
-    'key %key pressed?':
-        '%key 키를 눌렀는가?',
-    'distance to %dst':
-        '%dst 까지 거리',
-    'reset timer':
-        '타이머 초기화',
-    'timer':
-        '타이머',
-    '%att of %spr':
-        '%att ( %spr 에 대한)',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        '터보 모드인가?',
-    'set turbo mode to %b':
-        '터보 모드 %b 으로 설정하기',
-    'filtered for %clr':
-        '%clr 색 추출하기',
-    'stack size':
-        '스택 크기',
-    'frames':
-        '프레임',
-    'current %dates':
-        '현재 %dates',
-    'year':
-        '연도',
-    'month':
-        '월',
-    'date':
-        '일',
-    'day of week':
-        '요일(1~7)',
-    'hour':
-        '시간',
-    'minute':
-        '분',
-    'second':
-        '초',
-    'time in milliseconds':
-        '밀리세컨드초',
-
-    // operators:
-    '%n mod %n':
-        '( %n / %n ) 의 나머지',
-    'round %n':
-        '%n 반올림',
-    '%fun of %n':
-        '%fun ( %n 에 대한)',
-    'pick random %n to %n':
-        '%n 부터 %n 사이의 난수',
-    '%b and %b':
-        '%b 그리고 %b',
-    '%b or %b':
-        '%b 또는 %b',
-    'not %b':
-        '%b 이(가) 아니다',
-    'true':
-        '참',
-    'false':
-        '거짓',
-    'join %words':
-        '%words 결합하기',
-    'split %s by %delim':
-        '%s 를 %delim 기준으로 나누기',
-    'hello':
-        '안녕',
-    'world':
-        '세상',
-    'letter %idx of %s':
-        '%idx 번째 글자 ( %s 에 대한)',
-    'length of %s':
-        '%s 의 길이',
-    'unicode of %s':
-        '%s 의 유니코드',
-    'unicode %n as letter':
-        '유니코드 %n 에 대한 문자',
-    'is %s a %typ ?':
-        '%s 이(가) %typ 인가?',
-    'is %s identical to %s ?':
-        '%s 와(과) %s 가 동일한가?',
-    'type of %s':
-        '%s 의 타입',
-
-    // variables:
-    'Make a variable':
-        '변수 만들기',
-    'Variable name':
-        '변수 이름',
-    'Delete a variable':
-        '변수 삭제하기',
-
-    'set %var to %s':
-        '변수 %var 에 %s 저장하기',
-    'change %var by %n':
-        '변수 %var 을(를) %n 만큼 바꾸기',
-    'show variable %var':
-        '변수 %var 보이기',
-    'hide variable %var':
-        '변수 %var 숨기기',
-    'script variables %scriptVars':
-        '스크립트 변수 %scriptVars',
-
-    // lists:
-    'list %exp':
-        '리스트 %exp',
-    '%s in front of %l':
-        '%s 을(를) 리스트 %l 의 맨 앞에 추가하기 ',
-    'item %idx of %l':
-        '%idx 번째 항목 (리스트 %l 에 대한)',
-    'all but first of %l':
-        '리스트 %l 에서 첫 번째 항목 제외하기',
-    'length of %l':
-        '리스트 %l 의 항목 갯수',
-    '%l contains %s':
-        '리스트 %l 에 %s 포함되었는가?',
-    'thing':
-        '어떤 것',
-    'add %s to %l':
-        '%s 을(를) 리스트 %l 의 마지막에 추가하기 ',
-    'delete %ida of %l':
-        '%ida 번째 항목 삭제하기 (리스트 %l 에 대한)',
-    'insert %s at %idx of %l':
-        '%s 을(를) %idx 위치에 추가하기 (리스트 %l 에 대한)',
-    'replace item %idx of %l with %s':
-        '%idx 번째 (리스트 %l 에 대한) 를 %s (으)로 바꾸기',
-
-    // other
-    'Make a block':
-        '블록 만들기',
-
-    // Paint Editor
-    'Paint Editor':
-        '그림 편집기',
-    'undo':
-        '되돌리기',
-    'grow':
-        '확대',
-    'shrink':
-        '축소',
-    'flip ↔':
-        '↔ 반전',
-    'flip ↕':
-        '↕ 반전',
-    'Brush size':
-        '펜 크기',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        '도형 크기 비율을 고정하는가?\n(shift 키를 눌러서 사용할 수 있습니다.)',
-    'Paintbrush tool\n(free draw)':
-        '붓 도구',
-    'Stroked Rectangle\n(shift: square)':
-        '사각형 그리기 도구\n(shift: 정사각형)',
-    'Stroked Ellipse\n(shift: circle)':
-        '타원 그리기 도구\n(shift: 원)',
-    'Eraser tool':
-        '지우개 도구',
-    'Set the rotation center':
-        '회전축 설정하기',
-    'Line tool\n(shift: vertical/horizontal)':
-        '선 그리기 도구\n(shift: 수평/수직)',
-    'Filled Rectangle\n(shift: square)':
-        '채워진 사각형 그리기 도구\n(shift: 정사각형)',
-    'Filled Ellipse\n(shift: circle)':
-        '채워진 타원 그리기 도구\n(shift: 원)',
-    'Fill a region':
-        '색 채우기',
-    'Pipette tool\n(pick a color anywhere)':
-        '스포이드 도구\n(원하는 색 선택하기)',
-
-    // menus
-    // snap menu
-    'About...':
-        'Snap! 에 대해서...',
-    'Reference manual':
-        '참고자료 다운로드',
-    'Snap! website':
-        'Snap! 웹사이트',
-    'Download source':
-        '소스코드 다운로드',
-    'Switch back to user mode':
-        '사용자 모드로 전환',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        '고도의 모픽 컨텍스트 메뉴를 숨겨 사용자 친화적으로 보여줍니다.',
-    'Switch to dev mode':
-        '개발자 모드로 전환',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '모픽 컨텍스트 메뉴와 인스펙터를 사용할 수 있으나, 사용자 친화적이지 않습니다!',
-
-    // project menu
-    'Project notes...':
-        '프로젝트 메모...',
-    'New':
-        '새로 만들기',
-    'Open...':
-        '열기...',
-    'Save':
-        '저장하기',
-    'Save to disk':
-        '내 컴퓨터에 저장하기',
-    'experimental - store this project\nin your downloads folder':
-        '실험적 - 이 프로젝트를\n 다운로드 폴더에 저장합니다.',
-    'Save As...':
-        '다른 이름으로 저장하기...',
-    'Import...':
-        '가져오기...',
-    'file menu import hint':
-        '내보낸 프로젝트 파일, 블록 라이브러리\n'
-		+ '스프라이트 모양 또는 소리를 가져옵니다.',
-    'Export project as plain text...':
-        '프로젝트를 텍스트 파일로 내보내기...',
-    'Export project...':
-        '프로젝트 내보내기...',
-    'show project data as XML\nin a new browser window':
-        '프로젝트 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export blocks...':
-        '블록 내보내기...',
-    'show global custom block definitions as XML\nin a new browser window':
-        '새롭게 정의한 전역 블록 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export all scripts as pic...':
-        '모든 스크립트를 그림파일로 내보내기',
-    'show a picture of all scripts\nand block definitions':
-        '모든 스크립트와 정의된 블록을 그림파일로 보여줍니다.',
-    'Import tools':
-        '추가 도구 가져오기',
-    'load the official library of\npowerful blocks':
-        '강력한 기능을 제공하는\n 블록들을 가져옵니다.',
-    'Libraries...':
-        '라이브러리...',
-    'Select categories of additional blocks to add to this project.':
-        '추가적인 블록을 선택해서\n 사용할 수 있습니다.',
-    'Import library':
-        '라이브러리 가져오기',
-
-    // cloud menu
-    'Login...':
-        '로그인...',
-    'Signup...':
-        '계정만들기...',
-    'Reset Password...':
-        '비밀번호 재설정...',
-    'url...':
-        'url...',
-    'export project media only...':
-        'export project media only...',
-    'export project without media...':
-        'export project without media...',
-    'export project as cloud data...':
-        'export project as cloud data...',
-    'open shared project from cloud...':
-        'open shared project from cloud...',
-
-    // settings menu
-    'Language...':
-        '언어선택...',
-    'Zoom blocks...':
-        '블록 크기 설정...',
-    'Stage size...':
-        '무대 크기 설정...',
-    'Stage size':
-        '무대 크기',
-    'Stage width':
-        '가로(너비)',
-    'Stage height':
-        '세로(높이)',
-    'Default':
-        '기본설정',
-    
-    'Blurred shadows':
-        '반투명 그림자',
-    'uncheck to use solid drop\nshadows and highlights':
-        '체크해제하면, 그림자와 하이라이트가\n불투명 상태로 됩니다.',
-    'check to use blurred drop\nshadows and highlights':
-        '체크하면, 그림자와 하이라이트가\n반투명 상태로 됩니다.',
-    
-    'Zebra coloring':
-        '중첩 블록 구분하기',
-    'check to enable alternating\ncolors for nested blocks':
-        '체크하면, 중첩된 블록을\n다른 색으로 구분할 수 있습니다.',
-    'uncheck to disable alternating\ncolors for nested block':
-        '체크해제하면, 중첩된 블록을\n다른 색으로 구분할 수 없습니다.',
-    
-    'Dynamic input labels':
-        'Dynamic input labels',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'uncheck to disable dynamic\nlabels for variadic inputs',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'check to enable dynamic\nlabels for variadic inputs',
-    
-    'Prefer empty slot drops':
-        '빈 슬롯에 입력 가능',
-    'settings menu prefer empty slots hint':
-        '설정 메뉴에 빈 슬롯의\n힌트를 사용할 수 있습니다.',
-    'uncheck to allow dropped\nreporters to kick out others':
-        '체크해제하면, 기존 리포터 블록에\n새로운 리포터 블록으로 대체할 수 있습니다.',
-    
-    'Long form input dialog':
-        '긴 형태의 입력 대화창',
-    'check to always show slot\ntypes in the input dialog':
-        '체크하면, 입력 대화창에\n항상 슬롯의 형태를 보여줍니다.',
-    'uncheck to use the input\ndialog in short form':
-        '체크해제하면, 입력 대화창을\n짧은 형태로 사용합니다.',
-    
-    'Plain prototype labels':
-        '새로 만든 블록 인수 설정',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        '체크해제하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 보입니다.',
-    'check to hide (+) symbols\nin block prototype labels':
-        '체크하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 숨깁니다.',
-    
-    'Virtual keyboard':
-        '가상 키보드',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        '체크해제하면, 모바일 기기에서\n가상 키보드를 사용할 수 없습니다.',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        '체크하면, 모바일 기기에서\n가상 키보드를 사용할 수 있습니다.',
-    
-    'Input sliders':
-        '입력창에서 슬라이더 사용',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        '체크해제하면, 입력창에서\n슬라이더를 사용할 수 없습니다.',
-    'check to enable\ninput sliders for\nentry fields':
-        '체크하면, 입력창에서\n슬라이더를 사용할 수 있습니다.',
-    
-    'Clicking sound':
-        '블록 클릭시 소리',
-    'uncheck to turn\nblock clicking\nsound off':
-        '체크해제하면, 블록 클릭시\n소리가 꺼집니다.',
-    'check to turn\nblock clicking\nsound on':
-        '체크하면, 블록 클릭시\n소리가 켜집니다.',
-    
-    'Animations':
-        '애니메이션',
-    'uncheck to disable\nIDE animations':
-        '체크해제하면, IDE 애니메이션을\n 사용할 수 없습니다.',
-    
-    'Turbo mode':
-        '터보 모드',
-    'check to prioritize\nscript execution':
-        '체크하면, 스크립트를\n 빠르게 실행합니다.',
-    'uncheck to run scripts\nat normal speed':
-        '체크해제하면, 스크립트 실행 속도를\n 보통으로 합니다.',
-    
-    'Flat design':
-        '플랫(Flat) 디자인',
-    'uncheck for default\nGUI design':
-        '체크해제하면,\n 기본 GUI 디자인으로\n 변경합니다.',
-    'check for alternative\nGUI design':
-        '체크하면, 플랫(Flat)\n 디자인으로 변경합니다.',
-    
-    'Sprite Nesting':
-        'Sprite Nesting',
-    'uncheck to disable\nsprite composition':
-        'uncheck to disable\nsprite composition',
-    'check to enable\nsprite composition':
-        'check to enable\nsprite composition',
-
-    'Thread safe scripts':
-        '스레드 안전 스크립트',
-    'uncheck to allow\nscript reentrance':
-        '체크해제하면, 스크립트\n재진입성을 허락합니다.',
-    'check to disallow\nscript reentrance':
-        '체크하면, 스크립트\n재진입성을 허락하지 않습니다.',
-    
-    'Prefer smooth animations':
-        '자연스러운 애니메이션',
-    'uncheck for greater speed\nat variable frame rates':
-        '체크해제하면, 프레임\n 전환 비율이 빨라집니다.',
-    'check for smooth, predictable\nanimations across computers':
-        '체크하면, 애니메이션이\n 자연스러워 집니다.',
-    
-    'Flat line ends':
-        '선 끝을 평평하게 만들기',
-    'check for flat ends of lines':
-        '체크하면, 선 끝을\n 평평하게 만듭니다.',
-    'uncheck for round ends of lines':
-        '체크해제하면, 선 끝을\n 둥글게 만듭니다.',
-    
-    'Codification support':
-        '체계화 지원',
-    'uncheck to disable\nblock to text mapping features':
-        'uncheck to disable\nblock to text mapping features',    
-    'check for block\nto text mapping features':
-        '체크하면, check for block\nto text mapping features', 
-
-    // inputs
-    'with inputs':
-        '매개변수',
-    'input names:':
-        '매개변수이름:',
-    'Input Names:':
-        '매개변수이름:',
-
-    // context menus:
-    'help':
-        '도움말',
-    
-    // palette:
-    'find blocks...':
-        '블록 찾기...',
-    'hide primitives':
-        '기본 블록 숨기기',
-    'show primitives':
-        '기본 블록 보이기',
-
-    // blocks:
-    'help...':
-        '블록 도움말...',
-    'relabel...':
-        '블록 바꾸기...',
-    'duplicate':
-        '복사하기',
-    'make a copy\nand pick it up':
-        '복사해서\n들고 있습니다.',
-    'delete':
-        '삭제하기',
-    'script pic...':
-        '이 스크립트를 그림파일로 내보내기...',
-    'open a new window\nwith a picture of this script':
-        '이 스크립트 그림을\n새로운 윈도우에서 엽니다.',
-    'ringify':
-        '블록형태 변환하기',
-    'unringify':
-        'unringify',
-
-    // custom blocks:
-    'delete block definition...':
-        '블록 삭제하기',
-    'edit...':
-        '편집…',
-
-    // sprites:
-    'edit':
-        '스크립트 편집하기',
-    'export...':
-        '내보내기...',
-
-    // stage:
-    'show all':
-        '모든 스프라이트 나타내기',
-    'pic...':
-        '그림파일로 내보내기...',
-    'open a new window\nwith a picture of the stage':
-        '새로운 창을 열고\n무대의 화면을\n그림파일로 저장한다.',
-
-    // scripting area
-    'clean up':
-        '스크립트 정리하기',
-    'arrange scripts\nvertically':
-        '스크립트를\n수직으로 정렬한다.',
-    'add comment':
-        '주석 추가하기',
-    'undrop':
-        '마지막으로 가져온 블록',
-    'undo the last\nblock drop\nin this pane':
-        '마지막으로\n 가져온 블록을\n 확인한다.',
-    'scripts pic...':
-        '모든 스크립트를 그림파일로 내보내기...',
-    'open a new window\nwith a picture of all scripts':
-        '새로운 창을 열어서\n 모든 스크립트를\n 그림으로 저장한다.',
-    'make a block...':
-        '블록 만들기...',
-
-    // costumes
-    'rename':
-        '이름 수정하기',
-    'export':
-        '내보내기',
-
-    // sounds
-    'Play sound':
-        '소리 재생',
-    'Stop sound':
-        '소리 정지',
-    'Stop':
-        '정지',
-    'Play':
-        '재생',
-
-    // dialogs
-    // buttons
-    'OK':
-        '확인',
-    'Ok':
-        '확인',    
-    'Cancel':
-        '취소',
-    'Yes':
-        '예',
-    'No':
-        '아니오',
-
-    // help
-    'Help':
-        '도움말',
-
-    // zoom blocks
-    'Zoom blocks':
-        '블록 크기 설정',
-    'build':
-        '만들기',
-    'your own':
-        '나만의',
-    'blocks':
-        '블록',
-    'normal (1x)':
-        '기본 크기 (1x)',
-    'demo (1.2x)':
-        '데모 크기 (1.2x)',
-    'presentation (1.4x)':
-        '발표용 크기 (1.4x)',
-    'big (2x)':
-        '큰 크기 (2x)',
-    'huge (4x)':
-        '매우 큰 크기(4x)',
-    'giant (8x)':
-        '정말 큰 크기 (8x)',
-    'monstrous (10x)':
-        '믿을 수 없는 크기 (10x)',
-
-
-    // costume editor
-    'Costume Editor':
-        '모양 편집기',
-    'click or drag crosshairs to move the rotation center':
-        '클릭 또는 드래그 해서 회전 중심 설정하기',
-
-    // project notes
-    'Project Notes':
-        '프로젝트 메모',
-
-    // new project
-    'New Project':
-        '새로운 프로젝트',
-    'Replace the current project with a new one?':
-        '현재 프로젝트를 새로운 프로젝트로 교체하시겠습니까?',
-
-    // open project
-    'Open Projekt':
-        '프로젝트 열기',
-
-    // save project
-    'Save Project As...':
-        '프로젝트 저장...',
-
-    // export blocks
-    'Export blocks':
-        '블록 내보내기',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        '이 프로젝트에는 아직 새로 만든 전역 블록이 없습니다.',
-    'select':
-        '선택',
-    'all':
-        '모두',
-    'none':
-        '모두 취소',
-
-    // variable dialog
-    'for all sprites':
-        '모든 스프라이트에 대해',
-    'for this sprite only':
-        '이 스프라이트에 대해',
-
-    // block dialog
-    'Change block':
-        '블록 변경',
-    'Command':
-        '커맨드',
-    'Reporter':
-        '리포터',
-    'Predicate':
-        '프레디키트',
-
-    // block editor
-    'Block Editor':
-        '블록 편집기',
-    'Apply':
-        '적용',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        '블록 삭제하기',
-    'block deletion dialog text':
-        '이 블록과 모든 인스턴스를\n 삭제해도 괜찮습니까?',
-
-    // input dialog
-    'Create input name':
-        '입력 이름 생성',
-    'Edit input name':
-        '입력 이름 편집',
-    'Title text':
-        '제목 텍스트',
-    'Input name':
-        '입력 이름',
-    'Delete':
-        '삭제',
-    'Object':
-        '객체',
-    'Number':
-        '숫자',
-    'Text':
-        '텍스트',
-    'List':
-        '리스트',
-    'Any type':
-        '아무타입',
-    'Boolean (T/F)':
-        '불리언 (참/거짓)',
-    'Command\n(inline)':
-        '커맨드\n(인라인)',
-    'Command\n(C-shape)':
-        '커맨드 \n(C-모양)',
-    'Any\n(unevaluated)':
-        '아무값\n(평가되지 않음)',
-    'Boolean\n(unevaluated)':
-        '불리언\n(평가되지 않음)',
-    'Single input.':
-        '단일 입력',
-    'Default Value:':
-        '기본 값:',
-    'Multiple inputs (value is list of inputs)':
-        '다중 입력 (값은 리스트의 입력값입니다)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - 호출자에게 내부 변수 보이게 만들기',
-
-    // About Snap
-    'About Snap':
-        'Snap에 대해서',
-    'Back...':
-        '뒤로…',
-    'License...':
-        '라이센스...',
-    'Modules...':
-        '모듈...',
-    'Credits...':
-        '크레디트...',
-    'Translators...':
-        '번역자',
-    'License':
-        '라이센스',
-    'current module versions:':
-        '현재 모듈 버전:',
-    'Contributors':
-        '기여자:',
-    'Translations':
-        '번역',
-
-    // variable watchers
-    'normal':
-        '보통 읽기',
-    'large':
-        '크게 보기',
-    'slider':
-        '슬라이더',
-    'slider min...':
-        '슬라이더 최소값 설정...',
-    'slider max...':
-        '슬라이더 최대값 설정...',
-    'Slider minimum value':
-        '슬라이더 최소값 설정',
-    'Slider maximum value':
-        '슬라이더 최대값 설정',
-
-    // list watchers
-    'length: ':
-        '길이: ',
-
-    // coments
-    'add comment here...':
-        '여기에 주석 추가…',
-    'comment pic...':
-        '주석을 그림파일로 내보내기...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) 오른쪽',
-    '(-90) left':
-        '(-90) 왼쪽',
-    '(0) up':
-        '(0) 위',
-    '(180) right':
-        '(180) 아래',
-
-    // collision detection
-    'mouse-pointer':
-        '마우스의 포인터',
-    'edge':
-        '벽',
-    'pen trails':
-        '펜의 궤적',
-
-    // costumes
-    'Turtle':
-        '화살표',
-    'Empty':
-        'Leer',
-
-        // graphical effects
-    'brightness':
-        '밝기',
-    'ghost':
-        '유령',
-    'negative':
-        '반전',
-    'comic':
-        '코믹',
-    'confetti':
-        '색종이',
-
-
-    // keys
-    'space':
-        '스페이스',
-    'up arrow':
-        '위쪽 화살표',
-    'down arrow':
-        '아래쪽 화살표',
-    'right arrow':
-        '오른쪽 화살표',
-    'left arrow':
-        '왼쪽 화살표',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        '새로 만들기...',
-
-    // math functions
-    'abs':
-        '절대값(abs)',
-    'sqrt':
-        '제곱근(sqrt)',
-    'floor':
-        '바닥(floor)',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        '글자',
-    'whitespace':
-        '빈칸',
-    'line':
-        '줄',
-    'tab':
-        '탭',
-    'cr':
-        '새줄(cr)',
-
-    // data types
-    'number':
-        '숫자',
-    'text':
-        '문자',
-    'Boolean':
-        '불리언',
-    'list':
-        '리스트',
-    'command':
-        '커맨드',
-    'reporter':
-        '리포터',
-    'predicate':
-        '프레디키트',
-
-    // list indices
-    'last':
-        '마지막',
-    'any':
-        '임의',
-
-    // missing entries
-    'Untitled':
-        '이름없음',
-    'Open Project':
-        '프로젝트 열기',
-    'Open':
-        '열기',
-    '(empty)':
-        '(공란)',
-    'Saved!':
-        '저장했습니다!',
-    'Delete Project':
-        '프로젝트 삭제',
-    'Are you sure you want to delete':
-        '정말로 삭제합니까?',
-    'unringify':
-        '블록형태변환 취소하기',
-    'rename...':
-        '이름수정...',
-    '(180) down':
-        '(180) 아래',
-    'Ok':
-        '확인'
-
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) 왼쪽",
+    "(0) up": "(0) 위",
+    "(1) sine": "",
+    "(180) down": "(180) 아래",
+    "(180) right": "(180) 아래",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) 오른쪽",
+    "(empty)": "(공란)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Snap에 대해서",
+    "About...": "Snap! 에 대해서...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "애니메이션",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "아무값 (평가되지 않음)",
+    "Any type": "아무타입",
+    "Apply": "적용",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "정말로 삭제합니까?",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "뒤로…",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "블록 편집기",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "반투명 그림자",
+    "Boolean": "불리언",
+    "Boolean (T/F)": "불리언 (참/거짓)",
+    "Boolean (unevaluated)": "불리언 (평가되지 않음)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "펜 크기",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "취소",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "블록 변경",
+    "Clear backup": "",
+    "Clicking sound": "블록 클릭시 소리",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "체계화 지원",
+    "Colors and Crayons": "",
+    "Command": "커맨드",
+    "Command (C-shape)": "커맨드 (C-모양)",
+    "Command (inline)": "커맨드 (인라인)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "도형 크기 비율을 고정하는가? (shift 키를 눌러서 사용할 수 있습니다.)",
+    "Contents": "",
+    "Contributors": "기여자:",
+    "Control": "제어",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "모양 편집기",
+    "Costumes": "모양",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "입력 이름 생성",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "크레디트...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "기본설정",
+    "Default Value:": "기본 값:",
+    "Delete": "삭제",
+    "Delete Custom Block": "블록 삭제하기",
+    "Delete Project": "프로젝트 삭제",
+    "Delete a variable": "변수 삭제하기",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "소스코드 다운로드",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "입력 이름 편집",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "지우개 도구",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "모든 스크립트를 그림파일로 내보내기",
+    "Export blocks": "블록 내보내기",
+    "Export blocks...": "블록 내보내기...",
+    "Export project as plain text...": "프로젝트를 텍스트 파일로 내보내기...",
+    "Export project...": "프로젝트 내보내기...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "색 채우기",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "채워진 타원 그리기 도구 (shift: 원)",
+    "Filled Rectangle (shift: square)": "채워진 사각형 그리기 도구 (shift: 정사각형)",
+    "First-Class Sprites": "",
+    "Flat design": "플랫(Flat) 디자인",
+    "Flat line ends": "선 끝을 평평하게 만들기",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "안녕!",
+    "Hello, World!": "",
+    "Help": "도움말",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "흠…",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "",
+    "Import library": "라이브러리 가져오기",
+    "Import sound": "",
+    "Import tools": "추가 도구 가져오기",
+    "Import...": "가져오기...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "매개변수이름:",
+    "Input Slot Options": "",
+    "Input name": "입력 이름",
+    "Input sliders": "입력창에서 슬라이더 사용",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "언어선택...",
+    "Libraries...": "라이브러리...",
+    "License": "라이센스",
+    "License...": "라이센스...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "선 그리기 도구 (shift: 수평/수직)",
+    "List": "리스트",
+    "List utilities": "",
+    "Lists": "리스트",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "로그인...",
+    "Logout": "",
+    "Long form input dialog": "긴 형태의 입력 대화창",
+    "Looks": "형태",
+    "Make a block": "블록 만들기",
+    "Make a variable": "변수 만들기",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "메시지 이름",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "모듈...",
+    "Motion": "동작",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "다중 입력 (값은 리스트의 입력값입니다)",
+    "Nested auto-wrapping": "",
+    "New": "새로 만들기",
+    "New Category": "",
+    "New Project": "새로운 프로젝트",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "아니오",
+    "November": "",
+    "Number": "숫자",
+    "OK": "확인",
+    "Object": "객체",
+    "October": "",
+    "Ok": "확인",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "열기",
+    "Open Project": "프로젝트 열기",
+    "Open Projekt": "프로젝트 열기",
+    "Open in Community Site": "",
+    "Open...": "열기...",
+    "Opening project...": "",
+    "Operators": "연산",
+    "Other": "기타",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "그림 편집기",
+    "Paint a new costume": "새로운 모양 그리기",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "붓 도구",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "펜",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "스포이드 도구 (원하는 색 선택하기)",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "새로 만든 블록 인수 설정",
+    "Play": "재생",
+    "Play sound": "소리 재생",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "프레디키트",
+    "Prefer empty slot drops": "빈 슬롯에 입력 가능",
+    "Prefer smooth animations": "자연스러운 애니메이션",
+    "Privacy...": "",
+    "Project Notes": "프로젝트 메모",
+    "Project URLs": "",
+    "Project notes...": "프로젝트 메모...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "참고자료 다운로드",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "현재 프로젝트를 새로운 프로젝트로 교체하시겠습니까?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "리포터",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "비밀번호 재설정...",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "저장하기",
+    "Save As...": "다른 이름으로 저장하기...",
+    "Save Project": "",
+    "Save Project As...": "프로젝트 저장...",
+    "Save to disk": "내 컴퓨터에 저장하기",
+    "Saved!": "저장했습니다!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "",
+    "Scripts": "스크립트",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "추가적인 블록을 선택해서 사용할 수 있습니다.",
+    "Selection tool": "",
+    "Sensing": "관찰",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "회전축 설정하기",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "계정만들기...",
+    "Single input.": "단일 입력",
+    "Single palette": "",
+    "Slider maximum value": "슬라이더 최대값 설정",
+    "Slider minimum value": "슬라이더 최소값 설정",
+    "Snap! website": "Snap! 웹사이트",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "소리",
+    "Sound Recorder": "",
+    "Sounds": "소리",
+    "Sprite": "스프라이트",
+    "Sprite Nesting": "",
+    "Stage": "무대",
+    "Stage height": "세로(높이)",
+    "Stage selected: no motion primitives": "무대 선택: 사용 가능한 동작 블록이 없습니다.",
+    "Stage size": "무대 크기",
+    "Stage size...": "무대 크기 설정...",
+    "Stage width": "가로(너비)",
+    "Stop": "정지",
+    "Stop sound": "소리 정지",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "타원 그리기 도구 (shift: 원)",
+    "Stroked Rectangle (shift: square)": "사각형 그리기 도구 (shift: 정사각형)",
+    "Switch back to user mode": "사용자 모드로 전환",
+    "Switch to dev mode": "개발자 모드로 전환",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "텍스트",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "스레드 안전 스크립트",
+    "Title text": "제목 텍스트",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "번역",
+    "Translators...": "번역자",
+    "Turbo mode": "터보 모드",
+    "Turtle": "화살표",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "이름없음",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Upvar - 호출자에게 내부 변수 보이게 만들기",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "변수 이름",
+    "Variables": "변수",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "가상 키보드",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "예",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "중첩 블록 구분하기",
+    "Zoom blocks": "블록 크기 설정",
+    "Zoom blocks...": "블록 크기 설정...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "리스트 _ 에 _ 포함되었는가?",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ 을(를) 리스트 _ 의 맨 앞에 추가하기",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "( _ / _ ) 의 나머지",
+    "_ of _": "_ ( _ 에 대한)",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "절대값(abs)",
+    "acos": "acos",
+    "add _ to _": "_ 을(를) 리스트 _ 의 마지막에 추가하기",
+    "add a new Turtle sprite": "새로운 스프라이트 추가하기",
+    "add a new sprite": "",
+    "add comment": "주석 추가하기",
+    "add comment here...": "여기에 주석 추가…",
+    "agent": "",
+    "alert _": "경고: _",
+    "all": "모두",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "리스트 _ 에서 첫 번째 항목 제외하기",
+    "all but this script": "이 스크립트를 제외한 모두",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "그리고",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "대답",
+    "any": "",
+    "any key": "",
+    "any message": "어떤 메시지",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "스크립트를 수직으로 정렬한다.",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "_ 을(를) 묻고 기다리기",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "큰 크기 (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "이 블록과 모든 인스턴스를 삭제해도 괜찮습니까?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "블록",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "밝기",
+    "broadcast _ _": "_ _ 방송하기",
+    "broadcast _ _ and wait": "_ _ 방송하고 기다리기",
+    "brush": "",
+    "build": "만들기",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "_ 을(를) _ 으로 호출하기",
+    "call _ w/continuation": "반복해서 _ 을(를) 호출하기",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "회전가능",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "변수 _ 을(를) _ 만큼 바꾸기",
+    "change _ effect by _": "_ 효과를 _ 만큼 바꾸기",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "펜 색깔을 _ 만큼 바꾸기",
+    "change pen shade by _": "펜 음영을 _ 만큼 바꾸기",
+    "change pen size by _": "펜 굵기를 _ 만큼 바꾸기",
+    "change size by _": "크기를 _ 만큼 바꾸기",
+    "change tempo by _": "빠르기를 _ 만큼 바꾸기",
+    "change volume by _": "",
+    "change x by _": "x좌표 _ 만큼 바꾸기",
+    "change y by _": "y좌표 _ 만큼 바꾸기",
+    "check for alternative GUI design": "체크하면, 플랫(Flat) 디자인으로 변경합니다.",
+    "check for block to text mapping features": "체크하면, check for block to text mapping features",
+    "check for flat ends of lines": "체크하면, 선 끝을 평평하게 만듭니다.",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "체크하면, 애니메이션이 자연스러워 집니다.",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "체크하면, 입력 대화창에 항상 슬롯의 형태를 보여줍니다.",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "체크하면, 스크립트 재진입성을 허락하지 않습니다.",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "",
+    "check to enable alternating colors for nested blocks": "체크하면, 중첩된 블록을 다른 색으로 구분할 수 있습니다.",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "",
+    "check to enable input sliders for entry fields": "체크하면, 입력창에서 슬라이더를 사용할 수 있습니다.",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "체크하면, 모바일 기기에서 가상 키보드를 사용할 수 있습니다.",
+    "check to hide (+) symbols in block prototype labels": "체크하면, 블록 편집기에서 블록 인수 추가 버튼(+)을 숨깁니다.",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "체크하면, 스크립트를 빠르게 실행합니다.",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "체크하면, 블록 클릭시 소리가 켜집니다.",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "체크하면, 그림자와 하이라이트가 반투명 상태로 됩니다.",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "스크립트 정리하기",
+    "clear": "펜 자국 지우기",
+    "clear graphic effects": "그래픽 효과 지우기",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "클릭 또는 드래그 해서 회전 중심 설정하기",
+    "clicked": "",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "_ 색이 _ 색에 닿았는가?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "코믹",
+    "command": "커맨드",
+    "comment pic...": "주석을 그림파일로 내보내기...",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "색종이",
+    "console log _": "콘솔 로그 _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "모양 번호",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "다른 웹페이지나 컴퓨터에 있는 이미지 파일을 여기로 드래그해서 가져옵니다.",
+    "could not connect to:": "",
+    "cr": "새줄(cr)",
+    "create a clone of _": "_ 을(를) 복제하기",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "현재 _",
+    "current module versions:": "현재 모듈 버전:",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "일",
+    "day of week": "요일(1~7)",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "삭제하기",
+    "delete _": "",
+    "delete _ of _": "_ 번째 항목 삭제하기 (리스트 _ 에 대한)",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "블록 삭제하기",
+    "delete slot": "",
+    "delete this clone": "이 복제본 삭제하기",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "데모 크기 (1.2x)",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "개발자 모드",
+    "development mode debugging primitives:": "개발자 모드 디버깅 프리미티브:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "방향",
+    "disable deep-Morphic context menus and show user-friendly ones": "고도의 모픽 컨텍스트 메뉴를 숨겨 사용자 친화적으로 보여줍니다.",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "_ 까지 거리",
+    "distribution": "",
+    "don't rotate": "회전할 수 없습니다",
+    "down arrow": "아래쪽 화살표",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "마우스로 직접 움직이기",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "복사하기",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "벽",
+    "edit": "스크립트 편집하기",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "편집…",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "모픽 컨텍스트 메뉴와 인스펙터를 사용할 수 있으나, 사용자 친화적이지 않습니다!",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - store this project in your downloads folder": "실험적 - 이 프로젝트를 다운로드 폴더에 저장합니다.",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "내보내기",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "내보내기...",
+    "extract": "",
+    "f": "f",
+    "false": "거짓",
+    "file": "",
+    "file menu import hint": "내보낸 프로젝트 파일, 블록 라이브러리 스프라이트 모양 또는 소리를 가져옵니다.",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "_ 색 추출하기",
+    "find blocks": "",
+    "find blocks...": "블록 찾기...",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "↔ 반전",
+    "flip ↕": "↕ 반전",
+    "floor": "바닥(floor)",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "모든 스프라이트에 대해",
+    "for each _ in _ _": "",
+    "for this sprite only": "이 스프라이트에 대해",
+    "forever _": "무한 반복하기 _",
+    "frame": "",
+    "frames": "프레임",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "유령",
+    "giant (8x)": "정말 큰 크기 (8x)",
+    "glide _ secs to x: _ y: _": "_ 초 동안 x: _ 、y: _ 쪽으로 이동하기",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "_ 번째로 물러나기",
+    "go to _": "_ 위치로 이동하기",
+    "go to _ layer": "",
+    "go to front": "맨 앞으로 나오기",
+    "go to x: _ y: _": "x: _ 、y: _ 쪽으로 이동하기",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "확대",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "안녕",
+    "help": "도움말",
+    "help...": "블록 도움말...",
+    "hide": "숨기기",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "기본 블록 숨기기",
+    "hide variable _": "변수 _ 숨기기",
+    "high": "",
+    "hour": "시간",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "매우 큰 크기(4x)",
+    "i": "i",
+    "identical to": "가 동일한가",
+    "if _ _": "만약 _ 라면 _",
+    "if _ _ else _": "만약 _ 라면 _ 아니면 _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "벽에 닿으면 튕기기",
+    "import a sound from your computer by dragging it into here": "컴퓨터에 있는 소리 파일을 여기로 드래그해서 가져옵니다.",
+    "import without attempting to parse or format data": "",
+    "import...": "",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "",
+    "input names:": "매개변수이름:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "_ 을(를) _ 위치에 추가하기 (리스트 _ 에 대한)",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "와(과) _ ?",
+    "is _ a _ ?": "_ 이(가) _ 인가?",
+    "is _ empty?": "",
+    "is _ identical to _ ?": "_ 와(과) _ 가 동일한가?",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "_ 번째 항목 (리스트 _ 에 대한)",
+    "items": "",
+    "j": "j",
+    "join _": "_ 결합하기",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "_ 키를 눌렀는가?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "한국어",
+    "language_translator": "Yunjae Jang",
+    "large": "크게 보기",
+    "last": "마지막",
+    "last changed": "",
+    "last_changed": "2015-01-21",
+    "launch _ _": "_ 을(를) _ 으로 동시실행하기",
+    "left": "",
+    "left arrow": "왼쪽 화살표",
+    "length": "",
+    "length of _": "리스트 _ 의 항목 갯수",
+    "length:": "길이:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "글자",
+    "letter _ of _": "_ 번째 글자 ( _ 에 대한)",
+    "light (70)": "",
+    "lightness": "",
+    "line": "줄",
+    "lines": "",
+    "list": "리스트",
+    "list _": "리스트 _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "강력한 기능을 제공하는 블록들을 가져옵니다.",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "블록 만들기...",
+    "make a category...": "",
+    "make a copy and pick it up": "복사해서 들고 있습니다.",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "메시지",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "분",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "믿을 수 없는 크기 (10x)",
+    "month": "월",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "마우스를 클릭했는가?",
+    "mouse position": "",
+    "mouse x": "마우스의 x좌표",
+    "mouse y": "마우스의 y좌표",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "마우스의 포인터",
+    "move": "",
+    "move _ steps": "_ 만큼 움직이기",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "나 자신",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "반전",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "새로 만들기...",
+    "next": "",
+    "next costume": "다음 모양",
+    "none": "모두 취소",
+    "normal": "보통 읽기",
+    "normal (1x)": "기본 크기 (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "_ 이(가) 아니다",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "숫자",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "",
+    "only face left/right": "왼쪽에서 오른쪽으로만",
+    "only grab this block": "",
+    "open a new window with a picture of all scripts": "새로운 창을 열어서 모든 스크립트를 그림으로 저장한다.",
+    "open a new window with a picture of the stage": "새로운 창을 열고 무대의 화면을 그림파일로 저장한다.",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "이 스크립트 그림을 새로운 윈도우에서 엽니다.",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "또는",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "이 스프라이트에 있는 다른 스크립트",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "새로운 스프라이트 그리기",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "모두 잠시 멈추기 _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "펜 내리기",
+    "pen down?": "",
+    "pen trails": "펜의 궤적",
+    "pen up": "펜 올리기",
+    "pen vectors": "",
+    "pic...": "그림파일로 내보내기...",
+    "pick random _ to _": "_ 부터 _ 사이의 난수",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "_ 음을 _ 박자로 연주하기",
+    "play sound _": "_ 소리내기",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "_ 을(를) 끝까지 소리내기",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "_ 도 방향 보기",
+    "point towards _": "_ 쪽 보기",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "프레디키트",
+    "presentation (1.4x)": "발표용 크기 (1.4x)",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "임의",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "블록 바꾸기...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "이름 수정하기",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "",
+    "rename only this reporter": "",
+    "rename sound": "",
+    "rename...": "이름수정...",
+    "repeat _ _": "_ 번 반복하기 _",
+    "repeat until _ _": "_ 까지 반복하기 _",
+    "replace item _ of _ with _": "_ 번째 (리스트 _ 에 대한) 를 _ (으)로 바꾸기",
+    "report _": "_ 출력하기",
+    "reporter": "리포터",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "타이머 초기화",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "_ 박자 동안 쉬기",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "오른쪽 화살표",
+    "ring": "",
+    "ringify": "블록형태 변환하기",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "_ 반올림",
+    "run _ _": "_ 을(를) _ 으로 실행하기",
+    "run _ w/continuation": "반복해서 _ 을(를) 실행하기",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "_ 말하기",
+    "say _ for _ secs": "_ 을(를) _ 초 동안 말하기",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "이 스크립트를 그림파일로 내보내기...",
+    "script variables _": "스크립트 변수 _",
+    "scripts": "",
+    "scripts pic...": "모든 스크립트를 그림파일로 내보내기...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "초",
+    "select": "선택",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "_ 효과를 _ 만큼 정하기",
+    "set _ of block _ to _": "",
+    "set _ to _": "변수 _ 에 _ 저장하기",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "펜 색깔을 _ 으로 정하기",
+    "set pen shade to _": "펜 음영을 _ 으로 정하기",
+    "set pen size to _": "펜 굵기를 _ (으)로 정하기",
+    "set size to _ %": "크기를 _ % 로 정하기",
+    "set tempo to _ bpm": "빠르기를 _ bpm으로 정하기",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "터보 모드 _ 으로 설정하기",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "x좌표 _ (으)로 정하기",
+    "set y to _": "y좌표 _ (으)로 정하기",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "설정 메뉴에 빈 슬롯의 힌트를 사용할 수 있습니다.",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "보이기",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "모든 스크립트와 정의된 블록을 그림파일로 보여줍니다.",
+    "show all": "모든 스프라이트 나타내기",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "새롭게 정의한 전역 블록 데이터를 새로운 윈도우에 XML 형태로 보여주기",
+    "show primitives": "기본 블록 보이기",
+    "show project data as XML in a new browser window": "프로젝트 데이터를 새로운 윈도우에 XML 형태로 보여주기",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "변수 _ 보이기",
+    "shown?": "",
+    "shrink": "축소",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "크기",
+    "slider": "슬라이더",
+    "slider max...": "슬라이더 최대값 설정...",
+    "slider min...": "슬라이더 최소값 설정...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "스페이스",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "_ 를 _ 기준으로 나누기",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "제곱근(sqrt)",
+    "square": "",
+    "stack size": "스택 크기",
+    "stage": "",
+    "stage image": "",
+    "stamp": "도장찍기",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "_ 멈추기",
+    "stop all sounds": "모든 소리 끄기",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "모양 _ 로 바꾸기",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "탭",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "빠르기",
+    "temporary?": "",
+    "text": "문자",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "어떤 것",
+    "think _": "_ 생각하기",
+    "think _ for _ secs": "_ 을(를) _ 초 동안 생각하기",
+    "this _": "",
+    "this block": "이 블록",
+    "this project doesn't have any custom global blocks yet": "이 프로젝트에는 아직 새로 만든 전역 블록이 없습니다.",
+    "this script": "이 스크립트",
+    "time in milliseconds": "밀리세컨드초",
+    "timer": "타이머",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "_ 에 닿았는가?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "janggoons@gmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "참",
+    "turbo mode": "",
+    "turbo mode?": "터보 모드인가?",
+    "turn _ _ degrees": "_ _ 도 돌기",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "_ 의 타입",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "체크해제하면, 기본 GUI 디자인으로 변경합니다.",
+    "uncheck for greater speed at variable frame rates": "체크해제하면, 프레임 전환 비율이 빨라집니다.",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "체크해제하면, 선 끝을 둥글게 만듭니다.",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "체크해제하면, 기존 리포터 블록에 새로운 리포터 블록으로 대체할 수 있습니다.",
+    "uncheck to allow script reentrance": "체크해제하면, 스크립트 재진입성을 허락합니다.",
+    "uncheck to always show (+) symbols in block prototype labels": "체크해제하면, 블록 편집기에서 블록 인수 추가 버튼(+)을 보입니다.",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "체크해제하면, IDE 애니메이션을 사용할 수 없습니다.",
+    "uncheck to disable alternating colors for nested block": "체크해제하면, 중첩된 블록을 다른 색으로 구분할 수 없습니다.",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "",
+    "uncheck to disable input sliders for entry fields": "체크해제하면, 입력창에서 슬라이더를 사용할 수 없습니다.",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "체크해제하면, 모바일 기기에서 가상 키보드를 사용할 수 없습니다.",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "체크해제하면, 스크립트 실행 속도를 보통으로 합니다.",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "체크해제하면, 블록 클릭시 소리가 꺼집니다.",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "체크해제하면, 그림자와 하이라이트가 불투명 상태로 됩니다.",
+    "uncheck to use the input dialog in short form": "체크해제하면, 입력 대화창을 짧은 형태로 사용합니다.",
+    "uncompile": "",
+    "undo": "되돌리기",
+    "undo the last block drop in this pane": "마지막으로 가져온 블록을 확인한다.",
+    "undrop": "마지막으로 가져온 블록",
+    "unicode _ as letter": "유니코드 _ 에 대한 문자",
+    "unicode of _": "_ 의 유니코드",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "블록형태변환 취소하기",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "이름없음",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "위쪽 화살표",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "_ 초 기다리기",
+    "wait until _": "_ 까지 기다리기",
+    "wardrobe": "",
+    "warp _": "워프 _",
+    "what's your name?": "당신의 이름은?",
+    "when I am _": "이 스프라이트를 클릭했을 때 _",
+    "when I receive _ _": "_ _ 을(를) 받았을 때",
+    "when I start as a clone": "복제되었을 때",
+    "when _": "",
+    "when _ clicked": "_ 클릭했을 때",
+    "when _ is edited _": "",
+    "when _ key pressed _": "_ _ 키를 눌렀을 때",
+    "whirl": "",
+    "whitespace": "빈칸",
+    "width": "",
+    "with data": "",
+    "with inputs": "매개변수",
+    "word": "",
+    "world": "세상",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x좌표",
+    "y": "y",
+    "y position": "y좌표",
+    "year": "연도",
+    "year:": "",
+    "your own": "나만의",
+    "z": "z"
+}

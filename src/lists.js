@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2021 by Jens Mönig and Brian Harvey
+    Copyright (C) 2025 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-ZERO, WHITE*/
+Context, ZERO, WHITE, ReadStream, Process*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2021-December-15';
+modules.lists = '2025-January-07';
 
 var List;
 var ListWatcherMorph;
@@ -119,16 +119,22 @@ var ListWatcherMorph;
     size()                  - count the number of all atomic elements
     rank()                  - answer the number of my dimensions
     shape()                 - answer a list of the max size for each dimension
-    width()                 - ansswer the maximum length of my columns, if any
+    width()                 - answer the maximum length of my columns, if any
     flatten()               - answer a concatenated list of columns and atoms
     ravel()                 - answer a flat list of all atoms in all sublists
     columns()               - answer a 2D list with rows turned into columns
     transpose()             - answer the matrix transpose over all dimensions
     reversed()              - answer a reversed shallow copy of the list
+    ssum()                  - answer the sum of all number leafs
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct
     slice()                 - same as query() turning negative indices into slices
+
+    analysis:
+    ---------
+    distribution()          - answer the occurrence count for each element
+
 */
 
 // List instance creation:
@@ -145,6 +151,7 @@ function List(array) {
 // List global preferences
 
 List.prototype.enableTables = true;
+List.prototype.enableWrapping = false;
 
 // List printing
 
@@ -190,11 +197,9 @@ List.prototype.cdr = function () {
 // List array setters:
 
 List.prototype.add = function (element, index) {
-/*
-    insert the element before the given slot index,
-    if no index is specifed, append the element
-*/
-    var idx = Math.round(+index) || this.length() + 1,
+    // insert the element before the given slot index,
+    // if no index is specifed, append the element
+    var idx = isNil(index) ? this.length() + 1 : this.wrapIndex(index),
         obj = isNil(element) ? null : element;
 
     this.becomeArray();
@@ -204,7 +209,7 @@ List.prototype.add = function (element, index) {
 
 List.prototype.put = function (element, index) {
     // exchange the element at the given slot for another
-    var idx = Math.round(+index) || 0,
+    var idx = this.wrapIndex(index),
         data = element === 0 ? 0
             : element === false ? false
                     : element || null;
@@ -220,7 +225,7 @@ List.prototype.put = function (element, index) {
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
     this.becomeArray();
-    this.contents.splice(Math.round(+index || 0) - 1, 1);
+    this.contents.splice(this.wrapIndex(index) - 1, 1);
     this.changed();
 };
 
@@ -246,6 +251,14 @@ List.prototype.deepMap = function (callback) {
             : callback(item));
 };
 
+List.prototype.wrapIndex = function (num) {
+    var idx = Math.round(+num || 0),
+        mod = (a, b) => ((+a % +b) + (+b)) % +b;
+    return this.enableWrapping ?
+        mod(idx - 1, this.length()) + 1
+        : idx;
+};
+
 // List getters (all hybrid):
 
 List.prototype.length = function () {
@@ -263,14 +276,14 @@ List.prototype.length = function () {
 
 List.prototype.at = function (index) {
     var value,
-        idx = Math.round(+index || 0),
+        idx = this.wrapIndex(index),
         pair = this;
     while (pair.isLinked) {
         if (idx > 1) {
             pair = pair.rest;
             idx -= 1;
         } else {
-            return pair.first;
+            return idx < 1 ? '' : pair.first;
         }
     }
     value = pair.contents[idx - 1];
@@ -315,6 +328,73 @@ List.prototype.indexOf = function (element) {
         }
     }
     return 0;
+};
+
+// List key-value accessing (experimental in v8.1):
+
+List.prototype.lookup = function (key, ifNone = '') {
+    // look up the value of a given key, return optional ifNone value,
+    // which can also be a niladic callback, or an empty string
+    var rec, parent;
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return this.at(key);
+    }
+    rec = this.itemsArray().find(elem => elem instanceof List &&
+        elem.length() > 0 &&
+        snapEquals(elem.at(1), key));
+    if (rec) {
+        return rec.length() > 2 ? rec.cdr() : rec.at(2);
+    }
+    if (snapEquals(key, '...')) {
+        if (typeof ifNone === 'function') {
+            return ifNone();
+        }
+        return ifNone;
+    }
+    parent = this.lookup('...');
+    if (parent instanceof List) {
+        return parent.lookup(key, ifNone);
+    } else if (isSnapObject(parent)) {
+        Process.prototype.assertAlive(parent);
+        return parent.variables.getVar(key);
+    }
+    return typeof ifNone === 'function' ? ifNone() : ifNone;
+};
+
+List.prototype.bind = function (key, value) {
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return this.put(value, key);
+    }
+    if (key instanceof List) {
+        return; // cannot use lists as key because of hyperization
+    }
+    this.add(new List([key, value]), this.forget(key) + 1);
+};
+
+List.prototype.forget = function (key) {
+    // remove all records indicated by the key
+    // and return the index of the first match, if any
+    var idx = 0,
+        match = this.length(),
+        query = rec =>
+            snapEquals(rec, key) || (
+                rec instanceof List &&
+                rec.length() === 2 &&
+                snapEquals(rec.at(1), key)
+            );
+
+    if (parseFloat(key) === +key) { // treat as numerical index
+        this.remove(key);
+        return key;
+    }
+    while (idx > -1) {
+        idx = this.itemsArray().findIndex(query);
+        if (idx > -1) {
+            match = Math.min(match, idx);
+            this.remove(idx + 1);
+        }
+    }
+    return match;
 };
 
 // List table (2D) accessing (for table morph widget):
@@ -406,18 +486,26 @@ List.prototype.version = function (startRow, rows, startCol, cols) {
     return v;
 };
 
-// List matrix operations and utilities - very experimental
+// List matrix operations and utilities
 
 List.prototype.query = function (indices) {
     // assumes a 2D argument list where each slot represents
     // the indices to select from a dimension
     // e.g. [rows, columns, planes]
-    var first, select;
+    var first, rank, dim, select;
     if (indices.isEmpty()) {
         return this.map(e => e);
     }
-    if (indices.rank() === 1) {
-        return indices.map(i => this.at(i));
+    rank = indices.quickRank();
+    if (rank === 1) {
+        return indices.map(i => this.lookup(i));
+    }
+    if (rank > 2) {
+        return indices.map(i => this.query(i));
+    }
+    dim = indices.length();
+    if (dim > 10) {
+        throw new Error('too many dimensions (' + dim + ')?');
     }
     first = indices.at(1);
     if (first instanceof List) {
@@ -427,9 +515,12 @@ List.prototype.query = function (indices) {
     } else {
         select = new List([first]);
     }
-    return select.map(i => this.at(i)).map(
-            e => e instanceof List? e.query(indices.cdr()) : e
-    );
+    return select.map(i => this.lookup(i)).map(e => {
+        let rest = indices.cdr();
+        return e instanceof List ? e.query(rest)
+            : (rest.isEmpty() ? e
+                : new List([e]).query(rest));
+    });
 };
 
 List.prototype.slice = function (indices) {
@@ -575,6 +666,13 @@ List.prototype.ravel = function () {
     return new List(all);
 };
 
+List.prototype.ssum = function () {
+    // answer the sum of all number leafs
+    var ss = 0;
+    this.deepMap(leaf => ss += (+leaf || 0));
+    return ss;
+};
+
 List.prototype.rank = function () {
     // answer the number of my dimensions
     // traverse the whole structure for irregularly shaped nested lists
@@ -589,6 +687,14 @@ List.prototype.rank = function () {
         }
     }
     return rank;
+};
+
+List.prototype.quickRank = function () {
+    // answer the number of my dimensions
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var item = this.at(1);
+    return item instanceof List ? item.quickRank() + 1 : 1;
 };
 
 List.prototype.shape = function () {
@@ -607,6 +713,19 @@ List.prototype.shape = function () {
         shp.add(max);
     }
     return shp;
+};
+
+List.prototype.quickShape = function () {
+    // answer a list of each dimension's size
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var shp = [],
+        item = this;
+    while (item instanceof List) {
+        shp.push(item.length());
+        item = item.at(1);
+    }
+    return new List(shp);
 };
 
 List.prototype.getDimension = function (rank = 0) {
@@ -653,7 +772,7 @@ List.prototype.flatten = function () {
 };
 
 List.prototype.transpose = function () {
-    if (this.rank() > 2) {
+    if (this.quickRank() > 2) {
         return this.strideTranspose();
     }
     return this.columns();
@@ -688,20 +807,22 @@ List.prototype.reshape = function (dimensions) {
     // truncate excess elements, if any.
     // pad with (repetitions of) existing elements
     var src = this.ravel().itemsArray(),
-	i = 0,
-    size, trg;
+        dim = this.fillDimensionsFor(dimensions, src.length),
+        i = 0,
+        size, trg;
 
     // if no dimensions, report a scalar
-    if (dimensions.isEmpty()) {return src[0]; }
+    if (dim.isEmpty()) {return src[0]; }
 
-    size = dimensions.itemsArray().reduce((a, b) => a * b);
+    size = dim.itemsArray().reduce((a, b) => a * b);
+    if (size === Infinity) {return new List(); }
 
     // make sure the items count matches the specified target dimensions
     if (size < src.length) {
         // truncate excess elements from the source
         trg = src.slice(0, size);
     } else {
-        if (size > src.length && dimensions.length() > 2 && size > 1000000) {
+        if (size > src.length && dim.length() > 2 && size > 1000000) {
             // limit usage of reshape to grow to a maximum size of 1MM rows
             // in higher dimensions to prevent accidental dimension overflow
             throw new Error('exceeding the size limit for reshape');
@@ -718,7 +839,27 @@ List.prototype.reshape = function (dimensions) {
     }
 
     // fold the doctored source into the specified dimensions
-    return new List(trg).folded(dimensions);
+    return new List(trg).folded(dim);
+};
+
+List.prototype.fillDimensionsFor = function (dimensions, leafCount) {
+    // private - answer a copy of the dimensions list with all zeroish
+    // values adjusted to accomodate the given overall leaf count from
+    // left to right, e.g. for leaf count of 10 the given dimensions
+    // (0,3) become (4,3)
+    var product, factor,
+        already = -1;
+    if (dimensions.contains(0) ||
+        dimensions.contains('') ||
+        dimensions.contains(false)
+    ) {
+        product = dimensions.itemsArray().reduce((a, b) =>
+            Math.max(a, 1) * Math.max(b, 1));
+        factor = Math.ceil(leafCount / Math.max(product, 1));
+        return dimensions.map(each =>
+            each ? each : (already++ ? factor : 1));
+    }
+    return dimensions;
 };
 
 List.prototype.folded = function (dimensions) {
@@ -829,6 +970,30 @@ List.prototype.strideTranspose = function () {
 List.prototype.reversed = function () {
     // only for arrayed lists
     return new List(this.itemsArray().slice().reverse());
+};
+
+// List analysis
+
+List.prototype.distribution = function () {
+    // return a table representing a dictionary indicating the occurrence count
+    // of each unique elements
+    // note: for compound data this method uses identity rather than equality
+    var dict = new Map(),
+        data = this.itemsArray(),
+        len = data.length,
+        isNum = thing => parseFloat(thing) === +thing,
+        item, i;
+    for (i = 0; i < len; i += 1) {
+        item = isNum(data[i]) ? data[i].toString() : data[i];
+        if (dict.has(item)) {
+            dict.set(item, dict.get(item) + 1);
+        } else {
+            dict.set(item, 1);
+        }
+    }
+    return new List([...dict].sort((a, b) => b[1] - a[1])
+        .map(pair => new List(pair))
+    );
 };
 
 // List conversion:
@@ -957,25 +1122,24 @@ List.prototype.asCSV = function () {
     return items.map(encodeCell).join(',');
 };
 
-List.prototype.asJSON = function (guessObjects) {
+List.prototype.asJSON = function () {
     // Caution, no error catching!
     // this method assumes that the list.canBeJSON()
 
-    function objectify(list, guessObjects) {
+    function objectify(list) {
         var items = list.itemsArray(),
             obj = {};
         if (canBeObject(items)) {
             items.forEach(pair => {
                 var value = pair.length() === 2 ? pair.at(2) : undefined;
                 obj[pair.at(1)] = (value instanceof List ?
-                    objectify(value, guessObjects) : value);
+                    objectify(value) : value);
             });
             return obj;
         }
-        return items.map(element => {
-            return element instanceof List ?
-                objectify(element, guessObjects) : element;
-        });
+        return items.map(element => element instanceof List ?
+            objectify(element) : element
+        );
     }
 
     function canBeObject(array) {
@@ -984,18 +1148,19 @@ List.prototype.asJSON = function (guessObjects) {
         // than as array
         var keys;
         if (array.every(
-            element => element instanceof List && (element.length() < 3)
+            element => element instanceof List && (element.length() === 2)
         )) {
             keys = array.map(each => each.at(1));
             return keys.every(each => isString(each) && isUniqueIn(each, keys));
         }
+        return false;
     }
 
     function isUniqueIn(element, array) {
         return array.indexOf(element) === array.lastIndexOf(element);
     }
 
-    return JSON.stringify(objectify(this, guessObjects));
+    return JSON.stringify(objectify(this), null, 4);
 };
 
 List.prototype.canBeTXT = function () {
@@ -1006,8 +1171,144 @@ List.prototype.canBeTXT = function () {
 
 List.prototype.asTXT = function () {
     // Caution, no error catching!
-    // this method assumes that the list.canBeJSON()
+    // this method assumes that the list.canBeTXT()
     return this.itemsArray().join('\n');
+};
+
+List.prototype.canBeWords = function (already = []) {
+    return this.itemsArray().every(item =>
+        isString(item) ||
+        (typeof item === 'number') ||
+        (item instanceof List &&
+            !already.includes(item) &&
+            item.canBeWords(already.concat([item]))) // detect circularity
+    );
+};
+
+List.prototype.asWords = function () {
+    // recursively join all leaf items with spaces between.
+    // Caution, no error catching!
+    // this method assumes that the list.canBeWords()
+    return this.itemsArray().map(each =>
+        each instanceof List ? each.asWords() : each.toString().trim()
+    ).filter(word => word.length).join(' ');
+};
+
+// List to blocks parsing and encoding, highly experimental for v10
+
+List.prototype.parse = function (string) {
+    var stream = new ReadStream(string);
+    stream.upTo('(');
+    stream.skip();
+    this.parseStream(stream);
+};
+
+List.prototype.parseStream = function (stream) {
+    var item = '',
+        quoted = false,
+        ch, child;
+    while (!stream.atEnd()) {
+        ch = stream.next();
+        if (ch === ';' && !quoted) { // comment
+            stream.upTo('\n');
+        } else if (ch === '(' && !quoted) {
+            child = new List();
+            child.parseStream(stream);
+            this.add(child);
+        } else if ((ch === ')' || !ch.trim().length) && !quoted) {
+            if (item.length) {
+                if (snapEquals(item, 'nil')) {
+                    item = '';
+                }
+                this.add(item);
+                item = '';
+            }
+            if (ch === ')') {
+                return;
+            }
+        } else if (ch === '"') {
+            quoted = !quoted;
+            if (!quoted) {
+                if (!item.length) {
+                    this.add('');
+                } else if (snapEquals(item, 'nil')) {
+                    this.add(item);
+                }
+            }
+        } else if (ch === '\\') {
+            item += stream.next();
+        } else {
+            item += ch;
+        }
+    }
+};
+
+List.prototype.encode = function (level = 0, indent = 4) {
+    var str = '(',
+        len = this.length(),
+        hasBranch = false,
+        item,
+        i;
+    for (i = 1; i <= len; i += 1) {
+        item = this.at(i);
+        if (item instanceof List && !(item.at(1) instanceof List)) {
+            hasBranch = true;
+        }
+        str += this.encodeItem(item, level, indent);
+        if (i < len) {
+            str += ' ';
+        }
+    }
+    str += hasBranch && indent ?
+        '\n' + this.indentation(level, indent) + ')'
+        : ')';
+    return str;
+};
+
+List.prototype.encodeItem = function (data, level = 0, indent = 4) {
+    if (data instanceof List) {
+        if (!(data.at(1) instanceof List) && indent) {
+            return '\n' +
+                this.indentation(level + 1, indent) +
+                data.encode(level + 1, indent);
+        }
+        return data.encode(level, indent);
+    }
+    return isString(data) ? this.escape(data)
+        : (typeof data === 'boolean' ? this.encodeBoolean(data) : data);
+};
+
+List.prototype.escape = function (string) {
+    var str = '',
+        quoted = false,
+        len = string.length,
+        i, ch;
+    if (string.trim().length && 'tf'.includes(string.toLowerCase())) {
+        return '\\' + string;
+    } else if (snapEquals(string, 'nil')) {
+        return '"' + string + '"';
+    }
+    for (i = 0; i < len; i += 1) {
+        ch = string[i];
+        if (ch === '"' || (ch === ';')) {
+            ch = '\\' + ch;
+        } else if (!ch.trim().length || '()'.includes(ch)) {
+            if (!quoted) {
+                str = '"' + str;
+                quoted = true;
+            }
+        }
+        str += ch;
+    }
+    return quoted ? str + '"' : str || 'nil';
+};
+
+List.prototype.encodeBoolean = function (data) {
+    return (data === true) ? 't' : 'f';
+};
+
+List.prototype.indentation = function (level = 0, amount = 4) {
+    return new Array(level * amount + 1).join(' ') || '';
 };
 
 // List testing
@@ -1059,31 +1360,31 @@ List.prototype.equalTo = function (other) {
 };
 
 List.prototype.canBeCSV = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') ||
             isString(value) ||
-            (value instanceof List && value.hasOnlyAtomicData());
-    });
+            (value instanceof List && value.hasOnlyAtomicData())
+    );
 };
 
-List.prototype.canBeJSON = function () {
-    return this.itemsArray().every(value => {
-        return !isNaN(+value) ||
-            isString(value) ||
-            value === true ||
-            value === false ||
-            (value instanceof List && value.canBeJSON());
-    });
+List.prototype.canBeJSON = function (already = []) {
+    return this.itemsArray().every(value => !isNaN(+value) ||
+        isString(value) ||
+        value === true ||
+        value === false ||
+        (value instanceof List &&
+            !already.includes(value) &&
+            value.canBeJSON(already.concat([value]))) // detect circularity
+    );
 };
 
 List.prototype.hasOnlyAtomicData = function () {
-    return this.itemsArray().every(value => {
-        return (!isNaN(+value) && typeof value !== 'boolean') ||
-            isString(value);
-    });
+    return this.itemsArray().every(value =>
+        (!isNaN(+value) && typeof value !== 'boolean') || isString(value)
+    );
 };
 
-// List-to-block (experimental)
+// List-to-block
 
 List.prototype.blockify = function (limit = 500, count = [0]) {
     var block = SpriteMorph.prototype.blockForSelector('reportNewList'),
@@ -1241,7 +1542,9 @@ ListWatcherMorph.prototype.update = function (anyway) {
             if (m.contentsMorph instanceof ListWatcherMorph) {
                 m.contentsMorph.update();
             } else if (isSnapObject(m.contents) ||
-                    (m.contents instanceof Costume)) {
+                (m.contents instanceof Costume) ||
+                (m.contents instanceof Context)
+            ) {
                 m.update();
             }
         }
@@ -1472,7 +1775,10 @@ ListWatcherMorph.prototype.expand = function (maxExtent) {
 // ListWatcherMorph context menu
 
 ListWatcherMorph.prototype.userMenu = function () {
-    if (!List.prototype.enableTables) {
+    var world = this.world(),
+        ide = detect(world.children, m => m instanceof IDE_Morph);
+
+    if (!List.prototype.enableTables || ide.isAppMode) {
         return this.escalateEvent('userMenu');
     }
     var menu = new MenuMorph(this);
@@ -1481,13 +1787,29 @@ ListWatcherMorph.prototype.userMenu = function () {
         menu.addItem(
             'blockify',
             () => {
-                var world = this.world(),
-                    ide = detect(world.children, m => m instanceof IDE_Morph);
                 this.list.blockify().pickUp(world);
                 world.hand.grabOrigin = {
                     origin: ide.palette,
                     position: ide.palette.center()
                 };
+            }
+        );
+        menu.addItem(
+            'export',
+            () => {
+                if (this.list.canBeCSV()) {
+                    ide.saveFileAs(
+                        this.list.asCSV(),
+                        'text/csv;charset=utf-8', // RFC 4180
+                        localize('data') // name
+                    );
+                } else {
+                    ide.saveFileAs(
+                        this.list.asJSON(),
+                        'text/json;charset=utf-8',
+                        localize('data') // name
+                    );
+                }
             }
         );
     }

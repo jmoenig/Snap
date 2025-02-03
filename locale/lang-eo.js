@@ -1,1419 +1,1388 @@
-/*
-
-	lang-eo.js
-
-	German translation for SNAP!
-
-	written by Jens Mönig
-
-	Copyright (C) 2012 by Jens Mönig
-
-	This file is part of Snap!.
-
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
-
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-                'last value'
-        }
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.eo = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ĉ, ĉ   \u0108, \u0109
-    Ĝ, ĝ   \u011c, \u011d
-    Ĥ, ĥ   \u0124, \u0125
-    Ĵ, ĵ   \u0134, \u0135
-    Ŝ, ŝ   \u015c, \u015d
-    Ŭ, ŭ   \u016c, \u016d
-*/
-
-    // translations meta information
-    'language_name':
-        'Esperanto',
-    'language_translator':
-        'Sebastian CYPRYCH',
-    'translator_e-mail':
-        'sebacyp(heliko)gmail(punkto)com',
-    'last_changed':
-        '2017-10-01',
-
-    // GUI
-    // control bar:
-    'untitled':
-        'sentitola',
-    'development mode':
-        'programada re\u011dimo',
-
-    // categories:
-    'Motion':
-        'Movo',
-    'Looks':
-        'Aspekto',
-    'Sound':
-        'Sono',
-    'Pen':
-        'Skribilo',
-    'Control':
-        'Regado',
-    'Sensing':
-        'Sentado',
-    'Operators':
-        'Operatoroj',
-    'Variables':
-        'Variabloj',
-    'Lists':
-        'Listoj',
-    'Other':
-        'Aliaj',
-
-    // editor:
-    'draggable':
-        'trenebla',
-
-    // tabs:
-    'Scripts':
-        'Skriptoj',
-    'Costumes':
-        'Kost\u00fcme',
-    'Backgrounds':
-        'Fonoj',
-    'Sounds':
-        'Sonoj',
-
-    // names:
-    'Sprite':
-        'Objekto',
-    'Stage':
-        'Scenejo',
-
-    // rotation styles:
-    'don\'t rotate':
-        'ne turnebla',
-    'can rotate':
-        'turnebla',
-    'only face left/right':
-        'nur maldekstren/dekstren',
-
-    // new sprite button:
-    'add a new sprite':
-        'aldoni novan objekton',
-
-    // tab help
-    'costumes tab help':
-        'trenu tien bildojn\nel aliaj retpa\u011doj a\u016d de via komputilo',
-    'import a sound from your computer\nby dragging it into here':
-        'importu sonon de via komputilo\ntrenante \u011din \u0109i tien',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Scenejo elektita:\nneniuj movaj bazelementoj',
-    'move %n steps':
-        'iri %n pa\u015dojn',
-    'turn %clockwise %n degrees':
-        'turni %n gradojn %clockwise',
-    'turn %counterclockwise %n degrees':
-        'turni %n gradojn %counterclockwise',
-    'point in direction %dir':
-        'celi la\u016d direkto %dir',
-    'point towards %dst':
-        'celi al %dst',
-    'go to x: %n y: %n':
-        'iri al x: %n y: %n',
-    'go to %dst':
-        'iri al %dst',
-    'glide %n secs to x: %n y: %n':
-        'gliti dum %n sek. al x: %n y: %n',
-    'change x by %n':
-        '\u015dan\u011di x je %n',
-    'set x to %n':
-        '\u015dan\u011di x al %n',
-    'change y by %n':
-        '\u015dan\u011di y je %n',
-    'set y to %n':
-        '\u015dan\u011di y al %n',
-    'if on edge, bounce':
-        'resalti de la rando',
-    'x position':
-        'x pozicio',
-    'y position':
-        'y pozicio',
-    'direction':
-        'direkto',
-
-    // looks:
-    'switch to costume %cst':
-        '\u015dan\u011di al kostumo %cst',
-    'next costume':
-        'sekva kostumo',
-    'costume #':
-        'numero de kostumo',
-    'say %s for %n secs':
-        'diri %s dum %n sek.',
-    'say %s':
-        'diri %s',
-    'think %s for %n secs':
-        'pensi %s dum %n sek.',
-    'think %s':
-        'pensi %s',
-    'Hello!':
-        'Saluton!',
-    'Hmm...':
-        'Hmm...',
-    'change %eff effect by %n':
-        '\u015dan\u011di %eff efekton je %n',
-    'set %eff effect to %n':
-        '\u015dan\u011di efekton %eff al %n',
-    'clear graphic effects':
-        'forigi grafikajn efektojn',
-    'change size by %n':
-        '\u015dan\u011di grandecon je %n',
-    'set size to %n %':
-        '\u015dan\u011di grandecon al %n',
-    'size':
-        'grandeco',
-    'show':
-        'montri',
-    'hide':
-        'ka\u015di',
-    'go to front':
-        'iri anta\u016den',
-    'go back %n layers':
-        'iri %n tavolojn malanta\u016den',
-
-    'development mode \ndebugging primitives:':
-        'programada re\u011dimo \nsencimigadaj bazelementoj:',
-    'console log %mult%s':
-        'konzola protokolo: %mult%oj',
-    'alert %mult%s':
-        'averto %mult%oj',
-
-    // sound:
-    'play sound %snd':
-        'a\u016ddigi sonon %snd',
-    'play sound %snd until done':
-        'a\u016ddigi sonon %snd \u011dis finite',
-    'stop all sounds':
-        'haltigi \u0109iujn sonojn',
-    'rest for %n beats':
-        'pa\u016dzi dum %n taktoj',
-    'play note %n for %n beats':
-        'a\u016ddigi noton %n dum %n taktoj',
-    'change tempo by %n':
-        '\u015dan\u011di rapidecon je %n',
-    'set tempo to %n bpm':
-        '\u015dan\u011di rapidecon al %n taktoj minute',
-    'tempo':
-        'tempo',
-
-    // pen:
-    'clear':
-        'forigi desegna\u0135on',
-    'pen down':
-        'malsuprenigi skribilon',
-    'pen up':
-        'suprenigi skribilon',
-    'set pen color to %clr':
-        '\u015dan\u011di skribilokoloron al %clr',
-    'change pen color by %n':
-        '\u015dan\u011di skribilokoloron je %n',
-    'set pen color to %n':
-        '\u015dan\u011di skribilokoloron al %n',
-    'change pen shade by %n':
-        '\u015dan\u011di kolorombron je %n',
-    'set pen shade to %n':
-        '\u015dan\u011di kolorombron al %n',
-    'change pen size by %n':
-        '\u015dan\u011di skribilodikecon je %n',
-    'set pen size to %n':
-        '\u015dan\u011di skribilodikecon al %n',
-    'stamp':
-        'stemple',
-    'fill':
-        'plenigi',
-
-    // control:
-    'when %greenflag clicked':
-        'Kiam %greenflag estas alklakita',
-    'when %keyHat key pressed %keyName':
-        'se %keyHat klavo estas premita %keyName',
-    'when I am %interaction':
-        'Dum mi estas %interaction',
-    'clicked':
-        'alklakita',
-    'pressed':
-        'premita',
-    'dropped':
-        'demetita',
-    'mouse-entered':
-        'tu\u015data de musa montrilo',
-    'mouse-departed':
-        'lasita de musa montrilo',
-    'when %b':
-        'kiam %b',
-    'when I receive %msgHat %message':
-        'Kiam mi ricevas %msgHat %message',
-    'broadcast %msg %receive':
-        'elsendi %msg %receive',
-    'broadcast %msg %receive and wait':
-        'elsendi %msg %receive kaj atendi',
-    'Message name':
-        'Mesa\u011donomo',
-    'message':
-        'mesa\u011do',
-    'any message':
-        'iu mesa\u011do',
-    'wait %n secs':
-        'atendi %n sek.',
-    'wait until %b':
-        'atendi \u011dis %b',
-    'forever %loop':
-        'ripeti eterne %loop',
-    'repeat %n %loop':
-        'ripeti %n -foje %loop',
-    'repeat until %b %loop':
-        'ripeti \u011dis %b %loop',
-    'if %b %c':
-        'se %b %c',
-    'if %b %c else %c':
-        'se %b %c alie %c',
-    'report %s':
-        'raporti %s',
-    'stop %stopChoices':
-        'halti %stopChoices',
-    'all':
-        '\u0109ion',
-    'this script':
-        'tiun \u0109i skripton',
-    'this block':
-        'tiun \u0109i blokon',
-    'stop %stopOthersChoices':
-        'halti %stopOthersChoices',
-    'all but this script':
-        '\u0109ion krom tiu \u0109i skripto',
-    'other scripts in sprite':
-        'aliajn skriptojn en tiu objekto',
-    'pause all %pause':
-        'pa\u016dzi \u0109iujn %pause',
-    'run %cmdRing %inputs':
-        'ruli %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'lan\u0109i %cmdRing %inputs',
-    'call %repRing %inputs':
-        'voki %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'ruli %cmdRing %inputs kun da\u016drigo',
-    'call %cmdRing w/continuation':
-        'voki %cmdRing %inputs kun da\u016drigo',
-    'warp %c':
-        'nedisigeble %c',
-    'when I start as a clone':
-        'kiam mi estas klonita',
-    'create a clone of %cln':
-        'kloni %cln',
-    'myself':
-        'min',
-    'delete this clone':
-        'forigi tiun \u0109i klonon',
-
-    // sensing:
-    'touching %col ?':
-        'tu\u015das %col ?',
-    'touching %clr ?':
-        'tu\u015das %clr ?',
-    'color %clr is touching %clr ?':
-        'koloro %clr tu\u015das %clr ?',
-    'ask %s and wait':
-        'demandi %s kaj atendi',
-    'what\'s your name?':
-        'Kiu estas via nomo?',
-    'answer':
-        'respondo',
-    'mouse x':
-        'musa x-pozicio',
-    'mouse y':
-        'musa y-pozicio',
-    'mouse down?':
-        'musklavo estas premita?',
-    'key %key pressed?':
-        'klavo %key estas premita?',
-    'distance to %dst':
-        'distanco de %dst',
-    'reset timer':
-        'nuligi klikhorlo\u011don',
-    'timer':
-        'klikhorlo\u011do',
-    '%att of %spr':
-        '%att de %spr',
-    'my %get':
-        'mia %get',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'Rapida re\u011dimo?',
-    'set turbo mode to %b':
-        'apliki rapidan re\u011dimon al %b',
-    'filtered for %clr':
-        'filtrita por %clr',
-    'stack size':
-        'stakokapacito',
-    'frames':
-        'kadroj',
-
-    // operators:
-    '%n mod %n':
-        '%n mod %n',
-    'round %n':
-        'rondigi %n',
-    '%fun of %n':
-        '%fun de %n',
-    'pick random %n to %n':
-        'elekti stokaston inter %n kaj %n',
-    '%b and %b':
-        '%b kaj %b',
-    '%b or %b':
-        '%b a\u016d %b',
-    'not %b':
-        'ne %b',
-    'true':
-        'vero',
-    'false':
-        'malvero',
-    'join %words':
-        'kunigi %words',
-    'split %s by %delim':
-        'dividi %s kun %delim',
-    'hello':
-        'saluton',
-    'world':
-        'mondo',
-    'letter %idx of %s':
-        'litero %idx el %s',
-    'length of %s':
-        'longeco de %s',
-    'unicode of %s':
-        'unikodo de %s',
-    'unicode %n as letter':
-        'unikodo %n kiel litero',
-    'is %s a %typ ?':
-        '\u0109u %s estas %typ ?',
-    'is %s identical to %s ?':
-        'estas %s identa kun %s ?',
-    'type of %s':
-        'tipo de %s',
-
-    // variables:
-    'Make a variable':
-        'Krei variablon',
-    'Variable name':
-        'Variablonomo',
-    'Script variable name':
-        'Variablonomo de skripto',
-    'Delete a variable':
-        'Forigi variablon',
-    'set %var to %s':
-        '\u015dan\u011di %var al %s',
-    'change %var by %n':
-        '\u015dan\u011di %var je %n',
-    'show variable %var':
-        'montri variablon %var',
-    'hide variable %var':
-        'ka\u015di variablon %var',
-    'script variables %scriptVars':
-        'variabloj de skripto %scriptVars',
-
-    // lists:
-    'list %exp':
-        'listo %exp',
-    '%s in front of %l':
-        '%s estas anta\u016d %l',
-    'item %idx of %l':
-        'elemento %idx el %l',
-    'all but first of %l':
-        '\u0109iuj krom la unua el %l',
-    'length of %l':
-        'longeco de %l',
-    '%l contains %s':
-        '%l enhavas %s',
-    'thing':
-        'io',
-    'add %s to %l':
-        'aldoni %s al %l',
-    'delete %ida of %l':
-        'forigi %ida el %l',
-    'insert %s at %idx of %l':
-        'enigi %s je %idx en %l',
-    'replace item %idx of %l with %s':
-        'astata\u016di elementon %idx de %l per %s',
-
-    // other
-    'Make a block':
-        'Krei blokon',
-
-    // menus
-    // snap menu
-    'About...':
-        'Pri...',
-    'Reference manual':
-        'Manlibro',
-    'Snap! website':
-        'Snap! pa\u011daro',
-    'Download source':
-        'El\u015duti fontokodon',
-    'Switch back to user mode':
-        '\u015can\u011di reen al uzantore\u011dimo',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'mal\u015dalti deep-Morphic\nkuntekstajn menuojn\nkaj montri la afablajn',
-    'Switch to dev mode':
-        '\u015can\u011di al programada re\u011dimo',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '\u015dalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
-
-    // project menu
-    'Project notes...':
-        'Projektonotoj...',
-    'New':
-        'Nova',
-    'Open...':
-        'Malfermi...',
-    'Save':
-        'Konservi',
-    'Save to disk':
-        'Konservi al disko',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'konservi tiun \u0109i projekton\nen lokal el\u015dutan dosierujon\n'
-            + '(ne \u0109iuj foliumiloj tion apogas)',
-    'Save As...':
-        'Konservi kiel...',
-    'Import...':
-        'Importi...',
-    'file menu import hint':
-        'el\u015dutu dosieron kun blokoj sonoj a\u016d kostumoj',
-    'Export project as plain text...':
-        'Eksporti projekton en plata teksta formo...',
-    'Export project...':
-        'Eksporti projekton...',
-    'show project data as XML\nin a new browser window':
-        'prezenti projekton kiel XML\nen nova fenestro de retumilo',
-    'Export blocks...':
-        'Eksporti blokojn...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'prezenti mallokajn difinojn de propraj blokoj kiel XML\nen nova fenestro de retumilo',
-    'Unused blocks...':
-          'Neuzataj blokoj...',
-    'find unused global custom blocks\nand remove their definitions':
-        'trovi neuzatajn proprajn blokojn\nkaj forigi iliajn difinojn',
-    'Remove unused blocks':
-        'Forigi neuzatajn blokojn',
-    'there are currently no unused\nglobal custom blocks in this project':
-        'aktuale estas neniu neuzata\nmalloka propra bloko en tiu \u0109i projekto',
-    'unused block(s) removed':
-        'neuzata(j) bloko(j) forigitaj',
-    'Export summary...':
-        'Eksportresumo',
-    'open a new browser browser window\n with a summary of this project':
-        'malfermi projektresumon\nen nova fenestro de foliumilo',
-    'Contents':
-        'Enhavo',
-    'Kind of':
-        'Speco de',
-    'Part of':
-        'Parto de',
-    'Parts':
-        'Partoj',
-    'Blocks':
-        'Blokoj',
-    'For all Sprites':
-        'Por \u0109iu objekto',
-    'Import tools':
-        'Importi ilaron',
-    'load the official library of\npowerful blocks':
-        'importi oficialan bibliotekon\nde potencaj blokoj',
-    'Libraries...':
-        'Bibliotekoj...',
-    'Import library':
-        'Importi bibliotekon',
-
-    // cloud menu
-    'Login...':
-        'Ensaluti...',
-    'Signup...':
-        'Krei konton...',
-
-    // settings menu
-    'Language...':
-        'Lingvo...',
-    'Zoom blocks...':
-        'Zomi blokojn...',
-    'Stage size...':
-        'Grandeco de scenejo...',
-    'Stage size':
-        'Grandeco de scenejo',
-    'Stage width':
-        'Lar\u011deco de scenejo',
-    'Stage height':
-        'Alteco de scenejo',
-    'Default':
-        'Normala',
-    'Blurred shadows':
-        'Malklaraj ombroj',
-    'uncheck to use solid drop\nshadows and highlights':
-        'mal\u015daltu por uzi klarajn\nombrojn kaj emfazojn',
-    'check to use blurred drop\nshadows and highlights':
-        '\u015daltu por uzi malklarajn\nombrojn kaj emfazojn',
-    'Zebra coloring':
-        'Zebra kolorigado',
-    'check to enable alternating\ncolors for nested blocks':
-        '\u015daltu por ebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
-    'uncheck to disable alternating\ncolors for nested block':
-        'mal\u015daltu por malebligi diferencigadon\n de koloroj de stake kolektitaj blokoj',
-    'Dynamic input labels':
-        'Dinamikaj enigoetikedoj',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'mal\u015daltu por malebligi dinamikajn\nenigoetikedojn por enigo de variabloj',
-    'check to enable dynamic\nlabels for variadic inputs':
-        '\u015daltu por ebligi dinamikajn\nenigoetikedojn por enigo de variabloj',
-    'Prefer empty slot drops':
-        'Preferas malplenajn ingojn',
-    'settings menu prefer empty slots hint':
-        'agorda menuo preferas indikojn \u0109e malpenaj ingoj',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'mal\u015daltu por ebligi demetatajn\nraportilojn for\u015dovi la aliajn',
-    'Long form input dialog':
-        'Eniga formularo en longa formo',
-    'Plain prototype labels':
-        'Krudaj prototipaj etikedoj',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'mal\u015daltu por \u0109iam montri (+) signon\nen etikedoj de prototipaj blokoj',
-    'check to hide (+) symbols\nin block prototype labels':
-        '\u015daltu por ka\u015di (+) signon\nen etikedoj de prototipaj blokoj',
-    'check to always show slot\ntypes in the input dialog':
-        '\u015daltu por \u0109iam montri specon\nde ingo en eniga formularo',
-    'uncheck to use the input\ndialog in short form':
-        'mal\u015daltu por uzi la enigan\nformularon en mallonga formo',
-    'Virtual keyboard':
-        'Virtuala klavaro',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'mal\u015daltu por malebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        '\u015daltu por ebligi\nsubtenon de virtuala klavaro\npor porteblaj aparatoj',
-    'Input sliders':
-        'Enigaj \u015doviloj',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'mal\u015daltu por malebligi\nenigajn \u015dovilojn por\nenigaj kampoj',
-    'check to enable\ninput sliders for\nentry fields':
-        '\u015daltu por ebligi\nenigajn \u015dovilojn por\nenigaj kampoj',
-    'Clicking sound':
-        'Klakanta sono',
-    'uncheck to turn\nblock clicking\nsound off':
-        'mal\u015daltu por malebligi\nklakantan sonon',
-    'check to turn\nblock clicking\nsound on':
-        '\u015daltu por ebligi\nklakantan sonon',
-    'Animations':
-        'Animacioj',
-    'uncheck to disable\nIDE animations':
-        'mal\u015dalti por malebligi\nIDE-animaciojn',
-    'Turbo mode':
-        'Rapida re\u011dimo',
-    'check to prioritize\nscript execution':
-        '\u015dalti por asigni prioritaton\nde skriptoplenumado',
-    'uncheck to run scripts\nat normal speed':
-        'mal\u015dalti por plenumi skripton\nkun normala rapideco',
-    'check to enable\nIDE animations':
-        '\u015dalti por ebligi\nIDE-animaciojn',
-    'Flat design':
-        'Plata fasonado',
-    'Nested auto-wrapping':
-        'Ingita \u0109irka\u016dfulo',
-    'Keyboard Editing':
-        'Klavara redaktado',
-    'Table support':
-        'Subteno de tabeloj',
-    'Table lines':
-        'Linioj de tabelo',
-    'Visible stepping':
-        'Ponunupa\u015da plenumado',
-    'Thread safe scripts':
-        'Fadensekuraj skriptoj',
-    'uncheck to allow\nscript reentrancy':
-        'mal\u015daltu por ebligi\nreeniron en fadenon',
-    'check to disallow\nscript reentrancy':
-        '\u015daltu por malebligi\nreeniron en fadenon',
-    'Prefer smooth animations':
-        'Preferas glatajn animaciojn',
-    'uncheck for greater speed\nat variable frame rates':
-        'mal\u015daltu por pli granda rapideco\nkun varia bildorapido',
-    'check for smooth, predictable\nanimations across computers':
-        '\u015daltu por glataj, prognozeblaj\nanimacioj sur \u0109iuj komputiloj',
-    'Flat line ends':
-        'Malrondaj linifinoj',
-    'check for flat ends of lines':
-        '\u015daltu por malrondaj linifinoj',
-    'uncheck for round ends of lines':
-        'mal\u015daltu por rondaj linifinoj',
-    'Inheritance support':
-        'Subteno de heredado',
-
-    // inputs
-    'with inputs':
-        'kun enigoj',
-    'input names:':
-        'enigonomoj:',
-    'Input Names:':
-        'Enigonomoj:',
-    'input list:':
-        'enigolisto:',
-
-    // context menus:
-    'help':
-        'helpo',
-
-    // palette:
-    'hide primitives':
-        'ka\u015di bazelementojn',
-    'show primitives':
-        'montri bazelementojn',
-
-    // blocks:
-    'help...':
-        'helpo...',
-    'relabel...':
-        'Reetikedi...',
-    'duplicate':
-        'duobligi',
-    'make a copy\nand pick it up':
-        'krei kopion\nkaj elekt \u011din',
-    'only duplicate this block':
-        'duobligi nur tiun \u0109i blokon',
-    'delete':
-        'forigi',
-    'script pic...':
-        'bildo de skripto...',
-    'open a new window\nwith a picture of this script':
-        'malfermi novan fenestron\nkun bildo de \u0109i tiu skripto',
-    'ringify':
-        'procedurigi',
-    'unringify':
-        'malprocedurigi',
-    'transient':
-        'travidebla',
-    'uncheck to save contents\nin the project':
-        'mal\u015daltu por konservi enhavon\nen la projekton',
-    'check to prevent contents\nfrom being saved':
-        '\u015daltu por malebligi konservon de la enhavo\nen al projekton',
-
-    // custom blocks:
-    'delete block definition...':
-        'forigi blokodifinon...',
-    'edit...':
-        'redakti...',
-
-    // sprites:
-    'edit':
-        'redakti',
-    'move':
-        'movi',
-    'detach from':
-        'malligi de',
-    'detach all parts':
-        'malligi \u0109iujn partojn',
-    'export...':
-        'eksporti...',
-
-    // stage:
-    'show all':
-        'montri \u0109ion',
-    'pic...':
-        'bildo...',
-    'open a new window\nwith a picture of the stage':
-        'malfermi novan fenestron\nkun bildon de scenejo',
-
-    // scripting area
-    'clean up':
-        'purigi',
-    'arrange scripts\nvertically':
-        'ordigi skriptojn\nvertikale',
-    'add comment':
-        'aldoni komenton',
-    'undrop':
-        'maldemeti',
-    'undo the last\nblock drop\nin this pane':
-        'malfari la alstan\ndemeton de bloko\nen tiu \u0109i panelo',
-    'redrop':
-        'redemeti',
-    'scripts pic...':
-        'bildo de skriptoj...',
-    'open a new window\nwith a picture of all scripts':
-        'malfermi novan fenestron\nkun bildo de \u0109iuj skriptoj',
-    'make a block...':
-        'krei blokon...',
-
-    // costumes
-    'rename':
-        'alinomi',
-    'export':
-        'eksporti',
-    'rename costume':
-	'Alinomi kostumon',
-
-    // sounds
-    'Play sound':
-        'A\u016ddigi sonon',
-    'Stop sound':
-        'Halti sonon',
-    'Stop':
-        'Haltigi',
-    'Play':
-        'A\u016ddigi',
-    'rename sound':
-        'renomi sonon',
-
-    // lists and tables
-    'list view...':
-        'lista vidigo',
-    'table view...':
-        'tabela vidigo',
-    'open in dialog...':
-        'malfermi en formularo...',
-    'reset columns':
-        'nuligi kolumnojn',
-    'items':
-        'elementoj',
-
-    // dialogs
-    // buttons
-    'OK':
-        'Bone',
-    'Ok':
-        'Bone',
-    'Cancel':
-        'Rezigni',
-    'Yes':
-        'Jes',
-    'No':
-        'Ne',
-    'Open':
-        'Malfermi',
-
-    // help
-    'Help':
-        'Helpo',
-
-    // zoom blocks
-    'Zoom blocks':
-        'Zomi vlokojn',
-    'build':
-        'konstrui',
-    'your own':
-        'propraj',
-    'blocks':
-        'blokoj',
-    'normal (1x)':
-        'normala (1x)',
-    'demo (1.2x)':
-        'provo (1,2x)',
-    'presentation (1.4x)':
-        'prezentado (1,4x)',
-    'big (2x)':
-        'granda (2x)',
-    'huge (4x)':
-        'grandega (4x)',
-    'giant (8x)':
-        'giganta (8x)',
-    'monstrous (10x)':
-        'monstra (10x)',
-
-    // Project Manager
-    'Untitled':
-        'Sentitola',
-    'Open Project':
-        'Malfermi projekton',
-    '(empty)':
-        '(nenio)',
-    'Saved!':
-        'Konservita!',
-    'Delete Project':
-        'Forigi projekton',
-    'Are you sure you want to delete':
-        '\u0108u vi certe volas forigi?',
-    'rename...':
-        'alinomi...',
-
-    // costume editor
-    'Costume Editor':
-        'Kostumoredaktilo',
-    'click or drag crosshairs to move the rotation center':
-        'klaku a\u016d trenu la krucon por movi la turnocentron',
-
-    // project notes
-    'Project Notes':
-        'Projektonotoj',
-
-    // new project
-    'New Project':
-        'Nova projekto',
-    'Replace the current project with a new one?':
-        'Anstata\u016di la aktualan projekton per la nova?',
-
-    // save project
-    'Save Project As...':
-        'Konservi projekton kiel...',
-
-    // export blocks
-    'Export blocks':
-        'Eksporti blokojn',
-    'Import blocks':
-        '',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        '\u0109i tiu projekto\nhavas ankora\u016d neniun\npropran blokon',
-    'select':
-        'elekti',
-    'none':
-        'neniun',
-
-    // variable dialog
-    'for all sprites':
-        'por \u0109iuj objektoj',
-    'for this sprite only':
-        'nur por \u0109i tiu objekto',
-
-    // variables refactoring
-    'rename only\nthis reporter':
-        '',
-    'rename all...':
-        '',
-    'rename all blocks that\naccess this variable':
-        '',
-
-
-    // block dialog
-    'Change block':
-        '\u015can\u011di blokon',
-    'Command':
-        'Komando',
-    'Reporter':
-        'Raportilo',
-    'Predicate':
-        'Predikato',
-
-    // block editor
-    'Block Editor':
-        'Blokoredaktilo',
-    'Apply':
-        'Apliki',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Forigi propran blokon',
-    'block deletion dialog text':
-        'forigo de la bloko estas ne malfarebla, \u0109u vi vere volas \u011din forigi?',
-
-    // input dialog
-    'Create input name':
-        'Krei enigonomon',
-    'Edit input name':
-        'Redakti enigonomon',
-    'Edit label fragment':
-        '',
-    'Title text':
-        'Teksto de titolo',
-    'Input name':
-        'Nomo de enigo',
-    'Delete':
-        'Forigi',
-    'Object':
-        'Objekto',
-    'Number':
-        'Nombro',
-    'Text':
-        'Teksto',
-    'List':
-        'Listo',
-    'Any type':
-        'Iu tipo',
-    'Boolean (T/F)':
-        'Buleo',
-    'Command\n(inline)':
-        'Komando\n(enlinia)',
-    'Command\n(C-shape)':
-        'Komando\n(C-forma)',
-    'Any\n(unevaluated)':
-        'Iu\n(nekalkulita)',
-    'Boolean\n(unevaluated)':
-        'Buleo\n(nekalkulita)',
-    'Single input.':
-        'Unuopa enigo.',
-    'Default Value:':
-        'Defa\u016dlta valoro:',
-    'Multiple inputs (value is list of inputs)':
-        'Pluraj enigoj (valoro estas listo de enigoj)',
-    'Upvar - make internal variable visible to caller':
-        'Fari internan variablon videblan por vokanto',
-
-    // About Snap
-    'About Snap':
-        'Pri Snap',
-    'Back...':
-        'Reen...',
-    'License...':
-        'Licenco...',
-    'Modules...':
-        'Moduloj...',
-    'Credits...':
-        'Honoroj...',
-    'Translators...':
-        'Tradukantoj...',
-    'License':
-        'Licenco',
-    'current module versions:':
-        'versioj de aktualaj moduloj:',
-    'Contributors':
-        'Kontribuantoj',
-    'Translations':
-        'Tradukoj',
-
-    // variable watchers
-    'normal':
-        'normala',
-    'large':
-        'lar\u011de',
-    'slider':
-        '\u015dovilo',
-    'slider min...':
-        '\u015dovilo min...',
-    'slider max...':
-        '\u015dovilo maks...',
-    'import...':
-        'importi...',
-    'Slider minimum value':
-        'Minimuma valoro de \u015dovilo',
-    'Slider maximum value':
-        'Maksimuma valoro de \u015dovilo',
-
-    // list watchers
-    'length: ':
-        'longeco: ',
-
-    // coments
-    'add comment here...':
-        'aldonu komenton \u0109i tie...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) dekstren',
-    '(-90) left':
-        '(-90) maldekstren',
-    '(0) up':
-        '(0) supren',
-    '(180) right':
-        '(180) suben',
-
-    // collision detection
-    'mouse-pointer':
-        'musmontrilo',
-    'edge':
-        'rando',
-    'pen trails':
-        'spuro de skribilo',
-
-    // costumes
-    'Turtle':
-        'Testudo',
-    'Empty':
-        'Malplena',
-
-    // graphical effects
-    'color':
-        'koloro',
-    'fisheye':
-        'fi\u015dokulo',
-    'whirl':
-        'kirlo',
-    'pixelate':
-        'bilderigi',
-    'mosaic':
-        'mozaiko',
-    'saturation':
-        'satureco',
-    'brightness':
-        'brileco',
-    'ghost':
-        'diafaneco',
-    'negative':
-        'negativo',
-    'comic':
-        'bildtrio',
-    'confetti':
-        'konfeto',
-
-    // keys
-    'space':
-        'spacetklavo',
-    'up arrow':
-        'sago supren',
-    'down arrow':
-        'sago malsupren',
-    'right arrow':
-        'sago dekstren',
-    'left arrow':
-        'sago maldekstren',
-    'any key':
-        'ajna klavo',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'kvo',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'duobla v',
-    'x':
-        'ikso',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'nova...',
-
-    // math functions
-    'abs':
-        'abs',
-    'ceiling':
-        '',
-    'floor':
-        '',
-    'sqrt':
-        'radiko',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'litero',
-    'whitespace':
-        'blankspaco',
-    'line':
-        'linio',
-    'tab':
-        'tabo',
-    'cr':
-        '\u0109aretreveno',
-
-    // data types
-    'number':
-        'nombro',
-    'text':
-        'teksto',
-    'Boolean':
-        'Buleo',
-    'list':
-        'listo',
-    'command':
-        'komando',
-    'reporter':
-        'raportilo',
-    'predicate':
-        'predikato',
-    'sprite':
-        'objekto',
-
-    // list indices
-    'last':
-        'lasta',
-    'any':
-        'ajna',
-
-    // attributes
-    'neighbors':
-        'najbaroj',
-    'self':
-        'mem',
-    'other sprites':
-        'aliaj objektoj',
-    'parts':
-        'partoj',
-    'anchor':
-        'ankro',
-    'parent':
-        'parenco',
-    'children':
-        'idoj',
-    'clones':
-        'klonoj',
-    'other clones':
-        'aliaj klonoj',
-    'dangling?':
-        'misaj?',
-    'rotation x':
-        'rotacio x',
-    'rotation y':
-        'rotacio y',
-    'center x':
-        'centro x',
-    'center y':
-        'centro y',
-    'name':
-        'nomo',
-    'stage':
-        'scenejo'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) maldekstren",
+    "(0) up": "(0) supren",
+    "(1) sine": "",
+    "(180) down": "",
+    "(180) right": "(180) suben",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) dekstren",
+    "(empty)": "(nenio)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "Pri Snap",
+    "About...": "Pri...",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "Animacioj",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "Iu (nekalkulita)",
+    "Any type": "Iu tipo",
+    "Apply": "Apliki",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Ĉu vi certe volas forigi?",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "Reen...",
+    "Backgrounds": "Fonoj",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "Blokoredaktilo",
+    "Blocks": "Blokoj",
+    "Blocks category name:": "",
+    "Blurred shadows": "Malklaraj ombroj",
+    "Boolean": "Buleo",
+    "Boolean (T/F)": "Buleo",
+    "Boolean (unevaluated)": "Buleo (nekalkulita)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "Rezigni",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "Ŝanĝi blokon",
+    "Clear backup": "",
+    "Clicking sound": "Klakanta sono",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "Komando",
+    "Command (C-shape)": "Komando (C-forma)",
+    "Command (inline)": "Komando (enlinia)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "Enhavo",
+    "Contributors": "Kontribuantoj",
+    "Control": "Regado",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "Kostumoredaktilo",
+    "Costumes": "",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "Krei enigonomon",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "Honoroj...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "Normala",
+    "Default Value:": "Defaŭlta valoro:",
+    "Delete": "Forigi",
+    "Delete Custom Block": "Forigi propran blokon",
+    "Delete Project": "Forigi projekton",
+    "Delete a variable": "Forigi variablon",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "Elŝuti fontokodon",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Dinamikaj enigoetikedoj",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "Redakti enigonomon",
+    "Edit label fragment": "",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "Malplena",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "Eksporti blokojn",
+    "Export blocks...": "Eksporti blokojn...",
+    "Export project as plain text...": "Eksporti projekton en plata teksta formo...",
+    "Export project...": "Eksporti projekton...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "Eksportresumo",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "Plata fasonado",
+    "Flat line ends": "Malrondaj linifinoj",
+    "For all Sprites": "Por ĉiu objekto",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "Saluton!",
+    "Hello, World!": "",
+    "Help": "Helpo",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "",
+    "Import library": "Importi bibliotekon",
+    "Import sound": "",
+    "Import tools": "Importi ilaron",
+    "Import...": "Importi...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "Subteno de heredado",
+    "Input Names:": "Enigonomoj:",
+    "Input Slot Options": "",
+    "Input name": "Nomo de enigo",
+    "Input sliders": "Enigaj ŝoviloj",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "Klavara redaktado",
+    "Kind of": "Speco de",
+    "LEAP Motion controller": "",
+    "Language...": "Lingvo...",
+    "Libraries...": "Bibliotekoj...",
+    "License": "Licenco",
+    "License...": "Licenco...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "Listo",
+    "List utilities": "",
+    "Lists": "Listoj",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "Ensaluti...",
+    "Logout": "",
+    "Long form input dialog": "Eniga formularo en longa formo",
+    "Looks": "Aspekto",
+    "Make a block": "Krei blokon",
+    "Make a variable": "Krei variablon",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "Mesaĝonomo",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "Moduloj...",
+    "Motion": "Movo",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "Pluraj enigoj (valoro estas listo de enigoj)",
+    "Nested auto-wrapping": "Ingita ĉirkaŭfulo",
+    "New": "Nova",
+    "New Category": "",
+    "New Project": "Nova projekto",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "Ne",
+    "November": "",
+    "Number": "Nombro",
+    "OK": "Bone",
+    "Object": "Objekto",
+    "October": "",
+    "Ok": "Bone",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "Malfermi",
+    "Open Project": "Malfermi projekton",
+    "Open in Community Site": "",
+    "Open...": "Malfermi...",
+    "Opening project...": "",
+    "Operators": "Operatoroj",
+    "Other": "Aliaj",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "Parto de",
+    "Parts": "Partoj",
+    "Password:": "",
+    "Pen": "Skribilo",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "Krudaj prototipaj etikedoj",
+    "Play": "Aŭdigi",
+    "Play sound": "Aŭdigi sonon",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Predikato",
+    "Prefer empty slot drops": "Preferas malplenajn ingojn",
+    "Prefer smooth animations": "Preferas glatajn animaciojn",
+    "Privacy...": "",
+    "Project Notes": "Projektonotoj",
+    "Project URLs": "",
+    "Project notes...": "Projektonotoj...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "Manlibro",
+    "Remove a category...": "",
+    "Remove unused blocks": "Forigi neuzatajn blokojn",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "Anstataŭi la aktualan projekton per la nova?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "Raportilo",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "Konservi",
+    "Save As...": "Konservi kiel...",
+    "Save Project": "",
+    "Save Project As...": "Konservi projekton kiel...",
+    "Save to disk": "Konservi al disko",
+    "Saved!": "Konservita!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "Variablonomo de skripto",
+    "Scripts": "Skriptoj",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "Sentado",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "Krei konton...",
+    "Single input.": "Unuopa enigo.",
+    "Single palette": "",
+    "Slider maximum value": "Maksimuma valoro de ŝovilo",
+    "Slider minimum value": "Minimuma valoro de ŝovilo",
+    "Snap! website": "Snap! paĝaro",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "Sono",
+    "Sound Recorder": "",
+    "Sounds": "Sonoj",
+    "Sprite": "Objekto",
+    "Sprite Nesting": "",
+    "Stage": "Scenejo",
+    "Stage height": "Alteco de scenejo",
+    "Stage selected: no motion primitives": "Scenejo elektita: neniuj movaj bazelementoj",
+    "Stage size": "Grandeco de scenejo",
+    "Stage size...": "Grandeco de scenejo...",
+    "Stage width": "Larĝeco de scenejo",
+    "Stop": "Haltigi",
+    "Stop sound": "Halti sonon",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "Ŝanĝi reen al uzantoreĝimo",
+    "Switch to dev mode": "Ŝanĝi al programada reĝimo",
+    "Switch to vector editor?": "",
+    "Table lines": "Linioj de tabelo",
+    "Table support": "Subteno de tabeloj",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "Teksto",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "Fadensekuraj skriptoj",
+    "Title text": "Teksto de titolo",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "Tradukoj",
+    "Translators...": "Tradukantoj...",
+    "Turbo mode": "Rapida reĝimo",
+    "Turtle": "Testudo",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "Sentitola",
+    "Unused blocks...": "Neuzataj blokoj...",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Fari internan variablon videblan por vokanto",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "Variablonomo",
+    "Variables": "Variabloj",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Virtuala klavaro",
+    "Visible stepping": "Ponunupaŝa plenumado",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "Jes",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "Zebra kolorigado",
+    "Zoom blocks": "Zomi vlokojn",
+    "Zoom blocks...": "Zomi blokojn...",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ enhavas _",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ estas antaŭ _",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "",
+    "_ of _": "",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "",
+    "acos": "acos",
+    "add _ to _": "aldoni _ al _",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "aldoni novan objekton",
+    "add comment": "aldoni komenton",
+    "add comment here...": "aldonu komenton ĉi tie...",
+    "agent": "",
+    "alert _": "averto _",
+    "all": "ĉion",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "ĉiuj krom la unua el _",
+    "all but this script": "ĉion krom tiu ĉi skripto",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "ankro",
+    "and": "kaj",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "respondo",
+    "any": "ajna",
+    "any key": "ajna klavo",
+    "any message": "iu mesaĝo",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "ordigi skriptojn vertikale",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "demandi _ kaj atendi",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "granda (2x)",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "forigo de la bloko estas ne malfarebla, ĉu vi vere volas ĝin forigi?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "blokoj",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "brileco",
+    "broadcast _ _": "elsendi _ _",
+    "broadcast _ _ and wait": "elsendi _ _ kaj atendi",
+    "brush": "",
+    "build": "konstrui",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "voki _ _",
+    "call _ w/continuation": "voki _ _ kun daŭrigo",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "turnebla",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "centro x",
+    "center y": "centro y",
+    "change _ by _": "ŝanĝi _ je _",
+    "change _ effect by _": "ŝanĝi _ efekton je _",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "ŝanĝi skribilokoloron je _",
+    "change pen shade by _": "ŝanĝi kolorombron je _",
+    "change pen size by _": "ŝanĝi skribilodikecon je _",
+    "change size by _": "ŝanĝi grandecon je _",
+    "change tempo by _": "ŝanĝi rapidecon je _",
+    "change volume by _": "",
+    "change x by _": "ŝanĝi x je _",
+    "change y by _": "ŝanĝi y je _",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "ŝaltu por malrondaj linifinoj",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for smooth, predictable animations across computers": "ŝaltu por glataj, prognozeblaj animacioj sur ĉiuj komputiloj",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "ŝaltu por ĉiam montri specon de ingo en eniga formularo",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "",
+    "check to disallow script reentrancy": "ŝaltu por malebligi reeniron en fadenon",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "ŝalti por ebligi IDE-animaciojn",
+    "check to enable alternating colors for nested blocks": "ŝaltu por ebligi diferencigadon de koloroj de stake kolektitaj blokoj",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "ŝaltu por ebligi dinamikajn enigoetikedojn por enigo de variabloj",
+    "check to enable input sliders for entry fields": "ŝaltu por ebligi enigajn ŝovilojn por enigaj kampoj",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "ŝaltu por ebligi subtenon de virtuala klavaro por porteblaj aparatoj",
+    "check to hide (+) symbols in block prototype labels": "ŝaltu por kaŝi (+) signon en etikedoj de prototipaj blokoj",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "ŝaltu por malebligi konservon de la enhavo en al projekton",
+    "check to prioritize script execution": "ŝalti por asigni prioritaton de skriptoplenumado",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "ŝaltu por ebligi klakantan sonon",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "ŝaltu por uzi malklarajn ombrojn kaj emfazojn",
+    "children": "idoj",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "purigi",
+    "clear": "forigi desegnaĵon",
+    "clear graphic effects": "forigi grafikajn efektojn",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "klaku aŭ trenu la krucon por movi la turnocentron",
+    "clicked": "alklakita",
+    "clone": "",
+    "clones": "klonoj",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "koloro",
+    "color _ is touching _ ?": "koloro _ tuŝas _ ?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "bildtrio",
+    "command": "komando",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "konfeto",
+    "console log _": "konzola protokolo: _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "numero de kostumo",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "trenu tien bildojn el aliaj retpaĝoj aŭ de via komputilo",
+    "could not connect to:": "",
+    "cr": "ĉaretreveno",
+    "create a clone of _": "kloni _",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "versioj de aktualaj moduloj:",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "misaj?",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "forigi",
+    "delete _": "",
+    "delete _ of _": "forigi _ el _",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "forigi blokodifinon...",
+    "delete slot": "",
+    "delete this clone": "forigi tiun ĉi klonon",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "provo (1,2x)",
+    "demo...": "",
+    "detach all parts": "malligi ĉiujn partojn",
+    "detach and put into the hand": "",
+    "detach from": "malligi de",
+    "development mode": "programada reĝimo",
+    "development mode debugging primitives:": "programada reĝimo sencimigadaj bazelementoj:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "direkto",
+    "disable deep-Morphic context menus and show user-friendly ones": "malŝalti deep-Morphic kuntekstajn menuojn kaj montri la afablajn",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "distanco de _",
+    "distribution": "",
+    "don't rotate": "ne turnebla",
+    "down arrow": "sago malsupren",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "trenebla",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "demetita",
+    "duplicate": "duobligi",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "rando",
+    "edit": "redakti",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "redakti...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "ŝalti Morphic kuntekstajn menuojn kaj kontrolilojn, ne la afablajn!",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "eksporti",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "eksporti...",
+    "extract": "",
+    "f": "f",
+    "false": "malvero",
+    "file": "",
+    "file menu import hint": "elŝutu dosieron kun blokoj sonoj aŭ kostumoj",
+    "fill": "plenigi",
+    "fill page...": "",
+    "filtered for _": "filtrita por _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "trovi neuzatajn proprajn blokojn kaj forigi iliajn difinojn",
+    "fisheye": "fiŝokulo",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "por ĉiuj objektoj",
+    "for each _ in _ _": "",
+    "for this sprite only": "nur por ĉi tiu objekto",
+    "forever _": "ripeti eterne _",
+    "frame": "",
+    "frames": "kadroj",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "diafaneco",
+    "giant (8x)": "giganta (8x)",
+    "glide _ secs to x: _ y: _": "gliti dum _ sek. al x: _ y: _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "iri _ tavolojn malantaŭen",
+    "go to _": "iri al _",
+    "go to _ layer": "",
+    "go to front": "iri antaŭen",
+    "go to x: _ y: _": "iri al x: _ y: _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "saluton",
+    "help": "helpo",
+    "help...": "helpo...",
+    "hide": "kaŝi",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide primitives": "kaŝi bazelementojn",
+    "hide variable _": "kaŝi variablon _",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "grandega (4x)",
+    "i": "i",
+    "identical to": "identa kun",
+    "if _ _": "se _ _",
+    "if _ _ else _": "se _ _ alie _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "resalti de la rando",
+    "import a sound from your computer by dragging it into here": "importu sonon de via komputilo trenante ĝin ĉi tien",
+    "import without attempting to parse or format data": "",
+    "import...": "importi...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "enigolisto:",
+    "input names:": "enigonomoj:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "enigi _ je _ en _",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "estas _ ?",
+    "is _ a _ ?": "ĉu _ estas _ ?",
+    "is _ empty?": "",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "elemento _ el _",
+    "items": "elementoj",
+    "j": "j",
+    "join _": "kunigi _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "klavo _ estas premita?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "Esperanto",
+    "language_translator": "Sebastian CYPRYCH",
+    "large": "larĝe",
+    "last": "lasta",
+    "last changed": "",
+    "last_changed": "2017-10-01",
+    "launch _ _": "lanĉi _ _",
+    "left": "",
+    "left arrow": "sago maldekstren",
+    "length": "",
+    "length of _": "longeco de _",
+    "length:": "longeco:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "litero",
+    "letter _ of _": "litero _ el _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "linio",
+    "lines": "",
+    "list": "listo",
+    "list _": "listo _",
+    "list view...": "lista vidigo",
+    "ln": "ln",
+    "load the official library of powerful blocks": "importi oficialan bibliotekon de potencaj blokoj",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "krei blokon...",
+    "make a category...": "",
+    "make a copy and pick it up": "krei kopion kaj elekt ĝin",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "mesaĝo",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "monstra (10x)",
+    "month": "",
+    "mosaic": "mozaiko",
+    "motion": "",
+    "mouse down?": "musklavo estas premita?",
+    "mouse position": "",
+    "mouse x": "musa x-pozicio",
+    "mouse y": "musa y-pozicio",
+    "mouse-departed": "lasita de musa montrilo",
+    "mouse-entered": "tuŝata de musa montrilo",
+    "mouse-pointer": "musmontrilo",
+    "move": "movi",
+    "move _ steps": "iri _ paŝojn",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "mia _",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "min",
+    "n": "n",
+    "name": "nomo",
+    "neg": "",
+    "negative": "negativo",
+    "neighbors": "najbaroj",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "nova...",
+    "next": "",
+    "next costume": "sekva kostumo",
+    "none": "neniun",
+    "normal": "normala",
+    "normal (1x)": "normala (1x)",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "ne _",
+    "note": "",
+    "nothing": "",
+    "now connected.": "",
+    "number": "nombro",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "duobligi nur tiun ĉi blokon",
+    "only face left/right": "nur maldekstren/dekstren",
+    "only grab this block": "",
+    "open a new browser browser window with a summary of this project": "malfermi projektresumon en nova fenestro de foliumilo",
+    "open a new window with a picture of all scripts": "malfermi novan fenestron kun bildo de ĉiuj skriptoj",
+    "open a new window with a picture of the stage": "malfermi novan fenestron kun bildon de scenejo",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "malfermi novan fenestron kun bildo de ĉi tiu skripto",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "malfermi en formularo...",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "aŭ",
+    "or before": "",
+    "other clones": "aliaj klonoj",
+    "other scripts in sprite": "aliajn skriptojn en tiu objekto",
+    "other sprites": "aliaj objektoj",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "parenco",
+    "parent...": "",
+    "parts": "partoj",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "paŭzi ĉiujn _",
+    "pen": "",
+    "pen _": "",
+    "pen down": "malsuprenigi skribilon",
+    "pen down?": "",
+    "pen trails": "spuro de skribilo",
+    "pen up": "suprenigi skribilon",
+    "pen vectors": "",
+    "pic...": "bildo...",
+    "pick random _ to _": "elekti stokaston inter _ kaj _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "bilderigi",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "aŭdigi noton _ dum _ taktoj",
+    "play sound _": "aŭdigi sonon _",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "aŭdigi sonon _ ĝis finite",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "celi laŭ direkto _",
+    "point towards _": "celi al _",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "predikato",
+    "presentation (1.4x)": "prezentado (1,4x)",
+    "pressed": "premita",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "kvo",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "hazarda",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "redemeti",
+    "relabel...": "Reetikedi...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "alinomi",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "Alinomi kostumon",
+    "rename only this reporter": "",
+    "rename sound": "renomi sonon",
+    "rename...": "alinomi...",
+    "repeat _ _": "ripeti _ -foje _",
+    "repeat until _ _": "ripeti ĝis _ _",
+    "replace item _ of _ with _": "astataŭi elementon _ de _ per _",
+    "report _": "raporti _",
+    "reporter": "raportilo",
+    "reporter didn't report": "",
+    "reset columns": "nuligi kolumnojn",
+    "reset timer": "nuligi klikhorloĝon",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "paŭzi dum _ taktoj",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "sago dekstren",
+    "ring": "",
+    "ringify": "procedurigi",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "rotacio x",
+    "rotation y": "rotacio y",
+    "round _": "rondigi _",
+    "run _ _": "ruli _ _",
+    "run _ w/continuation": "ruli _ _ kun daŭrigo",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "satureco",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "diri _",
+    "say _ for _ secs": "diri _ dum _ sek.",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "bildo de skripto...",
+    "script variables _": "variabloj de skripto _",
+    "scripts": "",
+    "scripts pic...": "bildo de skriptoj...",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "elekti",
+    "selection": "",
+    "self": "mem",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "ŝanĝi efekton _ al _",
+    "set _ of block _ to _": "",
+    "set _ to _": "ŝanĝi _ al _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "ŝanĝi skribilokoloron al _",
+    "set pen shade to _": "ŝanĝi kolorombron al _",
+    "set pen size to _": "ŝanĝi skribilodikecon al _",
+    "set size to _ %": "ŝanĝi grandecon al _",
+    "set tempo to _ bpm": "ŝanĝi rapidecon al _ taktoj minute",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "apliki rapidan reĝimon al _",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "ŝanĝi x al _",
+    "set y to _": "ŝanĝi y al _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "agorda menuo preferas indikojn ĉe malpenaj ingoj",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "montri",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "montri ĉion",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "prezenti mallokajn difinojn de propraj blokoj kiel XML en nova fenestro de retumilo",
+    "show primitives": "montri bazelementojn",
+    "show project data as XML in a new browser window": "prezenti projekton kiel XML en nova fenestro de retumilo",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "montri variablon _",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "grandeco",
+    "slider": "ŝovilo",
+    "slider max...": "ŝovilo maks...",
+    "slider min...": "ŝovilo min...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "spacetklavo",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "dividi _ kun _",
+    "sprite": "objekto",
+    "sprites": "",
+    "sqrt": "radiko",
+    "square": "",
+    "stack size": "stakokapacito",
+    "stage": "scenejo",
+    "stage image": "",
+    "stamp": "",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "halti _",
+    "stop all sounds": "haltigi ĉiujn sonojn",
+    "stop frequency": "",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "konservi tiun ĉi projekton en lokal elŝutan dosierujon (ne ĉiuj foliumiloj tion apogas)",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "ŝanĝi al kostumo _",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "tabo",
+    "table view...": "tabela vidigo",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "",
+    "temporary?": "",
+    "text": "teksto",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "aktuale estas neniu neuzata malloka propra bloko en tiu ĉi projekto",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "io",
+    "think _": "pensi _",
+    "think _ for _ secs": "pensi _ dum _ sek.",
+    "this _": "",
+    "this block": "tiun ĉi blokon",
+    "this project doesn't have any custom global blocks yet": "ĉi tiu projekto havas ankoraŭ neniun propran blokon",
+    "this script": "tiun ĉi skripton",
+    "time in milliseconds": "",
+    "timer": "klikhorloĝo",
+    "tip": "",
+    "to": "",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "tuŝas _ ?",
+    "transient": "travidebla",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "sebacyp(heliko)gmail(punkto)com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "vero",
+    "turbo mode": "",
+    "turbo mode?": "Rapida reĝimo?",
+    "turn _ _ degrees": "turni _ gradojn _",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "tipo de _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for greater speed at variable frame rates": "malŝaltu por pli granda rapideco kun varia bildorapido",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "malŝaltu por rondaj linifinoj",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "malŝaltu por ebligi demetatajn raportilojn forŝovi la aliajn",
+    "uncheck to allow script reentrance": "",
+    "uncheck to allow script reentrancy": "malŝaltu por ebligi reeniron en fadenon",
+    "uncheck to always show (+) symbols in block prototype labels": "malŝaltu por ĉiam montri (+) signon en etikedoj de prototipaj blokoj",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "malŝalti por malebligi IDE-animaciojn",
+    "uncheck to disable alternating colors for nested block": "malŝaltu por malebligi diferencigadon de koloroj de stake kolektitaj blokoj",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "malŝaltu por malebligi dinamikajn enigoetikedojn por enigo de variabloj",
+    "uncheck to disable input sliders for entry fields": "malŝaltu por malebligi enigajn ŝovilojn por enigaj kampoj",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "malŝaltu por malebligi subtenon de virtuala klavaro por porteblaj aparatoj",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "malŝalti por plenumi skripton kun normala rapideco",
+    "uncheck to save contents in the project": "malŝaltu por konservi enhavon en la projekton",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "malŝaltu por malebligi klakantan sonon",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "malŝaltu por uzi klarajn ombrojn kaj emfazojn",
+    "uncheck to use the input dialog in short form": "malŝaltu por uzi la enigan formularon en mallonga formo",
+    "uncompile": "",
+    "undo": "",
+    "undo the last block drop in this pane": "malfari la alstan demeton de bloko en tiu ĉi panelo",
+    "undrop": "maldemeti",
+    "unicode _ as letter": "unikodo _ kiel litero",
+    "unicode of _": "unikodo de _",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "malprocedurigi",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "sentitola",
+    "unused": "",
+    "unused block(s) removed": "neuzata(j) bloko(j) forigitaj",
+    "up arrow": "sago supren",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "duobla v",
+    "wait _ secs": "atendi _ sek.",
+    "wait until _": "atendi ĝis _",
+    "wardrobe": "",
+    "warp _": "nedisigeble _",
+    "what's your name?": "Kiu estas via nomo?",
+    "when I am _": "Dum mi estas _",
+    "when I receive _ _": "Kiam mi ricevas _ _",
+    "when I start as a clone": "kiam mi estas klonita",
+    "when _": "kiam _",
+    "when _ clicked": "Kiam _ estas alklakita",
+    "when _ is edited _": "",
+    "when _ key pressed _": "se _ klavo estas premita _",
+    "whirl": "kirlo",
+    "whitespace": "blankspaco",
+    "width": "",
+    "with data": "",
+    "with inputs": "kun enigoj",
+    "word": "",
+    "world": "mondo",
+    "write _ size _": "",
+    "x": "ikso",
+    "x position": "x pozicio",
+    "y": "y",
+    "y position": "y pozicio",
+    "year": "",
+    "year:": "",
+    "your own": "propraj",
+    "z": "z"
+}

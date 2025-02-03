@@ -1,5 +1,7 @@
-var snapVersion = '7.0.5',
-    cacheName = 'snap-pwa',
+/*global self, caches*/
+/*jshint esversion: 6*/
+var snapVersion = '10.4.5',
+    cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
 
@@ -25,8 +27,10 @@ var snapVersion = '7.0.5',
         'src/locale.js',
         'src/cloud.js',
         'src/api.js',
+        'src/embroider.js',
         'src/sha512.js',
         'src/FileSaver.min.js',
+        'src/santa.js',
 
         // translations
         'locale/lang-ar.js',
@@ -69,37 +73,135 @@ var snapVersion = '7.0.5',
         'locale/lang-sv.js',
         'locale/lang-ta.js',
         'locale/lang-te.js',
+        'locale/lang-ti.js',
         'locale/lang-tr.js',
         'locale/lang-ua.js',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
 
         //libraries
-        'libraries/LIBRARIES',
+        'libraries/LIBRARIES.json',
 
         'libraries/animation_module.xml',
         'libraries/apl.xml',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
+
+        'libraries/beetle.xml',
+
+            // Beetle coordinate images
+            'libraries/beetle/x.png',
+            'libraries/beetle/y.png',
+            'libraries/beetle/z.png',
+
+            // Beetle dependencies
+            'libraries/beetle/beetle.js',
+            'libraries/beetle/earcut.min.js',
+            'libraries/beetle/babylonjs.loaders.min.js',
+            'libraries/beetle/babylon.js.map',
+            'libraries/beetle/babylon.js',
+            'libraries/beetle/babylon.gridMaterial.min.js',
+
+            // Beetle shapes
+            'libraries/beetle/meshes/beetle-gray.obj',
+            'libraries/beetle/meshes/beetle-color.obj',
+            'libraries/beetle/meshes/beetle-black.obj',
+            'libraries/beetle/meshes/beetle-black.mtl',
+
         'libraries/biginteger.js',
         'libraries/bignumbers.xml',
         'libraries/bignums.js',
+        'libraries/bitwise.xml',
         'libraries/bbtSnapExtension.js',
-        'libraries/cases.xml',
+
+        // BLE
+        'libraries/ble/ble.js',
+        'libraries/ble/init.js',
+
+        'libraries/code2blocks_module.xml',
         'libraries/colors.xml',
+        'libraries/continuations_module.xml',
+        'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
+        'libraries/embroidery_module.xml',
+        'libraries/events_module.xml',
         'libraries/frequency_distribution_module.xml',
+        'libraries/halo_module.xml',
         'libraries/httpBlocks.xml',
         'libraries/HummingbirdBlocks.xml',
         'libraries/iteration-composition.xml',
-        'libraries/leap-library.xml',
+        'libraries/list_comprehension_module.xml',
         'libraries/list-utilities.xml',
         'libraries/localstorage_module.xml',
+        'libraries/tiles_module.xml',
+        'libraries/arcs_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
+        'libraries/menu_module.xml',
+        'libraries/metaprogramming_module.xml',
+        'libraries/microblocks.xml',
+
+        'libraries/mqttExtension.js',
+        'libraries/mqtt.js',
+        'libraries/mqtt.xml',
+
+        'libraries/OOP_module.xml',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
+        'libraries/plot_bars_module.xml',
+        'libraries/replace_letters_module.xml',
         'libraries/schemeNumber.js',
+
+        'libraries/SciSnap3Blocks.xml',
+        'libraries/SciSnap3Extensions.js',
+        // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
+
+        'libraries/sprite_api_module.xml',
+
+        'libraries/TuneScope.xml',
+
+            // TuneScope dependencies
+            'libraries/TuneScope/TuneScope.js',
+            'libraries/TuneScope/TS_init.js',
+            'libraries/TuneScope/webmidi.iife.js',
+            'libraries/TuneScope/WebAudioFontPlayer.js',
+
+            // TuneScope instruments
+            'libraries/TuneScope/12849_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12848_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12847_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12846_0_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12842_0_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12835_21_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/12840_6_JCLive_sf2_file.js',
+            'libraries/TuneScope/12869_6_JCLive_sf2_file.js',
+            'libraries/TuneScope/0580_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0560_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0110_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0680_JCLive_sf2_file.js',
+            'libraries/TuneScope/0121_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1070_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/0460_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0600_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0730_JCLive_sf2_file.js',
+            'libraries/TuneScope/0710_Chaos_sf2_file.js',
+            'libraries/TuneScope/0420_JCLive_sf2_file.js',
+            'libraries/TuneScope/0400_JCLive_sf2_file.js',
+            'libraries/TuneScope/0700_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1040_Aspirin_sf2_file.js',
+            'libraries/TuneScope/0770_SBLive_sf2.js',
+            'libraries/TuneScope/0100_SBLive_sf2.js',
+            'libraries/TuneScope/0650_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/1050_FluidR3_GM_sf2_file.js',
+            'libraries/TuneScope/0180_Chaos_sf2_file.js',
+            'libraries/TuneScope/0020_JCLive_sf2_file.js',
+            'libraries/TuneScope/0260_JCLive_sf2_file.js',
+            'libraries/TuneScope/0241_JCLive_sf2_file.js',
+            'libraries/TuneScope/0350_JCLive_sf2_file.js',
+            'libraries/TuneScope/0291_LesPaul_sf2_file.js',
+            'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
+            'libraries/TuneScope/0230_Aspirin_sf2_file.js',
+
         'libraries/serial_module.xml',
         'libraries/signada.js',
         'libraries/signada.xml',
@@ -107,18 +209,26 @@ var snapVersion = '7.0.5',
         'libraries/stream-tools.xml',
         'libraries/strings.xml',
         'libraries/textCostumes_module.xml',
+        'libraries/textformat_module.xml',
         'libraries/try-catch.xml',
-        'libraries/variadic-reporters.xml',
+        'libraries/variable_declaration_module.xml',
         'libraries/word-sentence.xml',
+        'libraries/words_module.xml',
 
         //costumes
-        'Costumes/COSTUMES',
+        'Costumes/COSTUMES.json',
 
         'Costumes/abby-a.svg',
         'Costumes/abby-b.svg',
         'Costumes/abby-c.svg',
         'Costumes/abby-d.svg',
         'Costumes/airplane2.png',
+        'Costumes/aleassa01.png',
+        'Costumes/aleassa02.png',
+        'Costumes/aleassa03.png',
+        'Costumes/aleassa04.png',
+        'Costumes/aleassa05.png',
+        'Costumes/aleassa06.png',
         'Costumes/alonzo.png',
         'Costumes/Alonzo3D.png',
         'Costumes/alonzo.svg',
@@ -303,6 +413,12 @@ var snapVersion = '7.0.5',
         'Costumes/dee-c.svg',
         'Costumes/dee-d.svg',
         'Costumes/dee-e.svg',
+        'Costumes/derec01.png',
+        'Costumes/derec02.png',
+        'Costumes/derec03.png',
+        'Costumes/derec04.png',
+        'Costumes/derec05.png',
+        'Costumes/derec06.png',
         'Costumes/devin-a.svg',
         'Costumes/devin-b.svg',
         'Costumes/devin-c.svg',
@@ -420,6 +536,12 @@ var snapVersion = '7.0.5',
         'Costumes/home_button.svg',
         'Costumes/horse1-a.svg',
         'Costumes/horse1-b.svg',
+        'Costumes/jahrd01.png',
+        'Costumes/jahrd02.png',
+        'Costumes/jahrd03.png',
+        'Costumes/jahrd04.png',
+        'Costumes/jahrd05.png',
+        'Costumes/jahrd06.png',
         'Costumes/jaime-a.png',
         'Costumes/jaime-b.png',
         'Costumes/jaime_walking-a.png',
@@ -427,6 +549,13 @@ var snapVersion = '7.0.5',
         'Costumes/jaime_walking-c.png',
         'Costumes/jaime_walking-d.png',
         'Costumes/jaime_walking-e.png',
+        'Costumes/jamet01.png',
+        'Costumes/jamet02.png',
+        'Costumes/jamet03.png',
+        'Costumes/jamet04.png',
+        'Costumes/jamet05.png',
+        'Costumes/jamet06.png',
+        'Costumes/jamet06-wall.png',
         'Costumes/jay.gif',
         'Costumes/jeans-a.svg',
         'Costumes/jeans-b.svg',
@@ -473,6 +602,12 @@ var snapVersion = '7.0.5',
         'Costumes/lb_top_R_leg.png',
         'Costumes/lb_top_stand.png',
         'Costumes/lightning.svg',
+        'Costumes/lirin01.png',
+        'Costumes/lirin02.png',
+        'Costumes/lirin03.png',
+        'Costumes/lirin04.png',
+        'Costumes/lirin05.png',
+        'Costumes/lirin06.png',
         'Costumes/lion-a.svg',
         'Costumes/lion-b.svg',
         'Costumes/lioness.svg',
@@ -542,6 +677,12 @@ var snapVersion = '7.0.5',
         'Costumes/ruby-b.png',
         'Costumes/sail-boat.png',
         'Costumes/sam.gif',
+        'Costumes/sarron01.png',
+        'Costumes/sarron02.png',
+        'Costumes/sarron03.png',
+        'Costumes/sarron04.png',
+        'Costumes/sarron05.png',
+        'Costumes/sarron06.png',
         'Costumes/saxophone-a.svg',
         'Costumes/saxophone-b.svg',
         'Costumes/scarf1.svg',
@@ -602,6 +743,12 @@ var snapVersion = '7.0.5',
         'Costumes/trombone-b.svg',
         'Costumes/trumpet-a2.svg',
         'Costumes/trumpet-a.svg',
+        'Costumes/turtle01_colour.png',
+        'Costumes/turtle02_colour_resized.png',
+        'Costumes/turtle03.png',
+        'Costumes/turtle04.png',
+        'Costumes/turtle05.png',
+        'Costumes/turtle06.png',
         'Costumes/ukulele.svg',
         'Costumes/umbrella.png',
         'Costumes/unicorn1.png',
@@ -618,7 +765,7 @@ var snapVersion = '7.0.5',
         'Costumes/wizard.svg',
 
         // Backgrounds
-        'Backgrounds/BACKGROUNDS',
+        'Backgrounds/BACKGROUNDS.json',
 
         'Backgrounds/atom_playground.jpg',
         'Backgrounds/bedroom1.gif',
@@ -632,9 +779,9 @@ var snapVersion = '7.0.5',
         'Backgrounds/party_room.jpg',
         'Backgrounds/pathway.jpg',
         'Backgrounds/xy-grid.gif',
-        
+
         // Sounds
-        'Sounds/SOUNDS',
+        'Sounds/SOUNDS.json',
 
         'Sounds/Cat.mp3',
         'Sounds/Chord.wav',
@@ -648,9 +795,9 @@ var snapVersion = '7.0.5',
         'Sounds/Laugh-male3.mp3',
         'Sounds/Meow.wav',
         'Sounds/Pop.wav',
-        
+
         // Examples
-        'Examples/EXAMPLES',
+        'Examples/EXAMPLES.json',
 
         'Examples/animal-game.xml',
         'Examples/Codification.xml',
@@ -661,9 +808,10 @@ var snapVersion = '7.0.5',
         'Examples/live-tree.xml',
         'Examples/swimmer.xml',
         'Examples/tree.xml',
-        'Examples/vee.xml',
+        'Examples/vee.xml'
     ];
 
+console.log('service worker executed', snapVersion);
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(
@@ -674,6 +822,7 @@ self.addEventListener('install', function(e) {
 });
 
 self.addEventListener('activate', (evt) => {
+    self.skipWaiting();
     evt.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(keyList.map((key) => {
@@ -687,13 +836,12 @@ self.addEventListener('activate', (evt) => {
 });
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
-    e.respondWith(
-        caches.match(
-            e.request,
-            {'ignoreSearch': true}
-        ).then(function(response) {
-            return response || fetch(e.request);
-        })
-    );
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+      fetch(event.request).catch(function(e) {
+        return caches.open(cacheName).then(function(cache) {
+          return cache.match(event.request,
+                             {'ignoreSearch': true}).then(response => response);
+        });
+    }));
 });

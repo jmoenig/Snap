@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2021 by Jens Mönig
+    Copyright (C) 2010-2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -49,6 +49,7 @@
             (f) resize event
             (g) combined mouse-keyboard events
             (h) text editing events
+            (i) indicating unsaved changes
         (4) stepping
         (5) creating new kinds of morphs
             (a) drawing the shape
@@ -317,7 +318,6 @@
                 var	world1, world2;
 
                 window.onload = function () {
-                    disableRetinaSupport();
                     world1 = new WorldMorph(
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
@@ -326,7 +326,7 @@
                 };
 
                 function loop() {
-            requestAnimationFrame(loop);
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -642,7 +642,7 @@
 
     Drops of image elements from outside the world canvas are dispatched as
 
-        droppedImage(aCanvas, name)
+        droppedImage(aCanvas, name, embeddedData)
         droppedSVG(anImage, name)
 
     events to interested Morphs at the mouse pointer. If you want your Morph
@@ -663,8 +663,22 @@
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
 
-    The same applies to drops of audio or text files from outside the world
-    canvas.
+    Note that PNG images provide for embedded text comments, which can be used
+    to include code or arbitrary data such as a CSV, JSON or XML file inside
+    the image. Such a payload has to be identified by an agreed-upon marker.
+    The default tag is stored in MorphicPreferences and can be overriden by
+    apps wishing to make use of this feature. If such an embedded text-payload
+    is found inside a PNG it is passed as the optional third "embeddedData"
+    parameter to the "droppedImage()" event. embedded text only applies to PNGs.
+    You can embed a string into the PNG metadata of a PNG by  calling
+
+        embedMetadataPNG(aCanvas, aString)
+
+    with a raster image represented by a canvas and a string that is to be
+    embedded into the PNG's metadata.
+
+    The same event mechanism applies to drops of audio or text files from
+    outside the world canvas.
 
     Those are dispatched as
 
@@ -841,6 +855,19 @@
 
     they are different so that Morphs which contain both multi-line and
     single-line text elements can hold them apart.
+
+
+    (i) indicating unsaved changes
+    ------------------------------
+    Before closing a browser tab with a Morphic world any top level morph
+    can signal unsaved changes by implementing a
+    
+        hasUnsavedChanges()
+    
+    method, which returns a Boolean value indicating whether it is safe to
+    destroy. If any top level morph indicates unsaved changes the browser
+    pops up a dialog box warning about unsaved changes and prompting for user
+    confirmation to close it.
 
 
     (4) stepping
@@ -1215,6 +1242,24 @@
 
     are implemented.
 
+    Animations can also be used to schedule a function execution just once
+    in lockstep with the Morphic scheduler, avoiding the setTimeout() pattern.
+    A syntactic shortcut for single-time scheduling exists in the WorldMorph's
+
+        schedule()
+
+    method.
+
+    For usage examples look at how TriggerMorph implements
+
+        bubbleHelp()
+
+    or at MenuItemMorph's
+
+        delaySubmenu()
+
+    method.
+
 
     (10) minifying morphic.js
     -------------------------
@@ -1276,6 +1321,8 @@
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
     Zhenlei Jia and Dariusz Dorożalski pioneered IME text editing.
+    Dariusz Dorożalski and Jesus Villalobos contributed embedding blocks
+    into image metadata.
     Bernat Romagosa contributed to text editing and to the core design.
     Michael Ball found and fixed a longstanding scrolling bug.
     Brian Harvey contributed to the design and implementation of submenus.
@@ -1289,9 +1336,9 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList, Map*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2021-December-10';
+var morphicVersion = '2025-January-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1303,6 +1350,7 @@ const CLEAR = new Color(0, 0, 0, 0);
 Object.freeze(ZERO);
 Object.freeze(BLACK);
 Object.freeze(WHITE);
+Object.freeze(CLEAR);
 
 var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
@@ -1318,6 +1366,7 @@ var standardSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: false, // turned on by touch events, don't set
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1338,6 +1387,7 @@ var touchScreenSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     isTouchDevice: true,
+    pngPayloadMarker: 'Data\tPayload\tEmbedded',
     rasterizeSVGs: false,
     isFlat: false,
     grabThreshold: 5,
@@ -1569,6 +1619,45 @@ function copy(target) {
     return c;
 }
 
+function embedMetadataPNG(aCanvas, aString) {
+    var embedTag = MorphicPreferences.pngPayloadMarker,
+        crc32 = (str, crc) => {
+            let table = [...Array(256).keys()].map(it =>
+                [...Array(8)].reduce((cc) =>
+                (cc & 1) ? (0xedb88320 ^ (cc >>> 1)) : (cc >>> 1), it)
+                );
+            crc = [...str].reduce(
+                (crc, ch) => (crc >>> 8) ^ table[(crc ^ ch.charCodeAt(0)) & 0xff],
+                (crc ? crc = 0 : crc) ^ (-1) // (crc ||= 0) ^ (-1)
+            );
+            return ( crc ^ (-1) ) >>> 0;
+        },
+        arr2Str = (arr) =>
+            arr.reduce((res, byte) => res + String.fromCharCode(byte), ''),
+        int2BStr = (val) =>
+            arr2Str(Array.from(new Uint8Array(new Uint32Array( [val] ).buffer)).reverse()),
+        buildChunk = (data) => {
+            let res = "iTXt" + data;
+            return int2BStr(data.length) + res + int2BStr(crc32(res));
+        },
+        parts = aCanvas.toDataURL("image/png").split(","),
+        bPart = atob(parts[1]).split(""),
+        newChunk = buildChunk(
+            "Snap!_SRC\0\0\0\0\0" +
+            embedTag +
+            encodeURIComponent(aString) +
+            embedTag
+        );
+    try {
+        bPart = bPart.slice(0, -12).concat( newChunk.split(""), bPart.slice( -12));
+        parts[1] = btoa(bPart.join(""));
+    } catch (err) {
+        console.log(err);
+    }
+    return parts.join(',');
+}
+
+
 // Retina Display Support //////////////////////////////////////////////
 
 /*
@@ -1721,7 +1810,7 @@ function enableRetinaSupport() {
                 this.height = prevHeight;
             }
         },
-        configurable: true // [Jens]: allow to be deleted an reconfigured
+        configurable: true // [Jens]: allow to be deleted and reconfigured
     });
 
     Object.defineProperty(canvasProto, 'width', {
@@ -1739,7 +1828,7 @@ function enableRetinaSupport() {
                 context.restore();
                 context.save();
                 */
-                context.scale(pixelRatio, pixelRatio);
+                context?.scale(pixelRatio, pixelRatio);
             } catch (err) {
                 console.log('Retina Display Support Problem', err);
                 uber.width.set.call(this, width);
@@ -1760,7 +1849,7 @@ function enableRetinaSupport() {
             context.restore();
             context.save();
             */
-            context.scale(pixelRatio, pixelRatio);
+            context?.scale(pixelRatio, pixelRatio);
         }
     });
 
@@ -2073,8 +2162,10 @@ Color.prototype.toRGBstring = function () {
 
 Color.fromString = function (aString) {
     // I parse rgb/rgba strings into a Color object
-    var components = aString.split(/[\(),]/).slice(1,5);
-    return new Color(components[0], components[1], components[2], components[3]);
+    var components = aString.split(/[\(),]/),
+        channels = aString.startsWith('rgba') ?
+            components.slice(1, 5) : components.slice(0, 4);
+    return new Color(+channels[0], +channels[1], +channels[2], +channels[3]);
 };
 
 // Color copying:
@@ -2708,7 +2799,7 @@ Rectangle.prototype.boundingBox = function () {
 
 Rectangle.prototype.center = function () {
     return this.origin.add(
-        this.corner.subtract(this.origin).floorDivideBy(2)
+        this.corner.subtract(this.origin).divideBy(2)
     );
 };
 
@@ -3031,6 +3122,16 @@ Node.prototype.allChildren = function () {
     return result;
 };
 
+Node.prototype.allChildrenExcept = function (callback) {
+    // includes myself, stops at nodes that satisfy the callback predicate
+    var result = [this];
+    if (callback(this)) {return []; }
+    this.children.forEach(child => {
+        result = result.concat(child.allChildrenExcept(callback));
+    });
+    return result;
+};
+
 Node.prototype.forAllChildren = function (aFunction) {
     if (this.children.length > 0) {
         this.children.forEach(child => child.forAllChildren(aFunction));
@@ -3096,6 +3197,27 @@ Node.prototype.parentThatIsA = function () {
 Node.prototype.parentThatIsAnyOf = function (constructors) {
     // deprecated, use parentThatIsA instead
     return this.parentThatIsA.apply(this, constructors);
+};
+
+Node.prototype.childThatIsA = function () {
+    // including myself
+    // Note: you can pass in multiple constructors to test for
+    var i, hit;
+    for (i = 0; i < arguments.length; i += 1) {
+        if (this instanceof arguments[i]) {
+            return this;
+        }
+    }
+    if (!this.children.length) {
+        return null;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        hit = this.childThatIsA.apply(this.children[i], arguments);
+        if (hit) {
+            return hit;
+        }
+    }
+    return null;
 };
 
 // Morphs //////////////////////////////////////////////////////////////
@@ -3386,7 +3508,7 @@ Morph.prototype.setBottom = function (y) {
 Morph.prototype.setCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.extent().floorDivideBy(2)
+            this.extent().divideBy(2)
         )
     );
 };
@@ -3394,7 +3516,7 @@ Morph.prototype.setCenter = function (aPoint) {
 Morph.prototype.setFullCenter = function (aPoint) {
     this.setPosition(
         aPoint.subtract(
-            this.fullBounds().extent().floorDivideBy(2)
+            this.fullBounds().extent().divideBy(2)
         )
     );
 };
@@ -3757,6 +3879,7 @@ Morph.prototype.penTrails = function () {
     // obtained canvas will be around at the next display cycle,
     // so they might also wish to set the receiver's "isCachingImage"
     // property to "true".
+    this.isCachingImage = true;
     return this.getImage();
 };
 
@@ -4435,7 +4558,28 @@ Morph.prototype.developersMenu = function () {
     );
     menu.addItem(
         "pic...",
-        () => window.open(this.fullImage().toDataURL()),
+        () => {
+            var imgURL = this.fullImage().toDataURL(),
+                doc, body, tag, str;
+            try {
+                doc = window.open('', '_blank', 'popup').document;
+                body = doc.getElementsByTagName('body')[0];
+                str = '' + this;
+                doc.title = str;
+                tag = doc.createElement('h1');
+                tag.textContent = str;
+                body.appendChild(tag);
+                tag = doc.createElement('img');
+                tag.alt = str;
+                tag.src = imgURL;
+                body.appendChild(tag);
+            } catch (error) {
+                console.warn(
+                    'failed to popup pic, morph:%O, error:%O, image URL:%O',
+                    this, error, [imgURL]
+                );
+            }
+        },
         'open a new window\nwith a picture of this morph'
     );
     menu.addLine();
@@ -8162,7 +8306,7 @@ MenuMorph.prototype.adjustWidths = function () {
         if (item === this.label) {
             item.text.setPosition(
                 item.center().subtract(
-                    item.text.extent().floorDivideBy(2)
+                    item.text.extent().divideBy(2)
                 )
             );
         }
@@ -9268,7 +9412,25 @@ TextMorph.prototype.parse = function () {
                         this.maxLineWidth,
                         context.measureText(oldline).width
                     );
-                    oldline = word + ' ';
+                    w = context.measureText(word).width;
+                    if (w > this.maxWidth) {
+                        oldline = '';
+                        word.split('').forEach((letter, idx) => {
+                            w = context.measureText(oldline + letter).width;
+                            if (w > this.maxWidth && oldline.length) {
+                                this.lines.push(oldline);
+                                this.lineSlots.push(slot + idx);
+                                this.maxLineWidth = Math.max(
+                                    this.maxLineWidth,
+                                    context.measureText(oldline).width
+                                );
+                                oldline = '';
+                            }
+                            oldline += letter;
+                        });
+                    } else {
+                        oldline = word + ' ';
+                    }
                 } else {
                     oldline = newline;
                 }
@@ -9802,7 +9964,7 @@ TriggerMorph.prototype.createLabel = function () {
 TriggerMorph.prototype.fixLayout = function () {
     this.label.setPosition(
         this.center().subtract(
-            this.label.extent().floorDivideBy(2)
+            this.label.extent().divideBy(2)
         )
     );
 };
@@ -9918,16 +10080,10 @@ TriggerMorph.prototype.rootForGrab = function () {
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
-    var world = this.world();
-    this.schedule = new Animation(
-        nop,
-        nop,
-        0,
-        500,
-        nop,
-        () => this.popUpbubbleHelp(contents)
+    this.schedule = this.world().schedule(
+        () => this.popUpbubbleHelp(contents),
+        500
     );
-    world.animations.push(this.schedule);
 };
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
@@ -10160,16 +10316,10 @@ MenuItemMorph.prototype.isShowingSubmenu = function () {
 // MenuItemMorph submenus:
 
 MenuItemMorph.prototype.delaySubmenu = function () {
-    var world = this.world();
-    this.schedule = new Animation(
-        nop,
-        nop,
-        0,
-        500,
-        nop,
-        () => this.popUpSubmenu()
+    this.schedule = this.world().schedule(
+        () => this.popUpSubmenu(),
+        500
     );
-    world.animations.push(this.schedule);
 };
 
 MenuItemMorph.prototype.popUpSubmenu = function () {
@@ -11142,6 +11292,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
+    this.touchStartPosition = null;
 
     // properties for caching dragged objects:
     this.cachedFullImage = null;
@@ -11246,7 +11397,11 @@ HandMorph.prototype.dropTargetFor = function (aMorph) {
 };
 
 HandMorph.prototype.grab = function (aMorph) {
-    var oldParent = aMorph.parent;
+    var oldParent;
+    if (!aMorph) {
+        return null;
+    }
+    oldParent = aMorph.parent;
     if (aMorph instanceof WorldMorph) {
         return null;
     }
@@ -11259,12 +11414,12 @@ HandMorph.prototype.grab = function (aMorph) {
         if (!aMorph.noDropShadow) {
             aMorph.addShadow();
         }
-        this.add(aMorph);
 
         // cache the dragged object's display resources
         this.cachedFullImage = aMorph.fullImage();
         this.cachedFullBounds = aMorph.fullBounds();
 
+        this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
             oldParent.reactToGrabOf(aMorph);
@@ -11358,7 +11513,9 @@ HandMorph.prototype.processMouseDown = function (event) {
             }
         }
         if (this.world.cursor) {
-            if (morph !== this.world.cursor.target) {
+            if (morph !== this.world.cursor.target &&
+                    !morph.parentThatIsA(MenuItemMorph)
+            ) {
                 this.world.stopEditing();
             }
         }
@@ -11384,6 +11541,10 @@ HandMorph.prototype.processTouchStart = function (event) {
     MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
+        this.touchStartPosition = new Point(
+            event.touches[0].pageX,
+            event.touches[0].pageY
+        );
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             () => {
                 this.processMouseDown({button: 2});
@@ -11400,7 +11561,12 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    var pos = new Point(event.touches[0].pageX, event.touches[0].pageY);
     MorphicPreferences.isTouchDevice = true;
+    if (this.touchStartPosition.distanceTo(pos) <
+            MorphicPreferences.grabThreshold) {
+        return;
+    }
     if (event.touches.length === 1) {
         var touch = event.touches[0];
         this.processMouseMove(touch);
@@ -11618,7 +11784,7 @@ HandMorph.prototype.processDrop = function (event) {
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
 
-        droppedImage(canvas, name)
+        droppedImage(canvas, name, embeddedData)
         droppedSVG(image, name)
         droppedAudio(audio, name)
         droppedText(text, name, type)
@@ -11667,16 +11833,38 @@ HandMorph.prototype.processDrop = function (event) {
     function readImage(aFile) {
         var pic = new Image(),
             frd = new FileReader(),
-            trg = target;
+            trg = target,
+            embedTag = MorphicPreferences.pngPayloadMarker;
+
         while (!trg.droppedImage) {
             trg = trg.parent;
         }
+                
         pic.onload = () => {
-            canvas = newCanvas(new Point(pic.width, pic.height), true);
-            canvas.getContext('2d').drawImage(pic, 0, 0);
-            trg.droppedImage(canvas, aFile.name);
-            bulkDrop();
+            (async () => {
+                // extract embedded data (e.g. blocks)
+                // from the image's metadata if present
+                var buff = new Uint8Array(await aFile?.arrayBuffer()),
+                    strBuff = buff.reduce((acc, b) =>
+                        acc + String.fromCharCode(b), ""),
+                    embedded;
+
+                if (strBuff.includes(embedTag)) {
+                    try {
+                        embedded = decodeURIComponent(
+                            (strBuff)?.split(embedTag)[1]
+                        );
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+                canvas = newCanvas(new Point(pic.width, pic.height), true);
+                canvas.getContext('2d').drawImage(pic, 0, 0);
+                trg.droppedImage(canvas, aFile.name, embedded);
+                bulkDrop();
+            })();
         };
+
         frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
@@ -11928,6 +12116,10 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.activeMenu = null;
     this.activeHandle = null;
 
+    if (!fillPage && aCanvas.isRetinaEnabled) {
+        this.initRetina();
+    }
+
     this.initKeyboardHandler();
     this.resetKeyboardHandler();
     this.initEventListeners();
@@ -12056,16 +12248,48 @@ WorldMorph.prototype.fillPage = function () {
     });
 };
 
+WorldMorph.prototype.initRetina = function () {
+    var canvasHeight = this.worldCanvas.getBoundingClientRect().height,
+        canvasWidth = this.worldCanvas.getBoundingClientRect().width;
+    this.worldCanvas.style.width = canvasWidth + 'px';
+    this.worldCanvas.width = canvasWidth;
+    this.setWidth(canvasWidth);
+    this.worldCanvas.style.height = canvasHeight + 'px';
+    this.worldCanvas.height = canvasHeight;
+    this.setHeight(canvasHeight);
+};
+
+// WorldMorph scheduling:
+
+WorldMorph.prototype.schedule = function (callback, timeout) {
+    // run a function once after a given time in msecs in lockstep
+    // with the Morphic scheduler, answer an Animation object
+    // if timeout is omitted the callback is executed at the next
+    // display cycle
+    var schedule = new Animation(
+        nop, // setter
+        nop, // getter
+        0, // delta
+        timeout || 0, // duration msecs
+        nop, // easing
+        callback || nop // onComplete
+    );
+    this.animations.push(schedule);
+    return schedule;
+};
+
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
     // answer the color at the given point.
-    var dta = this.worldCanvas.getContext('2d').getImageData(
-        point.x,
-        point.y,
-        1,
-        1
-    ).data;
+    // first, create a new temporary canvas representing the fullImage
+    // and sample that one instead of the actual world canvas
+    // this slows things down but keeps Chrome from crashing
+    // in v119 in the Fall of 2023
+    var dta = Morph.prototype.fullImage.call(this)
+            .getContext('2d')
+            .getImageData(point.x, point.y, 1, 1)
+            .data;
     return new Color(dta[0], dta[1], dta[2]);
 };
 
@@ -12088,6 +12312,8 @@ WorldMorph.prototype.initKeyboardHandler = function () {
     kbd.world = this;
     kbd.style.zIndex = -1;
     kbd.autofocus = true;
+    kbd.style.width = '0px';
+    kbd.style.height = '0px';
     document.body.appendChild(kbd);
     this.keyboardHandler = kbd;
 
@@ -12280,6 +12506,7 @@ WorldMorph.prototype.initEventListeners = function () {
     window.addEventListener(
         "drop",
         event => {
+            this.hand.processMouseMove(event);
             this.hand.processDrop(event);
             event.preventDefault();
         },
@@ -12296,7 +12523,12 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
-    window.onbeforeunload = (evt) => {
+    window.cachedOnbeforeunload = window.onbeforeunload;
+    this.onbeforeunloadListener = (evt) => {
+        if (!this.hasUnsavedEdits()) return;
+        if (window.cachedOnbeforeunload) {
+            window.cachedOnbeforeunload.call(null, evt);
+        }
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";
         // For IE and Firefox
@@ -12306,6 +12538,14 @@ WorldMorph.prototype.initEventListeners = function () {
         // For Safari / chrome
         return msg;
     };
+     window.addEventListener("beforeunload", this.onbeforeunloadListener);
+};
+
+WorldMorph.prototype.hasUnsavedEdits = function () {
+    // any top-level morph can implement an hasUnsavedEdits() method
+    return this.children.some(any =>
+        any.hasUnsavedEdits && any.hasUnsavedEdits()
+    );
 };
 
 WorldMorph.prototype.mouseDownLeft = nop;
@@ -12752,4 +12992,9 @@ WorldMorph.prototype.togglePreferences = function () {
 WorldMorph.prototype.toggleHolesDisplay = function () {
     MorphicPreferences.showHoles = !MorphicPreferences.showHoles;
     this.rerender();
+};
+
+WorldMorph.prototype.destroy = function () {
+    window.removeEventListener("onbeforeunload", this.onbeforeunloadListener);
+    WorldMorph.uber.destroy.call(this);
 };

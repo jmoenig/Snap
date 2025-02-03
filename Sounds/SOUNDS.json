@@ -1,0 +1,74 @@
+[
+  {
+    "fileName": "Cat.mp3",
+    "name": "Cat",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Chord.wav",
+    "name": "Chord",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Dog1.wav",
+    "name": "Dog 1",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Dog2.wav",
+    "name": "Dog 2",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "FingerSnap.wav",
+    "name": "Finger Snap",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Kitten.wav",
+    "name": "Kitten",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Laugh-female.wav",
+    "name": "Laugh Female",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Laugh-male1.wav",
+    "name": "Laugh Male 1",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Laugh-male2.wav",
+    "name": "Laugh Male 2",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Laugh-male3.mp3",
+    "name": "Laugh Male 3",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Meow.wav",
+    "name": "Meow",
+    "translations": {
+    }
+  },
+  {
+    "fileName": "Pop.wav",
+    "name": "Pop",
+    "translations": {
+    }
+  }
+]

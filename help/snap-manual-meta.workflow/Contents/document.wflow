@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>444.7</string>
+	<string>512</string>
 	<key>AMApplicationVersion</key>
-	<string>2.8</string>
+	<string>2.10</string>
 	<key>AMDocumentVersion</key>
 	<string>2</string>
 	<key>actions</key>
@@ -54,15 +54,6 @@
 					<array>
 						<string>~/Desktop/SnapManual.pdf</string>
 					</array>
-				</dict>
-				<key>ActionRuntimeParameters</key>
-				<dict>
-					<key>fileNames</key>
-					<array>
-						<string>~/Desktop/SnapManual.pdf</string>
-					</array>
-					<key>temporary items path</key>
-					<string>/var/folders/dh/qzbgtp5j4691byv02vkth71rr4fgb6/T/6FFFC4B9-E0EF-41F5-AC3F-E82AB1086C12/1/com.apple.Automator.SpecifiedFiles</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.SpecifiedFiles</string>
@@ -114,7 +105,7 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>349.500000:240.000000</string>
+				<string>309.000000:239.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Get Specified Finder Items.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
@@ -132,11 +123,11 @@
 					<false/>
 					<key>Types</key>
 					<array>
-						<string>com.apple.cocoa.path</string>
+						<string>com.adobe.pdf</string>
 					</array>
 				</dict>
 				<key>AMActionVersion</key>
-				<string>9</string>
+				<string>1.1</string>
 				<key>AMApplication</key>
 				<array>
 					<string>Preview</string>
@@ -170,7 +161,7 @@
 					<string>List</string>
 					<key>Types</key>
 					<array>
-						<string>com.apple.cocoa.path</string>
+						<string>com.adobe.pdf</string>
 					</array>
 				</dict>
 				<key>AMRequiredResources</key>
@@ -198,39 +189,14 @@
 					<key>subjectFlag</key>
 					<false/>
 					<key>titleAttr</key>
-					<string>Snap! 6.5 Reference Manual</string>
-					<key>titleFlag</key>
-					<true/>
-				</dict>
-				<key>ActionRuntimeParameters</key>
-				<dict>
-					<key>authorAttr</key>
-					<string>Brian Harvey and Jens Mönig</string>
-					<key>authorFlag</key>
-					<true/>
-					<key>creatorAttr</key>
-					<string></string>
-					<key>creatorFlag</key>
-					<false/>
-					<key>keywordsAttr</key>
-					<array/>
-					<key>keywordsFlag</key>
-					<false/>
-					<key>subjectAttr</key>
-					<string></string>
-					<key>subjectFlag</key>
-					<false/>
-					<key>temporary items path</key>
-					<string>/var/folders/dh/qzbgtp5j4691byv02vkth71rr4fgb6/T/6FFFC4B9-E0EF-41F5-AC3F-E82AB1086C12/1/com.apple.Automator.SetPDFMetadata</string>
-					<key>titleAttr</key>
-					<string>Snap! 6.5 Reference Manual</string>
+					<string>Snap! 8.0 Reference Manual</string>
 					<key>titleFlag</key>
 					<true/>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.SetPDFMetadata</string>
 				<key>CFBundleVersion</key>
-				<string>9</string>
+				<string>1.1</string>
 				<key>CanShowSelectedItemsWhenRun</key>
 				<true/>
 				<key>CanShowWhenRun</key>
@@ -258,9 +224,9 @@
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>349.500000:510.000000</string>
+				<string>309.000000:511.500000</string>
 				<key>nibPath</key>
-				<string>/System/Library/Automator/Set PDF Metadata.action/Contents/Resources/English.lproj/main.nib</string>
+				<string>/System/Library/Automator/Set PDF Metadata.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
 			<key>isViewVisible</key>
 			<true/>
@@ -268,7 +234,7 @@
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>981B3CC5-C00F-45BF-AAD7-C664E84FF062</key>
+		<key>5F67F7A0-C310-436B-BFFE-D9B5DAD45F1D</key>
 		<dict>
 			<key>from</key>
 			<string>CFD83777-C216-4F34-A577-822B9F18C5D5 - CFD83777-C216-4F34-A577-822B9F18C5D5</string>

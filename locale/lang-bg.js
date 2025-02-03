@@ -1,1127 +1,1383 @@
-/*
-
-    lang-bg.js
-
-    Bulgarian translation for SNAP!
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.bg = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    ,    \u00c4, \u00e4
-
-,    \u00d6, \u00f6
-    ,    \u00dc, \u00fc
-    §      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Български', // the name as it should appear in the language menu
-    'language_translator':
-        'Иван Савов', // your name for the Translators tab
-    'translator_e-mail':
-        'ivan.savov@gmail.com', // optional
-    'last_changed':
-        '2015-11-02', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'Без име',
-    'development mode':
-        'Режим за програмисти',
-
-    // categories:
-    'Motion':
-        'Движение',
-    'Looks':
-        'Външност',
-    'Sound':
-        'Звуци',
-    'Pen':
-        'Молив',
-    'Control':
-        'Управление',
-    'Sensing':
-        'Сензори',
-    'Operators':
-        'Оператори',
-    'Variables':
-        'Променливи',
-    'Lists':
-        'Списъци',
-    'Other':
-        'Други',
-
-    // editor:
-    'draggable':
-        'движимо',
-
-    // tabs:
-    'Scripts':
-        'Скриптове',
-    'Costumes':
-        'Костюми',
-    'Sounds':
-        'Звуци',
-
-    // names:
-    'Sprite':
-        'Спрайт',
-    'Stage':
-        'Сцена',
-
-    // rotation styles:
-    'don\'t rotate':
-        'не се върти',
-    'can rotate':
-        'върти се',
-    'only face left/right':
-        'само ляво-дясно ориентация',
-
-    // new sprite button:
-    'add a new sprite':
-        'Добави нов спрайт',
-
-    // tab help
-    'costumes tab help':
-        'импортирай изображения от друг уеб-сайт\nили от твоя компютър пускайки ги тук',
-    'import a sound from your computer\nby dragging it into here':
-        'добави звуци от твоя компютър\nпускайки ги тук ',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Избрана сцена:\nняма блокове с движение',
-
-    'move %n steps':
-        'напред с %n стъпки',
-    'turn %clockwise %n degrees':
-        ' %clockwise с %n градуса',
-    'turn %counterclockwise %n degrees':
-        'завърти %counterclockwise с %n градуса',
-    'point in direction %dir':
-        'обърни се в посока %dir',
-    'point towards %dst':
-        'обърни се към %dst',
-    'go to x: %n y: %n':
-        'премини към x %n y %n',
-    'go to %dst':
-        'премини в точка %dst',
-    'glide %n secs to x: %n y: %n':
-        'плъзгане %n сек до x %n y %n',
-    'change x by %n':
-        'промени х с %n',
-    'set x to %n':
-        'настрой х на %n',
-    'change y by %n':
-        'промени y с %n',
-    'set y to %n':
-        'настрой y на %n',
-    'if on edge, bounce':
-        'ако е в края, отблъсни се',
-    'x position':
-        'x позиция',
-    'y position':
-        'y позиция',
-    'direction':
-        'посока',
-
-    // looks:
-    'switch to costume %cst':
-        'смени костюм с %cst',
-    'next costume':
-        'следващия костюм',
-    'costume #':
-        'костюм №',
-    'say %s for %n secs':
-        'кажи %s за %n сек',
-    'say %s':
-        'кажи %s',
-    'think %s for %n secs':
-        'мисли %s за %n сек',
-    'think %s':
-        'мисли %s',
-    'Hello!':
-        'Здрасти!',
-    'Hmm...':
-        'Хмм...',
-    'change %eff effect by %n':
-        'смени %eff ефект с %n',
-    'set %eff effect to %n':
-        'настрой ефект %eff на %n',
-    'clear graphic effects':
-        'махни ефектите',
-    'change size by %n':
-        'промени размера с %n',
-    'set size to %n %':
-        'настрой размера на %n',
-    'size':
-        'размер',
-    'show':
-        'покажи',
-    'hide':
-        'скрий',
-    'go to front':
-        'премини най-отпред',
-    'go back %n layers':
-        'премини с %n слоя назад',
-
-    'development mode \ndebugging primitives:':
-        'Режим за програмисти \nпримитиви за дебъгиране:',
-    'console log %mult%s':
-        'напиши в конзолата %mult%s',
-    'alert %mult%s':
-        'предупреждение %mult%s',
-
-    // sound:
-    'play sound %snd':
-        'пусни звук %snd',
-    'play sound %snd until done':
-        'пусни звук %snd до край',
-    'stop all sounds':
-        'спри всички звуци',
-    'rest for %n beats':
-        'пауза за %n такта',
-    'play note %n for %n beats':
-        'пусни нота %n за %n такта',
-    'change tempo by %n':
-        'промени темпото с %n',
-    'set tempo to %n bpm':
-        'настрой темпо %n удара в мин.',
-    'tempo':
-        'темпо',
-
-    // pen:
-    'clear':
-        'изчисти всичко',
-    'pen down':
-        'натисни молива',
-    'pen up':
-        'вдигни молива',
-    'set pen color to %clr':
-        'избери молив с цвят %clr',
-    'change pen color by %n':
-        'промени цвята на молива с %n',
-    'set pen color to %n':
-        'избери цвят %n',
-    'change pen shade by %n':
-        'промени яркостта с %n',
-    'set pen shade to %n':
-        'настрой яркостта на %n',
-    'change pen size by %n':
-        'промени размера с %n',
-    'set pen size to %n':
-        'ибери молив с размер %n',
-    'stamp':
-        'печатче',
-
-    // control:
-    'when %greenflag clicked':
-        'когато %greenflag е кликнат',
-    'when %keyHat key pressed %keyName':
-        'когато бутон %keyHat е натиснат %keyName',
-    'when I am %interaction':
-        'когато %interaction върху мен',
-    'when I receive %msgHat %message':
-        'когато получа %msgHat %message',
-    'broadcast %msg %receive':
-        'изпрати %msg %receive',
-    'broadcast %msg %receive and wait':
-        'изпрати %msg %receive и изчакай',
-    'to':
-        'към',
-    'Message name':
-        'Име на съобщение',
-    'wait %n secs':
-        'изчакай %n сек',
-    'wait until %b':
-        'изчакай до %b',
-    'forever %loop':
-        'завинаги %loop',
-    'repeat %n %loop':
-        'повтори %n %loop',
-    'repeat until %b %loop':
-        'повтори докато %b %loop',
-    'if %b %c':
-        'ако %b %c',
-    'if %b %c else %c':
-        'ако %b %c иначе %c',
-    'report %s':
-        'резултат %s',
-    'stop block':
-        'спри блока',
-    'stop script':
-        'спри скрипта',
-    'stop all %stop':
-        'спри всичко %stop',
-    'run %cmdRing %inputs':
-        'изпълни %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'пусни %cmdRing %inputs',
-    'call %repRing %inputs':
-        'извикай %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'изпълни %cmdRing с продължение',
-    'call %cmdRing w/continuation':
-        'извикай %cmdRing с продължение',
-    'warp %c':
-        'warp %c',
-
-    // sensing:
-    'touching %col ?':
-        'допира ли %col ?',
-    'touching %clr ?':
-        'допира ли %clr ?',
-    'color %clr is touching %clr ?':
-        'цвят %clr допира ли %clr ?',
-    'ask %s and wait':
-        'попитай %s и изчакай',
-    'what\'s your name?':
-        'как се казваш?',
-    'answer':
-        'отговор',
-    'mouse x':
-        'мишка x-позиция',
-    'mouse y':
-        'мишка y-позиция',
-    'mouse down?':
-        'натиснат бутон на мишката?',
-    'key %key pressed?':
-        'бутон %key натиснат?',
-    'distance to %dst':
-        'растояние до %dst',
-    'reset timer':
-        'нулирай таймер',
-    'timer':
-        'таймер',
-    'http:// %s':
-        'http:// %s',
-
-    'filtered for %clr':
-        'филтър за %clr',
-    'stack size':
-        'размер на стека',
-    'frames':
-        'рамки',
-
-    // operators:
-    '%n mod %n':
-        '%n модул %n',
-    'round %n':
-        'закръгли %n',
-    '%fun of %n':
-        '%fun от %n',
-    'pick random %n to %n':
-        'произволно число между %n и %n',
-    '%b and %b':
-        '%b и %b',
-    '%b or %b':
-        '%b или %b',
-    'not %b':
-        'не %b',
-    'true':
-        'true',
-    'false':
-        'false',
-    'join %words':
-        'съедини %words',
-    'hello':
-        'здравейте',
-    'world':
-        'хора',
-    'letter %idx of %s':
-        'буква %idx от %s',
-    'length of %s':
-        'дължина на %s',
-    'unicode of %s':
-        'Unicode на %s',
-    'unicode %n as letter':
-        'буква с Unicode %n',
-    'is %s a %typ ?':
-        '%s от тип %typ ли е ?',
-    'is %s identical to %s ?':
-        '%s идентичен с %s ?',
-
-    'type of %s':
-        'тип на %s',
-
-    // variables:
-    'Make a variable':
-        'Направи променлива',
-    'Variable name':
-        'Име на променливата',
-    'Delete a variable':
-        'Изтрий променлива',
-
-    'set %var to %s':
-        'настрой %var на стойност %s',
-    'change %var by %n':
-        'промени %var с %n',
-    'show variable %var':
-        'покажи променлива %var',
-    'hide variable %var':
-        'скрий променлива %var',
-    'script variables %scriptVars':
-        'променливи на скрипта %scriptVars',
-
-    // lists:
-    'list %exp':
-        'списък %exp',
-    '%s in front of %l':
-        '%s пред %l',
-    'item %idx of %l':
-        'елемент %idx от %l',
-    'all but first of %l':
-        'всичко осрен първия от %l',
-    'length of %l':
-        'дължина на %l',
-    '%l contains %s':
-        '%l съдържа %s',
-    'thing':
-        'нещо',
-    'add %s to %l':
-        'добави %s към %l',
-    'delete %ida of %l':
-        'изтрий %ida от %l',
-    'insert %s at %idx of %l':
-        'вмъкни %s на позиция %idx в %l',
-    'replace item %idx of %l with %s':
-        'замести елемент %idx в %l с %s',
-
-    // other
-    'Make a block':
-        'Нов блок',
-
-    // menus
-    // snap menu
-    'About...':
-        'За Snap!',
-    'Snap! website':
-        'Уебсайт на Snap!',
-    'Download source':
-        'Издърпай програмния код',
-    'Switch back to user mode':
-        'Премини към режим на потребителя',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'изключи deep-Morphic\nконтекст меню',
-    'Switch to dev mode':
-        'Премини към режим за порграмисти',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'включи Morphic\nконтекст менюта\nи инспектори,\nмното сложно!',
-
-    // project menu
-    'Project notes...':
-        'Записки по проекта...',
-    'New':
-        'Нов проект',
-    'Open...':
-        'Отвори...',
-    'Save':
-        'Запиши',
-    'Save As...':
-        'Запиши като...',
-    'Import...':
-        'Импорт...',
-    'file menu import hint':
-        'Зареди проект,\nблокова библиотека,\nспрайт или звук',
-    'Export project as plain text...':
-        'Експорт проекта како текст файл...',
-    'Export project...':
-        'Експорт на проект...',
-    'show project data as XML\nin a new browser window':
-        'Покажи XML данните на проекта\nв нов прозорец на браузъра',
-    'Export blocks...':
-        'Експорт на блокове...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'Покажи XML дефинициите на custom блокове\nв нов прозорец на браузъра',
-    'Import tools':
-        'Импорт опции',
-    'load the official library of\npowerful blocks':
-        'Зареди официалната библиотеката от мощните блокове',
-
-    // settings menu
-    'Language...':
-        'Език...',
-    'Blurred shadows':
-        'Размити сенки',
-    'uncheck to use solid drop\nshadows and highlights':
-        'откажи за да използваш плътни\nсенки и очертания',
-    'check to use blurred drop\nshadows and highlights':
-        'избери за да използваш плътни\nсенки и очертания',
-    'Zebra coloring':
-        'Зеброви цветове',
-    'check to enable alternating\ncolors for nested blocks':
-        'избери за да включиш\nалтениращи цветове за блоковете',
-    'uncheck to disable alternating\ncolors for nested block':
-        'откажи за да изключиш\nалтениращи цветове за блоковете',
-    'Dynamic input labels':
-        'Динамични входни етикети',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'откажи за да изключиш динамични входни етикети\nза входни с множество стйности',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'избери за да използваш динамични входни етикети\nза входни с множество стйности',
-    'Prefer empty slot drops':
-        'Предпочиай несвързани блокове',
-    'settings menu prefer empty slots hint':
-        'избери и новите блокове ще\nотместват старите',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'откажи за да позволиш новите блокове\nда изместват старите',
-    'Long form input dialog':
-        'Дълга форма за входни',
-    'check to always show slot\ntypes in the input dialog':
-        'избери за да са покаже типът\nна всички входните',
-    'uncheck to use the input\ndialog in short form':
-        'откажи за да използвап кратка форма\nза входни променливи',
-    'Virtual keyboard':
-        'Виртуална клавиатура',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'откажи за да изключиш виртуалната клавиатура',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'избери за да изпозваш виртуална\nклавиатура за мобилни устройства',
-    'Input sliders':
-        'Слайдери',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'откажи за да изключиш слайдерите\nза входни полета',
-    'check to enable\ninput sliders for\nentry fields':
-        'избери за да изпозваш слайдери\nза входни полета',
-    'Clicking sound':
-        'Звук на клик',
-    'uncheck to turn\nblock clicking\nsound off':
-        'откажи за да изключиш звука\nпри кликване върху блок',
-    'check to turn\nblock clicking\nsound on':
-        'избери за да включиш звука\nпри кликване върху блок',
-    'Animations':
-        'Aнимации',
-    'uncheck to disable\nIDE animations':
-        'откажи за да изключиш\nIDE aнимациите',
-    'check to enable\nIDE animations':
-        'избери за да включиш\nIDE aнимациите',
-    'Thread safe scripts':
-        'Thread safe скриптове',
-    'uncheck to allow\nscript reentrancy':
-        'откажи за да изключиш\nthread safe скриптове',
-    'check to disallow\nscript reentrancy':
-        'избери за да включиш\nthread safe скриптове',
-
-    // inputs
-    'with inputs':
-        'с вход на данни',
-    'input names:':
-        'имена на входните данни:',
-    'Input Names:':
-        'Имена на входните данни:',
-    'input list:':
-        'Вход на списък:',
-
-    // context menus:
-    'help':
-        'помощ',
-
-    // blocks:
-    'help...':
-        'помощ...',
-    'relabel...':
-        'смени етикета...',
-    'duplicate':
-        'дупликация',
-    'make a copy\nand pick it up':
-        'копирай\nи вземи',
-    'only duplicate this block':
-        'копирай само този блок',
-    'delete':
-        'изтрий',
-    'script pic...':
-        'изображение на скрипта...',
-    'open a new window\nwith a picture of this script':
-        'отвори нов екран\n с изображение на скрипта',
-    'ringify':
-        'ringify',
-    'unringify':
-        'unringify',
-
-    // custom blocks:
-    'delete block definition...':
-        'изтрий дефиницията на блока',
-    'edit...':
-        'редактирай...',
-
-    // sprites:
-    'edit':
-        'редактирай',
-    'export...':
-        'експорт...',
-
-    // stage:
-    'show all':
-        'почажи всичко',
-
-    // scripting area
-    'clean up':
-        'разчисти',
-    'arrange scripts\nvertically':
-        'вертикално подреждане на скриптовере',
-    'add comment':
-        'добави коментар',
-    'make a block...':
-        'нов блок...',
-
-    // costumes
-    'rename':
-        'Преименуване',
-    'export':
-        'Експорт',
-    'rename costume':
-        'Преименуване на костюм',
-
-    // sounds
-    'Play sound':
-        'Пусни звука',
-    'Stop sound':
-        'Спри звука',
-    'Stop':
-        'Стоп',
-    'Play':
-        'Пусни',
-    'rename sound':
-        'Преименувай звука',
-
-    // dialogs
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'Ok',
-    'Cancel':
-        'Отмени',
-    'Yes':
-        'Да',
-    'No':
-        'Не',
-
-    // help
-    'Help':
-        'Помощ',
-
-    // Project Manager
-    'Untitled':
-        'Без име',
-    'Open Project':
-        'Отвори Проект',
-    '(empty)':
-        '(празно)',
-    'Saved!':
-        'Записан!',
-    'Delete Project':
-        'Изтрий Проект',
-    'Are you sure you want to delete':
-        'Сирурен ли си че искаш да изтриеш?',
-    'rename...':
-        'Преименуване...',
-
-    // costume editor
-    'Costume Editor':
-        'Редактор на Костюми',
-    'click or drag crosshairs to move the rotation center':
-        'кликни за да преместиш центра на ротацията',
-
-    // project notes
-    'Project Notes':
-        'Записки по проекта',
-
-    // new project
-    'New Project':
-        'Нов Проект',
-    'Replace the current project with a new one?':
-        'Замени проекта с нов?',
-
-    // save project
-    'Save Project As...':
-        'Запиши проекта като...',
-
-    // export blocks
-    'Export blocks':
-        'Експорт на блокове',
-    'Import blocks':
-        'Импорт на блокове',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'Този проект не съдъжа\nглобални custom\nблокове',
-    'select':
-        'избери',
-    'all':
-        'всичко',
-    'none':
-        'нищо',
-
-    // variable dialog
-    'for all sprites':
-        'за вскички спрайтове',
-    'for this sprite only':
-        'само за този спрайт',
-
-    // block dialog
-    'Change block':
-        'Замени блок',
-    'Command':
-        'Команда',
-    'Reporter':
-        'Репортер',
-    'Predicate':
-        'Предикат',
-
-    // block editor
-    'Block Editor':
-        'Редактор на блокове',
-    'Apply':
-        'Приложи',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Изтрий custom блок',
-    'block deletion dialog text':
-        'Сигурен ли си че искаш да изтиреш този блок?',
-
-    // input dialog
-    'Create input name':
-        'Направи нов вход с име',
-    'Edit input name':
-        'Редактирай име на вход',
-    'Edit label fragment':
-        'Редактирай текста етикет',
-    'Title text':
-        'Текст заглавие',
-    'Input name':
-        'Име на входа на данни',
-    'Delete':
-        'Изтрий',
-    'Object':
-        'Обект',
-    'Number':
-        'Число',
-    'Text':
-        'Tекст',
-    'List':
-        'Списък',
-    'Any type':
-        'Произволен тип',
-    'Boolean (T/F)':
-        'Булев (Т/F)',
-    'Command\n(inline)':
-        'Команда\n(inline)',
-    'Command\n(C-shape)':
-        'Команда\n(С-форма)',
-    'Any\n(unevaluated)':
-        'Произволен\n(unevaluated)',
-    'Boolean\n(unevaluated)':
-        'Булев\n(unevaluated)',
-    'Single input.':
-        'Единичен вход',
-    'Default Value:':
-        'Default стойност:',
-    'Multiple inputs (value is list of inputs)':
-        'Множество входни (спиък от данни)',
-    'Upvar - make internal variable visible to caller':
-        'Upvar - направи вътрешна променлива видима от извиквача',
-
-    // About Snap
-    'About Snap':
-        'За Snap!',
-    'Back...':
-        'Назад...',
-    'License...':
-        'Лиценз...',
-    'Modules...':
-        'Модули...',
-    'Credits...':
-        'Кредити...',
-    'Translators...':
-        'Преводачи',
-    'License':
-        'Лиценз',
-    'current module versions:':
-        'Версии на модулие',
-    'Contributors':
-        'Участници',
-    'Translations':
-        'Преводи',
-
-    // variable watchers
-    'normal':
-        'нормален',
-    'large':
-        'голям',
-    'slider':
-        'слайдер',
-    'slider min...':
-        'слайдер min...',
-    'slider max...':
-        'слайдер max...',
-    'import...':
-        'импорт...',
-    'Slider minimum value':
-        'Слайдер с min стойност',
-    'Slider maximum value':
-        'Слайдер с max стойност',
-
-    // list watchers
-    'length: ':
-        'дължина: ',
-
-    // coments
-    'add comment here...':
-        'добави коментар тук...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) надясно',
-    '(-90) left':
-        '(-90) наляво',
-    '(0) up':
-        '(0) нагоре',
-    '(180) down':
-        '(180) надолу',
-
-    // collision detection
-    'mouse-pointer':
-        'курсор на мишката',
-    'edge':
-        'край',
-    'pen trails':
-        'линии след молива',
-
-    // costumes
-    'Turtle':
-        'Костенурка',
-
-    // graphical effects
-    'ghost':
-        'прозрачност',
-
-    // keys
-    'space':
-        'интервал',
-    'up arrow':
-        'стрелка нагоре',
-    'down arrow':
-        'стрелка надолу',
-    'right arrow':
-        'стрелка надясно',
-    'left arrow':
-        'стрелка наляво',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'нов...',
-
-    // math functions
-    'abs':
-        'абсолютна стойност',
-    'sqrt':
-        'корен квадратен',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // data types
-    'number':
-        'число',
-    'text':
-        'текст',
-    'Boolean':
-        'булев',
-    'list':
-        'списък',
-    'command':
-        'команда',
-    'reporter':
-        'репортер',
-    'predicate':
-        'предикат',
-
-    // list indices
-    'last':
-        'последен',
-    'any':
-        'някой',
-    'now connected':
-        'конектиран',
-    'undo':
-        'въстанови'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "",
+    "(-90) left": "(-90) наляво",
+    "(0) up": "(0) нагоре",
+    "(1) sine": "",
+    "(180) down": "(180) надолу",
+    "(2) square": "",
+    "(3) sawtooth": "",
+    "(4) triangle": "",
+    "(90) right": "(90) надясно",
+    "(empty)": "(празно)",
+    "(in a new window)": "",
+    "(no matches)": "",
+    "(temporary)": "",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "",
+    "APL primitives": "",
+    "About Snap": "За Snap!",
+    "About...": "За Snap!",
+    "Account created.": "",
+    "Add interactive maps to projects": "",
+    "Add scene...": "",
+    "Adds features from the APL language supporting hyperblocks.": "",
+    "Allow multi-line text input to a block": "",
+    "An e-mail with your password has been sent to the address provided": "",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "",
+    "Analyze data for frequency distribution": "",
+    "Analyze, manipulate and generate sound samples.": "",
+    "Animation": "",
+    "Animations": "Aнимации",
+    "Another custom block with this name exists.": "",
+    "Any (unevaluated)": "Произволен (unevaluated)",
+    "Any type": "Произволен тип",
+    "Apply": "Приложи",
+    "April": "",
+    "Are you sure you want to continue?": "",
+    "Are you sure you want to delete": "Сирурен ли си че искаш да изтриеш?",
+    "Are you sure you want to publish": "",
+    "Are you sure you want to replace": "",
+    "Are you sure you want to share": "",
+    "Are you sure you want to unpublish": "",
+    "Are you sure you want to unshare": "",
+    "Audio Comp": "",
+    "August": "",
+    "Back...": "Назад...",
+    "Backgrounds": "",
+    "Backup failed. This cannot be undone, proceed anyway?": "",
+    "Bar charts": "",
+    "Bignums, rationals, complex #s": "",
+    "Birth date:": "",
+    "Bitmap": "",
+    "Block Editor": "Редактор на блокове",
+    "Blocks": "",
+    "Blocks category name:": "",
+    "Blurred shadows": "Размити сенки",
+    "Boolean": "булев",
+    "Boolean (T/F)": "Булев (Т/F)",
+    "Boolean (unevaluated)": "Булев (unevaluated)",
+    "Bottom": "",
+    "Bring back deleted sprites": "",
+    "Browser": "",
+    "Brush size": "",
+    "Cache Inputs": "",
+    "Camera": "",
+    "Camera not supported": "",
+    "Camera support": "",
+    "Cancel": "Отмени",
+    "Case sensitivity": "",
+    "Catch errors": "",
+    "Catch errors in a script": "",
+    "Category color": "",
+    "Change Password": "",
+    "Change Password...": "",
+    "Change block": "Замени блок",
+    "Clear backup": "",
+    "Clicking sound": "Звук на клик",
+    "Closed brush (free draw)": "",
+    "Cloud": "",
+    "Code mapping": "",
+    "Codification support": "",
+    "Colors and Crayons": "",
+    "Command": "Команда",
+    "Command (C-shape)": "Команда (С-форма)",
+    "Command (inline)": "Команда (inline)",
+    "Computer": "",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "",
+    "Constrain proportions of shapes? (you can also hold shift)": "",
+    "Contents": "",
+    "Contributors": "Участници",
+    "Control": "Управление",
+    "Control the Hummingbird robotics kit processor": "",
+    "Convert to bitmap?": "",
+    "Costume Editor": "Редактор на Костюми",
+    "Costumes": "Костюми",
+    "Crayons": "",
+    "Create and manage global/sprite/script variables in a script": "",
+    "Create input name": "Направи нов вход с име",
+    "Create variables": "",
+    "Create variables in program": "",
+    "Credits...": "Кредити...",
+    "Custom Block Translations": "",
+    "Database": "",
+    "December": "",
+    "Default": "",
+    "Default Value:": "Default стойност:",
+    "Delete": "Изтрий",
+    "Delete Custom Block": "Изтрий custom блок",
+    "Delete Project": "Изтрий Проект",
+    "Delete a variable": "Изтрий променлива",
+    "Disable click-to-run": "",
+    "Disable dragging data": "",
+    "Down": "",
+    "Download source": "Издърпай програмния код",
+    "Dragging threshold...": "",
+    "Dynamic input labels": "Динамични входни етикети",
+    "E-mail address of parent or guardian:": "",
+    "E-mail address:": "",
+    "ERROR: INVALID PASSWORD": "",
+    "EXPERIMENTAL! check to enable live custom control structures": "",
+    "EXPERIMENTAL! check to enable support for compiling": "",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "",
+    "Edge color (left click)": "",
+    "Edit input name": "Редактирай име на вход",
+    "Edit label fragment": "Редактирай текста етикет",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "",
+    "Ellipse (shift: circle)": "",
+    "Empty": "",
+    "Enable command drops in all rings": "",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "",
+    "Eraser tool": "",
+    "Error": "",
+    "Examples": "",
+    "Execute on slider change": "",
+    "Export Project As...": "",
+    "Export all scripts as pic...": "",
+    "Export blocks": "Експорт на блокове",
+    "Export blocks...": "Експорт на блокове...",
+    "Export project as plain text...": "Експорт проекта како текст файл...",
+    "Export project...": "Експорт на проект...",
+    "Export summary with drop-shadows...": "",
+    "Export summary...": "",
+    "Extension blocks": "",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "",
+    "Fade blocks": "",
+    "Fade blocks...": "",
+    "February": "",
+    "Fetching project from the cloud...": "",
+    "Fill a region": "",
+    "Fill color (right click)": "",
+    "Filled Ellipse (shift: circle)": "",
+    "Filled Rectangle (shift: square)": "",
+    "First-Class Sprites": "",
+    "Flat design": "",
+    "Flat line ends": "",
+    "For all Sprites": "",
+    "Frequency Distribution Analysis": "",
+    "Generate costumes from letters or words of text.": "",
+    "Getters and setters": "",
+    "Glide, grow and rotate using easing functions.": "",
+    "HSL pen color model": "",
+    "Header mapping": "",
+    "Hello!": "Здрасти!",
+    "Hello, World!": "",
+    "Help": "Помощ",
+    "Hide blocks in palette": "",
+    "Hide blocks...": "",
+    "Hmm...": "Хмм...",
+    "Hummingbird robotics": "",
+    "Hyper blocks support": "",
+    "I have read and agree to the Terms of Service": "",
+    "If you cannot find that email, please check your spam folder.": "",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "",
+    "Import": "",
+    "Import a new costume from your webcam": "",
+    "Import blocks": "Импорт на блокове",
+    "Import library": "",
+    "Import sound": "",
+    "Import tools": "Импорт опции",
+    "Import...": "Импорт...",
+    "Imported": "",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "",
+    "Infinite precision integers, exact rationals, complex": "",
+    "Inheritance support": "",
+    "Input Names:": "Имена на входните данни:",
+    "Input Slot Options": "",
+    "Input name": "Име на входа на данни",
+    "Input sliders": "Слайдери",
+    "Inside a custom block": "",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "",
+    "Iteration, composition": "",
+    "JIT compiler support": "",
+    "January": "",
+    "JavaScript extensions": "",
+    "JavaScript extensions for Snap! are turned off": "",
+    "JavaScript function ( _ ) { _ }": "",
+    "July": "",
+    "June": "",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "",
+    "Keyboard Editing": "",
+    "Kind of": "",
+    "LEAP Motion controller": "",
+    "Language...": "Език...",
+    "Libraries...": "",
+    "License": "Лиценз",
+    "License...": "Лиценз...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "",
+    "Line tool (shift: constrain to 45º)": "",
+    "Line tool (shift: vertical/horizontal)": "",
+    "List": "Списък",
+    "List utilities": "",
+    "Lists": "Списъци",
+    "Live coding support": "",
+    "Loading": "",
+    "Local Block(s) in Global Definition": "",
+    "Log pen vectors": "",
+    "Login...": "",
+    "Logout": "",
+    "Long form input dialog": "Дълга форма за входни",
+    "Looks": "Външност",
+    "Make a block": "Нов блок",
+    "Make a variable": "Направи променлива",
+    "Manipulate costumes pixel-wise.": "",
+    "March": "",
+    "May": "",
+    "Message name": "Име на съобщение",
+    "Method Editor": "",
+    "Microphone": "",
+    "Microphone resolution...": "",
+    "Modules...": "Модули...",
+    "Motion": "Движение",
+    "Multi-branched conditional": "",
+    "Multi-branched conditional (switch)": "",
+    "Multiple inputs (value is list of inputs)": "Множество входни (спиък от данни)",
+    "Nested auto-wrapping": "",
+    "New": "Нов проект",
+    "New Category": "",
+    "New Project": "Нов Проект",
+    "New category...": "",
+    "New password:": "",
+    "New scene": "",
+    "No": "Не",
+    "November": "",
+    "Number": "Число",
+    "OK": "",
+    "Object": "Обект",
+    "October": "",
+    "Ok": "",
+    "Old password:": "",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "",
+    "Open": "",
+    "Open Project": "Отвори Проект",
+    "Open in Community Site": "",
+    "Open...": "Отвори...",
+    "Opening project...": "",
+    "Operators": "Оператори",
+    "Other": "Други",
+    "Output text using speech synthesis.": "",
+    "Paint Editor": "",
+    "Paint a new costume": "",
+    "Paint a shape (shift: edge color)": "",
+    "Paint a shape (shift: secondary color)": "",
+    "Paintbrush tool (free draw)": "",
+    "Parallelization": "",
+    "Part of": "",
+    "Parts": "",
+    "Password:": "",
+    "Pen": "Молив",
+    "Persist linked sublist IDs": "",
+    "Persistent key-value storage across Snap! sessions in the same browser": "",
+    "Pipette tool (pick a color anywhere)": "",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "",
+    "Pixels": "",
+    "Plain prototype labels": "",
+    "Play": "Пусни",
+    "Play sound": "Пусни звука",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "",
+    "Please use the verification link that was sent to your email address when you signed up.": "",
+    "Polygon": "",
+    "Predicate": "Предикат",
+    "Prefer empty slot drops": "Предпочиай несвързани блокове",
+    "Privacy...": "",
+    "Project Notes": "Записки по проекта",
+    "Project URLs": "",
+    "Project notes...": "Записки по проекта...",
+    "Provide 100 selected colors": "",
+    "Provide getters and setters for all GUI-controlled global settings": "",
+    "Publish": "",
+    "Publish Project": "",
+    "Rasterize SVGs": "",
+    "Record a new sound": "",
+    "Recover": "",
+    "Rectangle (shift: square)": "",
+    "Reference manual": "",
+    "Remove a category...": "",
+    "Remove unused blocks": "",
+    "Repeat Password:": "",
+    "Repeat new password:": "",
+    "Replace Project": "",
+    "Replace the current project with a new one?": "Замени проекта с нов?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "",
+    "Reporter": "Репортер",
+    "Request blocked": "",
+    "Resend Verification Email...": "",
+    "Resend verification email": "",
+    "Reset Password...": "",
+    "Reset password": "",
+    "Restore unsaved project": "",
+    "Retina display support": "",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "",
+    "Run several scripts in parallel and wait until all are done.": "",
+    "SVG costumes are not yet fully supported in every browser": "",
+    "Same Named Blocks": "",
+    "Save": "Запиши",
+    "Save As...": "Запиши като...",
+    "Save Project": "",
+    "Save Project As...": "Запиши проекта като...",
+    "Save to disk": "",
+    "Saved!": "Записан!",
+    "Saving project to the cloud...": "",
+    "Scenes...": "",
+    "Script variable name": "",
+    "Scripts": "Скриптове",
+    "Select a costume from the media library": "",
+    "Select a sound from the media library": "",
+    "Select categories of additional blocks to add to this project.": "",
+    "Selection tool": "",
+    "Sensing": "Сензори",
+    "September": "",
+    "Serial Ports": "",
+    "Service:": "",
+    "Set RGB or HSV pen color": "",
+    "Set the rotation center": "",
+    "Share": "",
+    "Share Project": "",
+    "Show buttons": "",
+    "Show categories": "",
+    "Sign in": "",
+    "Sign up": "",
+    "Signada (Network remote control)": "",
+    "Signup": "",
+    "Signup...": "",
+    "Single input.": "Единичен вход",
+    "Single palette": "",
+    "Slider maximum value": "Слайдер с max стойност",
+    "Slider minimum value": "Слайдер с min стойност",
+    "Snap! website": "Уебсайт на Snap!",
+    "Snap!Cloud": "",
+    "Some standard functions on lists (reverse, sort, etc.)": "",
+    "Sound": "Звуци",
+    "Sound Recorder": "",
+    "Sounds": "Звуци",
+    "Sprite": "Спрайт",
+    "Sprite Nesting": "",
+    "Stage": "Сцена",
+    "Stage height": "",
+    "Stage selected: no motion primitives": "Избрана сцена: няма блокове с движение",
+    "Stage size": "",
+    "Stage size...": "",
+    "Stage width": "",
+    "Stop": "Стоп",
+    "Stop sound": "Спри звука",
+    "Streams (lazy lists)": "",
+    "Strings, Multi-line input": "",
+    "Stroked Ellipse (shift: circle)": "",
+    "Stroked Rectangle (shift: square)": "",
+    "Switch back to user mode": "Премини към режим на потребителя",
+    "Switch to dev mode": "Премини към режим за порграмисти",
+    "Switch to vector editor?": "",
+    "Table lines": "",
+    "Table support": "",
+    "Table view": "",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "",
+    "Ternary Boolean slots": "",
+    "Text": "Tекст",
+    "Text Costumes": "",
+    "Text to Speech": "",
+    "Text to speech": "",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "",
+    "The question came up at": "",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "",
+    "This will convert your vector objects into bitmaps,": "",
+    "This will erase your current drawing.": "",
+    "Thread safe scripts": "Thread safe скриптове",
+    "Title text": "Текст заглавие",
+    "Today": "",
+    "Today,": "",
+    "Top": "",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "",
+    "Translations": "Преводи",
+    "Translators...": "Преводачи",
+    "Turbo mode": "",
+    "Turtle": "Костенурка",
+    "Undelete sprites...": "",
+    "Unpublish": "",
+    "Unpublish Project": "",
+    "Unsaved Changes!": "",
+    "Unshare": "",
+    "Unshare Project": "",
+    "Untitled": "Без име",
+    "Unused blocks...": "",
+    "Unverified account:": "",
+    "Up": "",
+    "Updating project list...": "",
+    "Uploading": "",
+    "Upvar - make internal variable visible to caller": "Upvar - направи вътрешна променлива видима от извиквача",
+    "Use CPU for graphics": "",
+    "User name must be four characters or longer": "",
+    "User name:": "",
+    "Variable name": "Име на променливата",
+    "Variables": "Променливи",
+    "Variadic reporters": "",
+    "Vector": "",
+    "Vector Paint Editor": "",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "",
+    "Virtual keyboard": "Виртуална клавиатура",
+    "Visible stepping": "",
+    "Web Audio API is not supported in this browser": "",
+    "Web services access (https)": "",
+    "Words, sentences": "",
+    "World Map": "",
+    "World...": "",
+    "Would you like to replace it?": "",
+    "Yes": "Да",
+    "Yesterday": "",
+    "Yesterday,": "",
+    "You are not logged in": "",
+    "You are now logged in, and your account is enabled for three days.": "",
+    "You have": "",
+    "Zebra coloring": "Зеброви цветове",
+    "Zoom blocks": "",
+    "Zoom blocks...": "",
+    "_ at _": "",
+    "_ combine _ using _": "",
+    "_ contains _": "_ съдържа _",
+    "_ effect": "",
+    "_ find first item _ in _": "",
+    "_ in front of _": "_ пред _",
+    "_ keep items _ from _": "",
+    "_ map _ over _": "",
+    "_ mod _": "_ модул _",
+    "_ of _": "_ от _",
+    "_ of block _": "",
+    "_ of costume _": "",
+    "_ of sound _": "",
+    "_ of text _": "",
+    "_ to _": "",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "",
+    "a new clone of _": "",
+    "a variable of name '": "",
+    "about morphic.js...": "",
+    "abs": "абсолютна стойност",
+    "acos": "acos",
+    "add _ to _": "добави _ към _",
+    "add a new Turtle sprite": "",
+    "add a new sprite": "Добави нов спрайт",
+    "add comment": "добави коментар",
+    "add comment here...": "добави коментар тук...",
+    "agent": "",
+    "alert _": "предупреждение _",
+    "all": "всичко",
+    "all <": "",
+    "all =": "",
+    "all >": "",
+    "all but first of _": "всичко осрен първия от _",
+    "all but this script": "",
+    "all identical": "",
+    "all scenes": "",
+    "all ≤": "",
+    "all ≥": "",
+    "alpha value:": "",
+    "anchor": "",
+    "and": "и",
+    "and send": "",
+    "and you will not be able to convert them back into vector drawings.": "",
+    "animation demo": "",
+    "answer": "отговор",
+    "any": "",
+    "any key": "",
+    "any message": "",
+    "anything": "",
+    "append _": "",
+    "arrange scripts vertically": "вертикално подреждане на скриптовере",
+    "arrowDown": "",
+    "arrowDownOutline": "",
+    "arrowLeft": "",
+    "arrowLeftOutline": "",
+    "arrowRight": "",
+    "arrowRightOutline": "",
+    "arrowUp": "",
+    "arrowUpOutline": "",
+    "asin": "asin",
+    "ask _ and wait": "попитай _ и изчакай",
+    "ask _ for _ _": "",
+    "atan": "atan",
+    "attach...": "",
+    "b": "b",
+    "back": "",
+    "balance": "",
+    "big (2x)": "",
+    "bigger menu fonts and sliders": "",
+    "bins": "",
+    "block": "",
+    "block deletion dialog text": "Сигурен ли си че искаш да изтиреш този блок?",
+    "block variables": "",
+    "block variables...": "",
+    "block-solid (0)": "",
+    "blockify": "",
+    "blocks": "",
+    "blue": "",
+    "blurred shadows...": "",
+    "blurry shades, use for new browsers": "",
+    "bottom": "",
+    "box": "",
+    "brightness": "",
+    "broadcast _ _": "изпрати _ _",
+    "broadcast _ _ and wait": "изпрати _ _ и изчакай",
+    "brush": "",
+    "build": "",
+    "but getting a": "",
+    "c": "c",
+    "call _ _": "извикай _ _",
+    "call _ w/continuation": "извикай _ с продължение",
+    "caller": "",
+    "camera": "",
+    "can only write text or numbers, not a": "",
+    "can rotate": "върти се",
+    "cannot handle zero width or height": "",
+    "cannot operate on a deleted sprite": "",
+    "cannot send media, sprites or procedures to another scene": "",
+    "case sensitivity": "",
+    "categories": "",
+    "category": "",
+    "ceiling": "",
+    "center": "",
+    "center x": "",
+    "center y": "",
+    "change _ by _": "промени _ с _",
+    "change _ effect by _": "смени _ ефект с _",
+    "change background _ by _": "",
+    "change balance by _": "",
+    "change pen _ by _": "",
+    "change pen color by _": "промени цвята на молива с _",
+    "change pen shade by _": "промени яркостта с _",
+    "change pen size by _": "промени размера с _",
+    "change size by _": "промени размера с _",
+    "change tempo by _": "промени темпото с _",
+    "change volume by _": "",
+    "change x by _": "промени х с _",
+    "change y by _": "промени y с _",
+    "check for alternative GUI design": "",
+    "check for block to text mapping features": "",
+    "check for flat ends of lines": "",
+    "check for higher contrast table views": "",
+    "check for higher resolution, uses more computing resources": "",
+    "check for multi-column list view support": "",
+    "check for sprite inheritance features": "",
+    "check to allow empty Boolean slots": "",
+    "check to always show slot types in the input dialog": "избери за да са покаже типът на всички входните",
+    "check to cache inputs boosts recursion": "",
+    "check to disable directly running blocks by clicking on them": "",
+    "check to disallow script reentrance": "",
+    "check to disallow script reentrancy": "избери за да включиш thread safe скриптове",
+    "check to distinguish upper- and lowercase when comparing texts": "",
+    "check to enable IDE animations": "избери за да включиш IDE aнимациите",
+    "check to enable alternating colors for nested blocks": "избери за да включиш алтениращи цветове за блоковете",
+    "check to enable auto-wrapping inside nested block stacks": "",
+    "check to enable camera support": "",
+    "check to enable dropping commands in all rings": "",
+    "check to enable dynamic labels for variadic inputs": "избери за да използваш динамични входни етикети за входни с множество стйности",
+    "check to enable input sliders for entry fields": "избери за да изпозваш слайдери за входни полета",
+    "check to enable keyboard editing support": "",
+    "check to enable project data in URLs": "",
+    "check to enable saving linked sublist identities": "",
+    "check to enable sprite composition": "",
+    "check to enable support for first-class sprite": "",
+    "check to enable using operators on lists and tables": "",
+    "check to enable virtual keyboard support for mobile devices": "избери за да изпозваш виртуална клавиатура за мобилни устройства",
+    "check to hide (+) symbols in block prototype labels": "",
+    "check to inherit from": "",
+    "check to prevent contents from being saved": "",
+    "check to prioritize script execution": "",
+    "check to rasterize SVGs on import": "",
+    "check to run the edited script when moving the slider": "",
+    "check to show all blocks in a single palette": "",
+    "check to show buttons in the palette": "",
+    "check to show category names in the palette": "",
+    "check to show extension primitives in the palette": "",
+    "check to show in palette": "",
+    "check to support native JavaScript functions": "",
+    "check to switch pen colors and graphic effects to HSL": "",
+    "check to turn block clicking sound on": "избери за да включиш звука при кликване върху блок",
+    "check to turn on logging pen vectors": "",
+    "check to turn on visible stepping (slow)": "",
+    "check to use blurred drop shadows and highlights": "избери за да използваш плътни сенки и очертания",
+    "children": "",
+    "choose another color for this morph": "",
+    "choose the World's background color": "",
+    "circle": "",
+    "circle box": "",
+    "circleSolid": "",
+    "clean up": "разчисти",
+    "clear": "изчисти всичко",
+    "clear graphic effects": "махни ефектите",
+    "clear undrop queue": "",
+    "click or drag crosshairs to move the rotation center": "кликни за да преместиш центра на ротацията",
+    "clicked": "",
+    "clone": "",
+    "clones": "",
+    "closedBrush": "",
+    "cloud": "",
+    "cloud unavailable without a web server.": "",
+    "cloudGradient": "",
+    "cloudOutline": "",
+    "code": "",
+    "code mapping...": "",
+    "code of _": "",
+    "collection": "",
+    "color": "",
+    "color _ is touching _ ?": "цвят _ допира ли _ ?",
+    "color palette": "",
+    "color picker": "",
+    "color...": "",
+    "color:": "",
+    "columns": "",
+    "combinations _": "",
+    "combine _ using _": "",
+    "comic": "",
+    "command": "команда",
+    "comment pic...": "",
+    "compile": "",
+    "compile _": "",
+    "compile _ for _ args": "",
+    "confetti": "",
+    "console log _": "напиши в конзолата _",
+    "continuation": "",
+    "continuations cannot be forked": "",
+    "cos": "cos",
+    "costume": "",
+    "costume #": "костюм №",
+    "costume name": "",
+    "costumes": "",
+    "costumes tab help": "импортирай изображения от друг уеб-сайт или от твоя компютър пускайки ги тук",
+    "could not connect to:": "",
+    "cr": "",
+    "create a clone of _": "",
+    "cross": "",
+    "crosshairs": "",
+    "current": "",
+    "current _": "",
+    "current module versions:": "Версии на модулие",
+    "current parent": "",
+    "custom?": "",
+    "cut from _": "",
+    "d": "d",
+    "dangling?": "",
+    "data": "",
+    "date": "",
+    "day of week": "",
+    "days left": "",
+    "days left.": "",
+    "defaults": "",
+    "define _ _ _": "",
+    "definition": "",
+    "delete": "изтрий",
+    "delete _": "",
+    "delete _ of _": "изтрий _ от _",
+    "delete a category...": "",
+    "delete block _": "",
+    "delete block definition...": "изтрий дефиницията на блока",
+    "delete slot": "",
+    "delete this clone": "",
+    "delete variable": "",
+    "delimiter": "",
+    "demo (1.2x)": "",
+    "demo...": "",
+    "detach all parts": "",
+    "detach and put into the hand": "",
+    "detach from": "",
+    "development mode": "Режим за програмисти",
+    "development mode debugging primitives:": "Режим за програмисти примитиви за дебъгиране:",
+    "development mode...": "",
+    "dimensions": "",
+    "direction": "посока",
+    "disable deep-Morphic context menus and show user-friendly ones": "изключи deep-Morphic контекст меню",
+    "disable developers' context menus": "",
+    "disable dragging media and blocks out of watchers and balloons": "",
+    "disconnected.": "",
+    "distance": "",
+    "distance to _": "растояние до _",
+    "distribution": "",
+    "don't rotate": "не се върти",
+    "down arrow": "стрелка надолу",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "",
+    "download script": "",
+    "download this script as an XML file": "",
+    "draggable": "движимо",
+    "draggable?": "",
+    "dragging threshold": "",
+    "dropped": "",
+    "duplicate": "дупликация",
+    "duplicate block definition...": "",
+    "duration": "",
+    "e": "e",
+    "e^": "e^",
+    "edge": "край",
+    "edit": "редактирай",
+    "edit rotation point only...": "",
+    "edit the costume's rotation center": "",
+    "edit...": "редактирай...",
+    "editables": "",
+    "elegant (90)": "",
+    "enable Morphic context menus and inspectors, not user-friendly!": "включи Morphic контекст менюта и инспектори, мното сложно!",
+    "enter": "",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "",
+    "entering user mode": "",
+    "eraser": "",
+    "exceeding maximum number of clones": "",
+    "expecting": "",
+    "expecting a": "",
+    "expecting a finite number but getting Infinity or NaN": "",
+    "experimental - under construction": "",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "",
+    "export": "Експорт",
+    "export block definition...": "",
+    "export pen trails line segments as SVG": "",
+    "export project as cloud data...": "",
+    "export project media only...": "",
+    "export project without media...": "",
+    "export script": "",
+    "export...": "експорт...",
+    "extract": "",
+    "f": "f",
+    "false": "",
+    "file": "",
+    "file menu import hint": "Зареди проект, блокова библиотека, спрайт или звук",
+    "fill": "",
+    "fill page...": "",
+    "filtered for _": "филтър за _",
+    "find blocks": "",
+    "find blocks...": "",
+    "find first item _ in _": "",
+    "find unused global custom blocks and remove their definitions": "",
+    "fisheye": "",
+    "flag": "",
+    "flash": "",
+    "flat line ends": "",
+    "flatten": "",
+    "flip ↔": "",
+    "flip ↕": "",
+    "floor": "",
+    "footprints": "",
+    "for _ = _ to _ _": "",
+    "for all sprites": "за вскички спрайтове",
+    "for each _ in _ _": "",
+    "for this sprite only": "само за този спрайт",
+    "forever _": "завинаги _",
+    "frame": "",
+    "frames": "рамки",
+    "frequencies": "",
+    "frequency": "",
+    "front": "",
+    "fullScreen": "",
+    "g": "g",
+    "gears": "",
+    "get blocks": "",
+    "get data": "",
+    "ghost": "прозрачност",
+    "giant (8x)": "",
+    "glide _ secs to x: _ y: _": "плъзгане _ сек до x _ y _",
+    "global?": "",
+    "globe": "",
+    "go back _ layers": "премини с _ слоя назад",
+    "go to _": "премини в точка _",
+    "go to _ layer": "",
+    "go to front": "премини най-отпред",
+    "go to x: _ y: _": "премини към x _ y _",
+    "gray scale palette": "",
+    "green": "",
+    "grow": "",
+    "h": "h",
+    "handle": "",
+    "header": "",
+    "header mapping...": "",
+    "height": "",
+    "hello": "здравейте",
+    "help": "помощ",
+    "help...": "помощ...",
+    "hide": "скрий",
+    "hide all...": "",
+    "hide blocks...": "",
+    "hide variable _": "скрий променлива _",
+    "high": "",
+    "hour": "",
+    "http:// _": "",
+    "hue": "",
+    "huge (4x)": "",
+    "i": "i",
+    "identical to": "идентичен с",
+    "if _ _": "ако _ _",
+    "if _ _ else _": "ако _ _ иначе _",
+    "if _ then _ else _": "",
+    "if on edge, bounce": "ако е в края, отблъсни се",
+    "import a sound from your computer by dragging it into here": "добави звуци от твоя компютър пускайки ги тук",
+    "import without attempting to parse or format data": "",
+    "import...": "импорт...",
+    "in palette": "",
+    "including dependencies": "",
+    "index": "",
+    "index of _ in _": "",
+    "inherit _": "",
+    "inherited": "",
+    "input list:": "Вход на списък:",
+    "input names:": "имена на входните данни:",
+    "input(s), but getting": "",
+    "inputs": "",
+    "insert _ at _ of _": "вмъкни _ на позиция _ в _",
+    "insert a slot": "",
+    "insert a variable": "",
+    "inspect...": "",
+    "is _ ?": "",
+    "is _ a _ ?": "_ от тип _ ли е ?",
+    "is _ empty?": "",
+    "is _ on?": "",
+    "is not a valid option": "",
+    "is read-only": "",
+    "item": "",
+    "item _ of _": "елемент _ от _",
+    "items": "",
+    "j": "j",
+    "join _": "съедини _",
+    "jukebox": "",
+    "k": "k",
+    "keep all submorphs within and visible": "",
+    "keep items _ from _": "",
+    "key": "",
+    "key _ pressed?": "бутон _ натиснат?",
+    "keyboard": "",
+    "keyboardFilled": "",
+    "l": "l",
+    "label": "",
+    "language_name": "Български",
+    "language_translator": "Иван Савов",
+    "large": "голям",
+    "last": "последен",
+    "last changed": "",
+    "last_changed": "2015-11-02",
+    "launch _ _": "пусни _ _",
+    "left": "",
+    "left arrow": "стрелка наляво",
+    "length": "",
+    "length of _": "дължина на _",
+    "length:": "дължина:",
+    "let the World automatically adjust to browser resizing": "",
+    "letter": "",
+    "letter _ of _": "буква _ от _",
+    "light (70)": "",
+    "lightness": "",
+    "line": "",
+    "lines": "",
+    "list": "списък",
+    "list _": "списък _",
+    "list view...": "",
+    "ln": "ln",
+    "load the official library of powerful blocks": "Зареди официалната библиотеката от мощните блокове",
+    "location": "",
+    "lock": "",
+    "log pen vectors": "",
+    "login": "",
+    "loop": "",
+    "low": "",
+    "lower case": "",
+    "m": "m",
+    "magnifierOutline": "",
+    "magnifyingGlass": "",
+    "make a block...": "нов блок...",
+    "make a category...": "",
+    "make a copy and pick it up": "копирай и вземи",
+    "make a morph": "",
+    "make temporary and hide in the sprite corral": "",
+    "make this morph movable": "",
+    "make this morph unmovable": "",
+    "map String to code _": "",
+    "map _ of _ to code _": "",
+    "map _ over _": "",
+    "map _ to _ _": "",
+    "max": "",
+    "maximum": "",
+    "medium (50)": "",
+    "menus": "",
+    "message": "",
+    "microphone _": "",
+    "middle": "",
+    "minimum": "",
+    "minute": "",
+    "mirror video": "",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "",
+    "month": "",
+    "mosaic": "",
+    "motion": "",
+    "mouse down?": "натиснат бутон на мишката?",
+    "mouse position": "",
+    "mouse x": "мишка x-позиция",
+    "mouse y": "мишка y-позиция",
+    "mouse-departed": "",
+    "mouse-entered": "",
+    "mouse-pointer": "курсор на мишката",
+    "move": "",
+    "move _ steps": "напред с _ стъпки",
+    "move all inside...": "",
+    "move...": "",
+    "my": "",
+    "my _": "",
+    "my anchor": "",
+    "my dangling?": "",
+    "my draggable?": "",
+    "my name": "",
+    "my parent": "",
+    "my rotation style": "",
+    "my rotation x": "",
+    "my rotation y": "",
+    "my temporary?": "",
+    "myself": "",
+    "n": "n",
+    "name": "",
+    "neg": "",
+    "negative": "",
+    "neighbors": "",
+    "neighbors ≠": "",
+    "new costume _ width _ height _": "",
+    "new line": "",
+    "new sound _ rate _ Hz": "",
+    "new...": "нов...",
+    "next": "",
+    "next costume": "следващия костюм",
+    "none": "нищо",
+    "normal": "нормален",
+    "normal (1x)": "",
+    "normalScreen": "",
+    "normalStage": "",
+    "not": "",
+    "not _": "не _",
+    "note": "",
+    "nothing": "",
+    "now connected": "конектиран",
+    "now connected.": "",
+    "number": "число",
+    "number of channels": "",
+    "numbers from _ to _": "",
+    "o": "o",
+    "object _": "",
+    "octagon": "",
+    "only duplicate this block": "копирай само този блок",
+    "only face left/right": "само ляво-дясно ориентация",
+    "only grab this block": "",
+    "open a new window with a picture of this morph": "",
+    "open a new window with a picture of this script": "отвори нов екран с изображение на скрипта",
+    "open a window on all properties": "",
+    "open in another dialog...": "",
+    "open in dialog...": "",
+    "open shared project from cloud...": "",
+    "options...": "",
+    "or": "или",
+    "or before": "",
+    "other clones": "",
+    "other scripts in sprite": "",
+    "other sprites": "",
+    "p": "p",
+    "paint a new sprite": "",
+    "paintbucket": "",
+    "parameters": "",
+    "parent": "",
+    "parent...": "",
+    "parts": "",
+    "password has been changed.": "",
+    "password must be six characters or longer": "",
+    "passwords do not match": "",
+    "paste on _": "",
+    "pause": "",
+    "pause all _": "",
+    "pen": "",
+    "pen _": "",
+    "pen down": "натисни молива",
+    "pen down?": "",
+    "pen trails": "линии след молива",
+    "pen up": "вдигни молива",
+    "pen vectors": "",
+    "pic...": "",
+    "pick random _ to _": "произволно число между _ и _",
+    "pick up": "",
+    "pipe _ $arrowRight _": "",
+    "pipette": "",
+    "pitch": "",
+    "pivot": "",
+    "pixel": "",
+    "pixelate": "",
+    "pixels": "",
+    "play _ Hz for _ secs": "",
+    "play frequency _ Hz": "",
+    "play note _ for _ beats": "пусни нота _ за _ такта",
+    "play sound _": "пусни звук _",
+    "play sound _ at _ Hz": "",
+    "play sound _ until done": "пусни звук _ до край",
+    "please agree to the TOS": "",
+    "please fill out this field": "",
+    "please provide a valid email address": "",
+    "point in direction _": "обърни се в посока _",
+    "point towards _": "обърни се към _",
+    "pointRight": "",
+    "polygon": "",
+    "position": "",
+    "poster": "",
+    "predicate": "предикат",
+    "presentation (1.4x)": "",
+    "pressed": "",
+    "previous": "",
+    "processes": "",
+    "product": "",
+    "published.": "",
+    "publishing project...": "",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "някой",
+    "random position": "",
+    "rank": "",
+    "raw data...": "",
+    "ray length": "",
+    "read-only": "",
+    "receivers...": "",
+    "recording": "",
+    "rectangle": "",
+    "rectangleSolid": "",
+    "red": "",
+    "redo the last undone block drop in this pane": "",
+    "redraw the screen once": "",
+    "redrop": "",
+    "relabel...": "смени етикета...",
+    "release": "",
+    "remove block variables...": "",
+    "rename": "Преименуване",
+    "rename all blocks that access this variable": "",
+    "rename all...": "",
+    "rename background": "",
+    "rename costume": "Преименуване на костюм",
+    "rename only this reporter": "",
+    "rename sound": "Преименувай звука",
+    "rename...": "Преименуване...",
+    "repeat _ _": "повтори _ _",
+    "repeat until _ _": "повтори докато _ _",
+    "replace item _ of _ with _": "замести елемент _ в _ с _",
+    "report _": "резултат _",
+    "reporter": "репортер",
+    "reporter didn't report": "",
+    "reset columns": "",
+    "reset timer": "нулирай таймер",
+    "reshape _ to _": "",
+    "resize...": "",
+    "resolution": "",
+    "rest for _ beats": "пауза за _ такта",
+    "restore display": "",
+    "result pic...": "",
+    "reverse": "",
+    "right": "",
+    "right arrow": "стрелка надясно",
+    "ring": "",
+    "ringify": "",
+    "robot": "",
+    "rotate": "",
+    "rotation style": "",
+    "rotation x": "",
+    "rotation y": "",
+    "round _": "закръгли _",
+    "run _ _": "изпълни _ _",
+    "run _ w/continuation": "изпълни _ с продължение",
+    "s": "s",
+    "sample morphs": "",
+    "sample rate": "",
+    "samples": "",
+    "saturation": "",
+    "save _ as costume named _": "",
+    "save a picture of all scripts": "",
+    "save a picture of both this script and its result": "",
+    "save a picture of the stage": "",
+    "save a picture of this comment": "",
+    "save a picture of this script": "",
+    "save a summary of this project": "",
+    "save global custom block definitions as XML": "",
+    "save project data as XML to your downloads folder": "",
+    "saved.": "",
+    "say _": "кажи _",
+    "say _ for _ secs": "кажи _ за _ сек",
+    "scope": "",
+    "screenshot": "",
+    "screenshot...": "",
+    "script": "",
+    "script pic with result...": "",
+    "script pic...": "изображение на скрипта...",
+    "script variables _": "променливи на скрипта _",
+    "scripts": "",
+    "scripts pic...": "",
+    "scroll frame": "",
+    "scrolled-down": "",
+    "scrolled-up": "",
+    "second": "",
+    "select": "избери",
+    "selection": "",
+    "self": "",
+    "send _ to _": "",
+    "senders...": "",
+    "sensor demo": "",
+    "set _ effect to _": "настрой ефект _ на _",
+    "set _ of block _ to _": "",
+    "set _ to _": "настрой _ на стойност _",
+    "set background _ to _": "",
+    "set background color to _": "",
+    "set balance to _": "",
+    "set instrument to _": "",
+    "set pen _ to _": "",
+    "set pen color to _": "избери цвят _",
+    "set pen shade to _": "настрой яркостта на _",
+    "set pen size to _": "ибери молив с размер _",
+    "set size to _ %": "настрой размера на _",
+    "set tempo to _ bpm": "настрой темпо _ удара в мин.",
+    "set this morph's alpha value": "",
+    "set turbo mode to _": "",
+    "set video transparency to _": "",
+    "set volume to _ %": "",
+    "set x to _": "настрой х на _",
+    "set y to _": "настрой y на _",
+    "setting the rotation center requires a costume": "",
+    "settings menu prefer empty slots hint": "избери и новите блокове ще отместват старите",
+    "several block definitions already match this label": "",
+    "shared.": "",
+    "sharing project...": "",
+    "sharp drop shadows use for old browsers": "",
+    "sharp shadows...": "",
+    "shimmering (80)": "",
+    "show": "покажи",
+    "show a handle which can be dragged to change this morph's extent": "",
+    "show a handle which can be dragged to move this morph": "",
+    "show a picture of all scripts and block definitions": "",
+    "show all": "почажи всичко",
+    "show all...": "",
+    "show global custom block definitions as XML in a new browser window": "Покажи XML дефинициите на custom блокове в нов прозорец на браузъра",
+    "show project data as XML in a new browser window": "Покажи XML данните на проекта в нов прозорец на браузъра",
+    "show table _": "",
+    "show the World's menu": "",
+    "show variable _": "покажи променлива _",
+    "shown?": "",
+    "shrink": "",
+    "shuffled": "",
+    "signals": "",
+    "sin": "sin",
+    "size": "размер",
+    "slider": "слайдер",
+    "slider max...": "слайдер max...",
+    "slider min...": "слайдер min...",
+    "slots": "",
+    "smallStage": "",
+    "smaller menu fonts and sliders": "",
+    "snap": "",
+    "sorted": "",
+    "sound": "",
+    "sounds": "",
+    "space": "интервал",
+    "specify the distance the hand has to move before it picks up an object": "",
+    "spectrum": "",
+    "speech bubble": "",
+    "speechBubble": "",
+    "speechBubbleOutline": "",
+    "split _ by _": "",
+    "sprite": "",
+    "sprites": "",
+    "sqrt": "корен квадратен",
+    "square": "",
+    "stack size": "размер на стека",
+    "stage": "",
+    "stage image": "",
+    "stamp": "печатче",
+    "standard settings": "",
+    "stay signed in on this computer until logging out": "",
+    "stepForward": "",
+    "stick this morph to another one": "",
+    "stick to": "",
+    "stop _": "",
+    "stop all _": "спри всичко _",
+    "stop all sounds": "спри всички звуци",
+    "stop block": "спри блока",
+    "stop frequency": "",
+    "stop script": "спри скрипта",
+    "stopped": "",
+    "storage": "",
+    "store this project in the downloads folder (in supporting browsers)": "",
+    "stretch _ x: _ y: _ %": "",
+    "string": "",
+    "subtle (95)": "",
+    "sum": "",
+    "svg...": "",
+    "switch to costume _": "смени костюм с _",
+    "switch to scene _ _": "",
+    "t": "t",
+    "tab": "",
+    "table view...": "",
+    "take a camera snapshot and import it as a new sprite": "",
+    "tan": "tan",
+    "tell _ to _ _": "",
+    "tempo": "темпо",
+    "temporary?": "",
+    "text": "текст",
+    "text-only (100)": "",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "нещо",
+    "think _": "мисли _",
+    "think _ for _ secs": "мисли _ за _ сек",
+    "this _": "",
+    "this block": "",
+    "this project doesn't have any custom global blocks yet": "Този проект не съдъжа глобални custom блокове",
+    "this script": "",
+    "time in milliseconds": "",
+    "timer": "таймер",
+    "tip": "",
+    "to": "към",
+    "top": "",
+    "touch screen settings": "",
+    "touching _ ?": "допира ли _ ?",
+    "transient": "",
+    "translations": "",
+    "translations...": "",
+    "translator_e-mail": "ivan.savov@gmail.com",
+    "transparency": "",
+    "transparency...": "",
+    "trash is empty": "",
+    "true": "",
+    "turbo mode": "",
+    "turbo mode?": "",
+    "turn _ _ degrees": "завърти _ с _ градуса",
+    "turn all pen trails and stamps into a new background for the stage": "",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "",
+    "turn pen trails into new background...": "",
+    "turn pen trails into new costume...": "",
+    "turnBack": "",
+    "turnForward": "",
+    "turnLeft": "",
+    "turnRight": "",
+    "turtle": "",
+    "turtleOutline": "",
+    "type": "",
+    "type of _": "тип на _",
+    "u": "u",
+    "unable to convert to": "",
+    "unable to inherit (disabled or circular?)": "",
+    "unable to nest (disabled or circular?)": "",
+    "uncheck for default GUI design": "",
+    "uncheck for less contrast multi-column list views": "",
+    "uncheck for lower resolution, saves computing resources": "",
+    "uncheck for round ends of lines": "",
+    "uncheck for smooth scaling of vector costumes": "",
+    "uncheck to allow dropped reporters to kick out others": "откажи за да позволиш новите блокове да изместват старите",
+    "uncheck to allow script reentrance": "",
+    "uncheck to allow script reentrancy": "откажи за да изключиш thread safe скриптове",
+    "uncheck to always show (+) symbols in block prototype labels": "",
+    "uncheck to confine auto-wrapping to top-level block stacks": "",
+    "uncheck to disable IDE animations": "откажи за да изключиш IDE aнимациите",
+    "uncheck to disable alternating colors for nested block": "откажи за да изключиш алтениращи цветове за блоковете",
+    "uncheck to disable block to text mapping features": "",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "откажи за да изключиш динамични входни етикети за входни с множество стйности",
+    "uncheck to disable input sliders for entry fields": "откажи за да изключиш слайдерите за входни полета",
+    "uncheck to disable keyboard editing support": "",
+    "uncheck to disable multi-column list views": "",
+    "uncheck to disable project data in URLs": "",
+    "uncheck to disable saving linked sublist identities": "",
+    "uncheck to disable sprite composition": "",
+    "uncheck to disable sprite inheritance features": "",
+    "uncheck to disable support for first-class sprites": "",
+    "uncheck to disable support for native JavaScript functions": "",
+    "uncheck to disable using operators on lists and tables": "",
+    "uncheck to disable virtual keyboard support for mobile devices": "откажи за да изключиш виртуалната клавиатура",
+    "uncheck to disinherit": "",
+    "uncheck to drag media and blocks out of watchers and balloons": "",
+    "uncheck to drag media, and blocks out of watchers and balloons": "",
+    "uncheck to enable directly running blocks by clicking on them": "",
+    "uncheck to hide buttons in the palette": "",
+    "uncheck to hide category names in the palette": "",
+    "uncheck to hide extension primitives in the palette": "",
+    "uncheck to hide in palette": "",
+    "uncheck to ignore upper- and lowercase when comparing texts": "",
+    "uncheck to limit Boolean slots to true / false": "",
+    "uncheck to run scripts at normal speed": "",
+    "uncheck to save contents in the project": "",
+    "uncheck to show only the selected category's blocks": "",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "",
+    "uncheck to suppress running scripts when moving the slider": "",
+    "uncheck to switch pen colors and graphic effects to HSV": "",
+    "uncheck to turn block clicking sound off": "откажи за да изключиш звука при кликване върху блок",
+    "uncheck to turn off logging pen vectors": "",
+    "uncheck to turn off visible stepping": "",
+    "uncheck to use solid drop shadows and highlights": "откажи за да използваш плътни сенки и очертания",
+    "uncheck to use the input dialog in short form": "откажи за да използвап кратка форма за входни променливи",
+    "uncompile": "",
+    "undo": "въстанови",
+    "undo the last block drop in this pane": "",
+    "undrop": "",
+    "unicode _ as letter": "буква с Unicode _",
+    "unicode of _": "Unicode на _",
+    "unlock": "",
+    "unpublished.": "",
+    "unpublishing project...": "",
+    "unringify": "",
+    "unshared.": "",
+    "unsharing project...": "",
+    "unsupported attribute": "",
+    "unsupported data type": "",
+    "unsupported graphic effect": "",
+    "untitled": "Без име",
+    "unused": "",
+    "unused block(s) removed": "",
+    "up arrow": "стрелка нагоре",
+    "upper case": "",
+    "url...": "",
+    "use the keyboard to enter blocks": "",
+    "user features...": "",
+    "user mode...": "",
+    "v": "v",
+    "value": "",
+    "variable": "",
+    "variables": "",
+    "video _ on _": "",
+    "video capture": "",
+    "volume": "",
+    "w": "w",
+    "wait _ secs": "изчакай _ сек",
+    "wait until _": "изчакай до _",
+    "wardrobe": "",
+    "warp _": "",
+    "what's your name?": "как се казваш?",
+    "when I am _": "когато _ върху мен",
+    "when I receive _ _": "когато получа _ _",
+    "when I start as a clone": "",
+    "when _": "",
+    "when _ clicked": "когато _ е кликнат",
+    "when _ is edited _": "",
+    "when _ key pressed _": "когато бутон _ е натиснат _",
+    "whirl": "",
+    "whitespace": "",
+    "width": "",
+    "with data": "",
+    "with inputs": "с вход на данни",
+    "word": "",
+    "world": "хора",
+    "write _ size _": "",
+    "x": "x",
+    "x position": "x позиция",
+    "y": "y",
+    "y position": "y позиция",
+    "year": "",
+    "year:": "",
+    "your own": "",
+    "z": "z"
+}

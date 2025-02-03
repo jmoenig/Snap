@@ -1,1744 +1,1396 @@
-/*
-
-    lang-ua.js
-
-    Ukrainian translation for SNAP!
-
-    This file is part of Snap!.
-
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
-*/
-
-/*global SnapTranslator*/
-
 SnapTranslator.dict.ua = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    ,    \u00c4, \u00e4
-
-,    \u00d6, \u00f6
-    ,    \u00dc, \u00fc
-    §      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Українська', // the name as it should appear in the language menu
-    'language_translator':
-        'Serhiy Kryzhanovsky', // your name for the Translators tab
-    'translator_e-mail':
-        'kseryj@gmail.com', // optional
-    'last_changed':
-        '2019-08-21', // this, too, will appear in the Translators tab
-
-    // GUI
-    // control bar:
-    'untitled':
-        'Без назви',
-    'development mode':
-        'Версія в розробці',
-
-    // categories:
-    'Motion':
-        'Рух',
-    'Looks':
-        'Вигляд',
-    'Sound':
-        'Звук',
-    'Pen':
-        'Олівець',
-    'Control':
-        'Керування',
-    'Sensing':
-        'Датчики',
-    'Operators':
-        'Оператори',
-    'Variables':
-        'Величини',
-    'Lists':
-        'Списки',
-    'Other':
-        'Інше',
-
-    // editor:
-    'draggable':
-        'рухомий',
-
-    // tabs:
-    'Scripts':
-        'Скрипти',
-    'Costumes':
-        'Образи',
-    'Backgrounds':
-        'Фони',
-    'Sounds':
-        'Звуки',
-
-    // names:
-    'Sprite':
-        'Спрайт',
-    'Stage':
-        'Сцена',
-
-    // rotation styles:
-    'don\'t rotate':
-        'без обертання',
-    'can rotate':
-        'з обертанням',
-    'only face left/right':
-        'обертання ліво/право',
-
-    // new sprite button:
-    'add a new sprite':
-        'Додати новый спрайт',
-
-    // tab help
-    'costumes tab help':
-        'Перенесіть образ спрайту з ПК',
-    'import a sound from your computer\nby dragging it into here':
-        'Перенесіть звуковий файл з вашого ПК',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        'Обрана сцена:\nвідсутні блоки руху',
-    'move %n steps':
-        'перемістити на %n кроків',
-    'turn %clockwise %n degrees':
-        'поворот %clockwise на %n градусів',
-    'turn %counterclockwise %n degrees':
-        'поворот %counterclockwise на %n градусів',
-    'point in direction %dir':
-        'повернути у напрямку %dir',
-    'point towards %dst':
-        'слідувати за %dst',
-    'go to x: %n y: %n':
-        'перемістити в x %n y %n',
-    'go to %dst':
-        'перемістити в  %dst',
-    'glide %n secs to x: %n y: %n':
-        'ковзати %n сек до x %n y %n',
-    'change x by %n':
-        'змінити х на %n',
-    'set x to %n':
-        'задати значення х %n',
-    'change y by %n':
-        'змінити y на %n',
-    'set y to %n':
-        'задати значення y %n',
-    'if on edge, bounce':
-        'якщо на межі, відбити',
-    'x position':
-        'значення x',
-    'y position':
-        'значення y',
-    'direction':
-        'напрямок',
-
-    // looks:
-    'switch to costume %cst':
-        'змінити образ на %cst',
-    'next costume':
-        'наступний образ',
-    'costume #':
-        'образ №',
-    'say %s for %n secs':
-        'говорити %s %n сек',
-    'say %s':
-        'говорити %s',
-    'think %s for %n secs':
-        'подумати %s  %n сек',
-    'think %s':
-        'подумати %s',
-    'Hello!':
-        'Привіт!',
-    'Hmm...':
-        'Хмм...',
-    '%img of costume %cst':
-        '%img образу %cst',
-    'new costume %l width %dim height %dim':
-        'новий образ %l ширина %dim висота %dim',
-    'stretch %cst x: %n y: %n %':
-        'розтягнути %cst x: %n y: %n %',
-    'change %eff effect by %n':
-        'змінити ефект %eff на %n',
-    'set %eff effect to %n':
-        'встановити ефект %eff в %n',
-    'clear graphic effects':
-        'очистити графічні ефекти',
-    '%eff effect':
-        'ефект %eff ',
-    'change size by %n':
-        'змінити розмір на %n %',
-    'set size to %n %':
-        'встановити розмір в %n %',
-    'size':
-        'розмір',
-    'show':
-        'показати',
-    'hide':
-        'сховати',
-    'shown?':
-        'показати?',
-    'go to %layer layer':
-        'стати %layer всіх рівнів',
-    'front':
-        'попереду',
-    'back':
-        'позаду',
-    'go to front':
-        'стати попереду всіх',
-    'go back %n layers':
-        'стати позаду %n рівнів',
-    'development mode \ndebugging primitives:':
-        'Режим розробки \n налагодження примітивів:',
-    'console log %mult%s':
-        'консоль-реєстрація %mult%',
-    'alert %mult%s':
-        'Попередження %mult%',
-
-    // sound:
-    'play sound %snd':
-        'грати звук %snd',
-    'play sound %snd until done':
-        'грати звук %snd до завершення',
-    'stop all sounds':
-        'зупинити всі звуки',
-    'rest for %n beats':
-        'пауза %n тактів',
-    'play sound %snd at %rate Hz':
-        'грати звук %snd як %rate Hz', 
-    '%aa of sound %snd':
-        '%aa звуку %snd',
-    'duration':
-        'тривалість',
-    'length':
-        'довжина',
-    'number of channels':
-        'номер каналу',
-    'sample rate':
-        'частота семплування',
-    'samples':
-        'семпли',
-    'new sound %l rate %rate Hz':
-        'новий звук %l як %rate Hz',
-    'play note %note for %n beats':
-        'грати ноту %note %n тактів',
-    'change tempo by %n':
-        'змінити темп на %n',
-    'set tempo to %n bpm':
-        'встановити темп в %n уд/хв',
-    'set instrument to %inst':
-        'задати інструмент %inst',
-    'tempo':
-        'темп',
-    'sine':
-        'синус (sine)',
-    'square':
-        'квадрат (square)',
-    'sawtooth':
-        'пила (sawtooth)',
-    'triangle':
-        'трикутник (triangle)',
-    '(1) sine':
-        '(1) синус (sine)',
-    '(2) square':
-        '(2) квадрат (square)',
-    '(3) sawtooth':
-        '(3) пила (sawtooth)',
-    '(4) triangle':
-        '(4) трикутник (triangle)',
-    'change volume by %n':
-        'змінити гучність на %n',
-    'set volume to %n %':
-        'встановити гучність як %n %',
-    'change balance by %n':
-        'змінити баланс на %n',
-    'set balance to %n':
-        'встановити баланс у %n',
-    'balance':
-        'баланс',
-    'volume':
-        'гучність',
-    'note':
-        'нота',
-    'frequency':
-        'частота',
-    'play frequency %n Hz':
-        'відтворити частоту %n Hz',
-    'stop frequency':
-        'зупитнити відтворнення частоти',
-    'play %n Hz for %n secs':
-        'spiele %n Hz f\u00fcr %n Sek.',
-
-    // pen:
-    'clear':
-        'очистити',
-    'pen down':
-        'опустити олівець',
-    'pen up':
-        'підняти олівець',
-    'pen down?':
-        'олівець опущено?',
-    'set pen color to %clr':
-        'колір олівця %clr',
-    'change pen color by %n':
-        'змінити колір олівця на %n',
-    'set pen color to %n':
-        'задати колір олівця %n',
-    'change pen shade by %n':
-        'змінити яскравість олівця на %n',
-    'set pen shade to %n':
-        'задати яскравість олівця %n',
-    'change pen size by %n':
-        'змінити розмір олівця на %n',
-    'set pen size to %n':
-        'задати розмір олівця %n',
-    'stamp':
-        'штамп',
-    'fill':
-        'заливка',
-    'change pen %clrdim by %n':
-        'змінити властивість %clrdim на %n',
-    'set pen %clrdim to %n':
-        'встановити властивість %clrdim як %n',
-    'pen %pen':
-        'олівець %pen',
-    'write %s size %n':
-        'написати %s розмір %n',
-    'paste on %spr':
-        'вставити на %spr',
-
-    // control:
-    'when %greenflag clicked':
-        'коли натиснуто %greenflag',
-    'when %keyHat key pressed %keyName':
-        'коли натиснуто клавішу %keyHat %keyName',
-    'when I am %interaction':
-        'коли мене %interaction',
-    'clicked':
-        'клікнуть',
-    'pressed':
-        'натиснуть',
-    'dropped':
-        'кинуть',
-    'mouse-entered':
-        'торкнеться курсор',
-    'mouse-departed':
-        'залишить курсор',
-    'scrolled-down':
-    	'прокручування вниз',
-    'scrolled-up':
-        'прокручування ввгору',
-    'stopped':
-        'зупинка',
-    'when %b':
-        'коли %b',
-    'when I receive %msgHat %message':
-        'коли я отримаю %msgHat %message',
-    'broadcast %msg %receive':
-        'надіслати %msg %receive',
-    'broadcast %msg %receive and wait':
-        'надіслати %msg %receive і чекати',
-    'Message name':
-        'назва повідомлення',
-    'message':
-        'повідомлення',
-    'any message':
-        'будь-яке повідомлення',
-    'wait %n secs':
-        'чекати %n сек.',
-    'wait until %b':
-        'чекати до %b',
-    'forever %loop':
-        'завжди %loop',
-    'repeat %n %loop':
-        'повторити %n %loop',
-    'repeat until %b %loop':
-        'повторити поки не %b %loop',
-    'for %upvar = %n to %n %cla':
-        'для %upvar = %n до %n %cla',
-    'if %b %c':
-        'якщо %b %c',
-    'if %b %c else %c':
-        'якщо %b то %c інакше %c',
-    'if %b then %s else %s':
-        'якщо %b то %s інакше %s',
-    'report %s':
-        'результат %s',
-    'stop %stopChoices':
-        'зупинити %stopChoices',
-    'all':
-        'все',
-    'this script':
-        'цей скрипт',
-    'this block':
-        'цей блок',
-    'stop %stopOthersChoices':
-        'стоп %stopOthersChoices',
-    'all but this script':
-        'всіх, окрім мене',
-    'other scripts in sprite':
-        'всі інші мої скрипти',
-    'run %cmdRing %inputs':
-        'виконати %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        'запустити %cmdRing %inputs',
-    'call %repRing %inputs':
-        'викликати %repRing %inputs',
-    'run %cmdRing w/continuation':
-        'виконати %cmdRing з продовженням',
-    'call %cmdRing w/continuation':
-        'викликати %cmdRing з продовженням',
-    'tell %spr to %cmdRing %inputs':
-        'передати %spr команди %cmdRing %inputs',
-    'ask %spr for %repRing %inputs':
-        'запитати у %spr інформацію %cmdRing %inputs',
-    'warp %c':
-        'відразу %c',
-    'when I start as a clone':
-        'Коли я починаю як клон',
-    'create a clone of %cln':
-        'клонувати %cln',
-    'a new clone of %cln':
-        'новий клон %cln',
-    'myself':
-        'з мене',
-    'delete this clone':
-        'видалити клон',
-    'pause all %pause':
-        'пауза для всіх %pause',
-
-    // sensing:
-    'touching %col ?':
-        'доторкається %col ?',
-    'touching %clr ?':
-        'доторкається %clr ?',
-    'color %clr is touching %clr ?':
-        'колір %clr торкається %clr ?',
-    'ask %s and wait':
-        'запитати %s і чекати',
-    'what\'s your name?':
-        'Як твоє імʼя?',
-    'answer':
-        'відповідь',
-    'mouse x':
-        'мишка x',
-    'mouse y':
-        'мишка y',
-    'mouse down?':
-        'мишку натиснуто?',
-    'key %key pressed?':
-        'клавішу %key натиснуто?',
-    'distance to %dst':
-        'відстань до %dst',
-    '%rel to %dst':
-        '%rel до %dst',
-    'distance':
-    	'відстань',
-    'reset timer':
-        'скинути таймер',
-    'timer':
-        'таймер',
-    '%att of %spr':
-        '%att у %spr',
-    'my %get':
-        'атрибут %get',
-    'object %self':
-        'обʼєкт %self',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        'режим турбо?',
-    'set turbo mode to %b':
-        'встановити турбо-режим %b',
-    'filtered for %clr':
-        'фільтрація для %clr',
-    'stack size':
-        'размір стека',
-    'frames':
-        'рамки',
-    'microphone %audio':
-        'мікрофон %audio',
-    'video %vid on %self':
-        'відео %vid на %self',
-    'motion':
-        'рух',
-    'snap':
-        'Snap',
-    'set video transparency to %n':
-        'встановити прозорість відео в %n',
-    'is %setting on?':
-        'чи %setting ввімкнено?',
-    'video capture':
-        'відеозапис',
-    'mirror video':
-        'дзеркальне відео',
-    'turbo mode':
-        'режим турбо',
-    'set %setting to %b':
-        'задати %setting як %b',
-    'temporary?':
-        'тимчасовий?',   
-    'width':
-        'ширина',
-    'height':
-        'висота',
-    'rotation style':
-        'стиль обертання',
-    'draggable?':
-        'відчутний?',
-    'spectrum':
-        'спектр частот',
-    'resolution':
-        'якість',
-    'Microphone resolution...':
-        'Якість запису мікрофону',
-    'Microphone':
-        'Мікрофон',
-    'low':
-        'низька',
-    'high':
-        'висока',
-    'max':
-        'максимальна',
-    'flat line ends':
-        'прямокутні кінці ліній',
-
-    // operators:
-    '%n mod %n':
-        '%n остача від ділення %n',
-    'round %n':
-        'округлити %n',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        'випадкове значення від %n до %n',
-    '%b and %b':
-        '%b та %b',
-    '%b or %b':
-        '%b або %b',
-    'not %b':
-        'не %b',
-    'true':
-        'true',
-    'false':
-        'false',
-    'join %words':
-        'зʼєднати %words',
-    'hello':
-        'Привіт',
-    'world':
-        'світ',
-    'letter %idx of %s':
-        '%idx літера слова %s',
-    'length of %s':
-        'довжина %s',
-    'unicode of %s':
-        'Unicode  літери %s',
-    'unicode %n as letter':
-        'літера з Unicode %n',
-    'is %s a %typ ?':
-        '%s це %typ ?',
-    'is %s identical to %s ?':
-        '%s тотожно %s ?',
-    'split %s by %delim':
-        'розділити %s по %delim',
-    'JavaScript function ( %mult%s ) { %code }':
-        'функція JavaScript ( %mult%s ) { %code }',
-    'type of %s':
-        'тип %s',
-
-    // variables:
-    'Make a variable':
-        'Створити змінну',
-    'Variable name':
-        'Імʼя змінної',
-    'Delete a variable':
-        'Видалити змінну',
-
-    'set %var to %s':
-        'надати %var значення %s',
-    'change %var by %n':
-        'змінити %var на %n',
-    'show variable %var':
-        'показати змінну %var',
-    'hide variable %var':
-        'сховати змінну %var',
-    'script variables %scriptVars':
-        'змінні скрипту %scriptVars',
-    'inherit %shd':
-        'переймати %shd',
-
-    // lists:
-    'list %exp':
-        'список %exp',
-    'numbers from %n to %n':
-        'числа від %n до %n',
-    '%s in front of %l':
-        '%s попереду %l',
-    'item %idx of %l':
-        'елемент %idx з %l',
-    'all but first of %l':
-        'всі окрім першого з %l',
-    'length of %l':
-        'довжина %l',
-    '%l contains %s':
-        '%l вміщує %s',
-    'thing':
-        'що-небудь',
-    'is %l empty?':
-        'чи %l порожнє?',
-    'map %repRing over %l':
-        'встановити %repRing над %l',
-    'keep items %predRing from %l':
-        'утримати елемент %predRing з %l',
-    'find first item %predRing in %l':
-        'знайти перший елемент %predRing в %l',
-    'combine %l using %repRing':
-        'поєднати елементи %l із %repRing',
-    '%blitz map %repRing over %l':
-        '%blitz wende %repRing an auf %l',
-    '%blitz keep items %predRing from %l':
-        '%blitz behalte Elemente, die %predRing aus %l',
-    '%blitz find first item %predRing in %l':
-        '%blitz finde das erste Element, das %predRing in %l',
-    '%blitz combine %l using %repRing':
-        '%blitz kombiniere die Elemente von %l mit %repRing',
-    'for each %upvar in %l %cla':
-        'для кожного %upvar в %l %cla',
-    'item':
-        'елемент',
-    'add %s to %l':
-        'додати %s до %l',
-    'delete %ida of %l':
-        'вилучити %ida з %l',
-    'insert %s at %idx of %l':
-        'встав. %s в позицію %idx в %l',
-    'replace item %idx of %l with %s':
-        'замінити елемент %idx в %l на %s',
-    'empty? %l':
-        'порожній? %l',
-
-    // other
-    'Make a block':
-        'Створити новий блок',
-    'find blocks...':
-        'Знайти блоки...',
-
-    // menus
-    // snap menu
-    'About...':
-        'Про програму',
-    'Snap! website':
-        'Веб-сайт програми Snap!',
-    'Download source':
-        'Завантажити джерельний код',
-    'Switch back to user mode':
-        'Повернутись в режим користувача',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'вимкнути deep-Morphic\nконтекстне меню',
-    'Switch to dev mode':
-        'перейти в режим розробки',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'ввімкнути Morphic\nконтекстне меню',
-
-    // project menu
-    'Project notes...':
-        'Проєктні нотатки...',
-    'New':
-        'Новий проєкт',
-    'Open...':
-        'Відкрити...',
-    'Save':
-        'Зберегти',
-    'Save As...':
-        'Зберегти як...',
-    'Import...':
-        'Імпортувати...',
-    'file menu import hint':
-        'завантажити експортований проєкт\nабо бібліотеку блоків, маску чи звук',
-    'Export project as plain text...':
-        'Експортувати проєкт як текстовий файл...',
-    'Export project...':
-        'Експортувати проєкт...',
-    'save project data as XML\nto your downloads folder':
-        'зберегти і завантажити проєкт як XML',
-    'Export summary...':
-        'Експортована інформація...',
-    'open a new browser browser window\n with a summary of this project':
-        'відобразити проєктні дані як XML\nв новому вікні браузера',
-    'Export blocks...':
-        'Експортувати блоки...',
-    'show global custom block definitions as XML\nin a new browser window':
-        'відобразити визначення глобальних користувацьких блоків як XML\nв новому вікні браузера',
-    'Unused blocks...':
-        'Невикористовувані блоки...',
-    'find unused global custom blocks\nand remove their definitions':
-        'пошук і видалення невикористовуваних блоків',
-    'Import tools':
-        'Імпортувати сервісні засоби',
-    'load the official library of\npowerful blocks':
-        'завантажити службову бібліотеку блоків',
-    'Backgrounds...':
-        'Тло...',
-    'Libraries...':
-        'Бібліотеки...',
-    'Select categories of additional blocks to add to this project.':
-        'обрати додаткові бібліотеки блоків\nдля добавання в проект',
-    'Select a costume from the media library':
-        'Додати образ з бібліотеки',
-    'Select a sound from the media library':
-        'Добдати звук з бібліотеки',
-
-    // Libraries
-    'Import library':
-        'Імпортувати бібліотеки',
-    'Loading':
-        'Завантаження',
-    'Imported':
-        'Імпортовано',
-
-    // cloud menu
-    'Login...':
-        'Увійти...',
-    'Signup...':
-        'Запам`ятати...',
-    'Logout':
-        'Вийти...',
-    'Change Password...':
-        'Змінити пароль...',
-    'Reset Password...':
-        'Скинути пароль...',
-    'Resend Verification Email...':
-        'Повтор надсилання підтвердження електронною поштою ..',
-
-    // settings menu
-    'Language...':
-        'Мова...',
-    'Zoom blocks...':
-       'Збільшити розмір блоків...',
-    'Stage size...':
-        'Розмір сцени...',
-    'Retina display support':
-        'Підтримка Retina display',
-    'uncheck for lower resolution,\nsaves computing resources':
-        'вимкніть для зменшення роздільної здатності\nзменшує навантаження на ресурси ПК',
-    'check for higher resolution,\nuses more computing resources':
-        'увімкніть, для збільшення роздільної здатності\nзбільшує навантаження на ресурси ПК',
-    'Stage size':
-        'Розмір сцени',
-    'Stage width':
-        'Ширина сцени',
-    'Stage height':
-        'Висота сцени',
-    'Blurred shadows':
-        'Контрастність тіні',
-    'uncheck to use solid drop\nshadows and highlights':
-        'вимкніть для використання суцільних\nтіней та освітлення',
-    'check to use blurred drop\nshadows and highlights':
-        'увімкніть для використання розмитих\nтіней та освітлення',
-    'Zebra coloring':
-        'Використання альтернативних кольорів',
-    'check to enable alternating\ncolors for nested blocks':
-        'увімкніть, щоб для використання\nкольорів для вкладених блоків',
-    'uncheck to disable alternating\ncolors for nested block':
-        'вимкніть, для відміни використання\nкольорів для вкладених блоків',
-    'Dynamic input labels':
-        'Використання динамічних позначок',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        'вимкніть щоб не використовувати динамічні позначення\nпри введенні зі змінним числом аргументів',
-    'check to enable dynamic\nlabels for variadic inputs':
-        'увімкніть,для використання динамічних позначень\nпри введенні зі змінним числом аргументів',
-    'Prefer empty slot drops':
-        'Використання порожніх комірок введення',
-    'settings menu prefer empty slots hint':
-        'увімкніть, щоб генерувати значення\nлише в порожніх клітинках',
-    'uncheck to allow dropped\nreporters to kick out others':
-        'вимкніть, щоб мати змогу генерувати значення\nв зайнятих комірках',
-    'Long form input dialog':
-        'Розширена форма діалогу введення',
-    'check to always show slot\ntypes in the input dialog':
-        'увімкніть,щоб вказати тип комірок\nв діалозі введення',
-    'uncheck to use the input\ndialog in short form':
-        'вимкніть, для використання короткої форми\nдіалогу введення',
-    'Virtual keyboard':
-        'Віртуальная клавіатура',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'вимкніть, щоб не використовувати віртуальну клавіатуру\nдля мобільних пристоїв',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'увімкніть, для використання віртуальної клавіатури\nдля мобільних пристоїв',
-    'Input sliders':
-        'Використання слайдерів',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'вимкніть, щоб не використовувати слайдери\nпри заповненні полів введення',
-    'check to enable\ninput sliders for\nentry fields':
-        'увімкніть, щоб використати слайдери\nпри заповненні полів введеня',
-    'Clicking sound':
-        'Звук кліку',
-    'uncheck to turn\nblock clicking\nsound off':
-        'вимкніть, щоб відключити звук\nкліку на блок',
-    'check to turn\nblock clicking\nsound on':
-        'увімкніть,щоб використовувати звук\nкліку блок',
-    'Animations':
-        'Aнимація',
-    'uncheck to disable\nIDE animations':
-        'вимкніть, щоб не використовувати\nIDE aнимацію',
-    'check to enable\nIDE animations':
-        'увімкніть, для використання\nIDE aнимації',
-    'Turbo mode':
-        'Режим Турбо',
-    'check to prioritize\nscript execution':
-        'увімкніть, для прискорення виконання скрипту',
-    'uncheck to run scripts\nat normal speed':
-        'вимкніть, для виконанная скрипту\nз нормальною швидкістю',
-    'Flat design':
-        'Плаский дизайн',
-    'check for alternative\nGUI design':
-        'увімкніть для використання\nальтернативного дизайну',
-    'uncheck for default\nGUI design':
-        'вимкніть для переходу до\nстандартного дизайну',
-    'Nested auto-wrapping':
-        'Nested auto-wrapping',
-    'Keyboard Editing':
-        'Редагування з клавіатури',
-    'check to enable\nkeyboard editing support':
-        'увімкніть, щоб отримати\nможливість програмування з клавіатури (Shift+Клік на блок)',
-    'uncheck to disable\nkeyboard editing support':
-        'вимкніть, щоб програмувати\nбез використання',
-    'Table support':
-        'Підтримка таблиць',
-    'uncheck to disable\nmulti-column list views':
-        'увімкніть для відображення\nсписку як таблицю',
-    'check for multi-column\nlist view support':
-        'вимкніть, щоб не відображати\nсписок як таблицю',
-    'Table lines':
-        'межі таблиць',
-    'uncheck for less contrast\nmulti-column list views':
-        'вимкніть, щоб зменшити контраст меж\nтаблиці у вікні',
-    'check for higher contrast\ntable views':
-        'увімкніть, для збільшення контрасту меж\nтаблиці у вікні',
-    'Visible stepping':
-        'Відображення кроків виконання',
-    'check to turn on\n visible stepping (slow)':
-        'увімкніть, для відображення кроків\nвиконання скрипту (повільно)',
-    'uncheck to turn off\nvisible stepping':
-        'вимкніть, щоб не відображати\nкроки виконання скрипту',
-    'Thread safe scripts':
-        'Захищенність скрипту в багатопоточному режимі',
-    'uncheck to allow\nscript reentrance':
-        'вимкніть, щоб дозволити\nповторний вхід в скрипт',
-    'check to disallow\nscript reentrance':
-        'увімкніть, щоб заборонити\nповторний вхід в скрипт',
-    'Plain prototype labels':
-        'Прості заголовки блоків',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        'вимкніть, щоб відображати (+)\nпід час редагування заголовка',
-    'check to hide (+) symbols\nin block prototype labels':
-        'увімкніть, щоб не відображати (+)\nпід час редагування заголовка',
-    'Flat line ends':
-        'Прямокутні кінці ліній',
-    'uncheck for round ends of lines':
-        'вимкніть, для закруглення\nкінців мальованих ліній',
-    'check for flat ends of lines':
-        'увімкніть, щоб не закруглювати\nкінці мальованих ліній',
-    'Codification support':
-        'Підтримка кодифікації блоків',
-    'uncheck to disable\nblock to text mapping features':
-        'вимкніть, щоб прибрати блоки\nтрансляції в текст на іншу мову програмування',
-    'check for block\nto text mapping features':
-        'увімкніть, щоб додати блоки\nтрансляції в текст на іншу мову програмування',
-    'Inheritance support':
-        'Підтримка наслідування',
-    'uncheck to disable\nsprite inheritance features':
-        'вимкніть, щоб відмінити\nнаслідування властивостей спрайтів',
-    'check for sprite\ninheritance features':
-        'увімкніть, щоб задіяти\nнаслідування властивостей спрайтів',
-     'Error\nexpecting list but getting nothing':
-        'Помилка\nне вказано список',
-     'Log pen vectors':
-        'Запис малюнків олівцем у вектор',
-    'uncheck to turn off\nlogging pen vectors':
-        'вимкніть, щоб припинити заппис малюнків олівцем у вектор',
-    'check to turn on\nlogging pen vectors':
-        'увімкніть, щоб записати молюнки олівцем у вектор',
-
-    // inputs
-    'with inputs':
-        'разом з вхідними даними',
-    'input names:':
-        'імена вхідних даних:',
-    'Input Names:':
-        'Імена Вхідних Даних:',
-    'input list:':
-        'вхідний список:',
-
-    // context menus:
-    'help':
-        'Довідка',
-
-    // blocks:
-    'help...':
-        'довідка...',
-    'relabel...':
-        'перепозначити...',
-    'duplicate':
-        'дублювати',
-    'make a copy\nand pick it up':
-        'копіювати\nта запамʼятати',
-    'only duplicate this block':
-        'дублювати лише даний блок',
-    'delete':
-        'видалити',
-    'script pic...':
-        'зображення скрипту...',
-    'open a new window\nwith a picture of this script':
-        'відкрити зображення скрипту\nу новому вікні',
-    'ringify':
-        'обвести',
-    'unringify':
-        'прибрати обведення',
-    'find blocks':
-        'знайти блоки',
-    'hide primitives':
-        'приховати стандартні блоки',
-    'show primitives':
-        'показати стандартні блоки',
-
-    // custom blocks:
-    'delete block definition...':
-        'видалити визначення блока',
-    'edit...':
-        'редагувати...',
-
-    // sprites:
-    'edit':
-        'редагувати',
-    'move':
-        'перемістити',
-    'clone':
-        'клонувати',
-    'export...':
-        'експорт...',
-    'parent...':
-        'джерело...',
-    'release':
-        'звільнити',
-    'make temporary and\nhide in the sprite corral':
-        'зробити тимчасовим\nта сховати окремий спрайт',
-    'current parent':
-        'джерело спрайта',
-    'add a new Turtle sprite':
-        'створити новий Базовий спрайт',
-    'paint a new sprite':
-        'малювати новий спрайт',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'створити фото камерою\n та використати зображення як новий спрайт',
-    'pivot':
-        'центр обертання',
-    'edit the costume\'s\nrotation center':
-        'вказати центр обертання для образу',
-
-    // stage:
-    'show all':
-        'показати все',
-    'pic...':
-        'зображення...',
-    'open a new window\nwith a picture of the stage':
-        'перетворити вид сцени\nна зображення',
-
-    // scripting area
-    'clean up':
-        'упорядкувати',
-    'arrange scripts\nvertically':
-        'вертикальне розміщення\nскриптів',
-    'add comment':
-        'додати коментар',
-    'scripts pic...':
-        'перетворити скрипт на зображення...',
-    'open a new window\nwith a picture of all scripts':
-        'перетворити всі скрипти аркуша\nна зображення',
-    'make a block...':
-        'створити новий блок...',
-    'use the keyboard\nto enter blocks':
-        'використати клавіатуру\nдля роботи з блоками',
-    'undrop':
-        'відмінити',
-    'undo the last\nblock drop\nin this pane':
-        'відмінити останню\nдію з блоком',
-    'redrop':
-        'повернути',
-    'redo the last undone\nblock drop\nin this pane':
-        'повторити відмінену\nдію з блоком',
-
-    // costumes
-    'rename':
-        'перейменувати',
-    'export':
-        'експорт',
-    'rename costume':
-        'перейменувати образ',
-    'pixels':
-        'пікселі',
-
-    // sounds
-    'Play sound':
-        'Відтворити звук',
-    'Stop sound':
-        'Зупинити звук',
-    'Stop':
-        'Стоп',
-    'Play':
-        'Відтворити',
-    'rename sound':
-        'перейменувати звук',
-
-    // dialogs
-    'Import library':
-        'Завантаження бібліотек',
-    'Table view':
-        'Табличний вигляд',
-    'Save project':
-        'Збереження проєкту',
-    'Export Project As...':
-        'Експортувати проєкт як...',
-    'Cloud':
-        'Хмара',
-    'Computer':
-        'Компʼютер',
-    'Browser':
-        'Браузер',
-    'Examples':
-        'Приклади',
-
-    // buttons
-    'OK':
-        'OK',
-    'Ok':
-        'Ok',
-    'Cancel':
-        'Відмінити',
-    'Yes':
-        'Так',
-    'No':
-        'Ні',
-    'Open':
-        'Відкрити',
-    'Empty':
-        'Порожньо',
-    'Import':
-        'Імпортувати',
-
-    // help
-    'Help':
-        'Довідка',
-
-    // Project Manager
-    'Untitled':
-        'Без заголовку',
-    'Open Project':
-        'Відкрити Проєкт',
-    '(empty)':
-        '(порожньо)',
-    'Saved!':
-        'Збережено!',
-    'Delete Project':
-        'Видалити Проєкт',
-    'Are you sure you want to delete':
-        'Ви впевнені, що бажаєте видалити?',
-    'rename...':
-        'перейменувати...',
-
-    // costume editor
-    'Costume Editor':
-        'Редактор образів',
-    'click or drag crosshairs to move the rotation center':
-        'клікніть на перехрестя для переміщення центра повороту',
-
-    // project notes
-    'Project Notes':
-        'Проєктні нотатки',
-
-    // new project
-    'New Project':
-        'Новий Проєкт',
-    'Replace the current project with a new one?':
-        'Замінити даний проєкт на новий?',
-
-    // save project
-    'Save Project As...':
-        'Зберегти Проєкт Як...',
-    'Save Project':
-        'Зберегти Проєкт',
-
-    // export blocks
-    'Export blocks':
-        'Експортувати блоки',
-    'Import blocks':
-        'Імпортувати блоки',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        'У проєкта відсутні глобальні\nкористувацькі блоки',
-    'select':
-        'виділити',
-    'none':
-        'нічого',
-
-    // variable dialog
-    'for all sprites':
-        'для всіх спрайтів',
-    'for this sprite only':
-        'тільки для поточного спрайту',
-
-    // block dialog
-    'Change block':
-        'Замінити блок',
-    'Command':
-        'Команда',
-    'Reporter':
-        'Генератор значень',
-    'Predicate':
-        'Предикат',
-
-    // block editor
-    'Block Editor':
-        'Редактор Блоків',
-    'Apply':
-        'Застосувати',
-    'translations...':
-        'переклади',
-    'block variables...':
-        'змінні блоку...',
-    'rename all...':
-        'перейменувати все...',
-    'block variables':
-        'змінні блоку',
-    'Block variable name':
-        'Імʼя змінної блоку',
-    'remove block variables...':
-        'видалити змінні блоку',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        'Видалити Користувацький Блок',
-    'block deletion dialog text':
-        'Ви впевнені, що бажаєте видалити цей блок?',
-
-    // input dialog
-    'Create input name':
-        'Створити імʼя вхідних даних',
-    'Edit input name':
-        'Редагувати імʼя вхідних даних',
-    'Edit label fragment':
-        'Редагувати фрагмнт позначення',
-    'Title text':
-        'Заголовок тексту',
-    'Input name':
-        'Імʼя вхідних даних',
-    'Delete':
-        'Видалити',
-    'Object':
-        'Обʼєкт',
-    'Number':
-        'Число',
-    'Text':
-        'Tекст',
-    'List':
-        'Список',
-    'Any type':
-        'Будь-якийтип',
-    'Boolean (T/F)':
-        'Бульовий (Т/Н)',
-    'Command\n(inline)':
-        'Команда\n(вбудована)',
-    'Command\n(C-shape)':
-        'Команда\n(С-форма)',
-    'Any\n(unevaluated)':
-        'Будь-який\n(невизначений)',
-    'Boolean\n(unevaluated)':
-        'Бульовий\n(невизначений)',
-    'Single input.':
-        'Одноразове введення.',
-    'Default Value:':
-        'Значення за замовчуванням:',
-    'Multiple inputs (value is list of inputs)':
-        'Багаторазове ввдення (список)',
-    'Upvar - make internal variable visible to caller':
-        'Створити внутрішню змінну видимою ззовні',
-
-    // About Snap
-    'About Snap':
-        'Про Snap',
-    'Back...':
-        'Повернутися...',
-    'License...':
-        'Ліцензія...',
-    'Modules...':
-        'Модулі...',
-    'Credits...':
-        'Співробітники...',
-    'Translators...':
-        'Перекладачі',
-    'License':
-        'Ліцензія',
-    'current module versions:':
-        'поточні версії модулів',
-    'Contributors':
-        'Учасники',
-    'Translations':
-        'Переклади',
-    'Reference manual':
-        'Інструкція користувача',
-
-    // variable watchers
-    'normal':
-        'стандартний',
-    'large':
-        'збільшений',
-    'slider':
-        'слайдер',
-    'slider min...':
-        'слайдер min...',
-    'slider max...':
-        'слайдер max...',
-    'import...':
-        'імпорт...',
-    'Slider minimum value':
-        'Слайдер - min значення',
-    'Slider maximum value':
-        'Слайдер - max значення',
-
-    // list watchers
-    'length: ':
-        'довжина: ',
-    'list view...':
-        'відобразити як список...',
-    'table view...':
-        'відобразити як таблицю...',
-    'open in dialog...':
-        'відкрити у окремому вікні...',
-    'open in another dialog...':
-        'відкрити в іншому вікні...',
-
-    // coments
-    'add comment here...':
-        'додати коментар сюди...',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) вправо',
-    '(-90) left':
-        '(-90) вліво',
-    '(0) up':
-        '(0) ввгору',
-    '(180) down':
-        '(180) вниз',
-     'random':
-    	'випадкове значення',
-     'random position':
-     	'випадкова позиція',
-
-    // collision detection
-    'mouse-pointer':
-        'курсор мишки',
-    'edge':
-        'межа',
-    'pen trails':
-        'лінія олівця',
-    'center':
-        'центр',
-
-    // costumes
-    'Turtle':
-        'Вказівник',
-    'Opening Costumes...':
-        'Завантаження образів...',
-    'pen':
-        'олівець',
-    'tip':
-        'на кінці',
-    'middle':
-        'посередині',
-    'Paint a new costume':
-        'Намалювати новий образ',
-    'Import a new costume from your webcam':
-        'Створити образ із фото з веб-камери',
-
-    // graphical effects
-    'ghost':
-        'прозорість',
-    'color':
-        'колір',
-    'fisheye':
-        'рибʼяче око',
-    'whirl':
-        'вихор',
-    'pixelate':
-        'пікселізація',
-    'mosaic':
-        'мозаїка',
-    'negative':
-        'негатив',
-    'comic':
-        'комікс',
-    'confetti':
-        'конфетті',
-    'saturation':
-        'насиченість',
-    'brightness':
-        'яскравість',
-    'hue':
-        'відтінок',
-    'transparency':
-        'прозорість',
-
-    // keys
-    'space':
-        'пропуск',
-    'any key':
-        'будь-яка клавіша',
-    'up arrow':
-        'стрілка вгору',
-    'down arrow':
-        'стрілка вниз',
-    'right arrow':
-        'стрілка вправо',
-    'left arrow':
-        'стрілка вліво',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'новий...',
-
-    // math functions
-    'abs':
-        'по модулю',
-    'ceiling':
-        'округлення до більшого',
-    'floor':
-        'округлення до меншого',
-    'sqrt':
-        'квадратний корінь',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'letter':
-        'літерам',
-    'word':
-        'словам',
-    'whitespace':
-        'пробілом',
-    'line':
-        'рядкам',
-    'tab':
-        'табуляторам',
-    'cr':
-        'кінцям рядків',
-
-    // data types
-    'number':
-        'число',
-    'text':
-        'текст',
-    'Boolean':
-        'бульовий',
-    'list':
-        'список',
-    'command':
-        'команда',
-    'reporter':
-        'генератор значень',
-    'predicate':
-        'предікат',
-    'sprite':
-        'спрайт',
-    'costume':
-        'образ',
-    'sound':
-        'звук',
-
-    // list indices
-    'last':
-        'останній',
-    'any':
-        'будь-який',
-    'now connected':
-        'зʼєднання встановлено',
-    'undo':
-        'відмінити',
-    'Error':
-        'Помилка',
-
-    // attributes
-    'neighbors':
-        'сусіди',
-    'self':
-        'я',
-    'other sprites':
-        'інші спрайти',
-    'parts':
-        'частини',
-    'anchor':
-        'якір',
-    'parent':
-        'джерело',
-    'children':
-        'нащадок',
-    'clones':
-        'клони',
-    'other clones':
-        'інші клони',
-    'dangling?':
-        'підвішений?',
-    'rotation x':
-        'зміщення за x',
-    'rotation y':
-        'зміщення за y',
-    'center x':
-        'x центр спрайту',
-    'center y':
-        'y центр спрайту',
-    'name':
-        'Імʼя',
-    'stage':
-        'сцена',
-    'costumes':
-        'образи',
-    'sounds':
-        'звуки',
-
-    //Paint editor
-    'Paint Editor':
-        'Графічний редактор',
-    'flip \u2194':
-        'віддзеркалити \u2194',
-    'flip \u2195':
-        'віддзеркалити \u2195',
-    'grow':
-        'збільшити',
-    'shrink':
-        'зменшити',
-    'Brush size':
-        'Розмір пера',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Зберігати пропорції фігур (коло, квадрат)?\nможна використати Shift',
-    'Paintbrush tool\n(free draw)':
-        'Пензлик (довільне малювання)',
-    'Stroked Rectangle\n(shift: square)':
-        'Прямокутник\n(shift: квадрат)',
-    'Stroked Ellipse\n(shift: circle)':
-        'Еліпс\n(shift: коло)',
-    'Eraser tool':
-        'Гумка',
-    'Set the rotation center':
-        'Встановлення центру обертання',
-    'Line tool\n(shift: vertical/horizontal)':
-        'Лінія\n(shift: вертикальна/горизонтальна)',
-    'Filled Rectangle\n(shift: square)':
-        'Зафарбований прямокутник\n(shift: квадрат)',
-    'Filled Ellipse\n(shift: circle)':
-        'Зафарбований еліпс\n(shift: круг)',
-    'Fill a region':
-        'Заливка',
-    'Pipette tool\n(pick a color anywhere)':
-        'Вибір кольору\n(взяти колір кліком на будь-яку точку)',
-    'experimental -\nunder construction':
-        'експериментальна можливість -\nв розробці',
-    'Camera':
-        'Камера',
-    'Camera not supported':
-        'Камера не підтримується',
-    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
-        'Будь ласка перевірте оновлення вашого браузера до останньої версії\nі чи Ваша камера правильно сконфігурована. \n\nдеякі браузери потребують протокола HTTPS\nдля доступу Snap до камери.\n\nСпробуйте змінити "http://" в рядку адреси\nВашого браузера на "https://" і спробуйте ще раз.',
-    'current %dates':
-        'зараз %dates',
-    'year':
-        'рік',
-    'month':
-        'місяць',
-    'date':
-        'день',
-    'day of week':
-        'день тижня',
-    'hour':
-        'годин',
-    'minute':
-        'хвилин',
-    'second':
-        'секунд',
-    'time in milliseconds':
-        'час в мілісекундах',
-    'costume name':
-        'Імʼя образу'
-};
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "' не існує в цьому контексті",
+    "(-90) left": "(-90) вліво",
+    "(0) up": "(0) ввгору",
+    "(1) sine": "(1) синус (sine)",
+    "(180) down": "(180) вниз",
+    "(2) square": "(2) квадрат (square)",
+    "(3) sawtooth": "(3) пила (sawtooth)",
+    "(4) triangle": "(4) трикутник (triangle)",
+    "(90) right": "(90) вправо",
+    "(empty)": "(порожньо)",
+    "(in a new window)": "(в новому вікні)",
+    "(no matches)": "(немає збігів)",
+    "(temporary)": "(тимчасовий)",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "Варіант типу даних списку, у якому кожен елемент списку не обчислюється, доки він не знадобиться, тож ви можете створювати списки з мільйона елементів, насправді не займаючи весь цей час чи пам’ять, або навіть списки нескінченного розміру. (Блок, який звіти про всі прості числа включені як приклад.) Перегляньте SICP 3.5 для підручника.",
+    "APL primitives": "примітиви APL",
+    "About Snap": "Про Snap",
+    "About...": "Про програму",
+    "Account created.": "Обліковий запис створено.",
+    "Add interactive maps to projects": "Додати інтерактивні карти до проектів",
+    "Add scene...": "Додати сцену...",
+    "Adds features from the APL language supporting hyperblocks.": "Додає функції з мови APL, що підтримують гіперблоки.",
+    "Allow multi-line text input to a block": "Дозволити введення багаторядкового тексту в блок",
+    "An e-mail with your password has been sent to the address provided": "На вказану адресу надіслано електронний лист із вашим паролем",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "Розширена версія блоку URL-адрес, яка дозволяє POST, PUT і DELETE, а також запити GET, дозволяє використовувати захищений протокол HTTPS і надає контроль над заголовками тощо. Також аналізує дані JSON",
+    "Analyze data for frequency distribution": "Аналізуйте дані для розподілу частот",
+    "Analyze, manipulate and generate sound samples.": "Аналізуйте, маніпулюйте та створюйте звукові зразки.",
+    "Animation": "Анімація",
+    "Animations": "Aнимації",
+    "Another custom block with this name exists.": "Існує ще один настроюваний блок із таким ім’ям",
+    "Any (unevaluated)": "Будь-який (невизначений)",
+    "Any type": "Будь-якийтип",
+    "Apply": "Застосувати",
+    "April": "Квітень",
+    "Are you sure you want to continue?": "Ви впевнені, що бажаєте продовжити?",
+    "Are you sure you want to delete": "Ви впевнені, що бажаєте видалити?",
+    "Are you sure you want to publish": "Ви впевнені, що хочете опублікувати?",
+    "Are you sure you want to replace": "Ви впевнені, що хочете замінити",
+    "Are you sure you want to share": "Ви впевнені, що хочете поширити?",
+    "Are you sure you want to unpublish": "Ви впевнені, що хочете скасувати публікацію?",
+    "Are you sure you want to unshare": "Ви впевнені, що хочете скасувати поширення",
+    "Audio Comp": "Audio Comp",
+    "August": "Серпень",
+    "Back...": "Повернутися...",
+    "Backgrounds": "Фони",
+    "Backgrounds...": "Тло...",
+    "Backup failed. This cannot be undone, proceed anyway?": "Помилка резервного копіювання. Цю дію неможливо скасувати. Усе одно продовжити?",
+    "Bar charts": "Стовпчасті діаграми",
+    "Bignums, rationals, complex #s": "Великі, раціональні, комплексні числа #s",
+    "Birth date:": "Дата народження",
+    "Bitmap": "Растрове зображення",
+    "Block Editor": "Редактор Блоків",
+    "Block variable name": "Імʼя змінної блоку",
+    "Blocks": "Блоки",
+    "Blocks category name:": "Назва категорії блоків",
+    "Blurred shadows": "Контрастність тіні",
+    "Boolean": "бульовий",
+    "Boolean (T/F)": "Бульовий (Т/Н)",
+    "Boolean (unevaluated)": "Бульовий (невизначений)",
+    "Bottom": "Нижній",
+    "Bring back deleted sprites": "Повернути видалені спрайти",
+    "Browser": "Браузер",
+    "Brush size": "Розмір пера",
+    "Cache Inputs": "Кеш входи",
+    "Camera": "Камера",
+    "Camera not supported": "Камера не підтримується",
+    "Camera support": "Підтримка камери",
+    "Cancel": "Відмінити",
+    "Case sensitivity": "Чутливість до регістру",
+    "Catch errors": "Відстежити помилки",
+    "Catch errors in a script": "Відстежити помилки в скрипті",
+    "Category color": "Колір категорії",
+    "Change Password": "Змінити пароль",
+    "Change Password...": "Змінити пароль...",
+    "Change block": "Замінити блок",
+    "Clear backup": "Очистити резервну копію",
+    "Clicking sound": "Звук кліку",
+    "Closed brush (free draw)": "Закритий пензель (вільний малюнок)",
+    "Cloud": "Хмара",
+    "Code mapping": "Відображення коду",
+    "Codification support": "Підтримка кодифікації блоків",
+    "Colors and Crayons": "Кольори та олівці",
+    "Command": "Команда",
+    "Command (C-shape)": "Команда (С-форма)",
+    "Command (inline)": "Команда (вбудована)",
+    "Computer": "Компʼютер",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "Підключення до апаратних розширень через Web Serial API (потрібен Chromium, Chrome або Edge)",
+    "Constrain proportions of shapes? (you can also hold shift)": "Зберігати пропорції фігур (коло, квадрат)? можна використати Shift",
+    "Contents": "Зміст",
+    "Contributors": "Учасники",
+    "Control": "Керування",
+    "Control the Hummingbird robotics kit processor": "Керуйте процесором комплекту робототехніки Hummingbird",
+    "Convert to bitmap?": "Перетворити на растрове зображення?",
+    "Costume Editor": "Редактор образів",
+    "Costumes": "Образи",
+    "Crayons": "Олівці",
+    "Create and manage global/sprite/script variables in a script": "Створення глобальних/спрайтових/скриптових змінних у сценарії та керування ними",
+    "Create input name": "Створити імʼя вхідних даних",
+    "Create variables": "Створити змінні",
+    "Create variables in program": "Створення змінних у програмі",
+    "Credits...": "Співробітники...",
+    "Custom Block Translations": "Спеціальні переклади блоків",
+    "Database": "База даних",
+    "December": "Грудень",
+    "Default": "За замовчуванням",
+    "Default Value:": "Значення за замовчуванням:",
+    "Delete": "Видалити",
+    "Delete Custom Block": "Видалити Користувацький Блок",
+    "Delete Project": "Видалити Проєкт",
+    "Delete a variable": "Видалити змінну",
+    "Disable click-to-run": "Вимкнути click-to-run",
+    "Disable dragging data": "Вимкнути перетягування даних",
+    "Down": "Вниз",
+    "Download source": "Завантажити джерельний код",
+    "Dragging threshold...": "Порог перетягування...",
+    "Dynamic input labels": "Використання динамічних позначок",
+    "E-mail address of parent or guardian:": "Адреса електронної пошти батьків або опікуна:",
+    "E-mail address:": "Адреса електронної пошти:",
+    "ERROR: INVALID PASSWORD": "ПОМИЛКА: НЕПРАВИЛЬНИЙ ПАРОЛЬ",
+    "EXPERIMENTAL! check to enable live custom control structures": "ЕКСПЕРИМЕНТАЛЬНО! поставте прапорець, щоб увімкнути власні структури керування",
+    "EXPERIMENTAL! check to enable support for compiling": "ЕКСПЕРИМЕНТАЛЬНО! позначте, щоб увімкнути підтримку компіляції",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "ЕКСПЕРИМЕНТАЛЬНО! оптимізувати операції зворотного читання Canvas2D за допомогою атрибута \"willReadFrequently\" за рахунок сповільнення відтворення в деяких веб-браузерах",
+    "EXPERIMENTAL! uncheck to disable live custom control structures": "ЕКСПЕРИМЕНТАЛЬНО! зніміть прапорець, щоб вимкнути власні структури керування",
+    "EXPERIMENTAL! uncheck to disable live support for compiling": "ЕКСПЕРИМЕНТАЛЬНО! зніміть прапорець, щоб вимкнути підтримку для компіляції",
+    "Edge color (left click)": "Колір краю (клацніть лівою кнопкою миші)",
+    "Edit input name": "Редагувати імʼя вхідних даних",
+    "Edit label fragment": "Редагувати фрагмнт позначення",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки.",
+    "Ellipse (shift: circle)": "Еліпс (  Shift: коло)",
+    "Empty": "Порожньо",
+    "Enable command drops in all rings": "Увімкнути командні перепади в усіх кільцях",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "Введіть код, який відповідає визначенню блоку. Виберіть власні офіційні назви параметрів (ігноруючи ті, що відображені)",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "Введіть код, який відповідає визначенню блоку. Використовуйте формальні назви параметрів, як показано, і <body> для посилання на згенерований текстовий код тіла визначення",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "Введіть код, який відповідає операції блоку (зазвичай це один виклик функції). Використовуйте <#n> для посилання на фактичні аргументи, як показано.",
+    "Enter one option per line.Optionally use \"=\" as key/value delimiter e.g. the answer=42": "Введіть по одному варіанту на рядок. За бажанням використовуйте \"=\" як роздільник ключ/значення, наприклад answer=42",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter and underscore (\"_\") as placeholder for an input, e.g.: en:say _ for _ secs": "Введіть один переклад на рядок. Використовуйте двокрапку (\":\") як роздільник мови/спец. та підкреслення (\"_\") як заповнювач для введення, наприклад: en:say _ for _ secs",
+    "Eraser tool": "Гумка",
+    "Error": "Помилка",
+    "Error expecting list but getting nothing": "Помилка не вказано список",
+    "Examples": "Приклади",
+    "Execute on slider change": "Виконати при зміні слайдера",
+    "Export Project As...": "Експортувати проєкт як...",
+    "Export all scripts as pic...": "Експортувати всі скрипти як зображення...",
+    "Export blocks": "Експортувати блоки",
+    "Export blocks...": "Експортувати блоки...",
+    "Export project as plain text...": "Експортувати проєкт як текстовий файл...",
+    "Export project...": "Експортувати проєкт...",
+    "Export summary with drop-shadows...": "Експортувати підсумок із тінями...",
+    "Export summary...": "Експортувати підсумок...",
+    "Extension blocks": "Блоки розширень",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "Витягувати підрядки рядка різними способами. Загалом, введення тексту допускає лише один рядок. Блок MULTILINE приймає багаторядкове введення тексту і може використовуватися в слотах введення тексту інших блоків.",
+    "Fade blocks": "Прозорість блоків",
+    "Fade blocks...": "Прозорість блоків...",
+    "February": "Лютий",
+    "Fetching project from the cloud...": "Отримання проекту з хмари...",
+    "Fill a region": "Залити ділянку",
+    "Fill color (right click)": "Колір заливки (клацніть правою кнопкою миші)",
+    "Filled Ellipse (shift: circle)": "Зафарбований еліпс (shift: круг)",
+    "Filled Rectangle (shift: square)": "Зафарбований прямокутник (shift: квадрат)",
+    "First-Class Sprites": "Спрайти першого класу",
+    "Flat design": "Плаский дизайн",
+    "Flat line ends": "Прямокутні кінці ліній",
+    "For all Sprites": "Для усіх спрайтів",
+    "Frequency Distribution Analysis": "Аналіз розподілу частот",
+    "Generate costumes from letters or words of text.": "Генерування костюмів з букв та слів",
+    "Generate puzzle": "Згенерувати пазл",
+    "Getters and setters": "Гетери та сетери",
+    "Glide, grow and rotate using easing functions.": "Ковзайте, збільшуйте та обертайте за допомогою функцій пом'якшення.",
+    "HSL pen color model": "Кольорова модель пера HSL",
+    "Header mapping": "Відображення заголовка",
+    "Hello!": "Привіт!",
+    "Hello, World!": "Привіт, світе!",
+    "Help": "Довідка",
+    "Hide blocks in palette": "Приховати блоки в палітрі",
+    "Hide blocks...": "Приховати блоки",
+    "Hmm...": "Хмм...",
+    "Hummingbird robotics": "Робототехніка Hummingbird",
+    "Hyper blocks support": "Підтримка гіперблоків",
+    "I have read and agree to the Terms of Service": "Я прочитав і погоджуюся з умовами використання",
+    "If you cannot find that email, please check your spam folder.": "Якщо ви не можете знайти цей електронний лист, будь ласка, перевірте теку зі спамом.",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "Якщо ви все одно не можете його знайти, скористайтеся опцією \"Повторно надіслати електронний лист із підтвердженням...\" у меню хмари.",
+    "Import": "Імпортувати",
+    "Import a new costume from your webcam": "Створити образ із фото з веб-камери",
+    "Import blocks": "Імпортувати блоки",
+    "Import library": "Завантаження бібліотек",
+    "Import sound": "Імпортувати звук",
+    "Import tools": "Імпортувати сервісні засоби",
+    "Import...": "Імпортувати...",
+    "Imported": "Імпортовано",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "Включає колишні бібліотеки олівців і наборів RGB. Реалізує світлі відтінки (більше помаранчевого, менше зеленого, додає коричневий) і лінійну шкалу кольорів, включаючи градації сірого та відтінки на основі світлих відтінків.",
+    "Infinite precision integers, exact rationals, complex": "Цілі числа нескінченної точності, точні раціональні, комплексні",
+    "Inheritance support": "Підтримка наслідування",
+    "Input Names:": "Назви Вхідних Даних:",
+    "Input Slot Options": "Параметри вхідного слота",
+    "Input name": "Імʼя вхідних даних",
+    "Input sliders": "Використання слайдерів",
+    "Inside a custom block": "Всередині користувацького блоку",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "Взаємодія з пристроями MicroBlocks через Wi-Fi. Потрібно, щоб пристрій мав TFT-дисплей, дві кнопки та можливість Wi-Fi, а також завантажений проект Signada MicroBlocks. Citilab ED1 і низка плат M5Stack є одними з пристроїв, які працюють з Signada",
+    "Iteration, composition": "Ітерація, композиція",
+    "JIT compiler support": "Підтримка компілятора JIT",
+    "January": "Січень",
+    "JavaScript extensions": "розширення JavaScript",
+    "JavaScript extensions for Snap! are turned off": "Розширення JavaScript для Snap! вимкнені",
+    "JavaScript function ( _ ) { _ }": "функція JavaScript ( _ ) { _ }",
+    "July": "Липень",
+    "June": "Червень",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "Лише кольорові олівці без решти бібліотеки кольорів. Швидко і просто.",
+    "Keyboard Editing": "Редагування з клавіатури",
+    "Kind of": "Титу",
+    "LEAP Motion controller": "Контролер руху LEAP",
+    "Language...": "Мова...",
+    "Libraries...": "Бібліотеки...",
+    "License": "Ліцензія",
+    "License...": "Ліцензія...",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "Як \"switch\" у C-подібних мовах або \"cond\" у Lisp. Дякую Натану Дінсмору за винайдення ідеї окремого блоку для кожної гілки!",
+    "Line tool (shift: constrain to 45º)": "Інструмент «Лінія» (Shift: обмеженно до 45º)",
+    "Line tool (shift: vertical/horizontal)": "Лінія (shift: вертикальна/горизонтальна)",
+    "List": "Список",
+    "List utilities": "Утиліти для списків",
+    "Lists": "Списки",
+    "Live coding support": "Підтримка кодування в реальному часі",
+    "Loading": "Завантаження",
+    "Local Block(s) in Global Definition": "Локальні блоки в глобальному визначенні",
+    "Log pen vectors": "Журналювати вектори олівця",
+    "Login...": "Увійти...",
+    "Logout": "Вийти...",
+    "Long form input dialog": "Розширена форма діалогу введення",
+    "Looks": "Вигляд",
+    "Make a block": "Створити новий блок",
+    "Make a variable": "Створити змінну",
+    "Manipulate costumes pixel-wise.": "Керуйте костюмами піксельно.",
+    "March": "Березень",
+    "May": "Травень",
+    "Message name": "назва повідомлення",
+    "Method Editor": "Редактор методів",
+    "Microphone": "Мікрофон",
+    "Microphone resolution...": "Якість запису мікрофону",
+    "Modules...": "Модулі...",
+    "Motion": "Рух",
+    "Multi-branched conditional": "Мультирозгалуджені умови",
+    "Multi-branched conditional (switch)": "Мультирозгалуджені умови(перемикач)",
+    "Multiple inputs (value is list of inputs)": "Багаторазове ввдення (список)",
+    "Nested auto-wrapping": "Вкладене автоперенесення",
+    "New": "Новий проєкт",
+    "New Category": "Нова категорія",
+    "New Project": "Новий Проєкт",
+    "New category...": "Нова категорія...",
+    "New password:": "Новий пароль:",
+    "New scene": "Нова сцена",
+    "No": "Ні",
+    "Notes...": "Нотатки...",
+    "November": "Листопад",
+    "Number": "Число",
+    "OK": "ОК",
+    "Object": "Обʼєкт",
+    "October": "Жовтень",
+    "Ok": "Ок",
+    "Old password:": "Старий пароль:",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "Одна з головних ідей у Logo, яку вони залишили позачергово, полягає в уявленні про структурований текст у слова та речення, а не просто рядок символів. Ця бібліотека повертає цю ідею",
+    "Open": "Відкрити",
+    "Open Project": "Відкрити Проєкт",
+    "Open in Community Site": "Відкрити на сайті спільноти",
+    "Open...": "Відкрити...",
+    "Opening Costumes...": "Завантаження образів...",
+    "Opening project...": "Відкриття проекту...",
+    "Operators": "Оператори",
+    "Other": "Інше",
+    "Output text using speech synthesis.": "Виведення тексту за допомогою синтезу мовлення.",
+    "Paint Editor": "Графічний редактор",
+    "Paint a new costume": "Намалювати новий образ",
+    "Paint a shape (shift: edge color)": "Зафарбуйте фігуру (Shift: колір краю)",
+    "Paint a shape (shift: secondary color)": "Зафарбувати фігуру (Shift: додатковий колір)",
+    "Paintbrush tool (free draw)": "Пензлик (довільне малювання)",
+    "Parallelization": "Розпаралелювання",
+    "Part of": "Частина",
+    "Parts": "Частини",
+    "Password:": "Пароль:",
+    "Pen": "Олівець",
+    "Persist linked sublist IDs": "Зберігати пов’язані ID підсписків",
+    "Persistent key-value storage across Snap! sessions in the same browser": "Постійне зберігання ключ-значення в Snap! сесій в одному браузері",
+    "Pipette tool (pick a color anywhere)": "Вибір кольору (взяти колір кліком на будь-яку точку)",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "Інструмент «Піпетка» (вибір кольору з будь-якого місця: колір заливки)",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "Інструмент «Піпетка» (вибір кольору з будь-якого місця: вторинний колір)",
+    "Pixels": "Пікселі",
+    "Plain prototype labels": "Прості заголовки блоків",
+    "Play": "Відтворити",
+    "Play sound": "Відтворити звук",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "Будь ласка перевірте оновлення вашого браузера до останньої версії і чи Ваша камера правильно сконфігурована. деякі браузери потребують протокола HTTPS для доступу Snap до камери. Спробуйте змінити \"http://\" в рядку адреси Вашого браузера на \"https://\" і спробуйте ще раз.",
+    "Please use the verification link that was sent to your email address when you signed up.": "Скористайтеся посиланням для підтвердження, яке було надіслано на вашу електронну адресу під час реєстрації.",
+    "Polygon": "Багатокутник",
+    "Predicate": "Предикат",
+    "Prefer empty slot drops": "Використання порожніх комірок введення",
+    "Privacy...": "Конфіденційність...",
+    "Project Notes": "Проєктні нотатки",
+    "Project URLs": "URL-адреси проекту",
+    "Project notes...": "Проєктні нотатки...",
+    "Provide 100 selected colors": "Надайте 100 вибраних кольорів",
+    "Provide getters and setters for all GUI-controlled global settings": "Надайте засоби отримання та встановлення для всіх глобальних параметрів, керованих графічним інтерфейсом користувача",
+    "Publish": "Опублікувати",
+    "Publish Project": "Опублікувати проєкт",
+    "Rasterize SVGs": "Перевести SVG у растр",
+    "Record a new sound": "Записати новий звук",
+    "Recover": "Відновити",
+    "Rectangle (shift: square)": "Прямокутник (shift: квадрат)",
+    "Reference manual": "Інструкція користувача",
+    "Remove a category...": "Вилучити категорію...",
+    "Remove unused blocks": "Видалити невикористані блоки",
+    "Repeat Password:": "Повторити пароль",
+    "Repeat new password:": "Повторити новий пароль",
+    "Replace Project": "Замінити проєкт",
+    "Replace the current project with a new one?": "Замінити даний проєкт на новий?",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "Повідомляйте про положення рук із контролера руху LEAP (leapmotion.com).",
+    "Reporter": "Генератор значень",
+    "Request blocked": "Запит заблоковано",
+    "Resend Verification Email...": "Повтор надсилання підтвердження електронною поштою ..",
+    "Resend verification email": "Відправити лист з підтвердженням",
+    "Reset Password...": "Скинути пароль...",
+    "Reset password": "Скинути пароль",
+    "Restore unsaved project": "Відновити незбережений проект",
+    "Retina display support": "Підтримка Retina display",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "Запустити сценарій; якщо сталася помилка, замість того, щоб зупинити сценарій із червоним ореолом, запустити інший сценарій, щоб обробити помилку. Також містить блок, який викликає помилку з повідомленням, наданим як вхід. Також містить блок щоб створити змінну сценарію та надати їй значення.",
+    "Run several scripts in parallel and wait until all are done.": "Запустити кілька сценаріїв паралельно та чекати, поки всі будуть виконані",
+    "SVG costumes are not yet fully supported in every browser": "Костюми SVG ще не підтримуються повністю в усіх браузерах",
+    "Same Named Blocks": "Одноіменні блоки",
+    "Save": "Зберегти",
+    "Save As...": "Зберегти як...",
+    "Save Project": "Зберегти Проєкт",
+    "Save Project As...": "Зберегти Проєкт Як...",
+    "Save project": "Збереження проєкту",
+    "Save to disk": "Зберегти на диск",
+    "Saved!": "Збережено!",
+    "Saving project to the cloud...": "Зберегти проєкт у хмару...",
+    "Scenes...": "Сцени...",
+    "Script variable name": "Назва змінної скрипта",
+    "Scripts": "Скрипти",
+    "Select a costume from the media library": "Додати образ з бібліотеки",
+    "Select a sound from the media library": "Додати звук з бібліотеки",
+    "Select categories of additional blocks to add to this project.": "обрати додаткові бібліотеки блоків для додавання в проєкт",
+    "Selection tool": "Інструмент виділення",
+    "Sensing": "Датчики",
+    "September": "Вересень",
+    "Serial Ports": "Послідовні порти",
+    "Service:": "Сервіс",
+    "Set RGB or HSV pen color": "Встановіть колір пера RGB або HSV",
+    "Set the rotation center": "Встановлення центру обертання",
+    "Share": "Поширити",
+    "Share Project": "Поширити проєкт",
+    "Show buttons": "Показати кнопки",
+    "Show categories": "Показати категорії",
+    "Sign in": "Увійти",
+    "Sign up": "Зареєструватися",
+    "Signada (Network remote control)": "Signada (мережевий дистанційний контроль)",
+    "Signup": "Запам'ятати",
+    "Signup...": "Запам`ятати...",
+    "Single input.": "Одноразове введення.",
+    "Single palette": "Одна палітра",
+    "Slider maximum value": "Слайдер - max значення",
+    "Slider minimum value": "Слайдер - min значення",
+    "Snap! website": "Веб-сайт програми Snap!",
+    "Snap!Cloud": "Snap!Хмара",
+    "Some standard functions on lists (reverse, sort, etc.)": "Деякі стандартні функції для списків (перевертання, сортування тощо)",
+    "Sound": "Звук",
+    "Sound Recorder": "Запис звуку",
+    "Sounds": "Звуки",
+    "Sprite": "Спрайт",
+    "Sprite Nesting": "Вкладення спрайтів",
+    "Stage": "Сцена",
+    "Stage height": "Висота сцени",
+    "Stage selected: no motion primitives": "Обрана сцена: відсутні блоки руху",
+    "Stage size": "Розмір сцени",
+    "Stage size...": "Розмір сцени...",
+    "Stage width": "Ширина сцени",
+    "Stop": "Стоп",
+    "Stop sound": "Зупинити звук",
+    "Streams (lazy lists)": "Потоки (ліниві списки)",
+    "Strings, Multi-line input": "Рядки, багаторядковий ввід",
+    "Stroked Ellipse (shift: circle)": "Еліпс (shift: коло)",
+    "Stroked Rectangle (shift: square)": "Прямокутник (shift: квадрат)",
+    "Switch back to user mode": "Повернутись в режим користувача",
+    "Switch to dev mode": "перейти в режим розробки",
+    "Switch to vector editor?": "Перейти до векторного редактора?",
+    "Table lines": "межі таблиць",
+    "Table support": "Підтримка таблиць",
+    "Table view": "Табличний вигляд",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "",
+    "Terms of Service...": "Умови використання...",
+    "Ternary Boolean slots": "Тернарні булеві слоти",
+    "Text": "Tекст",
+    "Text Costumes": "Текстові костюми",
+    "Text to Speech": "Текст в мовлення",
+    "Text to speech": "Текст в мовлення",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "Повна схема числової вежі. \"USE BIGNUMS <True>\", щоб увімкнути.",
+    "The question came up at": "Питання виникло в",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "Це глобальне визначення блоку містить один або кілька локальних спеціальних блоків, які потрібно спочатку видалити.",
+    "This will convert your vector objects into bitmaps,": "Це перетворить ваші векторні об’єкти на растрові зображення,",
+    "This will erase your current drawing.": "Це призведе до видалення вашого поточного малюнка.",
+    "Thread safe scripts": "Захищенність скрипту в багатопоточному режимі",
+    "Title text": "Заголовок тексту",
+    "Today": "Сьогодні",
+    "Today,": "Сьогодні,",
+    "Top": "Верх",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "Традиційні конструкції циклу (while, until тощо) плюс Lisp \"named let\" (узагальнення FOR) плюс функціональна ітерація (повторний виклик функції) і композиція функції.",
+    "Translations": "Переклади",
+    "Translators...": "Перекладачі",
+    "Turbo mode": "Режим Турбо",
+    "Turtle": "Вказівник",
+    "Undelete sprites...": "Відновити спрайти...",
+    "Unpublish": "Скасувати публікацію",
+    "Unpublish Project": "Скасувати публікацію проєкту",
+    "Unsaved Changes!": "Не зберігати зміни",
+    "Unshare": "Не поширювати",
+    "Unshare Project": "Не поширювати проєкт",
+    "Untitled": "Без заголовку",
+    "Unused blocks...": "Невикористовувані блоки...",
+    "Unverified account:": "Непідтверджений обліковий запис:",
+    "Up": "Вгору",
+    "Updating project list...": "Оновлення списку проєктів...",
+    "Uploading": "Завантаження",
+    "Upvar - make internal variable visible to caller": "Створити внутрішню змінну видимою ззовні",
+    "Use CPU for graphics": "Використати процесор для графіки",
+    "User name must be four characters or longer": "Ім'я користувача має містити не менше чотирьох символів",
+    "User name:": "Ім'я користувача",
+    "Variable name": "Назва змінної",
+    "Variables": "Величини",
+    "Variadic reporters": "Різноманітні репортери",
+    "Vector": "Вектор",
+    "Vector Paint Editor": "Редактор векторних зображень",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "Версії +, x, AND та OR, які потребують більше двох вводів.",
+    "Virtual keyboard": "Віртуальная клавіатура",
+    "Visible stepping": "Відображення кроків виконання",
+    "Web Audio API is not supported in this browser": "Web Audio API не підтримується в цьому браузері",
+    "Web services access (https)": "Доступ до веб-служб (https)",
+    "Words, sentences": "Слова, речення",
+    "World Map": "Карта світу",
+    "World...": "Світ...",
+    "Would you like to replace it?": "Чи хотіли б ви його замінити?",
+    "Yes": "Так",
+    "Yesterday": "Вчора",
+    "Yesterday,": "Вчора,",
+    "You are not logged in": "Ви не ввійшли в систему",
+    "You are now logged in, and your account is enabled for three days.": "Тепер ви ввійшли, і ваш обліковий запис активовано на три дні.",
+    "You have": "Ви маєте",
+    "Zebra coloring": "Використання альтернативних кольорів",
+    "Zoom blocks": "більшити розмір блоків",
+    "Zoom blocks...": "Збільшити розмір блоків...",
+    "_ at _": "_ в _",
+    "_ combine _ using _": "_ комбінувати _ за допомогою _",
+    "_ contains _": "_ містить _",
+    "_ effect": "ефект _",
+    "_ find first item _ in _": "_знайти перший елемент _ у _",
+    "_ in front of _": "_ попереду _",
+    "_ keep items _ from _": "_утримати елементи_від_",
+    "_ map _ over _": "_ перетворити _ список _",
+    "_ mod _": "_ остача від ділення _",
+    "_ of _": "_ у _",
+    "_ of block _": "_ блоку _",
+    "_ of costume _": "_ образу _",
+    "_ of sound _": "_ звуку _",
+    "_ of text _": "_ тексту _",
+    "_ to _": "_ до _",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "відсутнє користувальницьке визначення блоку",
+    "a new clone of _": "новий клон _",
+    "a variable of name '": "змінна з назвою '",
+    "about morphic.js...": "про morphic.js...",
+    "abs": "по модулю",
+    "acos": "acos",
+    "add _ to _": "додати _ до _",
+    "add a new Turtle sprite": "створити новий Базовий спрайт",
+    "add a new sprite": "Додати новий спрайт",
+    "add comment": "додати коментар",
+    "add comment here...": "додати коментар сюди...",
+    "agent": "агент",
+    "alert _": "Попередження _",
+    "all": "все",
+    "all <": "все <",
+    "all =": "все =",
+    "all >": "все >",
+    "all but first of _": "всі окрім першого з _",
+    "all but this script": "всіх, окрім мене",
+    "all identical": "всі ідентичні",
+    "all scenes": "всі сцени",
+    "all ≤": "все ≤",
+    "all ≥": "все ≥",
+    "alpha value:": "значення альфа:",
+    "anchor": "якір",
+    "and": "та",
+    "and send": "і відправити",
+    "and you will not be able to convert them back into vector drawings.": "і ви не зможете перетворити їх назад у векторні малюнки.",
+    "animation demo": "демонстрація анімації",
+    "answer": "відповідь",
+    "any": "будь-який",
+    "any key": "будь-яка клавіша",
+    "any message": "будь-яке повідомлення",
+    "anything": "будь-що",
+    "append _": "додати _",
+    "arrange scripts vertically": "вертикальне розміщення скриптів",
+    "arrowDown": "стрілка вниз",
+    "arrowDownOutline": "контур стрілка вниз",
+    "arrowLeft": "стрілка вліво",
+    "arrowLeftOutline": "контур стрілка вліво",
+    "arrowRight": "стрілка вправо",
+    "arrowRightOutline": "контур стрілка вправо",
+    "arrowUp": "стрілка вгору",
+    "arrowUpOutline": "контур стрілка вгору",
+    "asin": "asin",
+    "ask _ and wait": "запитати _ і чекати",
+    "ask _ for _ _": "запитати у _ інформацію _ _",
+    "atan": "atan",
+    "attach...": "attach...",
+    "b": "b",
+    "back": "позаду",
+    "balance": "баланс",
+    "big (2x)": "збільшити (2x)",
+    "bigger menu fonts and sliders": "більші шрифти меню та повзунки",
+    "bins": "",
+    "block": "блок",
+    "block deletion dialog text": "Ви впевнені, що бажаєте видалити цей блок?",
+    "block variables": "змінні блоку",
+    "block variables...": "змінні блоку...",
+    "block-solid (0)": "твердий блок (0)",
+    "blockify": "блокувати",
+    "blocks": "блоки",
+    "blue": "блакитний",
+    "blurred shadows...": "розмиті тіні...",
+    "blurry shades, use for new browsers": "розмиті відтінки, використовуйте для нових браузерів",
+    "bottom": "нижній",
+    "box": "коробка",
+    "brightness": "яскравість",
+    "broadcast _ _": "надіслати _ _",
+    "broadcast _ _ and wait": "надіслати _ _ і чекати",
+    "brush": "пензель",
+    "build": "будувати",
+    "but getting a": "але отримання a",
+    "c": "c",
+    "call _ _": "викликати _ _",
+    "call _ w/continuation": "викликати _ з продовженням",
+    "caller": "код що викликає",
+    "camera": "камера",
+    "can only write text or numbers, not a": "може писати лише текст або цифри, a не",
+    "can rotate": "з обертанням",
+    "cannot handle zero width or height": "не може працювати з нульовою шириною або висотою",
+    "cannot operate on a deleted sprite": "не може працювати з видаленим спрайтом",
+    "cannot send media, sprites or procedures to another scene": "не може надсилати медіа, спрайти чи процедури на іншу сцену",
+    "case sensitivity": "чутливість до регістру",
+    "categories": "категорії",
+    "category": "категорія",
+    "ceiling": "округлення до більшого",
+    "center": "центр",
+    "center x": "x центр спрайту",
+    "center y": "y центр спрайту",
+    "change _ by _": "змінити _ на _",
+    "change _ effect by _": "змінити ефект _ на _",
+    "change background _ by _": "змінити фон _ на _",
+    "change balance by _": "змінити баланс на _",
+    "change pen _ by _": "змінити властивість _ на _",
+    "change pen color by _": "змінити колір олівця на _",
+    "change pen shade by _": "змінити яскравість олівця на _",
+    "change pen size by _": "змінити розмір олівця на _",
+    "change size by _": "змінити розмір на _ %",
+    "change tempo by _": "змінити темп на _",
+    "change volume by _": "змінити гучність на _",
+    "change x by _": "змінити х на _",
+    "change y by _": "змінити y на _",
+    "check for alternative GUI design": "увімкніть для використання альтернативного дизайну",
+    "check for block to text mapping features": "увімкніть, щоб додати блоки трансляції в текст на іншу мову програмування",
+    "check for flat ends of lines": "увімкніть, щоб не закруглювати кінці мальованих ліній",
+    "check for higher contrast table views": "увімкніть, для збільшення контрасту меж таблиці у вікні",
+    "check for higher resolution, uses more computing resources": "увімкніть, для збільшення роздільної здатності збільшує навантаження на ресурси ПК",
+    "check for multi-column list view support": "вимкніть, щоб не відображати список як таблицю",
+    "check for sprite inheritance features": "увімкніть, щоб задіяти наслідування властивостей спрайтів",
+    "check to allow empty Boolean slots": "перевірте, щоб дозволити порожні логічні слоти",
+    "check to always show slot types in the input dialog": "увімкніть,щоб вказати тип комірок в діалозі введення",
+    "check to cache inputs boosts recursion": "перевірка для кешування вхідних даних посилює рекурсію",
+    "check to disable directly running blocks by clicking on them": "позначте, щоб вимкнути безпосередньо запущені блоки, клацнувши їх",
+    "check to disallow script reentrance": "увімкніть, щоб заборонити повторний вхід в скрипт",
+    "check to distinguish upper- and lowercase when comparing texts": "перевірте, щоб розрізняти великі та малі літери під час порівняння текстів",
+    "check to enable IDE animations": "увімкніть, для використання IDE aнимації",
+    "check to enable alternating colors for nested blocks": "увімкніть, щоб для використання кольорів для вкладених блоків",
+    "check to enable auto-wrapping inside nested block stacks": "поставте прапорець, щоб увімкнути автоматичне обгортання всередині стеків вкладених блоків",
+    "check to enable camera support": "позначте, щоб увімкнути підтримку камери",
+    "check to enable dropping commands in all rings": "позначте, щоб увімкнути скидання команд у всіх кільцях",
+    "check to enable dynamic labels for variadic inputs": "увімкніть,для використання динамічних позначень при введенні зі змінним числом аргументів",
+    "check to enable input sliders for entry fields": "увімкніть, щоб використати слайдери при заповненні полів введеня",
+    "check to enable keyboard editing support": "увімкніть, щоб отримати можливість програмування з клавіатури (Shift+Клік на блок)",
+    "check to enable project data in URLs": "позначте, щоб увімкнути дані проєкту в URL-адресі",
+    "check to enable saving linked sublist identities": "поставте прапорець, щоб увімкнути збереження ідентифікаторів пов’язаних підсписків",
+    "check to enable sprite composition": "позначте, щоб увімкнути композицію спрайтів",
+    "check to enable support for first-class sprite": "позначте, щоб увімкнути підтримку спрайту першого класу",
+    "check to enable using operators on lists and tables": "позначте, щоб увімкнути використання операторів у списках і таблицях",
+    "check to enable virtual keyboard support for mobile devices": "увімкніть, для використання віртуальної клавіатури для мобільних пристоїв",
+    "check to hide (+) symbols in block prototype labels": "увімкніть, щоб не відображати (+) під час редагування заголовка",
+    "check to inherit from": "увімкніть для успадкування від",
+    "check to prevent contents from being saved": "поставте прапорець, щоб запобігти збереженню вмісту",
+    "check to prioritize script execution": "увімкніть, для прискорення виконання скрипту",
+    "check to rasterize SVGs on import": "позначте, щоб растеризувати SVG під час імпорту",
+    "check to run the edited script when moving the slider": "позначте, щоб запускати відредагований сценарій під час переміщення повзунка",
+    "check to show all blocks in a single palette": "позначте, щоб усі блоки відображалися в одній палітрі",
+    "check to show buttons in the palette": "позначте, щоб відобразити кнопки на палітрі",
+    "check to show category names in the palette": "позначте, щоб відображати назви категорій у палітрі",
+    "check to show extension primitives in the palette": "позначте, щоб відображати примітиви розширення в палітрі",
+    "check to show in palette": "позначте, щоб відобразити на палітрі",
+    "check to support native JavaScript functions": "позначте для підтримки власних функцій JavaScript",
+    "check to switch pen colors and graphic effects to HSL": "позначте, щоб переключити кольори пера та графічні ефекти на HSL",
+    "check to turn block clicking sound on": "увімкніть,щоб використовувати звук кліку блок",
+    "check to turn on logging pen vectors": "увімкніть, щоб записати молюнки олівцем у вектор",
+    "check to turn on visible stepping (slow)": "увімкніть, для відображення кроків виконання скрипту (повільно)",
+    "check to use blurred drop shadows and highlights": "увімкніть для використання розмитих тіней та освітлення",
+    "children": "дочірні елементи",
+    "choose another color for this morph": "вибрати інший колір для цієї морфи",
+    "choose the World's background color": "вибрати колір тла світу",
+    "circle": "коло",
+    "circle box": "кругла коробка",
+    "circleSolid": "суцільне коло",
+    "clean up": "упорядкувати",
+    "clear": "очистити",
+    "clear graphic effects": "очистити графічні ефекти",
+    "clear undrop queue": "очистити чергу скасування",
+    "click or drag crosshairs to move the rotation center": "клацніть на перехрестя для переміщення центра повороту",
+    "clicked": "клацнуто",
+    "clone": "клонувати",
+    "clones": "клони",
+    "closedBrush": "закрити пензель",
+    "cloud": "хмара",
+    "cloud unavailable without a web server.": "хмара недоступна без веб-сервера.",
+    "cloudGradient": "хмарний градієнт",
+    "cloudOutline": "контур хмари",
+    "code": "код",
+    "code mapping...": "відображення коду...",
+    "code of _": "код _",
+    "collection": "колекція",
+    "color": "колір",
+    "color _ is touching _ ?": "колір _ торкається _ ?",
+    "color palette": "палітра кольорів",
+    "color picker": "вибір кольору",
+    "color...": "колір...",
+    "color:": "колір:",
+    "columns": "стовпці",
+    "combinations _": "комбінації _",
+    "combine _ using _": "поєднати елементи _ із _",
+    "comic": "комікс",
+    "command": "команда",
+    "comment pic...": "коментар зображення...",
+    "compile": "компілювати",
+    "compile _": "компілювати _",
+    "compile _ for _ args": "компілювати _ для _ аргументів",
+    "confetti": "конфетті",
+    "console log _": "друкувати в консоль _",
+    "continuation": "продовження",
+    "continuations cannot be forked": "продовження не можуть розгалужуватися",
+    "cos": "cos",
+    "costume": "образ",
+    "costume #": "образ №",
+    "costume name": "Імʼя образу",
+    "costumes": "образи",
+    "costumes tab help": "Перенесіть образ спрайту з ПК",
+    "could not connect to:": "не вдалося підключитися до",
+    "cr": "кінцям рядків",
+    "create a clone of _": "клонувати _",
+    "cross": "перетин",
+    "crosshairs": "приціл",
+    "current": "поточний",
+    "current _": "поточний _",
+    "current module versions:": "поточні версії модулів",
+    "current parent": "джерело спрайта",
+    "custom?": "обрати?",
+    "cut from _": "вирізати з _",
+    "d": "d",
+    "dangling?": "підвішений?",
+    "data": "дані",
+    "date": "день",
+    "day of week": "день тижня",
+    "days left": "днів залишилось",
+    "days left.": "днів залишилось.",
+    "defaults": "за замовчуванням",
+    "define _ _ _": "визначити _ _ _",
+    "definition": "визначення",
+    "delete": "видалити",
+    "delete _": "видалити _",
+    "delete _ of _": "вилучити _ з _",
+    "delete a category...": "видалити категорію...",
+    "delete block _": "видалити блок _",
+    "delete block definition...": "видалити визначення блока",
+    "delete slot": "видалити слот",
+    "delete this clone": "видалити клон",
+    "delete variable": "видалити змінну",
+    "delimiter": "роздільник",
+    "demo (1.2x)": "демо (1.2x)",
+    "demo...": "демо...",
+    "detach all parts": "від'єднайте всі частини",
+    "detach and put into the hand": "від'єднати і покласти в руку",
+    "detach from": "від'єднатися від",
+    "development mode": "версія в розробці",
+    "development mode debugging primitives:": "Режим розробки налагодження примітивів:",
+    "development mode...": "режим розробки...",
+    "dimensions": "розміри",
+    "direction": "напрямок",
+    "disable deep-Morphic context menus and show user-friendly ones": "вимкнути deep-Morphic контекстне меню",
+    "disable developers' context menus": "вимкнути контекстне меню розробників",
+    "disable dragging media and blocks out of watchers and balloons": "вимкнути перетягування медіафайлів і блокування спостерігачів і виносок",
+    "disconnected.": "відключений.",
+    "distance": "відстань",
+    "distance to _": "відстань до _",
+    "distribution": "дистрибуція",
+    "don't rotate": "без обертання",
+    "down arrow": "стрілка вниз",
+    "download and save with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "завантажте та збережіть із коротким описом цього проекту з тінями на всіх зображеннях. не підтримується всіма браузерами",
+    "download script": "завантажити скрипт",
+    "download this script as an XML file": "завантажте цей скрипт як файл XML",
+    "draggable": "рухомий",
+    "draggable?": "відчутний?",
+    "dragging threshold": "порог перетягування",
+    "dropped": "кинуть",
+    "duplicate": "дублювати",
+    "duplicate block definition...": "повторюване визначення блоку...",
+    "duration": "тривалість",
+    "e": "e",
+    "e^": "e^",
+    "edge": "межа",
+    "edit": "редагувати",
+    "edit rotation point only...": "редагувати лише точку повороту...",
+    "edit the costume's rotation center": "вказати центр обертання для образу",
+    "edit...": "редагувати...",
+    "editables": "редаговані",
+    "elegant (90)": "витончений (90)",
+    "empty? _": "порожній? _",
+    "enable Morphic context menus and inspectors, not user-friendly!": "ввімкнути Morphic контекстне меню",
+    "enter": "введіть",
+    "entering development mode. error catching is turned off, use the browser's web console to see error messages.": "вхід у режим розробки. Перелов помилок вимкнено, використовуйте веб-консоль браузера, щоб переглянути повідомлення про помилки",
+    "entering user mode": "вхід в режим користувача",
+    "eraser": "гумка",
+    "exceeding maximum number of clones": "перевищення максимальної кількості клонів",
+    "expecting": "очікуючи",
+    "expecting a": "очікуючи",
+    "expecting a finite number but getting Infinity or NaN": "очікування кінцевого числа, але отримання нескінченності або NaN",
+    "experimental - under construction": "експериментальна можливість - в розробці",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "експериментально! зробіть цього репортера швидким і безперервним. УВАГА: помилки в кільці можуть перервати ваш сеанс Snap!",
+    "export": "експорт",
+    "export block definition...": "експорт визначення блоку...",
+    "export pen trails line segments as SVG": "експортувати відрізки ліній у форматі SVG",
+    "export project as cloud data...": "експортувати проект як хмарні дані...",
+    "export project media only...": "експортувати лише мультимедійні файли проекту...",
+    "export project without media...": "експорт проекту без мультимедіа...",
+    "export script": "експортувати скрипт",
+    "export...": "експорт...",
+    "extract": "витягти",
+    "f": "f",
+    "false": "false",
+    "file": "файл",
+    "file menu import hint": "завантажити експортований проєкт або бібліотеку блоків, маску чи звук",
+    "fill": "заливка",
+    "fill page...": "заповнити сторінку...",
+    "filtered for _": "фільтрація для _",
+    "find blocks": "знайти блоки",
+    "find blocks...": "Знайти блоки...",
+    "find first item _ in _": "знайти перший елемент _ в _",
+    "find unused global custom blocks and remove their definitions": "пошук і видалення невикористовуваних блоків",
+    "fisheye": "рибʼяче око",
+    "flag": "прапорець",
+    "flash": "спалах",
+    "flat line ends": "прямокутні кінці ліній",
+    "flatten": "розплющити",
+    "flip ↔": "віддзеркалити ↔",
+    "flip ↕": "віддзеркалити ↕",
+    "floor": "округлення до меншого",
+    "footprints": "сліди",
+    "for _ = _ to _ _": "для _ = _ до _ _",
+    "for all sprites": "для всіх спрайтів",
+    "for each _ in _ _": "для кожного _ в _ _",
+    "for this sprite only": "тільки для поточного спрайту",
+    "forever _": "завжди _",
+    "frame": "кадр",
+    "frames": "кадри",
+    "frequencies": "частоти",
+    "frequency": "частота",
+    "front": "попереду",
+    "fullScreen": "поний екран",
+    "g": "g",
+    "gears": "шестерні",
+    "get blocks": "отримати блоки",
+    "get data": "отримати дані",
+    "ghost": "прозорість",
+    "giant (8x)": "збільшити (8x)",
+    "glide _ secs to x: _ y: _": "ковзати _ сек до x _ y _",
+    "global?": "глобальний?",
+    "globe": "глобус",
+    "go back _ layers": "стати позаду _ рівнів",
+    "go to _": "перемістити в _",
+    "go to _ layer": "стати _ всіх рівнів",
+    "go to front": "стати попереду всіх",
+    "go to x: _ y: _": "перемістити в x _ y _",
+    "gray scale palette": "палітра відтінків сірого",
+    "green": "зелений:",
+    "grow": "збільшити",
+    "h": "h",
+    "handle": "обробити",
+    "header": "заголовок",
+    "header mapping...": "зіставлення заголовків...",
+    "height": "висота",
+    "hello": "Привіт",
+    "help": "Довідка",
+    "help...": "довідка...",
+    "hide": "сховати",
+    "hide all...": "сховати все...",
+    "hide blocks...": "приховати блоки...",
+    "hide primitives": "приховати стандартні блоки",
+    "hide variable _": "сховати змінну _",
+    "high": "висока",
+    "hour": "годин",
+    "http:// _": "http:// _",
+    "hue": "відтінок",
+    "huge (4x)": "збільшити (4x)",
+    "i": "i",
+    "identical to": "тотожно",
+    "if _ _": "якщо _ _",
+    "if _ _ _": "якщо _ _ _",
+    "if _ _ else _": "якщо _ то _ інакше _",
+    "if _ then _ else _": "якщо _ то _ інакше _",
+    "if on edge, bounce": "якщо на межі, відбити",
+    "import a sound from your computer by dragging it into here": "Перенесіть звуковий файл з вашого ПК",
+    "import without attempting to parse or format data": "імпортувати без спроб аналізу чи форматування даних",
+    "import...": "імпорт...",
+    "in palette": "в палітрі",
+    "including dependencies": "включаючи залежності",
+    "index": "індекс",
+    "index of _ in _": "індекс _ у _",
+    "inherit _": "переймати _",
+    "inherited": "успадковані",
+    "input list:": "вхідний список:",
+    "input names:": "назви вхідних даних:",
+    "input(s), but getting": "введення",
+    "inputs": "введення",
+    "insert _ at _ of _": "встав. _ в позицію _ в _",
+    "insert a slot": "вставте слот",
+    "insert a variable": "вставити змінну",
+    "inspect...": "оглядати...",
+    "is _ ?": "_ ?",
+    "is _ a _ ?": "_ це _ ?",
+    "is _ empty?": "чи _ порожнє?",
+    "is _ identical to _ ?": "_ тотожно _ ?",
+    "is _ on?": "чи _ ввімкнено?",
+    "is not a valid option": "не є дійсним варіантом",
+    "is read-only": "лише для читання",
+    "item": "елемент",
+    "item _ of _": "елемент _ з _",
+    "items": "елементи",
+    "j": "j",
+    "join _": "зʼєднати _",
+    "jukebox": "музичний автомат",
+    "k": "k",
+    "keep all submorphs within and visible": "тримати всі субморфи всередині та видимими",
+    "keep items _ from _": "взяти елементи _ з _",
+    "key": "клавіша",
+    "key _ pressed?": "клавішу _ натиснуто?",
+    "keyboard": "клавіатура",
+    "keyboardFilled": "клавіатуру заповнено",
+    "l": "l",
+    "label": "напис",
+    "language_name": "Українська",
+    "language_translator": "Serhiy Kryzhanovsky",
+    "large": "збільшений",
+    "last": "останній",
+    "last changed": "остання зміна",
+    "last_changed": "2024-06-04",
+    "launch _ _": "запустити _ _",
+    "left": "вліво",
+    "left arrow": "стрілка вліво",
+    "length": "довжина",
+    "length of _": "довжина _",
+    "length:": "довжина:",
+    "let the World automatically adjust to browser resizing": "нехай світ автоматично пристосовується до зміни розміру браузера",
+    "letter": "літерам",
+    "letter _ of _": "_ літера слова _",
+    "light (70)": "світло (70)",
+    "lightness": "освітлення",
+    "line": "рядкам",
+    "lines": "лінії",
+    "list": "список",
+    "list _": "список _",
+    "list view...": "відобразити як список...",
+    "ln": "ln",
+    "load the official library of powerful blocks": "завантажити службову бібліотеку блоків",
+    "location": "розташування",
+    "lock": "блокування",
+    "log pen vectors": "журналювати вектори олівця",
+    "login": "логін",
+    "loop": "цикл",
+    "low": "низька",
+    "lower case": "малими літерами",
+    "m": "m",
+    "magnifierOutline": "контур лупи",
+    "magnifyingGlass": "збільшувальне скло",
+    "make a block...": "створити новий блок...",
+    "make a category...": "створити категорію...",
+    "make a copy and pick it up": "копіювати та запамʼятати",
+    "make a morph": "створити морф",
+    "make temporary and hide in the sprite corral": "зробити тимчасовим та сховати окремий спрайт",
+    "make this morph movable": "зробити цей морф рухомим",
+    "make this morph unmovable": "зробити цей морф нерухомим",
+    "map String to code _": "перетворювати рядки на код _",
+    "map _ of _ to code _": "перетворити _ з _ на код _",
+    "map _ over _": "перетворити _ список _",
+    "map _ to _ _": "перетворити _ на _ _",
+    "max": "максимальна",
+    "maximum": "максимум",
+    "medium (50)": "середній (50)",
+    "menus": "меню",
+    "message": "повідомлення",
+    "microphone _": "мікрофон _",
+    "middle": "посередині",
+    "minimum": "мінімум",
+    "minute": "хвилин",
+    "mirror video": "дзеркальне відео",
+    "missing / unspecified extension": "",
+    "monstrous (10x)": "жахливий (10x)",
+    "month": "місяць",
+    "mosaic": "мозаїка",
+    "motion": "рух",
+    "mouse down?": "мишку натиснуто?",
+    "mouse position": "позиція мишки",
+    "mouse x": "координата x мишки",
+    "mouse y": "координата y мишки",
+    "mouse-departed": "залишить курсор",
+    "mouse-entered": "торкнеться курсор",
+    "mouse-pointer": "курсор мишки",
+    "move": "перемістити",
+    "move _ steps": "перемістити на _ кроків",
+    "move all inside...": "переміщувати все всередині...",
+    "move...": "рух...",
+    "my": "мій",
+    "my _": "мій атрибут _",
+    "my anchor": "мій якір",
+    "my dangling?": "мій бовтається?",
+    "my draggable?": "мій перетягуваний?",
+    "my name": "моє ім'я",
+    "my parent": "мій батько",
+    "my rotation style": "мій стиль обертання",
+    "my rotation x": "моє обертання x",
+    "my rotation y": "моє обертання y",
+    "my temporary?": "моя тимчасовість?",
+    "myself": "з мене",
+    "n": "n",
+    "name": "Імʼя",
+    "neg": "негатив",
+    "negative": "негатив",
+    "neighbors": "сусіди",
+    "neighbors ≠": "сусіди ≠",
+    "new costume _ width _ height _": "новий образ _ ширина _ висота _",
+    "new line": "нова лінія",
+    "new sound _ rate _ Hz": "новий звук _ як _ Hz",
+    "new...": "новий...",
+    "next": "наступний",
+    "next costume": "наступний образ",
+    "none": "нічого",
+    "normal": "стандартний",
+    "normal (1x)": "звичайний(1x)",
+    "normalScreen": "звчайний екран",
+    "normalStage": "звичайна стадія",
+    "not": "не",
+    "not _": "не _",
+    "note": "нота",
+    "nothing": "нічого",
+    "now connected": "зʼєднання встановлено",
+    "now connected.": "зʼєднання встановлено.",
+    "number": "число",
+    "number of channels": "номер каналу",
+    "numbers from _ to _": "числа від _ до _",
+    "o": "o",
+    "object _": "обʼєкт _",
+    "octagon": "восьмикутник",
+    "only duplicate this block": "дублювати лише даний блок",
+    "only face left/right": "обертання ліво/право",
+    "only grab this block": "захопіть лише цей блок",
+    "open a new browser browser window with a summary of this project": "відобразити проєктні дані як XML в новому вікні браузера",
+    "open a new window with a picture of all scripts": "перетворити всі скрипти аркуша на зображення",
+    "open a new window with a picture of the stage": "перетворити вид сцени на зображення",
+    "open a new window with a picture of this morph": "відкрити нове вікно із зображенням цього морфа",
+    "open a new window with a picture of this script": "відкрити зображення скрипту у новому вікні",
+    "open a window on all properties": "відкрити вікно всіх властивостей",
+    "open in another dialog...": "відкрити в іншому вікні...",
+    "open in dialog...": "відкрити у окремому вікні...",
+    "open shared project from cloud...": "відкрити спільний проект із хмари...",
+    "options...": "опції...",
+    "or": "або",
+    "or before": "або раніше",
+    "other clones": "інші клони",
+    "other scripts in sprite": "всі інші мої скрипти",
+    "other sprites": "інші спрайти",
+    "p": "p",
+    "paint a new sprite": "малювати новий спрайт",
+    "paintbucket": "відро фарби",
+    "parameters": "параметри",
+    "parent": "джерело",
+    "parent...": "джерело...",
+    "parts": "частини",
+    "password has been changed.": "пароль змінено.",
+    "password must be six characters or longer": "пароль має містити шість символів або більше",
+    "passwords do not match": "паролі не збігаються",
+    "paste on _": "вставити на _",
+    "pause": "пауза",
+    "pause all _": "пауза для всіх _",
+    "pen": "олівець",
+    "pen _": "атрибут олівця _",
+    "pen down": "опустити олівець",
+    "pen down?": "олівець опущено?",
+    "pen trails": "лінія олівця",
+    "pen up": "підняти олівець",
+    "pen vectors": "векторне пер",
+    "pic...": "зображення...",
+    "pick random _ to _": "випадкове значення від _ до _",
+    "pick up": "забрати",
+    "pipe _ $arrowRight _": "конвеєр _ $arrowRight _",
+    "pipette": "піпетка",
+    "pitch": "подача",
+    "pivot": "центр обертання",
+    "pixel": "піксель",
+    "pixelate": "пікселізація",
+    "pixels": "пікселі",
+    "play _ Hz for _ secs": "відтворити _ Гц протягом _ секунд",
+    "play frequency _ Hz": "відтворити частоту _ Hz",
+    "play note _ for _ beats": "грати ноту _ _ тактів",
+    "play sound _": "грати звук _",
+    "play sound _ at _ Hz": "грати звук _ як _ Hz",
+    "play sound _ until done": "грати звук _ до завершення",
+    "please agree to the TOS": "погодьтеся з TOS",
+    "please fill out this field": "будь ласка, заповніть це поле",
+    "please provide a valid email address": "надайте дійсну електронну адресу",
+    "point in direction _": "повернути у напрямку _",
+    "point towards _": "слідувати за _",
+    "pointRight": "точка Праворуч",
+    "polygon": "багатокутник",
+    "position": "позиція",
+    "poster": "постер",
+    "predicate": "предікат",
+    "presentation (1.4x)": "презентація (1,4x)",
+    "pressed": "натиснуть",
+    "previous": "попередній",
+    "processes": "процеси",
+    "product": "продукт",
+    "published.": "опубліковано.",
+    "publishing project...": "опублікований проєкт...",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "",
+    "random": "випадкове значення",
+    "random position": "випадкова позиція",
+    "rank": "ранг",
+    "raw data...": "необроблені дані...",
+    "ray length": "довжина променя",
+    "read-only": "лише для читання",
+    "receivers...": "приймачі...",
+    "recording": "запис",
+    "rectangle": "прямокутник",
+    "rectangleSolid": "суцільний прямокутник",
+    "red": "червоний",
+    "redo the last undone block drop in this pane": "повторити відмінену дію з блоком",
+    "redraw the screen once": "перемалювати екран один раз",
+    "redrop": "повернути",
+    "relabel...": "перепозначити...",
+    "release": "звільнити",
+    "remove block variables...": "видалити змінні блоку",
+    "rename": "перейменувати",
+    "rename all blocks that access this variable": "перейменувати всі блоки, які мають доступ до цієї змінної",
+    "rename all...": "перейменувати все...",
+    "rename background": "перейменувати фон",
+    "rename costume": "перейменувати образ",
+    "rename only this reporter": "перейменувати лише цього репортера",
+    "rename sound": "перейменувати звук",
+    "rename...": "перейменувати...",
+    "repeat _ _": "повторити _ _",
+    "repeat until _ _": "повторити поки не _ _",
+    "replace item _ of _ with _": "замінити елемент _ в _ на _",
+    "report _": "результат _",
+    "reporter": "генератор значень",
+    "reporter didn't report": "репортер не повідомив",
+    "reset columns": "скинути стовпці",
+    "reset timer": "скинути таймер",
+    "reshape _ to _": "змінити форму _ на _",
+    "resize...": "змінити розмір...",
+    "resolution": "якість",
+    "rest for _ beats": "пауза _ тактів",
+    "restore display": "відновити дисплей",
+    "result pic...": "результат фото...",
+    "reverse": "зворотний",
+    "right": "вправо",
+    "right arrow": "стрілка вправо",
+    "ring": "кільце",
+    "ringify": "обвести",
+    "robot": "робот",
+    "rotate": "обертання",
+    "rotation style": "стиль обертання",
+    "rotation x": "зміщення за x",
+    "rotation y": "зміщення за y",
+    "round _": "округлити _",
+    "run _ _": "виконати _ _",
+    "run _ w/continuation": "виконати _ з продовженням",
+    "s": "s",
+    "sample morphs": "зразки морфів",
+    "sample rate": "частота семплування",
+    "samples": "семпли",
+    "saturation": "насиченість",
+    "save _ as costume named _": "зберегти _ як костюм під назвою _",
+    "save a picture of all scripts": "зберегти зображення всіх сценаріїв",
+    "save a picture of both this script and its result": "збережіть зображення цього сценарію та його результату",
+    "save a picture of the stage": "зберегти зображення сцени",
+    "save a picture of this comment": "збережіть зображення цього коментаря",
+    "save a picture of this script": "збережіть зображення цього скрипту",
+    "save a summary of this project": "зберегти резюме цього проекту",
+    "save global custom block definitions as XML": "зберегти глобальні настроювані визначення блоків як XML",
+    "save project data as XML to your downloads folder": "зберегти і завантажити проєкт як XML",
+    "saved.": "збережено.",
+    "sawtooth": "пила (sawtooth)",
+    "say _": "говорити _",
+    "say _ for _ secs": "говорити _ _ сек",
+    "scope": "обсяг",
+    "screenshot": "скріншот",
+    "screenshot...": "скріншот...",
+    "script": "скрипт",
+    "script pic with result...": "зображення скрипту з результатом...",
+    "script pic...": "зображення скрипту...",
+    "script variables _": "змінні скрипту _",
+    "scripts": "скрипти",
+    "scripts pic...": "перетворити скрипт на зображення...",
+    "scroll frame": "прогорнути кадр",
+    "scrolled-down": "прокручування вниз",
+    "scrolled-up": "прокручування ввгору",
+    "second": "секунд",
+    "select": "виділити",
+    "selection": "вибір",
+    "self": "я",
+    "send _ to _": "відправити _",
+    "senders...": "відправники...",
+    "sensor demo": "демонстрація датчика",
+    "set _ effect to _": "встановити ефект _ в _",
+    "set _ of block _ to _": "встановити _ блоку _ до _",
+    "set _ to _": "надати _ значення _",
+    "set background _ to _": "встановити фон _ на _",
+    "set background color to _": "встановити колір фону на _",
+    "set balance to _": "встановити баланс у _",
+    "set instrument to _": "задати інструмент _",
+    "set pen _ to _": "встановити властивість _ як _",
+    "set pen color to _": "колір олівця _",
+    "set pen shade to _": "задати яскравість олівця _",
+    "set pen size to _": "задати розмір олівця _",
+    "set size to _ %": "встановити розмір в _ %",
+    "set tempo to _ bpm": "встановити темп в _ уд/хв",
+    "set this morph's alpha value": "встановити значення альфа-версії цього морфу",
+    "set turbo mode to _": "встановити турбо-режим _",
+    "set video transparency to _": "встановити прозорість відео в _",
+    "set volume to _ %": "встановити гучність як _ %",
+    "set x to _": "задати значення х _",
+    "set y to _": "задати значення y _",
+    "setting the rotation center requires a costume": "встановлення центру обертання вимагає костюма",
+    "settings menu prefer empty slots hint": "увімкніть, щоб генерувати значення лише в порожніх клітинках",
+    "several block definitions already match this label": "кілька визначень блоків уже відповідають цій мітці",
+    "shared.": "поширено.",
+    "sharing project...": "поширення проєкту...",
+    "sharp drop shadows use for old browsers": "використання різких тіней для старих браузерів",
+    "sharp shadows...": "різкі тіні...",
+    "shimmering (80)": "мерехтливий (80)",
+    "show": "показати",
+    "show a handle which can be dragged to change this morph's extent": "показати дескриптор, який можна перетягнути, щоб змінити ступінь цієї трансформації",
+    "show a handle which can be dragged to move this morph": "показати маркер, який можна перетягнути, щоб перемістити цей морф",
+    "show a picture of all scripts and block definitions": "показати зображення всіх скриптів і визначень блоків",
+    "show all": "показати все",
+    "show all...": "показати все...",
+    "show global custom block definitions as XML in a new browser window": "відобразити визначення глобальних користувацьких блоків як XML в новому вікні браузера",
+    "show primitives": "показати стандартні блоки",
+    "show project data as XML in a new browser window": "показати дані проекту як XML у новому вікні браузера",
+    "show table _": "показати таблицю _",
+    "show the World's menu": "показати меню світу",
+    "show variable _": "показати змінну _",
+    "shown?": "показати?",
+    "shrink": "зменшити",
+    "shuffled": "перетасувався",
+    "signals": "сигнали",
+    "sin": "sin",
+    "sine": "синус (sine)",
+    "size": "розмір",
+    "slider": "слайдер",
+    "slider max...": "слайдер max...",
+    "slider min...": "слайдер min...",
+    "slots": "слоти",
+    "smallStage": "мала сцена",
+    "smaller menu fonts and sliders": "менші шрифти меню та повзунки",
+    "snap": "знімок",
+    "sorted": "сортування",
+    "sound": "звук",
+    "sounds": "звуки",
+    "space": "пропуск",
+    "specify the distance the hand has to move before it picks up an object": "вказати відстань, на яку має рухатися рука, перш ніж вона візьме предмет",
+    "spectrum": "спектр частот",
+    "speech bubble": "спливаюча підказка",
+    "speechBubble": "спливаюча підказка",
+    "speechBubbleOutline": "контур спливаючої підказки",
+    "split _ by _": "розділити _ по _",
+    "sprite": "спрайт",
+    "sprites": "спрайти",
+    "sqrt": "квадратний корінь",
+    "square": "квадрат (square)",
+    "stack size": "размір стека",
+    "stage": "сцена",
+    "stage image": "сценічний образ",
+    "stamp": "штамп",
+    "standard settings": "стандартні налаштування",
+    "stay signed in on this computer until logging out": "залишайтеся в системі на цьому комп’ютері, доки не вийдете",
+    "stepForward": "крок вперед",
+    "stick this morph to another one": "прикріпити цей морф до іншого",
+    "stick to": "дотримуватися",
+    "stop _": "стоп _",
+    "stop all sounds": "зупинити всі звуки",
+    "stop frequency": "зупитнити відтворнення частоти",
+    "stopped": "зупинка",
+    "storage": "зберігання",
+    "store this project in the downloads folder (in supporting browsers)": "зберегти цей проект у папці завантажень (у підтримуваних браузерах)",
+    "stretch _ x: _ y: _ %": "розтягнути _ x: _ y: _ %",
+    "string": "рядок",
+    "subtle (95)": "тонкий (95)",
+    "sum": "sum",
+    "svg...": "svg...",
+    "switch to costume _": "змінити образ на _",
+    "switch to scene _ _": "перейти до сцени _ _",
+    "t": "t",
+    "tab": "табуляторам",
+    "table view...": "відобразити як таблицю...",
+    "take a camera snapshot and import it as a new sprite": "створити фото камерою та використати зображення як новий спрайт",
+    "tan": "tan",
+    "tell _ to _ _": "передати _ команди _ _",
+    "tempo": "темп",
+    "temporary?": "тимчасовий?",
+    "text": "текст",
+    "text-only (100)": "лише текст (100)",
+    "the predicate takes too long for a custom hat block": "",
+    "there are currently no unused global custom blocks in this project": "",
+    "there are currently no vectorizable pen trail segments": "",
+    "thing": "що-небудь",
+    "think _": "подумати _",
+    "think _ for _ secs": "подумати _ _ сек",
+    "this _": "цей _",
+    "this block": "цей блок",
+    "this project doesn't have any custom global blocks yet": "У проєкта відсутні глобальні користувацькі блоки",
+    "this script": "цей скрипт",
+    "time in milliseconds": "час в мілісекундах",
+    "timer": "таймер",
+    "tip": "на кінці",
+    "to": "до",
+    "top": "згори",
+    "touch screen settings": "налаштування сенсорного екрана",
+    "touching _ ?": "доторкається _ ?",
+    "transient": "перехідний",
+    "translations": "переклади",
+    "translations...": "переклади...",
+    "translator_e-mail": "kseryj@gmail.com",
+    "transparency": "прозорість",
+    "transparency...": "прозорість...",
+    "trash is empty": "кошик порожній",
+    "triangle": "трикутник (triangle)",
+    "true": "true",
+    "turbo mode": "режим турбо",
+    "turbo mode?": "режим турбо?",
+    "turn _ _ degrees": "поворот _ на _ градусів",
+    "turn all pen trails and stamps into a new background for the stage": "перетворити всі сліди пера та штампи на новий фон для сцени",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "перетворити всі сліди пера та штампи на новий костюм для поточного вибраного спрайту",
+    "turn pen trails into new background...": "перетворити сліди пера на новий фон...",
+    "turn pen trails into new costume...": "перетворити сліди пера на новий костюм...",
+    "turnBack": "повернути назад",
+    "turnForward": "повернути вперед",
+    "turnLeft": "наліво",
+    "turnRight": "направо",
+    "turtle": "черепаха",
+    "turtleOutline": "контур черепахи",
+    "type": "тип",
+    "type of _": "тип _",
+    "u": "u",
+    "unable to convert to": "неможливо перетворити на",
+    "unable to inherit (disabled or circular?)": "неможливо успадкувати (вимкнено чи циклічно?)",
+    "unable to nest (disabled or circular?)": "неможливе вкладення (вимкнено чи кругове?)",
+    "uncheck for default GUI design": "вимкніть для переходу до стандартного дизайну",
+    "uncheck for less contrast multi-column list views": "вимкніть, щоб зменшити контраст меж таблиці у вікні",
+    "uncheck for lower resolution, saves computing resources": "вимкніть для зменшення роздільної здатності зменшує навантаження на ресурси ПК",
+    "uncheck for round ends of lines": "вимкніть, для закруглення кінців мальованих ліній",
+    "uncheck for smooth scaling of vector costumes": "вимкніть для плавного масштабування векторних костюмів",
+    "uncheck to allow dropped reporters to kick out others": "вимкніть, щоб мати змогу генерувати значення в зайнятих комірках",
+    "uncheck to allow script reentrance": "вимкніть, щоб дозволити повторний вхід в скрипт",
+    "uncheck to always show (+) symbols in block prototype labels": "вимкніть, щоб відображати (+) під час редагування заголовка",
+    "uncheck to confine auto-wrapping to top-level block stacks": "вимкніть, щоб обмежити автоматичне обгортання стеками блоків верхнього рівня",
+    "uncheck to disable IDE animations": "вимкніть, щоб не використовувати IDE aнимацію",
+    "uncheck to disable alternating colors for nested block": "вимкніть, для відміни використання кольорів для вкладених блоків",
+    "uncheck to disable block to text mapping features": "вимкніть, щоб прибрати блоки трансляції в текст на іншу мову програмування",
+    "uncheck to disable camera support": "",
+    "uncheck to disable dropping commands in reporter rings": "",
+    "uncheck to disable dynamic labels for variadic inputs": "вимкніть щоб не використовувати динамічні позначення при введенні зі змінним числом аргументів",
+    "uncheck to disable input sliders for entry fields": "вимкніть, щоб не використовувати слайдери при заповненні полів введення",
+    "uncheck to disable keyboard editing support": "вимкніть, щоб програмувати без використання",
+    "uncheck to disable multi-column list views": "вимкніть для відображення списку як таблицю",
+    "uncheck to disable project data in URLs": "вимкніть, щоб вимкнути підтримку камери",
+    "uncheck to disable saving linked sublist identities": "вимкніть, щоб вимкнути збереження ідентифікаторів пов’язаних підсписків",
+    "uncheck to disable sprite composition": "вимкніть, щоб вимкнути композицію спрайтів",
+    "uncheck to disable sprite inheritance features": "вимкніть, щоб відмінити наслідування властивостей спрайтів",
+    "uncheck to disable support for first-class sprites": "вимкніть, щоб вимкнути підтримку спрайтів першого класу",
+    "uncheck to disable support for native JavaScript functions": "вимкніть, щоб вимкнути підтримку власних функцій JavaScript",
+    "uncheck to disable using operators on lists and tables": "вимкніть, щоб вимкнути використання операторів у списках і таблицях",
+    "uncheck to disable virtual keyboard support for mobile devices": "вимкніть, щоб не використовувати віртуальну клавіатуру для мобільних пристоїв",
+    "uncheck to disinherit": "вимкніть, щоб позбавити спадщини",
+    "uncheck to drag media and blocks out of watchers and balloons": "вимкніть, щоб перетягнути медіа та блоки з спостерігачів і повітряних куль",
+    "uncheck to drag media, and blocks out of watchers and balloons": "вимкніть, щоб перетягнути медіафайли та заблокувати спостерігачів і виноски",
+    "uncheck to enable directly running blocks by clicking on them": "зніміть прапорець, щоб увімкнути безпосередньо запущені блоки, клацнувши їх",
+    "uncheck to hide buttons in the palette": "вимкніть, щоб приховати кнопки на палітрі",
+    "uncheck to hide category names in the palette": "вимкніть, щоб приховати назви категорій у палітрі",
+    "uncheck to hide extension primitives in the palette": "вимкніть, щоб приховати примітиви розширення в палітрі",
+    "uncheck to hide in palette": "вимкніть, щоб сховати в палітрі",
+    "uncheck to ignore upper- and lowercase when comparing texts": "вимкніть, щоб ігнорувати великі та малі літери під час порівняння текстів",
+    "uncheck to limit Boolean slots to true / false": "вимкніть, щоб обмежити логічні слоти значеннями true/false",
+    "uncheck to run scripts at normal speed": "вимкніть, для виконанная скрипту з нормальною швидкістю",
+    "uncheck to save contents in the project": "вимкніть, щоб зберегти вміст у проекті",
+    "uncheck to show only the selected category's blocks": "вимкніть, щоб відображати лише блоки вибраної категорії",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "вимкніть, щоб припинити кешування введених даних (для налагодження оцінювача)",
+    "uncheck to suppress running scripts when moving the slider": "вимкніть, щоб блокувати запущені сценарії під час переміщення повзунка",
+    "uncheck to switch pen colors and graphic effects to HSV": "вимкніть, щоб переключити кольори пера та графічні ефекти на HSV",
+    "uncheck to turn block clicking sound off": "вимкніть, щоб відключити звук кліку на блок",
+    "uncheck to turn off logging pen vectors": "вимкніть, щоб припинити заппис малюнків олівцем у вектор",
+    "uncheck to turn off visible stepping": "вимкніть, щоб не відображати кроки виконання скрипту",
+    "uncheck to use solid drop shadows and highlights": "вимкніть для використання суцільних тіней та освітлення",
+    "uncheck to use the input dialog in short form": "вимкніть, для використання короткої форми діалогу введення",
+    "uncompile": "декомпілювати",
+    "undo": "відмінити",
+    "undo the last block drop in this pane": "відмінити останню дію з блоком",
+    "undrop": "відмінити",
+    "unicode _ as letter": "літера з Unicode _",
+    "unicode of _": "Unicode літери _",
+    "unlock": "розблокувати",
+    "unpublished.": "неопублікований.",
+    "unpublishing project...": "скасування публікації проекту...",
+    "unringify": "прибрати обведення",
+    "unshared.": "не поширювати",
+    "unsharing project...": "не поширювати проєкт...",
+    "unsupported attribute": "непідтримуваний атрибут",
+    "unsupported data type": "непідтримуваний тип даних",
+    "unsupported graphic effect": "непідтримуваний графічний ефект",
+    "untitled": "Без назви",
+    "unused": "невикористаний",
+    "unused block(s) removed": "видалено виневикористані блоки",
+    "up arrow": "стрілка вгору",
+    "upper case": "верхній регістр",
+    "url...": "url...",
+    "use the keyboard to enter blocks": "використати клавіатуру для роботи з блоками",
+    "user features...": "функції користувача...",
+    "user mode...": "режим користувача...",
+    "v": "v",
+    "value": "значення",
+    "variable": "змінна",
+    "variables": "змінні",
+    "video _ on _": "відео _ на _",
+    "video capture": "відеозапис",
+    "volume": "гучність",
+    "w": "w",
+    "wait _ secs": "чекати _ сек.",
+    "wait until _": "чекати до _",
+    "wardrobe": "гардероб",
+    "warp _": "відразу _",
+    "what's your name?": "Як твоє імʼя?",
+    "when I am _": "коли мене _",
+    "when I receive _ _": "коли я отримаю _ _",
+    "when I start as a clone": "Коли я починаю як клон",
+    "when _": "коли _",
+    "when _ clicked": "коли натиснуто _",
+    "when _ is edited _": "коли _ редагується _",
+    "when _ key pressed _": "коли натиснуто клавішу _ _",
+    "whirl": "вихор",
+    "whitespace": "пробілом",
+    "width": "ширина",
+    "with data": "з даними",
+    "with inputs": "разом з вхідними даними",
+    "word": "словам",
+    "world": "світ",
+    "write _ size _": "написати _ розмір _",
+    "x": "x",
+    "x position": "значення x",
+    "y": "y",
+    "y position": "значення y",
+    "year": "рік",
+    "year:": "рік:",
+    "your own": "ваш",
+    "z": "z"
+}
