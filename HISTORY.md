@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-02-05
+* gui: reduced blocks outline contrast in flat design mode
+
 ## 10.4.5:
 * **Notable Fixes:**
     * fixed evaluating special strings inside numerical input slots
