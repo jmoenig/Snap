@@ -4,6 +4,7 @@
 
 ### 2025-02-05
 * gui: reduced blocks outline contrast in flat design mode
+* SciSnap update, thanks, Eckart!
 
 ## 10.4.5:
 * **Notable Fixes:**
