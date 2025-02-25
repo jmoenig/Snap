@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-02-25
+* gui: tweaked sound recording to - hopefully - support Safari, sigh
+
 ## 10.4.6:
 * **Notable Changes:**
     * SciSnap update, thanks, Eckart!

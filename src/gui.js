@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-February-05';
+modules.gui = '2025-February-25';
 
 // Declarations
 
-var SnapVersion = '10.4.6';
+var SnapVersion = '10.4.7-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3084,7 +3084,7 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
                 reader.readAsDataURL(blob);
                 reader.onloadend = () => {
                 	var base64 = reader.result;
-                    base64 = 'data:audio/ogg;base64,' +
+                    base64 = 'data:audio/mpeg;base64,' +
                         base64.split(',')[1];
                     anAudio.src = base64;
                     this.droppedAudio(anAudio, name);
@@ -13304,7 +13304,7 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                 reader.readAsDataURL(buffer);
                 reader.onloadend = () => {
                     var base64 = reader.result;
-                    base64 = 'data:audio/ogg;base64,' +
+                    base64 = 'data:audio/mpeg;base64,' +
                         base64.split(',')[1];
                     this.audioElement.src = base64;
                     this.audioElement.load();
@@ -13385,32 +13385,39 @@ SoundRecorderDialogMorph.prototype.stop = function () {
 };
 
 SoundRecorderDialogMorph.prototype.play = function () {
-    this.stop();
-    this.audioElement.oncanplaythrough = function () {
-        this.play();
-        this.oncanplaythrough = nop;
-    };
+    try {
+        this.audioElement.play();
+    } catch (err) {
+        this.audioElement.oncanplaythrough = function () {
+            this.play();
+            this.oncanplaythrough = nop;
+        };
+    }
     this.playButton.label.setColor(new Color(0, 255, 0));
 };
 
 SoundRecorderDialogMorph.prototype.ok = function () {
     var myself = this;
     this.stop();
-    this.audioElement.oncanplaythrough = function () {
-        if (this.duration && this.duration !== Infinity) {
-            myself.accept(this);
-            this.oncanplaythrough = nop;
-            myself.destroy();
-        } else {
-            // For some reason, we need to play the sound
-            // at least once to get its duration.
-            myself.buttons.children.forEach(button =>
-                button.disable()
-            );
-            this.play();
-        }
-    };
-
+    if (this.audioElement.readyState === 4) {
+        myself.accept(this.audioElement);
+        myself.destroy();
+    } else {
+        this.audioElement.oncanplaythrough = function () {
+            if (this.duration && this.duration !== Infinity) {
+                myself.accept(this);
+                this.oncanplaythrough = nop;
+                myself.destroy();
+            } else {
+                // For some reason, we need to play the sound
+                // at least once to get its duration.
+                myself.buttons.children.forEach(button =>
+                    button.disable()
+                );
+                this.play();
+            }
+        };
+    }
 };
 
 SoundRecorderDialogMorph.prototype.destroy = function () {
