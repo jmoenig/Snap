@@ -850,10 +850,10 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph);
 
         function updateTilt(event) {
-            ide.tilt.version = Date.now();
-            ide.tilt.data.put(event.alpha, 1);
-            ide.tilt.data.put(event.beta, 2);
-            ide.tilt.data.put(event.gamma, 3);
+            ide.tilt.put(event.alpha, 1);
+            ide.tilt.put(event.beta, 2);
+            ide.tilt.put(event.gamma, 3);
+            ide.tilt.put(Date.now(), 4);
         }
 
         function activate() {
@@ -878,23 +878,22 @@ SnapExtensions.primitives.set(
         }
 
         if (!ide.tilt) {
-            ide.tilt = {
-                version: Date.now(),
-                data: new List([0, 0, 0])
-            };
+            ide.tilt = new List([0, 0, 0]);
             activate();
         }
 
         switch (axis) {
             case 'x':
-                return ide.tilt.data.at(1);
+                return ide.tilt.at(1);
             case 'y':
-                return ide.tilt.data.at(2);
+                return ide.tilt.at(2);
             case 'z':
-                return ide.tilt.data.at(3);
+                return ide.tilt.at(3);
+            case 'xyz':
+                return ide.tilt.at(new List([1, 2, 3]));
             default:
                 activate();
-                return ide.tilt.data;
+                return ide.tilt;
         }
     }
 );
