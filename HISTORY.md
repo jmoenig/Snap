@@ -1,6 +1,10 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * STRETCH COSTUME: Also accept a matrix of pixel data and in this case also report one
+* **Notable Fixes:**
+    * fixed (again, sigh) recording sounds in Safari (Mac & mobile)
 
 ### 2025-02-26
 * threads: tweaked STRETCH COSTUME primitive to also accept a matrix of pixel data as input and to then also return one
