@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, DeviceMotionEvent, console*/
+BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -850,26 +850,34 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph);
 
         function updateTilt(event) {
-            ide.tilt.put(event.alpha, 1);
-            ide.tilt.put(event.beta, 2);
-            ide.tilt.put(event.gamma, 3);
+            ide.tilt.put(event.alpha || 0, 1);
+            ide.tilt.put(event.beta || 0, 2);
+            ide.tilt.put(event.gamma || 0, 3);
+        }
+
+        function userTriggerTilt() {
+            DeviceOrientationEvent.requestPermission().then(response => {
+                if (response === 'granted') {
+                    // Permission granted
+                    window.addEventListener(
+                        'deviceorientation',
+                        updateTilt
+                    );
+                } else {
+                    // Permission denied
+                }
+            }).catch(console.error);
         }
 
         function activate() {
-            if (typeof(DeviceMotionEvent) !== 'undefined' &&
-                    typeof(DeviceMotionEvent.requestPermission) === 'function'
+            if (typeof(DeviceOrientationEvent) !== 'undefined' &&
+                typeof(DeviceOrientationEvent.requestPermission) === 'function'
             ) {
-                DeviceMotionEvent.requestPermission().then(response => {
-                    if (response === 'granted') {
-                        // Permission granted
-                        window.addEventListener(
-                            'deviceorientation',
-                            updateTilt
-                        );
-                    } else {
-                        // Permission denied
-                    }
-                }).catch(console.error);
+                ide.confirm(
+                    'activate device orientation',
+                    'Tilt Sensor',
+                    userTriggerTilt
+                );
             } else {
                 // other devices
                 window.addEventListener('deviceorientation', updateTilt);
