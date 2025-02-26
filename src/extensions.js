@@ -31,11 +31,11 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array*/
+BigUint64Array, DeviceMotionEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-January-09';
+modules.extensions = '2025-February-26';
 
 // Global stuff
 
@@ -839,6 +839,63 @@ SnapExtensions.primitives.set(
             options
         );
         return () => crd;
+    }
+);
+
+// Device Orientation (ori_ "tilt")
+
+SnapExtensions.primitives.set(
+    'ori_tilt(xyz)',
+    function (axis) {
+        var ide = this.parentThatIsA(IDE_Morph);
+
+        function updateTilt(event) {
+            ide.tilt.version = Date.now();
+            ide.tilt.data.put(event.alpha, 1);
+            ide.tilt.data.put(event.beta, 2);
+            ide.tilt.data.put(event.gamma, 3);
+        }
+
+        function activate() {
+            if (typeof(DeviceMotionEvent) !== 'undefined' &&
+                    typeof(DeviceMotionEvent.requestPermission) === 'function'
+            ) {
+                DeviceMotionEvent.requestPermission().then(response => {
+                    if (response === 'granted') {
+                        // Permission granted
+                        window.addEventListener(
+                            'deviceorientation',
+                            updateTilt
+                        );
+                    } else {
+                        // Permission denied
+                    }
+                }).catch(console.error);
+            } else {
+                // other devices
+                window.addEventListener('deviceorientation', updateTilt);
+            }
+        }
+
+        if (!ide.tilt) {
+            ide.tilt = {
+                version: Date.now(),
+                data: new List([0, 0, 0])
+            };
+            activate();
+        }
+
+        switch (axis) {
+            case 'x':
+                return ide.tilt.data.at(1);
+            case 'y':
+                return ide.tilt.data.at(2);
+            case 'z':
+                return ide.tilt.data.at(3);
+            default:
+                activate();
+                return ide.tilt.data;
+        }
     }
 );
 
