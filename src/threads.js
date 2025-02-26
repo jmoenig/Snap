@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-January-24';
+modules.threads = '2025-February-26';
 
 var ThreadManager;
 var Process;
@@ -7744,11 +7744,21 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
 };
 
 Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
-    var cst;
+    var cst, shp, height, width, dim, xStretch, yStretch, result;
     if (name instanceof List) {
-        return this.reportNewCostume(name, xP, yP);
+        shp = name.quickShape();
+        if (shp.at(2) > 0) {
+            height = shp.at(1);
+            width = shp.at(2);
+            dim = new List([height * width]);
+            if (shp.length() === 3) {
+                dim.add(shp.at(3));
+            }
+            cst = this.reportNewCostume(name.reshape(dim), width, height);
+        }
+    } else {
+        cst = this.costumeNamed(name);
     }
-    cst = this.costumeNamed(name);
     if (!cst) {
         throw new Error(
             'expecting a costume\nbut getting none'
@@ -7760,10 +7770,18 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
             'expecting a finite number\nbut getting Infinity or NaN'
         );
     }
-    return cst.stretched(
-        Math.round(cst.width() * +xP / 100),
-        Math.round(cst.height() * +yP / 100)
-    );
+    xStretch = Math.round(cst.width() * +xP / 100);
+    yStretch = Math.round(cst.height() * +yP / 100);
+    result = cst.stretched(xStretch, yStretch);
+    if (shp instanceof List && shp.at(2) > 0) {
+        if (shp.at(3) < 1) {
+            return result.pixels().columns().at(1).reshape(
+                new List([yStretch, xStretch])
+            );
+        }
+        return result.pixels().reshape(new List([yStretch, xStretch, 0]));
+    }
+    return result;
 };
 
 Process.prototype.reportNewCostumeSkewed = function (name, angle, factor) {

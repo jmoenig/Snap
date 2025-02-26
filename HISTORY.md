@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-02-26
+* threads: tweaked STRETCH COSTUME primitive to also accept a matrix of pixel data as input and to then also return one 
+
 ### 2025-02-25
 * gui: tweaked sound recording to - hopefully - support Safari, sigh
 
