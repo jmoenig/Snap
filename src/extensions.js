@@ -850,9 +850,9 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph);
 
         function updateTilt(event) {
-            ide.tilt.put(event.alpha || 0, 1);
-            ide.tilt.put(event.beta || 0, 2);
-            ide.tilt.put(event.gamma || 0, 3);
+            ide.tilt.put(Math.round(event.alpha || 0), 1);
+            ide.tilt.put(Math.round(event.beta || 0), 2);
+            ide.tilt.put(Math.round(event.gamma || 0), 3);
         }
 
         function userTriggerTilt() {
