@@ -890,7 +890,7 @@ SnapExtensions.primitives.set(
             case 'z':
                 return ide.tilt.at(3);
             case 'xyz':
-                return ide.tilt.at(new List([1, 2, 3]));
+                return new List(ide.tilt.itemsArray().slice(0, 2));
             default:
                 activate();
                 return ide.tilt;
