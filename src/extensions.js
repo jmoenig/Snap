@@ -31,7 +31,7 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, DeviceMotionEvent, console*/
+BigUint64Array*/
 
 /*jshint esversion: 11, bitwise: false*/
 
@@ -856,6 +856,7 @@ SnapExtensions.primitives.set(
             ide.tilt.put(Date.now(), 4);
         }
 
+/*
         function activate() {
             if (typeof(DeviceMotionEvent) !== 'undefined' &&
                     typeof(DeviceMotionEvent.requestPermission) === 'function'
@@ -876,10 +877,12 @@ SnapExtensions.primitives.set(
                 window.addEventListener('deviceorientation', updateTilt);
             }
         }
+*/
 
         if (!ide.tilt) {
             ide.tilt = new List([0, 0, 0]);
-            activate();
+//            activate();
+            window.addEventListener("deviceorientation", updateTilt);
         }
 
         switch (axis) {
@@ -892,7 +895,6 @@ SnapExtensions.primitives.set(
             case 'xyz':
                 return new List(ide.tilt.itemsArray().slice(0, 3));
             default:
-                activate();
                 return ide.tilt;
         }
     }
