@@ -4,12 +4,14 @@
 * **New Features:**
     * new "Mobile Device Sensors" library featuring a "tilt" reporter
 * **Notable Changes:**
-    * STRETCH COSTUME: Also accept a matrix of pixel data and in this case also report one
+    * changed STRETCH COSTUME to also accept a matrix of pixel data and in this case also report one
+    * changed RESHAPE to use the ceiling of fractional dimensions (2.3 x 4.6 becomes 3 x 5)
 * **Notable Fixes:**
     * fixed (again, sigh) recording sounds in Safari (Mac & mobile)
 
 ### 2025-02-27
 * new "Mobile Device Sensors" library featuring a "tilt" reporter
+* lists: changed RESHAPE to use the ceiling of fractional dimensions
 
 ### 2025-02-26
 * threads: tweaked STRETCH COSTUME primitive to also accept a matrix of pixel data as input and to then also return one

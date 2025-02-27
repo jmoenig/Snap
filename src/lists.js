@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-January-07';
+modules.lists = '2025-February-27';
 
 var List;
 var ListWatcherMorph;
@@ -814,7 +814,9 @@ List.prototype.reshape = function (dimensions) {
     // if no dimensions, report a scalar
     if (dim.isEmpty()) {return src[0]; }
 
-    size = dim.itemsArray().reduce((a, b) => a * b);
+    size = Math.ceil(
+        dim.itemsArray().reduce((a, b) => Math.ceil(a) * Math.ceil(b))
+    );
     if (size === Infinity) {return new List(); }
 
     // make sure the items count matches the specified target dimensions
@@ -871,7 +873,7 @@ List.prototype.folded = function (dimensions) {
         return this.map(e => e);
     }
     for (i = len; i > 1; i -= 1) {
-        trg = trg.asChunksOf(dimensions.at(i));
+        trg = trg.asChunksOf(Math.ceil(dimensions.at(i)));
     }
     return trg;
 };
