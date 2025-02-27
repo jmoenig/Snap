@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-February-26';
+modules.extensions = '2025-February-27';
 
 // Global stuff
 
@@ -847,12 +847,13 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ori_tilt(xyz)',
     function (axis) {
-        var ide = this.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph),
+            myself = this;
 
         function updateTilt(event) {
-            ide.tilt.put(Math.round(event.alpha || 0), 1);
-            ide.tilt.put(Math.round(event.beta || 0), 2);
-            ide.tilt.put(Math.round(event.gamma || 0), 3);
+            ide.tilt.put(event.gamma || 0, 1);
+            ide.tilt.put(-(event.beta || 0), 2);
+            ide.tilt.put(event.alpha || 0, 3);
         }
 
         function userTriggerTilt() {
@@ -865,6 +866,7 @@ SnapExtensions.primitives.set(
                     );
                 } else {
                     // Permission denied
+                    myself.inform('Warning:\nDevice orientation failed.');
                 }
             }).catch(console.error);
         }
@@ -874,7 +876,7 @@ SnapExtensions.primitives.set(
                 typeof(DeviceOrientationEvent.requestPermission) === 'function'
             ) {
                 ide.confirm(
-                    'activate device orientation',
+                    'Activate device orientation',
                     'Tilt Sensor',
                     userTriggerTilt
                 );
