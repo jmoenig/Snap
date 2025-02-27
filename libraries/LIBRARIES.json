@@ -2276,6 +2276,24 @@
     "name": "~"
   },
   {
+    "fileName": "mobile_sensors.xml",
+    "name": "Mobile Device Sensors",
+    "description": "Access sensors on phones and tablets",
+    "searchData": [
+      "tilt",
+      "sensor",
+      "mobile",
+      "phone",
+      "tablet",
+      "iPad",
+      "orientation",
+      "accelerometer"
+    ],
+    "categories": [
+      "sensing"
+    ]
+  },
+  {
     "fileName": "serial_module.xml",
     "name": "Serial Ports",
     "description": "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)",
