@@ -12,6 +12,7 @@
 ### 2025-02-27
 * new "Mobile Device Sensors" library featuring a "tilt" reporter
 * lists: changed RESHAPE to use the ceiling of fractional dimensions
+* v10.5-rc1
 
 ### 2025-02-26
 * threads: tweaked STRETCH COSTUME primitive to also accept a matrix of pixel data as input and to then also return one
