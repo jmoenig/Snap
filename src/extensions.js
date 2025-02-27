@@ -851,9 +851,10 @@ SnapExtensions.primitives.set(
             myself = this;
 
         function updateTilt(event) {
+            var z = event.alpha || 0;
             ide.tilt.put(event.gamma || 0, 1);
             ide.tilt.put(-(event.beta || 0), 2);
-            ide.tilt.put(event.alpha || 0, 3);
+            ide.tilt.put(z >= 180 ? 360 - z : -z, 3);
         }
 
         function userTriggerTilt() {
