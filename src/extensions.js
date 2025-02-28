@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-February-27';
+modules.extensions = '2025-February-28';
 
 // Global stuff
 
@@ -951,6 +951,15 @@ SnapExtensions.primitives.set(
         soundRecorder.key = 'microphone';
         soundRecorder.popUp(this.world());
         return () => result;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mda_set_mic_resolution(idx)',
+    function (idx, proc) {
+        proc.assertType(+idx, 'number');
+        var microphone = this.parentThatIsA(StageMorph).microphone;
+        microphone.setResolution(+idx);
     }
 );
 

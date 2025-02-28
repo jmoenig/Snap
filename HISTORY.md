@@ -2,12 +2,17 @@
 
 ## in development:
 * **New Features:**
-    * new "Mobile Device Sensors" library featuring a "tilt" reporter
+    * new "Mobile Device Sensors" library featuring a "tilt" reporter (kids, THIS is for you!), based on
+    * new "ori_tilt(xyz)" extension block
+    * new "mda_set_mic_resolution(idx)" extension block to programmatically set the audio buffer size to 1:256, 2:512, 3:1024 or 4:2048 (kids, you don't ever need to and shouldn't ever, this is for grown-up programmers of media extensions)
 * **Notable Changes:**
-    * changed STRETCH COSTUME to also accept a matrix of pixel data and in this case also report one
+    * changed STRETCH COSTUME to also accept a matrix of pixel data and in this case also report one (again, kids, this isn't for you but for educators and curriculum developers)
     * changed RESHAPE to use the ceiling of fractional dimensions (2.3 x 4.6 becomes 3 x 5)
 * **Notable Fixes:**
     * fixed (again, sigh) recording sounds in Safari (Mac & mobile)
+
+### 2025-02-28
+* extensions: new "mda_set_mic_resolution(idx)" extension block to programmatically set the audio buffer size
 
 ### 2025-02-27
 * new "Mobile Device Sensors" library featuring a "tilt" reporter
