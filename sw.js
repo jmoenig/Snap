@@ -140,6 +140,7 @@ var snapVersion = '10.5-rc2',
         'libraries/menu_module.xml',
         'libraries/metaprogramming_module.xml',
         'libraries/microblocks.xml',
+        'libraries/mobile_sensors.xml',
 
         'libraries/mqttExtension.js',
         'libraries/mqtt.js',

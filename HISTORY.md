@@ -14,6 +14,7 @@
 ### 2025-02-28
 * extensions: new "mda_set_mic_resolution(idx)" extension block to programmatically set the audio buffer size
 * v10.5-rc2
+* sw: added mobile device sensor library to pwa cache
 
 ### 2025-02-27
 * new "Mobile Device Sensors" library featuring a "tilt" reporter
