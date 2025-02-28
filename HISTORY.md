@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.5.0:
 * **New Features:**
     * new "Mobile Device Sensors" library featuring a "tilt" reporter (kids, THIS is for you!), based on
     * new "ori_tilt(xyz)" extension block
@@ -16,6 +18,7 @@
 * v10.5-rc2
 * sw: added mobile device sensor library to pwa cache
 * v10.5-rc3
+* prepared v10.5 minor release
 
 ### 2025-02-27
 * new "Mobile Device Sensors" library featuring a "tilt" reporter
