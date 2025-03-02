@@ -4,6 +4,7 @@
 
 ### 2025-03-02
 * extensions: added landscape orientation support for TILT sensor extension
+* updated dev version
 
 ## 10.5.0:
 * **New Features:**
