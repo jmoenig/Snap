@@ -895,7 +895,7 @@ SnapExtensions.primitives.set(
 
         switch (axis) {
             case 'x':
-                return isPortrait ? ide.tilt.at(1) : 360 - ide.tilt.at(2);
+                return isPortrait ? ide.tilt.at(1) : -ide.tilt.at(2);
             case 'y':
                 return ide.tilt.at(isPortrait ? 2 : 1);
             case 'z':
