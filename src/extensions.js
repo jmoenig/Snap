@@ -849,7 +849,8 @@ SnapExtensions.primitives.set(
     function (axis) {
         var ide = this.parentThatIsA(IDE_Morph),
             isPortrait = window.matchMedia("(orientation: portrait)").matches,
-            myself = this;
+            myself = this,
+            z;
 
         function updateTilt(event) {
             var z = event.alpha || 0;
@@ -899,7 +900,8 @@ SnapExtensions.primitives.set(
             case 'y':
                 return ide.tilt.at(isPortrait ? 2 : 1);
             case 'z':
-                return ide.tilt.at(3) - isPortrait ? 0 : 90;
+                z = ide.tilt.at(3);
+                return isPortrait ? z : (z < 90 ? z + 180 : z - 90);
             default:
                 return ide.tilt;
         }
