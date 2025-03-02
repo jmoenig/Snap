@@ -897,7 +897,7 @@ SnapExtensions.primitives.set(
         x = isPortrait ? ide.tilt.at(1) : -ide.tilt.at(2);
         y = ide.tilt.at(isPortrait ? 2 : 1);
         z = ide.tilt.at(3);
-        if (isPortrait) {
+        if (!isPortrait) {
             z = (z > 90 ? z - 180 : z + 90);
         }
         switch (axis) {
