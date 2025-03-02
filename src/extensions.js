@@ -901,7 +901,7 @@ SnapExtensions.primitives.set(
                 return ide.tilt.at(isPortrait ? 2 : 1);
             case 'z':
                 z = ide.tilt.at(3);
-                return isPortrait ? z : (z < 90 ? z + 180 : z - 90);
+                return isPortrait ? z : (z > 90 ? z - 180 : z + 90);
             default:
                 return ide.tilt;
         }
