@@ -91,7 +91,7 @@ modules.gui = '2025-March-02';
 
 // Declarations
 
-var SnapVersion = '10.5.1_25-03-02-dev';
+var SnapVersion = '10.5.1';
 
 var IDE_Morph;
 var ProjectDialogMorph;
