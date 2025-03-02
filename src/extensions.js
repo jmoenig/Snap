@@ -850,7 +850,7 @@ SnapExtensions.primitives.set(
         var ide = this.parentThatIsA(IDE_Morph),
             isPortrait = window.matchMedia("(orientation: portrait)").matches,
             myself = this,
-            z;
+            x, y, z;
 
         function updateTilt(event) {
             var z = event.alpha || 0;
@@ -894,16 +894,21 @@ SnapExtensions.primitives.set(
             activate();
         }
 
+        x = isPortrait ? ide.tilt.at(1) : -ide.tilt.at(2);
+        y = ide.tilt.at(isPortrait ? 2 : 1);
+        z = ide.tilt.at(3);
+        if (isPortrait) {
+            z = (z > 90 ? z - 180 : z + 90);
+        }
         switch (axis) {
             case 'x':
-                return isPortrait ? ide.tilt.at(1) : -ide.tilt.at(2);
+                return x;
             case 'y':
-                return ide.tilt.at(isPortrait ? 2 : 1);
+                return y;
             case 'z':
-                z = ide.tilt.at(3);
-                return isPortrait ? z : (z > 90 ? z - 180 : z + 90);
+                return z;
             default:
-                return ide.tilt;
+                return isPortrait ? ide.tilt : new List([x, y, z]);
         }
     }
 );
