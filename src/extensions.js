@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-February-28';
+modules.extensions = '2025-March-02';
 
 // Global stuff
 
@@ -848,6 +848,7 @@ SnapExtensions.primitives.set(
     'ori_tilt(xyz)',
     function (axis) {
         var ide = this.parentThatIsA(IDE_Morph),
+            isPortrait = window.matchMedia("(orientation: portrait)").matches,
             myself = this;
 
         function updateTilt(event) {
@@ -894,11 +895,11 @@ SnapExtensions.primitives.set(
 
         switch (axis) {
             case 'x':
-                return ide.tilt.at(1);
+                return ide.tilt.at(isPortrait ? 1 : 2);
             case 'y':
-                return ide.tilt.at(2);
+                return ide.tilt.at(isPortrait ? 2 : 1);
             case 'z':
-                return ide.tilt.at(3);
+                return ide.tilt.at(3) - isPortrait ? 0 : 90;
             default:
                 return ide.tilt;
         }

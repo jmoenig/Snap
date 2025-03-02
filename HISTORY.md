@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-03-02
+* extensions: added landscape orientation support for TILT sensor extension
+
 ## 10.5.0:
 * **New Features:**
     * new "Mobile Device Sensors" library featuring a "tilt" reporter (kids, THIS is for you!), based on
