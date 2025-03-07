@@ -776,6 +776,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
                 (prim t doPlaySoundAtRate target rate)
                 (play (newSound (sound [samples] (get target)) (get rate))))`
         },
+        doStopSound: {
+            type: 'command',
+            category: 'sound',
+            spec: 'stop sound %snd',
+            defaults: [''],
+            code: 'stopSound'
+        },
         doStopAllSounds: {
             type: 'command',
             category: 'sound',
@@ -3658,6 +3665,7 @@ SpriteMorph.prototype.blockTemplates = function (
 
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
+        blocks.push(block('doStopSound'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doPlaySoundAtRate'));
@@ -10908,6 +10916,7 @@ StageMorph.prototype.blockTemplates = function (
 
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
+        blocks.push(block('doStopSound'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doPlaySoundAtRate'));
@@ -11895,6 +11904,11 @@ StageMorph.prototype.addSound
 
 StageMorph.prototype.doPlaySound
     = SpriteMorph.prototype.doPlaySound;
+
+StageMorph.prototype.stopSound = function (src) {
+    this.activeSounds.forEach(audio => {if (src === audio.src) audio.pause()});
+    this.activeSounds = this.activeSounds.filter(audio => audio.src === src);
+};
 
 StageMorph.prototype.stopAllActiveSounds = function () {
     this.activeSounds.forEach(audio => audio.pause());
