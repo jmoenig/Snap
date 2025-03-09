@@ -16,8 +16,9 @@
  * V1.6.1 05Jan2024 "binary" replaced by "buffer mode"
  * V1.6.2 17Jan2023 bugfix -remove automatic convert JSON to Snap! list
  * V1.7.0 12Jul2024 Add in maximum QoS for subscribe
+ * V1.7.1 28Feb2025 Added Base64 encoding/decoding blocks
+ * V1.7.2 02Mar2025 Added the public HiveMQ broker to the list 
  */
-
 
 
 SnapExtensions.primitives.set(
@@ -77,8 +78,6 @@ SnapExtensions.primitives.set(
 			wsbroker = wsbroker + '/mqtt'
 		} else if (wsbroker == 'wss://test.mosquitto.org') {
 			wsbroker = wsbroker + ':8081'
-		} else if (wsbroker == 'ws://vps656540.ovh.net') {
-			wsbroker = wsbroker + ':8080'
 		} else if (wsbroker == 'ws://test.mosquitto.org') {
 			wsbroker = wsbroker + ':8080'
 		} else if (broker == 'broker.xmqtt.net') {
@@ -87,6 +86,10 @@ SnapExtensions.primitives.set(
 			wsbroker = wsbroker + ':8084'
 		} else if (wsbroker == 'ws://cymplecy.uk') {
 			wsbroker = wsbroker + ':8083'
+		} else if (wsbroker == 'wss://broker.hivemq.com') {
+			wsbroker = wsbroker + ':8884/mqtt'
+		} else if (wsbroker == 'ws://broker.hivemq.com') {
+			wsbroker = wsbroker + ':8080/mqtt'
 		} else if (wsbroker == 'ws://localhost') {
 			wsbroker = wsbroker + ':9001'
 		}
@@ -360,4 +363,74 @@ SnapExtensions.primitives.set(
 		  //console.log(e);
 		}
 	}
+);
+
+
+SnapExtensions.primitives.set(
+    'mqt_to_base64(media_or_data)',
+    function (media_or_data) {
+        if (media_or_data instanceof List) {
+           return SnapExtensions.primitives.get('mqt_list_to_base64(lst)')(media_or_data);
+	} else if (media_or_data instanceof Sound) {
+            return media_or_data.audio.src;
+        } else if (media_or_data instanceof Costume) {
+            return media_or_data.contents.toDataURL();
+        } else {
+            return window.btoa(media_or_data);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mqt_from_base64(b64)',
+    function (b64, proc) {
+        if (b64.startsWith('data:image')) {
+            return SnapExtensions.primitives.get('cst_load(url)')(b64, proc);
+        } else if (b64.startsWith('data:audio')) {
+            if (!proc.context.accumulator) {
+                proc.context.accumulator = {
+                    audio: document.createElement('audio'),
+                    snd: null
+                };
+                proc.context.accumulator.audio.addEventListener("loadeddata", () => {
+                    proc.context.accumulator.snd = new Sound(proc.context.accumulator.audio, name);
+                });
+                proc.context.accumulator.audio.src = b64;
+            } else if (proc.context.accumulator.snd) {
+                return proc.context.accumulator.snd;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
+        } else {
+            return window.atob(b64);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mqt_list_to_base64(lst)',
+    function (lst) {
+        var byteArray = new Uint8Array(lst.contents.length);
+        lst.contents.forEach((value, i) => {byteArray[i] = value & 0xff;});
+	return window.btoa(new Uint8Array(byteArray.buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mqt_binary_to_list(bytes)',
+    function (bytes) {
+	var n = bytes.length;    
+        var byteArray = new Uint8Array(n);
+	for (i = 0; i < n; i++) {
+	    byteArray[i] = bytes.charCodeAt(i);
+	}    
+	return new List(byteArray);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mqt_console_log(param)',
+    function (param) {
+        console.log(param);
+    }
 );
