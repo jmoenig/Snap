@@ -708,7 +708,7 @@ SnapExtensions.primitives.set(
     }
 );
 
-// text-to-speech (tts_):
+// text-to-speech, voice-to-text (tts_):
 
 SnapExtensions.primitives.set(
     'tts_speak(txt, lang, pitch, rate)',
