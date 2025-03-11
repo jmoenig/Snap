@@ -838,9 +838,13 @@
   },
   {
     "fileName": "speech_module.xml",
-    "name": "Text to Speech",
-    "description": "Output text using speech synthesis.",
+    "name": "Text to Speech - Voice to Text",
+    "description": "Output text using speech synthesis and input text by speaking into the microphone.",
     "translations": {
+      "de": {
+        "name": "Spracherkennung und Sprachausgabe",
+        "description": "Gesprochene Worte als Text verarbeiten, und Text als Sprache ausgeben"
+      },
       "ca": {
         "name": "Lector de text",
         "description": "Utilitza la síntesi de veu per crear so des d'un text"
