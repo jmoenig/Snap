@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-03-11
+* new dev version
+
 ## 10.5.1:
 * **Notable Fixes:**
     * added landscape orientation support for TILT sensor extension
