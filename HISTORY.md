@@ -1,7 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
-
+* **New Features:**
+    * new "recognize speech" reporter block in the "Text to Speech, Voice to Text" library
+    * new "tts_recognize" extension block
+* **Notable Changes:**
+    * renamed the "Text to Speech" library into "Text to Speech, Voice to Text"
+    
 ### 2025-03-11
 * new dev version
 * extensions: new "tts_recognize" extension for voice-to-text
