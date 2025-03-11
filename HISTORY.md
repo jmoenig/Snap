@@ -5,6 +5,7 @@
 ### 2025-03-11
 * new dev version
 * extensions: new "tts_recognize" extension for voice-to-text
+* added new "recognize speech" reporter to the Text-to-Speech library
 
 ## 10.5.1:
 * **Notable Fixes:**
