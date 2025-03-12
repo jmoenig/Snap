@@ -6,7 +6,12 @@
     * new "tts_recognize" extension block
 * **Notable Changes:**
     * renamed the "Text to Speech" library into "Text to Speech, Voice to Text"
+* **Notable Fixes:**
+    * reduced processor load when idling
     
+### 2025-03-12
+* objects: reduced processor load when idling
+
 ### 2025-03-11
 * new dev version
 * extensions: new "tts_recognize" extension for voice-to-text

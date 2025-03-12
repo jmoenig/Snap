@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-January-24';
+modules.objects = '2025-March-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -10339,6 +10339,7 @@ StageMorph.prototype.scheduleFrame = function () {
     } else {
         isDone = this.stepGenericConditions();
         this.threads.step();
+        isDone = !this.threads.processes.length; // idle - no running scripts
         isDone = this.twostep() || isDone; // double-clock event hats
 
         // single-stepping hook:
