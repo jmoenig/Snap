@@ -13,6 +13,7 @@
 ### 2025-03-12
 * objects: reduced processor load when idling
 * store: fixed a costume-loss issue for multi-scene projects stored in the cloud
+* incremented dev version to 10.6-rc1
 
 ### 2025-03-11
 * new dev version
