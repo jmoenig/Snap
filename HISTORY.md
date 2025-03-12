@@ -6,6 +6,7 @@
     * new "tts_recognize" extension block
 * **Notable Changes:**
     * renamed the "Text to Speech" library into "Text to Speech, Voice to Text"
+    * MQTT library update with base64 encoding, thanks, Xavier and Simon!
 * **Notable Fixes:**
     * fixed a costume-loss issue for multi-scene projects stored in the cloud
     * reduced processor load when idling
@@ -14,6 +15,7 @@
 * objects: reduced processor load when idling
 * store: fixed a costume-loss issue for multi-scene projects stored in the cloud
 * incremented dev version to 10.6-rc1
+* MQTT library update, thanks, Xavier and Simon!
 
 ### 2025-03-11
 * new dev version
