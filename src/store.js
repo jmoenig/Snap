@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-January-10';
+modules.store = '2025-March-12';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -163,7 +163,9 @@ XML_Serializer.prototype.addMedia = function (object, mediaID) {
     }
     this.media.push(object);
     if (mediaID) {
-        object[this.mediaIdProperty] = mediaID + '_' + object.name;
+        // object[this.mediaIdProperty] = mediaID + '_' + object.name;
+        object[this.mediaIdProperty] = this.scene.name + '_' +
+            mediaID + '_' + object.name;
     } else {
         object[this.mediaIdProperty] = this.media.length;
     }

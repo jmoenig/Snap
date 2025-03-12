@@ -7,10 +7,12 @@
 * **Notable Changes:**
     * renamed the "Text to Speech" library into "Text to Speech, Voice to Text"
 * **Notable Fixes:**
+    * fixed a costume-loss issue for multi-scene projects stored in the cloud
     * reduced processor load when idling
     
 ### 2025-03-12
 * objects: reduced processor load when idling
+* store: fixed a costume-loss issue for multi-scene projects stored in the cloud
 
 ### 2025-03-11
 * new dev version
