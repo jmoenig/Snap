@@ -10,7 +10,12 @@
 * **Notable Fixes:**
     * fixed a costume-loss issue for multi-scene projects stored in the cloud
     * reduced processor load when idling
+* **Translation Updates:**
+    * Armenian, thanks, Antrohoos Education Foundation!
     
+### 2025-03-13
+* Armenian translation update, thanks, Antrohoos Education Foundation!
+
 ### 2025-03-12
 * objects: reduced processor load when idling
 * store: fixed a costume-loss issue for multi-scene projects stored in the cloud

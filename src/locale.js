@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-January-23';
+modules.locale = '2025-March-13';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -698,5 +698,5 @@ SnapTranslator.dict.hy = {
     'translator_e-mail':
         'info@symotec.am and info@armath.am',
     'last_changed':
-        '2025-01-22',
+        '2025-03-13',
 };
