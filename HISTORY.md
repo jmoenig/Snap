@@ -15,6 +15,7 @@
     
 ### 2025-03-13
 * Armenian translation update, thanks, Antrohoos Education Foundation!
+* v10.6-rc2
 
 ### 2025-03-12
 * objects: reduced processor load when idling
