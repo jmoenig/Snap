@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.6.0:
 * **New Features:**
     * new "recognize speech" reporter block in the "Text to Speech, Voice to Text" library
     * new "tts_recognize" extension block
@@ -13,6 +15,9 @@
 * **Translation Updates:**
     * Armenian, thanks, Antrohoos Education Foundation!
     
+### 2025-03-13
+* prepared v10.6.0 minor release
+
 ### 2025-03-13
 * Armenian translation update, thanks, Antrohoos Education Foundation!
 * v10.6-rc2
