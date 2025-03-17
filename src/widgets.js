@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2024-July-24';
+modules.widgets = '2025-March-17';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2992,63 +2992,23 @@ DialogBoxMorph.prototype.render = function (ctx) {
 };
 
 DialogBoxMorph.prototype.outlinePathTitle = function (ctx, radius) {
-    var w = this.width(),
-        h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
-
-    // top left:
-    ctx.arc(
-        radius,
-        radius,
-        radius,
-        radians(-180),
-        radians(-90),
-        false
+    ctx.roundRect(
+        0,
+        0,
+        this.width(),
+        Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+        [radius, radius, 0, 0]
     );
-    // top right:
-    ctx.arc(
-        w - radius,
-        radius,
-        radius,
-        radians(-90),
-        radians(-0),
-        false
-    );
-    // bottom right:
-    ctx.lineTo(w, h);
-
-    // bottom left:
-    ctx.lineTo(0, h);
 };
 
 DialogBoxMorph.prototype.outlinePathBody = function (ctx, radius) {
-    var w = this.width(),
-        h = this.height(),
-        th = Math.floor(fontHeight(this.titleFontSize)) +
-            this.titlePadding * 2;
-
-    // top left:
-    ctx.moveTo(0, th);
-
-    // top right:
-    ctx.lineTo(w, th);
-
-    // bottom right:
-    ctx.arc(
-        w - radius,
-        h - radius,
-        radius,
-        radians(0),
-        radians(90),
-        false
-    );
-    // bottom left:
-    ctx.arc(
-        radius,
-        h - radius,
-        radius,
-        radians(90),
-        radians(180),
-        false
+    var th = Math.floor(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
+    ctx.roundRect(
+        0,
+        th,
+        this.width(),
+        this.height() - th,
+        [0, 0, radius, radius]
     );
 };
 

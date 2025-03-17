@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2025-03-17
+* morphic: simplified BoxMorph & CircleBoxMorph outlinePath rendering with new Canvas roundRect() primitive
+* objects, widgets: simplified DialogBoxMorph and StagePicker outlinePath rendering with new Canvas roundRect primitive
+
 ## 10.6.0:
 * **New Features:**
     * new "recognize speech" reporter block in the "Text to Speech, Voice to Text" library

@@ -1338,7 +1338,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-January-21';
+var morphicVersion = '2025-March-17';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -6032,44 +6032,14 @@ BoxMorph.prototype.render = function (ctx) {
 BoxMorph.prototype.outlinePath = function (ctx, corner, inset) {
     var w = this.width(),
         h = this.height(),
-        radius = Math.min(corner, (Math.min(w, h) - inset) / 2),
-        offset = radius + inset;
+        radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
 
-    // top left:
-    ctx.arc(
-        offset,
-        offset,
-        radius,
-        radians(-180),
-        radians(-90),
-        false
-    );
-    // top right:
-    ctx.arc(
-        w - offset,
-        offset,
-        radius,
-        radians(-90),
-        radians(-0),
-        false
-    );
-    // bottom right:
-    ctx.arc(
-        w - offset,
-        h - offset,
-        radius,
-        radians(0),
-        radians(90),
-        false
-    );
-    // bottom left:
-    ctx.arc(
-        offset,
-        h - offset,
-        radius,
-        radians(90),
-        radians(180),
-        false
+    ctx.roundRect(
+        inset,
+        inset,
+        w - (inset * 2),
+        h - (inset * 2),
+        radius
     );
 };
 
@@ -6844,75 +6814,15 @@ CircleBoxMorph.prototype.autoOrientation = function () {
 };
 
 CircleBoxMorph.prototype.render = function (ctx) {
-    var w = this.width(),
-        h = this.height(),
-        radius;
-
     if (this.autoOrient) {
         this.autoOrientation();
     }
+    var w = this.width(),
+        h = this.height(),
+        radius = this.orientation === 'vertical' ? w / 2 : h / 2;
 
-    if (this.orientation === 'vertical') {
-        radius = w / 2;
-        ctx.beginPath();
-
-        // top semi-circle
-        ctx.arc(
-            radius,
-            radius,
-            radius,
-            radians(180),
-            radians(0),
-            false
-        );
-
-        // right line
-        ctx.lineTo(
-            w,
-            h - radius
-        );
-
-        // bottom semi-circle
-        ctx.arc(
-            radius,
-            h - radius,
-            radius,
-            radians(0),
-            radians(180),
-            false
-        );
-
-    } else {
-        radius = h / 2;
-        ctx.beginPath();
-
-        // left semi-circle
-        ctx.arc(
-            radius,
-            radius,
-            radius,
-            radians(90),
-            radians(-90),
-            false
-        );
-
-        // top line
-        ctx.lineTo(
-            w - radius,
-            0
-        );
-
-        // right semi-circle
-        ctx.arc(
-            w - radius,
-            radius,
-            radius,
-            radians(-90),
-            radians(90),
-            false
-        );
-    }
-    ctx.closePath();
+    ctx.beginPath();
+    ctx.roundRect(0, 0, w, h, radius);
     ctx.fillStyle = this.color.toString();
     ctx.fill();
 };

@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-March-12';
+modules.objects = '2025-March-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -15689,34 +15689,14 @@ StagePickerMorph.prototype.createLabel = function () {
         // modify to only draw the top corners rounded
         var w = this.width(),
             h = this.height(),
-            radius = Math.min(corner, (Math.min(w, h) - inset) / 2),
-            offset = radius + inset;
-
-        // top left:
-        ctx.arc(
-            offset,
-            offset,
-            radius,
-            radians(-180),
-            radians(-90),
-            false
+            radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
+        ctx.roundRect(
+            inset,
+            inset,
+            w - inset * 2,
+            h - inset * 2,
+            [radius, radius, 0, 0]
         );
-
-        // top right:
-        ctx.arc(
-            w - offset,
-            offset,
-            radius,
-            radians(-90),
-            radians(-0),
-            false
-        );
-
-        // bottom right:
-        ctx.lineTo(w, h);
-
-        // bottom left:
-        ctx.lineTo(0, h);
     };
 
     this.label.setExtent(text.extent().add(this.edge));
