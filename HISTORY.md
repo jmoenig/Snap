@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2025-03-19
+* morphic: added lockMouseFocus() mechanism and the concept of a clickTarget, improved user interaction scenarios for buttons, handles and sliders 
+* gui: improved user interaction scenarios for buttons, handles and sliders 
+
 ### 2025-03-17
 * new dev version
 * morphic: simplified BoxMorph & CircleBoxMorph outlinePath rendering with new Canvas roundRect() primitive
