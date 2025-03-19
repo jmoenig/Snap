@@ -2,9 +2,17 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * improved user interaction scenarios for buttons, handles and sliders
+* **Documentation Updates:**
+    * updated Morphic documentation for the new lockMouseFocus() mechanism
+    * moved Morphic documentation from src to docs folder
+
 ### 2025-03-19
 * morphic: added lockMouseFocus() mechanism and the concept of a clickTarget, improved user interaction scenarios for buttons, handles and sliders 
-* gui: improved user interaction scenarios for buttons, handles and sliders 
+* gui: improved user interaction scenarios for buttons, handles and sliders
+* updated morphic documentation
+* updated dev version
 
 ### 2025-03-17
 * new dev version
