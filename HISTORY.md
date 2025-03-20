@@ -8,6 +8,9 @@
     * updated Morphic documentation for the new lockMouseFocus() mechanism
     * moved Morphic documentation from src to docs folder
 
+### 2025-03-20
+* morphic: prevent locked inputTargets from firing mouseEnter events
+
 ### 2025-03-19
 * morphic: added lockMouseFocus() mechanism and the concept of a clickTarget, improved user interaction scenarios for buttons, handles and sliders 
 * gui: improved user interaction scenarios for buttons, handles and sliders

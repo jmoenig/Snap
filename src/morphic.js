@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-March-19';
+var morphicVersion = '2025-March-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -4787,6 +4787,7 @@ Morph.prototype.lockMouseFocus = function () {
     var hand = this.world().hand;
     hand.inputTarget = this;
     hand.clickTarget = this;
+    hand.mouseOverList = hand.mouseOverList.concat(this.allParents());
 };
 
 // Morph eval:
