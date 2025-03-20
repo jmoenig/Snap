@@ -19,6 +19,7 @@
  * V1.7.1 28Feb2025 Added Base64 encoding/decoding blocks
  * V1.7.2 02Mar2025 Added the public HiveMQ broker to the list 
  * V1.7.3 12Mar2025 Slight bux fix to Base64 code 
+ * V1.7.4 18Mar2025 Another small bugfix to Base64 code
  */
 
 
@@ -421,7 +422,7 @@ SnapExtensions.primitives.set(
     'mqt_binary_to_list(bytes)',
     function (bytes) {
 	var n = bytes.length;    
-        var byteArray = new Uint8Array(n);
+        var byteArray = new Array(n);
 	for (i = 0; i < n; i++) {
 	    byteArray[i] = bytes.charCodeAt(i);
 	}    
