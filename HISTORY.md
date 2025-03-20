@@ -4,12 +4,15 @@
 
 * **Notable Changes:**
     * improved user interaction scenarios for buttons, handles and sliders
+* **Notable Fixes:**
+    * MQTT Extension: fixed base64 reporter, thanks, Simon!
 * **Documentation Updates:**
     * updated Morphic documentation for the new lockMouseFocus() mechanism
     * moved Morphic documentation from src to docs folder
 
 ### 2025-03-20
 * morphic: prevent locked inputTargets from firing mouseEnter events
+* MQTT extension base64 update, thanks, Simon!
 
 ### 2025-03-19
 * morphic: added lockMouseFocus() mechanism and the concept of a clickTarget, improved user interaction scenarios for buttons, handles and sliders 
