@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 10.6.1:
 * **Notable Changes:**
     * improved user interaction scenarios for buttons, handles and sliders
 * **Notable Fixes:**
@@ -13,6 +14,7 @@
 ### 2025-03-20
 * morphic: prevent locked inputTargets from firing mouseEnter events
 * MQTT extension base64 update, thanks, Simon!
+* prepared v10.6.1 patch
 
 ### 2025-03-19
 * morphic: added lockMouseFocus() mechanism and the concept of a clickTarget, improved user interaction scenarios for buttons, handles and sliders 
