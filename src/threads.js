@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-February-26';
+modules.threads = '2025-March-21';
 
 var ThreadManager;
 var Process;
@@ -200,6 +200,7 @@ function invoke(
 
 function ThreadManager() {
     this.processes = [];
+    this.halos = [];
     this.wantsToPause = false; // single stepping support
 }
 
@@ -417,7 +418,12 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     glow.threadCount = count;
                     glow.updateReadout();
                 } else {
-                    proc.topBlock.removeHighlight();
+                    // afterglow the script for a couple of frames
+                    // was: proc.topBlock.removeHighlight();
+                    proc.topBlock.afterglow = 5;
+                    if (!this.halos.includes(proc.topBlock)) {
+                        this.halos.push(proc.topBlock);
+                    }
                 }
             }
             if (proc.prompter) {
@@ -458,6 +464,19 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
         }
     });
     this.processes = remaining;
+};
+
+ThreadManager.prototype.stepHalos = function () {
+    var remaining = [];
+    this.halos.forEach(block => {
+        block.afterglow -= 1;
+        if (block.afterglow < 1) {
+            block.removeHighlight();
+        } else {
+            remaining.push(block);
+        }
+    });
+    this.halos = remaining;
 };
 
 ThreadManager.prototype.findProcess = function (block, receiver) {

@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * Thread halos: "afterglow" - display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)
+
+### 2025-03-20
+* blocks, objects, threads: "afterglow" - display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)
 
 ## 10.6.1:
 * **Notable Changes:**

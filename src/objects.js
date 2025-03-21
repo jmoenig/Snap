@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-March-17';
+modules.objects = '2025-March-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -10328,6 +10328,9 @@ StageMorph.prototype.scheduleFrame = function () {
 
     var isDone = false,
         ide;
+
+    // "Afterglow" - display halos around running scripts
+    this.threads.stepHalos();
 
     if (this.isFastTracked && this.threads.processes.length) {
         while (this.isFastTracked && (Date.now() - this.lastTime) < 16.7) {

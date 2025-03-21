@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-January-25';
+modules.blocks = '2025-March-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2742,6 +2742,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
+    if (this.removeHighlight) {this.removeHighlight(); }
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
                 IDE_Morph
@@ -3067,6 +3068,7 @@ BlockMorph.prototype.init = function () {
     this.instantiationSpec = null; // spec to set upon fullCopy() of template
     this.category = null; // for zebra coloring (non persistent)
     this.isCorpse = false; // marked for deletion fom a custom block definition
+    this.afterglow = 0; // frame count-down for displaying the "active" halo
 
     BlockMorph.uber.init.call(this);
     this.color = new Color(102, 102, 102);
@@ -5480,6 +5482,7 @@ BlockMorph.prototype.removeHighlight = function () {
     if (highlight !== null) {
         this.fullChanged();
         this.removeChild(highlight);
+        this.afterglow = 0;
     }
     return highlight;
 };
