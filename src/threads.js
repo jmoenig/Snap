@@ -7766,7 +7766,7 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     var cst, shp, height, width, dim, xStretch, yStretch, result;
     if (name instanceof List) {
         shp = name.quickShape();
-        if (shp.at(2) > 0) {
+        if (shp.at(2) > 4) {
             height = shp.at(1);
             width = shp.at(2);
             dim = new List([height * width]);
@@ -7774,6 +7774,8 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
                 dim.add(shp.at(3));
             }
             cst = this.reportNewCostume(name.reshape(dim), width, height);
+        } else {
+            return this.reportNewCostume(name, xP, yP);
         }
     } else {
         cst = this.costumeNamed(name);
