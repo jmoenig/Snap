@@ -1,14 +1,17 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 10.6.2:
 * **Notable Fixes:**
-    * Thread halos: "afterglow" - (again) display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)
+    * thread halos: "afterglow" - (again) display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)
     * fixed STRETCH COSTUME reporter to again also accept a 4-column list of pixel data 
 
 ### 2025-03-21
 * new dev version
 * blocks, objects, threads: "afterglow" - display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)
 * threads: fixed STRETCH COSTUME reporter to again also accept a 4-column list of pixel data 
+* prepared v10.6.2 patch
 
 ## 10.6.1:
 * **Notable Changes:**
