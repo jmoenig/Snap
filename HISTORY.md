@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2025-03-21
+* new dev version
+* threads, objects: "afterglow" for generic conditions - display halos around scripts that have run as generic conditions, even if they have terminated within the same frame
+
 ## 10.6.2:
 * **Notable Fixes:**
     * thread halos: "afterglow" - (again) display halos around running scripts for a couple of frames after their process has terminated (except for generic / custom event hats)

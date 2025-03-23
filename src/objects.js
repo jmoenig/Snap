@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-March-21';
+modules.objects = '2025-March-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -10436,7 +10436,8 @@ StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
                         true, // rightAway
                         null, // atomic
                         null, // variables
-                        true // no halo
+                        true, // no halo
+                        true // generic condition
                     ).isAnimated || animating;
                 }
             });

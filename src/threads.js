@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-March-21';
+modules.threads = '2025-March-23';
 
 var ThreadManager;
 var Process;
@@ -239,7 +239,8 @@ ThreadManager.prototype.startProcess = function (
     rightAway,
     atomic, // special option used (only) for "onStop" scripts
     variables, // optional variable frame, used for WHEN hats
-    noHalo
+    noHalo,
+    genericCondition
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -256,6 +257,7 @@ ThreadManager.prototype.startProcess = function (
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     newProc.isAtomic = atomic || false;
+    newProc.isGenericCondition = genericCondition || false;
 
     // in case an optional variable frame has been passed,
     // copy it into the new outer context.
@@ -420,9 +422,18 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                 } else {
                     // afterglow the script for a couple of frames
                     // was: proc.topBlock.removeHighlight();
-                    proc.topBlock.afterglow = 5;
-                    if (!this.halos.includes(proc.topBlock)) {
-                        this.halos.push(proc.topBlock);
+                    if (!proc.isGenericCondition ||
+                        proc.hasFiredGenericCondition
+                    ) {
+                        if (proc.hasFiredGenericCondition &&
+                            !proc.topBlock.getHighlight()
+                        ) {
+                            proc.topBlock.addHighlight();
+                        }
+                        proc.topBlock.afterglow = 5;
+                        if (!this.halos.includes(proc.topBlock)) {
+                            this.halos.push(proc.topBlock);
+                        }
                     }
                 }
             }
@@ -635,6 +646,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.isInterrupted = false; // for single-stepping
     this.canBroadcast = true; // used to control "when I am stopped"
     this.isAnimated = false; // temporary - used to control yields for animation
+    this.isGenericCondition = false; // used for displaying halos
+    this.hasFiredGenericCondition = false; // ised for displaying halos
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -2899,6 +2912,7 @@ Process.prototype.receiveCondition = function (bool) {
     this.popContext();
     if ((bool === true || this.isClicked) && nb) {
         this.pushContext(nb.blockSequence(), outer);
+        this.hasFiredGenericCondition = true;
         this.wantsHalo = true;
     }
     this.pushContext();
@@ -2913,6 +2927,7 @@ Process.prototype.receiveConditionEvent = function (bool) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
             hatBlock.isLoaded = this.enableSingleStepping; // false;
             this.pushContext(next.blockSequence(), outer);
+            this.hasFiredGenericCondition = true;
             this.wantsHalo = true;
         } else if (!bool) {
             hatBlock.isLoaded = true;
@@ -2940,6 +2955,7 @@ Process.prototype.dispatchRule = function (hatBlock, bool) {
     this.popContext();
     if ((bool === true || this.isClicked) && next) {
         this.pushContext(next.blockSequence(), outer);
+        this.hasFiredGenericCondition = true;
         this.wantsHalo = true;
     }
     this.pushContext();
@@ -2953,6 +2969,7 @@ Process.prototype.dispatchEvent = function (hatBlock, bool) {
         if ((bool === true && hatBlock.isLoaded) || this.isClicked) {
             hatBlock.isLoaded = this.enableSingleStepping; // false;
             this.pushContext(next.blockSequence(), outer);
+            this.hasFiredGenericCondition = true;
             this.wantsHalo = true;
         } else if (!bool) {
             hatBlock.isLoaded = true;
