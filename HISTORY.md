@@ -2,9 +2,14 @@
 
 ## in development:
 
+## 10.6.3:
+* **Notable Fixes:**
+    * thread halos: fixed / added "afterglow" for generic conditions
+
 ### 2025-03-21
 * new dev version
 * threads, objects: "afterglow" for generic conditions - display halos around scripts that have run as generic conditions, even if they have terminated within the same frame
+* prepared v10.6.3 patch
 
 ## 10.6.2:
 * **Notable Fixes:**
