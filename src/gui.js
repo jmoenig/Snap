@@ -8169,11 +8169,11 @@ IDE_Morph.prototype.userSetBlocksAfterglow = function () {
         this.world(),
         sample, // pic
         {
-            'off' : 0,
-            'short' : 1,
-            'normal' : 5,
-            'long' : 10,
-            'maximum' : 20
+            'off (0x)' : 0,
+            'short (1x)' : 1,
+            'normal (5x)' : 5,
+            'long (10x)' : 10,
+            'maximum (20x)' : 20
         },
         false, // read only?
         true, // numeric
