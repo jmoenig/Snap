@@ -2,11 +2,18 @@
 
 ## in development:
 
+* **New Features:**
+    * "Afterglow blocks" setting - lets you specify the number of frames running scripts keep their halo after their process has terminated
+
+### 2025-03-24
+* new dev version
+* gui, threads: new "Afterglow blocks" setting lets you specify the number of frames running scripts keep their halo after their process has terminated 
+
 ## 10.6.3:
 * **Notable Fixes:**
     * thread halos: fixed / added "afterglow" for generic conditions
 
-### 2025-03-21
+### 2025-03-23
 * new dev version
 * threads, objects: "afterglow" for generic conditions - display halos around scripts that have run as generic conditions, even if they have terminated within the same frame
 * prepared v10.6.3 patch

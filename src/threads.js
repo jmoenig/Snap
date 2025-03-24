@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-March-23';
+modules.threads = '2025-March-24';
 
 var ThreadManager;
 var Process;
@@ -206,6 +206,7 @@ function ThreadManager() {
 
 ThreadManager.prototype.pauseCustomHatBlocks = false;
 ThreadManager.prototype.disableClickToRun = false;
+ThreadManager.prototype.afterglow = 5;
 
 ThreadManager.prototype.toggleProcess = function (block, receiver) {
     if (this.disableClickToRun) {
@@ -430,7 +431,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                         ) {
                             proc.topBlock.addHighlight();
                         }
-                        proc.topBlock.afterglow = 5;
+                        proc.topBlock.afterglow = this.afterglow;
                         if (!this.halos.includes(proc.topBlock)) {
                             this.halos.push(proc.topBlock);
                         }

@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-March-23';
+modules.gui = '2025-March-24';
 
 // Declarations
 
@@ -3485,6 +3485,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         theme = this.getSetting('theme'),
         zoom = this.getSetting('zoom'),
         fade = this.getSetting('fade'),
+        glow = this.getSetting('glow'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
@@ -3518,6 +3519,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // blocks fade
     if (!isNil(fade)) {
         this.setBlockTransparency(+fade);
+    }
+
+    // blocks afterglow //
+    if (isNil(glow)) {
+        this.setBlocksAfterglow(5);
+    } else {
+        this.setBlocksAfterglow(Math.max(0, Math.min(glow, 20)));
     }
 
     // language
@@ -4433,6 +4441,10 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addItem(
         'Fade blocks...',
         'userFadeBlocks'
+    );
+    menu.addItem(
+        'Afterglow blocks...',
+        'userSetBlocksAfterglow'
     );
     menu.addItem(
         'Stage size...',
@@ -8085,6 +8097,99 @@ IDE_Morph.prototype.setBlockTransparency = function (num, save) {
         } else {
             this.saveSetting('fade', num);
         }
+    }
+};
+
+// IDE_Morph blocks scaling
+
+IDE_Morph.prototype.userSetBlocksAfterglow = function () {
+    var glow = ThreadManager.prototype.afterglow,
+        scrpt,
+        blck,
+        shield,
+        sample,
+        action,
+        timeout,
+        dlg;
+
+    scrpt = new CommandBlockMorph();
+    scrpt.color = SpriteMorph.prototype.blockColor.motion;
+    scrpt.setSpec(localize('build'));
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.sound;
+    blck.setSpec(localize('your own'));
+    scrpt.nextBlock(blck);
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.operators;
+    blck.setSpec(localize('blocks'));
+    scrpt.bottomBlock().nextBlock(blck);
+
+    sample = new FrameMorph();
+    sample.acceptsDrops = false;
+    sample.color = IDE_Morph.prototype.groupColor;
+    if (!MorphicPreferences.isFlat &&
+            SyntaxElementMorph.prototype.alpha > 0.8) {
+        sample.cachedTexture = this.scriptsTexture();
+    }
+    sample.setExtent(new Point(250, 180));
+    scrpt.setPosition(sample.position().add(10));
+    sample.add(scrpt);
+
+    shield = new Morph();
+    shield.alpha = 0;
+    shield.setExtent(sample.extent());
+    shield.setPosition(sample.position());
+    shield.mouseClickLeft = () => action(glow);
+    sample.add(shield);
+
+    action = (num) => {
+        glow = num;
+        if (!isNil(timeout)) {
+            clearTimeout(timeout);
+        }
+        if (!scrpt.getHighlight()) {
+            scrpt.addHighlight();
+        }
+        timeout = setTimeout(
+            () => scrpt.removeHighlight(),
+            num * 16,67
+        );
+    };
+
+    dlg = new DialogBoxMorph(
+        null,
+        num => this.setBlocksAfterglow(Math.max(0, Math.min(num, 20)))
+    ).withKey('afterglow');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
+        'Afterglow blocks',
+        ThreadManager.prototype.afterglow.toString(),
+        this.world(),
+        sample, // pic
+        {
+            'off' : 0,
+            'short' : 1,
+            'normal' : 5,
+            'long' : 10,
+            'maximum' : 20
+        },
+        false, // read only?
+        true, // numeric
+        0, // slider min
+        20, // slider max
+        action, // slider action
+        0 // decimals
+    );
+};
+
+IDE_Morph.prototype.setBlocksAfterglow = function (num) {
+    ThreadManager.prototype.afterglow = num;
+    if (num === 5) {
+        this.removeSetting('glow');
+    } else {
+        this.saveSetting('glow', num);
     }
 };
 
