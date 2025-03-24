@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 10.7.0:
 * **New Features:**
     * "Afterglow blocks" setting - lets you specify the number of frames running scripts keep their halo after their process has terminated
 * **Translation Updates:**
@@ -11,6 +12,7 @@
 * new dev version
 * gui, threads: new "Afterglow blocks" setting lets you specify the number of frames running scripts keep their halo after their process has terminated
 * German translation update 
+* prepared v10.7 minor release
 
 ## 10.6.3:
 * **Notable Fixes:**
