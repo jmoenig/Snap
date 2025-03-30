@@ -8225,6 +8225,9 @@ RingMorph.prototype.render = function (ctx) {
 // RingMorph dragging and dropping
 
 RingMorph.prototype.rootForGrab = function () {
+    if (this.parent?.isTemplate) {
+        return this.parent;
+    }
     if (this.isDraggable) {
         return this;
     }
