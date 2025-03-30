@@ -2,6 +2,12 @@
 
 ## in development:
 
+* **Notable Fixes:**
+    * fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206
+
+### 2025-03-30
+* blocks: fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206
+
 ## 10.7.0:
 * **New Features:**
     * "Afterglow blocks" setting - lets you specify the number of frames running scripts keep their halo after their process has terminated

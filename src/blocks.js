@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-March-21';
+modules.blocks = '2025-March-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -16303,6 +16303,9 @@ CommentMorph.prototype.snap = function (hand) {
     scripts.clearDropInfo();
     target = scripts.closestBlock(this, hand);
     if (target !== null) {
+        if (this.block) {
+            this.block.comment = null;
+        }
         target.comment = this;
         this.block = target;
         if (this.snapSound) {
@@ -16321,7 +16324,6 @@ CommentMorph.prototype.snap = function (hand) {
     if (hand) {
         scripts.recordDrop(hand.grabOrigin);
     }
-
 };
 
 // CommentMorph sticking to blocks
