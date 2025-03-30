@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-March-24';
+modules.threads = '2025-March-30';
 
 var ThreadManager;
 var Process;
@@ -393,7 +393,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
     this.processes.forEach(proc => {
         if (proc.isAnimated && skipAnimations) {
             skipped += 1;
-        } else if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
+        } else if (!proc.homeContext.receiver?.isPickedUp() && !proc.isDead) {
             if (proc.wantsHalo) { this.highlight(proc, -1); }
             proc.runStep();
             animating = animating || proc.isAnimated;

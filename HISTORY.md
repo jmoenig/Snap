@@ -5,10 +5,12 @@
 * **Notable Fixes:**
     * fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206
     * fixed a ring-slot slide-back bug, prevent ring-slots from being dragged off template blocks in the palette, see https://forum.snap.berkeley.edu/t/look-at-my-video-is-a-bug/19211
+    * fixed a launch-list-item bug, see https://forum.snap.berkeley.edu/t/launching-from-an-alphanumeric-index-crashes/19210
 
 ### 2025-03-30
 * blocks: fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206
 * blocks: fixed a ring-slot slide-back bug, prevent ring-slots from being dragged off template blocks in the palette, see https://forum.snap.berkeley.edu/t/look-at-my-video-is-a-bug/19211
+* threads: fixed a launch-list-item bug, see https://forum.snap.berkeley.edu/t/launching-from-an-alphanumeric-index-crashes/19210
 
 ## 10.7.0:
 * **New Features:**
