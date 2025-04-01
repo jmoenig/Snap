@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-04-01
+* new dev version
+
 ## 10.7.1:
 * **Notable Fixes:**
     * fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206
