@@ -102,6 +102,14 @@ function snapEquals(a, b) {
         return false;
     }
 
+    // colors (points, rectangles)
+    if (a.eq || b.eq) {
+        if (a.constructor.name === b.constructor.name) {
+            return a.eq(b, true); // observe alpha
+        }
+        return false;
+    }
+
     var x = +a,
         y = +b;
 
