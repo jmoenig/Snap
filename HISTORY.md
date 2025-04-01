@@ -5,6 +5,7 @@
 ### 2025-04-01
 * new dev version
 * blocks, objects, tables, threads: added "color" data type
+* store: saving and loading support for "color" data
 
 ## 10.7.1:
 * **Notable Fixes:**

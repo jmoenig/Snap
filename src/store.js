@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-March-12';
+modules.store = '2025-April-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1954,6 +1954,8 @@ SnapSerializer.prototype.loadValue = function (model, object, silently) {
         }
         record();
         return v;
+    case 'color':
+        return this.loadColor(model.contents);
     case 'wish':
     	def = new CustomBlockDefinition(model.attributes.s);
      	def.type = model.attributes.type;
@@ -2819,6 +2821,16 @@ Context.prototype.toXML = function (serializer) {
         this.receiver ? serializer.store(this.receiver) : '',
         this.receiver ? serializer.store(this.origin) : '',
         this.outerContext ? serializer.store(this.outerContext) : ''
+    );
+};
+
+Color.prototype.toXML = function (serializer) {
+    return serializer.format(
+        '<color>$,$,$,$</color>',
+        this.r,
+        this.g,
+        this.b,
+        this.a
     );
 };
 
