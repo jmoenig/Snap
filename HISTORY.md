@@ -4,6 +4,7 @@
 
 ### 2025-04-01
 * new dev version
+* blocks, objects, tables, threads: added "color" data type
 
 ## 10.7.1:
 * **Notable Fixes:**

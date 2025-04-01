@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-March-23';
+modules.objects = '2025-April-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -9351,13 +9351,32 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint, recycleMe) {
     return thumb;
 };
 
-// SpriteMorph Boolean visual representation
+// SpriteMorph visual data representations
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
     var sym = new BooleanSlotMorph(bool);
     sym.isStatic = true;
     sym.fixLayout();
     return sym;
+};
+
+SpriteMorph.prototype.colorSwatch = function (color, size) {
+    var swatch = new Morph();
+    swatch.color = color;
+
+    swatch.render = function (ctx) {
+        var w = this.width(),
+            h = this.height();
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(1, 1, w - 2, h - 2);
+        ctx.fillStyle = this.getRenderColor().toString();
+        ctx.fillRect(2, 2, w - 4, h - 4);
+    };
+
+    swatch.setExtent(new Point(size, size));
+    return swatch;
 };
 
 // SpriteMorph nesting
@@ -12724,6 +12743,11 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             script.setPosition(this.position());
             return script;
         };
+    } else if (data instanceof Color) {
+        contents = SpriteMorph.prototype.colorSwatch(
+            data,
+            this.bubbleFontSize * 1.4
+        );
     } else {
         contents = new TextMorph(
             display(data),
@@ -14387,6 +14411,11 @@ CellMorph.prototype.createContents = function () {
                 }
             }
             this.contentsMorph.isDraggable = false;
+        } else if (this.contents instanceof Color) {
+            this.contentsMorph = SpriteMorph.prototype.colorSwatch(
+                this.contents,
+                fontSize * 1.4
+            );
         } else {
             this.contentsMorph = new TextMorph(
                 display(this.contents),
@@ -15602,6 +15631,8 @@ StagePickerMorph.prototype.dataRepresentation = function (data) {
         return sym.fullImage();
     case 'sound':
         return (new SymbolMorph('notes', 30 * this.scale)).fullImage();
+    case 'color':
+        return SpriteMorph.prototype.colorSwatch(data, 20 * this.scale);
     default:
         return data.toString();
     }

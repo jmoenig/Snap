@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -68,12 +68,12 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
-ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows,
+ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows, Color,
 CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2023-August-17';
+modules.tables = '2025-April-01';
 
 var Table;
 var TableCellMorph;
@@ -422,6 +422,11 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         ).getImage();
     } else if (dta instanceof List) {
         return this.listSymbol();
+    } else if (dta instanceof Color) {
+        return SpriteMorph.prototype.colorSwatch(
+            dta,
+            SyntaxElementMorph.prototype.fontSize * 1.4
+        ).getImage();
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }

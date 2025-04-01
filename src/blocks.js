@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-March-30';
+modules.blocks = '2025-April-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2655,6 +2655,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,
             value
+        );
+    } else if (value instanceof Color) {
+        morphToShow = SpriteMorph.prototype.colorSwatch(
+            value,
+            this.fontSize * 1.4
         );
     } else if (isString(value)) {
         // shorten the string, commented out because we now scroll it
@@ -11772,6 +11777,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     }
     dict.costume = ['costume'];
     dict.sound = ['sound'];
+    dict.color = ['color'];
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];

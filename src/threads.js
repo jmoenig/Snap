@@ -61,12 +61,12 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy, Map,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
-StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph,
+StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph, Color,
 CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-March-30';
+modules.threads = '2025-April-01';
 
 var ThreadManager;
 var Process;
@@ -4793,6 +4793,9 @@ Process.prototype.reportTypeOf = function (thing) {
     }
     if (thing instanceof Sound) {
         return 'sound';
+    }
+    if (thing instanceof Color) {
+        return 'color';
     }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
