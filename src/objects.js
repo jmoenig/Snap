@@ -1066,8 +1066,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'cut from %spr',
-             code: 'cut',
+            code: 'cut',
             animation: true
+        },
+        reportColor: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'color %clr',
+            code: 'color'
         },
 
         // Control
@@ -3719,6 +3725,8 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
+        blocks.push('-');
+        blocks.push(block('reportColor'));
 
     } else if (category === 'control') {
 
@@ -10985,6 +10993,8 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
+        blocks.push('-');
+        blocks.push(block('reportColor'));
 
     } else if (category === 'control') {
 

@@ -6258,6 +6258,14 @@ Process.prototype.castColor = function (color) {
     return clr;
 };
 
+Process.prototype.reportColor = function (color) {
+    // hyper-monadicized
+    if (this.reportQuickRank(color) > 1) {
+        return color.map(each => this.reportColor(each));
+    }
+    return this.castColor(color);
+};
+
 Process.prototype.setColor = function (color) {
     this.blockReceiver().setColor(this.castColor(color));
 };

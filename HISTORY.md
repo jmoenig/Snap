@@ -7,6 +7,7 @@
 * blocks, threads: added "color" selector to location-aspect reporter ("() at ()")
 * blocks: made all color input slots replaceable
 * threads: added rgba color-casting for color primitives
+* objects, threads: new hyper-monadic "color" reporter primitive in the pen category
 
 ### 2025-04-01
 * new dev version
