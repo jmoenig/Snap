@@ -4,6 +4,7 @@
 
 ### 2025-04-02
 * blocks, objects: added "color" selector to pen-attributes reporter
+* blocks, threads: added "color" selector to location-aspect reporter ("() at ()")
 
 ### 2025-04-01
 * new dev version

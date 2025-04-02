@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-01';
+modules.threads = '2025-April-02';
 
 var ThreadManager;
 var Process;
@@ -6412,9 +6412,10 @@ Process.prototype.reportAspect = function (aspect, location) {
     // ----------------
     // left input (aspect):
     //
-    //      'hue'           - hsl HUE on a scale of 0 - 100
-    //      'saturation'    - hsl SATURATION on a scale of 0 - 100
-    //      'brightness'    - hsl BRIGHTNESS on a scale of 0 - 100
+    //      'color'         - a COLOR object
+    //      'hue'           - hsv HUE on a scale of 0 - 100
+    //      'saturation'    - hsv SATURATION on a scale of 0 - 100
+    //      'brightness'    - hsv BRIGHTNESS on a scale of 0 - 100
     //      'transparency'  - rgba ALPHA on a reversed (!) scale of 0 - 100
     //      'r-g-b-a'       - list of rgba values on a scale of 0 - 255 each
     //      'sprites'       - a list of sprites at the location, empty if none
@@ -6498,6 +6499,9 @@ Process.prototype.reportAspect = function (aspect, location) {
 
     }
 
+    if (choice === 'color') {
+        return clr.copy();
+    }
     if (choice === 'r-g-b-a') {
         return new List([clr.r, clr.g, clr.b, Math.round(clr.a * 255)]);
     }

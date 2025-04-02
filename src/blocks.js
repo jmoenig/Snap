@@ -754,12 +754,14 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            color : ['color'],
+            '~' : null,
             hue : ['hue'],
             saturation : ['saturation'],
             brightness : ['brightness'],
             transparency : ['transparency'],
             'r-g-b-a' : ['r-g-b-a'],
-            '~' : null,
+            '~~' : null,
             sprites : ['sprites'],
         }
     },
