@@ -5,6 +5,7 @@
 ### 2025-04-03
 * tables: further rendering speed-up
 * objects, threads: new "attribute of color" reporter primitive in the pen category
+* objects: made color swatch background white for (semi-) transparent colors
 
 ### 2025-04-02
 * blocks, objects: added "color" selector to pen-attributes reporter
