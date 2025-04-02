@@ -6,6 +6,7 @@
 * blocks, objects: added "color" selector to pen-attributes reporter
 * blocks, threads: added "color" selector to location-aspect reporter ("() at ()")
 * blocks: made all color input slots replaceable
+* threads: added rgba color-casting for color primitives
 
 ### 2025-04-01
 * new dev version

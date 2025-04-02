@@ -6213,6 +6213,66 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
 
 // Process color primitives
 
+Process.prototype.castColor = function (color) {
+    // private - return the given color, if it is a list of number, return
+    // a color represented by the list's rgba values
+    // if the list is a single color, interpret it as grayscales
+    // if the list has 2 values, interpret it as grayscale and alpha
+    // if it has 3 values, treat it as solid rgba
+    var clr = color,
+        len,
+        n;
+    this.assertType(color, ['color', 'list']);
+    if (color instanceof List) {
+        clr = new Color();
+        len = color.length();
+        if (len > 0 && len < 3) {
+            n = color.at(1);
+            this.assertType(n, 'number');
+            n = Math.min(Math.max(+n, 0), 255);
+            clr.r = n;
+            clr.g = n;
+            clr.b = n;
+            if (len === 2) {
+                n = color.at(2);
+                this.assertType(n, 'number');
+                clr.a = Math.min(Math.max(+n, 0), 255) / 255;
+            }
+        } else if (len > 0) {
+            n = color.at(1);
+            this.assertType(n, 'number');
+            clr.r = Math.min(Math.max(+n, 0), 255);
+            n = color.at(2);
+            this.assertType(n, 'number');
+            clr.g = Math.min(Math.max(+n, 0), 255);
+            n = color.at(3);
+            this.assertType(n, 'number');
+            clr.b = Math.min(Math.max(+n, 0), 255);
+            if (color.length() > 3) {
+                n = color.at(4);
+                this.assertType(n, 'number');
+                clr.a = Math.min(Math.max(n, 0), 255) / 255;
+            }
+        }
+    }
+    return clr;
+};
+
+Process.prototype.setColor = function (color) {
+    this.blockReceiver().setColor(this.castColor(color));
+};
+
+Process.prototype.reportTouchingColor = function (color) {
+    return this.blockReceiver().reportTouchingColor(this.castColor(color));
+};
+
+Process.prototype.reportColorIsTouchingColor = function (color, another) {
+    return this.blockReceiver().reportColorIsTouchingColor(
+        this.castColor(color),
+        this.castColor(another)
+    );
+};
+
 Process.prototype.setColorDimension = function (name, num) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'],
         choice = this.inputOption(name);
