@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2025-April-01';
+modules.tables = '2025-April-02';
 
 var Table;
 var TableCellMorph;
@@ -286,7 +286,7 @@ TableCellMorph.prototype.listSymbol = function () {
             SpriteMorph.prototype.blockColor.lists.darker(50)
         );
     }
-    return this.cachedListSymbol.getImage();
+    return this.cachedListSymbol;
 };
 
 // TableCellMorph instance creation:
@@ -374,6 +374,14 @@ TableCellMorph.prototype.render = function (ctx) {
             ctx.shadowColor = 'lightgray';
         }
         ctx.drawImage(dta, x, y);
+    } else if (dta instanceof Morph) {
+        ctx.save();
+        ctx.translate(
+            Math.max((width - dta.width()) / 2, 0),
+            Math.max((height - dta.height()) / 2, 0)
+        );
+        dta.render(ctx); // to do: center horizontally
+        ctx.restore();
     } else { // text
         ctx.font = font;
         ctx.textAlign = 'left';
@@ -419,14 +427,14 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Sound) {
         return new SymbolMorph(
             'notes', SyntaxElementMorph.prototype.fontSize
-        ).getImage();
+        );
     } else if (dta instanceof List) {
         return this.listSymbol();
     } else if (dta instanceof Color) {
         return SpriteMorph.prototype.colorSwatch(
             dta,
             SyntaxElementMorph.prototype.fontSize * 1.4
-        ).getImage();
+        );
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }

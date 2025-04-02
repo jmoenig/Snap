@@ -8,6 +8,7 @@
 * blocks: made all color input slots replaceable
 * threads: added rgba color-casting for color primitives
 * objects, threads: new hyper-monadic "color" reporter primitive in the pen category
+* tables: rendering speed-up
 
 ### 2025-04-01
 * new dev version
