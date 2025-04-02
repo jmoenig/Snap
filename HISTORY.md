@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-04-02
+* blocks, objects: added "color" selector to pen-attributes reporter
+
 ### 2025-04-01
 * new dev version
 * blocks, objects, tables, threads: added "color" data type

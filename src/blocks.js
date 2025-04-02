@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-April-01';
+modules.blocks = '2025-April-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -740,11 +740,13 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             size : ['size'],
+            color : ['color'],
+            '~' : null,
             hue : ['hue'],
             saturation : ['saturation'],
             brightness : ['brightness'],
             transparency : ['transparency'],
-            '~' : null,
+            '~~' : null,
             'r-g-b-a' : ['r-g-b-a']
         }
     },

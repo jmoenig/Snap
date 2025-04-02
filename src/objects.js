@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-April-01';
+modules.objects = '2025-April-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -6251,6 +6251,9 @@ SpriteMorph.prototype.getPenAttribute = function (attrib) {
         options = ['hue', 'saturation', 'brightness', 'transparency'];
     if (name === 'size') {
         return this.size || 0;
+    }
+    if (name === 'color') {
+        return this.color.copy();
     }
     if (name === 'r-g-b-a') {
         return new List([
