@@ -1137,8 +1137,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     // other single types
     '%clr': {
-        type: 'color',
-        tags: 'static'
+        type: 'color'
     },
     '%br': {
         type: 'break'
@@ -13760,6 +13759,7 @@ ColorSlotMorph.prototype.init = function (clr) {
     ColorSlotMorph.uber.init.call(this);
     this.alpha = 1;
     this.setColor(clr || new Color(145, 26, 68));
+    this.fixLayout();
 };
 
 ColorSlotMorph.prototype.getSpec = function () {
