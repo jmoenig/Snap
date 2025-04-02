@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-April-02';
+modules.objects = '2025-April-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -1073,6 +1073,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             category: 'pen',
             spec: 'color %clr',
+            code: 'color'
+        },
+        reportColorAttribute: {
+            type: 'reporter',
+            category: 'pen',
+            spec: '%clrdim of color %clr',
+            defaults: [['hue']],
             code: 'color'
         },
 
@@ -3727,6 +3734,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doCutFrom'));
         blocks.push('-');
         blocks.push(block('reportColor'));
+        blocks.push(block('reportColorAttribute'));
 
     } else if (category === 'control') {
 
@@ -10995,6 +11003,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doCutFrom'));
         blocks.push('-');
         blocks.push(block('reportColor'));
+        blocks.push(block('reportColorAttribute'));
 
     } else if (category === 'control') {
 

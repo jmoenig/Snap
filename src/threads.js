@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-02';
+modules.threads = '2025-April-03';
 
 var ThreadManager;
 var Process;
@@ -6264,6 +6264,28 @@ Process.prototype.reportColor = function (color) {
         return color.map(each => this.reportColor(each));
     }
     return this.castColor(color);
+};
+
+Process.prototype.reportColorAttribute = function (attrib, color) {
+    var options = ['hue', 'saturation', 'brightness', 'transparency'],
+        choice = this.inputOption(attrib),
+        clr = this.castColor(color),
+        model,
+        idx;
+    if (choice === 'r-g-b(-a)') {
+        return new List([
+            clr.r,
+            clr.g,
+            clr.b,
+            Math.round(clr.a * 255)
+        ]);
+    }
+    model = clr[SpriteMorph.prototype.penColorModel]();
+    idx = options.indexOf(choice);
+    if (idx === 3) {
+        return (1 - clr.a) * 100;
+    }
+    return (model[idx] || 0) * 100;
 };
 
 Process.prototype.setColor = function (color) {
