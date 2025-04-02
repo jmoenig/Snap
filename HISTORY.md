@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-04-03
+* tables: further rendering speed-up
+
 ### 2025-04-02
 * blocks, objects: added "color" selector to pen-attributes reporter
 * blocks, threads: added "color" selector to location-aspect reporter ("() at ()")

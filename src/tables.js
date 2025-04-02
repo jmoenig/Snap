@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2025-April-02';
+modules.tables = '2025-April-03';
 
 var Table;
 var TableCellMorph;
@@ -399,9 +399,8 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
             return dta.thumbnail(new Point(40, 40), null, true); // no watchers
-        } else {
-            return dta.fullImage();
         }
+        return dta;
     } else if (isString(dta)) {
         return dta.length > 100 ? dta.slice(0, 100) + '...' : dta;
     } else if (typeof dta === 'number') {
@@ -410,7 +409,7 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return SpriteMorph.prototype.booleanMorph.call(
             null,
             dta
-        ).fullImage();
+        );
     } else if (dta instanceof Array) {
         if (dta[0] instanceof Array && isString(dta[0][0])) {
             return display(dta[0]);
