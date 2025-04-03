@@ -6223,6 +6223,12 @@ Process.prototype.castColor = function (color) {
         len,
         n;
     this.assertType(color, ['color', 'list']);
+
+    if (this.reportQuickRank(clr) > 1) {
+        // hyper-monadicized
+        return clr.map(each => this.castColor(each));
+    }
+
     if (color instanceof List) {
         clr = new Color();
         len = color.length();
@@ -6259,10 +6265,6 @@ Process.prototype.castColor = function (color) {
 };
 
 Process.prototype.reportColor = function (color) {
-    // hyper-monadicized
-    if (this.reportQuickRank(color) > 1) {
-        return color.map(each => this.reportColor(each));
-    }
     return this.castColor(color);
 };
 
