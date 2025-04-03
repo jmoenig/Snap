@@ -9389,7 +9389,7 @@ SpriteMorph.prototype.colorSwatch = function (color, size) {
             clr = this.getRenderColor();
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = 'gray';
         ctx.fillRect(1, 1, w - 2, h - 2);
         ctx.fillStyle = 'white'; // for transparent colors
         ctx.fillRect(2, 2, w - 4, h - 4);
