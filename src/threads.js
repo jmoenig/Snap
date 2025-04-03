@@ -6300,6 +6300,15 @@ Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
     return (model[idx] || 0) * 100;
 };
 
+Process.prototype.reportNewColor = function (h, s, v) {
+    var clr = new Color();
+    this.assertType(h, 'number');
+    this.assertType(s, 'number');
+    this.assertType(v, 'number');
+    clr.set_hsv(h * 0.01, s * 0.01, v * 0.01);
+    return clr;
+};
+
 Process.prototype.setColor = function (color) {
     this.blockReceiver().setColor(this.castColor(color));
 };

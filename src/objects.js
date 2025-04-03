@@ -1082,6 +1082,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['hue']],
             code: 'color'
         },
+        reportNewColor: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'color hue: %n saturation: %n brightness: %n',
+            defaults: [20, 80, 50],
+            code: 'newColor'
+        },
 
         // Control
         receiveGo: {
@@ -3735,6 +3742,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportColor'));
         blocks.push(block('reportColorAttribute'));
+        blocks.push(block('reportNewColor'));
 
     } else if (category === 'control') {
 
@@ -11012,6 +11020,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportColor'));
         blocks.push(block('reportColorAttribute'));
+        blocks.push(block('reportNewColor'));
 
     } else if (category === 'control') {
 
