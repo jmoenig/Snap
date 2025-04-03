@@ -6230,6 +6230,9 @@ Process.prototype.castColor = function (color) {
     }
 
     if (color instanceof List) {
+        if (clr.at(1) instanceof Color) {
+            return clr.map(each => this.castColor(each));
+        }
         clr = new Color();
         len = color.length();
         if (len > 0 && len < 3) {
@@ -6269,9 +6272,16 @@ Process.prototype.reportColor = function (color) {
 };
 
 Process.prototype.reportColorAttribute = function (attrib, color) {
+    return this.hyper(
+        (att, obj) => this.reportBasicColorAttribute(att, obj),
+        attrib,
+        this.castColor(color)
+    );
+};
+
+Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
     var options = ['hue', 'saturation', 'brightness', 'transparency'],
         choice = this.inputOption(attrib),
-        clr = this.castColor(color),
         model,
         idx;
     if (choice === 'r-g-b(-a)') {
