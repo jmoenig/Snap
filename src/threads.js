@@ -2661,7 +2661,9 @@ Process.prototype.reportDistribution = function (list) {
     }
     if (this.context.accumulator.idx === list.length()) {
         this.returnValueToParentContext(
-            new List(this.context.accumulator.target.map(row => new List(row)))
+            new List(this.context.accumulator.target
+                .sort((a, b) =>b[1] - a[1])
+                .map(row => new List(row)))
         );
         return;
     }
@@ -2696,6 +2698,7 @@ Process.prototype.reportIsBefore = function (a, b) {
             'text',
             'number',
             'Boolean',
+            'color',
             'command',
             'reporter',
             'predicate',
@@ -2728,6 +2731,8 @@ Process.prototype.reportIsBefore = function (a, b) {
                     this.reportIsBefore(a.cdr(), b.cdr()))
             )
         );
+    case 'color':
+        return a.r < b.r || a.g < b.g || a.b < b.b;
     case 'command':
     case 'reporter':
     case 'predicate':

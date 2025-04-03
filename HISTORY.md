@@ -10,6 +10,8 @@
 * objects: visualize fully transparent colors as light gray checkerboard in the color swatch morph
 * objects, threads: added "new color h:s:v:" reporter primitive in the pen category
 * updated dev version
+* threads: sort colors by rgb values
+* threads: fixed sorting the distribution of compound data (blocks, colors)
 
 ### 2025-04-02
 * blocks, objects: added "color" selector to pen-attributes reporter
