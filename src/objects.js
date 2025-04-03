@@ -9385,14 +9385,20 @@ SpriteMorph.prototype.colorSwatch = function (color, size) {
 
     swatch.render = function (ctx) {
         var w = this.width(),
-            h = this.height();
+            h = this.height(),
+            clr = this.getRenderColor();
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, w, h);
         ctx.fillStyle = 'black';
         ctx.fillRect(1, 1, w - 2, h - 2);
         ctx.fillStyle = 'white'; // for transparent colors
         ctx.fillRect(2, 2, w - 4, h - 4);
-        ctx.fillStyle = this.getRenderColor().toString();
+        if (!clr.a) { // fully transparent
+            ctx.fillStyle = "lightgray";
+            ctx.fillRect(2, 2, w * 0.5 - 2, w * 0.5 - 2);
+            ctx.fillRect(w * 0.5, w * 0.5, w * 0.5 - 2, w * 0.5 - 2);
+        }
+        ctx.fillStyle = clr.toString();
         ctx.fillRect(2, 2, w - 4, h - 4);
     };
 

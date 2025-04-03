@@ -7,6 +7,7 @@
 * objects, threads: new "attribute of color" reporter primitive in the pen category
 * objects: made color swatch background white for (semi-) transparent colors
 * threads: hyper-dyadicized "attribute of color" reporter
+* objects: visualize fully transparent colors as light gray checkerboard in the color swatch morph
 
 ### 2025-04-02
 * blocks, objects: added "color" selector to pen-attributes reporter
