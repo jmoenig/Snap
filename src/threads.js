@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-03';
+modules.threads = '2025-April-08';
 
 var ThreadManager;
 var Process;
@@ -7915,7 +7915,9 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     var cst, shp, height, width, dim, xStretch, yStretch, result;
     if (name instanceof List) {
         shp = name.quickShape();
-        if (shp.at(2) > 4) {
+        if (shp.at(2) > 4 ||
+            (shp.length() === 2 && name.at(1).at(1) instanceof Color)
+        ) {
             height = shp.at(1);
             width = shp.at(2);
             dim = new List([height * width]);
@@ -7944,6 +7946,11 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     yStretch = Math.round(cst.height() * +yP / 100);
     result = cst.stretched(xStretch, yStretch);
     if (shp instanceof List && shp.at(2) > 0) {
+        if (shp.length() === 2 && name.at(1).at(1) instanceof Color) {
+            return this.reportColor(
+                result.pixels().reshape(new List([yStretch, xStretch, 4]))
+            );
+        }
         if (shp.at(3) < 1) {
             return result.pixels().columns().at(1).reshape(
                 new List([yStretch, xStretch])
@@ -8008,7 +8015,9 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     if (width <= 0 || height <= 0) {
         // try to interpret the pixels as matrix
         shp = pixels.quickShape();
-        if (shp.at(2) > 4) {
+        if (shp.at(2) > 4 ||
+            (shp.length() === 2 && pixels.at(1).at(1) instanceof Color)
+        ) {
             height = shp.at(1);
             width = shp.at(2);
             dim = new List([height * width]);
@@ -8028,7 +8037,13 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     src = pixels.itemsArray();
     dta = ctx.createImageData(width, height);
     for (i = 0; i < src.length; i += 1) {
-        px = src[i] instanceof List ? src[i].itemsArray() : [src[i]];
+        if (src[i] instanceof List) {
+            px = src[i].itemsArray();
+        } else if (src[i] instanceof Color) {
+            px = [src[i].r, src[i].g, src[i].b, Math.round(src[i].a * 255)];
+        } else {
+            px = [src[i]];
+        }
         for (k = 0; k < 3; k += 1) {
             dta.data[(i * 4) + k] = px[k] === undefined ? +px[0] : +px[k];
         }

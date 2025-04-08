@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-04-08
+* threads: added support for (auto-) generating costumes from lists & tables of colors
+
 ### 2025-04-03
 * tables: further rendering speed-up
 * objects, threads: new "attribute of color" reporter primitive in the pen category
