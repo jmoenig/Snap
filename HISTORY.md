@@ -8,6 +8,7 @@
 * objects: tweaked LISP code for new color primitives
 * objects: updated new primitives list for hiding new blocks in old puzzles
 * blocks, objects, threads: new %color selector
+* updated dev version
 
 ### 2025-04-03
 * tables: further rendering speed-up
