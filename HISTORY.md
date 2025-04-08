@@ -4,6 +4,7 @@
 
 ### 2025-04-08
 * threads: added support for (auto-) generating costumes from lists & tables of colors
+* threads: optimized frequency distribution analysis (uniques, distribution) for lists of colors
 
 ### 2025-04-03
 * tables: further rendering speed-up

@@ -2492,7 +2492,9 @@ Process.prototype.reportListAttribute = function (choice, list) {
         return list.transpose();
     case 'uniques':
         this.assertType(list, 'list');
-        if (list.canBeCSV()) {
+        if (list.canBeCSV() ||
+            list.itemsArray().every(value => value instanceof Color)
+        ) {
             return this.reportListAttribute(
                 'distribution',
                 list
@@ -2518,6 +2520,15 @@ Process.prototype.reportListAttribute = function (choice, list) {
                     isString(item) && item.startsWith('__json__') ?
                         this.parseJSON(item.slice(8))
                         : item,
+                    row.at(2)
+                ]);
+            });
+        } else if (list.itemsArray().every(value => value instanceof Color)) {
+            return list.map(value =>
+                this.normalizeColor(value)
+            ).distribution().map(row => {
+                return new List([
+                    this.restoreColor(row.at(1)),
                     row.at(2)
                 ]);
             });
@@ -2576,6 +2587,26 @@ Process.prototype.reportListAttribute = function (choice, list) {
     default:
         return 0;
     }
+};
+
+Process.prototype.normalizeColor = function (aColor) {
+    // private - answer a string representation of the given color
+    // that can be used for (quick) statistical purposes such as
+    // sorting and frequency distribution analysis
+    return (
+        'rgba(' +
+        aColor.r.toString().padStart(3, '0') + ',' +
+        aColor.g.toString().padStart(3, '0') + ',' +
+        aColor.b.toString().padStart(3, '0') + ',' +
+        Math.round(aColor.a * 255).toString().padStart(3, '0') +
+        ')'
+    );
+};
+
+Process.prototype.restoreColor = function (normalized) {
+    // private - answer a color from a normalized color string
+    var channels = normalized.split(/[\(),]/).slice(1, 5);
+    return new Color(+channels[0], +channels[1], +channels[2], +channels[3]);
 };
 
 Process.prototype.reportListLength = function (list) {
