@@ -6320,7 +6320,7 @@ Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
         choice = this.inputOption(attrib),
         model,
         idx;
-    if (choice === 'r-g-b(-a)') {
+    if (choice === 'r-g-b-a') {
         return new List([
             clr.r,
             clr.g,
@@ -6329,6 +6329,14 @@ Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
         ]);
     }
     model = clr[SpriteMorph.prototype.penColorModel]();
+    if (choice === 'dimensions') {
+        return new List([
+            (model[0] || 0) * 100,
+            (model[1] || 0) * 100,
+            (model[2] || 0) * 100,
+            (1 - clr.a) * 100
+        ]);
+    }
     idx = options.indexOf(choice);
     if (idx === 3) {
         return (1 - clr.a) * 100;

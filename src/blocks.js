@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-April-02';
+modules.blocks = '2025-April-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -733,6 +733,19 @@ SyntaxElementMorph.prototype.labelParts = {
             transparency : ['transparency'],
             '~' : null,
             'r-g-b(-a)' : ['r-g-b(-a)']
+        }
+    },
+    '%color': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            hue : ['hue'],
+            saturation : ['saturation'],
+            brightness : ['brightness'],
+            transparency : ['transparency'],
+            '~' : null,
+            dimensions : ['dimensions'],
+            'r-g-b-a' : ['r-g-b-a']
         }
     },
     '%pen': {

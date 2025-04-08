@@ -1078,7 +1078,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportColorAttribute: {
             type: 'reporter',
             category: 'pen',
-            spec: '%clrdim of color %clr',
+            spec: '%color of color %clr',
             defaults: [['hue']],
             code: 'color'
         },
