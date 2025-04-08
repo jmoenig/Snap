@@ -2,6 +2,29 @@
 
 ## in development:
 
+* **New Features:**
+    * First-Class Colors
+        - new immutable data type "color", new "color" entry in the "is a ?" predicate
+        - new color readout in variable and list watchers and speech and result balloons
+        - added "color" selector to pen-attributes reporter
+        - added "color" selector to location-aspect reporter "[] at []"
+        - new "color []" reporter primitive, lets you
+            1) pick a color and reports it
+            2) pass in a list of RGB(A) values each from 0-255 to create a color, where
+                - a single item represents a gray scale
+                - a pair of numbers represents a gray scale and an alpha value
+                - a triple represents RGB
+                - four numbers represent RGBA
+            3) pass in a multidimensional HYPER structure to create lists, tables and tensors of numbers all at once
+        - new "[dimension] of color []" reporter primitive, hyperized
+        - new "color hue: [] saturation: [] brightness: []" reporter primitive for generating a color from HSB values on a range from 0-100
+* **Notable Changes:**
+    * significantly sped-up rendering morphs representing data inside table cells 
+* **Notable Fixes:**
+    * fixed sorting the distribution of compound non-list data (blocks, colors)
+* **Translation Updates:**
+    * German
+
 ### 2025-04-08
 * threads: added support for (auto-) generating costumes from lists & tables of colors
 * threads: optimized frequency distribution analysis (uniques, distribution) for lists of colors
