@@ -6,6 +6,7 @@
 * threads: added support for (auto-) generating costumes from lists & tables of colors
 * threads: optimized frequency distribution analysis (uniques, distribution) for lists of colors
 * objects: tweaked LISP code for new color primitives
+* objects: updated new primitives list for hiding new blocks in old puzzles
 
 ### 2025-04-03
 * tables: further rendering speed-up

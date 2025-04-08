@@ -2817,7 +2817,14 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'receiveConditionEvent',
         );
     }
-    // 10.4: no new primitives
+    // 10.4 - 10.7: no new primitives
+    if (version < 10.8) {
+        selectors.push(
+            'reportColor',
+            'reportColorAttribute',
+            'reportNewColor'
+        );
+    }
 
     return selectors;
 };
