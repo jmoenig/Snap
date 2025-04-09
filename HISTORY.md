@@ -25,12 +25,14 @@
     * significantly sped-up rendering morphs representing data inside table cells 
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
+    * prevented web-serial extension primitives from quickstepping
 * **Translation Updates:**
     * German
 
 ### 2025-04-09
 * updated release notes
 * updated dev version
+* extensions: prevented web-serial extension primitives from quickstepping
 
 ### 2025-04-08
 * threads: added support for (auto-) generating costumes from lists & tables of colors

@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-March-11';
+modules.extensions = '2025-April-09';
 
 // Global stuff
 
@@ -1548,6 +1548,7 @@ SnapExtensions.primitives.set(
             }
         }
 
+        proc.isAnimated = true; // prevent overclocking / dynamic quickstepping
         if (!acc) {
             acc = proc.context.accumulator = {result: false};
             (async function (baud) {
@@ -1584,6 +1585,7 @@ SnapExtensions.primitives.set(
     function (port, proc) {
         var acc = proc.context.accumulator;
 
+        proc.isAnimated = true; // prevent overclocking / dynamic quickstepping
         if (!acc) {
             acc = proc.context.accumulator = {result: false};
             (async function (port) {
@@ -1614,6 +1616,7 @@ SnapExtensions.primitives.set(
     'srl_read(port)',
     function (port, proc) {
         var acc = {result: false};
+        proc.isAnimated = true; // prevent overclocking / dynamic quickstepping
         if(!port?.readable) {throw Error( "Port not opened."); }
         if( port.readable?.locked){ //No reentry
             return (port._bklog?.length > 0) ? port._bklog.splice(0) : true;
@@ -1652,6 +1655,7 @@ SnapExtensions.primitives.set(
     function (port, bytes, proc) {
         var acc = proc.context.accumulator;
 
+        proc.isAnimated = true; // prevent overclocking / dynamic quickstepping
         if (!acc) {
             acc = proc.context.accumulator = {result: false};
             (async function (port, bytes) {
