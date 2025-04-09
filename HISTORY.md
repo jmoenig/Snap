@@ -33,6 +33,7 @@
 * updated release notes
 * updated dev version
 * extensions: prevented web-serial extension primitives from quickstepping
+* updated dev version
 
 ### 2025-04-08
 * threads: added support for (auto-) generating costumes from lists & tables of colors
