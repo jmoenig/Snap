@@ -25,6 +25,10 @@
 * **Translation Updates:**
     * German
 
+### 2025-04-09
+* updated release notes
+* updated dev version
+
 ### 2025-04-08
 * threads: added support for (auto-) generating costumes from lists & tables of colors
 * threads: optimized frequency distribution analysis (uniques, distribution) for lists of colors
