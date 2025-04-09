@@ -18,6 +18,9 @@
             3) pass in a multidimensional HYPER structure to create lists, tables and tensors of numbers all at once
         - new "[dimension] of color []" reporter primitive, hyperized
         - new "color hue: [] saturation: [] brightness: []" reporter primitive for generating a color from HSB values on a range from 0-100
+        - color-type input slots in primitives ("set pen color", "is touching color", "color is touching") accept reporter drops of
+            * colors
+            * RGB(A) value lists
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells 
 * **Notable Fixes:**
