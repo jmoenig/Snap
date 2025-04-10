@@ -25,9 +25,11 @@
     * significantly sped-up rendering morphs representing data inside table cells 
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
-    * prevented web-serial extension primitives from quickstepping
 * **Translation Updates:**
     * German
+
+### 2025-04-10
+* extensions: reverted preventing web-serial extension primitives from quickstepping (did not fix the issue)
 
 ### 2025-04-09
 * updated release notes
