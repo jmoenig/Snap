@@ -28,6 +28,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-04-11
+* updated dev version
+
 ### 2025-04-10
 * extensions: reverted preventing web-serial extension primitives from quickstepping (did not fix the issue)
 
