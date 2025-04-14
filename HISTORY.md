@@ -32,6 +32,7 @@
 ### 2025-04-14
 * updated German translation for "darker" and "lighter"
 * added new "Colors" blocks library based on the new first-class colors
+* updated dev version
 
 ### 2025-04-11
 * updated dev version
