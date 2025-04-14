@@ -79,7 +79,7 @@
     }
   },
   {
-    "fileName": "colors.xml",
+    "fileName": "colors_module.xml",
     "name": "Colors",
     "description": "mix, modify and transition colors",
     "searchData": [
