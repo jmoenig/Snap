@@ -67,6 +67,7 @@
     ],
     "translations": {
       "de": {
+        "name": "Ereignisse",
         "searchData": [
           "Wenn _ sich ereignet",
           "hat _ sich ereignet?"
