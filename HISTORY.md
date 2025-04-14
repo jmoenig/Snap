@@ -28,6 +28,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-04-14
+* updated German translation for "darker" and "lighter"
+
 ### 2025-04-11
 * updated dev version
 
