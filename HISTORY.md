@@ -23,7 +23,8 @@
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
 * **Notable Changes:**
-    * significantly sped-up rendering morphs representing data inside table cells 
+    * significantly sped-up rendering morphs representing data inside table cells
+    * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
 * **Translation Updates:**
@@ -33,6 +34,7 @@
 * updated German translation for "darker" and "lighter"
 * added new "Colors" blocks library based on the new first-class colors
 * updated dev version
+* threads: support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them 
 
 ### 2025-04-11
 * updated dev version

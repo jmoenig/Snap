@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-08';
+modules.threads = '2025-April-14';
 
 var ThreadManager;
 var Process;
@@ -108,6 +108,14 @@ function snapEquals(a, b) {
             return a.eq(b, true); // observe alpha
         }
         return false;
+    }
+
+    // selectors (translatable text)
+    if (a instanceof Array) {
+        return snapEquals(a[0], b);
+    }
+    if (b instanceof Array) {
+        return snapEquals(a, b[0]);
     }
 
     var x = +a,
