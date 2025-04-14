@@ -2431,7 +2431,8 @@ Process.prototype.reportListItem = function (index, list) {
         if (index[0] === 'parent') {
             index = '...';
         } else {
-            return '';
+            // return '';
+            return this.reportListItem(index[0], list); // support selector keys
         }
     }
     if (index instanceof List && this.enableHyperOps) {
