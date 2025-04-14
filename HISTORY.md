@@ -21,6 +21,7 @@
         - color-type input slots in primitives ("set pen color", "is touching color", "color is touching") accept reporter drops of
             * colors
             * RGB(A) value lists
+        - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells 
 * **Notable Fixes:**
@@ -30,6 +31,7 @@
 
 ### 2025-04-14
 * updated German translation for "darker" and "lighter"
+* added new "Colors" blocks library based on the new first-class colors
 
 ### 2025-04-11
 * updated dev version

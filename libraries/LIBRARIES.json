@@ -79,6 +79,52 @@
     }
   },
   {
+    "fileName": "colors.xml",
+    "name": "Colors",
+    "description": "mix, modify and transition colors",
+    "searchData": [
+      "colors of costume _",
+      "mix _ with _ ratio _ %",
+      "color _ _ by _ %",
+      "change _ of _ by _",
+      "transition _ over _"
+    ],
+    "categories": [
+      "looks",
+      "pen"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "Farben von Kostüm _",
+          "mische _ mit _ im Verhältnis _ %",
+          "Farbe _ _ um _ %",
+          "ändere _ von _ um _",
+          "_ transparent _ %",
+          "Farbübergang _ Länge _"
+        ]
+      },
+      "ca": {
+        "name": "Colors"
+      },
+      "es": {
+        "name": "Colores"
+      },
+      "it": {
+        "name": "Colori"
+      },
+      "ti": {
+        "name": "ሕብርታት"
+      },
+      "ua": {
+        "name": "Кольори"
+      },
+      "zh_CN": {
+        "name": "颜色"
+      }
+    }
+  },
+  {
     "fileName": "~",
     "name": "~"
   },

@@ -120,6 +120,7 @@ var snapVersion = '10.8-250411-dev',
 
         'libraries/code2blocks_module.xml',
         'libraries/colors.xml',
+        'libraries/colors_module.xml',
         'libraries/continuations_module.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
