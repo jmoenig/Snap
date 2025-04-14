@@ -95,6 +95,7 @@
     ],
     "translations": {
       "de": {
+        "name": "Farben",
         "searchData": [
           "Farben von Kostüm _",
           "mische _ mit _ im Verhältnis _ %",
