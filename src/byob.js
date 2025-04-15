@@ -5304,10 +5304,10 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
         );
     }
 
+    addSpecialSlotType('color', '%clr');
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
     menu.addLine();
-    addSpecialSlotType('color', '%clr');
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');
     addSpecialSlotType('send data', '%send');
