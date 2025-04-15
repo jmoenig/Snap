@@ -13786,8 +13786,8 @@ ColorSlotMorph.prototype.setContents = function (clr) {
 ColorSlotMorph.prototype.setColor = function (clr) {
     ColorSlotMorph.uber.setColor.call(
         this,
-        isString(clr) ? Color.fromString(clr || 'rgba(145,26,68,1)')
-            : clr || new Color(145, 26, 68)
+        isString(clr) && clr.length > 10 ? Color.fromString(clr)
+            : (clr instanceof Color ? clr : new Color(145, 26, 68))
     );
 };
 
