@@ -34,6 +34,7 @@
 ### 2025-04-15
 * blocks, objects: added support for color slot default values in primitives
 * blocks, byob: added support for color slot default values in custom blocks
+* updated dev version
 
 ### 2025-04-14
 * updated German translation for "darker" and "lighter"
