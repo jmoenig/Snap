@@ -13783,6 +13783,10 @@ ColorSlotMorph.prototype.setContents = function (clr) {
     this.setColor(clr);
 };
 
+ColorSlotMorph.prototype.setColor = function (clr) {
+    ColorSlotMorph.uber.setColor.call(this, isString(clr) ? Color.fromString(clr) : clr);
+};
+
 // ColorSlotMorph  color sensing:
 
 ColorSlotMorph.prototype.getUserColor = function () {

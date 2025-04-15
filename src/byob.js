@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -105,14 +105,14 @@ nop, radians, BoxMorph, ArrowMorph, PushButtonMorph, contains, InputSlotMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, ToggleElementMorph, fontHeight, isNil,
 StageMorph, SyntaxElementMorph, CommentMorph, localize, CSlotMorph, Variable,
 MorphicPreferences, SymbolMorph, CursorMorph, VariableFrame, BooleanSlotMorph,
-WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, MultiArgMorph,
-ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList*/
+WatcherMorph, XML_Serializer, SnapTranslator, SnapExtensions, ColorSlotMorph,
+ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2024-December-18';
+modules.byob = '2025-April-15';
 
 // Declarations
 
@@ -1410,7 +1410,8 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function (definition) {
         var i;
         if (inp instanceof InputSlotMorph ||
             inp instanceof BooleanSlotMorph ||
-            inp instanceof TemplateSlotMorph
+            inp instanceof TemplateSlotMorph ||
+            inp instanceof ColorSlotMorph
         ) {
             inp.setContents(
                 (definition || this.definition).defaultValueOfInputIdx(idx)
@@ -4679,6 +4680,9 @@ InputSlotDialogMorph.prototype.getInput = function () {
         if (contains(['%b', '%boolUE'], this.fragment.type)) {
             this.fragment.defaultValue =
                 this.slots.defaultSwitch.evaluate();
+        } else if (this.fragment.type === '%clr') {
+            this.fragment.defaultValue =
+                this.slots.defaultPicker.evaluate().toString();
         } else if (this.slots.defaultInputField.isVisible) {
             this.fragment.defaultValue =
                 this.slots.defaultInputField.getValue();
@@ -4803,7 +4807,7 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var defLabel, defInput, defSwitch, loopArrow, settingsButton;
+    var defLabel, defInput, defSwitch, defPicker, loopArrow, settingsButton;
 
     // slot types
     this.addSlotTypeButton('Object', '%obj');
@@ -4844,7 +4848,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
-                    '%mlt', '%code', '%upvar'
+                    '%mlt', '%code', '%upvar', '%clr'
                 ],
                 this.fragment.type
             )) {
@@ -4897,6 +4901,17 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     };
     this.slots.defaultSwitch = defSwitch;
     this.slots.add(defSwitch);
+
+    defPicker = new ColorSlotMorph(this.fragment.defaultValue);
+    defPicker.refresh = () => {
+        if (this.isExpanded && this.fragment.type === '%clr') {
+            defPicker.show();
+        } else {
+            defPicker.hide();
+        }
+    };
+    this.slots.defaultPicker = defPicker;
+    this.slots.add(defPicker);
 
     // loop arrow checkbox //
     loopArrow = new ToggleMorph(
@@ -5120,6 +5135,14 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.defaultSwitch.setCenter(
         this.slots.defaultInputLabel.center().add(new Point(
             this.slots.defaultSwitch.width() / 2
+                + this.slots.defaultInputLabel.width() / 2 + 5,
+            0
+        ))
+    );
+
+    this.slots.defaultPicker.setCenter(
+        this.slots.defaultInputLabel.center().add(new Point(
+            this.slots.defaultPicker.width() / 2
                 + this.slots.defaultInputLabel.width() / 2 + 5,
             0
         ))
