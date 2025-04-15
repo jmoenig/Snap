@@ -25,10 +25,14 @@
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
+    * added support for color slot default values in primitives
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
 * **Translation Updates:**
     * German
+
+### 2025-04-15
+* blocks, objects: added support for color slot default values in primitives
 
 ### 2025-04-14
 * updated German translation for "darker" and "lighter"

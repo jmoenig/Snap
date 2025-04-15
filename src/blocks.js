@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-April-08';
+modules.blocks = '2025-April-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13777,6 +13777,10 @@ ColorSlotMorph.prototype.init = function (clr) {
 
 ColorSlotMorph.prototype.getSpec = function () {
     return '%clr';
+};
+
+ColorSlotMorph.prototype.setContents = function (clr) {
+    this.setColor(clr);
 };
 
 // ColorSlotMorph  color sensing:
