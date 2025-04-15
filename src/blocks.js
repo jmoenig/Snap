@@ -13771,7 +13771,7 @@ function ColorSlotMorph(clr) {
 ColorSlotMorph.prototype.init = function (clr) {
     ColorSlotMorph.uber.init.call(this);
     this.alpha = 1;
-    this.setColor(clr || new Color(145, 26, 68));
+    this.setColor(clr);
     this.fixLayout();
 };
 
@@ -13784,7 +13784,11 @@ ColorSlotMorph.prototype.setContents = function (clr) {
 };
 
 ColorSlotMorph.prototype.setColor = function (clr) {
-    ColorSlotMorph.uber.setColor.call(this, isString(clr) ? Color.fromString(clr) : clr);
+    ColorSlotMorph.uber.setColor.call(
+        this,
+        isString(clr) ? Color.fromString(clr || 'rgba(145,26,68,1)')
+            : clr || new Color(145, 26, 68)
+    );
 };
 
 // ColorSlotMorph  color sensing:
