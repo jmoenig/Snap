@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-14';
+modules.threads = '2025-April-15';
 
 var ThreadManager;
 var Process;
@@ -8430,10 +8430,10 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
                 ) {
                     data = (value[1] || '').split('\n').map(each =>
                         each.trim()).filter(each =>
-                            each.length);
+                            each.length).map(txt => this.perhapsColor(txt));
                     slots.add(data.length > 1 ? new List(data) : data[0]);
                 } else {
-                    slots.add(value[1]);
+                    slots.add(this.perhapsColor(value[1]));
                 }
             });
         } else {
@@ -8673,6 +8673,13 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return new List();
     }
     return '';
+};
+
+Process.prototype.perhapsColor = function (value) {
+    // private - cast strings starting with 'rgba(' to colors
+    return isString(value) && value.startsWith('rgba(') ?
+        Color.fromString(value)
+        : value;
 };
 
 Process.prototype.slotType = function (spec) {
@@ -9057,7 +9064,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         });
         break;
     case 'defaults':
-        this.assertType(val, ['list', 'Boolean', 'number', 'text']);
+        this.assertType(val, ['list', 'Boolean', 'number', 'text', 'color']);
         if (!(val instanceof List)) {
             val = new List(new Array(def.inputNames().length).fill(val));
         }
@@ -9066,7 +9073,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
                 options = val.at(idx + 1);
             this.assertType(
                 options,
-                ['list', 'Boolean', 'number', 'text', 'selector']
+                ['list', 'Boolean', 'number', 'text', 'selector', 'color']
             );
             if (options instanceof List) {
                 options = options.itemsArray().map(v =>

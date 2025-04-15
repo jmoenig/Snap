@@ -35,6 +35,7 @@
 * blocks, objects: added support for color slot default values in primitives
 * blocks, byob: added support for color slot default values in custom blocks
 * updated dev version
+* threads: added metaprogramming support for using first-class colors in color slot default values
 
 ### 2025-04-14
 * updated German translation for "darker" and "lighter"
