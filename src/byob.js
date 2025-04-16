@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-April-15';
+modules.byob = '2025-April-16';
 
 // Declarations
 
@@ -4810,7 +4810,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     var defLabel, defInput, defSwitch, defPicker, loopArrow, settingsButton;
 
     // slot types
-    this.addSlotTypeButton('Object', '%obj');
+    this.addSlotTypeButton('Color', '%clr');
     this.addSlotTypeButton('Text', '%txt');
     this.addSlotTypeButton('List', '%l');
     this.addSlotTypeButton('Number', '%n');
@@ -5256,7 +5256,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
         }
         menu.addMenu(
             (contains(
-                ['%mlt', '%code', '%clr', '%scriptVars', '%receive', '%send',
+                ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
                     '%elseif'],
                 this.fragment.type
             ) ? on : off) +
@@ -5304,9 +5304,9 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
         );
     }
 
-    addSpecialSlotType('color', '%clr');
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('object', '%obj');
     menu.addLine();
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');
