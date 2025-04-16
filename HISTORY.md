@@ -34,6 +34,7 @@
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
+* blocks, threads, locale: changed "dimensions" selector in "color" attributes reporter to "HSBT"
 
 ### 2025-04-15
 * blocks, objects: added support for color slot default values in primitives

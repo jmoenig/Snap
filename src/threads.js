@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-15';
+modules.threads = '2025-April-16';
 
 var ThreadManager;
 var Process;
@@ -6338,7 +6338,7 @@ Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
         ]);
     }
     model = clr[SpriteMorph.prototype.penColorModel]();
-    if (choice === 'dimensions') {
+    if (choice === 'h-s-b-t') {
         return new List([
             (model[0] || 0) * 100,
             (model[1] || 0) * 100,

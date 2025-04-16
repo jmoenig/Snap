@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-April-14';
+modules.locale = '2025-April-16';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -143,6 +143,8 @@ Localizer.prototype.contextualize = function (string) {
     case 'brightness':
         return SpriteMorph.prototype.penColorModel === 'hsl' ?
             'lightness' : string;
+    case 'h-s-b-t':
+        return 'HSBT';
     case 'r-g-b-a':
         return 'RGBA';
     case 'r-g-b(-a)':
