@@ -1085,7 +1085,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportNewColor: {
             type: 'reporter',
             category: 'pen',
-            spec: 'color hue: %n saturation: %n brightness: %n',
+            spec: 'color hue: %n saturation: %n brilliance: %n',
             defaults: [70, 80, 90],
             code: 'newColor'
         },
