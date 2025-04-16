@@ -37,6 +37,7 @@
 * blocks, threads, locale: changed "dimensions" selector in "color" attributes reporter to "HSBT"
 * German translation update
 * updated "Colors" library
+* updated dev version
 
 ### 2025-04-15
 * blocks, objects: added support for color slot default values in primitives
