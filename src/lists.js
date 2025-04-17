@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-February-27';
+modules.lists = '2025-April-17';
 
 var List;
 var ListWatcherMorph;
@@ -695,6 +695,14 @@ List.prototype.quickRank = function () {
     // assuming regularly shaped nested lists
     var item = this.at(1);
     return item instanceof List ? item.quickRank() + 1 : 1;
+};
+
+List.prototype.firstAtom = function () {
+    // answer the first non-list value in my sublists,
+    // only look at the first item of each dimension,
+    // assuming regularly shaped nested lists
+    var item = this.at(1);
+    return item instanceof List ? item.firstAtom() : item;
 };
 
 List.prototype.shape = function () {

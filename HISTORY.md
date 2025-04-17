@@ -44,6 +44,7 @@
 * threads: hyperized color primitives to directly work on costumes
 * removed "colors of costume" reporter from the "Colors" library, because the "color ()" block can now do this directly on a costume
 * threads: hyperized "new costume" reporter to also work on tensors of colors
+* lists, threads: generalized the concept of color tensors when applying color primitives to costumes
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)

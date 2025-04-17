@@ -7987,7 +7987,7 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     if (name instanceof List) {
         shp = name.quickShape();
         if (shp.at(2) > 4 ||
-            (shp.length() === 2 && name.at(1).at(1) instanceof Color)
+            (shp.length() === 2 && name.firstAtom() instanceof Color)
         ) {
             height = shp.at(1);
             width = shp.at(2);
@@ -8017,7 +8017,7 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
     yStretch = Math.round(cst.height() * +yP / 100);
     result = cst.stretched(xStretch, yStretch);
     if (shp instanceof List && shp.at(2) > 0) {
-        if (shp.length() === 2 && name.at(1).at(1) instanceof Color) {
+        if (shp.length() === 2 && name.firstAtom() instanceof Color) {
             return this.reportColor(
                 result.pixels().reshape(new List([yStretch, xStretch, 4]))
             );
@@ -8086,12 +8086,12 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     if (width <= 0 || height <= 0) {
         // try to interpret the pixels as matrix
         shp = pixels.quickShape();
-        if (shp.length() === 3 && pixels.at(1).at(1).at(1) instanceof Color) {
+        if (shp.length() > 2 && pixels.firstAtom() instanceof Color) {
             return pixels.map(each =>
                 this.reportNewCostume(each, width, height, name));
         }
         if (shp.at(2) > 4 ||
-            (shp.length() === 2 && pixels.at(1).at(1) instanceof Color)
+            (shp.length() === 2 && pixels.firstAtom() instanceof Color)
         ) {
             height = shp.at(1);
             width = shp.at(2);
