@@ -34,6 +34,7 @@
 
 ### 2025-04-17
 * blocks, objects, threads: changed "new color" reporter primitive to be both polyadic and hyperized
+* translation / German translation update
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)

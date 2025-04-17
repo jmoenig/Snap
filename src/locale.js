@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-April-16';
+modules.locale = '2025-April-17';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -146,10 +146,6 @@ Localizer.prototype.contextualize = function (string) {
     case 'h-s-b-t':
         return SpriteMorph.prototype.penColorModel === 'hsl' ?
             'HSLT' : 'HSBT';
-    case 'color hue: _ saturation: _ brilliance: _':
-        return SpriteMorph.prototype.penColorModel === 'hsl' ?
-            'color hue: _ saturation: _ lightness: _'
-            : 'color hue: _ saturation: _ brightness: _'
     case 'r-g-b-a':
         return 'RGBA';
     case 'r-g-b(-a)':
@@ -210,7 +206,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2025-04-16'
+        '2025-04-17'
 };
 
 SnapTranslator.dict.it = {
