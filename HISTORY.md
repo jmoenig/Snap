@@ -29,6 +29,7 @@
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
     * added support for color slot default values
     * replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
+    * hyperized "new costume" reporter to also work on tensors of colors
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
 * **Translation Updates:**
@@ -42,6 +43,7 @@
 * updated dev version
 * threads: hyperized color primitives to directly work on costumes
 * removed "colors of costume" reporter from the "Colors" library, because the "color ()" block can now do this directly on a costume
+* threads: hyperized "new costume" reporter to also work on tensors of colors
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)

@@ -8086,6 +8086,10 @@ Process.prototype.reportNewCostume = function (pixels, width, height, name) {
     if (width <= 0 || height <= 0) {
         // try to interpret the pixels as matrix
         shp = pixels.quickShape();
+        if (shp.length() === 3 && pixels.at(1).at(1).at(1) instanceof Color) {
+            return pixels.map(each =>
+                this.reportNewCostume(each, width, height, name));
+        }
         if (shp.at(2) > 4 ||
             (shp.length() === 2 && pixels.at(1).at(1) instanceof Color)
         ) {
