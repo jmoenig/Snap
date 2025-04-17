@@ -37,6 +37,7 @@
 * translation / German translation update
 * threads: wrap hue dimension of first-class colors
 * hyperized "shift color-dimension" and removed "color transparent" blocks in the "Colors" library 
+* updated dev version
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
