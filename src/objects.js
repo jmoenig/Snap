@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-April-15';
+modules.objects = '2025-April-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -1085,8 +1085,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportNewColor: {
             type: 'reporter',
             category: 'pen',
-            spec: 'color hue: %n saturation: %n brilliance: %n',
-            defaults: [70, 80, 90],
+            spec: 'new color %hsbt',
             code: 'newColor'
         },
 

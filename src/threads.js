@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-16';
+modules.threads = '2025-April-17';
 
 var ThreadManager;
 var Process;
@@ -6259,7 +6259,7 @@ Process.prototype.doSwitchToScene = function (id, transmission) {
 // Process color primitives
 
 Process.prototype.castColor = function (color) {
-    // private - return the given color, if it is a list of number, return
+    // private - return the given color, if it is a list of numbers, return
     // a color represented by the list's rgba values
     // if the list is a single color, interpret it as grayscales
     // if the list has 2 values, interpret it as grayscale and alpha
@@ -6353,12 +6353,30 @@ Process.prototype.reportBasicColorAttribute = function (attrib, clr) {
     return (model[idx] || 0) * 100;
 };
 
-Process.prototype.reportNewColor = function (h, s, v) {
-    var clr = new Color();
+Process.prototype.reportNewColor = function (hsbt) {
+    // return the given color encoded by a list of numbers
+    // representing hsbt values, - brightness/lightness - depending
+    // on the user's globel color model setting.
+    // fill-in missing dimensions with default values.
+    var model = SpriteMorph.prototype.penColorModel,
+        len, clr, h, s, b, t;
+    this.assertType(hsbt, 'list');
+    if (this.reportQuickRank(hsbt) > 1) { // hyper-monadicized
+        return hsbt.map(each => this.reportNewColor(each));
+    }
+    len = hsbt.length();
+    h = len < 1 ? 0 : Math.min(Math.max(hsbt.at(1), 0), 100) / 100;
     this.assertType(h, 'number');
+    s = len < 2 ? 1 : Math.min(Math.max(hsbt.at(2), 0), 100) / 100;
     this.assertType(s, 'number');
-    this.assertType(v, 'number');
-    clr.set_hsv(h * 0.01, s * 0.01, v * 0.01);
+    b = len < 3 ? (model === 'hsl' ? 0.5 : 1)
+        : Math.min(Math.max(hsbt.at(3), 0), 100) / 100;
+    this.assertType(b, 'number');
+    t = len < 4 ? 0 : Math.min(Math.max(hsbt.at(4), 0), 100) / 100;
+    this.assertType(t, 'number');
+    clr = new Color();
+    clr['set_' + model].apply(clr, [h, s, b]);
+    clr.a = 1 - t;
     return clr;
 };
 

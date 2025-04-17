@@ -17,7 +17,7 @@
                 - four numbers represent RGBA
             3) pass in a multidimensional HYPER structure to create lists, tables and tensors of numbers all at once
         - new "[dimension] of color []" reporter primitive, hyperized
-        - new "color hue: [] saturation: [] brightness: []" reporter primitive for generating a color from HSB values on a range from 0-100
+        - new hyperized "new color hue [] saturation [] brightness []" reporter primitive for generating a color from HSB values on a range from 0-100
         - color-type input slots in primitives ("set pen color", "is touching color", "color is touching") accept reporter drops of
             * colors
             * RGB(A) value lists
@@ -31,6 +31,9 @@
     * fixed sorting the distribution of compound non-list data (blocks, colors)
 * **Translation Updates:**
     * German
+
+### 2025-04-17
+* blocks, objects, threads: changed "new color" reporter primitive to be both polyadic and hyperized
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)

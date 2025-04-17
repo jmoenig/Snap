@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-April-16';
+modules.blocks = '2025-April-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1192,6 +1192,14 @@ SyntaxElementMorph.prototype.labelParts = {
         label: ['to', 'with data'],
         tags: 'static widget',
         max: 2
+    },
+    '%hsbt': {
+        type: 'multi',
+        slots: '%n',
+        label: ['hue', 'saturation', 'brightness', 'transparency'],
+        dflt: [0, 100, 100, '0'], // last zero needs to be a string to show up
+        defaults: 1,
+        max: 4
     },
     '%scriptVars': {
         type: 'multi',
