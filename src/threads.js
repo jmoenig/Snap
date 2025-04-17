@@ -6365,7 +6365,7 @@ Process.prototype.reportNewColor = function (hsbt) {
         return hsbt.map(each => this.reportNewColor(each));
     }
     len = hsbt.length();
-    h = len < 1 ? 0 : Math.min(Math.max(hsbt.at(1), 0), 100) / 100;
+    h = len < 1 ? 0 : this.reportBasicModulus(hsbt.at(1), 100) / 100;
     this.assertType(h, 'number');
     s = len < 2 ? 1 : Math.min(Math.max(hsbt.at(2), 0), 100) / 100;
     this.assertType(s, 'number');
