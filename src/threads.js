@@ -6265,17 +6265,22 @@ Process.prototype.castColor = function (color) {
     // if the list has 2 values, interpret it as grayscale and alpha
     // if it has 3 values, treat it as solid rgba
     var clr = color,
-        len,
-        n;
-    this.assertType(color, ['color', 'list']);
-
+        len, first, n;
+    this.assertType(color, ['color', 'list', 'costume']);
     if (this.reportQuickRank(clr) > 1) {
         // hyper-monadicized
         return clr.map(each => this.castColor(each));
     }
-
+    if (color instanceof Costume) {
+        return this.castColor(color.rasterized().pixels().reshape(new List([
+            color.height(),
+            color.width(),
+            4
+        ])));
+    }
     if (color instanceof List) {
-        if (clr.at(1) instanceof Color) {
+        first = clr.at(1);
+        if (first instanceof Color || first instanceof Costume) {
             return clr.map(each => this.castColor(each));
         }
         clr = new Color();

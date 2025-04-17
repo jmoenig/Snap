@@ -16,8 +16,10 @@
                 - a triple represents RGB
                 - four numbers represent RGBA
             3) pass in a multidimensional HYPER structure to create lists, tables and tensors of numbers all at once
-        - new "[dimension] of color []" reporter primitive, hyperized
-        - new hyperized "new color hue [] saturation [] brightness []" reporter primitive for generating a color from HSB values on a range from 0-100
+            4) pass in a costume to report a matrix of colors
+            5) pass in a multidimensional HYPER structure of costumes
+        - new "[dimension] of color []" reporter primitive, hyperized, also directly for costumes
+        - new polyadic hyperized "new color hue [] saturation [] brightness [] transparency" reporter primitive for generating a color from HSB values on a range from 0-100
         - color-type input slots in primitives ("set pen color", "is touching color", "color is touching") accept reporter drops of
             * colors
             * RGB(A) value lists
@@ -38,6 +40,7 @@
 * threads: wrap hue dimension of first-class colors
 * hyperized "shift color-dimension" and removed "color transparent" blocks in the "Colors" library 
 * updated dev version
+* threads: hyperized color primitives to directly work on costumes
 
 ### 2025-04-16
 * byob: replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
