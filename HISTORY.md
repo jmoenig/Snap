@@ -39,6 +39,7 @@
 ### 2025-04-18
 * blocks, threads: added "colors" selector to "(attributes) of costume" block - reports the pixels of the costume as table of colors
 * updated dev version
+* updated German translation for "colors"
 
 ### 2025-04-17
 * blocks, objects, threads: changed "new color" reporter primitive to be both polyadic and hyperized
