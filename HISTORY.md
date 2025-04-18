@@ -8,6 +8,7 @@
         - new color readout in variable and list watchers and speech and result balloons
         - added "color" selector to pen-attributes reporter
         - added "color" selector to location-aspect reporter "[] at []"
+        - added "colors" selector to "(attributes) of costume" block - reports the pixels of the costume as table of colors
         - new "color []" reporter primitive, lets you
             1) pick a color and reports it
             2) pass in a list of RGB(A) values each from 0-255 to create a color, where
@@ -34,6 +35,9 @@
     * fixed sorting the distribution of compound non-list data (blocks, colors)
 * **Translation Updates:**
     * German
+
+### 2025-04-18
+* blocks, threads: added "colors" selector to "(attributes) of costume" block - reports the pixels of the costume as table of colors
 
 ### 2025-04-17
 * blocks, objects, threads: changed "new color" reporter primitive to be both polyadic and hyperized

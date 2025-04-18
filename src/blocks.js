@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-April-17';
+modules.blocks = '2025-April-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -397,7 +397,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'name' : ['name'],
             'width' : ['width'],
             'height' : ['height'],
-            'pixels' : ['pixels']
+            'pixels' : ['pixels'],
+            'colors' : ['colors']
         }
     },
     '%imgsource': {

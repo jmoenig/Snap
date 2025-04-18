@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-17';
+modules.threads = '2025-April-18';
 
 var ThreadManager;
 var Process;
@@ -7977,6 +7977,8 @@ Process.prototype.reportGetImageAttribute = function (choice, name) {
         return cst.height();
     case 'pixels':
         return cst.rasterized().pixels();
+    case 'colors':
+        return this.castColor(cst);
     default:
         return cst;
     }
