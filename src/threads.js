@@ -1321,7 +1321,7 @@ Process.prototype.tryCatch = function (action, exception, errVarName) {
         }
         exception.pc = 0;
         exception.outerContext.variables.addVar(errVarName);
-        exception.outerContext.variables.setVar(errVarName, new List(error.name,error.message));
+        exception.outerContext.variables.setVar(errVarName, error.name==='Error'?error.message:new List(error.name,error.message));
         this.context = exception;
         this.evaluate(next, new List(), true);
     };
