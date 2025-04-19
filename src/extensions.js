@@ -368,6 +368,11 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
+        if (msg instanceof List){
+            var err = new Error(msg.at(2));
+            err.name = msg.at(1);
+            throw err
+        }
         throw new Error(msg, {cause: 'user'});
     }
 );
