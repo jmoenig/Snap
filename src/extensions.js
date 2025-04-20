@@ -369,7 +369,7 @@ SnapExtensions.primitives.set(
     'err_error(msg)',
     function (msg) {
         if (msg instanceof List){
-            var err = new Error(msg.at(2));
+            var err = new Error(msg.at(2),{cause: 'user'});
             err.name = msg.at(1);
             throw err
         }
