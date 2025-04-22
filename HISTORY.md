@@ -36,6 +36,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-04-22
+* threads: added hyperblocks support setting for colors
+
 ### 2025-04-18
 * blocks, threads: added "colors" selector to "(attributes) of costume" block - reports the pixels of the costume as table of colors
 * updated dev version

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-18';
+modules.threads = '2025-April-22';
 
 var ThreadManager;
 var Process;
@@ -6267,20 +6267,25 @@ Process.prototype.castColor = function (color) {
     var clr = color,
         len, first, n;
     this.assertType(color, ['color', 'list', 'costume']);
-    if (this.reportQuickRank(clr) > 1) {
-        // hyper-monadicized
-        return clr.map(each => this.castColor(each));
-    }
-    if (color instanceof Costume) {
-        return this.castColor(color.rasterized().pixels().reshape(new List([
-            color.height(),
-            color.width(),
-            4
-        ])));
+
+    if (this.enableHyperOps) {
+        if (this.reportQuickRank(clr) > 1) {
+            // hyper-monadicized
+            return clr.map(each => this.castColor(each));
+        }
+        if (color instanceof Costume) {
+            return this.castColor(color.rasterized().pixels().reshape(new List([
+                color.height(),
+                color.width(),
+                4
+            ])));
+        }
     }
     if (color instanceof List) {
         first = clr.at(1);
-        if (first instanceof Color || first instanceof Costume) {
+        if ((first instanceof Color || first instanceof Costume) &&
+            this.enableHyperOps
+        ) {
             return clr.map(each => this.castColor(each));
         }
         clr = new Color();
