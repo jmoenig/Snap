@@ -33,8 +33,12 @@
     * hyperized "new costume" reporter to also work on tensors of colors
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
+    * improved localization of list watcher ('length' label) 
 * **Translation Updates:**
     * German
+
+### 2025-04-23
+* lists: improved localization of list watcher ('length' label) 
 
 ### 2025-04-22
 * threads: added hyperblocks support setting for colors

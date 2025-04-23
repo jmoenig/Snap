@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-April-17';
+modules.lists = '2025-April-23';
 
 var List;
 var ListWatcherMorph;
@@ -1469,7 +1469,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
 
     // elements declarations
     this.label = new StringMorph(
-        localize('length: ') + this.list.length(),
+        localize('length') + ': ' + this.list.length(),
         SyntaxElementMorph.prototype.fontSize,
         null,
         false,
@@ -1686,7 +1686,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
 };
 
 ListWatcherMorph.prototype.updateLength = function (notDone) {
-    this.label.text = localize('length: ') + this.list.length();
+    this.label.text = localize('length') + ': ' + this.list.length();
     if (notDone) {
         this.label.color = new Color(0, 0, 100);
     } else {
