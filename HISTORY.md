@@ -39,6 +39,7 @@
 
 ### 2025-04-23
 * lists: improved localization of list watcher ('length' label) 
+* updated dev version
 
 ### 2025-04-22
 * threads: added hyperblocks support setting for colors
