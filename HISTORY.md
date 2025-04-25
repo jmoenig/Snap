@@ -39,6 +39,7 @@
 
 ### 2025-04-25
 * updated new "Colors" library, hyperized "transition" block
+* updated dev version
 
 ### 2025-04-23
 * lists: improved localization of list watcher ('length' label) 
