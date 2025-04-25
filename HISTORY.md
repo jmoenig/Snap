@@ -37,6 +37,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-04-25
+* updated new "Colors" library, hyperized "transition" block
+
 ### 2025-04-23
 * lists: improved localization of list watcher ('length' label) 
 * updated dev version
