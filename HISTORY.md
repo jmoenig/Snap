@@ -27,6 +27,8 @@
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
+        - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
+        - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
