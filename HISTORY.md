@@ -39,7 +39,7 @@
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label) 
 * **Translation Updates:**
-    * German
+    * German, including translation of the "Writing and formatting" library blocks
 
 ### 2025-04-28
 * extensions: new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
