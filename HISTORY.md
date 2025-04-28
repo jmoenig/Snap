@@ -43,6 +43,10 @@
 
 ### 2025-04-28
 * extensions: new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
+* "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
+* "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
+* added German translation to the "Writing and formatting" library blocks
+* updated dev version
 
 ### 2025-04-25
 * updated new "Colors" library, hyperized "transition" block
