@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-April-10';
+modules.extensions = '2025-April-28';
 
 // Global stuff
 
@@ -440,6 +440,33 @@ SnapExtensions.primitives.set(
             arr = new Uint8Array(arr);
         }
         return new TextDecoder("utf-8").decode(arr);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'txt_width(txt, fontsize)',
+    function (text, size) {
+        // answer the width of the given text and size in the writing font
+        // also works for hacks that abuse the size paramter
+        // for fancy typography, as in the "writing and formatting" library
+        if (typeof text !== 'string' && typeof text !== 'number') {
+            throw new Error(
+                localize('can only write text or numbers, not a') + ' ' +
+                typeof text
+            );
+        }
+
+        var stage = this.parentThatIsA(StageMorph),
+            context = stage.penTrails().getContext('2d'),
+            len;
+
+        context.save();
+        context.font = size + 'px monospace';
+        context.textAlign = 'left';
+        context.textBaseline = 'alphabetic';
+        len = context.measureText(text).width;
+        context.restore();
+        return len;
     }
 );
 

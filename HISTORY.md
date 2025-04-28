@@ -25,6 +25,8 @@
             * colors
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
+    * Minor typography enhancements
+        - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
@@ -36,6 +38,9 @@
     * improved localization of list watcher ('length' label) 
 * **Translation Updates:**
     * German
+
+### 2025-04-28
+* extensions: new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
 
 ### 2025-04-25
 * updated new "Colors" library, hyperized "transition" block
