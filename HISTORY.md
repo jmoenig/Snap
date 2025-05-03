@@ -41,6 +41,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-05-03
+* updated "Writing and formatting" library with default values for typographic switches
+
 ### 2025-04-28
 * extensions: new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
 * "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
