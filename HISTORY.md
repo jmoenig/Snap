@@ -12,6 +12,7 @@
 * improved Unicode string handling in Base64 blocks, thanks Simon!
 * fixed three wrong strings in ES translation, thanks, Bernat & Mary!
 * blocks: fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
+* prepared v10.7.2 patch
 
 ## 10.7.1:
 * **Notable Fixes:**
