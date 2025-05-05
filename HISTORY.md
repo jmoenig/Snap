@@ -41,6 +41,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-05-05
+* updated dev from main, integrated fixes from patch 10.7.2
+
 ### 2025-05-03
 * updated "Writing and formatting" library with default values for typographic switches
 
