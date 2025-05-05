@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-March-30';
+modules.blocks = '2025-May-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8227,6 +8227,9 @@ RingMorph.prototype.render = function (ctx) {
 RingMorph.prototype.rootForGrab = function () {
     if (this.parent?.isTemplate) {
         return this.parent;
+    } else if (this.parent instanceof MultiArgMorph &&
+            this.parent.parent?.isTemplate) {
+        return this.parent.parent;
     }
     if (this.isDraggable) {
         return this;

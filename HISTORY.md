@@ -6,10 +6,12 @@
 * **Notable Fixes:**
     * MQTT Extension: improved Unicode string handling in Base64 blocks, thanks Simon!
     * ES translation: fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+    * fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
 
 ### 2025-05-05
 * improved Unicode string handling in Base64 blocks, thanks Simon!
 * fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+* blocks: fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
 
 ## 10.7.1:
 * **Notable Fixes:**
