@@ -185,7 +185,7 @@ SnapTranslator.dict.es = {
     "translator_e-mail":
         "victor.muratalla@yahoo.com / rizzi.cristian@gmail.com", // optional
     "last_changed":
-        "2023-11-20", // this, too, will appear in the Translators tab
+        "2025-05-05", // this, too, will appear in the Translators tab
 
     //ADDING jadga's newest commits
     "0": "0",
@@ -995,7 +995,7 @@ SnapTranslator.dict.es = {
     "for all sprites": "para todos los objetos",
     "for each _ in _ _": "para cada _ de _ _",
     "for this sprite only": "solo para este objeto",
-    "forever _": "repetir y repetir _",
+    "forever _": "por siempre _",
     "frame": "panel",
     "frames": "cuadros",
     "frequencies": "frecuencias",
@@ -1481,7 +1481,7 @@ SnapTranslator.dict.es = {
     "to": "a",
     "top": "arriba del todo",
     "touch screen settings": "configuración de pantallas táctiles",
-    "touching _ ?": "¿tocando el color _ ?",
+    "touching _ ?": "¿tocando _ ?",
     "transient": "excluir al guardar",
     "translations": "traducciones",
     "translations...": "traducciones…",

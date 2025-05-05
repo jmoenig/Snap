@@ -145,6 +145,18 @@
 * store: saving and loading support for "color" data
 * threads: equality and identity testing support for "color" data
 
+## 10.7.2:
+* **Notable Fixes:**
+    * MQTT Extension: improved Unicode string handling in Base64 blocks, thanks Simon!
+    * ES translation: fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+    * fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
+
+### 2025-05-05
+* improved Unicode string handling in Base64 blocks, thanks Simon!
+* fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+* blocks: fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
+* prepared v10.7.2 patch
+
 ## 10.7.1:
 * **Notable Fixes:**
     * fixed a comment re-drop bug, see https://forum.snap.berkeley.edu/t/snap-just-broke-due-to-undrop-comment/19206

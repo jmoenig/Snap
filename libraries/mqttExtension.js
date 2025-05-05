@@ -20,6 +20,7 @@
  * V1.7.2 02Mar2025 Added the public HiveMQ broker to the list 
  * V1.7.3 12Mar2025 Slight bux fix to Base64 code 
  * V1.7.4 18Mar2025 Another small bugfix to Base64 code
+ * V1.7.5 17Apr2025 Change Base64 unicode string handling
  */
 
 
@@ -373,12 +374,12 @@ SnapExtensions.primitives.set(
     function (media_or_data) {
         if (media_or_data instanceof List) {
            return SnapExtensions.primitives.get('mqt_list_to_base64(lst)')(media_or_data);
-	} else if (media_or_data instanceof Sound) {
+    } else if (media_or_data instanceof Sound) {
             return media_or_data.audio.src;
         } else if (media_or_data instanceof Costume) {
             return media_or_data.contents.toDataURL();
         } else {
-            return window.btoa(media_or_data);
+            return btoa(unescape(encodeURIComponent(media_or_data)));
         }
     }
 );
@@ -404,7 +405,13 @@ SnapExtensions.primitives.set(
             proc.pushContext('doYield');
             proc.pushContext();
         } else {
-            return window.atob(b64);
+            try {
+               // to return a Unicode string
+               return decodeURIComponent(escape(atob(b64)));
+            } catch(e) {
+               // otherwise simple decode
+               return window.atob(b64);
+            }
         }
     }
 );
@@ -414,7 +421,7 @@ SnapExtensions.primitives.set(
     function (lst) {
         var byteArray = new Uint8Array(lst.contents.length);
         lst.contents.forEach((value, i) => {byteArray[i] = value & 0xff;});
-	return window.btoa(new Uint8Array(byteArray.buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    return window.btoa(new Uint8Array(byteArray.buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
     }
 );
 
