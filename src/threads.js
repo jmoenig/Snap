@@ -5502,11 +5502,20 @@ Process.prototype.reportLetter = function (idx, string) {
     );
 };
 
+Process.prototype.safeStringArray = function (str) {
+    // An error is thrown if the string is >= 125814709 characters long
+    str = (str || '').toString();
+    if (str.length > 125814709) {
+        return str;
+    }
+    return Array.from(str.toString());
+};
+
 Process.prototype.reportBasicLetter = function (idx, string) {
     var str, i;
 
     str = isNil(string) ? '' : string.toString();
-    char_array = Array.from(str);
+    char_array = this.safeStringArray(str);
     if (this.inputOption(idx) === 'random') {
         idx = this.reportBasicRandom(1, char_array.length);
     }
@@ -5539,7 +5548,7 @@ Process.prototype.reportTextAttribute = function (choice, text) {
 
 Process.prototype.reportStringSize = function (data) {
     return this.hyper(
-        str => isString(str) ? Array.from(str.toString()).length
+        str => isString(str) ? this.safeStringArray(str).length
                 : (parseFloat(str) === +str ? str.toString().length : 0),
         data
     );
