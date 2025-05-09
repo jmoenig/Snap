@@ -1605,8 +1605,6 @@ SnapExtensions.primitives.set(
             }
             return;
         }
-        proc.pushContext('doYield');
-        proc.pushContext();
     }
 );
 
