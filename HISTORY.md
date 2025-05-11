@@ -37,9 +37,13 @@
     * hyperized "new costume" reporter to also work on tensors of colors
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
-    * improved localization of list watcher ('length' label) 
+    * improved localization of list watcher ('length' label)
+    * fixed case-insensitive text comparison for <, <=, >, >=
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-12
+* threads: fixed case-insensitive text comparison for <, <=, >, >=
 
 ### 2025-05-05
 * updated dev from main, integrated fixes from patch 10.7.2

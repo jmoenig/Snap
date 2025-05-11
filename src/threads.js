@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-22';
+modules.threads = '2025-May-12';
 
 var ThreadManager;
 var Process;
@@ -5257,6 +5257,14 @@ Process.prototype.reportBasicLessThan = function (a, b) {
         x = a;
         y = b;
     }
+    if (Process.prototype.isCaseInsensitive) {
+        if (isString(x)) {
+            x = x.toLowerCase();
+        }
+        if (isString(y)) {
+            y = y.toLowerCase();
+        }
+    }
     return x < y;
 };
 
@@ -5278,6 +5286,14 @@ Process.prototype.reportBasicGreaterThan = function (a, b) {
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
+    }
+    if (Process.prototype.isCaseInsensitive) {
+        if (isString(x)) {
+            x = x.toLowerCase();
+        }
+        if (isString(y)) {
+            y = y.toLowerCase();
+        }
     }
     return x > y;
 };
