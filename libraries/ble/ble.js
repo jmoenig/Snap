@@ -53,7 +53,7 @@ BLEController.prototype.onReceive = function (event) {
 };
 
 BLEController.prototype.processData = function (data) {
-    this.buffer.push(...data);
+    this.buffer = this.buffer.concat(Array.from(data));
     if (this.snapBLEprocessBlockDef) {
         var block = this.snapBLEprocessBlockDef.blockInstance();
         if (block) {
