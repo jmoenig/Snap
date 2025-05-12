@@ -39,11 +39,13 @@
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
     * fixed case-insensitive text comparison for <, <=, >, >=
+    * serial port communication fixes for MicroBlocks, thanks, Bernat!
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
+* serial port fixes for MicroBlocks, thanks, Bernat!
 
 ### 2025-05-05
 * updated dev from main, integrated fixes from patch 10.7.2
