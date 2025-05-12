@@ -46,6 +46,7 @@
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
 * serial port fixes for MicroBlocks, thanks, Bernat!
+* updated dev version
 
 ### 2025-05-05
 * updated dev from main, integrated fixes from patch 10.7.2
