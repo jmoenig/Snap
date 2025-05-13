@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-May-12';
+modules.threads = '2025-May-13';
 
 var ThreadManager;
 var Process;
@@ -5523,7 +5523,7 @@ Process.prototype.safeStringArray = function (str) {
     // While both strings and arrays can be much longer, the JS runtime
     // throws an error when using a string iterator which is too long.
     // We set this value at an "even" 100 million characters.
-    MAX_STRING_LENGTH = 100e6;
+    let MAX_STRING_LENGTH = 100e6;
     str = (str || '').toString();
     if (str.length > MAX_STRING_LENGTH) {
         return str;
@@ -5532,10 +5532,9 @@ Process.prototype.safeStringArray = function (str) {
 };
 
 Process.prototype.reportBasicLetter = function (idx, string) {
-    var str, i;
-
-    str = isNil(string) ? '' : string.toString();
-    char_array = this.safeStringArray(str);
+    var str = isNil(string) ? '' : string.toString(),
+        char_array = this.safeStringArray(str),
+        i;
     if (this.inputOption(idx) === 'random') {
         idx = this.reportBasicRandom(1, char_array.length);
     }

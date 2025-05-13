@@ -42,6 +42,7 @@
     * fixed case-insensitive text comparison for <, <=, >, >=
     * serial port communication fixes for MicroBlocks, thanks, Bernat!
     * ignore hidden blocks when reordering the palette
+    * fixed unicode splitting, thanks, Michael!
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
@@ -49,6 +50,7 @@
 * byob: ignore hidden blocks when reordering the palette
 * objects: keep the source's ghost effect when pasting a sprite onto another
 * updated dev version
+* integrated unicode fixes, thanks, Michael!
 
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
