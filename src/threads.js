@@ -5503,9 +5503,13 @@ Process.prototype.reportLetter = function (idx, string) {
 };
 
 Process.prototype.safeStringArray = function (str) {
-    // An error is thrown if the string is >= 125814709 characters long
+    // An error is thrown if the string is > 125814708 characters long
+    // While both strings and arrays can be much longer, the JS runtime
+    // throws an error when using a string iterator which is too long.
+    // We set this value at an "even" 100 million characters.
+    MAX_STRING_LENGTH = 100e6;
     str = (str || '').toString();
-    if (str.length > 125814709) {
+    if (str.length > MAX_STRING_LENGTH) {
         return str;
     }
     return Array.from(str.toString());
