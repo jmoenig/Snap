@@ -6,11 +6,10 @@ SerialController.prototype.init = function (stage) {
     this.stage = stage;
     this.connected = false;
     this.disconnecting = false;
+    this.sendInProgress = false;
     this.port = undefined;
     this.reader = undefined;
     this.writer = undefined;
-    this.sendInProgress = false;
-    this.lastReceiveTime = Date.now();
     this.buffer = [];
     this.snapSerialProcessBlockDef =
         this.stage.globalBlocks.find(
@@ -30,8 +29,12 @@ SerialController.prototype.connect = async function (baudrate) {
 };
 
 SerialController.prototype.disconnect = async function () {
-    // actually called from readerLoop when disconnecting becomes true
+    this.disconnecting = true;
     await this.reader.releaseLock(); 
+    // readerLoop will take over, as read() is now unlocked
+};
+
+SerialController.prototype.close = async function () {
     await this.writer.releaseLock();
     await this.port.close();
 
@@ -51,13 +54,13 @@ SerialController.prototype.readerLoop = async function () {
                 this.processData(value);
             }
             if (done) {
-                this.disconnect();
+                this.close();
                 return;
             }
         }
-        this.disconnect();
+        this.close();
     } catch (error) {
-        this.disconnect();
+        this.close();
     }
 };
 
@@ -113,8 +116,7 @@ SnapExtensions.primitives.set(
     function () {
         var stage = this.parentThatIsA(StageMorph);
         if (stage.serial) {
-            // defer disconnection for readerLoop to handle
-            stage.serial.disconnecting = true;
+            stage.serial.disconnect();
         }
     }
 );
