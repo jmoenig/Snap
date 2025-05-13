@@ -35,6 +35,7 @@
     * added support for color slot default values
     * replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
     * hyperized "new costume" reporter to also work on tensors of colors
+    * keep the source's ghost effect when pasting a sprite onto another
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -46,6 +47,7 @@
 
 ### 2025-05-13
 * byob: ignore hidden blocks when reordering the palette
+* objects: keep the source's ghost effect when pasting a sprite onto another
 
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
