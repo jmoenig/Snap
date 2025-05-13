@@ -5564,7 +5564,7 @@ Process.prototype.reportUnicode = function (string) {
             return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
-        unicodeList = Array.from(str);
+        unicodeList = this.safeStringArray(str);
         if (unicodeList.length > 1) {
             return this.reportUnicode(new List(unicodeList));
         }
@@ -5647,7 +5647,7 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         break;
     case '':
     case 'letter':
-        return new List(Array.from(str));
+        return new List(this.safeStringArray(str));
     case 'csv':
         return this.parseCSV(string);
     case 'json':
