@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-April-16';
+modules.byob = '2025-May-13';
 
 // Declarations
 
@@ -2075,13 +2075,13 @@ CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
         cat = blocks[idx].category;
         if (dir === 'up') {
             for (t_idx = idx - 1; t_idx > -1; t_idx -= 1) {
-                if (blocks[t_idx].category === cat) {
+                if (blocks[t_idx].category === cat && !blocks[t_idx].isHelper) {
                     break;
                 }
             }
         } else { // 'down'
             for (t_idx = idx + 1; t_idx < blocks.length; t_idx += 1) {
-                if (blocks[t_idx].category === cat) {
+                if (blocks[t_idx].category === cat && !blocks[t_idx].isHelper) {
                     break;
                 }
             }

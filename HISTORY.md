@@ -40,8 +40,12 @@
     * improved localization of list watcher ('length' label)
     * fixed case-insensitive text comparison for <, <=, >, >=
     * serial port communication fixes for MicroBlocks, thanks, Bernat!
+    * ignore hidden blocks when reordering the palette
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-13
+* byob: ignore hidden blocks when reordering the palette
 
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
