@@ -48,6 +48,7 @@
 ### 2025-05-13
 * byob: ignore hidden blocks when reordering the palette
 * objects: keep the source's ghost effect when pasting a sprite onto another
+* updated dev version
 
 ### 2025-05-12
 * threads: fixed case-insensitive text comparison for <, <=, >, >=
