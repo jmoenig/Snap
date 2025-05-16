@@ -46,6 +46,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-05-17
+* gui: refactored performer mode
+
 ### 2025-05-13
 * byob: ignore hidden blocks when reordering the palette
 * objects: keep the source's ghost effect when pasting a sprite onto another

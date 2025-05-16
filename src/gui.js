@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-May-13';
+modules.gui = '2025-May-17';
 
 // Declarations
 
-var SnapVersion = '11-250513-dev';
+var SnapVersion = '11-250517-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -7424,7 +7424,11 @@ IDE_Morph.prototype.toggleSliderExecute = function () {
 };
 
 IDE_Morph.prototype.togglePerformerMode = function () {
-    this.performerMode = !this.performerMode;
+    this.setPerformerModeTo(!this.performerMode);
+};
+
+IDE_Morph.prototype.setPerformerModeTo = function (bool = false) {
+    this.performerMode = bool;
     if (!this.performerMode) {
         this.setStageExtent(new Point(480, 360));
     }
