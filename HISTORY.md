@@ -35,11 +35,30 @@
     * added support for color slot default values
     * replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
     * hyperized "new costume" reporter to also work on tensors of colors
+    * keep the source's ghost effect when pasting a sprite onto another
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
-    * improved localization of list watcher ('length' label) 
+    * improved localization of list watcher ('length' label)
+    * fixed case-insensitive text comparison for <, <=, >, >=
+    * serial port communication fixes for MicroBlocks, thanks, Bernat!
+    * ignore hidden blocks when reordering the palette
+    * fixed unicode splitting, thanks, Michael!
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-13
+* byob: ignore hidden blocks when reordering the palette
+* objects: keep the source's ghost effect when pasting a sprite onto another
+* updated dev version
+* integrated unicode fixes, thanks, Michael!
+
+### 2025-05-12
+* threads: fixed case-insensitive text comparison for <, <=, >, >=
+* serial port fixes for MicroBlocks, thanks, Bernat!
+* updated dev version
+
+### 2025-05-05
+* updated dev from main, integrated fixes from patch 10.7.2
 
 ### 2025-05-03
 * updated "Writing and formatting" library with default values for typographic switches
@@ -144,6 +163,18 @@
 * blocks, objects, tables, threads: added "color" data type
 * store: saving and loading support for "color" data
 * threads: equality and identity testing support for "color" data
+
+## 10.7.2:
+* **Notable Fixes:**
+    * MQTT Extension: improved Unicode string handling in Base64 blocks, thanks Simon!
+    * ES translation: fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+    * fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
+
+### 2025-05-05
+* improved Unicode string handling in Base64 blocks, thanks Simon!
+* fixed three wrong strings in ES translation, thanks, Bernat & Mary!
+* blocks: fixed a variadic ring-slot slide-back bug, thanks, mark4sisb, for the report!
+* prepared v10.7.2 patch
 
 ## 10.7.1:
 * **Notable Fixes:**

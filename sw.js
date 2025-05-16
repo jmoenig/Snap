@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11-250428-dev',
+var snapVersion = '11-250513-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -204,7 +204,11 @@ var snapVersion = '11-250428-dev',
             'libraries/TuneScope/0320_GeneralUserGS_sf2_file.js',
             'libraries/TuneScope/0230_Aspirin_sf2_file.js',
 
+        // serial port
         'libraries/serial_module.xml',
+        'libraries/serial/init.js',
+        'libraries/serial/serial.js',
+
         'libraries/signada.js',
         'libraries/signada.xml',
         'libraries/speech_module.xml',

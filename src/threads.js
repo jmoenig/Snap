@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-April-22';
+modules.threads = '2025-May-13';
 
 var ThreadManager;
 var Process;
@@ -5257,6 +5257,14 @@ Process.prototype.reportBasicLessThan = function (a, b) {
         x = a;
         y = b;
     }
+    if (Process.prototype.isCaseInsensitive) {
+        if (isString(x)) {
+            x = x.toLowerCase();
+        }
+        if (isString(y)) {
+            y = y.toLowerCase();
+        }
+    }
     return x < y;
 };
 
@@ -5278,6 +5286,14 @@ Process.prototype.reportBasicGreaterThan = function (a, b) {
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
+    }
+    if (Process.prototype.isCaseInsensitive) {
+        if (isString(x)) {
+            x = x.toLowerCase();
+        }
+        if (isString(y)) {
+            y = y.toLowerCase();
+        }
     }
     return x > y;
 };
@@ -5502,18 +5518,31 @@ Process.prototype.reportLetter = function (idx, string) {
     );
 };
 
-Process.prototype.reportBasicLetter = function (idx, string) {
-    var str, i;
+Process.prototype.safeStringArray = function (str) {
+    // An error is thrown if the string is > 125814708 characters long
+    // While both strings and arrays can be much longer, the JS runtime
+    // throws an error when using a string iterator which is too long.
+    // We set this value at an "even" 100 million characters.
+    let MAX_STRING_LENGTH = 100e6;
+    str = (str || '').toString();
+    if (str.length > MAX_STRING_LENGTH) {
+        return str;
+    }
+    return Array.from(str.toString());
+};
 
-    str = isNil(string) ? '' : string.toString();
+Process.prototype.reportBasicLetter = function (idx, string) {
+    var str = isNil(string) ? '' : string.toString(),
+        char_array = this.safeStringArray(str),
+        i;
     if (this.inputOption(idx) === 'random') {
-        idx = this.reportBasicRandom(1, str.length);
+        idx = this.reportBasicRandom(1, char_array.length);
     }
     if (this.inputOption(idx) === 'last') {
-        idx = str.length;
+        idx = char_array.length;
     }
     i = +(idx || 0);
-    return str[i - 1] || '';
+    return char_array[i - 1] || '';
 };
 
 Process.prototype.reportTextAttribute = function (choice, text) {
@@ -5538,11 +5567,8 @@ Process.prototype.reportTextAttribute = function (choice, text) {
 
 Process.prototype.reportStringSize = function (data) {
     return this.hyper(
-        str => isString(str) ? str.length
+        str => isString(str) ? this.safeStringArray(str).length
                 : (parseFloat(str) === +str ? str.toString().length : 0),
-        // proposed scheme by Michael to address text with emojis, has
-        // memory issue when the stringd get very large:
-        // str => isNil(data) ? 0 : Array.from(str.toString()).length,
         data
     );
 };
@@ -5557,8 +5583,7 @@ Process.prototype.reportUnicode = function (string) {
             return string.map(each => this.reportUnicode(each));
         }
         str = isNil(string) ? '\u0000' : string.toString();
-        // unicodeList = Array.from(str); // emoji-friendly version
-        unicodeList = str.split('');
+        unicodeList = this.safeStringArray(str);
         if (unicodeList.length > 1) {
             return this.reportUnicode(new List(unicodeList));
         }
@@ -5641,8 +5666,7 @@ Process.prototype.reportBasicTextSplit = function (string, delimiter) {
         break;
     case '':
     case 'letter':
-        // return new List(Array.from(str)); // proposed by Michael for emojis
-        return new List(str.split(''));
+        return new List(this.safeStringArray(str));
     case 'csv':
         return this.parseCSV(string);
     case 'json':
@@ -8800,7 +8824,7 @@ Process.prototype.slotType = function (spec) {
         'cs':           5, // spec
         // mnemonics:
         'script':       5,
-        
+
         '6':            6,
         'cmdring':      6, // spec
         // mnemonics:
@@ -9288,7 +9312,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
     while (rcvr.doubleDefinitionsFor(def).length > 0) {
         def.spec += (' (2)');
     }
-    
+
     // update all block instances:
     // refer to "updateDefinition()" of BlockEditorMorph:
     template = rcvr.paletteBlockInstance(def);
@@ -10534,7 +10558,7 @@ JSCompiler.prototype.gensymForVar = function (varName, argIndex) {
 
 JSCompiler.prototype.getGensym = function (varName) {
     var scope = this.scope, gensym;
-    while (null == (gensym = scope.get(varName)) && 
+    while (null == (gensym = scope.get(varName)) &&
         null != (scope = scope.outerScope));
     return gensym;
 };
@@ -10592,7 +10616,7 @@ JSCompiler.prototype.compileFunctionBody = function (
     if (block instanceof Array) {
         throw new Error('can\'t compile empty ring');
     }
-   
+
     this.source = aContext;
     if (implicitParamCount === '' || isNil(implicitParamCount)) {
         this.implicitParams = 1;

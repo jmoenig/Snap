@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-April-17';
+modules.objects = '2025-May-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -6689,6 +6689,7 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
     ctx = targetCostume.contents.getContext('2d');
     ctx.rotate(radians(relRot));
     ctx.scale(relScale, relScale);
+    ctx.globalAlpha = this.alpha;
     ctx.globalCompositeOperation = mask;
     ctx.drawImage(sourceCostume.contents, pos.x, pos.y);
 
