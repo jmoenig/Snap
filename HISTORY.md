@@ -48,6 +48,8 @@
 
 ### 2025-05-17
 * gui: refactored performer mode
+* ble library fix, thanks, Bernat!
+* updated dev version
 
 ### 2025-05-13
 * byob: ignore hidden blocks when reordering the palette
