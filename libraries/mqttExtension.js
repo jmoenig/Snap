@@ -446,7 +446,7 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'mqt_base64_to_list(bytes)',
+    'mqt_from_base64_to_byte_list(b64)',
     function (b64) {
 		return new List(Base64Binary.decode(b64)); 
 	}
