@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-May-13';
+modules.threads = '2025-May-26';
 
 var ThreadManager;
 var Process;
@@ -5429,6 +5429,9 @@ Process.prototype.reportBasicMonadic = function (fname, n) {
         break;
     case '2^':
         result = Math.pow(2, x);
+        break;
+    case 'sigmoid':
+        result = 1 / (1 + Math.exp(-x));
         break;
     case 'id':
         return n;

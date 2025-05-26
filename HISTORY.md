@@ -25,6 +25,7 @@
             * colors
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
+    * Added sigmoid function ('σ') to the dropdown of the monadic operators reporter
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
         - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
@@ -45,6 +46,9 @@
     * fixed unicode splitting, thanks, Michael!
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-26
+* blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
 
 ### 2025-05-17
 * gui: refactored performer mode
