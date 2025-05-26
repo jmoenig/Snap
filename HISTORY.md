@@ -49,6 +49,7 @@
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
+* updated dev version
 
 ### 2025-05-17
 * gui: refactored performer mode
