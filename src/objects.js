@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-May-13';
+modules.objects = '2025-May-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -15814,7 +15814,7 @@ StagePickerMorph.prototype.createItems = function (scale) {
     y += 1;
     this.items.forEach(tuple => {
         isLine = false;
-        if (tuple[0] === 0) {
+        if (tuple[0] === 0 && tuple[1]) {
             isLine = true;
             item = new Morph();
             item.color = this.borderColor;

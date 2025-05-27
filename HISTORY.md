@@ -46,12 +46,14 @@
     * fixed unicode splitting, thanks, Michael!
     * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
     * MQTT: Base64 byte decoding improvement, thanks, Simon!
+    * fixed an edge-case glitch for ASK -ing a list with a zero number item
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
 ### 2025-05-27
 * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
 * MQTT: Base64 byte decoding improvement, thanks, Simon!
+* objects: fixed an edge-case glitch for ASK -ing a list with a zero number item
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
