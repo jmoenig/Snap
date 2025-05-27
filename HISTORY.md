@@ -45,11 +45,13 @@
     * ignore hidden blocks when reordering the palette
     * fixed unicode splitting, thanks, Michael!
     * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
+    * MQTT: Base64 byte decoding improvement, thanks, Simon!
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
 ### 2025-05-27
 * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
+* MQTT: Base64 byte decoding improvement, thanks, Simon!
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
