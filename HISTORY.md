@@ -58,6 +58,7 @@
 * objects: fixed an edge-case glitch for ASK -ing a list with a zero number item
 * blocks, objects, threads: enabled hyper-mutation for arbitrary (sub-) lists
 * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
+* updated dev version
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
