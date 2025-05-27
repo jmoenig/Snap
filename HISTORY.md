@@ -48,6 +48,7 @@
     * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
     * MQTT: Base64 byte decoding improvement, thanks, Simon!
     * fixed an edge-case glitch for ASK -ing a list with a zero number item
+    * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
@@ -56,6 +57,7 @@
 * MQTT: Base64 byte decoding improvement, thanks, Simon!
 * objects: fixed an edge-case glitch for ASK -ing a list with a zero number item
 * blocks, objects, threads: enabled hyper-mutation for arbitrary (sub-) lists
+* Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter
