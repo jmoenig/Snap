@@ -1209,6 +1209,7 @@ SnapExtensions.primitives.set('SciS_isType(data,selection)',
 SnapExtensions.primitives.set('SciS_variance(data,mean)',
   function (data, mean) {
     var n = 0, isNumber, c, variance = 0, i = 1, k, value;
+    mean = Number(mean);
     if (data.length() === 0)
       return 0;
     data = data.flatten();
@@ -1930,6 +1931,7 @@ SnapExtensions.primitives.set('SciS_convertData(data,type)',
 SnapExtensions.primitives.set('SciS_columncopy(data,cols,start,stop)',
   function (data, cols, start, stop) {
     var row, result = new List();
+    start = Number(start); stop = Number(stop);
     for (var i = start; i <= stop; i++) {
       row = new List();
       for (var n = 1; n <= cols.length(); n++)
@@ -1941,7 +1943,7 @@ SnapExtensions.primitives.set('SciS_columncopy(data,cols,start,stop)',
 //returns a subsection of a table --------------------------------------------------------------------------------------------------------------------------------------
 SnapExtensions.primitives.set('SciS_subsection(data,begin,end)',
   function (data, begin, end) {
-    var x, y, x1 = begin.at(1), y1 = begin.at(2), x2 = end.at(1), y2 = end.at(2), row, result = new List();
+    var x, y, x1 = Number(begin.at(1)), y1 = Number(begin.at(2)), x2 = Number(end.at(1)), y2 = Number(end.at(2)), row, result = new List();
     y = y1;
     while ((y <= y2) && (y <= data.length())) {
       x = x1;
@@ -5388,46 +5390,31 @@ SnapExtensions.primitives.set(
       }
       return result;
     }
-
-    no = Number(no);
-    color0 = Number(color0);
-    color1 = Number(color1);
-    if ((no > 255) || (no < 0))
-      return "ERROR: number out of range!";
-    WolframData = new List(numberToBits(no));
-    for (var i = 1; i <= 3 * gridWidth; i++)
-      lineData.add(color0);
+    no = Number(no); color0 = Number(color0); color1 = Number(color1);
+    if ((no > 255) || (no < 0)) return "ERROR: number out of range!";
+    //Convert the gridnumber to a bit pattern.
+    WolframData = new List(numberToBits(no)); 
+    //To avoid edge effects, lines are enlarged both left and right. The griddata are in the middle.
+    for (var i = 1; i <= 3 * gridWidth; i++) lineData.add(color0);
     for (var i = gridWidth + 1; i <= 2 * gridWidth; i++)
-      lineData.put(grid.at(1).at(i - gridWidth), i);
+      lineData.put(grid.at(1).at(i - gridWidth), i); 
     lineLength = lineData.length();
     for (var y = 1; y < grid.length(); y++) {
+    //Apply the Wolfram-process to all cells of a line.
       result = new List();
       for (var i = 1; i <= lineLength; i++) {
         if (i === 1) {
-          if (lineData.at(1) === color1)
-            n = 2;
-          else
-            n = 0;
-          if (lineData.at(2) === color1)
-            n++;
+          if (Number(lineData.at(1)) === color1) n = 2; else n = 0;
+          if (Number(lineData.at(2)) === color1) n++;
         } else if (i === lineLength) {
-          if (lineData.at(i - 1) === color1)
-            n = 4;
-          else
-            n = 0;
-          if (lineData.at(i) === color1)
-            n = n + 2;
+          if (lineData.at(i - 1) === color1) n = 4; else n = 0;
+          if (Number(lineData.at(i)) === color1) n = n + 2;
         } else {
-          if (lineData.at(i - 1) === color1)
-            n = 4;
-          else
-            n = 0;
-          if (lineData.at(i) === color1)
-            n = n + 2;
-          if (lineData.at(i + 1) === color1)
-            n++;
+          if (Number(lineData.at(i - 1)) === color1) n = 4; else n = 0;
+          if (Number(lineData.at(i)) === color1) n = n + 2;
+          if (Number(lineData.at(i + 1)) === color1) n++;
         }
-        if (WolframData.at(n + 1) === 1) {
+        if (Number(WolframData.at(n + 1)) === 1) {
           result.add(color1);
           if ((i > gridWidth) && (i <= 2 * gridWidth))
             grid.at(y + 1).put(color1, i - gridWidth);
