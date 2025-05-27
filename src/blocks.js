@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-May-26';
+modules.blocks = '2025-May-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -838,6 +838,11 @@ SyntaxElementMorph.prototype.labelParts = {
     '%var': {
         type: 'input',
         tags: 'read-only static', // if "static" is removed, enable auto-ringify
+        menu: 'getVarNamesDict'
+    },
+    '%hyperVar': {
+        type: 'input',
+        tags: 'read-only',
         menu: 'getVarNamesDict'
     },
     '%shd': {

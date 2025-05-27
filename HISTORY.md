@@ -25,6 +25,7 @@
             * colors
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
+    * Hyper-mutation for arbitrary (sub-) lists: the CHANGE BY command also accepts list values in its first input slot
     * Added sigmoid function ('σ') to the dropdown of the monadic operators reporter
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
@@ -54,6 +55,7 @@
 * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
 * MQTT: Base64 byte decoding improvement, thanks, Simon!
 * objects: fixed an edge-case glitch for ASK -ing a list with a zero number item
+* blocks, objects, threads: enabled hyper-mutation for arbitrary (sub-) lists
 
 ### 2025-05-26
 * blocks, threads: added sigmoid function ('σ') to the dropdown of the monadic operators reporter

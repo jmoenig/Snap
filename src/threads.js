@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-May-26';
+modules.threads = '2025-May-27';
 
 var ThreadManager;
 var Process;
@@ -2115,6 +2115,9 @@ Process.prototype.doChangeVar = function (varName, value) {
             );
             return;
         }
+    } else if (name instanceof List) {
+        this.hyperChangeBy(name, value);
+        return; // do not shadow in this case (problematic, experimental)
     }
     varFrame.changeVar(name, value, this.blockReceiver());
 };

@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-May-17';
+modules.objects = '2025-May-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -1935,7 +1935,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeVar: {
             type: 'command',
             category: 'variables',
-            spec: 'change %var by %n',
+            spec: 'change %hyperVar by %n',
             defaults: [null, 1],
             code: '+='
         },
