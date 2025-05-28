@@ -55,6 +55,7 @@
 
 ### 2025-05-28
 * objects: increased watcher update frequency for non-table monitors
+* updated dev version
 
 ### 2025-05-27
 * SciScnap3: fixed a JS type casting bug, thanks, Eckart!
