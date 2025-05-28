@@ -38,6 +38,7 @@
     * replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
     * hyperized "new costume" reporter to also work on tensors of colors
     * keep the source's ghost effect when pasting a sprite onto another
+    * increased watcher update frequency for non-table monitors
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -51,6 +52,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-28
+* objects: increased watcher update frequency for non-table monitors
 
 ### 2025-05-27
 * SciScnap3: fixed a JS type casting bug, thanks, Eckart!

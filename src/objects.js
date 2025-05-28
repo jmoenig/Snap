@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-May-27';
+modules.objects = '2025-May-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -9876,8 +9876,8 @@ StageMorph.prototype.init = function (globals) {
     // frequency player, experimental
     this.freqPlayer = null; // Note, to be lazily initialized
 
-    this.watcherUpdateFrequency = 2;
-    this.lastWatcherUpdate = Date.now();
+    this.watcherUpdateFrequency = 10; // increased in v11, was: 2
+    this.lastWatcherUpdate = Date.now(); // needed when slowing down updates
 
     this.scale = 1; // for display modes, do not persist
 
@@ -10366,12 +10366,16 @@ StageMorph.prototype.step = function () {
     this.scheduleFrame();
 
     // update watchers
-    current = Date.now();
-    elapsed = current - this.lastWatcherUpdate;
-    leftover = (1000 / this.watcherUpdateFrequency) - elapsed;
-    if (leftover < 1) {
+    if (this.watcherUpdateFrequency) {
+        current = Date.now();
+        elapsed = current - this.lastWatcherUpdate;
+        leftover = (1000 / this.watcherUpdateFrequency) - elapsed;
+        if (leftover < 1) {
+            this.watchers().forEach(w => w.update());
+            this.lastWatcherUpdate = Date.now();
+        }
+    } else {
         this.watchers().forEach(w => w.update());
-        this.lastWatcherUpdate = Date.now();
     }
 
     // projection layer update (e.g. video frame capture)
