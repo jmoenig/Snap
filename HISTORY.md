@@ -56,6 +56,7 @@
 
 ### 2025-05-30
 * Just Bars library: added option to clear before plotting
+* updated dev version
 
 ### 2025-05-28
 * objects: increased watcher update frequency for non-table monitors
