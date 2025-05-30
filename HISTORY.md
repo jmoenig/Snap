@@ -39,6 +39,7 @@
     * hyperized "new costume" reporter to also work on tensors of colors
     * keep the source's ghost effect when pasting a sprite onto another
     * increased watcher update frequency for non-table monitors
+    * Just Bars library: added option to clear before plotting
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -52,6 +53,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-05-30
+* Just Bars library: added option to clear before plotting
 
 ### 2025-05-28
 * objects: increased watcher update frequency for non-table monitors
