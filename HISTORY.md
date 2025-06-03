@@ -58,6 +58,7 @@
 ### 2025-06-03
 * extensions: added "tts_stop" extension, un-blocks all processes currently waiting for speech recognition and advances to the next block
 * speech library: new "stop speech recognition" command
+* updated dev version
 
 ### 2025-05-30
 * Just Bars library: added option to clear before plotting
