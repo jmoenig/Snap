@@ -31,7 +31,7 @@
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
         - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
         - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
-    * new "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
+    * new "stop speech recognition" command in the spech library and "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
@@ -57,6 +57,7 @@
 
 ### 2025-06-03
 * extensions: added "tts_stop" extension, un-blocks all processes currently waiting for speech recognition and advances to the next block
+* speech library: new "stop speech recognition" command
 
 ### 2025-05-30
 * Just Bars library: added option to clear before plotting
