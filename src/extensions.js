@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-April-28';
+modules.extensions = '2025-June-03';
 
 // Global stuff
 
@@ -781,6 +781,17 @@ SnapExtensions.primitives.set(
         }
         proc.pushContext('doYield');
         proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'tts_stop',
+    function () {
+        this.parentThatIsA(StageMorph).threads.processes.forEach(proc => {
+            if (proc?.context?.accumulator?.voice) {
+                proc.context.accumulator.text = '';
+            }
+        });
     }
 );
 
