@@ -28,6 +28,18 @@
     }
   },
   {
+    "fileName": "quadratics.xml",
+    "name": "Quadratics",
+    "description": "Handling quadratic equations in mathematics.",
+    "searchData": [
+    ],
+    "categories": [
+      "operators"
+    ],
+    "translations": {
+    }
+  },
+  {
     "fileName": "OOP_module.xml",
     "name": "OOP",
     "description": "Data Objects with prototypical inheritance",
