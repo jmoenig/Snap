@@ -41,6 +41,7 @@
     * keep the source's ghost effect when pasting a sprite onto another
     * increased watcher update frequency for non-table monitors
     * Just Bars library: added option to clear before plotting
+    * in embedded projects don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -57,6 +58,8 @@
 
 ### 2025-06-10
 * blocks, threads: added derivative sigmoid function ('∂σ') to the dropdown of the monadic operators reporter
+* gui: don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
+* updated dev version
 
 ### 2025-06-03
 * extensions: added "tts_stop" extension, un-blocks all processes currently waiting for speech recognition and advances to the next block
