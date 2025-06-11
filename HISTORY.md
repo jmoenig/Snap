@@ -58,6 +58,7 @@
 
 ### 2025-06-11
 * blocks: commented out derivative sigmoid function from the monadic operators reporter again
+* updated dev version
 
 ### 2025-06-10
 * blocks, threads: added derivative sigmoid function ('∂σ') to the dropdown of the monadic operators reporter
