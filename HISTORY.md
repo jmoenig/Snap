@@ -59,6 +59,7 @@
 
 ### 2025-06-12
 * threads, lists: added hypermutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
+* updated dev version
 
 ### 2025-06-11
 * blocks: commented out derivative sigmoid function from the monadic operators reporter again
