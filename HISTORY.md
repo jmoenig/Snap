@@ -26,6 +26,7 @@
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
     * Hyper-mutation for arbitrary (sub-) lists: the CHANGE BY command also accepts list values in its first input slot
+    * Hyper-mutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
     * Added sigmoid (σ) function to the dropdown of the monadic operators reporter
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
@@ -55,6 +56,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-06-12
+* threads, lists: added hypermutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
 
 ### 2025-06-11
 * blocks: commented out derivative sigmoid function from the monadic operators reporter again
