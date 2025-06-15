@@ -7856,6 +7856,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     if (!noSave) {
         this.saveSetting('language', lang);
     }
+    document.documentElement.lang = lang;
 };
 
 // IDE_Morph design settings

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Snap! Build Your Own Blocks</title>
         <link rel="icon" href="src/favicon.ico" type="image/x-icon">
@@ -63,8 +63,23 @@
                 requestAnimationFrame(loop);
             };
         </script>
+        <style>
+            .visually-hidden {
+                position: absolute !important;
+                width: 1px; height: 1px;
+                padding: 0; margin: -1px;
+                overflow: hidden;
+                clip: rect(0,0,0,0);
+                white-space: nowrap;
+                border: 0;
+            }
+        </style>
     </head>
     <body style="margin: 0;">
-        <canvas id="world" tabindex="1" style="position: absolute;"></canvas>
+        <h1 class="visually-hidden">Snap! Build Your Own Blocks</h1>
+        <canvas id="world" tabindex="0" style="position: absolute;"
+            aria-label="Snap! IDE. Current not compatible with screen readers.">
+            <p>Your browser does not support the HTML5 canvas tag.</p>
+        </canvas>
     </body>
 </html>
