@@ -62,6 +62,7 @@
 
 ### 2025-06-20
 * added new "Neural Networks" library, currently still constrained to vector data
+* updated dev version
 
 ### 2025-06-12
 * threads, lists: added hypermutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
