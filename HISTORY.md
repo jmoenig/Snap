@@ -3,6 +3,9 @@
 ## in development:
 
 * **New Features:**
+    * Neural Networks
+        - support for building your own custom neural networks using hypermutation and data-objects (OOP 2.0)
+        - added new "Neural Networks" library for creating, training sharing and visualizing vector-based deep neural networks
     * First-Class Colors
         - new immutable data type "color", new "color" entry in the "is a ?" predicate
         - new color readout in variable and list watchers and speech and result balloons
@@ -56,6 +59,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-06-20
+* added new "Neural Networks" library, currently still constrained to vector data
 
 ### 2025-06-12
 * threads, lists: added hypermutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)

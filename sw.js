@@ -147,6 +147,7 @@ var snapVersion = '11-250612-dev',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
 
+        'libraries/neural_networks_module.xml',
         'libraries/OOP_module.xml',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
