@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11-250528-dev',
+var snapVersion = '11-250620-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -147,6 +147,7 @@ var snapVersion = '11-250528-dev',
         'libraries/mqtt.js',
         'libraries/mqtt.xml',
 
+        'libraries/neural_networks_module.xml',
         'libraries/OOP_module.xml',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-May-27';
+modules.threads = '2025-June-12';
 
 var ThreadManager;
 var Process;
@@ -5434,7 +5434,12 @@ Process.prototype.reportBasicMonadic = function (fname, n) {
         result = Math.pow(2, x);
         break;
     case 'sigmoid':
+    case 'σ':
         result = 1 / (1 + Math.exp(-x));
+        break;
+    case 'sigmoid\'':
+    case '∂σ':
+        result = x * (1 - x);
         break;
     case 'id':
         return n;
@@ -10386,7 +10391,11 @@ VariableFrame.prototype.changeVar = function (name, delta, sender) {
     if (frame) {
         if (frame instanceof List) { // OOP 2.0
             value = frame.lookup(name, () => this.variableError(name));
-            // hypermutation is not supported for use inside dictionaries
+            // only hypermutate if the attribute is not inherited
+            if (value instanceof List && frame.hasKey(name)) {
+                Process.prototype.hyperChangeBy(value, delta);
+                return;
+            }
             newValue = isNaN(parseFloat(value)) ? delta
                 : Process.prototype.reportSum(value, delta);
             frame.bind(name, newValue);

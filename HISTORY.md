@@ -3,6 +3,9 @@
 ## in development:
 
 * **New Features:**
+    * Neural Networks
+        - support for building your own custom neural networks using hypermutation and data-objects (OOP 2.0)
+        - added new "Neural Networks" library for creating, training sharing and visualizing vector-based deep neural networks
     * First-Class Colors
         - new immutable data type "color", new "color" entry in the "is a ?" predicate
         - new color readout in variable and list watchers and speech and result balloons
@@ -26,11 +29,13 @@
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
     * Hyper-mutation for arbitrary (sub-) lists: the CHANGE BY command also accepts list values in its first input slot
-    * Added sigmoid function ('σ') to the dropdown of the monadic operators reporter
+    * Hyper-mutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
+    * Added sigmoid (σ) function to the dropdown of the monadic operators reporter
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
         - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
         - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
+    * new "stop speech recognition" command in the spech library and "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
 * **Notable Changes:**
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
@@ -39,6 +44,8 @@
     * hyperized "new costume" reporter to also work on tensors of colors
     * keep the source's ghost effect when pasting a sprite onto another
     * increased watcher update frequency for non-table monitors
+    * Just Bars library: added option to clear before plotting
+    * in embedded projects don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -52,6 +59,32 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-06-20
+* added new "Neural Networks" library, currently still constrained to vector data
+* updated dev version
+
+### 2025-06-12
+* threads, lists: added hypermutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
+* updated dev version
+
+### 2025-06-11
+* blocks: commented out derivative sigmoid function from the monadic operators reporter again
+* updated dev version
+
+### 2025-06-10
+* blocks, threads: added derivative sigmoid function ('∂σ') to the dropdown of the monadic operators reporter
+* gui: don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
+* updated dev version
+
+### 2025-06-03
+* extensions: added "tts_stop" extension, un-blocks all processes currently waiting for speech recognition and advances to the next block
+* speech library: new "stop speech recognition" command
+* updated dev version
+
+### 2025-05-30
+* Just Bars library: added option to clear before plotting
+* updated dev version
 
 ### 2025-05-28
 * objects: increased watcher update frequency for non-table monitors

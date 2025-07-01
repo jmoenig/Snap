@@ -87,11 +87,11 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-May-28';
+modules.gui = '2025-June-20';
 
 // Declarations
 
-var SnapVersion = '11-250528-dev';
+var SnapVersion = '11-250620-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -487,6 +487,12 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     function autoRun () {
+        // if we're going to run the project anyway, remove the embed
+        // overlay in case we're in embedMode
+        if (myself.embedOverlay) {
+            myself.embedPlayButton.destroy();
+            myself.embedOverlay.destroy();
+        }
         // wait until all costumes and sounds are loaded
         if (isLoadingAssets()) {
             myself.world().animations.push(

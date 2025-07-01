@@ -127,6 +127,24 @@
     }
   },
   {
+    "fileName": "neural_networks_module.xml",
+    "name": "Neural Networks",
+    "description": "Classify data vectors using neural networks, train and validate your own deep neural models",
+    "searchData": [
+      "new neural network _",
+      "classify _ with network _",
+      "_ network _ on _",
+      "_ of network",
+      "_ of network to _",
+      "render neural model _"
+    ],
+    "categories": [
+      "pen",
+      "variables",
+      "Neural Networks"
+    ]
+  },
+  {
     "fileName": "~",
     "name": "~"
   },

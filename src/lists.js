@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-April-23';
+modules.lists = '2025-June-12';
 
 var List;
 var ListWatcherMorph;
@@ -359,6 +359,18 @@ List.prototype.lookup = function (key, ifNone = '') {
         return parent.variables.getVar(key);
     }
     return typeof ifNone === 'function' ? ifNone() : ifNone;
+};
+
+List.prototype.hasKey = function (key) {
+    // look up if the given key is present and not inherited
+    var rec;
+    if (parseFloat(key) === +key) { // treat as numerical index
+        return true;
+    }
+    rec = this.itemsArray().find(elem => elem instanceof List &&
+        elem.length() > 0 &&
+        snapEquals(elem.at(1), key));
+    return !isNil(rec);
 };
 
 List.prototype.bind = function (key, value) {
