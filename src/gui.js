@@ -4686,8 +4686,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         menu.addItem(
             'Performer mode scale...',
             'userSetPerformerModeScale',
-            'specify the scale of the stage\npixels in performer mode',
-            new Color(100, 0, 0)
+            'specify the scale of the stage\npixels in performer mode'
         );
     }
     menu.addLine(); // everything visible below is persistent
