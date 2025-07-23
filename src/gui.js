@@ -350,6 +350,7 @@ IDE_Morph.prototype.init = function (config) {
     this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
     this.performerMode = false;
+    this.performerScale = 1;
 
     this.wasSingleStepping = false; // for toggling to and from app mode
 
@@ -2675,13 +2676,17 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stageRatio = 1;
             this.isSmallStage = false;
             this.stage.dimensions = new Point(
-                    this.width() - this.palette.width(),
-                    this.palette.height() -
+                    (this.width() - this.palette.width()) / this.performerScale,
+                    (this.palette.height() -
                         this.corralBar.height() -
                         this.corral.childThatIsA(SpriteIconMorph).height()
+                    ) / this.performerScale
             );
             this.stage.stopVideo();
-            this.stage.setExtent(this.stage.dimensions);
+            this.stage.setExtent(new Point(
+                this.stage.dimensions.x * this.performerScale,
+                this.stage.dimensions.y * this.performerScale
+            ));
             this.stage.resizePenTrails();
             Costume.prototype.maxDimensions = this.stage.dimensions;
             this.paletteHandle.fixLayout();
@@ -4677,6 +4682,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to have the stage use up\nall space and go behind the\n' +
         'scripting area'
     );
+    if (this.performerMode) {
+        menu.addItem(
+            'Performer mode scale...',
+            'userSetPerformerModeScale',
+            'specify the scale of the stage\npixels in performer mode'
+        );
+    }
     menu.addLine(); // everything visible below is persistent
     addPreference(
         'Blurred shadows',
@@ -7471,6 +7483,29 @@ IDE_Morph.prototype.setEmbedMode = function () {
     this.add(this.embedPlayButton);
 
     this.fixLayout();
+};
+
+IDE_Morph.prototype.userSetPerformerModeScale = function () {
+   new DialogBoxMorph(
+        this,
+        num => {
+            this.performerScale = Math.min(Math.max(+num, 1), 32);
+            this.parentThatIsA(IDE_Morph).fixLayout();
+        },
+        this
+    ).prompt(
+        "Performer mode scale",
+        this.performerScale.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true, // numeric
+        1,    // slider min
+        32,   // slider max
+        nop,  // slider action
+        0     // decimals
+    );
 };
 
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
