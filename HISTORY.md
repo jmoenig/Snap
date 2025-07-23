@@ -37,6 +37,7 @@
         - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
     * new "stop speech recognition" command in the spech library and "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
 * **Notable Changes:**
+    * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error 
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
     * added support for color slot default values
@@ -59,6 +60,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-07-23
+* threads: allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing an error 
 
 ### 2025-06-20
 * added new "Neural Networks" library, currently still constrained to vector data

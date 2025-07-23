@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-June-12';
+modules.threads = '2025-July-23';
 
 var ThreadManager;
 var Process;
@@ -2865,7 +2865,10 @@ Process.prototype.reportConcatenatedLists = function (lists) {
         return lists;
     }
     first = lists.at(1);
-    this.assertType(first, 'list');
+    // this.assertType(first, 'list');
+    if (!(first instanceof List)) {
+        first = new List([first]);
+    }
     if (first.isLinked) { // link everything
         return this.concatenateLinkedLists(lists);
     }
@@ -2875,10 +2878,14 @@ Process.prototype.reportConcatenatedLists = function (lists) {
     rows = lists.length();
     for (rowIdx = 1; rowIdx <= rows; rowIdx += 1) {
         row = lists.at(rowIdx);
-        this.assertType(row, 'list');
-        cols = row.length();
-        for (col = 1; col <= cols; col += 1) {
-            result.push(row.at(col));
+        // this.assertType(row, 'list');
+        if (row instanceof List) {
+            cols = row.length();
+            for (col = 1; col <= cols; col += 1) {
+                result.push(row.at(col));
+            }
+        } else { // append scalar as new list item
+            result.push(row);
         }
     }
     return new List(result);
@@ -2890,7 +2897,10 @@ Process.prototype.concatenateLinkedLists = function (lists) {
         return lists;
     }
     first = lists.at(1);
-    this.assertType(first, 'list');
+    // this.assertType(first, 'list');
+    if (!(first instanceof List)) {
+        first = lists.cons(first, new List());
+    }
     if (lists.length() === 1) {
         return first;
     }
