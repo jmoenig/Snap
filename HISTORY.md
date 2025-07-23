@@ -36,6 +36,8 @@
         - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
         - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
     * new "stop speech recognition" command in the spech library and "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
+    * new websockets extension, thanks, Bernat!
+    * new stage-resolution setting option for performer-mode, thanks, Bernat!
 * **Notable Changes:**
     * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error 
     * significantly sped-up rendering morphs representing data inside table cells
@@ -62,7 +64,11 @@
     * German, including translation of the "Writing and formatting" library blocks
 
 ### 2025-07-23
-* threads: allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing an error 
+* threads: allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing an error
+* new websockets extension, thanks, Bernat!
+* new stage-resolution setting option for performer-mode, thanks, Bernat!
+* updated service-worker cache with new websocket extension files
+* updated dev version
 
 ### 2025-06-20
 * added new "Neural Networks" library, currently still constrained to vector data
