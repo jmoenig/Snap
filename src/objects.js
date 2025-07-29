@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-May-28';
+modules.objects = '2025-July-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -3243,13 +3243,15 @@ SpriteMorph.prototype.fixLayout = function () {
         corners = [],
         origin,
         corner,
-        costumeExtent;
+        costumeExtent,
+        ide = this.parentThatIsA(IDE_Morph);
 
     currentCenter = this.center();
     isLoadingCostume = this.costume &&
         typeof this.costume.loaded === 'function';
     stageScale = this.parent instanceof StageMorph ?
             this.parent.scale : 1;
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
     facing = this.rotationStyle ? this.heading : 90;
     if (this.rotationStyle === 2) {
         facing = 90;
@@ -3349,12 +3351,14 @@ SpriteMorph.prototype.render = function (ctx) {
         cst,
         pic, // (flipped copy of) actual costume based on my rotation style
         stageScale,
-        handle;
+        handle,
+        ide = this.parentThatIsA(IDE_Morph);
 
     isLoadingCostume = this.costume &&
         typeof this.costume.loaded === 'function';
     stageScale = this.parent instanceof StageMorph ?
             this.parent.scale : 1;
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
     facing = this.rotationStyle ? this.heading : 90;
     if (this.rotationStyle === 2) {
         facing = 90;
@@ -6493,7 +6497,9 @@ SpriteMorph.prototype.neighbors = function (aStage) {
 SpriteMorph.prototype.perimeter = function (aStage) {
     var stage = aStage || this.parentThatIsA(StageMorph),
         stageScale = this instanceof StageMorph ? 1 : stage.scale,
-        radius;
+        radius,
+        ide = this.parentThatIsA(IDE_Morph);
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
     if (this.costume) {
         radius = Math.max(
             this.costume.width(),
@@ -6600,7 +6606,8 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
         relRot, relScale, stageScale,
         centerDist, centerDelta, centerAngleRadians, center,
         originDist, originAngleRadians,
-        spriteCenter, thisCenter, relPos, pos;
+        spriteCenter, thisCenter, relPos, pos,
+        ide = this.parentThatIsA(IDE_Morph);
 
     // prevent pasting an object onto itself
     if (this === target) {return; }
@@ -6628,6 +6635,7 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
             relRot = sourceHeading - targetHeading;
             relScale = this.scale / target.scale;
             stageScale = this.parentThatIsA(StageMorph).scale;
+            if (ide?.performerMode) { stageScale = ide.performerScale; }
             centerDist = target.center().distanceTo(this.center());
             centerDelta = this.center().subtract(target.center());
             centerAngleRadians = Math.atan2(centerDelta.y, centerDelta.x);
@@ -7217,9 +7225,14 @@ SpriteMorph.prototype.positionTalkBubble = function () {
         stageScale = stage ? stage.scale : 1,
         bubble = this.talkBubble(),
         bottom = this.bottom(),
-        step = this.extent().divideBy(10)
-            .max(new Point(5, 5).scaleBy(stageScale))
-            .multiplyBy(new Point(-1, 1));
+        step,
+        ide = this.parentThatIsA(IDE_Morph);
+
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
+
+    step = this.extent().divideBy(10)
+        .max(new Point(5, 5).scaleBy(stageScale))
+        .multiplyBy(new Point(-1, 1));
 
     if (!bubble) {return null; }
     bubble.show();
@@ -7291,7 +7304,10 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         to = dest.subtract(stagePos).divideBy(stageScale),
         damagedFrom,
         damagedTo,
-        damaged;
+        damaged,
+        ide = this.parentThatIsA(IDE_Morph);
+
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
 
     if (this.isDown) {
         // record for later svg conversion

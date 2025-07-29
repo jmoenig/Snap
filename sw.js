@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11-250620-dev',
+var snapVersion = '11-250723-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -219,6 +219,12 @@ var snapVersion = '11-250620-dev',
         'libraries/textformat_module.xml',
         'libraries/try-catch.xml',
         'libraries/variable_declaration_module.xml',
+
+        // websockets
+        'libraries/websockets.xml',
+        'libraries/websockets/websockets.js',
+        'libraries/websockets/init.js',
+
         'libraries/word-sentence.xml',
         'libraries/words_module.xml',
 
