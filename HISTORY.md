@@ -67,6 +67,7 @@
 ### 2025-07-30
 * blocks, objects, threads: new "poll" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
 * objects: renamed "poll" reporter to "request"
+* German translation update for "request" and "from"
 
 ### 2025-07-23
 * threads: allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing an error
