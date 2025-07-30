@@ -1144,8 +1144,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportPoll: {
             type: 'reporter',
             category: 'control',
-            spec: 'poll %msg %survey',
-            code: 'poll'
+            spec: 'request %msg %survey',
+            code: 'request'
         },
         doWait: {
             type: 'command',

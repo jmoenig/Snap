@@ -28,7 +28,7 @@
             * colors
             * RGB(A) value lists
         - new fundamentally simplified "Colors" library based on first-class colors, lets you mix, modify and transition colors
-    * new "poll" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
+    * new "request" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
     * Hyper-mutation for arbitrary (sub-) lists: the CHANGE BY command also accepts list values in its first input slot
     * Hyper-mutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
     * Added sigmoid (σ) function to the dropdown of the monadic operators reporter
@@ -66,6 +66,7 @@
 
 ### 2025-07-30
 * blocks, objects, threads: new "poll" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
+* objects: renamed "poll" reporter to "request"
 
 ### 2025-07-23
 * threads: allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing an error
