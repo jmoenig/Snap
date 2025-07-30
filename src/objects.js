@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-July-23';
+modules.objects = '2025-July-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1140,6 +1140,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'broadcast %msg %receive and wait',
             code: 'sendAll'
+        },
+        reportPoll: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'poll %msg %survey',
+            code: 'poll'
         },
         doWait: {
             type: 'command',
@@ -2825,6 +2831,11 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'reportNewColor'
         );
     }
+    if (version < 11) {
+        selectors.push(
+            'reportPoll'
+        );
+    }
 
     return selectors;
 };
@@ -3765,6 +3776,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('reportPoll'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -11060,6 +11072,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('receiveMessage'));
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('reportPoll'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');

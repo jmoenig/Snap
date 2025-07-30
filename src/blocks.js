@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-June-11';
+modules.blocks = '2025-July-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1198,6 +1198,13 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'multi',
         slots: ['%rcv', '%s'],
         label: ['to', 'with data'],
+        tags: 'static widget',
+        max: 2
+    },
+    '%survey': {
+        type: 'multi',
+        slots: ['%rcv', '%s'],
+        label: ['from', 'with data'],
         tags: 'static widget',
         max: 2
     },

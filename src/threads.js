@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-July-23';
+modules.threads = '2025-July-30';
 
 var ThreadManager;
 var Process;
@@ -1089,7 +1089,9 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
                     }
                 }
                 if (inputs.length &&
-                    !['%receive', '%send'].includes(multiSlot.elementSpec)
+                    !['%receive', '%send', '%survey'].includes(
+                        multiSlot.elementSpec
+                    )
                 ) {
                     // format the inputs as 2D table, unless it's a "built-in"
                     // group, e.g. for broadcast, scene changes etc.
@@ -4770,6 +4772,38 @@ Process.prototype.doBroadcastAndWait = function (message, target) {
     );
     if (this.context.activeSends.length === 0) {
         return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.reportPoll = function (message, target) {
+    // experimental in v11: Reporter version of "broadcast and wait" that
+    // supports collecting replies from every fired script (using "report"),
+    // answering a list of replies, or a single value if there is only
+    // a single fired script
+    var replies;
+    if (!this.context.activeSends) {
+        this.context.activeSends = this.doBroadcast(message, target);
+        this.context.accumulator = {threads: this.context.activeSends.slice()};
+        if (this.isRunning()) {
+            this.context.activeSends.forEach(proc =>
+                proc.runStep()
+            );
+        }
+    }
+    this.context.activeSends = this.context.activeSends.filter(proc =>
+        proc.isRunning()
+    );
+    if (this.context.activeSends.length === 0) {
+        replies = this.context.accumulator.threads.map(p => {
+            let answer = p.homeContext.inputs[0];
+            return isNil(answer) ? '' : answer;
+        });
+        this.returnValueToParentContext(
+            replies.length === 1 ? replies[0] : new List(replies)
+        );
+        return;
     }
     this.pushContext('doYield');
     this.pushContext();
