@@ -66,6 +66,7 @@
 
 ### 2025-08-04
 * updated Neural Networks library
+* updated dev version
 
 ### 2025-07-30
 * blocks, objects, threads: new "poll" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
