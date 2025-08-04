@@ -64,6 +64,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-04
+* updated Neural Networks library
+
 ### 2025-07-30
 * blocks, objects, threads: new "poll" reporter primitive in the Control category palette, same as "broadcast and wait" but collects replies
 * objects: renamed "poll" reporter to "request"
