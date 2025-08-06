@@ -71,6 +71,7 @@
 * German translation update
 * updated Neural Networks library with localization support and normalization blocks
 * updated the "Just Bars" single block library with new optional inputs
+* updated dev version
 
 ### 2025-08-04
 * updated Neural Networks library
