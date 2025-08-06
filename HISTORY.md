@@ -51,6 +51,7 @@
     * increased watcher update frequency for non-table monitors
     * Just Bars library: added option to clear before plotting
     * in embedded projects don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
+    * updated the "Just Bars" single block library with new optional inputs
 * **Notable Fixes:**
     * fixed sorting the distribution of compound non-list data (blocks, colors)
     * improved localization of list watcher ('length' label)
@@ -69,6 +70,7 @@
 * blocks, threads: support for optional input slots using a variadic input group and setting max slots to the length of the group
 * German translation update
 * updated Neural Networks library with localization support and normalization blocks
+* updated the "Just Bars" single block library with new optional inputs
 
 ### 2025-08-04
 * updated Neural Networks library
