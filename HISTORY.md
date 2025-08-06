@@ -68,6 +68,7 @@
 ### 2025-08-06
 * blocks, threads: support for optional input slots using a variadic input group and setting max slots to the length of the group
 * German translation update
+* updated Neural Networks library with localization support and normalization blocks
 
 ### 2025-08-04
 * updated Neural Networks library
