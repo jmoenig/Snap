@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-July-30';
+modules.threads = '2025-August-06';
 
 var ThreadManager;
 var Process;
@@ -1089,6 +1089,7 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
                     }
                 }
                 if (inputs.length &&
+                    multiSlot.groupInputs > 1 &&
                     !['%receive', '%send', '%survey'].includes(
                         multiSlot.elementSpec
                     )

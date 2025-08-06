@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-July-30';
+modules.blocks = '2025-August-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14187,6 +14187,16 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
         }
         this.labelText = labels.map(arr => arr.join(' '));
     }
+    // special case: if maxSlots equals the input group size
+    // expand and collapse the group inputs one by one
+    // otherwise group-wise
+    if (this.slotSpec instanceof Array) { // input group
+        if (this.groupInputs === this.maxInputs) {
+            this.groupInputs = 1;
+        } else {
+            this.groupInputs = this.slotSpec.length;
+        }
+    }
 };
 
 MultiArgMorph.prototype.collapseLabel = function () {
@@ -14324,6 +14334,17 @@ MultiArgMorph.prototype.setMinSlots = function (minSlots) {
 
 MultiArgMorph.prototype.setMaxSlots = function (maxSlots) {
     this.maxInputs = +maxSlots;
+
+    // special case: if maxSlots equals the input group size
+    // expand and collapse the group inputs one by one
+    // otherwise group-wise
+    if (this.slotSpec instanceof Array) { // input group
+        if (this.slotSpec.length === this.maxInputs) {
+            this.groupInputs = 1;
+        } else {
+            this.groupInputs = this.slotSpec.length;
+        }
+    }
 };
 
 // MultiArgMorph defaults:

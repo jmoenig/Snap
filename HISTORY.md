@@ -32,6 +32,7 @@
     * Hyper-mutation for arbitrary (sub-) lists: the CHANGE BY command also accepts list values in its first input slot
     * Hyper-mutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
     * Added sigmoid (σ) function to the dropdown of the monadic operators reporter
+    * support for optional input slots using a variadic input group and setting max slots to the length of the group
     * Minor typography enhancements
         - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
         - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
@@ -63,6 +64,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-08-06
+* blocks, threads: support for optional input slots using a variadic input group and setting max slots to the length of the group
 
 ### 2025-08-04
 * updated Neural Networks library
