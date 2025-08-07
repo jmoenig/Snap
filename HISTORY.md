@@ -66,6 +66,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-07
+* updated Neural Networks library with a data partitioning reporter
+
 ### 2025-08-06
 * blocks, threads: support for optional input slots using a variadic input group and setting max slots to the length of the group
 * German translation update
