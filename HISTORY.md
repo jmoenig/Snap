@@ -69,6 +69,7 @@
 
 ### 2025-08-08
 * threads: allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
+* updated dev version
 
 ### 2025-08-07
 * updated Neural Networks library with a data partitioning reporter
