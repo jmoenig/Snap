@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-August-06';
+modules.threads = '2025-August-08';
 
 var ThreadManager;
 var Process;
@@ -1492,9 +1492,15 @@ Process.prototype.evaluate = function (
         return this.runContinuation(context, args);
     }
     if (context instanceof List) {
+        if (context.canBeJSON() && isCommand) {
+            return;
+        }
         return this.hyperEval(context, args);
     }
     if (!(context instanceof Context)) {
+        if (isCommand) {
+            return this.returnValueToParentContext(null);
+        }
         throw new Error('expecting a ring but getting ' + context);
     }
 

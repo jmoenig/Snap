@@ -41,7 +41,8 @@
     * new websockets extension, thanks, Bernat!
     * new stage-resolution setting option for performer-mode, thanks, Bernat!
 * **Notable Changes:**
-    * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error 
+    * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error
+    * allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
     * added support for color slot default values
@@ -65,6 +66,9 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+
+### 2025-08-08
+* threads: allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
 
 ### 2025-08-07
 * updated Neural Networks library with a data partitioning reporter
