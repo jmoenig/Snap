@@ -67,6 +67,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-18
+* updated Neural Networks library, swapped order of inputs in the "render neural model" command
+
 ### 2025-08-08
 * threads: allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
 * updated dev version
