@@ -33,14 +33,14 @@
     * Hyper-mutation support for non-inherited data-object list attributes (e.g. weight vectors/matrices inside hidden layer objects in neural networks)
     * Added sigmoid (σ) function to the dropdown of the monadic operators reporter
     * support for optional input slots using a variadic input group and setting max slots to the length of the group
-    * Minor typography enhancements
-        - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
-        - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
-        - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
     * new S4A Connector extension for all firmate boards (e.g. Arduino), thanks, Joan!
     * new websockets extension, thanks, Bernat!
     * new stage-resolution setting option for performer-mode, thanks, Bernat!
     * new "stop speech recognition" command in the spech library and "tts_stop" extension, globally un-blocks all processes currently waiting for speech recognition and advances to the next block
+    * Minor typography enhancements
+        - new "txt_width" extension, reports the width of the given text at the specified font size and optional stylings
+        - "Writing and formatting" library: new "width of text" reporter for determining the width of a text given the specified size and stylings 
+        - "Writing and formatting" library: new "write ... wrap" command for automatically word-wrapping a text at the specified width given the size and stylings
 * **Notable Changes:**
     * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error
     * allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
@@ -74,6 +74,7 @@
 * new S4A connector extension, thank you, Joan!!!
 * cleaned up translation files, thank you, Joan!
 * added S4A Connector files to the service worker cache
+* v11-rc1
 
 ### 2025-08-08
 * threads: allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
