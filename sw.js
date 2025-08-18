@@ -153,14 +153,34 @@ var snapVersion = '11-250808-dev',
         'libraries/pixel_module.xml',
         'libraries/plot_bars_module.xml',
         'libraries/replace_letters_module.xml',
+
+        // Snap4Arduino
+        'libraries/s4aConn.xml',
+        'libraries/s4aConn/init.js',
+        'libraries/s4aConn/s4aConn.js',
+        'libraries/s4aConn/firmata-web/WebSerialTransport.js',
+        'libraries/s4aConn/firmata-web/firmata.js',
+        'libraries/s4aConn/firmata-web/index.js',
+        'libraries/s4aConn/firmata-web/types.js',
+        'libraries/s4aConn/firmata-web/events.js',
+        'libraries/s4aConn/firmata-web/onewireutils.js',
+        'libraries/s4aConn/firmata-web/encoder7bit.js',
+        'libraries/s4aConn/firmata-web/buffer-es6/package.json',
+        'libraries/s4aConn/firmata-web/buffer-es6/index.js',
+        'libraries/s4aConn/firmata-web/buffer-es6/isArray.js',
+        'libraries/s4aConn/firmata-web/buffer-es6/base64.js',
+        'libraries/s4aConn/firmata-web/buffer-es6/ieee754.js',
+
         'libraries/schemeNumber.js',
 
+        // SciSnap
         'libraries/SciSnap3Blocks.xml',
         'libraries/SciSnap3Extensions.js',
         // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
 
         'libraries/sprite_api_module.xml',
 
+        // TuneScope
         'libraries/TuneScope.xml',
 
             // TuneScope dependencies

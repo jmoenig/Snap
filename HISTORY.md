@@ -73,6 +73,7 @@
 * updated Neural Networks library, swapped order of inputs in the "render neural model" command
 * new S4A connector extension, thank you, Joan!!!
 * cleaned up translation files, thank you, Joan!
+* added S4A Connector files to the service worker cache
 
 ### 2025-08-08
 * threads: allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
