@@ -69,6 +69,10 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-19
+* Catalan translation update, thank you, Joan!
+* v11-rc2
+
 ### 2025-08-18
 * updated Neural Networks library, swapped order of inputs in the "render neural model" command
 * new S4A connector extension, thank you, Joan!!!
