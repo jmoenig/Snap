@@ -3345,6 +3345,7 @@ BlockMorph.prototype.localizeBlockSpec = function (spec) {
 BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
+        ide = this.parentThatIsA(IDE_Morph),
         myself = this,
         hasLine = false,
         proc = this.activeProcess(),
@@ -3642,7 +3643,6 @@ BlockMorph.prototype.userMenu = function () {
         "duplicate",
         () => {
             var dup = this.fullCopy(),
-                ide = this.parentThatIsA(IDE_Morph),
                 blockEditor = this.parentThatIsA(BlockEditorMorph);
             dup.pickUp(world);
             // register the drop-origin, so the block can
@@ -3728,6 +3728,61 @@ BlockMorph.prototype.userMenu = function () {
             }
         );
     }
+    menu.addLine();
+    if ((this instanceof CommandBlockMorph)) {
+        menu.addItem(
+            'copy below',
+            () => {
+                ide.clipboard = {
+                    type: 'xml',
+                    content: this.toXMLString()
+                };
+            },
+            'copy block and below'
+        );
+    }
+    menu.addItem(
+        'copy block',
+        () => {
+            let block = this.fullCopy();
+            if (block instanceof CommandBlockMorph || block instanceof HatBlockMorph) {
+                var nb = block.nextBlock();
+                if (nb) {
+                    nb.destroy();
+                }
+            }
+
+            block.parent = ide;
+            ide.clipboard = {
+                type: 'xml',
+                content: block.toXMLString()
+            };
+            block.destroy();
+        },
+        'copy this block'
+    );
+    menu.addItem(
+        'cut block',
+        () => {
+            let block = this.fullCopy();
+            if (this instanceof CommandBlockMorph || this instanceof HatBlockMorph) {
+                var nb = block.nextBlock();
+                if (nb) {
+                    nb.destroy();
+                }
+            }
+
+            block.parent = ide;
+            ide.clipboard = {
+                type: 'xml',
+                content: block.toXMLString()
+            };
+            block.destroy();
+
+            this.userDestroy();
+        },
+        'copy this block and delete it'
+    );
     menu.addLine();
     menu.addItem(
         "script pic...",
@@ -8970,6 +9025,16 @@ ScriptsMorph.prototype.userMenu = function () {
                 )
             );
         }
+    }
+    if (ide.clipboard) {
+        menu.addLine();
+        menu.addItem(
+            "paste",
+            () => {
+                ide.userPaste();
+            },
+            'Retrieve script\nfrom clipboard'
+        );
     }
     return menu;
 };
@@ -16260,7 +16325,13 @@ CommentMorph.prototype.fixLayout = function () {
 // CommentMorph menu:
 
 CommentMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
 
     menu.addItem(
         "duplicate",
@@ -16307,6 +16378,31 @@ CommentMorph.prototype.userMenu = function () {
             );
         },
         'save a picture\nof this comment'
+    );
+    menu.addLine();
+    menu.addItem(
+        'copy comment',
+        () => {
+            ide.clipboard = {
+                type: 'comment',
+                content: this.text(),
+                width: this.textWidth(),
+            };
+        },
+        'copy this comment'
+    );
+    menu.addItem(
+        'cut comment',
+        () => {
+            ide.clipboard = {
+                type: 'comment',
+                content: this.text(),
+                width: this.textWidth(),
+            };
+
+            this.userDestroy()
+        },
+        'copy this comment and delete it'
     );
     return menu;
 };
