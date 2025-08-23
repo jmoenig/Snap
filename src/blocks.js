@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-August-06';
+modules.blocks = '2025-August-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1998,7 +1998,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.dflt,
                 info.group
             );
-            part.maxInputs = info.max;
+            part.setMaxSlots(info.max);
             part.initialSlots = Math.max( // this needs some fixing
                 part.initialSlots,
                 isNil(info.min) ? 0 : +info.min,

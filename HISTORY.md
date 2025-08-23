@@ -69,6 +69,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-23
+* blocks: fixed expanding optional inputs of broadcast and request blocks by 1 instead of all at once
+
 ### 2025-08-19
 * Catalan translation update, thank you, Joan!
 * v11-rc2
