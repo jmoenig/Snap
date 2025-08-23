@@ -71,6 +71,7 @@
 
 ### 2025-08-23
 * blocks: fixed expanding optional inputs of broadcast and request blocks by 1 instead of all at once
+* v11-rc3
 
 ### 2025-08-19
 * Catalan translation update, thank you, Joan!
