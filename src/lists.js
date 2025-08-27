@@ -900,15 +900,17 @@ List.prototype.folded = function (dimensions) {
 
 List.prototype.asChunksOf = function (size) {
     // private
+    size = Math.max(Math.floor(size),1);
     var trg = new List(),
+        myArray = this.asArray(),
         len = this.length(),
-        sub, i;
-    for (i = 0; i < len; i += 1) {
-        if (i % size === 0) {
-            sub = new List();
-            trg.add(sub);
-        }
-        sub.add(this.at(i + 1));
+        dim = Math.floor(len / size),
+        i, j, sub;
+    for (i = 0; i < dim; i += 1) {        
+        j = i * size;
+        // there is no native function for getting a range of indexes in a list yet
+        let sub = new List(myArray.slice(j, j + size));
+        trg.add(sub);
     }
     return trg;
 };
