@@ -68,9 +68,11 @@
     * Just Bars library: Only plot non-zero values, avoid drawing a "dot" for zero
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
+    * Catalan, thank you, Joan!
 
 ### 2025-08-27
 * updated Neural Networks library: new "generade predicate" command, programs a custom ai block all by itself
+* German translation update
 
 ### 2025-08-23
 * blocks: fixed expanding optional inputs of broadcast and request blocks by 1 instead of all at once
