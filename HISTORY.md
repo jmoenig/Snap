@@ -69,6 +69,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
 
+### 2025-08-27
+* updated Neural Networks library: new "generade predicate" command, programs a custom ai block all by itself
+
 ### 2025-08-23
 * blocks: fixed expanding optional inputs of broadcast and request blocks by 1 instead of all at once
 * v11-rc3
