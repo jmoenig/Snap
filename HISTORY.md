@@ -77,6 +77,7 @@
 * updated Neural Networks library: translation support for optional inputs of "generate predicate" command
 * v11-rc6
 * updated Neural Networks library: manual abort / shortcut support for "generate predicate" command
+* v11-rc7
 
 ### 2025-08-27
 * updated Neural Networks library: new "generate predicate" command, programs a custom ai block all by itself
