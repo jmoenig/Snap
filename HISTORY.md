@@ -70,6 +70,9 @@
     * German, including translation of the "Writing and formatting" library blocks
     * Catalan, thank you, Joan!
 
+### 2025-08-28
+* German translation update
+
 ### 2025-08-27
 * updated Neural Networks library: new "generade predicate" command, programs a custom ai block all by itself
 * German translation update
