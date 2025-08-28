@@ -73,6 +73,7 @@
 ### 2025-08-28
 * German translation update
 * updated Neural Networks library: added options to "generate predicate" command for epochs, partitioning and hidden layers topology
+* v11-rc5
 
 ### 2025-08-27
 * updated Neural Networks library: new "generate predicate" command, programs a custom ai block all by itself
