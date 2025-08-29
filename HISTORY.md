@@ -45,6 +45,7 @@
 * **Notable Changes:**
     * allow non-list inputs (scalars) to APPEND, automatically treat as single-item lists without throwing a type assertion error
     * allow using RUN as "ignore" command for a reporter, removed the ring type assertion and error message
+    * allow setting "my scripts" to a list of scripts (powerful but dangerous!)
     * significantly sped-up rendering morphs representing data inside table cells
     * support testing selectors (translatable text) for equality with text and numbers without needing to "unselect" them
     * added support for color slot default values
@@ -76,6 +77,7 @@
 * objects, blocks: Enable the stage to create temporary sprites using the "a new clone of (Turtle sprite)" reporter
 * updated Neural Networks library: improved "generate predicate" command for rendering and ignoring csv column names
 * v11-rc9
+* blocks, threads: made "my scripts" attribute settable (to a list of scripts)
 
 ### 2025-08-28
 * German translation update

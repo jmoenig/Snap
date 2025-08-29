@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-August-18';
+modules.threads = '2025-August-29';
 
 var ThreadManager;
 var Process;
@@ -7607,6 +7607,26 @@ Process.prototype.doSet = function (attribute, value) {
         break;
     case 'microphone modifier':
         this.setMicrophoneModifier(value);
+        break;
+    case 'scripts':
+    case 'my scripts':
+        // careful, this is powerful but also super dangerous, because it
+        // simply replaces all scripts, deleting the old ones for good!!
+        this.assertType(value, 'list');
+        value.map(each => this.assertType(
+            each,
+            ['command', 'reporter', 'predicate', 'hat']
+        ));
+        rcvr.scripts.allChildren().forEach(morph => {
+            if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
+                morph.destroy();
+            }
+        });
+        value.map(ring => rcvr.scripts.add(ring.expression.fullCopy()));
+        rcvr.scripts.forAllChildren(m => {if (m instanceof BlockMorph) {
+            m.fixBlockColor();
+        }});
+        rcvr.scripts.cleanUp();
         break;
     default:
         throw new Error(
