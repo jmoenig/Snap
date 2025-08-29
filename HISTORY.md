@@ -73,6 +73,7 @@
 
 ### 2025-08-29
 * objects, blocks: Enable the stage to create temporary sprites using the "a new clone of (Turtle sprite)" reporter
+* updated Neural Networks library: improved "generate predicate" command for rendering and ignoring csv column names
 
 ### 2025-08-28
 * German translation update
