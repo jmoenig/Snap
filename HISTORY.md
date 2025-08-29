@@ -81,6 +81,7 @@
 * German translation update (for "my scripts")
 * updated Neural Networks library with a reporter that generates a perceptron/hidden layer sprite
 * v11-rc10
+* v11.0.0 major release
 
 ### 2025-08-28
 * German translation update
