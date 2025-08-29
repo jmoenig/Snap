@@ -79,6 +79,7 @@
 * v11-rc9
 * blocks, threads: made "my scripts" attribute settable (to a list of scripts)
 * German translation update (for "my scripts")
+* updated Neural Networks library with a reporter that generates a perceptron/hidden layer sprite
 
 ### 2025-08-28
 * German translation update
