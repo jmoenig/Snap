@@ -78,6 +78,7 @@
 * updated Neural Networks library: improved "generate predicate" command for rendering and ignoring csv column names
 * v11-rc9
 * blocks, threads: made "my scripts" attribute settable (to a list of scripts)
+* German translation update (for "my scripts")
 
 ### 2025-08-28
 * German translation update
