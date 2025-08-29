@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 11.0.0:
 * **New Features:**
     * Neural Networks
         - support for building your own custom neural networks using hypermutation and data-objects (OOP 2.0)
@@ -74,6 +75,7 @@
 ### 2025-08-29
 * objects, blocks: Enable the stage to create temporary sprites using the "a new clone of (Turtle sprite)" reporter
 * updated Neural Networks library: improved "generate predicate" command for rendering and ignoring csv column names
+* v11-rc9
 
 ### 2025-08-28
 * German translation update
