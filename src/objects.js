@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-August-18';
+modules.objects = '2025-August-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -1369,7 +1369,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         removeClone: {
             type: 'command',
             category: 'control',
-            spec: 'delete this clone'
+            spec: 'delete this clone',
+            code: 'removeClone'
         },
 
         // recording user edits
@@ -12510,6 +12511,11 @@ StageMorph.prototype.scriptsOnlyXML =
 
 StageMorph.prototype.synchScriptsFrom =
     SpriteMorph.prototype.synchScriptsFrom;
+
+// StageMorph cloning a generic sprite
+
+StageMorph.prototype.newTurtleSprite =
+    SpriteMorph.prototype.newTurtleSprite;
 
 // StageMorph pen trails as costume
 

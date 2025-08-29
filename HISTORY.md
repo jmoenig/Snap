@@ -50,6 +50,7 @@
     * replaced "Object" type input slot with "Color" type in the input slot dialog ("Object" is now in the "special slots" menu)
     * hyperized "new costume" reporter to also work on tensors of colors
     * keep the source's ghost effect when pasting a sprite onto another
+    * enabled the stage to create temporary sprites using the "a new clone of (Turtle sprite)" reporter
     * increased watcher update frequency for non-table monitors
     * Just Bars library: added option to clear before plotting
     * in embedded projects don't show the embed overlay ('green flag')' if embedMode is present but noRun isn't, thanks, Bernat!
@@ -69,6 +70,9 @@
 * **Translation Updates:**
     * German, including translation of the "Writing and formatting" library blocks
     * Catalan, thank you, Joan!
+
+### 2025-08-29
+* objects, blocks: Enable the stage to create temporary sprites using the "a new clone of (Turtle sprite)" reporter
 
 ### 2025-08-28
 * German translation update

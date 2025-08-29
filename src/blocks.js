@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-August-23';
+modules.blocks = '2025-August-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11715,8 +11715,8 @@ InputSlotMorph.prototype.clonablesMenuWithTurtle = function (searching) {
 
     if (rcvr instanceof SpriteMorph) {
         dict.myself = ['myself'];
-        dict['Turtle sprite'] = ['Turtle sprite'];
     }
+    dict['Turtle sprite'] = ['Turtle sprite'];
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (!allNames.some(n => snapEquals(n, morph.name))) {
