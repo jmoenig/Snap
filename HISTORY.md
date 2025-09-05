@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-05
+* neural networks library: Added dynamic dropdown menu to the "tag" input of the "generate predicate" block
+
 ## 11.0.0:
 * **New Features:**
     * Neural Networks
