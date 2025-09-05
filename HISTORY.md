@@ -4,6 +4,7 @@
 
 ### 2025-09-05
 * neural networks library: Added dynamic dropdown menu to the "tag" input of the "generate predicate" block
+* objects: fixed a doubling "corpse" bug when deleting a cloned permanent "Turtle sprite"
 
 ## 11.0.0:
 * **New Features:**
