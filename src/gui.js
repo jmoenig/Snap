@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-August-29';
+modules.gui = '2025-September-06';
 
 // Declarations
 
@@ -469,10 +469,10 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.hideControls) {
             myself.controlBar.hide();
-            window.onbeforeunload = nop;
+            window.noExitWarning = true;
         }
         if (dict.noExitWarning) {
-            window.onbeforeunload = window.cachedOnbeforeunload;
+            window.noExitWarning = true;
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
@@ -966,7 +966,7 @@ IDE_Morph.prototype.applyConfigurations = function () {
 
     // disable onbeforeunload close warning
     if (cnf.noExitWarning) {
-        window.onbeforeunload = window.cachedOnbeforeunload;
+        window.noExitWarning = true;
     }
 };
 
@@ -977,7 +977,7 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     if (cnf.hideControls) {
         this.logo.hide();
         this.controlBar.hide();
-        window.onbeforeunload = nop;
+        window.noExitWarning = true;
     }
 
     // hide categories
