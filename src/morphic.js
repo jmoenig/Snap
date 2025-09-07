@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-March-20';
+var morphicVersion = '2025-September-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -12452,22 +12452,14 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
-    window.cachedOnbeforeunload = window.onbeforeunload;
     this.onbeforeunloadListener = (evt) => {
-        if (!this.hasUnsavedEdits()) return;
-        if (window.cachedOnbeforeunload) {
-            window.cachedOnbeforeunload.call(null, evt);
+        if (this.hasUnsavedEdits() && !window.noExitWarning) {
+            evt.preventDefault();
+            // legacy browsers support
+            evt.returnValue = true;
         }
-        var e = evt || window.event,
-            msg = "Are you sure you want to leave?";
-        // For IE and Firefox
-        if (e) {
-            e.returnValue = msg;
-        }
-        // For Safari / chrome
-        return msg;
     };
-     window.addEventListener("beforeunload", this.onbeforeunloadListener);
+    window.addEventListener("beforeunload", this.onbeforeunloadListener);
 };
 
 WorldMorph.prototype.hasUnsavedEdits = function () {

@@ -4,7 +4,7 @@
 
 ### 2025-09-06
 * blocks: fixed & added "senders / receivers" scanning support for "request" reporters
-
+* morphic and gui: fixed noExitWarning configuration/flag feature
 ### 2025-09-05
 * neural networks library: Added dynamic dropdown menu to the "tag" input of the "generate predicate" block
 * objects: fixed a doubling "corpse" bug when deleting a cloned permanent "Turtle sprite"
