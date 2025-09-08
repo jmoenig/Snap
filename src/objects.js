@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-September-05';
+modules.objects = '2025-September-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -12090,6 +12090,9 @@ StageMorph.prototype.stopAllActiveSounds = function () {
     this.activeSounds = [];
     if (this.microphone.modifier && this.microphone.isReady) {
         this.microphone.stop();
+    }
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
     }
 };
 

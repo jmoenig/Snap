@@ -5,6 +5,7 @@
 ### 2025-09-08
 * morphic, blocks, widgets: fixed selector-type default inputs in custom polyadic slots
 * neural networks library: added localizable "auto" default values for epochs and topology inputs ofthe "generate predicate" block
+* objects: stop active text-to-speech sounds when pressing the stop button or executing the stop command
 
 ### 2025-09-06
 * blocks: fixed & added "senders / receivers" scanning support for "request" reporters
