@@ -4,6 +4,7 @@
 
 ### 2025-09-08
 * morphic, blocks, widgets: fixed selector-type default inputs in custom polyadic slots
+* neural networks library: added localizable "auto" default values for epochs and topology inputs ofthe "generate predicate" block
 
 ### 2025-09-06
 * blocks: fixed & added "senders / receivers" scanning support for "request" reporters
