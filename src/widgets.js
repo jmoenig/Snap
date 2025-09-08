@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-March-17';
+modules.widgets = '2025-September-08';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -3198,7 +3198,7 @@ InputFieldMorph.prototype.setIsNumeric = function (bool) {
 
     // adjust my shown value to conform with the numeric flag
     value = this.getValue();
-    if (this.isNumeric) {
+    if (this.isNumeric && !value.startsWith('$_')) { // support selectors
         value = parseFloat(value);
         if (isNaN(value)) {
             value = null;

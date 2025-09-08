@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-September-06';
+var morphicVersion = '2025-September-08';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -5807,6 +5807,9 @@ CursorMorph.prototype.processInput = function (event) {
             hasE = false,
             result = '',
             i, ch, valid;
+        if (content === '$' || content.startsWith('$_')) { // support selectors
+            return content;
+        }
         for (i = 0; i < content.length; i += 1) {
             ch = content.charAt(i);
             valid = (

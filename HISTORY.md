@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-08
+* morphic, blocks, widgets: fixed selector-type default inputs in custom polyadic slots
+
 ### 2025-09-06
 * blocks: fixed & added "senders / receivers" scanning support for "request" reporters
 * neural networks library: Added dynamic dropdown menu to the "tag" input of the "generate predicate" block

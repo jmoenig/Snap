@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-September-06';
+modules.blocks = '2025-September-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14318,7 +14318,7 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
         var items = (str || '').toString().split('\n')
             .filter(each => each.length).map(each =>
                 isString(each) && each.length > 2 && each.startsWith('$_') ?
-                    localize(each.slice(2))
+                    [each.slice(2)]
                     : each);
         return items.length > 1 ? items : items[0] || null;
     }
