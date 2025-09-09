@@ -2,14 +2,18 @@
 
 ## in development:
 
+## 11.0.1:
 * **Notable Changes:**
     * added a dynamic dropdown menu to the "tag" input of the "generate predicate" block in the neural networks library
-    * added localizable "auto" default values for epochs and topology inputs ofthe "generate predicate" block in the neural networks library
+    * added localizable "auto" default values for epochs and topology inputs of the "generate predicate" block in the neural networks library
 * **Notable Fixes:**
     * fixed a doubling "corpse" bug when deleting a cloned permanent "Turtle sprite"
     * fixed & added "senders / receivers" scanning support for "request" reporters
     * fixed stopping active text-to-speech sounds when pressing the stop button or executing the stop command
     * fixed noExitWarning configuration/flag feature, thanks Joan!
+
+### 2025-09-09
+* prepared v11.0.1 patch
 
 ### 2025-09-08
 * morphic, blocks, widgets: fixed selector-type default inputs in custom polyadic slots
