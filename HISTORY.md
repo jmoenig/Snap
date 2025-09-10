@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-10
+* widgets: fixed a missing edge case when specifying default values for numerical input slots 
+
 ## 11.0.1:
 * **Notable Changes:**
     * added a dynamic dropdown menu to the "tag" input of the "generate predicate" block in the neural networks library
