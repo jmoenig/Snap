@@ -2,9 +2,18 @@
 
 ## in development:
 
+## 11.0.2:
+* **Notable Changes:**
+    * MQTT library update, thanks, Simon!
+* **Notable Fixes:**
+    * fixed a missing edge case when specifying default values for numerical input slots
+    * show cloud message when saving a project, thanks, Bernat!
+
 ### 2025-09-10
 * widgets: fixed a missing edge case when specifying default values for numerical input slots
-* gui: show cloud message when saving a project, thanks, Bernat! 
+* gui: show cloud message when saving a project, thanks, Bernat!
+* MQTT library update, thanks, Simon!
+* prepared v11.0.2 patch
 
 ## 11.0.1:
 * **Notable Changes:**
