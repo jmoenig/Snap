@@ -22,7 +22,8 @@
  * V1.7.4 18Mar2025 Another small bugfix to Base64 code
  * V1.7.5 17Apr2025 Change Base64 unicode string handling
  * V1.8.0 22May2025 Change Base64 binary list handling
- */
+ * V1.8.1 10May2025 Remove console logging primitive as available in Snap! dev mode
+ *  */
 
 
 SnapExtensions.primitives.set(
@@ -438,12 +439,6 @@ SnapExtensions.primitives.set(
     }
 );
 
-SnapExtensions.primitives.set(
-    'mqt_console_log(param)',
-    function (param) {
-        console.log(param);
-    }
-);
 
 SnapExtensions.primitives.set(
     'mqt_from_base64_to_byte_list(b64)',
