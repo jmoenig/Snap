@@ -8596,9 +8596,9 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     this.cloud.saveProject(
         this.getProjectName(),
         projectBody,
-        () => {
+        (message) => {
             this.recordSavedChanges();
-            this.showMessage('saved.', 2);
+            this.showMessage(message, 2);
         },
         this.cloudError()
     );
