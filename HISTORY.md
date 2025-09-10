@@ -3,7 +3,8 @@
 ## in development:
 
 ### 2025-09-10
-* widgets: fixed a missing edge case when specifying default values for numerical input slots 
+* widgets: fixed a missing edge case when specifying default values for numerical input slots
+* gui: show cloud message when saving a project, thanks, Bernat! 
 
 ## 11.0.1:
 * **Notable Changes:**
