@@ -12360,16 +12360,6 @@ WorldMorph.prototype.initEventListeners = function () {
                 this.keyboardHandler.blur();
                 this.onNextStep = () => this.keyboardHandler.focus();
             }
-
-        console.log('here now')
-        if (window.speechSynthesis) { // +++
-            // activate
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
-        } else {
-            alert('speech synthesis unavailable')
-        }
-
-
             this.hand.processMouseDown(event);
         },
         true
@@ -12377,7 +12367,17 @@ WorldMorph.prototype.initEventListeners = function () {
 
     canvas.addEventListener(
         "touchstart",
-        event => this.hand.processTouchStart(event),
+        event => {
+        console.log('here now')
+            if (window.speechSynthesis) { // +++
+                // activate
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
+            } else {
+                alert('speech synthesis unavailable')
+            }
+
+            this.hand.processTouchStart(event);
+        },
         false
     );
 
