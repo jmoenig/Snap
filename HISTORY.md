@@ -4,6 +4,7 @@
 
 ### 2025-09-14
 * new dev version
+* morphic: Try to activate speech synthesis on mobile Safari (this totally used to work, I hate Apple)
 
 ## 11.0.2:
 * **Notable Changes:**

@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-September-08';
+var morphicVersion = '2025-September-14';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11456,7 +11456,13 @@ HandMorph.prototype.processMouseDown = function (event) {
 };
 
 HandMorph.prototype.processTouchStart = function (event) {
-    MorphicPreferences.isTouchDevice = true;
+    if (!MorphicPreferences.isTouchDevice) {
+        MorphicPreferences.isTouchDevice = true;
+        if (window.speechSynthesis) {
+            // activate
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance());
+        }
+    }
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
         this.touchStartPosition = new Point(
