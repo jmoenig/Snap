@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-14
+* new dev version
+
 ## 11.0.2:
 * **Notable Changes:**
     * MQTT library update, thanks, Simon!
