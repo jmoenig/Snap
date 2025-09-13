@@ -12367,17 +12367,7 @@ WorldMorph.prototype.initEventListeners = function () {
 
     canvas.addEventListener(
         "touchstart",
-        event => {
-        console.log('here now')
-            if (window.speechSynthesis) { // +++
-                // activate
-                window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
-            } else {
-                alert('speech synthesis unavailable')
-            }
-
-            this.hand.processTouchStart(event);
-        },
+        event => this.hand.processTouchStart(event),
         false
     );
 
