@@ -11456,13 +11456,15 @@ HandMorph.prototype.processMouseDown = function (event) {
 };
 
 HandMorph.prototype.processTouchStart = function (event) {
-    if (!MorphicPreferences.isTouchDevice) {
+    // if (!MorphicPreferences.isTouchDevice) {
         MorphicPreferences.isTouchDevice = true;
         if (window.speechSynthesis) {
             // activate
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance());
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
+        } else {
+            alert('speech synthesis unavailable')
         }
-    }
+    // }
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
         this.touchStartPosition = new Point(
