@@ -11456,15 +11456,7 @@ HandMorph.prototype.processMouseDown = function (event) {
 };
 
 HandMorph.prototype.processTouchStart = function (event) {
-    // if (!MorphicPreferences.isTouchDevice) {
-        MorphicPreferences.isTouchDevice = true;
-        if (window.speechSynthesis) {
-            // activate
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
-        } else {
-            alert('speech synthesis unavailable')
-        }
-    // }
+    MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
         this.touchStartPosition = new Point(
@@ -12368,6 +12360,16 @@ WorldMorph.prototype.initEventListeners = function () {
                 this.keyboardHandler.blur();
                 this.onNextStep = () => this.keyboardHandler.focus();
             }
+
+        console.log('here now')
+        if (window.speechSynthesis) { // +++
+            // activate
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance('yay'));
+        } else {
+            alert('speech synthesis unavailable')
+        }
+
+
             this.hand.processMouseDown(event);
         },
         true
