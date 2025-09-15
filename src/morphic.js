@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-September-14';
+var morphicVersion = '2025-September-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11686,12 +11686,9 @@ HandMorph.prototype.processMouseScroll = function (event) {
     if (morph) {
         morph.mouseScroll(
             (event.detail / -3) || (
-                Object.prototype.hasOwnProperty.call(
-                    event,
-                    'wheelDeltaY'
-                ) ?
-                        event.wheelDeltaY / 120 :
-                        event.wheelDelta / 120
+                'wheelDeltaY' in event ?
+                    event.wheelDeltaY / 120 :
+                    event.wheelDelta / 120
             ),
             event.wheelDeltaX / 120 || 0
         );
