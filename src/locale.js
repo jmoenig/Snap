@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-August-29';
+modules.locale = '2025-September-15';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -206,7 +206,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2025-08-29'
+        '2025-09-15'
 };
 
 SnapTranslator.dict.it = {
@@ -415,7 +415,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2025-08-19'
+        '2025-05-15'
 };
 
 SnapTranslator.dict.ca_VA = {

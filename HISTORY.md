@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-15
+* German and Catalan translation update
+
 ### 2025-09-14
 * new dev version
 * morphic: Try to activate speech synthesis on mobile Safari (this totally used to work, I hate Apple)
