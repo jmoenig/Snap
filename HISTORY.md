@@ -4,6 +4,7 @@
 
 ### 2025-09-15
 * German and Catalan translation update
+* neural networks library: changed "classify" reporter to feature a dropdown menu for "classify" and "predict" selectors, allowing to determine the neural network's confidence
 
 ### 2025-09-14
 * new dev version
