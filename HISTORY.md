@@ -6,6 +6,7 @@
 * German and Catalan translation update
 * neural networks library: changed "classify" reporter to feature a dropdown menu for "classify" and "predict" selectors, allowing to determine the neural network's confidence
 * morphic: fixed horizontal scrolling for trackpads, thanks, @ego-lay-atman-bay !
+* extensions: new "tts_activate(msg)" extension for activating speech synthesis on mobile iOS / iPadOS devices, sigh
 
 ### 2025-09-14
 * new dev version

@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-June-03';
+modules.extensions = '2025-September-15';
 
 // Global stuff
 
@@ -748,6 +748,48 @@ SnapExtensions.primitives.set(
         utter.onend = () => isDone = true;
         window.speechSynthesis.speak(utter);
         return () => isDone;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'tts_activate(msg)',
+    function (label, proc) {
+        // create a DOM button element covering the stage displaying the
+        // given label text, if any, blocking the current script's
+        // execution until the user has clicked the button, which will
+        // enable speech synthesis on stupid iOS / iPadOS devices,
+        // where Apple forgot to activate speech synthesis when the user
+        // interacts with a canvas element. Sigh.
+        var button = document.getElementById('morphic_speechActivator'),
+            area = this.parentThatIsA(StageMorph).extent(),
+            center = this.worldPoint(new Point(0, 0)),
+            acc = proc.context.accumulator;
+        if (button) {
+            acc = proc.context.accumulator = { blocking: true };
+            proc.pushContext('doYield');
+            proc.pushContext();
+        } else if (!acc?.blocking) {
+            acc = proc.context.accumulator = { blocking: true };
+            button = document.createElement("button");
+            button.setAttribute('id', 'morphic_speechActivator');
+            button.textContent = label;
+            button.style.position = 'absolute';
+            button.style.width = Math.max(20, area.x) + 'px';
+            button.style.height = Math.max(10, area.y) + 'px';
+
+            button.onclick = () => {
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance());
+                document.body.removeChild(button);
+                acc.blocking = false;
+            };
+
+            document.body.appendChild(button);
+            button.style.left = center.x - (button.offsetWidth / 2) + 'px';
+            button.style.top = center.y - (button.offsetHeight / 2) + 'px';
+            button.focus();
+            proc.pushContext('doYield');
+            proc.pushContext();
+        }
     }
 );
 
