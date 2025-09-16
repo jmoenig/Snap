@@ -852,7 +852,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
         refresh = () => {
             // load project
             if (cnf.load) {
-                setTimeout( () => {
                 this.getURL(
                     cnf.load,
                     projectData => {
@@ -864,14 +863,14 @@ IDE_Morph.prototype.applyConfigurations = function () {
                             this.rawOpenProjectString(projectData);
                         }
                         this.hasChangedMedia = true;
+                        this.buildPanes();
+                        this.fixLayout();
                         this.applyPaneHidingConfigurations();
                         if (cnf.onload) {
                             cnf.onload();
                         }
                     }
-                );},
-                1000
-            );
+                );
             } else {
                 this.buildPanes();
                 this.fixLayout();
