@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-09-16
+* added experimental editor configuration for German middle schools (imbw)
+
 ### 2025-09-15
 * German and Catalan translation update
 * neural networks library: changed "classify" reporter to feature a dropdown menu for "classify" and "predict" selectors, allowing to determine the neural network's confidence
