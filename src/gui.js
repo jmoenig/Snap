@@ -855,6 +855,8 @@ IDE_Morph.prototype.applyConfigurations = function () {
                 this.getURL(
                     cnf.load,
                     projectData => {
+                        this.buildPanes();
+                        this.fixLayout();
                         if (projectData.indexOf('<snapdata') === 0) {
                             this.rawOpenCloudDataString(projectData);
                         } else if (
@@ -863,8 +865,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
                             this.rawOpenProjectString(projectData);
                         }
                         this.hasChangedMedia = true;
-                        this.buildPanes();
-                        this.fixLayout();
                         this.applyPaneHidingConfigurations();
                         if (cnf.onload) {
                             cnf.onload();
