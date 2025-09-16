@@ -846,13 +846,12 @@ IDE_Morph.prototype.openIn = function (world) {
 
 IDE_Morph.prototype.applyConfigurations = function () {
     var cnf = this.config,
-        refreshLater = false,
+        refreshLater = !isNil(cnf.lang), // false,
         lang, translation, src,
 
         refresh = () => {
             // load project
             if (cnf.load) {
-                this.buildPanes();
                 this.getURL(
                     cnf.load,
                     projectData => {
