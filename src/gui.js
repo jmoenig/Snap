@@ -852,6 +852,7 @@ IDE_Morph.prototype.applyConfigurations = function () {
         refresh = () => {
             // load project
             if (cnf.load) {
+                setTimeout(
                 this.getURL(
                     cnf.load,
                     projectData => {
@@ -868,7 +869,9 @@ IDE_Morph.prototype.applyConfigurations = function () {
                             cnf.onload();
                         }
                     }
-                );
+                ),
+                1000
+            )
             } else {
                 this.buildPanes();
                 this.fixLayout();
