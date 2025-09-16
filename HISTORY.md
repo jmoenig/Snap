@@ -4,6 +4,7 @@
 
 ### 2025-09-16
 * added experimental editor configuration for German middle schools (imbw)
+* gui: fixed an IDE refreshing glitch when using a configuration dictionary that loads a default project
 
 ### 2025-09-15
 * German and Catalan translation update
