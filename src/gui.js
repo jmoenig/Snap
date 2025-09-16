@@ -852,6 +852,7 @@ IDE_Morph.prototype.applyConfigurations = function () {
         refresh = () => {
             // load project
             if (cnf.load) {
+                this.buildPanes();
                 this.getURL(
                     cnf.load,
                     projectData => {
