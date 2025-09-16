@@ -846,7 +846,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
 IDE_Morph.prototype.applyConfigurations = function () {
     var cnf = this.config,
-        refreshLater = !isNil(cnf.lang), // false,
+        refreshLater = false,
         lang, translation, src,
 
         refresh = () => {
