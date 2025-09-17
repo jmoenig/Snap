@@ -2,6 +2,21 @@
 
 ## in development:
 
+## 11.0.3:
+* **Notable Changes:**
+    * speech library: added new "activate speech synthesis" command to the speech library for iOS devices
+    * new "tts_activate(msg)" extension for activating speech synthesis on mobile iOS / iPadOS devices, sigh
+    * neural networks library: changed "classify" reporter to feature a dropdown menu for "classify" and "predict" selectors, allowing to determine the neural network's confidence
+* **Notable Fixes:**
+    * fixed horizontal scrolling for trackpads, thanks, @ego-lay-atman-bay!
+    * show cloud message when saving a project, thanks, Bernat!
+* **Translation Updates:**
+    * German
+    * Catalan
+
+### 2025-09-17
+* prepared v11.0.3 patch
+
 ### 2025-09-16
 * added experimental editor configuration for German middle schools (imbw)
 * gui: fixed an IDE refreshing glitch when using a configuration dictionary that loads a default project
