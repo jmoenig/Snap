@@ -2,6 +2,17 @@
 
 ## in development:
 
+## 11.0.4:
+* **Notable Changes:**
+    * neural networks library: added "confusion matrix" option to the "train/validate" reporter
+* **Translation Updates:**
+    * German
+
+### 2025-09-22
+* neural networks library: added "confusion matrix" option to the "train/validate" reporter
+* German translation update for "confusion matrix"
+* prepared v11.0.4 patch
+
 ## 11.0.3:
 * **Notable Changes:**
     * speech library: added new "activate speech synthesis" command to the speech library for iOS devices
