@@ -2094,7 +2094,7 @@ CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
         ide.flushPaletteCache();
         ide.categories.refreshEmpty();
         ide.refreshPalette();
-    }    
+    }
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
@@ -2149,7 +2149,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
     if (exp instanceof BlockMorph) {
         rebindRecursiveCalls(exp);
     }
- 
+
 
     ide.flushPaletteCache();
     ide.refreshPalette();
@@ -2930,6 +2930,7 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
     );
 };
 
+// TODO-a11y
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
         colors = [

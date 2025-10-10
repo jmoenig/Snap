@@ -261,7 +261,11 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     var outlineStyle,
         isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    if (!this.outline || isFlat) {return null; }
+    // TODO-a11y: we definitely want outlines in high contrast mode
+    if (!this.outline) {return null; }
+    if (isFlat) {
+        ctx.lineWidth = 1;
+    }
     if (this.outlineGradient) {
         outlineStyle = ctx.createLinearGradient(
             0,
@@ -278,7 +282,7 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : this.corner,
+        isFlat ? 1 : this.corner,
         0
     );
     ctx.closePath();
@@ -292,7 +296,7 @@ PushButtonMorph.prototype.drawBackground = function (ctx, color) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : Math.max(this.corner - this.outline, 0),
+        isFlat ? 1 : Math.max(this.corner - this.outline, 0),
         this.outline
     );
     ctx.closePath();
@@ -306,6 +310,7 @@ PushButtonMorph.prototype.drawEdges = function (
     topColor,
     bottomColor
 ) {
+    // TODO-a11y: we definitely want edges in high contrast mode
     if (MorphicPreferences.isFlat && !this.is3D) {return; }
     var minInset = Math.max(this.corner, this.outline + this.edge),
         w = this.width(),
@@ -1492,6 +1497,7 @@ DialogBoxMorph.uber = Morph.prototype;
 
 // DialogBoxMorph preferences settings:
 
+// TODO-a11y: We want these to be 14-16 and 18-20 respectively
 DialogBoxMorph.prototype.fontSize = 12;
 DialogBoxMorph.prototype.titleFontSize = 14;
 DialogBoxMorph.prototype.fontStyle = 'sans-serif';
@@ -1501,6 +1507,7 @@ DialogBoxMorph.prototype.titleTextColor = WHITE;
 DialogBoxMorph.prototype.titleBarColor
     = PushButtonMorph.prototype.pressColor;
 
+// TODO-a11y: Verify if this matters for high contrast mode
 DialogBoxMorph.prototype.contrast = 40;
 
 DialogBoxMorph.prototype.corner = 12;
@@ -1508,6 +1515,7 @@ DialogBoxMorph.prototype.padding = 14;
 DialogBoxMorph.prototype.titlePadding = 6;
 
 DialogBoxMorph.prototype.buttonContrast = 50;
+// TODO-a11y: We want this to be 14-16
 DialogBoxMorph.prototype.buttonFontSize = 12;
 DialogBoxMorph.prototype.buttonCorner = 12;
 DialogBoxMorph.prototype.buttonEdge = 6;
@@ -3443,7 +3451,7 @@ InputFieldMorph.prototype.drawRectBorder = function (ctx) {
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
-/* 
+/*
     I am a menu that looks like a piano keyboard.
 */
 
@@ -3608,7 +3616,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     var key,
         note,
         visibleOctave;
-    
+
     if (isNil(midiNum)) {
         return;
     }
@@ -3625,7 +3633,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     }
 
     this.octave = visibleOctave;
-    
+
     key = detect(
         this.children,
         each => each.pitch === note
@@ -3837,19 +3845,19 @@ PianoKeyMorph.prototype.mouseEnter = function () {
         soundType = piano ? piano.soundType : 1,
         octave = Math.floor((this.action - 1) / 12),
         octaveOffset = 0;
-        
+
     if (piano) {
         piano.unselectAllItems();
         piano.selection = this;
         piano.world.keyboardFocus = piano;
         piano.hasFocus = true;
-        
+
         octave = piano.octave;
     }
     octaveOffset = Math.floor((this.pitch - 1) / 12);
     this.action = (this.pitch - 1) + (12 * (octave + 1));
     this.note.pitch = this.action;
-    
+
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();

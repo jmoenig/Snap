@@ -122,21 +122,56 @@ IDE_Morph.uber = Morph.prototype;
 // IDE_Morph preferences settings and skins
 
 IDE_Morph.prototype.isBright = false;
+IDE_Morph.prototype.isAccessibleTheme = false;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
+    MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = false;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
+    MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
     SyntaxElementMorph.prototype.contrast = 20;
 };
 
+// This is a design mode designed to meet accessibility guidelines
+// for users with low vision who need larger fonts and higher contrast
+// TODO-a11y: What is the boundary between the 'design' mode and the 'theme'?
+IDE_Morph.prototype.setLargeTextDesign = function () {
+    // TODO: RESET THESE WHEN SWITCHING AWAY FROM ACCESSIBLE MODE
+    // TODO: If flat we need button outlines and block outlines.
+    let morphicAccessibleSettings = {
+        menuFontSize: 18,
+        bubbleHelpFontSize: 18,
+        prompterFontSize: 24,
+        prompterSliderSize: 20,
+        handleSize: 26,
+        scrollBarSize: 16,
+        mouseScrollAmount: 40,
+        useSliderForInput: false,
+        isTouchDevice: false,
+        isFlat: true, // TODO: Is this right?
+        grabThreshold: 5,
+        showHoles: false
+    };
+    // TODO: Default min zoom blocks to 1.2x if not set?
+    MorphicPreferences = Object.assign({}, standardSettings, morphicAccessibleSettings);
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    SyntaxElementMorph.prototype.contrast = 65;
+
+    // DEFAULT TO FLAT MODE WITH DARK COLORS?
+    // remove embossing on dialog text
+    // increase default dialog font size by a bit.
+    // in flat mode buttons need borders.
+};
+
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.isBright = false;
+    IDE_Morph.prototype.isAccessibleTheme = false;
 
     PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
     PushButtonMorph.prototype.outlineGradient = false;
@@ -178,10 +213,13 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = WHITE;
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
+
 };
 
 IDE_Morph.prototype.setBrightTheme = function () {
     IDE_Morph.prototype.isBright = true;
+    IDE_Morph.prototype.isAccessibleTheme = false;
 
     PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
     PushButtonMorph.prototype.outlineGradient = true;
@@ -221,6 +259,70 @@ IDE_Morph.prototype.setBrightTheme = function () {
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
+};
+
+// This is a High Contrast theme (for accessibility)
+// It's similar to the default theme, but with tweaked block colors
+// and a few other changes to improve contrast
+// Should this set flat more or just the large text design?
+IDE_Morph.prototype.setHighContrastTheme = function () {
+    IDE_Morph.prototype.isBright = false;
+    IDE_Morph.prototype.isAccessibleTheme = true;
+
+    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+    PushButtonMorph.prototype.outlineGradient = false;
+
+    // DARKEN THIS?
+    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
+    SpriteMorph.prototype.paletteTextColor = new Color(255, 255, 255);
+    StageMorph.prototype.paletteTextColor
+        = SpriteMorph.prototype.paletteTextColor;
+    StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
+    SpriteMorph.prototype.sliderColor
+        = SpriteMorph.prototype.paletteColor.lighter(30);
+
+    IDE_Morph.prototype.buttonContrast = 30;
+    // DARKEN THIS?
+    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
+    IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
+
+    IDE_Morph.prototype.groupColor
+        = SpriteMorph.prototype.paletteColor.lighter(5);
+    IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
+    IDE_Morph.prototype.buttonLabelColor = WHITE;
+    IDE_Morph.prototype.tabColors = [
+        IDE_Morph.prototype.groupColor.darker(50),
+        IDE_Morph.prototype.groupColor.darker(25),
+        IDE_Morph.prototype.groupColor
+    ];
+    IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
+    IDE_Morph.prototype.appModeColor = BLACK;
+    IDE_Morph.prototype.padding = 1;
+
+    SpriteIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    CostumeIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SoundIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    TurtleIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+
+    ScriptsMorph.prototype.feedbackColor = WHITE;
+    // Use high contrast block colors
+    // Should we swap default black/white fonts or always use black?
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR;
+
+    // CONSIDERATIONS:
+    // SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
+    // SpriteMorph.prototype.highlightBorder = 8;
+    // SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
+    // SpriteMorph.prototype.bubbleMaxTextWidth = 130;
+    // BlockMorph.prototype.zebraContrast = 40;
+
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
@@ -884,20 +986,33 @@ IDE_Morph.prototype.applyConfigurations = function () {
     }
 
     // design
-    if (cnf.design) {
-        if (cnf.design === 'flat') {
+    switch(cnf.design) {
+        case 'flat':
             this.setFlatDesign();
-        } else if (cnf.design === 'classic') {
+            break;
+        case 'large-text':
+            this.setLargeTextDesign();
+            break;
+        case 'classic':
+        default:
             this.setDefaultDesign();
-        }
+            break;
     }
+
 
     // theme
     if (cnf.theme) {
-        if (cnf.theme === 'bright') {
-            this.setBrightTheme();
-        } else if (cnf.theme === 'dark') {
-            this.setDefaultTheme();
+        switch (cnf.theme) {
+            case 'bright':
+                this.setBrightTheme();
+                break;
+            case 'high-contrast':
+                this.setHighContrastTheme();
+                break;
+            case 'dark':
+            default:
+                this.setDefaultTheme();
+                break;
         }
     }
 
@@ -2182,6 +2297,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
 
+    // TODO-a11y: verify this
     tab.getPressRenderColor = function () {
         if (MorphicPreferences.isFlat ||
                 SyntaxElementMorph.prototype.alpha > 0.85) {
@@ -3438,6 +3554,15 @@ IDE_Morph.prototype.flatBrightLooks = function () {
     this.saveSetting('theme', 'bright');
 };
 
+// TODO: We should have a much better name for this option
+IDE_Morph.prototype.accessibleLooks = function () {
+    this.setLargeTextDesign();
+    this.setHighContrastTheme();
+    this.refreshIDE();
+    this.saveSetting('design', 'large-text');
+    this.saveSetting('theme', 'high-contrast');
+};
+
 IDE_Morph.prototype.defaultDesign = function () {
     this.setDefaultDesign();
     this.refreshIDE();
@@ -3450,6 +3575,12 @@ IDE_Morph.prototype.flatDesign = function () {
     this.saveSetting('design', 'flat');
 };
 
+IDE_Morph.prototype.largeTextDesign = function () {
+    this.setLargeTextDesign();
+    this.refreshIDE();
+    this.saveSetting('design', 'large-text');
+};
+
 IDE_Morph.prototype.defaultTheme = function () {
     this.setDefaultTheme();
     this.refreshIDE();
@@ -3460,6 +3591,12 @@ IDE_Morph.prototype.brightTheme = function () {
     this.setBrightTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
+};
+
+IDE_Morph.prototype.highContrastTheme = function () {
+    this.setHighContrastTheme();
+    this.refreshIDE();
+    this.saveSetting('theme', 'high-contrast');
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
@@ -7938,6 +8075,7 @@ IDE_Morph.prototype.looksMenuData = function () {
 
     empty.render = nop;
 
+    // TODO-a11y: CHECKBOX STATE LOGIC IS BROKEN
     menu.addItem(
         [
             MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
@@ -7953,6 +8091,14 @@ IDE_Morph.prototype.looksMenuData = function () {
             localize('Flat Bright')
         ],
         this.flatBrightLooks
+    );
+    menu.addItem(
+        [
+            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick
+                : empty,
+            localize('High Contrast Large Text')
+        ],
+        this.accessibleLooks
     );
     menu.addLine();
     menu.addPreference(
@@ -7979,6 +8125,32 @@ IDE_Morph.prototype.looksMenuData = function () {
         IDE_Morph.prototype.isBright,
         'uncheck for default\nGUI theme',
         'check for alternative\nGUI theme',
+        false
+    );
+    menu.addPreference(
+        'Large Text',
+        () => {
+            if (this.setting('theme') === 'large-text') {
+                return this.defaultTheme();
+            }
+            this.largeTextTheme();
+        },
+        IDE_Morph.prototype.isLargeText,
+        'uncheck for default\nGUI theme',
+        'check for large text (accessible)\nGUI theme',
+        false
+    );
+    menu.addPreference(
+        'High Contrast',
+        () => {
+            if (this.setting('theme') === 'high-contrast') {
+                return this.defaultTheme();
+            }
+            this.highContrastTheme();
+        },
+        IDE_Morph.prototype.isAccessibleTheme, //TODO: THIS IS WRONG
+        'uncheck for default\nGUI theme',
+        'check for high contrast\nGUI theme',
         false
     );
     return menu;

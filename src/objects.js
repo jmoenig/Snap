@@ -162,7 +162,7 @@ SpriteMorph.prototype.categories =
         'other'
     ];
 
-SpriteMorph.prototype.blockColor = {
+SpriteMorph.prototype.DEFAULT_BLOCK_COLOR = {
     motion : new Color(74, 108, 212),
     looks : new Color(143, 86, 227),
     sound : new Color(207, 74, 217),
@@ -174,6 +174,109 @@ SpriteMorph.prototype.blockColor = {
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
 };
+
+// High Contrast colors for accessibility mode
+// Assumes the background is the default dark gray (10, 10, 10)
+// Base colors are all OK with black text, but not with white text
+// If we darken the base colors by 40 we get sufficient contrast with white text
+// Then the zebra (lighter) colors are the default colors, which have black text.
+SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR = {
+    motion : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.motion.darker(40),
+    looks : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.looks.darker(40),
+    sound : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.sound.darker(40),
+    pen : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.pen.darker(40),
+    control : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.control.darker(40),
+    sensing : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.sensing.darker(40),
+    operators : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.operators.darker(40),
+    variables : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.variables.darker(40),
+    lists : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.lists.darker(40),
+    other: SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.other.darker(40)
+};
+
+// This is just for testing / calculation purposes
+// Remove before deploying or adapt zebra coloring to use this lookup table
+SpriteMorph.prototype.HIGH_CONTRAST_ZEBRA_COLORS = {
+    motion : new Color(74, 108, 212).lighter(40),
+    looks : new Color(143, 86, 227).lighter(40),
+    sound : new Color(207, 74, 217).lighter(40),
+    pen : new Color(0, 161, 120).lighter(40),
+    control : new Color(230, 168, 34).lighter(40),
+    sensing : new Color(4, 148, 220).lighter(40),
+    operators : new Color(98, 194, 19).lighter(40),
+    variables : new Color(243, 118, 29).lighter(40),
+    lists : new Color(217, 77, 17).lighter(40),
+    other: new Color(150, 150, 150).lighter(40)
+};
+
+/*
+DARKER RGB Zebra colors
+motion -> rgb(44,65,127)
+looks -> rgb(86,52,136)
+sound -> rgb(124,44,130)
+pen -> rgb(0,97,72)
+control -> rgb(138,101,20)
+sensing -> rgb(2,89,132)
+operators -> rgb(59,116,11)
+variables -> rgb(146,71,17)
+lists -> rgb(130,46,10)
+other -> rgb(90,90,90)
+LIGHTER RGB Zebra colors
+motion -> rgb(146,167,229)
+looks -> rgb(188,154,238)
+sound -> rgb(226,146,232)
+pen -> rgb(102,199,174)
+control -> rgb(240,203,122)
+sensing -> rgb(104,191,234)
+operators -> rgb(161,218,113)
+variables -> rgb(248,173,119)
+lists -> rgb(232,148,112)
+other -> rgb(192,192,192)
+*/
+
+/**** HIGH CONTRAST ACCESSIBILITY MODE NOTES
+ * Assume dark gray background (10, 10, 10)
+ * We need 3:1 between the block color and the background
+ * We need 4.5:1 between the block color and white text
+ * We need 4.5:1 between the zebra color and black text
+ * We want (need?) 3:1 between all pairs of block colors
+ * We need to take care of zebra mode...
+ * HEX VALUES:
+ * motion    : #4A6CD4
+ * looks     : #8F56E3
+ * sound     : #CF4AD9
+ * pen       : #00A178
+ * control   : #E6A822
+ * sensing   : #0494DC
+ * operators : #62C213
+ * variables : #F3761D
+ * lists     : #D94D11
+ * other     : #969696
+ * ZEBRA COLORS (40% darker):
+ * motion    : #2C417F
+ * looks     : #563488
+ * sound     : #7C2C82
+ * pen       : #006148
+ * control   : #8A6514
+ * sensing   : #025984
+ * operators : #3B740B
+ * variables : #924711
+ * lists     : #822E0A
+ * other     : #5A5A5A
+ * LIGHTER COLORS (40% lighter):
+ * motion    : #92A7E5
+ * looks     : #BC9AEE
+ * sound     : #E292E8
+ * pen       : #66C7AE
+ * control   : #F0CB7A
+ * sensing   : #68BFEA
+ * operators : #A1DA71
+ * variables : #F8AD77
+ * lists     : #E89470
+ * other     : #C0C0C0
+ */
+
+/**********************************************/
+SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
 
 SpriteMorph.prototype.customCategories = new Map(); // key: name, value: color
 
@@ -2351,8 +2454,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'other',
             spec: 'arduino connected?',
             src:`(
-                (prim t reportConnected) 
-                (report 
+                (prim t reportConnected)
+                (report
                     (ext s4a_reportConnected)
                 )
             )`
@@ -2363,9 +2466,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'other',
             spec: 'set digital pin %n to %b',
             src:`(
-                (prim t digitalWrite pin value) 
-                (extension "s4a_digitalWrite(pin, value)" 
-                    (get pin) 
+                (prim t digitalWrite pin value)
+                (extension "s4a_digitalWrite(pin, value)"
+                    (get pin)
                     (get value)
                 )
             )`
@@ -2377,9 +2480,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'set pin %n to value %n',
             defaults: [null, 128],
             src:`(
-                (prim t pwmWrite pin value) 
-                (extension "s4a_pwmWrite(pin, value)" 
-                    (get pin) 
+                (prim t pwmWrite pin value)
+                (extension "s4a_pwmWrite(pin, value)"
+                    (get pin)
                     (get value)
                 )
             )`
@@ -2391,10 +2494,10 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'set servo %n to %s',
             defaults: [null, ['clockwise']],
             src:`(
-                (prim t servoWrite pin value) 
-                (extension "s4a_servoWrite(pin, value)" 
-                    (get pin) 
-                    (ext "txt_transform(name, txt)" unselect 
+                (prim t servoWrite pin value)
+                (extension "s4a_servoWrite(pin, value)"
+                    (get pin)
+                    (ext "txt_transform(name, txt)" unselect
                         (get value)
                     )
                 )
@@ -2406,9 +2509,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'other',
             spec: 'analog reading %n',
             src:`(
-                (prim t reportAnalogReading pin) 
-                (report 
-                    (ext "s4a_reportAnalogReading(pin)" 
+                (prim t reportAnalogReading pin)
+                (report
+                    (ext "s4a_reportAnalogReading(pin)"
                         (get pin)
                     )
                 )
@@ -2420,9 +2523,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'other',
             spec: 'digital reading %n',
             src:`(
-                (prim t reportDigitalReading pin) 
-                (report 
-                    (ext "s4a_reportDigitalReading(pin)" 
+                (prim t reportDigitalReading pin)
+                (report
+                    (ext "s4a_reportDigitalReading(pin)"
                         (get pin)
                     )
                 )
@@ -11926,7 +12029,7 @@ StageMorph.prototype.renameVariable = SpriteMorph.prototype.renameVariable;
 StageMorph.prototype.flashScope = SpriteMorph.prototype.flashScope;
 StageMorph.prototype.unflashScope = SpriteMorph.prototype.unflashScope;
 StageMorph.prototype.visibleScopeFor = SpriteMorph.prototype.visibleScopeFor;
- 
+
 
 // StageMorph Palette Utilities
 
@@ -12173,7 +12276,7 @@ StageMorph.prototype.snapPoint
 
 StageMorph.prototype.worldPoint =
     SpriteMorph.prototype.worldPoint;
-    
+
 // StageMorph dimension getters
 
 StageMorph.prototype.xCenter = function () {
@@ -16134,7 +16237,7 @@ StagePickerItemMorph.prototype.popUpSubmenu = function () {
         );
         scroller.adjustScrollBars();
      }
-    
+
     menu.add(this.action);
     menu.submenu = this.action;
     this.action.fullChanged();
