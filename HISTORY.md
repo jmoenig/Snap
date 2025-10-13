@@ -3,6 +3,9 @@
 ## in development:
 
 ### 2025-10-13
+* neural networks library: added multiclass classification support
+* neural networks library: added "classifier" option to the "generate block" command
+* neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
 * German translation update for newly added "classifier" string
 
 ## 11.0.4:
