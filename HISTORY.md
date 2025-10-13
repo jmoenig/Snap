@@ -1,8 +1,15 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * neural networks library: added multiclass classification support
+    * neural networks library: added "classifier" option to the "generate block" command
+    * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
+* **Translation Updates:**
+    * German
 
 ### 2025-10-13
+* new dev version
 * neural networks library: added multiclass classification support
 * neural networks library: added "classifier" option to the "generate block" command
 * neural networks library: tweaked "partition" reporter to make sure each class in a data set is adequately represented in both partitions
