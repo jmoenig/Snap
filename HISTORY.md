@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2025-10-13
+* German translation update for newly added "classifier" string
+
 ## 11.0.4:
 * **Notable Changes:**
     * neural networks library: added "confusion matrix" option to the "train/validate" reporter
