@@ -1,7 +1,14 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11.0.5',
-    cacheName = `snap-pwa-${snapVersion}`,
+let cacheBuster = '';
+
+if (self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1') {
+    // Prevent caching during development
+    cacheBuster = Date.now();
+}
+
+var snapVersion = '11.0.5-x',
+    cacheName = `snap-pwa-${snapVersion}-${cacheBuster}`,
     filesToCache = [
         'snap.html',
 
