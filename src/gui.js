@@ -7893,6 +7893,9 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     if (!noSave) {
         this.saveSetting('language', lang);
     }
+
+    // ensure the root html element has the correct language attribute
+    document.documentElement.lang = lang;
 };
 
 // IDE_Morph design settings
