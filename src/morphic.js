@@ -1370,6 +1370,7 @@ var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
     globalFontFamily: '',
     menuFontName: 'sans-serif',
+    isLargeText: false,
     menuFontSize: 12,
     bubbleHelpFontSize: 10,
     prompterFontName: 'sans-serif',
@@ -1391,6 +1392,7 @@ var touchScreenSettings = {
     minimumFontHeight: standardSettings.minimumFontHeight,
     globalFontFamily: '',
     menuFontName: 'sans-serif',
+    isLargeText: true, // TODO-a11y: Should this be true here or only for 'accessible' mode?
     menuFontSize: 24,
     bubbleHelpFontSize: 18,
     prompterFontName: 'sans-serif',
@@ -1407,6 +1409,18 @@ var touchScreenSettings = {
     grabThreshold: 5,
     showHoles: false
 };
+
+let largeTextSettings = Object.assign({}, standardSettings, {
+    isLargeText: true,
+    menuFontSize: 18,
+    bubbleHelpFontSize: 18,
+    prompterFontSize: 24,
+    prompterSliderSize: 16,
+    handleSize: 20,
+    scrollBarSize: 14, // Default is 9
+    useSliderForInput: false,
+    isTouchDevice: false,
+});
 
 var MorphicPreferences = standardSettings;
 
@@ -2172,6 +2186,11 @@ Color.prototype.toRGBstring = function () {
         Math.round(this.r) + ',' +
         Math.round(this.g) + ',' +
         Math.round(this.b) + ')';
+};
+
+Color.prototype.toHexString = function () {
+  const toHex = (val) => Math.round(val).toString(16).padStart(2, '0');
+  return `#${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`;
 };
 
 Color.fromString = function (aString) {

@@ -180,33 +180,21 @@ SpriteMorph.prototype.DEFAULT_BLOCK_COLOR = {
 // Base colors are all OK with black text, but not with white text
 // If we darken the base colors by 40 we get sufficient contrast with white text
 // Then the zebra (lighter) colors are the default colors, which have black text.
-SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR = {
-    motion : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.motion.darker(40),
-    looks : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.looks.darker(40),
-    sound : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.sound.darker(40),
-    pen : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.pen.darker(40),
-    control : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.control.darker(40),
-    sensing : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.sensing.darker(40),
-    operators : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.operators.darker(40),
-    variables : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.variables.darker(40),
-    lists : SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.lists.darker(40),
-    other: SpriteMorph.prototype.DEFAULT_BLOCK_COLOR.other.darker(40)
-};
+const mapObject = (obj, fn) => Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, fn(v, k)])
+);
+
+SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR = mapObject(
+    SpriteMorph.prototype.DEFAULT_BLOCK_COLOR,
+    color => color.darker(40)
+);
 
 // This is just for testing / calculation purposes
 // Remove before deploying or adapt zebra coloring to use this lookup table
-SpriteMorph.prototype.HIGH_CONTRAST_ZEBRA_COLORS = {
-    motion : new Color(74, 108, 212).lighter(40),
-    looks : new Color(143, 86, 227).lighter(40),
-    sound : new Color(207, 74, 217).lighter(40),
-    pen : new Color(0, 161, 120).lighter(40),
-    control : new Color(230, 168, 34).lighter(40),
-    sensing : new Color(4, 148, 220).lighter(40),
-    operators : new Color(98, 194, 19).lighter(40),
-    variables : new Color(243, 118, 29).lighter(40),
-    lists : new Color(217, 77, 17).lighter(40),
-    other: new Color(150, 150, 150).lighter(40)
-};
+SpriteMorph.prototype.HIGH_CONTRAST_ZEBRA_COLORS = mapObject(
+    SpriteMorph.prototype.DEFAULT_BLOCK_COLOR,
+    color => color.lighter(40)
+);
 
 /*
 DARKER RGB Zebra colors

@@ -122,13 +122,16 @@ IDE_Morph.uber = Morph.prototype;
 // IDE_Morph preferences settings and skins
 
 IDE_Morph.prototype.isBright = false;
-IDE_Morph.prototype.isAccessibleTheme = false;
+IDE_Morph.prototype.isHighContrastTheme = false;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = false;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
+
+    Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
@@ -136,45 +139,36 @@ IDE_Morph.prototype.setFlatDesign = function () {
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
     SyntaxElementMorph.prototype.contrast = 20;
+
+    Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.FLAT_MODE_LOOKS);
+    Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.FLAT_MODE_LOOKS);
 };
 
 // This is a design mode designed to meet accessibility guidelines
-// for users with low vision who need larger fonts and higher contrast
-// TODO-a11y: What is the boundary between the 'design' mode and the 'theme'?
+// for users with low vision who need larger fonts.
+// There is a related "High Contrast" theme that can be used with this design.
+// This turns on `isFlat`, though a user can later turn it off to return to the default design.
 IDE_Morph.prototype.setLargeTextDesign = function () {
-    // TODO: RESET THESE WHEN SWITCHING AWAY FROM ACCESSIBLE MODE
-    // TODO: If flat we need button outlines and block outlines.
-    let morphicAccessibleSettings = {
-        menuFontSize: 18,
-        bubbleHelpFontSize: 18,
-        prompterFontSize: 24,
-        prompterSliderSize: 20,
-        handleSize: 26,
-        scrollBarSize: 16,
-        mouseScrollAmount: 40,
-        useSliderForInput: false,
-        isTouchDevice: false,
-        isFlat: true, // TODO: Is this right?
-        grabThreshold: 5,
-        showHoles: false
-    };
-    // TODO: Default min zoom blocks to 1.2x if not set?
-    MorphicPreferences = Object.assign({}, standardSettings, morphicAccessibleSettings);
+    MorphicPreferences = Object.assign({}, standardSettings, largeTextSettings);
+    MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
+    let currentBlocksScale = SyntaxElementMorph.prototype.scale
+    if (currentBlocksScale < 1.2) {
+        this.setBlocksScale(1.2);
+   }
 
-    // DEFAULT TO FLAT MODE WITH DARK COLORS?
-    // remove embossing on dialog text
-    // increase default dialog font size by a bit.
-    // in flat mode buttons need borders.
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.FLAT_MODE_LOOKS,
+        PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
+   Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.FLAT_MODE_LOOKS,
+        DialogBoxMorph.prototype.LARGE_TEXT_LOOKS);
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.isBright = false;
-    IDE_Morph.prototype.isAccessibleTheme = false;
-
-    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
-    PushButtonMorph.prototype.outlineGradient = false;
+    IDE_Morph.prototype.isHighContrastTheme = false;
 
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
@@ -189,7 +183,7 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
-        = SpriteMorph.prototype.paletteColor.lighter(5);
+        = SpriteMorph.prototype.paletteColor.darker(5);
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
     IDE_Morph.prototype.buttonLabelColor = WHITE;
     IDE_Morph.prototype.tabColors = [
@@ -215,11 +209,15 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
     ScriptsMorph.prototype.feedbackColor = WHITE;
     SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
 
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
 
 IDE_Morph.prototype.setBrightTheme = function () {
     IDE_Morph.prototype.isBright = true;
-    IDE_Morph.prototype.isAccessibleTheme = false;
+    IDE_Morph.prototype.isHighContrastTheme = false;
 
     PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
     PushButtonMorph.prototype.outlineGradient = true;
@@ -268,10 +266,29 @@ IDE_Morph.prototype.setBrightTheme = function () {
 // Should this set flat more or just the large text design?
 IDE_Morph.prototype.setHighContrastTheme = function () {
     IDE_Morph.prototype.isBright = false;
-    IDE_Morph.prototype.isAccessibleTheme = true;
+    IDE_Morph.prototype.isHighContrastTheme = true;
 
-    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
-    PushButtonMorph.prototype.outlineGradient = false;
+    // This is also the background for the dialog headers.
+    // We want to darken the highlight color, but it needs to still be 4.5 with black.
+    // PushButtonMorph.prototype.pressColor = new Color(60, 90, 120);
+    // PushButtonMorph.prototype.highlightColor
+    //     = PushButtonMorph.prototype.pressColor.lighter(50);
+    // // PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+    // PushButtonMorph.prototype.outlineGradient = false;
+
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
+
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS);
+
+    // DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
+    // DialogBoxMorph.prototype.titleTextColor = WHITE;
+    // DialogBoxMorph.prototype.titleBarColor
+    //     = PushButtonMorph.prototype.pressColor;
+    // DialogBoxMorph.prototype.buttonOutlineColor
+    //     = PushButtonMorph.prototype.pressColor;
+    // DialogBoxMorph.prototype.buttonOutlineGradient = false;
 
     // DARKEN THIS?
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
@@ -283,8 +300,9 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
     IDE_Morph.prototype.buttonContrast = 30;
-    // DARKEN THIS?
-    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
+    // Actually, this should be lighter because the blocks themselves are darker
+    // Or we increase the border around each block a bit.
+    // IDE_Morph.prototype.backgroundColor = new Color(72, 72, 72);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
@@ -8094,7 +8112,7 @@ IDE_Morph.prototype.looksMenuData = function () {
     );
     menu.addItem(
         [
-            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick
+            MorphicPreferences.isLargeText && IDE_Morph.prototype.isHighContrastTheme ? tick
                 : empty,
             localize('High Contrast Large Text')
         ],
@@ -8130,25 +8148,25 @@ IDE_Morph.prototype.looksMenuData = function () {
     menu.addPreference(
         'Large Text',
         () => {
-            if (this.setting('theme') === 'large-text') {
+            if (this.getSetting('theme') === 'large-text') {
                 return this.defaultTheme();
             }
             this.largeTextTheme();
         },
         IDE_Morph.prototype.isLargeText,
-        'uncheck for default\nGUI theme',
+        'uncheck for default\nGUI text size',
         'check for large text (accessible)\nGUI theme',
         false
     );
     menu.addPreference(
-        'High Contrast',
+        'High Contrast Colors',
         () => {
-            if (this.setting('theme') === 'high-contrast') {
+            if (this.getSetting('theme') === 'high-contrast') {
                 return this.defaultTheme();
             }
             this.highContrastTheme();
         },
-        IDE_Morph.prototype.isAccessibleTheme, //TODO: THIS IS WRONG
+        IDE_Morph.prototype.isHighContrastTheme,
         'uncheck for default\nGUI theme',
         'check for high contrast\nGUI theme',
         false
