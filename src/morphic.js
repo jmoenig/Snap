@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-September-15';
+var morphicVersion = '2025-October-18';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -1365,7 +1365,6 @@ Object.freeze(BLACK);
 Object.freeze(WHITE);
 Object.freeze(CLEAR);
 
-// TODO-a11y: Should we not freeze these, then duplicate so we can reset to defaults easily?
 var standardSettings = {
     minimumFontHeight: getMinimumFontHeight(), // browser settings
     globalFontFamily: '',

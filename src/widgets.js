@@ -156,7 +156,8 @@ PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS = {
     pressColor: SnapHighContrastAccentBlue,
     // Because this a button with black text, it is OK to lighten the highlight
     highlightColor: SnapHighContrastAccentBlue.lighter(20),
-    outlineColor: SnapHighContrastAccentBlue,
+    // This is used in the main UI for buttons around the scripting area
+    outlineColor: new Color(120, 120, 120),
 };
 
 Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
@@ -1532,7 +1533,7 @@ DialogBoxMorph.prototype.DEFAULT_LOOKS = {
 
     color: PushButtonMorph.prototype.color,
     titleTextColor: WHITE,
-    titleBarColor: PushButtonMorph.prototype.pressColor,
+    titleBarColor: SnapAccentLightBlue,
 
     contrast: 40,
 
@@ -1541,12 +1542,13 @@ DialogBoxMorph.prototype.DEFAULT_LOOKS = {
     titlePadding: 6,
 
     buttonContrast: 50,
-    // TODO-a11y: We want this to be 14-16
     buttonFontSize: 12,
     buttonCorner: 12,
     buttonEdge: 6,
     buttonPadding: 0,
     buttonOutline: 3,
+    // In default mode, buttons have a gradient outline with the start of the gradient
+    // being the same color as the button color.
     buttonOutlineColor: PushButtonMorph.prototype.color,
     buttonOutlineGradient: true,
 };
@@ -1556,7 +1558,7 @@ DialogBoxMorph.prototype.DEFAULT_LOOKS = {
 // determines precedence (last one wins).
 DialogBoxMorph.prototype.FLAT_MODE_LOOKS = {
     buttonOutline: 1,
-    buttonOutlineColor: PushButtonMorph.prototype.color,
+    buttonOutlineColor: new Color(180, 180, 180),
     buttonOutlineGradient: false,
 };
 
@@ -1565,13 +1567,14 @@ DialogBoxMorph.prototype.LARGE_TEXT_LOOKS = {
     titleFontSize: 16,
     buttonFontSize: 14,
     buttonCorner: 14,
+    buttonOutlineGradient: false,
 };
 
 DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS = {
     titleBarColor: SnapHighContrastAccentBlue,
     contrast: 40, // TODO-a11y: Verify if this matters for high contrast mode
     buttonContrast: 50,
-    buttonOutlineColor: SnapHighContrastAccentBlue,
+    buttonOutlineColor: new Color(120, 120, 120),
     buttonOutlineGradient: false,
 };
 

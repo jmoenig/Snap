@@ -153,10 +153,10 @@ IDE_Morph.prototype.setLargeTextDesign = function () {
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
-    let currentBlocksScale = SyntaxElementMorph.prototype.scale
-    if (currentBlocksScale < 1.2) {
-        this.setBlocksScale(1.2);
-   }
+//     let currentBlocksScale = SyntaxElementMorph.prototype.scale
+//     if (currentBlocksScale < 1.2) {
+//         this.setBlocksScale(1.2);
+//    }
 
     Object.assign(PushButtonMorph.prototype,
         PushButtonMorph.prototype.FLAT_MODE_LOOKS,
@@ -183,7 +183,7 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
-        = SpriteMorph.prototype.paletteColor.darker(5);
+        = SpriteMorph.prototype.paletteColor.lighter(5);
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
     IDE_Morph.prototype.buttonLabelColor = WHITE;
     IDE_Morph.prototype.tabColors = [
@@ -218,9 +218,6 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
 IDE_Morph.prototype.setBrightTheme = function () {
     IDE_Morph.prototype.isBright = true;
     IDE_Morph.prototype.isHighContrastTheme = false;
-
-    PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
-    PushButtonMorph.prototype.outlineGradient = true;
 
     SpriteMorph.prototype.paletteColor = WHITE;
     SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
@@ -258,6 +255,15 @@ IDE_Morph.prototype.setBrightTheme = function () {
 
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
     SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
+
+    // TODO: these need color adjustments for bright theme
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.DEFAULT_LOOKS);
+    PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
+    PushButtonMorph.prototype.outlineGradient = false;
+    DialogBoxMorph.prototype.outlineGradient = false;
 };
 
 // This is a High Contrast theme (for accessibility)
@@ -268,27 +274,10 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = true;
 
-    // This is also the background for the dialog headers.
-    // We want to darken the highlight color, but it needs to still be 4.5 with black.
-    // PushButtonMorph.prototype.pressColor = new Color(60, 90, 120);
-    // PushButtonMorph.prototype.highlightColor
-    //     = PushButtonMorph.prototype.pressColor.lighter(50);
-    // // PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
-    // PushButtonMorph.prototype.outlineGradient = false;
-
     Object.assign(PushButtonMorph.prototype,
         PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
-
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS);
-
-    // DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
-    // DialogBoxMorph.prototype.titleTextColor = WHITE;
-    // DialogBoxMorph.prototype.titleBarColor
-    //     = PushButtonMorph.prototype.pressColor;
-    // DialogBoxMorph.prototype.buttonOutlineColor
-    //     = PushButtonMorph.prototype.pressColor;
-    // DialogBoxMorph.prototype.buttonOutlineGradient = false;
 
     // DARKEN THIS?
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
@@ -302,7 +291,7 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
     IDE_Morph.prototype.buttonContrast = 30;
     // Actually, this should be lighter because the blocks themselves are darker
     // Or we increase the border around each block a bit.
-    // IDE_Morph.prototype.backgroundColor = new Color(72, 72, 72);
+    IDE_Morph.prototype.backgroundColor = new Color(72, 72, 72);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
@@ -3665,16 +3654,26 @@ IDE_Morph.prototype.applySavedSettings = function () {
         solidshadow = this.getSetting('solidshadow');
 
     // design
-    if (design === 'flat') {
+    switch (design) {
+    case 'large-text':
+        this.setLargeTextDesign();
+        break;
+    case 'flat':
         this.setFlatDesign();
-    } else {
+        break;
+    default:
         this.setDefaultDesign();
     }
 
     // theme
-    if (theme === 'bright') {
+    switch (theme) {
+    case 'high-contrast':
+        this.setHighContrastTheme();
+        break;
+    case 'bright':
         this.setBrightTheme();
-    } else {
+        break;
+    default:
         this.setDefaultTheme();
     }
 
