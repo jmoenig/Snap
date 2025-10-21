@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-September-08';
+modules.blocks = '2025-October-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1567,7 +1567,8 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                     : this.scriptTarget().getMethod(this.blockSpec);
             if (!noValues &&
                 (deflt instanceof InputSlotMorph ||
-                deflt instanceof BooleanSlotMorph)
+                deflt instanceof BooleanSlotMorph ||
+                deflt instanceof ColorSlotMorph)
             ) {
                 deflt.setContents(
                     def.defaultValueOfInputIdx(inp)
@@ -1584,6 +1585,10 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
         if (deflt instanceof MultiArgMorph) {
             deflt.defaults = this.defaults[inp];
         }
+    } else if (this instanceof MultiArgMorph &&
+            this.defaultValue instanceof Array
+    ) {
+        deflt.setContents(this.defaultValue[inp]);
     }
     return deflt;
 };
@@ -14801,6 +14806,8 @@ MultiArgMorph.prototype.defaultValueFor = function (index) {
 MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     // private - answer the raw untranslated data
     // repeat & wrap default values inside label groups
+    var dflt;
+
     if (!this.parent || this.groupInputs > 1) {
         return this.defaultValue instanceof Array ?
             this.defaultValue[index % this.defaultValue.length]
@@ -14808,10 +14815,12 @@ MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     }
 
     // otherwise use them just once each
-    if (this.defaultValue instanceof Array) {
-        return this.defaultValue[index] || '';
+    dflt = isNil(this.defaultValue) ? this.defaults
+        : this.defaultValue;
+    if (dflt instanceof Array) {
+        return dflt[index] || '';
     }
-    return index ? '' : this.defaultValue;
+    return index ? '' : dflt;
 };
 
 // MultiArgMorph events:

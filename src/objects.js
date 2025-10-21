@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-September-08';
+modules.objects = '2025-October-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -3600,17 +3600,21 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
             block.inputs()[migration.expand].addInput();
         }
     }
-    if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
+    if (info.defaults || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
         block.defaults = defaults;
         inputs = block.inputs();
         if (inputs[0] instanceof MultiArgMorph) {
-            inputs[0].setContents(defaults);
             inputs[0].defaults = defaults;
+            if (setDefaults) {
+                inputs[0].setContents(defaults);
+            }
         } else {
             for (i = 0; i < defaults.length; i += 1) {
                 if (defaults[i] !== null) {
-                    inputs[i].setContents(defaults[i]);
+                    if (setDefaults) {
+                        inputs[i].setContents(defaults[i]);
+                    }
                     if (inputs[i] instanceof MultiArgMorph) {
                         inputs[i].defaults = defaults[i];
                     }

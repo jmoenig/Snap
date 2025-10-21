@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed default values for color slots & improved default slot values overall
+
+### 2025-10-21
+    * objects, blocks: fixed default values for color slots & improved default slot values overall
 
 ## 11.0.5:
 * **Notable Changes:**
