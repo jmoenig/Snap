@@ -142,8 +142,12 @@ IDE_Morph.prototype.setFlatDesign = function () {
     IDE_Morph.prototype.scriptsPaneTexture = null;
     SyntaxElementMorph.prototype.contrast = 20;
 
-    Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.FLAT_MODE_LOOKS);
-    Object.assign(ToggleButtonMorph.prototype, PushButtonMorph.prototype.FLAT_MODE_LOOKS);
+    let looks = PushButtonMorph.prototype.FLAT_MODE_LOOKS;
+    if (IDE_Morph.prototype.isBright) {
+        looks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+    }
+    Object.assign(PushButtonMorph.prototype, looks);
+    Object.assign(ToggleButtonMorph.prototype, looks);
     Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.FLAT_MODE_LOOKS);
 };
 
@@ -266,13 +270,15 @@ IDE_Morph.prototype.setBrightTheme = function () {
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
     SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
 
-    // TODO: these need color adjustments for bright theme
-    Object.assign(PushButtonMorph.prototype,
-        PushButtonMorph.prototype.DEFAULT_LOOKS);
-    Object.assign(ToggleButtonMorph.prototype,
-        PushButtonMorph.prototype.DEFAULT_LOOKS);
-    Object.assign(DialogBoxMorph.prototype,
-        DialogBoxMorph.prototype.DEFAULT_LOOKS);
+    let pushButtonLooks = PushButtonMorph.prototype.DEFAULT_LOOKS;
+    let dialogBoxLooks = DialogBoxMorph.prototype.DEFAULT_LOOKS;
+    if (MorphicPreferences.isFlat) {
+        pushButtonLooks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+        dialogBoxLooks = DialogBoxMorph.prototype.FLAT_MODE_LOOKS;
+    }
+    Object.assign(PushButtonMorph.prototype, pushButtonLooks);
+    Object.assign(ToggleButtonMorph.prototype, pushButtonLooks);
+    Object.assign(DialogBoxMorph.prototype, dialogBoxLooks);
     // PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
     // PushButtonMorph.prototype.outlineGradient = false;
     // DialogBoxMorph.prototype.outlineGradient = false;
@@ -3575,7 +3581,6 @@ IDE_Morph.prototype.flatBrightLooks = function () {
     this.saveSetting('theme', 'bright');
 };
 
-// TODO: We should have a much better name for this option
 IDE_Morph.prototype.accessibleLooks = function () {
     this.setLargeTextDesign();
     this.setHighContrastTheme();
@@ -8161,12 +8166,12 @@ IDE_Morph.prototype.looksMenuData = function () {
     menu.addPreference(
         'Large Text',
         () => {
-            if (this.getSetting('theme') === 'large-text') {
+            if (MorphicPreferences.isLargeText) {
                 return this.defaultTheme();
             }
-            this.largeTextTheme();
+            this.largeTextDesign();
         },
-        IDE_Morph.prototype.isLargeText,
+        MorphicPreferences.isLargeText,
         'uncheck for default\nGUI text size',
         'check for large text (accessible)\nGUI theme',
         false

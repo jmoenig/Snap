@@ -141,12 +141,19 @@ PushButtonMorph.prototype.DEFAULT_LOOKS = {
 };
 
 PushButtonMorph.prototype.FLAT_MODE_LOOKS = {
-    outlineColor: IDE_Morph.prototype.isBright ? new Color(200, 200, 200) : new Color(50, 50, 50),
+    // TODO: This should be the outline color for buttons in the IDE, but isn't showing.
+    outlineColor: new Color(70, 70, 70),
     outlineGradient: false,
-    //
+    // highlightColor: SnapAccentLightBlue.lighter(30),
+    corner: 2,
+};
+
+PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS = {
+    outlineColor: new Color(200, 200, 200),
+    outlineGradient: false,
     highlightColor: SnapAccentLightBlue.lighter(30),
     corner: 2,
-}
+};
 
 PushButtonMorph.prototype.LARGE_TEXT_LOOKS = {
     fontSize: 12,
@@ -341,7 +348,6 @@ PushButtonMorph.prototype.drawEdges = function (
     topColor,
     bottomColor
 ) {
-    // TODO-a11y: we definitely want edges in high contrast mode
     if (MorphicPreferences.isFlat && !this.is3D) {return; }
     var minInset = Math.max(this.corner, this.outline + this.edge),
         w = this.width(),
