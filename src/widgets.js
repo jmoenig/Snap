@@ -141,8 +141,10 @@ PushButtonMorph.prototype.DEFAULT_LOOKS = {
 };
 
 PushButtonMorph.prototype.FLAT_MODE_LOOKS = {
-    outlineColor: new Color(50, 50, 50),
+    outlineColor: IDE_Morph.prototype.isBright ? new Color(200, 200, 200) : new Color(50, 50, 50),
     outlineGradient: false,
+    //
+    highlightColor: SnapAccentLightBlue.lighter(30),
     corner: 2,
 }
 

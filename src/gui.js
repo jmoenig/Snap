@@ -131,6 +131,8 @@ IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     SyntaxElementMorph.prototype.contrast = 65;
 
     Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
+    // We need to manually update subclasses that inherit PushButtonMorph looks
+    Object.assign(ToggleButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
     Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
 
@@ -141,6 +143,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SyntaxElementMorph.prototype.contrast = 20;
 
     Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.FLAT_MODE_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype, PushButtonMorph.prototype.FLAT_MODE_LOOKS);
     Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.FLAT_MODE_LOOKS);
 };
 
@@ -153,15 +156,20 @@ IDE_Morph.prototype.setLargeTextDesign = function () {
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
-//     let currentBlocksScale = SyntaxElementMorph.prototype.scale
-//     if (currentBlocksScale < 1.2) {
-//         this.setBlocksScale(1.2);
-//    }
+    // TODO: Enabling this causes some circular dependencies during IDE initialization
+    // setBlocksScale isn't available yet.
+    // let currentBlocksScale = SyntaxElementMorph.prototype.scale
+    // if (currentBlocksScale < 1.2) {
+    //     this.setBlocksScale(1.2);
+    // }
 
     Object.assign(PushButtonMorph.prototype,
         PushButtonMorph.prototype.FLAT_MODE_LOOKS,
         PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
-   Object.assign(DialogBoxMorph.prototype,
+    Object.assign(ToggleButtonMorph.prototype,
+        PushButtonMorph.prototype.FLAT_MODE_LOOKS,
+        PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.FLAT_MODE_LOOKS,
         DialogBoxMorph.prototype.LARGE_TEXT_LOOKS);
 };
@@ -211,6 +219,8 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
 
     Object.assign(PushButtonMorph.prototype,
         PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
@@ -259,11 +269,13 @@ IDE_Morph.prototype.setBrightTheme = function () {
     // TODO: these need color adjustments for bright theme
     Object.assign(PushButtonMorph.prototype,
         PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.DEFAULT_LOOKS);
-    PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
-    PushButtonMorph.prototype.outlineGradient = false;
-    DialogBoxMorph.prototype.outlineGradient = false;
+    // PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
+    // PushButtonMorph.prototype.outlineGradient = false;
+    // DialogBoxMorph.prototype.outlineGradient = false;
 };
 
 // This is a High Contrast theme (for accessibility)
@@ -275,6 +287,8 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
     IDE_Morph.prototype.isHighContrastTheme = true;
 
     Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
         PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS);
@@ -291,7 +305,7 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
     IDE_Morph.prototype.buttonContrast = 30;
     // Actually, this should be lighter because the blocks themselves are darker
     // Or we increase the border around each block a bit.
-    IDE_Morph.prototype.backgroundColor = new Color(72, 72, 72);
+    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
