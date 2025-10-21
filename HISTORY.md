@@ -1,12 +1,15 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 11.0.6:
 * **Notable Fixes:**
     * fixed default values for color slots & improved default slot values overall
 
 ### 2025-10-21
 * objects, blocks: fixed default values for color slots & improved default slot values overall
 * objects: (internal) methods to externally persist and restore which global blocks (primitives, custom blocks, variables) are visible in the palette
+* prepared v11.0.6 patch
 
 ## 11.0.5:
 * **Notable Changes:**
