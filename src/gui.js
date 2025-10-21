@@ -120,13 +120,36 @@ IDE_Morph.prototype.constructor = IDE_Morph;
 IDE_Morph.uber = Morph.prototype;
 
 // IDE_Morph preferences settings and skins
+/* Snap! has two independent appearance dimensions:
+    - Design: 'default' (skeuomorphic), 'flat', and 'large-text'
+    - Theme: 'default' (dark), 'bright', and 'high-contrast'
+
+    Both affect the overall look of the IDE and widgets, can be combined differently.
+    Note that while 'large-text' is a design mode, it also enforces the flat design properties.
+    (It is designed to be more accessible for low-vision users, and not have too many individual styles.) When saved to local storage, it is saved as 'large-text-flat'.
+
+    Note that the 'design' settings are stored in MorphicPreferences.isFlat and MorphicPreferences.isLargeText,
+    and the 'theme' settings are stored in IDE_Morph.prototype.isBright and IDE_Morph.prototype.isHighContrastTheme.
+
+    When Snap! loads setDefaultDesign() and setDefaultTheme() are called to set the default appearance, and subsequently any additional methods are called when reading saved user settings.
+
+    These settings are commonly combined as follows:
+    * 'Default Looks': default design + default theme (skeuomorphic + dark)
+    * 'Flat Bright': flat design + bright theme
+    * 'Large Text High Contrast': large-text design + high-contrast theme (see setAccessibleLooks)
+*/
 
 IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.isHighContrastTheme = false;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
+    console.log('Snap! default design activated');
+    console.log(MorphicPreferences);
     MorphicPreferences = Object.assign({}, standardSettings);
+    console.log(MorphicPreferences);
     MorphicPreferences.isFlat = false;
+    IDE_Morph.prototype.isBright = false;
+    IDE_Morph.prototype.isHighContrastTheme = false;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
 
@@ -137,6 +160,7 @@ IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
+    console.log('Snap! flat design mode activated');
     MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
@@ -151,11 +175,8 @@ IDE_Morph.prototype.setFlatDesign = function () {
     Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.FLAT_MODE_LOOKS);
 };
 
-// This is a design mode designed to meet accessibility guidelines
-// for users with low vision who need larger fonts.
-// There is a related "High Contrast" theme that can be used with this design.
-// This turns on `isFlat`, though a user can later turn it off to return to the default design.
 IDE_Morph.prototype.setLargeTextDesign = function () {
+    console.log('Snap! large text design mode activated');
     MorphicPreferences = Object.assign({}, standardSettings, largeTextSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
@@ -179,6 +200,7 @@ IDE_Morph.prototype.setLargeTextDesign = function () {
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
+    console.log('Snap! default dark theme activated');
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = false;
 
@@ -230,6 +252,7 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
 };
 
 IDE_Morph.prototype.setBrightTheme = function () {
+    console.log('Snap! bright theme activated');
     IDE_Morph.prototype.isBright = true;
     IDE_Morph.prototype.isHighContrastTheme = false;
 
@@ -279,9 +302,6 @@ IDE_Morph.prototype.setBrightTheme = function () {
     Object.assign(PushButtonMorph.prototype, pushButtonLooks);
     Object.assign(ToggleButtonMorph.prototype, pushButtonLooks);
     Object.assign(DialogBoxMorph.prototype, dialogBoxLooks);
-    // PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
-    // PushButtonMorph.prototype.outlineGradient = false;
-    // DialogBoxMorph.prototype.outlineGradient = false;
 };
 
 // This is a High Contrast theme (for accessibility)
@@ -289,6 +309,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
 // and a few other changes to improve contrast
 // Should this set flat more or just the large text design?
 IDE_Morph.prototype.setHighContrastTheme = function () {
+    console.log('Snap! high contrast theme activated');
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = true;
 
@@ -387,7 +408,8 @@ function IDE_Morph(config = {}) {
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
         onload:         callback, called when the microworld is loaded
-        design:         str, currently "flat" (bright) or "classic" (dark)
+        design:         str, currently "flat", "classic" (default), or "large-text-flat"
+        theme:          str, currently "dark" (default), "bright", or "high-contrast"
         border:         num, pixels surrounding the IDE, default is none (zero)
         lang:           str, translation to be used, e.g. "de" for German
         mode:           str, currently "presentation" or "edit"
@@ -1012,35 +1034,32 @@ IDE_Morph.prototype.applyConfigurations = function () {
         return;
     }
 
+    // theme
+    switch (cnf.theme) {
+        case 'bright':
+            this.setBrightTheme();
+            break;
+        case 'high-contrast':
+            this.setHighContrastTheme();
+            break;
+        case 'dark':
+        default:
+            this.setDefaultTheme();
+            break;
+    }
+
     // design
     switch(cnf.design) {
         case 'flat':
             this.setFlatDesign();
             break;
-        case 'large-text':
+        case 'large-text-flat':
             this.setLargeTextDesign();
             break;
         case 'classic':
         default:
             this.setDefaultDesign();
             break;
-    }
-
-
-    // theme
-    if (cnf.theme) {
-        switch (cnf.theme) {
-            case 'bright':
-                this.setBrightTheme();
-                break;
-            case 'high-contrast':
-                this.setHighContrastTheme();
-                break;
-            case 'dark':
-            default:
-                this.setDefaultTheme();
-                break;
-        }
     }
 
     // interaction mode
@@ -3585,41 +3604,47 @@ IDE_Morph.prototype.accessibleLooks = function () {
     this.setLargeTextDesign();
     this.setHighContrastTheme();
     this.refreshIDE();
-    this.saveSetting('design', 'large-text');
+    this.saveSetting('design', 'large-text-flat');
     this.saveSetting('theme', 'high-contrast');
 };
 
 IDE_Morph.prototype.defaultDesign = function () {
+    console.log('defaultDesign');
     this.setDefaultDesign();
     this.refreshIDE();
     this.removeSetting('design');
 };
 
 IDE_Morph.prototype.flatDesign = function () {
+    console.log('flatDesign');
     this.setFlatDesign();
     this.refreshIDE();
     this.saveSetting('design', 'flat');
 };
 
 IDE_Morph.prototype.largeTextDesign = function () {
+    console.log('largeTextDesign');
     this.setLargeTextDesign();
     this.refreshIDE();
-    this.saveSetting('design', 'large-text');
+    this.saveSetting('design', 'large-text-flat');
 };
 
 IDE_Morph.prototype.defaultTheme = function () {
+    console.log('defaultTheme');
     this.setDefaultTheme();
     this.refreshIDE();
     this.removeSetting('theme');
 };
 
 IDE_Morph.prototype.brightTheme = function () {
+    console.log('brightTheme');
     this.setBrightTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
 };
 
 IDE_Morph.prototype.highContrastTheme = function () {
+    console.log('highContrastTheme');
     this.setHighContrastTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'high-contrast');
@@ -3674,7 +3699,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
     // design
     switch (design) {
-    case 'large-text':
+    case 'large-text-flat':
         this.setLargeTextDesign();
         break;
     case 'flat':
@@ -8111,7 +8136,6 @@ IDE_Morph.prototype.looksMenuData = function () {
 
     empty.render = nop;
 
-    // TODO-a11y: CHECKBOX STATE LOGIC IS BROKEN
     menu.addItem(
         [
             MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
@@ -8151,6 +8175,19 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addPreference(
+        'Large text design',
+        () => {
+            if (MorphicPreferences.isLargeText) {
+                return this.defaultDesign();
+            }
+            this.largeTextDesign();
+        },
+        MorphicPreferences.isLargeText,
+        'uncheck for default\nGUI theme',
+        'check for large text (accessible)\nGUI design\nlarge text always enables flat design',
+        false
+    );
+    menu.addPreference(
         'Bright theme',
         () => {
             if (IDE_Morph.prototype.isBright) {
@@ -8164,22 +8201,9 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addPreference(
-        'Large Text',
+        'High contrast theme',
         () => {
-            if (MorphicPreferences.isLargeText) {
-                return this.defaultTheme();
-            }
-            this.largeTextDesign();
-        },
-        MorphicPreferences.isLargeText,
-        'uncheck for default\nGUI text size',
-        'check for large text (accessible)\nGUI theme',
-        false
-    );
-    menu.addPreference(
-        'High Contrast Colors',
-        () => {
-            if (this.getSetting('theme') === 'high-contrast') {
+            if (IDE_Morph.prototype.isHighContrastTheme) {
                 return this.defaultTheme();
             }
             this.highContrastTheme();
