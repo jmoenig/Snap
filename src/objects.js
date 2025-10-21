@@ -11417,6 +11417,41 @@ StageMorph.prototype.blockTemplates = function (
     return blocks;
 };
 
+// StageMorph microworld palette support
+
+StageMorph.prototype.hiddenGlobalBlocks = function () {
+    var dict = this.globalVariables().vars;
+    return new List([
+        new List(Object.keys(this.hiddenPrimitives).filter(selector =>
+            this.hiddenPrimitives[selector])
+        ),
+        new List(this.globalBlocks.filter(def => def.isHelper).map(def =>
+            def.abstractBlockSpec())
+        ),
+        new List(Object.keys(dict).filter(name => dict[name].isHidden))
+    ]);
+    
+};
+
+StageMorph.prototype.restoreHiddenGlobalBlocks = function (hiddenList) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        variables = this.globalVariables(),
+        dict = {};
+    hiddenList.at(1).map(spec => dict[spec] = true);
+    StageMorph.prototype.hiddenPrimitives = dict;
+    this.globalBlocks.forEach(def =>
+        def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec));
+    variables.names(true).forEach(name =>
+        variables.vars[name].isHidden = hiddenList.at(3).contains(name));
+    ide.flushBlocksCache();
+    ide.refreshPalette();
+    ide.categories.refreshEmpty();
+    this.recordUserEdit(
+        'palette',
+        'restore microworld'
+    );
+};
+
 // StageMorph primitives
 
 StageMorph.prototype.clear = function () {
