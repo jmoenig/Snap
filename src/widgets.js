@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-September-10';
+modules.widgets = '2025-October-22';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -111,12 +111,13 @@ PushButtonMorph.prototype = new TriggerMorph();
 PushButtonMorph.prototype.constructor = PushButtonMorph;
 PushButtonMorph.uber = TriggerMorph.prototype;
 
-// TODO: Put this in some better place?
 // This color is used for the background of Snap! buttons, highlights
 // and in dialog boxes.
 const SnapAccentLightBlue = new Color(115, 180, 240);
 // This color (#3B7CA0) is chose to have 4.5:1 contrast ratio with white AND black
 // It is safe to use both in the dialog title bars and button highlights.
+// TODO-a11y: In some lists, this a darker version is used for selected items,
+// We may need to adjust dependent colors to maintain sufficient contrast.
 const SnapHighContrastAccentBlue = new Color(59, 124, 160);
 
 // PushButtonMorph preferences settings:
@@ -141,13 +142,13 @@ PushButtonMorph.prototype.DEFAULT_LOOKS = {
 };
 
 PushButtonMorph.prototype.FLAT_MODE_LOOKS = {
-    // TODO: This should be the outline color for buttons in the IDE, but isn't showing.
     outlineColor: new Color(70, 70, 70),
     outlineGradient: false,
-    // highlightColor: SnapAccentLightBlue.lighter(30),
+    highlightColor: SnapAccentLightBlue.lighter(30),
     corner: 2,
 };
 
+// Even in bright mode, buttons are still light (like in dialogs)
 PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS = {
     outlineColor: new Color(200, 200, 200),
     outlineGradient: false,

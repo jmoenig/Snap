@@ -5394,10 +5394,14 @@ BlockMorph.prototype.render = function (ctx) {
     this.cachedClrBright = this.bright();
     this.cachedClrDark = this.dark();
 
-    // TODO-a11y: Consider thickening borders?
     if (MorphicPreferences.isFlat) {
+        let outlineColor = this.cachedClrDark;
+        // In high contrast mode, use white for the outline, which works only for dark mode.
+        if (IDE_Morph.prototype.isHighContrastTheme) {
+            outlineColor = WHITE;
+        }
         // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
+        ctx.fillStyle = outlineColor;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
         ctx.closePath();
@@ -5406,7 +5410,7 @@ BlockMorph.prototype.render = function (ctx) {
         // draw the inner filled shaped
         ctx.fillStyle = this.cachedClr;
         ctx.beginPath();
-        this.outlinePath(ctx, this.flatEdge);
+        this.outlinePath(ctx, 1);
         ctx.closePath();
         ctx.fill();
     } else {

@@ -2930,7 +2930,6 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
     );
 };
 
-// TODO-a11y
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
     var labelWidth = 75,
         colors = [

@@ -143,10 +143,7 @@ IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.isHighContrastTheme = false;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
-    console.log('Snap! default design activated');
-    console.log(MorphicPreferences);
     MorphicPreferences = Object.assign({}, standardSettings);
-    console.log(MorphicPreferences);
     MorphicPreferences.isFlat = false;
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = false;
@@ -160,7 +157,6 @@ IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
-    console.log('Snap! flat design mode activated');
     MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
@@ -176,23 +172,20 @@ IDE_Morph.prototype.setFlatDesign = function () {
 };
 
 IDE_Morph.prototype.setLargeTextDesign = function () {
-    console.log('Snap! large text design mode activated');
     MorphicPreferences = Object.assign({}, standardSettings, largeTextSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
-    // TODO: Enabling this causes some circular dependencies during IDE initialization
-    // setBlocksScale isn't available yet.
-    // let currentBlocksScale = SyntaxElementMorph.prototype.scale
-    // if (currentBlocksScale < 1.2) {
-    //     this.setBlocksScale(1.2);
-    // }
 
+    let looks = PushButtonMorph.prototype.FLAT_MODE_LOOKS;
+    if (IDE_Morph.prototype.isBright) {
+        looks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+    }
     Object.assign(PushButtonMorph.prototype,
-        PushButtonMorph.prototype.FLAT_MODE_LOOKS,
+        looks,
         PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
     Object.assign(ToggleButtonMorph.prototype,
-        PushButtonMorph.prototype.FLAT_MODE_LOOKS,
+        looks,
         PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.FLAT_MODE_LOOKS,
@@ -200,7 +193,6 @@ IDE_Morph.prototype.setLargeTextDesign = function () {
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
-    console.log('Snap! default dark theme activated');
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = false;
 
@@ -252,7 +244,6 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
 };
 
 IDE_Morph.prototype.setBrightTheme = function () {
-    console.log('Snap! bright theme activated');
     IDE_Morph.prototype.isBright = true;
     IDE_Morph.prototype.isHighContrastTheme = false;
 
@@ -304,12 +295,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
     Object.assign(DialogBoxMorph.prototype, dialogBoxLooks);
 };
 
-// This is a High Contrast theme (for accessibility)
-// It's similar to the default theme, but with tweaked block colors
-// and a few other changes to improve contrast
-// Should this set flat more or just the large text design?
 IDE_Morph.prototype.setHighContrastTheme = function () {
-    console.log('Snap! high contrast theme activated');
     IDE_Morph.prototype.isBright = false;
     IDE_Morph.prototype.isHighContrastTheme = true;
 
@@ -320,7 +306,10 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
     Object.assign(DialogBoxMorph.prototype,
         DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS);
 
-    // DARKEN THIS?
+    // The regular palette colors generally have enough contrast already
+    // However, we could consider increasing the contrast between the blocks (now darker)
+    // and the background by lightening the background a bit or increasing the block border
+    // See also: IDE_Morph.prototype.backgroundColor
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(255, 255, 255);
     StageMorph.prototype.paletteTextColor
@@ -330,8 +319,6 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
     IDE_Morph.prototype.buttonContrast = 30;
-    // Actually, this should be lighter because the blocks themselves are darker
-    // Or we increase the border around each block a bit.
     IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
@@ -361,16 +348,16 @@ IDE_Morph.prototype.setHighContrastTheme = function () {
 
     ScriptsMorph.prototype.feedbackColor = WHITE;
     // Use high contrast block colors
-    // Should we swap default black/white fonts or always use black?
     SpriteMorph.prototype.blockColor = SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR;
 
     // CONSIDERATIONS:
+    // Borders on blocks:
+    // SyntaxElementMorph.prototype.contrast = 80;
     // SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
     // SpriteMorph.prototype.highlightBorder = 8;
     // SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
     // SpriteMorph.prototype.bubbleMaxTextWidth = 130;
     // BlockMorph.prototype.zebraContrast = 40;
-
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
@@ -1034,20 +1021,6 @@ IDE_Morph.prototype.applyConfigurations = function () {
         return;
     }
 
-    // theme
-    switch (cnf.theme) {
-        case 'bright':
-            this.setBrightTheme();
-            break;
-        case 'high-contrast':
-            this.setHighContrastTheme();
-            break;
-        case 'dark':
-        default:
-            this.setDefaultTheme();
-            break;
-    }
-
     // design
     switch(cnf.design) {
         case 'flat':
@@ -1059,6 +1032,20 @@ IDE_Morph.prototype.applyConfigurations = function () {
         case 'classic':
         default:
             this.setDefaultDesign();
+            break;
+    }
+
+    // theme
+    switch (cnf.theme) {
+        case 'bright':
+            this.setBrightTheme();
+            break;
+        case 'high-contrast':
+            this.setHighContrastTheme();
+            break;
+        case 'dark':
+        default:
+            this.setDefaultTheme();
             break;
     }
 
@@ -8177,13 +8164,14 @@ IDE_Morph.prototype.looksMenuData = function () {
     menu.addPreference(
         'Large text design',
         () => {
+            // Turning off large text leaves flat design active.
             if (MorphicPreferences.isLargeText) {
-                return this.defaultDesign();
+                return this.flatDesign();
             }
             this.largeTextDesign();
         },
         MorphicPreferences.isLargeText,
-        'uncheck for default\nGUI theme',
+        'uncheck for flat\nGUI design',
         'check for large text (accessible)\nGUI design\nlarge text always enables flat design',
         false
     );

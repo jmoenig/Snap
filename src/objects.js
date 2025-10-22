@@ -4489,7 +4489,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     // toolbar:
 
-    palette.toolBar = new AlignmentMorph('column');
+    palette.toolBar = new AlignmentMorph('column', 2);
 
     searchButton = new PushButtonMorph(
         this,
