@@ -3596,42 +3596,36 @@ IDE_Morph.prototype.accessibleLooks = function () {
 };
 
 IDE_Morph.prototype.defaultDesign = function () {
-    console.log('defaultDesign');
     this.setDefaultDesign();
     this.refreshIDE();
     this.removeSetting('design');
 };
 
 IDE_Morph.prototype.flatDesign = function () {
-    console.log('flatDesign');
     this.setFlatDesign();
     this.refreshIDE();
     this.saveSetting('design', 'flat');
 };
 
 IDE_Morph.prototype.largeTextDesign = function () {
-    console.log('largeTextDesign');
     this.setLargeTextDesign();
     this.refreshIDE();
     this.saveSetting('design', 'large-text-flat');
 };
 
 IDE_Morph.prototype.defaultTheme = function () {
-    console.log('defaultTheme');
     this.setDefaultTheme();
     this.refreshIDE();
     this.removeSetting('theme');
 };
 
 IDE_Morph.prototype.brightTheme = function () {
-    console.log('brightTheme');
     this.setBrightTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
 };
 
 IDE_Morph.prototype.highContrastTheme = function () {
-    console.log('highContrastTheme');
     this.setHighContrastTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'high-contrast');
