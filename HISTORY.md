@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed an input slot default value bug that occasionally prevented deserialization
+
+### 2025-10-22
+* objects: fixed an input slot default value bug that occasionally prevented deserialization 
 
 ## 11.0.6:
 * **Notable Fixes:**
