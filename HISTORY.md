@@ -3,10 +3,13 @@
 ## in development:
 * **Notable Changes:**
     * added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
+* **Notable Fixes:**
+    * fixed double entries for "distribution" and "uniques" of nested lists containing numbers and textual numbers 
 
 ### 2025-10-23
 * new dev version
 * blocks, threads: added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
+* lists: coerce text-numbers to JavaScript numbers when stringifying a list to JSON, fixes double entries for "distribution" and "uniques" of nested lists 
 
 ## 11.0.7:
 * **Notable Fixes:**
