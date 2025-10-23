@@ -4,12 +4,14 @@
 * **Notable Changes:**
     * added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
 * **Notable Fixes:**
+    * fixed an internal migration bug for old blocks that have since added additional input slots with default values
     * fixed double entries for "distribution" and "uniques" of nested lists containing numbers and textual numbers 
 
 ### 2025-10-23
 * new dev version
 * blocks, threads: added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
-* lists: coerce text-numbers to JavaScript numbers when stringifying a list to JSON, fixes double entries for "distribution" and "uniques" of nested lists 
+* lists: coerce text-numbers to JavaScript numbers when stringifying a list to JSON, fixes double entries for "distribution" and "uniques" of nested lists
+* objects: fixed an internal migration bug for old blocks that have since added additional input slots with default values
 
 ## 11.0.7:
 * **Notable Fixes:**
