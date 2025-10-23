@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-August-29';
+modules.threads = '2025-October-23';
 
 var ThreadManager;
 var Process;
@@ -5597,6 +5597,9 @@ Process.prototype.reportBasicLetter = function (idx, string) {
     var str = isNil(string) ? '' : string.toString(),
         char_array = this.safeStringArray(str),
         i;
+    if (this.inputOption(idx) === 'all') {
+        return new List(char_array);
+    }
     if (this.inputOption(idx) === 'random') {
         idx = this.reportBasicRandom(1, char_array.length);
     }

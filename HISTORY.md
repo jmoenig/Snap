@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
+
+### 2025-10-23
+* new dev version
+* blocks, threads: added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
 
 ## 11.0.7:
 * **Notable Fixes:**

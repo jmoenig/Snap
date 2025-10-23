@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-October-21';
+modules.blocks = '2025-October-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -490,7 +490,9 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            random : ['random']
+            random : ['random'],
+            '~' : null,
+            all : ['all'],
         }
     },
     '%la': {
