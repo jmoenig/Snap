@@ -1,6 +1,6 @@
 # Snap! (BYOB) History
 
-## in development:
+## 11.0.8:
 * **Notable Changes:**
     * added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
 * **Notable Fixes:**
@@ -12,6 +12,7 @@
 * blocks, threads: added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"
 * lists: coerce text-numbers to JavaScript numbers when stringifying a list to JSON, fixes double entries for "distribution" and "uniques" of nested lists
 * objects: fixed an internal migration bug for old blocks that have since added additional input slots with default values
+* prepared v11.0.8 patch
 
 ## 11.0.7:
 * **Notable Fixes:**
