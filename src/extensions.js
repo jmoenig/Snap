@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-September-15';
+modules.extensions = '2025-October-24';
 
 // Global stuff
 
@@ -807,22 +807,36 @@ SnapExtensions.primitives.set(
                 throw new Error('Speech Recognition is unavailable');
             }
             acc = proc.context.accumulator = {
+                start: false,
                 voice: new sprec(),
                 text: null
             };
             acc.voice.onresult = (event) => {
                 acc.text = event.results[0][0].transcript;
             };
+            acc.voice.onspeechstart = () => acc.start = true;
             done = () => acc.text = '';
             acc.voice.onnomatch = done;
             acc.voice.orreror = done;
             acc.voice.start();
-
         } else if (acc.text !== null) {
             return acc.text;
         }
         proc.pushContext('doYield');
         proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'tts_started',
+    function () {
+        var started = false;
+        this.parentThatIsA(StageMorph).threads.processes.forEach(proc => {
+            if (proc?.context?.accumulator?.voice) {
+                started = proc.context.accumulator.start;
+            }
+        });
+        return started;
     }
 );
 

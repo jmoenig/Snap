@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
 
 ### 2025-10-24
 * new dev version
+* extensions: new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
 
 ## 11.0.8:
 * **Notable Changes:**
