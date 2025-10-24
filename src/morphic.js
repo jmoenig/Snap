@@ -2240,6 +2240,35 @@ Color.prototype.isCloseTo = function (aColor, observeAlpha, tolerance) {
         (observeAlpha ? this.a === aColor.a : true);
 };
 
+// Accessibility Contrast Methods
+Color.prototype.luminance = function () {
+    // calculate relative luminance according to WCAG definition
+    function channelLuminance(c) {
+        var chan = c / 255;
+        return chan <= 0.03928 ?
+            chan / 12.92
+                : Math.pow((chan + 0.055) / 1.055, 2.4);
+    }
+    return 0.2126 * channelLuminance(this.r) +
+        0.7152 * channelLuminance(this.g) +
+        0.0722 * channelLuminance(this.b);
+};
+
+Color.prototype.contrastRatio = function (aColor) {
+    // calculate contrast ratio against another color according to WCAG
+    var lum1 = this.luminance(),
+        lum2 = aColor.luminance(),
+        lighter = Math.max(lum1, lum2),
+        darker = Math.min(lum1, lum2);
+    return (lighter + 0.05) / (darker + 0.05);
+};
+
+// Like the CSS contrast-color() function, return either black or white
+// depending on which contrasts better with this Color
+Color.prototype.contrastColor = function () {
+    return this.contrastRatio(WHITE) >= this.contrastRatio(BLACK) ? WHITE : BLACK;
+};
+
 // Color conversion (hsv):
 
 Color.prototype.hsv = function () {
