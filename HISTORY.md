@@ -2,7 +2,9 @@
 
 ## in development:
 * **New Features:**
-    * templates: let the user restore the visibility of global blocks in the palette 
+    * templates
+        * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
+        * projects based on a template let the user restore the visibility of global blocks in the template palette 
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
 * **Translation Updates:**
