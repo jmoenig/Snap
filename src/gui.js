@@ -12770,11 +12770,33 @@ SceneIconMorph.prototype.userMenu = function () {
         return null;
     }
     if (!this.isProjectScene()) {
+        if (this.world().currentKey === 16) { // shiftClicked
+            menu.addItem(
+                "tutorial...",
+                "openAsTutorial",
+                "open and run this scene\nin a separate pane",
+                new Color(100, 0, 0)
+            );
+            menu.addLine();
+        }
         menu.addItem("rename", "renameScene");
         menu.addItem("delete", "removeScene");
     }
     menu.addItem("export", "exportScene");
     return menu;
+};
+
+SceneIconMorph.prototype.openAsTutorial = function () {
+    // experimental - open and run my scene in a separate dialog box
+    var scene = this.object,
+        dlg = new DialogBoxMorph();
+    dlg.labelString = scene.name;
+    dlg.createLabel();
+    dlg.addBody(scene.stage);
+    dlg.addButton('ok', 'Close');
+    dlg.fixLayout();
+    dlg.popUp(this.world());
+    scene.stage.fireGreenFlagEvent();
 };
 
 SceneIconMorph.prototype.renameScene = function () {
