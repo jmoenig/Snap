@@ -411,6 +411,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
         scene.customCategories = this.loadPalette(model.palette);
         SpriteMorph.prototype.customCategories = scene.customCategories;
     }
+    scene.isTemplate = model.scene.attributes.use === 'template';
     model.template = model.scene.childNamed('template');
     if (model.template) {
         hidden = new List();
@@ -717,6 +718,10 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     );
 
     this.objects = {};
+    if (scene.isTemplate) {
+        scene.name = '';
+        scene.isTemplate = false;
+    }
     return scene.initialize();
 };
 
