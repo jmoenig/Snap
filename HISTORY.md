@@ -2,11 +2,15 @@
 
 ## in development:
 * **New Features:**
+    * templates: let the user restore the visibility of global blocks in the palette 
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
+* **Translation Updates:**
+    * German
 
 ### 2025-10-27
-* scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette 
+* scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette
+* German translation update for new "Restore palette", "restore palette" and "Template" strings
 
 ### 2025-10-24
 * new dev version
