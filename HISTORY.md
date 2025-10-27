@@ -5,6 +5,9 @@
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
 
+### 2025-10-27
+* scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette 
+
 ### 2025-10-24
 * new dev version
 * extensions: new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query

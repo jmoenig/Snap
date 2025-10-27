@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-23';
+modules.objects = '2025-October-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -4459,6 +4459,16 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 () => new BlockVisibilityDialogMorph(myself).popUp(
                     myself.world())
             );
+            if (ide.scene.template) {
+                menu.addItem(
+                    'restore palette',
+                    () => ide.stage.restoreHiddenGlobalBlocks(
+                        ide.scene.template.hide,
+                        ide.scene.template.version
+                    ),
+                    '"' + ide.scene.template.name + '"'
+                );
+            }
             menu.addLine();
             menu.addItem(
                 'make a category...',
@@ -11433,16 +11443,34 @@ StageMorph.prototype.hiddenGlobalBlocks = function () {
     
 };
 
-StageMorph.prototype.restoreHiddenGlobalBlocks = function (hiddenList) {
+StageMorph.prototype.restoreHiddenGlobalBlocks = function (
+    hiddenList,
+    version // optionial snap version
+) {
     var ide = this.parentThatIsA(IDE_Morph),
         variables = this.globalVariables(),
+        newer = SpriteMorph.prototype.newPrimitivesSince(parseFloat(version)),
         dict = {};
-    hiddenList.at(1).map(spec => dict[spec] = true);
+
+    function hidePrimitive(selector) {
+        let migration = SpriteMorph.prototype.blockMigrations[selector],
+            id = migration ? migration.selector : selector;
+        dict[id] = true;
+    }
+
+    // primitives - make sure to take the current block, in case it was changed
+    hiddenList.at(1).map(sel => hidePrimitive(sel));
+    newer.map(sel => hidePrimitive(sel));
     StageMorph.prototype.hiddenPrimitives = dict;
+
+    // global custom blocks
     this.globalBlocks.forEach(def =>
         def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec));
+
+    // global variables
     variables.names(true).forEach(name =>
         variables.vars[name].isHidden = hiddenList.at(3).contains(name));
+
     ide.flushBlocksCache();
     ide.refreshPalette();
     ide.categories.refreshEmpty();

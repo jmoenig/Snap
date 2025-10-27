@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-April-01';
+modules.store = '2025-October-27';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -410,6 +410,24 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     if (model.palette) {
         scene.customCategories = this.loadPalette(model.palette);
         SpriteMorph.prototype.customCategories = scene.customCategories;
+    }
+    model.template = model.scene.childNamed('template');
+    if (model.template) {
+        hidden = new List();
+        hidden.add(
+            this.loadValue(model.template.childNamed('primitives').children[0])
+        );
+        hidden.add(
+            this.loadValue(model.template.childNamed('custom').children[0])
+        );
+        hidden.add(
+            this.loadValue(model.template.childNamed('variables').children[0])
+        );
+        scene.template = {
+            name: model.template.attributes.name,
+            version: model.template.attributes.version,
+            hide: hidden
+        };
     }
     model.globalVariables = model.scene.childNamed('variables');
 
@@ -2064,6 +2082,27 @@ Scene.prototype.toXML = function (serializer) {
         return str;
     }
 
+    function templateXML(dict) {
+        var blocks = dict.hide;
+        return '<template version="' +
+            dict.version +
+            '" name="' +
+            dict.name +
+        '">' +
+            '<primitives>' + serializer.store(blocks.at(1)) + '</primitives>' +
+            '<custom>' + serializer.store(blocks.at(2)) + '</custom>' +
+            '<variables>' + serializer.store(blocks.at(3)) + '</variables>' +
+        '</template>';
+    }
+
+    if (this.isTemplate) {
+        this.template = {
+            name: this.name || localize('Untitled'),
+            version: SnapVersion,
+            hide: this.stage.hiddenGlobalBlocks()
+        };
+    }
+
     serializer.scene = this; // keep the order of sprites in the corral
 
     // capture primitives and apply own ones
@@ -2071,10 +2110,11 @@ Scene.prototype.toXML = function (serializer) {
     SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
-        '<scene name="@"%%%%%%>' +
+        '<scene name="@"%%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
+            '%' + // template
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
@@ -2083,6 +2123,7 @@ Scene.prototype.toXML = function (serializer) {
             '<variables>%</variables>' +
             '</scene>',
         this.name || localize('Untitled'),
+        this.isTemplate ? ' use="template"' : '',
         this.unifiedPalette ? ' palette="single"' : '',
         this.unifiedPalette && !this.showCategories ?
             ' categories="false"' : '',
@@ -2097,6 +2138,7 @@ Scene.prototype.toXML = function (serializer) {
                 (a, b) => a + ' ' + b,
                 ''
             ),
+        this.template ? templateXML(this.template) : '',
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),

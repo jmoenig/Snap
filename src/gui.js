@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-24';
+modules.gui = '2025-October-27';
 
 // Declarations
 
@@ -4897,6 +4897,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
+        'Template',
+        () => this.scene.isTemplate = !this.scene.isTemplate,
+        this.scene.isTemplate,
+        'uncheck to save this\nscene regularly',
+        'check to turn this scene into an uneditable\ntemplate when saving it'
+    );
+    addPreference(
         'Thread safe scripts',
         () => stage.isThreadSafe = !stage.isThreadSafe,
         this.stage.isThreadSafe,
@@ -5200,6 +5207,24 @@ IDE_Morph.prototype.projectMenu = function () {
                     this.currentSprite
                 ).popUp(world)
         );
+        if (this.scene.template) {
+            menu.addItem(
+                'Restore palette',
+                () => this.stage.restoreHiddenGlobalBlocks(
+                    this.scene.template.hide,
+                    this.scene.template.version
+                ),
+                '"' + this.scene.template.name + '"'
+            );
+            if (shiftClicked) {
+                menu.addItem(
+                    'Remove template',
+                    () => this.scene.template = null,
+                    '"' + this.scene.template.name + '"',
+                    new Color(100, 0, 0)
+                );
+            }
+        }
         menu.addItem(
             'New category...',
             () => this.createNewCategory()
