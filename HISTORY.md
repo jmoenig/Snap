@@ -16,6 +16,7 @@
 * objects: prevent watchers from being draggable outside of the IDE
 * gui: only allow one tutorial dialog at the time
 * gui: don't close the tutorial dialog when switching scenes
+* scenes, store, gui: refactored scene.isTemplate setting into scene.role for both templates and tutorials 
 
 ### 2025-10-27
 * scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette

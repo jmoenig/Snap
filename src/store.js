@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-October-27';
+modules.store = '2025-October-29';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -411,7 +411,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
         scene.customCategories = this.loadPalette(model.palette);
         SpriteMorph.prototype.customCategories = scene.customCategories;
     }
-    scene.isTemplate = model.scene.attributes.use === 'template';
+    scene.role = model.scene.attributes.role || null;
     model.template = model.scene.childNamed('template');
     if (model.template) {
         hidden = new List();
@@ -718,9 +718,9 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     );
 
     this.objects = {};
-    if (scene.isTemplate) {
+    if (scene.role === 'template') {
         scene.name = '';
-        scene.isTemplate = false;
+        scene.role = null;
     }
     return scene.initialize();
 };
@@ -2100,7 +2100,7 @@ Scene.prototype.toXML = function (serializer) {
         '</template>';
     }
 
-    if (this.isTemplate) {
+    if (this.role === 'template') {
         this.template = {
             name: this.name || localize('Untitled'),
             version: SnapVersion,
@@ -2128,7 +2128,7 @@ Scene.prototype.toXML = function (serializer) {
             '<variables>%</variables>' +
             '</scene>',
         this.name || localize('Untitled'),
-        this.isTemplate ? ' use="template"' : '',
+        this.role ? ' role="' + this.role + '"' : '',
         this.unifiedPalette ? ' palette="single"' : '',
         this.unifiedPalette && !this.showCategories ?
             ' categories="false"' : '',

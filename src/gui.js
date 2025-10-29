@@ -4898,10 +4898,19 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Template',
-        () => this.scene.isTemplate = !this.scene.isTemplate,
-        this.scene.isTemplate,
+        () => this.scene.role = this.scene.role === 'template' ?
+            null : 'template',
+        this.scene.role === 'template',
         'uncheck to save this\nscene regularly',
         'check to turn this scene into an uneditable\ntemplate when saving it'
+    );
+    addPreference(
+        'Tutorial',
+        () => this.scene.role = this.scene.role === 'tutorial' ?
+            null : 'tutorial',
+        this.scene.role === 'tutorial',
+        'uncheck to treat this\nscene regularly',
+        'check to turn this scene\ninto a tutorial'
     );
     addPreference(
         'Thread safe scripts',
