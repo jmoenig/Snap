@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-27';
+modules.gui = '2025-October-29';
 
 // Declarations
 
@@ -12789,13 +12789,47 @@ SceneIconMorph.prototype.userMenu = function () {
 SceneIconMorph.prototype.openAsTutorial = function () {
     // experimental - open and run my scene in a separate dialog box
     var scene = this.object,
-        dlg = new DialogBoxMorph();
+        dlg = new DialogBoxMorph(),
+        handle,
+        fullSize;
+
+    scene.stage.setScale(1);
     dlg.labelString = scene.name;
     dlg.createLabel();
     dlg.addBody(scene.stage);
     dlg.addButton('ok', 'Close');
     dlg.fixLayout();
     dlg.popUp(this.world());
+
+    fullSize = dlg.extent();
+
+    handle = new HandleMorph(
+        dlg,
+        100,
+        100,
+        dlg.corner,
+        dlg.corner
+    );
+
+    handle.mouseMove = function (pos) {
+        var newPos, newExt;
+        newPos = pos.subtract(this.offset);
+        newExt = newPos.add(
+            this.extent().add(this.inset)
+        ).subtract(this.target.bounds.origin);
+        newExt = newExt.max(this.minExtent);
+        scene.stage.setScale(Math.min(
+            newExt.x / fullSize.x,
+            newExt.y / fullSize.y
+        ));
+        this.target.fixLayout();
+        this.setPosition(
+            this.target.bottomRight().subtract(
+                this.extent().add(this.inset)
+            )
+        );
+    };
+
     scene.stage.fireGreenFlagEvent();
 };
 

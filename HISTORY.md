@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-10-29
+* gui: made tutorial dialog resizable
+
 ### 2025-10-27
 * scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette
 * German translation update for new "Restore palette", "restore palette" and "Template" strings
