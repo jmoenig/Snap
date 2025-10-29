@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-27';
+modules.objects = '2025-October-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -15151,10 +15151,12 @@ WatcherMorph.prototype.mouseDoubleClick = function (pos) {
 // WatcherMorph dragging and dropping:
 
 WatcherMorph.prototype.rootForGrab = function () {
-    // prevent watchers to be dragged in presentation mode
+    // prevent watchers to be dragged in presentation and tutorial mode
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide && ide.isAppMode) {
         return ide;
+    } else if (!ide) {
+        return null;
     }
     return this;
 };

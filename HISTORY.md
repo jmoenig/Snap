@@ -13,6 +13,7 @@
 
 ### 2025-10-29
 * gui: made tutorial dialog resizable
+* objects: prevent watchers from being draggable outside of the IDE
 
 ### 2025-10-27
 * scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette
