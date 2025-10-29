@@ -12800,6 +12800,7 @@ SceneIconMorph.prototype.openAsTutorial = function () {
     dlg.addButton('ok', 'Close');
     dlg.fixLayout();
     dlg.popUp(this.world());
+    dlg.nag = true; // don't close when switching scenes
 
     fullSize = dlg.extent();
 

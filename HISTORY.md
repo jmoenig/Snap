@@ -14,7 +14,8 @@
 ### 2025-10-29
 * gui: made tutorial dialog resizable
 * objects: prevent watchers from being draggable outside of the IDE
-* gu: only allow one tutorial dialog at the time
+* gui: only allow one tutorial dialog at the time
+* gui: don't close the tutorial dialog when switching scenes
 
 ### 2025-10-27
 * scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette
