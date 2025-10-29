@@ -12789,7 +12789,7 @@ SceneIconMorph.prototype.userMenu = function () {
 SceneIconMorph.prototype.openAsTutorial = function () {
     // experimental - open and run my scene in a separate dialog box
     var scene = this.object,
-        dlg = new DialogBoxMorph(),
+        dlg = new DialogBoxMorph().withKey('tutorial'),
         handle,
         fullSize;
 
