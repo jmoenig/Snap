@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-29';
+modules.gui = '2025-October-30';
 
 // Declarations
 
@@ -309,6 +309,9 @@ IDE_Morph.prototype.init = function (config) {
     this.scene = this.scenes.at(1);
     this.isAddingScenes = false;
     this.isAddingNextScene = false;
+
+    // tutorial scene(s)
+    this.tutorial = null; // active dialog box or tutorial pane, if any
 
     // editor
     this.globalVariables = this.scene.globalVariables;
@@ -9085,6 +9088,69 @@ IDE_Morph.prototype.warnAboutDev = function () {
     ).nag = true;
 };
 
+// IDE_Morph tutorial scene
+
+IDE_Morph.prototype.launchTutorial = function (scene) {
+    // open and run a scene in a separate dialog box
+    var dlg = new DialogBoxMorph(
+                null,
+                () => scene.stop()
+            ).withKey('tutorial ' + scene.name),
+        handle,
+        fullSize;
+
+    this.escapeTutorial();
+
+    scene.stage.setScale(1);
+    dlg.labelString = scene.name;
+    dlg.createLabel();
+    dlg.addBody(scene.stage);
+    dlg.addButton('ok', 'Close');
+    dlg.fixLayout();
+    dlg.popUp(this.world());
+    dlg.nag = true; // don't close when switching scenes
+    this.tutorial = dlg;
+
+    fullSize = dlg.extent();
+
+    handle = new HandleMorph(
+        dlg,
+        100,
+        100,
+        dlg.corner,
+        dlg.corner
+    );
+
+    handle.mouseMove = function (pos) {
+        var newPos, newExt;
+        newPos = pos.subtract(this.offset);
+        newExt = newPos.add(
+            this.extent().add(this.inset)
+        ).subtract(this.target.bounds.origin);
+        newExt = newExt.max(this.minExtent);
+        scene.stage.setScale(Math.min(
+            newExt.x / fullSize.x,
+            newExt.y / fullSize.y
+        ));
+        this.target.fixLayout();
+        this.setPosition(
+            this.target.bottomRight().subtract(
+                this.extent().add(this.inset)
+            )
+        );
+    };
+
+    scene.stage.fireGreenFlagEvent();
+};
+
+IDE_Morph.prototype.escapeTutorial = function () {
+    if (!this.tutorial) {
+        return;
+    }
+    this.tutorial.ok();
+    this.tutorial = null;
+};
+
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
 // ProjectDialogMorph inherits from DialogBoxMorph:
@@ -12779,12 +12845,11 @@ SceneIconMorph.prototype.userMenu = function () {
         return null;
     }
     if (!this.isProjectScene()) {
-        if (this.world().currentKey === 16) { // shiftClicked
+        if (!this.isCurrentScene()) {
             menu.addItem(
-                "tutorial...",
-                "openAsTutorial",
-                "open and run this scene\nin a separate pane",
-                new Color(100, 0, 0)
+                "launch...",
+                "launchAsTutorial",
+                "open and run this scene as a tutorial\nin a separate pane"
             );
             menu.addLine();
         }
@@ -12795,52 +12860,11 @@ SceneIconMorph.prototype.userMenu = function () {
     return menu;
 };
 
-SceneIconMorph.prototype.openAsTutorial = function () {
-    // experimental - open and run my scene in a separate dialog box
-    var scene = this.object,
-        dlg = new DialogBoxMorph().withKey('tutorial'),
-        handle,
-        fullSize;
-
-    scene.stage.setScale(1);
-    dlg.labelString = scene.name;
-    dlg.createLabel();
-    dlg.addBody(scene.stage);
-    dlg.addButton('ok', 'Close');
-    dlg.fixLayout();
-    dlg.popUp(this.world());
-    dlg.nag = true; // don't close when switching scenes
-
-    fullSize = dlg.extent();
-
-    handle = new HandleMorph(
-        dlg,
-        100,
-        100,
-        dlg.corner,
-        dlg.corner
-    );
-
-    handle.mouseMove = function (pos) {
-        var newPos, newExt;
-        newPos = pos.subtract(this.offset);
-        newExt = newPos.add(
-            this.extent().add(this.inset)
-        ).subtract(this.target.bounds.origin);
-        newExt = newExt.max(this.minExtent);
-        scene.stage.setScale(Math.min(
-            newExt.x / fullSize.x,
-            newExt.y / fullSize.y
-        ));
-        this.target.fixLayout();
-        this.setPosition(
-            this.target.bottomRight().subtract(
-                this.extent().add(this.inset)
-            )
-        );
-    };
-
-    scene.stage.fireGreenFlagEvent();
+SceneIconMorph.prototype.launchAsTutorial = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.launchTutorial(this.object);
+    }
 };
 
 SceneIconMorph.prototype.renameScene = function () {
@@ -12909,6 +12933,13 @@ SceneIconMorph.prototype.isProjectScene = function (anIDE) {
     // because its name and project notes are those of the project
     var ide = anIDE || this.parentThatIsA(IDE_Morph);
     return ide.scenes.indexOf(this.object) === 1;
+};
+
+SceneIconMorph.prototype.isCurrentScene = function (anIDE) {
+    // the currently actife  scene of a project cannot be launched as a
+    // tutorial, because it cannot live in 2 locations at the same time
+    var ide = anIDE || this.parentThatIsA(IDE_Morph);
+    return ide.scene === this.object;
 };
 
 // SceneIconMorph drawing
