@@ -83,7 +83,7 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
 BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
 HatBlockMorph*/
 
-/*jshint esversion: 8*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -2551,7 +2551,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
         this.stageIcon.setLeft(this.left() + padding);
 
         // scenes
-        if (myself.scenes.length() < 2) {
+        if (myself.tutorial || myself.scenes.length() < 2) {
             this.album.hide();
         } else {
             this.stageIcon.setTop(this.top());
@@ -3366,7 +3366,11 @@ IDE_Morph.prototype.isPaused = function () {
 
 IDE_Morph.prototype.stopAllScripts = function () {
     if (this.world().currentKey === 16) { // shiftClicked
-        this.scenes.map(scn => scn.stop(true));
+        this.scenes.map(scn => {
+            if (scn !== this.tutorial?.scene) {
+                scn.stop(true);
+            }
+        });
     } else {
         this.scene.stop();
     }
@@ -9094,13 +9098,17 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     // open and run a scene in a separate dialog box
     var dlg = new DialogBoxMorph(
                 null,
-                () => scene.stop()
+                () => {
+                    scene.stop();
+                    this.tutorial = null;
+                    this.corral.fixLayout(); // update scene icons
+                }
             ).withKey('tutorial ' + scene.name),
         handle,
         fullSize;
 
     this.escapeTutorial();
-
+    dlg.scene = scene;
     scene.stage.setScale(1);
     dlg.labelString = scene.name;
     dlg.createLabel();
@@ -9110,7 +9118,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.popUp(this.world());
     dlg.nag = true; // don't close when switching scenes
     this.tutorial = dlg;
-
+    this.corral.fixLayout(); // update scene icons
     fullSize = dlg.extent();
 
     handle = new HandleMorph(
@@ -9149,6 +9157,7 @@ IDE_Morph.prototype.escapeTutorial = function () {
     }
     this.tutorial.ok();
     this.tutorial = null;
+    this.corral.fixLayout(); // update scene icons
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
