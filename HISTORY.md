@@ -15,6 +15,7 @@
 * German translation update for new "Tutorial" string
 * locale: cleaned up some ambiguous syntax
 * gui: added tutorial scene launch and escape methods
+* German translation update for new "launch..." string (for tutorial scenes)
 
 ### 2025-10-29
 * gui: made tutorial dialog resizable
