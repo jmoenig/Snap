@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-10-30
+* German translation update for new "Tutorial" string
+
 ### 2025-10-29
 * gui: made tutorial dialog resizable
 * objects: prevent watchers from being draggable outside of the IDE
