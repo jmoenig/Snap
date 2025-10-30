@@ -13,6 +13,7 @@
 
 ### 2025-10-30
 * German translation update for new "Tutorial" string
+* locale: cleaned up some ambiguous syntax
 
 ### 2025-10-29
 * gui: made tutorial dialog resizable
