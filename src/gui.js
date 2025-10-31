@@ -9116,7 +9116,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
                 }
             ).withKey('tutorial ' + scene.name),
         handle,
-        fullSize;
+        diff;
 
     this.escapeTutorial();
     dlg.scene = scene;
@@ -9130,7 +9130,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.nag = true; // don't close when switching scenes
     this.tutorial = dlg;
     this.corral.fixLayout(); // update scene icons
-    fullSize = dlg.extent();
+    diff = dlg.extent().subtract(scene.stage.dimensions);
 
     handle = new HandleMorph(
         dlg,
@@ -9145,11 +9145,11 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         newPos = pos.subtract(this.offset);
         newExt = newPos.add(
             this.extent().add(this.inset)
-        ).subtract(this.target.bounds.origin);
+        ).subtract(this.target.bounds.origin).subtract(diff);
         newExt = newExt.max(this.minExtent);
         scene.stage.setScale(Math.min(
-            newExt.x / fullSize.x,
-            newExt.y / fullSize.y
+            newExt.x / scene.stage.dimensions.x,
+            newExt.y / scene.stage.dimensions.y
         ));
         this.target.fixLayout();
         this.setPosition(
