@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-30';
+modules.gui = '2025-October-31';
 
 // Declarations
 
@@ -7087,7 +7087,8 @@ IDE_Morph.prototype.openProjectName = function (name) {
 };
 
 IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
-    var scn = project.currentScene || project.scenes.at(1);
+    var scn = project.currentScene || project.scenes.at(1),
+        tutorial;
     if (this.isAddingScenes) {
         project.scenes.itemsArray().forEach(scene => {
             scene.name = this.newSceneName(scene.name, scene);
@@ -7099,6 +7100,16 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
     this.performerMode = false;
     if (purgeCustomizedPrims) {
         scn.blocks = SpriteMorph.prototype.primitiveBlocks();
+    }
+    if (scn.createdFromTemplate) {
+        // launch tutorial, if any exist
+        tutorial = detect(
+            project.scenes.asArray(),
+            each => each.role == 'tutorial'
+        );
+        if (tutorial) {
+            this.launchTutorial(tutorial);
+        }
     }
     this.switchToScene(
         scn,

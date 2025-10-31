@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-10-31
+* store, scenes, gui: auto-launch tutorials in template projects, don't save tutorials in template copies
+
 ### 2025-10-30
 * German translation update for new "Tutorial" string
 * locale: cleaned up some ambiguous syntax

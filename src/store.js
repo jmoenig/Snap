@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-October-29';
+modules.store = '2025-October-31';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -721,6 +721,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     if (scene.role === 'template') {
         scene.name = '';
         scene.role = null;
+        scene.createdFromTemplate = true;
     }
     return scene.initialize();
 };
@@ -2042,13 +2043,20 @@ Array.prototype.toXML = function (serializer) {
 // Scenes & multi-scene projects
 
 Project.prototype.toXML = function (serializer) {
-    var thumbdata;
+    var thumbdata,
+        scenes = this.scenes.asArray();
 
     // thumb data catch cross-origin tainting exception when using SVG costumes
     try {
         thumbdata = this.thumbnail.toDataURL('image/png');
     } catch (error) {
         thumbdata = null;
+    }
+
+    if (scenes.some(any => any.createdFromTemplate) &&
+        !(scenes.some(any => any.role === 'template'))
+    ) {
+        scenes = scenes.filter(each => each.role !== 'tutorial');
     }
 
     return serializer.format(
@@ -2062,9 +2070,8 @@ Project.prototype.toXML = function (serializer) {
         serializer.version,
         this.notes || '',
         thumbdata,
-        this.scenes.asArray().indexOf(
-            this.currentScene) + 1,
-        serializer.store(this.scenes.itemsArray())
+        scenes.indexOf(this.currentScene) + 1,
+        serializer.store(scenes)
     );
 };
 
