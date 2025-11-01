@@ -2729,7 +2729,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             scroller.color = new Color(0, 0, 0, 0);
             morphToShow = scroller;
         }
-        
+
         // support exporting text / numbers directly from result bubbles:
         morphToShow.userMenu = function () {
             var menu = new MenuMorph(this);
@@ -5402,8 +5402,13 @@ BlockMorph.prototype.render = function (ctx) {
     this.cachedClrDark = this.dark();
 
     if (MorphicPreferences.isFlat) {
+        let outlineColor = this.cachedClrDark;
+        // In high contrast mode, use white for the outline, which works only for dark mode.
+        if (IDE_Morph.prototype.isHighContrastTheme) {
+            outlineColor = WHITE;
+        }
         // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
+        ctx.fillStyle = outlineColor;
         ctx.beginPath();
         this.outlinePath(ctx, 0);
         ctx.closePath();
@@ -5412,7 +5417,7 @@ BlockMorph.prototype.render = function (ctx) {
         // draw the inner filled shaped
         ctx.fillStyle = this.cachedClr;
         ctx.beginPath();
-        this.outlinePath(ctx, this.flatEdge);
+        this.outlinePath(ctx, 1);
         ctx.closePath();
         ctx.fill();
     } else {
@@ -5688,6 +5693,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
     }
 };
 
+// TODO-a11y: Default to black color which meets all contrast requirements.
 BlockMorph.prototype.forceNormalColoring = function () {
     var clr = SpriteMorph.prototype.blockColorFor(this.category);
     this.setColor(clr);
@@ -5715,12 +5721,14 @@ BlockMorph.prototype.alternateBlockColor = function () {
     this.fixChildrensBlockColor(true); // has issues if not forced
 };
 
+// TODO-a11y: Consider whether this needs adapted.
 BlockMorph.prototype.ghost = function () {
     this.setColor(
         SpriteMorph.prototype.blockColorFor(this.category).lighter(35)
     );
 };
 
+// TODO-a11y: Default to black color which meets all contrast requirements.
 BlockMorph.prototype.fixLabelColor = function () {
     if (this.zebraContrast > 0 && this.category) {
         var clr = SpriteMorph.prototype.blockColorFor(this.category);
@@ -6334,7 +6342,7 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
 
     return trace;
 };
- 
+
  BlockMorph.prototype.getVarName = function () {
     // return the name of the (first) variable accessed by this block or null
     // if it doesn't access any variable.
@@ -6351,9 +6359,9 @@ BlockMorph.prototype.rewind = function (scriptOnly = false) {
     }
     return null;
  };
- 
+
  // BlockMorph - editing as custom block
- 
+
 BlockMorph.prototype.editPrimitive = function () {
     var info = SpriteMorph.prototype.blocks[this.selector],
         rcvr = this.scriptTarget(),
@@ -6369,7 +6377,7 @@ BlockMorph.prototype.editPrimitive = function () {
     editor.popUp();
     editor.changed();
 };
- 
+
 // CommandBlockMorph ///////////////////////////////////////////////////
 
 /*
@@ -12491,6 +12499,7 @@ InputSlotMorph.prototype.render = function (ctx) {
             this.width() - this.edge * 2,
             this.height() - this.edge * 2
         );
+        // TODO-a11y: Consider drawing a border
         if (!MorphicPreferences.isFlat) {
             this.drawRectBorder(ctx);
         }
@@ -14583,7 +14592,7 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         block = this.parentThatIsA(BlockMorph),
         sprite = block.scriptTarget(),
         infix;
-    
+
     if (this.maxInputs && (this.inputs().length >= this.maxInputs)) {
         return;
     }
