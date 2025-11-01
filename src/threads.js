@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-October-23';
+modules.threads = '2025-October-30';
 
 var ThreadManager;
 var Process;
@@ -3843,8 +3843,11 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
+                        : (reporter.expression.selector === 'reportJoinWords' ? ''
+                            : reporter.expression.selector === 'reportVariadicAnd' ? true
+                            : reporter.expression.selector === 'reportVariadicOr' ? false
+                            : reporter.expression.selector === 'reportConcatenatedLists' ? new List()
+                            : reporter.expression.selector === 'reportCrossproduct' ? new List([new List()])
                             : 0)
                 );
                 return;
@@ -3885,8 +3888,11 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
+                        : (reporter.expression.selector === 'reportJoinWords' ? ''
+                            : reporter.expression.selector === 'reportVariadicAnd' ? true
+                            : reporter.expression.selector === 'reportVariadicOr' ? false
+                            : reporter.expression.selector === 'reportConcatenatedLists' ? new List()
+                            : reporter.expression.selector === 'reportCrossproduct' ? new List([new List()])
                             : 0)
                 );
                 return;
