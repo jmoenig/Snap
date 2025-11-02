@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-31';
+modules.gui = '2025-November-02';
 
 // Declarations
 
@@ -9126,7 +9126,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.addBody(scene.stage);
     dlg.addButton('ok', 'Close');
     dlg.fixLayout();
-    dlg.popUp(this.world());
+    dlg.popUp(this.world(), true); // noFocus
     dlg.nag = true; // don't close when switching scenes
     this.tutorial = dlg;
     this.corral.fixLayout(); // update scene icons

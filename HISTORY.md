@@ -11,6 +11,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-02
+* widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus
+
 ### 2025-10-31
 * store, scenes, gui: auto-launch tutorials in template projects, don't save tutorials in template copies
 * gui: improved resizing the tutorial dialog
