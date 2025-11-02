@@ -3843,12 +3843,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ? ''
-                            : reporter.expression.selector === 'reportVariadicAnd' ? true
-                            : reporter.expression.selector === 'reportVariadicOr' ? false
-                            : reporter.expression.selector === 'reportConcatenatedLists' ? new List()
-                            : reporter.expression.selector === 'reportCrossproduct' ? new List([new List()])
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3888,12 +3885,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ? ''
-                            : reporter.expression.selector === 'reportVariadicAnd' ? true
-                            : reporter.expression.selector === 'reportVariadicOr' ? false
-                            : reporter.expression.selector === 'reportConcatenatedLists' ? new List()
-                            : reporter.expression.selector === 'reportCrossproduct' ? new List([new List()])
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3999,6 +3993,23 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
             contains(aContext.inputs, each.blockSpec)
     );
 };
+
+Process.prototype.emptyListValueForCombine = function (selector) {
+    switch (selector) {
+    case 'reportJoinWords':
+        return '';
+    case 'reportVariadicAnd':
+        return true;
+    case 'reportVariadicOr':
+        return false;
+    case 'reportConcatenatedLists':
+        return new List();
+    case 'reportCrossproduct':
+        return new List([new List()]);
+    default:
+        return 0;
+    }
+}
 
 Process.prototype.reportPipe = function (value, reporterList) {
     // Pipe - answer an aggregation of channeling an initial value
