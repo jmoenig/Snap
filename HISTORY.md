@@ -1,5 +1,49 @@
 # Snap! (BYOB) History
 
+## in development:
+* **New Features:**
+    * templates
+        * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
+        * projects based on a template let the user restore the visibility of global blocks in the template palette
+    * tutorials: open and run a scene inside a separate dialog box
+    * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
+    * TTS library: new "started speech response?" predicate
+* **Translation Updates:**
+    * German
+
+### 2025-12-02
+* widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus
+* objects, gui: disable drag & drop for assets on a launched tutorial stage
+
+### 2025-10-31
+* store, scenes, gui: auto-launch tutorials in template projects, don't save tutorials in template copies
+* gui: improved resizing the tutorial dialog
+
+### 2025-10-30
+* German translation update for new "Tutorial" string
+* locale: cleaned up some ambiguous syntax
+* gui: added tutorial scene launch and escape methods
+* German translation update for new "launch..." string (for tutorial scenes)
+* gui: update visibility of scene icons when launching or escaping a tutorial
+
+### 2025-10-29
+* gui: made tutorial dialog resizable
+* objects: prevent watchers from being draggable outside of the IDE
+* gui: only allow one tutorial dialog at the time
+* gui: don't close the tutorial dialog when switching scenes
+* scenes, store, gui: refactored scene.isTemplate setting into scene.role for both templates and tutorials 
+
+### 2025-10-27
+* scenes, objects, gui story: new "template" setting captures hidden global blocks per scene and lets the user restore the palette
+* German translation update for new "Restore palette", "restore palette" and "Template" strings
+* store: clear scene name when loading a template
+* gui: tutorials, experimental, under construction: open and run a scene inside a separate dialog box
+
+### 2025-10-24
+* new dev version
+* extensions: new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
+* TTS library: new "started speech response?" predicate
+
 ## 11.0.8:
 * **Notable Changes:**
     * added "all" option to "letter ... of ... " block, reports a list with all letters, same as "split ... by letter"

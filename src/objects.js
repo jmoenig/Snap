@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-October-23';
+modules.objects = '2025-November-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -4459,6 +4459,16 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 () => new BlockVisibilityDialogMorph(myself).popUp(
                     myself.world())
             );
+            if (ide.scene.template) {
+                menu.addItem(
+                    'restore palette',
+                    () => ide.stage.restoreHiddenGlobalBlocks(
+                        ide.scene.template.hide,
+                        ide.scene.template.version
+                    ),
+                    '"' + ide.scene.template.name + '"'
+                );
+            }
             menu.addLine();
             menu.addItem(
                 'make a category...',
@@ -7562,6 +7572,10 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
 };
 
 SpriteMorph.prototype.rootForGrab = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage?.tutorialMode) {
+        return stage;
+    }
     if (this.anchor) {
         return this.anchor.rootForGrab();
     }
@@ -9786,6 +9800,9 @@ SpriteMorph.prototype.mouseLeave = function () {
 SpriteMorph.prototype.wantsDropOf = function (morph) {
     // allow myself to be the anchor of another sprite
     // by drag & drop
+    if (this.parent?.tutorialMode) {
+        return false;
+    }
     return this.enableNesting
         && morph instanceof SpriteIconMorph
         && !contains(morph.object.allParts(), this);
@@ -10048,6 +10065,9 @@ StageMorph.prototype.init = function (globals) {
 
     // Snap! API event listeners, transient
     this.messageCallbacks = {}; // name : [functions]
+
+    // Tutorial scenes, transient
+    this.tutorialMode = false;
 
     StageMorph.uber.init.call(this);
 
@@ -10449,6 +10469,9 @@ StageMorph.prototype.reportMouseY = function () {
 // StageMorph drag & drop
 
 StageMorph.prototype.wantsDropOf = function (aMorph) {
+    if (this.tutorialMode) {
+        return false;
+    }
     return aMorph instanceof SpriteMorph ||
         aMorph instanceof WatcherMorph ||
         aMorph instanceof ListWatcherMorph ||
@@ -11433,16 +11456,34 @@ StageMorph.prototype.hiddenGlobalBlocks = function () {
     
 };
 
-StageMorph.prototype.restoreHiddenGlobalBlocks = function (hiddenList) {
+StageMorph.prototype.restoreHiddenGlobalBlocks = function (
+    hiddenList,
+    version // optionial snap version
+) {
     var ide = this.parentThatIsA(IDE_Morph),
         variables = this.globalVariables(),
+        newer = SpriteMorph.prototype.newPrimitivesSince(parseFloat(version)),
         dict = {};
-    hiddenList.at(1).map(spec => dict[spec] = true);
+
+    function hidePrimitive(selector) {
+        let migration = SpriteMorph.prototype.blockMigrations[selector],
+            id = migration ? migration.selector : selector;
+        dict[id] = true;
+    }
+
+    // primitives - make sure to take the current block, in case it was changed
+    hiddenList.at(1).map(sel => hidePrimitive(sel));
+    newer.map(sel => hidePrimitive(sel));
     StageMorph.prototype.hiddenPrimitives = dict;
+
+    // global custom blocks
     this.globalBlocks.forEach(def =>
         def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec));
+
+    // global variables
     variables.names(true).forEach(name =>
         variables.vars[name].isHidden = hiddenList.at(3).contains(name));
+
     ide.flushBlocksCache();
     ide.refreshPalette();
     ide.categories.refreshEmpty();
@@ -15123,10 +15164,17 @@ WatcherMorph.prototype.mouseDoubleClick = function (pos) {
 // WatcherMorph dragging and dropping:
 
 WatcherMorph.prototype.rootForGrab = function () {
-    // prevent watchers to be dragged in presentation mode
-    var ide = this.parentThatIsA(IDE_Morph);
+    // prevent watchers to be dragged in presentation and tutorial mode
+    var ide = this.parentThatIsA(IDE_Morph),
+        stage;
     if (ide && ide.isAppMode) {
         return ide;
+    } else if (!ide) {
+        return null;
+    }
+    stage = this.parentThatIsA(StageMorph);
+    if (stage?.tutorialMode) {
+        return stage;
     }
     return this;
 };

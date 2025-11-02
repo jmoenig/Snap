@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-September-10';
+modules.widgets = '2025-November-02';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2541,7 +2541,7 @@ DialogBoxMorph.prototype.withKey = function (key) {
     return this;
 };
 
-DialogBoxMorph.prototype.popUp = function (world) {
+DialogBoxMorph.prototype.popUp = function (world, noFocus) {
     if (world) {
         if (this.key) {
             if (this.instances[world.stamp]) {
@@ -2555,7 +2555,7 @@ DialogBoxMorph.prototype.popUp = function (world) {
             }
         }
         world.add(this);
-        world.keyboardFocus = this;
+        if (!noFocus) {world.keyboardFocus = this; }
         this.setCenter(world.center());
         this.edit();
     }

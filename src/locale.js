@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-October-13';
+modules.locale = '2025-October-30';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -110,11 +110,11 @@ Localizer.prototype.languageName = function (lang) {
 Localizer.prototype.credits = function () {
     var txt = '';
     this.languages().forEach(lang => {
-        txt = txt + '\n'
-            + this.languageName(lang)
-            + ' (' + lang + ') - '
-            + this.dict[lang].language_translator
-            + ' - ' + this.dict[lang].last_changed;
+        txt = txt + '\n' +
+            this.languageName(lang) +
+            ' (' + lang + ') - ' +
+            this.dict[lang].language_translator +
+            ' - ' + this.dict[lang].last_changed;
     });
     return txt;
 };
@@ -127,8 +127,9 @@ Localizer.prototype.unload = function () {
         if (lang !== 'en') {
             dict = this.dict[lang];
             for (key in dict) {
-                if (Object.prototype.hasOwnProperty.call(dict, key)
-                        && !contains(keep, key)) {
+                if (Object.prototype.hasOwnProperty.call(dict, key) &&
+                    !contains(keep, key)
+                ) {
                     delete dict[key];
                 }
             }
@@ -177,17 +178,17 @@ SnapTranslator.dict.en = {
 
     // long strings look-up only
     'file menu import hint':
-        'load an exported project file\nor block library, a costume\n'
-            + 'or a sound',
+        'load an exported project file\nor block library, a costume\n' +
+            'or a sound',
     'settings menu prefer empty slots hint':
-        'check to focus on empty slots\nwhen dragging & '
-                + 'dropping reporters',
+        'check to focus on empty slots\nwhen dragging & ' +
+            'dropping reporters',
     'costumes tab help':
-        'import a picture from another web page or from\n'
-            + 'a file on your computer by dropping it here\n',
+        'import a picture from another web page or from\n' +
+            'a file on your computer by dropping it here\n',
     'block deletion dialog text':
-        'Are you sure you want to delete this\n'
-            + 'custom block and all its instances?',
+        'Are you sure you want to delete this\n' +
+            'custom block and all its instances?',
     'download to disk text':
         'This item could not be opened in a new tab.\n' +
         'It has been saved to your browser\'s downloads folder.',
@@ -206,7 +207,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2025-10-13'
+        '2025-10-30'
 };
 
 SnapTranslator.dict.it = {
