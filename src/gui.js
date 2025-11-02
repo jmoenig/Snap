@@ -7185,6 +7185,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.add(scene.stage);
     this.stage = scene.stage;
     this.stage.messageCallbacks = listeners;
+    this.stage.tutorialMode = false;
     this.sprites = scene.sprites;
     if (pauseHats) {
         this.stage.pauseGenericHatBlocks();
@@ -9121,6 +9122,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     this.escapeTutorial();
     dlg.scene = scene;
     scene.stage.setScale(1);
+    scene.stage.tutorialMode = true;
     dlg.labelString = scene.name;
     dlg.createLabel();
     dlg.addBody(scene.stage);
@@ -9167,6 +9169,7 @@ IDE_Morph.prototype.escapeTutorial = function () {
         return;
     }
     this.tutorial.ok();
+    this.tutorial.scene.stage.tutorialMode = false;
     this.tutorial = null;
     this.corral.fixLayout(); // update scene icons
 };
