@@ -20,6 +20,7 @@
 * gui: added context sensitive tutorial items to the project menu's scenes group
 * gui: removed "close" button from the tutorial dialog
 * German translation update for new "Launch tutorial..." and "Exit tutorial" strings
+* gui: refactored layout of tutorial dialog
 
 ### 2025-12-02
 * widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus

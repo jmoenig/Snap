@@ -9168,10 +9168,12 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
             newExt.y / scene.stage.dimensions.y
         ));
         this.target.fixLayout();
-        this.setPosition(
-            this.target.bottomRight().subtract(
-                this.extent().add(this.inset)
-            )
+    };
+
+    dlg.fixLayout = function () {
+        DialogBoxMorph.prototype.fixLayout.call(this);
+        handle.setPosition(
+            this.bottomRight().subtract(handle.extent().add(handle.inset))
         );
     };
 
