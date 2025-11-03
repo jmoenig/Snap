@@ -5070,7 +5070,8 @@ IDE_Morph.prototype.projectMenu = function () {
         graphicsName = this.currentSprite instanceof SpriteMorph ?
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16),
-        backup = this.availableBackup(shiftClicked);
+        backup = this.availableBackup(shiftClicked),
+        help;
 
     menu = new MenuMorph(this);
     menu.addItem('Notes...', 'editNotes');
@@ -5262,10 +5263,23 @@ IDE_Morph.prototype.projectMenu = function () {
         }
         menu.addLine();
         if (this.scenes.length() > 1) {
+            if (!this.tutorial) {
+                help = this.scenes.itemsArray().find(any =>
+                    any.role === 'tutorial');
+                if (help) {
+                    menu.addItem(
+                        'Launch tutorial...',
+                        () => this.launchTutorial(help)
+                    );
+                }
+            }
             menu.addItem('Scenes...', 'scenesMenu');
         }
         menu.addPair('New scene', 'createNewScene');
         menu.addPair('Add scene...', 'addScene');
+        if (this.tutorial) {
+            menu.addPair('Exit tutorial', 'escapeTutorial');
+        }
         menu.addLine();
     }
     menu.addItem(
@@ -9168,8 +9182,8 @@ IDE_Morph.prototype.escapeTutorial = function () {
     if (!this.tutorial) {
         return;
     }
-    this.tutorial.ok();
     this.tutorial.scene.stage.tutorialMode = false;
+    this.tutorial.ok();
     this.tutorial = null;
     this.corral.fixLayout(); // update scene icons
 };

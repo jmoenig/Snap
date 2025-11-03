@@ -17,6 +17,7 @@
 * gui: always normalize SVGs on import
 * gui, objects: prevent dialog boxes to be dropped onto the palette
 * morphic: cleaned up some redunancies
+* gui: added context sensitive tutorial items to the project menu's scenes group
 
 ### 2025-12-02
 * widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus
