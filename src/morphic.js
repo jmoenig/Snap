@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-September-15';
+var morphicVersion = '2025-November-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -11754,7 +11754,6 @@ HandMorph.prototype.processDrop = function (event) {
             trg.droppedSVG(pic, aFile.name);
             bulkDrop();
         };
-        frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
     }
@@ -11794,7 +11793,6 @@ HandMorph.prototype.processDrop = function (event) {
             })();
         };
 
-        frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
     }
