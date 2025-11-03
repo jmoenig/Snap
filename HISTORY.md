@@ -8,8 +8,13 @@
     * tutorials: open and run a scene inside a separate dialog box
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
+* **Notable Changes:**
+    * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Translation Updates:**
     * German
+
+### 2025-12-03
+* gui: always normalize SVGs on import
 
 ### 2025-12-02
 * widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus

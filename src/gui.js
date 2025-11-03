@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-02';
+modules.gui = '2025-November-03';
 
 // Declarations
 
@@ -3021,7 +3021,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
         svgObj = new DOMParser().parseFromString(
             atob(svgStrEncoded), "image/svg+xml"
         ).firstElementChild,
-        normalizing = false;
+        normalizing = true; // false; // v11.1: always reconfigure SVGs
 
     name = name.split('.')[0];
 
