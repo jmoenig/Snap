@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-November-02';
+modules.objects = '2025-November-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -4134,7 +4134,7 @@ SpriteMorph.prototype.blockTemplates = function (
     return blocks;
 };
 
-// Utitlies displayed in the palette
+// Utilities displayed in the palette
 SpriteMorph.prototype.makeVariableButton = function () {
     var button, myself = this;
 
@@ -12623,7 +12623,7 @@ StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
     return all;
 };
 
-// StageMorph serialization & exporting utils
+// StageMorph serialization & exporting utilities
 
 StageMorph.prototype.toXMLString = function () {
     // answer an xml string representation of this sprite and all parts

@@ -1924,10 +1924,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         };
     }
 
+    this.palette.wantsDropOf = (morph) => !(morph instanceof DialogBoxMorph);
+
     this.palette.reactToDropOf = (droppedMorph, hand) => {
-        if (droppedMorph instanceof DialogBoxMorph) {
-            this.world().add(droppedMorph);
-        } else if (droppedMorph instanceof SpriteMorph) {
+        if (droppedMorph instanceof SpriteMorph) {
             this.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
