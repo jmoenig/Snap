@@ -1532,30 +1532,38 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'scn_scale([num])',
-    function (scale) {
+    'scn_scale(num)',
+    function (scale, proc) {
         var wrld = this.world(),
             stage = this.parentThatIsA(StageMorph),
+            acc = proc.context.accumulator,
             dlg, center;
         if (!stage.tutorialMode) {return; }
         if (!scale) {return stage.scale; }
         dlg = stage.parentThatIsA(DialogBoxMorph);
         center = dlg.center();
         if (dlg.ide.isAnimating) {
-            wrld.animations.push(new Animation(
-                s => { // setter
-                    stage.setScale(s);
-                    dlg.fixLayout();
-                    dlg.setCenter(center);
-                    dlg.keepWithin(wrld);
-                    center = dlg.center();
-                },
-                () => stage.scale, // getter
-                scale - stage.scale, // delta
-                300, // duration in ms
-                t => Math.pow(t, 6), // easing
-                null // onComplete
-            ));
+            if (!proc.context.accumulator) {
+                acc = proc.context.accumulator = {progress: true };
+                wrld.animations.push(new Animation(
+                    s => { // setter
+                        stage.setScale(s);
+                        dlg.fixLayout();
+                        dlg.setCenter(center);
+                        dlg.keepWithin(wrld);
+                        center = dlg.center();
+                    },
+                    () => stage.scale, // getter
+                    scale - stage.scale, // delta
+                    300, // duration in ms
+                    t => Math.pow(t, 6), // easing
+                    () => acc.progress = false // null // onComplete
+                ));
+            } else if (!acc.progress) {
+                return;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
         } else {
             stage.setScale(scale);
             dlg.fixLayout();
@@ -1566,10 +1574,11 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
-    'scn_position(pane, [x, y])',
-    function (pane, x = 0, y = 0) {
+    'scn_position(pane, x, y)',
+    function (pane, x = 0, y = 0, proc = null) {
         var wrld = this.world(),
             stage = this.parentThatIsA(StageMorph),
+            acc = proc.context.accumulator,
             dlg, rect, area, target;
 
         if (!stage.tutorialMode) {return; }
@@ -1600,12 +1609,22 @@ SnapExtensions.primitives.set(
         );
 
         if (dlg.ide.isAnimating) {
-            dlg.glideTo(
-                target,
-                300, // msecs
-                t => Math.pow(t, 6), // easing
-                () => dlg.keepWithin(wrld)
-            );
+            if (!proc.context.accumulator) {
+                acc = proc.context.accumulator = {progress: true };
+                dlg.glideTo(
+                    target,
+                    300, // msecs
+                    t => Math.pow(t, 6), // easing
+                    () => {
+                        dlg.keepWithin(wrld);
+                        acc.progress = false;
+                    }
+                );
+            } else if (!acc.progress) {
+                return;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
         } else {
             dlg.setPosition(target);
             dlg.keepWithin(wrld);

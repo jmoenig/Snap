@@ -9,9 +9,9 @@
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
     * "scn" extension category for cloned scenes and tutorials
-    * new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
+    * new "scn_scale(num)" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
     * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
-    * new "scn_position(pane, [x, y])" extension, positions the tutorial dialog into the specified pane
+    * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
 * **Notable Changes:**
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Translation Updates:**
@@ -23,6 +23,7 @@
 * gui, extensions: new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
 * extensions: animate tutorial resize actions based on the (hidden) animation preference
 * extensions: new "scn_position(pane, [x, y])" extension, positions the tutorial dialog into the specified pane
+* extensions: interpolated evaluation of tutorial scaling and positioning extensions
 
 ### 2025-12-03
 * gui: always normalize SVGs on import
