@@ -20,6 +20,7 @@
 * extensions: new "scn" category for cloned scenes and tutorials
 * extensions: new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
 * gui, extensions: new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
+* extensions: animate tutorial resize actions based on the (hidden) animation preference
 
 ### 2025-12-03
 * gui: always normalize SVGs on import

@@ -1541,20 +1541,27 @@ SnapExtensions.primitives.set(
         if (!scale) {return stage.scale; }
         dlg = stage.parentThatIsA(DialogBoxMorph);
         center = dlg.center();
-        wrld.animations.push(new Animation(
-            s => { // setter
-                stage.setScale(s);
-                dlg.fixLayout();
-                dlg.setCenter(center);
-                dlg.keepWithin(wrld);
-                center = dlg.center();
-            },
-            () => stage.scale, // getter
-            scale - stage.scale, // delta
-            300, // duration in ms
-            t => Math.pow(t, 6), // easing
-            null // onComplete
-        ));
+        if (dlg.ide.isAnimating) {
+            wrld.animations.push(new Animation(
+                s => { // setter
+                    stage.setScale(s);
+                    dlg.fixLayout();
+                    dlg.setCenter(center);
+                    dlg.keepWithin(wrld);
+                    center = dlg.center();
+                },
+                () => stage.scale, // getter
+                scale - stage.scale, // delta
+                300, // duration in ms
+                t => Math.pow(t, 6), // easing
+                null // onComplete
+            ));
+        } else {
+            stage.setScale(scale);
+            dlg.fixLayout();
+            dlg.setCenter(center);
+            dlg.keepWithin(wrld);
+        }
     }
 );
 
