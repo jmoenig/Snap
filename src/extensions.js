@@ -31,11 +31,11 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, DeviceOrientationEvent, console*/
+BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-October-24';
+modules.extensions = '2025-November-04';
 
 // Global stuff
 
@@ -1517,6 +1517,35 @@ SnapExtensions.primitives.set(
         data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
         SnapTranslator.dict[SnapTranslator.language] = dict;
         ide.reflectLanguage(SnapTranslator.language);
+    }
+);
+
+// Tutorials & Cloned Scenes (scn_)
+
+SnapExtensions.primitives.set(
+    'scn_scale([num])',
+    function (scale) {
+        var wrld = this.world(),
+            stage = this.parentThatIsA(StageMorph),
+            dlg, center;
+        if (!stage.tutorialMode) {return; }
+        if (!scale) {return stage.scale; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        center = dlg.center();
+        wrld.animations.push(new Animation(
+            s => { // setter
+                stage.setScale(s);
+                dlg.fixLayout();
+                dlg.setCenter(center);
+                dlg.keepWithin(wrld);
+                center = dlg.center();
+            },
+            () => stage.scale, // getter
+            scale - stage.scale, // delta
+            300, // duration in ms
+            t => Math.pow(t, 6), // easing
+            null // onComplete
+        ));
     }
 );
 

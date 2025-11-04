@@ -8,10 +8,16 @@
     * tutorials: open and run a scene inside a separate dialog box
     * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
     * TTS library: new "started speech response?" predicate
+    * "scn" extension category for cloned scenes and tutorials
+    * new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
 * **Notable Changes:**
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Translation Updates:**
     * German
+
+### 2025-12-04
+* extensions: new "scn" category for cloned scenes and tutorials
+* extensions: new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
 
 ### 2025-12-03
 * gui: always normalize SVGs on import
