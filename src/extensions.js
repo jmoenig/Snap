@@ -1565,6 +1565,51 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'scn_position(pane, [x, y])',
+    function (pane, x = 0, y = 0) {
+        var wrld = this.world(),
+            stage = this.parentThatIsA(StageMorph),
+            dlg, rect, area, target;
+        if (!stage.tutorialMode) {return; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        switch(pane.toLowerCase()) {
+        case 'ide':
+            rect = dlg.ide.bounds;
+            break;
+        case 'stage':
+            rect = dlg.ide.stage.bounds;
+            break;
+        case 'palette':
+            rect = dlg.ide.palette.bounds;
+            break;
+        case 'corral':
+            rect = dlg.ide.corral.bounds;
+            break;
+        case 'scripts':
+            rect = dlg.ide.spriteEditor.bounds;
+            break;
+        default:
+            return;
+        }
+        area = rect.extent().subtract(dlg.extent());
+        target = rect.origin.add(
+            area.multiplyBy(new Point(+x, +y).add(1).divideBy(2))
+        );
+        if (dlg.ide.isAnimating) {
+            dlg.glideTo(
+                target,
+                300, // msecs
+                t => Math.pow(t, 6), // easing
+                () => dlg.keepWithin(wrld)
+            );
+        } else {
+            dlg.setPosition(target);
+            dlg.keepWithin(wrld);
+        }
+    }
+);
+
 // Synchronization
 
 SnapExtensions.primitives.set(
