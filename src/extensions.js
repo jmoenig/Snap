@@ -1571,8 +1571,10 @@ SnapExtensions.primitives.set(
         var wrld = this.world(),
             stage = this.parentThatIsA(StageMorph),
             dlg, rect, area, target;
+
         if (!stage.tutorialMode) {return; }
         dlg = stage.parentThatIsA(DialogBoxMorph);
+
         switch(pane.toLowerCase()) {
         case 'ide':
             rect = dlg.ide.bounds;
@@ -1596,6 +1598,7 @@ SnapExtensions.primitives.set(
         target = rect.origin.add(
             area.multiplyBy(new Point(+x, +y).add(1).divideBy(2))
         );
+
         if (dlg.ide.isAnimating) {
             dlg.glideTo(
                 target,
