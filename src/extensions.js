@@ -1523,6 +1523,15 @@ SnapExtensions.primitives.set(
 // Tutorials & Cloned Scenes (scn_)
 
 SnapExtensions.primitives.set(
+    'scn_exit',
+    function () {
+        var stage = this.parentThatIsA(StageMorph);
+        if (!stage.tutorialMode) {return; }
+        stage.parentThatIsA(DialogBoxMorph).ok();
+    }
+);
+
+SnapExtensions.primitives.set(
     'scn_scale([num])',
     function (scale) {
         var wrld = this.world(),

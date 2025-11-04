@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-03';
+modules.gui = '2025-November-04';
 
 // Declarations
 
@@ -9135,6 +9135,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
 
     this.escapeTutorial();
     dlg.scene = scene;
+    dlg.ide = this;
     scene.stage.setScale(1);
     scene.stage.tutorialMode = true;
     dlg.labelString = scene.name;
