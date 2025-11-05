@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-November-03';
+modules.objects = '2025-November-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -12768,7 +12768,37 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         }
     }
 
-    if (data instanceof Morph) {
+    if (data instanceof BlockMorph) {
+        img = data.fullImage();
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+
+        // support blocks to be dragged out of speech balloons:
+        contents.isDraggable = !sprite.disableDraggingData;
+
+        contents.selectForEdit = function () {
+            var script = data.fullCopy(),
+                prepare = script.prepareToBeGrabbed,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            script.setPosition(this.position());
+            return script;
+        };
+    } else if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
             contents = new Morph();
@@ -13174,16 +13204,16 @@ StageBubbleMorph.prototype.init = function (data, stage) {
     this.rerender();
 };
 
-// SpriteBubbleMorph contents formatting
+// StageBubbleMorph contents formatting
 
 StageBubbleMorph.prototype.dataAsMorph =
     SpriteBubbleMorph.prototype.dataAsMorph;
 
-// SpriteBubbleMorph scaling
+// StageBubbleMorph scaling
 
 StageBubbleMorph.prototype.setScale = SpriteBubbleMorph.prototype.setScale;
 
-// SpriteBubbleMorph layout:
+// StageBubbleMorph layout:
 
 StageBubbleMorph.prototype.fixLayout = SpriteBubbleMorph.prototype.fixLayout;
 
