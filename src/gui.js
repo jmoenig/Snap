@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-04';
+modules.gui = '2025-November-05';
 
 // Declarations
 
@@ -9148,6 +9148,8 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     this.tutorial = dlg;
     this.corral.fixLayout(); // update scene icons
     diff = dlg.extent().subtract(scene.stage.dimensions);
+    dlg.minScale = (100 - (Math.min(diff.x, diff.y))) /
+        Math.min(scene.stage.dimensions.x, scene.stage.dimensions.y);
 
     handle = new HandleMorph(
         dlg,

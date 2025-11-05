@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-November-04';
+modules.extensions = '2025-November-05';
 
 // Global stuff
 
@@ -1554,7 +1554,7 @@ SnapExtensions.primitives.set(
                         center = dlg.center();
                     },
                     () => stage.scale, // getter
-                    scale - stage.scale, // delta
+                    Math.max(scale, dlg.minScale) - stage.scale, // delta
                     300, // duration in ms
                     t => Math.pow(t, 6), // easing
                     () => acc.progress = false // null // onComplete

@@ -17,6 +17,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-05
+* gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size
+
 ### 2025-12-04
 * extensions: new "scn" category for cloned scenes and tutorials
 * extensions: new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
