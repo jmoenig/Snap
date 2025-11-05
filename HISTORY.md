@@ -5,13 +5,16 @@
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
-    * tutorials: open and run a scene inside a separate dialog box
-    * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
-    * TTS library: new "started speech response?" predicate
-    * "scn" extension category for cloned scenes and tutorials
-    * new "scn_scale(num)" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
-    * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
-    * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
+    * tutorials
+        * open and run a scene inside a separate dialog box
+        * "scn" extension category for cloned scenes and tutorials
+        * new "scn_scale(num)" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
+        * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
+        * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
+        * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
+    * speech recognition
+        * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
+        * TTS library: new "started speech response?" predicate
 * **Notable Changes:**
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Translation Updates:**
@@ -20,6 +23,7 @@
 ### 2025-12-05
 * gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size
 * extensions: reverse direction of y-axis for positioning tutorial windows, make it same as the stage
+* extensions: new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
 
 ### 2025-12-04
 * extensions: new "scn" category for cloned scenes and tutorials

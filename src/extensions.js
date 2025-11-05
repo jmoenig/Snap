@@ -1632,6 +1632,40 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'scn_dimensions(pane)',
+    function (pane) {
+        var stage = this.parentThatIsA(StageMorph),
+            dlg, rect;
+
+        if (!stage.tutorialMode) {return ''; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+
+        switch(pane.toLowerCase()) {
+        case 'ide':
+            rect = dlg.ide.bounds;
+            break;
+        case 'stage':
+            rect = dlg.ide.stage.bounds;
+            break;
+        case 'palette':
+            rect = dlg.ide.palette.bounds;
+            break;
+        case 'corral':
+            rect = dlg.ide.corral.bounds;
+            break;
+        case 'scripts':
+            rect = dlg.ide.spriteEditor.bounds;
+            break;
+        case 'tutorial':
+            rect = dlg.bounds;
+            break;
+        default:
+            return;
+        }
+        return new List([rect.left(), rect.top(), rect.right(), rect.bottom()]);
+    }
+);
 // Synchronization
 
 SnapExtensions.primitives.set(
