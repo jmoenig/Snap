@@ -13,6 +13,10 @@
         * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
         * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
         * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
+    * unringed block as data
+        * new "expression" selector in block-attribute (metaprogramming) reporter
+        * enables expressions (unringed blocks) to be CALLed and RUN
+        * enabled unringed blocks to be shown in and dragged out of speech and result balloons
     * speech recognition
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
@@ -26,6 +30,10 @@
 * extensions: reverse direction of y-axis for positioning tutorial windows, make it same as the stage
 * extensions: new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
 * new "Tutorials" library for positioning and scaling the tutorial window
+* threads: new "expression" selector in block-attribute (metaprogramming) reporter
+* threads: directly apply eval() to expressions (unringed blocks), drag unringed blocks out of result balloons
+* objects: display expressions (unringed blocks) in speech balloons, allow dragging them out into the scripting area
+* German translation update for new "expression" selector ("Term") for unringed blocks 
 
 ### 2025-12-04
 * extensions: new "scn" category for cloned scenes and tutorials
