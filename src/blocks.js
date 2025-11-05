@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-October-23';
+modules.blocks = '2025-November-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -913,6 +913,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?'],
+            'expression': ['expression'],
             'type': ['type'],
             'scope': ['scope'],
             'selector': ['selector'],
@@ -2571,6 +2572,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             morphToShow.bounds.setWidth(img.width);
             morphToShow.bounds.setHeight(img.height);
             morphToShow.cachedImage = img;
+            if (value instanceof BlockMorph) {
+                // support blocks to be dragged out of result bubbles:
+                morphToShow.isDraggable =
+                    !SpriteMorph.prototype.disableDraggingData;
+
+                morphToShow.selectForEdit = function () {
+                    var script = value.fullCopy(),
+                        prepare = script.prepareToBeGrabbed;
+
+                    script.prepareToBeGrabbed = function (hand) {
+                        prepare.call(this, hand);
+                        hand.grabOrigin = {
+                            origin: ide.palette,
+                            position: ide.palette.center()
+                        };
+                        this.prepareToBeGrabbed = prepare;
+                    };
+
+                    script.setPosition(this.position());
+                    return script;
+                };
+            }
         }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
