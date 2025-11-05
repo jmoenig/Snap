@@ -19,6 +19,7 @@
 
 ### 2025-12-05
 * gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size
+* extensions: reverse direction of y-axis for positioning tutorial windows, make it same as the stage
 
 ### 2025-12-04
 * extensions: new "scn" category for cloned scenes and tutorials

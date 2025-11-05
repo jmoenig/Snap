@@ -1605,7 +1605,7 @@ SnapExtensions.primitives.set(
         }
         area = rect.extent().subtract(dlg.extent());
         target = rect.origin.add(
-            area.multiplyBy(new Point(+x, +y).add(1).divideBy(2))
+            area.multiplyBy(new Point(+x, -(+y)).add(1).divideBy(2))
         );
 
         if (dlg.ide.isAnimating) {
