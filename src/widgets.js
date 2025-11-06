@@ -1120,6 +1120,11 @@ ToggleMorph.prototype.init = function (
         environment,
         hint
     );
+    // increase contrast for checkboxes/radio in bright theme for accessibility
+    if (IDE_Morph && IDE_Morph.prototype && IDE_Morph.prototype.isBright) {
+        this.outlineColor = new Color(120, 120, 120);
+        this.outlineGradient = false;
+    }
     this.fixLayout();
     this.refresh();
 };
@@ -1183,6 +1188,9 @@ ToggleMorph.prototype.createLabel = function () {
         }
     }
     if (this.tick === null) {
+        var tickColor = (IDE_Morph && IDE_Morph.prototype && IDE_Morph.prototype.isBright)
+            ? IDE_Morph.prototype.buttonLabelColor || new Color(70, 70, 70)
+            : new Color(240, 240, 240);
         this.tick = new StringMorph(
             localize(this.labelString),
             this.fontSize,
@@ -1191,7 +1199,7 @@ ToggleMorph.prototype.createLabel = function () {
             false,
             false,
             shading ? new Point(1, 1) : null,
-            new Color(240, 240, 240)
+            tickColor
         );
         this.add(this.tick);
     }
