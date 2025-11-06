@@ -13,17 +13,20 @@
         * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
         * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
         * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
-    * unringed block as data
+    * unringed blocks as data
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
+* **Notable Changes:**
     * speech recognition
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
-* **Notable Changes:**
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Translation Updates:**
     * German
+
+### 2025-12-06
+* gui: exit the tutorial window when creating or opening a new project 
 
 ### 2025-12-05
 * gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size

@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-05';
+modules.gui = '2025-November-06';
 
 // Declarations
 
@@ -7109,6 +7109,7 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
             this.scenes.add(scene);
         });
     } else {
+        this.escapeTutorial();
         this.scenes = project.scenes;
     }
     this.performerMode = false;
