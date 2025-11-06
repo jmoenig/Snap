@@ -299,6 +299,7 @@ IDE_Morph.prototype.init = function (config) {
     this.serializer = new SnapSerializer();
     this.config = config;
     this.version = Date.now(); // for outside observers
+    this.devWarned = false; // ensure dev warning shown once and after i18n ready
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
@@ -7927,6 +7928,10 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
+    // ensure dev warning after language set
+    if (!this.devWarned) {
+        this.warnAboutDev();
+    }
     if (!this.loadNewProject) {
         this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
@@ -9106,6 +9111,7 @@ IDE_Morph.prototype.warnAboutDev = function () {
     if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
+    if (this.devWarned) { return; }
     this.inform(
         localize("CAUTION! Development Version"),
         localize(
@@ -9118,6 +9124,7 @@ IDE_Morph.prototype.warnAboutDev = function () {
             'for the official Snap! installation.'
         )
     ).nag = true;
+    this.devWarned = true;
 };
 
 // IDE_Morph tutorial scene
