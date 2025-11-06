@@ -3470,7 +3470,20 @@ IDE_Morph.prototype.brightTheme = function () {
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
 
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
@@ -3492,7 +3505,13 @@ IDE_Morph.prototype.refreshIDE = function () {
     if (this.loadNewProject) {
         this.newProject();
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
     }
 };
 
@@ -5268,15 +5287,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 help = scns.find(any => any.role === 'tutorial');
                 work = scns.find(any => any.role !== 'tutorial');
                 if (help && work) {
-                    menu.addItem(
-                        'Launch tutorial...',
-                        () => {
-                            if (this.scene.role === 'tutorial') {
-                                this.switchToScene(work);
-                            }
-                            this.launchTutorial(help);
-                        }
-                    );
+                    menu.addItem('Launch tutorial...', 'lauchProjectTutorial');
                 }
             }
             menu.addItem('Scenes...', 'scenesMenu');
@@ -6696,10 +6707,16 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     );
 };
 
-IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
+IDE_Morph.prototype.openProjectString = function (
+    str,
+    callback,
+    noPrims,
+    keepRoles,
+    onDone = nop
+) {
     var msg;
     if (this.bulkDropInProgress || this.isAddingScenes) {
-        this.rawOpenProjectString(str, noPrims);
+        this.rawOpenProjectString(str, noPrims, keepRoles);
         if (callback) {callback(); }
         return;
     }
@@ -6709,27 +6726,28 @@ IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
-            this.rawOpenProjectString(str, noPrims);
+            this.rawOpenProjectString(str, noPrims, keepRoles);
             msg.destroy();
             if (callback) {callback(); }
-        }
+        },
+        onDone
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims) {
+IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims, keepRoles) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.openProject(
-                this.serializer.load(str, this, noPrims)
+                this.serializer.load(str, this, noPrims, keepRoles)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
         this.openProject(
-            this.serializer.load(str, this, noPrims)
+            this.serializer.load(str, this, noPrims, keepRoles)
         );
     }
     this.autoLoadExtensions();
@@ -7931,10 +7949,22 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
-    var projectData,
+    var projectData, onComplete, name, tutorial,
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
+        if (this.scene.createdFromTemplate) {
+            name = this.scene.name;
+            tutorial = !isNil(this.tutorial);
+            this.scene.createdFromTemplate = false;
+            onComplete = () => {
+                this.scene.createdFromTemplate = true;
+                this.setProjectName(name);
+                if (tutorial) {
+                    this.launchProjectTutorial();
+                }
+            };
+        }
         this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
             try {
@@ -7962,7 +7992,13 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         location.hash = urlBar;
         if (callback) {callback.call(this); }
     } else {
-        this.openProjectString(projectData, callback);
+        this.openProjectString(
+            projectData,
+            callback,
+            null,
+            true, // keepRoles
+            onComplete // restore name and template origin
+        );
     }
     if (!noSave) {
         this.saveSetting('language', lang);
@@ -8139,7 +8175,19 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 };
 
 IDE_Morph.prototype.setBlocksScale = function (num) {
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -8163,7 +8211,13 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.createCorralBar();
     this.refreshCustomizedPalette();
     this.fixLayout();
-    this.openProjectString(projectData);
+    this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
     this.saveSetting('zoom', num);
 };
 
@@ -8409,7 +8463,19 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     // highly experimental for v10 - tweak the palette blocks,
     // e.g. replace all primitives with custom block definitions etc.
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -8431,7 +8497,13 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     this.categories.refreshEmpty();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData, null, true); // no prims
+    this.openProjectString(
+        projectData,
+        null,
+        true, // no prims
+        true, // keepRoles
+        onComplete // restore name and template origin
+    );
 };
 
 // IDE_Morph cloud interface
@@ -9126,6 +9198,20 @@ IDE_Morph.prototype.warnAboutDev = function () {
 };
 
 // IDE_Morph tutorial scene
+
+IDE_Morph.prototype.launchProjectTutorial = function () {
+    // if both a tutorial and a non-tutorial scene exist in the project,
+    // make sure the non-tutorial scene is active and launch the tutorial
+    var scns = this.scenes.itemsArray(),
+        help = scns.find(any => any.role === 'tutorial'),
+        work = scns.find(any => any.role !== 'tutorial');
+    if (help && work) {
+        if (this.scene.role === 'tutorial') {
+            this.switchToScene(work);
+        }
+        this.launchTutorial(help);
+    }
+};
 
 IDE_Morph.prototype.launchTutorial = function (scene) {
     // open and run a scene in a separate dialog box

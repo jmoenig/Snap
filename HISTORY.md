@@ -28,6 +28,7 @@
 ### 2025-12-06
 * gui: exit the tutorial window when creating or opening a new project
 * gui: make sure to switch to a non-tutorial scene when launching a tutorial
+* gui, store: retain templates and tutorials when refreshing the IDE by serializing and de-serializing the project 
 
 ### 2025-12-05
 * gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size

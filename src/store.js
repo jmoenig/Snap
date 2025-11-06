@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-October-31';
+modules.store = '2025-November-06';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -323,16 +323,21 @@ XML_Serializer.prototype.mediaXML = function (name) {
 
 // SnapSerializer loading:
 
-SnapSerializer.prototype.load = function (xmlString, ide, noPrims) {
+SnapSerializer.prototype.load = function (xmlString, ide, noPrims, keepRoles) {
     // public - answer a new Project represented by the given XML String
     var obj;
     this.noPrims = noPrims || false;
-    obj = this.loadProjectModel(this.parse(xmlString), ide);
+    obj = this.loadProjectModel(this.parse(xmlString), ide, null, keepRoles);
     this.noPrims = false;
     return obj;
 };
 
-SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
+SnapSerializer.prototype.loadProjectModel = function (
+    xmlNode,
+    ide,
+    remixID,
+    keepRoles // bool - don't change templates into work
+) {
     // public - answer a new Project represented by the given XML top node
     // show a warning if the origin apps differ
 
@@ -356,16 +361,25 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
         }
         scenesModel.childrenNamed('scene').forEach(model => {
             ide.scene.captureGlobalSettings();
-            project.scenes.add(this.loadScene(model, appVersion));
+            project.scenes.add(
+                this.loadScene(model, appVersion, null, keepRoles)
+            );
             ide.scene.applyGlobalSettings();
         });
     } else {
-        project.scenes.add(this.loadScene(xmlNode, appVersion, remixID));
+        project.scenes.add(
+            this.loadScene(xmlNode, appVersion, remixID, keepRoles)
+        );
     }
     return project.initialize();
 };
 
-SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
+SnapSerializer.prototype.loadScene = function (
+    xmlNode,
+    appVersion,
+    remixID,
+    keepRoles
+) {
     // private
     var scene = new Scene(),
         model,
@@ -718,7 +732,7 @@ SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     );
 
     this.objects = {};
-    if (scene.role === 'template') {
+    if (scene.role === 'template' && !keepRoles) {
         scene.name = '';
         scene.role = null;
         scene.createdFromTemplate = true;
