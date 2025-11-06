@@ -5071,7 +5071,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16),
         backup = this.availableBackup(shiftClicked),
-        help;
+        scns, help, work;
 
     menu = new MenuMorph(this);
     menu.addItem('Notes...', 'editNotes');
@@ -5264,12 +5264,18 @@ IDE_Morph.prototype.projectMenu = function () {
         menu.addLine();
         if (this.scenes.length() > 1) {
             if (!this.tutorial) {
-                help = this.scenes.itemsArray().find(any =>
-                    any.role === 'tutorial');
-                if (help) {
+                scns = this.scenes.itemsArray();
+                help = scns.find(any => any.role === 'tutorial');
+                work = scns.find(any => any.role !== 'tutorial');
+                if (help && work) {
                     menu.addItem(
                         'Launch tutorial...',
-                        () => this.launchTutorial(help)
+                        () => {
+                            if (this.scene.role === 'tutorial') {
+                                this.switchToScene(work);
+                            }
+                            this.launchTutorial(help);
+                        }
                     );
                 }
             }
