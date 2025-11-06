@@ -5287,7 +5287,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 help = scns.find(any => any.role === 'tutorial');
                 work = scns.find(any => any.role !== 'tutorial');
                 if (help && work) {
-                    menu.addItem('Launch tutorial...', 'lauchProjectTutorial');
+                    menu.addItem('Launch tutorial...', 'launchProjectTutorial');
                 }
             }
             menu.addItem('Scenes...', 'scenesMenu');
