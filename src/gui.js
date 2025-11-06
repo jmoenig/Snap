@@ -299,6 +299,8 @@ IDE_Morph.prototype.init = function (config) {
     this.serializer = new SnapSerializer();
     this.config = config;
     this.version = Date.now(); // for outside observers
+    this.devWarned = false; // ensure dev warning shown once
+    this.devWarningPending = false; // postpone until language is ready
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
@@ -7927,6 +7929,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData,
         urlBar = location.hash;
     SnapTranslator.language = lang;
+    // show pending dev warning after language is ready
+    if (this.devWarningPending && !this.devWarned) {
+        this.devWarningPending = false;
+        this.warnAboutDev();
+    }
     if (!this.loadNewProject) {
         this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
@@ -9106,16 +9113,37 @@ IDE_Morph.prototype.warnAboutDev = function () {
     if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
+    if (this.devWarned) { return; }
+    // if language not yet loaded or target language is non-English, postpone
+    var hash = location.hash || '',
+        desiredLang = null,
+        currentLang = SnapTranslator.language || 'en',
+        dictReady = !!(SnapTranslator.dict && SnapTranslator.dict[currentLang] &&
+            Object.prototype.hasOwnProperty.call(
+                SnapTranslator.dict[currentLang],
+                'CAUTION! Development Version'
+            ));
+    if (hash.substr(0, 6) === '#lang:') {
+        desiredLang = hash.charAt(8) === '_' ? hash.slice(6, 11) : hash.slice(6, 8);
+    }
+    desiredLang = this.cloud.parseDict(hash).lang || desiredLang || this.userLanguage;
+    if ((currentLang === 'en' && desiredLang && desiredLang !== 'en') || !dictReady) {
+        this.devWarningPending = true;
+        return;
+    }
     this.inform(
-        "CAUTION! Development Version",
-        'This version of Snap! is being developed.\n' +
+        localize("CAUTION! Development Version"),
+        localize(
+            'This version of Snap! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
             'make it UNUSABLE or DEFECTIVE for current and\n' +
             'even future official versions!\n\n' +
             'visit https://snap.berkeley.edu/run\n' +
             'for the official Snap! installation.'
+        )
     ).nag = true;
+    this.devWarned = true;
 };
 
 // IDE_Morph tutorial scene
@@ -11735,6 +11763,9 @@ CostumeIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (!(this.object instanceof Costume)) {return null; }
     menu.addItem("edit", "editCostume");
+    if (window.PaperAdapterBridge && (this.object instanceof SVG_Costume)) {
+        menu.addItem("edit (beta)", "editCostumeAlt");
+    }
     if (this.world().currentKey === 16) { // shift clicked
         menu.addItem(
             'edit rotation point only...',
@@ -11775,6 +11806,22 @@ CostumeIconMorph.prototype.editCostume = function () {
         this.parentThatIsA(IDE_Morph),
         false // not a new costume, retain existing rotation center
     );
+};
+
+CostumeIconMorph.prototype.editCostumeAlt = function () {
+    // Use embedded prototype editor as a fallback/beta
+    this.disinherit();
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (this.object instanceof SVG_Costume && window.PaperAdapterBridge) {
+        this.object.editAlt(
+            this.world(),
+            ide,
+            false // retain rotation center
+        );
+    } else {
+        // Fallback to default
+        this.editCostume();
+    }
 };
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
