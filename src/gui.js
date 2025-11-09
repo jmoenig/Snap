@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-06';
+modules.gui = '2025-November-09';
 
 // Declarations
 
@@ -9226,6 +9226,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         handle,
         diff;
 
+    dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
     this.escapeTutorial();
     dlg.scene = scene;
     dlg.ide = this;
@@ -9248,8 +9249,8 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         dlg,
         100,
         100,
-        dlg.corner,
-        dlg.corner
+        dlg.padding,
+        dlg.padding
     );
 
     handle.mouseMove = function (pos) {

@@ -25,6 +25,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-09
+* gui: optimized tutorial window layout for flat mode
+
 ### 2025-12-06
 * gui: exit the tutorial window when creating or opening a new project
 * gui: make sure to switch to a non-tutorial scene when launching a tutorial
