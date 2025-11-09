@@ -27,6 +27,7 @@
 
 ### 2025-12-09
 * gui: optimized tutorial window layout for flat mode
+* gui, widgets: optimized tutorial window layout for default mode
 
 ### 2025-12-06
 * gui: exit the tutorial window when creating or opening a new project

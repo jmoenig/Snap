@@ -9227,6 +9227,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         diff;
 
     dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
+    dlg.stackPadding = 0;
     this.escapeTutorial();
     dlg.scene = scene;
     dlg.ide = this;
