@@ -9236,7 +9236,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.labelString = scene.name;
     dlg.createLabel();
     dlg.addBody(scene.stage);
-    // dlg.addButton('ok', 'Close');
+    // dlg.addButton('ok', 'OK');
     dlg.fixLayout();
     dlg.popUp(this.world(), true); // noFocus
     dlg.nag = true; // don't close when switching scenes
