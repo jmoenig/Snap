@@ -22,8 +22,13 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
+* **Notable Fixes:**
+    * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
 * **Translation Updates:**
     * German
+
+### 2025-12-13
+* frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
 
 ### 2025-12-09
 * gui: optimized tutorial window layout for flat mode
