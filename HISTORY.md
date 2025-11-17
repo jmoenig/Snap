@@ -29,7 +29,8 @@
 
 ### 2025-12-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles
-* microworlds (EDC) extension: added optional "max height" input to "fancy say / think"  extensions
+* microworlds (EDC) extension: added optional "max height" input to "fancy say / think" extensions
+* (EDC) Fancy Text library: added optional "max height" inputs to "fancy say / think" library blocks
 
 ### 2025-12-13
 * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
