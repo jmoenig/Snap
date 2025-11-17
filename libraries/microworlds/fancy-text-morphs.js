@@ -7,44 +7,44 @@ SnapExtensions.primitives.set(
     function (data, size, maxWidth, color, proc) {
         makeFancyBubble(this, data, false, false, proc, size, maxWidth, color);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'say(data, size, maxWidth, color, anchor)',
     function (data, size, maxWidth, color, anchor, maxHeight, proc) {
         makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color)',
     function (data, size, maxWidth, color, proc) {
         makeFancyBubble(this, data, true, false, proc, size, maxWidth, color);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color, anchor)',
     function (data, size, maxWidth, color, anchor, maxHeight, proc) {
         makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'costume(data, size, maxWidth, color, align, font)',
     function (data, size, maxWidth, color, align, font, proc) {
         validateColor(color);
-        return new FancyTextCostume(data, size, maxWidth, color, align, font)
+        return new FancyTextCostume(data, size, maxWidth, color, align, font);
     }
 
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'remove_formatting_characters(text)',
     function (text) {
 
         function remove(t) {
-            return t.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1))
+            return t.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1));
         }
 
         function removeCharacters(t) {
@@ -58,7 +58,7 @@ SnapExtensions.primitives.set(
         return removeCharacters(text);
 
     }
-)
+);
 
 function validateColor(color) {
     if(!/rgba?\(\d{1,3}\,\d{1,3},\d{1,3},?\d?\.?\d*\)/.test(color) && !!color){
@@ -162,7 +162,7 @@ if(!SpriteMorph.prototype.oldPositionTalkBubble) {
             bubble.setLeft(this.center().x);
         }
         bubble.keepWithin(stage);
-    }
+    };
 
 }
 
@@ -219,7 +219,7 @@ FancyTextMorph.prototype.init = function (
         fontName,
         shadowOffset,
         shadowColor);
-}
+};
 
 FancyTextMorph.prototype.fixLayout = function () {
     // determine my extent depending on my current settings
@@ -255,11 +255,11 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
     const processChar = (char) => {
         ctx.font = this.font();
         charCb(char, ctx);
-    }
+    };
 
     const processFrac = (frac) => {
         fracCb(frac, ctx);
-    }
+    };
 
     let escape = false;
 
@@ -301,10 +301,10 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
                     processIfEscaped(char, ()=> escape = true);
                     break;
                 case '*':
-                    processIfEscaped(char, () => this.isBold = !this.isBold)
+                    processIfEscaped(char, () => this.isBold = !this.isBold);
                     break;
                 case '_':
-                    processIfEscaped(char, () => this.isItalic = !this.isItalic)
+                    processIfEscaped(char, () => this.isItalic = !this.isItalic);
                     break;
                 case '~':
                     processIfEscaped(char, () => {
@@ -319,7 +319,7 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
 
     this.isBold = originalBold;
     this.isItalic = originalItalic;
-}
+};
 
 FancyTextMorph.prototype.lineWidth = function(ctx, line) {
     let width = 0;
@@ -328,7 +328,7 @@ FancyTextMorph.prototype.lineWidth = function(ctx, line) {
         frac => width += this.measureFraction(frac).width
     );
     return width;
-}
+};
 
 FancyTextMorph.prototype.lineHeight = function(line) {
     const fractions = FancyFraction.extract(line);
@@ -337,16 +337,16 @@ FancyTextMorph.prototype.lineHeight = function(line) {
 
     fractions.forEach(fraction => {
         lineHeight = Math.max(lineHeight, this.measureFraction(fraction).height);
-    })
+    });
 
     return lineHeight;
-}
+};
 
 FancyTextMorph.prototype.totalTextHeight = function() {
     let height = 0;
     this.lines.forEach(line =>
         {
-            height += this.lineHeight(line)
+            height += this.lineHeight(line);
         }
 
     );
@@ -354,7 +354,7 @@ FancyTextMorph.prototype.totalTextHeight = function() {
     height += fontHeight(this.fontSize) * 0.2;
 
     return height;
-}
+};
 
 FancyTextMorph.prototype.fillLine = function(ctx, line, x, y) {
     const lineHeight = this.lineHeight(line);
@@ -366,8 +366,8 @@ FancyTextMorph.prototype.fillLine = function(ctx, line, x, y) {
         const {width: fWidth, height: fHeight} = this.measureFraction(frac);
         this.drawFraction(frac, ctx, x, y + ((lineHeight - fHeight) / 2));
         x += fWidth;
-    })
-}
+    });
+};
 
 FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth) {
 
@@ -423,7 +423,7 @@ FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth
         ),
         y,
         totalWidth
-    )
+    );
 
     const oldLineWidth = ctx.lineWidth;
     ctx.lineWidth = FancyFraction.lineWidth(this.fontSize);
@@ -451,11 +451,11 @@ FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth
         ),
         y + ctx.lineWidth * 2,
         totalWidth
-    )
+    );
 
     ctx.font = oldFont;
 
-}
+};
 
 FancyTextMorph.prototype.fractionHeight = function(fraction) {
     const fontSize = this.fontSize,
@@ -471,7 +471,7 @@ FancyTextMorph.prototype.fractionHeight = function(fraction) {
 
     return this.fractionHeight(fraction.numerator) +
         this.fractionHeight(fraction.denominator) + lineWidth * 4;
-}
+};
 
 FancyTextMorph.prototype.fractionWidth = function(fraction) {
 
@@ -508,14 +508,14 @@ FancyTextMorph.prototype.fractionWidth = function(fraction) {
 
     return width;
 
-}
+};
 
 FancyTextMorph.prototype.measureFraction = function(fraction){
     return {
         width: this.fractionWidth(fraction),
         height: this.fractionHeight(fraction)
-    }
-}
+    };
+};
 
 FancyTextMorph.prototype.render = function (ctx) {
     var shadowWidth = Math.abs(this.shadowOffset.x),
@@ -620,7 +620,7 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
     this.anchor = anchor || 'top right';
 
     FancySpriteBubbleMorph.uber.init.call(this, data, stage, isThought, isQuestion);
-}
+};
 
 FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
     var contents,
@@ -697,11 +697,11 @@ FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
     }
 
     return FancySpriteBubbleMorph.uber.dataAsMorph.call(this, data);
-}
+};
 
 function FancyFraction (numerator, denominator) {
     this.init(numerator, denominator);
-};
+}
 
 FancyFraction.prototype.init = function (numerator, denominator) {
     this.numerator = numerator;
@@ -740,11 +740,11 @@ FancyFraction.extract = function (aString) {
     var fractions = [];
 
     fractionStrings.forEach(fractionString => {
-        fractions.push(FancyFraction.parse(fractionString))
-    })
+        fractions.push(FancyFraction.parse(fractionString));
+    });
 
     return fractions;
-}
+};
 
 FancyFraction.parse = function (aString) {
     // * All fractions need to be parenthesized
@@ -771,7 +771,7 @@ FancyFraction.parse = function (aString) {
 
 FancyFraction.lineWidth = function(fontSize) {
     return Math.max(fontSize / 12, 1);
-}
+};
 
 FancyFraction.fontName = 'Courier';
 FancyFraction.fontStyle = 'monospace';
@@ -782,11 +782,11 @@ FancyFraction.transformFont = function(fontString, originalFontName, originalFon
         font = font.replace(originalFontStyle, FancyFraction.fontStyle);
     }
     return font;
-}
+};
 
 FancyTextCostume.prototype = new Costume();
 FancyTextCostume.prototype.constructor = FancyTextCostume;
-FancyTextCostume.uber = Costume.prototype
+FancyTextCostume.uber = Costume.prototype;
 
 function FancyTextCostume(data, size, maxWidth, color, align, font) {
     align = ['left','right','center'].includes(align) ? align : 'left';
@@ -837,7 +837,7 @@ function FancyTextCostume(data, size, maxWidth, color, align, font) {
 
 FancyTextMorph.prototype.toString = function() {
     return 'a FancyTextCostume(' + this.name + ')';
-}
+};
 
 Object.defineProperty(FancyTextCostume.prototype, "contents", {
     get: function contents() {
@@ -847,7 +847,7 @@ Object.defineProperty(FancyTextCostume.prototype, "contents", {
         textMorph.render(ctx);
         return canvas;
     }
-})
+});
 
 if(!SpriteMorph.prototype.oldRender) {
     SpriteMorph.prototype.oldRender = SpriteMorph.prototype.render;
@@ -916,4 +916,4 @@ SpriteMorph.prototype.render = function(ctx) {
     this.version = Date.now();
 
 
-}
+};
