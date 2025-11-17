@@ -1,5 +1,9 @@
 // Update 2025-11-17 (jens - automatic vertical scrolling in fancy text bubbles)
 
+/*global SnapExtensions, StageMorph, Color, isNil, SpriteMorph, Point,
+TextMorph, fontHeight, SpriteBubbleMorph, isString, MenuMorph, IDE_Morph,
+localize, ScrollFrameMorph, Costume, newCanvas, radians*/
+
 /*jshint esversion: 11*/
 
 var prefix = 'ftx_';
