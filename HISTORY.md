@@ -17,6 +17,9 @@
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
+    * files
+        * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
+        * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
 * **Notable Changes:**
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -25,7 +28,6 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
-    * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
 * **Translation Updates:**
@@ -40,6 +42,7 @@
 * fancy-text-morphs: added "global" comment declcaration (for use with JSHint)
 * fancy-text-morphs: fixed some variable declaration / usage glitches
 * extensions: added general "dta_export(data, name, type)" extension (for csv, json, etc.)
+* extensions: added general "dta_import(raw?)" extension (for text files, csv, json etc.)
 
 ### 2025-12-13
 * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
