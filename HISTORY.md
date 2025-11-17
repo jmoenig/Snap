@@ -18,6 +18,9 @@
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
 * **Notable Changes:**
+    * (EDC) Fancy Text
+        * added automatic vertical scrolling to "fancy say / think" balloons
+        * added optional "max height" input to "fancy say / think" library commands
     * speech recognition
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
