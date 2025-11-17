@@ -37,6 +37,7 @@
 * fancy-text-morphs: fixed some syntax issues wrt semicolons (for use with JSHint)
 * fancy-text-morphs: added "jshint: esversion: 11" comment (for use with JSHint)
 * fancy-text-morphs: added "global" comment declcaration (for use with JSHint)
+* fancy-text-morphs: fixed some variable declaration / usage glitches
 
 ### 2025-12-13
 * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully

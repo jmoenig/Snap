@@ -634,9 +634,8 @@ FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
         maxHeight = (this.maxHeight || this.stage?.dimensions?.y || 360) *
             this.scale - (this.border + this.padding + 1) * 2,
         isText,
-        img,
-        scaledImg,
-        width;
+        width,
+        scroller;
 
     // everything here comes directly from SpriteBubbleMorph.prototype.dataAsMorph,
     // EXCEPT that we're creating a FancyTextMorph
