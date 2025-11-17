@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-November-05';
+modules.extensions = '2025-November-17';
 
 // Global stuff
 
@@ -629,6 +629,17 @@ SnapExtensions.primitives.set(
     function (data, delta, proc) {
         proc.assertType(data, 'list');
         proc.hyperChangeBy(data, delta);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_export(data, name, type)',
+    function (data, mime, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            type = mime.toString() || 'text/txt'; // also for 'text/csv' etc.
+        name = name || localize('data');
+        name = name.toString();
+        ide.saveFileAs(data, type, name);
     }
 );
 
