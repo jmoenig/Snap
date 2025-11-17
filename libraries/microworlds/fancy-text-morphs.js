@@ -1,4 +1,4 @@
-// Update 2023-01-02
+// Update 2025-11-17 (jens - automatic vertical scrolling in fancy text bubbles)
 
 var prefix = 'ftx_';
 
@@ -11,8 +11,8 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     prefix+'say(data, size, maxWidth, color, anchor)',
-    function (data, size, maxWidth, color, anchor, proc) {
-        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor);
+    function (data, size, maxWidth, color, anchor, maxHeight, proc) {
+        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
 )
 
@@ -25,8 +25,8 @@ SnapExtensions.primitives.set(
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color, anchor)',
-    function (data, size, maxWidth, color, anchor, proc) {
-        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor);
+    function (data, size, maxWidth, color, anchor, maxHeight, proc) {
+        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
 )
 
@@ -66,7 +66,7 @@ function validateColor(color) {
     }
 }
 
-function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color, anchor) {
+function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color, anchor, maxHeight) {
     const stage = sprite.parentThatIsA(StageMorph);
 
     validateColor(color);
@@ -83,7 +83,8 @@ function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWi
         size,
         maxWidth,
         color,
-        anchor
+        anchor,
+        maxHeight
     );
 
     sprite.add(bubble);
@@ -592,14 +593,14 @@ FancyTextMorph.prototype.render = function (ctx) {
     }
 };
 
-function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor) {
-    this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor);
+function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight) {
+    this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight);
 }
 
 FancySpriteBubbleMorph.prototype = new SpriteBubbleMorph('');
 FancySpriteBubbleMorph.prototype.constructor = FancySpriteBubbleMorph;
 FancySpriteBubbleMorph.uber = SpriteBubbleMorph.prototype;
-FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color, anchor){
+FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight){
 
     maxWidth = parseInt(maxWidth);
 
@@ -607,6 +608,13 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
         maxWidth = 0;
     }
     this.maxWidth = maxWidth;
+
+    maxHeight = parseInt(maxHeight);
+    if(!maxHeight){
+        maxHeight = 0;
+    }
+    this.maxHeight = maxHeight;
+
     this.size = size || SpriteMorph.prototype.bubbleFontSize;
     this.textColor = color || new Color();
     this.anchor = anchor || 'top right';
@@ -617,6 +625,8 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
 FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
     var contents,
         sprite = SpriteMorph.prototype,
+        maxHeight = (this.maxHeight || this.stage?.dimensions?.y || 360) *
+            this.scale - (this.border + this.padding + 1) * 2,
         isText,
         img,
         scaledImg,
@@ -664,6 +674,24 @@ FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
             width = Math.min(width, this.maxWidth * this.scale);
         }
         contents.setWidth(width);
+
+        if (contents.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(contents.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(contents);
+            scroller.color = new Color(0, 0, 0, 0);
+
+            // scroll to the bottom:
+            /* // commented out for this case for now
+            scroller.scrollY(scroller.bottom() - contents.bottom());
+            scroller.adjustScrollBars();
+            */
+
+            contents = scroller;
+        }
 
         return contents;
     }
