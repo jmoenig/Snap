@@ -35,6 +35,7 @@
 * microworlds (EDC) extension: added optional "max height" input to "fancy say / think" extensions
 * (EDC) Fancy Text library: added optional "max height" inputs to "fancy say / think" library blocks
 * fancy-text-morphs: fixed some syntax issues wrt semicolons (for use with JSHint)
+* fancy-text-morphs: added "jshint: esversion: 11" comment (for use with JSHint)
 
 ### 2025-12-13
 * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully

@@ -1,5 +1,7 @@
 // Update 2025-11-17 (jens - automatic vertical scrolling in fancy text bubbles)
 
+/*jshint esversion: 11*/
+
 var prefix = 'ftx_';
 
 SnapExtensions.primitives.set(
