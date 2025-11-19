@@ -632,6 +632,105 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'dta_import(raw?)',
+    function (raw, proc) {
+        // raw is a Boolean flag selecting to keep the data unparsed
+        var inp = document.createElement('input'),
+            ide = this.parentThatIsA(IDE_Morph),
+            data = false;
+
+        function userImport() {
+
+            function txtOnlyMsg(ftype, anyway) {
+                ide.confirm(
+                    localize(
+                        'Can only import "text" files. ' +
+                            'You selected a file of type "' +
+                            ftype +
+                            '".'
+                    ) + '\n\n' + localize('Open anyway?'),
+                    'Unable to import',
+                    anyway // callback
+                );
+            }
+
+            function readText(aFile) {
+                var frd = new FileReader(),
+                    ext = aFile.name.split('.').pop().toLowerCase();
+
+                function isTextFile(aFile) {
+                    // special cases for Windows
+                    // check the file extension for text-like-ness
+                    return aFile.type.indexOf('text') !== -1 ||
+                        contains(['txt', 'csv', 'xml', 'json', 'tsv'], ext);
+                }
+
+                function isType(aFile, string) {
+                    return aFile.type.indexOf(string) !== -1 || (ext === string);
+                }
+
+                frd.onloadend = function (e) {
+                    if (!raw && isType(aFile, 'csv')) {
+                        data = Process.prototype.parseCSV(e.target.result);
+                    } else if (!raw && isType(aFile, 'json')) {
+                        data = Process.prototype.parseJSON(e.target.result);
+                    } else {
+                        data = e.target.result;
+                    }
+                };
+
+                if (raw || isTextFile(aFile)) {
+                    frd.readAsText(aFile);
+                } else {
+                    // show a warning and an option
+                    // letting the user load the file anyway
+                    txtOnlyMsg(
+                        aFile.type,
+                        () => frd.readAsText(aFile)
+                    );
+                }
+            }
+
+            document.body.removeChild(inp);
+            ide.filePicker = null;
+            if (inp.files.length > 0) {
+                readText(inp.files[inp.files.length - 1]);
+            }
+        }
+
+        if (ide.filePicker) {
+            document.body.removeChild(ide.filePicker);
+            ide.filePicker = null;
+        }
+        inp.type = 'file';
+        inp.style.color = "transparent";
+        inp.style.backgroundColor = "transparent";
+        inp.style.border = "none";
+        inp.style.outline = "none";
+        inp.style.position = "absolute";
+        inp.style.top = "0px";
+        inp.style.left = "0px";
+        inp.style.width = "0px";
+        inp.style.height = "0px";
+        inp.style.display = "none";
+        inp.addEventListener(
+            "change",
+            userImport,
+            false
+        );
+        inp.addEventListener(
+            "cancel",
+            () => data = '',
+            false
+        );
+        document.body.appendChild(inp);
+        ide.filePicker = inp;
+        inp.click();
+        return () => data;
+    }
+);
+
 // World map (map_):
 
 SnapExtensions.primitives.set(
