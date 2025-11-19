@@ -92,6 +92,7 @@ modules.gui = '2025-August-29';
 // Declarations
 
 var SnapVersion = '11.0.2';
+var SplitVersion = '1.0.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -837,6 +838,7 @@ IDE_Morph.prototype.openIn = function (world) {
     this.applyConfigurations();
 
     this.warnAboutDev();
+    this.inform("BETA BUILD!", "This is a WIP of Split!")
     return this;
 };
 
@@ -1613,7 +1615,7 @@ IDE_Morph.prototype.createControlBar = function () {
         name = (myself.getProjectName() || localize('untitled'));
         if (!myself.config.preserveTitle) {
             document.title = "Split! " +
-                (myself.getProjectName() ? name : SnapVersion);
+                (myself.getProjectName() ? name : SplitVersion);
         }
         txt = new StringMorph(
             prefix + name +  scene + suffix,
@@ -5640,7 +5642,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Split! ' + SnapVersion + '\na Snap! mod in the style of Scratch\n\n'
+    aboutTxt = 'Split! ' + SplitVersion + '\na Snap! mod in the style of Scratch\n\n'
         + 'Copyright \u24B8 2008-2025 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -7966,7 +7968,7 @@ IDE_Morph.prototype.looksMenuData = function () {
 
     empty.render = nop;
 
-    menu.addItem(
+    /*menu.addItem(
         [
             MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
                 : tick,
@@ -7982,7 +7984,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         ],
         this.flatBrightLooks
     );
-    menu.addLine();
+    menu.addLine();*/
     /*menu.addPreference(
         'Flat design',
         () => {
@@ -9083,11 +9085,11 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-    if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
+    if (!SplitVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
     this.inform(
-        "CAUTION! Development Version",
+        localize("CAUTION! Development Version"),
         'This version of Snap! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
