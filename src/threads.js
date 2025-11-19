@@ -8224,7 +8224,6 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
 };
 
 Process.prototype.reportNewCostumeSkewed = function (name, angle, factor) {
-    console.log(angle)
     if(angle instanceof Array) {
         if (angle[0] == "random") {
             angle = this.reportRandom(0, 360)

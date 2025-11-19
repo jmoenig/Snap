@@ -270,7 +270,6 @@ SyntaxElementMorph.prototype.setScale = function (num) {
   } catch (error) {
     highContrast = false
   }
-  console.log(highContrast)
   this.contrast = highContrast ? 70 : 25;//65;
   this.scale = scale;
   this.corner = 3 * scale;
@@ -2532,7 +2531,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     blockWidth -= rightCorrection;
   }
   // adjust right padding if rightmost input in a reporter is round
-  rightMost instanceof InputSlotMorph && this instanceof ReporterBlockMorph && console.warn(lines.length, rightMost.isReadOnly)
   if (
     rightMost instanceof InputSlotMorph && !rightMost?.isReadOnly &&
     this instanceof ReporterBlockMorph &&
@@ -12835,9 +12833,7 @@ InputSlotMorph.prototype.render = function (ctx) {
     if (this.isStatic) {
       ctx.fillStyle = borderColor.darker(highContrast ? 70 : 0).toString();
     }
-    console.warn()
   }
-  console.log(ctx.fillStyle, highContrast)
 
   // cache my border colors
   this.cachedClr = borderColor.toString();
