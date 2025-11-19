@@ -2891,7 +2891,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     }
     pos = anchor.center();
   }
-  bubble = new ReporterBubbleMorph(morphToShow, null, 2 * this.scale, 0);
+  bubble = new SpeechBubbleMorph(morphToShow, null, 5 * this.scale, 0);
   bubble.popUp(wrrld, pos, isClickable);
   if (exportPic) {
     this.exportPictureWithResult(bubble);
@@ -10884,7 +10884,7 @@ CSlotMorph.prototype.fixLoopLayout = function () {
     loop = this.loop();
     if (loop) {
       loop.setRight(this.right() - this.corner);
-      loop.setBottom(this.bottom() + this.cSlotPadding + this.edge * 2);
+      loop.setBottom(this.bottom() + this.cSlotPadding + this.edge * 5);
     }
   }
 };
@@ -12831,7 +12831,7 @@ InputSlotMorph.prototype.render = function (ctx) {
     // unless flashing
     ctx.fillStyle = borderColor.darker(highContrast ? 80 : 11).toString();
     if (this.isStatic) {
-      ctx.fillStyle = borderColor.darker(highContrast ? 70 : 0).toString();
+      ctx.fillStyle = highContrast ? borderColor.darker(70).toString() : borderColor.toString();
     }
   }
 
@@ -13986,6 +13986,7 @@ ArrowMorph.prototype.init = function (direction, size, padding, color, isLbl) {
   this.size = size || (size === 0 ? 0 : 50);
   this.padding = padding || 0;
   this.isBlockLabel = isLbl || false;
+  this.scale = SyntaxElementMorph.prototype.scale;
 
   ArrowMorph.uber.init.call(this);
   this.color = color || new Color(87, 94, 117);
@@ -14011,13 +14012,13 @@ ArrowMorph.prototype.blackArrow.src = "src/down-arrow-black.svg";
 ArrowMorph.prototype.drawImage = function (ctx, image, horiz) {
   // I have a feeling that this might be turning into spagetti code...
   var pr = !isRetinaEnabled() ? 1 : window.devicePixelRatio || 1,
-    pad = horiz ? 0 : this.padding + 0,
+    pad = horiz ? 0 : this.padding + 1.5,
     w = this.width(),
     h = this.height(),
     ow = image.width,
     oh = image.height,
-    i1 = [pad - pad, h - h / 1.5],
-    i2 = [w - pad / 2, h / 1.5];
+    i1 = [pad - 1.5, h - h / 1.7],
+    i2 = [w - pad - (0.5 * this.scale), h / 1.7];
   image.width = (ow / pr) * pr;
   image.height = (oh / pr) * pr;
   ctx.drawImage(
@@ -14060,7 +14061,7 @@ ArrowMorph.prototype.render = function (ctx) {
     ctx.translate(nw / -2, nh / -2);
     this.drawImage(
       ctx,
-      this.color.r < 20
+      this.color.b < 118
         ? ArrowMorph.prototype.blackArrow
         : ArrowMorph.prototype.whiteArrow,
       horiz

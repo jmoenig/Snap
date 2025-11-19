@@ -1850,7 +1850,7 @@ DialogBoxMorph.prototype.promptVector = function (
 };
 
 DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
-  // var clr = new AlignmentMorph('row', 4),
+  
   //     iw = this.fontSize * 4,
   //     rInp = new InputFieldMorph(color.r.toString(), true),
   //     gInp = new InputFieldMorph(color.g.toString(), true),
@@ -1970,11 +1970,10 @@ DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
   // this.popUp(world);
   var dialog = this;
   var editor = new Morph();
-  var oldColor = {...colorSlot.color},
+  var oldColor = colorSlot.color,
   hInp = new InputFieldMorph(colorSlot.color.hsl()[0]*100, true),
  sInp = new InputFieldMorph(colorSlot.color.hsl()[1]*100, true),
 vInp = new InputFieldMorph(colorSlot.color.hsl()[2]*100, true);
-Object.setPrototypeOf(oldColor, colorSlot.evaluate().prototype);
 
 hInp.contents().minWidth = this.fontSize * 3
 
@@ -2028,8 +2027,7 @@ vInp.contents().minWidth = this.fontSize * 3
   var result = new Morph();
   result.bounds.origin = new Point(0, 62.5);
   result.bounds.corner = new Point(100, 100);
-  result.color = {...colorSlot.evaluate()};
-  Object.setPrototypeOf(result.color, colorSlot.evaluate().prototype);
+  result.color = colorSlot.evaluate();
   
     
   dialog.labelString = "Color Picker";
@@ -3003,7 +3001,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
 
   // title bar
   if (isFlat) {
-    ctx.fillStyle = this.titleBarColor.darker(this.contrast/2).toString();
+    ctx.fillStyle = this.titleBarColor.toString();
   } else {
     gradient = ctx.createLinearGradient(0, 0, 0, th);
     gradient.addColorStop(
