@@ -14012,12 +14012,12 @@ ArrowMorph.prototype.blackArrow.src = "src/down-arrow-black.svg";
 ArrowMorph.prototype.drawImage = function (ctx, image, horiz) {
   // I have a feeling that this might be turning into spagetti code...
   var pr = !isRetinaEnabled() ? 1 : window.devicePixelRatio || 1,
-    pad = horiz ? 0 : this.padding + 1.5,
+    pad = horiz ? 0 : this.padding + 1 * this.scale,
     w = this.width(),
     h = this.height(),
     ow = image.width,
     oh = image.height,
-    i1 = [pad - 1.5, h - h / 1.7],
+    i1 = [pad - 0.9 * this.scale, h - h / 1.7],
     i2 = [w - pad - (0.5 * this.scale), h / 1.7];
   image.width = (ow / pr) * pr;
   image.height = (oh / pr) * pr;
